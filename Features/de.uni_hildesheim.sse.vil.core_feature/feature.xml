@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="de.uni_hildesheim.sse.vil.core_feature"
+      label="VIL Core"
+      version="0.2.0"
+      provider-name="University of Hildesheim - SSE">
+
+   <description>
+      This feature provides the core functionalities of the VIL build language and the VIL template language. This feature is mandatory.
+   </description>
+
+   <copyright>
+      Copyright 2013 University of Hildesheim, Software Systems Engineering
+   </copyright>
+
+   <license>
+      Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+   </license>
+
+   <url>
+      <update label="EASy Producer Update Site" url="http://projects.sse.uni-hildesheim.de/easy/"/>
+   </url>
+
+   <plugin
+         id="de.uni_hildesheim.sse.vil.buildlang"
+         download-size="0"
+         install-size="0"
+         version="0.2.0"
+         unpack="false"/>
+
+   <plugin
+         id="de.uni_hildesheim.sse.vil.expressions"
+         download-size="0"
+         install-size="0"
+         version="0.2.0"
+         unpack="false"/>
+
+   <plugin
+         id="de.uni_hildesheim.sse.vil.templatelang"
+         download-size="0"
+         install-size="0"
+         version="0.2.0"
+         unpack="false"/>
+
+</feature>

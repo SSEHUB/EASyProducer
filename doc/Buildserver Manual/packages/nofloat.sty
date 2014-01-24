@@ -1,0 +1,11 @@
+% NOFLOAT.STY
+
+% \setfloattype{table|figure|...}
+\newcommand{\setfloattype}[1]{\def\@captype{#1}}
+
+%  non-floating table-, figure-, ... environment
+%  may contain \caption
+\newenvironment{nofloat}[1]
+  {\setfloattype{#1}
+   \begin{trivlist}\item[]}
+  {\end{trivlist}}

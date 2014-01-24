@@ -1,0 +1,6 @@
+\section{Introduction}
+This manual explains how to build the \EASy\ tool suite on a local machine and also how to configure the build server, which can be accessed at \Jenkins.
+
+\EASy\ consists of several Eclipse\footnote{\url{http://www.eclipse.org}} \textit{plug-in}s. Related plug-ins are stored together in the same folder on the Subversion\footnote{\url{http://en.wikipedia.org/wiki/Apache_Subversion}} server. We denote these folders as \textit{project}s. It is possible to build a complete project as well as a single plug-in via a build script. The build server builds all configured projects, which means that all nested plug-ins are built and tested in one step.
+
+The remainder of this manual is structured as follows: Section \ref{sec:Local} describes how to download and to build the individual projects and plug-ins. This also includes the installation of necessary build tools. This is needed to test the correctness of the build scripts. In Section \ref{sec:Build Server}, we explain how to maintain the existing build scripts. This also includes the configuration of the build server, which executes the build scripts. Finally, Section \ref{sec:FAQ} shows some problems and how to solve them.

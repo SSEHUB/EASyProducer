@@ -1,0 +1,93 @@
+\section{Local Build}
+\label{sec:Local}
+%\wrappic{0.25}{AntLogo}{Ant Logo}{Ant Logo.}{AntsLogo}{l}
+This section explains how to build \EASy\ and all plug-ins on your local hard drive using ANT\footnote{\url{http://ant.apache.org/}}. Section \vref{sec:ANT} roughly explains how to install ANT. Section \vref{sec:Relevant Folders} shows the relevant folders which must be downloaded to run the build scripts. Sections \ref{sec:Preparation of Eclipse} and \ref{sec:global-build.properties} explain local configurations, which must be done before running the build. Finally, Section \vref{sec:Local Build} explains the commands for running the build scripts on a local PC.\\
+
+\subsection{Installation of ANT}
+\label{sec:ANT}
+Download ANT from \url{http://ant.apache.org/} and extract the archive into the programs folder, e.g. \ttfamily C:\textbackslash Program Files\textbackslash Ant\normalfont. We suggest ANT version 1.8.4, because this version is also used by the build server. Set the \texttt{Path} environment variable to the \texttt{<ANT folder>\textbackslash bin} directory. Figure \vref{fig:antPath} shows an example how to configure the \texttt{Path} variable in Windows.
+\pic{0.95}{antPath}{Configuration of the Path variable for ANT}{Configuration of the Path variable for ANT in Windows.}{antPath}
+
+\subsection{Relevant Folders}
+\label{sec:Relevant Folders}
+The whole \EASy\ tool suite can be downloaded from \EASyURL\ via Subversion. The plug-ins are located in sub folders of \texttt{/trunk}. The documentation build script for the creation of a common JavaDoc is located in \texttt{/doc/javadoc}.
+
+Relevant projects are:
+\begin{description}
+	\item[/trunk/VarModel] $ $\\
+		The variability model and other utility functions which do not depend of other plug-ins.
+	\item[/trunk/IVML] $ $\\
+		The parser and editor for the variability model.
+	\item[/trunk/Instantiation] $ $\\
+		Tools and models needed for resolving variability in product line artifacts.
+	\item[/trunk/Reasoner/ReasonerCore] $ $\\
+		Reasoner core functionality (interfaces and data objects). This package is not able to perform reasonings by its own and needs at least one of the reasoner implementations below:
+	\begin{description}
+		\item[/trunk/Reasoner/Drools] $ $\\
+			A reasoner implementation, using Drools Expert\footnote{\url{http://www.jboss.org/drools/drools-expert.html}}.
+		\item[/trunk/Reasoner/Jess] $ $\\
+			A reasoner implementation, using Jess\footnote{\url{http://www.jessrules.com/}}. Currently, not maintained.
+	\end{description}
+	\item[/trunk/EASy-Producer] $ $\\
+		\EASy\ core functionality and Eclipse editors.
+\end{description}
+
+It is also possible to check out the complete \texttt{/trunk} folder. The result should look like Figure \vref{fig:relevantFolders}.
+
+\label{Copying global-build.properties}
+The \texttt{/trunk} folder contains also a \texttt{global-build.properties} file. This file must be copied to the \texttt{HOME} directory, e.g., the \textit{user files} in Windows and edited as described in Section \vref{sec:global-build.properties}.
+
+\pic{.85}{relevantFolders}{Relevant folders for compiling \EASy}{Relevant folders, which must be checked out, for compiling \EASy.}{relevantFolders}
+
+\subsection{Preparation of Eclipse for compilation and testing}
+\label{sec:Preparation of Eclipse}
+For compilation and testing an Eclipse\footnote{\url{http://www.eclipse.org/}} instance is needed, which contains needed plug-ins like Xtext\footnote{\url{http://www.eclipse.org/Xtext/}}. We provide an already packed Eclipse instance, which can be used for this purpose, at \url{https://projects.sse.uni-hildesheim.de/eclipse/releases/EclipseTest.zip}. We suggest to use 2 instances:
+\begin{itemize}
+	\item One unpacked instance for compilation. This Eclipse installation should not contain already compiled \EASy\ plug-ins.
+	\item One packed instance for testing. This Eclipse instance will be unpacked, before the test plug-ins will be installed into this instance. This procedure ensures a clean Eclipse installation for testing, which will also contain only needed \EASy plug-ins.
+\end{itemize}
+
+\subsection{Editing \texttt{global-build.properties}}
+\label{sec:global-build.properties}
+The copied \texttt{global-build.properties} (cf. Section \vref{Copying global-build.properties}) must be edited to facilitate local builds. Figure \vref{lst:localSettingOfbuil.properties} shows the relevant entries, which must be configured.
+
+\begin{nofloat}{figure}
+	\centering
+	\lstinputlisting[language=Properties, firstline=1, lastline=15]{\trunkDir/global-build.properties}
+	\caption[Local settings of the \texttt{global-build.properties}]{Local settings of the \texttt{global-build.properties} (excerpt).}
+	\label{lst:localSettingOfbuil.properties}
+\end{nofloat}
+
+The entries should be configured as explained below:
+\begin{description}
+	\item[eclipse.home] $ $\\
+		This entry must point to the unpacked Eclipse instance (\textbf{absolute path}), which shall be used for compilation.
+	\item[home.base.dir] $ $\\
+		This entry must point to the root directory (\textbf{absolute path}) of the downloaded plug-ins, i.e., the downloaded \texttt{/trunk} folder.
+	\item[projects.<project>] $ $\\
+		These entries must point to the \textbf{relative paths} of the sub folders of the related \texttt{<project>}s inside the \texttt{/trunk} folder.
+	\item[emma.path] $ $\\
+		This entry must point to the \textbf{absolute path} of the EMMA libraries\footnote{\url{http://emma.sourceforge.net/}}. The development of Emma has been discontinued. As a consequence, we recommend to use the latest release for building \EASy\ plug-ins.
+	\newpage
+	\item[unzipNewEclipse] $ $\\
+		Specification whether a fresh Eclipse instance should be unpacked for each test (\texttt{true}) or not (\texttt{false}).	
+	\begin{description}
+		\item[alternative.test.eclipse.dir] $ $\\
+			\textbf{Absolute path} of an unpacked Eclipse instance, which should be used for testing. Only relevant if \texttt{unzipNewEclipse} was set to \texttt{false}.
+	\item[test.eclipse.zip] $ $\\
+			\textbf{Absolute path} of an packed Eclipse instance, which should be used for testing. Only relevant if \texttt{unzipNewEclipse} was set to \texttt{true}.
+	\end{description}
+\end{description}
+
+\subsection{Building the Projects}
+\label{sec:Local Build}
+Each of the relevant folders, listed in \vref{sec:Relevant Folders}, contain a \texttt{build.xml} file for building all related plug-ins in one step. All nested plug-ins contain a \texttt{build-jk.xml} for building the single plug-in only.
+
+The build can be started by opening a command shell in the folder an running one of the commands below:
+\begin{itemize}
+	\item Inside the project dir (e.g. VarModel): \texttt{ant}
+	\item Inside the nested plug-in dir (e.g. VarModel/Model): \texttt{ant -f build-jk.xml}
+\end{itemize}
+
+Currently, the relationship as shown in Figure \vref{fig:EASy Architecture} exists between the plug-ins (and projects). For this reason, the plug-ins and projects should be build in the opposite order of the \textit{<<use>>} relationships. For instance, the \texttt{Model} must be build before \texttt{IVML} can be build.
+\pic{.2}{../../architectureImages/Architecture}{Architecture of \EASy}{The architecture of \EASy.}{EASy Architecture}

@@ -1,0 +1,8 @@
+ReasonerCore
+  - 8064 loggified 
+Model
+  - 8059 loggified
+IVML.ui
+  - 8058 loggified
+IVML
+  - 8058 loggified, unqualified variables warning for compounds

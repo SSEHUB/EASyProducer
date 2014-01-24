@@ -1,0 +1,3 @@
+- no part is allowed to access JessRules directly (let's see for standalone)
+- no part is allowed to access Drules directly (let's see for standalone)
+- Model: values package is not allowed to access CST (but v.v.)

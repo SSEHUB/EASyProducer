@@ -1,0 +1,138 @@
+\section{Configuration of the Build Server}
+\label{sec:Build Server}
+This section explains how to configure the build server. First, we explain how to write and edit build scripts before we show how to configure Jenkins (\Jenkins).
+
+\subsection{Editing Build Scripts}
+\label{sec:Editing Build Scripts}
+This section explains how build scripts should be written and edited, so that the build server can handle them. The \texttt{/trunk} folder is structured in projects containing multiple plug-ins, which are related to each other. For each project a sub folder inside of \texttt{/trunk} exist containing a \texttt{build.xml} for building the whole project, i.e., all related plug-ins. Section \ref{sec:Managing Plug-in Dependencies} describes how existing build scripts can be edited if dependencies between projects/plug-ins change. Section \ref{sec:Creation of new Plug-ins} shows how new plug-ins and projects can be created.
+
+\subsubsection{Managing Plug-in Dependencies}
+\label{sec:Managing Plug-in Dependencies}
+When the dependencies between plug-ins (OSGI Manfests) and/or projects change, multiple build files have to be changed manually. This section describes how to identify the plug-in dependencies and how to adapt existing build scripts.
+
+\begin{nofloat}{figure}
+	\centering
+	\lstinputlisting[language=Manifest, firstline=1, lastline=28]{\trunkDir/IVML/de.uni_hildesheim.sse.ivml.ui/META-INF/MANIFEST.MF}
+	\caption[Manifest of the IVML editor]{Manifest of the IVML editor plug-in (excerpt).}
+	\label{lst:Manifest a plug-in}
+\end{nofloat}
+
+First it is necessary to identify the dependencies between the plug-ins of \EASy. Plug-in dependencies to Eclipse, Xtext, \ldots\ will be resolved automatically. This can be done by reading the \textit{manifest file} inside the plug-in. The manifest file is located at \texttt{META-INF/MANIFEST.MF} inside the plug-in directory. Figure \vref{lst:Manifest a plug-in} shows an example for a manifest file.
+
+The sections \texttt{Require-Bundle} and \texttt{Import-Package} are important as they show plug-in dependencies.
+\begin{description}
+	\item[\texttt{Require-Bundle}] lists plug-ins, which are needed for the current plug-in.
+	\item[\texttt{Import-Package}] lists Java packages, which are needed for the current plug-in. Thus, it is unclear which plug-in is needed. Usually, plug-ins and packages follow the same naming conventions. Therefore, the package names give a hint, which plug-in is really needed.
+\end{description}
+
+The optional command \texttt{visibility:=reexport} allows plug-ins to provide functionality provided by imported plug-ins. Thus, also this command may hide needed plug-ins. Consequently, the manifest files of all imported plug-ins should also be checked to find all all needed plug-ins.
+
+An analysis of the manifest file in Figure \vref{lst:Manifest a plug-in} indicates that the following plug-ins are needed among others:
+\begin{itemize}
+	\item The variability model (de.uni\_hildesheim.sse.varModel).
+	\item The dsl core plug-in (de.uni\_hildesheim.sse.dslCore)
+	\item Some Eclipse plug-ins (org.eclipse.xtext.ui, org.apache.log4j, \ldots). These plug-ins need not be considered, as the build scripts will resolve them automatically.
+\end{itemize}
+
+Inside the \texttt{global-build.properties} two properties are defined for each plug-in:
+\begin{itemize}
+	\item The property home.<plug-in name>.dir points to the directory of the plug-in.
+	\item The property libs.<plug-in name> points to the jar file created by the build scripts.
+\end{itemize}
+
+Figure \vref{lst:Ant home and libs definition} shows an excerpt of the \texttt{global-build.properties}. This excerpt holds the definition of properties for the variability model.
+
+\begin{nofloat}{figure}
+	\centering
+	\lstinputlisting[language=Properties, firstline=39, lastline=45]{\trunkDir/global-build.properties}
+	\caption[Settings of the VarModel project inside the \texttt{global-build.properties}]{Settings of the VarModel project inside the \texttt{global-build.properties} (excerpt).}
+	\label{lst:Ant home and libs definition}
+\end{nofloat}
+
+\begin{nofloat}{figure}
+	\centering
+	\lstinputlisting[language=Ant, firstline=1, lastline=23]{\trunkDir/IVML/de.uni_hildesheim.sse.ivml.ui/build-jk.xml}
+	\caption[Build script of the IVML Editor]{Build script (\texttt{build-jk.xml}) of the IVML Editor (excerpt). \texttt{path ="includes"} must be changed to import all needed plug-ins.}
+	\label{lst:Build script of the IVML Editor}
+\end{nofloat}
+Whenever new plug-in dependencies occur (or old dependencies are removed) the build scripts have to be changed on different places. The \texttt{build-jk.xml} has to be changed for the plug-in itself and also the \texttt{build.xml} for the complete project containing the changed plug-in. We suggest first to update the \texttt{build-jk.xml} of the plug-in. Figure \vref{lst:Build script of the IVML Editor} shows the relevant parts, which must be changed. Inside the \texttt{includes} Section, new \texttt{pathelement}s must be created whenever new plug-in dependencies occur.
+
+\begin{figure}[ht]
+	\centering
+	\lstinputlisting[language=Ant, linerange={63 - 63, 72 - 78}]{\trunkDir/IVML/build.xml}
+	\caption[Build script of the IVML project]{Build script (\texttt{build.xml}) of the IVML project (excerpt). \texttt{target name="copy.to.eclipse"} must be changed to copy all needed plug-ins for testing the plug-ins of the project.}
+	\label{lst:Build script of the IVML project}
+\end{figure}
+
+\label{editing includes}
+After the build scripts of the plug-ins were adapted, also the build script for the complete project must be changed. If the plug-in is tested than a target \texttt{copy.to.eclipse} exist, where all necessary plug-ins are copied into the \textit{plug-ins folder} of the Eclipse instance for testing. Figure \vref{lst:Build script of the IVML project} shows an already prepared \texttt{copy.to.eclipse} target for the IVML project. In lines 3 -- 6 necessary plug-ins are copied to eclipse. These lines must be changed to reflect the current plug-in dependencies. If the project is not tested, e.g. if it only consists of interfaces and so on, than the \texttt{build.xml} need not be changed.
+
+\subsubsection{Creation of new Plug-ins}
+\label{sec:Creation of new Plug-ins}
+This section describes necessary changes if new plug-ins (or projects) are created. If existing plug-ins should use the new plug-ins, than the adaptations described in the section before must be applied to the old plug-ins and projects. This section describes further changes necessary for the new plug-in. This consists of 4 steps explained in the remainder of this section:\begin{enumerate}
+	\item \label{Folder creation} Create a new project folder on the subversion server and upload all plug-ins of the project into the newly created folder.
+	\item Definition of new ant properties inside the \texttt{global-build.properties}.
+	\item The creation of a new \texttt{build-jk.xml} inside the plug-ins directory.
+	\item The creation/adaptation of a \texttt{build.xml} for the whole project.
+\end{enumerate}
+
+After the new folder was created, new properties must be defined inside the \texttt{global\-build.properties} file (cf. Figure \vref{lst:Ant home and libs definition}). Update the \texttt{global\-build.properties} located in the \texttt{/trunk} folder. Create a new \texttt{home.<project name>.dir} property pointing to relative path of the plug-in's folder and create also a \texttt{libs.<project name>} property pointing to the jar file, which will be created after the execution of the plug-in's build script.
+
+After the properties for the new plug-in were created, a new \texttt{build-jk.xml} must be created inside the plug-ins directory. The build files contain only as little individual code as possible. Therefore, the best way of creating a new \texttt{build-jk.xml} is coping an existing file from an old plug-in to the new plug-in's folder (we suggest to use the \texttt{build-jk.xml} from the Model plug-in) and modify the relevant passages:
+\begin{enumerate}
+	\item Modify the name attribute of the project (cf. line 2 in Figure \vref{lst:Build script of the IVML Editor}). The name of the project is used for the creation of the jar file. Thus, the name of the project must match to the specified \texttt{libs.<plug-in name>} ant property.
+	\item Check whether the compilation settings are correct (cf. lines 6 -- 10 in Figure \vref{lst:Build script of the IVML Editor}). There, the right JDK version has to be selected (lines 9 and 10). Some projects contain also multiple source folders (lines 7 and 8). In this case, all relevant source folders should be defined in the section of compilation settings.
+	\item Edit the \texttt{includes} section to specify needed plug-ins for compilation (already described in Section \vref{editing includes}).
+	\item If multiple source folders exists and were specified in step 2, include the defined source folders inside the compilation target (cf. Figure \vref{lst:Adaption of build-jk part 2}, line 4).
+\end{enumerate}
+
+\begin{nofloat}{figure}
+	\centering
+	\lstinputlisting[language=Ant, firstline=36, lastline=42]{\trunkDir/IVML/de.uni_hildesheim.sse.ivml.ui/build-jk.xml}
+	\caption[Build script of the IVML Editor (compilation target)]{Build script (\texttt{build-jk.xml}) of the IVML Editor (excerpt). In line 4, the additional source folder \texttt{src.gen.dir} was included.}
+	\label{lst:Adaption of build-jk part 2}
+\end{nofloat}
+
+Finally, a \texttt{build.xml} must be created for the project. Also for this file is it the way to copy an existing file (we suggest to use the \texttt{build.xml} of the variability model) and to modify the relevant passages:
+\begin{enumerate}
+	\item Inside the compilation target, all plug-ins of this project must be added, also the test plug-ins (cf. lines 2 -- 15 in Figure \vref{lst:Adaption of build part 2}). Please use the \texttt{home.<plug-in name>.dir} for calling the \texttt{build-jk.xml} of the individual plug-ins.
+	\item Instrument plug-ins, which should be tested (cf. lines 22 -- 24 in Figure \vref{lst:Adaption of build part 2}).
+	\item Copy all plug-ins needed for testing into the Eclipse instance for testing (cf. lines 32 -- 35 in Figure \vref{lst:Adaption of build part 2}). In this step, all instrumented plug-ins as well as all plug-ins, which are needed for running the tested plug-ins, must be copied into the Eclipse instance.
+	\item Edit the target \texttt{coreTestEMMA} to call the test suite class inside the test plug-in.
+	\item Edit the target \texttt{emmaReport} to produce code coverage only for relevant source code files.
+	\item Finally, edit the target \texttt{javadoc} to create the Java documentation for relevant source code files.
+\end{enumerate}
+
+\newpage
+\begin{nofloat}{figure}
+	\centering
+	\lstinputlisting[language=Ant, linerange={24 - 43, 47 - 55, 62 - 63, 72 - 78}]{\trunkDir/IVML/build.xml}
+	\caption[Build script of the IVML project (compile, instrument, copy targets)]{Build script (\texttt{build.xml}) of the IVML project (excerpt).}
+	\label{lst:Adaption of build part 2}
+\end{nofloat}
+
+In this section, we explained how to create and modify the ant build scripts. With these scripts it is possible to build the newly created plug-ins on a local machine as well as on the build server. However, the build server is not able to detect newly created build scripts by its own. Therefore, also the build server has to be configured after new projects has been created. This is explained in the next section.
+
+\subsection{Configuring Jenkins}
+\label{sec:Configuring Jenkins}
+\wrappic{0.275}{JenkinsLogo}{Jenkins Logo}{Jenkins Logo.}{JenkinsLogo}{l}Currently, we use Jenkins (\url{http://jenkins-ci.org/}) as server for continuous integration. This server monitors the software configuration management system (SCM), i.e. Subversion, and triggers a new build whenever it detects changes in a project. Such a build includes the compilation of nested projects, testing including code coverage, the creation of JavaDoc, \ldots. A build of a project may also lead to a build of related projects. This section describes how to configure Jenkins to build newly created projects (cf. Section \ref{sec:Editing Build Scripts}).
+
+Jenkins is structured in \texttt{jobs}. The projects described above can be mapped directly to such jobs. Therefore, for each created project, a new job must be created in Jenkins. For doing so, a Jenkins account is needed. Please contact Sascha El-Sharkawy, if you have none.
+
+After you are logged in, select "Jenkins" $\to$ "New Job" in the menu for creating a new build job (see Figure \vref{fig:NewJob}). 
+
+\pic{1}{NewJob}{Jenkins: Creation of a new Build Job (Step 1)}{Creation of a new build job in Jenkins (step 1).}{NewJob}
+
+The next screen asks for a name and for the nature of the job. The easiest way of defining a new job is the selection of "Copy existing Job". An example is given in Figure \vref{fig:NewJob2}.
+
+\picWidth{NewJob2}{Jenkins: Creation of a new Build Job (Step 2)}{Creation of a new build job in Jenkins (step 2).}{NewJob2}
+
+The next screen offers an detailed configuration of the new job. Please check the name and the description of the project. The Section \texttt{Post-build Actions} must also be revised (cf. Figure \vref{fig:NewJob3}):
+\begin{enumerate}
+	\item In \texttt{Publish Javadoc} and \texttt{Publish HTML reports} the existing project name must be replaced by the folder's name of the current project as defined in Bullet \vref{Folder creation}.
+	\item Modify the \texttt{Record Emma coverage report} Section. Please insert the current coverage values to the cells. As a consequence, future builds with a worse coverage will be marked as unstable.
+	\item If other projects use this project, than edit also the \texttt{Build other projects} Section, remove this section otherwise.
+	\item Finally, edit the \texttt{Recipients} inside the \texttt{E-mail Notification} Section.
+\end{enumerate}
+
+\picWidth{NewJob3}{Jenkins: Creation of a new Build Job (Step 3)}{Creation of a new build job in Jenkins (step 3).}{NewJob3}

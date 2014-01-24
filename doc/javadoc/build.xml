@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="EASy-Producer Documentation" default="all" basedir=".">	
+	<property file="${user.home}/global-build.properties"/>
+    <property name="src.all.files" value="src"/>
+    
+    <path id ="includes">
+		<!-- Libs of VarModel -->
+        <fileset dir="${home.model.persistency.dir}/lib" includes="**/*.jar"/>
+        <!-- Libs of Instantiator -->
+        <fileset dir="${home.instantiatorCore.dir}/lib" includes="**/*.jar"/>
+        <fileset dir="${home.instantiator.xvcl.dir}/lib" includes="**/*.jar"/>
+        <fileset dir="${home.instantiator.velocityLib.dir}/lib" includes="**/*.jar"/>
+        <!-- Eclipse-Plugins -->
+        <fileset dir="${eclipse.plugins.dir}" includes="**/*.jar"/>
+        
+        <!-- Plug-ins containing generated sources -->
+        <fileset dir="${home.ivml.dir}/${build.jar.dir}" includes="**/*.jar" />
+        <fileset dir="${home.ivml.ui.dir}/${build.jar.dir}" includes="**/*.jar" />
+        <fileset dir="${home.vil.expressions.core.dir}/${build.jar.dir}" includes="**/*.jar" />
+        <fileset dir="${home.vil.expressions.ui.dir}/${build.jar.dir}" includes="**/*.jar" />
+        <fileset dir="${home.vil.core.dir}/${build.jar.dir}" includes="**/*.jar" />
+        <fileset dir="${home.vil.ui.dir}/${build.jar.dir}" includes="**/*.jar" />
+        <fileset dir="${home.template.core.dir}/${build.jar.dir}" includes="**/*.jar" />
+        <fileset dir="${home.template.ui.dir}/${build.jar.dir}" includes="**/*.jar" />
+	</path>
+    
+	<target name="init">
+		<!-- Delete generated folders -->
+		<delete dir="${doc.dir}"/>
+        <delete file="javadoc.zip"/>
+        <delete dir="${src.all.files}"/>
+		
+		<!-- Create folders -->
+		<mkdir dir="${doc.dir}"/>
+		<mkdir dir="${src.all.files}"/>
+	</target>
+	
+	<target name="gather.sources">
+        <copy todir="${src.all.files}" failonerror="true" overwrite="false">
+			<!-- VarModel -->
+            <fileset dir="${home.utils.dir}/src" includes="**/*.java"/>
+            <fileset dir="${home.model.dir}/src" includes="**/*.java"/>
+            <fileset dir="${home.model.persistency.dir}/src" includes="**/*.java"/>
+            <fileset dir="${home.dslCore.dir}/src" includes="**/*.java"/>
+            
+            <!-- IVML Parser -->
+            <fileset dir="${home.ivml.dir}/src" includes="**/*.java"/>      
+            <!--fileset dir="${home.ivml.dir}/src-gen" includes="**/*.java"/>
+            <fileset dir="${home.ivml.dir}/xtend-gen" includes="**/*.java"/-->
+            
+            <fileset dir="${home.ivml.ui.dir}/src" includes="**/*.java"/>
+            <!--fileset dir="${home.ivml.ui.dir}/src-gen" includes="**/*.java"/-->
+            
+            <!-- Integration -->
+            <fileset dir="${home.integration.common.dir}/src" includes="**/*.java"/>
+            <fileset dir="${home.integration.common.eclipse.dir}/src" includes="**/*.java"/>
+            <fileset dir="${home.integration.common.impl.dir}/src" includes="**/*.java"/>
+            
+            <!-- ReasonerCore -->
+            <fileset dir="${home.reasonerCore.dir}/src" includes="**/*.java"/>
+            
+            <!-- Instantiation -->
+            <fileset dir="${home.instantiatorCore.dir}/src" includes="**/*.java"/>
+            <fileset dir="${home.instantiator.copy.core.dir}/src" includes="**/*.java"/>
+            <fileset dir="${home.instantiator.copy.java.dir}/src" includes="**/*.java"/>
+            <fileset dir="${home.instantiator.xvcl.dir}/src" includes="**/*.java"/>
+            <fileset dir="${home.instantiator.velocityLib.dir}/src" includes="**/*.java"/>
+            <fileset dir="${home.instantiator.velocity.dir}/src" includes="**/*.java"/>
+            <fileset dir="${home.vil.expressions.core.dir}/src" includes="**/*.java"/>
+            <fileset dir="${home.vil.expressions.ui.dir}/src" includes="**/*.java"/>           
+            <fileset dir="${home.vil.core.dir}/src" includes="**/*.java"/>            
+            <fileset dir="${home.vil.ui.dir}/src" includes="**/*.java"/>           
+            <fileset dir="${home.template.core.dir}/src" includes="**/*.java"/>            
+            <fileset dir="${home.template.ui.dir}/src" includes="**/*.java"/>            
+            <!--fileset dir="${home.vil.expressions.core.dir}/src-gen" includes="**/*.java"/>
+            <fileset dir="${home.vil.expressions.core.dir}/xtend-gen" includes="**/*.java"/>
+            <fileset dir="${home.template.ui.dir}/src-gen" includes="**/*.java"/>
+            <fileset dir="${home.vil.expressions.ui.dir}/src-gen" includes="**/*.java"/>
+            <fileset dir="${home.vil.core.dir}/src-gen" includes="**/*.java"/>
+            <fileset dir="${home.vil.core.dir}/xtend-gen" includes="**/*.java"/>
+            <fileset dir="${home.template.core.dir}/src-gen" includes="**/*.java"/>
+            <fileset dir="${home.template.core.dir}/xtend-gen" includes="**/*.java"/>
+            <fileset dir="${home.vil.ui.dir}/src-gen" includes="**/*.java"/-->
+            
+            <!-- EASy-Producer -->
+            <fileset dir="${home.easy.persistence.dir}/src" includes="**/*.java"/>
+            <fileset dir="${home.easy.PLugin.dir}/src" includes="**/*.java"/>
+            <fileset dir="${home.easy.easy-producer.ui.dir}/src" includes="**/*.java"/>
+		</copy>
+    </target>
+    
+    <!-- Creates Javadoc -->
+    <target name="javadoc" depends="gather.sources">
+        <javadoc packagenames="de.*" 
+            private="true"
+            maxmemory="1g"
+            defaultexcludes="yes"
+            sourcepath="${src.all.files}"
+            destdir="${doc.dir}"
+            author="true"
+            version="true"
+            use="true"
+            Encoding="${javadoc.encoding}"
+            useexternalfile="yes"
+            source="1.6"
+            windowtitle="${ant.project.name} API">
+            <classpath refid="includes"/>
+            <!-- JavaDoc Annotations used by Xtext -->
+            <!--tag name="generated" scope="all" description="Generated via Xtext"/>
+            <tag name="model" scope="all" description="model"/>
+            <tag name="ordered" scope="all" description="ordered"/>
+            <tag name="parameter" scope="all"/-->
+            <doctitle><![CDATA[<h1>${ant.project.name}</h1>]]></doctitle>
+            <bottom><![CDATA[<i>Copyright &#169; 2009 - 2013 SSE. All Rights Reserved.</i>]]></bottom>
+        </javadoc>
+    </target>
+  
+    <target name="zip">	
+		<zip destfile="javadoc.zip" basedir="${doc.dir}"/>
+    </target>
+	
+	<target name="all" depends="init, javadoc, zip"/>
+</project>

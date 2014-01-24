@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="de.uni_hildesheim.sse.ivml_integration.sap_integration_feature"
+      label="SAP Integration"
+      version="0.6.2"
+      provider-name="University of Hildesheim - SSE">
+
+   <description url="http://www.sap.com">
+      This feature provides the integration with SAP.
+   </description>
+
+   <copyright>
+      Copyright 2013 University of Hildesheim, Software Systems Engineering
+   </copyright>
+
+   <license>
+      Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+   </license>
+
+   <url>
+      <update label="EASy Producer Update Site" url="http://projects.sse.uni-hildesheim.de/easy/"/>
+   </url>
+
+   <plugin
+         id="de.uni-hildesheim.sse.ivml.sap"
+         download-size="0"
+         install-size="0"
+         version="0.4.1"
+         unpack="false"/>
+
+   <plugin
+         id="de.uni-hildesheim.sse.ivml.sap.impl"
+         download-size="0"
+         install-size="0"
+         version="0.4.1"
+         unpack="false"/>
+
+   <plugin
+         id="de.uni_hildesheim.sse.varModel.persistency"
+         download-size="0"
+         install-size="0"
+         version="0.6.0"
+         unpack="false"/>
+
+</feature>
