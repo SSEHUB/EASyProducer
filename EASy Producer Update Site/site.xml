@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/de.uni_hildesheim.sse.easy_producer.instantiation.xvcl_feature.jar" id="de.uni_hildesheim.sse.easy_producer.instantiation.xvcl_feature" version="0.4.0">
+      <category name="de.uni_hildesheim.sse.easy_producer.instantiation_category"/>
+   </feature>
+   <feature url="features/de.uni_hildesheim.sse.easy_producer.instantiation.velocity_feature.jar" id="de.uni_hildesheim.sse.easy_producer.instantiation.velocity_feature" version="0.6.0">
+      <category name="de.uni_hildesheim.sse.easy_producer.instantiation_category"/>
+   </feature>
+   <feature url="features/de.uni_hildesheim.sse.ivml.core_feature.jar" id="de.uni_hildesheim.sse.ivml.core_feature" version="0.7.0">
+      <category name="de.uni_hildesheim.sse.easy_producer.core_category"/>
+   </feature>
+   <feature url="features/de.uni_hildesheim.sse.ivml.ui_feature.jar" id="de.uni_hildesheim.sse.ivml.ui_feature" version="0.7.0">
+      <category name="de.uni_hildesheim.sse.easy_producer.core_category"/>
+   </feature>
+   <feature url="features/de.uni_hildesheim.sse.easy_producer.core_feature.jar" id="de.uni_hildesheim.sse.easy_producer.core_feature" version="0.7.0">
+      <category name="de.uni_hildesheim.sse.easy_producer.core_category"/>
+   </feature>
+   <feature url="features/de.uni_hildesheim.sse.easy_producer.ui_feature.jar" id="de.uni_hildesheim.sse.easy_producer.ui_feature" version="0.7.0">
+      <category name="de.uni_hildesheim.sse.easy_producer.core_category"/>
+   </feature>
+   <feature url="features/de.uni_hildesheim.sse.reasoning.drools_feature.jar" id="de.uni_hildesheim.sse.reasoning.drools_feature" version="0.6.1">
+      <category name="de.uni_hildesheim.sse.easy_producer.reasoning_category"/>
+   </feature>
+   <feature url="features/de.uni_hildesheim.sse.easy_producer.instantiation.serializer_feature.jar" id="de.uni_hildesheim.sse.easy_producer.instantiation.serializer_feature" version="0.4.1">
+      <category name="de.uni_hildesheim.sse.easy_producer.instantiation_category"/>
+   </feature>
+   <feature url="features/de.uni_hildesheim.sse.ivml_integration.integration_core_feature.jar" id="de.uni_hildesheim.sse.ivml_integration.integration_core_feature" version="0.7.0">
+      <category name="de.uni_hildesheim.sse.easy_producer.integration_category"/>
+   </feature>
+   <feature url="features/de.uni_hildesheim.sse.vil.core_feature.jar" id="de.uni_hildesheim.sse.vil.core_feature" version="0.2.0">
+      <category name="de.uni_hildesheim.sse.easy_producer.core_category"/>
+   </feature>
+   <feature url="features/de.uni_hildesheim.sse.vil.ui_feature.jar" id="de.uni_hildesheim.sse.vil.ui_feature" version="0.2.0">
+      <category name="de.uni_hildesheim.sse.easy_producer.core_category"/>
+   </feature>
+   <feature url="features/de.uni_hildesheim.sse.easy_producer.quick_install_feature.jar" id="de.uni_hildesheim.sse.easy_producer.quick_install_feature" version="0.7.0">
+      <category name="de.uni_hildesheim.sse.easy_producer.quick_install_category"/>
+   </feature>
+   <feature url="features/de.uni_hildesheim.sse.easy.instantiator.java.feature_0.1.0.jar" id="de.uni_hildesheim.sse.easy.instantiator.java.feature" version="0.1.2">
+      <category name="de.uni_hildesheim.sse.easy_producer.instantiation_category"/>
+   </feature>
+   <feature url="features/de.uni_hildesheim.sse.reasoning.drools2_feature_0.0.1.jar" id="de.uni_hildesheim.sse.reasoning.drools2_feature" version="0.1.0">
+      <category name="de.uni_hildesheim.sse.easy_producer.reasoning_category"/>
+   </feature>
+   <category-def name="de.uni_hildesheim.sse.easy_producer.core_category" label="EASy Producer">
+      <description>
+         The features of this category provide the core functionalities of the EASy Producer tool, a software product line engineering tool for the easy development of large-scale, multi-software product lines. This category also includes the optional but recommended user interface for EASy Producer.
+      </description>
+   </category-def>
+   <category-def name="de.uni_hildesheim.sse.easy_producer.reasoning_category" label="EASy Producer Reasoning">
+      <description>
+         The features of this category provide the reasoning functionalities of the EASy Producer tool, a software product line engineering tool for the easy development of large-scale, multi-software product lines. In order to perform validity checks on variability models, at least one of the features must be selected.
+      </description>
+   </category-def>
+   <category-def name="de.uni_hildesheim.sse.easy_producer.instantiation_category" label="EASy Producer Instantiation">
+      <description>
+         The features of this category provide the instantiation functionalities of the EASy Producer tool, a software product line engineering tool for the easy development of large-scale, multi-software product lines. In order to perform artifact instantiations, the core feature and one of the instantiator features must be selected.
+      </description>
+   </category-def>
+   <category-def name="de.uni_hildesheim.sse.easy_producer.integration_category" label="EASy Producer Integration (Core)">
+      <description>
+         The features of this category provide the core functionality for the integration of external tools with the EASy Producer tool, a software product line engineering tool for the easy development of large-scale, multi-software product lines. In order to integrate EASy Producer with other tools, select the corresponding feature (typically, the feature has the same name as the tool to integrate with).
+      </description>
+   </category-def>
+   <category-def name="de.uni_hildesheim.sse.easy_producer.quick_install_category" label="Quick Installation of EASy Producer">
+      <description>
+         The single feature of this category provides all required plug-ins for an easy installation of EASy Producer. However, if you prefer a custom installation, please use the other EASy categories to select your desired plug-ins.
+      </description>
+   </category-def>
+</site>
