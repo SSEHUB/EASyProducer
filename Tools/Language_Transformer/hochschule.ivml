@@ -1,0 +1,206 @@
+Project hochschule  { 
+Compound _chooseKindOfCreation { 
+	String de = "Erstellungsart wählen:" ; 
+	String en = "Choose kind of creation:" ; 
+	 }
+
+
+Compound _AllocationKey { 
+	_chooseKindOfCreation chooseKindOfCreation ;
+	 }
+
+
+Compound _allocationaccounting { 
+	_AllocationKey AllocationKey ;
+	 }
+
+
+Compound _bia { 
+	_allocationaccounting allocationaccounting ;
+	 }
+
+
+Compound _supportInfo { 
+	String de = "Bei technischen Problemen oder Fragen zum Bewerbungsverfahren erhalten Sie Hilfe an der Support-Hotline <strong>0511 1220-0</strong> oder per E-Mail unter <strong>support@his.de</strong>." ; 
+	String en = "Assistance is available at the support hotline <strong>1220-0</strong> or via e-mail at <strong>support@his.de</strong>." ; 
+	 }
+
+
+Compound _overview { 
+	_supportInfo supportInfo ;
+	 }
+
+
+Compound _onlineapplication { 
+	_overview overview ;
+	 }
+
+
+Compound _cs { 
+	_bia bia ;
+	 }
+
+
+Compound _cm { 
+	_alu alu ;
+	_app app ;
+	_stu stu ;
+	 }
+
+
+Compound _messages { 
+	_mail mail ;
+	String active = "1" ; 
+	 }
+
+
+Compound _portal { 
+	_messages messages ;
+	 }
+
+
+Compound _customizing { 
+	_portal portal ;
+	 }
+
+
+Compound _sys { 
+	_customizing customizing ;
+	 }
+
+
+Compound _com { 
+	_system system ;
+	 }
+
+
+Compound _active_datapage { 
+	String study_history = "1" ; 
+	 }
+
+
+Compound _online { 
+	_active_datapage active_datapage ;
+	 }
+
+
+Compound _enrollment { 
+	_online online ;
+	String number_of_addresses = "3" ; 
+	 }
+
+
+Compound _stu { 
+	_enrollment enrollment ;
+	 }
+
+
+Compound _serviceverfahren { 
+	String semester = "WS" ; 
+	 }
+
+
+Compound _webservice { 
+	String password = "Test1234!" ; 
+	String url = "http://vmhsst02.his.de:8080/zvs.application.mitarbeiter.fe.web/webservice/2/" ; 
+	String user = "h-webservice" ; 
+	 }
+
+
+Compound _sftp { 
+	String host = "vmhsst02.his.de" ; 
+	String password = "HIS2011" ; 
+	String root = "/home/dosv/sftp/HS1450/" ; 
+	String user = "sftp_HS1450" ; 
+	 }
+
+
+Compound _dosv { 
+	_mail mail ;
+	_sftp sftp ;
+	_webservice webservice ;
+	String client_type = "WebService" ; 
+	 }
+
+
+Compound _sest { 
+	_dosv dosv ;
+	_serviceverfahren serviceverfahren ;
+	String url_hs_bewerbungsportal = "http://www.his.de" ; 
+	String verfahren_type = "Dezentral" ; 
+	 }
+
+
+Compound _person { 
+	String info1 = "3" ; 
+	String info2 = "3" ; 
+	 }
+
+
+Compound _application { 
+	String redirect_free_applications = "1" ; 
+	 }
+
+
+Compound _app { 
+	_application application ;
+	_person person ;
+	_sest sest ;
+	_onlineapplication onlineapplication ;
+	 }
+
+
+Compound _mail { 
+	String mailfrom = "alumni@his.de" ; 
+	String from_mail_adresse = "dosv@his.de" ; 
+	String smtp_host = "listserv.his.de" ; 
+	String noreplyemailaddress = "no-reply@his.de" ; 
+	 }
+
+
+Compound _contact { 
+	String person = "name=Sarah Eggers
+office=Alumni-Verwaltung
+street=Unter den Linden 38
+postcode=19059
+city=Schwerin
+phone=04711 72 09 72
+fax=04711 72 09 01
+email=contact@alumni.example.com" ; 
+	String person = "name=Antje Wagner
+office=Community-Verwaltung
+street=Alt-Moabit 23
+postcode=19059
+city=Schwerin
+phone=04711 72 09 90
+fax=04711 72 09 02
+email=contact@community.example.com" ; 
+	 }
+
+
+Compound _system { 
+	_contact contact ;
+	_mail mail ;
+	 }
+
+
+Compound _alu { 
+	_system system ;
+	 }
+
+
+Compound _core { 
+	_com com ;
+	_sys sys ;
+	 }
+
+
+Compound _cm { 
+	_alu alu ;
+	_app app ;
+	_stu stu ;
+	 }
+
+
+
+}

@@ -1,0 +1,55 @@
+Project TestProject  { 
+Compound _chooseKindOfCreation { 
+	String de = "Erstellungsart wählen:" ; 
+	String en = "Choose kind of creation:" ; 
+	 }
+
+
+Compound _AllocationKey { 
+	_chooseKindOfCreation chooseKindOfCreation ;
+	 }
+
+
+Compound _allocationaccounting { 
+	_AllocationKey AllocationKey ;
+	 }
+
+
+Compound _bia { 
+	_allocationaccounting allocationaccounting ;
+	 }
+
+
+Compound _supportInfo { 
+	String de = "Bei technischen Problemen oder Fragen zum Bewerbungsverfahren erhalten Sie Hilfe an der Support-Hotline <strong>0511 1220-0</strong> oder per E-Mail unter <strong>support@his.de</strong>." ; 
+	String en = "Assistance is available at the support hotline <strong>1220-0</strong> or via e-mail at <strong>support@his.de</strong>." ; 
+	 }
+
+
+Compound _overview { 
+	_supportInfo supportInfo ;
+	 }
+
+
+Compound _onlineapplication { 
+	_overview overview ;
+	 }
+
+
+Compound _app { 
+	_onlineapplication onlineapplication ;
+	 }
+
+
+Compound _cs { 
+	_bia bia ;
+	 }
+
+
+Compound _cm { 
+	_app app ;
+	 }
+
+
+
+}

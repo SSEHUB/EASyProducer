@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<configurationContainer>
+    <configuration identifier="TestProject">
+		<defaultValue>
+            <configType>uitext</configType>
+            <name>cm.app.onlineapplication.overview.supportInfo.de</name>
+            <value>Bei technischen Problemen oder Fragen zum Bewerbungsverfahren erhalten Sie Hilfe an der Support-Hotline &lt;strong&gt;0511 1220-0&lt;/strong&gt; oder per E-Mail unter &lt;strong&gt;support@his.de&lt;/strong&gt;.</value>
+        </defaultValue>
+        <defaultValue>
+            <configType>uitext</configType>
+            <name>cm.app.onlineapplication.overview.supportInfo.en</name>
+            <value>Assistance is available at the support hotline &lt;strong&gt;1220-0&lt;/strong&gt; or via e-mail at &lt;strong&gt;support@his.de&lt;/strong&gt;.</value>
+        </defaultValue>
+        <defaultValue>
+            <configType>uitext</configType>
+            <name>cs.bia.allocationaccounting.AllocationKey.chooseKindOfCreation.de</name>
+            <value>Erstellungsart wählen:</value>
+        </defaultValue>
+        <defaultValue>
+            <configType>uitext</configType>
+            <name>cs.bia.allocationaccounting.AllocationKey.chooseKindOfCreation.en</name>
+            <value>Choose kind of creation:</value>
+        </defaultValue>
+    </configuration>
+</configurationContainer>
+		

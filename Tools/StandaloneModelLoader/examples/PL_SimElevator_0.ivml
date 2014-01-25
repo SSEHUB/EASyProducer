@@ -1,0 +1,26 @@
+project PL_SimElevator {
+
+    version v0;
+    enum ControllerType {DefaultEController, DistanceEController};
+    enum ButtonType {DefaultButton, ArrowButton};
+    Integer elevators = 2;
+    Integer floors;
+    ControllerType controlling_controllertype = ControllerType.DefaultEController;
+    Boolean controlling_synchronized = true;
+    Boolean controlling_accelerated = true;
+    ButtonType outerview_buttontype = ButtonType.DefaultButton;
+    Boolean outerview_emergencybuttons = true;
+    Boolean outerview_cancellation = true;
+    Boolean innerview_emergencybutton = true;
+    Boolean innerview_authorization = true;
+    Boolean innerview_doorbutton = true;
+    Boolean display_direction = true;
+    Boolean display_currfloor_number = true;
+    Boolean display_currfloor_chain = true;
+    Boolean display_target = true;
+    Boolean display_openingside = true;
+    Boolean outerview_autoscroll = true;
+    controlling_synchronized = true implies elevators >= 2;
+    elevators > 0;
+    floors >= 1;
+}

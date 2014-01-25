@@ -1,0 +1,44 @@
+<body><table border="1">
+<tr><td colspan="6"><b>Integer Operations (16) :</b></td></tr>
+<tr align="center"><td>&nbsp;&nbsp;1) &nbsp;&nbsp;</td><td> Integer </td><td> + </td><td> Integer </td><td> = </td><td>Integer</td></tr>
+<tr align="center"><td>&nbsp;&nbsp;2) &nbsp;&nbsp;</td><td> Integer </td><td> + </td><td> Real </td><td> = </td><td>Real</td></tr>
+<tr align="center"><td>&nbsp;&nbsp;3) &nbsp;&nbsp;</td><td> Integer </td><td> - </td><td> Integer </td><td> = </td><td>Integer</td></tr>
+<tr align="center"><td>&nbsp;&nbsp;4) &nbsp;&nbsp;</td><td> Integer </td><td> - </td><td> Real </td><td> = </td><td>Real</td></tr>
+<tr align="center"><td>&nbsp;&nbsp;5) &nbsp;&nbsp;</td><td> Integer </td><td> * </td><td> Integer </td><td> = </td><td>Integer</td></tr>
+<tr align="center"><td>&nbsp;&nbsp;6) &nbsp;&nbsp;</td><td> Integer </td><td> * </td><td> Real </td><td> = </td><td>Real</td></tr>
+<tr align="center"><td>&nbsp;&nbsp;7) &nbsp;&nbsp;</td><td> Integer </td><td> / </td><td> Integer </td><td> = </td><td>Integer</td></tr>
+<tr align="center"><td>&nbsp;&nbsp;8) &nbsp;&nbsp;</td><td> Integer </td><td> / </td><td> Real </td><td> = </td><td>Real</td></tr>
+<tr align="center"><td>&nbsp;&nbsp;9) &nbsp;&nbsp;</td><td> Integer </td><td> = </td><td> Integer </td><td> = </td><td>Boolean</td></tr>
+<tr align="center"><td>&nbsp;&nbsp;10) &nbsp;&nbsp;</td><td> Integer </td><td> = </td><td> Real </td><td> = </td><td>Boolean</td></tr>
+<tr align="center"><td>&nbsp;&nbsp;11) &nbsp;&nbsp;</td><td> Integer </td><td> <> </td><td> Integer </td><td> = </td><td>Boolean</td></tr>
+<tr align="center"><td>&nbsp;&nbsp;12) &nbsp;&nbsp;</td><td> Integer </td><td> <> </td><td> Real </td><td> = </td><td>Boolean</td></tr>
+<tr align="center"><td>&nbsp;&nbsp;13) &nbsp;&nbsp;</td><td> Integer </td><td> > </td><td> Integer </td><td> = </td><td>Boolean</td></tr>
+<tr align="center"><td>&nbsp;&nbsp;14) &nbsp;&nbsp;</td><td> Real </td><td> > </td><td> Integer </td><td> = </td><td>Boolean</td></tr>
+<tr align="center"><td>&nbsp;&nbsp;15) &nbsp;&nbsp;</td><td> Integer </td><td> max </td><td> Integer </td><td> = </td><td>Integer</td></tr>
+<tr align="center"><td>&nbsp;&nbsp;16) &nbsp;&nbsp;</td><td> Integer </td><td> max </td><td> Real </td><td> = </td><td>Integer</td></tr>
+<tr><td colspan="6"><b>Real Operations (12) :</b></td></tr>
+<tr align="center"><td>&nbsp;&nbsp;1) &nbsp;&nbsp;</td><td> Real </td><td> + </td><td> Real </td><td> = </td><td>Real</td></tr>
+<tr align="center"><td>&nbsp;&nbsp;2) &nbsp;&nbsp;</td><td> Real </td><td> + </td><td> Integer </td><td> = </td><td>Real</td></tr>
+<tr align="center"><td>&nbsp;&nbsp;3) &nbsp;&nbsp;</td><td> Real </td><td> - </td><td> Real </td><td> = </td><td>Real</td></tr>
+<tr align="center"><td>&nbsp;&nbsp;4) &nbsp;&nbsp;</td><td> Real </td><td> - </td><td> Integer </td><td> = </td><td>Real</td></tr>
+<tr align="center"><td>&nbsp;&nbsp;5) &nbsp;&nbsp;</td><td> Real </td><td> * </td><td> Real </td><td> = </td><td>Real</td></tr>
+<tr align="center"><td>&nbsp;&nbsp;6) &nbsp;&nbsp;</td><td> Real </td><td> * </td><td> Integer </td><td> = </td><td>Real</td></tr>
+<tr align="center"><td>&nbsp;&nbsp;7) &nbsp;&nbsp;</td><td> Real </td><td> / </td><td> Real </td><td> = </td><td>Real</td></tr>
+<tr align="center"><td>&nbsp;&nbsp;8) &nbsp;&nbsp;</td><td> Real </td><td> / </td><td> Integer </td><td> = </td><td>Real</td></tr>
+<tr align="center"><td>&nbsp;&nbsp;9) &nbsp;&nbsp;</td><td> Real </td><td> = </td><td> Real </td><td> = </td><td>Boolean</td></tr>
+<tr align="center"><td>&nbsp;&nbsp;10) &nbsp;&nbsp;</td><td> Real </td><td> = </td><td> Integer </td><td> = </td><td>Boolean</td></tr>
+<tr align="center"><td>&nbsp;&nbsp;11) &nbsp;&nbsp;</td><td> Real </td><td> <> </td><td> Real </td><td> = </td><td>Boolean</td></tr>
+<tr align="center"><td>&nbsp;&nbsp;12) &nbsp;&nbsp;</td><td> Real </td><td> <> </td><td> Integer </td><td> = </td><td>Boolean</td></tr>
+<tr><td colspan="6"><b>Boolean Operations (5) :</b></td></tr>
+<tr align="center"><td>&nbsp;&nbsp;1) &nbsp;&nbsp;</td><td> Boolean </td><td> not </td><td></td><td> = </td><td>Boolean</td></tr>
+<tr align="center"><td>&nbsp;&nbsp;2) &nbsp;&nbsp;</td><td> Boolean </td><td> or </td><td> Boolean </td><td> = </td><td>Boolean</td></tr>
+<tr align="center"><td>&nbsp;&nbsp;3) &nbsp;&nbsp;</td><td> Boolean </td><td> xor </td><td> Boolean </td><td> = </td><td>Boolean</td></tr>
+<tr align="center"><td>&nbsp;&nbsp;4) &nbsp;&nbsp;</td><td> Boolean </td><td> and </td><td> Boolean </td><td> = </td><td>Boolean</td></tr>
+<tr align="center"><td>&nbsp;&nbsp;5) &nbsp;&nbsp;</td><td> Boolean </td><td> implies </td><td> Boolean </td><td> = </td><td>Boolean</td></tr>
+<tr><td colspan="6"><b>String Operations (5) :</b></td></tr>
+<tr align="center"><td>&nbsp;&nbsp;1) &nbsp;&nbsp;</td><td> String </td><td> size </td><td></td><td> = </td><td>Integer</td></tr>
+<tr align="center"><td>&nbsp;&nbsp;2) &nbsp;&nbsp;</td><td> String </td><td> toInteger </td><td></td><td> = </td><td>Integer</td></tr>
+<tr align="center"><td>&nbsp;&nbsp;3) &nbsp;&nbsp;</td><td> String </td><td> toReal </td><td></td><td> = </td><td>Real</td></tr>
+<tr align="center"><td>&nbsp;&nbsp;4) &nbsp;&nbsp;</td><td> String </td><td> concat </td><td> String </td><td> = </td><td>String</td></tr>
+<tr align="center"><td>&nbsp;&nbsp;5) &nbsp;&nbsp;</td><td> String </td><td> substring </td><td> Integer ,  Integer </td><td> = </td><td>String</td></tr>
+</table></body>
