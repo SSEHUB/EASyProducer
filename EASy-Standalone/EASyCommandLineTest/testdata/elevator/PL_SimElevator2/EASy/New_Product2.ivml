@@ -1,0 +1,41 @@
+project New_Product2 {
+
+    version v0;
+    import PL_SimElevator2 with (PL_SimElevator2.version == v0);
+    elevators = 4;
+    floors = 10;
+    controlling_controllertype = ControllerType.DefaultEController;
+    controlling_synchronized = true;
+    controlling_accelerated = true;
+    outerview_buttontype = ButtonType.DefaultButton;
+    outerview_emergencybuttons = true;
+    outerview_cancellation = true;
+    innerview_emergencybutton = true;
+    innerview_authorization = true;
+    innerview_doorbutton = true;
+    display_direction = true;
+    display_currfloor_number = true;
+    display_currfloor_chain = true;
+    display_target = true;
+    display_openingside = true;
+    outerview_autoscroll = true;
+    freeze {
+        elevators;
+        floors;
+        controlling_controllertype;
+        controlling_synchronized;
+        controlling_accelerated;
+        outerview_buttontype;
+        outerview_emergencybuttons;
+        outerview_cancellation;
+        innerview_emergencybutton;
+        innerview_authorization;
+        innerview_doorbutton;
+        display_direction;
+        display_currfloor_number;
+        display_currfloor_chain;
+        display_target;
+        display_openingside;
+        outerview_autoscroll;
+    }
+}

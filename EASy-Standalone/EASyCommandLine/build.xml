@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Create Runnable Jar for Project EASyCommandLine with libraries in sub-folder">
+    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
+    <!--ANT 1.7 is required                                        -->
+    <property name="version" value="0.7"/>
+    
+    <target name="create_run_jar">
+        <jar destfile="C:/Users/El-Sharkawy/Desktop/cmd/EASyCommand.jar">
+            <manifest>
+                <attribute name="Main-Class" value="de.uni_hildesheim.sse.easy.cmd.CommandLineExecuter"/>
+                <attribute name="Class-Path" value=". EASyCommand_lib/easy-headless.jar EASyCommand_lib/eclipse-part.jar"/>
+            </manifest>
+            <fileset dir="C:/Elscha/Eclipse/workspaceSSE/EASyCommandLine/bin"/>
+        </jar>
+        <delete dir="C:/Users/El-Sharkawy/Desktop/cmd/EASyCommand_lib"/>
+        <mkdir dir="C:/Users/El-Sharkawy/Desktop/cmd/EASyCommand_lib"/>
+        <copy file="C:/Elscha/Eclipse/workspaceSSE/EASyCommandLine/lib/easy-headless.jar" todir="C:/Users/El-Sharkawy/Desktop/cmd/EASyCommand_lib"/>
+        <copy file="C:/Elscha/Eclipse/workspaceSSE/EASyCommandLine/lib/eclipse-part.jar" todir="C:/Users/El-Sharkawy/Desktop/cmd/EASyCommand_lib"/>
+    </target>
+    
+    <target name="jar">
+        <mkdir dir="dist"/>
+        <jar destfile="dist/EASyCommand-${version}.jar">
+            <fileset dir="bin"/>
+        </jar>
+    </target>
+</project>

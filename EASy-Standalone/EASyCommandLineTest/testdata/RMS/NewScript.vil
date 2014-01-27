@@ -1,0 +1,49 @@
+vilScript PL_RMS_Platform2 (Project source, Configuration config, Project target) {
+
+    version v0;
+
+    /*
+     * Info from NDL:
+     * Example of only one message:
+     *     {"webServiceName":"DirectTextMessageSessionPermission","status":true}
+     *
+     * Example of more than one message:
+     *     [{"webServiceName":"DirectTextMessageSessionPermission","status":true},
+     *      {"webServiceName":"DirectVoiceAndVideoSessionInitiationPermission","status":true},
+     *      {"webServiceName":"MachineMonitoringPermission","status":false},
+     *      {"webServiceName":"TextMessageHistoryPermission","status":false}]
+     */
+     
+     /*
+      * Curl and SOAP
+      * 
+      * $ curl -X POST
+      *        -H "Content-Type: text/xml" \
+      *        -H "SOAPAction: \"http://api.eyeblaster.com/IAuthenticationService/ClientLogin\"" \
+      *        --data-binary @request.xml \
+      *        https://sandbox.mediamind.com/Eyeblaster.MediaMind.API/V2/AuthenticationService.svc
+      */
+
+    load properties "EASy/build.properties";
+
+    Path curlExePath;
+
+    main(Project source, Configuration config, Project target) = : {
+        // TODO: check address and string for correctness!
+        // sorting is just for normalizing the test results
+        sequenceOf(DecisionVariable) rmsConfigs = config.getByName("platformServicesConfig").variables().sortAlpha();
+        execute curlExePath("-X", "POST", "\"{\\\"remotelyAdapt\\\":{\\\"items\\\":[
+            {\\\"RemoteAdaptation\\\":\\\"${rmsConfigs[0].name()}\\\":\\\"${rmsConfigs[0].value()}\\\"},
+            {\\\"RemoteAdaptation\\\":\\\"${rmsConfigs[1].name()}\\\":\\\"${rmsConfigs[1].value()}\\\"},
+            {\\\"RemoteAdaptation\\\":\\\"${rmsConfigs[2].name()}\\\":\\\"${rmsConfigs[2].value()}\\\"},
+            {\\\"RemoteAdaptation\\\":\\\"${rmsConfigs[3].name()}\\\":\\\"${rmsConfigs[3].value()}\\\"},
+            {\\\"RemoteAdaptation\\\":\\\"${rmsConfigs[4].name()}\\\":\\\"${rmsConfigs[4].value()}\\\"},
+            {\\\"RemoteAdaptation\\\":\\\"${rmsConfigs[5].name()}\\\":\\\"${rmsConfigs[5].value()}\\\"},
+            {\\\"RemoteAdaptation\\\":\\\"${rmsConfigs[6].name()}\\\":\\\"${rmsConfigs[6].value()}\\\"},
+            {\\\"RemoteAdaptation\\\":\\\"${rmsConfigs[7].name()}\\\":\\\"${rmsConfigs[7].value()}\\\"},
+            {\\\"RemoteAdaptation\\\":\\\"${rmsConfigs[8].name()}\\\":\\\"${rmsConfigs[8].value()}\\\"},
+            {\\\"RemoteAdaptation\\\":\\\"${rmsConfigs[9].name()}\\\":\\\"${rmsConfigs[9].value()}\\\"}],
+            \\\"children\\\":null}}\"", "-H", "\"Content-Type:application/json\"", "-BLUBB", "\"Accept:application/json\"",
+            "http://remoteadaptation.service.rms.indenica.nextdaylab.com/");        
+    }
+}

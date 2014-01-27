@@ -1,0 +1,16 @@
+PL_SimElevator2::elevators = How many different elevators shall be part of the simulator?
+PL_SimElevator2::floors = How many floors shall be accessible?
+PL_SimElevator2::controlling_controllertype = Which controller shall be used? DefaultEController = Normal behavior, DistanceEController = Near targets first.
+PL_SimElevator2::controlling_accelerated = Shall the elevator increase its velocity if there are many floors which shall be passed?
+PL_SimElevator2::outerview_buttontype = Is it possible to specify the direction of travel?
+PL_SimElevator2::outerview_emergencybuttons = Shall emergency buttons be provided outside of the elevator? 
+PL_SimElevator2::outerview_cancellation = Are certain floors only accessible by key (card)?
+PL_SimElevator2::innerview_emergencybutton = Shall emergency buttons be provided inside of the elevator? 
+PL_SimElevator2::innerview_authorization = Are certain floors only accessible by key (card)?
+PL_SimElevator2::innerview_doorbutton = 
+PL_SimElevator2::display_direction = 
+PL_SimElevator2::display_currfloor_number = 
+PL_SimElevator2::display_currfloor_chain = 
+PL_SimElevator2::display_target = 
+PL_SimElevator2::display_openingside = Does the elvator have more than one door?
+PL_SimElevator2::outerview_autoscroll = Shall the simulator focus the elevators while moving?

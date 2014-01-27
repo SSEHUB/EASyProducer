@@ -1,0 +1,11 @@
+import PL_SimElevator with (version == v0);
+
+vilScript New_Product (Project source, Configuration conf, Project target) {
+
+    version v0;
+
+    main(Project source, Configuration conf, Project target) = : {
+        super.main(source, conf, target);
+    }
+
+}

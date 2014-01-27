@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="EASyCommandLine.tests" default="all" basedir=".">
+	<!-- import von globalen Properties Einstellungen -->
+	<property file="${user.home}/global-build.properties"/>
+	
+	<!-- Einstellungen fuer dieses Projekt -->
+	<property name="src.dir" value="src"/>
+	<property name="javacSource" value="1.6"/>
+	<property name="javacTarget" value="1.6"/>
+	
+	<path id ="includes">
+        <!-- Lib -->
+        <fileset dir="lib">
+            <include name="**/*.jar" />
+        </fileset>
+		<!-- Junit -->
+        <fileset dir="${eclipse.plugins.dir}">
+            <include name="**/junit*.jar" />
+            <include name="**/org.hamcrest.core*.jar" />
+        </fileset>
+    </path>
+	
+	<!-- Targets  -->
+	<target name="init">
+		<!-- Delete generated folders -->
+		<delete dir="${build.base.dir}"/>
+		<delete dir="${basedir}/junit"/>
+		
+		<!-- Create folders -->
+        <mkdir dir="${build.base.dir}"/>
+        <mkdir dir="${build.base.dir}/testdata"/>
+		<mkdir dir="${build.classes.dir}"/>
+		<mkdir dir="${basedir}/junit"/>
+	</target>
+	
+	<!-- Compile all files without test classes -->
+	<target name="compile" depends="init">
+		<javac srcdir="${src.dir}" debug="on" destdir="${build.classes.dir}" includeAntRuntime="no" failonerror="true" source="${javacSource}" target="${javacTarget}" encoding="${javac.encoding}">
+			<classpath refid="includes" />	
+		</javac>
+    </target>
+	
+	<target name="junit" depends="compile">
+		<junit printsummary="yes" fork="yes" haltonfailure="yes">
+			<classpath >                            
+                <pathelement location="${build.classes.dir}"/>              
+                <path refid="includes" />                
+            </classpath> 
+			
+			<sysproperty key="EASyCommandlineTests.testdata" value="${basedir}/testdata"/>
+			<sysproperty key="EASyCommandline.binFolder" value="${home.standalone.executer.dir}/${build.classes.dir}"/>
+			<sysproperty key="EASyCommandline.libFolder" value="${home.standalone.executer.dir}/lib"/>
+			<formatter type="xml"/>		
+		    <test name="de.uni_hildesheim.sse.easy.cmd.AllTests" toDir="${basedir}/junit">
+		    	<formatter type="xml"/>
+		    </test>
+		</junit>
+	</target>
+	
+	<target name="all">
+		<antcall target="junit" />
+	</target>
+</project>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Project name must not contain whitespaces -->
+<project name="Standalone Tools" default="all" basedir=".">	
+	<property file="${user.home}/global-build.properties"/>
+	<path id="emma.lib" >    		
+		<pathelement location="${emma.path}/emma.jar" />	
+		<pathelement location="${emma.path}/emma_ant.jar" />	
+	</path>
+	<taskdef resource="emma_ant.properties" classpathref="emma.lib" />
+
+	<target name="init">
+		<!-- Delete generated folders -->
+		<delete dir="junitResults"/>
+		<delete dir="${coverage.base.dir}"/>
+		<delete dir="${doc.dir}"/>
+		
+		<!-- Create folders -->
+		<mkdir dir="junitResults"/>
+		<mkdir dir="${coverage.base.dir}"/>
+		<mkdir dir="${coverage.instr.dir}"/>
+		<mkdir dir="${coverage.results.dir}"/>
+		<mkdir dir="${doc.dir}"/>
+	</target>
+	
+	<target name="compile">
+        <echo>##########################</echo>
+        <echo>###  CommandLine Tool  ###</echo>
+        <echo>##########################</echo>
+        <ant dir="EASyCommandLine" antfile="${build.script.name}" />
+        
+        <echo>##########################</echo>
+        <echo>###  CommandLine Tests ###</echo>
+        <echo>##########################</echo>
+        <ant dir="EASyCommandLineTest" antfile="${build.script.name}" />
+    </target>
+	
+	<target name="all" depends="init, compile"/>
+</project>
