@@ -1,0 +1,17 @@
+// test import and access correctly via qualified and unqualified name
+// special comment ensures notation of IvmlWriter
+project testImportFail3 {
+
+    version v0;
+    import testInterface::iface1 with (testInterface.version < v1.10);
+// iface2 is not imported -> fail (qualified)
+    testInterface::iface2::s1.size() > 10;
+// iface2 is not imported -> fail (unqualified)
+    b1 = true;
+// not visible through interfaces -> fail (qualified)
+    testInterface::i3 = 10;
+// not visible through interfaces -> fail (unqualified)
+    i3 = 10;
+// not visible as variables of this type are not exported
+    testInterface::comp2 c2;
+}

@@ -1,0 +1,5 @@
+project testVersionedProject {
+
+    version v1.1;
+    Integer i = 5;
+}

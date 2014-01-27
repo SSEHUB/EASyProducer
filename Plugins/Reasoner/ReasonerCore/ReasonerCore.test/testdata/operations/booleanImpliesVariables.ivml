@@ -1,0 +1,14 @@
+project booleanImpliesVariables {
+
+    Boolean a, b, a1, b1;
+    a = true;
+    b = true;
+    a1 = false;
+    b1 = false;
+    
+    a == true implies b == true;
+    a1 == false implies b1 == false;
+    (a == true or a1 = false) implies b1 = false;
+    a == true or a1 = false implies b1 = false;
+
+}

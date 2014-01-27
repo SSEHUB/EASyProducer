@@ -1,0 +1,13 @@
+// this is not imported by files in advanced due to hierarchical import convention
+project testCompounds {
+
+    version v0;
+    compound position {
+        Integer x = 1;
+        Integer y = 2;
+        String s = "a";
+        x > 1;
+    }
+
+    position p;
+}

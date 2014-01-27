@@ -1,0 +1,72 @@
+project StringExpression {
+
+    /*
+    String common_errorpage_text_uitext_de;
+    String cs_sys_myreports_generalhelp_uitext_de; 
+    common_errorpage_text_uitext_de = "Es ist ein Fehler aufgetreten. Bitte wenden Sie sich an die Hochschule, falls der Fehler wiederholt auftritt.<br />
+<br />
+{0}";
+    //cs_sys_myreports_generalhelp_uitext_de = "Sie kö, blah, usw. im ür jn Buttons. Zum  PDF-Dateien ötig einen <a href=\"http://get.adobe.com/de/reader/\" target=\"_blank\" title=\"Adobe Reader\">PDF-Reader</a>.";
+    //cs_sys_myreports_generalhelp_uitext_de = "Sie , blah, usw. im  jn Buttons. Zum  PDF-Dateien tig einen <a href=\"http://get.adobe.com/de/reader/\" target=\"_blank\" title=\"Adobe Reader\">PDF-Reader</a>.";
+    
+    String temp;
+    temp = "Sie kö, blah,";
+    
+    String temp2;
+    temp2 = "einen <a href=";
+    
+    String temp3;
+   // temp3 = " ..\"http://get.adobe.com/de/reader/..";
+    
+    String temp4;
+    temp4 = "Pha\"ni";
+    */
+    /*
+    String cm_app_visiting_student_helptext_uitext_de;
+    cm_app_visiting_student_helptext_uitext_de  = "<p>Ein <b>Gaststudent</b>, auch <b>Gaststudierender</b> oder <b>Zweithörer</b> genannt, ist ein Student, der an einer Hochschule eingeschrieben ist, aber dort keine studentischen Mitgliedschaftsrechte ausübt, da er primär an einer anderen Hochschule als ordentlicher Student immatrikuliert ist.</p>
+<p>Gaststudenten werden auch als <i>visiting student</i>, <i>occasional fee paying student</i>, <i>individual mover</i>, <i>free mover</i>&nbsp;oder <i>étudiant libre</i>&nbsp;bezeichnet.</p>
+<p>Der Vorteil des Gaststudiums liegt darin, dass zwischen der eigenen und der Gastuniversität kein Abkommen nötig ist. Am Ende der belegten Kurse erhält der Student ein Zertifikat über die Kreditpunkte, die an der eigenen Universität angerechnet werden können. Ob dies möglich ist, sollte vorab geklärt werden. Die meisten Universitäten nehmen Gaststudierende auf.</p>
+<p>Zweithörer sind darüber hinaus Studenten, die auch an ihrer Zweithochschule im Rahmen eines <a href=\"http://de.wikipedia.org/wiki/Doppelstudium\" target=\"_blank\" title=\"Doppelstudium\">Parallelstudiums</a> ein vollständiges Studium absolvieren.<br />
+Quelle: [<a href=\"http://de.wikipedia.org/wiki/Gaststudent\" target=\"_blank\">http://de.wikipedia.org/wiki/Gaststudent</a>]</p>";
+    
+    
+    compound C {
+        Integer cc1;
+        Integer cc2;
+    }
+    
+    C c1;
+    //c1 = {cc1 = 5, cc2 = 5 * 10};
+    
+    Integer aaa = 10;
+    Integer bbb = 20;
+    Integer ccc;
+    ccc = (aaa + bbb) * 2; 
+    
+    C c2;
+    //c2 = {cc1 = 10, cc2 = aaa + bbb};
+    
+    C c3;
+    c3 = {cc1 = 100, cc2 = 200};
+    
+    eval {
+        1000 > 1500;
+        2000 < 1000;
+    }
+    */
+    
+    Integer x = 5;
+    Integer alpha = 20;
+    /*
+    */
+
+    let Integer y = x + 5
+        in y > 5;
+
+    Integer z;
+    Integer zz;
+    
+    x > 3 implies z == 2 + alpha;
+    x > 3 implies zz == 2 + alpha;
+    
+}

@@ -1,0 +1,21 @@
+project Example5 {
+
+    Integer a, b, c;
+    Integer x, y, z;
+    
+    //Fixing a and b
+    a == 5;
+    b == 7;
+    
+    //Fixing c
+    
+    a > 2 and b > 6 implies c == 10;
+    
+    x = 5;
+    //This should set default status to y
+    a > 2 and x > 3 implies y == 10;
+    
+    //This should fix y
+     a > 2 and b > 6 implies y == 8;
+
+}

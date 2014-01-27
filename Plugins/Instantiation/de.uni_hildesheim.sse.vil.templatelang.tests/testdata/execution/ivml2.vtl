@@ -1,0 +1,11 @@
+template ivml1(Configuration config, Artifact target) {
+
+    def main(Configuration config, Artifact target) {
+        if (config.getByName("pCompSeq").variables().isEmpty()) {
+            'empty'
+        } else {
+            'filled'
+        }
+    }
+
+}

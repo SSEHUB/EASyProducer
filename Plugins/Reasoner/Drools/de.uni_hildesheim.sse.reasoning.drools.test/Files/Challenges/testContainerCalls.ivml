@@ -1,0 +1,35 @@
+project container_test {
+
+    sequenceOf(Integer) seq3 = {1, 2, 3, 4, 5, 10, 9, 8, 7, 6};
+    seq3 = {11, 2, 3, 4, 5, 10, 9, 8, 7};
+
+/*    
+*/
+    sequenceOf(Integer) seq1 = {1, 2, 3, 4, 5};
+    sequenceOf(Integer) seq2;
+    //This works as assgn.
+   seq2 == seq1;
+    
+    //seq2 == {2, 3, 6, 8, 10, 12};
+    
+    seq1->exists(t | t > 4);
+
+
+    Integer a = 5;
+    a = 20;
+    //a = 25;
+    
+    
+    compound C {
+        sequenceOf(Integer) seq4 = {1, 2, 3, 4, 5, 10, 9, 8, 7, 6};
+    }
+    
+    C c1;
+    
+   c1.seq4 = {11, 2, 3, 4};
+   
+   Integer i1 = 50;
+   Integer i2;
+
+   i1 < seq4.sum(); 
+}

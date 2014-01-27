@@ -1,0 +1,5 @@
+-> main(Configuration, FileArtifact) with (<config>, test.texts)
+    -> getPath(FileArtifact) with (test.texts) = test.texts
+    -> isPattern(Path) with (test.texts) = false
+    -> not(Boolean) with (false) = true
+    visit if-branch

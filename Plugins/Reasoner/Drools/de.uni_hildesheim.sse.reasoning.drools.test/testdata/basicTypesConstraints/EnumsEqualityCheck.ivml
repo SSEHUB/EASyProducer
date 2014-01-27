@@ -1,0 +1,12 @@
+project testEnumsEqualityCheck {
+    enum Color {red, blue};
+    
+    Color color1;
+    color1 == Color.red;
+    Color color2; 
+    color2 == Color.blue;
+    
+    color1 == color2;
+    
+    
+}

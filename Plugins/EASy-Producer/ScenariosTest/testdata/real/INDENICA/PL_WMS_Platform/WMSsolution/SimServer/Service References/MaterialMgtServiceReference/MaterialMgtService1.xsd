@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/DataAccess" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/DataAccess" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost:49839/MaterialMgtService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/System.Data.Objects.DataClasses" />
+  <xs:complexType name="ArrayOfBox">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Box" nillable="true" type="tns:Box" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfBox" nillable="true" type="tns:ArrayOfBox" />
+  <xs:complexType name="Box">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q1="http://schemas.datacontract.org/2004/07/System.Data.Objects.DataClasses" base="q1:EntityObject">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="abc_cat" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="id" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="location" nillable="true" type="tns:Location" />
+          <xs:element minOccurs="0" name="locationReference" nillable="true" type="q1:EntityReferenceOfLocation5pLEqQDt" />
+          <xs:element minOccurs="0" name="location_id" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="positions" nillable="true" type="tns:ArrayOfPosition" />
+          <xs:element minOccurs="0" name="transportentry" nillable="true" type="tns:Transportentry" />
+          <xs:element minOccurs="0" name="transportentryReference" nillable="true" type="q1:EntityReferenceOfTransportentry5pLEqQDt" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Box" nillable="true" type="tns:Box" />
+  <xs:complexType name="Location">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q2="http://schemas.datacontract.org/2004/07/System.Data.Objects.DataClasses" base="q2:EntityObject">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="abc_cat" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="boxes" nillable="true" type="tns:ArrayOfBox" />
+          <xs:element minOccurs="0" name="id" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="locationtype" nillable="true" type="tns:Locationtype" />
+          <xs:element minOccurs="0" name="locationtypeReference" nillable="true" type="q2:EntityReferenceOfLocationtype5pLEqQDt" />
+          <xs:element minOccurs="0" name="rack" nillable="true" type="tns:Rack" />
+          <xs:element minOccurs="0" name="rackReference" nillable="true" type="q2:EntityReferenceOfRack5pLEqQDt" />
+          <xs:element minOccurs="0" name="rack_id" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="reserved" nillable="true" type="xs:boolean" />
+          <xs:element minOccurs="0" name="transportentries" nillable="true" type="tns:ArrayOfTransportentry" />
+          <xs:element minOccurs="0" name="type" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Location" nillable="true" type="tns:Location" />
+  <xs:complexType name="Locationtype">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q3="http://schemas.datacontract.org/2004/07/System.Data.Objects.DataClasses" base="q3:EntityObject">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="id" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="locations" nillable="true" type="tns:ArrayOfLocation" />
+          <xs:element minOccurs="0" name="name" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Locationtype" nillable="true" type="tns:Locationtype" />
+  <xs:complexType name="ArrayOfLocation">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Location" nillable="true" type="tns:Location" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfLocation" nillable="true" type="tns:ArrayOfLocation" />
+  <xs:complexType name="Rack">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q4="http://schemas.datacontract.org/2004/07/System.Data.Objects.DataClasses" base="q4:EntityObject">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="id" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="locations" nillable="true" type="tns:ArrayOfLocation" />
+          <xs:element minOccurs="0" name="name" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Rack" nillable="true" type="tns:Rack" />
+  <xs:complexType name="ArrayOfTransportentry">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Transportentry" nillable="true" type="tns:Transportentry" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfTransportentry" nillable="true" type="tns:ArrayOfTransportentry" />
+  <xs:complexType name="Transportentry">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q5="http://schemas.datacontract.org/2004/07/System.Data.Objects.DataClasses" base="q5:EntityObject">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="bin_id" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="box" nillable="true" type="tns:Box" />
+          <xs:element minOccurs="0" name="boxReference" nillable="true" type="q5:EntityReferenceOfBox5pLEqQDt" />
+          <xs:element minOccurs="0" name="box_id" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="location" nillable="true" type="tns:Location" />
+          <xs:element minOccurs="0" name="locationReference" nillable="true" type="q5:EntityReferenceOfLocation5pLEqQDt" />
+          <xs:element minOccurs="0" name="test" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Transportentry" nillable="true" type="tns:Transportentry" />
+  <xs:complexType name="ArrayOfPosition">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Position" nillable="true" type="tns:Position" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPosition" nillable="true" type="tns:ArrayOfPosition" />
+  <xs:complexType name="Position">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q6="http://schemas.datacontract.org/2004/07/System.Data.Objects.DataClasses" base="q6:EntityObject">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="amount" type="xs:decimal" />
+          <xs:element minOccurs="0" name="box" nillable="true" type="tns:Box" />
+          <xs:element minOccurs="0" name="boxReference" nillable="true" type="q6:EntityReferenceOfBox5pLEqQDt" />
+          <xs:element minOccurs="0" name="box_id" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="material" nillable="true" type="tns:Material" />
+          <xs:element minOccurs="0" name="materialReference" nillable="true" type="q6:EntityReferenceOfMaterial5pLEqQDt" />
+          <xs:element minOccurs="0" name="material_id" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Position" nillable="true" type="tns:Position" />
+  <xs:complexType name="Material">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q7="http://schemas.datacontract.org/2004/07/System.Data.Objects.DataClasses" base="q7:EntityObject">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="materialNumber" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="name" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="positions" nillable="true" type="tns:ArrayOfPosition" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Material" nillable="true" type="tns:Material" />
+  <xs:complexType name="ArrayOfMaterial">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Material" nillable="true" type="tns:Material" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfMaterial" nillable="true" type="tns:ArrayOfMaterial" />
+  <xs:complexType name="ArrayOfLocationtype">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Locationtype" nillable="true" type="tns:Locationtype" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfLocationtype" nillable="true" type="tns:ArrayOfLocationtype" />
+  <xs:complexType name="ArrayOfRack">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Rack" nillable="true" type="tns:Rack" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfRack" nillable="true" type="tns:ArrayOfRack" />
+  <xs:complexType name="ArrayOfOrder">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Order" nillable="true" type="tns:Order" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfOrder" nillable="true" type="tns:ArrayOfOrder" />
+  <xs:complexType name="Order">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q8="http://schemas.datacontract.org/2004/07/System.Data.Objects.DataClasses" base="q8:EntityObject">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="dockId" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="isUnloading" type="xs:boolean" />
+          <xs:element minOccurs="0" name="orderId" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="toBeCleaned" type="xs:boolean" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Order" nillable="true" type="tns:Order" />
+</xs:schema>

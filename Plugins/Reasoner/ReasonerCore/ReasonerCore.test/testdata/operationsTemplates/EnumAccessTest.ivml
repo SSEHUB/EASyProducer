@@ -1,0 +1,10 @@
+project EnumAccessTest {
+
+    enum ContentType {text, movie, audio, picture};
+    
+    ContentType contentA = ContentType.text;
+    ContentType contentB = ContentType.audio;
+    
+    contentA == ContentType.text;
+    contentA != contentB;
+}

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="de.uni_hildesheim.sse.ivml" default="jar" basedir=".">
+	<!-- import von globalen Properties Einstellungen -->
+	<property file="${user.home}/global-build.properties"/>
+	
+	<!-- Einstellungen fuer dieses Projekt -->
+	<property name="src.dir" value="src"/>
+	<property name="src.gen.dir" value="src-gen"/>
+	<property name="xtend.gen.dir" value="xtend-gen"/>
+	<property name="javacSource" value="1.5"/>
+	<property name="javacTarget" value="1.5"/>
+	
+	<path id ="includes">
+		<!-- Model -->
+		<pathelement path="${libs.utils}"/>
+		<pathelement path="${libs.model}"/>
+        <!-- DSL core common classes -->
+        <pathelement path="${libs.dslCore}"/>		
+		<!-- Eclipse-Plugins -->
+		<fileset dir="${eclipse.plugins.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+	
+	<!-- Targets  -->
+	<target name="init">
+		<!-- Delete generated folders -->
+		<delete dir="${build.base.dir}"/>
+		
+		<!-- Create folders -->
+        <mkdir dir="${build.base.dir}"/>
+		<mkdir dir="${build.classes.dir}"/>
+		<mkdir dir="${build.jar.dir}"/>
+	</target>
+	
+	<!-- Compile all files without test classes -->
+	<target name="compile" depends="init">
+		<javac srcdir="${src.dir}" debug="on" destdir="${build.classes.dir}" includeAntRuntime="no" failonerror="true" source="${javacSource}" target="${javacTarget}" encoding="${javac.encoding}">
+			<src path="${src.gen.dir}" />
+			<src path="${xtend.gen.dir}" />
+			<classpath refid="includes" />	
+		</javac>
+    </target>
+	
+	<!-- Creates a jar file -->
+	<target name="jar" depends="compile">
+        <!-- Copy needed xtext files -->
+		<copy todir="${build.classes.dir}" failonerror="true" overwrite="true">
+			<fileset dir="${src.dir}">
+				<include name="**/*.mwe2" />
+				<include name="**/*.xtext" />
+			</fileset>
+			<fileset dir="${src.gen.dir}">
+				<include name="**/*.xmi" />
+				<include name="**/*.genmodel" />
+				<include name="**/*.ecore" />
+				<include name="**/*.g" />
+				<include name="**/*.tokens" />
+			</fileset>
+		</copy>
+		<jar destfile="${build.jar.dir}/${ant.project.name}.jar" basedir="${build.classes.dir}" manifest="META-INF/MANIFEST.MF"/>
+    </target>
+</project>

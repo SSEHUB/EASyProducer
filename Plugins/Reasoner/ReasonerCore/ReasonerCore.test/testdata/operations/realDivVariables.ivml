@@ -1,0 +1,14 @@
+project realDivConstants {
+
+    Real i1 = 1;
+    Real i2 = 2.2;
+    Real i4 = 4.88;   
+
+    // division -> real
+    
+    i2 / 1 == 2.2;
+    i2 / i1 == 2.2;
+    i4 / 2 == 2.44;
+
+
+}

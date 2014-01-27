@@ -1,0 +1,18 @@
+project realFLOORVariables {
+
+    Real a;
+    Real a1;
+    Real a2;
+    Real a3;
+    
+    a = 2.8;
+    a1 = 3.4;
+    a2 = -5.8;
+    a3 = -7.3;
+    
+    floor(a) == 2;
+    floor(a1) == 3;
+    floor(a2) == -6;
+    floor(a3) == -8; 
+
+}

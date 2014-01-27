@@ -1,0 +1,17 @@
+vilScript simpleRules (Project source, Project target, Configuration config) {
+
+    resourceCompiler() = : {
+    }
+
+    translateJava() = "$source/src/**/*.txt" : "$source/src/**/*.java", resourceCompiler() {
+        touch(LHS);
+    }
+
+    compileC() = "$source/bin/**/*.o" : "$source/src/**/*.c", resourceCompiler() {
+        touch(LHS);
+    }
+
+    main(Project source, Project target, Configuration config) = : translateJava(), compileC() {
+    }
+
+}

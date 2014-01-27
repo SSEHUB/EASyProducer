@@ -1,0 +1,5 @@
+project root_irrelevantConflict {
+
+    version v1;
+    import c_irrelevantConflict with (c_irrelevantConflict.version == v1);
+}

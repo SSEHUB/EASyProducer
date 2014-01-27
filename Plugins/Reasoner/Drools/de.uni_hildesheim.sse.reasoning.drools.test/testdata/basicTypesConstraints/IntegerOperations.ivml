@@ -1,0 +1,25 @@
+project IntegerOperations {
+
+    Integer a;
+    Integer b;
+    
+    a == 25;
+    b == 28;
+    
+    //Invalid - 1, min is 25
+    a.min(b) <> 25;
+    
+    //Invalid - 2, max is 28
+    a.max(b) == 25;
+    
+    //Invalid - 3, mod is 0
+    a.mod(28) > 0;
+    
+    //Invalid - 4, is -3
+    a - b > 2;
+    
+    //Invalid - 5, is 3
+    b - a < 3;
+    
+   
+}

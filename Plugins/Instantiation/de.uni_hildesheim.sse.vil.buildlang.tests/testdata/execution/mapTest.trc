@@ -1,0 +1,6 @@
+m <- {{NDL, EU}, {sap, siemens}}
+-> [](Map, Any) with ({{NDL, EU}, {sap, siemens}}, sap) = siemens
+s1 <- siemens
+-> get(Map, Any) with ({{NDL, EU}, {sap, siemens}}, NDL) = EU
+s2 <- EU
+-> main()

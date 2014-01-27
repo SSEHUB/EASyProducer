@@ -1,0 +1,5 @@
+project a_localImportRestriction {
+
+    version v1;
+    import c_localImportRestriction with (c_localImportRestriction.version < v2);
+}

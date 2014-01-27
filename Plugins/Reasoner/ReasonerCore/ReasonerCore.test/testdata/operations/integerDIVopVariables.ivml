@@ -1,0 +1,28 @@
+project integerDIVopVariables {
+
+    Integer a;
+    Integer a1;
+    Integer b;    
+    Integer b1;
+    
+    Integer a2;
+    Integer b2;
+       
+   
+    
+    a=5;
+    b=2;
+    a1=-5;
+    b1=-2;
+    
+    div(5, b) == 2;
+    div(a, 2) == 2;
+    div(a, b) == 2;
+    div(-5, b) == -2;
+    div(a1, 2) == -2;
+    div(a1, b1) == 2;
+    div(5, b1) == -2;
+    div(a, -2) == -2;
+    div(a, b1) == -2;
+
+}

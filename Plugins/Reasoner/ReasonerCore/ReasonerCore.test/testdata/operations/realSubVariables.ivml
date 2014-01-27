@@ -1,0 +1,15 @@
+project realSubConstants {
+
+    Real i0 = 0.5;
+    Real i1 = 1.25;
+    Real i4 = 4.5;
+    Real i5 = 5.25;
+
+    // subtraction
+    i0 - i0 == 0;
+    i1 - i0 == 0.75;
+    i0 - i1 == -0.75;
+    i4 - i5 == -0.75;
+    i4 - (-i5) == 9.75;
+
+}

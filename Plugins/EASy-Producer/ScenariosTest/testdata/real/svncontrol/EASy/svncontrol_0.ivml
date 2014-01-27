@@ -1,0 +1,23 @@
+project svncontrol {
+    version v0;
+	
+	enum BindingTime {compile, startup, runtime};
+	attribute BindingTime bindingTime to svncontrol;
+	
+	Boolean OPT_HOOKS;
+	Boolean OPT_SCHEDULES;
+	Boolean OPT_WSAUTHENTICATION;
+	
+	OPT_HOOKS = false;
+	OPT_HOOKS.bindingTime = BindingTime.compile;
+	OPT_SCHEDULES = true;
+	OPT_SCHEDULES.bindingTime = BindingTime.startup;
+	OPT_WSAUTHENTICATION = false;
+	OPT_WSAUTHENTICATION.bindingTime = BindingTime.compile;
+	
+	freeze {
+	    OPT_HOOKS;
+	    OPT_SCHEDULES;
+	    OPT_WSAUTHENTICATION;
+	}
+}

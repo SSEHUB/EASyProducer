@@ -1,0 +1,17 @@
+iInt = -1
+pInt = 0
+compile at 100
+pString = Hello
+compile at 100
+pReal = 1.23
+compile at 100
+pBoolean = true
+compile at 100
+pEnum = val2
+compile at 100
+pComp = null
+compile at 100
+pCompSeq = null
+compile at 100
+1.23
+1.23

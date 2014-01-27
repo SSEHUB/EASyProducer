@@ -1,0 +1,195 @@
+project TestProject {
+
+	Integer a;
+	Integer b = 5;
+	Real c;
+	Real d = 10.5;
+	Real di;
+	di = d / b;
+	String f = "default String";
+	String e = "new string";
+	Boolean g;
+	Boolean h = false;
+	
+	setOf(Integer) a_Set = {1, 2, 3};
+	Integer inS;
+	inS = a_Set.min();
+	Integer maxS;
+	maxS = a_Set.max();
+	Integer setSum1;
+	setSum1 = a_Set.sum();
+	Integer int_product;
+	int_product = a_Set.product();
+	Integer int_avg;
+	int_avg = a_Set.avg();
+	
+	setOf(Real) b_Set = {1.5, 2.6, 3.3};
+	Real r_sum;
+	r_sum = b_Set.sum();
+	Real r_min;
+	Real r_max;
+	Real r_product;
+	Real r_avg;
+	r_min = b_Set.min();
+	r_max = b_Set.max();
+	r_product = b_Set.product();
+	r_avg = b_Set.avg();
+	
+	sequenceOf(Integer) duplicates_seq = {2, 2, 2, 3, 3};
+	sequenceOf(Integer) s_seq;
+	s_seq = {100, 300, 600};
+	sequenceOf(Integer) seq_A = {1, 2, 3, 4, 5};
+	sequenceOf(Real) seq_B = {1.1, 2.2, 3.3, 4.4, 5.5};
+	sequenceOf(Boolean) seq_C = {true, false, true, true, false};
+	sequenceOf(String) seq_D = {"aa", "bb", "cc", "dd", "ee"};
+	
+	//setOf(Integer) s_s = {1, 2, 3};
+	//setOf(Integer) s_s1;
+	//s_s1 = {2, 5, 10};
+	
+	Integer sz = 4;
+	seq_A.first() > 0;
+	sz = seq_A.size();
+	seq_A.append(99).size() > 0 implies seq_A = seq_A.append(99);
+	seq_A.append(299).size() > 0 implies seq_A = seq_A.append(299); 
+	seq_A.prepend(199).size() < 0; 
+	Integer mini;
+	Integer maxi;
+	Integer avg;
+	Integer product;
+	mini = seq_A.min();
+	maxi = seq_A.max();
+	avg = seq_A.avg();
+	product = seq_A.product();
+	Integer first;
+	Integer last;
+	first = seq_A.first();
+	last = seq_A.last();
+	Integer fl;
+	fl = seq_A.first() + seq_A.last();
+	
+	
+	compound CMP2 {
+	Integer intA;
+	Integer intB;
+	}
+	
+	compound CMP1 {
+	Integer x;
+	Integer y = 200;
+	CMP2 cm21;
+	}
+	
+	compound CMP3 {
+	Integer aa = 15; 
+	Integer bb = 25;
+	}
+	
+	
+	CMP1 cm11;
+	CMP2 cm12;
+	enum Color {red, blue, black};
+	enum Cars {wolvo = 100, benz = 200, bmw = 300};
+	Color someColor;
+	Color anotherColor;
+	someColor = Color.black;
+	anotherColor = Color.blue;
+	//anotherColor <> someColor;
+	
+	 Integer t1 = 2;
+	 Integer t2 = 23;
+	 sequenceOf(Integer) sA = {2, 23};
+	 
+	 compound CMP4 refines CMP3 {
+	 
+	 String someString;
+	 Cars aCar = Cars.benz;
+	 Color aColor = Color.red;
+	 sequenceOf(Integer) seq_BBBB;
+	 sequenceOf(Integer) seq_AAAA = {1, 2, 3, 4, 5};
+	 sequenceOf(Real) seq_BB = {1.1, 2.2, 3.3, 4.4, 5.5};
+	 sequenceOf(Boolean) seq_CCCC = {true, false, true, true, false};
+	 sequenceOf(String) seq_DDDD = {"aa", "bb", "cc", "dd", "ee"};
+	 
+	 }
+	 
+	 
+	 /*
+	 */
+	 CMP4 cm41;
+	 Cars car2;
+	 car2 = Cars.wolvo;
+	 Cars car3 = Cars.benz;
+	 car2 > car3;
+	 
+	a = 3;
+	//a = 5;
+	(b > a);
+	a < 17;
+	//b > a and a < 17;
+	//b > a implies a < 17;
+	b > a implies ((a < 17) and (a > 2));
+	//(b > a) implies c = 2.75;
+	cm12.intA > 50;
+	((cm12.intA  + b) > 50) implies cm11.x = (125 + b);
+	cm11.x > 150;
+	c = (3.75 + d + 2.6) * 5;
+	//g = ((b > a) implies h);
+	cm12.intA = 99;
+	//g = not h;
+	String str1;
+	String str2;
+	str1 = e.concat(f);
+	CMP2 cm22;
+	cm22.intA = 199;
+	((cm12.intA  + b) > 50) implies str2 = e.concat(f);
+	Integer i1;
+	Integer i3;
+	Integer i4;
+	Integer i2 = 4;
+	Integer i7;
+	i3 = 5;
+	i1 = i2.max(i3);
+	i4 = i2.min(i3);
+	i3 = i2.min(i3);
+	Integer i8;
+	i8 = i2.min(i3);
+	Integer i5 = 4;
+	Integer i6;
+	Real r1 = 2.2;
+	Real r2 = 3.2;
+	Real r4;
+	r4 = r1 * r2;
+	Real r3;
+	r3 = r2 - r1;
+	i6 == i3;
+	Boolean b2;
+	//b2 = (i3 == i6);
+	Boolean b1;
+	b1 = (i2 <> i5);
+	
+	
+	typedef myInt Integer with (myInt > 50);
+	compound A {
+	myInt anA;
+	}
+	
+	A comp_A;
+	comp_A.anA = 49;
+	
+	sequenceOf(Integer) new_seq1 = {2, 3, 4, 5, 5, 4};
+	Integer to_insert = 33;
+	new_seq1.insertAt(1, to_insert).size() > 1;
+	setOf(Integer) new_set;
+	new_seq1.asSet().size() > 0;
+	
+	Integer cnt;
+	Boolean cntt;
+	Boolean incl;
+	incl = new_seq1.includes(4);
+	sequenceOf(Integer) new_set1 = {2, 3, 5, 4};
+	Integer to_find = 4;
+	//cnt = new_seq1.count(to_find);
+	CMP4.aa > 15;
+	
+}

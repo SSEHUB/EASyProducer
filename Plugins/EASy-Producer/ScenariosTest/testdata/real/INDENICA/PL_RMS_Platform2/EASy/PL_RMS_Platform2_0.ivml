@@ -1,0 +1,35 @@
+project PL_RMS_Platform2 {
+
+    version v0;
+    
+    compound PlatformServicesConfig {
+        Boolean textMessageHistoryPermission;
+        Boolean directVoiceAndVideoSessionInitiationPermission;
+        Boolean remoteVoiceAndVideoSessionInitiationPermission;
+        Boolean directVoiceSessionInitiationPermission;
+        Boolean remoteVoiceSessionInitiationPermission;
+        Boolean directVideoSessionInitiationPermission;
+        Boolean remoteVideoSessionInitiationPermission;
+        Boolean directTextMessageSessionPermission;
+        Boolean remoteTextMessageSessionPermission;
+        Boolean machineMonitoringPermission;   
+    }
+    // Assumption: No need for the definition of individual services
+    PlatformServicesConfig platformServicesConfig;
+
+    platformServicesConfig = {textMessageHistoryPermission = true, 
+        directVoiceAndVideoSessionInitiationPermission = false, 
+        remoteVoiceAndVideoSessionInitiationPermission = true, 
+        directVoiceSessionInitiationPermission = true, 
+        remoteVoiceSessionInitiationPermission = false, 
+        directVideoSessionInitiationPermission = true, 
+        remoteVideoSessionInitiationPermission = true, 
+        directTextMessageSessionPermission = false, 
+        remoteTextMessageSessionPermission = true, 
+        machineMonitoringPermission = true};
+
+    freeze {
+        platformServicesConfig;
+    }    
+    
+}

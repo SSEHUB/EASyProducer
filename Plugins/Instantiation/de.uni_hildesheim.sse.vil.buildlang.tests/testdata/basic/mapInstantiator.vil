@@ -1,0 +1,9 @@
+vilScript mapInstantiator (Project source, Configuration config) {
+
+    main(Project source, Configuration config) = : {
+        map(decVar=config.variables()) {
+            vilTemplateProcessor(source.getEasyFolder() + "/JsonTemplate.vtl", config, "$source/out.txt");
+        };
+    }
+
+}

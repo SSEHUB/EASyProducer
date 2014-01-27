@@ -1,0 +1,27 @@
+project SequenceFunctions {
+
+    sequenceOf(Integer) seq1;
+    seq1 = {2, 4, 5, 6};
+    
+    //invalid - 1
+    seq1.min() > 3;
+    
+    //invalid - 2
+    seq1.max() < 6;
+    
+    //invalid - 3
+    seq1.isEmpty();
+    
+    //invalid - 4, sum is 17
+    seq1.sum() > 18;
+    
+    //Invalid - 5, product is 240
+    seq1.product() <> 240;
+    
+    //Invalid - 6, avg is 4, which is less than than seq1[2]
+    seq1.avg() > seq1[2];
+    
+    //valid - 
+    seq1.notEmpty();
+
+}

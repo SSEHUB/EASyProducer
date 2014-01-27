@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/de.uni_hildesheim.sse.ivml/src-gen" editDirectory="/de.uni_hildesheim.sse.ivml.edit/src"
+    editorDirectory="/de.uni_hildesheim.sse.ivml.editor/src" modelPluginID="de.uni_hildesheim.sse.ivml"
+    forceOverwrite="true" modelName="Ivml" updateClasspath="false" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    complianceLevel="5.0" copyrightFields="false" editPluginID="de.uni_hildesheim.sse.ivml.edit"
+    editorPluginID="de.uni_hildesheim.sse.ivml.editor" runtimeVersion="2.7">
+  <genPackages prefix="Ivml" basePackage="de.uni_hildesheim.sse" disposableProviderFactory="true"
+      ecorePackage="Ivml.ecore#/">
+    <genClasses ecoreClass="Ivml.ecore#//VariabilityUnit">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//VariabilityUnit/projects"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//Project">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//Project/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Project/version"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Project/imports"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Project/conflicts"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Project/interfaces"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Project/contents"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//ProjectContents">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//ProjectContents/elements"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//Typedef">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Typedef/tEnum"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Typedef/tCompound"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Typedef/tMapping"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//TypedefEnum">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//TypedefEnum/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//TypedefEnum/literals"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//TypedefEnum/constraint"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//TypedefEnumLiteral">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//TypedefEnumLiteral/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//TypedefEnumLiteral/value"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//TypedefCompound">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//TypedefCompound/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//TypedefCompound/super"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//TypedefCompound/elements"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//AttrAssignment">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//AttrAssignment/parts"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//AttrAssignment/elements"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//AttrAssignmentPart">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//AttrAssignmentPart/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//AttrAssignmentPart/value"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//TypedefMapping">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//TypedefMapping/newType"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//TypedefMapping/type"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//TypedefMapping/constraint"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//TypedefConstraint">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//TypedefConstraint/expressions"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//VariableDeclaration">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//VariableDeclaration/type"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//VariableDeclaration/decls"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//VariableDeclarationPart">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//VariableDeclarationPart/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//VariableDeclarationPart/default"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//BasicType">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//BasicType/type"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//Type">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Type/type"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Type/id"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Type/derived"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//NumValue">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//NumValue/val"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//QualifiedName">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//QualifiedName/qName"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//AccessName">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//AccessName/aName"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//Value">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Value/nValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//Value/sValue"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Value/qValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//Value/bValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//Value/rValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//Value/nullValue"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//DerivedType">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//DerivedType/op"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//DerivedType/type"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//DslContext">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//DslContext/stop"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//DslContext/escape"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//DslContext/command"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//DslContext/dsl"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//AttributeTo">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//AttributeTo/attributeType"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//AttributeTo/attributeDecl"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//AttributeTo/names"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//Freeze">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Freeze/names"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Freeze/but"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//FreezeStatement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//FreezeStatement/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//FreezeStatement/access"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//FreezeButList">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//FreezeButList/list"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//FreezeButExpression">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//FreezeButExpression/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//FreezeButExpression/access"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//FreezeButExpression/wildcard"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//Eval">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Eval/nested"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Eval/statements"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//InterfaceDeclaration">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//InterfaceDeclaration/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//InterfaceDeclaration/exports"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//Export">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//Export/names"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//ImportStmt">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//ImportStmt/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//ImportStmt/interface"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//ImportStmt/versions"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//ConflictStmt">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//ConflictStmt/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//ConflictStmt/conflicts"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//VersionedId">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//VersionedId/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//VersionedId/op"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//VersionedId/version"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//VersionStmt">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//VersionStmt/version"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//OpDefStatement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//OpDefStatement/result"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//OpDefStatement/id"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//OpDefStatement/param"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//OpDefStatement/impl"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//OpDefParameterList">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//OpDefParameterList/list"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//OpDefParameter">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//OpDefParameter/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//OpDefParameter/id"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//OpDefParameter/val"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//ExpressionStatement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//ExpressionStatement/expr"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//Expression">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Expression/let"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Expression/expr"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Expression/collection"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Expression/dsl"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//LetExpression">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//LetExpression/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//LetExpression/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//LetExpression/valueExpr"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//LetExpression/subExpr"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//AssignmentExpression">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//AssignmentExpression/left"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//AssignmentExpression/right"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//AssignmentExpressionPart">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//AssignmentExpressionPart/op"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//AssignmentExpressionPart/ex"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//AssignmentExpressionPart/collection"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//ImplicationExpression">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//ImplicationExpression/left"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//ImplicationExpression/right"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//ImplicationExpressionPart">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//ImplicationExpressionPart/op"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//ImplicationExpressionPart/ex"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//LogicalExpression">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//LogicalExpression/left"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//LogicalExpression/right"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//LogicalExpressionPart">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//LogicalExpressionPart/op"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//LogicalExpressionPart/ex"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//EqualityExpression">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//EqualityExpression/left"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//EqualityExpression/right"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//EqualityExpressionPart">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//EqualityExpressionPart/op"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//EqualityExpressionPart/ex"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//EqualityExpressionPart/collection"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//RelationalExpression">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//RelationalExpression/left"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//RelationalExpression/right"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//RelationalExpressionPart">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//RelationalExpressionPart/op"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//RelationalExpressionPart/ex"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//AdditiveExpression">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//AdditiveExpression/left"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//AdditiveExpression/right"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//AdditiveExpressionPart">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//AdditiveExpressionPart/op"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//AdditiveExpressionPart/ex"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//MultiplicativeExpression">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//MultiplicativeExpression/left"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//MultiplicativeExpression/right"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//MultiplicativeExpressionPart">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//MultiplicativeExpressionPart/op"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//MultiplicativeExpressionPart/expr"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//UnaryExpression">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//UnaryExpression/op"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//UnaryExpression/expr"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//PostfixExpression">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//PostfixExpression/call"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//PostfixExpression/fCalls"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//PostfixExpression/access"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//PostfixExpression/left"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//Call">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Call/call"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Call/setOp"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Call/arrayEx"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//FeatureCall">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//FeatureCall/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//FeatureCall/param"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//SetOp">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//SetOp/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//SetOp/decl"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//SetOp/declEx"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//Declarator">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Declarator/decl"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//Declaration">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//Declaration/id"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Declaration/type"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Declaration/init"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//ActualParameterList">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//ActualParameterList/param"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//ExpressionAccess">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//ExpressionAccess/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//ExpressionAccess/calls"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//ExpressionAccess/access"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//PrimaryExpression">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//PrimaryExpression/lit"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//PrimaryExpression/ex"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//PrimaryExpression/ifEx"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//PrimaryExpression/refName"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//PrimaryExpression/calls"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//PrimaryExpression/access"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//CollectionInitializer">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//CollectionInitializer/type"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//CollectionInitializer/init"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//ExpressionListOrRange">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//ExpressionListOrRange/list"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//ExpressionListEntry">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//ExpressionListEntry/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//ExpressionListEntry/attrib"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//ExpressionListEntry/value"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//ExpressionListEntry/collection"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//Literal">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Literal/val"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//IfExpression">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//IfExpression/ifEx"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//IfExpression/thenEx"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//IfExpression/elseEx"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

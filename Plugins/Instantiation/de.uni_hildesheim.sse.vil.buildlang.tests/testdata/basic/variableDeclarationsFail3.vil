@@ -1,0 +1,5 @@
+vilScript variableDeclarationsFail2 () {
+
+    const Integer test;
+
+}

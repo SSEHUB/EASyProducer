@@ -1,0 +1,18 @@
+project integerDivVariablesFail {
+
+    Integer i0 = 0;
+    Integer i1 = 2;
+    Integer i2 = -2;   
+
+    // division by 0 -> integer
+    
+    i1 / i0 == 0;
+    i1 / i0 == 2;
+    i1 / 0 == 0;
+    i1 / 0 == 2;
+    i2 / i0 == 0;
+    i2 / i0 == -2;
+    i2 / 0 == 0;
+    i2 / 0 == -2;
+
+}

@@ -1,0 +1,6 @@
+﻿Licence:
+This package is provided "AS IS," without express or implied warranty of any kind, and may be used and modified.
+This package may be used in corporate applications without any pretence.
+
+However I would appreciate if you would drop me a line to let me know you are using it to corneliu at acorns.com.au 
+or even donate some money by PayPal to the same address :)

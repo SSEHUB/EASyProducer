@@ -1,0 +1,9 @@
+project integerLessThanConstants {
+
+      
+    5 < 2 == false;
+    5 < -2 == false;
+    -5 < 2 == true;
+    -5 < -2 == true;
+
+}

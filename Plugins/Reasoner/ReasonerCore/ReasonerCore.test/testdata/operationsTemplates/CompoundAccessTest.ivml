@@ -1,0 +1,12 @@
+project CompoundAccessTest {
+
+    compound C {
+    Integer intA = 5;
+    Integer intB;
+    }
+    
+    C cmp;    
+    cmp.intA == 5;
+    cmp.intA == 3 + 2;
+    cmp.intB = 2;
+}

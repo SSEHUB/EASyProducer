@@ -1,0 +1,16 @@
+project integerEqConstants {
+
+    // basic equality (so that we can build on that)
+    1 == 1;
+    0 == 0;
+    -1 == -1;
+    
+    // basic inequality (so that we can build on that)
+    1 <> 0;
+    0 <> 1;
+    -1 <> 0;
+    0 <> -1;
+    1 <> -1;
+    -1 <> 1;
+
+}

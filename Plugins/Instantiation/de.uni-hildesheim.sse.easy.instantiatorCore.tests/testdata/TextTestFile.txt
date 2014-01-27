@@ -1,0 +1,10 @@
+Hi,
+
+this is a simple test file for testing the methods of the Text-class.
+
+The Text-class can be used to provide a textual representation of an (filesystem?) artifact.
+
+Based on this representation, the actual content of any artifact can be modified.
+
+
+Have fun!!

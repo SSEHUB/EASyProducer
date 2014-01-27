@@ -1,0 +1,36 @@
+project StringConstraints {
+
+    String str1, str2, str3;
+    str1 = "This is a string";
+    str2 = "5";
+    str3 = "2.2";
+    
+    String str4, str5, str6;
+    
+    str4 = "A";
+    str5 = " string";
+    
+    str6 = str4.concat(str5);
+    
+    //Invalid - 1, size is 8
+    str6.size() <> 8;
+    
+    //Invalid - 2, is exactly 5
+    str2.toInteger() <> 5;
+    
+    //Invalid - 3
+    str3.toReal() < 2;
+    
+    //Invalid - 4 "A string" is not equal to "a string"
+    str1.substring(8, 16) == str6;
+    
+    String str7 = str1.substring(8, 16); 
+    String str8 = "abab";
+    String str9;
+    str9 = str8.substitutes("a", "b");
+    
+    //This is valid
+    (str9 == "bbbb");
+    Boolean bool = (str9 == "bbbb");   
+
+}

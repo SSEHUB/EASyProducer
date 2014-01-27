@@ -1,0 +1,10 @@
+project constraintVar {
+
+    version v0;
+    Integer i;
+    Integer j;
+    Constraint cstr = i > 0;
+    cstr = i < 0;
+    cstr;
+    j > 0 and cstr;
+}

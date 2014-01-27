@@ -1,0 +1,8 @@
+project attributeEnum {
+
+    version v0;
+    enum Test {a, b, c};
+    Test t;
+    attribute Integer k to t;
+    t.k = 0;
+}

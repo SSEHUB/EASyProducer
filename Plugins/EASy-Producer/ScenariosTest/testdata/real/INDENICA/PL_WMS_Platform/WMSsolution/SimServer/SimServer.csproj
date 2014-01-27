@@ -1,0 +1,165 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{6DF0346B-E66C-40E5-9773-615D356E11BB}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SuperWebSocketServer</RootNamespace>
+    <AssemblyName>SuperWebSocketServer</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Apache.NMS">
+      <HintPath>..\lib\Apache.NMS.dll</HintPath>
+    </Reference>
+    <Reference Include="Apache.NMS.ActiveMQ">
+      <HintPath>..\lib\Apache.NMS.ActiveMQ.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging, Version=1.2.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Spring.Aop">
+      <HintPath>..\lib\Spring.Aop.dll</HintPath>
+    </Reference>
+    <Reference Include="Spring.Core">
+      <HintPath>..\lib\Spring.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Spring.Services">
+      <HintPath>..\lib\Spring.Services.dll</HintPath>
+    </Reference>
+    <Reference Include="SuperSocket.Common, Version=1.4.3.0, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\SuperSocket.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="SuperSocket.SocketBase">
+      <HintPath>lib\SuperSocket.SocketBase.dll</HintPath>
+    </Reference>
+    <Reference Include="SuperSocket.SocketEngine">
+      <HintPath>lib\SuperSocket.SocketEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="SuperWebSocket">
+      <HintPath>lib\SuperWebSocket.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service References\MaterialMgtServiceReference\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="SimWebSocketServer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ACorns.WCF.DynamicClientProxy\ACorns.WCF.DynamicClientProxy.csproj">
+      <Project>{952C8F4B-7569-40C8-9DB7-BD6509A0E4D9}</Project>
+      <Name>ACorns.WCF.DynamicClientProxy</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ActiveMQMessaging\ActiveMQMessaging.csproj">
+      <Project>{DBAF1A98-658F-4356-A032-02692919217A}</Project>
+      <Name>ActiveMQMessaging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DataAccess\DataAccess.csproj">
+      <Project>{D91F4F0B-A689-487F-A5FE-D78B2DD647CF}</Project>
+      <Name>DataAccess</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Properties\DataSources\DataAccess.Box.datasource" />
+    <None Include="Properties\DataSources\DataAccess.Location.datasource" />
+    <None Include="Properties\DataSources\DataAccess.Locationtype.datasource" />
+    <None Include="Properties\DataSources\DataAccess.Material.datasource" />
+    <None Include="Properties\DataSources\DataAccess.Order.datasource" />
+    <None Include="Properties\DataSources\DataAccess.Position.datasource" />
+    <None Include="Properties\DataSources\DataAccess.Rack.datasource" />
+    <None Include="Properties\DataSources\DataAccess.Transportentry.datasource" />
+    <None Include="Service References\MaterialMgtServiceReference\MaterialMgtService.wsdl" />
+    <None Include="Service References\MaterialMgtServiceReference\MaterialMgtService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MaterialMgtServiceReference\MaterialMgtService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MaterialMgtServiceReference\MaterialMgtService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MaterialMgtServiceReference\MaterialMgtService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MaterialMgtServiceReference\MaterialMgtService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="lib\log4net.dll" />
+    <Content Include="lib\SuperSocket.Common.dll" />
+    <Content Include="lib\SuperSocket.SocketBase.dll" />
+    <Content Include="lib\SuperSocket.SocketEngine.dll" />
+    <Content Include="lib\SuperWebSocket.dll" />
+    <None Include="Service References\MaterialMgtServiceReference\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\MaterialMgtServiceReference\configuration.svcinfo" />
+    <None Include="Service References\MaterialMgtServiceReference\configuration91.svcinfo" />
+    <None Include="Service References\MaterialMgtServiceReference\MaterialMgtService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\MaterialMgtServiceReference\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

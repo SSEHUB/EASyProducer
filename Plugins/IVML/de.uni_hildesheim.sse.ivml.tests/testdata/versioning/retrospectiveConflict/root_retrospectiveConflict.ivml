@@ -1,0 +1,6 @@
+project root_retrospectiveConflict {
+
+    version v1;
+    import a_retrospectiveConflict;
+    import b_retrospectiveConflict;
+}

@@ -1,0 +1,8 @@
+template loop2(Configuration config, Path path) {
+
+    def main(Configuration config, Path path) {
+        String name;
+        for (DecisionVariable v : config.variables()) name = v.name();
+    }
+
+}

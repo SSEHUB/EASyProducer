@@ -1,0 +1,23 @@
+project realMINVariables {
+
+    Real a;
+    Real a1;
+    Real b;    
+    Real b1;
+    
+    a=5.2;
+    b=2.5;
+    a1=-5.2;
+    b1=-2.5;
+    
+    min(5.2, b) == 2.5;
+    min(a, 2.5) == 2.5;
+    min(a, b) == 2.5;
+    min(-5.2, b) == -5.2;
+    min(a1, 2.5) == -5.2;
+    min(a1, b1) == -5.2;
+    min(5.2, b1) == -2.5;
+    min(a, -2.5) == -2.5;
+    min(a, b1) == -2.5;   
+
+}

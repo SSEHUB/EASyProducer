@@ -1,0 +1,27 @@
+project AttributesTest {
+
+    version v0;
+    attribute Integer meta = 0 to AttributesTest;
+    
+    Integer a, b, c;
+    Boolean bool;
+    
+    a = 5;
+    b = 10;
+   // c = 20;
+    bool == true;
+    
+    b.meta = 50;
+    a.meta == 25;
+    c.meta = 100;
+    
+    //a.meta > 50;
+    
+    a > 4 and c < 30 implies c == 20;
+    c == 15;
+    
+    
+    
+    
+
+}

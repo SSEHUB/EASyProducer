@@ -1,0 +1,14 @@
+vilScript PL_WMS_Platform (Project source, Configuration config, Project target) {
+
+    version v1;
+
+    Path wmsProductLocation = target.getPath() + "/WMSsolutionProduct";
+    
+    test() = wmsProductLocation : {
+        wmsProductLocation.mkdir();
+    } 
+
+    main(Project source, Project target, Configuration config) = : wmsProductLocation {
+        
+    } 
+}

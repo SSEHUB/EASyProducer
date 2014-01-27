@@ -1,0 +1,8 @@
+vilScript vtl (Project source, Project target, Configuration config) {
+
+    main(Project source, Project target, Configuration config) = "$target/bin/**/*.class" : "$source/src/**/*.java" {
+        sequenceOf(String) cp = {"$source/lib/commons-io-2.4.jar"};
+        javac(RHSMATCH, "$target/bin", classpath=cp);
+    }
+
+}

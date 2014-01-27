@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" version="$Revision: 1.1 $">
+    <!-- Modify the xs:schema version on every update of this schema -->
+    <xs:annotation>
+        <xs:appinfo>ScaleLog Interface</xs:appinfo>
+        <xs:documentation>Specification of the SKU recordtype for the ScaleLog Prototype interface</xs:documentation>
+    </xs:annotation>
+    <xs:element name="sku">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="1" minOccurs="1" name="client" type="xs:string"/>
+                <xs:element maxOccurs="1" minOccurs="1" name="skuno" type="xs:string"/>
+                <xs:element maxOccurs="1" minOccurs="1" name="description" type="xs:string"/>
+                <xs:element maxOccurs="1" minOccurs="1" name="flagbatch" type="xs:boolean"/>
+                <xs:element maxOccurs="1" minOccurs="1" name="flagbestbefore" type="xs:boolean"/>
+                <xs:element maxOccurs="1" minOccurs="1" name="length" type="xs:double"/>
+                <xs:element maxOccurs="1" minOccurs="1" name="width" type="xs:double"/>
+                <xs:element maxOccurs="1" minOccurs="1" name="height" type="xs:double"/>
+                <xs:element maxOccurs="1" minOccurs="1" name="ean" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

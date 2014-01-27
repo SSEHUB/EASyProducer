@@ -1,0 +1,8 @@
+template alternative1(Configuration config, FileArtifact target) {
+
+    def main(Configuration config, FileArtifact target) {
+        Boolean exists = false;
+        if (target.getPath().exists()) exists = true;
+    }
+
+}

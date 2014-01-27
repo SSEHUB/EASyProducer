@@ -1,0 +1,5 @@
+project a_legitIMportAndConflict {
+
+    version v1;
+    import c_legitIMportAndConflict;
+}

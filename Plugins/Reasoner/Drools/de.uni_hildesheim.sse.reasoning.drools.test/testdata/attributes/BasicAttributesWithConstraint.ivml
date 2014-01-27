@@ -1,0 +1,17 @@
+project BasicAttributesWithConstraint {
+
+    version v0;
+    attribute Integer meta = 0 to BasicAttributesWithConstraint;
+    
+    
+    Integer a, b;
+    a == 10;
+    b == 20;
+    
+    a.meta = 20;
+    
+    //This is invalid.
+    a.meta > 20;
+
+
+}

@@ -1,0 +1,9 @@
+-> translateJava()
+    -> touch(FileSystemArtifact) with (src/test/Test.c) = {src/test/Test.c}
+    -> touch(FileSystemArtifact) with (src/test/Test2.c) = {src/test/Test2.c}
+    -> touch(FileSystemArtifact) with (src/test/sub/Test2.c) = {src/test/sub/Test2.c}
+-> compileC()
+    -> touch(FileSystemArtifact) with (bin/test/Test.o) = {bin/test/Test.o}
+    -> touch(FileSystemArtifact) with (bin/test/Test2.o) = {bin/test/Test2.o}
+    -> touch(FileSystemArtifact) with (bin/test/sub/Test2.o) = {bin/test/sub/Test2.o}
+-> main(Project, Project, Configuration) with (<project>, <project>, <config>)

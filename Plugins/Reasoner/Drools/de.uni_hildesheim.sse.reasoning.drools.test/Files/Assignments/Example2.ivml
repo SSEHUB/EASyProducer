@@ -1,0 +1,23 @@
+project Example2 {
+
+    Integer x, y;
+    
+    
+    Integer a, b;
+   
+   
+   x = 5;
+   y = 11;
+   a == 20;
+   x > 3 and y > 10 implies a < 5;
+   
+   /*
+   This should cause inconsistency because a is fixed.
+   This will not change the value of a.
+   */
+   
+   x > 3 and y > 10 implies a == 25;
+   
+   
+   //if a > b then b == 20 else b == 40 endif; 
+}

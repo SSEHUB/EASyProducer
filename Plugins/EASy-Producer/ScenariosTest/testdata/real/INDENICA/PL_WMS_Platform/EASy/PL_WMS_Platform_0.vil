@@ -1,0 +1,61 @@
+@advice(PL_WMS_Platform)
+/*
+ * A little bit different to the previous WMS-instantiation (easing testing):
+ * 
+ * Project source = this EASy-project (including the general WMS-implementation)
+ * Project target = assumed to be a simple path where the specific instance will
+ *   be stored including the creation of a specific sub-folder in target for the
+ *   VisualStudio implementation.
+ * 
+ */ 
+vilScript PL_WMS_Platform (Project source, Configuration config, Project target) {
+    
+    version v0;
+    
+    Path wmsSolutionLocation = source.getPath() + "/WMSsolution";
+    Path wmsProductLocation = target.getPath() + "/WMSsolutionProduct"; // or define explicit folder here? see comment above!
+    Path wmsConfigLocation = "$wmsProductLocation/Config_Resources";
+    Path dbSchemaLocation = "$wmsConfigLocation/1CreateDatabaseAndTables.sql";
+    Path ormConfigLocation = "$wmsConfigLocation/mapperfragment.xml";
+    Path dbInitLocation = "$wmsConfigLocation/2insertExampleData.sql";
+    Path msBuildPath = "PATH_TO_MSBUILDEXE"; // TODO!!
+    
+    // Currently unused!
+    clean() = /* !wmsProductLocation.exists() */ : /* wmsProductLocation */ {
+        // Delete all artifacts in the target but keep base-location
+        wmsProductLocation.deleteAll();
+    }
+
+    // HE: /* missing, else only paths are matched (see ANT spec)
+    createGenericInstance () = "$wmsProductLocation/**/*" : "$wmsSolutionLocation/**/*" {
+        wmsProductLocation.mkdir(); // HE this is inefficient - call before
+        // Copy all artifacts of the source (the VisualStudio project) to target
+        copy(RHS, LHS);
+    }
+    
+    processSpringConfiguration(Project source, Configuration config) = "$wmsProductLocation/**/*.config" : "$wmsProductLocation/**/*.*" {
+        setOf(XmlFileArtifact) springConfigFiles = wmsProductLocation.selectByType(XmlFileArtifact);
+        map (artifact = springConfigFiles) {
+            vilTemplateProcessor(source.getEasyFolder() + "/SpringConfigurationTemplate.vtl", config, artifact);
+        };
+    }
+    
+    processDatabaseSchema(Project source, Configuration config) = /* genericDbSchemaLocation but updated?! */ : dbSchemaLocation {
+        vilTemplateProcessor(source.getEasyFolder() + "/DatabaseSchemaTemplate.vtl", config, dbSchemaLocation);
+    }
+    
+    processObjectRelationMapperConfiguration(Project source, Configuration config) = /* genericOrmConfigLocation but updated?! */ : ormConfigLocation {
+        vilTemplateProcessor(source.getEasyFolder() + "/ObjectRelationMapperTemplate.vtl", config, ormConfigLocation);
+    }
+    
+    processDatabaseInitialization(Project source, Configuration config) = : processDatabaseSchema(source, config), processObjectRelationMapperConfiguration(source, config) {
+        vilTemplateProcessor(source.getEasyFolder() + "/DatabaseContentTemplate.vtl", config, dbInitLocation);
+    }
+    
+    // HE: sequence must match parameter
+    // Entry-point if no other rule is directly called (main rule)
+    main(Project source, Configuration config, Project target) = : "$wmsProductLocation/*", processDatabaseInitialization(source, config) {
+        // After all preconditions are satisfied, run msbuild! --> disabled for testing
+        //execute msBuildPath("$target/WMSsolution/WMSsolution.sln");
+    }   
+}

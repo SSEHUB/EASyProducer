@@ -1,0 +1,17 @@
+project testBasisDatatype {
+
+    Integer intA;
+    Real    realA;
+    
+    intA = 5;
+    realA = 10.0;
+
+    //realA - intA = 5;
+    realA - intA = 5.0; //TODO CONFLICT!!
+    
+    Real x;
+    Integer y;
+    x = realA - intA;
+    y = realA - intA;
+    
+}

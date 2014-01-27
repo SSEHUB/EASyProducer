@@ -1,0 +1,6 @@
+-> main(Configuration, Artifact) with (<config>, test.texts)
+    -> getByName(Configuration, String) with (<config>, pComp) = test::pComp
+    -> variables(DecisionVariable) with (test::pComp) = {test::pCompound::pcInt, test::pCompound::pcString}
+    configs <- {test::pCompound::pcInt, test::pCompound::pcString}
+    -> [](Sequence, Integer) with ({test::pCompound::pcInt, test::pCompound::pcString}, 0) = test::pCompound::pcInt
+    -> name(DecisionVariable) with (test::pCompound::pcInt) = pcInt

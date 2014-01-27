@@ -1,0 +1,11 @@
+import generics;
+
+vilScript importTest () {
+
+    main() = : {
+        productionGenericCopy("build.xml", "build1.xml");
+        generics::productionGenericCopy("build.xml", "build1.xml");
+        Integer impVal = generics::test;
+    }
+
+}

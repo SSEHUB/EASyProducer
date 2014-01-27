@@ -1,0 +1,42 @@
+project testConstraints {
+
+    version v0;
+    Boolean a;
+    Boolean b;
+    Real r1;
+    Real r2;
+    Integer i1;
+    Integer i2;
+    String s1;
+// boolean tests
+    not a;
+    a and b;
+    a or b;
+    a xor b;
+    (not a) and b;
+    (a and b) or (b xor a);
+    a == b;
+    a <> b;
+// Real tests
+    r1 = r2;
+    ((r1 < r2) and (r1 < r2));
+//    (r1 <> r2) or (r1 = r2);
+    //* (r1 <> r2) or (r1 == r2);
+    (r1 <> r2) or (r1 == r2);    
+    r1 = 10;
+    r2 = 20.1;
+// Integer tests
+    i1 == i2;
+    ((i1 < i2) and (i1 < i2));
+//    (i1 <> i2) or (i1 == i2);
+    //* (i1 <> i2) or (i1 == i2);
+    (i1 <> i2) or (i1 == i2);
+    i1 = 10;
+    i1 == 10;
+    i1 < r1;
+// String tests
+    s1 = "";
+    size(s1) == 10;
+    //* size(s1) == 20;
+    s1.size() == 20;
+}

@@ -1,0 +1,32 @@
+template objectRelationalMapper(Configuration config, XmlFileArtifact target) {
+    /*
+     * Important: Currently navigating to a specific compound or filtering for
+     * decision variables with a specific name is not included. The latter case
+     * is because this was a hack for D2.2.2.
+     * 
+     * The former may be a more elegant solution and will be included as soon as
+     * there is a variability model that includes such a compound (or any other element).
+     */
+
+    def main(Configuration config, XmlFileArtifact target) {
+        setOf(XmlElement) subModels = target.selectByName("edmx:.*Models"); // How to do this right? All elements starting with "edmx:" and ending with "Models"
+        for (XmlElement subModel : subModels) {
+            // Maybe more readable if this would be another def?!
+            setOf(XmlElement) entityTypes = subModel.selectByName("EntityType");
+            for (XmlElement entityType : entityTypes) {
+                for (DecisionVariable decVar : config.variables()) {
+                    if (entityType.getName() == decVar.getName()) { //decVar will be a compound!
+                        setOf(XmlElement) properties = entityType.selectByName("property");
+                        for (XmlElement property : properties) {
+                            for (DecisionVariable nestedVar : decVar.variables()) {
+                                if (property.getName() == nestedVar.getName() and nestedVar.getValue() == false) {
+                                    property.delete();
+                                }
+                            }
+                        }
+                    }    
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,24 @@
+project exportTest1 {
+
+    // Defining interfaces
+    interface myInterface {
+        export a;
+        export b;
+    }
+    
+    interface second {
+        export c;
+        export d;
+    }
+    
+    // Declaration
+    Integer a;
+    Integer b;
+    Integer c;
+    Integer d;
+    
+    // (internal) constraints
+    c = 2 * a;
+    d = 2 * b;
+}
+

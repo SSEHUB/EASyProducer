@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/de.uni_hildesheim.sse.vil.templatelang/src-gen"
+    editDirectory="/de.uni_hildesheim.sse.vil.templatelang.edit/src" editorDirectory="/de.uni_hildesheim.sse.vil.templatelang.editor/src"
+    modelPluginID="de.uni_hildesheim.sse.vil.templatelang" forceOverwrite="true" modelName="TemplateLang"
+    updateClasspath="false" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    complianceLevel="5.0" copyrightFields="false" editPluginID="de.uni_hildesheim.sse.vil.templatelang.edit"
+    editorPluginID="de.uni_hildesheim.sse.vil.templatelang.editor" runtimeVersion="2.7"
+    usedGenPackages="../../../../../../../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/ExpressionDsl.genmodel#//expressionDsl">
+  <genPackages prefix="TemplateLang" basePackage="de.uni_hildesheim.sse.vil.templatelang"
+      disposableProviderFactory="true" ecorePackage="TemplateLang.ecore#/">
+    <genClasses ecoreClass="TemplateLang.ecore#//LanguageUnit">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//LanguageUnit/javaExts"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//LanguageUnit/indent"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//LanguageUnit/param"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TemplateLang.ecore#//LanguageUnit/ext"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//LanguageUnit/vars"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//LanguageUnit/defs"/>
+    </genClasses>
+    <genClasses ecoreClass="TemplateLang.ecore#//IndentationHint">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//IndentationHint/parts"/>
+    </genClasses>
+    <genClasses ecoreClass="TemplateLang.ecore#//IndentationHintPart">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TemplateLang.ecore#//IndentationHintPart/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TemplateLang.ecore#//IndentationHintPart/value"/>
+    </genClasses>
+    <genClasses ecoreClass="TemplateLang.ecore#//VilDef">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//VilDef/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TemplateLang.ecore#//VilDef/id"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//VilDef/param"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//VilDef/stmts"/>
+    </genClasses>
+    <genClasses ecoreClass="TemplateLang.ecore#//StmtBlock">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//StmtBlock/stmts"/>
+    </genClasses>
+    <genClasses ecoreClass="TemplateLang.ecore#//Stmt">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//Stmt/var"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//Stmt/alt"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//Stmt/switch"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//Stmt/block"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//Stmt/multi"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//Stmt/loop"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//Stmt/exprStmt"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//Stmt/ctn"/>
+    </genClasses>
+    <genClasses ecoreClass="TemplateLang.ecore#//Alternative">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//Alternative/expr"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//Alternative/if"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//Alternative/else"/>
+    </genClasses>
+    <genClasses ecoreClass="TemplateLang.ecore#//Content">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TemplateLang.ecore#//Content/print"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TemplateLang.ecore#//Content/ctn"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//Content/indent"/>
+    </genClasses>
+    <genClasses ecoreClass="TemplateLang.ecore#//Switch">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//Switch/expr"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//Switch/parts"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//Switch/dflt"/>
+    </genClasses>
+    <genClasses ecoreClass="TemplateLang.ecore#//SwitchPart">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//SwitchPart/left"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//SwitchPart/right"/>
+    </genClasses>
+    <genClasses ecoreClass="TemplateLang.ecore#//Loop">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//Loop/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TemplateLang.ecore#//Loop/id"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//Loop/expr"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//Loop/separator"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//Loop/finalSeparator"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//Loop/stmt"/>
+    </genClasses>
+    <genClasses ecoreClass="TemplateLang.ecore#//multiselect">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//multiselect/gen"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//multiselect/user"/>
+    </genClasses>
+    <genClasses ecoreClass="TemplateLang.ecore#//genericMultiselect">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//genericMultiselect/preamble"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//genericMultiselect/selector"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//genericMultiselect/part"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//genericMultiselect/trailer"/>
+    </genClasses>
+    <genClasses ecoreClass="TemplateLang.ecore#//multiSelectPart">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//multiSelectPart/case"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//multiSelectPart/code"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//multiSelectPart/selector"/>
+    </genClasses>
+    <genClasses ecoreClass="TemplateLang.ecore#//userMultiselect">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TemplateLang.ecore#//userMultiselect/id"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//userMultiselect/stmt"/>
+    </genClasses>
+    <genClasses ecoreClass="TemplateLang.ecore#//Extension">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//Extension/name"/>
+    </genClasses>
+    <genClasses ecoreClass="TemplateLang.ecore#//JavaQualifiedName">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TemplateLang.ecore#//JavaQualifiedName/qname"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

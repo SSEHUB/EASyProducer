@@ -1,0 +1,18 @@
+project KBaseUpdateCompoundsTest {
+
+   version v0;
+    
+    compound Cmp {
+    Integer a = 1;
+    Integer b;
+    Integer c;
+    
+    a == 1 implies b == 1 + 1;
+    b == 2 implies c == 2 + 1;
+    }
+    
+    Cmp cmpA;
+    
+    
+
+}

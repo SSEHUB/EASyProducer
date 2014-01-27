@@ -1,0 +1,6 @@
+project testDsl {
+
+    version v0;
+    Integer i;
+    DSL("stop", "##", "cmd.exe") % DO##i DSL%;
+}

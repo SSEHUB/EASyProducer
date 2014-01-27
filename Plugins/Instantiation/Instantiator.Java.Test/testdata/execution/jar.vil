@@ -1,0 +1,9 @@
+vilScript zip (Project source, Project target, Configuration config) {
+
+    main(Project source, Project target, Configuration config) = : {
+        jar(source, "$source/src/**/*.java", "$target/test.jar");
+        unjar("$target/test.jar", "$target/testjar/");
+        unjar("$target/test.jar", "$target/testjar/", true);
+    }
+
+}

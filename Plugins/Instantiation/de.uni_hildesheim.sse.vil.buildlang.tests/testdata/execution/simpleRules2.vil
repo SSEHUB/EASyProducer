@@ -1,0 +1,9 @@
+vilScript simpleRules2 (Project source, Project target, Configuration config) {
+
+    compile() = : {
+    }
+
+    main() = : compile() {
+    }
+
+}

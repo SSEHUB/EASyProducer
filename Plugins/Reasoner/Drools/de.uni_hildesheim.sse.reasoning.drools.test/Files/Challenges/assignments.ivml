@@ -1,0 +1,69 @@
+project assignments {
+
+    Integer a;
+   // a = 5;
+    /*
+    */
+    a == 15;
+    true implies a == 20;
+    true implies a > 20;
+    Integer b;
+    
+    b = a + 5;
+    
+    compound D {
+        Integer d;
+        Integer e;
+    }
+    
+    compound C {
+        
+        Integer x;
+        Integer y;
+        D d1;
+    
+    }
+    
+   C c1;
+   
+   /*
+   c1 = {x = 5};
+   
+     
+   
+   //c1.x > 3 implies a == 15;
+   
+    //a = 15 implies c1.y == 20;    
+    */
+   true implies c1.x > 10;
+   true implies c1.x == 15;
+   c1.d1.d = 15;
+    c1.x == 15;
+    //c1.x == 20;
+   true implies c1.x == 16;
+       
+       
+   compound E {
+        Integer i1; 
+        Integer i2;
+   }    
+       
+   E ee1;
+   
+   //ee1 == {i1 = 15 * 1, i2 = 10 * a};
+   
+   true implies ee1 == {i1 = 15 * 1, i2 = 10 * a};
+   
+   true implies ee1 == {i1 = 15, i2 = 10}; 
+   //ee1 == {i1 = 15, i2 = 10};    
+   ee1.i1 = 15;
+   ee1.i2 = ee1.i1 + b + 199 + b * 2;
+   
+   Integer x = 5;
+   let Integer y = x + 5
+        in y > 5;
+   Integer xx = ee1.i2 + 100;
+   let Integer let1 = ee1.i2 + 100
+        in let1 > 200;
+   
+}

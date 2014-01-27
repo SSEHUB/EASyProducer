@@ -1,0 +1,14 @@
+project FullyConfiguredProject_4 {
+
+    version v0;
+    enum AttributeType {STATE_1, STATE_2};
+    attribute AttributeType attributeStateVariable to FullyConfiguredProject_4;
+    
+    Integer variableWithoutAttr = 2; 
+    assign (attributeStateVariable = AttributeType.STATE_1) to {
+        Integer variableWithCorrectAttr; 
+    }
+    assign (attributeStateVariable = AttributeType.STATE_2) to {
+        Integer variableWithWrongAttr = 3; 
+    }
+}

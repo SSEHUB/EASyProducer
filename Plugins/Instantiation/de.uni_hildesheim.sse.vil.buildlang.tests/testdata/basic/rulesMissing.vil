@@ -1,0 +1,6 @@
+vilScript rulesMissing (Project source, Project target, Configuration config) {
+
+    main() = : compileGoal() {
+    }
+
+}

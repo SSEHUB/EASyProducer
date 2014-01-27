@@ -1,0 +1,5 @@
+project b_legitIMportAndConflict {
+
+    version v1;
+    conflicts c_legitIMportAndConflict with (c_legitIMportAndConflict.version <= v1);
+}

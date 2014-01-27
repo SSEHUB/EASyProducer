@@ -1,0 +1,24 @@
+project P1 {
+    
+    compound Telecom {
+        
+        Integer id;
+        String name;
+    }
+    
+    Telecom t1;
+    t1 = {id = 2, name = "three"};
+}
+
+project ProjectImportsWithCompounds {
+
+    import P1;
+    
+    t1 = {id = 1, name = "3"};
+    
+    String nameCopy = t1.name;
+    
+    Telecom t2;
+    t2 == {name = "vodafone"};
+    t2.name == "vodafone";
+}

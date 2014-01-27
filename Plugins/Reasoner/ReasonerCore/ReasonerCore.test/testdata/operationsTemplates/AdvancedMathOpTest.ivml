@@ -1,0 +1,54 @@
+project AdvancedMathOpTest {
+
+    // Integer
+    Integer intA = 2;
+    Integer intB = 1;
+    Integer intC = -5;
+    
+    max(1, 2) == 2;
+    max(intB, intA) == intA;
+    min(1, 2) == 1;
+    min(intB, intA) == intB;
+    
+    abs(intC) == 5;
+    
+    div(1, 2) == 0;
+    div(intA, intB) == 2;
+    div(10, 3) == 3;
+    
+    mod(10, 3) == 1;
+    mod(intA, intB) == 0;
+    
+    // Real
+    Real realA = 2.0;
+    Real realB = 1.0;
+    Real realC = -5.0;
+    Real realD = 5.5;
+   
+    max(1.0, 2.0) == 2.0;
+    max(realB, realA) == intA;
+    min(1.0, 2.0) == 1.0;
+    min(realB, realA) == intB;
+   
+    // Integer and Real
+   
+    max(1.0, 2) == 2;
+    max(1, 2.0) == 2.0;
+    max(realB, intA) == intA;
+    max(intB, realA) == realA;
+    min(1, 2.0) == 1;
+    min(1.0, 2) == 1.0;
+    min(intB, realA) == intB;
+    min(realB, intA) == realB;
+    
+    abs(realC) == 5.0;
+    floor(realD) == 5;
+    round(realD) == 6;
+    
+    mod(4 + 0.5, 1) == 0.5;
+    mod(5, 1.5) == 0.5;
+    mod(4.5, 1.5) == 0;
+    
+   
+    
+}

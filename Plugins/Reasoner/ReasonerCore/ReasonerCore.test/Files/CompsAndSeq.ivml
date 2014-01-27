@@ -1,0 +1,31 @@
+project testDatatypeSequence {
+    
+    //Define compound
+    compound CMP {
+        Integer intA;
+        Real    realA;
+        String  stringA;
+    }
+    
+    String test;
+    
+    //Declaration
+    CMP compoundA;
+    CMP compoundB;
+    //initial Sequence
+    sequenceOf(Integer) iA = {1, 2, 3, 4};
+    sequenceOf(Real)    rA = {1.1, 2.2, 3.3, 4.4};
+    sequenceOf(String)  sA = {"a", "b", "c", "d"};
+    compoundA.intA = 3;
+    test = sA[3]; 
+    compoundB.intA = 3;
+    compoundA.intA      < (iA[1] + 2);
+    compoundA.realA     < (rA[2] + 2);
+    (compoundA.realA) < 10 and (compoundA.realA > 3);
+    compoundA.intA < compoundB.intA;
+    compoundA.stringA   == test;
+    
+    
+    
+    
+}

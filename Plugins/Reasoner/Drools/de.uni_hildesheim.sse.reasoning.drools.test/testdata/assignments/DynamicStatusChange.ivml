@@ -1,0 +1,45 @@
+project DynamicStatusChange {
+
+    Integer a, b, c;
+    Integer e;
+    
+    a = 5;
+    b = 20;
+    
+   
+    
+    //e == 20;
+    c == b + a;
+   //b == 20 implies c == 15 * a;
+   //a == 5 implies c == 20 * b;
+   //true implies c == 10;
+
+   //b == 20 implies c == 15 * e;
+   
+    //true implies c == 125;
+    
+        
+    /*
+    
+    //First c would be set to 25, and default
+    c == a * a;
+    
+    //After this expression, c would be set to 49, fixed.
+    true implies a == 7;
+    
+    //This is valid because a is fixed to 7 and c would be 49 which is less than 50
+        
+    c < 50;
+    
+    Integer aa;
+    aa = 5;
+    Integer bb, cc;
+    bb = 3;
+    cc = 4;
+    
+    aa == bb * cc;
+    aa == 1;
+    
+    */
+    
+}

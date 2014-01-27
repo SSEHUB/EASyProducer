@@ -1,0 +1,12 @@
+project QuantorReject {
+
+    sequenceOf(Integer) seq1;
+    
+    seq1 = {1, 3, 5, 6, 3, 8, 9};
+    
+    //This is invalid, as the result sequence's size is 4. 
+    seq1->reject(t | t < 5).append(10).size() > 5;    
+   
+
+
+}

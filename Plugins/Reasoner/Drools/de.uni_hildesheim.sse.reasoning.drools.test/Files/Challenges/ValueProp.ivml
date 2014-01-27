@@ -1,0 +1,73 @@
+project Value_Prop {
+
+/*
+    compound C {
+        Integer i1;
+        Boolean b1;
+        Integer i2;
+    }
+    
+    C c1, c2;
+    
+    
+    c1 = {i1 = 10, b1 = true, i2 = 15};
+    
+   0 < 2 implies c2 == {i1 = 100, b1 = true, i2 = 150};
+    
+   //c2 == c1;
+   
+   sequenceOf(Integer) seq1;
+   
+   seq1 = {1, 2, 3, 4, 5};
+   
+   
+   compound D {
+    sequenceOf(Integer) seq2;
+   }
+   
+    D d1;
+   
+    0 < 2 implies d1 == {seq2 = {2, 4, 5, 6}};
+    
+   
+   compound E {
+    Integer aa = 15;
+    sequenceOf(Boolean) seq3;
+   }
+   
+   
+   E ee1;
+   
+   0 < 2 implies ee1 == {aa = 25, seq3 = {true, false, true}};
+   
+   */
+   
+    sequenceOf(String) seqD;
+    seqD = {"a", "b"};    
+    
+   //seqD->exists(t | t == "d");
+    
+    sequenceOf(Integer) seqE;
+    seqE = {1, 2, 3};
+    
+    //seqE->exists(t | t == 5);
+    
+    enum color {red = 0, black = 1, blue = 2, white = 3};
+    
+    sequenceOf(color) colors1;
+    colors1 = {color.black, color.red, color.blue, color.black}  ; 
+    
+   // colors1->exists(t | t == color.white);
+    
+    sequenceOf(color) colors2;
+    
+    compound D {
+        sequenceOf(Integer) seqF;
+    }
+    
+    D d1;
+    d1.seqF = {2, 3, 4, 5, 6};
+    
+    d1.seqF->exists(t | t > 7) and seqE->exists(t | t == 5);
+    
+}

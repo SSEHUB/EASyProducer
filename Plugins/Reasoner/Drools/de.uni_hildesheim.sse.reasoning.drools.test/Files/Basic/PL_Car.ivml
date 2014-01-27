@@ -1,0 +1,60 @@
+project PL_car {
+ 
+    version v0;
+    enum Fuel {gasoline, diesel};
+    enum Type {automatic, manual};
+    enum Frame {sedan, coupe, suv};
+    enum Doors {D2, D4};
+    enum Colour {white, black, red};
+    typedef Wheels Integer with (Wheels >= 14 and Wheels <= 18);
+    compound Engine {
+        Integer cylenders;
+        Integer power;
+        Fuel fuel;
+    }
+ 
+    compound Transmission {
+        Type type;
+        Integer gears;
+    }
+ 
+    compound Built {
+        Frame frame;
+        Doors doors;
+        Colour colour;
+    }
+   
+    
+    Engine engine;
+    Transmission transmission;
+    Built built;
+    Wheels wheels;
+   
+    engine.cylenders = 6;
+    engine.power = 18;
+    engine.fuel = Fuel.gasoline;
+   
+    transmission.type = Type.manual;
+    transmission.gears = -5;
+   
+    built.frame = Frame.coupe;
+    built.doors = Doors.D2;
+    built.colour = Colour.black;
+   
+        
+    wheels = 1;
+ 
+    Engine.cylenders = 4 or Engine.cylenders = 6;
+    Engine.power = 170 or Engine.power = 180 or Engine.power = 190;
+    Transmission.gears >= 4 and Transmission.gears <= 6;
+    Engine.cylenders = 4 implies (Engine.power = 170 or Engine.power = 180);
+    Engine.cylenders = 6 implies Engine.power = 190;
+    Engine.power = 170 implies Transmission.gears = 4;
+    Engine.power = 180 implies Transmission.gears = 5;
+    Engine.power = 190 implies Transmission.gears = 6;
+    Engine.fuel = Fuel.diesel implies Built.frame = Frame.suv;
+    Built.frame = Frame.coupe implies Built.doors = Doors.D2;
+   
+ 
+}
+ 

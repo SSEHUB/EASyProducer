@@ -1,0 +1,43 @@
+project AssignmentAttributeTest {
+
+     attribute Integer meta = 10 to AssignmentAttributeTest;
+
+
+    compound Rating {
+    
+        Integer rating;
+    }
+
+    compound Tele {
+    
+        Integer id;
+        String name;
+        Boolean g;
+        Real speed;
+        Rating rated;
+        
+        assign (meta = 100) to 
+            
+               {
+                 //speed > 25.0;
+                 Tele.speed > 25.0;
+                 
+                 Tele.id == 999;
+                 
+                 //Tele.rated.rating == 5;
+                    rated.rating == 555;
+               }
+    }
+    
+    
+    Tele t1;
+    t1 == {id = 1, name = "3", g = true, speed = 24.0, rated = {rating = 1}};
+
+    Tele t2;
+    t2 = {id = 1, name = "3", g = true, speed = 24.0};
+    
+    
+    Tele t3;
+    
+    
+}

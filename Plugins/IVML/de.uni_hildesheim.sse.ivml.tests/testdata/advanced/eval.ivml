@@ -1,0 +1,13 @@
+project evals {
+
+    version v0;
+    Integer i;
+    String s;
+    i < 10;
+    eval {
+        eval {
+            i > 2;
+        };
+        size(s) < 10;
+    };
+}

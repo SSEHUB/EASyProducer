@@ -1,0 +1,27 @@
+@indent(indentation = 4, additional = 1)
+template cocktailVarModel(Configuration config, FileArtifact target) {
+	
+	// sortAlpha only for normalization in regression testing
+	
+	def main(Configuration config, FileArtifact target) {
+        '<?xml version=”1.0” encoding=”utf-8”>
+         <cocktail>
+             <variability>'
+		for (DecisionVariable dv : config.variables().sortAlpha()) {
+			createCocktailVariable(dv);
+		}
+        '    </variability>
+         </cocktail>'
+	}
+	
+	def createCocktailVariable(DecisionVariable variable) {
+	    if (variable.variables().size() > 0) {
+            for (DecisionVariable dv : variable.variables().sortAlpha()) {
+                createCocktailVariable(dv);
+            }
+        } else {
+            '<element derived="false" name="${variable.getQualifiedName()}"/>' | 8;
+        }
+		
+	}
+}

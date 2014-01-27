@@ -1,0 +1,14 @@
+b1 <- true
+-> and(Boolean, Boolean) with (true, true) = true
+b2 <- true
+-> or(Boolean, Boolean) with (true, false) = true
+b3 <- true
+-> xor(Boolean, Boolean) with (true, false) = true
+b4 <- true
+-> !(Boolean) with (true) = false
+b5 <- false
+-> not(Boolean) with (false) = true
+b6 <- true
+-> ==(Boolean, Boolean) with (false, true) = false
+b7 <- false
+-> main()

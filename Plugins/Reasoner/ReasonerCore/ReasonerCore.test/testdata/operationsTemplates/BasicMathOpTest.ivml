@@ -1,0 +1,39 @@
+project BasicMathOpTest {
+
+    // Integer
+    Integer intA = 2;
+    Integer intB = 1;
+    Integer intC = 6;
+    
+    (2 + 2 * intA) == 6;
+    2 + 2 * 2 == 6;
+    2 + 2 * intA == 6;
+    1 + 1 + intB == intA + 1;
+    2 - 2 + intA == intB + 1;
+    intA == 2;
+    
+    intA * intB == 2;
+    intA / intB == 2;
+    // intB / intA == 0;
+    
+    intB - intA == -1;
+    intA - intB == -(-1);
+    intA -(-intB) == 3;
+    
+    // Real
+    Real realA = 2.0;
+    Real realB = 1.0;
+   
+    1 + 1 + realB == realA + 1;
+    2 - 2 + realA == realB + 1;
+    
+    realB * realA == 2.0;
+    realA / realB == 2;
+    realB / realA == 0.5;
+    
+    realB - realA == -1.0;
+    realA - realB == -(-1.0);
+    realA -(-realB) == 3;
+   
+    
+}

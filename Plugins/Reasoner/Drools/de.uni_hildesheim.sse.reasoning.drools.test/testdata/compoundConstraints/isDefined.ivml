@@ -1,0 +1,28 @@
+project isDefined {
+
+    compound A {
+        Integer aa1;
+        B bb;
+        Boolean bool3 = true;
+        }
+        
+     compound B {
+        Integer b1;
+        C cc;
+     }
+
+    compound C {
+        Integer ccc;
+        Integer ccc2;
+    }
+    
+    A a1;
+    
+    a1.aa1 == 20;
+    
+    isDefined(a1);   
+    
+
+
+
+}

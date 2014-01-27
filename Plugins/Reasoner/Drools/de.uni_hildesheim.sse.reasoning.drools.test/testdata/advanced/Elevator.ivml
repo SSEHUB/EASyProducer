@@ -1,0 +1,59 @@
+project PL_SimElevator {
+
+    version v0;
+    enum ControllerType {DefaultEController, DistanceEController};
+    enum ButtonType {DefaultButton, ArrowButton};
+    
+    Integer i1, i2;
+    i2 = i1 * i1;
+    
+    Integer elevators = 3;
+    Integer floors;
+    ControllerType controlling_controllertype = ControllerType.DefaultEController;
+    Boolean controlling_synchronized = true;
+    Boolean controlling_accelerated = true;
+    ButtonType outerview_buttontype = ButtonType.DefaultButton;
+    Boolean outerview_emergencybuttons = true;
+    Boolean outerview_cancellation = true;
+    Boolean innerview_emergencybutton = true;
+    Boolean innerview_authorization = true;
+    Boolean innerview_doorbutton = true;
+    Boolean display_direction = true;
+    Boolean display_currfloor_number = true;
+    Boolean display_currfloor_chain = true;
+    Boolean display_target = true;
+    Boolean display_openingside = true;
+    Boolean outerview_autoscroll = true;
+    controlling_synchronized == true implies elevators >= 2;
+    elevators > 0;
+    floors >= 1;
+    
+    elevators == 10;
+}
+
+
+project SUH_ELEVATOR_2 {
+
+    version v0;
+    import PL_SimElevator ;
+    floors = 4;
+    
+    Integer x;
+    x == floors + elevators;
+    
+    //This is an error
+    Integer anInt = 2;
+    anInt = 10;
+    
+}
+
+project Main {
+    import SUH_ELEVATOR_2;
+    i1 == 10;
+    elevators = 5;
+    Boolean bool;
+    Integer y;
+    bool = true;
+    bool == true implies y == x + floors + elevators;
+
+}

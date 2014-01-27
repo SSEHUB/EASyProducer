@@ -1,0 +1,24 @@
+@indent(indentation = 4, additional = 1)
+template CompileUiTemplate(Configuration config, FileArtifact target) {
+
+    def String value(DecisionVariable var) {
+        switch (var.type()) {
+            "Boolean" : '$var',
+            "Integer" : '$var',
+            default : '"$var"'
+        }
+    }
+
+    def main(Configuration config, FileArtifact target) {
+        'package variability;
+
+         public class StaticConfiguration implements de.uni_hildesheim.sse.variability.runtime.StaticConfiguration {'
+         
+        for (DecisionVariable v: config.variables()) {
+            'public static final boolean ${v.name()} = ${value(v)};'
+        }
+
+        '}'
+
+    }
+}

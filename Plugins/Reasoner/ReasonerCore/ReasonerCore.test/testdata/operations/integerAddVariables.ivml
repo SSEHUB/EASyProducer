@@ -1,0 +1,18 @@
+project integerAddConstants {
+
+    Integer i0 = 0;
+    Integer i1 = 1;
+    Integer iM1 = -1;
+    Integer i3 = 3;
+    Integer i4 = 4;
+    Integer iM5 = -5;
+
+    // addition
+    i0 + i0 == i0;
+    i1 + i0 == i1;
+    i0 + i1 == i1;
+    iM1 + i4 == i3;
+    iM5 + i4 == iM1;
+    iM5 + (iM5) == -10;
+
+}

@@ -1,0 +1,9 @@
+project testopdef {
+
+    version v0;
+    Integer j;
+    def Integer myOp(Integer i) = i + 10;
+    def Integer myOp0() = j;
+    myOp(10) > 5;
+    myOp0() == 10;
+}

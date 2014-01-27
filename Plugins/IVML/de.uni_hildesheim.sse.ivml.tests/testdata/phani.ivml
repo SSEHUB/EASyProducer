@@ -1,0 +1,75 @@
+project test {
+
+   version v1;
+    
+   enum Color {blue = 100, black = 200, red = 300};
+   enum Cars {volvo, bmw, benz};
+   
+   Integer alpha = 4;
+   Integer beta = 2;
+   Integer gamma;
+   Real realNumber1;
+   Color someColor;
+   gamma = 4/ 2;
+   
+   Real delta = 17;
+   Integer xx; 
+   xx = delta/alpha;
+   
+     
+   Cars car1;
+   car1 = Cars.volvo;
+   
+   Color color1;
+   color1 = Color.blue;
+   Color color2;
+   color2 = Color.black;
+   
+   color1 != color2;
+   color1 >= color2;
+   Color color3;
+   color3 = Color.red;
+   color1 < color2 implies color2 > color3;
+   sequenceOf(Color) s_cl;
+   s_cl = {Color.blue, Color.red};
+   Integer x;
+   Integer y = 5;
+   x = 10;
+   Integer z;
+   z = x / y;
+   
+   compound CMP1 {
+   Integer intA = 4;
+   Integer intB = 5;
+   }
+   
+   compound CMP2 {
+   Integer intC = 8;
+   Integer intD = 19;
+   }
+   
+   CMP1 cm1;
+   CMP1 cm2;
+   CMP2 cm3;
+   CMP2 cm4;
+  
+   compound CMP3 {
+   Integer intE;
+   Integer intF;
+   } 
+   
+   CMP3 cm5;
+   
+   cm1.intA = 15;
+   cm2.intB = 20;
+   CMP1.intA > CMP1.intB;
+   cm1.intA > cm2.intB;
+   cm1.intA < cm2.intA and cm1.intA > cm2.intB;
+   
+   Boolean defined;
+   defined = true;
+   cm5.isDefined() = defined;
+   
+   
+   
+}

@@ -1,0 +1,105 @@
+project testBasisDatatype {
+
+    Integer intA;
+    Real    realA;
+    Boolean boolA;
+    String  stringA;
+    
+    Boolean tempBool;
+    tempBool = true;
+    
+    String tempString;
+    tempString = "Another string";
+    
+    Integer tempInt;
+    tempInt = 0;
+    
+    Real tempReal;
+    tempReal = 0.0;
+
+    // INTEGER
+    intA + intA                     = 2;
+    intA + realA                    = 3.0;
+    intA - intA                     = 0;
+    intA - realA                    = -1.0;
+    intA * intA                     = 1;
+    intA * realA                    = 2.0;
+    intA / intA                     = 1;
+    intA / realA                    = 0.5;  
+    (intA + 1 = intA + 1)           = tempBool;    
+    (intA + 1 <> intA)              = tempBool;
+    (intA + 2 <> realA)             = tempBool;
+    (intA > 0)                      = tempBool;
+    (intA < 2)                      = tempBool;
+    (intA > realA - 2.0)            = tempBool;
+    (intA < realA)                  = tempBool;
+    (intA + 2 >= 3)                 = tempBool;
+    (intA + 2 <= 3)                 = tempBool;
+    (intA + 1 >= realA)             = tempBool;
+    (intA + 1 <= realA)             = tempBool;
+    (tempBool = true) implies (intA    = intA.min(4));
+    tempBool = true implies intA    = intA.min(4);
+    tempBool = true implies intA    = intA.max(-1);
+    tempBool = true implies intA    = intA.abs();
+    tempBool = true implies intA    = intA.mod(2);
+    tempBool = true implies (intA    = intA.mod(2.0));
+
+    // REAL
+    realA + realA                   = 4.0;
+    realA + intA                    = 3.0;
+    realA - realA                   = 0.0;
+    realA - intA                    = 1.0;
+    realA * realA                   = 4.0;
+    realA * intA                    = 2.0;
+    realA / realA                   = 1.0;
+    realA / intA                    = 2.0;
+    (realA + 1.0 = realA + 1.0)     = tempBool;
+    (realA + 1 <> realA - 1.0)      = tempBool;
+    (realA + 1 <> intA + 1)         = tempBool;
+    (realA > realA - 1.0)           = tempBool;
+    (realA < realA + 1.0)           = tempBool;
+    (realA > intA)                  = tempBool;
+    (realA < intA + 2)              = tempBool;
+    (realA >= realA)                = tempBool;
+    (realA <= realA)                = tempBool;
+    (realA >= intA + 1)             = tempBool;
+    (realA <= intA + 1)             = tempBool;
+    tempBool = true implies realA   = realA.min(4.0);
+    tempBool = true implies realA   = realA.max(1.0);
+    tempBool = true implies realA   = realA.min(4);
+    tempBool = true implies realA   = realA.max(1);
+    tempBool = true implies realA   = realA.abs();
+    tempBool = true implies realA   = realA.floor();
+    tempBool = true implies realA   = realA.round();
+    
+
+    // BOOLEAN 
+    (boolA <> not boolA)            = tempBool;
+    (not ( not boolA) )               = tempBool;   // << false = true
+    (boolA or tempBool)             = tempBool;
+    (boolA xor not tempBool)        = tempBool;
+    not (boolA and not tempBool)    = tempBool;
+    (boolA implies tempBool)        = tempBool;
+    not (boolA implies not tempBool) = tempBool;
+   
+    // STRING
+    (stringA == stringA)            = tempBool;
+    (stringA <> tempString)         = tempBool;
+    
+    //stringA.size() > 0;
+    
+    String concatString;
+    concatString = stringA.concat(tempString);
+    String substrString;
+    substrString = stringA.substring(0, 1);
+    String substiString;
+    substiString = stringA.substitutes("A","s");
+        //tempString.matches(^A\s\w+) = tempBool; // tempString = "A string"
+        //tempInt = concatString.toInteger();
+        //tempReal = concatString.toReal();
+        //String str1;
+        //String str2 = "1";
+        //Integer a;
+        //a = str2.toInteger();
+
+}

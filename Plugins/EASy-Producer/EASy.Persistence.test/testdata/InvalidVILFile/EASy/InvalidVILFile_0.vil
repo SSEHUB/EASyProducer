@@ -1,0 +1,15 @@
+vilScript InvalidVILFile (Project source, Configuration config, Project target) {
+
+    version v0;
+
+    main(Project source, Configuration config, Project target) = : {
+    }
+
+
+
+    Copy(String source, String destination) = destination : destination {
+        FileArtifact s = source;
+        FileArtifact d = destination;
+        copy(s, d);
+    }
+}

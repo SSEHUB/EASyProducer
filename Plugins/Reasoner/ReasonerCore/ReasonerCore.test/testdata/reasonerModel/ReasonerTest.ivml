@@ -1,0 +1,9 @@
+project ReasonerTest {
+
+    Integer intA = 1;
+    Integer intB = 1;
+    
+    intA >= intB;
+    intA >= 100;
+ 
+}

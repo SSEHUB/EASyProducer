@@ -1,0 +1,34 @@
+project testBasisDatatype {
+
+    Integer intA;
+    Real    realA;
+    Boolean boolA;
+    String  stringA;
+    
+    Boolean tempBool;
+    tempBool = true;
+    
+    String tempString;
+    tempString = "Another string";
+   
+    // STRING
+    (stringA == stringA)            = tempBool;
+    (stringA <> tempString)         = tempBool;
+    
+    //stringA.size() > 0;
+    
+    String concatString;
+    concatString = stringA.concat(tempString);
+    String substrString;
+    substrString = stringA.substring(0, 1);
+    String substiString;
+    substiString = stringA.substitutes("A","s");
+        //tempString.matches(^A\s\w+) = tempBool; // tempString = "A string"
+        //tempInt = concatString.toInteger();
+        //tempReal = concatString.toReal();
+        //String str1;
+        //String str2 = "1";
+        //Integer a;
+        //a = str2.toInteger();
+
+}

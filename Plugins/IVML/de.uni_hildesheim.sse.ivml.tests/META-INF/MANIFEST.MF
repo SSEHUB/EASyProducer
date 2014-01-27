@@ -1,0 +1,22 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: de.uni_hildesheim.sse.ivml.tests
+Bundle-Vendor: My Company
+Bundle-Version: 0.0.3
+Bundle-SymbolicName: de.uni_hildesheim.sse.ivml.tests; singleton:=true
+Bundle-ActivationPolicy: lazy
+Require-Bundle: de.uni_hildesheim.sse.ivml,
+ org.eclipse.core.runtime,
+ org.junit;bundle-version="4.8.2",
+ de.uni_hildesheim.sse.varModel;bundle-version="0.0.3",
+ org.eclipse.xtext.junit4,
+ org.eclipse.ui.workbench;resolution:=optional,
+ ReasonerCore;bundle-version="0.4.0",
+ de.uni_hildesheim.sse.dslCore;bundle-version="0.0.1"
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Import-Package: org.junit.runner;version="4.5.0",
+ org.junit.runner.manipulation;version="4.5.0",
+ org.junit.runner.notification;version="4.5.0",
+ org.junit.runners;version="4.5.0",
+ org.junit.runners.model;version="4.5.0",
+ org.hamcrest.core

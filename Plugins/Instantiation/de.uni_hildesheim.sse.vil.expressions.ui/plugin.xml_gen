@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<plugin>
+
+    <extension
+            point="org.eclipse.ui.editors">
+        <editor
+            class="de.uni_hildesheim.sse.vil.expressions.ui.ExpressionDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.XtextEditor"
+            contributorClass="org.eclipse.ui.editors.text.TextEditorActionContributor"
+            default="true"
+            extensions="expr"
+            id="de.uni_hildesheim.sse.vil.expressions.ExpressionDsl"
+            name="ExpressionDsl Editor">
+        </editor>
+    </extension>
+    <extension
+        point="org.eclipse.ui.handlers">
+        <handler
+            class="de.uni_hildesheim.sse.vil.expressions.ui.ExpressionDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.hyperlinking.OpenDeclarationHandler"
+            commandId="org.eclipse.xtext.ui.editor.hyperlinking.OpenDeclaration">
+            <activeWhen>
+                <reference
+                    definitionId="de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.Editor.opened">
+                </reference>
+            </activeWhen>
+        </handler>
+        <handler
+            class="de.uni_hildesheim.sse.vil.expressions.ui.ExpressionDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.handler.ValidateActionHandler"
+            commandId="de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.validate">
+         <activeWhen>
+            <reference
+                    definitionId="de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.Editor.opened">
+            </reference>
+         </activeWhen>
+      </handler>
+    </extension>
+    <extension point="org.eclipse.core.expressions.definitions">
+        <definition id="de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.Editor.opened">
+            <and>
+                <reference definitionId="isActiveEditorAnInstanceOfXtextEditor"/>
+                <with variable="activeEditor">
+                    <test property="org.eclipse.xtext.ui.editor.XtextEditor.languageName" 
+                        value="de.uni_hildesheim.sse.vil.expressions.ExpressionDsl" 
+                        forcePluginActivation="true"/>
+                </with>        
+            </and>
+        </definition>
+    </extension>
+    <extension
+            point="org.eclipse.ui.preferencePages">
+        <page
+            class="de.uni_hildesheim.sse.vil.expressions.ui.ExpressionDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
+            id="de.uni_hildesheim.sse.vil.expressions.ExpressionDsl"
+            name="ExpressionDsl">
+            <keywordReference id="de.uni_hildesheim.sse.vil.expressions.ui.keyword_ExpressionDsl"/>
+        </page>
+        <page
+            category="de.uni_hildesheim.sse.vil.expressions.ExpressionDsl"
+            class="de.uni_hildesheim.sse.vil.expressions.ui.ExpressionDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.syntaxcoloring.SyntaxColoringPreferencePage"
+            id="de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.coloring"
+            name="Syntax Coloring">
+            <keywordReference id="de.uni_hildesheim.sse.vil.expressions.ui.keyword_ExpressionDsl"/>
+        </page>
+        <page
+            category="de.uni_hildesheim.sse.vil.expressions.ExpressionDsl"
+            class="de.uni_hildesheim.sse.vil.expressions.ui.ExpressionDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.templates.XtextTemplatePreferencePage"
+            id="de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.templates"
+            name="Templates">
+            <keywordReference id="de.uni_hildesheim.sse.vil.expressions.ui.keyword_ExpressionDsl"/>
+        </page>
+    </extension>
+    <extension
+            point="org.eclipse.ui.propertyPages">
+        <page
+            class="de.uni_hildesheim.sse.vil.expressions.ui.ExpressionDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
+            id="de.uni_hildesheim.sse.vil.expressions.ExpressionDsl"
+            name="ExpressionDsl">
+            <keywordReference id="de.uni_hildesheim.sse.vil.expressions.ui.keyword_ExpressionDsl"/>
+            <enabledWhen>
+	            <adapt type="org.eclipse.core.resources.IProject"/>
+			</enabledWhen>
+	        <filter name="projectNature" value="org.eclipse.xtext.ui.shared.xtextNature"/>
+        </page>
+    </extension>
+    <extension
+        point="org.eclipse.ui.keywords">
+        <keyword
+            id="de.uni_hildesheim.sse.vil.expressions.ui.keyword_ExpressionDsl"
+            label="ExpressionDsl"/>
+    </extension>
+    <extension
+         point="org.eclipse.ui.commands">
+      <command
+            description="Trigger expensive validation"
+            id="de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.validate"
+            name="Validate">
+      </command>
+    </extension>
+    <extension point="org.eclipse.ui.menus">
+        <menuContribution
+            locationURI="popup:#TextEditorContext?after=group.edit">
+             <command
+                 commandId="de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.validate"
+                 style="push"
+                 tooltip="Trigger expensive validation">
+            <visibleWhen checkEnabled="false">
+                <reference
+                    definitionId="de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.Editor.opened">
+                </reference>
+            </visibleWhen>
+         </command>  
+         </menuContribution>
+    </extension>
+    <extension point="org.eclipse.ui.menus">
+		<menuContribution locationURI="popup:#TextEditorContext?endof=group.find">
+			<command commandId="org.eclipse.xtext.ui.editor.FindReferences">
+				<visibleWhen checkEnabled="false">
+                	<reference definitionId="de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.Editor.opened">
+                	</reference>
+            	</visibleWhen>
+			</command>
+		</menuContribution>
+	</extension>
+	<extension point="org.eclipse.ui.handlers">
+	    <handler
+            class="de.uni_hildesheim.sse.vil.expressions.ui.ExpressionDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.findrefs.FindReferencesHandler"
+            commandId="org.eclipse.xtext.ui.editor.FindReferences">
+            <activeWhen>
+                <reference
+                    definitionId="de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.Editor.opened">
+                </reference>
+            </activeWhen>
+        </handler>
+    </extension>   
+
+<!-- adding resource factories -->
+
+	<extension
+		point="org.eclipse.emf.ecore.extension_parser">
+		<parser
+			class="de.uni_hildesheim.sse.vil.expressions.ui.ExpressionDslExecutableExtensionFactory:org.eclipse.xtext.resource.IResourceFactory"
+			type="expr">
+		</parser>
+	</extension>
+	<extension point="org.eclipse.xtext.extension_resourceServiceProvider">
+        <resourceServiceProvider
+            class="de.uni_hildesheim.sse.vil.expressions.ui.ExpressionDslExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
+            uriExtension="expr">
+        </resourceServiceProvider>
+    </extension>
+
+
+    <!-- marker definitions for de.uni_hildesheim.sse.vil.expressions.ExpressionDsl -->
+    <extension
+            id="expressiondsl.check.fast"
+            name="ExpressionDsl Problem"
+            point="org.eclipse.core.resources.markers">
+        <super type="org.eclipse.xtext.ui.check.fast"/>
+        <persistent value="true"/>
+    </extension>
+    <extension
+            id="expressiondsl.check.normal"
+            name="ExpressionDsl Problem"
+            point="org.eclipse.core.resources.markers">
+        <super type="org.eclipse.xtext.ui.check.normal"/>
+        <persistent value="true"/>
+    </extension>
+    <extension
+            id="expressiondsl.check.expensive"
+            name="ExpressionDsl Problem"
+            point="org.eclipse.core.resources.markers">
+        <super type="org.eclipse.xtext.ui.check.expensive"/>
+        <persistent value="true"/>
+    </extension>
+
+   <extension
+         point="org.eclipse.xtext.builder.participant">
+      <participant
+            class="de.uni_hildesheim.sse.vil.expressions.ui.ExpressionDslExecutableExtensionFactory:org.eclipse.xtext.builder.IXtextBuilderParticipant">
+      </participant>
+   </extension>
+   <extension
+            point="org.eclipse.ui.preferencePages">
+        <page
+            category="de.uni_hildesheim.sse.vil.expressions.ExpressionDsl"
+            class="de.uni_hildesheim.sse.vil.expressions.ui.ExpressionDslExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
+            id="de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.compiler.preferencePage"
+            name="Compiler">
+            <keywordReference id="de.uni_hildesheim.sse.vil.expressions.ui.keyword_ExpressionDsl"/>
+        </page>
+    </extension>
+    <extension
+            point="org.eclipse.ui.propertyPages">
+        <page
+            category="de.uni_hildesheim.sse.vil.expressions.ExpressionDsl"
+            class="de.uni_hildesheim.sse.vil.expressions.ui.ExpressionDslExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
+            id="de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.compiler.propertyPage"
+            name="Compiler">
+            <keywordReference id="de.uni_hildesheim.sse.vil.expressions.ui.keyword_ExpressionDsl"/>
+            <enabledWhen>
+	            <adapt type="org.eclipse.core.resources.IProject"/>
+			</enabledWhen>
+	        <filter name="projectNature" value="org.eclipse.xtext.ui.shared.xtextNature"/>
+        </page>
+    </extension>
+
+	<!-- Quick Outline -->
+	<extension
+		point="org.eclipse.ui.handlers">
+		<handler 
+			class="de.uni_hildesheim.sse.vil.expressions.ui.ExpressionDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.outline.quickoutline.ShowQuickOutlineActionHandler"
+			commandId="org.eclipse.xtext.ui.editor.outline.QuickOutline">
+			<activeWhen>
+				<reference
+					definitionId="de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.Editor.opened">
+				</reference>
+			</activeWhen>
+		</handler>
+	</extension>
+	<extension
+		point="org.eclipse.ui.commands">
+		<command
+			description="Open the quick outline."
+			id="org.eclipse.xtext.ui.editor.outline.QuickOutline"
+			name="Quick Outline">
+		</command>
+	</extension>
+	<extension point="org.eclipse.ui.menus">
+		<menuContribution
+			locationURI="popup:#TextEditorContext?after=group.open">
+			<command commandId="org.eclipse.xtext.ui.editor.outline.QuickOutline"
+				style="push"
+				tooltip="Open Quick Outline">
+				<visibleWhen checkEnabled="false">
+					<reference definitionId="de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.Editor.opened"/>
+				</visibleWhen>
+			</command>
+		</menuContribution>
+	</extension>
+    <!-- quickfix marker resolution generator for de.uni_hildesheim.sse.vil.expressions.ExpressionDsl -->
+    <extension
+            point="org.eclipse.ui.ide.markerResolution">
+        <markerResolutionGenerator
+            class="de.uni_hildesheim.sse.vil.expressions.ui.ExpressionDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+            markerType="de.uni_hildesheim.sse.vil.expressions.ui.expressiondsl.check.fast">
+            <attribute
+                name="FIXABLE_KEY"
+                value="true">
+            </attribute>
+        </markerResolutionGenerator>
+        <markerResolutionGenerator
+            class="de.uni_hildesheim.sse.vil.expressions.ui.ExpressionDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+            markerType="de.uni_hildesheim.sse.vil.expressions.ui.expressiondsl.check.normal">
+            <attribute
+                name="FIXABLE_KEY"
+                value="true">
+            </attribute>
+        </markerResolutionGenerator>
+        <markerResolutionGenerator
+            class="de.uni_hildesheim.sse.vil.expressions.ui.ExpressionDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+            markerType="de.uni_hildesheim.sse.vil.expressions.ui.expressiondsl.check.expensive">
+            <attribute
+                name="FIXABLE_KEY"
+                value="true">
+            </attribute>
+        </markerResolutionGenerator>
+    </extension>
+   	<!-- Rename Refactoring -->
+	<extension point="org.eclipse.ui.handlers">
+		<handler 
+			class="de.uni_hildesheim.sse.vil.expressions.ui.ExpressionDslExecutableExtensionFactory:org.eclipse.xtext.ui.refactoring.ui.IRenameElementHandler"
+			commandId="org.eclipse.xtext.ui.refactoring.RenameElement">
+			<activeWhen>
+				<reference
+					definitionId="de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.Editor.opened">
+				</reference>
+			</activeWhen>
+		</handler>
+	</extension>
+    <extension point="org.eclipse.ui.menus">
+         <menuContribution
+            locationURI="popup:#TextEditorContext?after=group.edit">
+         <command commandId="org.eclipse.xtext.ui.refactoring.RenameElement"
+               style="push">
+            <visibleWhen checkEnabled="false">
+               <reference
+                     definitionId="de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.Editor.opened">
+               </reference>
+            </visibleWhen>
+         </command>
+      </menuContribution>
+   </extension>
+   <extension point="org.eclipse.ui.preferencePages">
+	    <page
+	        category="de.uni_hildesheim.sse.vil.expressions.ExpressionDsl"
+	        class="de.uni_hildesheim.sse.vil.expressions.ui.ExpressionDslExecutableExtensionFactory:org.eclipse.xtext.ui.refactoring.ui.RefactoringPreferencePage"
+	        id="de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.refactoring"
+	        name="Refactoring">
+	        <keywordReference id="de.uni_hildesheim.sse.vil.expressions.ui.keyword_ExpressionDsl"/>
+	    </page>
+	</extension>
+
+  <extension point="org.eclipse.compare.contentViewers">
+    <viewer id="de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.compare.contentViewers"
+            class="de.uni_hildesheim.sse.vil.expressions.ui.ExpressionDslExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
+            extensions="expr">
+    </viewer>
+  </extension>
+  <extension point="org.eclipse.compare.contentMergeViewers">
+    <viewer id="de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.compare.contentMergeViewers"
+            class="de.uni_hildesheim.sse.vil.expressions.ui.ExpressionDslExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
+            extensions="expr" label="ExpressionDsl Compare">
+     </viewer>
+  </extension>
+  <extension point="org.eclipse.ui.editors.documentProviders">
+    <provider id="de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.editors.documentProviders"
+            class="de.uni_hildesheim.sse.vil.expressions.ui.ExpressionDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.model.XtextDocumentProvider"
+            extensions="expr">
+    </provider>
+  </extension>
+
+</plugin>

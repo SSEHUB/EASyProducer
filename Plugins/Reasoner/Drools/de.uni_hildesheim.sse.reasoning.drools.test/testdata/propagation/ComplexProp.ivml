@@ -1,0 +1,21 @@
+project P11 {
+
+    Boolean b;
+}
+
+project P12 {
+    Integer i;
+    
+}
+
+project P1 {
+
+import P11;
+import P12;
+    b == true implies i == 55;
+ }
+ 
+project Pmain {
+    import P1;
+    b == true;
+}

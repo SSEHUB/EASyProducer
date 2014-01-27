@@ -1,0 +1,27 @@
+template cocktailResolution(setOf(JavaFileArtifact, DecisionVariable) variabilities) {
+    
+    // Not used anymore as SAP does not have any compile-time variability!
+    // Further, JavaFileArtifact is currently not available!
+    
+    /*
+	// @Params: only artifacts with @VariationPoint and decision variables with attribute bindingTime = compile!
+	def main(setOf(JavaFileArtifact, DecisionVariable) variabilities) { // Do we need this parameter here? No, because "variabilities" are global!?
+		for (JavaFileArtifact variableFile : variabilities.selectByType(JavaFileArtifact)) {
+		    for (JavaAttribute variableAttribute : variableFile.getAttributes()) {
+		        if (variableAttribute.hasAnnotation("@VariationPoint")) {
+		            resolveVariability(variableAttribute, variabilities.selectByType(DecisionVariables));
+		        }
+		    }
+		}
+	}
+	
+	def resolveVariability(JavaAttribute variableAttribute, setOf(DecisionVariables) variables) {
+	    for (JavaAnnotation varAnnotation : variableAttribute.annotations()) {
+	        for (DecisionVariable decVar : variables) {
+    	        if (varAnnotation.getValue() == decVar.getName()) {
+    	            variableAttribute.setValue(decVar.getValue());
+                }
+	        }
+	    }
+	} */
+}

@@ -1,0 +1,13 @@
+import generics;
+
+vilScript derived () extends generics {
+
+    productionGenericCopy(FileArtifact x, FileArtifact y) = y : x {
+        super.productionGenericCopy(x, y);
+    }
+
+    main() = : {
+        productionGenericCopy("build.xml", "build1.xml");
+    }
+
+}

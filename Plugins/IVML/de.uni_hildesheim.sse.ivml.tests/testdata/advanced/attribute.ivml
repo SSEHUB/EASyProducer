@@ -1,0 +1,16 @@
+project attributes {
+
+    version v0;
+    enum bindingTimes {compile, startup, runtime};
+    Integer i;
+    Boolean b;
+    attribute Integer k to i;
+    attribute bindingTimes binding to i;
+    attribute Integer j to attributes;
+    i.k = 0;
+    i.binding = bindingTimes.compile;
+    attributes.j = 0;
+// similar to a problem Romans had    
+    i.j = 1;
+    b.j = 4;
+}

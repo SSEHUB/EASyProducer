@@ -1,0 +1,8 @@
+project FullyConfiguredProject_2 {
+
+    version v0;
+    Integer variableWithoutAttr = 2; 
+    Integer variableWithCorrectAttr;
+    Integer variableWithWrongAttr = 5; 
+
+}

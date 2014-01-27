@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="11abdf32-e1b8-4017-a8c7-dbe1e91e0180" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:49837/CCSMockService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="CCSMockService.disco" MetadataType="Disco" ID="239cf1e0-3ff3-4e37-8f1b-9bf4dcbd9062" SourceId="1" SourceUrl="http://localhost:49837/CCSMockService.svc?disco" />
+    <MetadataFile FileName="CCSMockService.wsdl" MetadataType="Wsdl" ID="a75cdf3f-10b1-4019-875e-60db1b3e15a6" SourceId="1" SourceUrl="http://localhost:49837/CCSMockService.svc?wsdl" />
+    <MetadataFile FileName="CCSMockService.xsd" MetadataType="Schema" ID="e8bc1048-12b2-429a-9f88-5d9da3a75bcb" SourceId="1" SourceUrl="http://localhost:49837/CCSMockService.svc?xsd=xsd1" />
+    <MetadataFile FileName="CCSMockService1.xsd" MetadataType="Schema" ID="4a07ac9e-e11c-4655-8f06-4b26775112bb" SourceId="1" SourceUrl="http://localhost:49837/CCSMockService.svc?xsd=xsd0" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

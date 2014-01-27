@@ -1,0 +1,17 @@
+project SequenceAsSet {
+    
+    sequenceOf(Integer) seq1;
+    seq1 = {1, 2, 4, 4, 6, 2, 2};
+    
+    //size of the seq is 7, valid
+    seq1.size() == 7;
+    
+    //size of the sequence as a set, after removing duplicate should be 4
+    seq1.asSet().size() == 4;
+    
+    // this is also valid.
+    seq1.asSequence().size() == 7;
+    
+    seq1.asSequence().size() == seq1.size();     
+
+}

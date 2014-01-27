@@ -1,0 +1,126 @@
+project PL_YMS_Platform {
+
+    version v0;
+    enum DdsSchedulingAlgorithm {SIMPLE, DYNAMIC};
+    enum JockeySchedulingType {SIMPLE, LOCATION};
+    typedef Count Integer with (Count > 0);
+    
+    /*
+    Integer i1, i2, i3, i4;
+    //i1 < 6 and i1 > 4; 
+    i1 > 4 and i2 > 3 + 1;
+    i1 < 6 and i2 < 10;
+    i3 > 4 and i3 < 6;
+    
+    
+    compound Container {
+    	String name;
+	    Integer x;
+    }
+    
+    Integer z = 5;
+    
+    sequenceOf(Integer) bitrates = {100, 50, 75, 75};
+    //bitrates.sum() <= 256;
+    
+    let Integer sumBitrate = bitrates.sum()
+    	in sumBitrate >= 256;
+    
+    	
+    compound Z {
+    	sequenceOf(Integer) bitrates2 = {100, 50, 75};
+    
+    }	
+    
+    Z z1;
+    
+    Integer ab = 10;
+    let Integer ab1 = ab
+        in ab1 >= 256;
+        
+    let Integer sumBitrate = z1.bitrates2.sum()
+    	in sumBitrate >= 512;
+    
+    
+    refTo(Container) myContainer;
+    refBy(myContainer).name = "ContentContainer";
+    refBy(myContainer).x < 30;
+    
+   
+   	// Cannot assign default value to compound reference?
+    //refTo(Container) yourContainer = {name = "contContainer", x = 10};
+    
+    
+    
+    1 < 3 implies refBy(myContainer).x = 25; 
+    refBy(myContainer).x > 24 and z > 4;
+    //1 < 3 implies refBy(myContainer)  = {name = "blah blah", x = 25};
+    
+    refTo(Integer) Y;
+    refBy(Y) = 25;
+    Boolean bool1;
+    bool1 = (refBy(myContainer).x = 25);
+    
+    refTo(Boolean) bool2 = true;
+    refBy(bool2) = true;
+    Boolean bool3;
+    bool3 = (bool1 or refBy(bool2));
+    
+    
+    */
+    
+    
+    compound AbstractComponent {
+    }
+
+    compound DdsComponent refines AbstractComponent {
+        Count docks;
+        Count waitingBays;
+        Boolean specialDocks;
+        DdsSchedulingAlgorithm scheduling;
+    }
+
+    compound JockeyComponent refines AbstractComponent {
+        Count jockeys;
+        Boolean reassignments;
+        JockeySchedulingType scheduling;
+    }
+
+    compound MobilityComponent refines AbstractComponent {
+        Boolean gpsBasedDrivers;
+        Boolean gpsBasedJockeys;
+    }
+
+	
+	
+		  
+	
+    Boolean gpsBased = true;
+    Boolean visualizationSupport = true;
+    Boolean useJms = true;
+    String jmsConnection = "Hello";
+    String queueName = "World";
+    //JockeyComponent jockeyComponent;
+    MobilityComponent mobilityComponent;
+    
+    JockeyComponent jockeyComponent = {jockeys = 2, reassignments = true, 
+        scheduling = JockeySchedulingType.SIMPLE};
+    //MobilityComponent mobilityComponent = {gpsBasedDrivers = true, gpsBasedJockeys = true};
+
+    gpsBased implies isDefined(mobilityComponent);
+    isDefined(mobilityComponent) implies gpsBased;
+
+    DdsComponent ddsComponent = {docks = 0, waitingBays = 2, specialDocks = false, 
+        scheduling = DdsSchedulingAlgorithm.SIMPLE};
+/*
+  */  
+    attribute Boolean metaInformation to jockeyComponent;
+    attribute Boolean metaInformation to mobilityComponent;
+    attribute Boolean metaInformation to ddsComponent;
+    useJms implies not (size(jmsConnection) == 0);
+    useJms implies not (size(queueName) == 0);
+    
+    jockeyComponent.scheduling == JockeySchedulingType.LOCATION implies mobilityComponent.gpsBasedJockeys;
+    
+    
+}

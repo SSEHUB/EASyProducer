@@ -1,0 +1,184 @@
+// Indenica Use Case - Siemens Warehouse Variability Model 
+// 
+// Authors: Georg Leyh, Andreas Schönberger
+//
+// Documentation:
+// ==============
+// This model strives for capturing a warehouse variability model that is consistent with reality, but not necessarily complete.
+// Rather, the concepts covered in this model are selected such that support of this model implies support of reasonable real-world variability models.
+// Therefore, several concepts that necessarily would have to be respected for a real-world model have been neglected because these do not contribute to the above goal.
+// Among others, these concepts are:
+// - Inventory process (Inventurprozess)
+// - Compactification (Kompaktifizierung)
+// - Avice notes (Avisierung)
+// - Type of stock determination (FIFO at the moment)
+// - Picking process error handling
+// - Interrupts during the processing of picking orders because of priority changes
+// - Packing
+// - Distribution
+  
+    
+
+project PL_Warehouse_SIE {
+    version v0.3;
+
+	import PL_GoodsIn;
+	import PL_TransportSystem;
+	import PL_Storage;
+	import PL_Picking;	
+	import PL_Aggregation;
+	
+	GoodsIn goodsIn;
+	TransportSystem transport;
+	Storage storage;
+	Picking picking;
+	Aggregation aggregation;
+
+	// TODO Update corresponding variable in web.config of SearchStorageBinSvc and double check that instantiating a product still works	
+	storage.storageArea.stAreaAbcStrategy = ABCStrategy.Abc;
+}
+
+// GoodsIn configuration
+// =====================
+project PL_GoodsIn {
+	version v0;
+	
+	enum GoodsInType {automatic, manual, semiAutomatic};
+    enum ContoursCheck {noCheck, simple, calculateStorageSize};
+    enum CheckInventory {none, count, weigh};
+   
+    compound StorabilityCheck{
+    	// true := check transport unit size against maximum weigth of storage locations
+    	// false otherwise
+    	Boolean weightCheck;
+    	Boolean contoursCheck;
+    }
+    
+    compound GoodsIn {
+    	GoodsInType goodsInType;
+    	ContoursCheck contoursCheck;
+    	CheckInventory checkInventory;
+    	Boolean addIdentifier;
+    	Boolean cumulativeStorage;
+    }
+}
+
+// Transport System configuration
+// ==============================
+project PL_TransportSystem {
+	version v0;
+	
+    enum CtrlType {manual, automatic};
+    enum TourDetermination {none, algorithm1, algorithm2, alogrithm3};
+    
+    // TODO try to find a way for expressing constraints between StorageArea influences type of TransportSystem
+    // --> avoid situations such as MPW and automatic transport system
+	compound TransportSystem {
+		CtrlType ctrlType;
+	}
+	
+	// TODO: still need a way to express that ctrlType muss be automatic for this sub-compound
+	compound AutomaticTransportSystem refines TransportSystem {
+		// true := avoid collisions in case of bidirectional trails
+		// false := no collision avoidance needed
+		Boolean collisionAvoidance;
+		Boolean pathLoadBalancing;		
+	}
+	
+	// TODO: still need a way to express that ctrlType muss be manual for this sub-compound
+	compound ManualTransportSystem refines TransportSystem {
+		TourDetermination tourDetermination;
+	}	
+}
+
+// Storage configuration
+// =====================
+project PL_Storage {
+	version v0;
+	
+	typedef Count Integer with (Count > 0);
+    
+    compound Interval {
+    	Count min;
+    	Count max;
+    }
+    
+    // constant := constant storage bin for transport unit
+    // generic := configurable algorithm
+    // dedicated := predominately dedicated development
+    enum FindStoreBinAlgType {constant, generic, dedicated};
+
+	// AMW := Automatic Miniload Warehouse
+	// MPW := Manual Pallet Warehouse
+	// APW := Automatic Pallet Warehouse
+	// FW := Floor Warehouse
+	// ACW := Automatic Compact Warehouse
+	// TODO Check in how far extending compounds is a better way for sorting out the differences between the variability models of different storage area types
+   	enum StorageAreaType {AMW, MPW, APW, FW, ACW, Other};     
+
+	// Abc --> A := frequently needed, B := less frequently needed, C := infrequently needed
+	enum ABCStrategy {Abc, Simple};	
+
+    compound StorageArea{
+        StorageAreaType stAreaType;
+        ABCStrategy stAreaAbcStrategy;
+    	Integer BinDepth;
+    	Boolean VariableBinSizes;
+    	// false := multiple goods on/within transport unit such as palette, Tablarbox or AggregationBox (Gesamtbox)
+    	// true otherwise
+		Boolean MonoMaterial;
+		// true := colocation of frequently assembled goods
+		// false otherwise TODO Constraint ColocOpt false if MonoMaterial true
+    	Boolean ColocOpt;
+    	// Number of StorageBin Indices in horizontal dimension 
+    	Interval x; 
+    	// Number of StorageBin Indices in vertical dimension
+    	Interval y; 
+    	// Number of aisles between high-racks (5 + 2 x 0,5)
+    	Interval z;	
+    }
+
+	//    typedef StorageAreas sequenceOf(StorageArea); // sequenceOf compounds currently NOT IMPLEMENTED    
+    compound Storage {
+    	FindStoreBinAlgType findStoreAlg;
+    	StorageArea storageArea;
+    }    
+}
+
+// Picking configuration
+// =====================
+// Assumptions:
+// - Priority scheduling of picking orders is performed within the order queues
+// - Repacking during performing a pick is solved manually
+// - Supply of empties is solved manually
+project PL_Picking {
+    version v0;
+
+    // goodsToMultiPlace := Bahnhofskommissionierung
+    // TODO: constraints zum TransportSystem!;
+    enum PickType {pickByLight, pickByVoice, regularManToGoods, goodsToMan, goodsToMultiPlace, modeled};
+	enum InventoryType {None, CloseToZero, Zero, Annual};
+	
+	compound Picking {
+		PickType picktype;
+		// if active pick orders are supplied by the ERP system
+		Boolean orderedPick;
+		InventoryType inventoryType;
+	}	
+}
+
+// Aggregation configuration
+// =========================
+project PL_Aggregation {
+	version v0;
+	
+	enum AggregationType {perStorageArea, staged, complete};
+    // OnFinish := forward each partial commission whenever the respective commission is finished
+    // OnEvent := forward each partial commission only if all other relevant commissions have been finished
+	enum ForwardType {OnFinish, OnEvent};
+	
+	compound Aggregation{
+		AggregationType aggregationType;
+		ForwardType forwardType;
+	} 
+}

@@ -1,0 +1,38 @@
+project Simple_CustomerProject {
+
+    version v0;
+    /*----------------- workflow independent decision variables ----------------*/
+
+    enum View {BA, DE};
+    attribute View view to Simple_CustomerProject;
+    
+    
+    Boolean multiClient;
+
+
+/*------------------ type definitions for workflow compound -----------------*/ 
+    
+    enum WorkflowStart {sku, barcode, goodsinpos};
+    
+    enum PalletForm {homogeneous, heterogeneous};
+    
+    setOf(Workflow) GoodsInWorkflows;
+    
+/*----------------------- the workflow compound itself ----------------------*/     
+    
+    compound Workflow {
+    
+        Integer anInt;
+        String workflowName;
+        anInt > 88888;
+        Integer yourInt;
+        yourInt > 9999;
+        yourInt > 9999 and anInt > 88888; 
+  
+    }
+    multiClient == true;
+
+    Workflow workflow1;
+
+    workflow1.workflowName == "sampleWorkflow";
+}

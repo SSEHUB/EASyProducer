@@ -1,0 +1,21 @@
+project BooleanOperations {
+
+    Boolean bool1, bool2;
+    
+    Boolean bool3;
+    
+    bool1 = false;
+    bool2 = true;
+    
+    //Wrongly constructed 
+    bool3 == bool1 iff bool2;
+
+    //Invalid - 1
+    bool1 iff bool2;
+    
+    //Invalid - 2 
+    not (bool1 <> bool2);
+    
+    not (bool1 xor bool2);
+
+}

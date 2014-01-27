@@ -1,0 +1,26 @@
+// do remove interfaces or declared variables as they are used by importConflict*
+project testInterface {
+
+    version v0;
+    interface iface1 {
+        export i1;
+        export c3;
+    }
+    interface iface2 {
+        export s1;
+        export b1;
+    }
+    compound comp {
+        Integer c3i5;
+    }
+
+    compound comp2 {
+        Integer noExport;
+    }
+
+    Integer i1;
+    String s1;
+    Boolean b1;
+    Integer i3;
+    comp c3;
+}

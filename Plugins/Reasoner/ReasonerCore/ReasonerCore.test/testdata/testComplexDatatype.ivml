@@ -1,0 +1,189 @@
+project testConstrainedCompound {
+
+    //Define compound
+    compound CMPA {
+        Integer intA;
+        Real    realA;
+        Boolean boolA;
+        String  stringA;
+    }
+    
+    compound CMPB {
+        Integer intA;
+        Real    realA;
+        Boolean boolA;
+        String  stringA;
+    }
+    
+    //initial Compounds
+    CMPA a1;
+    CMPA a2;
+    CMPB b1;
+    CMPB b2;
+    
+    
+    //initial Sequences
+    sequenceOf(Integer) iA := {1, 2, 3, 4, 5};
+    sequenceOf(Real)    rA := {1.1, 2.2, 3.3, 4.4, 5.5};
+    sequenceOf(Boolean) bA := {true, false, true, false};
+    sequenceOf(String)  sA := {"a", "b", "c", "d"};
+    sequenceOf(Integer) emptySeq := {};
+    
+    //initial Sets
+    setOf(Integer) iAset := {1, 2, 3, 4, 5};
+    setOf(Real)    rAset := {1.1, 2.2, 3.3, 4.4, 5.5};
+    setOf(Boolean) bAset := {true, false, true, false};
+    setOf(String)  sAset := {"a", "b", "c", "d"};
+    setOf(Integer) emptySet := {};
+    
+    // initial Constraints
+    (a1.intA + b1.intA) = (b1.intA + a1.intA);
+    (a1.realA + b1.intA) = (b1.intA + a1.intA);
+    
+    //Compound Operations
+    (a1 == a1) = a1.boolA;
+    (b1 == b2) = b2.boolA;
+    (b1 <> b2) = b1.boolA;
+    (a1 <> a1) = a2.boolA;
+    
+    // Constaint ok but not able to assign bool value to variable
+    /*
+     not working
+    a1.isTypeOf(a2) = a1.boolA;
+    a1.isTypeOf(b1) = b2.boolA;
+    a1.isKindOf(a2) = a1.boolA;
+    a1.isKindOf(b1) = b2.boolA;
+    
+    Boolean testTypeOf;
+    testTypeOf = a1.isTypeOf(a2); // == nil !!
+    */
+    
+    //Sequence Validation
+    a1.intA + 1 = iA[0] + 1;
+    a1.intA + b2.intA = iA[0] + b2.intA;
+    a1.intA + b2.intA <> iA[1] + b2.intA;
+    a2.realA + 1.4 = rA[2] + 0.1; 
+    a2.realA + b2.realA = rA[3] + 0.4;
+    a2.realA + b2.realA <> rA[2] + 0.4;
+        
+    //Sequence Constraints
+    iA.at(1) > a1.intA;
+    Boolean bA1;
+    bA1 = bA.at(1);
+    bA1 <> a1.boolA;
+    Integer iAfirst;
+    iAfirst = iA.first();
+    Integer iAlast;
+    iAlast = iA.last();
+    Integer appendMe;
+    appendMe = 6;
+    iA.append(appendMe);
+
+    /*
+     not working     
+    // PREPEND
+    Integer prependMe;
+    prependMe = 0;
+    iA.prepend(prependMe);
+    
+    // INDEX OF
+    Integer indexMe;
+    indexMe = iA.indexOf(position);
+    */
+
+    Integer iA4;
+    iA4 = iA[4];
+    Integer maxi;
+    maxi = 5;
+    max(iA) = maxi;
+    Integer minInt;
+    minInt = 1;
+    min(iA) = minInt;
+    Integer avgi;
+    avgi = 3;
+    avg(iA) = avgi;
+    Real maxReal;
+    maxReal = 5.5;
+    max(rA) = maxReal;    
+    Real minReal;
+    minReal = 1.1;
+    min(rA) = minReal;
+    Real avgr;
+    avgr = 3.3;
+    avg(rA) = avgr;
+    Integer sumInteger;
+    sumInteger = iA.sum();
+    Real sumReal;
+    sumReal = rA.sum();
+    Integer iAsize;
+    iAsize = iA.size();
+    Boolean seqIsEmpty;
+    seqIsEmpty = emptySeq.isEmpty();
+    Boolean seqNotEmpty;
+    seqNotEmpty = iA.notEmpty();
+    sequenceOf(Integer) iB = {1, 2, 3};
+    sequenceOf(Integer) iC;
+    iC = iA.union(iB);
+    
+    //Set Constraints
+    
+    // NOT EQUAL
+    Boolean setIsNotEqual;
+    setIsNotEqual = (iAset <> rAset); // TODO
+    
+
+    /** not working    
+    // AS SET
+    setOf(Integer) iF;
+    iF = iC.asSet(); //e.g. none
+    
+    // APPLY
+    Integer a;
+    a = 2;
+    Boolean ab;
+    ab = iAset.apply(a);
+    */
+    
+    Boolean isEmptySet;
+    isEmptySet = emptySet.isEmpty();
+    Boolean isNotEmptySet;
+    isNotEmptySet = iAset.notEmpty();    
+    
+    /*
+    NOT IMPLEMENTED IN DROOLS
+    Boolean existsSet;
+    Boolean existsTrigger;
+    existsTrigger = true;
+    existsSet = rAset.exists(existsTrigger);
+    */
+    
+    /*
+     not working
+    Real as;
+    as = 1.1;
+    Boolean excludesSet;
+    Boolean includesSet;
+    excludesSet = rAset.excludes(as);
+    includesSet = rAset.includes(as);
+
+    // INCLUDING // EXCLUDING
+    setOf(Real) excludingSet;
+    setOf(Real) includingSet;
+    rAset = rAset.excluding(as);
+    rAset = rAset.including(as);
+    excludingSet = rAset.excluding(as);
+    includingSet = rAset.including(as);
+
+    // EXISTS
+    Boolean temp = false;
+    temp = (aSeq.exists(t | t > 5));
+    */
+    
+    setOf(Integer) iBset := {0, 1, 2, 3, 4};
+    setOf(Integer) iCset;
+    setOf(Integer) iDset;
+    iCset = iAset.union(iBset);
+    iDset = iAset.intersection(iBset);
+    
+    
+}

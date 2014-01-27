@@ -1,0 +1,32 @@
+project valueValidation22 {
+
+    //   - Qualified names (instance)
+    //   - Constraints outside compound
+    //   - Assign block on variables and constraints (two assign block, different attributes)
+
+   enum View {BA, DE, Impl};
+   attribute View modelView to valueValidation22;
+   
+   enum ContentType {text, movie, audio, picture};
+    
+   compound Content {
+    assign (modelView = View.BA) to {
+        String name;
+        Integer number;
+        Boolean isValid;
+        ContentType type; 
+        }
+      }   
+    
+    Content sampleContent;
+    
+    sampleContent.name = "Audio Content";
+    sampleContent.number = 10;
+    sampleContent.type = ContentType.audio; 
+    sampleContent.isValid = true; 
+    
+     assign (modelView = View.DE) to {
+        sampleContent.name == "Audio Content" implies sampleContent.number == 10;
+        (sampleContent.name == "Audio Content" or sampleContent.type == ContentType.audio) implies sampleContent.isValid == true;            
+       }       
+}

@@ -1,0 +1,131 @@
+ /**
+ * Description:
+ *     Dieses Projekt beschreibt die Entscheidungsvariablen für das Subsystem 'Wareneingang' 
+ *     auf dem Detaillierungsgrad eines 'Domain Engineer'. 
+ *     Hier sind die Entscheidungsvariablen auf technischer Ebene enthalten.
+ * Author:
+ *     Michael Heinrich
+ * Level of detail:
+ *     Domain Engineer
+ * Subsystem:
+ *     Wareneingang
+ * 
+ */
+project GoodsInDE {
+	//Das 'Business Analyst' Projekt des Subsystems 'Wareneingang' importieren, da hier 
+	//die Entscheidungsvariablen auf Anforderungsebene enthalten sind.
+	import GoodsInBAMultiple;
+	import Infrastructure;
+	import General;
+	
+	// 1) Variabilität auf Ablaufebene (Compile Time (positive Variabilität))
+
+    //Kann das WE-Avis eindeutig über den Scan eines Barcodes idendifiziert werden?
+	//  true --> Der Einstiegsdialog ändert sich. Es wird nun nicht mehr die Artikel-Nr. abgefragt, sondern der Barcode der WE-Position
+	Boolean isGoodsInPosIdentifiedByBarcode;
+	GoodsInBAMultiple::GoodsInWorkflow::workflowStart = WorkflowStart.barcode implies isGoodsInPosIdentifiedByBarcode = true; // HE: adjusted
+	enum WorkflowVariability {now, later}; // HE added as undefined
+	//TODO Klappt nicht, wie in Language Spec erklärt: attribute WorkflowVariability workflowVariability = workflow to isGoodsInPosIdentifiedByBarcode;
+	//TODO Warum geht das nicht: attribute workflowVariability to isGoodsInPosIdentifiedByBarcode?
+	//TODO Macht das Sinn, die Art der Variabilität über ein Attribut zu beschreiben? 
+	//So geht's
+	attribute WorkflowVariability workflowVariability to isGoodsInPosIdentifiedByBarcode;
+	
+		
+	//Mischpaletten ja, nein?
+	//  manual     --> Nach der WE-Buchung wird die TE nicht sofort abgeschlossen, ...
+	//  automatic  --> Nach der WE-Buchung wird die TE sofort abgeschlossen, ...
+	Boolean isTuAutomaticallyFinished;
+	GoodsInBAMultiple::GoodsInWorkflow::receivingOfMixedPallets = true implies isTuAutomaticallyFinished = false; // HE: adjusted
+	
+	//Bildung vieler gleichartiger paletten
+	//  true  --> Mengeneingabe-Dialog wird vor TE-NR-Eingabe-Dialog angezeigt
+    //  false --> TE-NR-Eingabe-Dialog wird vor Mengeneingabe-Dialog angezeigt
+	Boolean isQtyFirst;
+	GoodsInBAMultiple::GoodsInWorkflow::palletForm = PalletForm.heterogeneous implies isQtyFirst = false; // HE: adjusted
+	
+	//Eingabe von Abmaßen nach Abschluss einer TU
+	//  true --> Dialog zur Eingabe von Abmaßen wird angezeigt
+	Boolean isSetTuDimensionsEnabled;
+	GoodsInBAMultiple::GoodsInWorkflow::palletShape = PalletShape.overwidth or GoodsInBAMultiple::GoodsInWorkflow::heightOfTuRelevant = true implies isSetTuDimensionsEnabled = true; // HE: adjusted
+	
+	//Wenn Abmessungen eingegeben werden, sind die Felder für Länge und Breite editierbar
+	//  true --> Felder für Länge und Breite sind editierbar
+	Boolean isTuLengthAndWidthEnabled;
+	// HE: alternative (only in case of same semantics): GoodsInBAMultiple::goodsInWorkflows->forAll(w|w.palletShape = PalletShape.overwidth) implies isTuLengthAndWidthEnabled = true;
+	GoodsInBAMultiple::GoodsInWorkflow::palletShape = PalletShape.overwidth implies isTuLengthAndWidthEnabled = true; // HE: adjusted
+	isTuLengthAndWidthEnabled = true implies isSetTuDimensionsEnabled = true;
+	
+	//Findet eine Vereinnahmung ohne Buchung gegen ein WE-Avis statt?
+	//  true --> Dialog zur WE-Avis Auswahl wird übersprungen, Dialog zur Auswahl einer Bestandsbewegung wird angezeigt
+	Boolean isWithoutGoodsInLine;
+	GoodsInBAMultiple::GoodsInWorkflow::receivingAgainstGoodsInLine = false implies isWithoutGoodsInLine = true; // HE: adjusted
+	 
+	//Soll wenn es nur eine freigegebene WE-Position gibt, der Dialog zur WE-Avis-Auswahl trotzdem angezeigt werden?
+	//  true --> Dialog wird angezeigt
+	Boolean isSelectGoodsInLineDialogShownWithSingleRow;
+	GoodsInBAMultiple::GoodsInWorkflow::isGoodsInLineConfirmationRequired = true implies isSelectGoodsInLineDialogShownWithSingleRow = true;  // HE: adjusted
+	isSelectGoodsInLineDialogShownWithSingleRow = true implies isWithoutGoodsInLine = false;
+	 
+	//Kann die Menge über Scan des Artikelbarcodes gezählt werden  
+	//  true --> Button zum Wechseln in den Dialog zur Zähl-Scannung wird im Mengeneingabedialog eingeblendet
+	Boolean isCountByScanningEnabled;
+	//GoodsInBA::countByScanning = false implies isCountByScanningEnabled = false; // HE: defined in GoodsInBA but not in GoodsInBAMultiple
+	
+	//ProjectSpecificTuFinishingAction getProjectSpecificTuFinishingAction();
+	//ProjectSpecificAction getProjectSpecificAction();
+
+	//Darf der Benutzer die Bestandsqualifikation selbst wählen (frei, gesperrt, QS-gesperrt)
+	//  true --> Combobox im Mengeneingabe-Dialog zur Auswahl der Bestandsqualifikation wird angezeigt
+	Boolean isStockQualificationChosenByUser;	
+	
+	//Sofern der Arbeitsplatz eine angeschlossene Waage hat, soll diese verwendet werden?
+	//  true --> Gewichtsprüfung bei der Vereinnahmung an Hand dem von der Waage gemeldeten Gewicht
+	Boolean isWeightCheckEnabled;
+	GoodsInBAMultiple::GoodsInWorkflow::weightCheckWithScale = true implies isWeightCheckEnabled = true;  // HE: adjusted
+	
+	//Soll im Einstiegsdialog der Button 'WE-Position auswählen' angezeigt werden
+	//  true --> Button wird angezeigt
+	Boolean isGoodsInPosSelectionEnabled;
+	//GoodsInBA::skuAlwaysIdentifiable = true implies isGoodsInPosSelectionEnabled = false; // HE: defined in GoodsInBA but not in GoodsInBAMultiple
+	//GoodsInBA::skuAlwaysIdentifiable = false implies isGoodsInPosSelectionEnabled = true;	 // HE: defined in GoodsInBA but not in GoodsInBAMultiple
+	//Es ist über einen Constraint in GoodsInBA gesichert, dass hier kein Widerspruch entsteht.
+	//TODO: oder besser so: isWithoutGoodsInLine = true implies isGoodsInPosSelectionEnabled = false?
+	GoodsInBAMultiple::GoodsInWorkflow::receivingAgainstGoodsInLine = false implies isGoodsInPosSelectionEnabled = false;  // HE: adjusted
+	
+	//Soll am Wareneingang ein Artikelbild angezeigt werden?
+	Boolean isSkuPictureShown = false;
+	GoodsInBAMultiple::GoodsInWorkflow::showSkuPicture = true implies isSkuPictureShown = true; // HE modified
+	
+		//TODO: Sampling beschreiben
+	
+		//TODO: Printouts beschreiben
+	
+	// 2) Variabilität auf Datenebene (Laufzeit)
+	
+		//TODO:
+		//Durch die Entscheidung GoodsInBA:goodsInInformationShown ist festgelegt, dass auf der GI.info / GIP.info
+		//Inhalte stehen, die im WE-Ablauf angezeigt werden müssen.
+	 
+		//Gibt es artikelspezifisch zu konfigurierende TU-Typen, die bei der Vereinnahmung vorzublenden, also zu bevorzugen sind?
+		//TODO: Wie wird bzw. wird überhaupt Laufzeitvariabilität hier abgebildet?  -> Konfiguration
+		//GoodsInBA::superimposeTuType implies ?????;
+
+     	//Gibt es TU-Typ spezifisch Standard-Artikelmengen, die bei der Vereinnahmung vorzublenden sind?
+		//TODO: Wie wird bzw. wird überhaupt Laufzeitvariabilität hier abgebildet?  -> Konfiguration
+		//TODO: Wie wird abgebildet, dass sich dies projektspezifisch ändern kann (z.B. immer die gesamte avisierte Menge vorblenden)?
+		//GoodsInBA::superimposeQtyToReceive implies ?????;   
+	
+		//TODO: Geteilte Behälter (split TUs) beschreiben
+		//TODO: GoodsInType beschreiben
+			
+	// 3) Variabilität auf Arbeitsplatzebene (Laufzeit)
+	
+		//Ist abhängig vom Abschnitt "Verbringung" in GoodsInBA
+	
+	// 4) Variabilität auf Mandantenebene (Laufzeit)
+	
+		//TODO: Stammdatenerfassung und Gebinde (PackingUnits) beschreiben 
+	
+	// 5) Variabilität auf iWACS-Instanzebene (Laufzeit)
+}

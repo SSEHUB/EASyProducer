@@ -1,0 +1,58 @@
+project ConstraintRetrievalCheck {
+
+   enum View {BA, DE, Impl};
+   attribute View modelView to ConstraintRetrievalCheck;
+    
+   enum ContentType {text = 1, movie = 2, audio = 4, picture = 8};
+   ContentType type;
+   
+   typedef MyInt1 Integer with(MyInt1 == 5);
+   typedef MyInt2 Integer with(MyInt2 < 13);   
+   
+   assign (modelView =View.BA) to {
+    Integer a;
+    Integer b;
+   }
+   
+   Integer c;
+   
+   compound Content {
+        String name;
+        Integer number;
+        assign (modelView =View.DE) to {
+            Boolean isValid;
+            
+        Content.number == 5 implies Content.isValid == true;
+        
+        }
+        
+        Content.name == "testName" implies Content.isValid == true;
+        
+        number != 0 implies (size(name) != 0);
+   }
+    
+   Content sampleContent;
+   
+   // error
+   type = ContentType.audio; 
+   
+   a = 1;
+   b = 2;
+   c = 3;
+   
+   MyInt1 myIntA;
+   MyInt1 myIntB;
+   MyInt2 myIntC;
+   
+   sampleContent.name = "testName";
+   sampleContent.number = 5;
+   
+   assign (modelView =View.BA) to {
+    a < b;   
+   }
+   
+   (b > a and a == 1) implies c > b;
+   sampleContent.number != 0 implies (size(sampleContent.name) != 0);
+    
+
+}

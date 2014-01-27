@@ -1,0 +1,18 @@
+project ivmlSpec_interfaces_application {
+
+    interface MyInterface {
+// writing exports in one line is possible and recognized but not canonical output    
+        export name;
+        export appType;
+    }
+    String name;
+    String appType;
+    Integer bitrate;
+    appType == "Video" implies bitrate == 256;
+}
+project ivmlSpec_interfaces_contentSharing {
+
+    import ivmlSpec_interfaces_application::MyInterface;
+    name = "myApp";
+    appType = "Video";
+}

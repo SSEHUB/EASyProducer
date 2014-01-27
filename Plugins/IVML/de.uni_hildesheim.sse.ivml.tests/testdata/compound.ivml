@@ -1,0 +1,14 @@
+// do remove interfaces or declared variables as they are used by importConflict*
+// this is required here as basic is not accessible due to hierarchical import
+// conventions
+project testCompounds {
+
+    version v0;
+    compound position {
+        Integer x1 = 1;
+        Integer y = 2;
+        String s = "a";
+    }
+
+    position p;
+}

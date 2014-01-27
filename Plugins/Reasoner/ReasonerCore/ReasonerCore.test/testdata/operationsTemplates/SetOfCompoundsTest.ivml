@@ -1,0 +1,28 @@
+project SetOfCompoundsTest {
+
+   version v0;
+   
+   enum View {BA, DE, Impl};
+   attribute View modelView to SetOfCompoundsTest;
+   
+   setOf(Workflow) GoodsInWorkflows; 
+   
+   assign (modelView = View.DE) to { 
+        Boolean multiClient = true;
+        multiClient == true;
+   } 
+   
+   compound Workflow {        
+        assign (modelView = View.BA) to {        
+            String workflowName;
+            Boolean mandatoryGoodsInLineConfirmation; 
+            Boolean receivingAgainstGoodsInLine;
+            multiClient == true implies mandatoryGoodsInLineConfirmation == true;           
+            mandatoryGoodsInLineConfirmation == true implies receivingAgainstGoodsInLine == false;           
+        }
+   } 
+  
+   GoodsInWorkflows = {{workflowName = "test1", mandatoryGoodsInLineConfirmation = true, receivingAgainstGoodsInLine = true},{workflowName = "test2", mandatoryGoodsInLineConfirmation = true, receivingAgainstGoodsInLine = false}};
+
+
+}

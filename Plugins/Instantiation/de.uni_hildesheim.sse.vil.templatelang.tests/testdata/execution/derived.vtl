@@ -1,0 +1,15 @@
+import generic;
+
+template importTest() extends generic {
+
+    def produceContent() {
+        super.produceContent();
+        'import content'
+    }
+
+    def main() {
+        produceContent();
+        produceContent2();
+    }
+
+}

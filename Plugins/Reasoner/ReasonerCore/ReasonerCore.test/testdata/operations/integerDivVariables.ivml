@@ -1,0 +1,16 @@
+project integerDivConstants {
+
+    Integer i1 = 1;
+    Integer i2 = 2;
+    Integer i4 = 4;
+    Integer i5 = 5;
+
+    // division -> integer
+    
+    i2 / 1 == 2;
+    i2 / i1 == 2;
+    i4 / 2 == 2;
+    i4 / i2 == 2;
+    i5 / i2 == 2;
+
+}

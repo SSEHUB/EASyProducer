@@ -1,0 +1,9 @@
+vilScript mapJoin5 (Project source, Project target, Configuration config) {
+
+    main() = : {
+        sequenceOf(FileArtifact) files = join(c:target.selectAllFiles(), exclude d:config.variables()) with (c.name() == d.name());
+        map(x=files) {
+        };
+    }
+
+}

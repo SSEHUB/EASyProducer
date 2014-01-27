@@ -1,0 +1,15 @@
+project FailingCase {
+
+    Integer a, b, c;
+    
+    a == 5;
+    b = 10;
+    
+    //default to c
+    a > 3 and b > 5 implies c == 10;
+    
+    //fixed to c
+    c == 15;
+    
+    // But reasoner will show inconsistency, because var == expression, are passed before the implies calls. 
+}

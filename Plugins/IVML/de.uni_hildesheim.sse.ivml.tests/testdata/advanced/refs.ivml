@@ -1,0 +1,17 @@
+project testRefs {
+
+    version v0;
+    compound Container {
+        String name;
+    }
+
+    compound Content {
+        String name;
+        Integer bitrate;
+        refTo(Container) myContainer = refBy(test);
+        myContainer = refBy(test);
+        refBy(myContainer).name = "ContentContainer";
+    }
+
+    Container test;
+}

@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="wmsdbModelStoreContainer" CdmEntityContainer="wmsdbEntities">
+    <EntitySetMapping Name="Boxes">
+      <EntityTypeMapping TypeName="wmsdbModel.Box">
+        <MappingFragment StoreEntitySet="box">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="location_id" ColumnName="location_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Locations">
+      <EntityTypeMapping TypeName="wmsdbModel.Location">
+        <MappingFragment StoreEntitySet="location">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="type" ColumnName="type" />
+          <ScalarProperty Name="reserved" ColumnName="reserved" />
+          <ScalarProperty Name="rack_id" ColumnName="rack_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Locationtypes">
+      <EntityTypeMapping TypeName="wmsdbModel.Locationtype">
+        <MappingFragment StoreEntitySet="locationtype">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Materials">
+      <EntityTypeMapping TypeName="wmsdbModel.Material">
+        <MappingFragment StoreEntitySet="material">
+          <ScalarProperty Name="materialNumber" ColumnName="materialNumber" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="description" ColumnName="description" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Positions">
+      <EntityTypeMapping TypeName="wmsdbModel.Position">
+        <MappingFragment StoreEntitySet="position">
+          <ScalarProperty Name="box_id" ColumnName="box_id" />
+          <ScalarProperty Name="material_id" ColumnName="material_id" />
+          <ScalarProperty Name="amount" ColumnName="amount" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Racks">
+      <EntityTypeMapping TypeName="wmsdbModel.Rack">
+        <MappingFragment StoreEntitySet="rack">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Transportentries">
+      <EntityTypeMapping TypeName="wmsdbModel.Transportentry">
+        <MappingFragment StoreEntitySet="transportentry">
+          <ScalarProperty Name="box_id" ColumnName="box_id" />
+          <ScalarProperty Name="bin_id" ColumnName="bin_id" />
+          <ScalarProperty Name="test" ColumnName="test" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

@@ -1,0 +1,20 @@
+    /*
+     * #if($pInt > 1)
+     */
+
+     private void greaterOne() {
+         System.out.println("$pString");
+     }
+
+     /*
+     * #else
+     */
+     
+     private void notGreaterOne() {
+         System.out.print("$pString");
+     }
+     
+     /*
+     * #end
+     */
+     

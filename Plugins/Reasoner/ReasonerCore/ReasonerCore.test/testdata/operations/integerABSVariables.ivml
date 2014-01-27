@@ -1,0 +1,12 @@
+project integerABSVariables {
+
+    Integer a;
+    Integer a1;
+    
+    a=5;
+    a1=-5;
+    
+    abs(a) == 5;
+    abs(a1) == 5;
+
+}

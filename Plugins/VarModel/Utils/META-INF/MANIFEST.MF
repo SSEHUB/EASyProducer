@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Utils
+Bundle-SymbolicName: de.uni_hildesheim.sse.utils;singleton:=true
+Bundle-Version: 0.2.0
+Bundle-Vendor: University of Hildesheim, SSE
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Export-Package: de.uni_hildesheim.sse.utils,
+ de.uni_hildesheim.sse.utils.logger,
+ de.uni_hildesheim.sse.utils.messages,
+ de.uni_hildesheim.sse.utils.modelManagement,
+ de.uni_hildesheim.sse.utils.progress
+Bundle-ActivationPolicy: lazy

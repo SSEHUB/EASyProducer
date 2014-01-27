@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProductLineProject id="38e03d43-2927-4efd-9d83-efaea9814a7a" name="New_Product" version="0" location="New_Product">
+	<predecessors>
+		<entity id="60d317a0-36ef-4f5d-892f-17b47a4d6099" name="PL_SimElevator" version="0" location="PL_SimElevator" />
+	</predecessors>
+	<successors>
+	</successors>
+	<instantiators>
+	</instantiators>
+	<reasoners>
+		<entity timeout="0" />
+	</reasoners>
+	<copy>
+		<entity copyID="de.uni_hildesheim.sse.easy.instantiator.copy.core.normal" />
+	</copy>
+</ProductLineProject>

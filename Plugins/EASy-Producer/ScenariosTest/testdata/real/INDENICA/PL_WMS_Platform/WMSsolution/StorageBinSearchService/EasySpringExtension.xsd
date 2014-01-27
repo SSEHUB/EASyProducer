@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--  
+In no event the creator of this schema nor its employer shall be liable for any damages that may be caused by usage of this schema
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:easy="http://projects.sse.uni-hildesheim.de/easy/"
+           targetNamespace="http://projects.sse.uni-hildesheim.de/easy/"
+           elementFormDefault="qualified" >
+
+  <xs:element name="varprop" type="xs:string"/>
+</xs:schema>

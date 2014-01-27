@@ -1,0 +1,27 @@
+project ivmlSpec_pe_application {
+
+    compound ContentType {
+        String contentName;
+        Integer bitrate;
+    }
+
+    ContentType appContent;
+    eval {
+        eval {
+            appContent.contentName == "Text" implies appContent.bitrate == 128;
+        };
+        size(appContent.contentName) > 0;
+    };
+}
+project ivmlSpec_pe_targetPlatform {
+
+    String name;
+    Integer bitrate;
+}
+project ivmlSpec_pe_contentSharing {
+
+    import ivmlSpec_pe_application;
+    import ivmlSpec_pe_targetPlatform;
+    //* bitrate >= appContent.bitrate;
+    ivmlSpec_pe_targetPlatform::bitrate >= ivmlSpec_pe_application::appContent.bitrate; 
+}

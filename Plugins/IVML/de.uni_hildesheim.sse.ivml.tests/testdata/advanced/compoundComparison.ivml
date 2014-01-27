@@ -1,0 +1,11 @@
+project compoundComparison {
+
+    version v0;
+    compound comp {
+        Integer a;
+        Integer b;
+    }
+
+    comp c;
+    isDefined(c) implies c == {a = 1, b = 2};
+}

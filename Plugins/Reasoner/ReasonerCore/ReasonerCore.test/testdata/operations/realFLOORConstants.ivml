@@ -1,0 +1,8 @@
+project realFLOORConstants {
+
+    floor(2.8) == 2;
+    floor(3.4) == 3;
+    floor(-5.8) == -6;
+    floor(-7.3) == -8;   
+
+}

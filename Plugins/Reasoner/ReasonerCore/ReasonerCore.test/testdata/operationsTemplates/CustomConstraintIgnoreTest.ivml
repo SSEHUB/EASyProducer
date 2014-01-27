@@ -1,0 +1,16 @@
+project CustomConstraintIgnoreTest {
+
+   version v0;
+   
+   compound MobilityComponent {
+        Boolean gpsBasedDrivers;
+        Boolean gpsBasedJockeys;
+    }
+    
+    MobilityComponent mobilityComponent;
+    
+    mobilityComponent = {gpsBasedDrivers = true, gpsBasedJockeys = true};
+  
+
+
+}

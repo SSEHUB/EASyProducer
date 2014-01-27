@@ -1,0 +1,9 @@
+project ivmlSpec_ref {
+
+    compound Name2 {
+        Integer name3;
+    }
+
+    refTo(Name2) Name4;
+    refBy(Name4).name3 = 1;
+}

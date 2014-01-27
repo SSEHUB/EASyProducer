@@ -1,0 +1,13 @@
+vilScript rulesTest (Project source, Project target, Configuration config) {
+
+    productionGenericCopy(FileArtifact x, FileArtifact y) = y : x {
+        x.copy(y);
+    }
+
+    compileGoal() = "$target/bin/*.class" : "$source/bin/*.java" {
+    }
+
+    main() = : compileGoal() {
+    }
+
+}

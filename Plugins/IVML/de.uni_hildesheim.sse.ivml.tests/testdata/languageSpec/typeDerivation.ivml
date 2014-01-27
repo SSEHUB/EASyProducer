@@ -1,0 +1,5 @@
+project ivmlSpec_typeDerivation {
+
+    typedef AllowedBitrates setOf(Integer);
+    typedef Bitrate Integer with (Bitrate >= 128 and Bitrate <= 256);
+}

@@ -1,0 +1,8 @@
+project ValuePropchallenge {
+
+	Integer x;
+	
+  	// assign:  x = 4
+	x<5 and x>3;
+	
+}

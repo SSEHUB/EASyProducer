@@ -1,0 +1,86 @@
+@advice(PL_YMS_Platform)
+vilScript PL_YMS_Platform(Project source, Project target, Configuration config) {
+    
+    version v0;
+    
+    /*
+     * Assumption (only for compile-time variability -- OBSOLETE!):
+     * source is an EASy-Producer project for configuring and instantiating the YMS-Platform.
+     * The only reference to the actual YMS-platform implementation is in the VIL-script.
+     * The derivation of a specific YMS-platform-instance is done by calling the VIL-script in source.
+     *     --> does not include the derivation of a new EASy-Producer project!
+     * 
+     * The derivation yields a new YMS-platform-project for later use by SAP
+     * 
+     */
+
+    load properties "EASy/build.properties";
+    
+    Path ymsPlatformImpl = "";
+    Path cocktailFilesLocation = "$target/src/main/resources"; // Taken from Cocktail-instantiator implementation
+    Path curlExePath;
+        
+    clean(Project source, Project target) = : {
+        // Delete all artifacts in target
+        target.getPath().deleteAll();
+    }
+    
+    createGenericInstance (Project source, Project target) = : clean(source, target) {
+        // Copy the entire implementation to the given target
+        map (artifact = ymsPlatformImpl.selectAll()) {
+            artifact.copy(target.getPath());
+        };
+    }
+    
+    // removed createGenericInstance as we currently to in-place instantiation in the tests
+    
+    createCocktailArtifacts (Project source, Project target, Configuration config) = : {
+        // Create Cocktail variability model
+        FileArtifact cocktailVarModel = "$target/src/main/resources/" + source.getName() + ".var"; // Does not exist at this point!
+        vilTemplateProcessor(source.getEasyFolder() + "/CocktailVarModelTemplate.vtl", config, cocktailVarModel);
+        // Create Cocktail resolution (model) 
+        FileArtifact cocktailResolution = "$target/src/main/resources/resolution.res"; // Does not exist at this point!
+        vilTemplateProcessor(source.getEasyFolder() + "/CocktailResModelTemplate.vtl", config, cocktailResolution);
+    }
+    
+    applyCocktailCompileTimeStrategy(Project source, Project target, Configuration config) = : createCocktailArtifacts(source, target, config) {
+        /*
+         * Due to the creation of the Cocktail-models by the templates,
+         * the only thing the Cocktail-instantiator must do is to execute
+         * the build-job. Thus, no parameters here.
+         */  
+        cocktailInstantiator(target);
+    }
+    
+    // The runtime production strategy: uses curl to change service attributes at runtime
+    applyCocktailRuntimeStrategy(Configuration config) = : {
+        // Configure DDS-service
+        // sortAlpha required for comparable results in recursion test
+        sequenceOf(DecisionVariable) ddsConfigs = config.getByName("ddsService").variables().sortAlpha();
+        execute curlExePath("-d", "\"{\\\"com.sap.ym.services.dds\\\":{\\\"items\\\":[
+            {\\\"${ddsConfigs[1].name()}\\\":\\\"${ddsConfigs[1].value()}\\\"},
+            {\\\"${ddsConfigs[2].name()}\\\":\\\"${ddsConfigs[2].value()}\\\"},
+            {\\\"${ddsConfigs[3].name()}\\\":\\\"${ddsConfigs[3].value()}\\\"},
+            {\\\"${ddsConfigs[4].name()}\\\":\\\"${ddsConfigs[4].value()}\\\"},
+            {\\\"${ddsConfigs[5].name()}\\\":\\\"${ddsConfigs[5].value()}\\\"}],
+            \\\"children\\\":null}}\"", "-H", "\"Content-Type:application/json\"", "-H", "\"Accept:application/json\"",
+            "https://indenicaym2.netweaver.ondemand.com/cocktail/api/resolutions/com.sap.ym.services.dds", "-k", "-i");
+
+        // Configure Jockey-service
+        sequenceOf(DecisionVariable) jockeyConfigs = config.getByName("jockeyService").variables().sortAlpha();
+        // sortAlpha required for comparable results in recursion test
+        execute curlExePath("-d", "\"{\\\"com.sap.ym.services.jockey\\\":{\\\"items\\\":[
+            {\\\"${jockeyConfigs[1].name()}\\\":\\\"${jockeyConfigs[1].value()}\\\"},
+            {\\\"${jockeyConfigs[2].name()}\\\":\\\"${jockeyConfigs[1].value()}\\\"},
+            {\\\"${jockeyConfigs[3].name()}\\\":\\\"${jockeyConfigs[1].value()}\\\"},
+            {\\\"${jockeyConfigs[4].name()}\\\":\\\"${jockeyConfigs[1].value()}\\\"}],
+            \\\"children\\\":null}}\"", "-H", "\"Content-Type:application/json\"", "-H", "\"Accept:application/json\"",
+            "https://indenicaym2.netweaver.ondemand.com/cocktail/api/resolutions/com.sap.ym.services.jockey", "-k", "-i");        
+    }
+
+    // Entry-point if no other rule is directly called (main rule)
+    main(Project source, Project target, Configuration config) = : {
+            applyCocktailCompileTimeStrategy(source, target, config);
+            applyCocktailRuntimeStrategy(config);
+    }
+}

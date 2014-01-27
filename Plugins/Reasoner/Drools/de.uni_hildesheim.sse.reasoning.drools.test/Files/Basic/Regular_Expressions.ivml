@@ -1,0 +1,41 @@
+project RegularExpressions {
+
+    Integer a = 5;
+    String email = "@saripalli.phani@gmail.com";
+    
+    //email = "@saripalli.phani@gmail.com";
+    
+    //email.matches("^[_A-Za-z0-9-\\+]");
+    
+    //email.matches("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@");
+    
+   // email.matches("[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})");
+    
+    String path = "phani/docs/uni";
+    
+    String newPath;
+    newPath = path;
+    
+    String newEmail;
+    
+    newEmail = email;
+    
+    String name;
+    name == "Phani\"";
+    
+    String name2 = "Phani\""; 
+    
+    String name3 = "Phani\"\\\nShashank\"";
+    
+    
+    compound C {
+        Integer i1;
+        Integer i2;
+    }
+    
+    C c1;
+    
+    c1 == {i1 = 5, i2 = 2 };
+    //c1.i1 = 5;
+    C.i1 > 0;
+}

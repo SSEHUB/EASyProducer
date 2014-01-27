@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<plugin>
+
+    <extension
+            point="org.eclipse.ui.editors">
+        <editor
+            class="de.uni_hildesheim.sse.ui.IvmlExecutableExtensionFactory:org.eclipse.xtext.ui.editor.XtextEditor"
+            contributorClass="org.eclipse.ui.editors.text.TextEditorActionContributor"
+            default="true"
+            extensions="ivml"
+            id="de.uni_hildesheim.sse.Ivml"
+            name="Ivml Editor">
+        </editor>
+    </extension>
+    <extension
+        point="org.eclipse.ui.handlers">
+        <handler
+            class="de.uni_hildesheim.sse.ui.IvmlExecutableExtensionFactory:org.eclipse.xtext.ui.editor.hyperlinking.OpenDeclarationHandler"
+            commandId="org.eclipse.xtext.ui.editor.hyperlinking.OpenDeclaration">
+            <activeWhen>
+                <reference
+                    definitionId="de.uni_hildesheim.sse.Ivml.Editor.opened">
+                </reference>
+            </activeWhen>
+        </handler>
+        <handler
+            class="de.uni_hildesheim.sse.ui.IvmlExecutableExtensionFactory:org.eclipse.xtext.ui.editor.handler.ValidateActionHandler"
+            commandId="de.uni_hildesheim.sse.Ivml.validate">
+         <activeWhen>
+            <reference
+                    definitionId="de.uni_hildesheim.sse.Ivml.Editor.opened">
+            </reference>
+         </activeWhen>
+      </handler>
+    </extension>
+    <extension point="org.eclipse.core.expressions.definitions">
+        <definition id="de.uni_hildesheim.sse.Ivml.Editor.opened">
+            <and>
+                <reference definitionId="isActiveEditorAnInstanceOfXtextEditor"/>
+                <with variable="activeEditor">
+                    <test property="org.eclipse.xtext.ui.editor.XtextEditor.languageName" 
+                        value="de.uni_hildesheim.sse.Ivml" 
+                        forcePluginActivation="true"/>
+                </with>        
+            </and>
+        </definition>
+    </extension>
+    <extension
+            point="org.eclipse.ui.preferencePages">
+        <page
+            class="de.uni_hildesheim.sse.ui.IvmlExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
+            id="de.uni_hildesheim.sse.Ivml"
+            name="Ivml">
+            <keywordReference id="de.uni_hildesheim.sse.ui.keyword_Ivml"/>
+        </page>
+        <page
+            category="de.uni_hildesheim.sse.Ivml"
+            class="de.uni_hildesheim.sse.ui.IvmlExecutableExtensionFactory:org.eclipse.xtext.ui.editor.syntaxcoloring.SyntaxColoringPreferencePage"
+            id="de.uni_hildesheim.sse.Ivml.coloring"
+            name="Syntax Coloring">
+            <keywordReference id="de.uni_hildesheim.sse.ui.keyword_Ivml"/>
+        </page>
+        <page
+            category="de.uni_hildesheim.sse.Ivml"
+            class="de.uni_hildesheim.sse.ui.IvmlExecutableExtensionFactory:org.eclipse.xtext.ui.editor.templates.XtextTemplatePreferencePage"
+            id="de.uni_hildesheim.sse.Ivml.templates"
+            name="Templates">
+            <keywordReference id="de.uni_hildesheim.sse.ui.keyword_Ivml"/>
+        </page>
+    </extension>
+    <extension
+            point="org.eclipse.ui.propertyPages">
+        <page
+            class="de.uni_hildesheim.sse.ui.IvmlExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
+            id="de.uni_hildesheim.sse.Ivml"
+            name="Ivml">
+            <keywordReference id="de.uni_hildesheim.sse.ui.keyword_Ivml"/>
+            <enabledWhen>
+	            <adapt type="org.eclipse.core.resources.IProject"/>
+			</enabledWhen>
+	        <filter name="projectNature" value="org.eclipse.xtext.ui.shared.xtextNature"/>
+        </page>
+    </extension>
+    <extension
+        point="org.eclipse.ui.keywords">
+        <keyword
+            id="de.uni_hildesheim.sse.ui.keyword_Ivml"
+            label="Ivml"/>
+    </extension>
+    <extension
+         point="org.eclipse.ui.commands">
+      <command
+            description="Trigger expensive validation"
+            id="de.uni_hildesheim.sse.Ivml.validate"
+            name="Validate">
+      </command>
+    </extension>
+    <extension point="org.eclipse.ui.menus">
+        <menuContribution
+            locationURI="popup:#TextEditorContext?after=group.edit">
+             <command
+                 commandId="de.uni_hildesheim.sse.Ivml.validate"
+                 style="push"
+                 tooltip="Trigger expensive validation">
+            <visibleWhen checkEnabled="false">
+                <reference
+                    definitionId="de.uni_hildesheim.sse.Ivml.Editor.opened">
+                </reference>
+            </visibleWhen>
+         </command>  
+         </menuContribution>
+    </extension>
+    <extension point="org.eclipse.ui.menus">
+		<menuContribution locationURI="popup:#TextEditorContext?endof=group.find">
+			<command commandId="org.eclipse.xtext.ui.editor.FindReferences">
+				<visibleWhen checkEnabled="false">
+                	<reference definitionId="de.uni_hildesheim.sse.Ivml.Editor.opened">
+                	</reference>
+            	</visibleWhen>
+			</command>
+		</menuContribution>
+	</extension>
+	<extension point="org.eclipse.ui.handlers">
+	    <handler
+            class="de.uni_hildesheim.sse.ui.IvmlExecutableExtensionFactory:org.eclipse.xtext.ui.editor.findrefs.FindReferencesHandler"
+            commandId="org.eclipse.xtext.ui.editor.FindReferences">
+            <activeWhen>
+                <reference
+                    definitionId="de.uni_hildesheim.sse.Ivml.Editor.opened">
+                </reference>
+            </activeWhen>
+        </handler>
+    </extension>   
+
+<!-- adding resource factories -->
+
+	<extension
+		point="org.eclipse.emf.ecore.extension_parser">
+		<parser
+			class="de.uni_hildesheim.sse.ui.IvmlExecutableExtensionFactory:org.eclipse.xtext.resource.IResourceFactory"
+			type="ivml">
+		</parser>
+	</extension>
+	<extension point="org.eclipse.xtext.extension_resourceServiceProvider">
+        <resourceServiceProvider
+            class="de.uni_hildesheim.sse.ui.IvmlExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
+            uriExtension="ivml">
+        </resourceServiceProvider>
+    </extension>
+
+
+    <!-- marker definitions for de.uni_hildesheim.sse.Ivml -->
+    <extension
+            id="ivml.check.fast"
+            name="Ivml Problem"
+            point="org.eclipse.core.resources.markers">
+        <super type="org.eclipse.xtext.ui.check.fast"/>
+        <persistent value="true"/>
+    </extension>
+    <extension
+            id="ivml.check.normal"
+            name="Ivml Problem"
+            point="org.eclipse.core.resources.markers">
+        <super type="org.eclipse.xtext.ui.check.normal"/>
+        <persistent value="true"/>
+    </extension>
+    <extension
+            id="ivml.check.expensive"
+            name="Ivml Problem"
+            point="org.eclipse.core.resources.markers">
+        <super type="org.eclipse.xtext.ui.check.expensive"/>
+        <persistent value="true"/>
+    </extension>
+
+   <extension
+         point="org.eclipse.xtext.builder.participant">
+      <participant
+            class="de.uni_hildesheim.sse.ui.IvmlExecutableExtensionFactory:org.eclipse.xtext.builder.IXtextBuilderParticipant">
+      </participant>
+   </extension>
+   <extension
+            point="org.eclipse.ui.preferencePages">
+        <page
+            category="de.uni_hildesheim.sse.Ivml"
+            class="de.uni_hildesheim.sse.ui.IvmlExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
+            id="de.uni_hildesheim.sse.Ivml.compiler.preferencePage"
+            name="Compiler">
+            <keywordReference id="de.uni_hildesheim.sse.ui.keyword_Ivml"/>
+        </page>
+    </extension>
+    <extension
+            point="org.eclipse.ui.propertyPages">
+        <page
+            category="de.uni_hildesheim.sse.Ivml"
+            class="de.uni_hildesheim.sse.ui.IvmlExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
+            id="de.uni_hildesheim.sse.Ivml.compiler.propertyPage"
+            name="Compiler">
+            <keywordReference id="de.uni_hildesheim.sse.ui.keyword_Ivml"/>
+            <enabledWhen>
+	            <adapt type="org.eclipse.core.resources.IProject"/>
+			</enabledWhen>
+	        <filter name="projectNature" value="org.eclipse.xtext.ui.shared.xtextNature"/>
+        </page>
+    </extension>
+
+	<!-- Quick Outline -->
+	<extension
+		point="org.eclipse.ui.handlers">
+		<handler 
+			class="de.uni_hildesheim.sse.ui.IvmlExecutableExtensionFactory:org.eclipse.xtext.ui.editor.outline.quickoutline.ShowQuickOutlineActionHandler"
+			commandId="org.eclipse.xtext.ui.editor.outline.QuickOutline">
+			<activeWhen>
+				<reference
+					definitionId="de.uni_hildesheim.sse.Ivml.Editor.opened">
+				</reference>
+			</activeWhen>
+		</handler>
+	</extension>
+	<extension
+		point="org.eclipse.ui.commands">
+		<command
+			description="Open the quick outline."
+			id="org.eclipse.xtext.ui.editor.outline.QuickOutline"
+			name="Quick Outline">
+		</command>
+	</extension>
+	<extension point="org.eclipse.ui.menus">
+		<menuContribution
+			locationURI="popup:#TextEditorContext?after=group.open">
+			<command commandId="org.eclipse.xtext.ui.editor.outline.QuickOutline"
+				style="push"
+				tooltip="Open Quick Outline">
+				<visibleWhen checkEnabled="false">
+					<reference definitionId="de.uni_hildesheim.sse.Ivml.Editor.opened"/>
+				</visibleWhen>
+			</command>
+		</menuContribution>
+	</extension>
+    <!-- quickfix marker resolution generator for de.uni_hildesheim.sse.Ivml -->
+    <extension
+            point="org.eclipse.ui.ide.markerResolution">
+        <markerResolutionGenerator
+            class="de.uni_hildesheim.sse.ui.IvmlExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+            markerType="de.uni_hildesheim.sse.ui.ivml.check.fast">
+            <attribute
+                name="FIXABLE_KEY"
+                value="true">
+            </attribute>
+        </markerResolutionGenerator>
+        <markerResolutionGenerator
+            class="de.uni_hildesheim.sse.ui.IvmlExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+            markerType="de.uni_hildesheim.sse.ui.ivml.check.normal">
+            <attribute
+                name="FIXABLE_KEY"
+                value="true">
+            </attribute>
+        </markerResolutionGenerator>
+        <markerResolutionGenerator
+            class="de.uni_hildesheim.sse.ui.IvmlExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+            markerType="de.uni_hildesheim.sse.ui.ivml.check.expensive">
+            <attribute
+                name="FIXABLE_KEY"
+                value="true">
+            </attribute>
+        </markerResolutionGenerator>
+    </extension>
+   	<!-- Rename Refactoring -->
+	<extension point="org.eclipse.ui.handlers">
+		<handler 
+			class="de.uni_hildesheim.sse.ui.IvmlExecutableExtensionFactory:org.eclipse.xtext.ui.refactoring.ui.IRenameElementHandler"
+			commandId="org.eclipse.xtext.ui.refactoring.RenameElement">
+			<activeWhen>
+				<reference
+					definitionId="de.uni_hildesheim.sse.Ivml.Editor.opened">
+				</reference>
+			</activeWhen>
+		</handler>
+	</extension>
+    <extension point="org.eclipse.ui.menus">
+         <menuContribution
+            locationURI="popup:#TextEditorContext?after=group.edit">
+         <command commandId="org.eclipse.xtext.ui.refactoring.RenameElement"
+               style="push">
+            <visibleWhen checkEnabled="false">
+               <reference
+                     definitionId="de.uni_hildesheim.sse.Ivml.Editor.opened">
+               </reference>
+            </visibleWhen>
+         </command>
+      </menuContribution>
+   </extension>
+   <extension point="org.eclipse.ui.preferencePages">
+	    <page
+	        category="de.uni_hildesheim.sse.Ivml"
+	        class="de.uni_hildesheim.sse.ui.IvmlExecutableExtensionFactory:org.eclipse.xtext.ui.refactoring.ui.RefactoringPreferencePage"
+	        id="de.uni_hildesheim.sse.Ivml.refactoring"
+	        name="Refactoring">
+	        <keywordReference id="de.uni_hildesheim.sse.ui.keyword_Ivml"/>
+	    </page>
+	</extension>
+
+  <extension point="org.eclipse.compare.contentViewers">
+    <viewer id="de.uni_hildesheim.sse.Ivml.compare.contentViewers"
+            class="de.uni_hildesheim.sse.ui.IvmlExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
+            extensions="ivml">
+    </viewer>
+  </extension>
+  <extension point="org.eclipse.compare.contentMergeViewers">
+    <viewer id="de.uni_hildesheim.sse.Ivml.compare.contentMergeViewers"
+            class="de.uni_hildesheim.sse.ui.IvmlExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
+            extensions="ivml" label="Ivml Compare">
+     </viewer>
+  </extension>
+  <extension point="org.eclipse.ui.editors.documentProviders">
+    <provider id="de.uni_hildesheim.sse.Ivml.editors.documentProviders"
+            class="de.uni_hildesheim.sse.ui.IvmlExecutableExtensionFactory:org.eclipse.xtext.ui.editor.model.XtextDocumentProvider"
+            extensions="ivml">
+    </provider>
+  </extension>
+
+</plugin>

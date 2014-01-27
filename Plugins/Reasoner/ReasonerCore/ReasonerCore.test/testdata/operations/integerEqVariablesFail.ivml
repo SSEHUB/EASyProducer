@@ -1,0 +1,20 @@
+project integerEqVariablesFail {
+
+    Integer i1 = 1;
+    Integer i0 = 0;
+    Integer im1 = -1;
+
+    // basic equality (shall fail!)
+    i1 <> i1;
+    i0 <> i0;
+    im1 <> im1;
+    
+    // basic inequality (shall fail!)
+    i1 == i0;
+    i0 == i1;
+    im1 == i0;
+    i0 == im1;
+    i1 == im1;
+    im1 == i1;
+
+}

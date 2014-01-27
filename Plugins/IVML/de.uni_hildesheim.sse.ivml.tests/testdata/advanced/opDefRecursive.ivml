@@ -1,0 +1,6 @@
+project testopdefRecursive {
+
+    version v0;
+    def Integer fak(Integer i) = if i > 0 then i * fak(i - 1) else 0 endif;
+    fak(10) > 5;
+}

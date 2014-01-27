@@ -1,0 +1,14 @@
+project booleanANDVariables {
+
+    Boolean t;
+    Boolean f;
+    
+    t = true;
+    f = false;
+    
+    (t and f) == false;
+    (f and t) == false;
+    (t and t) == true;
+    (f and f) == false;
+
+}

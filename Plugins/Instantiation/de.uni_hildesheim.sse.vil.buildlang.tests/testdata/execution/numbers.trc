@@ -1,0 +1,49 @@
+-> +(Integer, Integer) with (1, 3) = 4
+i1 <- 4
+-> -(Integer, Integer) with (4, 2) = 2
+i2 <- 2
+-> *(Integer, Integer) with (2, 4) = 8
+i3 <- 8
+-> /(Integer, Integer) with (8, 2) = 4
+i4 <- 4
+-> -(Integer) with (4) = -4
+i5 <- -4
+-> abs(Integer) with (4) = 4
+i6 <- 4
+-> ==(Integer, Integer) with (4, 4) = true
+b1 <- true
+-> +(Real, Real) with (1.0, 3.5) = 4.5
+r1 <- 4.5
+-> -(Real, Real) with (4.5, 1.2) = 3.3
+r2 <- 3.3
+-> *(Real, Real) with (3.3, 4.0) = 13.2
+r3 <- 13.2
+-> /(Real, Real) with (13.2, 2.0) = 6.6
+r4 <- 6.6
+-> -(Real) with (6.6) = -6.6
+r5 <- -6.6
+-> abs(Real) with (-6.6) = 6.6
+r6 <- 6.6
+-> floor(Real) with (6.6) = 6
+i7 <- 6
+-> ceil(Real) with (6.6) = 7
+i8 <- 7
+-> ==(Real, Real) with (6.6, 6.6) = true
+b2 <- true
+-> <(Integer, Integer) with (3, 4) = true
+b3 <- true
+-> <=(Integer, Integer) with (4, 4) = true
+b4 <- true
+-> >(Integer, Integer) with (4, 3) = true
+b5 <- true
+-> >=(Integer, Integer) with (4, 3) = true
+b6 <- true
+-> <(Real, Real) with (3.0, 4.0) = true
+b7 <- true
+-> <=(Real, Real) with (4.0, 4.0) = true
+b8 <- true
+-> >(Real, Real) with (4.0, 3.0) = true
+b9 <- true
+-> >=(Real, Real) with (4.0, 3.0) = true
+b10 <- true
+-> main()

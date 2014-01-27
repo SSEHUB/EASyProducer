@@ -1,0 +1,9 @@
+project integerDIVopConstants {
+
+      
+    div(5, 2) == 2;
+    div(-5, 2) == -2;
+    div(5, -2) == -2;
+    div(-5, -2) == 2;
+
+}

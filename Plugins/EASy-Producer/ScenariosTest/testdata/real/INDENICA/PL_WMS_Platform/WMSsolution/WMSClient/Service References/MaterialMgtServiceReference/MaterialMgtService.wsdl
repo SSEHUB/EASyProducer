@@ -1,0 +1,629 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MaterialMgtService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsp:Policy wsu:Id="WSHttpBinding_IMaterialMgtService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <wsaw:UsingAddressing />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IMaterialMgtService_CreateBox_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <wsat:ATAssertion wsp:Optional="true" wsp1:Optional="true" xmlns:wsat="http://schemas.xmlsoap.org/ws/2004/10/wsat" xmlns:wsp1="http://schemas.xmlsoap.org/ws/2002/12/policy" />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IMaterialMgtService_CreateMaterial_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <wsat:ATAssertion wsp:Optional="true" wsp1:Optional="true" xmlns:wsat="http://schemas.xmlsoap.org/ws/2004/10/wsat" xmlns:wsp1="http://schemas.xmlsoap.org/ws/2002/12/policy" />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IMaterialMgtService_InsertMaterial_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <wsat:ATAssertion wsp:Optional="true" wsp1:Optional="true" xmlns:wsat="http://schemas.xmlsoap.org/ws/2004/10/wsat" xmlns:wsp1="http://schemas.xmlsoap.org/ws/2002/12/policy" />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IMaterialMgtService_CreateLocation_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <wsat:ATAssertion wsp:Optional="true" wsp1:Optional="true" xmlns:wsat="http://schemas.xmlsoap.org/ws/2004/10/wsat" xmlns:wsp1="http://schemas.xmlsoap.org/ws/2002/12/policy" />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IMaterialMgtService_CreateTransportentry_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <wsat:ATAssertion wsp:Optional="true" wsp1:Optional="true" xmlns:wsat="http://schemas.xmlsoap.org/ws/2004/10/wsat" xmlns:wsp1="http://schemas.xmlsoap.org/ws/2002/12/policy" />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IMaterialMgtService_ReserveBin_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <wsat:ATAssertion wsp:Optional="true" wsp1:Optional="true" xmlns:wsat="http://schemas.xmlsoap.org/ws/2004/10/wsat" xmlns:wsp1="http://schemas.xmlsoap.org/ws/2002/12/policy" />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IMaterialMgtService_UnReserveBin_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <wsat:ATAssertion wsp:Optional="true" wsp1:Optional="true" xmlns:wsat="http://schemas.xmlsoap.org/ws/2004/10/wsat" xmlns:wsp1="http://schemas.xmlsoap.org/ws/2002/12/policy" />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IMaterialMgtService_SetLocation_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <wsat:ATAssertion wsp:Optional="true" wsp1:Optional="true" xmlns:wsat="http://schemas.xmlsoap.org/ws/2004/10/wsat" xmlns:wsp1="http://schemas.xmlsoap.org/ws/2002/12/policy" />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://localhost:49839/MaterialMgtService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://localhost:49839/MaterialMgtService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://localhost:49839/MaterialMgtService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataAccess" />
+      <xsd:import schemaLocation="http://localhost:49839/MaterialMgtService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/System.Data.Objects.DataClasses" />
+      <xsd:import schemaLocation="http://localhost:49839/MaterialMgtService.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/System.Data" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IMaterialMgtService_CreateBox_InputMessage">
+    <wsdl:part name="parameters" element="tns:CreateBox" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_CreateBox_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CreateBoxResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_DeleteBox_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteBox" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_DeleteBox_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteBoxResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_CreateMaterial_InputMessage">
+    <wsdl:part name="parameters" element="tns:CreateMaterial" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_CreateMaterial_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CreateMaterialResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_InsertMaterial_InputMessage">
+    <wsdl:part name="parameters" element="tns:InsertMaterial" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_InsertMaterial_OutputMessage">
+    <wsdl:part name="parameters" element="tns:InsertMaterialResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_CreateLocation_InputMessage">
+    <wsdl:part name="parameters" element="tns:CreateLocation" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_CreateLocation_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CreateLocationResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_CreateTransportentry_InputMessage">
+    <wsdl:part name="parameters" element="tns:CreateTransportentry" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_CreateTransportentry_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CreateTransportentryResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_DeleteTransportentry_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteTransportentry" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_DeleteTransportentry_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteTransportentryResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_CreateOrder_InputMessage">
+    <wsdl:part name="parameters" element="tns:CreateOrder" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_CreateOrder_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CreateOrderResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_DeleteOrder_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteOrder" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_DeleteOrder_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteOrderResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_Ready_InputMessage">
+    <wsdl:part name="parameters" element="tns:Ready" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_Ready_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ReadyResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_ProcessOrder_InputMessage">
+    <wsdl:part name="parameters" element="tns:ProcessOrder" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_ProcessOrder_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ProcessOrderResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_Finished_InputMessage">
+    <wsdl:part name="parameters" element="tns:Finished" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_Finished_OutputMessage">
+    <wsdl:part name="parameters" element="tns:FinishedResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_ReserveBin_InputMessage">
+    <wsdl:part name="parameters" element="tns:ReserveBin" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_ReserveBin_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ReserveBinResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_UnReserveBin_InputMessage">
+    <wsdl:part name="parameters" element="tns:UnReserveBin" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_UnReserveBin_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UnReserveBinResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_SetLocation_InputMessage">
+    <wsdl:part name="parameters" element="tns:SetLocation" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_SetLocation_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SetLocationResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_GetBoxes_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetBoxes" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_GetBoxes_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetBoxesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_GetBoxesOnRS_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetBoxesOnRS" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_GetBoxesOnRS_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetBoxesOnRSResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_GetMaterials_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetMaterials" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_GetMaterials_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetMaterialsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_GetPositions_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPositions" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_GetPositions_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPositionsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_GetLocations_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetLocations" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_GetLocations_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetLocationsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_GetStorageBins_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetStorageBins" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_GetStorageBins_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetStorageBinsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_GetLocationTypes_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetLocationTypes" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_GetLocationTypes_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetLocationTypesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_GetRacks_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetRacks" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_GetRacks_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetRacksResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_GetTransportentries_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetTransportentries" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_GetTransportentries_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetTransportentriesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_GetOrders_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetOrders" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_GetOrders_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetOrdersResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_GetLocationtypeIdByName_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetLocationtypeIdByName" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_GetLocationtypeIdByName_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetLocationtypeIdByNameResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_GetRackIdByName_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetRackIdByName" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_GetRackIdByName_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetRackIdByNameResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_RecreateSampleDatabase_InputMessage">
+    <wsdl:part name="parameters" element="tns:RecreateSampleDatabase" />
+  </wsdl:message>
+  <wsdl:message name="IMaterialMgtService_RecreateSampleDatabase_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RecreateSampleDatabaseResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IMaterialMgtService">
+    <wsdl:operation name="CreateBox">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMaterialMgtService/CreateBox" message="tns:IMaterialMgtService_CreateBox_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMaterialMgtService/CreateBoxResponse" message="tns:IMaterialMgtService_CreateBox_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteBox">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMaterialMgtService/DeleteBox" message="tns:IMaterialMgtService_DeleteBox_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMaterialMgtService/DeleteBoxResponse" message="tns:IMaterialMgtService_DeleteBox_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateMaterial">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMaterialMgtService/CreateMaterial" message="tns:IMaterialMgtService_CreateMaterial_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMaterialMgtService/CreateMaterialResponse" message="tns:IMaterialMgtService_CreateMaterial_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="InsertMaterial">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMaterialMgtService/InsertMaterial" message="tns:IMaterialMgtService_InsertMaterial_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMaterialMgtService/InsertMaterialResponse" message="tns:IMaterialMgtService_InsertMaterial_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateLocation">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMaterialMgtService/CreateLocation" message="tns:IMaterialMgtService_CreateLocation_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMaterialMgtService/CreateLocationResponse" message="tns:IMaterialMgtService_CreateLocation_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateTransportentry">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMaterialMgtService/CreateTransportentry" message="tns:IMaterialMgtService_CreateTransportentry_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMaterialMgtService/CreateTransportentryResponse" message="tns:IMaterialMgtService_CreateTransportentry_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteTransportentry">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMaterialMgtService/DeleteTransportentry" message="tns:IMaterialMgtService_DeleteTransportentry_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMaterialMgtService/DeleteTransportentryResponse" message="tns:IMaterialMgtService_DeleteTransportentry_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateOrder">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMaterialMgtService/CreateOrder" message="tns:IMaterialMgtService_CreateOrder_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMaterialMgtService/CreateOrderResponse" message="tns:IMaterialMgtService_CreateOrder_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteOrder">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMaterialMgtService/DeleteOrder" message="tns:IMaterialMgtService_DeleteOrder_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMaterialMgtService/DeleteOrderResponse" message="tns:IMaterialMgtService_DeleteOrder_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="Ready">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMaterialMgtService/Ready" message="tns:IMaterialMgtService_Ready_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMaterialMgtService/ReadyResponse" message="tns:IMaterialMgtService_Ready_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ProcessOrder">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMaterialMgtService/ProcessOrder" message="tns:IMaterialMgtService_ProcessOrder_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMaterialMgtService/ProcessOrderResponse" message="tns:IMaterialMgtService_ProcessOrder_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="Finished">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMaterialMgtService/Finished" message="tns:IMaterialMgtService_Finished_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMaterialMgtService/FinishedResponse" message="tns:IMaterialMgtService_Finished_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ReserveBin">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMaterialMgtService/ReserveBin" message="tns:IMaterialMgtService_ReserveBin_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMaterialMgtService/ReserveBinResponse" message="tns:IMaterialMgtService_ReserveBin_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UnReserveBin">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMaterialMgtService/UnReserveBin" message="tns:IMaterialMgtService_UnReserveBin_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMaterialMgtService/UnReserveBinResponse" message="tns:IMaterialMgtService_UnReserveBin_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SetLocation">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMaterialMgtService/SetLocation" message="tns:IMaterialMgtService_SetLocation_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMaterialMgtService/SetLocationResponse" message="tns:IMaterialMgtService_SetLocation_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBoxes">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMaterialMgtService/GetBoxes" message="tns:IMaterialMgtService_GetBoxes_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMaterialMgtService/GetBoxesResponse" message="tns:IMaterialMgtService_GetBoxes_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBoxesOnRS">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMaterialMgtService/GetBoxesOnRS" message="tns:IMaterialMgtService_GetBoxesOnRS_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMaterialMgtService/GetBoxesOnRSResponse" message="tns:IMaterialMgtService_GetBoxesOnRS_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMaterials">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMaterialMgtService/GetMaterials" message="tns:IMaterialMgtService_GetMaterials_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMaterialMgtService/GetMaterialsResponse" message="tns:IMaterialMgtService_GetMaterials_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPositions">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMaterialMgtService/GetPositions" message="tns:IMaterialMgtService_GetPositions_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMaterialMgtService/GetPositionsResponse" message="tns:IMaterialMgtService_GetPositions_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLocations">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMaterialMgtService/GetLocations" message="tns:IMaterialMgtService_GetLocations_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMaterialMgtService/GetLocationsResponse" message="tns:IMaterialMgtService_GetLocations_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetStorageBins">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMaterialMgtService/GetStorageBins" message="tns:IMaterialMgtService_GetStorageBins_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMaterialMgtService/GetStorageBinsResponse" message="tns:IMaterialMgtService_GetStorageBins_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLocationTypes">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMaterialMgtService/GetLocationTypes" message="tns:IMaterialMgtService_GetLocationTypes_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMaterialMgtService/GetLocationTypesResponse" message="tns:IMaterialMgtService_GetLocationTypes_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetRacks">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMaterialMgtService/GetRacks" message="tns:IMaterialMgtService_GetRacks_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMaterialMgtService/GetRacksResponse" message="tns:IMaterialMgtService_GetRacks_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTransportentries">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMaterialMgtService/GetTransportentries" message="tns:IMaterialMgtService_GetTransportentries_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMaterialMgtService/GetTransportentriesResponse" message="tns:IMaterialMgtService_GetTransportentries_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetOrders">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMaterialMgtService/GetOrders" message="tns:IMaterialMgtService_GetOrders_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMaterialMgtService/GetOrdersResponse" message="tns:IMaterialMgtService_GetOrders_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLocationtypeIdByName">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMaterialMgtService/GetLocationtypeIdByName" message="tns:IMaterialMgtService_GetLocationtypeIdByName_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMaterialMgtService/GetLocationtypeIdByNameResponse" message="tns:IMaterialMgtService_GetLocationtypeIdByName_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetRackIdByName">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMaterialMgtService/GetRackIdByName" message="tns:IMaterialMgtService_GetRackIdByName_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMaterialMgtService/GetRackIdByNameResponse" message="tns:IMaterialMgtService_GetRackIdByName_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RecreateSampleDatabase">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMaterialMgtService/RecreateSampleDatabase" message="tns:IMaterialMgtService_RecreateSampleDatabase_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMaterialMgtService/RecreateSampleDatabaseResponse" message="tns:IMaterialMgtService_RecreateSampleDatabase_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="WSHttpBinding_IMaterialMgtService" type="tns:IMaterialMgtService">
+    <wsp:PolicyReference URI="#WSHttpBinding_IMaterialMgtService_policy" />
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="CreateBox">
+      <wsp:PolicyReference URI="#WSHttpBinding_IMaterialMgtService_CreateBox_policy" />
+      <soap12:operation soapAction="http://tempuri.org/IMaterialMgtService/CreateBox" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteBox">
+      <soap12:operation soapAction="http://tempuri.org/IMaterialMgtService/DeleteBox" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateMaterial">
+      <wsp:PolicyReference URI="#WSHttpBinding_IMaterialMgtService_CreateMaterial_policy" />
+      <soap12:operation soapAction="http://tempuri.org/IMaterialMgtService/CreateMaterial" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InsertMaterial">
+      <wsp:PolicyReference URI="#WSHttpBinding_IMaterialMgtService_InsertMaterial_policy" />
+      <soap12:operation soapAction="http://tempuri.org/IMaterialMgtService/InsertMaterial" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateLocation">
+      <wsp:PolicyReference URI="#WSHttpBinding_IMaterialMgtService_CreateLocation_policy" />
+      <soap12:operation soapAction="http://tempuri.org/IMaterialMgtService/CreateLocation" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateTransportentry">
+      <wsp:PolicyReference URI="#WSHttpBinding_IMaterialMgtService_CreateTransportentry_policy" />
+      <soap12:operation soapAction="http://tempuri.org/IMaterialMgtService/CreateTransportentry" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteTransportentry">
+      <soap12:operation soapAction="http://tempuri.org/IMaterialMgtService/DeleteTransportentry" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateOrder">
+      <soap12:operation soapAction="http://tempuri.org/IMaterialMgtService/CreateOrder" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteOrder">
+      <soap12:operation soapAction="http://tempuri.org/IMaterialMgtService/DeleteOrder" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Ready">
+      <soap12:operation soapAction="http://tempuri.org/IMaterialMgtService/Ready" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProcessOrder">
+      <soap12:operation soapAction="http://tempuri.org/IMaterialMgtService/ProcessOrder" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Finished">
+      <soap12:operation soapAction="http://tempuri.org/IMaterialMgtService/Finished" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReserveBin">
+      <wsp:PolicyReference URI="#WSHttpBinding_IMaterialMgtService_ReserveBin_policy" />
+      <soap12:operation soapAction="http://tempuri.org/IMaterialMgtService/ReserveBin" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UnReserveBin">
+      <wsp:PolicyReference URI="#WSHttpBinding_IMaterialMgtService_UnReserveBin_policy" />
+      <soap12:operation soapAction="http://tempuri.org/IMaterialMgtService/UnReserveBin" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetLocation">
+      <wsp:PolicyReference URI="#WSHttpBinding_IMaterialMgtService_SetLocation_policy" />
+      <soap12:operation soapAction="http://tempuri.org/IMaterialMgtService/SetLocation" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBoxes">
+      <soap12:operation soapAction="http://tempuri.org/IMaterialMgtService/GetBoxes" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBoxesOnRS">
+      <soap12:operation soapAction="http://tempuri.org/IMaterialMgtService/GetBoxesOnRS" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMaterials">
+      <soap12:operation soapAction="http://tempuri.org/IMaterialMgtService/GetMaterials" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPositions">
+      <soap12:operation soapAction="http://tempuri.org/IMaterialMgtService/GetPositions" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLocations">
+      <soap12:operation soapAction="http://tempuri.org/IMaterialMgtService/GetLocations" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetStorageBins">
+      <soap12:operation soapAction="http://tempuri.org/IMaterialMgtService/GetStorageBins" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLocationTypes">
+      <soap12:operation soapAction="http://tempuri.org/IMaterialMgtService/GetLocationTypes" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRacks">
+      <soap12:operation soapAction="http://tempuri.org/IMaterialMgtService/GetRacks" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTransportentries">
+      <soap12:operation soapAction="http://tempuri.org/IMaterialMgtService/GetTransportentries" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetOrders">
+      <soap12:operation soapAction="http://tempuri.org/IMaterialMgtService/GetOrders" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLocationtypeIdByName">
+      <soap12:operation soapAction="http://tempuri.org/IMaterialMgtService/GetLocationtypeIdByName" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRackIdByName">
+      <soap12:operation soapAction="http://tempuri.org/IMaterialMgtService/GetRackIdByName" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RecreateSampleDatabase">
+      <soap12:operation soapAction="http://tempuri.org/IMaterialMgtService/RecreateSampleDatabase" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="MaterialMgtService">
+    <wsdl:port name="WSHttpBinding_IMaterialMgtService" binding="tns:WSHttpBinding_IMaterialMgtService">
+      <soap12:address location="http://localhost:49839/MaterialMgtService.svc" />
+      <wsa10:EndpointReference>
+        <wsa10:Address>http://localhost:49839/MaterialMgtService.svc</wsa10:Address>
+      </wsa10:EndpointReference>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

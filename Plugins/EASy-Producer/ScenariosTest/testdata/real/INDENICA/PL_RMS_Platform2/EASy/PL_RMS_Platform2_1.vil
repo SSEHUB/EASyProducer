@@ -1,0 +1,45 @@
+vilScript PL_RMS_Platform2 (Project source, Configuration config, Project target) {
+
+    version v1;
+
+    /*
+     * Info from NDL:
+     * Example of only one message:
+     *     {"webServiceName":"DirectTextMessageSessionPermission","status":true}
+     *
+     * Example of more than one message:
+     *     [{"webServiceName":"DirectTextMessageSessionPermission","status":true},
+     *      {"webServiceName":"DirectVoiceAndVideoSessionInitiationPermission","status":true},
+     *      {"webServiceName":"MachineMonitoringPermission","status":false},
+     *      {"webServiceName":"TextMessageHistoryPermission","status":false}]
+     */
+     
+     /*
+      * Curl and SOAP
+      * 
+      * $ curl -X POST
+      *        -H "Content-Type: text/xml" \
+      *        -H "SOAPAction: \"http://api.eyeblaster.com/IAuthenticationService/ClientLogin\"" \
+      *        --data-binary @request.xml \
+      *        https://sandbox.mediamind.com/Eyeblaster.MediaMind.API/V2/AuthenticationService.svc
+      */
+
+    load properties "EASy/build.properties";
+
+    Path curlExePath;
+
+    main(Project source, Configuration config, Project target) = : {
+        // TODO: check address and string for correctness!
+        // sorting is just for normalizing the test results
+        sequenceOf(DecisionVariable) rmsConfigs = config.getByName("platformServicesConfig").variables().sortAlpha();
+        String items = "";
+        map(d = rmsConfigs) {
+            items = items + " {\\\"RemoteAdaptation\\\":\\\"${d.name()}\\\":\\\"${d.value()}\\\"},";
+        };
+        items = items.substring(0, items.length() - 1); // just for matching the exact format ;)
+        execute curlExePath("-X", "POST", "\"{\\\"remotelyAdapt\\\":{\\\"items\\\":[" + items 
+            + "], \\\"children\\\":null}}\"", "-H", "\"Content-Type:application/json\"", 
+            "-H", "\"Accept:application/json\"",
+            "http://remoteadaptation.service.rms.indenica.nextdaylab.com/");        
+    }
+}

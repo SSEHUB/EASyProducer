@@ -1,0 +1,56 @@
+project ValidationOfYMSTest {
+
+   version v0;
+    enum DdsSchedulingAlgorithm {SIMPLE, DYNAMIC};
+    enum JockeySchedulingType {SIMPLE, LOCATION};
+    typedef Count Integer with (Count > 0);
+    compound AbstractComponent {
+    }
+
+    compound DdsComponent refines AbstractComponent {
+        Count docks;
+        Count waitingBays;
+        //Integer docks;
+        //Integer waitingBays;
+        Boolean specialDocks;
+        DdsSchedulingAlgorithm scheduling;
+    }
+
+    compound JockeyComponent refines AbstractComponent {
+        Count jockeys;
+        //Integer jockeys;
+        Boolean reassignments;
+        JockeySchedulingType scheduling;
+    }
+
+    compound MobilityComponent refines AbstractComponent {
+        Boolean gpsBasedDrivers;
+        Boolean gpsBasedJockeys;
+    }
+
+    Boolean gpsBased;
+    Boolean visualizationSupport;
+    Boolean useJms;
+    String jmsConnection;
+    String queueName;
+    JockeyComponent jockeyComponent;
+    MobilityComponent mobilityComponent;
+    DdsComponent ddsComponent;
+    attribute Boolean metaInformation to jockeyComponent;
+    attribute Boolean metaInformation to mobilityComponent;
+    attribute Boolean metaInformation to ddsComponent;
+    useJms == true implies not (size(jmsConnection) == 0);
+    useJms == true implies not (size(queueName) == 0);
+    gpsBased implies isDefined(mobilityComponent);
+    isDefined(mobilityComponent) implies gpsBased == true;
+    jockeyComponent.scheduling == JockeySchedulingType.LOCATION implies mobilityComponent.gpsBasedJockeys == true;
+    gpsBased = true;
+    visualizationSupport = true;
+    useJms = true;
+    jmsConnection = "3g";
+    queueName = "test";
+    jockeyComponent = {jockeys = 2, reassignments = true, scheduling = JockeySchedulingType.SIMPLE};
+    mobilityComponent = {gpsBasedDrivers = true, gpsBasedJockeys = true};
+    ddsComponent = {docks = 1, waitingBays = 1, specialDocks = true, scheduling = DdsSchedulingAlgorithm.SIMPLE};
+    
+}

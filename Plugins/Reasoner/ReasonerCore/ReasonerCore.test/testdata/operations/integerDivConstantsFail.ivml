@@ -1,0 +1,10 @@
+project integerDivConstantsFail {
+
+    // division by 0 -> integer
+    
+    2 / 0 == 0;
+    2 / 0 == 2;
+    -2 / 0 == 0:
+    -2 / 0 == -2; 
+
+}

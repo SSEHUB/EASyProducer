@@ -1,0 +1,11 @@
+template alternative1(Configuration config, FileArtifact target) {
+
+    def main(Configuration config, FileArtifact target) {
+        if (target.getPath().isPattern()) {
+            'pattern path'
+        } else {
+            'usual path'
+        }
+    }
+
+}

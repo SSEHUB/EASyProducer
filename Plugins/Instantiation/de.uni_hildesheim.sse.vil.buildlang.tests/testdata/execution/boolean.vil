@@ -1,0 +1,14 @@
+vilScript booleans () {
+
+    Boolean b1 = true;
+    Boolean b2 = b1 and true;
+    Boolean b3 = b2 or false;
+    Boolean b4 = b1 xor false;
+    Boolean b5 = !b4;
+    Boolean b6 = not(b5);
+    Boolean b7 = b5 == true;
+
+    main() = : {
+    }
+
+}

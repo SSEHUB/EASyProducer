@@ -1,0 +1,18 @@
+// test import and access correctly via qualified and unqualified name
+// special comment ensures notation of IvmlWriter
+project testImport {
+
+    version v0;
+    import testInterface::iface1 with (testInterface.version < v1.10);
+    import testCompounds;
+    conflicts testInterface with (test.version >= v1.10);
+// visible as at least one variable of this type is exported
+    //* comp c1;
+    testInterface::comp c1;
+    //* i1 > 10;
+    testInterface::iface1::i1 > 10;
+    i1 > 10;
+    p.x1 = 10;
+    //* x1 < 100;
+    testCompounds::position::x1 < 100;
+}

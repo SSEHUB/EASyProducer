@@ -1,0 +1,17 @@
+project testNullValues {
+
+    version v0;
+    String s = null;
+    Integer i = null;
+    Real r = null;
+    Boolean b = null;
+    setOf(Integer) intSet = null;
+    sequenceOf(Integer) intSequence = null;
+    compound Comp {
+        Integer i;
+    }
+
+    Comp c = null;
+    enum Enum {val1, val2};
+    Enum e = null;
+}

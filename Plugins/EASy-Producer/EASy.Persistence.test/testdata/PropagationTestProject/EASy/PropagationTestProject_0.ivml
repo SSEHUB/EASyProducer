@@ -1,0 +1,9 @@
+project PropagationTestProject {
+
+    version v0;
+    
+    Integer a;
+    Integer b;
+    a = 5;
+    b = (a + 1);
+}

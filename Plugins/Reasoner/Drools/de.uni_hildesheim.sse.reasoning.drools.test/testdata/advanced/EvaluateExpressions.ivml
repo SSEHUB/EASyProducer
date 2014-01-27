@@ -1,0 +1,11 @@
+project EvaluateExpressions {
+
+    Integer a, b;
+    
+    a = 4;
+    b = 5;
+    
+    Integer c;
+    c == 10;
+
+}

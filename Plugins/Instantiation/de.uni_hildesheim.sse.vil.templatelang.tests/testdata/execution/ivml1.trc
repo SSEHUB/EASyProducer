@@ -1,0 +1,60 @@
+-> main(Configuration, Artifact) with (<config>, test.texts)
+    -> variables(Configuration) with (<config>) = {import::iInt, test::pBoolean, test::pComp, test::pCompSeq, test::pEnum, test::pInt, test::pReal, test::pString}
+    for var {
+        var <- import::iInt
+        -> name(DecisionVariable) with (import::iInt) = iInt
+        -> getValue(DecisionVariable) with (import::iInt) = -1
+        -> getAttribute(IvmlElement, IvmlElement) with (import::iInt, test::bindingTime) = null
+        -> getIntegerValue(IvmlElement) with (null) = null
+        -> ==(Integer, Integer) with (null, 100) = false
+        var <- test::pInt
+        -> name(DecisionVariable) with (test::pInt) = pInt
+        -> getValue(DecisionVariable) with (test::pInt) = 0
+        -> getAttribute(IvmlElement, IvmlElement) with (test::pInt, test::bindingTime) = test::bindingTime
+        -> getIntegerValue(IvmlElement) with (test::bindingTime) = 100
+        -> ==(Integer, Integer) with (100, 100) = true
+        visit if-branch
+        var <- test::pString
+        -> name(DecisionVariable) with (test::pString) = pString
+        -> getValue(DecisionVariable) with (test::pString) = Hello
+        -> getAttribute(IvmlElement, IvmlElement) with (test::pString, test::bindingTime) = test::bindingTime
+        -> getIntegerValue(IvmlElement) with (test::bindingTime) = 100
+        -> ==(Integer, Integer) with (100, 100) = true
+        visit if-branch
+        var <- test::pReal
+        -> name(DecisionVariable) with (test::pReal) = pReal
+        -> getValue(DecisionVariable) with (test::pReal) = 1.23
+        -> getAttribute(IvmlElement, IvmlElement) with (test::pReal, test::bindingTime) = test::bindingTime
+        -> getIntegerValue(IvmlElement) with (test::bindingTime) = 100
+        -> ==(Integer, Integer) with (100, 100) = true
+        visit if-branch
+        var <- test::pBoolean
+        -> name(DecisionVariable) with (test::pBoolean) = pBoolean
+        -> getValue(DecisionVariable) with (test::pBoolean) = true
+        -> getAttribute(IvmlElement, IvmlElement) with (test::pBoolean, test::bindingTime) = test::bindingTime
+        -> getIntegerValue(IvmlElement) with (test::bindingTime) = 100
+        -> ==(Integer, Integer) with (100, 100) = true
+        visit if-branch
+        var <- test::pEnum
+        -> name(DecisionVariable) with (test::pEnum) = pEnum
+        -> getValue(DecisionVariable) with (test::pEnum) = val2
+        -> getAttribute(IvmlElement, IvmlElement) with (test::pEnum, test::bindingTime) = test::bindingTime
+        -> getIntegerValue(IvmlElement) with (test::bindingTime) = 100
+        -> ==(Integer, Integer) with (100, 100) = true
+        visit if-branch
+        var <- test::pComp
+        -> name(DecisionVariable) with (test::pComp) = pComp
+        -> getValue(DecisionVariable) with (test::pComp) = null
+        -> getAttribute(IvmlElement, IvmlElement) with (test::pComp, test::bindingTime) = test::bindingTime
+        -> getIntegerValue(IvmlElement) with (test::bindingTime) = 100
+        -> ==(Integer, Integer) with (100, 100) = true
+        visit if-branch
+        var <- test::pCompSeq
+        -> name(DecisionVariable) with (test::pCompSeq) = pCompSeq
+        -> getValue(DecisionVariable) with (test::pCompSeq) = null
+        -> getAttribute(IvmlElement, IvmlElement) with (test::pCompSeq, test::bindingTime) = test::bindingTime
+        -> getIntegerValue(IvmlElement) with (test::bindingTime) = 100
+        -> ==(Integer, Integer) with (100, 100) = true
+        visit if-branch
+    }
+    -> getValue(IvmlElement) with (test::pReal) = 1.23

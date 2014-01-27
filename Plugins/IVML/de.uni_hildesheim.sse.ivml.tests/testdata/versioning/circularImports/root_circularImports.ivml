@@ -1,0 +1,5 @@
+project root_circularImports {
+
+    version v1;
+    import a_circularImports;
+}

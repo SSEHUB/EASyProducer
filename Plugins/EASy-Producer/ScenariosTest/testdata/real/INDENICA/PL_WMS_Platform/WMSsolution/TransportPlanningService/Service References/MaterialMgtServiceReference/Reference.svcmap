@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="b244cac1-798f-449f-bb07-e449d613b999" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:49839/MaterialMgtService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="MaterialMgtService.xsd" MetadataType="Schema" ID="f8939e6e-a22b-4c69-bb13-73389f6f5433" SourceId="1" SourceUrl="http://localhost:49839/MaterialMgtService.svc?xsd=xsd1" />
+    <MetadataFile FileName="MaterialMgtService1.xsd" MetadataType="Schema" ID="c89b34b1-2126-4490-a869-ffe507a6c570" SourceId="1" SourceUrl="http://localhost:49839/MaterialMgtService.svc?xsd=xsd2" />
+    <MetadataFile FileName="MaterialMgtService2.xsd" MetadataType="Schema" ID="20add240-f5b9-46ea-b921-7fa1ddccff65" SourceId="1" SourceUrl="http://localhost:49839/MaterialMgtService.svc?xsd=xsd3" />
+    <MetadataFile FileName="MaterialMgtService3.xsd" MetadataType="Schema" ID="a16a8562-17ee-45ca-9b79-a71d306d05f0" SourceId="1" SourceUrl="http://localhost:49839/MaterialMgtService.svc?xsd=xsd4" />
+    <MetadataFile FileName="MaterialMgtService.wsdl" MetadataType="Wsdl" ID="d8715692-ed86-46b4-a09a-2043209ee0a6" SourceId="1" SourceUrl="http://localhost:49839/MaterialMgtService.svc?wsdl" />
+    <MetadataFile FileName="MaterialMgtService.disco" MetadataType="Disco" ID="c448803d-eaec-49b9-a303-04f69eb23c2b" SourceId="1" SourceUrl="http://localhost:49839/MaterialMgtService.svc?disco" />
+    <MetadataFile FileName="MaterialMgtService4.xsd" MetadataType="Schema" ID="20ca103d-e760-499d-9cb0-0070e0ca4a62" SourceId="1" SourceUrl="http://localhost:49839/MaterialMgtService.svc?xsd=xsd0" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

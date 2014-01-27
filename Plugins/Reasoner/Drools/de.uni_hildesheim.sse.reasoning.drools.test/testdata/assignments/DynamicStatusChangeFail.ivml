@@ -1,0 +1,18 @@
+project DynamicStatusChangeFail {
+
+    Integer a, b, c;
+    
+    
+    a = 5;
+    b = 20;
+    
+    //c == 25;
+    c == a * a;
+    true implies a == 7;
+    a == 10;
+    
+    c < 50;
+
+
+
+}

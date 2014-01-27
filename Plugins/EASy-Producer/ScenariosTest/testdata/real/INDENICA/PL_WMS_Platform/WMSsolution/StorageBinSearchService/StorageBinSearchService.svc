@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="StorageBinSearchService.StorageBinSearchService" Factory="Spring.ServiceModel.Activation.ServiceHostFactory" CodeBehind="StorageBinSearchService.svc.cs" %>

@@ -1,0 +1,62 @@
+@indent(indentation = 4, additional = 1)
+template CompileUiTemplate(Configuration config, FileArtifact target, FileArtifact injectionTarget, DecisionVariable var) {
+
+    // a JavaFileArtifact would provide access to its JavaPath and its annotations...
+
+    def main(Configuration config, FileArtifact target, FileArtifact injectionTarget, DecisionVariable var) {
+        JavaPath itPath = injectionTarget.path().toJavaPath();
+        JavaPath tPath = target.path().toJavaPath();
+        String package = tPath.package();
+        String name = tPath.name();
+        String itName = itPath.name();
+        String decisionId = var.name();
+
+        'package $package;
+        
+         import javax.swing.*;
+        
+         import de.uni_hildesheim.sse.variability.runtime.*;
+        
+         aspect $name {
+        
+             pointcut targetClass(): within(MainWindow);
+              
+             // replace factory call
+          
+             pointcut componentFactory(JFrame f, JTabbedPane p, Client c): targetClass() 
+                 && call(void $itName.create(JFrame, JTabbedPane, Client)) 
+                 && args(f, p, c)
+                   && if(!variability.StaticConfiguration.$decisionId);
+        
+             // just delete the component constructor  
+             void around(JFrame f, JTabbedPane p, Client c): componentFactory(f, p, c) {
+                 if (variability.StartupConfiguration.$decisionId.getBooleanValue()) {
+                       proceed(f, p, c);
+                 }
+             }
+        
+             // inject startup call
+              
+             pointcut startupClass() : within(LoginWindow);
+              
+             pointcut startupMethod(): startupClass() 
+                   && execution(void main(String[]))
+                   && if(ProcessingState.hasKey("startupMethod", "$name"));
+              
+             before(): startupMethod() {
+                    if (variability.StartupConfiguration.HAS_ENABLED_ELEMENTS) {
+                      de.uni_hildesheim.sse.variability.runtime.SwingUserDecisionDialog.
+                          showDialog(null, variability.StartupConfiguration.allElements());
+                  }
+             }
+              
+             // avoid multiple weaving
+              
+             static {
+                 ProcessingState.setKey("addMethod", "$name");
+                 ProcessingState.setKey("startupMethod", "$name");
+             }
+        
+         }'
+    }
+}

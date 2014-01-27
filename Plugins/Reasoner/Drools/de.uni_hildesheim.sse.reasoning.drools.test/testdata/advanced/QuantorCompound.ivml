@@ -1,0 +1,16 @@
+project QuantorCompound {
+
+	compound C {
+		Integer a;
+		Integer b;
+		
+		a < b;
+		a < b + 0;
+	}
+	
+	setOf(C) c1;
+	
+	c1 = {{a = 5, b = 10}, {a = 10, b = 20}};
+	
+	C c2;
+}

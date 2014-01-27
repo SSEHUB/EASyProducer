@@ -1,0 +1,8 @@
+project testopdefDependent {
+
+    version v0;
+    def Integer myOp(Integer i) = myOp0(i) + 10;
+    def Integer myOp0(Integer j) = j + 5;
+    myOp(10) > 5;
+    myOp0(5) == 10;
+}

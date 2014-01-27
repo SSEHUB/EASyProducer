@@ -1,0 +1,13 @@
+project testContainerDuplicates {
+
+    version v0;
+// shall work
+    sequenceOf(Integer) intSequence = {1, 2, 1};
+// shall lead to error (duplicates)    
+    setOf(Integer) intSet = {1, 2, 1};
+
+// shall work
+    intSequence = {2, 3, 2};
+// shall lead to error (duplicates)    
+    intSet = {2, 3, 2};
+}

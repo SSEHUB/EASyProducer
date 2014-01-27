@@ -1,0 +1,9 @@
+project SimpleQuantorForEach {
+
+    sequenceOf(Integer) seq1;
+    
+    seq1 = {1, 3, 4, 5};
+    
+    seq1->forAll(t | t > 3);
+
+}

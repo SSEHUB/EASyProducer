@@ -1,0 +1,43 @@
+project ComplexSequenceFunctions {
+
+    sequenceOf(Integer) seq1;
+    seq1 = {1, 2, 1, 1, 3, 4, 5, 6, 6};
+    
+    seq1.includes(seq1[1] + seq1[4]);
+    seq1.excludes(seq1.size());
+    
+    sequenceOf(Integer) seq2;
+    seq2 = {2, 2};
+    
+    //This is invalid as sum and product - 1
+    seq2.sum() <> seq2.product();
+    
+    
+    sequenceOf(Integer) seq3, seq4;
+    seq3 = {2, 3, 5, 6, 6};
+    
+    //This is invalid - 2
+    seq1.union(seq3).size() < seq1.size() + seq3.size();
+    
+    //This is invalid - 3
+    seq1.last() > 6;
+    
+    //This is invalid - 4
+    seq1.isEmpty();
+    
+    //This is invalid - 5
+    seq1.first() > 2;
+    
+    setOf(Integer) set1, set2;
+    set1 = {2, 4, 6, 8};
+    
+    //This is invalid - 6
+    set1.isEmpty();
+    //This is invalid - 7
+    set1.min() > 2;         
+    
+    //Invalid, the size should be 2
+    //seq2 = {2, 2};
+    seq2.append(5).size() <> 3;
+    
+}

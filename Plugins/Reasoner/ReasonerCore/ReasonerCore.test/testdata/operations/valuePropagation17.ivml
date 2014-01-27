@@ -1,0 +1,31 @@
+project valuePropagation17 {
+
+    //   - Qualified names (type)
+    //   - Constraints outside compound
+    //   - Assign block on variables
+
+   enum View {BA, DE, Impl};
+   attribute View modelView to valuePropagation17;
+   
+   enum ContentType {text, movie, audio, picture};
+    
+   compound Content {
+    assign (modelView = View.BA) to {
+        String name;
+        Integer number;
+        Boolean isValid;
+        ContentType type; 
+        }
+      }   
+    
+    Content sampleContent;
+    
+    sampleContent.name = "Audio Content";
+    sampleContent.number = 10;
+    sampleContent.type = ContentType.audio;  
+    
+    
+       // Content.name == "Audio Content" implies Content.number == 10;
+       // (Content.name == "Audio Content" or Content.type == ContentType.audio) implies Content.isValid == true;            
+    
+}

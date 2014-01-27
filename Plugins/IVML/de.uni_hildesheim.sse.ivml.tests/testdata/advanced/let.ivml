@@ -1,0 +1,6 @@
+project testlet {
+
+    version v0;
+    Integer i;
+    let Integer tmp = i + 10 in tmp < i and tmp < 100;
+}

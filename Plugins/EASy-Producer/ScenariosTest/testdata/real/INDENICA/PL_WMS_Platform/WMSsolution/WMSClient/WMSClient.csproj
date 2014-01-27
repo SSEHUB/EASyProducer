@@ -1,0 +1,338 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{29B1E3F6-1A06-4B2C-9184-CD54F87E403B}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WMSClient</RootNamespace>
+    <AssemblyName>ClientForms</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Apache.NMS">
+      <HintPath>..\lib\Apache.NMS.dll</HintPath>
+    </Reference>
+    <Reference Include="Apache.NMS.ActiveMQ">
+      <HintPath>..\lib\Apache.NMS.ActiveMQ.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging">
+      <HintPath>..\lib\Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\lib\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Spring.Aop">
+      <HintPath>..\lib\Spring.Aop.dll</HintPath>
+    </Reference>
+    <Reference Include="Spring.Core">
+      <HintPath>..\lib\Spring.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Spring.Services">
+      <HintPath>..\lib\Spring.Services.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="GeneralTransportCallbackHandler.cs" />
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service References\GeneralTransportServiceReference\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\GoodsInServiceReference\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\MaterialMgtServiceReference\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\RoutingServiceReference\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\StorageBinSearchServiceReference\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\TransportPlanningServiceReference\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Properties\DataSources\DataAccess.Box.datasource" />
+    <None Include="Properties\DataSources\DataAccess.Location.datasource" />
+    <None Include="Properties\DataSources\DataAccess.Locationtype.datasource" />
+    <None Include="Properties\DataSources\DataAccess.Material.datasource" />
+    <None Include="Properties\DataSources\DataAccess.Order.datasource" />
+    <None Include="Properties\DataSources\DataAccess.Position.datasource" />
+    <None Include="Properties\DataSources\DataAccess.Rack.datasource" />
+    <None Include="Properties\DataSources\DataAccess.Transportentry.datasource" />
+    <None Include="Properties\DataSources\GoodsInService.CompositeType.datasource" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <None Include="Service References\GeneralTransportServiceReference\GeneralTransportService.wsdl" />
+    <None Include="Service References\GeneralTransportServiceReference\GeneralTransportService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\GeneralTransportServiceReference\GeneralTransportService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\GoodsInServiceReference\GoodsInService.wsdl" />
+    <None Include="Service References\GoodsInServiceReference\GoodsInService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\GoodsInServiceReference\GoodsInService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\GoodsInServiceReference\GoodsInService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\GoodsInServiceReference\WMSClient.GoodsInServiceReference.CompositeType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\MaterialMgtServiceReference\MaterialMgtService.wsdl" />
+    <None Include="Service References\MaterialMgtServiceReference\MaterialMgtService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MaterialMgtServiceReference\MaterialMgtService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MaterialMgtServiceReference\MaterialMgtService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MaterialMgtServiceReference\MaterialMgtService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MaterialMgtServiceReference\MaterialMgtService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\RoutingServiceReference\RoutingService.wsdl" />
+    <None Include="Service References\RoutingServiceReference\RoutingService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\RoutingServiceReference\RoutingService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\StorageBinSearchServiceReference\StorageBinSearchService.wsdl" />
+    <None Include="Service References\StorageBinSearchServiceReference\StorageBinSearchService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\StorageBinSearchServiceReference\StorageBinSearchService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TransportPlanningServiceReference\TransportPlanningService.wsdl" />
+    <None Include="Service References\TransportPlanningServiceReference\TransportPlanningService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TransportPlanningServiceReference\TransportPlanningService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ACorns.WCF.DynamicClientProxy\ACorns.WCF.DynamicClientProxy.csproj">
+      <Project>{952C8F4B-7569-40C8-9DB7-BD6509A0E4D9}</Project>
+      <Name>ACorns.WCF.DynamicClientProxy</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ActiveMQMessaging\ActiveMQMessaging.csproj">
+      <Project>{DBAF1A98-658F-4356-A032-02692919217A}</Project>
+      <Name>ActiveMQMessaging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ConstantsLibrary\ConstantsLibrary.csproj">
+      <Project>{B7326EE9-4FD1-4413-B160-69F04C51853E}</Project>
+      <Name>ConstantsLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DataAccess\DataAccess.csproj">
+      <Project>{D91F4F0B-A689-487F-A5FE-D78B2DD647CF}</Project>
+      <Name>DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Monitoring\Monitoring.csproj">
+      <Project>{25A27579-C736-4582-B4B0-CABD61D7B89D}</Project>
+      <Name>Monitoring</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\GeneralTransportServiceReference\" />
+    <WCFMetadataStorage Include="Service References\GoodsInServiceReference\" />
+    <WCFMetadataStorage Include="Service References\MaterialMgtServiceReference\" />
+    <WCFMetadataStorage Include="Service References\RoutingServiceReference\" />
+    <WCFMetadataStorage Include="Service References\StorageBinSearchServiceReference\" />
+    <WCFMetadataStorage Include="Service References\TransportPlanningServiceReference\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\GeneralTransportServiceReference\GeneralTransportService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\GeneralTransportServiceReference\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\GeneralTransportServiceReference\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\GeneralTransportServiceReference\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\RoutingServiceReference\RoutingService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\RoutingServiceReference\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\RoutingServiceReference\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\RoutingServiceReference\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\StorageBinSearchServiceReference\StorageBinSearchService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\StorageBinSearchServiceReference\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\StorageBinSearchServiceReference\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\StorageBinSearchServiceReference\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\TransportPlanningServiceReference\TransportPlanningService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\TransportPlanningServiceReference\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\TransportPlanningServiceReference\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\TransportPlanningServiceReference\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\GoodsInServiceReference\GoodsInService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\GoodsInServiceReference\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\GoodsInServiceReference\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\GoodsInServiceReference\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\MaterialMgtServiceReference\MaterialMgtService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\MaterialMgtServiceReference\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\MaterialMgtServiceReference\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\MaterialMgtServiceReference\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

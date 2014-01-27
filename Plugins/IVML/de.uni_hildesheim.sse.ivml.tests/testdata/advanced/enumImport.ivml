@@ -1,0 +1,12 @@
+project enumImportBase {
+
+    version v0;
+    enum bindingTimes {compile, startup, runtime};
+    attribute bindingTimes binding to enumImportBase;
+}
+project enumImportDerived {
+
+    version v0;
+    import enumImportBase;
+    attribute bindingTimes binding to enumImportDerived;
+}

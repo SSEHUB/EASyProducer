@@ -1,0 +1,9 @@
+project SimpleContainer {
+
+    sequenceOf(Integer) seq1 = {1, 2, 3, 4};
+    
+    Integer sum1;
+    sum1 = 10;
+    sum1 == seq1.sum();
+
+}

@@ -1,0 +1,11 @@
+project StateCheckProjectImported {
+
+    version v0;
+    
+    Integer a;
+    Integer b;
+    Integer c;
+    
+    a = 5;  
+    c = 3;
+}

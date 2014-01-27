@@ -1,0 +1,8 @@
+project DerivedTypeOne {
+
+    typedef Count Integer with (Count > 10);
+    
+    //Has only default.
+    Count a = 5;
+
+}

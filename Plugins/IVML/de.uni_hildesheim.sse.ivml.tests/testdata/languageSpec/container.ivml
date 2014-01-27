@@ -1,0 +1,5 @@
+project ivmlSpec_container {
+
+    enum ContentType {text, video, audio, threeD, blob};
+    sequenceOf(ContentType) basicContents = {ContentType.text, ContentType.audio};
+}

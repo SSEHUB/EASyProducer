@@ -1,0 +1,78 @@
+seq0 <- {}
+-> size() with ({}) = 0
+i_seq0 <- 0
+-> includes(, Any) with ({}, 5) = false
+i_b0 <- false
+seq1 <- {1, 2, 3, 4}
+-> size() with ({1, 2, 3, 4}) = 4
+i_s1 <- 4
+-> includes(, Any) with ({1, 2, 3, 4}, 5) = false
+i_b1 <- false
+-> includes(, Any) with ({1, 2, 3, 4}, 3) = true
+i_b2 <- true
+-> excludes(, Any) with ({1, 2, 3, 4}, 3) = false
+i_b3 <- false
+-> excludes(, Any) with ({1, 2, 3, 4}, 5) = true
+i_b4 <- true
+seq2 <- {{1, 2}, {2, 3}, {3, 4}}
+-> size() with ({{1, 2}, {2, 3}, {3, 4}}) = 3
+i_s2 <- 3
+seq3 <- {1, 2, 3, 4}
+-> equals(, ) with ({1, 2, 3, 4}, {1, 2, 3, 4}) = true
+i_b5 <- true
+-> ==(, ) with ({1, 2, 3, 4}, {1, 2, 3, 4}) = true
+i_b5e <- true
+-> equals(, ) with ({1, 2, 3, 4}, {{1, 2}, {2, 3}, {3, 4}}) = false
+i_b6 <- false
+-> ==(, ) with ({1, 2, 3, 4}, {{1, 2}, {2, 3}, {3, 4}}) = false
+i_b6e <- false
+-> isEmpty() with ({1, 2, 3, 4}) = false
+i_b7 <- false
+-> isNotEmpty() with ({1, 2, 3, 4}) = true
+i_b8 <- true
+-> get(Sequence, Integer) with ({1, 2, 3, 4}, 1) = 2
+i_i1 <- 2
+-> [](Sequence, Integer) with ({1, 2, 3, 4}, 2) = 3
+i_i2 <- 3
+-> toSet(Sequence) with ({1, 2, 3, 4}) = {1, 2, 3, 4}
+set1 <- {1, 2, 3, 4}
+seq4 <- {1, 2, 2, 3, 4, 5}
+-> toSet(Sequence) with ({1, 2, 2, 3, 4, 5}) = {1, 2, 3, 4, 5}
+set2 <- {1, 2, 3, 4, 5}
+-> toSequence(Set) with ({1, 2, 3, 4, 5}) = {1, 2, 3, 4, 5}
+seq7 <- {1, 2, 3, 4, 5}
+-> selectByType(Sequence, Type) with ({1, 2, 3, 4}, class de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.PseudoInteger) = {1, 2, 3, 4}
+seq8 <- {1, 2, 3, 4}
+-> selectByType(Sequence, Type) with ({1, 2, 3, 4}, class de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.PseudoReal) = {}
+seq9 <- {}
+-> excluding(Sequence, ) with ({1, 2, 2, 3, 4, 5}, {1, 2, 3, 4}) = {5}
+seq10 <- {5}
+-> excluding(Sequence, ) with ({1, 2, 2, 3, 4, 5}, {1, 2, 3, 4}) = {5}
+seq11 <- {5}
+-> >(Integer, Integer) with (1, 4) = false
+-> >(Integer, Integer) with (2, 4) = false
+-> >(Integer, Integer) with (2, 4) = false
+-> >(Integer, Integer) with (3, 4) = false
+-> >(Integer, Integer) with (4, 4) = false
+-> >(Integer, Integer) with (5, 4) = true
+-> select(Sequence, ExpressionEvaluator) with ({1, 2, 2, 3, 4, 5}, <evaluator>) = {5}
+seq12 <- {5}
+-> selectByType(Set, Type) with ({1, 2, 3, 4, 5}, class de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.PseudoInteger) = {1, 2, 3, 4, 5}
+set3 <- {1, 2, 3, 4, 5}
+-> selectByType(Set, Type) with ({1, 2, 3, 4, 5}, class de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.PseudoReal) = {}
+set4 <- {}
+-> excluding(Set, ) with ({1, 2, 3, 4, 5}, {1, 2, 3, 4, 5}) = {}
+set5 <- {}
+-> excluding(Set, ) with ({1, 2, 3, 4, 5}, {1, 2, 3, 4}) = {5}
+set6 <- {5}
+-> >(Integer, Integer) with (1, 4) = false
+-> >(Integer, Integer) with (2, 4) = false
+-> >(Integer, Integer) with (3, 4) = false
+-> >(Integer, Integer) with (4, 4) = false
+-> >(Integer, Integer) with (5, 4) = true
+-> select(Set, ExpressionEvaluator) with ({1, 2, 3, 4, 5}, <evaluator>) = {5}
+set7 <- {5}
+seq13 <- {1, 2, 4, 5, 6, 7}
+-> sortAlpha(Sequence) with ({1, 2, 4, 5, 6, 7}) = {1, 2, 4, 5, 6, 7}
+seq14 <- {1, 2, 4, 5, 6, 7}
+-> main()

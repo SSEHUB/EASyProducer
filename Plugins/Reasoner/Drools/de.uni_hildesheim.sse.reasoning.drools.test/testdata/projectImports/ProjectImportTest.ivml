@@ -1,0 +1,28 @@
+project P1 {
+    
+    Integer a, b, c;
+    a = 3;
+    b = 4;
+    c == a * b;
+    
+}
+
+
+project ProjectImportTest {
+    import P1;
+    
+    Integer x, y, z;
+    
+    x == 4;
+    y = 5;
+    
+    z == x * y;
+    z == x + y;
+    z == x * 6;
+    
+    /* 
+    c == x * y;
+    c == x + y;
+    c == x * 6;
+    */        
+}

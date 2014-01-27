@@ -1,0 +1,6 @@
+project testEnumerationsFail {
+
+    version v0;
+    enum OrderedEnum {f = 10, g = 20, h = 30, h = 40};
+    enum OrderedEnum1 {f = 10, g = 20, h = 30, i = 30};
+}

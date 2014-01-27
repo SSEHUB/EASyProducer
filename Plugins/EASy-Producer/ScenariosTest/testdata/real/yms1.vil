@@ -1,0 +1,41 @@
+vilScript yms1 (Project source, Project target, Configuration config, String bindingTime) {
+
+    Path targetPath = target.getPath();
+    FileArtifact cocktailVarModel;
+    FileArtifact cocktailResolution;
+
+    clean() = : {
+    }
+
+    createGenericArtifacts(sequenceOf(FileArtifact) variableArtifacts) = : {
+        map(genericArtifact=source.getLocalProjectArtifacts().excluding(variableArtifacts)) {
+            Path targetPath = target.localize(source, genericArtifact);
+            genericArtifact.copy(targetPath);
+        };
+    }
+
+    createCocktailArtifacts() = : {
+        cocktailVarModel = "$target/CocktailVarModel.cvm";
+        vilTemplateProcessor(source.getEasyFolder() + "/CocktailVarModelTemplate.vtl", config, cocktailVarModel);
+        cocktailResolution = "$target/CocktailResModel.crm";
+        vilTemplateProcessor(source.getEasyFolder() + "/CocktailResModelTemplate.vtl", config, cocktailResolution);
+    }
+
+    applyCocktailStrategy(sequenceOf(JavaFileArtifact) variableArtifacts) = : createCocktailArtifacts() {
+        cocktailInstantiator(variableArtifacts, cocktailResolution);
+    }
+
+    produceYmsVariant() = : {
+        sequenceOf(JavaFileArtifact) variableArtifacts = join(jFile:source.selectByType(JavaFileArtifact), exclude d:config.selectByAttribute(IVML::bindingTime, IVML::BindingTime.compile).variables()) with (jFile.hasAnnotation("VariationPoint", "value", d.name()));
+        applyCocktailStrategy(variableArtifacts);
+        map(artifact=variableArtifacts) {
+            Path targetPath = target.localize(source, artifact);
+            artifact.copy(targetPath);
+        };
+        createGenericArtifacts(variableArtifacts);
+    }
+
+    main() = : produceYmsVariant() {
+    }
+
+}

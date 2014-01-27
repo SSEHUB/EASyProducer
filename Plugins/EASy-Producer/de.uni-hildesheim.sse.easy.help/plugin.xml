@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <!--Extend the Eclipse help with the EASy-Producer Documentation-->
+   <extension
+         point="org.eclipse.help.toc">
+      <toc
+            file="toc.xml"
+            primary="true">
+      </toc>
+   </extension>
+   
+   <!--Define a new command for opening EASy-help-->
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+            name="EASy-Producer Documentation"
+            id="de.uni_hildesheim.sse.easy.help.category">
+      </category>
+      <command
+            categoryId="de.uni_hildesheim.sse.easy.help.category"
+            id="easy.help.command"
+            name="EASy-Producer Documentation">
+      </command>
+   </extension>
+   
+   <!--Define the handler for executing the command-->
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            commandId="easy.help.command"
+            class="de.uni_hildesheim.sse.easy.help.handlers.HelpCommand">
+      </handler>
+   </extension>
+   
+   <!--Register the new command via the new handler to the menu-->
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="menu:help?after=additions">
+         
+            <command commandId="easy.help.command"
+                  icon = "icons/logo_icon.gif"
+                  mnemonic="E"
+                  id="de.uni_hildesheim.sse.easy.helpCommand">
+            </command>
+      </menuContribution>
+   </extension>
+
+</plugin>

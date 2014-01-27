@@ -1,0 +1,68 @@
+project PL_car {
+ 
+    version v0;
+    enum Fuel {gasoline, diesel};
+    enum Type {automatic, manual};
+    enum Frame {sedan, coupe, suv};
+    enum Doors {D2, D4};
+    enum Colour {white, black, red};
+    typedef Wheels Integer with (Wheels >= 14 and Wheels <= 18);
+    compound Engine {
+        Integer cylenders;
+        Integer power;
+        Fuel fuel;
+    }
+ 
+    compound Transmission {
+        Type type;
+        Integer gears;
+    }
+ 
+    compound Built {
+        Frame frame;
+        Doors doors;
+        Colour colour;
+    }
+   
+    compound C {
+    	Integer x;
+    	}
+    
+    C c1;
+    
+    Engine engine;
+    //Engine engine2;
+    //engine2.power = 190;
+    Transmission transmission;
+    Built built;
+    Wheels wheels;
+   
+    engine = {cylenders = 4, power = 180, fuel = Fuel.gasoline};
+    transmission = {type = Type.manual, gears = 5};
+    built = {frame = Frame.coupe, doors = Doors.D2, colour = Colour.black};
+    wheels = 17;
+    sequenceOf(Engine) sE;
+    
+    //The below three work
+    sE = {{cylenders = 4, power = 180, fuel = Fuel.gasoline}, {cylenders = 5, power = 190, fuel = Fuel.gasoline}};
+    Integer aa = 5;
+    aa = 5 implies sE = {{cylenders = 4, power = 180, fuel = Fuel.gasoline}, {cylenders = 5, power = 190, fuel = Fuel.gasoline}};
+ 	
+ 	2 < 5 implies engine = {cylenders = 6, power = 180, fuel = Fuel.gasoline};
+ 	
+ 	sequenceOf(Integer) s2;
+ 	s2 = {2, 5, 10};
+ 	
+    Engine.cylenders = 4 or Engine.cylenders = 6;
+    Engine.power = 170 or Engine.power = 180 or Engine.power = 190;
+    Transmission.gears >= 4 and Transmission.gears <= 6;
+    Engine.cylenders = 4 implies (Engine.power = 170 or Engine.power = 180);
+    Engine.cylenders = 6 implies Engine.power = 190;
+    Engine.power = 170 implies Transmission.gears = 4;
+    Engine.power = 180 implies Transmission.gears = 5;
+    Engine.power = 190 implies Transmission.gears = 6;
+    Engine.fuel = Fuel.diesel implies Built.frame = Frame.suv;
+    Built.frame = Frame.coupe implies Built.doors = Doors.D2;
+   
+ 
+}

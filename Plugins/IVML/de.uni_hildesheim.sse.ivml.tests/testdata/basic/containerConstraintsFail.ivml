@@ -1,0 +1,13 @@
+project testContainerConstraintsFail {
+    
+    version v0;
+    compound comp {
+        Integer x;
+    }
+
+    setOf(Integer) intSet;
+    sequenceOf(comp) compSeq;
+    sequenceOf(Integer) intSeq;
+    intSet == compSeq;
+    compSeq == intSeq;
+}

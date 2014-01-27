@@ -1,0 +1,15 @@
+project typedefTest {
+
+  typedef Bitrate Integer with (Bitrate >= 128 and Bitrate <= 256);
+  typedef CustomBitrate Integer with (CustomBitrate >= 199 and CustomBitrate <= 199);
+   
+  Bitrate b;
+  CustomBitrate c;
+ 
+  b = 128;
+  c = 199;
+    
+    
+    
+
+}

@@ -1,0 +1,12 @@
+vilScript sequences (Project source, Project target, Configuration config) {
+
+    const Path source_src = "$source/src/**/*.java";
+    const FileArtifact source_build = "$source/build.xml";
+    const FileArtifact source_initDb = "$source/init.sql";
+
+    main() = : {
+        setOf(FileArtifact) srcFiles = source_src.selectAll();
+        setOf(XmlFileArtifact) dbFiles = source.selectByType(XmlFileArtifact);
+    }
+
+}

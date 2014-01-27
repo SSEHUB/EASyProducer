@@ -1,0 +1,59 @@
+@advice(svncontrol)
+vilScript svncontrol (Project source, Project target, Configuration config) {
+
+    version v0;
+
+    Path source_templates = source.easyFolder();
+    Path source_bin = "$source";
+    Path target_bin = "$target";
+    Path target_variability = "$target/variability";
+    Path target_dist = "$target/bin";
+    sequenceOf(String) cp = {"$target_bin"};
+
+// TODO use pre and postcondition 
+    compileGoal() = : {
+        javac("$source/**/*.java", "$target_bin/*.class", classpath=cp);
+    }
+
+    createAspectFromTemplate(Configuration config, FileArtifact class, FileArtifact template, FileArtifact aspectFile, DecisionVariable d) = : {
+        vilTemplateProcessor(template, config, aspectFile, injectionTarget=class, var=d);
+        aspectJ(aspectFile, "$target_bin/*.class", classpath=cp);
+    }
+
+    injectAspects(Project source, Project target, Configuration config, IvmlElement time) = : compileGoal() {
+        // class or java file artifact would be better, sequence of values in annotation may change arbitrarily
+        sequenceOf(FileArtifact, DecisionVariable) timedClassFiles = 
+          join(c:target.selectByName(".*/.*\\.java"), d:config.variables()) with (
+            time == d.getAttribute(svncontrol::bindingTime).value() and c.text().matches(".*@Component\\s*\\(\\s*boundTo\\s*=\\s*\"${d.name()}\".*"));
+        map(x, d=timedClassFiles) {
+            String component = "Ui"; // currently we do not consider the other types here
+            FileArtifact aspectFile = "$target/${x.pathSegments()}/${x.plainName()}Aspect.aj";
+            FileArtifact template = "$source_templates/${time.name().firstToUpperCase()}${component}Template.vtl";
+            createAspectFromTemplate(config, x, template, aspectFile, d);
+        };
+    }
+
+    produceJavaCompile() = : compileGoal() {
+        //.selectByAttribute(svncontrol::bindingTime, svncontrol::BindingTime.compile)
+        vilTemplateProcessor("$source_templates/CreateStaticConfiguration.vtl", config, "$target_variability/StaticConfiguration.java");
+        injectAspects(source, target, config, svncontrol::BindingTime.compile);
+    }
+
+    produceJavaStartup() = : compileGoal() {
+        vilTemplateProcessor("$source_templates/CreateDynamicConfiguration.vtl", config, "$target_variability/StartupConfiguration.java", bindingTime=svncontrol::BindingTime.startup);
+        injectAspects(source, target, config, svncontrol::BindingTime.startup);
+    }
+
+    produceJavaRuntime() = : compileGoal() {
+        vilTemplateProcessor("$source_templates/CreateDynamicConfiguration.vtl", config, "$target_variability/RuntimeConfiguration.java", bindingTime=svncontrol::BindingTime.runtime);
+        injectAspects(source, target, config, svncontrol::BindingTime.runtime);
+    }
+
+    package() = "$target_dist/client.jar" : produceJavaCompile(), produceJavaStartup(), produceJavaRuntime() {
+        zip(target, "$target/**/*.class", "$target_dist/client.jar");
+    }
+
+    main() = : package() {
+    }
+
+}

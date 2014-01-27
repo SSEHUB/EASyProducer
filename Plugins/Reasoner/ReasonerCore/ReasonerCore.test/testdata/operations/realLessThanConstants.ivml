@@ -1,0 +1,9 @@
+project realLessThanConstants {
+
+      
+    5.2 < 2.5 == false;
+    5.2 < -2.5 == false;
+    -5.2 < 2.5 == true;
+    -5.2 < -2.5 == true;
+
+}

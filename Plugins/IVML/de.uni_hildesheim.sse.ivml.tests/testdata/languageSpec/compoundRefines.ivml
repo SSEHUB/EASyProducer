@@ -1,0 +1,13 @@
+project ivmlSpec_compoundRefines {
+
+    compound Content {
+        String name;
+        Integer bitrate;
+    }
+
+    compound ExternalContent refines Content {
+        String contentPath;
+        String accessPassword;
+    }
+
+}

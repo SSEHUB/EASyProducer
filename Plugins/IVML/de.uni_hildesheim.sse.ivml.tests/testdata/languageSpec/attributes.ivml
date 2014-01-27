@@ -1,0 +1,9 @@
+project ivmlSpec_attributes {
+
+    enum BindingTimes {configuration = 0, compile = 1, runtime = 2};
+    compound ContentSharing {
+    }
+
+    ContentSharing contentSharing;
+    attribute BindingTimes binding = BindingTimes.compile to contentSharing;
+}

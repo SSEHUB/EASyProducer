@@ -1,0 +1,9 @@
+vilScript mapJoin4 (Project source, Project target, Configuration config) {
+
+    main() = : {
+        setOf(FileArtifact) files = join(c:target.selectAllFiles(), d:config.variables()) with (c.name() == d.name());
+        map(x=files) {
+        };
+    }
+
+}

@@ -1,0 +1,122 @@
+project values {
+	Integer x;
+	Integer y;
+	Integer z = 5;
+	Integer a = z * 2;
+	
+	/*
+	x > 5 and x < 10;
+	x > 5 implies y < 7;
+	y > 5;
+	z > 2 and a >8;
+	
+	Integer b = 21;
+	Integer c;
+	b + c = 63;
+	*/
+	Boolean boo;
+	//isDefined(x) implies boo;
+	
+	typedef Count Integer with (Count > 0);
+	compound AbstractComponent{}
+	
+//*******************   YMS   ***************************
+	Boolean gpsBased;
+	Boolean visualizationSupport; // saves visualization data for docks, lots, warehouses rsp registers rest endpoints for them
+								  // e.g. ParkingLogDesc, WaitingbayDesc, WarehouseDesc
+	
+	//** JMS config **
+	Boolean useJms;
+	String jmsConnection;
+	String queueName;
+	
+	useJms implies not(jmsConnection.size() = 0); 
+	useJms implies not(queueName.size() = 0); 
+	
+//*******************   DDS   *****************************
+	enum DdsSchedulingAlgorithm {SIMPLE, DYNAMIC};
+	compound DdsComponent refines AbstractComponent{
+		Count docks;
+		Count waitingBays;
+		Boolean specialDocks; //differentiate dock types
+		DdsSchedulingAlgorithm scheduling;
+	}
+	
+	
+	
+//******************   JOCKEY   *****************************	
+	enum JockeySchedulingType {SIMPLE, LOCATION}; 
+	compound JockeyComponent refines AbstractComponent{
+		Count jockeys;
+		Boolean reassignments; //assign jockeys to warehouse and back, if needed
+		JockeySchedulingType scheduling;
+	} 
+	
+	
+	
+	
+//******************   MOBILE   *****************************	
+	compound MobilityComponent refines AbstractComponent{
+	
+		Boolean gpsBasedDrivers; //drivers can update their location with a mobile device
+		Boolean gpsBasedJockeys; //jockeys can update their location with a mobile device
+		
+	}
+	
+
+
+	
+ 
+//******************   Resolution stuff   *****************************	
+	
+
+	JockeyComponent jockeyComponent;
+	MobilityComponent mobilityComponent;
+	DdsComponent ddsComponent;
+	
+ 
+	//registration of WADL / Schema endpoints
+	attribute Boolean metaInformation to jockeyComponent; 
+	attribute Boolean metaInformation to mobilityComponent; 
+	attribute Boolean metaInformation to ddsComponent; 
+	
+
+
+
+	gpsBased = true;
+	Boolean boo;
+	
+//******************   constraints   *****************************	
+ 
+	//gps implies that mobilityComponent has to be chosen!
+	gpsBased implies isDefined(mobilityComponent); // at least it exists, no information about contents
+	isDefined(mobilityComponent) implies gpsBased; // HE2: oclTypeOf is isTypeOf(TYPE) or typeOf() = TYPE in IVML
+ 	//boo = isDefined(mobilityComponent);
+
+	jockeyComponent.scheduling == JockeySchedulingType.LOCATION implies mobilityComponent.gpsBasedJockeys;
+	
+	
+	useJms = true;
+	jmsConnection="vm://localhost";
+	queueName = "eu.indenica.vsp.Notification";
+	
+	visualizationSupport = false;
+  
+	//metaInformations = true; // HE2 undefined at this point of time
+	 
+		ddsComponent = DdsComponent {
+			docks = 5,
+			waitingBays = 20,
+			specialDocks = false,
+			scheduling = PL_YM_parent::DdsSchedulingAlgorithm.SIMPLE
+		};
+		(2 = 2) implies ddsComponent.docks = 10;
+		
+		jockeyComponent = JockeyComponent{
+			jockeys = 2,
+			reassignments = false,
+			scheduling = PL_YM_parent::JockeySchedulingType.SIMPLE
+		};
+	
+	
+}

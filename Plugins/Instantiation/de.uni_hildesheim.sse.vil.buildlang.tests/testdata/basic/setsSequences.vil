@@ -1,0 +1,12 @@
+vilScript setsSequences (Project source, Project target, Configuration config) {
+
+    setOf(FileArtifact) global;
+
+    main() = : {
+        sequenceOf(FileArtifact) fileSequence;
+        setOf(FileArtifact) fileSet;
+        sequenceOf(FileArtifact, Integer) pairSequence;
+        setOf(FileArtifact, Integer) pairSet;
+    }
+
+}

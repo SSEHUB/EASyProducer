@@ -1,0 +1,7 @@
+project PhaniVarNames {
+
+    version v0;
+    Integer E1;
+    Integer v1;
+    Integer myInt;
+}

@@ -1,0 +1,6 @@
+project integerABSConstants {
+
+    abs(5) == 5;
+    abs(-5) == 5;
+
+}

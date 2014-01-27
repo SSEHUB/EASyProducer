@@ -1,0 +1,14 @@
+project SimpleQuantorAt {
+    
+    sequenceOf(Integer) seq1;
+    
+    seq1 = {2, 5, 6, 8};
+    
+    Integer x;
+    x == 4;
+    x > seq1.at(1);
+    
+    Integer y = seq1.at(1); 
+
+
+}

@@ -1,0 +1,14 @@
+project VariablePropagationTest {
+
+   version v0;
+
+    Boolean useJms = true;
+    
+    String jms0 = "";
+    useJms == true implies size(jms0) == 0;
+    
+    String jms1 = "";
+    size(jms1) = 0;  
+    
+
+}

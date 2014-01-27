@@ -1,0 +1,205 @@
+package de.uni_hildesheim.sse.reasoning.drools
+// Project - testEnumimport java.util.List;
+import java.util.Set;
+import java.util.Arrays;
+import java.util.ArrayList;
+
+import function de.uni_hildesheim.sse.reasoning.drools.functions.IVMLFunctions.*
+
+
+
+function boolean isDefined(Object o) { 
+	return o != null;		
+}
+
+global java.util.ArrayList cList
+
+function boolean implies(boolean a, boolean b) { 
+boolean result = false;
+if (a && !b)
+	result = false;
+else
+	result = true;
+return result;
+ }
+
+global Integer one_one;
+
+global Integer one_two;
+
+global Integer one_three;
+
+global Integer one_four;
+
+global Integer one_five;
+
+global Integer one_six;
+
+global Integer one_seven;
+
+global Integer one_eight;
+
+global Integer two_two;
+
+global Integer two_four;
+
+global Integer two_six;
+
+global Integer two_eight;
+
+global Integer orderedOne_one;
+
+global Integer orderedOne_two;
+
+global Integer orderedOne_three;
+
+global Integer orderedOne_four;
+
+global Integer orderedOne_five;
+
+global Integer orderedOne_six;
+
+global Integer orderedOne_seven;
+
+global Integer orderedOne_eight;
+
+global Integer orderedTwo_two;
+
+global Integer orderedTwo_four;
+
+global Integer orderedTwo_six;
+
+global Integer orderedTwo_eight;
+
+declare Project
+@typesafe (false) 
+
+	one1 : int
+	one2 : int
+	two1 : int
+	two2 : int
+	oOne1 : int
+	oOne2 : int
+	oTwo1 : int
+	oTwo2 : int
+	
+end
+
+
+rule " Config rule " 
+ agenda-group "Group Config"
+dialect "mvel"
+no-loop true
+lock-on-active true
+	when
+		P : Project()
+	then
+		modify(P) {oOne2 = 7, oOne1 = 4, two2 = 1, oTwo2 = 8, two1 = 0, oTwo1 = 6, one2 = 1, one1 = 0};
+System.out.println( "Project : " + P);
+ end 
+rule "Fact rule" 
+ agenda-group "Fact Config"
+dialect "mvel"
+no-loop true
+lock-on-active true
+	when
+		P : Project()
+	then
+		
+ end 
+rule "13"
+agenda-group "Group 0"
+dialect "mvel"
+no-loop true
+lock-on-active true
+when
+P : Project()
+then 
+	modify(P){one1 = ( 0 )};update(P);
+end
+
+
+rule "14"
+agenda-group "Group 0"
+dialect "mvel"
+no-loop true
+lock-on-active true
+when
+P : Project()
+then 
+	modify(P){one2 = ( 1 )};update(P);
+end
+
+
+rule "15"
+agenda-group "Group 0"
+dialect "mvel"
+no-loop true
+lock-on-active true
+when
+P : Project()
+then 
+	modify(P){two1 = ( 0 )};update(P);
+end
+
+
+rule "16"
+agenda-group "Group 0"
+dialect "mvel"
+no-loop true
+lock-on-active true
+when
+P : Project()
+then 
+	modify(P){two2 = ( 1 )};update(P);
+end
+
+
+rule "20"
+agenda-group "Group 0"
+dialect "mvel"
+no-loop true
+lock-on-active true
+when
+P : Project()
+then 
+	modify(P){oOne1 = ( 4 )};update(P);
+end
+
+
+rule "21"
+agenda-group "Group 0"
+dialect "mvel"
+no-loop true
+lock-on-active true
+when
+P : Project()
+then 
+	modify(P){oOne2 = ( 7 )};update(P);
+end
+
+
+rule "22"
+agenda-group "Group 0"
+dialect "mvel"
+no-loop true
+lock-on-active true
+when
+P : Project()
+then 
+	modify(P){oTwo1 = ( 6 )};update(P);
+end
+
+
+rule "23"
+agenda-group "Group 0"
+dialect "mvel"
+no-loop true
+lock-on-active true
+when
+P : Project()
+then 
+	modify(P){oTwo2 = ( 8 )};update(P);
+end
+
+

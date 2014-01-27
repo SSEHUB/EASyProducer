@@ -1,0 +1,9 @@
+vilScript generics () {
+
+    Integer test = 5;
+
+    productionGenericCopy(FileArtifact x, FileArtifact y) = y : x {
+        x.copy(y);
+    }
+
+}

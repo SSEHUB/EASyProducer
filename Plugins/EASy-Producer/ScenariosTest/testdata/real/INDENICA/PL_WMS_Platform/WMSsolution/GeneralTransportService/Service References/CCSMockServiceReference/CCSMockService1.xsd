@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="Move">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="boxId" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="transportMedium" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="startLocId" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="entLocId" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Dummy">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DummyResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="MoveFinished">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="boxId" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="endDestId" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

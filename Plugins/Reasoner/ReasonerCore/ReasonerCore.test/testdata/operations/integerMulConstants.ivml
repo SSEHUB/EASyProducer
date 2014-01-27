@@ -1,0 +1,11 @@
+project integerMulConstants {
+
+    // multiplication
+    
+    0 * 1 == 0;
+    1 * 1 == 1;
+    1 *(-1) == -1;
+    5 * -2 == -10;
+    -5 * (-5) == 25;
+
+}

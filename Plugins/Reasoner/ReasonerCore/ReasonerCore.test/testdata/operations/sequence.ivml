@@ -1,0 +1,56 @@
+project sequenceTest {
+
+    // sequenceOf(enum)
+    enum ContentType {text, movie, audio, picture};
+    sequenceOf(ContentType) basicContents =  {ContentType.text, ContentType.movie, ContentType.audio, ContentType.picture}; 
+    basicContents[0] == ContentType.text;
+    basicContents.first() == ContentType.text;
+    basicContents.last() == ContentType.picture;
+    basicContents.size() == 4;
+    basicContents.indexOf(ContentType.audio) == 2;
+    
+    // sequenceOf(Integer)
+    sequenceOf(Integer) basicInteger =  {0, 1, 10, 11};
+    basicInteger[3] == 11;
+    basicInteger.first() == 0;
+    basicInteger.last() == 11;
+    basicInteger.size() == 4;
+    basicInteger.indexOf(10) == 2;
+    
+    // sequenceOf(Real)
+    sequenceOf(Real) basicReal =  {0.5, 1.5, 10.5, 11.5};
+    basicReal[3] == 11.5;
+    basicReal.first() == 0.5;
+    basicReal.last() == 11.5;
+    basicReal.size() == 4;
+    basicReal.indexOf(10.5) == 2;
+    
+    // sequenceOf(String)
+    sequenceOf(String) basicString =  {"A", "B", "C", "D"};
+    basicString[3] == "D";
+    basicString.first() == "A";
+    basicString.last() == "D";
+    basicString.size() == 4;
+    basicString.indexOf("C") == 2;
+    
+     // sequenceOf(Boolean)
+    sequenceOf(Boolean) basicBoolean =  {false, true, false, true};
+    basicBoolean[3] == true;
+    basicBoolean.first() == false;
+    basicBoolean.last() == true;
+    basicBoolean.size() == 4;
+    //basicBoolean.indexOf(false) == 2;
+    
+    // sequenceOf(compound)
+    compound Content {
+        String name;
+        Integer number;
+        Boolean isValid;
+    }
+    sequenceOf(Content) basicCompound = {{name = "first", number = 1, isValid = true},{name = "second", number = 2, isValid = false}};
+    basicCompound.size() == 2;
+    
+    
+    
+
+}

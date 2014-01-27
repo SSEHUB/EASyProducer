@@ -1,0 +1,9 @@
+project realMulConstants {
+
+    // multiplication
+    
+    0 * 1.59 == 0;
+    1.987 * 1.25 == 2.48375;
+    -5.65 * (-5.84) == 32.996;
+
+}

@@ -1,0 +1,5 @@
+project root {
+
+    version v1;
+    import a with (a.version >= 3.1);
+}

@@ -1,0 +1,12 @@
+project General {
+	
+	enum VariabilityType {workflow, service, infrastructure};
+	VariabilityType workflowVariability = VariabilityType.workflow; 
+	// HE: added qualification
+	VariabilityType serviceVariability = VariabilityType.service; 
+	// HE: added qualification
+	VariabilityType infrastructureVariability = VariabilityType.infrastructure; 
+	// HE: added qualification
+
+	enum BiningTime {compile, runtime};	
+}

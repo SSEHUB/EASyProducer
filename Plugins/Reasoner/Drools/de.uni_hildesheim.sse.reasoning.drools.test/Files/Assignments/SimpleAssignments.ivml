@@ -1,0 +1,40 @@
+project SimpleAssignments {
+
+    Integer a;
+    a == 5;
+    //a = 5;
+    
+    Integer b = 10;
+    
+    Integer c;
+    
+    Integer d = 15;
+    d == 20;
+    
+    Integer e = a + b;
+    e == 20;
+    
+    Integer z;
+    z == 6 * a;
+    
+    /*
+    alpha should lead to error, because of double assignments.
+    */
+    Integer alpha = 3 * d;
+    alpha = 24 * d + b;
+    
+    
+    /*
+    compound A {
+        String name;
+    }
+    A a1, a2;
+    a1.name = "simple";
+    a2.name = "complex";
+    
+    sequenceOf(A) seq1;
+    seq1 = {{name = "simple"}, {name = "complex"}};
+    sequenceOf(Integer) seq2;
+    seq2 = {1, 2};
+    */
+}

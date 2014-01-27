@@ -1,0 +1,27 @@
+project valuePropagation3 {
+
+   //  - Unqualified names
+   //  - Constraints inside compound
+   //  - No assign blocks
+
+   enum ContentType {text, movie, audio, picture};
+    
+   compound Content {
+        String name;
+        Integer number; 
+        ContentType type;
+        Boolean isValid;
+        
+    name == "Audio Content" implies number == 10;
+    (type == ContentType.audio or name == "Audio Content") implies isValid == true;
+    
+    }
+    
+    Content sampleContent;
+    
+    sampleContent.name = "Audio Content";
+    sampleContent.number = 10;
+    sampleContent.type = ContentType.audio;
+    
+
+}

@@ -1,0 +1,12 @@
+project attributeDuplicated {
+
+    version v0;
+    enum bindingTimes {compile, startup, runtime};
+    Integer i;
+    attribute Integer j to i;
+    attribute bindingTimes binding to i;
+    attribute Integer j to attributeDuplicated;
+    i.j = 0;
+    i.binding = bindingTimes.compile;
+    attributeDuplicated.j = 0;
+}

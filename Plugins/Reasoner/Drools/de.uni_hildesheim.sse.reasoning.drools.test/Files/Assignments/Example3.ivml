@@ -1,0 +1,10 @@
+project Example3 {
+
+    Integer x, y;
+    
+    x == 7;
+    7 == x;
+    x == 8;
+    
+    
+} 

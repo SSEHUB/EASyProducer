@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="InstantiationAll" default="all" basedir=".">	
+	<property file="${user.home}/global-build.properties"/>
+	<path id="emma.lib" >    		
+		<pathelement location="${emma.path}/emma.jar" />	
+		<pathelement location="${emma.path}/emma_ant.jar" />	
+	</path>
+	<taskdef resource="emma_ant.properties" classpathref="emma.lib" />
+    
+    <!-- Indivdual properties for this build script -->
+    <property name="test.plugin.instantiation" value="de.uni-hildesheim.sse.easy.instantiatorCore.tests"/>
+    <property name="test.suite.instantiation" value="test.AllTests"/>
+    <property name="test.plugin.instantiation.java" value="de.uni_hildesheim.sse.easy.instantiator.java.test"/>
+    <property name="test.suite.instantiation.java" value="test.de.uni_hildesheim.sse.java.AllTests"/>
+    <property name="test.plugin.vil" value="de.uni_hildesheim.sse.vil.buildlang.tests"/>
+    <property name="test.suite.vil" value="test.de.uni_hildesheim.sse.vil.buildlang.AllTests"/>
+    <property name="test.plugin.template" value="de.uni_hildesheim.sse.vil.templatelang.tests"/>
+    <property name="test.suite.template" value="test.de.uni_hildesheim.sse.vil.templatelang.AllTests"/>
+    
+	<target name="init">
+		<!-- Delete generated folders -->
+		<delete dir="junitResults"/>
+		<delete dir="${coverage.base.dir}"/>
+		<delete dir="${doc.dir}"/>
+		
+		<!-- Create folders -->
+		<mkdir dir="junitResults"/>
+		<mkdir dir="${coverage.base.dir}"/>
+		<mkdir dir="${coverage.instr.dir}"/>
+		<mkdir dir="${coverage.results.dir}"/>
+		<mkdir dir="${doc.dir}"/>
+	</target>
+	
+	<target name="compile">
+		<echo>#############################</echo>
+        <echo>###  Compiling Copy Core  ###</echo>
+        <echo>#############################</echo>
+        <ant dir="de.uni_hildesheim.sse.easy.instantiator.copy.core" antfile="${build.script.name}" />
+		
+        <echo>#####################################</echo>
+        <echo>###  Compiling Instantiator Core  ###</echo>
+        <echo>#####################################</echo>
+        <ant dir="de.uni_hildesheim.sse.easy.instantiatorCore" antfile="${build.script.name}" />
+        
+        <echo>#############################</echo>
+        <echo>###  Compiling Copy Java  ###</echo>
+        <echo>#############################</echo>
+        <ant dir="de.uni_hildesheim.sse.instantiator.copy.java" antfile="${build.script.name}" /> 
+        
+        <echo>#######################################</echo>
+        <echo>###   Compiling Java Instantiator   ###</echo>
+        <echo>#######################################</echo>
+        <ant dir="${home.instantiator.java.dir}" antfile="${build.script.name}" />
+		
+        <echo>###############################</echo>
+        <echo>###  Compiling VelocityLib  ###</echo>
+        <echo>###############################</echo>
+        <ant dir="${home.instantiator.velocityLib.dir}" antfile="${build.script.name}" />
+		
+        <echo>#############################</echo>
+        <echo>###  Compiling Velocity   ###</echo>
+        <echo>#############################</echo>
+        <ant dir="de.uni_hildeshem.sse.easy.instantiator.velocity" antfile="${build.script.name}" />
+		
+        <echo>########################</echo>
+        <echo>###  Compiling XVCL  ###</echo>
+        <echo>########################</echo>
+        <ant dir="de.uni_hildesheim.sse.easy.instantiator.xvcl" antfile="${build.script.name}" />
+ 
+        <echo>####################################</echo>
+        <echo>###  Compiling Expressions Core  ###</echo>
+        <echo>####################################</echo>
+        <ant dir="${home.vil.expressions.core.dir}" antfile="${build.script.name}" />
+       
+        <echo>####################################</echo>
+        <echo>###   Compiling Expressions UI   ###</echo>
+        <echo>####################################</echo>
+        <ant dir="${home.vil.expressions.ui.dir}" antfile="${build.script.name}" />
+        
+        <echo>############################</echo>
+        <echo>###  Compiling VIL Core  ###</echo>
+        <echo>############################</echo>
+        <ant dir="${home.vil.core.dir}" antfile="${build.script.name}" />
+       
+        <echo>############################</echo>
+        <echo>###   Compiling VIL UI   ###</echo>
+        <echo>############################</echo>
+        <ant dir="${home.vil.ui.dir}" antfile="${build.script.name}" />
+       
+        <echo>#################################</echo>
+        <echo>###  Compiling Template Core  ###</echo>
+        <echo>#################################</echo>
+        <ant dir="${home.template.core.dir}" antfile="${build.script.name}" />
+       
+        <echo>#################################</echo>
+        <echo>###   Compiling Template UI   ###</echo>
+        <echo>#################################</echo>
+        <ant dir="${home.template.ui.dir}" antfile="${build.script.name}" />
+       
+        <echo>###########################################</echo>
+        <echo>###  Compiling Instantiator Core Tests  ###</echo>
+        <echo>###########################################</echo>
+        <ant dir="${home.instantiatorCore.tests.dir}" antfile="${build.script.name}" />
+        
+        <echo>##################################</echo>
+        <echo>###  Compiling Template Tests  ###</echo>
+        <echo>##################################</echo>
+        <ant dir="${home.template.tests.dir}" antfile="${build.script.name}" />
+        
+        <echo>#############################</echo>
+        <echo>###  Compiling VIL Tests  ###</echo>
+        <echo>#############################</echo>
+        <ant dir="${home.vil.tests.dir}" antfile="${build.script.name}" />
+        
+        <echo>#############################################</echo>
+        <echo>###   Compiling Java Instantiator Tests   ###</echo>
+        <echo>#############################################</echo>
+        <ant dir="${home.instantiator.java.test.dir}" antfile="${build.script.name}" />
+        
+	</target>
+	
+	<target name="instrument">
+		<emma enabled="true" verbosity="verbose">
+			<instr destdir="${coverage.instr.dir}" metadatafile="${coverage.results.dir}/metadata.emma" mode="fullcopy" >
+				<filter includes="*de.uni_hildesheim.sse*"/>
+				<filter excludes="*Activator*"/>
+				<filter excludes="*AllTests*"/>
+				<filter excludes="de.uni_hildesheim.sse.parser.antlr.internal.*"/>
+				<filter excludes="de.uni_hildesheim.sse.vil.templatelang.parser.antlr.internal.*"/>
+				<instrpath>
+				    <!-- disabled UI and legacy -->
+					<fileset dir="${home.instantiator.copy.core.dir}/${build.jar.dir}/" includes="**/*.jar" />
+					<fileset dir="${home.instantiatorCore.dir}/${build.jar.dir}/" includes="**/*.jar" />
+					<fileset dir="${home.instantiatorCore.tests.dir}/${build.jar.dir}/" includes="**/*.jar" />
+					<fileset dir="${home.instantiator.java.dir}/${build.jar.dir}/" includes="**/*.jar" />
+					<fileset dir="${home.instantiator.java.test.dir}/${build.jar.dir}/" includes="**/*.jar" />
+					<fileset dir="${home.instantiator.velocityLib.dir}/${build.jar.dir}/" includes="**/*.jar" />
+					<fileset dir="${home.instantiator.velocity.dir}/${build.jar.dir}/" includes="**/*.jar" />
+                    <fileset dir="${home.vil.expressions.core.dir}/${build.jar.dir}/" includes="**/*.jar" />
+					<fileset dir="${home.vil.core.dir}/${build.jar.dir}/" includes="**/*.jar" />
+					<fileset dir="${home.vil.tests.dir}/${build.jar.dir}/" includes="**/*.jar" />
+                    <fileset dir="${home.template.core.dir}/${build.jar.dir}/" includes="**/*.jar" />
+					<fileset dir="${home.template.tests.dir}/${build.jar.dir}/" includes="**/*.jar" />
+				</instrpath>
+			</instr>
+		</emma>
+	</target>
+	
+	<target name="prepareTestEclipse" if="${unzipNewEclipse}">
+		<delete dir="${test.eclipse.name}"/>
+		<mkdir dir="${test.eclipse.name}"/>
+		<mkdir dir="${test.eclipse.workspace.dir}"/>
+		<unzip src="${test.eclipse.zip}" dest="${test.eclipse.name}"/>
+	</target>
+	
+	<target name="copy.to.eclipse">
+		<condition property="test.eclipse.path" value="${basedir}/${test.eclipse.name}">
+			<istrue value="${unzipNewEclipse}"/>
+		</condition>
+		<condition property="test.eclipse.path" value="${alternative.test.eclipse.dir}">
+			<isfalse value="${unzipNewEclipse}"/>
+		</condition>
+		<antcall target="prepareTestEclipse"/>
+		
+        <!-- Copy needed plug-ins and libaries to test eclipse -->
+		<copy todir="${test.eclipse.path}/plugins" failonerror="true" overwrite="true">
+			<fileset dir="${coverage.instr.dir}/lib"/>
+            <!-- Model -->
+            <fileset dir="${home.utils.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <fileset dir="${home.model.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <fileset dir="${home.model.tests.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <!-- IVML Parser -->
+            <fileset dir="${home.dslCore.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <fileset dir="${home.ivml.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <fileset dir="${home.ivml.tests.dir}/${build.jar.dir}" includes="**/*.jar" />
+		</copy>
+	</target>
+	
+	<target name="coreTestEMMA" depends="instrument, copy.to.eclipse">
+		<property name="eclipse-home" value="${test.eclipse.path}"/>
+		<!-- Instantiator Core test -->
+        <ant target="core-test" antfile="plugins/${test.eclipse.testFW.dir}/library.xml" dir="${test.eclipse.path}">
+		  <property name="data-dir" value="${test.eclipse.workspace.dir}"/>
+		  <property name="plugin-name" value="${test.plugin.instantiation}"/>
+		  <property name="classname" value="${test.suite.instantiation}"/>
+		  <property name="vmargs" value="-Dbaz=true"/>
+		  <property name="extraVMargs" value="-DinstantiatorCore.testdata.home=${home.instantiatorCore.tests.dir}/testdata -Demma.coverage.out.file=${basedir}/${coverage.results.dir}/${ant.project.name}.emma -Dosgi.dev=${emma.path}/emma.jar" />
+		  <property name="os" value="win32"/>
+		  <property name="ws" value="win32"/>
+		  <property name="arch" value="x86"/>
+		  <property name="timeout" value="240000"/>
+		</ant>
+        <!-- buildlang test -->
+        <ant target="core-test" antfile="plugins/${test.eclipse.testFW.dir}/library.xml" dir="${test.eclipse.path}">
+		  <property name="data-dir" value="${test.eclipse.workspace.dir}"/>
+		  <property name="plugin-name" value="${test.plugin.vil}"/>
+		  <property name="classname" value="${test.suite.vil}"/>
+		  <property name="vmargs" value="-Dbaz=true"/>
+		  <property name="extraVMargs" value="-Dvil.buildlang.testdata.home=${home.vil.tests.dir}/testdata -Demma.coverage.out.file=${basedir}/${coverage.results.dir}/${ant.project.name}.emma -Dosgi.dev=${emma.path}/emma.jar" />
+		  <property name="os" value="win32"/>
+		  <property name="ws" value="win32"/>
+		  <property name="arch" value="x86"/>
+		  <property name="timeout" value="240000"/>
+		</ant>
+        <!-- templatelang test -->
+        <ant target="core-test" antfile="plugins/${test.eclipse.testFW.dir}/library.xml" dir="${test.eclipse.path}">
+		  <property name="data-dir" value="${test.eclipse.workspace.dir}"/>
+		  <property name="plugin-name" value="${test.plugin.template}"/>
+		  <property name="classname" value="${test.suite.template}"/>
+		  <property name="vmargs" value="-Dbaz=true"/>
+		  <property name="extraVMargs" value="-Dvil.templatelang.testdata.home=${home.template.tests.dir}/testdata -Demma.coverage.out.file=${basedir}/${coverage.results.dir}/${ant.project.name}.emma -Dosgi.dev=${emma.path}/emma.jar" />
+		  <property name="os" value="win32"/>
+		  <property name="ws" value="win32"/>
+		  <property name="arch" value="x86"/>
+		  <property name="timeout" value="240000"/>
+		</ant>
+        <!-- Java Instantiation test -->
+        <ant target="core-test" antfile="plugins/${test.eclipse.testFW.dir}/library.xml" dir="${test.eclipse.path}">
+		  <property name="data-dir" value="${test.eclipse.workspace.dir}"/>
+		  <property name="plugin-name" value="${test.plugin.instantiation.java}"/>
+		  <property name="classname" value="${test.suite.instantiation.java}"/>
+		  <property name="vmargs" value="-Dbaz=true"/>
+		  <property name="extraVMargs" value="-Dinstantiator.java.testdata.home=${home.instantiator.java.test.dir}/testdata -Demma.coverage.out.file=${basedir}/${coverage.results.dir}/${ant.project.name}.emma -Dosgi.dev=${emma.path}/emma.jar" />
+		  <property name="os" value="win32"/>
+		  <property name="ws" value="win32"/>
+		  <property name="arch" value="x86"/>
+		  <property name="timeout" value="240000"/>
+		</ant>
+	</target>
+	
+	<target name="emmaReport" depends="coreTestEMMA">
+		<emma enabled="true" verbosity="verbose">
+			<report>
+				<property name="report.html.out.encoding" value="UTF-8"/>
+				<sourcepath>
+                    <pathelement path="${home.instantiator.copy.core.dir}/src/"/>
+					<pathelement path="${home.instantiatorCore.dir}/src/"/>
+					<pathelement path="${home.instantiatorCore.tests.dir}/src/"/>
+					<pathelement path="${home.instantiator.copy.java.dir}/src/"/>
+					<pathelement path="${home.instantiator.java.dir}/src/"/>
+					<pathelement path="${home.instantiator.java.test.dir}/src/"/>
+                    <pathelement path="${home.instantiator.velocity.dir}/src/"/>
+                    <pathelement path="${home.vil.expressions.core.dir}/src/"/>
+                    <pathelement path="${home.vil.expressions.core.dir}/src-gen/"/>
+                    <pathelement path="${home.vil.expressions.core.dir}/xtend-gen/"/>
+                    <pathelement path="${home.vil.core.dir}/src/"/>
+					<pathelement path="${home.vil.core.dir}/src-gen/"/>
+					<pathelement path="${home.vil.core.dir}/xtend-gen/"/>
+					<pathelement path="${home.vil.tests.dir}/src/"/>
+					<pathelement path="${home.template.core.dir}/src/"/>
+					<pathelement path="${home.template.tests.dir}/src/"/>
+				</sourcepath>
+		        <fileset dir="${coverage.results.dir}" >
+		          <include name="*.emma" />
+		        </fileset>
+
+		        <xml outfile="${coverage.results.dir}/coverage.xml" depth="method"/>
+		        <html outfile="${coverage.results.dir}/coverage.html" />
+		      </report>
+	    </emma>
+	</target> 
+	
+	<target name="test" depends="emmaReport">
+		<!-- Gather Junit results -->
+		<copy todir="junitResults" failonerror="true" overwrite="true">
+			<fileset dir="${test.eclipse.path}/results/">
+				<include name="**/*.xml" />
+			</fileset>
+		</copy>
+	</target>		
+	
+	<!-- Creates Javadoc -->
+  <target name="javadoc">
+    <javadoc packagenames="de.*" 
+		private="true"
+		defaultexcludes="yes"
+		destdir="${doc.dir}"
+		author="true"
+		version="true"
+		use="true"
+		Encoding="${javadoc.encoding}"
+		windowtitle="${ant.project.name} API">
+		<fileset dir="${home.instantiator.copy.core.dir}/src/">
+			<exclude name="**/*Activator.java"/>
+		</fileset>
+		<fileset dir="${home.instantiatorCore.dir}/src/">
+			<exclude name="**/*Activator.java"/>
+		</fileset>
+		<fileset dir="${home.instantiator.copy.java.dir}/src/">
+			<exclude name="**/*Activator.java"/>
+		</fileset>
+		<fileset dir="${home.instantiator.velocity.dir}/src/">
+			<exclude name="**/*Activator.java"/>
+		</fileset>
+		<fileset dir="${home.instantiator.xvcl.dir}/src/">
+			<exclude name="**/*Activator.java"/>
+		</fileset>
+			<doctitle><![CDATA[<h1>${ant.project.name}</h1>]]></doctitle>
+		<bottom><![CDATA[<i>Copyright &#169; 2012 - 2013 SSE. All Rights Reserved.</i>]]></bottom>
+    </javadoc>
+  </target>
+	
+	<target name="all" depends="init, compile, test, javadoc"/>
+</project>

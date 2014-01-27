@@ -1,0 +1,5 @@
+-> main(Project, Project, Configuration) with (<project>, <project>, <config>)
+    fa <- build.xml
+    -> text(FileArtifact) with (build.xml) = <text>
+    -> matches(Text, String) with (<text>, (?s).*message.*) = true
+    matches <- true

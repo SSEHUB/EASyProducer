@@ -1,0 +1,21 @@
+project FailingTest {
+
+//attribute Integer meta to FailingTest;
+
+    compound C {
+    
+            Boolean receivingAgainstGoodsInLine;
+            
+            Boolean mandatoryGoodsInLineConfirmation;
+            
+            mandatoryGoodsInLineConfirmation == true implies receivingAgainstGoodsInLine == true;
+         
+    }
+    
+    setOf(C) c1;
+    
+    c1 == {{mandatoryGoodsInLineConfirmation = true, receivingAgainstGoodsInLine = false}};    
+    
+    //C c2;
+    //c2 = {mandatoryGoodsInLineConfirmation = true, receivingAgainstGoodsInLine = false};    
+}

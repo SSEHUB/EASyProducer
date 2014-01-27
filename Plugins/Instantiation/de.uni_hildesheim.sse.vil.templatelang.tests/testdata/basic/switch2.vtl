@@ -1,0 +1,10 @@
+template switch1(Configuration config, Artifact target) {
+
+    def main(Configuration config, Artifact target) {
+        switch(target.name()) {
+            "a" : "a1",
+            default : "a1"
+        }
+    }
+
+}

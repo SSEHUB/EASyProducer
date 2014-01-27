@@ -1,0 +1,12 @@
+vilScript simpleRules3 () {
+
+    precompile() = : {
+    }
+
+    compile() = : precompile() {
+    }
+
+    main() = : compile() {
+    }
+
+}

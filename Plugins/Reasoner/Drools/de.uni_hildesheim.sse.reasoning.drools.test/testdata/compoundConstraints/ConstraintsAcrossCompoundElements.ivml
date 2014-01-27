@@ -1,0 +1,29 @@
+project ConstraintsAcrossCompoundElements {
+
+    compound A {
+        Integer i1;
+        Integer i2;
+        Integer i3;
+    }
+    
+    
+    compound B {
+        Integer i4;
+        Integer i5;
+        Integer i6;
+    
+    }
+    
+    A a1;
+    B b1;
+    
+    a1 = {i1 = 10, i2 = 15, i3 = 20};
+    b1 = {i4 = 12, i5 = 13, i6 = 18};    
+    
+    a1.i2 > b1.i6;
+    
+    
+
+
+
+}

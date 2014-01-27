@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProductLineProject id="d6557228-8702-4b35-91da-30e586aa2452" name="PL_YMS_Platform" version="0" location="PL_YMS_Platform">
+	<predecessors>
+	</predecessors>
+	<successors>
+	</successors>
+	<instantiators>
+		<entity engine="VelocityTransformatorEngine" originid="d6557228-8702-4b35-91da-30e586aa2452" paths="C:\Kroeher\Eclipse SSE\runtime-EclipseApplication\PL_YMS_Platform//;//;//C:\Kroeher\Eclipse SSE\runtime-EclipseApplication\PL_YMS_Platform" inheritence="PL_YMS_Platform//;//;//" file="" />
+	</instantiators>
+	<reasoners>
+		<entity timeout="0" />
+	</reasoners>
+	<copy>
+		<entity copyID="de.uni_hildesheim.sse.easy.instantiator.copy.core.normal" />
+	</copy>
+</ProductLineProject>

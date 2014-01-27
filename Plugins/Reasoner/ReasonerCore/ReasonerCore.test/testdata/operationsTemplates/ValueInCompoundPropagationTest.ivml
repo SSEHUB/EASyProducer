@@ -1,0 +1,20 @@
+project ValueInCompoundPropagationTest {
+
+    compound C {
+    Integer intA;
+    Integer intB;
+    }
+    
+    compound C2 {
+        Integer intA = 5;
+        Integer intB;
+        C2.intA == 5 implies C2.intB == 5;
+    }
+    
+    C2 cmp2; 
+    
+    C cmp;
+    //cmp.intA == 3 + 2;
+    cmp.intB = 2;
+    cmp.intB == 2 implies cmp.intA == 5;
+}

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProductLineProject id="95e1185e-b6fd-4949-b759-4b35bcced9ff" name="PL_1" version="0" location="PL_1">
+	<predecessors>
+		<entity id="d1d596ed-cc30-431a-bbd0-d13675ab1068" name="PL_2" version="0" location="PL_2" />
+	</predecessors>
+	<successors>
+		<entity id="b2fc54da-2f7b-4a51-9ad6-3023d424e11a" name="test1" version="0" location="test1" />
+	</successors>
+	<instantiators>
+	</instantiators>
+	<reasoners>
+		<entity timeout="0" />
+	</reasoners>
+	<copy>
+		<entity copyID="de.uni_hildesheim.sse.easy.instantiator.copy.core.normal" />
+	</copy>
+</ProductLineProject>

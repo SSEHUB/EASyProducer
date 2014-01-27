@@ -1,0 +1,27 @@
+project valueValidation1 {
+
+   //  - Qualified names (type)
+   //  - Constraints outside compound
+   //  - No assign blocks
+
+   enum ContentType {text, movie, audio, picture};
+    
+   compound Content {
+        String name;
+        Integer number;        
+        ContentType type;
+        Boolean isValid; 
+    }
+    
+    Content sampleContent;
+    
+    sampleContent.name = "Audio Content";
+    sampleContent.number = 10;
+    sampleContent.type = ContentType.audio;        
+    sampleContent.isValid = true;
+    
+    //(Content.name == "AudioContent") implies (Content.number == 10);     
+    //(Content.type == ContentType.audio) implies (Content.isValid == true);
+    
+
+}

@@ -1,0 +1,628 @@
+grammar de.uni_hildesheim.sse.Ivml hidden(WS, ML_COMMENT, SL_COMMENT)
+
+generate ivml "http://www.uni_hildesheim.de/sse/Ivml"
+
+import "http://www.eclipse.org/emf/2002/Ecore" as ecore
+
+VariabilityUnit:
+	{VariabilityUnit}
+	projects+=Project*;
+
+Project:
+	'project' name=Identifier 
+	'{'
+     //#> Interfaces
+      version=VersionStmt?
+      imports+=ImportStmt*
+      conflicts+=ConflictStmt*
+	  interfaces += InterfaceDeclaration*
+	  //#< Interfaces
+	  contents=ProjectContents
+	'}' ';'?
+	;
+
+ProjectContents:
+	{ProjectContents} // ensure object creation
+ 	(   
+ 	    // in case of new elements adjust Utils.split
+        elements+=Typedef 
+		| elements+=VariableDeclaration 
+		//#> EvalFreeze
+		| elements+=Freeze 
+		| elements+=Eval 
+		//#< EvalFreeze
+		| elements+=ExpressionStatement
+		//#> Compounds
+		| elements+=AttributeTo
+		//#< Compounds
+		| elements+=OpDefStatement
+		| elements+=AttrAssignment
+	)*
+;
+
+Typedef:
+	tEnum=TypedefEnum 
+	| tCompound=TypedefCompound 
+	| tMapping=TypedefMapping
+;
+
+TypedefEnum: 
+	'enum' 
+	name=Identifier 
+	'{' 
+		literals+=TypedefEnumLiteral 
+		(
+			','
+			literals+=TypedefEnumLiteral
+		)*
+	'}'
+	constraint=TypedefConstraint?
+	';'
+	;
+
+TypedefEnumLiteral: 
+	name=Identifier 
+	(
+		'=' value = NumValue
+	)?
+	;	
+
+TypedefCompound: 
+    'compound' 
+    name=Identifier 
+    //#> Compounds
+    (
+    	'refines' 
+    	super=Identifier
+    )? 
+    //#< Compounds
+    '{'
+    	(elements+=VariableDeclaration 
+    	    | elements+=ExpressionStatement 
+    	    | elements+=AttrAssignment
+    	)*
+    '}' ';'?
+	;
+
+AttrAssignment:
+    'assign' '(' parts+=AttrAssignmentPart (',' parts+=AttrAssignmentPart)* ')' 'to' '{'
+        (elements+=VariableDeclaration | elements+=ExpressionStatement | elements+=AttrAssignment)+
+    '}' ';'?
+;
+
+AttrAssignmentPart:
+    name=Identifier '=' value=LogicalExpression
+;
+	
+TypedefMapping: 
+	'typedef' 
+	newType=Identifier 
+	type=Type 
+	constraint=TypedefConstraint?
+	';'
+	;	
+
+TypedefConstraint:
+	'with' 
+	'('
+		expressions += Expression 
+		(
+			',' 
+			expressions += Expression
+		)*
+	')'
+	;
+
+VariableDeclaration : 
+	type=Type 
+	decls+=VariableDeclarationPart 
+	(
+		',' 
+		decls+=VariableDeclarationPart
+	)*
+	';'
+	;
+
+VariableDeclarationPart :	
+	name=Identifier ('=' default=Expression)?
+	;	
+
+BasicType : 
+	type='Integer' 
+	| type='Real' 
+	| type='Boolean' 
+	| type='String'
+    | type='Constraint'
+	;
+
+Type : 
+	type=BasicType 
+	| id=QualifiedName
+	| derived=DerivedType
+	;	
+
+// just return string
+NumValue :	
+	val=NUMBER
+	;
+	
+QualifiedName :	
+	(
+		qName+=Identifier 
+		qName+='::' 
+		(
+			qName+=Identifier 
+			qName+='::'
+		)*
+	)?
+	qName+=Identifier
+	;
+
+AccessName:
+	(aName+='.' aName+=Identifier)+
+;
+
+Value :	
+	nValue = NumValue
+	| sValue = STRING
+	| qValue = QualifiedName
+	| bValue = ('true' | 'false')
+	//#> Compounds
+	| ('refby' '(' rValue=Identifier ')')
+	| nullValue = 'null'
+	//#< Compounds
+	;
+	
+DerivedType : 
+	(
+		op='setOf' 
+		| op='sequenceOf'
+		//#> Compounds
+		| op='refTo'
+		//#< Compounds
+	) 
+	'(' 
+	type=Type 
+	')' 
+	;
+
+//#> DSL
+// --------------------- Extension: DSL -----------------------------
+
+DslContext:
+	// currently most simple notation for DSL embedding, unclear if needed at all
+	'DSL' 
+	'(' stop=STRING ','
+		escape=STRING ','
+		command=STRING
+	')'
+	dsl=DSL_CONTENT
+	;	
+//#< DSL
+
+//#> Compounds
+// --------------------- Extension: Compounds ----------------------
+
+AttributeTo :
+    'attribute'
+	attributeType=Type
+	
+	attributeDecl=VariableDeclarationPart
+	'to'
+	names+=Identifier (',' names += Identifier)*
+	';'
+	;
+//#< Compounds
+
+//#> EvalFreeze
+// --------------------- Extension: EvalFreeze ---------------------
+
+Freeze: 
+	'freeze' '{'
+	names+=(FreezeStatement)+
+	'}' ('but' but=FreezeButList)? ';'?
+	; 
+	
+FreezeStatement:
+	name=QualifiedName 
+	access=AccessName?
+	';'	
+;
+
+FreezeButList:
+	'(' list+=FreezeButExpression (',' list+=FreezeButExpression)* ')'
+;
+
+FreezeButExpression:
+	name=QualifiedName
+	access=AccessName?
+	wildcard='*'?
+;
+	
+Eval: 
+	'eval' 
+    '{'
+    nested+=Eval*
+    statements+=ExpressionStatement+ 
+    '}' ';'?
+	;	
+	
+//#< EvalFreeze
+ 
+ 
+//#> Interfaces
+// ---------------------- Extension: Interfaces ---------------------
+
+InterfaceDeclaration :	
+	'interface' 
+	name=Identifier 
+	'{'
+		exports+=Export*
+	'}'';'?
+	;
+		
+Export :
+	'export' names+=Identifier (',' names+=Identifier)* ';'
+;		
+	
+ImportStmt: 
+	'import' 
+	name=Identifier ('::' interface=Identifier)?
+	(
+	  'with' '('
+	  versions+=VersionedId
+	  (',' versions+=VersionedId)*
+	  ')'
+	)?
+	';'
+	;
+
+ConflictStmt: 
+	'conflicts' 
+	name=Identifier
+	(
+	  'with' '('
+	  conflicts+=VersionedId
+	  (',' conflicts+=VersionedId)*
+	  ')'
+	)?
+	';'
+	;
+	
+VersionedId:
+    name=Identifier '.version'
+    op = VersionOperator
+	version=VERSION
+	;
+	
+VersionOperator:
+    '=='
+    |'>'
+    |'<'
+    |'>='
+    |'<='
+    ;
+		
+VersionStmt: 
+	'version'
+	version=VERSION
+	';'
+	;
+
+//#< Interfaces
+
+//------------------------------------ OCL (excerpt) ----------------------------	
+
+OpDefStatement:
+	'def' result=Type id=Identifier 
+	'(' param=OpDefParameterList ')' 
+	'=' impl=Expression
+	';'
+;
+
+OpDefParameterList:
+	{OpDefParameterList}
+    (list+=OpDefParameter
+	(
+		',' 
+		list+=OpDefParameter
+	)*)?
+;
+
+OpDefParameter:
+	type=Type id=Identifier ('=' val=Expression)?
+;
+
+// do not rename this rule (fragment parsing)
+ExpressionStatement:
+	expr=Expression 
+	';'
+	;
+
+// do not rename this rule (fragment parsing)	
+Expression:	
+	let=LetExpression
+	|	expr=ImplicationExpression
+	|   collection=CollectionInitializer
+	|   dsl=DslContext
+	;
+
+LetExpression:	
+	'let' 
+	type=Type name=Identifier // type is optional in OCL - IVML adjustment
+	'=' 
+	valueExpr=Expression 
+	'in' 
+	subExpr=Expression
+	;
+
+AssignmentExpression:
+    left=LogicalExpression
+    right+=AssignmentExpressionPart?
+;
+
+AssignmentExpressionPart:
+    op=AssignmentOperator
+    (ex=LogicalExpression | collection=CollectionInitializer)
+;
+
+AssignmentOperator:
+    '=' // IVML addition
+    ;
+	
+ImplicationExpression:
+    left=AssignmentExpression
+    right+=ImplicationExpressionPart*
+    ;
+
+ImplicationExpressionPart:
+    op=ImplicationOperator
+    ex=AssignmentExpression    
+    ;
+
+ImplicationOperator:
+    'implies'
+    |'iff'  // IVML addition
+    ;
+
+LogicalExpression:	
+	left=EqualityExpression 
+	right+=LogicalExpressionPart*
+	;	
+
+LogicalExpressionPart:
+	op=LogicalOperator 
+	ex=EqualityExpression
+;
+
+LogicalOperator:
+	'and'
+	|'or'
+	|'xor'
+	;
+
+EqualityExpression:   
+    left=RelationalExpression 
+    right=EqualityExpressionPart?
+    ;   
+
+EqualityExpressionPart:
+    op=EqualityOperator
+    (ex=RelationalExpression | collection=CollectionInitializer)
+;
+
+EqualityOperator:
+    '=='
+    |'<>'
+    |'!='
+    ;
+
+RelationalExpression:	
+	left=AdditiveExpression 
+	right=RelationalExpressionPart?
+	;	
+
+RelationalExpressionPart:
+	op=RelationalOperator
+	ex=AdditiveExpression
+;
+
+RelationalOperator:
+	'>'
+	|'<'
+	|'>='
+	|'<='
+	;
+
+AdditiveExpression:	
+	left=MultiplicativeExpression 
+	right+=AdditiveExpressionPart*
+	;
+
+AdditiveExpressionPart:
+	op=AdditiveOperator 
+	ex=MultiplicativeExpression
+;
+
+AdditiveOperator:
+	'+'
+	|'-'
+	;
+	
+MultiplicativeExpression:	
+	left=UnaryExpression 
+	right=MultiplicativeExpressionPart?
+	;
+
+MultiplicativeExpressionPart:
+	op=MultiplicativeOperator
+	expr=UnaryExpression
+;
+
+MultiplicativeOperator:
+	'*'
+	|'/'
+	;
+
+UnaryExpression:	
+	op = UnaryOperator?
+	expr=PostfixExpression
+	;
+
+UnaryOperator:
+	'not'
+	|'-'
+	;	
+
+PostfixExpression:	
+	(call=FeatureCall (fCalls+=Call)* access=ExpressionAccess?) // IVML addition, call primitive operations
+	| (left=PrimaryExpression)
+	;
+
+Call: // IVML: "lambda"-expression with apply operation set->apply(t,r=0|max(t,r))
+	'.' call=FeatureCall 
+	| '->' setOp=SetOp 
+	| '[' arrayEx=Expression ']' // IVML addition to OCL
+;
+
+FeatureCall:	
+	name=Identifier 
+	'(' 
+	param=ActualParameterList? 
+	')'
+	;
+	
+SetOp:
+	name=Identifier 
+	'(' 
+		// set operation only for quantors
+		decl=Declarator 
+		declEx=Expression?
+	')'
+	;
+
+Declarator:
+	decl+=Declaration (';' decl+=Declaration)* '|'
+	;
+
+Declaration:	
+	id+=Identifier (',' id+=Identifier)*
+	(':' type=Type)?
+	('=' init=Expression)?
+	;	
+	
+ActualParameterList:	
+	param+=Expression 
+	(
+		',' 
+		param+=Expression
+	)*
+	;
+
+ExpressionAccess:
+	'.' name=Identifier
+	calls+=Call*
+	access=ExpressionAccess?
+;
+
+PrimaryExpression:	
+	(lit=Literal
+//	|	call=FeatureCall // unclear on what to execute (in OCL this is the context)
+	|	'(' ex=Expression ')'
+	|	ifEx=IfExpression
+	|   'refBy' '(' refName=Identifier ')')
+	calls+=Call*
+	access=ExpressionAccess?
+	;
+
+CollectionInitializer:	
+	{CollectionInitializer}
+	type=QualifiedName? // not OclCollection as otherways Collections are excluded
+	'{' 
+	init=ExpressionListOrRange? 
+	'}'
+	;
+ 
+ExpressionListOrRange:	// adjust values to Expressions
+	list+=ExpressionListEntry 
+	(',' list+=ExpressionListEntry)* 
+//	|	'..' rangeEndEx=ExpressionListEntry // IVML change to OCL
+	;
+	
+ExpressionListEntry:
+	(name=Identifier ('.' attrib=Identifier)? '=')? // for compound initialization (IVML extension to OCL)
+	(value=LogicalExpression | collection=CollectionInitializer)
+	;	
+
+Literal:	
+	//Identifier | numValue
+	val=Value
+	;
+
+IfExpression:	
+	'if' 
+	ifEx=Expression 
+	'then' 
+	thenEx=Expression 
+	'else' 
+	elseEx=Expression 
+	'endif'
+	;
+	
+// unify distinct terminals -> IdentifierValueConverter
+// never allow identifiers starting with $ -> Reasoner name prefixes
+Identifier:
+    ID | VERSION | EXPONENT
+;
+
+// --------------------- Terminals ----------------------------------
+   
+// otherwise we would have to write 0 . 5 instead of 0.5
+terminal VERSION:
+	'v' ('0'..'9')+ ('.' ('0'..'9')+)*
+	;
+
+// adjust de.uni_hildesheim.sse.model.validation.IvmlIdentifierCheck
+// never allow identifiers starting with $ -> Reasoner name prefixes
+terminal ID: 
+	('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'_'|'0'..'9')*
+	;
+
+terminal NUMBER:
+    '-'?
+    (('0'..'9')+ ('.' ('0'..'9')* EXPONENT?)?
+    |   '.' ('0'..'9')+ EXPONENT?
+    |   ('0'..'9')+ EXPONENT)
+    ;
+
+terminal EXPONENT: // just return a string
+    ('e'|'E') ('+'|'-')? ('0'..'9')+
+;
+			
+terminal STRING	: 
+	'"' ( '\\' ('b'|'t'|'n'|'f'|'r'|'u'|'"'|"'"|'\\') | !('\\'|'"') )* '"' |
+	"'" ( '\\' ('b'|'t'|'n'|'f'|'r'|'u'|'"'|"'"|'\\') | !('\\'|"'") )* "'"
+	; 
+
+terminal DSL_CONTENT: 
+	'%' -> 'DSL%'
+	;
+
+// do not change the name of this terminal!!! -> comment recognition
+terminal ML_COMMENT: 
+	'/*' -> '*/'
+	;
+
+// do not change the name of this terminal!!! -> comment recognition
+terminal SL_COMMENT: 
+	'//' !('\n'|'\r')* ('\r'? '\n')?
+	;
+
+// do not change the name of this terminal!!! -> comment recognition
+terminal WS: 
+	(' '|'\t'|'\r'|'\n')+
+	;
+
+terminal ANY_OTHER: 
+	.
+	;

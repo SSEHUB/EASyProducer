@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="IntegrationAll" default="all" basedir=".">	
+	<property file="${user.home}/global-build.properties"/>
+	<path id="emma.lib" >    		
+		<pathelement location="${emma.path}/emma.jar" />	
+		<pathelement location="${emma.path}/emma_ant.jar" />	
+	</path>
+	<taskdef resource="emma_ant.properties" classpathref="emma.lib" />
+
+	<target name="init">
+		<!-- Delete generated folders -->
+		<delete dir="junitResults"/>
+		<delete dir="${coverage.base.dir}"/>
+		<delete dir="${doc.dir}"/>
+		
+		<!-- Create folders -->
+		<mkdir dir="junitResults"/>
+		<mkdir dir="${coverage.base.dir}"/>
+		<mkdir dir="${coverage.instr.dir}"/>
+		<mkdir dir="${coverage.results.dir}"/>
+		<mkdir dir="${doc.dir}"/>
+	</target>
+	
+	<target name="compile">
+		<echo>#####################################</echo>
+        <echo>###  Compiling Integration Common ###</echo>
+        <echo>#####################################</echo>
+        <ant dir="de.uni_hildesheim.sse.integration.common" antfile="${build.script.name}" />
+		
+        <echo>######################################</echo>
+        <echo>###  Compiling Integration Eclipse ###</echo>
+        <echo>######################################</echo>
+        <ant dir="de.uni_hildesheim.sse.integration.common.eclipse" antfile="${build.script.name}" /> 
+		
+        <echo>############################################</echo>
+        <echo>###  Compiling Integration Eclipse Tests ###</echo>
+        <echo>############################################</echo>
+        <ant dir="de.uni_hildesheim.sse.integration.common.eclipse.tests" antfile="${build.script.name}" />
+		
+        <echo>##########################################</echo>
+        <echo>###  Compiling Integration Common Imple###</echo>
+        <echo>##########################################</echo>
+        <ant dir="de.uni_hildesheim.sse.integration.common.impl" antfile="${build.script.name}" />
+		
+        <echo>###########################################</echo>
+        <echo>###  Compiling Integration Common Tests ###</echo>
+        <echo>###########################################</echo>
+        <ant dir="de.uni_hildesheim.sse.integration.common.tests" antfile="${build.script.name}" />
+    </target>
+	
+	<target name="instrumment">
+		<echo>#########################</echo>
+        <echo>###  Instrummentation ###</echo>
+        <echo>#########################</echo>
+        <emma enabled="true" verbosity="verbose">
+			<instr destdir="${coverage.instr.dir}" metadatafile="${coverage.results.dir}/metadata.emma" mode="fullcopy" >
+				<filter includes="*de.uni_hildesheim.sse*"/>
+				<filter excludes="*Activator*"/>
+				<filter excludes="*AllTests*"/>
+				<instrpath>
+					<fileset dir="${home.integration.common.dir}/${build.jar.dir}/" includes="**/*.jar" />
+					<fileset dir="${home.integration.common.eclipse.dir}/${build.jar.dir}/" includes="**/*.jar" />
+					<fileset dir="${home.integration.common.eclipse.tests.dir}/${build.jar.dir}/" includes="**/*.jar" />
+					<fileset dir="${home.integration.common.impl.dir}/${build.jar.dir}/" includes="**/*.jar" />
+					<fileset dir="${home.integration.common.tests.dir}/${build.jar.dir}/" includes="**/*.jar" />
+				</instrpath>
+			</instr>
+	    </emma>
+	</target>
+	
+	<target name="prepareTestEclipse" if="${unzipNewEclipse}">
+		<delete dir="${test.eclipse.name}"/>
+		<mkdir dir="${test.eclipse.name}"/>
+		<mkdir dir="${test.eclipse.workspace.dir}"/>
+		<unzip src="${test.eclipse.zip}" dest="${test.eclipse.name}"/>
+	</target>
+	
+	<target name="copy.to.eclipse">
+		<condition property="test.eclipse.path" value="${basedir}/${test.eclipse.name}">
+			<istrue value="${unzipNewEclipse}"/>
+		</condition>
+		<condition property="test.eclipse.path" value="${alternative.test.eclipse.dir}">
+			<isfalse value="${unzipNewEclipse}"/>
+		</condition>
+		<antcall target="prepareTestEclipse"/>
+		
+		<copy todir="${test.eclipse.path}/plugins" failonerror="true" overwrite="true">
+			<fileset dir="${coverage.instr.dir}/lib"/>
+			<fileset dir="${home.model.dir}/build/jar"/>
+			<fileset dir="${home.integration.common.tests.dir}/build/jar"/>
+			<fileset dir="${home.ivml.dir}/build/jar"/>
+		</copy>
+	</target>
+	
+	<target name="coreTestEMMA" depends="instrumment, copy.to.eclipse">
+		<echo>#################</echo>
+        <echo>###  tESTING  ###</echo>
+        <echo>#################</echo>
+        <property name="eclipse-home" value="${test.eclipse.path}"/>
+		<ant target="core-test" antfile="plugins/${test.eclipse.testFW.dir}/library.xml" dir="${test.eclipse.path}">
+		  <property name="data-dir" value="${test.eclipse.workspace.dir} -clean"/>
+		  <property name="plugin-name" value="de.uni_hildesheim.sse.integration.common.tests"/>
+		  <property name="classname" value="de.uni_hildesheim.sse.integration.common.tests.AbstractTest"/>
+		  <property name="vmargs" value="-Dbaz=true"/>
+		  <property name="extraVMargs" value="-Demma.coverage.out.file=${basedir}/${coverage.results.dir}/${ant.project.name}.emma -Dosgi.dev=${emma.path}/emma.jar" />
+		  <property name="os" value="win32"/>
+		  <property name="ws" value="win32"/>
+		  <property name="arch" value="x86"/>
+		  <property name="timeout" value="240000"/>
+		</ant>
+	</target>
+	
+	<target name="emmaReport" depends="coreTestEMMA">
+		<emma enabled="true" verbosity="verbose">
+			<report>
+				<property name="report.html.out.encoding" value="UTF-8"/>
+				<sourcepath>
+					<pathelement path="de.uni_hildesheim.sse.integration.common/src/"/>
+					<pathelement path="de.uni_hildesheim.sse.integration.common.eclipse/src/"/>
+					<pathelement path="de.uni_hildesheim.sse.integration.common.eclipse.tests/src/"/>
+					<pathelement path="de.uni_hildesheim.sse.integration.common.impl/src/"/>
+					<pathelement path="de.uni_hildesheim.sse.integration.common.tests/src/"/>
+				</sourcepath>
+		        <fileset dir="${coverage.results.dir}" >
+		          <include name="*.emma" />
+		        </fileset>
+
+		        <xml outfile="${coverage.results.dir}/coverage.xml" depth="method"/>
+		        <html outfile="${coverage.results.dir}/coverage.html" />
+		      </report>
+	    </emma>
+	</target> 
+	
+	<target name="test" depends="emmaReport">
+		<!-- Gather Junit results -->
+		<copy todir="junitResults" failonerror="true" overwrite="true">
+			<fileset dir="${test.eclipse.path}/results/">
+				<include name="**/*.xml" />
+			</fileset>
+		</copy>
+	</target>		
+	
+	<!-- Creates Javadoc -->
+  <target name="javadoc" >
+    <javadoc packagenames="de.*" 
+		private="true"
+		defaultexcludes="yes"
+		destdir="${doc.dir}"
+		author="true"
+		version="true"
+		use="true"
+		Encoding="${javadoc.encoding}"
+		windowtitle="${ant.project.name} API">
+		<fileset dir="${home.integration.common.dir}/src">
+			<exclude name="**/*Activator.java"/>
+		</fileset>
+		<fileset dir="${home.integration.common.eclipse.dir}/src">
+			<exclude name="**/*Activator.java"/>
+		</fileset>
+		<fileset dir="${home.integration.common.impl.dir}/src">
+			<exclude name="**/*Activator.java"/>
+		</fileset>
+			<doctitle><![CDATA[<h1>${ant.project.name}</h1>]]></doctitle>
+		<bottom><![CDATA[<i>Copyright &#169; 2009 - 2012 SSE. All Rights Reserved.</i>]]></bottom>
+    </javadoc>
+  </target>
+	
+	<target name="all" depends="init, compile, javadoc"/>
+</project>

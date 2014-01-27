@@ -1,0 +1,20 @@
+project attributeAssignment {
+
+    version v0;
+    enum BindingTimes {compile, startup, runtime};
+    attribute BindingTimes bindingTime to attributeAssignment;
+    assign (bindingTime = BindingTimes.startup) to {
+        Integer myInt;
+    }
+    compound Test {
+        assign (bindingTime = BindingTimes.startup) to {
+            Integer myInt;
+            assign (bindingTime = BindingTimes.runtime) to {
+                Integer myInt2;
+                myInt2 > 3;
+            }
+        }
+    }
+
+    Test.myInt > 5;
+}

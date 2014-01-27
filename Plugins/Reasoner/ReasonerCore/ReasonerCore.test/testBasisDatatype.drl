@@ -1,0 +1,356 @@
+package de.uni_hildesheim.sse.reasoning.drools
+// Project - testBasisDatatypeimport java.util.List;
+import java.util.Set;
+import java.util.Arrays;
+import java.util.ArrayList;
+
+import function de.uni_hildesheim.sse.reasoning.drools.functions.IVMLFunctions.*
+
+
+
+function boolean isDefined(Object o) { 
+	return o != null;		
+}
+
+global java.util.ArrayList cList
+
+function boolean implies(boolean a, boolean b) { 
+boolean result = false;
+if (a && !b)
+	result = false;
+else
+	result = true;
+return result;
+ }
+
+declare Project
+@typesafe (false) 
+
+	intA : int
+	realA : double
+	boolA : Boolean
+	stringA : String
+	tempBool : Boolean
+	tempString : String
+	tempInt : int
+	tempReal : double
+	concatString : String
+	substrString : String
+	substiString : String
+	
+end
+
+
+rule " Config rule " 
+ agenda-group "Group Config"
+dialect "mvel"
+no-loop true
+lock-on-active true
+	when
+		P : Project()
+	then
+		modify(P) {tempInt = 0, stringA = "A string", realA = 2.0, tempString = "Another string", tempBool = true, tempReal = 0.0, boolA = false, intA = 1};
+System.out.println( "Project : " + P);
+ end 
+rule "Fact rule" 
+ agenda-group "Fact Config"
+dialect "mvel"
+no-loop true
+lock-on-active true
+	when
+		P : Project()
+	then
+		
+ end 
+rule "12"
+agenda-group "Group 0"
+dialect "mvel"
+no-loop true
+lock-on-active true
+when
+P : Project()
+then 
+	modify(P){tempBool = ( true )};update(P);
+end
+
+
+rule "13"
+agenda-group "Group 0"
+dialect "mvel"
+no-loop true
+lock-on-active true
+when
+P : Project()
+then 
+	modify(P){tempString = ( "Another string" )};update(P);
+end
+
+
+rule "14"
+agenda-group "Group 0"
+dialect "mvel"
+no-loop true
+lock-on-active true
+when
+P : Project()
+then 
+	modify(P){tempInt = ( 0 )};update(P);
+end
+
+
+rule "15"
+agenda-group "Group 0"
+dialect "mvel"
+no-loop true
+lock-on-active true
+when
+P : Project()
+then 
+	modify(P){tempReal = ( 0.0 )};update(P);
+end
+
+
+rule "76"
+agenda-group "Group 0"
+dialect "mvel"
+no-loop true
+lock-on-active true
+when
+P : Project()
+then 
+	modify(P){concatString = ( concat(P.stringA , P.tempString  ) )};update(P);
+end
+
+
+rule "77"
+agenda-group "Group 0"
+dialect "mvel"
+no-loop true
+lock-on-active true
+when
+P : Project()
+then 
+	modify(P){substrString = ( substring(P.stringA , 0 , 1  ) )};update(P);
+end
+
+
+rule "78"
+agenda-group "Group 0"
+dialect "mvel"
+no-loop true
+lock-on-active true
+when
+P : Project()
+then 
+	modify(P){substiString = ( substitutes(P.stringA , "A" , "s"  ) )};update(P);
+end
+
+
+rule "35"
+agenda-group "Group 1"
+dialect "mvel"
+no-loop true
+lock-on-active true
+ when
+
+
+P : Project(isDefined(P.tempBool) &&  (P.tempBool == true) )
+
+then
+modify(P){intA = min(P.intA , 4)};
+ update(P);
+end
+
+
+rule "36"
+agenda-group "Group 1"
+dialect "mvel"
+no-loop true
+lock-on-active true
+ when
+
+
+P : Project(isDefined(P.tempBool) &&  P.tempBool == true )
+
+then
+modify(P){intA = min(P.intA , 4)};
+ update(P);
+end
+
+
+rule "37"
+agenda-group "Group 1"
+dialect "mvel"
+no-loop true
+lock-on-active true
+ when
+
+
+P : Project(isDefined(P.tempBool) &&  P.tempBool == true )
+
+then
+modify(P){intA = max(P.intA , -1)};
+ update(P);
+end
+
+
+rule "38"
+agenda-group "Group 1"
+dialect "mvel"
+no-loop true
+lock-on-active true
+ when
+
+
+P : Project(isDefined(P.tempBool) &&  P.tempBool == true)
+
+then
+modify(P){intA = abs(P.intA)};
+ update(P);
+end
+
+
+rule "39"
+agenda-group "Group 1"
+dialect "mvel"
+no-loop true
+lock-on-active true
+ when
+
+
+P : Project(isDefined(P.tempBool) &&  P.tempBool == true )
+
+then
+modify(P){intA = mod(P.intA , 2)};
+ update(P);
+end
+
+
+rule "40"
+agenda-group "Group 1"
+dialect "mvel"
+no-loop true
+lock-on-active true
+ when
+
+
+P : Project(isDefined(P.tempBool) &&  P.tempBool == true )
+
+then
+modify(P){intA = mod(P.intA , 2.0)};
+ update(P);
+end
+
+
+rule "60"
+agenda-group "Group 1"
+dialect "mvel"
+no-loop true
+lock-on-active true
+ when
+
+
+P : Project(isDefined(P.tempBool) &&  P.tempBool == true )
+
+then
+modify(P){realA = min(P.realA , 4.0)};
+ update(P);
+end
+
+
+rule "61"
+agenda-group "Group 1"
+dialect "mvel"
+no-loop true
+lock-on-active true
+ when
+
+
+P : Project(isDefined(P.tempBool) &&  P.tempBool == true )
+
+then
+modify(P){realA = max(P.realA , 1.0)};
+ update(P);
+end
+
+
+rule "62"
+agenda-group "Group 1"
+dialect "mvel"
+no-loop true
+lock-on-active true
+ when
+
+
+P : Project(isDefined(P.tempBool) &&  P.tempBool == true )
+
+then
+modify(P){realA = min(P.realA , 4)};
+ update(P);
+end
+
+
+rule "63"
+agenda-group "Group 1"
+dialect "mvel"
+no-loop true
+lock-on-active true
+ when
+
+
+P : Project(isDefined(P.tempBool) &&  P.tempBool == true )
+
+then
+modify(P){realA = max(P.realA , 1)};
+ update(P);
+end
+
+
+rule "64"
+agenda-group "Group 1"
+dialect "mvel"
+no-loop true
+lock-on-active true
+ when
+
+
+P : Project(isDefined(P.tempBool) &&  P.tempBool == true)
+
+then
+modify(P){realA = abs(P.realA)};
+ update(P);
+end
+
+
+rule "65"
+agenda-group "Group 1"
+dialect "mvel"
+no-loop true
+lock-on-active true
+ when
+
+
+P : Project(isDefined(P.tempBool) &&  P.tempBool == true)
+
+then
+modify(P){realA = floor(P.realA)};
+ update(P);
+end
+
+
+rule "66"
+agenda-group "Group 1"
+dialect "mvel"
+no-loop true
+lock-on-active true
+ when
+
+
+P : Project(isDefined(P.tempBool) &&  P.tempBool == true)
+
+then
+modify(P){realA = round(P.realA)};
+ update(P);
+end
+
+

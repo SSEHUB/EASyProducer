@@ -1,0 +1,27 @@
+@indent(indentation = 4, additional = 1)
+template cocktailResModel(Configuration config, FileArtifact target) {
+	
+	// sortAlpha only for normalization in regression testing
+	
+	def main(Configuration config, FileArtifact target) {
+        '<?xml version=”1.0” encoding=”utf-8”>
+         <cocktail>
+             <resolution>'
+		for (DecisionVariable dv : config.variables().sortAlpha()) {
+			createCocktailResolution(dv);
+		}
+        '    </resolution>
+         </cocktail>'
+	}
+	
+	def createCocktailResolution(DecisionVariable variable) {
+	    //bindingTime=compile comes from Cocktail not IVML/VIL!
+	    if (variable.variables().size() > 0) {
+	        for (DecisionVariable dv : variable.variables().sortAlpha()) {
+                createCocktailResolution(dv);
+	        }
+	    } else {
+		    '<element resolves="${variable.getQualifiedName()}" value="${variable.getValue()}" bindingTime="compile"/>' | 8;
+		}
+	}
+}

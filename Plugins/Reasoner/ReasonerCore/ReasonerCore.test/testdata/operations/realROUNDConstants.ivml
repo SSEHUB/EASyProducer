@@ -1,0 +1,10 @@
+project realROUNDConstants {
+
+    round(2.8) == 3;
+    round(3.4) == 3;
+    round(-5.8) == -6;
+    round(-7.3) == -7;
+    round(10.5) == 11;
+    round(-10.5) == -10;
+
+}

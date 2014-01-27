@@ -1,0 +1,12 @@
+project booleanNOTVariables {
+
+    Boolean t;
+    Boolean f;
+    
+    t = true;
+    f = false;
+    
+    not(t) == false;
+    not(f) == true;    
+
+}

@@ -1,0 +1,41 @@
+project testComplexBasisDatatype {
+
+    //Vairable Declarations
+    Integer intA;
+    Integer intB;
+    Real realA;
+    Real realB;
+    Real realC;
+    Real realD;
+    
+    //Constraints
+    //true (2/5)    
+    intA != intB;
+    intA < 3;
+    intB > 4;
+    (intB - intA) > 0;
+    (intA + intB) == 7;
+
+    //true (9.0/11.5)
+    //false (9.0/10.5)
+    realA != realB;
+    realA < 9.5;
+    realB > 9.5;
+    realC < 25.0;
+    realD > 0.0;
+    
+    //klammerungen gehen nicht?! werden beim testen nicht beachtet...!
+    (realA - realB) < (realC); //21.5 //19.5
+    
+    //works fine
+    (realB - realA) > 2.0;
+    
+    //realD == 2.0 !!
+    
+    // missing argument(s) in function call (>)
+    //(realB - realA) > (realD);
+    
+    // compareTo throws exception
+    //(realB - realA) > realD; 
+
+}

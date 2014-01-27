@@ -1,0 +1,6 @@
+vilScript scriptParameter2 (Project source, Project target, Configuration config) {
+
+    main() = : {
+    }
+
+}

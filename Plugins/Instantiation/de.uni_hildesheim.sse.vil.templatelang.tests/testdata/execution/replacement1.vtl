@@ -1,0 +1,8 @@
+template replacement1(Configuration config, Artifact target) {
+
+    def main(Configuration config, Artifact target) {
+        sequenceOf(DecisionVariable) configs = config.getByName("pComp").variables();
+        '${configs[0].name()}'
+    }
+
+}

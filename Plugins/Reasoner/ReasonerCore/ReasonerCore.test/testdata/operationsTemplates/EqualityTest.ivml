@@ -1,0 +1,51 @@
+project EqualityReasoningTest {
+
+    // Integer
+    Integer intA = 1;
+    Integer intB = 2;
+    Integer intC = 1;
+    
+    intA == intC;
+    intA <> intB;
+    intA != intB;
+    intA != 100;
+    intA <> 100;
+    
+    // Real
+    Real realA = 1;
+    Real realB = 2;
+    Real realC = 1;
+    
+    realA == realC;
+    realA <> realB;
+    realA != realB;
+    realA != 100;
+    realA <> 100;
+    
+    // Integer and Real
+    intA == realA;
+    
+    // Boolean
+    Boolean boolA = true;
+    Boolean boolB = false;
+    Boolean boolC = true;
+    
+    boolA == boolC;
+    boolA <> boolB;
+    boolA != boolB;
+    boolA != false;
+    boolA <> false;
+    
+    // String
+    String stringA = "A";
+    String stringB = "B";
+    String stringC = "A";
+    
+    stringA == stringC;
+    stringA <> stringB;
+    stringA != stringB;
+    stringA == "A";
+    stringA != "B";
+    stringA <> "B";
+    
+}

@@ -1,0 +1,8 @@
+P:\workpackages\wp5\Warehouse\WMS\WMSsolution\Monitoring\bin\Debug\Monitoring.dll.config
+P:\workpackages\wp5\Warehouse\WMS\WMSsolution\Monitoring\bin\Debug\Monitoring.dll
+P:\workpackages\wp5\Warehouse\WMS\WMSsolution\Monitoring\bin\Debug\Monitoring.pdb
+P:\workpackages\wp5\Warehouse\WMS\WMSsolution\Monitoring\bin\Debug\Apache.NMS.ActiveMQ.dll
+P:\workpackages\wp5\Warehouse\WMS\WMSsolution\Monitoring\bin\Debug\Apache.NMS.dll
+P:\workpackages\wp5\Warehouse\WMS\WMSsolution\Monitoring\obj\Debug\ResolveAssemblyReference.cache
+P:\workpackages\wp5\Warehouse\WMS\WMSsolution\Monitoring\obj\Debug\Monitoring.dll
+P:\workpackages\wp5\Warehouse\WMS\WMSsolution\Monitoring\obj\Debug\Monitoring.pdb

@@ -1,0 +1,474 @@
+package de.uni_hildesheim.sse.easy.ui.productline_editor.configuration;
+
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.ide.IDE;
+
+import de.uni_hildesheim.sse.easy.instantiator.copy.core.CopyMechansimRegistry;
+import de.uni_hildesheim.sse.easy.ui.confModel.GUIConfiguration;
+import de.uni_hildesheim.sse.easy.ui.confModel.GUIHistoryItem;
+import de.uni_hildesheim.sse.easy.ui.confModel.GUIVariable;
+import de.uni_hildesheim.sse.easy.ui.core.reasoning.AbstractReasonerListener;
+import de.uni_hildesheim.sse.easy.ui.productline_editor.AbstractEASyEditorPage;
+import de.uni_hildesheim.sse.easy.ui.productline_editor.EasyProducerDialog;
+import de.uni_hildesheim.sse.easy.ui.productline_editor.TransformatorProgressDialog;
+import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
+import de.uni_hildesheim.sse.easy_producer.instantiator.TranformatorNotificationDelegate;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
+import de.uni_hildesheim.sse.easy_producer.persistence.mgmt.IProductLineProjectListener;
+import de.uni_hildesheim.sse.easy_producer.persistence.mgmt.PLPInfo;
+import de.uni_hildesheim.sse.easy_producer.persistency.ResourcesMgmt;
+import de.uni_hildesheim.sse.model.confModel.ConfigurationException;
+import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
+import de.uni_hildesheim.sse.reasoning.core.frontend.IReasonerListener;
+import de.uni_hildesheim.sse.reasoning.core.frontend.ReasonerFrontend;
+import de.uni_hildesheim.sse.reasoning.core.model.ReasoningOperation;
+import de.uni_hildesheim.sse.reasoning.core.reasoner.Message;
+import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasoningResult;
+import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
+import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
+import de.uni_hildesheim.sse.utils.messages.Status;
+
+/**
+ * Header menu holding buttons for the product configuration editor page.<br>
+ * This buttons allow the user to:
+ * <ul>
+ * <li>Validate made Decisions</li>
+ * <li>Transform the product</li>
+ * </ul>
+ * This class also handles the transformator notification pop up.
+ * 
+ * @author EL-Sharkawy
+ * 
+ */
+public class ConfigurationHeaderMenu extends AbstractConfigMenu implements TranformatorNotificationDelegate,
+    IProductLineProjectListener {
+
+    private static final EASyLogger LOGGER = EASyLoggerFactory.INSTANCE.getLogger(ConfigurationHeaderMenu.class, 
+            Bundle.ID);
+    
+    private static final Image IMG_INSTANTIATE = PlatformUI.getWorkbench().getSharedImages()
+        .getImage(ISharedImages.IMG_ETOOL_DEF_PERSPECTIVE);
+    private static final Image IMG_VALIDATE = PlatformUI.getWorkbench().getSharedImages()
+        .getImage(ISharedImages.IMG_ELCL_SYNCED);
+    private static final Image IMG_FREEZE = PlatformUI.getWorkbench().getSharedImages()
+        .getImage(IDE.SharedImages.IMG_OPEN_MARKER);
+    private static final Image IMG_UNDO = PlatformUI.getWorkbench().getSharedImages()
+        .getImage(ISharedImages.IMG_TOOL_UNDO);
+
+    private Button validateProductButton;
+    private Button undoButton;
+    private Button btnInstantiate;
+    private Button btnFreezeAll;
+    private TransformatorProgressDialog progressDialog;
+    private PLPInfo plp;
+
+    /**
+     * Created for demonstrating only. Please remove this after Dry-Run-Review.
+     */
+    private Button btnPropagate;
+    private AbstractEASyEditorPage parentPage;
+
+    /**
+     * {@link IReasonerListener} for validating the configuration. Tests whether the current configuration is valid and
+     * opens a dialog presenting the result.
+     * 
+     * @author El-Sharkawy
+     * 
+     */
+    private class ValidateConfigListener extends AbstractReasonerListener {
+
+        @Override
+        public void endReasoning(ReasoningResult result) {
+            if (result.hasConflict()) {
+                Message[] errorMessages = new Message[result.getMessageCount()];
+                for (int i = 0; i < errorMessages.length; i++) {
+                    errorMessages[i] = result.getMessage(i);
+                }
+                setErrorMessages(errorMessages);
+                EasyProducerDialog.showReasonerErrorDialog(getParent().getShell(), errorMessages);
+            } else {
+                clearErrorMessages();
+                if (result.getMessageCount() > 0) {
+                    displayWarnings(result);
+                } else {
+                    EasyProducerDialog.showInfoDialog(getParent().getShell(), "Everything is ok");
+                }
+            }
+        }
+    }
+
+    /**
+     * {@link IReasonerListener} for propagating values.
+     * 
+     * @author El-Sharkawy
+     * 
+     */
+    private class PropagateListener extends AbstractReasonerListener {
+
+        @Override
+        public void endReasoning(ReasoningResult result) {
+            if (result.hasConflict()) {
+                Message[] errorMessages = new Message[result.getMessageCount()];
+                for (int i = 0; i < errorMessages.length; i++) {
+                    errorMessages[i] = result.getMessage(i);
+                }
+                setErrorMessages(errorMessages);
+                EasyProducerDialog.showReasonerErrorDialog(getParent().getShell(), errorMessages);
+            } else {
+                clearErrorMessages();
+                if (result.getMessageCount() > 0) {
+                    displayWarnings(result);
+                }
+                if (result.hasInfo()) {
+                    parentPage.setDirty();
+                    parentPage.refresh();
+                }
+            }
+        }
+    }
+
+    /**
+     * {@link IReasonerListener}, for a reasoning which is executed automatically before freezing the configuration.
+     * 
+     * @author El-Sharkawy
+     * 
+     */
+    private class ReasoningPreFreezeListener extends AbstractReasonerListener {
+        @Override
+        public void endReasoning(ReasoningResult result) {
+            if (result.hasConflict()) {
+                Message[] errorMessages = new Message[result.getMessageCount()];
+                for (int i = 0; i < errorMessages.length; i++) {
+                    errorMessages[i] = result.getMessage(i);
+                }
+                setErrorMessages(errorMessages);
+                EasyProducerDialog.showReasonerErrorDialog(getParent().getShell(), errorMessages);
+            } else {
+                clearErrorMessages();
+                if (result.getMessageCount() > 0) {
+                    displayWarnings(result);
+                }
+                getConfigContainer().getGuiConfig().freeze();
+                // TODO SE: check whether something changed.
+                parentPage.refresh();
+                parentPage.setDirty();
+            }
+        }
+    }
+
+    /**
+     * Sole constructor for this class.
+     * 
+     * @param parent
+     *            the parent control (must not be <tt>null</tt>).
+     * @param plp
+     *            Current configured project holding the configuration (must not be <tt>null</tt>).
+     * @param parentPage
+     *            The page bearing this menu item (must not be <tt>null</tt>).
+     */
+    public ConfigurationHeaderMenu(Composite parent, ProductLineProject plp, AbstractEASyEditorPage parentPage) {
+
+        super(parent, plp);
+        setBackground(parent.getBackground());
+        // TODO check (SE): please note that the following line shall ideally be executed only once
+        // I would expect that the copy core is part of the EASy core not of the UI, see also Startup class
+        CopyMechansimRegistry.INSTANCE.setResourceMgmt(ResourcesMgmt.INSTANCE);
+        this.plp = plp;
+        this.parentPage = parentPage;
+        plp.register(this);
+        createButtons();
+    }
+    
+    /**
+     * Creates the two buttons.
+     */
+    private void createButtons() {
+        createValidateButton();
+        createInstantiateButton();
+        createPropagateButton();
+        createFreezeButton();
+        createUndoButton();
+    }
+
+    
+
+    /**
+     * Creates Propagation button. TODO: Remove this button after Dry-Run-Review.
+     */
+    private void createPropagateButton() {
+        btnPropagate = new Button(this, SWT.NONE);
+        btnPropagate.setText("Propagate Values");
+        btnPropagate.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, true, true, 1, 1));
+        btnPropagate.setImage(IMG_VALIDATE);
+
+        // Add Listener
+        btnPropagate.addSelectionListener(new SelectionAdapter() {
+            @Override
+            public void widgetSelected(SelectionEvent event) {
+                createReasoningProgressObserver(ReasoningOperation.PROPAGATION, new PropagateListener());
+            }
+        });
+    }
+
+    /**
+     * Tests whether the model is valid and freezes all not frozen variables.
+     */
+    private void createFreezeButton() {
+        btnFreezeAll = new Button(this, SWT.NONE);
+        btnFreezeAll.setText("Freeze All");
+        btnFreezeAll.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, true, true, 1, 1));
+        btnFreezeAll.setImage(IMG_FREEZE);
+
+        // Add Listener
+        btnFreezeAll.addSelectionListener(new SelectionAdapter() {
+            public void widgetSelected(SelectionEvent event) {
+                createReasoningProgressObserver(ReasoningOperation.VALIDATION, new ReasoningPreFreezeListener());
+            }
+        });
+    }
+
+    /**
+     * Creates a reasoning progress observer based on {@link #getProductLineProject()}.
+     * 
+     * @param operation
+     *            the desired reasoning operation
+     * @param listener
+     *            A listener which will be called after the reasoning has been finished. Can be <tt>null</tt>, if no
+     *            action shall be executed after the reasoning is finished.
+     */
+    private void createReasoningProgressObserver(ReasoningOperation operation,
+        IReasonerListener listener) {
+
+        getProductLineProject().reason(operation, listener);
+    }
+    
+    /**
+     * Creates revert button.
+     */
+    private void createUndoButton() {
+        undoButton = new Button(this, SWT.NONE);
+        undoButton.setText("Undo Changes");
+        undoButton.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, true, true, 1, 1));
+        undoButton.setImage(IMG_UNDO);
+        // Add Listener
+        undoButton.addSelectionListener(new SelectionAdapter() {
+            public void widgetSelected(SelectionEvent event) {
+                GUIConfiguration guiConfig = getConfigContainer().getGuiConfig();
+                GUIVariable[] guiVarElements = guiConfig.getElements();
+                // Find out which variable was edited last
+                Map<Long, GUIVariable> lastEditedGuiVariable = new HashMap<Long, GUIVariable>();
+                for (GUIVariable guiVariable : guiVarElements) {
+                    if (guiVariable.getHistory().getLastEdited() > 0) {
+                        lastEditedGuiVariable.put(guiVariable.getHistory().getLastEdited(), guiVariable);
+                    }
+                }
+                // Sort lastEditedGuiVariable
+                TreeMap<Long, GUIVariable> treeMap = new TreeMap<Long, GUIVariable>(lastEditedGuiVariable);
+                if (!treeMap.isEmpty()) {
+                    GUIVariable guiVariable = treeMap.lastEntry().getValue();
+                    // Get last edited variable
+                    GUIHistoryItem guiHistoryitem = guiVariable.getHistory().getLastHistoryItem();
+                    if (guiHistoryitem != null) {
+                        try {
+                            guiVariable.getVariable().setHistoryValue(guiHistoryitem.getValue(), 
+                                guiHistoryitem.getState());
+                        } catch (ConfigurationException configurationException) {
+                            LOGGER.exception(configurationException);
+                        }
+                        LOGGER.debug("Reassigned old values " + guiVariable.getVariable());
+                        guiConfig.configurationChanged();
+                        
+                        int count = guiVariable.getVariable().getNestedElementsCount();
+                        for (int i = 0; i < count; i++) {
+                            IDecisionVariable tmp = guiVariable.getVariable().getNestedElement(i);
+                            LOGGER.debug("Nested: " + tmp + "; " + tmp.getState());
+                        }
+                    } 
+                }
+            }
+        });
+    }
+
+    /**
+     * Creates validation button.
+     */
+    private void createValidateButton() {
+        validateProductButton = new Button(this, SWT.NONE);
+        validateProductButton.setText("Validate Product");
+        validateProductButton.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, true, true, 1, 1));
+        validateProductButton.setImage(IMG_VALIDATE);
+
+        // Add Listener
+        setValidateListener();
+    }
+
+    /**
+     * Creates a listener for the validation button and add it to the button.
+     */
+    private void setValidateListener() {
+        validateProductButton.addSelectionListener(new SelectionAdapter() {
+            public void widgetSelected(SelectionEvent event) {
+                createReasoningProgressObserver(ReasoningOperation.VALIDATION, new ValidateConfigListener());
+            }
+        });
+    }
+
+    /**
+     * Creates the transform button.
+     */
+    private void createInstantiateButton() {
+        btnInstantiate = new Button(this, SWT.PUSH);
+        btnInstantiate.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, true, true, 1, 1));
+        btnInstantiate.setText("Instantiate Product");
+        btnInstantiate.setImage(IMG_INSTANTIATE);
+        // Add Listener
+        setTransformListener();
+    }
+
+    /**
+     * Creates a listener for the transform button and add it to the button.
+     */
+    private void setTransformListener() {
+        btnInstantiate.addSelectionListener(new SelectionAdapter() {
+            public void widgetSelected(SelectionEvent event) {
+                /*
+                 * The EclipseConsole allows displaying relevant information on instantiation processes to the user.
+                 * Thus, for each instantiation process triggered by the user, the console will be cleared first and
+                 * then the new output of the new instantiation process will be written to the console
+                 */
+                EclipseConsole.INSTANCE.clearConsole();
+                try {
+                    getProductLineProject().instantiate(ConfigurationHeaderMenu.this);
+                } catch (VilLanguageException e) {
+                    EasyProducerDialog.showErrorDialog(getParent().getShell(), e.getMessage());
+                }
+            }
+        });
+    }
+    
+    /**
+     * Method for preparing a <tt>RasonerResult</tt> for showing a warnings dialog. It filters only warnings out of the
+     * <tt>RasonerResult</tt> and creates a dialog which displays the warnings.
+     * 
+     * @param result
+     *            The result of an reasoning step, may containing warnings.
+     */
+    private void displayWarnings(ReasoningResult result) {
+        List<Message> warnings = new LinkedList<Message>();
+        for (int i = 0; i < result.getMessageCount(); i++) {
+            Message msg = result.getMessage(i);
+            if (Status.WARNING == msg.getStatus() || Status.UNSUPPORTED == msg.getStatus()) {
+                warnings.add(result.getMessage(i));
+            }
+        }
+        if (warnings.size() > 0) {
+            Message[] warningsArray = warnings.toArray(new Message[warnings.size()]);
+            EasyProducerDialog.showReasonerWarningDialog(getParent().getShell(), warningsArray);
+        }
+    }
+
+    @Override
+    public void tranformatorDidFinish() {
+        if (null != progressDialog) {
+            progressDialog.close();
+            progressDialog = null;
+        }
+    }
+
+    @Override
+    public void tranformatorDidStart(final int numberOfFiles) {
+        if (null != progressDialog) {
+            progressDialog.setNumberOfFiles(numberOfFiles);
+        }
+    }
+
+    @Override
+    public void transformatorDidFinishInQueue(final int numberOfFiles) {
+        if (null != progressDialog) {
+            progressDialog.incrementProgress(numberOfFiles);
+        }
+    }
+
+    @Override
+    public void transformatorDidFail(final String message) {
+        if (null != progressDialog) {
+            progressDialog.close();
+            progressDialog = null;
+        }
+        showInfoDialog(message);
+    }
+
+    @Override
+    public void showInfoDialog(final String message) {
+        Display.getDefault().asyncExec(new Runnable() {
+
+            @Override
+            public void run() {
+                EasyProducerDialog.showErrorDialog(getParent().getShell(), message);
+            }
+        });
+    }
+
+    @Override
+    public void revalidateButtons() {        
+        Display.getDefault().asyncExec(new Runnable() {
+            
+            @Override
+            public void run() {
+                if (!btnInstantiate.isDisposed()) {
+                    if (!getProductLineProject().isTransformable()) {
+                        btnInstantiate.setEnabled(false);
+                    } else if (!btnInstantiate.isEnabled()) {
+                        btnInstantiate.setEnabled(true);
+                    }
+                }
+
+                if (!validateProductButton.isDisposed()) {
+                    if (ReasonerFrontend.getInstance().reasoningSupported()) {
+                        validateProductButton.setEnabled(true);
+                    } else {
+                        validateProductButton.setEnabled(false);
+                    }
+                }
+            }            
+        });
+        
+    }
+
+    @Override
+    public void configurationPulled() {
+        revalidateButtons();
+    }
+
+    @Override
+    public void dispose() {
+        plp.unregister(this);
+        super.dispose();
+    }
+
+    @Override
+    public void projectClosed() {
+        // Not needed here
+    }
+
+    @Override
+    public void buildScriptChanged() {
+        revalidateButtons();
+    }
+}

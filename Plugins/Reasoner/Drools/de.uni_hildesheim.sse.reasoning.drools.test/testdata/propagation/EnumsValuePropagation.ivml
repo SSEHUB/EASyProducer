@@ -1,0 +1,33 @@
+project EnumsValuePropagation {
+
+    enum Color {black = 0, red = 1, blue = 2, white = 4};
+    enum Telecom {three, vodafone, tele2, tMobile};
+    
+    Color color1;
+    
+    Integer a, b;
+    a = 5; b = 10;
+    
+    //state should be default since a is default.
+    a == 5 implies color1 == Color.blue;
+    
+    Telecom t1;
+    
+    //state should be default since b is default.
+    b == 10 implies t1 == Telecom.three;
+    
+    Telecom t2;
+    
+    //state should be frozen. 
+    t2 == Telecom.tele2;
+    
+    
+    sequenceOf(Integer) seq1;
+    //seq1 == {1, 2, 3};
+    
+    
+    sequenceOf(Color) seqColor;
+    
+    seqColor == {Color.black, Color.red, Color.white};
+    
+}

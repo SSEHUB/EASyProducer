@@ -1,0 +1,14 @@
+project booleanIFFVariables {
+
+    Boolean a, b, a1, b1;
+    a = true;
+    b = true;
+    a1 = false;
+    b1 = false;
+    
+    a == true iff b == true;
+    a1 == false iff b1 == false;
+    a == true iff b1== false;
+    a1 == false iff b == true;
+
+}

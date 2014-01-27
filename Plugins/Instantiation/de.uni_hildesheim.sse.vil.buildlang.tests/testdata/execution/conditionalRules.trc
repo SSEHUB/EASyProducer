@@ -1,0 +1,7 @@
+-> resourceCompiler()
+-> translateJava()
+    -> touch(FileSystemArtifact) with (src/test/Test.txt) = {src/test/Test.txt}
+    -> touch(FileSystemArtifact) with (src/test/Test2.txt) = {src/test/Test2.txt}
+    -> touch(FileSystemArtifact) with (src/test/sub/Test2.txt) = {src/test/sub/Test2.txt}
+-> compileC()
+-> main(Project, Project, Configuration) with (<project>, <project>, <config>)

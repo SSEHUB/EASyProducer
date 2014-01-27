@@ -1,0 +1,49 @@
+project New {
+    
+    Integer i1 = 10;
+    Integer i2 = 20;
+    Integer i3 = 15;
+    
+    i1 > i2 - i3;
+    
+    compound A {
+        Integer i4 = 5;
+        Integer i5 = 10;
+        }
+        
+      A a1;
+      A a2;
+      A a3;
+      
+      compound B {
+         Integer i6 = 50;
+         Integer i7 = 100;
+         Real r1 = 22.5;
+         String s1 = "Hello";
+        }
+        
+       B b1;
+       B b2;
+       
+       i1 > a1.i4;
+       
+       b1.i6 < b2.i7 + a3.i5;
+       
+       compound C {
+        Integer i8 = 20;
+        Integer i9 = 22;
+        }
+        
+        C c1;
+        
+        C.i8 < b2.i7;
+        
+        sequenceOf(Integer) seq1 = {2, 5, 6, 8, 19};
+        seq1->exists(i | i < 20); 
+    
+        compound D {
+            sequenceOf(Integer) seq2 = {2, 5, 6, 8, 19};
+        }
+      
+        
+}

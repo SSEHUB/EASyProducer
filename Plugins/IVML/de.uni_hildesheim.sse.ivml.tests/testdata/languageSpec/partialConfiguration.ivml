@@ -1,0 +1,18 @@
+project ivmlSpec_pc_application {
+
+    String name = "Application";
+}
+project ivmlSpec_pc_targetPlatform {
+
+    String name;
+}
+project ivmlSpec_pc_contentSharing {
+
+    import ivmlSpec_pc_application;
+    import ivmlSpec_pc_targetPlatform;
+// qualification detection -> Sascha    
+    //* name = "myApp";
+    ivmlSpec_pc_application::name = "myApp";
+    //* name = "myPlatform";
+    ivmlSpec_pc_targetPlatform::name = "myPlatform";
+}

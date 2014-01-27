@@ -1,0 +1,9 @@
+project RegularExpressions {
+
+    String email = "@saripalli.phani@gmail.com";
+    
+    //Does not match.    
+    email.matches("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@");
+    
+
+}

@@ -1,0 +1,104 @@
+@advice(svncontrol)
+@indent(indentation = 4, additional = 1)
+template CompileUiTemplate(Configuration config, FileArtifact target, IvmlElement bindingTime) {
+
+    def String valueRange(DecisionVariable var) {
+        switch (var.type()) {
+            "Boolean" : "BooleanValueRange.BOOLEAN_RANGE",
+            "Integer" : "IntegerValueRange.COMPLETE_INTEGER_RANGE",
+            default : "UnknownValueRange.UNKNOWN_RANGE"
+        }
+    }
+    
+    def String value(DecisionVariable var) {
+        switch (var.type()) {
+            "Boolean" : '$var',
+            "Integer" : '$var',
+            default : '"$var"'
+        }
+    }
+    
+
+    def main(Configuration config, FileArtifact target, IvmlElement bindingTime) {
+        String className = target.plainName();
+    
+        'package variability;
+         
+         import java.util.EnumSet;
+         import de.uni_hildesheim.sse.variability.runtime.*;
+
+         public enum $className implements de.uni_hildesheim.sse.variability.runtime.$className {\n'
+  
+         for (DecisionVariable v: config.variables(), ",\n\n") {
+             print '${v.name()}("", ${valueRange(v)}, ${value(v)}, ${v.element("bindingTime").value() == bindingTime})' | 4;
+         }
+         ";\n"
+  
+        '    public static final boolean HAS_ELEMENTS = ${config.isEmpty()};
+             public static final boolean HAS_ENABLED_ELEMENTS = ${config.variables().select(ITER.booleanValue()).isEmpty()};
+             private String description;
+             private ValueRange valueRange;
+             private Object defaultValue;
+             private boolean disabled;
+
+             $className(String description, ValueRange valueRange, Object defaultValue, boolean disabled) {
+                 this.description = description;
+                 this.valueRange = valueRange;
+                 if (valueRange.checkValue(defaultValue)) {
+                     this.defaultValue = defaultValue;
+                 } else {
+                     throw new IllegalArgumentException("Default value does not match the decision value range");
+                 }
+                 this.defaultValue = defaultValue;
+                 this.disabled = disabled;
+             }
+
+             public String getKey() {
+                 return this.toString();
+             }
+
+             public String getDescription() {
+                 return description;
+             }
+
+             public ValueRange getValueRange() {
+                 return valueRange;
+             }
+
+             public Object getDefaultValue() {
+                 return defaultValue;
+             }
+
+             public boolean isDisabled() {
+                 return disabled;
+             }
+
+             public Object getValue() {
+                 return UserDecisionValues.getValue(this);
+             }
+
+             public boolean getBooleanValue() {
+                 return UserDecisionValues.getBooleanValue(this);
+             }
+
+             public void setValue(Object value) {
+                 UserDecisionValues.setValue(this, value);
+             }
+
+             public static EnumSet<$className> allElements() {'
+                 if (config.variables().isEmpty()) {
+                     'return EnumSet.none();' | 8;
+                 } else {
+                     String firstName = config.variables().first().name();
+                     String lastName = config.variables().last().name();
+                     print 'return EnumSet.range($firstName, $lastName);' | 8;
+                 }
+            '    }
+
+             static {
+                 UserDecisionValues.initializeFrom(allElements());
+             }'
+        '}'
+
+    }
+}

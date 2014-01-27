@@ -1,0 +1,8 @@
+vilScript zip (Project source, Project target, Configuration config) {
+
+    main(Project source, Project target, Configuration config) = : {
+        zip(source, "$source/*", "$target/test.zip");
+        unzip("$target/test.zip", "$target/testzip/");
+    }
+
+}

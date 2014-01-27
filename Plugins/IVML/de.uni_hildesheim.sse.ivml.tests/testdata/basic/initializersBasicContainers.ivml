@@ -1,0 +1,10 @@
+project testInitializersBasicContainers {
+
+    version v0;
+    enum Colors {red, green, blue};
+    setOf(Integer) intSet = {1, 2, 3};
+    setOf(String) stringSet = {"a", "b"};
+    setOf(Boolean) boolSet = {true, false};
+    sequenceOf(Colors) colorSeq = {Colors.red, Colors.green};
+    intSet = {1, 2, 3};
+}

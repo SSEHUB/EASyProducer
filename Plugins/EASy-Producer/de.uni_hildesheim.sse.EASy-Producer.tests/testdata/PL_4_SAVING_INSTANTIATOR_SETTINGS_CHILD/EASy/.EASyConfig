@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProductLineProject id="2bfe6392-88ad-4cce-9ad6-463fbdfbab47" name="PL_4_SAVING_INSTANTIATOR_SETTINGS_CHILD" version="0">
+	<predecessors>
+		<entity id="1eb08882-b3cc-4911-9358-cd9b29e4baef" name="PL_4_SAVING_INSTANTIATOR_SETTINGS_PARENT" />
+	</predecessors>
+	<successors>
+	</successors>
+	<instantiators>
+	</instantiators>
+	<reasoners>
+		<entity timeout="0" />
+	</reasoners>
+</ProductLineProject>

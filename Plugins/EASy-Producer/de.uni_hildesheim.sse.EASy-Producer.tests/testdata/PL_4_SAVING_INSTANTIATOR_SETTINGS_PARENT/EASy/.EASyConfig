@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProductLineProject id="1eb08882-b3cc-4911-9358-cd9b29e4baef" name="PL_4_SAVING_INSTANTIATOR_SETTINGS_PARENT" version="0">
+	<predecessors>
+	</predecessors>
+	<successors>
+		<entity id="2bfe6392-88ad-4cce-9ad6-463fbdfbab47" name="PL_4_SAVING_INSTANTIATOR_SETTINGS_CHILD" />
+	</successors>
+	<instantiators>
+		<entity engine="VelocityTransformatorEngine" originid="1eb08882-b3cc-4911-9358-cd9b29e4baef" paths="C:\Elscha\Eclipse\runtime-EclipseApplication\PL_4_SAVING_INSTANTIATOR_SETTINGS_PARENT//;//;//C:\Elscha\Eclipse\runtime-EclipseApplication\PL_4_SAVING_INSTANTIATOR_SETTINGS_PARENT" inheritence="PL_4_SAVING_INSTANTIATOR_SETTINGS_PARENT//;//;//" file="C:\Elscha\Eclipse\Eclipse SSE//;//;//" />
+	</instantiators>
+	<reasoners>
+		<entity timeout="0" />
+	</reasoners>
+</ProductLineProject>

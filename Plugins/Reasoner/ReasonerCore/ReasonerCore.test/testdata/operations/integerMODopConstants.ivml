@@ -1,0 +1,10 @@
+project integerAddConstants {
+
+      
+    mod(5, 2) == 1;   
+    mod(-5, 2) == -1;
+    mod(5, -2) == 1;
+    mod(-5,-2) == -1;  
+       
+
+}

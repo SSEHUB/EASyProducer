@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProductLineProject id="4a6c32af-457c-4189-8dec-345852411523" name="ReasoningWillFail" version="0" location="ReasoningWillFail">
+    <predecessors>
+	</predecessors>
+	<successors>
+	</successors>
+	<instantiators>
+	</instantiators>
+	<reasoners>
+	</reasoners>
+	<copy>
+	</copy>
+</ProductLineProject>

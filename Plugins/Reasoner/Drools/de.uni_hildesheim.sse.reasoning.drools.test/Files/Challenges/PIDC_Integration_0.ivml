@@ -1,0 +1,155 @@
+project SystemConstants {
+
+    version v0;
+    
+    typedef PosInteger Integer with (PosInteger >= 0);
+    typedef Int6 Integer with (Int6 >= 0, Int6 <=6);
+    typedef Int2 Integer with (Int2 >= 0, Int2 <=2);
+    
+    compound SystemConstants {
+        Boolean SY_EGAS;
+        Boolean SY_SU;
+        Int6 SY_LBK;
+        Boolean SY_DSU;
+        Boolean SY_TUM;
+        Boolean SY_DSVD;
+        Boolean SY_HFM;
+        Boolean SY_DSS;
+        Int2 SY_NWSA;
+        Int2 SY_VHA;
+        Int2 SY_NWS;
+        Int2 SY_VHE;
+        PosInteger SY_ZYLZA;
+        Boolean SY_STASTO;
+        Boolean SY_ABGKL;
+        PosInteger SY_NG;
+        PosInteger SY_CNG;
+        Boolean SY_DIRST;
+        Boolean SY_HSP;
+        Boolean SY_LUSRKR;
+        Boolean SY_HEV;        
+    }
+    
+    compound ETC {
+        Boolean DKPROSG_SY;
+        Boolean SY_BLOOP;
+        Boolean SY_CJ230;
+        Boolean SY_DKADANL;
+        Boolean SY_DKLRIKL;
+        Boolean SY_DKPDF;
+        Boolean SY_DKZEROP;
+        Boolean SY_DVEAIF;
+        Boolean SY_DVEAIFS;
+        Boolean SY_DVEAMP;
+        Boolean SY_DVEATT;
+        Boolean SY_DVEFO;
+        Boolean SY_DVEKOMP;
+        Boolean SY_DVEKOOR;
+        Boolean SY_EAOMSDK;
+        Boolean SY_EEPACC;
+        Boolean SY_KONWDK;
+        Boolean SY_NVRAMBK;
+        Boolean SY_TWDKS;
+        Boolean SY_UBDEDIQ;
+        Boolean SY_UBDEENQ;
+        Boolean SY_UBR;
+        Boolean WDKBAM_SY;
+    }
+    
+    Integer a;
+    a = 100;
+    
+    SystemConstants systemConstants;
+    ETC electronic_throttle_control;
+    
+    systemConstants.SY_EGAS = false implies electronic_throttle_control.DKPROSG_SY = false;
+    systemConstants.SY_EGAS = false implies electronic_throttle_control.SY_BLOOP = false;
+    systemConstants.SY_EGAS = false implies electronic_throttle_control.SY_CJ230 = false;
+    systemConstants.SY_EGAS = false implies electronic_throttle_control.SY_DKADANL = false;
+    systemConstants.SY_EGAS = false implies electronic_throttle_control.SY_DKLRIKL = false;
+    systemConstants.SY_EGAS = false implies electronic_throttle_control.SY_DKZEROP = false;
+    systemConstants.SY_EGAS = false implies electronic_throttle_control.SY_DVEAIF = false;
+    systemConstants.SY_EGAS = false implies electronic_throttle_control.SY_DVEAIFS = false;
+    systemConstants.SY_EGAS = false implies electronic_throttle_control.SY_DVEAMP = false;
+    systemConstants.SY_EGAS = false implies electronic_throttle_control.SY_DVEATT = false;
+    systemConstants.SY_EGAS = false implies electronic_throttle_control.SY_DVEFO = false;
+    systemConstants.SY_EGAS = false implies electronic_throttle_control.SY_DVEKOMP = false;
+    systemConstants.SY_EGAS = false implies electronic_throttle_control.SY_DVEKOOR = false;
+    systemConstants.SY_EGAS = false implies electronic_throttle_control.SY_EAOMSDK = false;
+    systemConstants.SY_EGAS = false implies electronic_throttle_control.SY_EEPACC = false;
+    systemConstants.SY_EGAS = false implies electronic_throttle_control.SY_KONWDK = false;
+    systemConstants.SY_EGAS = false implies electronic_throttle_control.SY_NVRAMBK = false;
+    systemConstants.SY_EGAS = false implies electronic_throttle_control.SY_TWDKS = false;
+    systemConstants.SY_EGAS = false implies electronic_throttle_control.SY_UBDEDIQ = false;
+    systemConstants.SY_EGAS = false implies electronic_throttle_control.SY_UBDEENQ = false;
+    systemConstants.SY_EGAS = false implies electronic_throttle_control.SY_UBR = false;
+    systemConstants.SY_EGAS = false implies electronic_throttle_control.WDKBAM_SY = false;
+      
+}
+
+
+project PIDC_Integration {
+
+    version v0;
+    import SystemConstants;
+    compound AirSystem {
+        Boolean egas;
+        Boolean intake_air_control;
+        Boolean manual_throttle;
+        Boolean vsa;
+        Boolean ambient_pressure_sensor;
+        Boolean ambient_temp_sensor;
+        Boolean maf;
+        Boolean map;
+    }
+
+    compound Engine {
+        Boolean camshaft_exhaust;
+        Boolean camshaft_intake;
+        Boolean combustion_concept_gasoline;
+        Integer number_of_cylinders;
+        Boolean start_stop_system;
+    }
+
+    compound ExhaustSystem {
+        Boolean exhaust_gas_flap;
+    }
+
+    compound FuelSystem {
+        Boolean fuel_standard;
+    }
+
+    compound SpecialFeatures {
+        Boolean cylinder_deactivation;
+        Boolean direct_start;
+        Boolean multiinjection_gdi;
+        Boolean scavenging;
+    }
+
+    compound Vehicle {
+        Boolean hybrid;
+        Boolean start_stop;
+    }
+
+  
+       
+    AirSystem airSystem;
+    //airSystem = {egas = true, intake_air_control = false, manual_throttle = true, vsa = true, ambient_pressure_sensor = true, ambient_temp_sensor = true, maf = true, map = true};
+    airSystem = {manual_throttle = true};
+    Engine engine;
+    ExhaustSystem exhaustSystem;
+    FuelSystem fuelSystem;
+    SpecialFeatures specialFeatures;
+    Vehicle vehicle;
+    
+    //airSystem.egas = true;
+    //airSystem.manual_throttle = true;
+    
+    engine = {number_of_cylinders = 16};
+    engine.camshaft_intake = true;
+    
+    airSystem.egas = true implies systemConstants.SY_EGAS = true;
+    airSystem.manual_throttle = true implies systemConstants.SY_EGAS = false;
+}
+
+

@@ -1,0 +1,7 @@
+vilScript loadProperties () {
+
+    load properties "basic/default.properties";
+
+    Integer var;
+
+}

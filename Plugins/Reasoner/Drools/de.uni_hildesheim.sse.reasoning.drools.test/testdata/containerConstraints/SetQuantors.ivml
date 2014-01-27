@@ -1,0 +1,65 @@
+project SetQuantors {
+
+    setOf(Integer) set1 , set2;
+    
+    set1 = {2, 3, 4, 5};
+    set2 = {3, 5, 8};
+    
+    //Invalid - 1
+    set1->exists(t | t > 5);
+    
+    //Invalid - 2
+    set1->forAll(t | t > 5);
+    
+    //Invalid - 3
+    set1->any(t | t > 4) > 5;
+    
+    //Invalid - 4
+    set1.asSet().size() <> set1.size();
+    
+    //Invalid - 5, avg is 3
+    set1.avg() <> 3;
+    
+    //Invalid - 6
+    set1.excludes(2);
+    
+    // Invalid - 7
+    set1.includes(8);
+    
+    //Invalid - 8, since the resulting union set should not contain duplicates.
+    set1.union(set2).size() <> 5;
+    
+    //Invalid - 9
+    set1->one(t | t > 2);
+    
+    //Invalid - 10
+    set1.product() <> 24 * 5;
+    
+    //Invalid - 11
+    not set1.notEmpty();
+    
+    // Invalid - 12
+    set2.size() <> 3;
+    
+    set1.min() == 2 implies set1.max() == 4;
+    
+    //Invalid - 13
+    set1->one(t | t > 3);
+    
+    //Invalid - 14
+    set1.excluding(5).size() == set1.size();
+    
+    //Invalid - 15, not sizes of both the sets are equal.
+    set2.including(9).size() <> set1.size();
+    
+    //INvalid - 16
+    set1->collect(t | t <> 4).size() <> set2.size();
+    
+    //Invalid - 17
+    set2.excluding(8).size() <> 3;
+    
+    //Invalid - 18, invalid because set does not already have 4. 
+    //Therefore, size should be equal to its original size, i.e.3
+   set2.excluding(9).size() <> 3;
+    
+}

@@ -1,0 +1,8 @@
+// import models which do not exist
+project testImportFail {
+
+    version v0;
+    import test;
+    import testInterface with (testInterface.version < v1.10);
+    conflicts test1 with (test1.version >= v1.10);
+}

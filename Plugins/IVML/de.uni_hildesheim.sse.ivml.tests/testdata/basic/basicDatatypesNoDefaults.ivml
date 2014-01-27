@@ -1,0 +1,6 @@
+project testBasicDatatypesNoDefaults {
+
+    version v0;
+    Integer i;
+    Boolean b;
+}

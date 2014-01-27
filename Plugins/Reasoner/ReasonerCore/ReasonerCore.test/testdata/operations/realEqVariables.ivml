@@ -1,0 +1,20 @@
+project realEqVariables {
+
+    Real i1 = 1.5;
+    Real i0 = 0.5;
+    Real im1 = -1.5;
+
+    // basic equality (so that we can build on that)
+    i1 == i1;
+    i0 == i0;
+    im1 == im1;
+    
+    // basic inequality (so that we can build on that)
+    i1 <> i0;
+    i0 <> i1;
+    im1 <> i0;
+    i0 <> im1;
+    i1 <> im1;
+    im1 <> i1;
+
+}

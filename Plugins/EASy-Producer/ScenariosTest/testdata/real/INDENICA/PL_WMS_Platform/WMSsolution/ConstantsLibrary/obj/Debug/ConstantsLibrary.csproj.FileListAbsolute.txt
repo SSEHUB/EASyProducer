@@ -1,0 +1,5 @@
+P:\workpackages\wp5\Warehouse\WMS\WMSsolution\ConstantsLibrary\bin\Debug\ConstantsLibrary.dll
+P:\workpackages\wp5\Warehouse\WMS\WMSsolution\ConstantsLibrary\bin\Debug\ConstantsLibrary.pdb
+P:\workpackages\wp5\Warehouse\WMS\WMSsolution\ConstantsLibrary\obj\Debug\ResolveAssemblyReference.cache
+P:\workpackages\wp5\Warehouse\WMS\WMSsolution\ConstantsLibrary\obj\Debug\ConstantsLibrary.dll
+P:\workpackages\wp5\Warehouse\WMS\WMSsolution\ConstantsLibrary\obj\Debug\ConstantsLibrary.pdb

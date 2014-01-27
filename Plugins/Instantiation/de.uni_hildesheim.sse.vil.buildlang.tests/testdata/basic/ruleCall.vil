@@ -1,0 +1,10 @@
+vilScript ruleCall (Project source, Project target, Configuration config) {
+
+    compileGoal() = "$target/bin/*.class" : "$source/bin/*.java" {
+    }
+
+    main() = : {
+        compileGoal();
+    }
+
+}

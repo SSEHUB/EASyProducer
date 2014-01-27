@@ -1,0 +1,18 @@
+project Esq {
+
+	Integer a, b, c;
+	a == 1;
+	b == 2;
+	a == b + 1;
+	a == 5;
+	
+	compound Z {
+		Integer a;
+		Integer b;
+		}
+		
+	Z z1;
+	z1.a == 10;
+	z1.a == 25;
+		
+}

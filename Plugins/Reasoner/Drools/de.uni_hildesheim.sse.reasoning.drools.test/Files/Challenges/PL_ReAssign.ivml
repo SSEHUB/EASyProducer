@@ -1,0 +1,39 @@
+project PL_ReAssign {
+
+Integer a;
+Integer b;
+Integer c;
+    
+   //a = 5;
+    a == 5;
+    c == 5;
+    a == 25;
+
+    Boolean aa = false;
+    
+    compound C {
+        Integer x = 5;
+        Integer y;
+        Integer z = 15;
+    }
+    C c1;
+    
+    
+    a == 5 implies b == 10;
+    a == 5 implies 2 < 0;
+    a > 30;
+    
+    /*
+    
+    c == 5 implies b == 15; 
+    
+    
+    
+    
+    
+   // c1.x > 1000;
+    
+    C c2;
+    
+    */
+}

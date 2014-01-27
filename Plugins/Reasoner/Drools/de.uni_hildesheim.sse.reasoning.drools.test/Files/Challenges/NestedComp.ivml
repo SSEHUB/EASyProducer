@@ -1,0 +1,97 @@
+project testNested {
+
+
+compound C {
+        Integer i1;
+        Integer i2 = 10;
+        Integer i3;
+    }
+
+    Integer a;
+    Integer b;
+    Integer c;
+    C c1;
+    a < b;
+    c = a * b;
+    a = 5;
+    b = 6;
+    //c = 30;
+    c1 = {i1 = 12, i2 = 10, i3 = 0};
+   2 < 3 implies c1.i3 == c1.i1 * 10;
+
+    enum Days {Monday, Tuesday, Wednesday};
+    compound Y {
+        Integer y1;
+    }
+    
+    compound X {
+        Integer x1;
+        Y yy1;
+        }
+        
+    compound Weeks {
+        Days day;
+        Integer ii;
+        Integer ii2;
+        X xx1;
+        Days day3;
+    }
+
+    compound Months {
+        Integer num;
+        Weeks week;
+        Days day4;
+    }
+    
+    compound D {
+        Integer dd;
+        Integer beta = 99;
+    }
+    
+    compound C1 {
+        Integer alpha;
+        D d1;
+        Integer gamma;
+        Integer delta = 999;
+    }
+    
+    Months month;
+    Months month2;
+    
+    C1 cc1;
+    C1 cc2;
+    
+    month2 = {num = 6666, week = {day = Days.Wednesday, ii = 75, ii2 = 100, 
+        xx1 = {x1 = 95, yy1 = {y1 = 100}},
+            day3 = Days.Wednesday}, 
+                day4 = Days.Wednesday};
+    
+    //month2.week.ii > 80;
+    
+    month.week.ii = 225;
+    month.week.ii > 0 implies cc1.alpha == 50;
+    //month.week.ii > 0 implies cc1.d1.dd = 100;
+    
+    cc1.alpha == 50 implies cc2.d1.dd == 500;
+    cc1.d1.dd == 100 implies cc2.alpha == 5000;
+    
+    month2.week.ii < month.week.ii;
+    
+    cc1.gamma == cc1.d1.beta + 99;
+    cc2.gamma == cc2.d1.beta + 99;
+    cc2.d1.dd = 500;
+    
+    // This works  - month2.week.ii = month.week.ii * 225;
+      
+    month.week.xx1.yy1.y1 == 1000;
+    
+    month.week.day == Days.Wednesday;
+    month.week.day3 == Days.Wednesday;
+    month = {num = 6, week = {day3 = Days.Wednesday}, day4 = Days.Wednesday};
+    
+    month.week.xx1.x1 == 100;
+   /* 
+*/
+
+    
+}

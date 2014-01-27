@@ -1,0 +1,6 @@
+project root_localImportRestriction {
+
+    version v1;
+    import a_localImportRestriction;
+    import b_localImportRestriction;
+}

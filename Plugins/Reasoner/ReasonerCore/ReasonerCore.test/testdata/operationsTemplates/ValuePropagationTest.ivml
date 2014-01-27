@@ -1,0 +1,12 @@
+project ValuePropagationTest {
+
+    version v0;    
+    
+    Integer a;
+    Integer b;
+    
+    b = 0;
+    b == 0 implies a == 1;
+    
+    
+}

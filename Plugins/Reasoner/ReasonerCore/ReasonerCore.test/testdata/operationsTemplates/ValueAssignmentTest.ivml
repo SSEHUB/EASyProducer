@@ -1,0 +1,13 @@
+project ValueAssignmentTest {
+
+    // Integer
+    Integer intA;
+    Integer intB;
+    Integer intC;
+    intA = intB;
+    intB = 2 + 2;
+    
+    intC = 10;
+    intC > 0;
+    //intC > 0 implies intC == 10;
+}

@@ -1,0 +1,6 @@
+project attributeFail {
+
+    version v0;
+    attribute Integer view to attributeFail;
+
+}

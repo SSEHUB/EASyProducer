@@ -1,0 +1,23 @@
+project integerMAXVariables {
+
+    Integer a;
+    Integer a1;
+    Integer b;    
+    Integer b1;
+    
+    a=5;
+    b=2;
+    a1=-5;
+    b1=-2;
+    
+    max(5, b) == 5;
+    max(a, 2) == 5;
+    max(a, b) == 5;
+    max(-5, b) == 2;
+    max(a1, 2) == 2;
+    max(a1, b1) == -2;
+    max(5, b1) == 5;
+    max(a, -2) == 5;
+    max(a, b1) == 5;   
+
+}

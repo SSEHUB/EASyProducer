@@ -1,0 +1,25 @@
+project SimpleTranslationTest {
+
+    version v0;
+    Integer intA;
+    Boolean boolA;
+    Real realA;
+    String strA;  
+    compound C {
+        Integer intB;
+    }
+    
+    C cmp1;
+    C cmp2;
+    Integer cmp1_intB;
+    setOf(Integer) intSet;
+    sequenceOf(Integer) intSeq;
+    
+    enum NotOrderedEnum {LiteralA, LiteralB};
+    enum OrderedEnum {LiteralC = 10, LiteralD = 50};
+    
+    NotOrderedEnum enumA;
+    OrderedEnum enumB;
+    
+    refTo(C) cmpRefernce;
+}

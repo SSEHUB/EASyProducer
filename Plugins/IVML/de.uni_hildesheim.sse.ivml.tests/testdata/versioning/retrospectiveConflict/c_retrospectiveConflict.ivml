@@ -1,0 +1,5 @@
+project c_retrospectiveConflict {
+
+    version v1;
+    conflicts root_retrospectiveConflict with (root_retrospectiveConflict.version <> v1.2.3.4);
+}

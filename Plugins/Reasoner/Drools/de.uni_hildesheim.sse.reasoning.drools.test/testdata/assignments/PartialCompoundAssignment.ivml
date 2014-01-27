@@ -1,0 +1,20 @@
+project PartialCompoundAssignment {
+
+compound C {
+    Integer i1;
+    Boolean b1;
+    String s1;
+}
+
+    C c1;
+    c1 = {i1 = 99, b1 = true, s1 = "First String"};
+
+    C c2;
+    c2 == {i1 = 999, s1 = "Second String"};
+    
+    C c3;
+    c3 = {i1 = 9999, s1 = "Third String"};
+    
+    C c4;
+    c4 == {i1 = 99999, b1 = true, s1 = "Fourth String"};
+}

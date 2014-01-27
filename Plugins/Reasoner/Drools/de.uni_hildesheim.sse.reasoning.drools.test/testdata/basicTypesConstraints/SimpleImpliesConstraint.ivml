@@ -1,0 +1,20 @@
+project SimpleImpliesConstraint {
+
+   Integer x, y;
+    
+   Integer a, b;
+   
+   
+   x = 5;
+   y = 11;
+   a == 20;
+
+   //Invalid - 1 because a < 5.
+   x > 3 and y > 10 implies a < 5;
+   
+   //Invalid - 1 because a is already fixed.
+   x > 3 and y > 10 implies a == 25;
+   
+   
+   
+}

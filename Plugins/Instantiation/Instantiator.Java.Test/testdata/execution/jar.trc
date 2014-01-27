@@ -1,0 +1,4 @@
+-> main(Project, Project, Configuration) with (<project>, <project>, <config>)
+    -> jar(Path, Path, Path) with (, src/**/*.java, test.jar) = {test.jar}
+    -> unjar(Path, Path) with (test.jar, testjar) = {testjar/src/test/Test.java, testjar/src/test/Test2.java, testjar/src/test/sub/Test2.java}
+    -> unjar(Path, Path, Boolean) with (test.jar, testjar, true) = {testjar/META-INF/MANIFEST.MF, testjar/src/test/Test.java, testjar/src/test/Test2.java, testjar/src/test/sub/Test2.java}

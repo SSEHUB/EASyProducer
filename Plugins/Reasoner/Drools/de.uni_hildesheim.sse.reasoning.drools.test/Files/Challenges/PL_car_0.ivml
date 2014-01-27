@@ -1,0 +1,85 @@
+project PL_car {
+
+    version v0;
+    enum Fuel {gasoline, diesel};
+    enum Type {automatic, manual};
+    enum Frame {sedan, coupe, suv};
+    enum Doors {D2, D4};
+    enum Colour {white, black, red};
+    typedef Wheels Integer with (Wheels >= 14 and Wheels <= 18);
+    
+    compound Engine {
+        Integer cylenders;
+        Integer power;
+        Fuel fuel;
+    }
+
+    compound Transmission {
+        Type type;
+        Integer gears;
+    }
+
+    compound Built {
+        Frame frame;
+        Doors doors;
+        Colour colour;
+    }
+
+    Engine engine;
+    Transmission transmission;
+    Built built;
+    Wheels wheels;
+    Engine.cylenders == 4 or Engine.cylenders == 6;
+    /*
+    Engine.power == 170 or Engine.power == 180 or Engine.power == 190;
+    
+    Transmission.gears >== 4 and Transmission.gears <== 6;
+    
+    Engine.cylenders == 4 implies Engine.power == 170 or Engine.power == 180;
+    Engine.cylenders == 6 implies Engine.power == 190;
+    
+    Engine.power == 170 implies Transmission.gears == 4;
+    Engine.power == 180 implies Transmission.gears == 5;
+    Engine.power == 190 implies Transmission.gears == 6;
+    */
+    
+    if Engine.fuel == Fuel.diesel then Engine.power == 170 or Engine.power == 180 
+        else Engine.power == 170 or Engine.power == 180 or Engine.power == 190 endif;
+    //if Built.frame == Frame.suv then wheels == 18 else wheels == 16 or wheels == 17 endif;
+    
+    Engine.fuel == Fuel.diesel implies Built.frame == Frame.suv;
+    Built.frame == Frame.coupe implies Built.doors == Doors.D2;
+    
+    Integer aaa = 4;
+    Integer bbb;
+    Integer ccc;
+    if aaa == 5 then bbb == 10 else ccc == 25 endif;
+    
+    /*
+    */
+   
+    
+    Integer x1, x2, x3;
+    x1 > 10 implies x2 + 4 == x3 +5;
+    x1 > 10 implies x2 == 4 + x3 +5;
+    x1 == 5;
+    x2 == 10;
+    x1 == 5 implies x2 == 20;
+    x1 == 5 implies (x3 == 20);
+    
+    x1 == 50;
+    
+    compound A {
+        Integer a1;
+        Integer a2;
+        }
+    
+    A ca1;
+    ca1.a1 == 199;
+    //ca1.a2 == 200;
+    
+    ca1.a1 == 250;
+    
+    Integer x4;
+    x4 == ca1.a1 + 200;
+}

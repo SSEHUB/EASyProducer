@@ -1,0 +1,6 @@
+project realABSConstants {
+
+    abs(5.5) == 5.5;
+    abs(-5.5) == 5.5;
+
+}

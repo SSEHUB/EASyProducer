@@ -1,0 +1,6 @@
+project testTypedefSubsequent {
+
+    version v0;
+    typedef PositiveInteger Integer with (PositiveInteger >= 0);
+    typedef Int5 PositiveInteger with (Int5 <= 5);
+}

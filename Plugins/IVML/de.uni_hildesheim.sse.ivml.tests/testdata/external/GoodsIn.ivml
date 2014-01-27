@@ -1,0 +1,145 @@
+project GoodsIn {
+    /*TODO: are there any restriction how the project name should look like
+	 *      ivml project name == eclipse project name ?!?!?
+	 */
+	
+	version v0;
+
+/*------------------ workflow independent type definitions -----------------*/
+
+    /*Different views for business analysts (BA) and domain engineers (DE)*/
+	enum View {BA, DE, Impl};
+	attribute View modelView to GoodsIn;
+    enum LocationType {singleTu, multipleTu};
+	
+/*----------------- workflow independent decision variables ----------------*/
+
+    assign (modelView =View.BA) to {
+		/* Description: Is there more than one client?
+		 *
+		 * Variability Instantiation: Blacklist Engine 
+		 *   If multiClient = true, the global blacklist has to have  
+		 *   these entries:
+		 * 
+		 *     clientId
+		 *     clientLongName
+		 * 
+		 *  If multiClient = false, the global blacklist should be emtpy.
+		 */
+		
+		Boolean multiClient;
+	  	 
+		
+		/*
+		 * Description: Can the storage locations can keep only one tu or 
+		 *              can they keep multiple tus?
+		 * 
+		 * Variability Instantiation: Service variability via dependency injection
+		 *   
+		 *   The spring configuration xml has to be amended. It sits in the 
+		 *   customer project's directory 'src/main/resources'.
+		 *   The filename is 'server-context-prj.xml'.
+		 * 
+		 *   If locationType = LocationType.singleTu, the following line has to be added
+		 *     <bean id="destChecker" class="de.klug_is.scalelog.wm.transportunit.service.SingleTuDestinationSlChecker" />
+		 * 
+		 *   If locationType = LocationType.multipleTu, nothing has to be done because in that
+		 *   case the default behavior of the platform is sufficcient.
+		 * 
+		 */
+		LocationType locationType;
+	}
+
+/*------------------ type definitions for workflow compound -----------------*/	
+	
+	enum WorkflowStart {sku, barcode, goodsinpos};
+	
+	enum PalletForm {homogeneous, heterogeneous};
+	
+	setOf(Workflow) GoodsInWorkflows;
+	
+/*----------------------- the workflow compound itself ----------------------*/		
+   
+    compound Workflow {
+        
+		assign (modelView =View.BA) to {
+	        
+			/*Unique name of the goods-in workflow*/
+	        String workflowName;
+	
+	        /*Is the goods-in line (not the sku) identifiable by scanning a barcode?*/    
+	        Boolean barcodeToIdentifyDeliveryLine;
+	        
+	        /*Can the sku be identified by EAN or sku number?*/
+	        Boolean skuHasEanOrNumberOnIt;
+	        
+	        /*Are the received pallets at goods-in sku-pure or do they have mixed skus on them?*/
+	        Boolean mixedPallets;
+	        
+	        /*Are the received pallets at goods-in sku-pure or do they have mixed skus on them?*/
+	        Boolean receivingAgainstGoodsInLine;
+	        
+	        /*Is the goods-in line confirmation in the receiving workflow mandatory?*/ 
+	        Boolean mandatoryGoodsInLineConfirmation;
+	        /*If this confirmation of a goods-in line is mandatory, 
+             *the receiving has to be booed against a goods-in line*/
+	        mandatoryGoodsInLineConfirmation == true implies receivingAgainstGoodsInLine == true;
+	        
+	        /*Are the received pallets mostly look the same or are they totally mixed?*/
+	        PalletForm palletForm;
+        }
+                
+		/*Mapping from BA decision variables to DE decision variables*/
+        assign (modelView =View.DE) to {
+	        WorkflowStart workflowStart;
+	        Workflow.skuHasEanOrNumberOnIt == true implies Workflow.workflowStart == WorkflowStart.sku;
+	        Workflow.skuHasEanOrNumberOnIt == false implies workflowStart == WorkflowStart.goodsinpos;
+	        /*TODO: Is it possible to override a previous decision like that?
+	         *      If barcodeToIdentifyDeliveryLine = true, workflowStart has to be
+	         *      WorkflowStart.barcode, regardless of what the previous implications
+	         *      said. 
+	         */        
+	        Workflow.barcodeToIdentifyDeliveryLine == true implies Workflow.workflowStart == WorkflowStart.barcode;
+	        /*
+	         * Again such a override thing. If receivingAgainstGoodsInLine = false,
+	         * workflowStart has to be WorkflowStart.sku, regardless of what 
+	         * the previous implications said. 
+	         */
+	        Workflow.receivingAgainstGoodsInLine == false implies Workflow.workflowStart == WorkflowStart.sku;
+        }
+
+        /*Mapping to velocity variables for variability instantiation 
+		 *with the WorkflowConfigInstantiator
+		 *TODO: to be discussed, whether the model is the right place to to this mapping
+		 *      maybe this better should be done at the artifact side*/
+        assign (modelView =View.Impl) to {
+	        Boolean goodsInPosIdentifiedByBarcode;
+	        Workflow.workflowStart == WorkflowStart.barcode implies Workflow.goodsInPosIdentifiedByBarcode == true;
+	        Workflow.workflowStart == WorkflowStart.sku implies Workflow.goodsInPosIdentifiedByBarcode == false;
+
+            /*The logic for WorkflowStart.goodsinpos is not implemented yet.
+             *Until this is done, it behaves like WorkflowStart.sku.*/  
+	        Workflow.workflowStart == WorkflowStart.goodsinpos implies Workflow.goodsInPosIdentifiedByBarcode == false;
+	        
+	        Boolean tuAutomaticallyFinished;
+	        Workflow.mixedPallets == false implies Workflow.tuAutomaticallyFinished == true;
+	        Workflow.mixedPallets == true implies Workflow.tuAutomaticallyFinished == false;
+	        
+	        Boolean withoutGoodsInLine;
+	        Workflow.receivingAgainstGoodsInLine == true implies Workflow.withoutGoodsInLine == false;
+	        Workflow.receivingAgainstGoodsInLine == false implies Workflow.withoutGoodsInLine == true;
+	        
+	        Boolean selectGoodsInLineDialogShownWithSingleRow;
+	        Workflow.mandatoryGoodsInLineConfirmation == true implies Workflow.selectGoodsInLineDialogShownWithSingleRow == true;
+	        Workflow.mandatoryGoodsInLineConfirmation == false implies Workflow.selectGoodsInLineDialogShownWithSingleRow == false;
+	        
+	        Boolean clientSelectionDisabled;
+	        multiClient == false implies Workflow.clientSelectionDisabled == true;
+	        multiClient == true implies Workflow.clientSelectionDisabled == false;
+	        
+	        Boolean qtyFirst;
+	        Workflow.palletForm == PalletForm.homogeneous implies Workflow.qtyFirst == true;
+	        Workflow.palletForm == PalletForm.heterogeneous implies Workflow.qtyFirst == false;
+        }
+    }
+}

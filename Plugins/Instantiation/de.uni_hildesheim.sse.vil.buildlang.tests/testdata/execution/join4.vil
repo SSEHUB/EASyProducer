@@ -1,0 +1,11 @@
+vilScript join4 (Project source, Project target, Configuration config) {
+
+    const Path source_src = "$source/src/**/*.java";
+
+    main() = : {
+        setOf(FileArtifact) srcFiles = source_src.selectAll();
+        map(y=join(exclude c:srcFiles, d:srcFiles)) {
+        };
+    }
+
+}

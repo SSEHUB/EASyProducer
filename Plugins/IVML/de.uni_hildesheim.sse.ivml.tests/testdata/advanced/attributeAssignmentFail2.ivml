@@ -1,0 +1,16 @@
+project attributeAssignmentFail2 {
+
+    version v0;
+    enum BindingTimes {compile, startup, runtime};
+    attribute BindingTimes bindingTime to attributeAssignmentFail2;
+    compound Test {
+        assign (bindingTime = BindingTimes.startup) to {
+            Integer myInt2;
+            assign (bindingTime = BindingTimes.runtime) to {
+                Integer myInt2;
+                myInt2 > 3;
+            }
+        }
+    }
+
+}

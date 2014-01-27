@@ -1,0 +1,5 @@
+-> main()
+    -> map(String) with (a)
+        switch(a)
+            0 : b a
+    var <- b a

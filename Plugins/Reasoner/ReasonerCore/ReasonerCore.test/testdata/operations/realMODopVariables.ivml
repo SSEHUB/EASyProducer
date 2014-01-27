@@ -1,0 +1,23 @@
+project realSubConstants {
+
+    Real a;
+    Real a1;
+    Real b;    
+    Real b1;
+    
+    a=6;
+    b=2.5;
+    a1=-6;
+    b1=-2.5;
+    
+    mod(6, b) == 1;
+    mod(a, 2.5) == 1;
+    mod(a, b) == 1;
+    mod(-6, b) == -1;
+    mod(a1, 2.5) == -1;
+    mod(a1, b1) == -1;
+    mod(6, b1) == 1;
+    mod(a, -2.5) == 1;
+    mod(a, b1) == 1;
+
+}

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="IVML EASy contribution">
+  <implementation class="de.uni_hildesheim.sse.ui.EditorPlugin"/>
+   <service>
+      <provide interface="de.uni_hildesheim.sse.easy.ui.core.contributions.ExternalEditor"/>
+   </service>
+</scr:component>

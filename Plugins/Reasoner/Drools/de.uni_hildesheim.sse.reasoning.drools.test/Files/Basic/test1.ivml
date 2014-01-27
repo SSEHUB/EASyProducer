@@ -1,0 +1,112 @@
+project PL_Phani {
+ 
+    //version v0;
+    enum BindingTimes {configuration= 0, compile=1, runtime=2};
+    
+    attribute BindingTimes binding = BindingTimes.compile to PL_Phani;
+    
+    enum color {red, blue};
+    Integer a = 5;
+    Integer b = 3;
+    Boolean c;
+    color myColor = color.blue;
+    Integer d;
+    d = a + b;
+    c = true;
+    
+    attribute Integer attr1 to d;
+    
+    
+    
+    myColor = color.blue implies b > 5;
+    d >= 8 implies c = true;
+    
+    String aString = "hello";
+    String bString;
+    String cString;
+    aString = aString.substitutes("h", "p");
+    
+    
+    Boolean boolA;
+    
+    Boolean tempBool;
+    tempBool = true;
+    (boolA <> not boolA) = tempBool;
+    
+    
+    sequenceOf(Integer) aSeq;
+    aSeq = {1, 2, 3, 4, 5};
+    Integer aa = 5;
+    Integer bb = 11;
+    Integer cc = aa + bb;
+    
+    compound CP {
+    	Integer aa = 10;
+    	Integer bb = 20;
+    	}
+    
+    CP cp1={};
+    CP cp2;
+    //cp2 = {aa = 15, bb = 25}
+    	
+ //::::::::::::::::::::::::::::::::::::::::::::::
+   
+     compound CP1 {
+    	Integer aaa = 100;
+    	Integer bbb = 200;
+    	Integer ccc;
+    	}
+    	
+    
+    CP1 cp11;	
+    cp11.ccc = 300;
+    CP1 cp21;
+    cp21 = {aaa = 100, bbb = 200, ccc = 500};
+    
+    sequenceOf(Integer) seqaa = {1, 2, 3, 4, 5};
+    sequenceOf(Integer) seqaa2 = {1, 2, 3, 4, 5};
+    sequenceOf(Integer) seqaa3 = {};
+    sequenceOf(Integer) seqaa4;
+    
+    /*
+    Boolean exists;
+    exists = seqaa->exists(t|t > 0);
+    seqaa->exists(t|t < 0);
+    
+    CP1 cp12;
+    cp12 = {aaa = 100, bbb = 200, ccc = 300};
+    
+    CP1 cp13;
+    CP1 cp23;
+    cp13 = {ccc = 1000};
+    cp12.aaa > cp21.bbb;
+    
+    Boolean defined1;
+    Boolean defined2;
+    Boolean defined3;
+    Boolean defined4;
+    Boolean defined5;
+
+    //defined1 = cp13.isDefined();
+    //defined3 = cp23.isDefined();
+    //defined4 = seqaa3.isDefined();
+    //defined5 = seqaa2.isDefined();
+    
+    
+    compound CP2 {
+    	Integer anInt;
+    }
+    
+    compound CP3 {
+    	Integer Int2 = 399;
+    	Integer Int3;
+    }
+    
+    
+    CP2 cp222;
+    CP3 cp333;
+	
+	*/
+	
+    
+}

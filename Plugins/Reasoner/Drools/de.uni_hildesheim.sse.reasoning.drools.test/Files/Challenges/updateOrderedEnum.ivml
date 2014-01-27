@@ -1,0 +1,22 @@
+project OrderedEnumTest {
+
+	enum Color {black = 1, red = 2, blue = 3};
+	Color color1 = Color.black;
+	
+	Color color2 = Color.red;
+	Color color3 = Color.blue;
+	
+	Color color4;
+	
+	color1 > color2;
+	1 < 3 implies color4 == Color.black;
+	
+	compound A {
+		Color color5;
+		}
+	
+	A a1;
+	
+	1 < 3 implies a1.color5 == Color.blue; 
+	
+}

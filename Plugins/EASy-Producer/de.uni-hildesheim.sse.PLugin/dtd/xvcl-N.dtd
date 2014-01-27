@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!ENTITY comma "\,">
+<!-- this entity is used for passing comas (,) as value in multi-valued -->
+<!ELEMENT xvcl:x-frame (#PCDATA | xvcl:break | xvcl:adapt | xvcl:set | xvcl:set-multi | xvcl:select | xvcl:value-of | 
+                         xvcl:message | xvcl:while | xvcl:remove | xvcl:ifdef | xvcl:ifndef |xvcl:print)*>
+<!ELEMENT xvcl:break (#PCDATA | xvcl:adapt | xvcl:set | xvcl:set-multi | xvcl:select | xvcl:value-of | xvcl:message | 
+                         xvcl:while | xvcl:remove | xvcl:ifdef | xvcl:ifndef |xvcl:print)*>
+<!ELEMENT xvcl:adapt (xvcl:insert | xvcl:insert-after | xvcl:insert-before)*>
+<!ELEMENT xvcl:insert (#PCDATA | xvcl:break | xvcl:adapt | xvcl:set | xvcl:set-multi | xvcl:select | xvcl:value-of | 
+                         xvcl:message | xvcl:while | xvcl:remove | xvcl:ifdef | xvcl:ifndef |xvcl:print)*>
+<!ELEMENT xvcl:insert-before (#PCDATA | xvcl:break | xvcl:adapt | xvcl:set | xvcl:set-multi | xvcl:select | xvcl:value-of | 
+                         xvcl:message | xvcl:while | xvcl:remove | xvcl:ifdef | xvcl:ifndef |xvcl:print)*>
+<!ELEMENT xvcl:insert-after (#PCDATA | xvcl:break | xvcl:adapt | xvcl:set | xvcl:set-multi | xvcl:select | xvcl:value-of | 
+                         xvcl:message | xvcl:while | xvcl:remove | xvcl:ifdef | xvcl:ifndef |xvcl:print)*>                         
+<!ELEMENT xvcl:set-multi EMPTY>
+<!ELEMENT xvcl:set EMPTY>
+<!ELEMENT xvcl:select (xvcl:option*, xvcl:otherwise?)>
+<!ELEMENT xvcl:ifndef (#PCDATA | xvcl:break | xvcl:adapt | xvcl:set | xvcl:set-multi | xvcl:select | xvcl:value-of | 
+                       xvcl:message | xvcl:while | xvcl:remove | xvcl:ifdef | xvcl:ifndef |xvcl:print)*>
+<!ELEMENT xvcl:ifdef (#PCDATA | xvcl:break | xvcl:adapt | xvcl:set | xvcl:set-multi | xvcl:select | xvcl:value-of | 
+                       xvcl:message | xvcl:while | xvcl:remove | xvcl:ifdef | xvcl:ifndef |xvcl:print)*>
+<!ELEMENT xvcl:option (#PCDATA | xvcl:break | xvcl:adapt | xvcl:set | xvcl:set-multi | xvcl:select | xvcl:value-of | 
+                       xvcl:message | xvcl:while | xvcl:remove | xvcl:ifdef | xvcl:ifndef |xvcl:print)*>
+<!ELEMENT xvcl:otherwise (#PCDATA | xvcl:break | xvcl:adapt | xvcl:set | xvcl:set-multi | xvcl:select | xvcl:value-of | 
+                       xvcl:message | xvcl:while | xvcl:remove | xvcl:ifdef | xvcl:ifndef |xvcl:print)*>
+<!ELEMENT xvcl:while (#PCDATA | xvcl:break | xvcl:adapt | xvcl:set | xvcl:set-multi | xvcl:select | xvcl:value-of | 
+                       xvcl:message | xvcl:while | xvcl:remove | xvcl:ifdef | xvcl:ifndef |xvcl:print)*>
+<!ELEMENT xvcl:message EMPTY>
+<!ELEMENT xvcl:value-of EMPTY>
+<!ELEMENT xvcl:remove EMPTY>
+<!ELEMENT xvcl:print EMPTY>
+<!ATTLIST xvcl:x-frame
+	name CDATA #REQUIRED
+	outdir CDATA #IMPLIED
+	outfile CDATA #IMPLIED
+	language CDATA #IMPLIED
+	xmlns:xvcl CDATA #FIXED "http://xvcl.comp.nus.edu.sg">
+<!ATTLIST xvcl:break
+	name CDATA #REQUIRED>
+<!ATTLIST xvcl:adapt
+	x-frame CDATA #REQUIRED
+	outdir CDATA #IMPLIED
+	outfile CDATA #IMPLIED
+	samelevel CDATA #IMPLIED
+	once CDATA #IMPLIED>
+<!ATTLIST xvcl:set
+	var CDATA #REQUIRED
+	value CDATA #REQUIRED
+	defer-evaluation CDATA #IMPLIED>
+<!ATTLIST xvcl:set-multi
+	var CDATA #REQUIRED
+	value CDATA #REQUIRED
+	defer-evaluation CDATA #IMPLIED>
+<!ATTLIST xvcl:insert
+	break CDATA #REQUIRED>
+<!ATTLIST xvcl:insert-after
+	break CDATA #REQUIRED>
+<!ATTLIST xvcl:insert-before
+	break CDATA #REQUIRED>
+<!ATTLIST xvcl:select
+	option CDATA #REQUIRED>
+<!ATTLIST xvcl:option
+	value CDATA #REQUIRED
+	comp-operator CDATA #IMPLIED>
+<!ATTLIST xvcl:while
+	using-items-in CDATA #REQUIRED>
+<!ATTLIST xvcl:value-of
+	expr CDATA #REQUIRED>
+<!ATTLIST xvcl:message
+	text CDATA #REQUIRED
+	continue CDATA #IMPLIED>
+<!ATTLIST xvcl:remove
+	var CDATA #REQUIRED>
+<!ATTLIST xvcl:ifdef
+	var CDATA #REQUIRED>
+<!ATTLIST xvcl:ifndef
+	var CDATA #REQUIRED>
+<!ATTLIST xvcl:print
+	text CDATA #REQUIRED>

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Model" default="all" basedir=".">
+	<!-- import von globalen Plugin-Build Einstellungen -->
+	<import file="../common_plugin_build_file.xml"/>
+
+	<!-- Compiler settings. -->
+	<property name="javacFailOnError" value="false"/>
+	<property name="javacDebugInfo" value="on"/>
+	<property name="javacVerbose" value="false"/>
+	<property name="logExtension" value=".log"/>
+	<property name="compilerArg" value=""/>
+	<property name="javacSource" value="1.6"/>
+	<property name="javacTarget" value="1.6"/>
+	<property name="junit.ok" value="true"/>
+	
+	<!-- Libs -->
+	<property name="libpath" value="C:/Program Files/CruiseControl/lib/" />	
+	<path id="classpath.emma" > 
+		<pathelement location="${libpath}/emma.jar" />	
+		<pathelement location="${libpath}/emma_ant.jar" />	
+	</path>
+	<path id="classpath.junit">
+		<pathelement location="${libpath}/junit.jar"/>
+		<pathelement location="${libpath}/org.hamcrest.core_1.1.0.v20090501071000.jar" />	
+	</path>	
+	
+	<!-- Folder settings -->
+	<property name="src.dir"     		value="src"/>
+    <property name="build.dir"   		value="build"/>
+	<property name="classes.dir" 	    value="${build.dir}/classes"/>
+    <property name="classes4inst.dir" 	value="${build.dir}/classes4inst"/>
+    <property name="jar.dir"     		value="${build.dir}/jar"/>
+	<property name="emma.inst.dir"     	value="${build.dir}/instr"/>
+	<property name="emma.work.dir"     	value="${build.dir}/emmaWorking"/>
+	<property name="emma.coverage.dir"  value="C:/Program Files/CruiseControl/webapps/emmaResults/ReasoningInterfaceModel"/>
+	<property name="emma.report.dir"    value="${build.dir}/test-results"/>
+	<property name="javadoc.dir"        value="C:/Program Files/CruiseControl/webapps/JavaDoc/ReasoningInterfaceModel"/>
+	
+	<!-- ANT Extensions -->
+	<taskdef resource="emma_ant.properties" classpathref="classpath.emma" />	
+	
+	<!-- Targets  -->
+	<!-- Clean up: Remove all generated files -->
+	<target name="clean">
+        <delete dir="${build.dir}"/>
+		<delete dir="${emma.coverage.dir}"/>
+		<delete dir="${javadoc.dir}"/>
+		<mkdir dir="${emma.work.dir}"/>
+    </target>
+	
+	<!-- Compile all files including test classes -->
+	<target name="compile.all">
+        <mkdir dir="${classes4inst.dir}"/>
+		<javac srcdir="${src.dir}" destdir="${classes4inst.dir}" failonerror="${javacFailOnError}" verbose="${javacVerbose}" debug="${javacDebugInfo}" includeAntRuntime="no">
+			<classpath refid="classpath.junit" />
+			<classpath refid="eclipse.plugins" />
+		</javac>
+    </target>
+	
+	<!-- Test the project -->
+	<target name="emma" depends="compile.all" description="Test Project with junit and emma">
+		<property name="junit.fail" value="false"/>
+		<!-- Wird benötigt, da EMMA keine Interfaces instrummentiert und diese sonst fehlen würden,
+		daher müssen die instrummentierten Dateien, diese Dateien überschreiben. -->
+		<copy todir="${emma.work.dir}" failonerror="true" overwrite="false">
+			<fileset dir="${classes4inst.dir}">
+				<include name="**"/>
+			</fileset>
+		</copy>
+		<emma enabled="true">                			
+			<instr instrpath="${classes4inst.dir}" destdir="${emma.inst.dir}" metadatafile="${emma.coverage.dir}/metadata.emma" mode="copy"/>                        								
+		</emma> 
+		<copy todir="${emma.work.dir}" failonerror="true" overwrite="true">
+			<fileset dir="${emma.inst.dir}">
+				<include name="**"/>
+			</fileset>
+		</copy>		
+		<mkdir dir="${emma.report.dir}"/>        
+		<junit fork="yes" haltonfailure="no" printsummary="on">            
+			<classpath >                
+				<pathelement location="${emma.work.dir}"/>				
+				<pathelement location="${build.dir}"/>				
+				<path refid="classpath.junit" />				
+				<path refid="classpath.emma" />            
+			</classpath>            
+			<formatter type="brief" usefile="false"/>           
+			<formatter type="xml" />						
+			<!-- EMMA-->			
+			<jvmarg value="-Demma.coverage.out.file=${emma.coverage.dir}/coverage.emma" />  			
+			<jvmarg value="-Demma.coverage.out.merge=true" />               
+			<batchtest todir="${emma.report.dir}" failureproperty="junit.fail">                
+				<fileset dir="${src.dir}">
+				    <exclude name="**/*package-info.java" />
+					<exclude name="**/*AllTests.java" /> 
+					<include name="*test/**/*.java" />
+				</fileset>          
+			</batchtest>
+		</junit>		
+		<emma enabled="true">                			
+			<report sourcepath="${src.dir}" depth="method">                        				
+				<fileset dir="${emma.coverage.dir}">                                					
+					<include name="*.emma" />       							
+				</fileset>                        				
+				<xml outfile="${emma.report.dir}/coverage.xml" depth="method" />				
+				<html outfile="${emma.coverage.dir}/coverage.html" />                			
+			</report>        		
+		</emma>
+	</target>
+	
+	<!-- Compile all files without test classes -->
+	<target name="compile">
+        <mkdir dir="${classes.dir}"/>
+		<javac srcdir="${src.dir}" destdir="${classes.dir}" excludes="test/**">
+			<classpath refid="eclipse.plugins" />
+		</javac>
+    </target>
+	
+	<!-- Creates a jar file -->
+	<target name="jar" depends="compile">
+        <mkdir dir="${jar.dir}"/>
+        <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}" excludes="**/*Activator.class"/>
+		<jar destfile="${jar.dir}/${ant.project.name}-osgi.jar" basedir="${classes.dir}" manifest="META-INF/MANIFEST.MF"/>
+    </target>
+	
+	<!-- Creates Javadoc -->
+	<target name="javadoc">
+		<delete dir="${javadoc.dir}"/>
+		<javadoc packagenames="de.*"
+           private="true"
+		   classpathref="eclipse.plugins"
+		   sourcepath="${src.dir}"
+		   defaultexcludes="yes"
+           destdir="${javadoc.dir}"
+           author="true"
+           version="true"
+           use="true"
+           windowtitle="${ant.project.name} API">
+			<fileset dir="${src.dir}">
+				<exclude name="**/*Activator.java"/>
+				<exclude name="**/*package.html"/>
+			</fileset>
+			<doctitle><![CDATA[<h1>${ant.project.name}</h1>]]></doctitle>
+			<bottom><![CDATA[<i>Copyright &#169; 2009 - 2012 SSE. All Rights Reserved.</i>]]></bottom>
+		</javadoc>
+	</target>
+	
+	<target name="all" depends="clean, emma, jar, javadoc">
+		<fail message="At least one test case failed." if="${junit.fail}" />
+	</target>
+</project>

@@ -1,0 +1,126 @@
+project PL_YMS_Platform {
+
+    version v0;
+    
+    
+    enum DdsSchedulingAlgorithm {SIMPLE, DYNAMIC};
+    enum JockeySchedulingType {SIMPLE, LOCATION};
+    enum Color {blue = 1, red = 2};
+    typedef Count Integer with (Count > 0);
+    
+    Integer z;
+    
+    compound B {
+        Integer z;
+        }
+        
+    compound A {
+        Integer x;
+        Integer y;
+        B b1;
+        }
+   //To write: a == new A(); a.b1 == new B();
+    
+    
+    compound AbstractComponent {
+    }
+
+    compound DdsComponent refines AbstractComponent {
+        Count docks;
+        Count waitingBays;
+        Boolean specialDocks;
+        DdsSchedulingAlgorithm scheduling;
+    }
+
+    compound JockeyComponent refines AbstractComponent {
+        Count jockeys;
+        Boolean reassignments;
+        JockeySchedulingType scheduling;
+        A a;
+    }
+
+    compound MobilityComponent refines AbstractComponent {
+        Boolean gpsBasedDrivers;
+        Boolean gpsBasedJockeys;
+    }
+
+    
+    enum Color {red, blue};
+    enum Car {bmw = 0, benz = 1};
+    compound Test {
+        Color color1;
+        Integer xx;
+        String ss;
+        Car car1;
+        }
+        
+    /*
+    */
+    
+    Integer bb;
+    Test test1;
+    Integer a = 5;
+    //a == 5 implies test1.color1 == Color.blue;
+    //a == 5 implies test1.car1 == Car.benz;	
+    Color color2;
+    //a == 5 implies color2 == Color.blue;
+    Car car2;
+    //a == 5 implies car2 == Car.benz;
+    Integer b = 6;
+    //a == 5 implies b == 8;
+    Integer c = 3;
+    
+    
+    freeze {
+        c;
+        }
+    
+    0 < 3 implies c == b * b;
+    
+    Boolean bool1;
+    bool1 = (true or false);
+    //a == 5 implies bool1 == true or false; 
+    Integer bb1 = 120;
+    //a == 5 implies bb1 == 120 or bb1 == 180;   
+    
+    
+
+    Boolean gpsBased;
+    Boolean visualizationSupport;
+    Boolean useJms;
+    String jmsConnection;
+    String queueName;
+    JockeyComponent jockeyComponent;
+
+
+    MobilityComponent mobilityComponent;
+    mobilityComponent = {gpsBasedDrivers = true, gpsBasedJockeys = true};
+    useJms = true;
+    
+    DdsComponent ddsComponent;
+    attribute Boolean metaInformation to jockeyComponent;
+    attribute Boolean metaInformation to mobilityComponent;
+    attribute Boolean metaInformation to ddsComponent;
+    
+    
+    useJms implies not (size(jmsConnection) == 0);
+    useJms implies not (size(queueName) == 0);
+    gpsBased implies isDefined(mobilityComponent);
+    isDefined(mobilityComponent) implies gpsBased == true;
+   
+   //jockeyComponent.scheduling == JockeySchedulingType.LOCATION;
+   //jockeyComponent == {scheduling == JockeySchedulingType.LOCATION};
+   
+   jockeyComponent.a.x = 25;
+   
+    jockeyComponent = {jockeys = 1, reassignments = true, scheduling = JockeySchedulingType.LOCATION};
+    jockeyComponent.scheduling == JockeySchedulingType.LOCATION implies mobilityComponent.gpsBasedJockeys == true;
+    
+    
+    
+    /*
+    
+    */
+   
+    
+}

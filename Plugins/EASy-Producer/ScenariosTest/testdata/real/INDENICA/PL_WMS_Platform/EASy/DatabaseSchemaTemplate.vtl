@@ -1,0 +1,22 @@
+template databaseSchema(Configuration config, SqlFileArtifact target) {
+    /*
+     * Important: Currently navigating to a specific compound or filtering for
+     * decision variables with a specific name is not included. The latter case
+     * is because this was a hack for D2.2.2.
+     * 
+     * The former may be a more elegant solution and will be included as soon as
+     * there is a variability model that includes such a compound (or any other element).
+     */
+
+    
+    def main(Configuration config, SqlFileArtifact target) {
+        setOf(SqlStatement) columns = target.statements().columns(); // Difference to selectAll() in implementation?
+        for (SqlStatement column : columns) {
+            for (DecisionVariable decVar : config.variables()) {
+                if (column.getName == decVar.getName() and decVar.getValue() == false) {
+                    column.delete();
+                }   
+            }
+        }
+    }
+}

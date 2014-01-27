@@ -1,0 +1,24 @@
+project booleanEvaluateValueAssignVariables {
+
+    Boolean boolA;
+    Boolean boolB;
+    boolA = true;
+    
+    Integer intA;
+    Integer intB;
+    intA = 1;
+    
+    Real realA;
+    Real realB;
+    realA = 1.5;
+    
+    String strA;
+    String strB;
+    strA = "teststring";
+    
+    boolB = boolA;
+    intB = intA;
+    realB = realA;
+    //strB = strA;
+
+}

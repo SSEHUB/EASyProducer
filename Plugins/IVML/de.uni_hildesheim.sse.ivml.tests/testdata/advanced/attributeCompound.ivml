@@ -1,0 +1,11 @@
+project attributeCompound {
+
+    version v0;
+    enum bindingTimes {compile, startup, runtime};
+    attribute bindingTimes binding to attributeCompound;
+    compound comp {
+    }
+
+    comp c;
+    c.binding = bindingTimes.compile;
+}

@@ -1,0 +1,13 @@
+template templateCall(Configuration config, Artifact target) {
+
+    def map(Artifact target) {
+        switch(target.name()) {
+            "a" : "a1"
+        }
+    }
+
+    def main(Configuration config, Artifact target) {
+        map(target);
+    }
+
+}

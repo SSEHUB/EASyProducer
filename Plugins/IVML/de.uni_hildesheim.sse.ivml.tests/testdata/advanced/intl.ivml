@@ -1,0 +1,11 @@
+project intl {
+
+    version v0;
+    enum Cars {mercedes, fiat};
+    compound comp {
+        Integer i;
+    }
+
+    Integer i;
+    Cars c;
+}

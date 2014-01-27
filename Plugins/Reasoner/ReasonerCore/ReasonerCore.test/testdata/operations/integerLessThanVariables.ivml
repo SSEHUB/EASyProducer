@@ -1,0 +1,23 @@
+project integerGreaterThanVariables {
+
+    Integer a;
+    Integer a1;
+    Integer b;    
+    Integer b1;
+    
+    a=5;
+    b=2;
+    a1=-5;
+    b1=-2; 
+    
+    5 < b == false;
+    a < 2 == false;
+    a < b == false;
+    -5 < b == true;
+    a1 < 2 == true;
+    a1 < b1 == true;
+    5 < b1 == false;
+    a < -2 == false;
+    a < b1 == false;
+
+}

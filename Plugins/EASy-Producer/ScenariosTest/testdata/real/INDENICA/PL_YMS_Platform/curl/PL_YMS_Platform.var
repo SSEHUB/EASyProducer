@@ -1,0 +1,16 @@
+<?xml version=”1.0” encoding=”utf-8”>
+<cocktail>
+    <variability>
+        <element derived="false" name="PL_YMS_Platform::AbstractService::name"/>
+        <element derived="false" name="PL_YMS_Platform::DdsService::schedulingType"/>
+        <element derived="false" name="PL_YMS_Platform::DdsService::shipsEnabled"/>
+        <element derived="false" name="PL_YMS_Platform::DdsService::trainsEnabled"/>
+        <element derived="false" name="PL_YMS_Platform::DdsService::useExtendedDockType"/>
+        <element derived="false" name="PL_YMS_Platform::DdsService::useMobile"/>
+        <element derived="false" name="PL_YMS_Platform::AbstractService::name"/>
+        <element derived="false" name="PL_YMS_Platform::JockeyService::showGpsLocationsMap"/>
+        <element derived="false" name="PL_YMS_Platform::JockeyService::showSatelite"/>
+        <element derived="false" name="PL_YMS_Platform::JockeyService::useGps"/>
+        <element derived="false" name="PL_YMS_Platform::JockeyService::useGpsCoords"/>
+    </variability>
+</cocktail>

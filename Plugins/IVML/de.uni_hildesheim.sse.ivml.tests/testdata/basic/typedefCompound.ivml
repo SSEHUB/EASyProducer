@@ -1,0 +1,8 @@
+project testTypedefCompound {
+
+    version v0;
+    compound AbstractComponent {
+    }
+
+    typedef ComponentSelection setOf(AbstractComponent);
+}

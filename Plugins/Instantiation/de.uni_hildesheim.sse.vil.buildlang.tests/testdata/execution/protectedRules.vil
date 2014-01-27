@@ -1,0 +1,9 @@
+vilScript protectedRules () {
+
+    protected compile() = : {
+    }
+
+    main() = : compile() {
+    }
+
+}

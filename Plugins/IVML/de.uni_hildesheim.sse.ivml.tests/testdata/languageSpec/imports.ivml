@@ -1,0 +1,19 @@
+project ivmlSpec_imports_application {
+
+    String name;
+}
+project ivmlSpec_imports_targetPlatform {
+
+    version v1.5;
+    String name;
+}
+project ivmlSpec_imports_contentSharing {
+
+    import ivmlSpec_imports_application;
+    import ivmlSpec_imports_targetPlatform with (ivmlSpec_imports_targetPlatform.version >= v1.3);
+// qualification detection -> Sascha    
+    //* name = "myApp";
+    ivmlSpec_imports_application::name = "myApp";
+    //* name = "myPlatform";
+    ivmlSpec_imports_targetPlatform::name = "myPlatform";
+}

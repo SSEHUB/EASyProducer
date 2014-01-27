@@ -1,0 +1,8 @@
+vilScript mapJoin3 (Project source, Project target, Configuration config) {
+
+    main() = : {
+        map(x=join(c:target.selectAllFiles(), exclude d:config.variables()) with (c.name() == d.name())) {
+        };
+    }
+
+}

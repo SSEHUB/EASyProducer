@@ -1,0 +1,5 @@
+project New_Product {
+
+    version v0;
+    import PL_ImportTest with (PL_ImportTest.version == v0);
+}

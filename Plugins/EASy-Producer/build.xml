@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="EasyAll" default="all" basedir=".">	
+	<property file="${user.home}/global-build.properties"/>
+	<path id="emma.lib" >    		
+		<pathelement location="${emma.path}/emma.jar" />	
+		<pathelement location="${emma.path}/emma_ant.jar" />	
+	</path>
+	<taskdef resource="emma_ant.properties" classpathref="emma.lib" />
+    
+    <!-- Indivdual properties for this build script -->
+    <property name="test.plugin" value="de.uni_hildesheim.sse.EASy-Producer.tests"/>
+    <property name="test.suite" value="test.AllTests"/>
+    <property name="test.plugin.szenarios" value="de.uni_hildeshem.sse.easy.scenario.tests"/>
+    <property name="test.suite.szenarios" value="test.de.uni_hildesheim.sse.scenarios.AllTests"/>
+    <property name="test.plugin.core" value="de.uni_hildesheim.sse.easy_producer.core.test"/>
+    <property name="test.suite.core" value="de.uni_hildesheim.sse.easy_producer.persistence.AllTests"/>
+
+	<target name="init">
+		<!-- Delete generated folders -->
+		<delete dir="junitResults"/>
+		<delete dir="${coverage.base.dir}"/>
+		<delete dir="${doc.dir}"/>
+		
+		<!-- Create folders -->
+		<mkdir dir="junitResults"/>
+		<mkdir dir="${coverage.base.dir}"/>
+		<mkdir dir="${coverage.instr.dir}"/>
+		<mkdir dir="${coverage.results.dir}"/>
+		<mkdir dir="${doc.dir}"/>
+	</target>
+	
+	<target name="compile">
+		<echo>###################################</echo>
+        <echo>###  Compiling EASy-Persistence ###</echo>
+        <echo>###################################</echo>
+        <ant dir="${home.easy.persistence.dir}" antfile="${build.script.name}" />
+        
+        <echo>###################################</echo>
+        <echo>###  Compiling EASy-Core Tests  ###</echo>
+        <echo>###################################</echo>
+        <ant dir="${home.easy.easy-producer.core.tests.dir}" antfile="${build.script.name}" />
+		
+        <echo>############################</echo>
+        <echo>###  Compiling EASy-Core ###</echo>
+        <echo>############################</echo>
+        <ant dir="${home.easy.PLugin.dir}" antfile="${build.script.name}" />
+		
+        <echo>##########################</echo>
+        <echo>###  Compiling EASy-UI ###</echo>
+        <echo>##########################</echo>
+        <ant dir="${home.easy.easy-producer.ui.dir}" antfile="${build.script.name}" />     
+        
+        <echo>#############################</echo>
+        <echo>###  Compiling Test-Suite ###</echo>
+        <echo>#############################</echo>
+        <ant dir="${home.easy.tests.dir}" antfile="${build.script.name}" />
+        
+        <echo>#################################</echo>
+        <echo>###  Compiling Scenario Tests ###</echo>
+        <echo>#################################</echo>
+        <ant dir="${home.scenario.tests.dir}" antfile="${build.script.name}" />
+        
+    </target>
+	
+	<target name="instrumment">
+		<echo>######################</echo>
+        <echo>###  Instrumment   ###</echo>
+        <echo>######################</echo>
+        <emma enabled="true" verbosity="verbose">
+			<instr destdir="${coverage.instr.dir}" metadatafile="${coverage.results.dir}/metadata.emma" mode="fullcopy" >
+				<filter includes="*de.uni_hildesheim.sse*"/>
+				<filter excludes="*Activator*"/>
+				<filter excludes="*AllTests*"/>
+				<instrpath>
+					<fileset dir="${home.easy.persistence.dir}/${build.jar.dir}/" includes="**/*.jar" />
+					<fileset dir="${home.easy.easy-producer.core.tests.dir}/${build.jar.dir}/" includes="**/*.jar" />
+					<fileset dir="${home.easy.tests.dir}/${build.jar.dir}/" includes="**/*.jar" />
+					<fileset dir="${home.easy.PLugin.dir}/${build.jar.dir}/" includes="**/*.jar" />
+					<fileset dir="${home.easy.easy-producer.ui.dir}/${build.jar.dir}/" includes="**/*.jar" />
+					<fileset dir="${home.scenario.tests.dir}/${build.jar.dir}/" includes="**/*.jar" />
+				</instrpath>
+			</instr>
+	    </emma>
+	</target>
+	
+	<target name="prepareTestEclipse" if="${unzipNewEclipse}">
+		<delete dir="${test.eclipse.name}"/>
+		<mkdir dir="${test.eclipse.name}"/>
+		<mkdir dir="${test.eclipse.workspace.dir}"/>
+		<unzip src="${test.eclipse.zip}" dest="${test.eclipse.name}"/>
+	</target>
+	
+	<target name="prepareTestEclipseGUI" if="${unzipNewEclipse}">
+		<delete dir="${test.eclipseGUI.name}"/>
+		<mkdir dir="${test.eclipseGUI.name}"/>
+		<mkdir dir="${test.eclipseGUI.workspace.dir}"/>
+		<mkdir dir="${test.eclipseGUI.report.dir}"/>
+		<mkdir dir="${test.eclipseGUI.testdata.dir}"/>
+		<mkdir dir="${test.eclipseGUI.jubula.dir}"/>
+		<mkdir dir="${test.eclipseGUI.screens.dir}"/>
+		<unzip src="${test.eclipseGUI.zip}" dest="${test.eclipseGUI.name}"/>
+	</target>
+	
+	<target name="copy.to.eclipse">
+		<condition property="test.eclipse.path" value="${basedir}/${test.eclipse.name}">
+			<istrue value="${unzipNewEclipse}"/>
+		</condition>
+		<condition property="test.eclipse.path" value="${alternative.test.eclipse.dir}">
+			<isfalse value="${unzipNewEclipse}"/>
+		</condition>
+		<antcall target="prepareTestEclipse"/>
+		<antcall target="prepareTestEclipseGUI"/>
+		
+		<copy todir="${test.eclipse.path}/plugins" failonerror="true" overwrite="true">
+			<fileset dir="${coverage.instr.dir}/lib"/>  
+            <!-- VarModel -->
+            <fileset dir="${home.utils.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <fileset dir="${home.model.dir}/${build.jar.dir}" includes="**/*.jar" />
+			<!-- IVML -->
+            <fileset dir="${home.dslCore.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <fileset dir="${home.ivml.dir}/${build.jar.dir}" includes="**/*.jar" />
+			<!-- Reasoner -->
+            <fileset dir="${home.reasonerCore.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <fileset dir="${home.drools2.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <!-- Instantiation -->
+            <fileset dir="${home.instantiatorCore.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <fileset dir="${home.instantiator.copy.core.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <fileset dir="${home.instantiator.velocity.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <fileset dir="${home.instantiator.velocityLib.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <!-- Instantiation Tests (needed for the scenarios) -->
+            <fileset dir="${home.vil.tests.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <fileset dir="${home.template.tests.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <fileset dir="${home.vil.core.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <fileset dir="${home.template.core.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <fileset dir="${home.vil.expressions.core.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <fileset dir="${home.model.tests.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <fileset dir="${home.instantiator.java.dir}/${build.jar.dir}" includes="**/*.jar" />
+		</copy>
+		
+		<copy todir="${basedir}/${test.eclipseGUI.name}/plugins" failonerror="true" overwrite="true">
+			<!-- Plug-ins of this project/job (must not be instrumnted)! -->
+			<fileset dir="${home.easy.persistence.dir}/${build.jar.dir}/" includes="**/*.jar" />
+			<fileset dir="${home.easy.tests.dir}/${build.jar.dir}/" includes="**/*.jar" />
+			<fileset dir="${home.easy.PLugin.dir}/${build.jar.dir}/" includes="**/*.jar" />
+			<fileset dir="${home.easy.easy-producer.ui.dir}/${build.jar.dir}/" includes="**/*.jar" />
+            
+            <!-- VarModel -->
+            <fileset dir="${home.utils.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <fileset dir="${home.model.dir}/${build.jar.dir}" includes="**/*.jar" />
+			<!-- IVML -->
+            <fileset dir="${home.dslCore.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <fileset dir="${home.ivml.dir}/${build.jar.dir}" includes="**/*.jar" />
+			<!-- Reasoner -->
+            <fileset dir="${home.reasonerCore.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <!-- Instantiation -->
+            <fileset dir="${home.instantiatorCore.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <fileset dir="${home.instantiator.copy.core.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <fileset dir="${home.instantiator.velocity.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <fileset dir="${home.instantiator.velocityLib.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <!-- Instantiation -->
+            <fileset dir="${home.vil.core.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <fileset dir="${home.template.core.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <fileset dir="${home.vil.expressions.core.dir}/${build.jar.dir}" includes="**/*.jar" />
+		</copy>
+	</target>
+	
+	<!-- GUI TESTS BY JUBULA -->
+	 <target name="startautagent" description="Start AUT Agent">
+		<exec executable="/bin/bash" spawn="true">
+		<arg line="${jubula.startautagent.exe}"/>
+		</exec>
+	</target>
+	
+	<target name="startaut" depends="startautagent" description="Start AUT">
+		<sleep seconds="5"/>
+		<exec executable="chmod">
+        <arg line="777 ${jubula.aut.exe}" />
+		</exec>
+		<exec executable="/bin/bash" spawn="true">
+			<arg line="${jubula.startaut.exe} -${jubula.aut.type} -p ${jubula.aut.port} -a ${jubula.aut.host} -k en_US -i ${jubula.aut.id} -e ${jubula.aut.exe} -data ${test.eclipseGUI.workspace.dir}"/>
+		</exec>
+	</target>
+	
+	<target name="testexecute" depends="startaut" description="Run the tests using testexec against an autagent">
+	 <sleep seconds="60"/>
+
+		<exec executable="${jubula.testexec.exe}" failonerror="true">
+			<arg line='-project ${jubula.project} -version ${jubula.project.version} -autid ${jubula.aut.id} -data ${test.eclipseGUI.jubula.dir} -testsuite ${jubula.suite}'/>
+			<arg line='-server ${jubula.aut.host} -port ${jubula.aut.port}'/>
+			<arg line='-datadir "${test.eclipseGUI.testdata.dir}" -resultdir "${test.eclipseGUI.report.dir}"'/>
+			<arg line='-language de_DE -dburl "${jubula.db.url}"'/>
+			<arg line='-dbuser ${jubula.db.user} -dbpw ${jubula.db.pw}'/>
+		</exec>
+	</target>
+
+	 <target name="stopautagent" depends="testexecute" description="Stop AUT Agent">
+		<exec executable="/bin/bash">
+		<arg line="${jubula.stopautagent.exe}"/>
+		</exec>
+	</target>
+	
+	<target name="coreTestEMMA" depends="instrumment, copy.to.eclipse">
+		<property name="eclipse-home" value="${test.eclipse.path}"/>
+		<!-- Core Tests -->
+        <ant target="core-test" antfile="plugins/${test.eclipse.testFW.dir}/library.xml" dir="${test.eclipse.path}">
+		  <property name="data-dir" value="${test.eclipse.workspace.dir} -clean"/>
+		  <property name="plugin-name" value="${test.plugin.core}"/>
+		  <property name="classname" value="${test.suite.core}"/>
+		  <property name="vmargs" value="-Dbaz=true"/>
+		  <property name="extraVMargs" value="-Dde.uni_hildesheim.sse.easy_producer.core.test=${home.easy.easy-producer.core.tests.dir}/testdata -Demma.coverage.out.file=${basedir}/${coverage.results.dir}/${ant.project.name}.emma -Dosgi.dev=${emma.path}/emma.jar" />
+		  <property name="os" value="win32"/>
+		  <property name="ws" value="win32"/>
+		  <property name="arch" value="x86"/>
+		  <property name="timeout" value="240000"/>
+		</ant>
+        <!-- Core.Eclipse Tests -->
+        <ant target="core-test" antfile="plugins/${test.eclipse.testFW.dir}/library.xml" dir="${test.eclipse.path}">
+		  <property name="data-dir" value="${test.eclipse.workspace.dir} -clean"/>
+		  <property name="plugin-name" value="${test.plugin}"/>
+		  <property name="classname" value="${test.suite}"/>
+		  <property name="vmargs" value="-Dbaz=true"/>
+		  <property name="extraVMargs" value="-Deasy_producer.testdata.home=${home.easy.tests.dir}/testdata -Demma.coverage.out.file=${basedir}/${coverage.results.dir}/${ant.project.name}.emma -Dosgi.dev=${emma.path}/emma.jar" />
+		  <property name="os" value="win32"/>
+		  <property name="ws" value="win32"/>
+		  <property name="arch" value="x86"/>
+		  <property name="timeout" value="240000"/>
+		</ant>
+        <!-- Scenario Tests -->
+        <ant target="core-test" antfile="plugins/${test.eclipse.testFW.dir}/library.xml" dir="${test.eclipse.path}">
+		  <property name="data-dir" value="${test.eclipse.workspace.dir} -clean"/>
+		  <property name="plugin-name" value="${test.plugin.szenarios}"/>
+		  <property name="classname" value="${test.suite.szenarios}"/>
+		  <property name="vmargs" value="-Dbaz=true"/>
+		  <property name="extraVMargs" value="-Deasy_producer.scenarios.testdata.home=${home.scenario.tests.dir}/testdata -Demma.coverage.out.file=${basedir}/${coverage.results.dir}/${ant.project.name}.emma -Dosgi.dev=${emma.path}/emma.jar" />
+		  <property name="os" value="win32"/>
+		  <property name="ws" value="win32"/>
+		  <property name="arch" value="x86"/>
+		  <property name="timeout" value="240000"/>
+		</ant>
+	</target>
+	
+	<target name="emmaReport" depends="coreTestEMMA">
+		<emma enabled="true" verbosity="verbose">
+			<report>
+				<property name="report.html.out.encoding" value="UTF-8"/>
+				<sourcepath>
+					<pathelement path="${home.easy.persistence.dir}/src/"/>
+					<pathelement path="${home.easy.tests.dir}/src/"/>
+					<pathelement path="${home.easy.PLugin.dir}/src/"/>
+					<pathelement path="${home.easy.easy-producer.ui.dir}/src/"/>
+					<pathelement path="${home.scenario.tests.dir}/src/"/>
+					<pathelement path="${home.easy.easy-producer.core.tests.dir}/src/"/>
+				</sourcepath>
+		        <fileset dir="${coverage.results.dir}" >
+		          <include name="*.emma" />
+		        </fileset>
+
+		        <xml outfile="${coverage.results.dir}/coverage.xml" depth="method"/>
+		        <html outfile="${coverage.results.dir}/coverage.html" />
+		      </report>
+	    </emma>
+	</target> 
+	
+	<target name="test" depends="emmaReport">
+		<!-- Gather Junit results -->
+		<copy todir="junitResults" failonerror="true" overwrite="true">
+			<fileset dir="${test.eclipse.path}/results/">
+				<include name="**/*.xml" />
+			</fileset>
+		</copy>
+	</target>		
+	
+    <target name="test.gui" depends="stopautagent" />
+    
+    
+	<!-- Creates Javadoc 
+         Not longer needed, as there is a special build job for creating a complete JavaDoc -->
+    <target name="javadoc">
+        <javadoc packagenames="de.*" 
+            private="true"
+            defaultexcludes="yes"
+            destdir="${doc.dir}"
+            author="true"
+            version="true"
+            use="true"
+            Encoding="${javadoc.encoding}"
+            windowtitle="${ant.project.name} API">
+            <fileset dir="${home.easy.PLugin.dir}/src">
+                <exclude name="**/*Activator.java"/>
+                <exclude name="**/package.html"/>
+            </fileset>
+            <fileset dir="${home.easy.easy-producer.ui.dir}/src">
+                <exclude name="**/*Activator.java"/>
+                <exclude name="**/package.html"/>
+            </fileset>
+            <doctitle><![CDATA[<h1>${ant.project.name}</h1>]]></doctitle>
+            <bottom><![CDATA[<i>Copyright &#169; 2009 - 2013 SSE. All Rights Reserved.</i>]]></bottom>
+        </javadoc>
+    </target>
+	
+	<target name="all" depends="init, compile, test, test.gui"/>
+</project>

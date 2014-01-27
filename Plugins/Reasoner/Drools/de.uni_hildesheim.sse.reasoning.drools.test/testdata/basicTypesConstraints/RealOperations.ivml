@@ -1,0 +1,45 @@
+project RealOperations {
+
+    Real r1, r2;
+    
+    Integer a, b;
+    
+    r1 == 1.4;
+    r2 = 2.7;
+    
+    a == 3;
+    
+    //Invalid - 1
+    r1.min(2) == 2.7;
+    
+    //Invalid - 2
+    r2.min(a) == a;
+    
+    Real r5 = 0.5;
+    //Invalid - 3
+    2.0 <> -r5;
+    
+    
+    //Invalid - 4
+    (r2 - r1) > 1.4;
+    
+    //Invalid - 5
+    (r2 + r1).round() <> 4;
+    
+    //Invalid - 6, round of 2.5 should be the greater of 2 and 3, i.e. 3 
+    (1.2 + 1.3).round() <> 3;
+    
+    //Invalid - 7, not a nice test
+    4 - 2.2 > 1.8;
+    
+    //Invalid - 8, not a great test
+    a.mod(1.2) > 1.7;
+    
+    //Invalid - 9, max is 3
+    2.7.max(3) == 2.7;
+    
+    //Invalid - 10
+    2.7.max(2.69999) == 2.69999; 
+    
+        
+}

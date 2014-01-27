@@ -1,0 +1,8 @@
+vilScript variableDeclarations () {
+
+    Integer varI;
+    Integer varJ = 1;
+    Integer varZ = 1 + 1;
+    const Integer varK = 2;
+
+}

@@ -1,0 +1,217 @@
+/**
+ * Description:
+ *     Dieses Projekt beschreibt die Entscheidungsvariablen für das Subsystem 'Wareneingang' 
+ *     auf dem Detaillierungsgrad eines 'Business Analyst'.
+ *     Hier sind die Entscheidungsvariablen auf Anforderungsebene enthalten.
+ * Author:
+ *     Michael Heinrich
+ * Level of detail:
+ *     Business Analyst
+ * Subsystem:
+ *     Wareneingang
+ * 
+ */
+project GoodsInBA { 
+	import Infrastructure;
+
+	Boolean scale; // HE: this was missing
+	
+	//Erfolgt die Vereinnahmnung unter Buchung gegen eine WE-Avis-Position?
+	Boolean receivingAgainstGoodsInLine;
+
+		//--> Wenn ja: Soll bei eindeutiger Identifizierbarkeit einer WE-Avis-Position diese zusätzlich durch den Bediener explizit bestätigt werden? 
+		Boolean isGoodsInLineConfirmationRequired;
+		//TODO: Wie kann ich beschreiben, dass diese Entscheidung nur getroffen werden muss, wenn receivingAgainstGoodsInLine = true ist?
+		//So nicht, oder?
+		receivingAgainstGoodsInLine = false implies isGoodsInLineConfirmationRequired = false;
+
+
+	//Ist der zu vereinnahmende Artikel immer über eine Artikelnummer, eine EAN oder auch über einen WE-Positions-Barcode identifizierbar,
+	//oder muss gegebenenfalls sowohl Artikel als auch WE-Avis-Position ausgehend vom Lieferschein manuell bestimmt werden? 
+	Boolean skuAlwaysIdentifiable = true;
+
+	//Ist die WE-Avis-Position mittels Barcode identifizierbar?
+	enum IdentificationType {sku, barcode};
+	IdentificationType identificationType;
+		//Wenn die Vereinnahmung nicht gegen eine WE-Avis-Position erfolgt, muss der Start des Workflows immer über den Artikel (Sku) erfolgen
+		receivingAgainstGoodsInLine = false implies identificationType = IdentificationType.sku; // HE: added qualification
+		receivingAgainstGoodsInLine = false implies skuAlwaysIdentifiable = true;
+
+	//Soll am Wareneingang ein Artikelbild angezeigt werden?
+	Boolean showSkuPicture = false;
+	
+	//Sind auf dem WE-Avis bzw. der WE-Avis-Position textuelle Informationen vorhanden, die bei der Vereinnahmung angezeigt werden müssen?
+	Boolean goodsInInformationShown = false;
+	 
+	//Werden am Wareneingang Bestandseigenschaften erfasst? 
+	// --> Wenn ja, welche? (In der Plattform vorhanden: Mindesthaltbarkeitsdatum, Chargennummer, Produktionsdatum)
+	Boolean bestBeforeEntered; //Mindesthaltbarkeitsdatum
+	Boolean batchEntered; //Chargennummer
+	Boolean prodDateEntered; //Produktionsdatum
+
+	//Wie bildet man weitere projektspezifische Bestandseigenschaften, die nicht in der Plattform vorhanden sind in der ab? --> Klärung TelCo
+	// --> Gibt es Prüfungen / Validierungen bei der Eingabe der Bestandseigenschaften?
+	//Keine Ahnung wie man (projektspezifische) Prüfungen / Validierungen in IVML abbildet -> Klärung in TelCo
+
+	//Werden vor allem gleichartige (homogen) Paletten vereinnahmt oder sind die vereinnahmten Paletten in der Regel unterschiedlich (heterogen)?
+	enum PalletForm {homogeneous, heterogeneous};
+	PalletForm palletForm = PalletForm.heterogeneous; // HE: added qualification
+	
+	//Werden Mischpaletten vereinnahmt?
+	Boolean receivingOfMixedPallets;
+	
+	//Gibt es überbreite TEs?
+	enum PalletShape {regular, overwidth};
+	PalletShape palletShape = PalletShape.regular; // HE: added qualification
+	
+	//Gibt es unterschiedlich hohe Lagerfächer? Ist also die Eingabe der Höhe einer vereinnahmten TE wichtig? 
+	Boolean heightOfTuRelevant = false; 
+		// --> Welche unterschliedlichen Fachhöhen (Höhenklassen) gibt es? Angabe in mm.
+		typedef HeightClasses setOf(Integer);
+		HeightClasses heightClasses;
+				
+	//Gibt es direkten Nachschub vom WE aus?
+	Boolean directReplenishment = true;
+		// --> Werden Paletten für den Nachschub optimiert gebildet und vereinnahmt?
+		//TODO: Wie kann ich beschreiben, dass diese Entscheidung nur getroffen werden muss, wenn directReplenishment = true ist?
+		Boolean optimizationOfPalletsForDirectReplenishment = false;
+			
+	//Gibt es Crossdocking?
+	Boolean crossdocking = false;
+		// --> Werden Paletten für Crossdocking optimiert gebildet und vereinnahmt?
+		//TODO: Wie kann ich beschreiben, dass diese Entscheidung nur getroffen werden muss, wenn crossdocking = true ist?
+		Boolean optimizationOfPalletsForCrossdocking = false;
+
+	//Erfolgt eine Gewichtsprüfung gegen ein Waagengewicht?
+	Boolean weightCheckWithScale;
+	scale = false implies weightCheckWithScale = false;
+	scale = true implies weightCheckWithScale = true;
+	//  TODO: Kann man das auch so schreiben?	scale implies weightCheckWithScale;
+		
+	//Gibt es Gebinde? (subsystem: master data)
+	Boolean packingUnits;
+		// --> Welche Gebindetypen gibt es? (subsystem: master data)
+		typedef PackingUnitTypes setOf(String);
+		PackingUnitTypes packingUnitTypes;
+
+	//Werden am Wareneingang Artikelstammdaten (Abmaße / Gewichte) erfasst?
+	Boolean skuMasterDataCollectionRequired;
+		//Kann nur vorhanden sein, wenn masterDataCollection = true (NULL-Wert von skuMasterDataCollection?);
+		SkuMasterDataCollection skuMasterDataCollection;
+		//sequenceOf(SkuMasterDataValue) SkuMasterDataValues; // HE: not needed, see below
+
+	enum SkuMasterDataReceivingTime {firstReceivingOfSku, firstSelectionOfGoodsInLine};
+	// HE: name changed to singular... intended?
+	enum SkuMasterDataValue {length, width, height, weight, packingUnitQuantity};
+
+	compound SkuMasterDataCollection {
+		//Erfolgt diese Stammdatenerfassung bei Artikelersteinlagerung oder bei der Erstauswahl der WE-Avis-Position?
+		SkuMasterDataReceivingTime skuMasterDataReceivingTime;
+		
+		//Wenn Gebinde, für welche Gebindetypen erfolgt die Stammdatenerfassung?
+		PackingUnitTypes packingUnitTypesForSkuMasterDataCollection;
+		//TODO: constraint hinzufügen, dass packingUnitTypesForMasterDataCollection eine Teilmenge von packingUnitTypes sein muss.
+	
+		//Welche Daten werden erfasst (L, B, H, G, GM)?
+		sequenceOf(SkuMasterDataValue) skuMasterDataValues = {SkuMasterDataValue.length, SkuMasterDataValue.width}; // HE: changed
+		
+		// --> Werden bereits erfasst Daten vorgeblendet?
+		Boolean superimposeExistingValues = false;		
+	}
+
+	//Gibt es Schüttgut bzw. Kleinteile, die schwer manuell zu zählen sind -> wenn nein, wird die Zählung per Referenzwiegung benötigt? 
+	Boolean skusManuallyCountable = true;
+	//Wenn keine Waage angeschlossen ist, kann es keien Referenzwiegung geben, also müssen die Artikel manuell zählbar sein
+	not scale implies skusManuallyCountable = true;   // HE: corrected
+	//TODO for TelCo: 
+	//Schreibt man diesen Constraint besser hier hin oder besser ins Infrastrukturpackage in der Form:
+	    //GoodsInBA::skuManuallyCountable = false implies scale = true
+	//um anzuzeigen, dass auf Grund des vorhandenen Artikelspektrums eine Waage erforderlich ist. Nachteil: Referenz auf GoodsInBA "package"
+	//in Infrastruktur "package". Vorteil: Es wird angezeigt, dass in einem Projekt eine Waage am WE-Arbeitsplatz erforderlich ist.
+	//Frage: Reihenfolge der Projektierung: in der "package" Hierarchie von oben nach unten oder von unten nach oben? 
+	//       Normalerweise von oben nach unten, oder? Erst überlegt man sich, welche Abläufe man braucht, danach welche Infrastruktur nötig ist.  
+
+	//Wird am Wareneingang eine Stichprobenmenge entnommen (und die restliche Ware QS-gesperrt eingelagert)? 
+	Boolean samplingRequired;
+		//Kann nur vorhanden sein, wenn samplingRequired = true (NULL-Wert von sampling?);
+		Sampling sampling;
+		
+		//Die Stichprobenmenge wird:
+		// - entweder vom ERP-System über die WE-Avis-Position definiert
+		// - oder vom ERP-System über die Artikelstammdaten definiert
+		// - oder im .WM als Parameter pro Mandant konfiguriert
+		enum SamplingQuantityDefinition {goodsInLine, sku, clientParameter};
+		
+		//Auslöser des Verwendungsentscheids (usage decision)
+		enum UsageDecisionTrigger {erp, wm};
+		
+		compound Sampling {
+			// Wer definiert die Stichprobenmenge?
+			SamplingQuantityDefinition samplingQuantityDefinition;
+			receivingAgainstGoodsInLine = false implies samplingQuantityDefinition = SamplingQuantityDefinition.clientParameter; // HE: corrected
+			
+			// 	Woher kommt der Verwendungsentscheid (Entscheidung, dass die QS-gesperrte Ware nun frei verfügbar ist.)?
+			UsageDecisionTrigger usageDecisionTrigger;
+		}
+		
+	//Gibt es eine Vereinnahmung in geteilte Behälter? 
+	Boolean splitTUsRequired = false;
+		//Kann nur vorhanden sein, wenn splitTUsRequired = true (NULL-Wert von splitTUs);
+		SplitTUs splitTUs;
+
+		enum CompartmentIdentificationType {barcode, lightControl};  //compartment = eine Teilung in einem geteilten Behälter
+		compound SplitTUs {
+			// Werden die Teilungen mittels Lichtsteuerung oder mittels Barcode identifiziert?
+			CompartmentIdentificationType compartmentIdentificationType;
+			//Dieser Constraint ist nur relevant, wenn splitTUs = true;		
+			not lightControl implies compartmentIdentificationType = CompartmentIdentificationType.barcode;
+			
+			// Wenn Barcode: Sind die Teilungen mit Barcodes vorbestückt?
+			Boolean compartmentsAlreadySetUp;
+		}
+	
+	//Gibt es artikelspezifisch zu konfigurierende TU-Typen, die bei der Vereinnahmung vorzublenden, also zu bevorzugen sind?
+	Boolean superimposeTuType;
+	
+	//Gibt es TU-Typ spezifisch Standard-Artikelmengen, die bei der Vereinnahmung vorzublenden sind?
+	Boolean superimposeQtyToReceive;
+	
+	//Soll die Menge über den Scan von Artikel-Barcodes gezählt werden können?
+	Boolean countByScanning = false;
+	
+	//Wie erfolgt die Verbringung in den Ziel-Lagerbereich?
+	//TODO: Mit Teamleiter Wareneingang klären 
+	
+	//Welche Druckdokumente gibt es im Wareneingang / bei der Vereinnahmung?
+ 		// --> Warenbegleitschein / -etikett pro TE nach der Vereinnahmung?
+		// --> Vereinnahmungsbericht pro WE-Avis-Position bei Abschluss?
+		// --> Vereinnahmungsbericht pro WE-Avis bei Abschluss?
+		enum PrintOutTypes {tuLabel, goodsInLineSummary, goodsInSummary}; //Projektspezifisch erweiterbar
+		setOf(PrintOutTypes) printOuts;
+
+	//PrintOuts printOuts; // HE: implied in setOf(PrintOutTypes) printOuts;
+		
+		
+	//Gibt es einen "manuelle" Wareneingangsavisierung, d.h. können WE-Avise direkt in .WM generiert werden?
+	Boolean manualPreAdviseAvailable;
+	//Kann nur vorhanden sein, wenn manualPreAdviseAvailable = true (NULL-Wert von manualPreAdvise);
+	ManualPreAdvise manualPreAdvise;
+	
+		compound ManualPreAdvise {
+			//Ist bei der manuellen Wareneingangsavisierung ein geplantes WE-Datum bekannt?
+			Boolean scheduledSupplyDateAvailable;
+			
+			//Kann die manuell erstellte WE-Avis-Position über einen Barcode identifiziert werden? 
+			//TODO: Schreibt man das noch als Entscheidungsvariable, obwohl schon alle Möglichkeiten über Contraints festgelegt sind?	
+			Boolean barcode;
+			identificationType = IdentificationType.sku implies barcode = false;
+			identificationType = IdentificationType.barcode implies barcode = true;
+		}		
+
+	//Verbringung:
+
+	//Welche unterschiedlichen Typen von Wareneingangsarbeitsplätzen gibt es?
+		//Hardware-Ausstattung
+		//Ziel-Lagerbereiche
+		//Verbringung mit Sammel-TE
+}

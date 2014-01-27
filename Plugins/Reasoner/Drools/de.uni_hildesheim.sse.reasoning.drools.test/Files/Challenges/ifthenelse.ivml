@@ -1,0 +1,48 @@
+project IF_THEN_ELSE {
+    
+    Integer a = 5;
+    Integer b;
+    Integer c;
+        
+
+    a == 5 implies c == 10;
+
+   // if a == 5 then b == 10 else c == 15 endif;
+      
+    sequenceOf(Integer) seqA;
+    sequenceOf(Integer) seqB;
+
+    
+    seqA = {1, 2, 3, 4, 5};
+    
+    //seqB = {a, b, a, c};
+    
+
+//    seqB.size() = 0;
+    
+    
+    compound db {
+        Integer value;
+        String server;
+        Integer key;
+    }
+    
+    
+  
+    
+    db db1;
+
+    db1 = {value = 1, server = "MAIL", key = 2};
+    
+    
+    Integer d;
+    d = 2 + 3;
+    
+    Integer e;
+    
+    //This should give a conflict, since db1 is assigned.
+    5 > 0 implies db1.key == 3;
+    
+    5 > 0 implies e == 15;
+    
+}

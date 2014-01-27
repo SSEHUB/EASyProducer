@@ -1,0 +1,23 @@
+project realMAXVariables {
+
+    Real a;
+    Real a1;
+    Real b;    
+    Real b1;
+    
+    a=5.2;
+    b=2.5;
+    a1=-5.2;
+    b1=-2.5;
+    
+    max(5.2, b) == 5.2;
+    max(a, 2.5) == 5.2;
+    max(a, b) == 5.2;
+    max(-5.2, b) == 2.5;
+    max(a1, 2.5) == 2.5;
+    max(a1, b1) == -2.5;
+    max(5.2, b1) == 5.2;
+    max(a, -2.5) == 5.2;
+    max(a, b1) == 5.2;   
+
+}

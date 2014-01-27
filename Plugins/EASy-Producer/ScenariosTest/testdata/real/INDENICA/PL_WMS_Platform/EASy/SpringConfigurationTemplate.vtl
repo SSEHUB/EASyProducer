@@ -1,0 +1,21 @@
+template springConfiguration(Configuration config, XmlFileArtifact target) {
+    /*
+     * Assumption: Even if not-config XmlArtifacts will be passed, only config-Artifacts
+     * will include the elements (xml-tags) that are considered by this template!
+     * Not-config XmlArtifacts stay untouched!
+     */ 
+    
+    def main(Configuration config, XmlFileArtifact target) {
+        setOf(XmlElement) propertyEntries = target.selectByName("property"); //get all XML-elements with a specific name; also recursive!
+        for (XmlElement entry : propertyEntries) {
+            XmlElement varEntry = entry.elements().selectByName("easy:varprop"); // Must only be one entry in "property"!
+            if (varEntry.exists()) {
+                for (DecisionVariable decVar : config.variables()) { // Could be refined to a specific compound...
+                    if (varEntry.getText() == decVar.getName) { // Is this safe? getText() or getContent() or both available? entry.getText; decVar.getQualifiedName() in case it is a compound-element? 
+                        varEntry.setText(decVar.getValue());
+                    }
+                }             
+            }
+        }
+    }
+}

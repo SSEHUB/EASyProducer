@@ -1,0 +1,18 @@
+project HardConstraintOverFixedStatus3 {
+
+    Integer a, b, c;
+    
+    
+    a = 5;
+    b = 20;
+    
+    //This should cause inconsistency
+    c == 25;
+    c == a * a;
+    true implies a == 7;
+    
+    //This is valid because c is fixed to 25 and in this case it cannot be equal to a * a which is 49.
+    c < 50;
+    
+
+}

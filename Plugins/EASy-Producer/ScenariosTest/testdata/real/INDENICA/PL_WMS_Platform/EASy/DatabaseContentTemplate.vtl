@@ -1,0 +1,42 @@
+template databaseContentInit(Configuration config, SqlFileArtifact target) {
+    /*
+     * Important: Currently navigating to a specific compound or filtering for
+     * decision variables with a specific name is not included. The latter case
+     * is because this was a hack for D2.2.2.
+     * 
+     * The former may be a more elegant solution and will be included as soon as
+     * there is a variability model that includes such a compound (or any other element).
+     */
+
+    def main(Configuration config, SqlFileArtifact target) {
+        'Here comes the header of this file and any additional information that has to be defined before the actual variants'
+    
+        createVariantContants(config);
+        
+        'Here comes the end of this file and any additional information that has to be defined after the actual variants'
+    }
+    
+    def createVariantContents(Configuration config) {
+        setOf(DecisionVariable) dbContentVariables = config.selectByName("materialTopology").getElements(); // Like in D2.2.2, "materialTopology" is a "setOf(Material)", while "Material" is a compound.
+        for (DecisionVariable dbContentVariable : dbContentVariables) { // iterate over compounds
+            if (dbContentVariable.getType() == "Material") {
+                createMaterialEntrydb(dbContentVariable);
+            }
+            if (dbContentVariable.getType() == "LocationType") {
+                // call other defs for creating the specific entry in contentInitArtifact
+            }
+        }
+    }
+    
+    def createMaterialEntry(DecisionVariable materialConfig) {
+        'MATERIAL ENTRY: $materialConfig.variables().selectByName("materialNumber").atIndex(0).getValue()'
+        /*
+        #INSERT [dbo].[material] ([materialNumber], [name]) VALUES (N'#
+            materialConfig.variables().selectByName("materialNumber").atIndex(0).getValue();
+        #', N'#
+            materialConfig.selectByName("name").atIndex(0).getValue();
+        #')#
+        * 
+        */
+    }
+}

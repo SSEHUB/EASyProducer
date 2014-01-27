@@ -1,0 +1,94 @@
+project testStringOperations {
+
+String str1;
+String str2;
+
+str1 = "A string";
+str2 = "Another string";
+str1.size() < 2;
+String str3;
+str3 = str1.concat(str2);
+Integer intx;
+intx = 5;
+
+String str4;
+str4 = str1.substring(0, 4);
+
+Integer aa = 5;
+Integer bb = 11;
+Integer cc = aa + bb;
+Integer dd = 50;
+Integer ee;
+Integer ff;
+aa = 55;
+ee = 25;
+
+ff = 29;
+Real ra = 5.6;
+ee = ra;
+ff = ra;
+Boolean eqs;
+eqs = (aa = ra);
+
+dd = 20;
+
+compound A {
+	Integer A_1;
+	Integer A_2;
+	}
+	
+compound B {
+	Integer B_1;
+	Integer B_2;
+	}
+A A1;
+A A2;
+A A3;
+B B1;
+
+A1.A_1 = 2;
+A1.A_2 = 5;	
+
+A3.A_1 = 2;
+A3.A_2 = 5;
+
+Boolean neqs2;
+neqs2 = (A3 = A1);
+
+Boolean neqs1;
+neqs1 = (A3 <> A1);
+B1.B_1 = 2;
+B1.B_2 = 5;
+
+Boolean ceqs;
+ceqs = (A1 <> B1);
+
+A1 = B1;
+A2 = A1;
+
+sequenceOf(Integer) seq_A = {1, 2, 2, 3, 4, 4, 5};
+sequenceOf(Integer) seq_B = {1, 2, 2, 3, 4, 4, 5};
+sequenceOf(Integer) seq_C ;
+sequenceOf(Integer) seq_D ;
+seq_C = seq_A.union(seq_B);
+seq_D = seq_A.intersection(seq_B);
+
+
+Boolean uniq1;
+//uniq1 = seq_A.isUnique();
+setOf(Integer) set_A= {1, 2, 3};
+setOf(Integer) set_B= {1, 2, 3};
+
+setOf(Integer) set_C;
+set_C = set_A.union(set_B);
+setOf(Integer) set_D;
+set_D = set_A.intersection(set_B);
+
+
+//uniq1 = (set_A <> set_B);
+uniq1 = (seq_A = seq_B);
+Integer ind;
+ind = seq_A.indexOf(5);
+
+
+}

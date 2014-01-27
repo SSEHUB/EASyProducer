@@ -1,0 +1,7 @@
+vilScript variableDeclarationsFail2 () {
+// fails due to equal names (different types)
+
+    Integer test;
+    Boolean test;
+
+}

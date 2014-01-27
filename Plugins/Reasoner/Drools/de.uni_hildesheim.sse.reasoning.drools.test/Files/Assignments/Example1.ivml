@@ -1,0 +1,21 @@
+project Example1 {
+
+    Integer a, b, c;
+    
+    sequenceOf(Integer) seq1 = {1, 2, 3};
+    
+    a = 5;
+    b = 20;
+    
+    //This will cause inconsistency
+    //c == 25;
+    c == a * a;
+    
+    a == 10;
+    b > 15 implies a == 6 * c;
+    true implies a == 7;
+    //a > 0 implies c == 99;
+    
+    
+
+}

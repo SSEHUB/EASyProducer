@@ -1,0 +1,74 @@
+@advice(myModel)
+vilScript produceEP1 (Project source, Project target, Configuration config) {
+
+    Path source_templates = "$source/templates";
+    Path source_bin = "$source/bin";
+    Path target_bin = "$target/bin";
+    Path target_variability = "$target/variability";
+    Path target_dist = "$target/dist";
+
+    produceGenericCopy(FileArtifact x, FileArtifact y) = y : x {
+        x.copy(y);
+    }
+
+    clean() = : {
+        target_bin.deleteAll();
+    }
+
+    createFolder(Path x) = target.localize(source, x) : x {
+        x.mkdir();
+    }
+
+    createFolders() = "$source/*.java" : {
+        setOf(FileArtifact) allFiles = source.getLocalProjectArtifacts();
+        map(x=allFiles.selectByType(FolderArtifact)) {
+            createFolder(x.path());
+        };
+        setOf(FileArtifact) noClasses = allFiles.selectByType(FileArtifact).excluding(allFiles.selectByType(ClassFileArtifact));
+        map(x=noClasses) {
+            produceGenericCopy(x, target.localize(source, x));
+        };
+    }
+
+    compileGoal() = "$target_bin/*.class" : "$source/*.java" {
+        javac(RHS, LHS);
+    }
+
+    createAspectFromTemplate(Configuration config, ClassFileArtifact class, FileArtifact template, FileArtifact aspectFile) = : {
+        vilTemplateProcessor(template, config, aspectFile);
+        aspectJ(aspectFile.substituteExtension("java"), aspectFile);
+    }
+
+    injectAspects(Project source, Project target, Configuration config, IvmlElement time) = : compileGoal() {
+        sequenceOf(ClassFileArtifact) timedClassFiles = join(c:target.selectByType(ClassFileArtifact), exclude d:config.variables()) with (c.annotationValue("Component", "decVar") == d.name() and time == d.getAttribute(Test::bindingTime).value());
+        map(x=timedClassFiles) {
+            FileArtifact aspectFile = target_variability + "/" + (x.name()) + ".aj";
+            FileArtifact template = source_templates + "/" + time + x.annotationValue("Component", "category") + "Template.tpl";
+            createAspectFromTemplate(config, x, template, aspectFile);
+        };
+    }
+
+    produceJavaCompile() = : compileGoal() {
+        vilTemplateProcessor("$source_templates/createConfiguration.vtl", config.selectByAttribute(Test::bindingTime, Test::BindingTime.compile), "$target_variability/StaticConfiguration.java", prefix="static private");
+        injectAspects(source, target, config, Test::BindingTime.compile);
+    }
+
+    produceJavaStartup() = : compileGoal() {
+        vilTemplateProcessor("$source_templates/createConfiguration.vtl", config.selectByAttribute(Test::bindingTime, Test::BindingTime.startup), "$target_variability/StaticConfiguration.java", prefix="");
+        injectAspects(source, target, config, Test::BindingTime.startup);
+    }
+
+    produceJavaRuntime() = : compileGoal() {
+        vilTemplateProcessor("$source_templates/createConfiguration.vtl", config.selectByAttribute(Test::bindingTime, Test::BindingTime.runtime), "$target_variability/StaticConfiguration.java", prefix="");
+        injectAspects(source, target, config, Test::BindingTime.runtime);
+    }
+
+    package() = "$target_dist/client.jar" : target_bin.selectByType(ClassFileArtifact), produceJavaCompile(), produceJavaStartup(), produceJavaRuntime() {
+        sequenceOf(FileArtifact) files = join(c:target_bin.selectByType(ClassFileArtifact), exclude d:config.variables()) with (c.annotationValue("Component", "decVar") == d.name() and d.booleanValue());
+        jar(target, files, "$target_dist/client.jar");
+    }
+
+    main() = : package() {
+    }
+
+}

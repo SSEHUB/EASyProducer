@@ -1,0 +1,14 @@
+project booleanORVariables {
+
+    Boolean t;
+    Boolean f;
+    
+    t = true;
+    f = false;
+    
+    (t or f) == true;
+    (f or t) == true;
+    (t or t) == true;
+    (f or f) == false;
+
+}

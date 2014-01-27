@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="wmsdbModel.Store" Alias="Self" Provider="System.Data.SqlClient" 
+        ProviderManifestToken="2008" 
+        xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" 
+        xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <!-- definitions and association sets skipped -->
+        <EntityType Name="material">
+          <Key>
+            <PropertyRef Name="materialNumber" />
+          </Key>
+          <Property Name="materialNumber" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" />
+          <Property Name="description" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <!-- further entity types skipped -->
+      </Schema></edmx:StorageModels>
+    <edmx:ConceptualModels>
+      <Schema Namespace="wmsdbModel" Alias="Self" xmlns="http://schemas.microsoft.com/ado/2008/09/edm"
+        xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+        <EntityContainer Name="wmsdbEntities" annotation:LazyLoadingEnabled="true" />
+        <!-- definitions skipped -->
+        <EntityType Name="Material">
+          <Key>
+            <PropertyRef Name="materialNumber" />
+          </Key>
+          <Property Name="materialNumber" Type="String" Nullable="false" MaxLength="50" Unicode="true" 
+            FixedLength="false" />
+          <Property Name="name" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="description" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="positions" Relationship="wmsdbModel.FK_position_material" 
+            FromRole="material" ToRole="position" />
+        </EntityType>
+        <!-- further entity types skipped -->
+      </Schema></edmx:ConceptualModels>
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="wmsdbModelStoreContainer" 
+          CdmEntityContainer="wmsdbEntities">
+          <EntitySetMapping Name="Materials"><EntityTypeMapping TypeName="wmsdbModel.Material">
+          <MappingFragment StoreEntitySet="material">
+            <ScalarProperty Name="materialNumber" ColumnName="materialNumber" />
+            <ScalarProperty Name="name" ColumnName="name" />
+            <ScalarProperty Name="description" ColumnName="description" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <!-- further mappings skipped -->
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- designer content skipped -->
+</edmx:Edmx>
+
+

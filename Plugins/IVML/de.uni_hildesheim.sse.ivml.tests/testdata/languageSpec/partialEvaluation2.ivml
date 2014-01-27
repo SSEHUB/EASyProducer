@@ -1,0 +1,25 @@
+// same as partialEvaluation but checks import preference in same file
+project ivmlSpec_pc_application {
+
+    compound ContentType {
+        String contentName;
+        Integer bitrate;
+    }
+
+    ContentType appContent;
+    eval {
+        appContent.contentName == "Text" implies appContent.bitrate == 128;
+    };
+}
+project ivmlSpec_pc_targetPlatform {
+
+    String name;
+    Integer bitrate;
+}
+project ivmlSpec_pc_contentSharing {
+
+    import ivmlSpec_pc_application;
+    import ivmlSpec_pc_targetPlatform;
+    //* bitrate >= appContent.bitrate;
+    ivmlSpec_pc_targetPlatform::bitrate >= ivmlSpec_pc_application::appContent.bitrate; 
+}

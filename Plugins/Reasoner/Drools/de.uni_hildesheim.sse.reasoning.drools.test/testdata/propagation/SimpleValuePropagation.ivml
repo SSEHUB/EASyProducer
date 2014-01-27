@@ -1,0 +1,20 @@
+project SimpleValuepropagation {
+	
+	Integer a, b ,c;
+		
+	b == 3;
+	c == 5;
+	
+	//ValueProp - 1
+	a == b * c;
+	
+	Boolean bool;
+	
+	//Value prop - 2, bool should be true, and status fixed.
+	bool == c > b;
+	
+	String str;
+	
+	//Value prop - 3, str should be "Hello world!" and status fixed/frozen.
+	str == "Hello".concat(" World!");
+}

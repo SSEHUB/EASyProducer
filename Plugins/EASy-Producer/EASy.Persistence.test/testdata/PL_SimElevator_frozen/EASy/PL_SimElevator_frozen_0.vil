@@ -1,0 +1,9 @@
+vilScript PL_SimElevator_frozen (Project source, Configuration conf, Project target) {
+
+    version v0;
+
+    main(Project source, Configuration conf, Project target) = : {
+        velocity("$target/**/*.java", conf);
+    }
+
+}

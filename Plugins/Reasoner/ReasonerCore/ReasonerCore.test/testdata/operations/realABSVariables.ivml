@@ -1,0 +1,12 @@
+project realABSVariables {
+
+    Real a;
+    Real a1;
+    
+    a=5.5;
+    a1=-5.5;
+    
+    abs(a) == 5.5;
+    abs(a1) == 5.5;
+
+}

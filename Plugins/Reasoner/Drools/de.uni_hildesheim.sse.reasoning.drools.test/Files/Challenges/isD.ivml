@@ -1,0 +1,48 @@
+project ISD {
+	
+	sequenceOf(Integer) seq2 = {1, 2, 3, 4, 5};
+
+	compound CP {
+		Boolean b6;	
+		sequenceOf(Integer) seq6 = {10, 20, 30, 40, 50};
+		sequenceOf(Integer) seq7;
+		Boolean b9;
+	}
+	
+	CP cp1;
+	CP cp2;
+	cp1.b6 = cp1.seq6->exists(t | t == 40);
+	
+	
+	
+	cp1.seq6.size() > 4;
+	cp1.seq7 == cp1.seq6->select(t | t > 20 and t < 50);
+	sequenceOf(Integer) seq8;
+	seq8 == cp1.seq6->reject(t | t > 20 and t < 50);
+	cp1.seq6->exists(t | t == 40);
+
+	Boolean b8;
+	cp1.seq6->exists(t | t == 40) implies b8 == true;
+	cp1.seq6->exists(t | t == 40) implies cp1.b9 == (true and cp1.b6);
+	Integer any1;
+	//any1 = cp1.seq6->any(t | t > 20);
+	Boolean b10;
+	//b10 = cp1.seq6->one(t | t == 50);
+	
+	cp2.seq6 = {30, 40, 50, 60};
+	
+	
+	/*
+	*/
+	Boolean b11;
+	b11 == cp1.seq6->exists(t | t > 40);
+	
+	10 < 13;
+	Integer i11 = 5;
+		
+	eval{
+		3 < 5 implies i11 == 25;
+		//2 < 3;
+		}
+	
+}

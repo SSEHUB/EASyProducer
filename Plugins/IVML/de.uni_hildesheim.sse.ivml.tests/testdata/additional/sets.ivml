@@ -1,0 +1,6 @@
+project PL_Sets {
+
+    version v0;
+    setOf(Integer) set;
+    set = {1, 2, 3, 3};
+}

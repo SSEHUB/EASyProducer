@@ -1,0 +1,16 @@
+project GeneralAssignmentAttribute {
+    
+    attribute Integer meta = 0 to GeneralAssignmentAttribute;
+    
+    assign (meta = 15) to {  
+             Boolean multiClient;
+    }
+    
+    
+    multiClient = true;
+    
+    Integer a;
+    a = 20;
+    a.meta = 20;
+    
+}

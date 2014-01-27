@@ -1,0 +1,16 @@
+vilScript strings () {
+
+    String s1 = "test";
+    Integer i1 = s1.length();
+    String s2 = s1 + " again";
+    Boolean b1 = s1 == "test again";
+    Boolean b2 = s2 == "test again";
+    Boolean b3 = s1.matches(".*est.*");
+    Boolean b4 = s1.matches(".*abba.*");
+    Integer i2 = toInteger("123");
+    Real r1 = toReal("12.3");
+
+    main() = : {
+    }
+
+}

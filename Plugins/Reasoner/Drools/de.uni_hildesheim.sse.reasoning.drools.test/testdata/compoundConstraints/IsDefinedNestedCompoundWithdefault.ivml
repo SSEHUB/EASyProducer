@@ -1,0 +1,26 @@
+project IsDefinedNestedCompoundWithdefault {
+
+    compound A {
+        Integer aa1;
+        B bb;
+        Boolean bool3 = true;
+        }
+        
+     compound B {
+        Integer b1 = 5;
+        C cc;
+     }
+
+    compound C {
+        Integer ccc;
+        Integer ccc2;
+    }
+    
+    A a1;
+    
+    B b2;
+    
+    //This should be consistent
+    isDefined(a1.bb); 
+
+}

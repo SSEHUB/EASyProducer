@@ -1,0 +1,9 @@
+vilScript copy () {
+
+    main() = : {
+        FileArtifact a;
+        Path p;
+        a.copy(p);
+    }
+
+}

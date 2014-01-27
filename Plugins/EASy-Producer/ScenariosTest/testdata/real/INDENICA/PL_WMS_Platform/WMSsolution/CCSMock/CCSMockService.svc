@@ -1,0 +1,2 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="CCSMockService.CCSMockService" Factory="Spring.ServiceModel.Activation.ServiceHostFactory" CodeBehind="CCSMockService.svc.cs" %>
+    

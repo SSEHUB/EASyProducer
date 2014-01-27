@@ -1,0 +1,5 @@
+project a_retrospectiveConflict {
+
+    version v1;
+    import c_retrospectiveConflict;
+}

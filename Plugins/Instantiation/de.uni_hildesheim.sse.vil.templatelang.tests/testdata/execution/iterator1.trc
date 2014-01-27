@@ -1,0 +1,23 @@
+-> main(Configuration, Artifact) with (<config>, test.texts)
+    -> variables(Configuration) with (<config>) = {import::iInt, test::pBoolean, test::pComp, test::pCompSeq, test::pEnum, test::pInt, test::pReal, test::pString}
+    -> name(DecisionVariable) with (import::iInt) = iInt
+    -> ==(String, String) with (iInt, pInt) = false
+    -> name(DecisionVariable) with (test::pInt) = pInt
+    -> ==(String, String) with (pInt, pInt) = true
+    -> name(DecisionVariable) with (test::pString) = pString
+    -> ==(String, String) with (pString, pInt) = false
+    -> name(DecisionVariable) with (test::pReal) = pReal
+    -> ==(String, String) with (pReal, pInt) = false
+    -> name(DecisionVariable) with (test::pBoolean) = pBoolean
+    -> ==(String, String) with (pBoolean, pInt) = false
+    -> name(DecisionVariable) with (test::pEnum) = pEnum
+    -> ==(String, String) with (pEnum, pInt) = false
+    -> name(DecisionVariable) with (test::pComp) = pComp
+    -> ==(String, String) with (pComp, pInt) = false
+    -> name(DecisionVariable) with (test::pCompSeq) = pCompSeq
+    -> ==(String, String) with (pCompSeq, pInt) = false
+    -> select(Sequence, ExpressionEvaluator) with ({import::iInt, test::pBoolean, test::pComp, test::pCompSeq, test::pEnum, test::pInt, test::pReal, test::pString}, <evaluator>) = {test::pInt}
+    for d {
+        d <- test::pInt
+        -> value(DecisionVariable) with (test::pInt) = 0
+    }

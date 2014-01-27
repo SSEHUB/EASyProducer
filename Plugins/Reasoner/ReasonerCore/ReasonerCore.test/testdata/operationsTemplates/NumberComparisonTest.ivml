@@ -1,0 +1,28 @@
+project NumberComparisonTest {
+
+    // Integer
+    Integer intA = 2;
+    Integer intB = 1;
+    
+    intA > intB;
+    intA >= intB;
+    intB < intA;
+    intB<= intA;
+    intA >= 0;
+    intB <= 100;
+    0 < 100;
+    
+    // Real
+    Real realA = 2.0;
+    Real realB = 1.0;
+   
+    realA > realB;
+    realA >= realB;
+    realB < realA;
+    realB<= realA;
+    realA >= 0;
+    realB <= 100;
+    0.0 < 100.0;
+   
+    
+}

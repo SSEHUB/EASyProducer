@@ -1,0 +1,57 @@
+project Tes_IsDefined {
+
+    compound A {
+        Integer aa1;
+        Integer aaaa;
+        B bb;
+        Boolean bool3 = true;
+        
+        }
+        
+     compound B {
+        Integer b1;
+        C cc;
+     }
+
+    compound C {
+        Integer ccc;
+        Integer ccc2;
+        }
+    
+    Boolean bool1;
+    
+    Integer a;
+    Integer b;
+    Integer c;
+    c = a * b;
+    
+    Integer d;
+    a == 5 implies (d == 160 or d == 190);
+    
+    A a1;
+    //bool1 = isDefined(a1);
+    Boolean bool4;
+    bool4 = bool1 or true;
+    
+    Boolean bool5;
+    bool5 = isDefined(a1.bb);
+    
+    a = 5; 
+    b = 6;
+    d = 190;
+    
+   a1 = {aa1 = 1, aaaa = 10, bb = {b1 = 100, cc = {ccc = 1000}}};
+    
+    /*
+    */
+   isDefined(a1) and true;
+   
+   
+    
+    bool1 = isDefined(a1);
+    
+    Boolean bool2;
+    bool2 = (a1.bool3 or true);
+    
+    
+}

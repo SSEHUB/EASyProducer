@@ -1,0 +1,11 @@
+import generics with (version == v1);
+
+vilScript importTest2 () {
+
+    version v1;
+
+    main() = : {
+        productionGenericCopy("build.xml", "build1.xml");
+    }
+
+}

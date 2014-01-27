@@ -1,0 +1,23 @@
+project integerSubConstants {
+
+    Integer a;
+    Integer a1;
+    Integer b;    
+    Integer b1;
+    
+    a=5;
+    b=2;
+    a1=-5;
+    b1=-2;
+    
+    mod(5, b) == 1;
+    mod(a, 2) == 1;
+    mod(a, b) == 1;
+    mod(-5, b) == -1;
+    mod(a1, 2) == -1;
+    mod(a1, b1) == -1;
+    mod(5, b1) == 1;
+    mod(a, -2) == 1;
+    mod(a, b1) == 1;
+
+}

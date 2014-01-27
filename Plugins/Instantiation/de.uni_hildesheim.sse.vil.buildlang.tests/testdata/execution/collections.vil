@@ -1,0 +1,43 @@
+vilScript collections () {
+
+    sequenceOf(Integer) seq0 = {};
+    Integer i_seq0 = seq0.size();
+    Boolean i_b0 = seq0.includes(5);
+    sequenceOf(Integer) seq1 = {1, 2, 3, 4};
+    Integer i_s1 = seq1.size();
+    Boolean i_b1 = seq1.includes(5);
+    Boolean i_b2 = seq1.includes(3);
+    Boolean i_b3 = seq1.excludes(3);
+    Boolean i_b4 = seq1.excludes(5);
+    sequenceOf(Integer, Integer) seq2 = {{1, 2}, {2, 3}, {3, 4}};
+    Integer i_s2 = seq2.size();
+    sequenceOf(Integer) seq3 = {1, 2, 3, 4};
+    Boolean i_b5 = seq1.equals(seq3);
+    Boolean i_b5e = seq1 == seq3;
+    Boolean i_b6 = seq1.equals(seq2);
+    Boolean i_b6e = seq1 == seq2;
+    Boolean i_b7 = seq1.isEmpty();
+    Boolean i_b8 = seq1.isNotEmpty();
+    Integer i_i1 = seq1.get(1);
+    Integer i_i2 = seq1[2];
+    setOf(Integer) set1 = seq1.toSet();
+    sequenceOf(Integer) seq4 = {1, 2, 2, 3, 4, 5};
+    setOf(Integer) set2 = seq4.toSet();
+    sequenceOf(Integer) seq7 = set2.toSequence();
+    sequenceOf(Integer) seq8 = seq1.selectByType(Integer);
+    sequenceOf(Integer) seq9 = seq1.selectByType(Real);
+    sequenceOf(Integer) seq10 = seq4.excluding(seq3);
+    sequenceOf(Integer) seq11 = seq4.excluding(seq1);
+    sequenceOf(Integer) seq12 = seq4.select(ITER > 4);
+    setOf(Integer) set3 = set2.selectByType(Integer);
+    setOf(Integer) set4 = set2.selectByType(Real);
+    setOf(Integer) set5 = set2.excluding(set2);
+    setOf(Integer) set6 = set2.excluding(seq8);
+    setOf(Integer) set7 = set2.select(ITER > 4);
+    sequenceOf(Integer) seq13 = {5, 4, 7, 2, 1, 6};
+    sequenceOf(Integer) seq14 = seq13.sortAlpha();
+
+    main() = : {
+    }
+
+}

@@ -1,0 +1,8 @@
+project ivmlSpec_compounds {
+
+    compound Content {
+        String name;
+        Integer bitrate;
+    }
+
+}

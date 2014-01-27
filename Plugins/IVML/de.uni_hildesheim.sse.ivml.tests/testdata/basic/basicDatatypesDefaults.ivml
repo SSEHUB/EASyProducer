@@ -1,0 +1,16 @@
+project testBasicDatatypesDefaults {
+
+    version v0;
+    Integer i1 = 5;
+    Integer i2 = 0;
+    Integer i3 = -1;
+    Boolean b1 = false;
+    Boolean b2 = true;
+    Real r1 = 5;
+    Real r2 = 0;
+    Real r3 = -4;
+    Real r4 = 5.0;
+    Real r5 = -5.0;
+    String s1 = "here";
+    String s2 = "";
+}

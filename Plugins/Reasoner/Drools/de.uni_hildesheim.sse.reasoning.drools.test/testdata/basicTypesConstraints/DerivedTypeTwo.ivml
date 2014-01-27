@@ -1,0 +1,11 @@
+project DerivedTypeTwo {
+
+    typedef Count Integer with (Count > 10);
+    
+    //Has default which does not satisfy the count constraint.
+    Count a = 5;
+
+    // a is now fixed, thus, the constraint on count is satisfied.
+    //model is satisfied.
+    a == 12;
+}

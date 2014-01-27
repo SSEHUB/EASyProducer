@@ -1,0 +1,5 @@
+varJ <- 1
+-> +(Integer, Integer) with (1, 1) = 2
+varZ <- 2
+varK <- 2
+-> main()

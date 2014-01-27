@@ -1,0 +1,5 @@
+-> main(Configuration, Artifact) with (<config>, test.texts)
+    -> getByName(Configuration, String) with (<config>, pCompSeq) = test::pCompSeq
+    -> variables(DecisionVariable) with (test::pCompSeq) = {test::pCompSeq [0], test::pCompSeq [1]}
+    -> isEmpty() with ({test::pCompSeq [0], test::pCompSeq [1]}) = false
+    visit else-branch

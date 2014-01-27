@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: ScenariosTest
+Bundle-SymbolicName: de.uni_hildeshem.sse.easy.scenario.tests;singleton:=true
+Bundle-Version: 0.0.1
+Bundle-Vendor: University of Hildesheim, SSE
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Require-Bundle: de.uni_hildesheim.sse.vil.buildlang.tests;bundle-version="0.0.1",
+ org.junit;bundle-version="4.8.2",
+ de.uni_hildesheim.sse.dslCore;bundle-version="0.5.5",
+ de.uni_hildesheim.sse.varModel;bundle-version="0.5.5",
+ de.uni-hildesheim.sse.easy.instantiatorCore;bundle-version="0.5.5",
+ de.uni_hildesheim.sse.ivml;bundle-version="0.5.5",
+ de.uni_hildesheim.sse.easy.instantiator.java;bundle-version="0.0.1"
+Export-Package: test.de.uni_hildesheim.sse.scenarios
+Bundle-ClassPath: lib/apache-commons-io/commons-io-2.4.jar,
+ .

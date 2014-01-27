@@ -1,0 +1,56 @@
+ project testEnum {
+
+    // enumeration
+    enum one {one, two, three, four, five, six, seven, eight};
+    enum two {two, four, six, eight};
+    
+    // ordered enumeration
+    enum orderedOne {one :=1, two :=2, three :=3, four :=4, five :=5, six :=6, seven :=7, eight :=8};
+    enum orderedTwo {two :=2, four :=4, six :=6, eight :=8};
+    
+    one one1;
+    one one2;
+    
+    two two1;
+    two two2;
+    
+    orderedOne oOne1;
+    orderedOne oOne2;
+    oOne1.one < oOne2.three;
+    
+    orderedTwo oTwo1;
+    orderedTwo oTwo2;
+    oTwo1.two < oTwo2.eight;
+    
+    oTwo1.four < oTwo2.six;
+    
+   /*
+    one1 := one.one;
+    one2 := one.two;
+    
+    two1 := two.two;
+    two2 := two.four;
+*/
+    // constraints
+    
+    
+    //(one1 <> one2) = true;
+    (one1 != one2) = true;
+    (two1 == two1) = true;
+
+/*
+    oOne1 := orderedOne.four;
+    oOne2 := orderedOne.seven;
+    
+    oTwo1 := orderedTwo.six;
+    oTwo2 := orderedTwo.eight;
+    
+    (oOne1 < oTwo1) = true;
+    (oTwo2 > oOne2) = true;    
+    
+    (oTwo1 <= oOne2) = true;
+    (oTwo2 >= oOne1) = true;
+    
+    */
+    
+}

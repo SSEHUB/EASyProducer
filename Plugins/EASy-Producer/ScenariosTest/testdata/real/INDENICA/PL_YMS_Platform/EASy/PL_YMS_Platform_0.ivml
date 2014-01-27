@@ -1,0 +1,100 @@
+project PL_YMS_Platform {
+
+    version v0;
+    enum SchedulingType {next, fitting};
+    
+    // use name for identification of service
+    compound AbstractService {
+        String name;
+    }
+    
+    // Definition of DDS-service configurable elements
+    compound DdsService refines AbstractService {
+        SchedulingType schedulingType;
+        Boolean useMobile;
+        Boolean useExtendedDockType;
+        Boolean trainsEnabled;
+        Boolean shipsEnabled;
+    }
+    
+    // Definition of Jockey-service configurable elements
+    compound JockeyService refines AbstractService {
+        Boolean useGps;
+        Boolean showGpsLocationsMap;
+        Boolean useGpsCoords;
+        Boolean showSatelite;
+    }
+    
+    // DDS-serive configuration
+    DdsService ddsService;
+    // configuration part does not recognize default values
+    ddsService = {
+        name = "dds",
+        schedulingType = SchedulingType.next,
+        useMobile = true,
+        useExtendedDockType = true,
+        trainsEnabled = false,
+        shipsEnabled = true
+    };
+    
+    // Jockey-service configuration
+    JockeyService jockeyService;
+    // configuration part does not recognize default values
+    jockeyService = {
+        name = "jockey",
+        useGps = true,
+        showGpsLocationsMap = true,
+        useGpsCoords = true,
+        showSatelite = true
+    };
+    
+    freeze {
+        ddsService;
+        jockeyService;
+    }
+    
+    // Further service configurations...
+    
+    
+/*################################################ Old model ################################################
+    enum DdsSchedulingAlgorithm {SIMPLE, DYNAMIC};
+    enum JockeySchedulingType {SIMPLE, LOCATION};
+    typedef Count Integer with (Count > 0);
+    compound AbstractComponent {
+    }
+
+    compound DdsComponent refines AbstractComponent {
+        Count docks;
+        Count waitingBays;
+        Boolean specialDocks;
+        DdsSchedulingAlgorithm scheduling;
+    }
+
+    compound JockeyComponent refines AbstractComponent {
+        Count jockeys;
+        Boolean reassignments;
+        JockeySchedulingType scheduling;
+    }
+
+    compound MobilityComponent refines AbstractComponent {
+        Boolean gpsBasedDrivers;
+        Boolean gpsBasedJockeys;
+    }
+
+    Boolean gpsBased;
+    Boolean visualizationSupport;
+    Boolean useJms;
+    String jmsConnection;
+    String queueName;
+    JockeyComponent jockeyComponent;
+    MobilityComponent mobilityComponent;
+    DdsComponent ddsComponent;
+    attribute Boolean metaInformation to jockeyComponent;
+    attribute Boolean metaInformation to mobilityComponent;
+    attribute Boolean metaInformation to ddsComponent;
+    useJms implies not (size(jmsConnection) = 0);
+    useJms implies not (size(queueName) = 0);
+    gpsBased implies isDefined(mobilityComponent);
+    isDefined(mobilityComponent) implies gpsBased = true;
+    jockeyComponent.scheduling = JockeySchedulingType.LOCATION implies mobilityComponent.gpsBasedJockeys = true;*/
+}

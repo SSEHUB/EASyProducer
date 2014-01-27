@@ -1,0 +1,13 @@
+vilScript protectedTest (Project source, Project target, Configuration config) {
+
+    protected productionGenericCopy(FileArtifact x, FileArtifact y) = y : x {
+        x.copy(y);
+    }
+
+    protected compileGoal() = "$target/bin/*.class" : "$source/bin/*.java" {
+    }
+
+    main() = : compileGoal() {
+    }
+
+}

@@ -1,0 +1,12 @@
+vilScript simpleRules4 () {
+
+    package() = : {
+    }
+
+    compile() = : {
+    }
+
+    main() = : compile(), package() {
+    }
+
+}

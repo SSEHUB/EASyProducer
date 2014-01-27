@@ -1,0 +1,15 @@
+source_src <- src/**/*.java
+-> main()
+    -> selectAll(Path) with (src/**/*.java) = {src/test/Test.java, src/test/Test2.java, src/test/sub/Test2.java}
+    srcFiles <- {src/test/Test.java, src/test/Test2.java, src/test/sub/Test2.java}
+    map {
+        map: y <- src/test/Test.java
+        map: y <- src/test/Test2.java
+        map: y <- src/test/sub/Test2.java
+        map: y <- src/test/Test.java
+        map: y <- src/test/Test2.java
+        map: y <- src/test/sub/Test2.java
+        map: y <- src/test/Test.java
+        map: y <- src/test/Test2.java
+        map: y <- src/test/sub/Test2.java
+    }

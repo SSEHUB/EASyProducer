@@ -1,0 +1,43 @@
+source_src <- src/**/*.java
+-> main()
+    -> selectAll(Path) with (src/**/*.java) = {src/test/Test.java, src/test/Test2.java, src/test/sub/Test2.java}
+    srcFiles <- {src/test/Test.java, src/test/Test2.java, src/test/sub/Test2.java}
+    map {
+        -> name(FileArtifact) with (src/test/Test.java) = Test.java
+        -> name(FileArtifact) with (src/test/Test.java) = Test.java
+        -> ==(String, String) with (Test.java, Test.java) = true
+        -> name(FileArtifact) with (src/test/Test.java) = Test.java
+        -> name(FileArtifact) with (src/test/Test2.java) = Test2.java
+        -> ==(String, String) with (Test.java, Test2.java) = false
+        -> name(FileArtifact) with (src/test/Test.java) = Test.java
+        -> name(FileArtifact) with (src/test/sub/Test2.java) = Test2.java
+        -> ==(String, String) with (Test.java, Test2.java) = false
+        -> name(FileArtifact) with (src/test/Test2.java) = Test2.java
+        -> name(FileArtifact) with (src/test/Test.java) = Test.java
+        -> ==(String, String) with (Test2.java, Test.java) = false
+        -> name(FileArtifact) with (src/test/Test2.java) = Test2.java
+        -> name(FileArtifact) with (src/test/Test2.java) = Test2.java
+        -> ==(String, String) with (Test2.java, Test2.java) = true
+        -> name(FileArtifact) with (src/test/Test2.java) = Test2.java
+        -> name(FileArtifact) with (src/test/sub/Test2.java) = Test2.java
+        -> ==(String, String) with (Test2.java, Test2.java) = true
+        -> name(FileArtifact) with (src/test/sub/Test2.java) = Test2.java
+        -> name(FileArtifact) with (src/test/Test.java) = Test.java
+        -> ==(String, String) with (Test2.java, Test.java) = false
+        -> name(FileArtifact) with (src/test/sub/Test2.java) = Test2.java
+        -> name(FileArtifact) with (src/test/Test2.java) = Test2.java
+        -> ==(String, String) with (Test2.java, Test2.java) = true
+        -> name(FileArtifact) with (src/test/sub/Test2.java) = Test2.java
+        -> name(FileArtifact) with (src/test/sub/Test2.java) = Test2.java
+        -> ==(String, String) with (Test2.java, Test2.java) = true
+        map: x <- src/test/Test.java
+        map: y <- src/test/Test.java
+        map: x <- src/test/Test2.java
+        map: y <- src/test/Test2.java
+        map: x <- src/test/Test2.java
+        map: y <- src/test/sub/Test2.java
+        map: x <- src/test/sub/Test2.java
+        map: y <- src/test/Test2.java
+        map: x <- src/test/sub/Test2.java
+        map: y <- src/test/sub/Test2.java
+    }

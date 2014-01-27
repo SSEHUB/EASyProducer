@@ -1,0 +1,27 @@
+project ComplexArithmeticConstraints {
+
+    Integer a, b;
+    Real x, y;
+    Integer c, d;
+    Real r1, r2;
+    
+    a == 4;
+    b == -5;
+    c == abs(b);
+    
+    // This is invalid - 1
+    c < 0;
+    
+    x == 2.4;
+    y == -2.6;
+    
+    r1 = abs(x);
+    r2 == abs(y);
+    
+    //This should be invalid - 2
+    r2 < 0;
+    
+    //Invalid - 3
+    3.5 - 4.2 > 1.0;
+
+}

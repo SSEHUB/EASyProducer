@@ -1,0 +1,30 @@
+project PL_1 {
+
+    version v0;
+    enum NotOrderedEnum {a, b, c, d, e};
+    enum OrderedEnum {f = 10, g = 20, h = 30, i = 40};
+    compound CP1 {
+        Integer b;
+    }
+
+    typedef MyInt Integer with (MyInt > 0);
+    Integer int = 1;
+    Boolean bool;
+    Real real;
+    String str;
+    sequenceOf(Integer) intSeq;
+    setOf(String) setStr;
+    CP1 cmp;
+    CP1 cmp2;
+    MyInt posInt;
+    posInt = -2;
+    NotOrderedEnum nEnum;
+    OrderedEnum oEnum;
+    refTo(CP1) ref;
+    bool = false;
+    cmp.b = 1;
+    intSeq = {1, 2};
+    setStr = {"Hallo", " ", "Welt"};
+    ref = cmp;
+    nEnum = NotOrderedEnum.b;
+}

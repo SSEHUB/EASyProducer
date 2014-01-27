@@ -1,0 +1,33 @@
+project TestAssgn_1 {
+
+    Integer a;
+    Integer b;
+    
+    a == 25;
+    a > 20 implies b == 35;
+    Integer c = 25;
+    
+    //c > 20 implies b == 30;
+    
+    compound C {
+        Integer x;
+        Integer y;
+        }
+     
+    C c1;
+    
+   //c1.x = 5;
+   c1.x == 15;
+     
+   c1.x == 15 implies c1.y == 25;
+   
+   
+   sequenceOf(Integer) seq1 ;
+   seq = {2, 3, 4, 5, 6};
+   
+   Boolean b1;
+   b1 = seq1->exists(t | t > 2);
+   //b1 = seq1->exists(t | t > 20);
+   
+     
+}

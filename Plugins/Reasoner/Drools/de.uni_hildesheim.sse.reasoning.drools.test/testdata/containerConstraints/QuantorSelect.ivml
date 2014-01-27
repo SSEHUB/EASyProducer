@@ -1,0 +1,10 @@
+project QuantorSelect {
+
+    sequenceOf(Integer) seq1;
+    seq1 = {2, 3, 4, 5, 3};
+    
+    //seq1->select(t | t > 3).size() > 2;
+    
+    seq1->collect(t | t > 3).size() > 2; 
+
+}

@@ -1,0 +1,12 @@
+project ImpliesTest {
+
+    Integer intA;
+    Integer intB;
+    Integer intC;
+    intA = 1;
+    intB = 0;
+    
+    //intB > intA;
+    intA == 1 implies intB > intA;
+    intA == 1 implies intC = 2;
+}

@@ -1,0 +1,45 @@
+project CompoundInternalConstraintsTest {
+    
+    enum View {BA, DE, Impl};
+    attribute View modelView to CompoundInternalConstraintsTest;
+      
+    Integer intA = 100;
+    Integer intB = 2;
+    assign (modelView = View.DE) to {
+    Integer intX = 0;
+    }
+    
+    compound C {
+        Integer intA = 2;
+        Integer intC;
+        Integer intB;
+        intA <= 10;
+        intA >= 5;
+        intC = 2;
+        intA == 2 implies intC > 0;
+        intC > 0 implies intB = 0;
+        intX == 0 implies intA == 2;
+    }
+    
+    C cmp0; 
+    C cmp1;
+    
+    compound C2 {
+        Integer intA = 5;
+        Integer intC;
+        Integer intB;
+        intB = 0;        
+        C2.intA >= intB;
+        C2.intA <= intA;
+        C2.intA > 10;
+        C2.intC = 5;
+        C2.intA == 5 implies C2.intC == 5;
+        C2.intC > 0 implies C2.intB = 0;
+    }
+    
+    C2 cmp2; 
+    
+    cmp2.intA < 0;
+    cmp2.intA < intA;   
+    
+}

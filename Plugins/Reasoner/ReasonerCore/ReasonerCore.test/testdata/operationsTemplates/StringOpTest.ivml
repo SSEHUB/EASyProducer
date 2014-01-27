@@ -1,0 +1,16 @@
+project StringOpTest {
+
+    String s = "testString";
+    String test = "test";
+    String result = "testStringtest";
+    
+    String intS = "1";
+    String realS = "2.0";
+    
+    s.size() == 10;    
+    result == s.concat(test);
+    result == s.concat("test");
+    result == "testStringtest";
+    intS.toInteger() == 1;
+    realS.toReal() == 2.0;
+}

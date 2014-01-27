@@ -1,0 +1,10 @@
+vilScript mapTest () {
+
+    mapOf(String, String) m = {{"sap", "siemens"}, {"NDL", "EU"}};
+    String s1 = m["sap"];
+    String s2 = m.get("NDL");
+
+    main() = : {
+    }
+
+}

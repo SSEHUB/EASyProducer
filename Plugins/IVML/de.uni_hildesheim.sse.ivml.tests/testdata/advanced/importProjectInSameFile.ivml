@@ -1,0 +1,10 @@
+project testImportSameFile {
+
+    version v0;
+    Boolean value;
+}
+project testImportSameFile2 {
+
+    import testImportSameFile;
+    value == true;
+}

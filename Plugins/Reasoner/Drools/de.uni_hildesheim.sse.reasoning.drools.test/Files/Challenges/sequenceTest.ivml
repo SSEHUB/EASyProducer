@@ -1,0 +1,7 @@
+project GLOBAL_Config {
+
+   sequenceOf(String) cm_app_sest_host = {"One", "two"};
+   cm_app_sest_host->exists(t|t == "listserv.his.de");
+   //cm_app_sest_host = {"One", "two"};
+}
+

@@ -1,0 +1,3 @@
+intl1::i = DFLT_i
+intl1::c = DFLT_c
+intl1::comp::i = DEFLT_i

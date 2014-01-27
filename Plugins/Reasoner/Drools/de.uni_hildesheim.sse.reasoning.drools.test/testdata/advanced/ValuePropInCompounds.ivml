@@ -1,0 +1,25 @@
+project ValuePropInCompounds {
+    
+    Integer b, c;
+    b == 5;
+    c = 7;
+    
+    compound C {
+        
+        Integer a;
+        Integer d;
+        Integer e;
+        Integer f;
+        
+        a > b + c;
+        d == b * c;
+        
+        a > 10 and true implies f == 999;
+    }
+    
+    C c1;
+    c1 = {a = 12};
+    
+    C.e == b + c + 8; 
+    
+}

@@ -1,0 +1,12 @@
+// do remove interfaces or declared variables as they are used by importConflict*
+project outsideConstraint {
+
+    version v0;
+    enum SamplingQuantityDefinition {goodsInLine, sku, clientParameter};
+    compound Sampling {
+        SamplingQuantityDefinition samplingQuantityDefinition;
+        receivingAgainstGoodsInLine == false implies samplingQuantityDefinition == SamplingQuantityDefinition.clientParameter;
+    }
+
+    Boolean receivingAgainstGoodsInLine;
+}

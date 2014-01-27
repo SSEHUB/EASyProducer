@@ -1,0 +1,15 @@
+project attributeAssignment2Compound {
+
+    version v0;
+    enum States {One, Two};
+    attribute States state to attributeAssignment2Compound;
+    compound test {
+        assign (state = States.One) to {
+            Integer a;
+        }
+        assign (state = States.Two) to {
+            Integer b;
+        }
+    }
+
+}

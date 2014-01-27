@@ -1,0 +1,8 @@
+project booleanXORConstants {
+
+    (true xor false) == true;
+    (false xor true) == true;
+    (true xor true) == false;
+    (false xor false) == false;
+
+}

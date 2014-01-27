@@ -1,0 +1,117 @@
+project defTest {
+	
+	
+	
+	Integer i1;
+	Integer i2;
+	Integer i3;
+	Integer i4;
+	Boolean bb1;
+	Boolean bb2;
+	i1 = i2 + 5 + c.a;
+	i2 = 2;
+	i1 < i2;
+	i1 > i2 implies i3 == (i4 + 2);
+	
+	//bb1 = (i1 > i2);
+	
+	1 < 2 implies bb2 == (i1 > i2);
+	
+	
+	
+	compound C {
+		Integer a;
+		Boolean bool;
+		Integer cc;
+	}
+	
+	C c;
+	C c1;
+	C c2;
+	
+	C.cc = 125 + c.a;
+	c1.a = 20 + C.cc;
+	i4 < C.cc + 2; 
+	c2 = {a = 2005, bool = true, cc = 1000};
+	
+	1 < 2 implies i4 == (2 + c.a + i1);
+	1 < 2 implies c.a == 1999;
+	
+	compound Eg {
+		Integer ee1;
+		Integer ee2 = 5;
+	}
+	
+	Eg eg_1;
+	Eg eg_2;
+	eg_2 = {ee1 = 2, ee2 = 10};
+	Boolean be1;
+	be1 = (eg_2.ee2 > eg_1.ee2);
+	sequenceOf(Integer) seq1 = {1, 3};
+	setOf(Integer) set1;
+	
+	Integer power = 180;
+	Integer transmission = 170;
+	
+	if power = 180 then transmission == 170 or transmission == 180 
+		else transmission == 180 or transmission == 190 endif;
+	
+	Integer fuel = 200;
+	fuel > 100;
+	
+	sequenceOf(Integer) seq2;
+	seq2 = seq1.append(5);
+	
+	
+	
+	Integer na;
+	na = c.a + 1;
+	c.a > 1000 and i1 == 25 and i2 == 33;
+	c.a > 1000 implies i1 == 10;
+	
+	isDefined(c);
+	
+	Boolean def1;
+	def1 = isDefined(c);
+	
+	//C c2;
+	c2 = {a = 10, bool = true, cc = 10};
+	
+	
+	C c4;
+	2 > 0 implies (c4.a == 25);
+	
+	Boolean def2;
+	def2 = isDefined(c2);
+	
+	isDefined(c2);
+	
+	C c3;
+	isDefined(c3);
+	
+	Boolean def3;
+	def3 = (isDefined(c2) implies 2 > 4);
+	
+	compound B {
+		Integer bb = 5;
+		}
+	
+	B b1;
+	Integer intA = 5;
+	
+	Boolean def4 = isDefined(b1);
+	Real r1 = 10.25;
+	String s1 = "aString";
+	sequenceOf(Integer) seq_1 = {1, 2, 3, 4, 5};
+	
+	enum Color {red, black};
+	Color color1;
+	color1 = Color.black;
+	
+	c.a > 54;
+	c.a > c.cc;
+	/*
+	*/
+	/*
+	*/
+}

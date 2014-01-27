@@ -1,0 +1,193 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="wmsdbModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+  <EntityContainer Name="wmsdbEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Boxes" EntityType="wmsdbModel.Box" />
+    <EntitySet Name="Locations" EntityType="wmsdbModel.Location" />
+    <EntitySet Name="Locationtypes" EntityType="wmsdbModel.Locationtype" />
+    <EntitySet Name="Materials" EntityType="wmsdbModel.Material" />
+    <EntitySet Name="Positions" EntityType="wmsdbModel.Position" />
+    <EntitySet Name="Racks" EntityType="wmsdbModel.Rack" />
+    <EntitySet Name="Transportentries" EntityType="wmsdbModel.Transportentry" />
+    <AssociationSet Name="FK_box_location" Association="wmsdbModel.FK_box_location">
+      <End Role="location" EntitySet="Locations" />
+      <End Role="box" EntitySet="Boxes" />
+    </AssociationSet>
+    <AssociationSet Name="FK_position_box" Association="wmsdbModel.FK_position_box">
+      <End Role="box" EntitySet="Boxes" />
+      <End Role="position" EntitySet="Positions" />
+    </AssociationSet>
+    <AssociationSet Name="FK_transportentity_box" Association="wmsdbModel.FK_transportentity_box">
+      <End Role="box" EntitySet="Boxes" />
+      <End Role="transportentry" EntitySet="Transportentries" />
+    </AssociationSet>
+    <AssociationSet Name="FK_location_locationtype" Association="wmsdbModel.FK_location_locationtype">
+      <End Role="locationtype" EntitySet="Locationtypes" />
+      <End Role="location" EntitySet="Locations" />
+    </AssociationSet>
+    <AssociationSet Name="FK_location_rack" Association="wmsdbModel.FK_location_rack">
+      <End Role="rack" EntitySet="Racks" />
+      <End Role="location" EntitySet="Locations" />
+    </AssociationSet>
+    <AssociationSet Name="FK_transportentity_location" Association="wmsdbModel.FK_transportentity_location">
+      <End Role="location" EntitySet="Locations" />
+      <End Role="transportentry" EntitySet="Transportentries" />
+    </AssociationSet>
+    <AssociationSet Name="FK_position_material" Association="wmsdbModel.FK_position_material">
+      <End Role="material" EntitySet="Materials" />
+      <End Role="position" EntitySet="Positions" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Box">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+    <Property Name="location_id" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+    <NavigationProperty Name="location" Relationship="wmsdbModel.FK_box_location" FromRole="box" ToRole="location" />
+    <NavigationProperty Name="positions" Relationship="wmsdbModel.FK_position_box" FromRole="box" ToRole="position" />
+    <NavigationProperty Name="transportentry" Relationship="wmsdbModel.FK_transportentity_box" FromRole="box" ToRole="transportentry" />
+  </EntityType>
+  <EntityType Name="Location">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+    <Property Name="type" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+    <Property Name="reserved" Type="Boolean" />
+    <Property Name="rack_id" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+    <NavigationProperty Name="boxes" Relationship="wmsdbModel.FK_box_location" FromRole="location" ToRole="box" />
+    <NavigationProperty Name="locationtype" Relationship="wmsdbModel.FK_location_locationtype" FromRole="location" ToRole="locationtype" />
+    <NavigationProperty Name="rack" Relationship="wmsdbModel.FK_location_rack" FromRole="location" ToRole="rack" />
+    <NavigationProperty Name="transportentries" Relationship="wmsdbModel.FK_transportentity_location" FromRole="location" ToRole="transportentry" />
+  </EntityType>
+  <EntityType Name="Locationtype">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+    <Property Name="name" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+    <NavigationProperty Name="locations" Relationship="wmsdbModel.FK_location_locationtype" FromRole="locationtype" ToRole="location" />
+  </EntityType>
+  <EntityType Name="Material">
+    <Key>
+      <PropertyRef Name="materialNumber" />
+    </Key>
+    <Property Name="materialNumber" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+    <Property Name="name" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+    <Property Name="description" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+    <NavigationProperty Name="positions" Relationship="wmsdbModel.FK_position_material" FromRole="material" ToRole="position" />
+  </EntityType>
+  <EntityType Name="Position">
+    <Key>
+      <PropertyRef Name="box_id" />
+      <PropertyRef Name="material_id" />
+    </Key>
+    <Property Name="box_id" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+    <Property Name="material_id" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+    <Property Name="amount" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+    <NavigationProperty Name="box" Relationship="wmsdbModel.FK_position_box" FromRole="position" ToRole="box" />
+    <NavigationProperty Name="material" Relationship="wmsdbModel.FK_position_material" FromRole="position" ToRole="material" />
+  </EntityType>
+  <EntityType Name="Rack">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+    <Property Name="name" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+    <NavigationProperty Name="locations" Relationship="wmsdbModel.FK_location_rack" FromRole="rack" ToRole="location" />
+  </EntityType>
+  <EntityType Name="Transportentry">
+    <Key>
+      <PropertyRef Name="box_id" />
+    </Key>
+    <Property Name="box_id" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+    <Property Name="bin_id" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+    <Property Name="test" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+    <NavigationProperty Name="box" Relationship="wmsdbModel.FK_transportentity_box" FromRole="transportentry" ToRole="box" />
+    <NavigationProperty Name="location" Relationship="wmsdbModel.FK_transportentity_location" FromRole="transportentry" ToRole="location" />
+  </EntityType>
+  <Association Name="FK_box_location">
+    <End Role="location" Type="wmsdbModel.Location" Multiplicity="1" />
+    <End Role="box" Type="wmsdbModel.Box" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="location">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="box">
+        <PropertyRef Name="location_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_position_box">
+    <End Role="box" Type="wmsdbModel.Box" Multiplicity="1" />
+    <End Role="position" Type="wmsdbModel.Position" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="box">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="position">
+        <PropertyRef Name="box_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_transportentity_box">
+    <End Role="box" Type="wmsdbModel.Box" Multiplicity="1" />
+    <End Role="transportentry" Type="wmsdbModel.Transportentry" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="box">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="transportentry">
+        <PropertyRef Name="box_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_location_locationtype">
+    <End Role="locationtype" Type="wmsdbModel.Locationtype" Multiplicity="1" />
+    <End Role="location" Type="wmsdbModel.Location" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="locationtype">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="location">
+        <PropertyRef Name="type" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_location_rack">
+    <End Role="rack" Type="wmsdbModel.Rack" Multiplicity="0..1" />
+    <End Role="location" Type="wmsdbModel.Location" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="rack">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="location">
+        <PropertyRef Name="rack_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_transportentity_location">
+    <End Role="location" Type="wmsdbModel.Location" Multiplicity="1" />
+    <End Role="transportentry" Type="wmsdbModel.Transportentry" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="location">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="transportentry">
+        <PropertyRef Name="bin_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_position_material">
+    <End Role="material" Type="wmsdbModel.Material" Multiplicity="1" />
+    <End Role="position" Type="wmsdbModel.Position" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="material">
+        <PropertyRef Name="materialNumber" />
+      </Principal>
+      <Dependent Role="position">
+        <PropertyRef Name="material_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

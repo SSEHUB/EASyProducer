@@ -1,0 +1,7 @@
+vilScript tmpFolder (Project source, Project target, Configuration config) {
+
+    main(Project source, Project target, Configuration config) = : {
+        FolderArtifact tmp = new FolderArtifact();
+    }
+
+}

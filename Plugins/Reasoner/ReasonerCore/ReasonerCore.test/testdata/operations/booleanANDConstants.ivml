@@ -1,0 +1,8 @@
+project booleanANDConstants {
+
+    (true and false) == false;
+    (false and true) == false;
+    (true and true) == true;
+    (false and false) == false;
+
+}

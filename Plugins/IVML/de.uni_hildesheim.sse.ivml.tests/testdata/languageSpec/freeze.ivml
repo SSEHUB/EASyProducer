@@ -1,0 +1,13 @@
+project ivmlSpec_freeze {
+
+    compound ContentType {
+        String contentName;
+        Integer bitrate;
+    }
+
+    ContentType appContent;
+    appContent.contentName = "Text";
+    freeze {
+        appContent;
+    } but (appContent.bitrate)
+}

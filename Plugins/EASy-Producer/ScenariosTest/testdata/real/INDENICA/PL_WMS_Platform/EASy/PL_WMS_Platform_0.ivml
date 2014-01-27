@@ -1,0 +1,105 @@
+project PL_WMS_Platform {
+
+    version v0;
+    enum GoodsInType {automatic, manual, semiAutomatic};
+    enum ContoursCheck {noCheck, simple, calculateStorageSize};
+    enum CheckInventory {none, count, weigh};
+    enum CtrlType {manual, automatic};
+    enum TourDetermination {none, algorithm1, algorithm2, alogrithm3};
+    enum FindStoreBinAlgType {constant, generic, dedicated};
+    enum StorageAreaType {AMW, MPW, APW, FW, ACW, Other};
+    enum ABCStrategy {Abc, Simple};
+    enum PickType {pickByLight, pickByVoice, regularManToGoods, goodsToMan, goodsToMultiPlace, modeled};
+    enum InventoryType {None, CloseToZero, Zero, Annual};
+    enum AggregationType {perStorageArea, staged, complete};
+    enum ForwardType {OnFinish, OnEvent};
+    compound StorabilityCheck {
+        Boolean weightCheck;
+        Boolean contoursCheck;
+    }
+
+    compound GoodsIn {
+        GoodsInType goodsInType;
+        ContoursCheck contoursCheck;
+        CheckInventory checkInventory;
+        Boolean addIdentifier;
+        Boolean cumulativeStorage;
+    }
+
+    compound TransportSystem {
+        CtrlType ctrlType;
+    }
+
+    compound AutomaticTransportSystem refines TransportSystem {
+        Boolean collisionAvoidance;
+        Boolean pathLoadBalancing;
+    }
+
+    compound ManualTransportSystem refines TransportSystem {
+        TourDetermination tourDetermination;
+    }
+
+    typedef Count Integer with (Count > 0);
+    compound Interval {
+        Count min;
+        Count max;
+    }
+
+    compound StorageArea {
+        //StorageAreaType stAreaType;
+        //ABCStrategy stAreaAbcStrategy;
+        Integer BinDepth;
+        Boolean VariableBinSizes;
+        Boolean MonoMaterial;
+        Boolean ColocOpt;
+        Interval x;
+        Interval y;
+        Interval z;
+    }
+
+    compound Storage {
+        FindStoreBinAlgType findStoreAlg;
+        StorageArea storageArea;
+    }
+
+    compound Picking {
+        PickType picktype;
+        Boolean orderedPick;
+        InventoryType inventoryType;
+    }
+
+    compound Aggregation {
+        AggregationType aggregationType;
+        ForwardType forwardType;
+    }
+/*
+ *  ---------------------------------------------------------------------------
+ * The following configuration is not based on the model above. This is due
+ * to a missing up-to-date model from SIE. Thus, the configuration below is
+ * simplified to test the build-script and templates.
+ * ---------------------------------------------------------------------------
+ */ 
+ 
+    // For the Spring configuration
+    ABCStrategy stAreaAbcStrategy;
+    stAreaAbcStrategy = ABCStrategy.Abc;
+    
+    // For OR-mapper configuration (requires new compound)
+    compound Material {
+        Boolean materialNumber;
+        Boolean name;
+        Boolean description;
+    }
+    Material material;
+    material = {materialNumber = true, name = true, description = false}; // delete description-entry only!
+    
+    // For DB-content specification (requires complete topology)
+    setOf(Material) materialTopology;
+    materialTopology = {{materialNumber = false, name = false, description = false}, {materialNumber = true, name = true, description = true}};
+    
+    freeze {
+        stAreaAbcStrategy;
+        material;
+        materialTopology;
+    }
+}

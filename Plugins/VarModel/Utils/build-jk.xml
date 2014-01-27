@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="de.uni_hildesheim.sse.Utils" default="jar" basedir=".">
+	<!-- import von globalen Properties Einstellungen -->
+	<property file="${user.home}/global-build.properties"/>
+	
+	<!-- Einstellungen fuer dieses Projekt -->
+	<property name="src.dir" value="src"/>
+	<property name="javacSource" value="1.5"/>
+	<property name="javacTarget" value="1.5"/>
+	
+	<path id ="includes">
+		<!-- Eclipse-Plugins -->
+		<fileset dir="${eclipse.plugins.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+	
+	<!-- Targets  -->
+	<target name="init">
+		<!-- Delete generated folders -->
+		<delete dir="${build.base.dir}"/>
+		
+		<!-- Create folders -->
+        <mkdir dir="${build.base.dir}"/>
+		<mkdir dir="${build.classes.dir}"/>
+		<mkdir dir="${build.jar.dir}"/>
+	</target>
+	
+	<!-- Compile all files without test classes -->
+	<target name="compile" depends="init">
+		<javac srcdir="${src.dir}" debug="on" destdir="${build.classes.dir}" includeAntRuntime="no" failonerror="true" source="${javacSource}" target="${javacTarget}" encoding="${javac.encoding}">
+			<classpath refid="includes" />	
+		</javac>
+    </target>
+	
+	<!-- Creates a jar file -->
+	<target name="jar" depends="compile">
+		<jar destfile="${build.jar.dir}/${ant.project.name}.jar" basedir="${build.classes.dir}" manifest="META-INF/MANIFEST.MF"/>
+    </target>
+</project>

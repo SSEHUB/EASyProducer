@@ -1,0 +1,19 @@
+project NestedEnumValuePropagation {
+    
+    enum Color {black = 0, red = 1, blue = 2, white = 4};
+    enum Telecom {three, vodafone, tele2, tMobile};
+    
+    compound C {
+        
+        Integer a;
+        Color color1;
+        Telecom telecom1;
+    }
+    
+    C c1;
+    
+    c1.color1 == Color.blue;
+    
+    c1.telecom1 == Telecom.tele2;
+    
+}

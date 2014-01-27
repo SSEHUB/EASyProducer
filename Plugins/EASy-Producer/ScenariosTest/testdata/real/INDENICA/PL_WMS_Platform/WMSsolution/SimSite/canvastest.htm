@@ -1,0 +1,148 @@
+﻿<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Canvas Test</title>
+  </head>
+<body>
+    <div>
+        <canvas id="canvas" width="400" height="300">
+         This text is displayed if your browser 
+         does not support HTML5 Canvas.
+        </canvas>
+    </div>
+
+<script type="text/javascript">
+    var canvas;
+    var ctx;
+    var x = 20;
+    var y = 20;
+    var dx = 4;
+    var dy = 4;
+    var canvasLoop;
+
+    //set movement directions
+    var rechts = true;
+    var nachUnten = false;
+    var links = false;
+    var nachOben = false;
+
+
+    function circle(x, y, r) {
+        ctx.beginPath();
+        //arc(x, y, radius, startAngle, endAngle, anticlockwise)
+        // to define the size and shape of our circle.
+        ctx.arc(x, y, r, 0, Math.PI * 2, true);
+        // Fill the path
+        ctx.fillStyle = "red";
+        ctx.fill();
+    }
+
+    function rect(x, y, w, h) {
+        ctx.beginPath();
+        ctx.rect(x, y, w, h);
+        ctx.closePath();
+        ctx.fill();
+    }
+
+
+    function clear() {
+        //erase everything in a rectangle that is the same size as the canvas
+        ctx.clearRect(0, 0, 150, 150);
+    }
+
+    //get a javascript reference to the canvas element
+    function init() {
+        canvas = document.getElementById("canvas");
+        ctx = canvas.getContext("2d");
+        canvasLoop = setInterval(draw, 100);
+
+    }
+
+    //the heart of the script and it beats once every 10 milliseconds 
+    //thanks to the setInterval() method
+    function draw() {
+        clear();
+
+
+        //rectangle
+        // Draw a path
+        ctx.beginPath();
+        ctx.moveTo(20, 20);        	// Top Left
+        ctx.lineTo(20, 120); 		// Bottom Right
+        ctx.lineTo(120, 120);         // Bottom Left
+        ctx.lineTo(120, 20);         // Bottom Left
+        ctx.closePath();
+
+        // Stroke the inner outline
+        ctx.lineWidth = 10;
+        ctx.lineJoin = "round";
+        ctx.strokeStyle = "#ccc";
+        ctx.stroke();
+
+        circle(x, y, 10);
+
+        //movement!
+
+
+
+        // rechts  
+        if (rechts) {
+            console.log("rechts");
+            if (x + dx < 120) {
+                x += dx;
+            }
+            else {
+                console.log("rechts stop");
+                rechts = false;
+                nachUnten = true;
+            }
+        }
+        console.log(x + ":" + y);
+
+        // nachUnten
+        if (nachUnten) {
+            console.log("nachUnten");
+            if (y + dy < 120) {
+                y += dy;
+            }
+            else {
+                nachUnten = false;
+                links = true;
+                console.log("nachUnten stop");
+            }
+        }
+        // links
+        if (links) {
+            console.log("links");
+            if (x - dx > 20) {
+                x -= dx;
+            }
+            else {
+                console.log("links stop");
+                links = false;
+                nachOben = true;
+            }
+        }
+
+        // nachOben
+        if (nachOben) {
+            console.log("nachOben");
+            if (y - dy > 20) {
+                y -= dy;
+            }
+            else {
+                nachOben = false;
+                console.log("nachOben stop");
+                clearInterval(canvasLoop);
+            }
+        }
+
+
+    }
+
+    init();
+</script>
+
+</body>
+</html>

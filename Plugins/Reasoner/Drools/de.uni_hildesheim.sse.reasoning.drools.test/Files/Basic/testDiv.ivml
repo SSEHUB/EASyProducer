@@ -1,0 +1,13 @@
+project testDiv {
+
+	Integer i1 = 1;
+	Real r1 = 2.0;
+	i1/r1 = 0.5;
+	
+	Integer i2;
+	Real r3;
+	
+	i2 = i1/r1;
+	r3 = i1/r1;
+
+	}

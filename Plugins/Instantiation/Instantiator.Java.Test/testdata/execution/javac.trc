@@ -1,0 +1,3 @@
+-> main(Project, Project, Configuration) with (<project>, <project>, <config>)
+    cp <- {/lib/commons-io-2.4.jar}
+    -> javac(Path, Path) with (src/**/*.java, bin, {{classpath, {/lib/commons-io-2.4.jar}}}) = {bin/test/Test.class, bin/test/Test2.class, bin/test/sub/Test2.class}

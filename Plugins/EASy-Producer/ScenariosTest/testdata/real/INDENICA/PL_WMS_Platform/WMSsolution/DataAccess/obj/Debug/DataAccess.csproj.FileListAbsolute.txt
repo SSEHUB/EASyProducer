@@ -1,0 +1,7 @@
+P:\workpackages\wp5\Warehouse\WMS\WMSsolution\DataAccess\bin\Debug\app.config
+P:\workpackages\wp5\Warehouse\WMS\WMSsolution\DataAccess\bin\Debug\DataAccess.dll.config
+P:\workpackages\wp5\Warehouse\WMS\WMSsolution\DataAccess\bin\Debug\DataAccess.dll
+P:\workpackages\wp5\Warehouse\WMS\WMSsolution\DataAccess\bin\Debug\DataAccess.pdb
+P:\workpackages\wp5\Warehouse\WMS\WMSsolution\DataAccess\obj\Debug\ResolveAssemblyReference.cache
+P:\workpackages\wp5\Warehouse\WMS\WMSsolution\DataAccess\obj\Debug\DataAccess.dll
+P:\workpackages\wp5\Warehouse\WMS\WMSsolution\DataAccess\obj\Debug\DataAccess.pdb

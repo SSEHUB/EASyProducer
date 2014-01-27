@@ -1,0 +1,10 @@
+project SimpleQuantorExists {
+
+    sequenceOf(Integer) seq1;
+    
+    seq1 = {1, 2, 3, 5, 6};
+    seq1->exists(t | t > 7);
+    
+    
+
+}

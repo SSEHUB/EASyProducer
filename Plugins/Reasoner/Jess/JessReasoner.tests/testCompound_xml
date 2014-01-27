@@ -1,0 +1,2 @@
+(MAIN::CMP (compound_name "CMP") (intA 10) (realB 10.0))
+(MAIN::project (projectName testCompound))

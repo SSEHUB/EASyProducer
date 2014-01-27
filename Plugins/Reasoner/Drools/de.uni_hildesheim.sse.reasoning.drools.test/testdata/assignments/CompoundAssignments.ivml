@@ -1,0 +1,51 @@
+project CompoundAssignments {
+
+    compound B {
+        Integer bb;
+    }
+
+    compound A {
+    
+        Integer i1;
+        Integer i2;
+        B b1;
+    }
+    
+    A a1;
+
+   
+   Integer a, b, c, d;
+   Integer x, y, z;
+   x = 4;
+   x == y + z;
+   a1.i2 == 25;
+   a1.b1.bb == 999;
+   
+   
+   isDefined(a1);
+   z == a1.i2 + 20; 
+    c == 5 implies a == 5;
+    c == 5 implies a == 5 + d;
+    
+    
+    a1.i1 > 20 and c == 5 implies a == 5 + a1.i1;
+   
+/*
+   b = 6;
+   c = 5;
+    
+   b == 7;
+   a = 10;
+    c == 5 implies a == 7;
+    //b == 7 implies a == 8;
+    a > 7;
+    
+    //c == 5 implies a == 10;   
+   
+   b > 5 implies a == 10 + c;
+   b > 5 implies a == 10 + c + a1.i2;
+   b > 5 and d > 6 implies a1.i2 == 10 + c + a;
+   */
+    
+    
+}

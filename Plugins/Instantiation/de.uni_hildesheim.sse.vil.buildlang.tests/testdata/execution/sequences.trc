@@ -1,0 +1,8 @@
+source_src <- src/**/*.java
+source_build <- build.xml
+source_initDb <- init.sql
+-> main()
+    -> selectAll(Path) with (src/**/*.java) = {src/test/Test.java, src/test/Test2.java, src/test/sub/Test2.java}
+    srcFiles <- {src/test/Test.java, src/test/Test2.java, src/test/sub/Test2.java}
+    -> selectByType(Project, Type) with (<project>, class de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.xml.XmlFileArtifact) = {build.xml}
+    dbFiles <- {build.xml}

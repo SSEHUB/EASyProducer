@@ -1,0 +1,25 @@
+project isDefinedInvalid {
+
+    compound A {
+        Integer aa1;
+        B bb;
+        Boolean bool3;
+        }
+        
+     compound B {
+        Integer b1;
+        C cc;
+     }
+
+    compound C {
+        Integer ccc;
+        Integer ccc2;
+    }
+    
+    A a1;
+    
+    //This should be inconsistent as a1 is not defined at all.
+    isDefined(a1);   
+    
+
+}

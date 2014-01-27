@@ -1,0 +1,77 @@
+project compound_block {
+    
+    attribute Integer metaI = 10 to compound_block;
+    typedef Count Integer with (Count > 100);
+    
+    Integer a;
+    Integer b;
+    a = 5;
+    a > 5;
+    
+    /*
+     assign (metaI = 100) to 
+            
+                  {
+                     a;
+                   }
+
+    Check this internal constraint.
+    sequenceOf(Count) seq;
+    */
+    
+    //seq = {101, 102}; 
+    
+    /*
+    compound D {
+        Integer dd1 = 55;
+        }
+    
+    compound C 
+    {
+            Count count2 = 10;
+            
+            assign (metaI = 30) to {
+                Integer count33;
+                // Count count3;
+            }
+            
+            
+            assign (metaI = 10) to 
+            
+                  {
+                     Integer i3 = 10;
+                     Integer i4 = 20;
+                     i3 > 25;
+                     C.i4 > 30;
+                     C.i4 > C.i5 + 60 + a;
+                            
+                     // Is this supposed to be the right way?
+                     i3 > 250;
+                     C.i4 = 2000;
+                   }
+                            
+            
+            
+            D d1;
+    
+    }
+    
+    C c1;
+    C c2;
+    
+       
+    
+    sequenceOf(Integer) seq2;
+    seq2 = {10, 200};
+    seq2->forAll(t | t > 199);   
+    
+    
+    sequenceOf(String) seq3 = {"a", "b"};
+    seq3->forAll(t | matches(t, "^#?(([a-fA-F0-9]){3}){1,2}$"));     
+  
+    Count count1;
+    //count1 == 10;
+  
+   */
+  
+}

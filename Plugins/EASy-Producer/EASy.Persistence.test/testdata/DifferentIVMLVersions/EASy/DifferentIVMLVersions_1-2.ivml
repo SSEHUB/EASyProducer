@@ -1,0 +1,7 @@
+project DifferentIVMLVersions {
+
+    version v1.2;
+    Integer a;
+    Integer b;
+    Integer c;
+}

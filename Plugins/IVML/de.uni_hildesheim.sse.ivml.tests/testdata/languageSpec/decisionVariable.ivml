@@ -1,0 +1,14 @@
+project ivmlSpec_decisionVariable {
+
+    enum ContentType {text, video, audio, threeD, blob};
+    enum Colors {green, yellow, black, white};
+    compound Content {
+        String name;
+        Integer bitrate;
+    }
+
+    Integer bitrate = 128;
+    Colors backgroundColor = Colors.black;
+    sequenceOf(ContentType) baseContent = {ContentType.text, ContentType.audio};
+    Content complexContent = {name = "Text", bitrate = 128};
+}

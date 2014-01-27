@@ -1,0 +1,16 @@
+project PL_WMS {
+  version v0;
+  enum PickingRateType {high, medium, low};
+  enum PartialPalletStrategyType {highSpeed, optimalReduction};
+  enum StaplerCraneStrategyType {single, multiple};
+  enum UIDeviceType {computer, mobile};
+  
+  PickingRateType VP1;
+  PartialPalletStrategyType VP2;
+  StaplerCraneStrategyType VP3;
+  UIDeviceType VP4;
+  
+  enum BindingTime {designTime, compileTime, initTime, runTime};
+  attribute BindingTime bindingTime = BindingTime.designTime to PL_WMS;
+  VP2.bindingTime = BindingTime.runtime;
+}

@@ -1,0 +1,17 @@
+project realMulConstants {
+
+    Real i0 = 0;
+    Real i1 = 1.5;
+    Real iM1 = -1.5;
+    Real i5 = 5.25;
+    Real iM5 = -5.25;
+
+    // multiplication
+    
+    i0 * i1 == 0;
+    i1 * i1 == 2.25;
+    i1 * iM1 == -2.25;
+    i5 * -2 == -10.5;
+    iM5 * (-5) == 26.25;
+
+}

@@ -1,0 +1,5 @@
+project ivmlSpec_enum {
+
+    enum Colors {green, yellow, black, white};
+    enum BindingTimes {configuration = 0, compile = 1, runtime = 2};
+}

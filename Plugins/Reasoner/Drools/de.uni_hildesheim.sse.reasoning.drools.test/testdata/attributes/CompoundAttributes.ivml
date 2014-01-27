@@ -1,0 +1,50 @@
+project CompoundAttributes {
+
+attribute Integer meta = 0 to CompoundAttributes;
+
+    compound Tele {
+    
+        
+            Integer id;
+            Real speed;
+            String company;
+            Boolean lte;
+        /*    
+        assign (meta = 50) to {
+            Integer extra;
+        }
+        */
+    }
+   
+    Tele t1;
+    t1 == {id = 1, speed = 22.8, company = "3", lte = true};
+    
+    t1.meta = 1000;
+    
+    Integer a = 5;
+    a.meta = 20;
+    
+    a == t1.id;
+    
+    //Error 1 - now a is 1
+    a > 1;
+    
+    //Error - 2, t1.d1 is fixed and cannot be changed
+    t1.id == 25;
+    
+    compound C {
+        Integer cc;
+    }
+    
+    
+    compound D {
+    
+        C c1;
+    }
+    
+    D d1;
+    d1 == {c1 = {cc = 99}};
+    
+    D d2;
+    true implies d2 == {c1 = {cc = 1991}};
+}

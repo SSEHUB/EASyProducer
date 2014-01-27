@@ -1,0 +1,23 @@
+project compounds {
+
+
+	compound CA {
+		
+		Integer x = 5;
+		Integer y = 10;
+	}
+	
+	compound CB {
+		Integer a;
+		Integer b;
+	}
+	
+	//CA.x > CA.y;
+	//CB.a = CA.y;
+	//CB.b = CA.x;
+	CA.x > 4 implies CB.b = 25;
+	Integer int1;
+	//int1 = 199;
+	//int1 > 5;
+	
+}

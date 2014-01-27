@@ -1,0 +1,14 @@
+project ivmlSpec_ref2 {
+
+    compound Container {
+        String name;
+    }
+
+    compound Content {
+        String name;
+        Integer bitrate;
+        refTo(Container) myContainer;
+        refBy(myContainer).name = "ContentContainer";
+    }
+
+}

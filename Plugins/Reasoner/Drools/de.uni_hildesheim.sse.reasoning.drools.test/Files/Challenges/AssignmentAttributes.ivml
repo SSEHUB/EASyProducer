@@ -1,0 +1,73 @@
+project AssignmentAttributes {
+
+    version v0;
+    attribute Integer metaI = 0 to AssignmentAttributes;
+    
+    Integer a;
+    Integer c;
+    c = 10;
+    a == c;
+    
+    Integer alpha = 25 * a;
+    
+    
+    a.metaI = 20;
+    c.metaI = 15;
+    
+    a.metaI > 25;
+    
+    
+    compound F {
+    
+    Integer aa;
+    Integer bb;
+    
+    }
+    
+    F f1;
+    Integer x = 10;
+    f1 == {aa = 5 * 10, bb = 10 * x };
+    
+    
+    //f1 = {aa = 5};
+   // f1 <> {aa = 5 * 10, bb = 100 * x };
+    
+    F f2;
+    f2 = {aa = 555, bb = 1111};
+    
+    F f3;
+    f3 = {aa = 111111};
+    
+    
+    
+    
+    Integer b = 6;
+    
+    let Integer ab = a
+        in ab > 3;
+    
+    compound Z {
+        Integer bah;
+    }
+    compound E {
+        Integer ii1 = 12;
+        Z bahbah;
+    }
+    
+    compound D {
+        Integer i1;
+        E ee1;
+    }
+    
+    D d1;
+    d1 = {i1 = 10, ee1 = {ii1 = 15 * 1}};
+    
+    D d2;
+    d2 = {ee1 = {ii1 = 15 * 1}};
+    
+    
+    
+    
+    
+    
+}

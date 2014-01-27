@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="1c9b2400-987d-429d-9bb9-c811b37dc2f6" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:49285/StorageBinSearchService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="StorageBinSearchService.xsd" MetadataType="Schema" ID="4b9bb199-bccb-49b4-bf39-6ebe28e70b5a" SourceId="1" SourceUrl="http://localhost:49285/StorageBinSearchService.svc?xsd=xsd1" />
+    <MetadataFile FileName="StorageBinSearchService.disco" MetadataType="Disco" ID="60d12b9a-49d5-4369-bab9-a7e16a9da956" SourceId="1" SourceUrl="http://localhost:49285/StorageBinSearchService.svc?disco" />
+    <MetadataFile FileName="StorageBinSearchService1.xsd" MetadataType="Schema" ID="2ce9220a-8b27-4070-bb68-592add8f3f79" SourceId="1" SourceUrl="http://localhost:49285/StorageBinSearchService.svc?xsd=xsd0" />
+    <MetadataFile FileName="StorageBinSearchService.wsdl" MetadataType="Wsdl" ID="c7d363ee-d689-4c44-983a-983d31fd0d00" SourceId="1" SourceUrl="http://localhost:49285/StorageBinSearchService.svc?wsdl" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

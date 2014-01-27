@@ -1,0 +1,109 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <script type="text/javascript" src="scripts/jquery.js"></script>
+    <script type="text/javascript" src="scripts/model.js"></script>    
+    <script type="text/javascript" src="scripts/websocket.js"></script>
+    <script type="text/javascript" src="scripts/canvas.js"></script>
+    <script type="text/javascript" src="scripts/controller.js"></script>    
+
+
+</head>
+<body onload = "connectSocketServer();">
+    
+    <table width="100%" cellspacing="1" bgcolor="#D2E0F0" cellpadding="0" border="0">
+        <tr><td> <span style="font-weight:bold; font-size:1.2em">WMS Simulation Site</span></td></tr>
+        <tr>        
+            <td>
+                <div> <!-- style="border:thin solid red -->
+                    <canvas id="canvas" width="600" height="300" ;">
+                     This text is displayed if your browser 
+                     does not support HTML5 Canvas.
+                    </canvas>
+                </div>                
+            </td>
+        </tr>
+    </table>
+
+    <br /><br />
+    <form id="formMain" runat="server">
+        <table width="100%" cellspacing="1" bgcolor="#D2E0F0" cellpadding="0" border="0" >
+            <tr><td> <span style="font-weight:bold; font-size:1.2em">Communication with the Simulation Server</span></td></tr>
+            <tr>
+                <td width="100" valign="middle" align="left">
+                    <input type="button" id="btnConnect"
+                        value="Connect to server"
+                        style="height:70px;"
+                        onclick="return connectSocketServer();" />
+
+                    <input type="button" id="btnDisconnect"
+                        value="Disconnect server"
+                        style="height:70px;"
+                        disabled = true;
+                        onclick="return disconnectSocketServer();" />
+
+<!--
+                    <textarea id="messageBoxCell" style="height:40px; width:300px; border: 1px solid gray;"></textarea>
+                            
+                    <input type="button" id="btnSend"
+                            value="Send message"
+                            style="height:70px;"
+                            disabled = true;
+                            onclick="return sendMessageFromSite();" />
+-->
+                </td>
+            </tr>
+        </table>
+        <table width="100%" cellspacing="1" bgcolor="#D2E0F0" cellpadding="0" border="1">            
+            <tr>
+                <td class="panelHeader">Communication board</td>
+            </tr>
+            <tr>
+                <td bgcolor="#ffffff">
+                    <div id="messageBoard" style="width: 100%; height: 120px; overflow: auto"></div>                
+                </td>
+            </tr>
+        </table>
+    </form>
+
+<!--
+    <br /><br />
+    <span style="font-weight:bold; font-size:1.2em">Canvas Tests</span>
+    <div>
+        <input type="button" id="startSimulationButton"
+                        value="Start Simulation"
+                        style="height:25px;"
+                        onclick="startSimulation()"; />
+
+        <input type="button" id="stopSimulationButton"
+                        value="Stop Simulation"
+                        disabled = true;
+                        style="height:25px;"
+                        onclick="stopSimulation()"; />
+    </div>
+    <div>
+        <p>box id: 
+            <textarea id="boxId"  style="height:20px; width:60px; border: 1px solid gray;"></textarea>
+            <input type="button" id="createBoxButton"
+                            value="Create a new box"
+                            disabled = true;
+                            style="height:25px;"
+                            onclick="createBoxFromSite()"; />
+            </p>
+    </div>
+    <div>
+        <p>box id: 
+            <textarea id="boxIdToMove" style="height:20px; width:60px; border: 1px solid gray;"></textarea>
+            storageBin id:
+            <textarea id="StorageBinIdToMoveTo" style="height:20px; width:60px; border: 1px solid gray;"></textarea>
+            <input type="button" id="moveBoxButton"
+                            value="Move a box to a storage bin"
+                            disabled = true;
+                            style="height:25px;"
+                            onclick="startMovingBoxFromSite()"; />
+        </p>
+    </div>
+-->    
+
+</body>
+</html>

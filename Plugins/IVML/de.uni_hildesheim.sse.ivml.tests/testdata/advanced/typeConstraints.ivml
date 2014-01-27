@@ -1,0 +1,19 @@
+project typeConstraints {
+
+    version v0;
+    compound AbstractComponent {
+    }
+
+    compound MobilityComponent refines AbstractComponent {
+        Boolean gpsBasedJockeys;
+    }
+
+    Boolean gpsBased;
+    setOf(AbstractComponent) components = {};
+    gpsBased implies components->exists(x|typeOf(x) == MobilityComponent);
+    gpsBased implies components->exists(x|isTypeOf(x, MobilityComponent));
+    gpsBased implies components->exists(x|isKindOf(x, MobilityComponent));
+    //* typeSelect(components, MobilityComponent)->forAll(t|t.gpsBasedJockeys);
+    components.typeSelect(MobilityComponent)->forAll(t|t.gpsBasedJockeys);
+    typeSelect(components, MobilityComponent)->forAll(t|t.gpsBasedJockeys);
+}

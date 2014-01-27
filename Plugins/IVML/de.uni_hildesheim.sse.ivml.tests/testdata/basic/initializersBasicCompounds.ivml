@@ -1,0 +1,10 @@
+project testInitializersBasicCompounds {
+
+    version v0;
+    compound cTest {
+        Integer i;
+        Integer j;
+    }
+
+    cTest c = {i = 10, j = 20};
+}

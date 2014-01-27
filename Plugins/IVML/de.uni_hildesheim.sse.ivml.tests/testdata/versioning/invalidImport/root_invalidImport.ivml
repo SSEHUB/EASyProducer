@@ -1,0 +1,5 @@
+project root_invalidImport {
+
+    version v1;
+    import b_invalidImport;
+}

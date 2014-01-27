@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="de.uni_hildesheim.sse.EASy-Producer"
+         name="EASy-Producer 2.0"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run class="de.uni_hildesheim.sse.easy_producer.persistency.eclipse.EASyNature">
+         </run>
+      </runtime>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="de.uni_hildesheim.sse.EASy_Producer"
+            name="EASy-Producer">
+      </category>
+      <wizard
+            category="de.uni_hildesheim.sse.EASy_Producer"
+            class="de.uni_hildesheim.sse.easy.ui.internal.NewEASyProjectWizard"
+            icon="icons/logo_icon.gif"
+            id="de.uni_hildesheim.sse.plugin.wizards.PLuginNewWizard"
+            name="New EASy-Producer Project"
+            project="true">
+      </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="de.uni_hildesheim.sse.easy.ui.productline_editor.Editor"
+            contributorClass="de.uni_hildesheim.sse.easy.ui.productline_editor.ProductLineConfigurationEditorContributor"
+            icon="icons/logo_icon.gif"
+            id="de.uni_hildesheim.sse.easy_producer.ProductLineConfigurationEditor.new"
+            name="Product Line Configuration Editor">
+      </editor>
+   </extension>
+   <extension point="org.eclipse.ui.startup">
+     <startup class="de.uni_hildesheim.sse.easy.ui.internal.Startup"/>
+   </extension>
+   <extension point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="true"
+            id="de.uni_hildesheim.sse.easy_producer.popUpMenu"
+            objectClass="org.eclipse.core.resources.IProject">
+         <action
+               class="de.uni_hildesheim.sse.easy.ui.internal.EditProductLineAction"
+               enablesFor="1"
+               icon="icons/logo_icon.gif"
+               id="de.uni_hildesheim.sse.easy_producer.editProductlineAction"
+               label="Edit Product Line"
+               menubarPath="additions">
+         </action>
+         <filter
+             name="nature"
+             value="de.uni_hildesheim.sse.EASy-Producer">
+         </filter>
+      </objectContribution>
+      <objectContribution
+            adaptable="true"
+            id="org.eclipse.xtext.builder.addNature"
+            objectClass="org.eclipse.core.resources.IProject">
+         <action
+               class="de.uni_hildesheim.sse.easy.ui.internal.ToggleEASyNatureAction"
+               icon="icons/logo_icon.gif"
+               id="de.uni_hildesheim.sse.easy_producer.AddEASyNatureAction"
+               label="Add EASy-Producer Nature"
+               menubarPath="org.eclipse.ui.projectConfigure/additions"
+               >
+         </action>
+         <visibility>
+            <not>
+                <objectState
+                      name="nature"
+                      value="de.uni_hildesheim.sse.EASy-Producer">
+                </objectState>
+            </not>
+         </visibility>
+      </objectContribution>
+      <objectContribution
+            adaptable="true"
+            id="org.eclipse.xtext.builder.removeNature"
+            objectClass="org.eclipse.core.resources.IProject">
+         <action
+               class="de.uni_hildesheim.sse.easy.ui.internal.ToggleEASyNatureAction"
+               icon="icons/logo_icon.gif"
+               id="de.uni_hildesheim.sse.easy_producer.RemoveEASyNatureAction"
+               label="Remove EASy PLE Nature"
+               menubarPath="org.eclipse.ui.projectConfigure/additions"
+               >
+         </action>
+         <visibility>
+               <objectState
+                      name="nature"
+                      value="de.uni_hildesheim.sse.EASy-Producer">
+                </objectState>
+         </visibility>
+      </objectContribution>
+   </extension>
+   <extension point="org.eclipse.ui.decorators">
+      <decorator
+            adaptable="true"
+            icon="icons/PL_over.gif"
+            id="de.uni_hildesheim.sse.easy_producer.EASyNature.overlay"
+            label="EASy PRoducer 2.0"
+            lightweight="true"
+            location="TOP_RIGHT"
+            state="true">
+         <enablement>
+            <objectState
+                  name="nature"
+                  value="de.uni_hildesheim.sse.EASy-Producer">
+            </objectState>
+         </enablement>
+      </decorator>
+   </extension>
+   <extension point="org.eclipse.ui.preferencePages">
+      <page
+            category="de.uni_hildesheim.sse.Ivml"
+            class="de.uni_hildesheim.sse.easy.ui.reasoner.ReasonerPreferencePage"
+            id="de.uni_hildesheim.sse.Ivml.reasoners"
+            name="Reasoners">
+            <keywordReference id="de.uni_hildesheim.sse.ui.keyword_Ivml"/>
+      </page>
+   </extension>   
+
+</plugin>

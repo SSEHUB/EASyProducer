@@ -1,0 +1,15 @@
+template switch1() {
+
+    def String map(String var) {
+        switch(var) {
+            "a" : "b $VALUE",
+            default : "d $VALUE"
+        }
+    }
+
+    def main() {
+        String var = map("a");
+        'output $var'
+    }
+
+}

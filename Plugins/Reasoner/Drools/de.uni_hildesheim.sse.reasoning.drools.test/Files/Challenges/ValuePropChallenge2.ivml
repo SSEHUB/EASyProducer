@@ -1,0 +1,10 @@
+project ValuePropchallenge2 {
+
+	Integer x;
+	Integer y;
+	
+	//  Assgn; x=2 and y = 4
+  	 x = y - 2 and 2 * x = y;
+
+	
+}

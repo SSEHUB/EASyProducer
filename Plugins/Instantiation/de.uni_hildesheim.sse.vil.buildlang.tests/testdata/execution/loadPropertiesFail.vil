@@ -1,0 +1,10 @@
+vilScript loadPropertiesFail () {
+
+    load properties "execution/loadPropertiesFail.properties";
+
+    const Integer var = 1;
+
+    main() = : {
+    }
+
+}

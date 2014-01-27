@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: ReasonerCore.test
+Bundle-SymbolicName: ReasonerCore.test;singleton:=true
+Bundle-Version: 0.0.1
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Require-Bundle: org.junit,
+ de.uni_hildesheim.sse.ivml;bundle-version="0.1.1",
+ ReasonerCore;bundle-version="0.0.3";visibility:=reexport,
+ org.eclipse.core.runtime;bundle-version="3.7.0",
+ de.uni_hildesheim.sse.dslCore;bundle-version="0.0.1"
+Export-Package: de.uni_hildesheim.sse.reasoning.core.frontend
+Bundle-ClassPath: testdata/,
+ .
+Bundle-ActivationPolicy: lazy

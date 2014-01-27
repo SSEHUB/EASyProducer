@@ -1,0 +1,7 @@
+project ifthenelse {
+
+    version v0;
+    Integer i;
+    String s;
+    if i < 10 then size(s) > 10 else size(s) < 10 endif;
+}

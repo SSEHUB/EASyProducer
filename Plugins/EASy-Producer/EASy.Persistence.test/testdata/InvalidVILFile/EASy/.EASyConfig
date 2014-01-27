@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProductLineProject id="4913fde0-24f0-4114-95ea-5ff2f8f20c8f" name="InvalidVILFile" version="0" location="InvalidVILFile">
+	<predecessors>
+	</predecessors>
+	<successors>
+	</successors>
+	<instantiators>
+	</instantiators>
+	<reasoners>
+	</reasoners>
+	<copy>
+	</copy>
+</ProductLineProject>

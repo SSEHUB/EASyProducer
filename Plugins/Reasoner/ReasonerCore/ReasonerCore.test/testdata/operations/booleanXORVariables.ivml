@@ -1,0 +1,14 @@
+project booleanXORVariables {
+
+    Boolean t;
+    Boolean f;
+    
+    t = true;
+    f = false;
+    
+    (t xor f) == true;
+    (f xor t) == true;
+    (t xor t) == false;
+    (f xor f) == false;
+
+}

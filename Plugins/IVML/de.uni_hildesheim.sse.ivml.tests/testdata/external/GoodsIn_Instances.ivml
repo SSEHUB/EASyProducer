@@ -1,0 +1,13 @@
+project GoodsIn_Instances {
+
+    version v0;
+    import GoodsIn with (GoodsIn.version == v0);
+    multiClient = false;
+    locationType = LocationType.singleTu;
+    GoodsInWorkflows = {{workflowName = "manualWarehouse", barcodeToIdentifyDeliveryLine = false, skuHasEanOrNumberOnIt = true, mixedPallets = true, receivingAgainstGoodsInLine = true, mandatoryGoodsInLineConfirmation = true, palletForm = PalletForm.heterogeneous, workflowStart = WorkflowStart.sku, goodsInPosIdentifiedByBarcode = false, tuAutomaticallyFinished = true, withoutGoodsInLine = false, selectGoodsInLineDialogShownWithSingleRow = true, clientSelectionDisabled = true, qtyFirst = false}};
+    freeze {
+        multiClient;
+        locationType;
+        GoodsInWorkflows;
+    }
+}

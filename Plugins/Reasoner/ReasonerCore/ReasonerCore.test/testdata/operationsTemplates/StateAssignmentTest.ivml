@@ -1,0 +1,11 @@
+project StateAssignmentTest {
+    
+    Integer intA;
+    Integer intB;
+    Integer intC;    
+    
+    intA = 1;
+    
+    intC = intA;   
+    
+}

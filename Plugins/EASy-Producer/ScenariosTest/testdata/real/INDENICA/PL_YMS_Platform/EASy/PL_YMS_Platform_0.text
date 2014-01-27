@@ -1,0 +1,8 @@
+PL_YMS_Platform::gpsBased = Is this system based on GPS?
+PL_YMS_Platform::visualizationSupport = Does this warehouse provide a visualization?
+PL_YMS_Platform::useJms = Shall Java Messaging Service be used for communication?
+PL_YMS_Platform::jmsConnection = In case of useJms: What is the URL to connect to?
+PL_YMS_Platform::queueName = In case of useJms: What is the JMS queue name?
+PL_YMS_Platform::jockeyComponent = Configures the Jockey subsystem
+PL_YMS_Platform::mobilityComponent = Configures the mobility subsystem
+PL_YMS_Platform::ddsComponent = Configures the DDS subsystem

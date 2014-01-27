@@ -1,0 +1,26 @@
+project shortNames {
+
+    version v0;
+    enum View {_a, _b, _c};
+    attribute View biew to shortNames;
+    compound C {
+        assign (biew = View._a) to {
+            Integer a;
+        }
+        Integer b;
+        b > 5;
+        assign (biew = View._a) to {
+            Integer c;
+            Integer d;
+        }
+    }
+
+    assign (biew = View._b) to {
+        Integer f;
+        Integer g;
+    }
+    C cmp;
+    cmp = {b = 1, a = 1, c = 1, d = 1};
+    f = 1;
+    g = 1;
+}

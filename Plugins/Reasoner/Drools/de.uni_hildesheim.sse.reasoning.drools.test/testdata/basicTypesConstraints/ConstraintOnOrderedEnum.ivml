@@ -1,0 +1,14 @@
+project testConstraintOnOrderedEnum {
+
+     enum Color {red = 0, blue = 1};
+     
+     Color color1;
+     color1 == Color.red;
+     Color color2; 
+     color2 == Color.blue;
+     
+     
+     color1 > color2;
+
+
+}

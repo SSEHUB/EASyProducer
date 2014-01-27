@@ -1,0 +1,26 @@
+project realGreaterThanVariables {
+
+    Real a;
+    Real a1;
+    Real b;    
+    Real b1;
+    
+    a=5.2;
+    b=2.5;
+    a1=-5.2;
+    b1=-2.5; 
+    
+    5.2 >= b == true;
+    5.2 >= a == true;
+    a >= 2.5 == true;
+    a >= b == true;
+    -5.2 >= b == false;
+    a1 >= 2.5 == false;
+    a1 >= -5.2 == true;
+    a1 >= b1 == false;
+    5.2 >= b1 == true;
+    a >= -2.5 == true;
+    a >= b1 == true;
+
+
+}

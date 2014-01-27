@@ -1,0 +1,11 @@
+project testEnumsInequalityCheck {
+    enum Color {red, blue};
+    
+    Color color1 = Color.red;
+    Color color2 = Color.red;
+    color1 <> color2;
+    
+    //color1 = color2;
+    
+    
+}

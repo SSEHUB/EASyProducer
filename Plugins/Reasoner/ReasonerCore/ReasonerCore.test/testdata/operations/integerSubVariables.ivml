@@ -1,0 +1,15 @@
+project integerSubConstants {
+
+    Integer i0 = 0;
+    Integer i1 = 1;
+    Integer i4 = 4;
+    Integer i5 = 5;
+
+    // subtraction
+    i0 - i0 == 0;
+    i1 - i0 == i1;
+    i0 - i1 == -1;
+    i4 - i5 == -1;
+    //i4 - (-i5) == 9;
+
+}

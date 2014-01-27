@@ -1,0 +1,20 @@
+project FrozenValuePropagation {
+
+
+    Integer a = 5;
+    
+    freeze {
+        a;
+    }
+    
+   // a == 10;
+    
+    Integer b = 5;
+    Integer c;
+    c == b * 3;
+    
+    Integer d, e;
+    d = 10;
+    e == 9;
+
+}

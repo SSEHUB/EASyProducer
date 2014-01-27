@@ -1,0 +1,105 @@
+grammar de.uni_hildesheim.sse.vil.templatelang.TemplateLang with de.uni_hildesheim.sse.vil.expressions.ExpressionDsl
+
+generate templateLang "http://www.uni_hildesheim.de/sse/vil/templatelang/TemplateLang"
+
+import "http://www.eclipse.org/emf/2002/Ecore" as ecore
+
+LanguageUnit: // do not rename - required for reuse
+    imports+=Import* 
+    javaExts+=Extension* 
+    (advices+=Advice)*
+    (indent=IndentationHint)?
+    'template' name=Identifier 
+    '(' param=ParameterList? ')'
+    ('extends' ext=Identifier)? 
+    '{' 
+        version=VersionStmt?
+        vars+=VariableDeclaration* 
+        defs+=VilDef* 
+    '}' 
+    ;
+    
+IndentationHint:
+    '@indent' '(' parts+=IndentationHintPart (',' parts+=IndentationHintPart)* ')' 
+    ;
+
+IndentationHintPart:
+    name=Identifier '=' value=NUMBER
+;
+
+VilDef:
+  'def' (type=Type)? id=Identifier '(' param=ParameterList? ')' stmts=StmtBlock ';'?
+  ;
+  
+StmtBlock: 
+    {StmtBlock}    
+    '{' 
+        stmts+=Stmt* 
+    '}'
+    ;
+
+Stmt: 
+  var=VariableDeclaration 
+  | alt=Alternative 
+  | switch=Switch 
+  | block = StmtBlock
+  | multi=multiselect
+  | loop=Loop 
+  | exprStmt=ExpressionStatement
+  | ctn=Content
+  ;
+
+Alternative:
+    'if' '(' expr=Expression ')' if=Stmt (=> 'else' else=Stmt)?
+    ;
+
+Content:
+    (print='print')? ctn=STRING ('|' indent=Expression ';')?
+    ;
+
+Switch: 
+    'switch' '(' expr=Expression ')' '{'
+      (parts+=SwitchPart (',' parts+=SwitchPart)* (',' 'default' ':' dflt=Expression)?) 
+    '}'
+    ;
+
+SwitchPart:
+    left=Expression ':' right=Expression
+    ;
+
+Loop:
+    'for' '(' 
+        type=Type id=Identifier ':' expr=Expression 
+        (',' separator=PrimaryExpression (',' finalSeparator=PrimaryExpression)?)?
+    ')' stmt=Stmt
+    ;
+
+      
+multiselect: 
+    gen=genericMultiselect 
+    | user=userMultiselect
+    ;
+    
+// a kind of macro
+genericMultiselect: 
+    'multiSelect' preamble=StmtBlock selector=StmtBlock part+=multiSelectPart+ trailer=StmtBlock
+    ;
+    
+multiSelectPart:
+    'case' case=Expression code=StmtBlock selector=StmtBlock
+;
+
+// a kind of pre-instantiated 
+userMultiselect:
+    id=Identifier ':=' 'generic-multiSelect' stmt=StmtBlock ';'?
+    ;
+
+// multiple alternatives missing at the moment
+  
+Extension: 
+    'extension' name=JavaQualifiedName ';'
+    ;
+
+JavaQualifiedName:
+    qname+=Identifier (qname+='.' qname+=Identifier)* 
+;

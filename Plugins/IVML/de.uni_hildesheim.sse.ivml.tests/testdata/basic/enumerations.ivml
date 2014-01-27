@@ -1,0 +1,8 @@
+project testEnumerations {
+
+    version v0;
+    enum colors {red, green, blue};
+    enum colors2 {red = 1, green = 5, blue = 10};
+    colors c1 = colors.red;
+    colors2 c2 = colors2.green;
+}

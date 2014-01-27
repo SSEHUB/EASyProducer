@@ -1,0 +1,19 @@
+project Project_Error_Producer {
+
+    Integer a1;
+    Integer a2 = 5;
+    a1 = a2 * a2;
+    
+    compound C {
+        Integer ca1 = 5;
+        Integer ca2;
+        Boolean cb1;
+        sequenceOf(Integer) seq1;
+    }
+    
+    C c1;
+    c1 = {ca2 = 100, cb1 = true};
+    //c1.ca2 = c1.ca1 + a1;
+    //c1.cb1 = (c1.ca2 > 25);
+
+}

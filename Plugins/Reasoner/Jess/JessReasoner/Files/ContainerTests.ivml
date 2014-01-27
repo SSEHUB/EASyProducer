@@ -1,0 +1,79 @@
+project container_Tests {
+	Integer i1 = 10;
+	Real r1 = 10.2;
+	
+	
+	//i2 = i1.-;
+	
+	Boolean b1 = true;
+	Boolean b2 = false;
+	Boolean b3;
+	b3 = (b1 iff b2);
+	
+	String s1 = "23";		
+	Integer i2;
+	i2 = s1.toInteger();
+	
+	String s2 = "hi";
+	String s3 = "hi";
+	Boolean b4;
+	b4 = s2.matches(s3);
+	
+	sequenceOf(Integer) seq1 = {1, 3, 5, 6};
+	Boolean b5;
+	b5 = seq1->exists(t| t > 7);
+	Boolean b6;
+	b6 = seq1.includes(1);
+	Boolean b7;
+	b7 = seq1.excludes(10);
+	Integer sum;
+	sum = seq1.sum();
+	Integer product;
+	product = seq1.product();
+	Integer min;
+	min = seq1.min();
+	Integer max;
+	max = seq1.max();
+	Integer avg;
+	avg = seq1.avg();
+	Boolean forAll;
+	forAll = seq1->forAll(t|t > 0 and t <= 6);
+	Boolean one1;
+	sequenceOf(Integer) seq3;
+	seq3 = seq1->collect(t|t > 3);
+//not working	one1 = seq1->one(t|t > 3);
+	//this editor accepts seq3 = seq1->one(t|t > 3);
+	sequenceOf(Integer) seq4;
+	seq4 = seq1->one(t|t > 3);
+	sequenceOf(Integer) seq6;
+	sequenceOf(Integer) seq7;
+	seq6 = seq1->select(t|t > 3);
+	seq7 = seq1->reject(t|t > 3);
+	
+	Boolean unique;
+	
+	compound CMP1 {
+		sequenceOf(Real) seq2 = {1.1, 2.2, 3.3, 4.4, 5.5};
+		Real r5 = 3.5;
+		Integer inI; 
+		sequenceOf(Real) seq5;
+		sequenceOf(Real) seq16; 
+		sequenceOf(Real) seq17;
+		}
+		
+	CMP1 cm11;
+	Real rmin;
+	rmin = cm11.seq2.min();
+	Integer r6;
+	r6 = cm11.r5;
+	Real rAvg;
+	rAvg = cm11.seq2.avg();
+	cm11.inI = 7 + 2;
+	Boolean rForAll;
+	rForAll = cm11.seq2->forAll(t|t > 0 and t <= 6);
+	cm11.seq5 = cm11.seq2->collect(t|t > 3.0);
+	cm11.seq2->collect(t|t > 3.0).size() > 4;
+	cm11.seq16 = cm11.seq2->select(t|t >= 3.3);
+	cm11.seq17 = cm11.seq2->reject(t|t >= 3.3);
+
+}

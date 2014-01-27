@@ -1,0 +1,10 @@
+project ArithmeticOne {
+
+    Integer i1 = 1;
+    Real r1 = 2.0;
+    
+    //Tests division
+    i1/r1 <> 0.5;
+    
+
+}

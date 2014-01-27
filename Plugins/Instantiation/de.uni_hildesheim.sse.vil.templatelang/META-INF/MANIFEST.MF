@@ -1,0 +1,41 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: de.uni_hildesheim.sse.vil.templatelang
+Bundle-Vendor: SSE - University of Hildesheim
+Bundle-Version: 0.2.0
+Bundle-SymbolicName: de.uni_hildesheim.sse.vil.templatelang; singleton:=true
+Bundle-ActivationPolicy: lazy
+Require-Bundle: org.eclipse.xtext;visibility:=reexport,
+ org.eclipse.xtext.xbase;resolution:=optional;visibility:=reexport,
+ org.eclipse.xtext.generator;resolution:=optional,
+ org.apache.commons.logging;bundle-version="1.0.4";resolution:=optional,
+ org.eclipse.emf.codegen.ecore;resolution:=optional,
+ org.eclipse.emf.mwe.utils;resolution:=optional,
+ de.uni_hildesheim.sse.dslCore;bundle-version="0.0.1";visibility:=reexport,
+ org.eclipse.xtext.util,
+ org.eclipse.emf.ecore,
+ org.eclipse.emf.common,
+ org.antlr.runtime,
+ org.eclipse.xtext.common.types,
+ org.eclipse.equinox.ds,
+ org.eclipse.osgi.services,
+ de.uni-hildesheim.sse.easy.instantiatorCore;bundle-version="0.5.0",
+ de.uni_hildesheim.sse.vil.expressions;bundle-version="0.0.1",
+ org.eclipse.emf.mwe2.launch;bundle-version="2.3.0"
+Import-Package: org.apache.log4j,
+ org.eclipse.xtext.xbase.lib
+Service-Component: OSGI-INF/vilParser.xml
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: de.uni_hildesheim.sse.vil.templatelang,
+ de.uni_hildesheim.sse.vil.templatelang.services,
+ de.uni_hildesheim.sse.vil.templatelang.templateLang,
+ de.uni_hildesheim.sse.vil.templatelang.templateLang.impl,
+ de.uni_hildesheim.sse.vil.templatelang.templateLang.util,
+ de.uni_hildesheim.sse.vil.templatelang.serializer,
+ de.uni_hildesheim.sse.vil.templatelang.parser.antlr,
+ de.uni_hildesheim.sse.vil.templatelang.parser.antlr.internal,
+ de.uni_hildesheim.sse.vil.templatelang.validation,
+ de.uni_hildesheim.sse.vil.templatelang.scoping,
+ de.uni_hildesheim.sse.vil.templatelang.generator,
+ de.uni_hildesheim.sse.vil.templatelang.formatting
+

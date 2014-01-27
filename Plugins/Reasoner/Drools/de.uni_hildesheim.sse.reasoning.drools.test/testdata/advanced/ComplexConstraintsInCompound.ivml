@@ -1,0 +1,100 @@
+project Complex_CustomerProject {
+
+    version v0;
+    /*----------------- workflow independent decision variables ----------------*/
+
+    //Different views for business analysts (BA) and domain engineers (DE)
+    enum View {BA, DE, Impl};
+    attribute View view to ScaleLog_CustomerProject;
+    
+    assign (view = View.BA) to {
+    Boolean multiClient;
+    }
+
+/*------------------ type definitions for workflow compound -----------------*/ 
+    
+    enum WorkflowStart {sku, barcode, goodsinpos};
+    
+    enum PalletForm {homogeneous, heterogeneous};
+    
+    setOf(Workflow) GoodsInWorkflows;
+    
+/*----------------------- the workflow compound itself ----------------------*/     
+    
+    compound Workflow {
+        
+  //____________  BA decision variables 
+  
+        //Unique name of the goods-in workflow
+        String workflowName;
+
+        //Is the goods-in line (not the sku) identifiable by scanning a barcode?        
+        Boolean barcodeToIdentifyDeliveryLine;
+        
+        //Can the sku be identified by EAN or sku number?
+        Boolean skuHasEanOrNumberOnIt;
+        
+        //Are the received pallets at goods-in sku-pure or do they have mixed skus on them?
+        Boolean mixedPallets;
+        
+        //Is the received stock booked against a pre-advised goods-in line?
+        Boolean receivingAgainstGoodsInLine;
+        
+        //Is the goods-in line confirmation in the receiving workflow mandatory? 
+        Boolean mandatoryGoodsInLineConfirmation;
+        //If this confirmation of a goods-in line is mandatory, 
+        //the receiving has to be booed against a goods-in line  
+        mandatoryGoodsInLineConfirmation == true implies receivingAgainstGoodsInLine == true;
+        
+        //Are the received pallets mostly look the same or are they totally mixed?
+        PalletForm palletForm;
+                
+  //____________  Mapping from BA decision variables to DE decision variables
+        
+        WorkflowStart workflowStart;
+        Workflow.skuHasEanOrNumberOnIt == true implies Workflow.workflowStart == WorkflowStart.sku;
+        Workflow.skuHasEanOrNumberOnIt == false implies workflowStart == WorkflowStart.goodsinpos;
+        /*TODO: Is it possible to override a previous decision like that?
+         *      If barcodeToIdentifyDeliveryLine = true, workflowStart has to be
+         *      WorkflowStart.barcode, regardless of what the previous implications
+         *      said. 
+         */        
+        Workflow.barcodeToIdentifyDeliveryLine == true implies Workflow.workflowStart == WorkflowStart.barcode;
+        /*
+         * Again such a override thing. If receivingAgainstGoodsInLine = false,
+         * workflowStart has to be WorkflowStart.sku, regardless of what 
+         * the previous implications said. 
+         */
+        Workflow.receivingAgainstGoodsInLine == false implies Workflow.workflowStart == WorkflowStart.sku;
+
+  //____________  Mapping to velocity variables for variability instantiation 
+  //____________  with the WorkflowConfigInstantiator 
+
+        Boolean goodsInPosIdentifiedByBarcode;
+        Workflow.workflowStart == WorkflowStart.barcode implies Workflow.goodsInPosIdentifiedByBarcode == true;
+        Workflow.workflowStart == WorkflowStart.sku implies Workflow.goodsInPosIdentifiedByBarcode == false;
+        //The logic for WorkflowStart.goodsinpos is not implemented yet.
+        //Until this is done, it behaves like WorkflowStart.sku.  
+        Workflow.workflowStart == WorkflowStart.goodsinpos implies Workflow.goodsInPosIdentifiedByBarcode == false;
+        
+        Boolean tuAutomaticallyFinished;
+        Workflow.mixedPallets == false implies Workflow.tuAutomaticallyFinished == true;
+        Workflow.mixedPallets == true implies Workflow.tuAutomaticallyFinished == false;
+        
+        Boolean withoutGoodsInLine;
+        Workflow.receivingAgainstGoodsInLine == true implies Workflow.withoutGoodsInLine == false;
+        Workflow.receivingAgainstGoodsInLine == false implies Workflow.withoutGoodsInLine == true;
+        
+        Boolean selectGoodsInLineDialogShownWithSingleRow;
+        Workflow.mandatoryGoodsInLineConfirmation == true implies Workflow.selectGoodsInLineDialogShownWithSingleRow == true;
+        Workflow.mandatoryGoodsInLineConfirmation == false implies Workflow.selectGoodsInLineDialogShownWithSingleRow == false;
+        
+        Boolean clientSelectionDisabled;
+        multiClient == false implies Workflow.clientSelectionDisabled == true;
+        multiClient == true implies Workflow.clientSelectionDisabled == false;
+        
+        Boolean qtyFirst;
+        Workflow.palletForm == PalletForm.homogeneous implies Workflow.qtyFirst == true;
+        Workflow.palletForm == PalletForm.heterogeneous implies Workflow.qtyFirst == false;
+    }
+}

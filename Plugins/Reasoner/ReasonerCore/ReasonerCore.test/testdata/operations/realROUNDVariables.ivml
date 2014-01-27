@@ -1,0 +1,25 @@
+project realABSVariables {
+
+    Real a;
+    Real a1;
+    Real a2;
+    Real a3;
+    Real a4;
+    Real a5;
+    
+    a = 2.8;
+    a1 = 3.4;
+    a2 = -5.8;
+    a3 = -7.3;
+    a4 = 10.5;
+    a5 = -10.5;
+    
+    
+    round(a) == 3;
+    round(a1) == 3;
+    round(a2) == -6;
+    round(a3) == -7;
+    round(a4) == 11;
+    round(a5) == -10;
+
+}

@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Tests for JessReasoner
+Bundle-SymbolicName: JessReasoner.tests
+Bundle-Version: 0.0.1
+Bundle-Vendor: University of Hildesheim - SSE
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Require-Bundle: org.junit;bundle-version="4.8.2",
+ de.uni_hildesheim.sse.reasoner.jess,
+ de.uni_hildesheim.sse.ivml,
+ ReasonerCore.test;bundle-version="0.0.1"

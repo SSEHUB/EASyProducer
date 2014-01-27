@@ -1,0 +1,317 @@
+grammar de.uni_hildesheim.sse.vil.expressions.ExpressionDsl hidden(WS, ML_COMMENT, SL_COMMENT)
+
+generate expressionDsl "http://www.uni_hildesheim.de/sse/vil/expressions/ExpressionDsl"
+
+import "http://www.eclipse.org/emf/2002/Ecore" as ecore
+
+LanguageUnit: // just a template for required data
+    (advices+=Advice)*
+    name=Identifier
+    version=VersionStmt?
+    imports+=Import*
+;
+
+VariableDeclaration:
+    (const='const')? 
+    type=Type
+    name=Identifier ('=' expression=Expression)?
+    ';'
+;
+
+// used in extending languages
+Advice:
+    '@advice' '(' name=QualifiedName ')' 
+    (versionSpec=VersionSpec?)
+;
+
+VersionSpec:
+   'with' '('
+   conflicts+=VersionedId
+   (',' conflicts+=VersionedId)*
+   ')'
+;
+
+VersionedId:
+    'version'
+    op = VersionOperator
+    version=VERSION
+    ;
+    
+VersionOperator:
+    '=='
+    |'>'
+    |'<'
+    |'>='
+    |'<='
+    ;
+
+ParameterList:
+    (param+=Parameter (',' param+=Parameter)*)
+;
+
+Parameter:
+    type=Type
+    name=Identifier
+;
+
+VersionStmt: 
+    'version'
+    version=VERSION
+    ';'
+;
+
+Import:
+    //here fqn because this may reference a specific project (of an external project)
+    'import' name=Identifier (versionSpec=VersionSpec?)
+    ';'
+;
+
+// ------------------------------------- expressions -----------------------
+
+// used in extending languages
+ExpressionStatement:
+    (var=Identifier '=')? 
+    expr=Expression 
+    ';'
+    ;
+
+Expression: 
+    expr=LogicalExpression | init=ContainerInitializer
+    ;
+
+LogicalExpression:  
+    left=EqualityExpression 
+    right+=LogicalExpressionPart*
+    ;   
+
+LogicalExpressionPart:
+    op=LogicalOperator 
+    ex=EqualityExpression
+;
+
+LogicalOperator:
+    'and'
+    |'or'
+    |'xor'
+    ;
+
+EqualityExpression:   
+    left=RelationalExpression 
+    right=EqualityExpressionPart?
+    ;   
+
+EqualityExpressionPart:
+    op=EqualityOperator
+    ex=RelationalExpression
+;
+
+EqualityOperator:
+    '=='
+    |'<>'
+    |'!='
+    ;
+
+RelationalExpression:   
+    left=AdditiveExpression 
+    right=RelationalExpressionPart?
+    ;   
+
+RelationalExpressionPart:
+    op=RelationalOperator
+    ex=AdditiveExpression
+;
+
+RelationalOperator:
+    '>'
+    |'<'
+    |'>='
+    |'<='
+    ;
+
+AdditiveExpression: 
+    left=MultiplicativeExpression 
+    right+=AdditiveExpressionPart*
+    ;
+
+AdditiveExpressionPart:
+    op=AdditiveOperator 
+    ex=MultiplicativeExpression
+;
+
+AdditiveOperator:
+    '+'
+    |'-'
+    ;
+    
+MultiplicativeExpression:   
+    left=UnaryExpression 
+    right=MultiplicativeExpressionPart?
+    ;
+
+MultiplicativeExpressionPart:
+    op=MultiplicativeOperator
+    expr=UnaryExpression
+;
+
+MultiplicativeOperator:
+    '*'
+    |'/'
+    ;
+
+UnaryExpression:    
+    op = UnaryOperator?
+    expr=PostfixExpression
+    ;
+
+UnaryOperator:
+    'not'
+    |'!'
+    |'-'
+    ;   
+
+PostfixExpression:  
+    left=PrimaryExpression // left here for extensions
+    ;
+
+PrimaryExpression:  
+    otherEx=ExpressionOrQualifiedExecution 
+    | unqEx=UnqualifiedExecution 
+    | superEx=SuperExecution 
+    | newEx=ConstructorExecution
+    ;
+    
+ExpressionOrQualifiedExecution:
+    (val=Constant
+    | '(' parenthesis=Expression ')'
+    )
+    calls+=SubCall*
+    ;    
+
+UnqualifiedExecution:
+    call=Call calls+=SubCall*
+    ;
+    
+SuperExecution:
+    'super' '.' call=Call calls+=SubCall*
+    ; 
+    
+ConstructorExecution:
+    'new' type=Type '(' param=ArgumentList? ')' calls+=SubCall*
+    ;
+    
+SubCall:
+    '.' call=Call 
+    | '[' arrayEx=Expression ']' // IVML addition to OCL
+;
+
+Call:    
+    name=QualifiedPrefix 
+    '(' 
+    param=ArgumentList? 
+    ')'
+    ;
+        
+ArgumentList:    
+    param+=NamedArgument
+    (
+        ',' 
+        param+=NamedArgument
+    )*
+    ;
+
+NamedArgument:
+    (name=Identifier '=')?
+    ex=Expression
+;
+
+QualifiedPrefix:
+    qname+=Identifier (qname+='::' qname+=Identifier)*
+    ;
+
+QualifiedName:
+    prefix=QualifiedPrefix (qname+='.' qname+=Identifier)?
+;
+
+Constant:
+    nValue = NumValue
+    | sValue = STRING
+    | qValue = QualifiedName
+    | bValue = ('true' | 'false')
+;
+
+NumValue :  
+    val=NUMBER
+;
+
+Identifier:
+    ID | VERSION | EXPONENT
+;
+
+Type:
+    name=Identifier // specific types will be dynamically loaded at start-up
+    | (set='setOf' param=TypeParameters)
+    | (seq='sequenceOf' param=TypeParameters)
+    | (map='mapOf' param=TypeParameters)
+;
+
+TypeParameters: // currently no nested types!
+    '(' param+=Identifier (',' param+=Identifier)* ')'
+;
+
+ContainerInitializer:
+    {ContainerInitializer}
+    '{' (exprs+=ContainerInitializerExpression (',' exprs+=ContainerInitializerExpression)*)? '}'
+;
+
+ContainerInitializerExpression:
+    logical=LogicalExpression
+    | container=ContainerInitializer
+;
+
+// --------------------- Terminals (from IVML)----------------------------------
+   
+// otherwise we would have to write 0 . 5 instead of 0.5
+terminal VERSION:
+    'v' ('0'..'9')+ ('.' ('0'..'9')+)*
+;
+
+// adjust de.uni_hildesheim.sse.model.validation.IvmlIdentifierCheck
+// never allow identifiers starting with $ -> Reasoner name prefixes
+terminal ID: 
+    ('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'_'|'0'..'9')*
+;
+
+terminal NUMBER:
+    '-'?
+    (('0'..'9')+ ('.' ('0'..'9')* EXPONENT?)?
+    |   '.' ('0'..'9')+ EXPONENT?
+    |   ('0'..'9')+ EXPONENT)
+;
+
+terminal EXPONENT: // just return a string
+    ('e'|'E') ('+'|'-')? ('0'..'9')+
+;
+            
+terminal STRING : 
+    '"' ( '\\' ('b'|'t'|'n'|'f'|'r'|'u'|'"'|"'"|'\\') | !('\\'|'"') )* '"' |
+    "'" ( '\\' ('b'|'t'|'n'|'f'|'r'|'u'|'"'|"'"|'\\') | !('\\'|"'") )* "'"
+; 
+
+// do not change the name of this terminal!!! -> comment recognition
+terminal ML_COMMENT: 
+    '/*' -> '*/'
+;
+
+// do not change the name of this terminal!!! -> comment recognition
+terminal SL_COMMENT: 
+    '//' !('\n'|'\r')* ('\r'? '\n')?
+;
+
+// do not change the name of this terminal!!! -> comment recognition
+terminal WS: 
+    (' '|'\t'|'\r'|'\n')+
+;
+
+terminal ANY_OTHER: 
+    .
+;

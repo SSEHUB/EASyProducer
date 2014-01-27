@@ -1,0 +1,10 @@
+project attributeAssignmentFail {
+
+    version v0;
+    enum BindingTimes {compile, startup, runtime};
+    attribute BindingTimes bindingTime to attributeAssignmentFail;
+    Integer myInt;
+    assign (bindingTime = BindingTimes.startup) to {
+        Integer myInt;
+    }
+}

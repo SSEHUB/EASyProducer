@@ -1,0 +1,8 @@
+-> name(Artifact) with (test.texts) = test.texts
+s <- test.texts
+i <- 1
+r <- 1.1
+b <- false
+-> main(Configuration, Artifact) with (<config>, test.texts)
+    -> name(Artifact) with (test.texts) = test.texts
+    s1 <- test.texts

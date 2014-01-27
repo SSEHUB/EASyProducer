@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Jess Reasoner Binary (licensed)
+Bundle-SymbolicName: JessReasoner.binary;singleton:=true
+Bundle-Version: 7.1.2
+Bundle-ClassPath: jess.jar,
+ jsr94.jar
+Bundle-Vendor: University of Hildesheim - SSE (internal)
+Export-Package: jess;version="0.0.1"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6

@@ -1,0 +1,5 @@
+project root_impossibleImportRestriction {
+
+    version v1;
+    import a_impossibleImportRestriction with (a_impossibleImportRestriction.version >= v3.1);
+}

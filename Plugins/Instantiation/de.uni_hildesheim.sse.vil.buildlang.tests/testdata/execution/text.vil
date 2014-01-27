@@ -1,0 +1,8 @@
+vilScript text (Project source, Project target, Configuration config) {
+
+    main(Project source, Project target, Configuration config) = : {
+        FileArtifact fa = "$source/build.xml";
+        Boolean matches = fa.text().matches("(?s).*message.*");
+    }
+
+}

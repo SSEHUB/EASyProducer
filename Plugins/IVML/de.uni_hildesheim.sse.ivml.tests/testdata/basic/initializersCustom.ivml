@@ -1,0 +1,26 @@
+project testInitializersCustom {
+
+    version v0;
+    compound cTest {
+        Integer i;
+        Integer j;
+    }
+
+    compound AbstractComponent {
+    }
+
+    compound DdsComponent refines AbstractComponent {
+        Boolean specialDocks;
+    }
+
+    compound JockeyComponent refines AbstractComponent {
+        Boolean reassignments;
+    }
+
+    sequenceOf(cTest) seq;
+    setOf(AbstractComponent) components = {};
+    attribute Integer a = 0 to components;
+    seq = {{i = 10, j = 20}, {i = 11, j = 21}};
+//    seq = {{i = 10, j = 20}, {i = 11, j = 21}};
+//    components = {DdsComponent {specialDocks = false, specialDocks.a = 1}, JockeyComponent {reassignments = false}};
+}

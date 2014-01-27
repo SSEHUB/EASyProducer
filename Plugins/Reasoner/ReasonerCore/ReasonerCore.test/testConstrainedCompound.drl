@@ -1,0 +1,686 @@
+package de.uni_hildesheim.sse.reasoning.drools
+// Project - testConstrainedCompound
+import java.util.List;
+import java.util.Set;
+import java.util.Arrays;
+import java.util.ArrayList;
+
+import function de.uni_hildesheim.sse.reasoning.drools.functions.IVMLFunctions.*
+
+
+
+function boolean isDefined(Object o) { 
+	return o != null;		
+}
+
+global java.util.ArrayList cList
+
+function boolean implies(boolean a, boolean b) { 
+boolean result = false;
+if (a && !b)
+	result = false;
+else
+	result = true;
+return result;
+ }
+
+declare CMPA
+@typesafe (false) 
+
+ 	intA : int
+ 	realA : double
+ 	boolA : Boolean
+ 	stringA : String
+end
+
+declare CMPB
+@typesafe (false) 
+
+ 	intA : int
+ 	realA : double
+ 	boolA : Boolean
+ 	stringA : String
+end
+
+declare Project
+@typesafe (false) 
+
+	a1 : CMPA
+	a2 : CMPA
+	b1 : CMPB
+	b2 : CMPB
+	iA : List =  new java.util.ArrayList(java.util.Arrays.asList(1 , 2 , 3 , 4 , 5))
+	rA : List =  new java.util.ArrayList(java.util.Arrays.asList(1.1 , 2.2 , 3.3 , 4.4 , 5.5))
+	bA : List =  new java.util.ArrayList(java.util.Arrays.asList(true , false , true , false))
+	sA : List =  new java.util.ArrayList(java.util.Arrays.asList("a" , "b" , "c" , "d"))
+	emptySeq : List =  new java.util.ArrayList(java.util.Arrays.asList())
+	iAset : Set =  new java.util.HashSet(java.util.Arrays.asList(1 , 2 , 3 , 4 , 5))
+	rAset : Set =  new java.util.HashSet(java.util.Arrays.asList(1.1 , 2.2 , 3.3 , 4.4 , 5.5))
+	bAset : Set =  new java.util.HashSet(java.util.Arrays.asList(true , false , true , false))
+	sAset : Set =  new java.util.HashSet(java.util.Arrays.asList("a" , "b" , "c" , "d"))
+	emptySet : Set =  new java.util.HashSet(java.util.Arrays.asList())
+	bA1 : Boolean
+	iAfirst : int
+	iAlast : int
+	appendMe : int
+	iA4 : int
+	maxi : int
+	minInt : int
+	avgi : int
+	maxReal : double
+	minReal : double
+	avgr : double
+	sumInteger : int
+	sumReal : double
+	iAsize : int
+	seqIsEmpty : Boolean
+	seqNotEmpty : Boolean
+	iB : List =  new java.util.ArrayList(java.util.Arrays.asList(1 , 2 , 3))
+	iC : List
+	setIsNotEqual : Boolean
+	isEmptySet : Boolean
+	isNotEmptySet : Boolean
+	iBset : Set =  new java.util.HashSet(java.util.Arrays.asList(0 , 1 , 2 , 3 , 4))
+	iCset : Set
+	iDset : Set
+	
+end
+
+
+rule " Config rule " 
+ agenda-group "Group Config"
+dialect "mvel"
+no-loop true
+lock-on-active true
+	when
+		P : Project()
+	then
+		modify(P) {avgi = 3, minReal = 1.1, maxi = 5, avgr = 3.3, maxReal = 5.5, appendMe = 6, b1 = new CMPB(1 , 1.0 , true , "aStringB1"), a1 = new CMPA(1 , 1.0 , true , "aStringA1"), b2 = new CMPB(2 , 2.0 , false , "aStringB2"), a2 = new CMPA(2 , 2.0 , false , "aStringA2"), minInt = 1};
+System.out.println( "Project : " + P);
+ end 
+rule "Fact rule" 
+ agenda-group "Fact Config"
+dialect "mvel"
+no-loop true
+lock-on-active true
+	when
+		P : Project()
+	then
+		insertLogical(P.a1)
+insertLogical(P.a2)
+insertLogical(P.b1)
+insertLogical(P.b2)
+
+ end 
+rule "54"
+agenda-group "Group 0"
+dialect "mvel"
+no-loop true
+lock-on-active true
+when
+P : Project()
+then 
+	modify(P){bA1 = ( at(P.bA , 1  ) )};update(P);
+end
+
+
+rule "56"
+agenda-group "Group 0"
+dialect "mvel"
+no-loop true
+lock-on-active true
+when
+P : Project()
+then 
+	modify(P){iAfirst = ( first(P.iA ) )};update(P);
+end
+
+
+rule "57"
+agenda-group "Group 0"
+dialect "mvel"
+no-loop true
+lock-on-active true
+when
+P : Project()
+then 
+	modify(P){iAlast = ( last(P.iA ) )};update(P);
+end
+
+
+rule "58"
+agenda-group "Group 0"
+dialect "mvel"
+no-loop true
+lock-on-active true
+when
+P : Project()
+then 
+	modify(P){appendMe = ( 6 )};update(P);
+end
+
+
+rule "59"
+agenda-group "Group 0"
+dialect "mvel"
+no-loop true
+lock-on-active true
+when
+P : Project()
+then 
+	modify(P){iA4 = ( at(P.iA , 4  ) )};update(P);
+end
+
+
+rule "60"
+agenda-group "Group 0"
+dialect "mvel"
+no-loop true
+lock-on-active true
+when
+P : Project()
+then 
+	modify(P){maxi = ( 5 )};update(P);
+end
+
+
+rule "62"
+agenda-group "Group 0"
+dialect "mvel"
+no-loop true
+lock-on-active true
+when
+P : Project()
+then 
+	modify(P){minInt = ( 1 )};update(P);
+end
+
+
+rule "64"
+agenda-group "Group 0"
+dialect "mvel"
+no-loop true
+lock-on-active true
+when
+P : Project()
+then 
+	modify(P){avgi = ( 3 )};update(P);
+end
+
+
+rule "66"
+agenda-group "Group 0"
+dialect "mvel"
+no-loop true
+lock-on-active true
+when
+P : Project()
+then 
+	modify(P){maxReal = ( 5.5 )};update(P);
+end
+
+
+rule "68"
+agenda-group "Group 0"
+dialect "mvel"
+no-loop true
+lock-on-active true
+when
+P : Project()
+then 
+	modify(P){minReal = ( 1.1 )};update(P);
+end
+
+
+rule "70"
+agenda-group "Group 0"
+dialect "mvel"
+no-loop true
+lock-on-active true
+when
+P : Project()
+then 
+	modify(P){avgr = ( 3.3 )};update(P);
+end
+
+
+rule "72"
+agenda-group "Group 0"
+dialect "mvel"
+no-loop true
+lock-on-active true
+when
+P : Project()
+then 
+	modify(P){sumInteger = ( sum(P.iA ) )};update(P);
+end
+
+
+rule "73"
+agenda-group "Group 0"
+dialect "mvel"
+no-loop true
+lock-on-active true
+when
+P : Project()
+then 
+	modify(P){sumReal = ( sum(P.rA ) )};update(P);
+end
+
+
+rule "74"
+agenda-group "Group 0"
+dialect "mvel"
+no-loop true
+lock-on-active true
+when
+P : Project()
+then 
+	modify(P){iAsize = ( size(P.iA ) )};update(P);
+end
+
+
+rule "75"
+agenda-group "Group 0"
+dialect "mvel"
+no-loop true
+lock-on-active true
+when
+P : Project()
+then 
+	modify(P){seqIsEmpty = ( isEmpty(P.emptySeq ) )};update(P);
+end
+
+
+rule "76"
+agenda-group "Group 0"
+dialect "mvel"
+no-loop true
+lock-on-active true
+when
+P : Project()
+then 
+	modify(P){seqNotEmpty = ( notEmpty(P.iA ) )};update(P);
+end
+
+
+rule "77"
+agenda-group "Group 0"
+dialect "mvel"
+no-loop true
+lock-on-active true
+when
+P : Project()
+then 
+	modify(P){iC = ( union(P.iA , P.iB  ) )};update(P);
+end
+
+
+rule "78"
+agenda-group "Group 0"
+dialect "mvel"
+no-loop true
+lock-on-active true
+when
+P : Project()
+then 
+	modify(P){isEmptySet = ( isEmpty(P.emptySet ) )};update(P);
+end
+
+
+rule "79"
+agenda-group "Group 0"
+dialect "mvel"
+no-loop true
+lock-on-active true
+when
+P : Project()
+then 
+	modify(P){isNotEmptySet = ( notEmpty(P.iAset ) )};update(P);
+end
+
+
+rule "80"
+agenda-group "Group 0"
+dialect "mvel"
+no-loop true
+lock-on-active true
+when
+P : Project()
+then 
+	modify(P){iCset = ( union(P.iAset , P.iBset  ) )};update(P);
+end
+
+
+rule "81"
+agenda-group "Group 0"
+dialect "mvel"
+no-loop true
+lock-on-active true
+when
+P : Project()
+then 
+	modify(P){iDset = ( intersection(P.iAset , P.iBset  ) )};update(P);
+end
+
+
+rule "41"
+agenda-group "Group 2"
+dialect "mvel"
+no-loop true
+ when
+
+
+P : Project(isDefined(P.a1) && isDefined(P.b1) && isDefined(P.b1) && isDefined(P.a1) &&  !((P.a1.intA + P.b1.intA) == (P.b1.intA + P.a1.intA)))
+
+then
+
+System.out.println("Rule not satisfied # " + 41);
+cList.add(41);
+end
+
+
+rule "42"
+agenda-group "Group 2"
+dialect "mvel"
+no-loop true
+ when
+
+
+P : Project(isDefined(P.a1) && isDefined(P.b1) && isDefined(P.b1) && isDefined(P.a1) &&  !((P.a1.realA + P.b1.intA) == (P.b1.intA + P.a1.intA)))
+
+then
+
+System.out.println("Rule not satisfied # " + 42);
+cList.add(42);
+end
+
+
+rule "43"
+agenda-group "Group 2"
+dialect "mvel"
+no-loop true
+ when
+
+
+P : Project(isDefined(P.a1) && isDefined(P.a1) && isDefined(P.a1) &&  !((P.a1 == P.a1) == P.a1.boolA))
+
+then
+
+System.out.println("Rule not satisfied # " + 43);
+cList.add(43);
+end
+
+
+rule "44"
+agenda-group "Group 2"
+dialect "mvel"
+no-loop true
+ when
+
+
+P : Project(isDefined(P.b1) && isDefined(P.b2) && isDefined(P.b2) &&  !((P.b1 == P.b2) == P.b2.boolA))
+
+then
+
+System.out.println("Rule not satisfied # " + 44);
+cList.add(44);
+end
+
+
+rule "45"
+agenda-group "Group 2"
+dialect "mvel"
+no-loop true
+ when
+
+
+P : Project(isDefined(P.b1) && isDefined(P.b2) && isDefined(P.b1) &&  !((uneq(P.b1 , P.b2 )) == P.b1.boolA))
+
+then
+
+System.out.println("Rule not satisfied # " + 45);
+cList.add(45);
+end
+
+
+rule "46"
+agenda-group "Group 2"
+dialect "mvel"
+no-loop true
+ when
+
+
+P : Project(isDefined(P.a1) && isDefined(P.a1) && isDefined(P.a2) &&  !((uneq(P.a1 , P.a1 )) == P.a2.boolA))
+
+then
+
+System.out.println("Rule not satisfied # " + 46);
+cList.add(46);
+end
+
+
+rule "47"
+agenda-group "Group 2"
+dialect "mvel"
+no-loop true
+ when
+
+
+P : Project(isDefined(P.a1) && isDefined(P.iA) &&  !(P.a1.intA + 1 == at(P.iA , 0 ) + 1))
+
+then
+
+System.out.println("Rule not satisfied # " + 47);
+cList.add(47);
+end
+
+
+rule "48"
+agenda-group "Group 2"
+dialect "mvel"
+no-loop true
+ when
+
+
+P : Project(isDefined(P.a1) && isDefined(P.b2) && isDefined(P.iA) && isDefined(P.b2) &&  !(P.a1.intA + P.b2.intA == at(P.iA , 0 ) + P.b2.intA))
+
+then
+
+System.out.println("Rule not satisfied # " + 48);
+cList.add(48);
+end
+
+
+rule "49"
+agenda-group "Group 2"
+dialect "mvel"
+no-loop true
+ when
+
+
+P : Project(isDefined(P.a1) && isDefined(P.b2) && isDefined(P.iA) && isDefined(P.b2) &&  !(uneq(P.a1.intA + P.b2.intA , at(P.iA , 1 ) + P.b2.intA )))
+
+then
+
+System.out.println("Rule not satisfied # " + 49);
+cList.add(49);
+end
+
+
+rule "50"
+agenda-group "Group 2"
+dialect "mvel"
+no-loop true
+ when
+
+
+P : Project(isDefined(P.a2) && isDefined(P.rA) &&  !(P.a2.realA + 1.4 == at(P.rA , 2 ) + 0.1))
+
+then
+
+System.out.println("Rule not satisfied # " + 50);
+cList.add(50);
+end
+
+
+rule "51"
+agenda-group "Group 2"
+dialect "mvel"
+no-loop true
+ when
+
+
+P : Project(isDefined(P.a2) && isDefined(P.b2) && isDefined(P.rA) &&  !(P.a2.realA + P.b2.realA == at(P.rA , 3 ) + 0.4))
+
+then
+
+System.out.println("Rule not satisfied # " + 51);
+cList.add(51);
+end
+
+
+rule "52"
+agenda-group "Group 2"
+dialect "mvel"
+no-loop true
+ when
+
+
+P : Project(isDefined(P.a2) && isDefined(P.b2) && isDefined(P.rA) &&  !(uneq(P.a2.realA + P.b2.realA , at(P.rA , 2 ) + 0.4 )))
+
+then
+
+System.out.println("Rule not satisfied # " + 52);
+cList.add(52);
+end
+
+
+rule "53"
+agenda-group "Group 2"
+dialect "mvel"
+no-loop true
+ when
+
+
+P : Project(isDefined(P.iA) && isDefined(P.a1) &&  !(at(P.iA , 1 ) > P.a1.intA))
+
+then
+
+System.out.println("Rule not satisfied # " + 53);
+cList.add(53);
+end
+
+
+rule "55"
+agenda-group "Group 2"
+dialect "mvel"
+no-loop true
+ when
+
+
+P : Project(isDefined(P.bA1) && isDefined(P.a1) &&  !(uneq(P.bA1 , P.a1.boolA )))
+
+then
+
+System.out.println("Rule not satisfied # " + 55);
+cList.add(55);
+end
+
+
+rule "61"
+agenda-group "Group 2"
+dialect "mvel"
+no-loop true
+ when
+
+
+P : Project(isDefined(P.iA) && isDefined(P.maxi) &&  !(max(P.iA) == P.maxi))
+
+then
+
+System.out.println("Rule not satisfied # " + 61);
+cList.add(61);
+end
+
+
+rule "63"
+agenda-group "Group 2"
+dialect "mvel"
+no-loop true
+ when
+
+
+P : Project(isDefined(P.iA) && isDefined(P.minInt) &&  !(min(P.iA) == P.minInt))
+
+then
+
+System.out.println("Rule not satisfied # " + 63);
+cList.add(63);
+end
+
+
+rule "65"
+agenda-group "Group 2"
+dialect "mvel"
+no-loop true
+ when
+
+
+P : Project(isDefined(P.iA) && isDefined(P.avgi) &&  !(avg(P.iA) == P.avgi))
+
+then
+
+System.out.println("Rule not satisfied # " + 65);
+cList.add(65);
+end
+
+
+rule "67"
+agenda-group "Group 2"
+dialect "mvel"
+no-loop true
+ when
+
+
+P : Project(isDefined(P.rA) && isDefined(P.maxReal) &&  !(max(P.rA) == P.maxReal))
+
+then
+
+System.out.println("Rule not satisfied # " + 67);
+cList.add(67);
+end
+
+
+rule "69"
+agenda-group "Group 2"
+dialect "mvel"
+no-loop true
+ when
+
+
+P : Project(isDefined(P.rA) && isDefined(P.minReal) &&  !(min(P.rA) == P.minReal))
+
+then
+
+System.out.println("Rule not satisfied # " + 69);
+cList.add(69);
+end
+
+
+rule "71"
+agenda-group "Group 2"
+dialect "mvel"
+no-loop true
+ when
+
+
+P : Project(isDefined(P.rA) && isDefined(P.avgr) &&  !(avg(P.rA) == P.avgr))
+
+then
+
+System.out.println("Rule not satisfied # " + 71);
+cList.add(71);
+end
+
+

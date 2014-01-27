@@ -1,0 +1,11 @@
+@indent(indentation = 4, additional = 0)
+template content6(Configuration config, FileArtifact target) {
+
+    def main(Configuration config, FileArtifact target) {
+        String name = target.name();
+        'my content 
+        $name
+        your content'
+    }
+
+}

@@ -1,0 +1,7 @@
+project PhaniNullPointer {
+
+    attribute Integer metaI = 1 to PhaniNullPointer;
+    Integer a;
+    a = 4;
+    a.metaI = 10;
+}

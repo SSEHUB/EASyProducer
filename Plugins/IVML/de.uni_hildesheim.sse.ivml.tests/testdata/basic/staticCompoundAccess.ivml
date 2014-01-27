@@ -1,0 +1,17 @@
+project staticCompoundAccess {
+
+    version v0;
+    enum JockeySchedulingType {SIMPLE, LOCATION};
+    compound AbstractComponent {
+    }
+
+    compound JockeyComponent refines AbstractComponent {
+        JockeySchedulingType scheduling;
+    }
+
+    compound MobilityComponent refines AbstractComponent {
+        Boolean gpsBasedJockeys;
+    }
+
+    JockeyComponent.scheduling == JockeySchedulingType.LOCATION implies MobilityComponent.gpsBasedJockeys;
+}

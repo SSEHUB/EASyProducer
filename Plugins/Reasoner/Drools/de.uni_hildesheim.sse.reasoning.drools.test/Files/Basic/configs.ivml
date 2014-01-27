@@ -1,0 +1,55 @@
+project configs {
+
+ 	/*
+ 	sequenceOf(Integer) seq_A ;
+ 	seq_A = {1, 2, 3, 4, 5};
+ 	sequenceOf(Integer) seq_B = {2, 4, 6, 8};
+ 	seq_A = seq_B;
+ 	sequenceOf(Integer) seq_C = {10,15,12,30};
+ 	sequenceOf(Integer) seq_D = {101,151,122,32};
+ 	seq_D = seq_B;
+ 	*/
+ 	Integer a = 5;
+ 	Integer b;
+ 	b = 10;
+ 	a = b;
+ 	Integer c;
+ 	Integer d;
+ 	
+ 	
+ 	compound CA {
+ 		Integer x = 5;
+ 		}
+ 		
+ 	compound CB {
+ 		Integer y = 5;
+ 		}
+ 		
+ 	CA ca1;
+ 	ca1.x = 35;
+ 	ca1.x = 20;
+ 	CA.x = 555;
+ 	Integer e;
+ 	e = 10 + CA.x;
+ 	b = 10 implies ca1.x = 25;
+ 	b = 10 implies CA.x = 35;
+ 	b = 10 implies c = 255 + CA.x;
+ 	b = 10 implies d = 255 + ca1.x; 
+ 	
+ 	CB cb1;
+ 	CB cb2;
+ 	cb1.y = 10;
+ 	cb2.y = 20;
+ 	
+ 	Boolean boo;
+ 	boo = (cb1.y < cb2.y);
+ 	CA ca2;
+ 	
+ 	compound CC {
+ 		Integer alpha;
+ 		Integer beta;
+ 	}
+ 	
+ 	CC cc1;
+ 	
+}

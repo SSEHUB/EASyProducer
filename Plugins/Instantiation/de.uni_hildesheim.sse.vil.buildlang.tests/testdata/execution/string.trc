@@ -1,0 +1,18 @@
+s1 <- test
+-> length(String) with (test) = 4
+i1 <- 4
+-> +(String, String) with (test,  again) = test again
+s2 <- test again
+-> ==(String, String) with (test, test again) = false
+b1 <- false
+-> ==(String, String) with (test again, test again) = true
+b2 <- true
+-> matches(String, String) with (test, .*est.*) = true
+b3 <- true
+-> matches(String, String) with (test, .*abba.*) = false
+b4 <- false
+-> toInteger(String) with (123) = 123
+i2 <- 123
+-> toReal(String) with (12.3) = 12.3
+r1 <- 12.3
+-> main()

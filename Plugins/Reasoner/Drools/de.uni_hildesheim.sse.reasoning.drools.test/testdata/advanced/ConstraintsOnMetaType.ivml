@@ -1,0 +1,30 @@
+project ConstraintsOnMetaType {
+
+    attribute Integer meta = 0 to ConstraintsOnMetaType;
+    compound C {
+    
+        Integer a;
+        Integer b;
+        
+        
+        assign (meta = 200) to {
+            b > 222;
+        }
+        
+        b > 333;
+        
+        
+    }
+    
+    C c1, c2;
+    
+    c1.a == 10;
+    c2.a == 20;
+    
+   // C.a > 20;
+    
+    C.b == 20;
+    
+    C.b > 111;
+
+}

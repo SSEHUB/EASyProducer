@@ -1,0 +1,9 @@
+vilScript variableDeclarations2 () {
+
+    Integer varI = 1;
+    Integer varJ = varI + 3;
+
+    main() = : {
+    }
+
+}

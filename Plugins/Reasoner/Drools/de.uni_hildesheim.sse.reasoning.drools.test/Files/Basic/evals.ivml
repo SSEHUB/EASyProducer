@@ -1,0 +1,6 @@
+project evals {
+	Integer x;
+	x = 5;
+	x = 1;
+
+}

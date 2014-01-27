@@ -1,0 +1,51 @@
+project dummy {
+    
+    Integer a, b, c;
+    
+    a = 2;
+    b = 3;
+    
+    c == a + b;
+    
+    compound Telecom {
+    	
+    	Integer x1;
+    	String company;
+    }
+    
+    Telecom t1;
+    
+}
+
+project P1 {
+    import dummy;
+    c == a * b;
+    c == a - b;
+    Integer x;
+    Integer y;
+    Integer z;
+    x = 5;
+    y = 10;
+    z == x + y;
+    //true implies z == 5;
+    //z == x - y;
+}
+
+project BasicProjectImport {
+    
+    import P1;
+    y = 10;
+    x = 7;
+    
+    freeze {
+    	a;
+    	b;
+    	t1;
+    	t1.company;
+    }
+    
+    //x <= 6;
+    
+    z == x - y;
+    
+}

@@ -1,0 +1,12 @@
+project testContainer {
+
+    version v0;
+    setOf(Integer) intSet;
+    setOf(Boolean) boolSet;
+    setOf(String) stringSet;
+    setOf(Real) realSet;
+    sequenceOf(Integer) intSequence;
+    sequenceOf(Boolean) boolSequence;
+    sequenceOf(String) stringSequence;
+    sequenceOf(Real) realSequence;
+}

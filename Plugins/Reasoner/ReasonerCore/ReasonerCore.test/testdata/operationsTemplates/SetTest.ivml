@@ -1,0 +1,12 @@
+project SetTest {
+
+    version v0;    
+    
+    setOf(Integer) intSet; 
+    intSet = {1, 2, 3}; 
+    
+    sequenceOf(Integer) intSequence; 
+    intSequence = {1, 2, 3};
+    
+    
+}

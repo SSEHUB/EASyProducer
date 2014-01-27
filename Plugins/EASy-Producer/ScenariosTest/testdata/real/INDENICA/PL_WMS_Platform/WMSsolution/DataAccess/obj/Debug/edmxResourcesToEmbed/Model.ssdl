@@ -1,0 +1,179 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="wmsdbModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+  <EntityContainer Name="wmsdbModelStoreContainer">
+    <EntitySet Name="box" EntityType="wmsdbModel.Store.box" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="location" EntityType="wmsdbModel.Store.location" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="locationtype" EntityType="wmsdbModel.Store.locationtype" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="material" EntityType="wmsdbModel.Store.material" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="position" EntityType="wmsdbModel.Store.position" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="rack" EntityType="wmsdbModel.Store.rack" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="transportentry" EntityType="wmsdbModel.Store.transportentry" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FK_box_location" Association="wmsdbModel.Store.FK_box_location">
+      <End Role="location" EntitySet="location" />
+      <End Role="box" EntitySet="box" />
+    </AssociationSet>
+    <AssociationSet Name="FK_location_locationtype" Association="wmsdbModel.Store.FK_location_locationtype">
+      <End Role="locationtype" EntitySet="locationtype" />
+      <End Role="location" EntitySet="location" />
+    </AssociationSet>
+    <AssociationSet Name="FK_location_rack" Association="wmsdbModel.Store.FK_location_rack">
+      <End Role="rack" EntitySet="rack" />
+      <End Role="location" EntitySet="location" />
+    </AssociationSet>
+    <AssociationSet Name="FK_position_box" Association="wmsdbModel.Store.FK_position_box">
+      <End Role="box" EntitySet="box" />
+      <End Role="position" EntitySet="position" />
+    </AssociationSet>
+    <AssociationSet Name="FK_position_material" Association="wmsdbModel.Store.FK_position_material">
+      <End Role="material" EntitySet="material" />
+      <End Role="position" EntitySet="position" />
+    </AssociationSet>
+    <AssociationSet Name="FK_transportentity_box" Association="wmsdbModel.Store.FK_transportentity_box">
+      <End Role="box" EntitySet="box" />
+      <End Role="transportentry" EntitySet="transportentry" />
+    </AssociationSet>
+    <AssociationSet Name="FK_transportentity_location" Association="wmsdbModel.Store.FK_transportentity_location">
+      <End Role="location" EntitySet="location" />
+      <End Role="transportentry" EntitySet="transportentry" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="box">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="location_id" Type="nvarchar" Nullable="false" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="location">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="type" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="reserved" Type="bit" />
+    <Property Name="rack_id" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="locationtype">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="name" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="material">
+    <Key>
+      <PropertyRef Name="materialNumber" />
+    </Key>
+    <Property Name="materialNumber" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="name" Type="nvarchar" MaxLength="50" />
+    <Property Name="description" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="position">
+    <Key>
+      <PropertyRef Name="box_id" />
+      <PropertyRef Name="material_id" />
+    </Key>
+    <Property Name="box_id" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="material_id" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="amount" Type="numeric" Nullable="false" />
+  </EntityType>
+  <EntityType Name="rack">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="name" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="transportentry">
+    <Key>
+      <PropertyRef Name="box_id" />
+    </Key>
+    <Property Name="box_id" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="bin_id" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="test" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <Association Name="FK_box_location">
+    <End Role="location" Type="wmsdbModel.Store.location" Multiplicity="1" />
+    <End Role="box" Type="wmsdbModel.Store.box" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="location">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="box">
+        <PropertyRef Name="location_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_location_locationtype">
+    <End Role="locationtype" Type="wmsdbModel.Store.locationtype" Multiplicity="1" />
+    <End Role="location" Type="wmsdbModel.Store.location" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="locationtype">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="location">
+        <PropertyRef Name="type" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_location_rack">
+    <End Role="rack" Type="wmsdbModel.Store.rack" Multiplicity="0..1" />
+    <End Role="location" Type="wmsdbModel.Store.location" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="rack">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="location">
+        <PropertyRef Name="rack_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_position_box">
+    <End Role="box" Type="wmsdbModel.Store.box" Multiplicity="1" />
+    <End Role="position" Type="wmsdbModel.Store.position" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="box">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="position">
+        <PropertyRef Name="box_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_position_material">
+    <End Role="material" Type="wmsdbModel.Store.material" Multiplicity="1" />
+    <End Role="position" Type="wmsdbModel.Store.position" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="material">
+        <PropertyRef Name="materialNumber" />
+      </Principal>
+      <Dependent Role="position">
+        <PropertyRef Name="material_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_transportentity_box">
+    <End Role="box" Type="wmsdbModel.Store.box" Multiplicity="1" />
+    <End Role="transportentry" Type="wmsdbModel.Store.transportentry" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="box">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="transportentry">
+        <PropertyRef Name="box_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_transportentity_location">
+    <End Role="location" Type="wmsdbModel.Store.location" Multiplicity="1" />
+    <End Role="transportentry" Type="wmsdbModel.Store.transportentry" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="location">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="transportentry">
+        <PropertyRef Name="bin_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

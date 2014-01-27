@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: IVML integration commons for Eclipse
+Bundle-SymbolicName: de.uni_hildesheim.sse.integration.common.eclipse;singleton:=true
+Bundle-Version: 0.7.0
+Bundle-Vendor: University of Hildesheim - SSE
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: de.uni_hildesheim.sse.integration.common.eclipse
+Require-Bundle: org.eclipse.core.runtime;visibility:=reexport,
+ org.eclipse.core.resources;visibility:=reexport,
+ de.uni_hildesheim.sse.varModel;bundle-version="0.0.2";visibility:=reexport,
+ de.uni_hildesheim.sse.integration.common;bundle-version="0.0.5";visibility:=reexport,
+ de.uni_hildesheim.sse.EASy-Producer.persistence;bundle-version="0.0.6",
+ de.uni_hildesheim.sse.EASy-Producer;bundle-version="0.5.5"

@@ -1,0 +1,112 @@
+project ContainerConstraints {
+    
+    enum colors {blue, red, black};
+    
+    enum cars {alto = 0, bmw = 1, benz = 2};
+
+    sequenceOf(colors) seqA;
+    sequenceOf(colors) seqB;
+    
+    sequenceOf(cars) seqC;
+    sequenceOf(cars) seqD;
+/*
+  */  
+    compound C {
+        Integer cc1;
+    }
+    
+    C c1;
+    c1.cc1 = 25;
+    c1.cc1 > 25;
+    
+    seqA = {colors.blue, colors.red, colors.black};
+    seqB = {colors.red, colors.red, colors.blue, colors.red, colors.black};
+    
+    seqC = {cars.alto, cars.bmw, cars.benz};
+    seqD = {cars.benz, cars.alto, cars.alto, cars.bmw, cars.benz};
+    sequenceOf(String) seqE;
+    sequenceOf(String) seqF;
+    
+  //  seqE = {"aa", "bb", "cc", "dd", "ee"};
+//    seqF = {"dd", "aa", "aa", "bb", "cc"};
+    
+    /*
+    */
+     
+     Boolean bb1;
+//    bb1 = seqE->exists(t | t == "aa");
+    
+    
+    Integer x1;
+    Integer y1;
+    
+    x1 = 5;
+    y1 = 10;
+    
+    //x1 > y1;
+    
+    
+    /*
+    //Adding constraints
+    seqA[0] == seqB[2];
+    */
+    
+    /*
+    //This should fire.
+    seqA[0] == seqB[1];
+    seqC.size() > 6;
+    seqC.size() > seqA.size();    
+    */
+    
+    compound A {
+        sequenceOf(colors) seq1;
+        sequenceOf(cars) seq2;
+        sequenceOf(Integer) seq3;
+        sequenceOf(String) seq4;
+    }
+    
+    compound B {
+        sequenceOf(colors) seq5;
+        sequenceOf(cars) seq6;
+        sequenceOf(Integer) seq7;
+        sequenceOf(String) seq8;
+        Integer x;
+    }
+    
+    A a1;
+    B b1;
+    
+    b1.x = 25;
+    b1.x == 35;
+    b1.x > 35;
+    b1.x < 35;
+    
+    
+    /*
+    a1.seq1 = {colors.blue, colors.red, colors.black, colors.blue, colors.red};    
+    b1.seq6 = {cars.benz, cars.alto, cars.alto, cars.bmw, cars.benz};
+    a1.seq4 = {"aa", "bb", "cc", "dd", "ee", "aa", "bb", "cc", "dd", "ee"};
+    
+    a1.seq4.size() > 10;
+    */
+    
+    /*
+   
+   
+    2 > 0 implies a1.seq4 == {"aa", "bb"};
+    //2 > 0 implies a1.seq4 == {"aa", "bb", "cc"};
+    
+    B tempb1;
+    tempb1 = {x = 5};
+    //tempb1 = {seq7 = {2, 3} };
+    
+    
+   // sequenceOf(B) sb1 =  {{seq5 = {colors.blue}, seq6 = {cars.benz} , seq7 = {2, 3, 4, 5}, seq8 = {"aa", "b"}, x = 5}};
+    
+  //  sb1[0].x > 10;
+        
+    */
+    
+    
+    
+}

@@ -1,0 +1,8 @@
+vilScript mapJoin1 (Project source, Project target, Configuration config) {
+
+    main() = : {
+        map(x,y=join(c:target.selectAllFiles(), d:config.variables())) {
+        };
+    }
+
+}

@@ -1,0 +1,25 @@
+project IsDefinedWithDefault {
+
+    compound A {
+        Integer aa1;
+        B bb;
+        Boolean bool3 = true;
+        }
+        
+     compound B {
+        Integer b1;
+        C cc;
+     }
+
+    compound C {
+        Integer ccc;
+        Integer ccc2;
+    }
+    
+    A a1;
+    
+    //This should be consistent as A has an element witha  default value.
+    isDefined(a1); 
+
+
+}

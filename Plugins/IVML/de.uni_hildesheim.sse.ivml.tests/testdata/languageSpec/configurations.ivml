@@ -1,0 +1,8 @@
+project ivmlSpec_configurations {
+
+    enum ContentType {text, video, audio, threeD, blob};
+    typedef Bitrate Integer with (Bitrate >= 128 and Bitrate <= 256);
+    ContentType content;
+    Bitrate contentBitrate = 128;
+    contentBitrate == 128 implies content == ContentType.text;
+}

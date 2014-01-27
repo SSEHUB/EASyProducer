@@ -1,0 +1,20 @@
+project values {
+	Integer x;
+	Integer y;
+	Integer z = 5;
+	Integer a = z * 2;
+	
+	/*
+	x > 5 and x < 10;
+	x > 5 implies y < 7;
+	y > 5;
+	z > 2 and a >8;
+	
+	Integer b = 21;
+	Integer c;
+	b + c = 63;
+	*/
+	Boolean defin;
+	isDefined(x) implies defin = true;;
+	
+}

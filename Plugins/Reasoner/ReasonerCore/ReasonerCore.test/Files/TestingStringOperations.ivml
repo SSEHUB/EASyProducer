@@ -1,0 +1,18 @@
+project testStringOperations {
+
+String str1;
+String str2;
+
+str1 = "A string";
+str2 = "Another string";
+str1.size() < 2;
+String str3;
+str3 = str1.concat(str2);
+Integer intx;
+intx = 5;
+
+String str4;
+str4 = str1.substring(0, 4);
+
+
+}

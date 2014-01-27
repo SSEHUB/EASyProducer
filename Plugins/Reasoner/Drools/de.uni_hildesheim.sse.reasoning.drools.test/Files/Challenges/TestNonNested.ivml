@@ -1,0 +1,59 @@
+
+project NonNested {
+	
+	compound A {
+		Integer aa1 = 10;
+		Integer aa2 = 20;
+	}
+	
+	A a1;
+	A a2;
+	a2.aa1 == a2.aa2 + 20;
+	
+	
+	compound B {
+		Integer bb1;
+		Integer bb2;
+	}
+	
+	B b1;
+	B b2 = {bb1 = 100, bb2 = 200};
+	b1.bb1 == a2.aa1;
+	b1.bb2 == a2.aa2 + 50;
+	
+	Integer x, y, z;
+	
+	x == 12;
+	y == x + 3;
+	z == x + y;
+	
+	String s1;
+	String s2 = "B";
+	s1 = "A";
+	String s3;
+	s3 == s1.concat(s2);
+	
+	s3.size() > 0;
+	s3.size() < a1.aa1;
+	s3.size() > a2.aa2 / x;
+	
+	Integer alpha = s3.size();
+	Boolean beta;
+	beta == (s3.size() > 1);
+	
+	sequenceOf(String) seq1 = {"a", "bb", "ccc", "dddd"};
+	seq1.at(0).size() == 1;
+	
+	sequenceOf(Integer) seq2;
+	seq2 = {0, 1, 2, 3};
+	seq1.at(0).size() == seq2.at(1);
+	
+	Boolean gamma;
+	gamma == (seq1.at(0).size() == seq2.at(1));
+	Boolean bool1;
+	bool1 == (s3.size() == 2); 
+	
+	/*
+	*/
+	
+}

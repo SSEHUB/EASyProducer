@@ -1,0 +1,6 @@
+project root_legitIMportAndConflict {
+
+    version v1;
+    import a_legitIMportAndConflict;
+    import b_legitIMportAndConflict;
+}

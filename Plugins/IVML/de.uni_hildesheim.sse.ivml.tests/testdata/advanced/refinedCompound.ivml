@@ -1,0 +1,17 @@
+project testRefinedCompound {
+
+    version v0;
+    compound base {
+        Integer x = 1;
+        Integer y = 2;
+        String s = "a";
+    }
+
+    compound refined refines base {
+        Integer z = 1;
+    }
+
+    refined var;
+    var.z = 2;
+    var.y = 3;
+}

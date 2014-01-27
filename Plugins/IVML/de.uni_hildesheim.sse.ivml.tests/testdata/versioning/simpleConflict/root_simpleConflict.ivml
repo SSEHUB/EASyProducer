@@ -1,0 +1,5 @@
+project root_simpleConflict {
+
+    version v1;
+    conflicts a_simpleConflict with (a_simpleConflict.version == v1);
+}
