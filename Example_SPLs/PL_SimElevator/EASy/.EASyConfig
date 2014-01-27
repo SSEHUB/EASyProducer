@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProductLineProject id="60d317a0-36ef-4f5d-892f-17b47a4d6099" name="PL_SimElevator" version="0" location="PL_SimElevator">
+	<predecessors>
+	</predecessors>
+	<successors>
+		<entity id="f0de34b6-de44-4931-8212-db8dfbad78dd" name="New_Product" version="0" location="New_Product" />
+	</successors>
+	<instantiators>
+		<entity engine="VelocityTransformatorEngine" originid="60d317a0-36ef-4f5d-892f-17b47a4d6099" paths="C:\Elscha\Eclipse\runtime-EclipseApplication\PL_SimElevator//;//;//C:\Elscha\Eclipse\runtime-EclipseApplication\PL_SimElevator" inheritence="PL_SimElevator//;//;//" file="C:\Elscha\Eclipse\runtime-EclipseApplication\PL_SimElevator\src\engine\ElevatorEngine.java//;//;//C:\Elscha\Eclipse\runtime-EclipseApplication\PL_SimElevator\src\engine\SpeedController.java//;//;//C:\Elscha\Eclipse\runtime-EclipseApplication\PL_SimElevator\src\gui\buttons\ArrowButton.java//;//;//C:\Elscha\Eclipse\runtime-EclipseApplication\PL_SimElevator\src\gui\buttons\AuthorizeButton.java//;//;//C:\Elscha\Eclipse\runtime-EclipseApplication\PL_SimElevator\src\gui\buttons\DefaultButton.java//;//;//C:\Elscha\Eclipse\runtime-EclipseApplication\PL_SimElevator\src\gui\buttons\EmergencyButton.java//;//;//C:\Elscha\Eclipse\runtime-EclipseApplication\PL_SimElevator\src\gui\views\inside\ControlPanel.java//;//;//C:\Elscha\Eclipse\runtime-EclipseApplication\PL_SimElevator\src\gui\views\inside\DisplayPanel.java//;//;//C:\Elscha\Eclipse\runtime-EclipseApplication\PL_SimElevator\src\gui\views\inside\displays\FloorChainDisplay.java//;//;//C:\Elscha\Eclipse\runtime-EclipseApplication\PL_SimElevator\src\gui\views\outside\ElevatorPanel.java//;//;//C:\Elscha\Eclipse\runtime-EclipseApplication\PL_SimElevator\src\gui\views\ScrollPanel.java//;//;//C:\Elscha\Eclipse\runtime-EclipseApplication\PL_SimElevator\src\gui\windows\Info.java//;//;//C:\Elscha\Eclipse\runtime-EclipseApplication\PL_SimElevator\src\gui\windows\InfoWindow.java//;//;//C:\Elscha\Eclipse\runtime-EclipseApplication\PL_SimElevator\src\gui\windows\MainWindow.java//;//;//C:\Elscha\Eclipse\runtime-EclipseApplication\PL_SimElevator\src\gui\windows\StartUpScreen.java//;//;//C:\Elscha\Eclipse\runtime-EclipseApplication\PL_SimElevator\src\main\ElevatorSimulator.java//;//;//C:\Elscha\Eclipse\runtime-EclipseApplication\PL_SimElevator\src\main\Main.java//;//;//C:\Elscha\Eclipse\runtime-EclipseApplication\PL_SimElevator\src\properties\ProgramSettings.java//;//;//C:\Elscha\Eclipse\runtime-EclipseApplication\PL_SimElevator\src\properties\Speed.java//;//;//C:\Elscha\Eclipse\runtime-EclipseApplication\PL_SimElevator\src\simulator\controllers\DefaultEController.java//;//;//C:\Elscha\Eclipse\runtime-EclipseApplication\PL_SimElevator\src\simulator\controllers\DistanceEController.java//;//;//C:\Elscha\Eclipse\runtime-EclipseApplication\PL_SimElevator\src\simulator\model\Elevator.java//;//;//C:\Elscha\Eclipse\runtime-EclipseApplication\PL_SimElevator\src\simulator\model\Target.java//;//;//C:\Elscha\Eclipse\runtime-EclipseApplication\PL_SimElevator\src\simulator\SuperController.java//;//;//" />
+	</instantiators>
+	<reasoners>
+		<entity timeout="0" />
+	</reasoners>
+	<copy>
+		<entity copyID="de.uni_hildesheim.sse.instantiator.copy.java" />
+	</copy>
+</ProductLineProject>
