@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import org.junit.Assert;
-import org.junit.Test;
 
 import de.uni_hildesheim.sse.ConstraintSyntaxException;
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;

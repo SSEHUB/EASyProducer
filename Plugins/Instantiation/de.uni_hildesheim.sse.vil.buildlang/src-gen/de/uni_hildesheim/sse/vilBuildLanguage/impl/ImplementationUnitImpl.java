@@ -1,25 +1,27 @@
 /**
- * <copyright>
- * </copyright>
- *
-
  */
 package de.uni_hildesheim.sse.vilBuildLanguage.impl;
+
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Import;
+
+import de.uni_hildesheim.sse.vilBuildLanguage.ImplementationUnit;
+import de.uni_hildesheim.sse.vilBuildLanguage.LanguageUnit;
+import de.uni_hildesheim.sse.vilBuildLanguage.Require;
+import de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage;
 
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.NotificationChain;
+
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
-
-import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Import;
-import de.uni_hildesheim.sse.vilBuildLanguage.ImplementationUnit;
-import de.uni_hildesheim.sse.vilBuildLanguage.LanguageUnit;
-import de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -29,6 +31,7 @@ import de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage;
  * The following features are implemented:
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.ImplementationUnitImpl#getImports <em>Imports</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.ImplementationUnitImpl#getRequires <em>Requires</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.ImplementationUnitImpl#getScripts <em>Scripts</em>}</li>
  * </ul>
  * </p>
@@ -46,6 +49,16 @@ public class ImplementationUnitImpl extends MinimalEObjectImpl.Container impleme
    * @ordered
    */
   protected EList<Import> imports;
+
+  /**
+   * The cached value of the '{@link #getRequires() <em>Requires</em>}' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getRequires()
+   * @generated
+   * @ordered
+   */
+  protected EList<Require> requires;
 
   /**
    * The cached value of the '{@link #getScripts() <em>Scripts</em>}' containment reference list.
@@ -97,6 +110,20 @@ public class ImplementationUnitImpl extends MinimalEObjectImpl.Container impleme
    * <!-- end-user-doc -->
    * @generated
    */
+  public EList<Require> getRequires()
+  {
+    if (requires == null)
+    {
+      requires = new EObjectContainmentEList<Require>(Require.class, this, VilBuildLanguagePackage.IMPLEMENTATION_UNIT__REQUIRES);
+    }
+    return requires;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EList<LanguageUnit> getScripts()
   {
     if (scripts == null)
@@ -118,6 +145,8 @@ public class ImplementationUnitImpl extends MinimalEObjectImpl.Container impleme
     {
       case VilBuildLanguagePackage.IMPLEMENTATION_UNIT__IMPORTS:
         return ((InternalEList<?>)getImports()).basicRemove(otherEnd, msgs);
+      case VilBuildLanguagePackage.IMPLEMENTATION_UNIT__REQUIRES:
+        return ((InternalEList<?>)getRequires()).basicRemove(otherEnd, msgs);
       case VilBuildLanguagePackage.IMPLEMENTATION_UNIT__SCRIPTS:
         return ((InternalEList<?>)getScripts()).basicRemove(otherEnd, msgs);
     }
@@ -136,6 +165,8 @@ public class ImplementationUnitImpl extends MinimalEObjectImpl.Container impleme
     {
       case VilBuildLanguagePackage.IMPLEMENTATION_UNIT__IMPORTS:
         return getImports();
+      case VilBuildLanguagePackage.IMPLEMENTATION_UNIT__REQUIRES:
+        return getRequires();
       case VilBuildLanguagePackage.IMPLEMENTATION_UNIT__SCRIPTS:
         return getScripts();
     }
@@ -156,6 +187,10 @@ public class ImplementationUnitImpl extends MinimalEObjectImpl.Container impleme
       case VilBuildLanguagePackage.IMPLEMENTATION_UNIT__IMPORTS:
         getImports().clear();
         getImports().addAll((Collection<? extends Import>)newValue);
+        return;
+      case VilBuildLanguagePackage.IMPLEMENTATION_UNIT__REQUIRES:
+        getRequires().clear();
+        getRequires().addAll((Collection<? extends Require>)newValue);
         return;
       case VilBuildLanguagePackage.IMPLEMENTATION_UNIT__SCRIPTS:
         getScripts().clear();
@@ -178,6 +213,9 @@ public class ImplementationUnitImpl extends MinimalEObjectImpl.Container impleme
       case VilBuildLanguagePackage.IMPLEMENTATION_UNIT__IMPORTS:
         getImports().clear();
         return;
+      case VilBuildLanguagePackage.IMPLEMENTATION_UNIT__REQUIRES:
+        getRequires().clear();
+        return;
       case VilBuildLanguagePackage.IMPLEMENTATION_UNIT__SCRIPTS:
         getScripts().clear();
         return;
@@ -197,6 +235,8 @@ public class ImplementationUnitImpl extends MinimalEObjectImpl.Container impleme
     {
       case VilBuildLanguagePackage.IMPLEMENTATION_UNIT__IMPORTS:
         return imports != null && !imports.isEmpty();
+      case VilBuildLanguagePackage.IMPLEMENTATION_UNIT__REQUIRES:
+        return requires != null && !requires.isEmpty();
       case VilBuildLanguagePackage.IMPLEMENTATION_UNIT__SCRIPTS:
         return scripts != null && !scripts.isEmpty();
     }

@@ -275,4 +275,9 @@ class VariableFinder implements IBuildlangVisitor {
         return null;
     }
 
+    @Override
+    public Object visitInstantiateExpression(InstantiateExpression inst) throws ExpressionException {
+        return null;
+    }
+
 }

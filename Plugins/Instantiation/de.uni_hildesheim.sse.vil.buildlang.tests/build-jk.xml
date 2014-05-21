@@ -9,7 +9,7 @@
 	<property name="javacTarget" value="1.5"/>
 	
 	<path id ="includes">
-        <!-- Model -->
+		<!-- Model -->
         <pathelement path="${libs.utils}"/>
         <pathelement path="${libs.model}"/>
         <pathelement path="${libs.model.tests}"/>
@@ -28,10 +28,6 @@
         <!-- VIL -->
 		<pathelement path="${libs.vil.core}"/>
 		<pathelement path="${libs.vil.ui}"/>
-	    <!-- lib -->
-        <fileset dir="lib">
-            <include name="**/*.jar" />
-        </fileset>
 		<!-- Eclipse-Plugins -->
 		<fileset dir="${eclipse.plugins.dir}">
 			<include name="**/*.jar" />
@@ -59,11 +55,7 @@
 	
 	<!-- Creates a jar file -->
 	<target name="jar" depends="compile">
-		<copy todir="${build.classes.dir}" failonerror="true" overwrite="true">
-			<fileset dir="${basedir}">
-				<include name="lib/**/*" />
-			</fileset>
-		</copy>
+		<!--copy todir="${build.classes.dir}" failonerror="true" overwrite="true"/-->
 		<jar destfile="${build.jar.dir}/${ant.project.name}.jar" basedir="${build.classes.dir}" manifest="META-INF/MANIFEST.MF"/>
     </target>
 </project>

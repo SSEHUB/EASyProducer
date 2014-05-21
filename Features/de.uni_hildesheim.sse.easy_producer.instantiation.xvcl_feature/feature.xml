@@ -2,7 +2,7 @@
 <feature
       id="de.uni_hildesheim.sse.easy_producer.instantiation.xvcl_feature"
       label="XVCL Instantiator"
-      version="0.4.0"
+      version="0.5.0"
       provider-name="University of Hildesheim - SSE">
 
    <description url="http://xvcl.comp.nus.edu.sg/cms/">
@@ -35,7 +35,7 @@ limitations under the License.
          id="de.uni-hildesheim.sse.easy.instantiator.xvcl"
          download-size="0"
          install-size="0"
-         version="3.2.3.8"
+         version="3.3.0.0"
          unpack="false"/>
 
 </feature>

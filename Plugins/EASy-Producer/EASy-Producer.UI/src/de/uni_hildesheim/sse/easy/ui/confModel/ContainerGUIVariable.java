@@ -33,13 +33,17 @@ class ContainerGUIVariable extends AbstractExpandableGUIVariable {
     @Override
     public String getValueText() {
         String result;
-        //checkstyle: stop exception type check 
-        try {
-            result = StringProvider.toIvmlString(getVariable().getValue());
-        } catch (Throwable t) {
-            result = "";
+        if (hasValue() && hasNullValue()) {
+            result = GUIVariable.NULL_VALUE_LABEL;
+        } else {
+            //checkstyle: stop exception type check 
+            try {
+                result = StringProvider.toIvmlString(getVariable().getValue());
+            } catch (Throwable t) {
+                result = "";
+            }
+            //checkstyle: resume exception type check 
         }
-        //checkstyle: resume exception type check 
         return result;
     }
     

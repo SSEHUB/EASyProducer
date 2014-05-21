@@ -1,8 +1,4 @@
 /**
- * <copyright>
- * </copyright>
- *
-
  */
 package de.uni_hildesheim.sse.vil.expressions.expressionDsl.util;
 

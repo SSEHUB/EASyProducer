@@ -11,9 +11,9 @@ import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 
+import de.uni_hildesheim.sse.easy_producer.core.mgmt.SPLsManager;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceException;
 import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
-import de.uni_hildesheim.sse.easy_producer.persistence.PersistenceException;
-import de.uni_hildesheim.sse.easy_producer.persistence.mgmt.SPLsManager;
 import de.uni_hildesheim.sse.easy_producer.persistency.ResourcesMgmt;
 import de.uni_hildesheim.sse.easy_producer.persistency.eclipse.EASyNature;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;

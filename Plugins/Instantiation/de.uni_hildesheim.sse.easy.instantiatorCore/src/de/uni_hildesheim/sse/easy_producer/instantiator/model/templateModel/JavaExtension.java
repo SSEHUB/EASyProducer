@@ -3,6 +3,7 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ClassWrapper;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaType;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 
 /**
  * Defines a java extension of the template language.
@@ -18,15 +19,16 @@ public class JavaExtension {
      * Creates a java extension instance.
      * 
      * @param name the name of the Java class extending the functionality
+     * @param registry the type registry being responsible for this extension
      * @throws VilLanguageException in case that the related class denoted by 
      *     <code>name</code> cannot be resolved
      */
-    public JavaExtension(String name) throws VilLanguageException {
+    public JavaExtension(String name, TypeRegistry registry) throws VilLanguageException {
         this.name = name;
         // try more specific first
         for (int l = ExtensionClassLoaders.getLoaderCount() - 1; null == resolved && l >= 0; l--) {
             try {
-                resolved = new ClassWrapper(ExtensionClassLoaders.getLoader(l).loadClass(name));
+                resolved = new ClassWrapper(ExtensionClassLoaders.getLoader(l).loadClass(name), registry);
             } catch (ClassNotFoundException e) {
                 // handled later
             }

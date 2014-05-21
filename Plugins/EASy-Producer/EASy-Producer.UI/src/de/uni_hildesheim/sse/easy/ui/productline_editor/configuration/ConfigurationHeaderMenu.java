@@ -26,12 +26,12 @@ import de.uni_hildesheim.sse.easy.ui.core.reasoning.AbstractReasonerListener;
 import de.uni_hildesheim.sse.easy.ui.productline_editor.AbstractEASyEditorPage;
 import de.uni_hildesheim.sse.easy.ui.productline_editor.EasyProducerDialog;
 import de.uni_hildesheim.sse.easy.ui.productline_editor.TransformatorProgressDialog;
+import de.uni_hildesheim.sse.easy_producer.core.mgmt.IProductLineProjectListener;
+import de.uni_hildesheim.sse.easy_producer.core.mgmt.PLPInfo;
 import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
 import de.uni_hildesheim.sse.easy_producer.instantiator.TranformatorNotificationDelegate;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
 import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
-import de.uni_hildesheim.sse.easy_producer.persistence.mgmt.IProductLineProjectListener;
-import de.uni_hildesheim.sse.easy_producer.persistence.mgmt.PLPInfo;
 import de.uni_hildesheim.sse.easy_producer.persistency.ResourcesMgmt;
 import de.uni_hildesheim.sse.model.confModel.ConfigurationException;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
@@ -104,7 +104,11 @@ public class ConfigurationHeaderMenu extends AbstractConfigMenu implements Tranf
                 EasyProducerDialog.showReasonerErrorDialog(getParent().getShell(), errorMessages);
             } else {
                 clearErrorMessages();
-                if (result.getMessageCount() > 0) {
+                boolean hasWarnings = false;
+                for (int i = 0; i < result.getMessageCount() && !hasWarnings; i++) {
+                    hasWarnings |= result.getMessage(i).getStatus() == Status.WARNING;
+                }
+                if (hasWarnings) {
                     displayWarnings(result);
                 } else {
                     EasyProducerDialog.showInfoDialog(getParent().getShell(), "Everything is ok");
@@ -134,10 +138,6 @@ public class ConfigurationHeaderMenu extends AbstractConfigMenu implements Tranf
                 clearErrorMessages();
                 if (result.getMessageCount() > 0) {
                     displayWarnings(result);
-                }
-                if (result.hasInfo()) {
-                    parentPage.setDirty();
-                    parentPage.refresh();
                 }
             }
         }

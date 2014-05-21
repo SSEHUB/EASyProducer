@@ -26,6 +26,8 @@ import de.uni_hildesheim.sse.ivml.VariabilityUnit;
 import de.uni_hildesheim.sse.ivml.VersionStmt;
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
+import de.uni_hildesheim.sse.model.varModel.IvmlKeyWords;
+import de.uni_hildesheim.sse.model.varModel.ModelQuery;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.persistency.ConfigurableIVMLWriter;
 import de.uni_hildesheim.sse.translation.ExpressionTranslator;
@@ -185,20 +187,39 @@ public class ModelUtility extends de.uni_hildesheim.sse.dslCore.ModelUtility<Var
         }
         return result;
     }
+
+    /**
+     * Returns the string representation of <code>type</code> (no search).
+     * 
+     * @param type the type to be converted into a string
+     * @return the type representation
+     */
+    public static final String stringValue(Type type) {
+        return stringValue(type, false);
+    }
     
     /**
      * Returns the string representation of <code>type</code>.
      * 
-     * @param type
-     *            the type to be converted into a string
+     * @param type the type to be converted into a string
+     * @param forSearch is the result intended for type searching
      * @return the type representation
      */
-    public static final String stringValue(Type type) {
+    public static final String stringValue(Type type, boolean forSearch) {
         String result;
         if (null != type) {
             if (null != type.getDerived()) {
-                result = type.getDerived().getOp() + "("
-                        + stringValue(type.getDerived().getType()) + ")";
+                String op = type.getDerived().getOp();
+                if (forSearch) {
+                    if (op.equals(IvmlKeyWords.SETOF)) {
+                        op = ModelQuery.MQ_SHORT_SET;
+                    } else if (op.equals(IvmlKeyWords.SEQUENCEOF)) {
+                        op = ModelQuery.MQ_SHORT_SEQUENCE;
+                    } else if (op.equals(IvmlKeyWords.REFTO)) {
+                        op = ModelQuery.MQ_SHORT_REFERENCE;
+                    }
+                }
+                result = op + "(" + stringValue(type.getDerived().getType(), forSearch) + ")";
             } else if (null != type.getType()) {
                 result = type.getType().getType();
             } else if (null != type.getId()) {

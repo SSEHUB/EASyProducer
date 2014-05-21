@@ -2,7 +2,6 @@ package de.uni_hildesheim.sse.model.varModel.values;
 
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
 
 /**
  * Reference value class.
@@ -39,43 +38,6 @@ public class ReferenceValue extends Value {
     public void accept(IValueVisitor visitor) {
         visitor.visitReferenceValue(this);
     }
-
-    /**
-     * Returns the Datatype of this Value. The datatype should match to the type of this value.
-     * @return Related datatype of this value.
-     */
-    public IDatatype getType() {
-        IDatatype result;
-        if (null == value) {
-            result = super.getType();
-        } else {
-            result = value.getType();
-            // indirection, access via reference
-            if (result instanceof Reference) {
-                result = ((Reference) result).getType();
-            }
-        }
-        return result;        
-    }
-    
-    /**
-     * Returns whether this value is used to define a reference to some variable
-     * declaration.
-     * 
-     * @return <code>true</code> if it is used to define, <code>false</code> else
-     */
-    public boolean isReferenceDefinition() {
-        return null != value && !Reference.TYPE.isAssignableFrom(value.getType());
-    }
-
-    /**
-     * Returns whether this value is used to apply a reference in order to use it.
-     * 
-     * @return <code>true</code> if it is used to apply, <code>false</code> else
-     */
-    public boolean isReferenceUse() {
-        return null != value && Reference.TYPE.isAssignableFrom(value.getType());
-    }
     
     @Override
     public void setValue(Object value) throws ValueDoesNotMatchTypeException {
@@ -83,11 +45,12 @@ public class ReferenceValue extends Value {
             DecisionVariableDeclaration decl = (DecisionVariableDeclaration) value;
             this.value = decl;
         } else if (value == null) {
+            // TODO check - IVML has an explicit null value!!!
             throw new ValueDoesNotMatchTypeException("null is not a valid reference", 
                 ValueDoesNotMatchTypeException.IS_NULL);
         } else {
-            throw new ValueDoesNotMatchTypeException("given value does not match", 
-                ValueDoesNotMatchTypeException.TYPE_MISMATCH);
+            throw new ValueDoesNotMatchTypeException("given value '" + value + "' does not match reference type " 
+                + getType(), ValueDoesNotMatchTypeException.TYPE_MISMATCH);
         }
     }
 

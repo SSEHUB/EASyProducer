@@ -3,6 +3,7 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallArgument;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IRuntimeEnvironment;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 
 /**
  * Implements the resolver for VIL templates.
@@ -32,9 +33,11 @@ public class Resolver extends de.uni_hildesheim.sse.easy_producer.instantiator.m
 
     /**
      * Creates a new resolver instance.
+     * 
+     * @param registry the (local) type registry
      */
-    public Resolver() {
-        super();
+    public Resolver(TypeRegistry registry) {
+        super(registry);
     }
     
     /**

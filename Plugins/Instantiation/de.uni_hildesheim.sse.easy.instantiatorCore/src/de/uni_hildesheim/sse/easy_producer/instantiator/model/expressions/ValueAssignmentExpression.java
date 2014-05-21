@@ -4,6 +4,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VariableDec
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 
 /**
  * Represents a value assignment.
@@ -61,7 +62,7 @@ public class ValueAssignmentExpression extends Expression {
                     + " to " + varType.getVilName(), ExpressionException.ID_SEMANTIC);
             }
         }
-        return TypeDescriptor.VOID;
+        return TypeRegistry.voidType();
     }
 
     @Override

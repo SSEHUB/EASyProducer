@@ -1,0 +1,10 @@
+project testRefAssignmentsContainer {
+
+    compound Test {
+    }
+
+    Test t1 = {};
+    Test t2 = {};
+    sequenceOf(refTo(Test)) tests = {refBy(t1), refBy(t2)};
+    refTo(Test) test = tests[0];
+}

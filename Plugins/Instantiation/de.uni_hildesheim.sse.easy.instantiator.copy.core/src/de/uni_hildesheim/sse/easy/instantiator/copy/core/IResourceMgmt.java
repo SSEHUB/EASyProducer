@@ -42,24 +42,27 @@ public interface IResourceMgmt {
     /**
      * Returns the source folder, which should be used for copying files.
      * @return The source folder of the current project, where to place copied files.
+     * 
+     * @deprecated remove as soon as copy mechanisms and legacy instantiations are removed
      */
+    @Deprecated
     public String getMainSourceFolder();
     
     /**
      * Returns the resources folder, which should be used for copying files.
      * @return The resources folder of the current project, where to place copied files.
+     * 
+     * @deprecated remove as soon as copy mechanisms and legacy instantiations are removed
      */
+    @Deprecated
     public String getResourcesFolder();
-    
-    /**
-     * Returns the lib folder, which should be used for copying files.
-     * @return The lib folder of the current project, where to place copied files.
-     */
-    public String getLibFolder();
     
     /**
      * Returns the config folder, which should be ignored during instantiation.
      * @return The config folder of the current project.
+     * 
+     * @deprecated remove as soon as copy mechanisms and legacy instantiations are removed
      */
+    @Deprecated
     public String getConfigFolder();
 }

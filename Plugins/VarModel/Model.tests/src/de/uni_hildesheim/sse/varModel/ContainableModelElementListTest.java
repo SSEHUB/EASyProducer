@@ -1,7 +1,6 @@
 package de.uni_hildesheim.sse.varModel;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -37,7 +36,7 @@ public class ContainableModelElementListTest {
      */
     @Test
     public void creatingEmptyCMEList() {
-        list = new ContainableModelElementList();
+        list = new ContainableModelElementList(null);
         Assert.assertTrue(list.getElementCount() == 0);
     }
     
@@ -46,7 +45,7 @@ public class ContainableModelElementListTest {
      */
     @Test
     public void creatingFilledCMEList() {
-        list = new ContainableModelElementList(2);
+        list = new ContainableModelElementList(2, null);
         Assert.assertTrue(list.getElementCount() == 0);
         
         Assert.assertTrue(list.add(dec1));

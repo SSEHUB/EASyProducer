@@ -49,7 +49,7 @@ public class ReasonerSettings implements ModifyListener {
     }
 
     /**
-     * Refreshes the list of possible Copy Mechanisms.
+     * Refreshes the timeout.
      */
     public void refresh() {
         setTimeout();

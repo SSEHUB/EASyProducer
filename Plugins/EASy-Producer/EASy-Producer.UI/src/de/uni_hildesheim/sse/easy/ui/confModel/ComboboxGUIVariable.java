@@ -104,21 +104,27 @@ class ComboboxGUIVariable extends GUIVariable {
     @Override
     public String getValueText() {
         String result = null;
-        int selectedIndex = (Integer) getValue();
-        //If user has entered a valid value, than also -1 is returned :-(
-        if (-1 != selectedIndex) {
-            result = values[selectedIndex].getLabel();
-        }
-        
-        // If the variables have been changed outside the gui, the combobox may be set to an old value and consequently
-        // returns the wrong value
-        Value correctValue = getVariable().getValue();
-        if (null != correctValue) {
-            if (null == correctValue.getValue()) {
-                result = "";                
-            }
+        if (hasValue() && hasNullValue()) {
+            result = GUIVariable.NULL_VALUE_LABEL;
         } else {
-            result = "";
+            int selectedIndex = (Integer) getValue();
+            //If user has entered a valid value by hand, than also -1 is returned :-(
+            if (-1 != selectedIndex) {
+                result = values[selectedIndex].getLabel();
+            }
+            
+            /* If the variables have been changed outside the gui,
+             * the combobox may be set to an old value and consequently
+             * returns the wrong value
+             */
+            Value correctValue = getVariable().getValue();
+            if (null != correctValue) {
+                if (null == correctValue.getValue()) {
+                    result = "";                
+                }
+            } else {
+                result = "";
+            }
         }
         
         return result;
@@ -148,7 +154,7 @@ class ComboboxGUIVariable extends GUIVariable {
         if (null != val) {
             Object valueItem = val.getValue();
             for (int i = 0; i < values.length && selectedIndex == 0; i++) {
-                if (values[i].getValue().equals(valueItem)) {
+                if (null != values[i].getValue() && values[i].getValue().equals(valueItem)) {
                     selectedIndex = i;
                 }
             }

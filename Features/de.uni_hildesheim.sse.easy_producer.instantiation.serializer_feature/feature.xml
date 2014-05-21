@@ -2,7 +2,7 @@
 <feature
       id="de.uni_hildesheim.sse.easy_producer.instantiation.serializer_feature"
       label="IVML Model Serialization Instantiator"
-      version="0.4.1"
+      version="0.4.2"
       provider-name="University of Hildesheim - SSE">
 
    <description url="http://xvcl.comp.nus.edu.sg/cms/">
@@ -35,7 +35,7 @@ limitations under the License.
          id="de.uni-hildesheim.sse.easy.instantiator.serializer"
          download-size="0"
          install-size="0"
-         version="0.4.0"
+         version="0.4.1"
          unpack="false"/>
 
 </feature>

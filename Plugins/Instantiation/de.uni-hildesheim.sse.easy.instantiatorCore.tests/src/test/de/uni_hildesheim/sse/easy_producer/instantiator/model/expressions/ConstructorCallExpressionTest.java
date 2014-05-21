@@ -1,7 +1,6 @@
 package test.de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import test.de.uni_hildesheim.sse.easy_producer.instantiator.model.AbstractTest;
@@ -27,7 +26,7 @@ public class ConstructorCallExpressionTest extends AbstractTest {
     @Test
     public void testConstructor() {
         try {
-            TypeDescriptor<? extends IVilType> fDesc = TypeRegistry.getType(FileArtifact.class.getSimpleName());
+            TypeDescriptor<? extends IVilType> fDesc = TypeRegistry.DEFAULT.getType(FileArtifact.class.getSimpleName());
             Assert.assertNotNull("FileArtifact descriptor must exist", fDesc);
             ConstructorCallExpression constructor = new ConstructorCallExpression(fDesc, new CallArgument[0]);
             Assert.assertNotNull("cannot infer type", constructor.inferType());

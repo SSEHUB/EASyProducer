@@ -5,6 +5,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expres
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IResolvable;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 
 /**
  * Represents a variable declaration.
@@ -51,7 +52,7 @@ public class VariableDeclaration extends
 
     @Override
     public TypeDescriptor<? extends IVilType> inferType() throws VilLanguageException {
-        return TypeDescriptor.VOID;
+        return TypeRegistry.voidType();
     }
 
 }

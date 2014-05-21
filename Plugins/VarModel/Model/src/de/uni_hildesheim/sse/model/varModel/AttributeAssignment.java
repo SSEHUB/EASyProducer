@@ -134,7 +134,7 @@ public class AttributeAssignment extends ContainableModelElement implements IDec
         boolean yetAdded = false;
         IModelElement parent = getEffectiveParent();
         if (parent instanceof Project) {
-            if (((Project) parent).containsByName(elem.getName(), null)) {
+            if (((Project) parent).containsByName(elem.getName())) {
                 yetAdded = true;
             }
         } // handled in compound

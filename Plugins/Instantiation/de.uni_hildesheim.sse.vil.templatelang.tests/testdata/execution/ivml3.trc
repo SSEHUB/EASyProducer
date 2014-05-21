@@ -1,0 +1,9 @@
+-> main(Configuration, Artifact) with (<config>, test.texts)
+    -> byName(Configuration, String) with (<config>, pInt) = test::pInt
+    i <- 0
+    -> byName(Configuration, String) with (<config>, pString) = test::pString
+    s <- Hello
+    -> byName(Configuration, String) with (<config>, pReal) = test::pReal
+    r <- 1.23
+    -> byName(Configuration, String) with (<config>, pBoolean) = test::pBoolean
+    b <- true

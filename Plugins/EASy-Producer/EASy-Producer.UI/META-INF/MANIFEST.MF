@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: EASy-Producer.UI
 Bundle-SymbolicName: de.uni_hildesheim.sse.easy.ui;singleton:=true
-Bundle-Version: 0.7.0
+Bundle-Version: 0.10.0
 Bundle-Activator: de.uni_hildesheim.sse.easy.ui.internal.Activator
 Bundle-Vendor: University of Hildesheim - SSE
 Require-Bundle: 
@@ -17,7 +17,7 @@ Require-Bundle:
  org.eclipse.jface,
  org.eclipse.ui.workbench,
  org.eclipse.xtext.ui;bundle-version="2.3.1",
- de.uni_hildesheim.sse.EASy-Producer;bundle-version="0.1.18",
+ de.uni_hildesheim.sse.easy_producer.eclipse;bundle-version="0.7.2",
  ReasonerCore;bundle-version="0.0.8",
  org.eclipse.ui.console;bundle-version="3.5.100",
  de.uni_hildesheim.sse.varModel;bundle-version="0.5.5"

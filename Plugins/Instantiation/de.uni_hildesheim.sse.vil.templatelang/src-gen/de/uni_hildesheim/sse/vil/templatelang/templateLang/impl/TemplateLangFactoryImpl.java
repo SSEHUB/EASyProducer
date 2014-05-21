@@ -1,8 +1,4 @@
 /**
- * <copyright>
- * </copyright>
- *
-
  */
 package de.uni_hildesheim.sse.vil.templatelang.templateLang.impl;
 
@@ -34,7 +30,7 @@ public class TemplateLangFactoryImpl extends EFactoryImpl implements TemplateLan
   {
     try
     {
-      TemplateLangFactory theTemplateLangFactory = (TemplateLangFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.uni_hildesheim.de/sse/vil/templatelang/TemplateLang"); 
+      TemplateLangFactory theTemplateLangFactory = (TemplateLangFactory)EPackage.Registry.INSTANCE.getEFactory(TemplateLangPackage.eNS_URI);
       if (theTemplateLangFactory != null)
       {
         return theTemplateLangFactory;

@@ -19,22 +19,11 @@ public class FailedRules {
     /**
      * Creates a new empty list of failed rules for an individual reasoning task.
      * Should be called before reasoning.
-     * @param projectName The name of the project, which is currently reasoned (serves as a basis for the ID).
-     *     The usage of the project name is only a suggestion, therefore other names/IDs could also be used.
-     * @return An ID to access add and get the numbers of failed rules.
+     * @param reasoningID unique reasoning ID.
      */
-    public static synchronized String createNewList(String projectName) {
-        String reasoningID = projectName + System.currentTimeMillis();
-        FailedElements failedElements = FAILED_RULES.get(reasoningID);
-        if (null == failedElements) {
-            failedElements = new FailedElements();
-            FAILED_RULES.put(reasoningID, failedElements);
-        } else {
-            int randomdigit = (int) (System.nanoTime() % 10);
-            // Recursive call
-            reasoningID = createNewList(projectName + randomdigit);
-        }
-        return reasoningID;
+    public static void createNewList(String reasoningID) {
+        FailedElements failedElements = new FailedElements();        
+        FAILED_RULES.put(reasoningID, failedElements);        
     }
     
     /**

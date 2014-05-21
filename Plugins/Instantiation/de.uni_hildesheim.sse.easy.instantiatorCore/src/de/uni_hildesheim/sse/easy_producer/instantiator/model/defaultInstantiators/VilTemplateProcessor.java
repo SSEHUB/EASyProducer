@@ -12,6 +12,7 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactFactory;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FileArtifact;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IArtifact;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.Path;
@@ -32,20 +33,24 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Temp
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Collection;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Constants;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Instantiator;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ListSet;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationMeta;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.AbstractIvmlVariable;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.Attribute;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.Configuration;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.DecisionVariable;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlElement;
+import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
 import de.uni_hildesheim.sse.utils.modelManagement.Version;
-import de.uni_hildesheim.sse.utils.modelManagement.VersionFormatException;
+import de.uni_hildesheim.sse.utils.modelManagement.VersionRestriction;
+import de.uni_hildesheim.sse.utils.modelManagement.VersionRestriction.Operator;
 
 /**
  * Implements the default VIL template processor. This instantiator handles
@@ -57,7 +62,7 @@ import de.uni_hildesheim.sse.utils.modelManagement.VersionFormatException;
  * 
  * @author Holger Eichelberger
  */
-@Instantiator("vilTemplateProcessor")
+@Instantiator(value = "vilTemplateProcessor", acceptsImplicitParameters = true)
 public class VilTemplateProcessor implements IVilType {
 
     /**
@@ -234,10 +239,50 @@ public class VilTemplateProcessor implements IVilType {
     }
     
     /**
-     * Instantiates <code>source</code> to <code>target</code>.
+     * Returns the applicable VTL restrictions.
+     * 
+     * @param templateName the name of the template to search for
+     * @param other the other (named) parameters
+     * @return the applicable VTL restrictions or <b>null</b> if there are none
+     */
+    private static ModelImport<Template> getVtlRestrictions(String templateName, Map<String, Object> other) {
+        ModelImport<Template> result = null;
+        if (null != other) {
+            Object parent = other.get(Constants.IMPLICIT_PARENT_PARAMETER_NAME);
+            if (parent instanceof Script) {
+                Script script = (Script) parent;
+                for (int r = 0; null == result && r < script.getVtlRestrictionsCount(); r++) {
+                    ModelImport<Template> restriction = script.getVtlRestriction(r);
+                    if (restriction.getName().equals(templateName)) {
+                        result = restriction;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+    
+    /**
+     * Returns the VTL paths passed in as implicit parameter {@link Constants#IMPLICIT_PATHS_PARAMETER_NAME}.
+     * 
+     * @param other the other (named) parameters
+     * @return the VTL paths, <b>null</b> if none were specified
+     */
+    private static String[] getVtlPaths(Map<String, Object> other) {
+        String[] result = null;
+        Object tmp = other.get(Constants.IMPLICIT_PATHS_PARAMETER_NAME);
+        if (tmp instanceof String[]) {
+            result = (String[]) tmp;
+        }
+        return result;
+    }
+    
+    /**
+     * Instantiates <code>source</code> to <code>target</code>. Versions restrictions may implicitly
+     * be specified as {@link Constants#IMPLICIT_PARENT_PARAMETER_NAME implicit parent parameter name}
+     * in terms of a Script instance.
      * 
      * @param templateName the name of the template
-     * @param version the version of the template (may be <b>null</b>)
      * @param config the variability configuration to process
      * @param targets the target artifacts (may be modified)
      * @param other named optional parameter
@@ -245,21 +290,41 @@ public class VilTemplateProcessor implements IVilType {
      * @throws ArtifactException in case that execution fails
      */
     @OperationMeta(returnGenerics = IArtifact.class)
-    public static Set<IArtifact> vilTemplateProcessor(String templateName, String version, Configuration config, 
+    public static Set<IArtifact> vilTemplateProcessor(String templateName, Configuration config, 
         Collection<IArtifact> targets, Map<String, Object> other) throws ArtifactException {
-        List<IArtifact> result = new ArrayList<IArtifact>();
-        Template template = obtainTemplate(templateName, version, config.getRootScript());
-        for (IArtifact target : targets) {
-            process(template, config, target, other, result);
+        Set<IArtifact> result = null;
+        try {
+            // ugly manual dispatch but String as first parameter without further parameters does not lead 
+            // to an artifact conversion
+            Path path = Path.convert(templateName);
+            FileArtifact art = ArtifactFactory.createArtifact(FileArtifact.class, path.getAbsolutePath(), 
+                path.getArtifactModel());
+            if (art instanceof VtlFileArtifact) {
+                result = vilTemplateProcessor((VtlFileArtifact) art, config, targets, other);
+            } else {
+                result = vilTemplateProcessor(art, config, targets, other);
+            }
+        } catch (ArtifactException e) {
+            // don't care
         }
-        return new ListSet<IArtifact>(result, IArtifact.class);
+        if (null == result) {
+            List<IArtifact> tmp = new ArrayList<IArtifact>();
+            Template template = obtainTemplate(templateName, getVtlRestrictions(templateName, other), 
+                 getVtlPaths(other), config.getRootScript());
+            for (IArtifact target : targets) {
+                process(template, config, target, other, tmp);
+            }
+            result = new ListSet<IArtifact>(tmp, IArtifact.class);
+        }
+        return result;
     }
     
     /**
-     * Instantiates <code>source</code> to <code>target</code>.
+     * Instantiates <code>source</code> to <code>target</code>. Versions restrictions may implicitly
+     * be specified as {@link Constants#IMPLICIT_PARENT_PARAMETER_NAME implicit parent parameter name}
+     * in terms of a Script instance.
      * 
      * @param templateName the name of the template
-     * @param version the version of the template (may be <b>null</b>)
      * @param config the variability configuration to process
      * @param target the target artifact (may be modified)
      * @param other named optional parameter
@@ -267,38 +332,77 @@ public class VilTemplateProcessor implements IVilType {
      * @throws ArtifactException in case that execution fails
      */
     @OperationMeta(returnGenerics = IArtifact.class)
-    public static Set<IArtifact> vilTemplateProcessor(String templateName, String version, Configuration config, 
+    public static Set<IArtifact> vilTemplateProcessor(String templateName, Configuration config, 
         IArtifact target, Map<String, Object> other) throws ArtifactException {
-        List<IArtifact> result = new ArrayList<IArtifact>();
-        Template template = obtainTemplate(templateName, version, config.getRootScript());
-        process(template, config, target, other, result);
-        return new ListSet<IArtifact>(result, IArtifact.class);
+        Set<IArtifact> result = null;
+        try {
+            // ugly manual dispatch but String as first parameter without further parameters does not lead 
+            // to an artifact conversion
+            Path path = Path.convert(templateName);
+            FileArtifact art = ArtifactFactory.createArtifact(FileArtifact.class, path.getAbsolutePath(), 
+                path.getArtifactModel());
+            if (art instanceof VtlFileArtifact) {
+                result = vilTemplateProcessor((VtlFileArtifact) art, config, target, other);
+            } else {
+                result = vilTemplateProcessor(art, config, target, other);
+            }
+        } catch (ArtifactException e) {
+            // don't care
+        }
+        if (null == result) {
+            List<IArtifact> tmp = new ArrayList<IArtifact>();
+            Template template = obtainTemplate(templateName, getVtlRestrictions(templateName, other), 
+                getVtlPaths(other), config.getRootScript());
+            process(template, config, target, other, tmp);
+            result = new ListSet<IArtifact>(tmp, IArtifact.class);
+        }
+        return result;
     }   
+    
+    /**
+     * Prunes <code>info</code> by removing all information objects that are not in one of the <code>vtlPaths</code>.
+     * 
+     * @param info the information objects to be pruned (may be <b>null</b>)
+     * @param vtlPaths the paths to be used for pruning (may be <b>null</b>)
+     */
+    private static void pruneByPaths(List<ModelInfo<Template>> info, String[] vtlPaths) {
+        if (null != info && null != vtlPaths) {
+            for (int i = info.size() - 1; i >= 0; i--) {
+                ModelInfo<Template> tmp = info.get(i);
+                String location = new File(tmp.getLocation()).getAbsolutePath();
+                boolean found = false;
+                for (int p = 0; !found && p < vtlPaths.length; p++) {
+                    found = location.startsWith(vtlPaths[p]);
+                }
+                if (!found) {
+                    info.remove(i);
+                }
+            }
+        }
+        // getting rid of unrelated paths is just a first solution
+    }
     
     /**
      * Obtains the template for <code>templateName</code> and <code>version</code>.
      * 
      * @param templateName the name of the template
-     * @param version the version of the template (may be <b>null</b>)
+     * @param restrictions the VTL resolution restrictions (may be <b>null</b>)
+     * @param vtlPaths the VTL path(s) of the source project(s) (may be <b>null</b>)
      * @param caller the root executing script for URI-based model resolution
      * @return the template model
      * @throws ArtifactException in case that execution fails
      */
-    private static Template obtainTemplate(String templateName, String version, Script caller) 
-        throws ArtifactException {
+    private static Template obtainTemplate(String templateName, ModelImport<Template> restrictions, String[] vtlPaths, 
+        Script caller) throws ArtifactException {
         Template model = null;
         Version ver = null;
-        if (null != version) {
-            version = version.trim();
-        }
-        if (null != version && 0 != version.length()) {
-            try {
-                if (version.startsWith("v") && version.length() > 1) {
-                    version = version.substring(1, version.length());
+        if (null != restrictions) {
+            // TODO resolve based on restrictions -> Patrick Jähne
+            if (1 == restrictions.getRestrictionsCount()) {
+                VersionRestriction res = restrictions.getRestriction(0);
+                if (Operator.EQUALS == res.getOperator()) {
+                    ver = res.getVersion();
                 }
-                ver = new Version(version);
-            } catch (VersionFormatException e) {
-                throw new ArtifactException(e.getMessage(), ArtifactException.ID_INVALID_VERSION);
             }
         }
         try {
@@ -310,9 +414,10 @@ public class VilTemplateProcessor implements IVilType {
                         templateName, ver, cInfo.getLocation());
                 }
             } 
-            if (null == info) {
+            if (null == info || info.isEmpty()) {
                 // no info via caller - try directly
                 info = TemplateModel.INSTANCE.availableModels().getModelInfo(templateName, ver);
+                pruneByPaths(info, vtlPaths);
             }
 
             if (null == info || info.isEmpty()) {
@@ -452,6 +557,16 @@ public class VilTemplateProcessor implements IVilType {
         @Override
         public Object getIvmlValue(String name) throws ExpressionException {
             return nameMap.get(name);
+        }
+
+        @Override
+        public String[] getContextPaths() {
+            return null;
+        }
+
+        @Override
+        public TypeRegistry getTypeRegistry() {
+            return TypeRegistry.DEFAULT; // TODO unsure whether local is needed
         }
         
     }

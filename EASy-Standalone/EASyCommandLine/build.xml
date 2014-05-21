@@ -1,27 +1,57 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project default="create_run_jar" name="Create Runnable Jar for Project EASyCommandLine with libraries in sub-folder">
-    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
-    <!--ANT 1.7 is required                                        -->
-    <property name="version" value="0.7"/>
-    
-    <target name="create_run_jar">
-        <jar destfile="C:/Users/El-Sharkawy/Desktop/cmd/EASyCommand.jar">
+<project default="create_run_jar" name="Create Runnable Jar for Project EASyCommandLine with libraries in sub-folder" basedir=".">
+	<property name="source" value="${basedir}"/>
+	<property name="destination" value="${user.home}/Desktop/cmd"/>
+	<property name="lib.folder" value="lib"/>
+
+	<target name="jar">
+		<mkdir dir="dist"/>
+        <jar destfile="dist/EASyCommand.jar">
             <manifest>
                 <attribute name="Main-Class" value="de.uni_hildesheim.sse.easy.cmd.CommandLineExecuter"/>
-                <attribute name="Class-Path" value=". EASyCommand_lib/easy-headless.jar EASyCommand_lib/eclipse-part.jar"/>
+                <attribute name="Class-Path" value=". ${lib.folder}/drools-compiler-5.5.0.Final.jar ${lib.folder}/easy-headless.jar ${lib.folder}/eclipse-part.jar"/>
             </manifest>
-            <fileset dir="C:/Elscha/Eclipse/workspaceSSE/EASyCommandLine/bin"/>
+            <fileset dir="${source}/bin"/>
         </jar>
-        <delete dir="C:/Users/El-Sharkawy/Desktop/cmd/EASyCommand_lib"/>
-        <mkdir dir="C:/Users/El-Sharkawy/Desktop/cmd/EASyCommand_lib"/>
-        <copy file="C:/Elscha/Eclipse/workspaceSSE/EASyCommandLine/lib/easy-headless.jar" todir="C:/Users/El-Sharkawy/Desktop/cmd/EASyCommand_lib"/>
-        <copy file="C:/Elscha/Eclipse/workspaceSSE/EASyCommandLine/lib/eclipse-part.jar" todir="C:/Users/El-Sharkawy/Desktop/cmd/EASyCommand_lib"/>
+	</target>
+	
+    <target name="javadoc">
+        <javadoc access="public" author="true" 
+        	classpath="lib/eclipse-part.jar;lib/easy-headless.jar;lib/drools-compiler-5.5.0.Final.jar" 
+        	destdir="doc" 
+        	doctitle="EASy-Producer commandline" 
+        	nodeprecated="false" 
+        	nodeprecatedlist="false" 
+        	noindex="false" 
+        	nonavbar="false" 
+        	notree="false" 
+        	packagenames="main,de.uni_hildesheim.sse.easy.cmd" 
+        	source="1.6" 
+        	sourcepath="src;res" 
+        	splitindex="true" 
+        	use="true" 
+        	version="true"/>
+    	<zip basedir="doc" destfile="dist/doc.zip"/>
     </target>
-    
-    <target name="jar">
-        <mkdir dir="dist"/>
-        <jar destfile="dist/EASyCommand-${version}.jar">
-            <fileset dir="bin"/>
+	
+	<!--this file was created by Eclipse Runnable JAR Export Wizard-->
+    <!--ANT 1.7 is required                                        -->
+    <target name="create_run_jar" depends="javadoc">
+        <jar destfile="${destination}/EASyCommand.jar">
+            <manifest>
+                <attribute name="Main-Class" value="de.uni_hildesheim.sse.easy.cmd.CommandLineExecuter"/>
+                <attribute name="Class-Path" value=". ${lib.folder}/drools-compiler-5.5.0.Final.jar ${lib.folder}/easy-headless.jar ${lib.folder}/eclipse-part.jar"/>
+            </manifest>
+            <fileset dir="${source}/bin"/>
         </jar>
+        <delete dir="${destination}/${lib.folder}"/>
+        <mkdir dir="${destination}/${lib.folder}"/>
+    	<copy todir="${destination}/${lib.folder}" failonerror="true" overwrite="true">
+            <fileset dir="${source}/lib" />
+        </copy>
+    	<copy todir="${destination}/" failonerror="true" overwrite="true">
+            <fileset dir="${source}/res" />
+        </copy>
+    	<copy todir="${destination}" failonerror="true" overwrite="true" file="dist/doc.zip"/>
     </target>
 </project>

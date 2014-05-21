@@ -1,0 +1,13 @@
+import instTest;
+
+vilScript inst (Project source, Project target, Configuration config) {
+
+    test(Project source, Project target, Configuration config) = : {
+    }
+
+    main(Project source, Project target, Configuration config) = : {
+        instantiate "test" (source, target, config);
+        instantiate "instTest::main" (source, target, config);
+    }
+
+}

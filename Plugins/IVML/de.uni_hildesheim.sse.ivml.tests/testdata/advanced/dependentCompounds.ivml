@@ -1,0 +1,14 @@
+project dependentCompounds {
+
+    version v0;
+    compound Edge {
+        refTo(Node) source;
+        refTo(Node) target;
+    }
+
+    compound Node {
+        setOf(refTo(Edge)) outgoing;
+    }
+
+    setOf(Node) nodes;
+}

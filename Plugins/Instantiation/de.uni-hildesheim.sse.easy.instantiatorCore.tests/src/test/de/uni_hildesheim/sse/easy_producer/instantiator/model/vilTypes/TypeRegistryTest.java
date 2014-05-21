@@ -2,8 +2,7 @@ package test.de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes;
 
 import java.util.HashSet;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import test.de.uni_hildesheim.sse.easy_producer.instantiator.model.AbstractTest;
@@ -43,11 +42,11 @@ public class TypeRegistryTest extends AbstractTest {
         expected.add("Project");
         expected.add("Attribute");
         for (String name : expected) {
-            TypeDescriptor<? extends IVilType> desc = TypeRegistry.getType(name);
+            TypeDescriptor<? extends IVilType> desc = TypeRegistry.DEFAULT.getType(name);
             Assert.assertNotNull("default type descriptor shall exist", desc);
             Assert.assertEquals("at least the name shall match - no access to actual class", name, desc.getName());
         }        
-        for (TypeDescriptor<?> descriptor : TypeRegistry.allTypes()) {
+        for (TypeDescriptor<?> descriptor : TypeRegistry.DEFAULT.allTypes()) {
             expected.remove(descriptor.getName());
         }
         Assert.assertTrue("not all expected default types registered", expected.isEmpty());
@@ -63,19 +62,19 @@ public class TypeRegistryTest extends AbstractTest {
         final Class<? extends IVilType> myArtifactClass = test.de.uni_hildesheim.sse.easy_producer.instantiator.model
             .vilTypes.testArtifacts.MyArtifact.class;
         try {
-            TypeRegistry.registerType(XmlFileArtifact.class);
+            TypeRegistry.DEFAULT.registerType(XmlFileArtifact.class);
             Assert.fail("already registered");
         } catch (VilException e) {
             Assert.assertEquals("exception id does not match", VilException.ID_ALREADY_REGISTERED, e.getId());
         }
         try {
-            TypeRegistry.registerType(test.de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes
+            TypeRegistry.DEFAULT.registerType(test.de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes
                 .testArtifacts.FileArtifact.class);
         } catch (VilException e) {
             Assert.fail("overriding a default artifact with same name in same hierarchy shall work");
         }
         try {
-            TypeRegistry.registerType(myArtifactClass);
+            TypeRegistry.DEFAULT.registerType(myArtifactClass);
         } catch (VilException e) {
             if (e.getId() == VilException.ID_ALREADY_REGISTERED) {
                 Assert.fail("did the TypeDescriptorTest run before this test?");
@@ -84,7 +83,7 @@ public class TypeRegistryTest extends AbstractTest {
             }
         }
         try {
-            TypeRegistry.registerType(test.de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes
+            TypeRegistry.DEFAULT.registerType(test.de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes
                 .testArtifacts.MySubArtifact.class);
         } catch (VilException e) {
             if (e.getId() == VilException.ID_ALREADY_REGISTERED) {
@@ -98,13 +97,13 @@ public class TypeRegistryTest extends AbstractTest {
         testDefaultTypes();
 
         String expectedName = myArtifactClass.getSimpleName();
-        TypeDescriptor<? extends IVilType> desc = TypeRegistry.getType(expectedName);
+        TypeDescriptor<? extends IVilType> desc = TypeRegistry.DEFAULT.getType(expectedName);
         Assert.assertNotNull("new type shall exist", desc);
         Assert.assertEquals("at least the name shall be the same", desc.getName(), expectedName);
         assertOperationDeclaringTypes(desc);
 
         // shall be the same
-        desc = TypeRegistry.getType(myArtifactClass.getSimpleName());
+        desc = TypeRegistry.DEFAULT.getType(myArtifactClass.getSimpleName());
         Assert.assertNotNull("new type shall exist", desc);
         Assert.assertEquals("at least the name shall be the same", desc.getName(), expectedName);
         assertOperationDeclaringTypes(desc);
@@ -146,7 +145,7 @@ public class TypeRegistryTest extends AbstractTest {
      */
     private void testInstantiator(Class<? extends IVilType> cls, Integer expectedExceptionCode) {
         try {
-            TypeRegistry.registerType(cls);
+            TypeRegistry.DEFAULT.registerType(cls);
         } catch (VilException e) {
             if (null == expectedExceptionCode) {
                 Assert.fail("unexpected exception: " + e.getMessage());

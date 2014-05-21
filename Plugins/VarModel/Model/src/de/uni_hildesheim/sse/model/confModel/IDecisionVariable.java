@@ -91,4 +91,18 @@ public interface IDecisionVariable extends IConfigurationElement, IConfiguration
      * @return <tt>false</tt> if the variable is hidden by an interface, <tt>true</tt> otherwise
      */
     public boolean isVisible();
+    
+    /**
+     * Checks whether the variable has a configured {@link Value}.
+     * @return <tt>true</tt> if the variable has a value, <tt>false</tt> otherwise.
+     */
+    public boolean hasValue();
+    
+    /**
+     * Checks whether the variable has a {@link de.uni_hildesheim.sse.model.varModel.values.NullValue}.
+     * Note: this method does not check whether the variable <b>has</b> a value.
+     * @return <tt>true</tt> if the variable has a {@link de.uni_hildesheim.sse.model.varModel.values.NullValue},
+     *     <tt>false</tt> otherwise.
+     */
+    public boolean hasNullValue();
 }

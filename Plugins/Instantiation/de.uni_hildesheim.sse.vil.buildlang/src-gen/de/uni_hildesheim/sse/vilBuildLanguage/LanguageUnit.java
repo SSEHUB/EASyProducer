@@ -1,14 +1,10 @@
 /**
- * <copyright>
- * </copyright>
- *
-
  */
 package de.uni_hildesheim.sse.vilBuildLanguage;
 
-import org.eclipse.emf.common.util.EList;
-
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ParameterList;
+
+import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->

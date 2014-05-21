@@ -27,7 +27,7 @@ import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
  *
  */
 public abstract class AbstractEASyEditorPage extends Composite implements IPageChangedListener, 
-    IPropertyListener {
+    IPropertyListener, IEASyEditorPage {
     
     private ProductLineProject plp;
     private FormToolkit toolkit;
@@ -80,17 +80,6 @@ public abstract class AbstractEASyEditorPage extends Composite implements IPageC
     public final Composite getContentPane() {
         return contentPane.getBody();
     }
-    
-    /**
-     * Refreshes the shown content of the current project.
-     */
-    public abstract void refresh();
-    
-    /**
-     * Returns the text label for the editor page.
-     * @return The text label for the editor page.
-     */
-    public abstract String getPageText();
     
     /**
      * This method will be called, when this editor page becomes active.

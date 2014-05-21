@@ -1,31 +1,13 @@
 /**
- * <copyright>
- * </copyright>
- *
-
  */
 package de.uni_hildesheim.sse.vilBuildLanguage.util;
 
+import de.uni_hildesheim.sse.vilBuildLanguage.*;
+
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.util.Switch;
 
-import de.uni_hildesheim.sse.vilBuildLanguage.DeferDeclaration;
-import de.uni_hildesheim.sse.vilBuildLanguage.ImplementationUnit;
-import de.uni_hildesheim.sse.vilBuildLanguage.Join;
-import de.uni_hildesheim.sse.vilBuildLanguage.JoinVariable;
-import de.uni_hildesheim.sse.vilBuildLanguage.LanguageUnit;
-import de.uni_hildesheim.sse.vilBuildLanguage.LoadProperties;
-import de.uni_hildesheim.sse.vilBuildLanguage.Map;
-import de.uni_hildesheim.sse.vilBuildLanguage.PrimaryExpression;
-import de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration;
-import de.uni_hildesheim.sse.vilBuildLanguage.RuleElement;
-import de.uni_hildesheim.sse.vilBuildLanguage.RuleElementBlock;
-import de.uni_hildesheim.sse.vilBuildLanguage.RuleModifier;
-import de.uni_hildesheim.sse.vilBuildLanguage.ScriptContents;
-import de.uni_hildesheim.sse.vilBuildLanguage.ScriptParentDecl;
-import de.uni_hildesheim.sse.vilBuildLanguage.SystemExecution;
-import de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage;
+import org.eclipse.emf.ecore.util.Switch;
 
 /**
  * <!-- begin-user-doc -->
@@ -94,6 +76,13 @@ public class VilBuildLanguageSwitch<T> extends Switch<T>
       {
         ImplementationUnit implementationUnit = (ImplementationUnit)theEObject;
         T result = caseImplementationUnit(implementationUnit);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case VilBuildLanguagePackage.REQUIRE:
+      {
+        Require require = (Require)theEObject;
+        T result = caseRequire(require);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -169,6 +158,13 @@ public class VilBuildLanguageSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case VilBuildLanguagePackage.INSTANTIATE:
+      {
+        Instantiate instantiate = (Instantiate)theEObject;
+        T result = caseInstantiate(instantiate);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case VilBuildLanguagePackage.MAP:
       {
         Map map = (Map)theEObject;
@@ -213,6 +209,22 @@ public class VilBuildLanguageSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseImplementationUnit(ImplementationUnit object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Require</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Require</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseRequire(Require object)
   {
     return null;
   }
@@ -373,6 +385,22 @@ public class VilBuildLanguageSwitch<T> extends Switch<T>
    * @generated
    */
   public T casePrimaryExpression(PrimaryExpression object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Instantiate</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Instantiate</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseInstantiate(Instantiate object)
   {
     return null;
   }

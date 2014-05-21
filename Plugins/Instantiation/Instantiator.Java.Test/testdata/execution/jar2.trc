@@ -1,0 +1,3 @@
+-> main(Project, Project, Configuration) with (<project>, <project>, <config>)
+    -> jar(Path, Path, Path, Path) with (jar2Testfiles/test, jar2Testfiles/test/**/*.java, Jar2Test.jar, jar2Testfiles/MANIFEST.MF) = {Jar2Test.jar}
+    -> unjar(Path, Path, Boolean) with (Jar2Test.jar, Jar2TestUnzipped, true) = {Jar2TestUnzipped/META-INF/MANIFEST.MF, Jar2TestUnzipped/Test.java, Jar2TestUnzipped/Test2.java, Jar2TestUnzipped/sub/Test2.java}

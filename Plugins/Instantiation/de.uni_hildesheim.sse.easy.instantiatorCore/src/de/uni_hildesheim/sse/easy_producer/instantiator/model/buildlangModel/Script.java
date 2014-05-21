@@ -30,12 +30,11 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.AbstractRes
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.Advice;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.IResolvableModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.IVariableDeclarationReceiver;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.Imports;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Template;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaOperation;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Project;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.VilException;
@@ -83,12 +82,70 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
     private List<LoadProperties> loadProperties;
 
     /**
-     * Constructor for a script without parent, parameters or advices.
+     * A descriptor class used for creating scripts (maximum parameter constraint).
+     * 
+     * @author Holger Eichelberger
+     */
+    public static class ScriptDescriptor {
+
+        private VariableDeclaration[] parameters;
+        private Advice[] advices;
+        private Imports imports;
+
+        /**
+         * Creates a script descriptor.
+         * 
+         * @param parameters the formal parameters of this script
+         * @param advices the advices (may be <b>null</b>)
+         * @param imports the imports (may be <b>null</b>)
+         */
+        public ScriptDescriptor(VariableDeclaration[] parameters, Advice[] advices, Imports imports) {
+            this.parameters = parameters;
+            this.advices = advices;
+            this.imports = imports;
+        }
+        
+    }
+
+    /**
+     * Constructor for a script without parent, parameters or advices and with the default
+     * type registry.
      * 
      * @param name Name of the project.
      */
     public Script(String name) {
-        this(name, null, null, null, null);
+        this(name, TypeRegistry.DEFAULT);
+    }
+
+    /**
+     * Constructor for a script without parent, parameters or advices.
+     * 
+     * @param name Name of the project.
+     * @param registry the responsible registry
+     */
+    public Script(String name, TypeRegistry registry) {
+        this(name, null, null, registry);
+    }
+    
+    /**
+     * Constructor for a script with parameters and default type registry.
+     * 
+     * @param name Name of the project.
+     * @param parameters the formal parameters of this script
+     */
+    public Script(String name, VariableDeclaration[] parameters) {
+        this(name, parameters, TypeRegistry.DEFAULT);
+    }
+    
+    /**
+     * Constructor for a script with parameters.
+     * 
+     * @param name Name of the project.
+     * @param parameters the formal parameters of this script
+     * @param registry the responsible registry
+     */
+    public Script(String name, VariableDeclaration[] parameters, TypeRegistry registry) {
+        this(name, null, new ScriptDescriptor(parameters, null, null), registry);
     }
     
     /**
@@ -97,22 +154,25 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
      * @param name Name of the project.
      * @param parent the super script to inherit from (as a script import, may be <b>null</b>, shall be member of 
      *     <code>imports</code> or also <b>null</b>)
-     * @param parameters the formal parameters of this script
-     * @param advices the advices (may be <b>null</b>)
-     * @param imports the imports (may be <b>null</b>)
+     * @param descriptor the descriptor carrying parameters, advices and imports (may be <b>null</b>)
+     * @param registry the responsible type registry 
      */
-    public Script(String name, ModelImport<Script> parent, VariableDeclaration[] parameters, Advice[] advices, 
-        Imports<Script> imports) {
-        super(imports);
+    public Script(String name, ModelImport<Script> parent, ScriptDescriptor descriptor, TypeRegistry registry) {
+        super(null == descriptor ? null : descriptor.imports, registry);
         this.name = name;
         this.parent = parent;
         this.version = null;
         this.loadProperties = new ArrayList<LoadProperties>();
-        this.advices = advices;
+        this.advices = null == descriptor ? null : descriptor.advices;
         this.declarations = new ArrayList<VariableDeclaration>();
         this.rules = new ArrayList<Rule>();        
-        this.parameters = parameters;
+        this.parameters = null == descriptor ? null : descriptor.parameters;
         createImplicitVariables();
+    }
+    
+    @Override
+    protected de.uni_hildesheim.sse.easy_producer.instantiator.model.common.Imports<Script> createImports() {
+        return new Imports((Imports) null, null);
     }
 
     /**
@@ -136,7 +196,7 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
     private void createImplicitVariables() {
         try {
             TypeDescriptor<? extends IVilType>[] tmp = TypeDescriptor.createArray(1);
-            tmp[0] = TypeRegistry.getType(Project.class);
+            tmp[0] = TypeRegistry.projectType();
             declarations.add(new VariableDeclaration(NAME_OTHERPROJECTS, TypeRegistry.getSetType(tmp)));
             declarations.add(new VariableDeclaration(NAME_SCRIPTDIR, TypeRegistry.stringType()));
         } catch (VilException e) {
@@ -214,6 +274,15 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
     }
     
     /**
+     * Removes a rule instance.
+     * 
+     * @param rule the rule instance
+     */
+    public void removeRule(Rule rule) {
+        rules.remove(rule);
+    }
+    
+    /**
      * Adds a variable declaration.
      * 
      * @param varDecl the variable declaration
@@ -228,6 +297,11 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
      * @return The name of this project.
      */
     public String getName() {
+        return this.name;
+    }
+    
+    @Override
+    public String getQualifiedName() {
         return this.name;
     }
     
@@ -578,6 +652,36 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
             rules.add(main);
         }
         return main;
+    }
+
+    @Override
+    public boolean isBasicType() {
+        return false;
+    }
+    
+    /**
+     * Returns the number of VTL restrictions.
+     * 
+     * @return the number of VTL restrictions
+     */
+    public int getVtlRestrictionsCount() {
+        Imports imp = (Imports) getImports();
+        return null == imp ? 0 : imp.getVtlRestrictionsCount();
+    }
+
+    /**
+     * Returns the specified VTL restriction.
+     * 
+     * @param index the 0-based index of the VTL restriction
+     * @return the specified model import
+     * @throws IndexOutOfBoundsException if <code>index &lt; 0 || index &gt;={@link #getVtlRestrictionsCount()}</code>
+     */
+    public ModelImport<Template> getVtlRestriction(int index) {
+        Imports imp = (Imports) getImports();
+        if (null == imp) {
+            throw new IndexOutOfBoundsException();
+        }
+        return imp.getVtlRestriction(index);
     }
 
 }

@@ -14,23 +14,24 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expres
 public class ListSet<T> extends AbstractListWrapper<T> implements Set<T> {
 
     /**
-     * Creates a new array collection wrapper.
+     * Creates a new array collection wrapper using the default type registry.
      * 
      * @param list the wrapped list
      * @param param the only type parameter characterizing <T>
      */
     public ListSet(List<T> list, Class<? extends IVilType> param) {
-        super(removeDuplicates(list), TypeRegistry.convert(param));
+        super(removeDuplicates(list), TypeRegistry.DEFAULT.convert(param));
     }
-    
+
     /**
-     * Creates a new array collection wrapper.
+     * Creates a new array collection wrapper using the default type registry.
      * 
      * @param list the wrapped list
-     * @param params the type parameter characterizing <T>
+     * @param registry the registry to convert <code>param</code>
+     * @param param the only type parameter characterizing <T>
      */
-    public ListSet(List<T> list, Class<? extends IVilType>... params) {
-        super(removeDuplicates(list), TypeRegistry.convert(params));
+    public ListSet(List<T> list, TypeRegistry registry, Class<? extends IVilType> param) {
+        super(removeDuplicates(list), registry, param);
     }
     
     /**
@@ -41,32 +42,6 @@ public class ListSet<T> extends AbstractListWrapper<T> implements Set<T> {
      */
     public ListSet(List<T> list, TypeDescriptor<? extends IVilType>... params) {
         super(removeDuplicates(list), params);
-    }
-    
-    /**
-     * Returns an empty set for one type parameter.
-     * 
-     * @param param the type parameter characterizing <T>
-     * @return an empty set
-     * @param <T> the element type
-     */
-    @Invisible
-    public static final <T> Set<T> empty(Class<? extends IVilType> param) {
-        return empty(TypeRegistry.getType(TypeDescriptor.getRegName(param)));
-    }
-    
-    /**
-     * Returns an empty set for one type parameter.
-     * 
-     * @param param the type parameter characterizing <T>
-     * @return an empty set
-     * @param <T> the element type
-     */
-    @Invisible
-    public static final <T> Set<T> empty(TypeDescriptor<? extends IVilType> param) {
-        TypeDescriptor<? extends IVilType>[] params = TypeDescriptor.createArray(1);
-        params[0] = param;
-        return new ListSet<T>(null, params);
     }
 
     /**
@@ -114,6 +89,20 @@ public class ListSet<T> extends AbstractListWrapper<T> implements Set<T> {
     @Override
     public T projectSingle() {
         return 1 == size() ? getList().get(0) : null;
+    }
+
+    /**
+     * Returns an empty set for one type parameter.
+     * 
+     * @param param the type parameter characterizing <T>
+     * @return an empty set
+     * @param <T> the element type
+     */
+    @Invisible
+    public static final <T> Set<T> empty(TypeDescriptor<? extends IVilType> param) {
+        TypeDescriptor<? extends IVilType>[] params = TypeDescriptor.createArray(1);
+        params[0] = param;
+        return new ListSet<T>(null, params);
     }
 
 }

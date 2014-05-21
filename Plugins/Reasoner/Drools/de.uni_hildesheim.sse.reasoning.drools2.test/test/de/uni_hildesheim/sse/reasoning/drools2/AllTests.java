@@ -19,7 +19,8 @@ import de.uni_hildesheim.sse.reasoning.drools2.translation.OCLFeatureTranslation
     //OperationTests.class,
     ModelTranslatorTest.class,
     OCLFeatureTranslationFactoryTest.class,
-    DroolsEngineTests.class
+    DroolsEngineTests.class,
+    ReasoningScenarioTests.class
     })
 public class AllTests {
 

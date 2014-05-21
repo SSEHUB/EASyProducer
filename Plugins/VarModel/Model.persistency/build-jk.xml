@@ -47,5 +47,9 @@
 			<fileset dir="lib" />
 		</copy>
         <jar destfile="${build.jar.dir}/${ant.project.name}.jar" basedir="${build.classes.dir}"/>
+		<!-- Copy created jar to global EASy Plug-ins directory -->
+		<copy todir="${easy.bundles.dir}">
+			<fileset dir="${build.jar.dir}" includes="**/*.jar"/>
+		</copy>
     </target>
 </project>

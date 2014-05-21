@@ -171,7 +171,11 @@ public abstract class AbstractExecutionTest extends AbstractTest {
         } catch (ArtifactException e) {
             Assert.fail("unexpected exception: " + e.getMessage());
         } finally {
-            TemplateModel.INSTANCE.locations().removeLocation(temp, ProgressObserver.NO_OBSERVER);
+            try {
+                TemplateModel.INSTANCE.locations().removeLocation(temp, ProgressObserver.NO_OBSERVER);
+            } catch (ModelManagementException e) {
+                Assert.fail("unexpected exception: " + e.getMessage());
+            }
             FileUtils.deleteQuietly(temp);
         }
     }

@@ -1,0 +1,6 @@
+project testRefAssignmentsFail {
+
+    refTo(Integer) rInt;
+    refTo(Boolean) rBool;
+    rInt = rBool;
+}

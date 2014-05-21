@@ -1,26 +1,19 @@
 /**
- * <copyright>
- * </copyright>
- *
-
  */
 package de.uni_hildesheim.sse.vilBuildLanguage.impl;
 
-import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.impl.EPackageImpl;
-
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
+
 import de.uni_hildesheim.sse.vilBuildLanguage.DeferDeclaration;
 import de.uni_hildesheim.sse.vilBuildLanguage.ImplementationUnit;
+import de.uni_hildesheim.sse.vilBuildLanguage.Instantiate;
 import de.uni_hildesheim.sse.vilBuildLanguage.Join;
 import de.uni_hildesheim.sse.vilBuildLanguage.JoinVariable;
 import de.uni_hildesheim.sse.vilBuildLanguage.LanguageUnit;
 import de.uni_hildesheim.sse.vilBuildLanguage.LoadProperties;
 import de.uni_hildesheim.sse.vilBuildLanguage.Map;
 import de.uni_hildesheim.sse.vilBuildLanguage.PrimaryExpression;
+import de.uni_hildesheim.sse.vilBuildLanguage.Require;
 import de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration;
 import de.uni_hildesheim.sse.vilBuildLanguage.RuleElement;
 import de.uni_hildesheim.sse.vilBuildLanguage.RuleElementBlock;
@@ -30,6 +23,13 @@ import de.uni_hildesheim.sse.vilBuildLanguage.ScriptParentDecl;
 import de.uni_hildesheim.sse.vilBuildLanguage.SystemExecution;
 import de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguageFactory;
 import de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage;
+
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EReference;
+
+import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -45,6 +45,13 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * @generated
    */
   private EClass implementationUnitEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass requireEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -115,6 +122,13 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * @generated
    */
   private EClass primaryExpressionEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass instantiateEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -235,9 +249,49 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getImplementationUnit_Scripts()
+  public EReference getImplementationUnit_Requires()
   {
     return (EReference)implementationUnitEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getImplementationUnit_Scripts()
+  {
+    return (EReference)implementationUnitEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getRequire()
+  {
+    return requireEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getRequire_Name()
+  {
+    return (EAttribute)requireEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getRequire_VersionSpec()
+  {
+    return (EReference)requireEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -575,6 +629,76 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  public EReference getPrimaryExpression_Instantiate()
+  {
+    return (EReference)primaryExpressionEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getInstantiate()
+  {
+    return instantiateEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getInstantiate_Project()
+  {
+    return (EAttribute)instantiateEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getInstantiate_Rule()
+  {
+    return (EAttribute)instantiateEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getInstantiate_RuleName()
+  {
+    return (EAttribute)instantiateEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getInstantiate_Param()
+  {
+    return (EReference)instantiateEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getInstantiate_VersionSpec()
+  {
+    return (EReference)instantiateEClass.getEStructuralFeatures().get(4);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getMap()
   {
     return mapEClass;
@@ -752,7 +876,12 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
     // Create classes and their features
     implementationUnitEClass = createEClass(IMPLEMENTATION_UNIT);
     createEReference(implementationUnitEClass, IMPLEMENTATION_UNIT__IMPORTS);
+    createEReference(implementationUnitEClass, IMPLEMENTATION_UNIT__REQUIRES);
     createEReference(implementationUnitEClass, IMPLEMENTATION_UNIT__SCRIPTS);
+
+    requireEClass = createEClass(REQUIRE);
+    createEAttribute(requireEClass, REQUIRE__NAME);
+    createEReference(requireEClass, REQUIRE__VERSION_SPEC);
 
     languageUnitEClass = createEClass(LANGUAGE_UNIT);
     createEReference(languageUnitEClass, LANGUAGE_UNIT__PARAM);
@@ -796,6 +925,14 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
     createEReference(primaryExpressionEClass, PRIMARY_EXPRESSION__SYS_EX);
     createEReference(primaryExpressionEClass, PRIMARY_EXPRESSION__MAP);
     createEReference(primaryExpressionEClass, PRIMARY_EXPRESSION__JOIN);
+    createEReference(primaryExpressionEClass, PRIMARY_EXPRESSION__INSTANTIATE);
+
+    instantiateEClass = createEClass(INSTANTIATE);
+    createEAttribute(instantiateEClass, INSTANTIATE__PROJECT);
+    createEAttribute(instantiateEClass, INSTANTIATE__RULE);
+    createEAttribute(instantiateEClass, INSTANTIATE__RULE_NAME);
+    createEReference(instantiateEClass, INSTANTIATE__PARAM);
+    createEReference(instantiateEClass, INSTANTIATE__VERSION_SPEC);
 
     mapEClass = createEClass(MAP);
     createEAttribute(mapEClass, MAP__VAR);
@@ -855,7 +992,12 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
     // Initialize classes and features; add operations and parameters
     initEClass(implementationUnitEClass, ImplementationUnit.class, "ImplementationUnit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getImplementationUnit_Imports(), theExpressionDslPackage.getImport(), null, "imports", null, 0, -1, ImplementationUnit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getImplementationUnit_Requires(), this.getRequire(), null, "requires", null, 0, -1, ImplementationUnit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getImplementationUnit_Scripts(), this.getLanguageUnit(), null, "scripts", null, 0, -1, ImplementationUnit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(requireEClass, Require.class, "Require", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getRequire_Name(), ecorePackage.getEString(), "name", null, 0, 1, Require.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getRequire_VersionSpec(), theExpressionDslPackage.getVersionSpec(), null, "versionSpec", null, 0, 1, Require.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(languageUnitEClass, LanguageUnit.class, "LanguageUnit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getLanguageUnit_Param(), theExpressionDslPackage.getParameterList(), null, "param", null, 0, 1, LanguageUnit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -899,6 +1041,14 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
     initEReference(getPrimaryExpression_SysEx(), this.getSystemExecution(), null, "sysEx", null, 0, 1, PrimaryExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getPrimaryExpression_Map(), this.getMap(), null, "map", null, 0, 1, PrimaryExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getPrimaryExpression_Join(), this.getJoin(), null, "join", null, 0, 1, PrimaryExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getPrimaryExpression_Instantiate(), this.getInstantiate(), null, "instantiate", null, 0, 1, PrimaryExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(instantiateEClass, Instantiate.class, "Instantiate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getInstantiate_Project(), ecorePackage.getEString(), "project", null, 0, 1, Instantiate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getInstantiate_Rule(), ecorePackage.getEString(), "rule", null, 0, 1, Instantiate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getInstantiate_RuleName(), ecorePackage.getEString(), "ruleName", null, 0, 1, Instantiate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getInstantiate_Param(), theExpressionDslPackage.getArgumentList(), null, "param", null, 0, 1, Instantiate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getInstantiate_VersionSpec(), theExpressionDslPackage.getVersionSpec(), null, "versionSpec", null, 0, 1, Instantiate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(mapEClass, Map.class, "Map", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getMap_Var(), ecorePackage.getEString(), "var", null, 0, -1, Map.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

@@ -378,7 +378,26 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
      * @throws ConfigurationException in case of any configuration errors
      */
     public Project toProject(boolean ownProject) throws ConfigurationException {
-        ConfigurationSaver saver = new ConfigurationSaver(this, ownProject);
+        return this.toProject(ownProject, true);
+    }
+    
+    /**
+     * Turns this configuration into a project, e.g. for writing.
+     * 
+     * @param ownProject return an own project (<code>true</code>) or add the 
+     *   configuration to {@link #project} (<code>false</code>)
+     * @param onlyUserInput Specifies whether only user Input should be stored:
+     *     <ul>
+     *     <li><tt>true:</tt> Assignments in state {@link AssignmentState#ASSIGNED} and {@link AssignmentState#FROZEN}
+     *         will be saved.</li>
+     *     <li><tt>false: Assignments in state {@link AssignmentState#ASSIGNED}, {@link AssignmentState#FROZEN}, and
+     *         {@link AssignmentState#DERIVED} will be saved (i.e. also computed values).</tt></li>
+     *     </ul>
+     * @return the project or <b>null</b> if not implemented (default)
+     * @throws ConfigurationException in case of any configuration errors
+     */
+    public Project toProject(boolean ownProject, boolean onlyUserInput) throws ConfigurationException {
+        ConfigurationSaver saver = new ConfigurationSaver(this, ownProject, onlyUserInput);
         return saver.getSavedConfiguration();
     }
     

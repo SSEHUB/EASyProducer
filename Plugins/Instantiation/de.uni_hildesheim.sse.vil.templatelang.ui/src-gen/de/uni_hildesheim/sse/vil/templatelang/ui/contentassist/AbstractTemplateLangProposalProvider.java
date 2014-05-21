@@ -5,17 +5,16 @@ package de.uni_hildesheim.sse.vil.templatelang.ui.contentassist;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.*;
-import de.uni_hildesheim.sse.vil.expressions.ui.contentassist.ExpressionDslProposalProvider;
 import org.eclipse.xtext.ui.editor.contentassist.ICompletionProposalAcceptor;
 import org.eclipse.xtext.ui.editor.contentassist.ContentAssistContext;
 
 /**
- * Represents a generated, default implementation of interface {@link IProposalProvider}.
+ * Represents a generated, default implementation of superclass {@link de.uni_hildesheim.sse.vil.expressions.ui.contentassist.ExpressionDslProposalProvider}.
  * Methods are dynamically dispatched on the first parameter, i.e., you can override them 
  * with a more concrete subtype. 
  */
 @SuppressWarnings("all")
-public class AbstractTemplateLangProposalProvider extends ExpressionDslProposalProvider {
+public class AbstractTemplateLangProposalProvider extends de.uni_hildesheim.sse.vil.expressions.ui.contentassist.ExpressionDslProposalProvider {
 		
 	public void completeLanguageUnit_Imports(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
 		completeRuleCall(((RuleCall)assignment.getTerminal()), context, acceptor);

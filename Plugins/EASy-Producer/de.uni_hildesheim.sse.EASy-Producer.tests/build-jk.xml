@@ -11,12 +11,17 @@
 	<path id ="includes">
 		<!-- VarModel -->
 		<pathelement path="${libs.model}"/>
+		<pathelement path="${libs.utils}"/>
+		<!-- Instantiation -->
+        <pathelement path="${libs.instantiator.core}"/>
+        <pathelement path="${libs.instantiator.copy.core}"/>
+        <pathelement path="${libs.vil.expressions.core}"/>
+        <pathelement path="${libs.vil.core}"/>
 		<!-- reasonerCore -->
 		<pathelement path="${libs.reasonerCore}"/>
         <!-- EASy-Producer -->
         <pathelement path="${libs.easy.persistence}"/>
         <pathelement path="${libs.easy.PLugin}"/>
-        <pathelement path="${libs.easy.UI}"/>
 		<!-- Eclipse-Plugins -->
 		<fileset dir="${eclipse.plugins.dir}">
 			<include name="**/*.jar" />

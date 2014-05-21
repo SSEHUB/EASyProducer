@@ -10,6 +10,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
 import de.uni_hildesheim.sse.IvmlBundleId;
+import de.uni_hildesheim.sse.dslCore.translation.Message;
 import de.uni_hildesheim.sse.dslCore.translation.TranslatorException;
 import de.uni_hildesheim.sse.ivml.ActualParameterList;
 import de.uni_hildesheim.sse.ivml.AdditiveExpression;
@@ -68,6 +69,7 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Container;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Enum;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
+import de.uni_hildesheim.sse.model.varModel.datatypes.MetaType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
 import de.uni_hildesheim.sse.model.varModel.values.CompoundValue;
@@ -186,7 +188,7 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
                 IDatatype type = context.resolveType(letEx.getType());
                 DecisionVariableDeclaration var = new DecisionVariableDeclaration(
                         letEx.getName(), type, parent);
-                context.pushLayer();
+                context.pushLayer(parent);
                 context.addToContext(var);
                 try {
                     var.setValue(processExpression(letEx.getValueExpr(),
@@ -273,8 +275,7 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
                         rhs = processCollectionInitializer(result.inferDatatype(),
                                 expr, part.getCollection(), context, parent);
                     } catch (IvmlException e) {
-                        throw new TranslatorException(e, expr,
-                                IvmlPackage.Literals.ASSIGNMENT_EXPRESSION__RIGHT);
+                        throw new TranslatorException(e, expr, IvmlPackage.Literals.ASSIGNMENT_EXPRESSION__RIGHT);
                     }
                 }
                 if (null != rhs) {
@@ -658,7 +659,7 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
                 declarators.add(declarator);
             }
         }
-        context.pushLayer();
+        context.pushLayer(parent);
         // construct container operation call
         int declSize = declarators.size();
         DecisionVariableDeclaration[] decls = new DecisionVariableDeclaration[declSize];
@@ -728,13 +729,20 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
         PrimaryExpression expr, TypeContext context, IModelElement parent)
         throws TranslatorException {
         ConstraintSyntaxTree result = null;
-        if (null != expr.getRefName()) {
+        if (null != expr.getRefName()) { // (refby)
             try {
-                AbstractVariable var = context.findVariable(expr.getRefName(),
-                        null);
+                AbstractVariable var = context.findVariable(expr.getRefName(), null);
                 if (null != var) {
-                    result = new ConstantValue(ValueFactory.createValue(
-                            Reference.TYPE, var));
+                    IDatatype varType = var.getType();
+                    IDatatype refType;
+                    if (Reference.TYPE.isAssignableFrom(varType)) {
+                        // dereference
+                        refType = varType;
+                    } else {
+                        // provide reference to variable
+                        refType = context.findRefType(var.getType());
+                    }
+                    result = new ConstantValue(ValueFactory.createValue(refType, var));
                 } else {
                     throw new TranslatorException("reference '"
                             + expr.getRefName() + "' is undefined", expr,
@@ -873,8 +881,15 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
                 type = lhs.inferDatatype();
             } // else: lhs is a type expression, inferDatatype would lead to a
               // MetaType
+            type = Reference.dereference(type);
             if (Compound.TYPE.isAssignableFrom(type) && hasSlot((Compound) type, name)) {
                 result = new CompoundAccess(lhs, name);
+                IDatatype lhsType = lhs.inferDatatype();
+                if (Constants.REASONER_UNQUALIFIED_NAME_WARNING && MetaType.TYPE.isAssignableFrom(lhsType)) {
+                    warning("Qualified compound type '" + lhsType.getName() 
+                        + "' outside a compound is currently not supported in reasoning.", access, 
+                        IvmlPackage.Literals.EXPRESSION_ACCESS__NAME, Message.CODE_IGNORE);
+                }
             } else if (Enum.TYPE.isAssignableFrom(type) && hasLiteral((Enum) type, name)) {
                 result = new ConstantValue(ValueFactory.createValue(type, name));
             } else {
@@ -947,7 +962,7 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
                 } else if (values[i] instanceof ConstraintSyntaxTree) {
                     throw new ValueDoesNotMatchTypeException("only literal values are allowed here", 
                         ValueDoesNotMatchTypeException.NO_LITERAL);
-                }
+                } // compounds may start with a special name String entry and a type - ignore here!
             }
         }
         return values;
@@ -1161,7 +1176,7 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
      * @param context the type context for resolving variables etc.
      * @param parent the parent element
      * @param specificType the specific type of the container
-     * @param entryList the entries of the iniutializer
+     * @param entryList the entries of the initializer
      * @return the model instance representing the container initializer
      * 
      * @throws TranslatorException in case that the processing of the <code>initializer</code> 

@@ -1,0 +1,6 @@
+vilScript instTest (Project source, Project target, Configuration config) {
+
+    main(Project source, Project target, Configuration config) = : {
+    }
+
+}

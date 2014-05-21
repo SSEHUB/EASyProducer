@@ -3,9 +3,8 @@ package de.uni_hildesheim.sse.reasoning.drools2.translation;
 import java.io.File;
 import java.io.IOException;
 
-import junit.framework.Assert;
-
 import org.eclipse.emf.common.util.URI;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 
 import de.uni_hildesheim.sse.ModelUtility;

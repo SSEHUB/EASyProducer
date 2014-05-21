@@ -2,7 +2,7 @@ package test.de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes;
 
 import java.util.Iterator;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Sequence;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.AbstractIvmlVariable;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.DecisionVariable;

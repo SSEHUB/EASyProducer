@@ -47,6 +47,18 @@ public class PseudoString implements IVilType {
     }
     
     /**
+     * Represents the unequality operation for Strings.
+     * 
+     * @param s1 the first boolean to be considered
+     * @param s2 the second boolean to be considered
+     * @return s1 != s2
+     */
+    @OperationMeta(name = {Constants.UNEQUALITY, Constants.UNEQUALITY_ALIAS }, opType = OperationType.INFIX)
+    public static boolean unequals(String s1, String s2) {
+        return (s1 == null && s2 == null) || (s1 != null && !s1.equals(s2));
+    }
+    
+    /**
      * The length of the string.
      * 
      * @param string the string to return the length for

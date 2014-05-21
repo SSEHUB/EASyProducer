@@ -121,6 +121,18 @@ public class PseudoReal implements IVilType {
     public static boolean equals(double r1, double r2) {
         return r1 == r2;
     }
+    
+    /**
+     * Represents the unequality operation for Reals.
+     * 
+     * @param r1 the first real to be considered
+     * @param r2 the second real to be considered
+     * @return r1 != r2
+     */
+    @OperationMeta(name = {Constants.UNEQUALITY, Constants.UNEQUALITY_ALIAS }, opType = OperationType.INFIX)
+    public static boolean unequals(double r1, double r2) {
+        return r1 != r2;
+    }
 
     /**
      * Negates the given real value.

@@ -2,8 +2,7 @@ package de.uni_hildesheim.sse.reasoning.drools2.translation;
 
 import java.io.StringWriter;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.model.confModel.Configuration;

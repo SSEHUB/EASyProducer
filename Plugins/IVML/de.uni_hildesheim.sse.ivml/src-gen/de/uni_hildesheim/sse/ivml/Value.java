@@ -1,8 +1,4 @@
 /**
- * <copyright>
- * </copyright>
- *
-
  */
 package de.uni_hildesheim.sse.ivml;
 
@@ -20,7 +16,6 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link de.uni_hildesheim.sse.ivml.Value#getSValue <em>SValue</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.Value#getQValue <em>QValue</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.Value#getBValue <em>BValue</em>}</li>
- *   <li>{@link de.uni_hildesheim.sse.ivml.Value#getRValue <em>RValue</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.Value#getNullValue <em>Null Value</em>}</li>
  * </ul>
  * </p>
@@ -134,32 +129,6 @@ public interface Value extends EObject
    * @generated
    */
   void setBValue(String value);
-
-  /**
-   * Returns the value of the '<em><b>RValue</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>RValue</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>RValue</em>' attribute.
-   * @see #setRValue(String)
-   * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getValue_RValue()
-   * @model
-   * @generated
-   */
-  String getRValue();
-
-  /**
-   * Sets the value of the '{@link de.uni_hildesheim.sse.ivml.Value#getRValue <em>RValue</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>RValue</em>' attribute.
-   * @see #getRValue()
-   * @generated
-   */
-  void setRValue(String value);
 
   /**
    * Returns the value of the '<em><b>Null Value</b></em>' attribute.

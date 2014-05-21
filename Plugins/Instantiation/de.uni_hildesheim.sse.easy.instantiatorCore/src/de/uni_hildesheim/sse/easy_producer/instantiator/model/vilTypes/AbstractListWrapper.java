@@ -16,6 +16,18 @@ public abstract class AbstractListWrapper<T> extends AbstractCollectionWrapper<T
 
     private List<T> list;
     private TypeDescriptor<? extends IVilType>[] params;
+
+    /**
+     * Creates a new array collection wrapper.
+     * 
+     * @param list the wrapped list
+     * @param registry the type registry to use for the conversion of <code>param</code>
+     * @param param the type parameter characterizing <T>
+     */
+    public AbstractListWrapper(List<T> list, TypeRegistry registry, Class<? extends IVilType> param) {
+        this.list = list;
+        this.params = registry.convert(param);
+    }
     
     /**
      * Creates a new array collection wrapper.

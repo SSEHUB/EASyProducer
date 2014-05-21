@@ -1,6 +1,7 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes;
 
 import java.io.File;
+import java.util.HashMap;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactFactory;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactModel;
@@ -8,6 +9,8 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.File
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FolderArtifact;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IFileSystemArtifact;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.Path;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IProjectDescriptor.ModelKind;
 import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
 
 /**
@@ -18,9 +21,11 @@ import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
  */
 public class Project implements IVilType, IStringValueProvider {
 
-    // TODO move to artifact model package
     private ArtifactModel artifactModel;
     private File base;
+    private IProjectDescriptor descriptor;
+    private Project successor;
+    private java.util.Map<String, Project> projectCache;
 
     /**
      * Creates an empty project without scanning. Just for testing.
@@ -42,7 +47,35 @@ public class Project implements IVilType, IStringValueProvider {
         artifactModel = ArtifactFactory.createArtifactModel(base);
         artifactModel.scanAll(observer);
     }
-     
+    
+    /**
+     * Creates a project based on a given <code>descriptor</code>.
+     * 
+     * @param descriptor the descriptor to create the project for
+     * @param observer to notify the caller in case of long-running scans
+     * @throws ArtifactException in case that the creation of artifacts fails
+     */
+    public Project(IProjectDescriptor descriptor, ProgressObserver observer) throws ArtifactException {
+        this(null, descriptor, observer);
+    }
+
+    /**
+     * Creates a project based on a given <code>descriptor</code> and links it to the <code>successor</code>.
+     * The first <code>successor</code> is the project at which the initialization started. This root successor
+     * will then cache the related projects.
+     * 
+     * @param successor the successor project
+     * @param descriptor the descriptor to create the project for
+     * @param observer to notify the caller in case of long-running scans
+     * @throws ArtifactException in case that the creation of artifacts fails
+     */
+    private Project(Project successor, IProjectDescriptor descriptor, ProgressObserver observer) 
+        throws ArtifactException {
+        this(descriptor.getBase().getAbsoluteFile(), observer);
+        this.descriptor = descriptor;
+        this.successor = successor;
+    }
+    
     /**
      * Returns the name of the project.
      * 
@@ -137,6 +170,69 @@ public class Project implements IVilType, IStringValueProvider {
         return artifactModel.selectByName(name);
     }
 
+    /**
+     * Returns the project for the specific descriptor (looking up the cache in the root
+     * successor).
+     * 
+     * @param descriptor the descriptor to return the project for
+     * @return the related project
+     * @throws ArtifactException in case that creating / scanning the project base fails
+     */
+    private Project getProjectFor(IProjectDescriptor descriptor) throws ArtifactException {
+        Project root = this;
+        while (null != root.successor) {
+            root = root.successor;
+        }
+        return root.getCachedProject(descriptor);
+    }
+
+    /**
+     * Returns a cached project or caches a new one for <code>descriptor</code>.
+     * This method shall only be called on the root successor as caching will only work there!
+     * 
+     * @param descriptor the descriptor to return the project for
+     * @return the related project
+     * @throws ArtifactException in case that creating / scanning the project base fails
+     */
+    private Project getCachedProject(IProjectDescriptor descriptor) throws ArtifactException {
+        Project result = null;
+        String key = descriptor.getBase().getAbsoluteFile().toString();
+        if (null != projectCache) {
+            result = projectCache.get(key);
+        }
+        if (null == result) {
+            if (null == successor && null == projectCache) {
+                projectCache = new HashMap<String, Project>();
+            }
+            result = new Project(this, descriptor, descriptor.createObserver());            
+            if (null != projectCache) {
+                projectCache.put(key, result);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Returns the predecessors of this project.
+     * 
+     * @return the predecessors
+     * @throws ArtifactException in case that creating / scanning the project base fails
+     */
+    @OperationMeta(returnGenerics = Project.class)
+    public Set<Project> predecessors() throws ArtifactException {
+        Project[] tmp;
+        if (null != descriptor) {
+            int count = descriptor.getPredecessorCount();
+            tmp = new Project[count];
+            for (int p = 0; p < count; p++) {
+                tmp[p] = getProjectFor(descriptor.getPredecessor(p));
+            }
+        } else {
+            tmp = new Project[0];
+        }
+        return new ArraySet<Project>(tmp, Project.class);
+    }
+
     @Override
     public String getStringValue(StringComparator comparator) {
         String result;
@@ -154,7 +250,51 @@ public class Project implements IVilType, IStringValueProvider {
      * @return the path to the EASy files
      */
     public Path getEasyFolder() {
-        return new Path("EASy", artifactModel); // TODO make generic -> ScaleLog
+        return createPathWithFallback(ModelKind.IVML);
+    }
+
+    /**
+     * Returns the path to the IVML model files.
+     * 
+     * @return the path to the IVML model files
+     */
+    public Path getIvmlFolder() {
+        return createPathWithFallback(ModelKind.IVML);
+    }
+
+    /**
+     * Returns the path to the VIL model files.
+     * 
+     * @return the path to the VIL model files
+     */
+    public Path getVilFolder() {
+        return createPathWithFallback(ModelKind.VIL);
+    }
+
+    /**
+     * Returns the path to the VTL model files.
+     * 
+     * @return the path to the VTL model files
+     */
+    public Path getVtlFolder() {
+        return createPathWithFallback(ModelKind.VTL);
+    }
+    
+    /**
+     * Creates a model path with default fallback.
+     * 
+     * @param kind the kind of the models
+     * @return the path
+     */
+    private Path createPathWithFallback(ModelKind kind) {
+        String path = null;
+        if (null != descriptor) {
+            path = descriptor.getModelFolder(kind);
+        }
+        if (null == path) {
+            path = "EASy"; // fallback, shall be a constant
+        }
+        return new Path(path, artifactModel);
     }
     
     /**
@@ -193,5 +333,21 @@ public class Project implements IVilType, IStringValueProvider {
     public static Path convert(Project project) {
         return project.getPath();
     }
+    
+    /**
+     * Returns the main VIL script of the project.
+     * 
+     * @return the main VIL script
+     */
+    public Script getMainVilScript() {
+        Script result;
+        if (null != descriptor) {
+            result = descriptor.getMainVilScript();
+        } else {
+            result = null;
+        }
+        return result;
+    }
+
  
 }

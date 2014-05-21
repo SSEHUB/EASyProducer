@@ -108,7 +108,7 @@ public class MapExpression extends Expression implements IRuleBlock {
                 }
             }
             if (null == expr) {
-                type = TypeDescriptor.VOID;
+                type = TypeRegistry.voidType();
             } else {
                 try {
                     TypeDescriptor<? extends IVilType>[] param = TypeDescriptor.createArray(1);

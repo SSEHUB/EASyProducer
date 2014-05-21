@@ -1,13 +1,7 @@
 package de.uni_hildesheim.sse.serializer;
 
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.xtext.serializer.acceptor.SequenceFeeder;
-import org.eclipse.xtext.serializer.sequencer.AbstractDelegatingSemanticSequencer;
-import org.eclipse.xtext.serializer.sequencer.ISemanticNodeProvider.INodesForEObjectProvider;
-import org.eclipse.xtext.serializer.sequencer.ITransientValueService.ValueTransient;
-
 import com.google.inject.Inject;
-
+import com.google.inject.Provider;
 import de.uni_hildesheim.sse.ivml.AccessName;
 import de.uni_hildesheim.sse.ivml.ActualParameterList;
 import de.uni_hildesheim.sse.ivml.AdditiveExpression;
@@ -78,6 +72,17 @@ import de.uni_hildesheim.sse.ivml.VariableDeclarationPart;
 import de.uni_hildesheim.sse.ivml.VersionStmt;
 import de.uni_hildesheim.sse.ivml.VersionedId;
 import de.uni_hildesheim.sse.services.IvmlGrammarAccess;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.xtext.serializer.acceptor.ISemanticSequenceAcceptor;
+import org.eclipse.xtext.serializer.acceptor.SequenceFeeder;
+import org.eclipse.xtext.serializer.diagnostic.ISemanticSequencerDiagnosticProvider;
+import org.eclipse.xtext.serializer.diagnostic.ISerializationDiagnostic.Acceptor;
+import org.eclipse.xtext.serializer.sequencer.AbstractDelegatingSemanticSequencer;
+import org.eclipse.xtext.serializer.sequencer.GenericSequencer;
+import org.eclipse.xtext.serializer.sequencer.ISemanticNodeProvider.INodesForEObjectProvider;
+import org.eclipse.xtext.serializer.sequencer.ISemanticSequencer;
+import org.eclipse.xtext.serializer.sequencer.ITransientValueService;
+import org.eclipse.xtext.serializer.sequencer.ITransientValueService.ValueTransient;
 
 @SuppressWarnings("all")
 public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
@@ -1229,7 +1234,6 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	 *         qValue=QualifiedName | 
 	 *         bValue='true' | 
 	 *         bValue='false' | 
-	 *         rValue=Identifier | 
 	 *         nullValue='null'
 	 *     )
 	 */

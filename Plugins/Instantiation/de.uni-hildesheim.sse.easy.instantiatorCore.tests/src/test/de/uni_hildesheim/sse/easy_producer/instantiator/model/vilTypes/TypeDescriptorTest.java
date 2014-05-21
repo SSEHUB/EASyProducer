@@ -4,8 +4,7 @@ import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -22,6 +21,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.PseudoBoo
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.PseudoInteger;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.PseudoReal;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.PseudoString;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.SignatureUtils;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.VilException;
@@ -40,13 +40,13 @@ public class TypeDescriptorTest extends AbstractTest {
      */
     static final void setUpMyArtifacts() {
         try {
-            TypeRegistry.registerType(test.de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes
+            TypeRegistry.DEFAULT.registerType(test.de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes
                 .testArtifacts.MyArtifact.class);
         } catch (VilException e) {
             // already registered, ok ;)
         }
         try {
-            TypeRegistry.registerType(test.de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes
+            TypeRegistry.DEFAULT.registerType(test.de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes
                 .testArtifacts.MySubArtifact.class);
         } catch (VilException e) {
             // already registered, ok ;)
@@ -90,7 +90,7 @@ public class TypeDescriptorTest extends AbstractTest {
         } else {
             clsName = cls.getSimpleName();
         }
-        TypeDescriptor<? extends IVilType> descriptor = TypeRegistry.getType(clsName);
+        TypeDescriptor<? extends IVilType> descriptor = TypeRegistry.DEFAULT.getType(clsName);
         Assert.assertNotNull(descriptor);
         assertOperations(cls, descriptor.getOperations());
         assertOperations(cls, new OperationsIterator(descriptor));
@@ -194,13 +194,13 @@ public class TypeDescriptorTest extends AbstractTest {
                     String[] names = meta.name();
                     if (null != names) {
                         for (int n = 0; n < names.length; n++) {
-                            ops.add(OperationDescriptor.getJavaSignature(method, names[n], false));
+                            ops.add(SignatureUtils.getJavaSignature(method, names[n], false));
                         }
                         done = names.length > 0;
                     }
                 }
                 if (!done) {
-                    ops.add(OperationDescriptor.getJavaSignature(method));
+                    ops.add(SignatureUtils.getJavaSignature(method));
                 }
             }
         }
@@ -243,15 +243,15 @@ public class TypeDescriptorTest extends AbstractTest {
      *   <code>java.lang.String</code>)
      */
     private static void testBasicType(Class<?> typeClass, String vilName, Class<?> wrapperClass, String primitiveName) {
-        TypeDescriptor<? extends IVilType> cDesc = TypeRegistry.getType(typeClass.getName());
+        TypeDescriptor<? extends IVilType> cDesc = TypeRegistry.DEFAULT.getType(typeClass.getName());
         Assert.assertNotNull(cDesc);
-        TypeDescriptor<? extends IVilType> vDesc = TypeRegistry.getType(vilName);
+        TypeDescriptor<? extends IVilType> vDesc = TypeRegistry.DEFAULT.getType(vilName);
         Assert.assertNotNull(vDesc);
-        TypeDescriptor<? extends IVilType> wDesc = TypeRegistry.getType(wrapperClass.getName());
+        TypeDescriptor<? extends IVilType> wDesc = TypeRegistry.DEFAULT.getType(wrapperClass.getName());
         Assert.assertNotNull(wDesc);
         TypeDescriptor<? extends IVilType> pDesc;
         if (null != primitiveName) {
-            pDesc = TypeRegistry.getType(primitiveName);
+            pDesc = TypeRegistry.DEFAULT.getType(primitiveName);
             Assert.assertNotNull(pDesc);
         } else {
             pDesc = null;
@@ -280,7 +280,7 @@ public class TypeDescriptorTest extends AbstractTest {
      */
     @Test
     public void testConversions() {
-        TypeDescriptor<? extends IVilType> cDesc = TypeRegistry.getType(Integer.class.getName());
+        TypeDescriptor<? extends IVilType> cDesc = TypeRegistry.integerType();
         Assert.assertNotNull(cDesc);
         Assert.assertTrue("there must be at least on conversion in Integer", cDesc.getConversionsCount() > 0);
         int count = 0;

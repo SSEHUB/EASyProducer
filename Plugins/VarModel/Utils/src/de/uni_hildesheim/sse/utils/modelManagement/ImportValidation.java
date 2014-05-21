@@ -49,17 +49,16 @@ class ImportValidation <M extends IModel> {
     /**
      * Hier wird das Root-Modell eingefügt, und dann werden alle Projekte rekursiv geprüft.
      * 
-     * @param model
-     *            Root-model
-     * @param uri
-     *            of root
+     * @param context the resolution context pointing to the root model
      * @return list of imported modelInfos.
      */
-    public ArrayList<ModelInfo<M>> validateModel(M model, URI uri) {
+    public ArrayList<ModelInfo<M>> validateModel(ResolutionContext<M> context) {
         isValid = true;
+        M model = context.getModel();
+        URI uri = context.getModelURI();
         importedModelInfos.add(new ModelInfo<M>(model, uri));
         modelsToVisit.add(repository.getModelInfo(model.getName(), model.getVersion(), uri));
-        while (validateQueue() && modelsToVisit.size() > 0) {
+        while (validateQueue(context) && modelsToVisit.size() > 0) {
             modelNamesToVisit.clear();
             for (Blacklist<M> blacklist : blacklists) {
                 blacklist.clearTemporaryRestrictions();
@@ -114,12 +113,13 @@ class ImportValidation <M extends IModel> {
     /**
      * adds restrictions and tries to import all models.
      * 
+     * @param context the resolution context providing access to the model paths
      * @return if all imports are valid.
      */
-    private boolean validateQueue() {
+    private boolean validateQueue(ResolutionContext<M> context) {
         addRestrictions(isCONFLICT);
         addRestrictions(!isCONFLICT); // seperated for later handling whether it's an import or conflict
-        boolean success = addQueue();
+        boolean success = addQueue(context);
         return success;
     }
 
@@ -156,11 +156,12 @@ class ImportValidation <M extends IModel> {
     /**
      * checks if the imports were valid.
      * 
+     * @param context the resolution context providing access to the model paths
      * @return if the imports were valid -> continue or invalid -> break.
      */
-    private boolean addQueue() {
+    private boolean addQueue(ResolutionContext<M> context) {
 
-        ArrayList<ModelInfo<M>> temp = fillVisitList();
+        ArrayList<ModelInfo<M>> temp = fillVisitList(context);
         if (isValid) {
             for (ModelInfo<M> modelInfo : temp) {
                 importedModelInfos.add(modelInfo);
@@ -174,9 +175,10 @@ class ImportValidation <M extends IModel> {
     /**
      * fills the importlist.
      * 
+     * @param context the resolution context providing access to the model paths
      * @return the list with all imports.
      */
-    private ArrayList<ModelInfo<M>> fillVisitList() {
+    private ArrayList<ModelInfo<M>> fillVisitList(ResolutionContext<M> context) {
         ArrayList<ModelInfo<M>> modelImportList = new ArrayList<ModelInfo<M>>();
         for (final ModelInfo<M> parentModelInfo : modelNamesToVisit.keySet()) {
             if (!isValid) {
@@ -194,7 +196,7 @@ class ImportValidation <M extends IModel> {
                             break;
                         }
                         ModelInfo<M> closestModelInfo = modelInfo.getByClosestUri(
-                            parentModelInfo.getLocation(), null);
+                            parentModelInfo.getLocation(), context.getModelPaths());
                         if (null != closestModelInfo) {
                             if (blacklistExists(closestModelInfo.getName())) {
                                 Blacklist<M> blacklist = getBlacklist(closestModelInfo.getName());

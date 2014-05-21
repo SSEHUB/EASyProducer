@@ -120,4 +120,11 @@ public class ProjectInterface extends ContainableModelElement implements IResolu
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public ContainableModelElement getElement(String name) {
+        return null;
+    }
+
 }

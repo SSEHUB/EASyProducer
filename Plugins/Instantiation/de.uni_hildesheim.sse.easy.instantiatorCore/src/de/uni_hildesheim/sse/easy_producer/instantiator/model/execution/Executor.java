@@ -33,10 +33,12 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Scr
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArraySequence;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IProjectDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ListSequence;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ListSet;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Project;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.model.confModel.Configuration;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
@@ -45,7 +47,10 @@ import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
  * Executes VIL scripts. This is a convenience class following the builder
  * pattern, i.e., you create an instance, add parameter and finally execute
  * the constructed call. Please note that some arguments may be optional from the
- * point of view of default EASy execution!
+ * point of view of default EASy execution! Further, projects may be given in terms
+ * of their base folder or as an {@link IProjectDescriptor}, whereby the project 
+ * descriptor carries explicit information about the project and shall be preferred 
+ * (except for explicit testing purposes).
  * 
  * @author Holger Eichelberger
  */
@@ -148,6 +153,21 @@ public class Executor {
         arguments.put(PARAM_SOURCE, source);
         return this;
     }
+    
+    /**
+     * Adds the source project as argument. 
+     * 
+     * @param source the source project
+     * @return this executor instance
+     * @throws IllegalArgumentException in case that <code>source</code> is <b>null</b>
+     */
+    public Executor addSource(IProjectDescriptor source) {
+        if (null == source) {
+            throw new IllegalArgumentException("at least one source must be given");
+        }
+        arguments.put(PARAM_SOURCE, source);
+        return this;
+    }
 
     /**
      * Adds the source folders as argument. This is opposite to {@link #addSource(File)}.
@@ -179,12 +199,38 @@ public class Executor {
     }
 
     /**
+     * Adds the source projects as argument. This is opposite to {@link #addSource(IProjectDescriptor)}.
+     * 
+     * @param sources the source projects
+     * @return this executor instance
+     * @throws IllegalArgumentException in case that <code>sources</code> is <b>null</b> or empty
+     */
+    public Executor addSources(IProjectDescriptor[] sources) {
+        if (null == sources || 0 == sources.length) {
+            throw new IllegalArgumentException("at least one source must be given");
+        }
+        arguments.put(PARAM_SOURCE, sources);
+        return this;
+    }
+    
+    /**
      * Adds the target (folder) as argument.
      * 
      * @param target the target folder (may be <b>null</b>, then source is taken)
      * @return this executor instance
      */
     public Executor addTarget(File target) {
+        arguments.put(PARAM_TARGET, target);
+        return this;
+    }
+
+    /**
+     * Adds the target project as argument.
+     * 
+     * @param target the target project (may be <b>null</b>, then source is taken)
+     * @return this executor instance
+     */
+    public Executor addTarget(IProjectDescriptor target) {
         arguments.put(PARAM_TARGET, target);
         return this;
     }
@@ -243,7 +289,7 @@ public class Executor {
      */
     private static TypeDescriptor<?>[] unknownCollectionType() {
         TypeDescriptor<?>[] unknown = TypeDescriptor.createArray(1);
-        unknown[0] = TypeDescriptor.ANY;
+        unknown[0] = TypeRegistry.anyType();
         return unknown;
     }
 
@@ -254,8 +300,8 @@ public class Executor {
      */
     private static TypeDescriptor<?>[] unknownMapType() {
         TypeDescriptor<?>[] unknown = TypeDescriptor.createArray(2);
-        unknown[0] = TypeDescriptor.ANY;
-        unknown[1] = TypeDescriptor.ANY;
+        unknown[0] = TypeRegistry.anyType();
+        unknown[1] = TypeRegistry.anyType();
         return unknown;
     }
 
@@ -425,6 +471,25 @@ public class Executor {
         if (args.get(param) instanceof File) {
             try {
                 args.put(param, new Project((File) args.get(param), observer));
+            } catch (ArtifactException e) {
+                throw new VilLanguageException(e.getMessage(), e.getId());
+            }
+        }
+        if (args.get(param) instanceof IProjectDescriptor) {
+            try {
+                args.put(param, new Project((IProjectDescriptor) args.get(param), observer));
+            } catch (ArtifactException e) {
+                throw new VilLanguageException(e.getMessage(), e.getId());
+            }
+        }
+        if (param.equals(PARAM_SOURCE) && args.get(PARAM_SOURCE) instanceof IProjectDescriptor[]) {
+            try {
+                IProjectDescriptor[] tmp = (IProjectDescriptor[]) args.get(PARAM_SOURCE);
+                Project[] sources = new Project[tmp.length];
+                for (int f = 0; f < tmp.length; f++) {
+                    sources[f] = new Project(tmp[f], observer);
+                }
+                args.put(PARAM_SOURCE, sources);
             } catch (ArtifactException e) {
                 throw new VilLanguageException(e.getMessage(), e.getId());
             }

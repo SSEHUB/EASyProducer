@@ -1,8 +1,4 @@
 /**
- * <copyright>
- * </copyright>
- *
-
  */
 package de.uni_hildesheim.sse.ivml;
 
@@ -791,22 +787,13 @@ public interface IvmlPackage extends EPackage
   int VALUE__BVALUE = 3;
 
   /**
-   * The feature id for the '<em><b>RValue</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int VALUE__RVALUE = 4;
-
-  /**
    * The feature id for the '<em><b>Null Value</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int VALUE__NULL_VALUE = 5;
+  int VALUE__NULL_VALUE = 4;
 
   /**
    * The number of structural features of the '<em>Value</em>' class.
@@ -815,7 +802,7 @@ public interface IvmlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int VALUE_FEATURE_COUNT = 6;
+  int VALUE_FEATURE_COUNT = 5;
 
   /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.ivml.impl.DerivedTypeImpl <em>Derived Type</em>}' class.
@@ -3455,17 +3442,6 @@ public interface IvmlPackage extends EPackage
   EAttribute getValue_BValue();
 
   /**
-   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.ivml.Value#getRValue <em>RValue</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>RValue</em>'.
-   * @see de.uni_hildesheim.sse.ivml.Value#getRValue()
-   * @see #getValue()
-   * @generated
-   */
-  EAttribute getValue_RValue();
-
-  /**
    * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.ivml.Value#getNullValue <em>Null Value</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -5801,14 +5777,6 @@ public interface IvmlPackage extends EPackage
      * @generated
      */
     EAttribute VALUE__BVALUE = eINSTANCE.getValue_BValue();
-
-    /**
-     * The meta object literal for the '<em><b>RValue</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute VALUE__RVALUE = eINSTANCE.getValue_RValue();
 
     /**
      * The meta object literal for the '<em><b>Null Value</b></em>' attribute feature.

@@ -25,7 +25,7 @@ public class RealVariable extends ReasonerVariable {
     RealVariable(IDecisionVariable configVariable, String name, ReasonerModel model, ReasonerVariable parent) {
         super(configVariable, name, model, parent);
         value = null;
-        if (null != configVariable.getValue()) {
+        if (configVariable.getValue() != null) {
             value = ((Number) configVariable.getValue().getValue()).doubleValue();
         }
     }

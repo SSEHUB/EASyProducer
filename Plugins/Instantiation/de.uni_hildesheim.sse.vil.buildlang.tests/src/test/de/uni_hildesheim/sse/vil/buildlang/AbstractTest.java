@@ -7,10 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import junit.framework.Assert;
-
 import org.apache.commons.io.FileUtils;
 import org.eclipse.emf.common.util.URI;
+import org.junit.Assert;
 
 import de.uni_hildesheim.sse.VilExpressionParser;
 import de.uni_hildesheim.sse.BuildLangModelUtility;
@@ -39,8 +38,6 @@ import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
  */
 public abstract class AbstractTest extends de.uni_hildesheim.sse.dslCore.test.AbstractTest<Script> {
 
-    private static final String[] ASSERT_EQUALITY_REC_POSTFIX_EXCLUDE = {".svn", ".svn-base"};
-
     /**
      * Creates and initializes an abstract test.
      */
@@ -59,7 +56,7 @@ public abstract class AbstractTest extends de.uni_hildesheim.sse.dslCore.test.Ab
             Assert.assertTrue(false); // shall not happen
         }
         test.de.uni_hildesheim.sse.vil.templatelang.AbstractTest.initializeInfrastructure(getTestDataDir());
-        cleanTemp();
+        //cleanTemp();
     }
 
     /**
@@ -141,7 +138,7 @@ public abstract class AbstractTest extends de.uni_hildesheim.sse.dslCore.test.Ab
      */
     protected static void registerTypeAnyway(Class<? extends IVilType> cls) {
         try {
-            TypeRegistry.registerType(cls);
+            TypeRegistry.DEFAULT.registerType(cls);
         } catch (VilException e) {
             if (VilException.ID_ALREADY_REGISTERED != e.getId()) {
                 Assert.fail("unexpected exception: " + e.getMessage());
@@ -195,9 +192,10 @@ public abstract class AbstractTest extends de.uni_hildesheim.sse.dslCore.test.Ab
                     String fileAsString = file2String(expectedTrace);
                     Assert.assertTrue(null != fileAsString);
 
+                    Script script = result.getResult(0);
                     BuildlangExecution exec = new BuildlangExecution(new StreamTracer(trace, getBaseFolders(data)), 
                         getTestDataDir(), data.getStartElement(), data.getParameter());
-                    result.getResult(0).accept(exec);
+                    script.accept(exec);
                     //String traceAsString = writer.toString().trim();
                     //Assert.assertTrue(checkEqualsAndPrint(fileAsString, traceAsString));
                     String errorMsg = checkEqualsAndPrepareMessage(fileAsString, trace);
@@ -240,6 +238,8 @@ public abstract class AbstractTest extends de.uni_hildesheim.sse.dslCore.test.Ab
         List<String> tmp = new ArrayList<String>();
         addBaseFolders(setup, Executor.PARAM_SOURCE, tmp);
         addBaseFolders(setup, Executor.PARAM_TARGET, tmp);
+        // and also the script directory
+        tmp.add(setup.getFile().getParentFile().getAbsolutePath());
         String[] result;
         if (tmp.size() > 0) {
             result = new String[tmp.size()];
@@ -347,90 +347,6 @@ public abstract class AbstractTest extends de.uni_hildesheim.sse.dslCore.test.Ab
             }
         } catch (IOException e) {
             // don't care
-        }
-    }
-
-    /**
-     * Assert the output for a certain file and handles possible exceptions.
-     * @param producedFile the file produced during the tests
-     * @param expectedFile the expected file (specified before the tests)
-     */
-    protected void assertFileEqualitySafe(File producedFile, File expectedFile) {
-        try {
-            assertFileEquality(producedFile, expectedFile);
-        } catch (IOException e) {
-            Assert.fail("unexpected exception: " + e.getMessage());
-        }
-    }
-    
-    /**
-     * Assert the output for a certain file.
-     * @param producedFile the file produced during the tests
-     * @param expectedFile the expected file (specified before the tests)
-     * @throws IOException in case of I/O problems (shall not happen)
-     */
-    protected void assertFileEquality(File producedFile, File expectedFile) throws IOException {
-        Assert.assertTrue(producedFile + " does not exist (produced)", producedFile.exists());
-        String produced = FileUtils.readFileToString(producedFile);
-        produced = normalizeText(produced);
-        Assert.assertTrue(expectedFile + " does not exist (expected)", expectedFile.exists());
-        String expected = FileUtils.readFileToString(expectedFile);
-        expected = normalizeText(expected);
-        Assert.assertEquals(produced, expected);
-    }
-    
-    /**
-     * Normalize the given <code>text</code> for comparison.
-     * 
-     * @param text the text to be normalized
-     * @return the normalized text, i.e., without line ends, without spaces at beginning
-     *    and end and with reduced whitespaces (multiples to one)
-     */
-    protected static final String normalizeText(String text) {
-        text = text.replaceAll("(\\r|\\n)", "");
-        text = text.trim();
-        StringBuffer tmp = new StringBuffer(text);
-        int i = 0;
-        while (i + 1 < tmp.length()) {
-            if (' ' == tmp.charAt(i) && ' ' == tmp.charAt(i + 1)) {
-                tmp.deleteCharAt(i);
-            } else {
-                i++;
-            }
-        }
-        return tmp.toString();
-    }
-    
-    /**
-     * Asserts file equality on a set of files or directories. Starting from <code>expected</code>
-     * the same relative files and directories are assumed in <code>generated</code> and asserted
-     * using {@link #assertFileEquality(File, File)}.
-     * 
-     * @param expected the expected file or directory
-     * @param generated the generated file or directory
-     * @throws IOException in case that reading and comparing a file does not work
-     */
-    protected void assertFileEqualityRec(File expected, File generated) throws IOException {
-        boolean exclude = false;
-        for (String postfix : ASSERT_EQUALITY_REC_POSTFIX_EXCLUDE) {
-            exclude |= expected.getName().endsWith(postfix);
-        }
-        if (!exclude) {
-            if (expected.isFile()) {
-                assertFileEquality(expected, generated);
-            } else {
-                File[] files = expected.listFiles();
-                if (null != files) {
-                    for (File f: files) {
-                        File gen = new File(generated, f.getName());
-                        if (f.isDirectory()) {
-                            assertFileEqualityRec(f, gen);
-                        } else {
-                            assertFileEquality(f, gen);
-                        }
-                    }
-                } 
-            }
         }
     }
     

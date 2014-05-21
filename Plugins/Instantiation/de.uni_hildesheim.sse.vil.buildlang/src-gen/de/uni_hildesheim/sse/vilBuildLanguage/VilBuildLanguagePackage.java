@@ -1,17 +1,13 @@
 /**
- * <copyright>
- * </copyright>
- *
-
  */
 package de.uni_hildesheim.sse.vilBuildLanguage;
+
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
-
-import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -82,13 +78,22 @@ public interface VilBuildLanguagePackage extends EPackage
   int IMPLEMENTATION_UNIT__IMPORTS = 0;
 
   /**
+   * The feature id for the '<em><b>Requires</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int IMPLEMENTATION_UNIT__REQUIRES = 1;
+
+  /**
    * The feature id for the '<em><b>Scripts</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int IMPLEMENTATION_UNIT__SCRIPTS = 1;
+  int IMPLEMENTATION_UNIT__SCRIPTS = 2;
 
   /**
    * The number of structural features of the '<em>Implementation Unit</em>' class.
@@ -97,7 +102,44 @@ public interface VilBuildLanguagePackage extends EPackage
    * @generated
    * @ordered
    */
-  int IMPLEMENTATION_UNIT_FEATURE_COUNT = 2;
+  int IMPLEMENTATION_UNIT_FEATURE_COUNT = 3;
+
+  /**
+   * The meta object id for the '{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.RequireImpl <em>Require</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.RequireImpl
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getRequire()
+   * @generated
+   */
+  int REQUIRE = 1;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int REQUIRE__NAME = 0;
+
+  /**
+   * The feature id for the '<em><b>Version Spec</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int REQUIRE__VERSION_SPEC = 1;
+
+  /**
+   * The number of structural features of the '<em>Require</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int REQUIRE_FEATURE_COUNT = 2;
 
   /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.LanguageUnitImpl <em>Language Unit</em>}' class.
@@ -107,7 +149,7 @@ public interface VilBuildLanguagePackage extends EPackage
    * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getLanguageUnit()
    * @generated
    */
-  int LANGUAGE_UNIT = 1;
+  int LANGUAGE_UNIT = 2;
 
   /**
    * The feature id for the '<em><b>Advices</b></em>' containment reference list.
@@ -198,7 +240,7 @@ public interface VilBuildLanguagePackage extends EPackage
    * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getScriptParentDecl()
    * @generated
    */
-  int SCRIPT_PARENT_DECL = 2;
+  int SCRIPT_PARENT_DECL = 3;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -226,7 +268,7 @@ public interface VilBuildLanguagePackage extends EPackage
    * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getLoadProperties()
    * @generated
    */
-  int LOAD_PROPERTIES = 3;
+  int LOAD_PROPERTIES = 4;
 
   /**
    * The feature id for the '<em><b>Path</b></em>' attribute.
@@ -254,7 +296,7 @@ public interface VilBuildLanguagePackage extends EPackage
    * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getScriptContents()
    * @generated
    */
-  int SCRIPT_CONTENTS = 4;
+  int SCRIPT_CONTENTS = 5;
 
   /**
    * The feature id for the '<em><b>Elements</b></em>' containment reference list.
@@ -282,7 +324,7 @@ public interface VilBuildLanguagePackage extends EPackage
    * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getRuleDeclaration()
    * @generated
    */
-  int RULE_DECLARATION = 5;
+  int RULE_DECLARATION = 6;
 
   /**
    * The feature id for the '<em><b>Modifier</b></em>' containment reference.
@@ -355,7 +397,7 @@ public interface VilBuildLanguagePackage extends EPackage
    * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getRuleElementBlock()
    * @generated
    */
-  int RULE_ELEMENT_BLOCK = 6;
+  int RULE_ELEMENT_BLOCK = 7;
 
   /**
    * The feature id for the '<em><b>Elements</b></em>' containment reference list.
@@ -383,7 +425,7 @@ public interface VilBuildLanguagePackage extends EPackage
    * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getRuleElement()
    * @generated
    */
-  int RULE_ELEMENT = 7;
+  int RULE_ELEMENT = 8;
 
   /**
    * The feature id for the '<em><b>Var Decl</b></em>' containment reference.
@@ -429,7 +471,7 @@ public interface VilBuildLanguagePackage extends EPackage
    * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getRuleModifier()
    * @generated
    */
-  int RULE_MODIFIER = 8;
+  int RULE_MODIFIER = 9;
 
   /**
    * The feature id for the '<em><b>Protected</b></em>' attribute.
@@ -457,7 +499,7 @@ public interface VilBuildLanguagePackage extends EPackage
    * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getDeferDeclaration()
    * @generated
    */
-  int DEFER_DECLARATION = 9;
+  int DEFER_DECLARATION = 10;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -494,7 +536,7 @@ public interface VilBuildLanguagePackage extends EPackage
    * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getPrimaryExpression()
    * @generated
    */
-  int PRIMARY_EXPRESSION = 10;
+  int PRIMARY_EXPRESSION = 11;
 
   /**
    * The feature id for the '<em><b>Other Ex</b></em>' containment reference.
@@ -560,13 +602,86 @@ public interface VilBuildLanguagePackage extends EPackage
   int PRIMARY_EXPRESSION__JOIN = ExpressionDslPackage.PRIMARY_EXPRESSION_FEATURE_COUNT + 2;
 
   /**
+   * The feature id for the '<em><b>Instantiate</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PRIMARY_EXPRESSION__INSTANTIATE = ExpressionDslPackage.PRIMARY_EXPRESSION_FEATURE_COUNT + 3;
+
+  /**
    * The number of structural features of the '<em>Primary Expression</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int PRIMARY_EXPRESSION_FEATURE_COUNT = ExpressionDslPackage.PRIMARY_EXPRESSION_FEATURE_COUNT + 3;
+  int PRIMARY_EXPRESSION_FEATURE_COUNT = ExpressionDslPackage.PRIMARY_EXPRESSION_FEATURE_COUNT + 4;
+
+  /**
+   * The meta object id for the '{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.InstantiateImpl <em>Instantiate</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.InstantiateImpl
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getInstantiate()
+   * @generated
+   */
+  int INSTANTIATE = 12;
+
+  /**
+   * The feature id for the '<em><b>Project</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INSTANTIATE__PROJECT = 0;
+
+  /**
+   * The feature id for the '<em><b>Rule</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INSTANTIATE__RULE = 1;
+
+  /**
+   * The feature id for the '<em><b>Rule Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INSTANTIATE__RULE_NAME = 2;
+
+  /**
+   * The feature id for the '<em><b>Param</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INSTANTIATE__PARAM = 3;
+
+  /**
+   * The feature id for the '<em><b>Version Spec</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INSTANTIATE__VERSION_SPEC = 4;
+
+  /**
+   * The number of structural features of the '<em>Instantiate</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INSTANTIATE_FEATURE_COUNT = 5;
 
   /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.MapImpl <em>Map</em>}' class.
@@ -576,7 +691,7 @@ public interface VilBuildLanguagePackage extends EPackage
    * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getMap()
    * @generated
    */
-  int MAP = 11;
+  int MAP = 13;
 
   /**
    * The feature id for the '<em><b>Var</b></em>' attribute list.
@@ -622,7 +737,7 @@ public interface VilBuildLanguagePackage extends EPackage
    * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getJoin()
    * @generated
    */
-  int JOIN = 12;
+  int JOIN = 14;
 
   /**
    * The feature id for the '<em><b>Var1</b></em>' containment reference.
@@ -668,7 +783,7 @@ public interface VilBuildLanguagePackage extends EPackage
    * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getJoinVariable()
    * @generated
    */
-  int JOIN_VARIABLE = 13;
+  int JOIN_VARIABLE = 15;
 
   /**
    * The feature id for the '<em><b>Excl</b></em>' attribute.
@@ -714,7 +829,7 @@ public interface VilBuildLanguagePackage extends EPackage
    * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getSystemExecution()
    * @generated
    */
-  int SYSTEM_EXECUTION = 14;
+  int SYSTEM_EXECUTION = 16;
 
   /**
    * The feature id for the '<em><b>Call</b></em>' containment reference.
@@ -766,6 +881,17 @@ public interface VilBuildLanguagePackage extends EPackage
   EReference getImplementationUnit_Imports();
 
   /**
+   * Returns the meta object for the containment reference list '{@link de.uni_hildesheim.sse.vilBuildLanguage.ImplementationUnit#getRequires <em>Requires</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Requires</em>'.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.ImplementationUnit#getRequires()
+   * @see #getImplementationUnit()
+   * @generated
+   */
+  EReference getImplementationUnit_Requires();
+
+  /**
    * Returns the meta object for the containment reference list '{@link de.uni_hildesheim.sse.vilBuildLanguage.ImplementationUnit#getScripts <em>Scripts</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -775,6 +901,38 @@ public interface VilBuildLanguagePackage extends EPackage
    * @generated
    */
   EReference getImplementationUnit_Scripts();
+
+  /**
+   * Returns the meta object for class '{@link de.uni_hildesheim.sse.vilBuildLanguage.Require <em>Require</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Require</em>'.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.Require
+   * @generated
+   */
+  EClass getRequire();
+
+  /**
+   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.vilBuildLanguage.Require#getName <em>Name</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Name</em>'.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.Require#getName()
+   * @see #getRequire()
+   * @generated
+   */
+  EAttribute getRequire_Name();
+
+  /**
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vilBuildLanguage.Require#getVersionSpec <em>Version Spec</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Version Spec</em>'.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.Require#getVersionSpec()
+   * @see #getRequire()
+   * @generated
+   */
+  EReference getRequire_VersionSpec();
 
   /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.vilBuildLanguage.LanguageUnit <em>Language Unit</em>}'.
@@ -1130,6 +1288,82 @@ public interface VilBuildLanguagePackage extends EPackage
   EReference getPrimaryExpression_Join();
 
   /**
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vilBuildLanguage.PrimaryExpression#getInstantiate <em>Instantiate</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Instantiate</em>'.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.PrimaryExpression#getInstantiate()
+   * @see #getPrimaryExpression()
+   * @generated
+   */
+  EReference getPrimaryExpression_Instantiate();
+
+  /**
+   * Returns the meta object for class '{@link de.uni_hildesheim.sse.vilBuildLanguage.Instantiate <em>Instantiate</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Instantiate</em>'.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.Instantiate
+   * @generated
+   */
+  EClass getInstantiate();
+
+  /**
+   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.vilBuildLanguage.Instantiate#getProject <em>Project</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Project</em>'.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.Instantiate#getProject()
+   * @see #getInstantiate()
+   * @generated
+   */
+  EAttribute getInstantiate_Project();
+
+  /**
+   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.vilBuildLanguage.Instantiate#getRule <em>Rule</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Rule</em>'.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.Instantiate#getRule()
+   * @see #getInstantiate()
+   * @generated
+   */
+  EAttribute getInstantiate_Rule();
+
+  /**
+   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.vilBuildLanguage.Instantiate#getRuleName <em>Rule Name</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Rule Name</em>'.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.Instantiate#getRuleName()
+   * @see #getInstantiate()
+   * @generated
+   */
+  EAttribute getInstantiate_RuleName();
+
+  /**
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vilBuildLanguage.Instantiate#getParam <em>Param</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Param</em>'.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.Instantiate#getParam()
+   * @see #getInstantiate()
+   * @generated
+   */
+  EReference getInstantiate_Param();
+
+  /**
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vilBuildLanguage.Instantiate#getVersionSpec <em>Version Spec</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Version Spec</em>'.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.Instantiate#getVersionSpec()
+   * @see #getInstantiate()
+   * @generated
+   */
+  EReference getInstantiate_VersionSpec();
+
+  /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.vilBuildLanguage.Map <em>Map</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1332,12 +1566,46 @@ public interface VilBuildLanguagePackage extends EPackage
     EReference IMPLEMENTATION_UNIT__IMPORTS = eINSTANCE.getImplementationUnit_Imports();
 
     /**
+     * The meta object literal for the '<em><b>Requires</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference IMPLEMENTATION_UNIT__REQUIRES = eINSTANCE.getImplementationUnit_Requires();
+
+    /**
      * The meta object literal for the '<em><b>Scripts</b></em>' containment reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
     EReference IMPLEMENTATION_UNIT__SCRIPTS = eINSTANCE.getImplementationUnit_Scripts();
+
+    /**
+     * The meta object literal for the '{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.RequireImpl <em>Require</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.RequireImpl
+     * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getRequire()
+     * @generated
+     */
+    EClass REQUIRE = eINSTANCE.getRequire();
+
+    /**
+     * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute REQUIRE__NAME = eINSTANCE.getRequire_Name();
+
+    /**
+     * The meta object literal for the '<em><b>Version Spec</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference REQUIRE__VERSION_SPEC = eINSTANCE.getRequire_VersionSpec();
 
     /**
      * The meta object literal for the '{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.LanguageUnitImpl <em>Language Unit</em>}' class.
@@ -1622,6 +1890,64 @@ public interface VilBuildLanguagePackage extends EPackage
      * @generated
      */
     EReference PRIMARY_EXPRESSION__JOIN = eINSTANCE.getPrimaryExpression_Join();
+
+    /**
+     * The meta object literal for the '<em><b>Instantiate</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference PRIMARY_EXPRESSION__INSTANTIATE = eINSTANCE.getPrimaryExpression_Instantiate();
+
+    /**
+     * The meta object literal for the '{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.InstantiateImpl <em>Instantiate</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.InstantiateImpl
+     * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getInstantiate()
+     * @generated
+     */
+    EClass INSTANTIATE = eINSTANCE.getInstantiate();
+
+    /**
+     * The meta object literal for the '<em><b>Project</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute INSTANTIATE__PROJECT = eINSTANCE.getInstantiate_Project();
+
+    /**
+     * The meta object literal for the '<em><b>Rule</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute INSTANTIATE__RULE = eINSTANCE.getInstantiate_Rule();
+
+    /**
+     * The meta object literal for the '<em><b>Rule Name</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute INSTANTIATE__RULE_NAME = eINSTANCE.getInstantiate_RuleName();
+
+    /**
+     * The meta object literal for the '<em><b>Param</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference INSTANTIATE__PARAM = eINSTANCE.getInstantiate_Param();
+
+    /**
+     * The meta object literal for the '<em><b>Version Spec</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference INSTANTIATE__VERSION_SPEC = eINSTANCE.getInstantiate_VersionSpec();
 
     /**
      * The meta object literal for the '{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.MapImpl <em>Map</em>}' class.

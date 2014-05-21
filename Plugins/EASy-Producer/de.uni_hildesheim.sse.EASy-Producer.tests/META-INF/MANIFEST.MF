@@ -5,19 +5,7 @@ Bundle-SymbolicName: de.uni_hildesheim.sse.EASy-Producer.tests;singleton:=true
 Bundle-Version: 0.0.1
 Bundle-Vendor: University of Hildesheim
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Require-Bundle: 
- org.junit;bundle-version="4.8.1",
- de.uni_hildesheim.sse.EASy-Producer;bundle-version="0.5.1",
- org.eclipse.core.runtime,
- org.eclipse.core.resources,
- de.uni_hildesheim.sse.ivml;bundle-version="0.0.5",
- de.uni_hildesheim.sse.EASy-Producer.persistence;bundle-version="0.0.1";visibility:=reexport,
- ReasonerCore;bundle-version="0.0.1",
- de.uni-hildesheim.sse.easy.instantiatorCore;bundle-version="0.0.1";visibility:=reexport,
- de.uni_hildesheim.sse.easy.instantiator.copy.core;bundle-version="0.0.1";visibility:=reexport,
- org.eclipse.jdt.core,
- org.eclipse.jface,
- org.eclipse.ui,
- de.uni_hildesheim.sse.easy.ui;bundle-version="0.5.2"
-Import-Package: de.uni_hildesheim.sse.easy.ui.internal
+Fragment-Host: de.uni_hildesheim.sse.easy_producer.eclipse;bundle-version="0.7.2"
+Require-Bundle: org.junit;bundle-version="4.8.1",
+ org.apache.commons.io
 

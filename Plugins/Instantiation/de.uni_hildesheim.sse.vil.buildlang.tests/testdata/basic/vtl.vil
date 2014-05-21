@@ -1,0 +1,9 @@
+requireVTL "test" with (version == v0.1);
+
+vilScript vtl (Project source, Project target, Configuration config) {
+
+    main(Project source, Project target, Configuration config) = : {
+        vilTemplateProcessor("test", config, "$target/test.txt");
+    }
+
+}

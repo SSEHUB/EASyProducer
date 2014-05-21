@@ -22,7 +22,7 @@ public class ConstructorCallExpression extends CallExpression {
      */
     public ConstructorCallExpression(TypeDescriptor<? extends IVilType> type, Expression... arguments) 
         throws ExpressionException {
-        super(OperationDescriptor.CONSTRUCTOR_NAME, arguments);
+        super(null, OperationDescriptor.CONSTRUCTOR_NAME, arguments);
         if (null == type) {
             throw new ExpressionException("cannot resolve type", ExpressionException.ID_SEMANTIC);
         }
@@ -38,7 +38,7 @@ public class ConstructorCallExpression extends CallExpression {
      */
     public ConstructorCallExpression(TypeDescriptor<? extends IVilType> type, CallArgument... arguments) 
         throws ExpressionException {
-        super(OperationDescriptor.CONSTRUCTOR_NAME, arguments);
+        super(null, OperationDescriptor.CONSTRUCTOR_NAME, arguments);
         if (null == type) {
             throw new ExpressionException("cannot resolve type", ExpressionException.ID_SEMANTIC);
         }

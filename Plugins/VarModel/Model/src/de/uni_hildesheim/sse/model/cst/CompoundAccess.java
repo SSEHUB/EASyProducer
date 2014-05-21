@@ -4,6 +4,7 @@ import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.MetaType;
+import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
 import de.uni_hildesheim.sse.model.varModel.values.MetaTypeValue;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
 
@@ -78,6 +79,7 @@ public class CompoundAccess extends ConstraintSyntaxTree {
             } else {
                 cExpression = compoundExpression.inferDatatype();
             }
+            cExpression = Reference.dereference(cExpression);
             if (cExpression.isAssignableFrom(MetaType.TYPE)) {
                 if (cExpression instanceof ConstantValue) {
                     // ugly!

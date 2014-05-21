@@ -1,8 +1,9 @@
 package de.uni_hildesheim.sse.logger;
 
-import junit.framework.Assert;
+
 
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;

@@ -15,6 +15,13 @@ public interface IMetaType {
     public String getName();
     
     /**
+     * Returns the qualified name of this type.
+     * 
+     * @return the qualified name
+     */
+    public String getQualifiedName();
+    
+    /**
      * Returns the number of operations provided by this provider.
      * 
      * @return the number of operations
@@ -49,4 +56,17 @@ public interface IMetaType {
      */
     public IMetaOperation findConversion(IMetaType sourceType, IMetaType targetType);
 
+    /**
+     * Returns whether this instance represents a basic type.
+     * 
+     * @return <code>true</code> if this instance represents a basic type, <code>false</code> else
+     */
+    public boolean isBasicType();
+    
+    /**
+     * Returns the type registry this type was registered by.
+     * 
+     * @return the type registry
+     */
+    public TypeRegistry getTypeRegistry();
 }

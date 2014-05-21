@@ -394,4 +394,24 @@ public class BasicTests extends AbstractTest {
         assertEqual("mapInstantiator");
     }
 
+    /**
+     * Tests the instantiate syntax.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testInstantiate() throws IOException {
+        assertEqual("instantiate");
+    }
+
+    /**
+     * Tests the VTL syntax.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testVtl() throws IOException {
+        assertEqual("vtl");
+    }
+
 }

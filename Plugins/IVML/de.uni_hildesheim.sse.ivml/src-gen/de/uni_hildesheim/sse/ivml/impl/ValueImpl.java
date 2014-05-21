@@ -1,22 +1,20 @@
 /**
- * <copyright>
- * </copyright>
- *
-
  */
 package de.uni_hildesheim.sse.ivml.impl;
-
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 import de.uni_hildesheim.sse.ivml.IvmlPackage;
 import de.uni_hildesheim.sse.ivml.NumValue;
 import de.uni_hildesheim.sse.ivml.QualifiedName;
 import de.uni_hildesheim.sse.ivml.Value;
+
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
+
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
+
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -29,7 +27,6 @@ import de.uni_hildesheim.sse.ivml.Value;
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ValueImpl#getSValue <em>SValue</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ValueImpl#getQValue <em>QValue</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ValueImpl#getBValue <em>BValue</em>}</li>
- *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ValueImpl#getRValue <em>RValue</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ValueImpl#getNullValue <em>Null Value</em>}</li>
  * </ul>
  * </p>
@@ -97,26 +94,6 @@ public class ValueImpl extends MinimalEObjectImpl.Container implements Value
    * @ordered
    */
   protected String bValue = BVALUE_EDEFAULT;
-
-  /**
-   * The default value of the '{@link #getRValue() <em>RValue</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getRValue()
-   * @generated
-   * @ordered
-   */
-  protected static final String RVALUE_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getRValue() <em>RValue</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getRValue()
-   * @generated
-   * @ordered
-   */
-  protected String rValue = RVALUE_EDEFAULT;
 
   /**
    * The default value of the '{@link #getNullValue() <em>Null Value</em>}' attribute.
@@ -306,29 +283,6 @@ public class ValueImpl extends MinimalEObjectImpl.Container implements Value
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getRValue()
-  {
-    return rValue;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setRValue(String newRValue)
-  {
-    String oldRValue = rValue;
-    rValue = newRValue;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, IvmlPackage.VALUE__RVALUE, oldRValue, rValue));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public String getNullValue()
   {
     return nullValue;
@@ -383,8 +337,6 @@ public class ValueImpl extends MinimalEObjectImpl.Container implements Value
         return getQValue();
       case IvmlPackage.VALUE__BVALUE:
         return getBValue();
-      case IvmlPackage.VALUE__RVALUE:
-        return getRValue();
       case IvmlPackage.VALUE__NULL_VALUE:
         return getNullValue();
     }
@@ -412,9 +364,6 @@ public class ValueImpl extends MinimalEObjectImpl.Container implements Value
         return;
       case IvmlPackage.VALUE__BVALUE:
         setBValue((String)newValue);
-        return;
-      case IvmlPackage.VALUE__RVALUE:
-        setRValue((String)newValue);
         return;
       case IvmlPackage.VALUE__NULL_VALUE:
         setNullValue((String)newValue);
@@ -445,9 +394,6 @@ public class ValueImpl extends MinimalEObjectImpl.Container implements Value
       case IvmlPackage.VALUE__BVALUE:
         setBValue(BVALUE_EDEFAULT);
         return;
-      case IvmlPackage.VALUE__RVALUE:
-        setRValue(RVALUE_EDEFAULT);
-        return;
       case IvmlPackage.VALUE__NULL_VALUE:
         setNullValue(NULL_VALUE_EDEFAULT);
         return;
@@ -473,8 +419,6 @@ public class ValueImpl extends MinimalEObjectImpl.Container implements Value
         return qValue != null;
       case IvmlPackage.VALUE__BVALUE:
         return BVALUE_EDEFAULT == null ? bValue != null : !BVALUE_EDEFAULT.equals(bValue);
-      case IvmlPackage.VALUE__RVALUE:
-        return RVALUE_EDEFAULT == null ? rValue != null : !RVALUE_EDEFAULT.equals(rValue);
       case IvmlPackage.VALUE__NULL_VALUE:
         return NULL_VALUE_EDEFAULT == null ? nullValue != null : !NULL_VALUE_EDEFAULT.equals(nullValue);
     }
@@ -496,8 +440,6 @@ public class ValueImpl extends MinimalEObjectImpl.Container implements Value
     result.append(sValue);
     result.append(", bValue: ");
     result.append(bValue);
-    result.append(", rValue: ");
-    result.append(rValue);
     result.append(", nullValue: ");
     result.append(nullValue);
     result.append(')');

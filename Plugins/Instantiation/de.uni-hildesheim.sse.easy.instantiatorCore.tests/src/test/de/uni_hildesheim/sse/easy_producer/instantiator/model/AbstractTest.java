@@ -1,7 +1,6 @@
 package test.de.uni_hildesheim.sse.easy_producer.instantiator.model;
 
 import java.io.File;
-
 import org.junit.BeforeClass;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.BuiltIn;

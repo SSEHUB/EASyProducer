@@ -1810,49 +1810,18 @@ ruleValue returns [EObject current=null]
 
 )
 )
-    |(	otherlv_4='refby' 
-    {
-    	newLeafNode(otherlv_4, grammarAccess.getValueAccess().getRefbyKeyword_4_0());
-    }
-	otherlv_5='(' 
-    {
-    	newLeafNode(otherlv_5, grammarAccess.getValueAccess().getLeftParenthesisKeyword_4_1());
-    }
-(
-(
-		{ 
-	        newCompositeNode(grammarAccess.getValueAccess().getRValueIdentifierParserRuleCall_4_2_0()); 
-	    }
-		lv_rValue_6_0=ruleIdentifier		{
-	        if ($current==null) {
-	            $current = createModelElementForParent(grammarAccess.getValueRule());
-	        }
-       		set(
-       			$current, 
-       			"rValue",
-        		lv_rValue_6_0, 
-        		"Identifier");
-	        afterParserOrEnumRuleCall();
-	    }
-
-)
-)	otherlv_7=')' 
-    {
-    	newLeafNode(otherlv_7, grammarAccess.getValueAccess().getRightParenthesisKeyword_4_3());
-    }
-)
     |(
 (
-		lv_nullValue_8_0=	'null' 
+		lv_nullValue_4_0=	'null' 
     {
-        newLeafNode(lv_nullValue_8_0, grammarAccess.getValueAccess().getNullValueNullKeyword_5_0());
+        newLeafNode(lv_nullValue_4_0, grammarAccess.getValueAccess().getNullValueNullKeyword_4_0());
     }
  
 	    {
 	        if ($current==null) {
 	            $current = createModelElement(grammarAccess.getValueRule());
 	        }
-       		setWithLastConsumed($current, "nullValue", lv_nullValue_8_0, "null");
+       		setWithLastConsumed($current, "nullValue", lv_nullValue_4_0, "null");
 	    }
 
 )

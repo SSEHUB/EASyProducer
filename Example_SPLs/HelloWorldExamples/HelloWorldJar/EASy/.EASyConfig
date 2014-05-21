@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProductLineProject id="8bdc866b-6f18-4f59-8938-624be5b3a8cd" name="HelloWorldJar" version="0" location="HelloWorldJar">
+	<predecessors>
+	</predecessors>
+	<successors>
+	</successors>
+	<settings>
+		<entity debug="false" />
+	</settings>
+	<reasoners>
+		<entity timeout="0" />
+	</reasoners>
+	<instantiators>
+	</instantiators>
+	<copy>
+		<entity copyID="de.uni_hildesheim.sse.easy.instantiator.copy.core.normal" />
+	</copy>
+</ProductLineProject>

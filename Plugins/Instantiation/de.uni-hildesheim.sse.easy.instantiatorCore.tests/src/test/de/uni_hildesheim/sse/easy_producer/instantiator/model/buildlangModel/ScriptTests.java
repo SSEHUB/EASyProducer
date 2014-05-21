@@ -4,14 +4,15 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildlangWriter;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Imports;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.Imports;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script.ScriptDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
 import de.uni_hildesheim.sse.utils.modelManagement.Version;
 import de.uni_hildesheim.sse.utils.modelManagement.VersionFormatException;
@@ -42,8 +43,9 @@ public class ScriptTests extends AbstractTest {
         VersionRestriction[] vr = {new VersionRestriction(impName, Operator.EQUALS, version)};
         List<ModelImport<Script>> imps = new ArrayList<ModelImport<Script>>();
         imps.add(new ModelImport<Script>(impName, false, vr));
-        Imports<Script> imports = new Imports<Script>(imps);
-        Script script = new Script(scriptName, null, null, null, imports);
+        Imports imports = new Imports(imps, null);
+        ScriptDescriptor desc = new ScriptDescriptor(null, null, imports);
+        Script script = new Script(scriptName, null, desc, TypeRegistry.DEFAULT);
         Assert.assertNotNull("script shall be there", script);
         StringWriter sWriter = new StringWriter();
         BuildlangWriter writer = new BuildlangWriter(sWriter);

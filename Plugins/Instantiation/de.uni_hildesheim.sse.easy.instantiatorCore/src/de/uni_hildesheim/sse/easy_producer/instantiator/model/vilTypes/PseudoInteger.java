@@ -121,6 +121,18 @@ public class PseudoInteger extends PseudoReal {
     public static boolean equals(int i1, int i2) {
         return i1 == i2;
     }
+    
+    /**
+     * Represents the unequality operation for Integers.
+     * 
+     * @param i1 the first integer to be considered
+     * @param i2 the second integer to be considered
+     * @return i1 != i2
+     */
+    @OperationMeta(name = {Constants.UNEQUALITY, Constants.UNEQUALITY_ALIAS }, opType = OperationType.INFIX)
+    public static boolean unequals(int i1, int i2) {
+        return i1 != i2;
+    }
 
     /**
      * Negates the given integer value.

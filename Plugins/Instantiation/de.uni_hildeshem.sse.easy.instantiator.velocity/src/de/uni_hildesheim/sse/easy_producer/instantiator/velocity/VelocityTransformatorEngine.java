@@ -31,7 +31,7 @@ public class VelocityTransformatorEngine extends AbstractVelocityIntantiatorEngi
      */
     protected void activate(ComponentContext context) {
         Transformator.addEngine(this);
-        TypeRegistry.register(VelocityInstantiator.class);
+        TypeRegistry.DEFAULT.register(VelocityInstantiator.class);
     }
 
     /**

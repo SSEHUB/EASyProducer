@@ -104,7 +104,7 @@ public abstract class DefaultImportResolver<M extends IModel> extends ImportReso
             IModelRepository<M> repository = context.getModelRepository();
             ArrayList<ModelInfo<M>> modelImportList;
             ImportValidation<M> importValidator = new ImportValidation<M>(repository, messages);
-            modelImportList = importValidator.validateModel(context.getModel(), context.getModelURI());
+            modelImportList = importValidator.validateModel(context);
             ModelInfo<M> toLoad = null;
             
             if (importValidator.wasSuccessful()) {
@@ -160,8 +160,7 @@ public abstract class DefaultImportResolver<M extends IModel> extends ImportReso
         // TODO CK: currently, as a fall-back mechanism!
         // currently we just pick the first one according to the URI
         URI contextURI = context.getModelURI();
-        ModelInfo<M> toLoad = versions.get(0).getByClosestUri(contextURI, 
-            context.getModelPaths().getModelPath(contextURI));
+        ModelInfo<M> toLoad = versions.get(0).getByClosestUri(contextURI, context.getModelPaths());
         // is it already loaded?
         //boolean isLoop = false;
         if (null != toLoad) {

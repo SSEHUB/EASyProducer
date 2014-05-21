@@ -1,0 +1,11 @@
+template ivml3(Configuration config, Artifact target) {
+
+    def main(Configuration config, Artifact target) {
+        Integer i = config.byName("pInt");
+        String s = config.byName("pString");
+        Real r = config.byName("pReal");
+        Boolean b = config.byName("pBoolean");
+        '$i $s $r $b'
+    }
+
+}

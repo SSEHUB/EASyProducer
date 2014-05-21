@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<!-- please don't touch the following lines -->
+<!DOCTYPE menubar [
+
+<!ELEMENT menubar (menu | param)+ >
+
+<!ELEMENT menu (dialog | menu | separator)* >
+<!ATTLIST menu resourceBundle NMTOKEN #REQUIRED >
+<!ATTLIST menu key NMTOKEN #REQUIRED >
+
+<!ELEMENT dialog (param*) >
+<!ATTLIST dialog class NMTOKEN #REQUIRED >
+<!ATTLIST dialog blacklistentry NMTOKEN #IMPLIED >
+
+<!ELEMENT separator EMPTY >
+
+<!ELEMENT param EMPTY >
+<!ATTLIST param name NMTOKEN #REQUIRED >
+<!ATTLIST param value NMTOKEN #REQUIRED >
+
+]>
+<!-- please don't touch the lines above -->
+<!-- below this line is your configuraion area ;) -->
+<menubar/>

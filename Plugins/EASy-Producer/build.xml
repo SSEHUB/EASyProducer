@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="EasyAll" default="all" basedir=".">	
+<project name="EasyAll" default="test.without.gui" basedir=".">
+    <!-- GUI tests are currently disabled, because we have no appropriate GUI-Test-Eclipse -->
 	<property file="${user.home}/global-build.properties"/>
 	<path id="emma.lib" >    		
 		<pathelement location="${emma.path}/emma.jar" />	
@@ -13,7 +14,7 @@
     <property name="test.plugin.szenarios" value="de.uni_hildeshem.sse.easy.scenario.tests"/>
     <property name="test.suite.szenarios" value="test.de.uni_hildesheim.sse.scenarios.AllTests"/>
     <property name="test.plugin.core" value="de.uni_hildesheim.sse.easy_producer.core.test"/>
-    <property name="test.suite.core" value="de.uni_hildesheim.sse.easy_producer.persistence.AllTests"/>
+    <property name="test.suite.core" value="de.uni_hildesheim.sse.easy_producer.core.AllTests"/>
 
 	<target name="init">
 		<!-- Delete generated folders -->
@@ -71,13 +72,15 @@
 				<filter includes="*de.uni_hildesheim.sse*"/>
 				<filter excludes="*Activator*"/>
 				<filter excludes="*AllTests*"/>
+				<filter excludes="*Test"/>
+				<filter excludes="*de.uni_hildesheim.sse.easy.ui*"/>
 				<instrpath>
 					<fileset dir="${home.easy.persistence.dir}/${build.jar.dir}/" includes="**/*.jar" />
 					<fileset dir="${home.easy.easy-producer.core.tests.dir}/${build.jar.dir}/" includes="**/*.jar" />
 					<fileset dir="${home.easy.tests.dir}/${build.jar.dir}/" includes="**/*.jar" />
 					<fileset dir="${home.easy.PLugin.dir}/${build.jar.dir}/" includes="**/*.jar" />
-					<fileset dir="${home.easy.easy-producer.ui.dir}/${build.jar.dir}/" includes="**/*.jar" />
 					<fileset dir="${home.scenario.tests.dir}/${build.jar.dir}/" includes="**/*.jar" />
+					<fileset dir="${home.easy.easy-producer.ui.dir}/${build.jar.dir}/" includes="**/*.jar" />
 				</instrpath>
 			</instr>
 	    </emma>
@@ -109,7 +112,6 @@
 			<isfalse value="${unzipNewEclipse}"/>
 		</condition>
 		<antcall target="prepareTestEclipse"/>
-		<antcall target="prepareTestEclipseGUI"/>
 		
 		<copy todir="${test.eclipse.path}/plugins" failonerror="true" overwrite="true">
 			<fileset dir="${coverage.instr.dir}/lib"/>  
@@ -136,6 +138,10 @@
             <fileset dir="${home.model.tests.dir}/${build.jar.dir}" includes="**/*.jar" />
             <fileset dir="${home.instantiator.java.dir}/${build.jar.dir}" includes="**/*.jar" />
 		</copy>
+	</target>
+	
+	<target name="copy.to.eclipseGUI">
+		<antcall target="prepareTestEclipseGUI"/>
 		
 		<copy todir="${basedir}/${test.eclipseGUI.name}/plugins" failonerror="true" overwrite="true">
 			<!-- Plug-ins of this project/job (must not be instrumnted)! -->
@@ -247,7 +253,6 @@
 					<pathelement path="${home.easy.persistence.dir}/src/"/>
 					<pathelement path="${home.easy.tests.dir}/src/"/>
 					<pathelement path="${home.easy.PLugin.dir}/src/"/>
-					<pathelement path="${home.easy.easy-producer.ui.dir}/src/"/>
 					<pathelement path="${home.scenario.tests.dir}/src/"/>
 					<pathelement path="${home.easy.easy-producer.core.tests.dir}/src/"/>
 				</sourcepath>
@@ -270,33 +275,13 @@
 		</copy>
 	</target>		
 	
-    <target name="test.gui" depends="stopautagent" />
+    <target name="test.gui" depends="stopautagent">
+		<antcall target="prepareTestEclipseGUI"/>
+		<antcall target="stopautagent"/>
+	</target>
     
-    
-	<!-- Creates Javadoc 
-         Not longer needed, as there is a special build job for creating a complete JavaDoc -->
-    <target name="javadoc">
-        <javadoc packagenames="de.*" 
-            private="true"
-            defaultexcludes="yes"
-            destdir="${doc.dir}"
-            author="true"
-            version="true"
-            use="true"
-            Encoding="${javadoc.encoding}"
-            windowtitle="${ant.project.name} API">
-            <fileset dir="${home.easy.PLugin.dir}/src">
-                <exclude name="**/*Activator.java"/>
-                <exclude name="**/package.html"/>
-            </fileset>
-            <fileset dir="${home.easy.easy-producer.ui.dir}/src">
-                <exclude name="**/*Activator.java"/>
-                <exclude name="**/package.html"/>
-            </fileset>
-            <doctitle><![CDATA[<h1>${ant.project.name}</h1>]]></doctitle>
-            <bottom><![CDATA[<i>Copyright &#169; 2009 - 2013 SSE. All Rights Reserved.</i>]]></bottom>
-        </javadoc>
-    </target>
 	
-	<target name="all" depends="init, compile, test, test.gui"/>
+	<target name="only.compile" depends="init, compile"/>
+	<target name="test.without.gui" depends="only.compile, test"/>
+	<target name="all" depends="test.without.gui, test.gui"/>
 </project>

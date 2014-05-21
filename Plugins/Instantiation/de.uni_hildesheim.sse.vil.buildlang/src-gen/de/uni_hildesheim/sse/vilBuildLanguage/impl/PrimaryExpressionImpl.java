@@ -1,22 +1,21 @@
 /**
- * <copyright>
- * </copyright>
- *
-
  */
 package de.uni_hildesheim.sse.vilBuildLanguage.impl;
 
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-
+import de.uni_hildesheim.sse.vilBuildLanguage.Instantiate;
 import de.uni_hildesheim.sse.vilBuildLanguage.Join;
 import de.uni_hildesheim.sse.vilBuildLanguage.Map;
 import de.uni_hildesheim.sse.vilBuildLanguage.PrimaryExpression;
 import de.uni_hildesheim.sse.vilBuildLanguage.SystemExecution;
 import de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage;
+
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
+
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
+
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -28,6 +27,7 @@ import de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage;
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.PrimaryExpressionImpl#getSysEx <em>Sys Ex</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.PrimaryExpressionImpl#getMap <em>Map</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.PrimaryExpressionImpl#getJoin <em>Join</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.PrimaryExpressionImpl#getInstantiate <em>Instantiate</em>}</li>
  * </ul>
  * </p>
  *
@@ -64,6 +64,16 @@ public class PrimaryExpressionImpl extends de.uni_hildesheim.sse.vil.expressions
    * @ordered
    */
   protected Join join;
+
+  /**
+   * The cached value of the '{@link #getInstantiate() <em>Instantiate</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getInstantiate()
+   * @generated
+   * @ordered
+   */
+  protected Instantiate instantiate;
 
   /**
    * <!-- begin-user-doc -->
@@ -235,6 +245,54 @@ public class PrimaryExpressionImpl extends de.uni_hildesheim.sse.vil.expressions
    * <!-- end-user-doc -->
    * @generated
    */
+  public Instantiate getInstantiate()
+  {
+    return instantiate;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetInstantiate(Instantiate newInstantiate, NotificationChain msgs)
+  {
+    Instantiate oldInstantiate = instantiate;
+    instantiate = newInstantiate;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, VilBuildLanguagePackage.PRIMARY_EXPRESSION__INSTANTIATE, oldInstantiate, newInstantiate);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setInstantiate(Instantiate newInstantiate)
+  {
+    if (newInstantiate != instantiate)
+    {
+      NotificationChain msgs = null;
+      if (instantiate != null)
+        msgs = ((InternalEObject)instantiate).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - VilBuildLanguagePackage.PRIMARY_EXPRESSION__INSTANTIATE, null, msgs);
+      if (newInstantiate != null)
+        msgs = ((InternalEObject)newInstantiate).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - VilBuildLanguagePackage.PRIMARY_EXPRESSION__INSTANTIATE, null, msgs);
+      msgs = basicSetInstantiate(newInstantiate, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, VilBuildLanguagePackage.PRIMARY_EXPRESSION__INSTANTIATE, newInstantiate, newInstantiate));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
@@ -246,6 +304,8 @@ public class PrimaryExpressionImpl extends de.uni_hildesheim.sse.vil.expressions
         return basicSetMap(null, msgs);
       case VilBuildLanguagePackage.PRIMARY_EXPRESSION__JOIN:
         return basicSetJoin(null, msgs);
+      case VilBuildLanguagePackage.PRIMARY_EXPRESSION__INSTANTIATE:
+        return basicSetInstantiate(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -266,6 +326,8 @@ public class PrimaryExpressionImpl extends de.uni_hildesheim.sse.vil.expressions
         return getMap();
       case VilBuildLanguagePackage.PRIMARY_EXPRESSION__JOIN:
         return getJoin();
+      case VilBuildLanguagePackage.PRIMARY_EXPRESSION__INSTANTIATE:
+        return getInstantiate();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -288,6 +350,9 @@ public class PrimaryExpressionImpl extends de.uni_hildesheim.sse.vil.expressions
         return;
       case VilBuildLanguagePackage.PRIMARY_EXPRESSION__JOIN:
         setJoin((Join)newValue);
+        return;
+      case VilBuildLanguagePackage.PRIMARY_EXPRESSION__INSTANTIATE:
+        setInstantiate((Instantiate)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -312,6 +377,9 @@ public class PrimaryExpressionImpl extends de.uni_hildesheim.sse.vil.expressions
       case VilBuildLanguagePackage.PRIMARY_EXPRESSION__JOIN:
         setJoin((Join)null);
         return;
+      case VilBuildLanguagePackage.PRIMARY_EXPRESSION__INSTANTIATE:
+        setInstantiate((Instantiate)null);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -332,6 +400,8 @@ public class PrimaryExpressionImpl extends de.uni_hildesheim.sse.vil.expressions
         return map != null;
       case VilBuildLanguagePackage.PRIMARY_EXPRESSION__JOIN:
         return join != null;
+      case VilBuildLanguagePackage.PRIMARY_EXPRESSION__INSTANTIATE:
+        return instantiate != null;
     }
     return super.eIsSet(featureID);
   }

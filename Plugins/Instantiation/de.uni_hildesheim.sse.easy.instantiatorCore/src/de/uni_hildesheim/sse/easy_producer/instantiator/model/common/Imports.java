@@ -25,6 +25,17 @@ public class Imports <M extends IModel> {
     public Imports(List<ModelImport<M>> imports) {
         this.imports = imports;
     }
+
+    /**
+     * Creates an imports instance form the given <code>src</code> instance.
+     * 
+     * @param src the source imports instance
+     */
+    protected Imports(Imports<M> src) {
+        if (null != src) {
+            this.imports = src.imports;
+        }
+    }
     
     /**
      * Get the number of imports of this template.

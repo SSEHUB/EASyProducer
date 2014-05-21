@@ -8,6 +8,7 @@ import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Container;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 import de.uni_hildesheim.sse.model.varModel.values.ContainerValue;
+import de.uni_hildesheim.sse.model.varModel.values.NullValue;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
 import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
 import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
@@ -87,21 +88,27 @@ public abstract class ContainerVariable extends StructuredVariable {
     
     @Override
     public void setValue(Value value, IAssignmentState state) throws ConfigurationException {
-        ContainerValue conValue = (ContainerValue) value;
-        IDatatype type = ((Container) getDeclaration().getType()).getContainedType();
+        ContainerValue conValue = null;
         
-        // Create nested Elements
-        if (conValue != null) {
-            for (int i = 0; i < conValue.getElementSize(); i++) {
-                String name = getElementName(i);
-                DecisionVariableDeclaration decl = new DecisionVariableDeclaration(name, type, getDeclaration());
-                VariableCreator creator = new VariableCreator(decl, this, isVisible());
-                try {
-                    IDecisionVariable var = creator.getVariable();
-                    addNestedElement(var);
-                } catch (ConfigurationException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+        if (value == NullValue.INSTANCE) {
+            nestedElements.clear();
+        } else {
+            conValue = (ContainerValue) value;
+            IDatatype type = ((Container) getDeclaration().getType()).getContainedType();
+            
+            // Create nested Elements
+            if (conValue != null) {
+                for (int i = 0; i < conValue.getElementSize(); i++) {
+                    String name = getElementName(i);
+                    DecisionVariableDeclaration decl = new DecisionVariableDeclaration(name, type, getDeclaration());
+                    VariableCreator creator = new VariableCreator(decl, this, isVisible());
+                    try {
+                        IDecisionVariable var = creator.getVariable();
+                        addNestedElement(var);
+                    } catch (ConfigurationException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
                 }
             }
         }

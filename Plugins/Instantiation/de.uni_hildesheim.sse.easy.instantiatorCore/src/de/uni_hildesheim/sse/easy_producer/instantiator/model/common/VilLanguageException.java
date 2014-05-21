@@ -53,6 +53,11 @@ public class VilLanguageException extends AbstractException {
      * Defines an identifier if something is wrong a value to type assignment at runtime.
      */
     public static final int ID_RUNTIME_TYPE = 50008;
+
+    /**
+     * Defines an identifier if something is wrong with a resolvable element, such as a missing import (whyever).
+     */
+    public static final int ID_RUNTIME_NOT_RESOLVED = 50009;
     
     /**
      * For serialization.

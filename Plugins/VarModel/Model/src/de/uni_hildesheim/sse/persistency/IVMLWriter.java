@@ -81,6 +81,7 @@ import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.FreezeBlock;
 import de.uni_hildesheim.sse.model.varModel.IDecisionVariableContainer;
 import de.uni_hildesheim.sse.model.varModel.IFreezable;
+import de.uni_hildesheim.sse.model.varModel.IModelElement;
 import de.uni_hildesheim.sse.model.varModel.IvmlDatatypeVisitor;
 import de.uni_hildesheim.sse.model.varModel.OperationDefinition;
 import de.uni_hildesheim.sse.model.varModel.PartialEvaluationBlock;
@@ -795,6 +796,28 @@ public class IVMLWriter extends AbstractVarModelWriter {
         }
         appendOutput(ENDING_PARENTHESIS);
     }
+    
+    /**
+     * Determines whether (on-demand) qualification of the given <code>var</code> is needed,
+     * i.e., whether its qualified name shall be printed out.
+     * 
+     * @param var the variable
+     * @return <code>true</code> if it needs to be qualified, <code>false</code> else
+     */
+    private boolean needsQualification(AbstractVariable var) {
+        boolean found = false;
+        String name = var.getName();
+        for (int p = getParentCount() - 1; !found && p > 0; p--) {
+            IModelElement par = getParent(p);
+            if (par instanceof IDecisionVariableContainer) {
+                IDecisionVariableContainer cont = (IDecisionVariableContainer) par;
+                DecisionVariableDeclaration elt = cont.getElement(name);
+                // using the simple name would point to the wrong variable
+                found = (null != elt && elt.getName().equals(name) && var != elt);
+            }
+        }
+        return found;
+    }
 
     /**
      * {@inheritDoc}
@@ -806,11 +829,18 @@ public class IVMLWriter extends AbstractVarModelWriter {
             appendOutput(attribute.getElement().getName());
             appendOutput(".");
         }*/
+        boolean needsFqn = false;
         if (null != variable.getQualifier()) {
             variable.getQualifier().accept(this);
             appendOutput(".");
+        } else {
+            needsFqn = needsQualification(variable.getVariable()); 
         }
-        appendOutput(var.getName());
+        if (needsFqn) {
+            appendOutput(var.getQualifiedName());
+        } else {
+            appendOutput(var.getName());
+        }
     }
 
     /**

@@ -12,7 +12,8 @@
 		<!-- Model -->
         <pathelement path="${libs.utils}"/>
 		<pathelement path="${libs.model}"/>
-        <pathelement path="${libs.dslCore}"/>       
+        <pathelement path="${libs.model.tests}"/>
+		<pathelement path="${libs.dslCore}"/>       
         <pathelement path="${libs.instantiator.core}"/>
         <pathelement path="${libs.template.core}"/>
         <pathelement path="${libs.vil.core}"/>

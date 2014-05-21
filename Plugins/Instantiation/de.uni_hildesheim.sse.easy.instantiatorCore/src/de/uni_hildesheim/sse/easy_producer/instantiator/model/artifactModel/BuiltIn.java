@@ -23,24 +23,24 @@ public class BuiltIn {
         if (!initialized) {
             initialized = true;
             
-            TypeRegistry.register(Text.class);
-            TypeRegistry.register(Binary.class);
+            TypeRegistry.DEFAULT.register(Text.class);
+            TypeRegistry.DEFAULT.register(Binary.class);
             
-            TypeRegistry.register(Path.class);
-            TypeRegistry.register(JavaPath.class);
+            TypeRegistry.DEFAULT.register(Path.class);
+            TypeRegistry.DEFAULT.register(JavaPath.class);
             
-            TypeRegistry.register(IArtifact.class);
-            TypeRegistry.register(IFileSystemArtifact.class);
-            TypeRegistry.register(FileArtifact.class);
-            TypeRegistry.register(FolderArtifact.class);
+            TypeRegistry.DEFAULT.register(IArtifact.class);
+            TypeRegistry.DEFAULT.register(IFileSystemArtifact.class);
+            TypeRegistry.DEFAULT.register(FileArtifact.class);
+            TypeRegistry.DEFAULT.register(FolderArtifact.class);
 
-            TypeRegistry.register(VtlFileArtifact.class);
+            TypeRegistry.DEFAULT.register(VtlFileArtifact.class);
 
             //-------------------- preliminary -------------
             
-            TypeRegistry.register(XmlFileArtifact.class);
-            TypeRegistry.register(XmlElement.class);
-            TypeRegistry.register(XmlAttribute.class);
+            TypeRegistry.DEFAULT.register(XmlFileArtifact.class);
+            TypeRegistry.DEFAULT.register(XmlElement.class);
+            TypeRegistry.DEFAULT.register(XmlAttribute.class);
         }
     }
 

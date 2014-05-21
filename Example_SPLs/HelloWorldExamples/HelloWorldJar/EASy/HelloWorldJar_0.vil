@@ -1,0 +1,23 @@
+vilScript HelloWorldJar (Project source, Configuration config, Project target) {
+
+    version v0;
+
+    createClass() = : {
+        vilTemplateProcessor("WindowTemplate", config, "$target/src/Window.java");
+    }
+
+    compile() = : {
+        javac("$target/src/**.java", "$target/bin/**.class");
+    }
+
+    createJar() = : {
+        jar("$target/bin", "$target/bin/*.class", "$target/Hello.jar", "$target/MANIFEST.MF");
+    }
+
+    main(Project source, Configuration config, Project target) = : {
+        createClass();
+        compile();
+        createJar();
+    }
+
+}

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProductLineProject id="7052d69e-27ae-41d4-a74c-340bee587971" name="SavingDebugInformation" version="0" location="SavingDebugInformation">
+	<predecessors>
+	</predecessors>
+	<successors>
+	</successors>
+	<settings>
+	</settings>
+	<reasoners>
+	</reasoners>
+	<instantiators>
+	</instantiators>
+	<copy>
+	</copy>
+</ProductLineProject>

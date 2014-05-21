@@ -13,8 +13,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 
-import de.uni_hildesheim.sse.easy.ui.project_management.InvalidProjectnameException;
 import de.uni_hildesheim.sse.easy.ui.project_management.ProjectUtils;
+import de.uni_hildesheim.sse.easy_producer.persistency.project_creation.InvalidProjectnameException;
 
 /**
  * Toggles the EASY nature.

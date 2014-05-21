@@ -10,6 +10,7 @@ import org.osgi.framework.BundleContext;
 
 import de.uni_hildesheim.sse.ModelUtility;
 import de.uni_hildesheim.sse.model.management.VarModel;
+import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
 
 /**
  * The activator class controls the plug-in life cycle. This class is required only if the IVML editor 
@@ -64,9 +65,13 @@ public class StandaloneActivator extends Activator {
             protected IStatus doJob() throws CoreException {
                 File root = getWorkspaceRoot();
                 File metaRoot = new File(root, ".metadata");
-                VarModel.INSTANCE.locations().removeLocation(root, getObserver());
-                VarModel.INSTANCE.loaders().unregisterLoader(ModelUtility.INSTANCE, getObserver());
-                VarModel.INSTANCE.locations().removeExcludedLocation(metaRoot);
+                try {
+                    VarModel.INSTANCE.locations().removeLocation(root, getObserver());
+                    VarModel.INSTANCE.loaders().unregisterLoader(ModelUtility.INSTANCE, getObserver());
+                    VarModel.INSTANCE.locations().removeExcludedLocation(metaRoot);
+                } catch (ModelManagementException e) {
+                    throw new CoreException(new Status(IStatus.ERROR, "ivml.ui", 0, e.getMessage(), e));
+                }
                 return Status.OK_STATUS;
             }
         };

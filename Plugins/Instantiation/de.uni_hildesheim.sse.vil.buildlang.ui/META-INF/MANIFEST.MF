@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: de.uni_hildesheim.sse.vil.buildlang.ui
 Bundle-Vendor: SSE - University of Hildesheim
-Bundle-Version: 0.2.0
+Bundle-Version: 0.4.0
 Bundle-SymbolicName: de.uni_hildesheim.sse.vil.buildlang.ui; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: de.uni_hildesheim.sse.vil.buildlang;visibility:=reexport,
@@ -22,5 +22,6 @@ Import-Package: org.apache.log4j
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: de.uni_hildesheim.sse.ui.contentassist,
  de.uni_hildesheim.sse.ui.contentassist.antlr,
- de.uni_hildesheim.sse.ui.internal
+ de.uni_hildesheim.sse.ui.internal,
+ de.uni_hildesheim.sse.ui.quickfix
 Bundle-Activator: de.uni_hildesheim.sse.ui.internal.VilBuildLanguageActivator

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProductLineProject id="429bbf8e-d463-476f-b830-290b7270c53d" name="MultipleFolders" version="0" location="MultipleFolders">
+	<predecessors>
+	</predecessors>
+	<successors>
+	</successors>
+	<settings>
+		<entity debug="false" />
+	</settings>
+	<reasoners>
+		<entity timeout="0" />
+	</reasoners>
+	<instantiators>
+	</instantiators>
+	<copy>
+		<entity copyID="de.uni_hildesheim.sse.easy.instantiator.copy.core.normal" />
+	</copy>
+</ProductLineProject>

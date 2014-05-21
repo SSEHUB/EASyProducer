@@ -102,7 +102,7 @@ public class BasicDecisionVariableContainer extends ModelElement implements IDec
         DecisionVariableDeclaration result = null;
         for (int e = 0; null == result && e < elements.size(); e++) {
             DecisionVariableDeclaration element = elements.get(e);
-            if (element.getName().equals(name)) {
+            if (element.getName().equals(name) || element.getQualifiedName().equals(name)) {
                 result = element;
             }
         }

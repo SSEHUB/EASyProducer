@@ -7,8 +7,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 
-import de.uni_hildesheim.sse.easy_producer.persistence.
-    datatypes.PathEnvironment;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.PathEnvironment;
 
 /**
  * Creates path environments in a generic way considering information from projects

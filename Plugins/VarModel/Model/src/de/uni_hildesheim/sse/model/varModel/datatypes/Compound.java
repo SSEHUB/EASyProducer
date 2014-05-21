@@ -11,7 +11,6 @@ import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.IDecisionVariableContainer;
 import de.uni_hildesheim.sse.model.varModel.IModelVisitor;
-import de.uni_hildesheim.sse.model.varModel.IvmlKeyWords;
 import de.uni_hildesheim.sse.model.varModel.ModelElement;
 import de.uni_hildesheim.sse.model.varModel.ProjectImport;
 
@@ -92,19 +91,6 @@ public class Compound extends StructuredDatatype implements IResolutionScope, ID
         this.refines = refines;
     }
 
-    /** 
-     * {@inheritDoc}
-     */
-    public String getNameSpace() {
-        String namespace = super.getNameSpace();
-        if (namespace.length() > 0) {
-            namespace = namespace + IvmlKeyWords.NAMESPACE_SEPARATOR + getName();
-        } else {
-            namespace = getName();
-        }
-        return namespace;
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -172,7 +158,27 @@ public class Compound extends StructuredDatatype implements IResolutionScope, ID
     */
     @Override
     public boolean isAssignableFrom(IDatatype type) {
-        return super.isAssignableFrom(type) || (null != refines && refines.isAssignableFrom(type));
+        boolean result = false;
+        // not nice but working for now
+        boolean classMatches = super.isAssignableFrom(type);
+        boolean isMetaType = this.getType() == TYPE.getType() || type.getType() == TYPE.getType();
+        boolean isTypeNull = AnyType.TYPE.getType() == type.getType();
+        boolean cmpMatches = this == type || isMetaType || isTypeNull;
+        if (isTypeNull) {
+            result = true;
+        } else {
+            // Check whether one of the parents match
+            if (!cmpMatches && type instanceof Compound) {
+                Compound tmpCmp = (Compound) type;
+                while (!cmpMatches && null != tmpCmp.getRefines()) {
+                    cmpMatches |= tmpCmp.getRefines() == this;
+                    tmpCmp = tmpCmp.getRefines();
+                }   
+            }
+            
+            result = classMatches && cmpMatches;
+        }
+        return result;
     }
     
     // --------------------------------- delegation part --------------------------------------
@@ -207,7 +213,7 @@ public class Compound extends StructuredDatatype implements IResolutionScope, ID
         int elementCount = container.getDeclarationCount();
         
         if (null != getRefines()) {
-            elementCount += getRefines().getElementCount();
+            elementCount += getRefines().getInheritedElementCount();
         }
             
         

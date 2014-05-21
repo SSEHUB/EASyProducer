@@ -1,5 +1,6 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.common;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,6 +49,7 @@ public class RuntimeEnvironment implements IRuntimeEnvironment {
         private IModel model;
         private int indentation;
         private IndentationConfiguration indentationConfiguration;
+        private String[] paths;
         
         /**
          * Creates a new context.
@@ -272,11 +274,18 @@ public class RuntimeEnvironment implements IRuntimeEnvironment {
     
     private Map<IModel, Context> contexts = new HashMap<IModel, Context>();
     private Context currentContext;
+    private TypeRegistry typeRegistry;
     
     /**
      * Creates a new runtime environment.
      */
     public RuntimeEnvironment() {
+        typeRegistry = TypeRegistry.DEFAULT; // TODO preliminary
+    }
+
+    @Override
+    public TypeRegistry getTypeRegistry() {
+        return typeRegistry;
     }
     
     /**
@@ -290,6 +299,33 @@ public class RuntimeEnvironment implements IRuntimeEnvironment {
             currentContext = new Context(model);
             contexts.put(model, currentContext);
         }
+    }
+
+    /**
+     * Defines the (sub-script) search paths of the current context.
+     * 
+     * @param paths the search paths
+     */
+    public void setContextPaths(List<File> paths) {
+        if (null != currentContext) {
+            String[] tmp = null;
+            if (null != paths) {
+                tmp = new String[paths.size()];
+                for (int i = 0; i < tmp.length; i++) {
+                    tmp[i] = paths.get(i).getAbsolutePath();
+                }
+            }
+            currentContext.paths = tmp;
+        }
+    }
+
+    @Override
+    public String[] getContextPaths() {
+        String[] result = null;
+        if (null != currentContext) {
+            result = currentContext.paths;
+        }
+        return result;
     }
     
     /**
@@ -408,8 +444,14 @@ public class RuntimeEnvironment implements IRuntimeEnvironment {
      */
     private void checkType(VariableDeclaration var, Object object) throws VilLanguageException {
         if (null != object && !var.getType().isInstance(object)) {
-            throw new VilLanguageException("cannot assign value of type " 
-                + TypeRegistry.getType(TypeDescriptor.getRegName(object.getClass())).getVilName() 
+            String oTypeName;
+            TypeDescriptor<?> oType = typeRegistry.findType(object.getClass());
+            if (null == oType) {
+                oTypeName = "?";
+            } else {
+                oTypeName = oType.getVilName();
+            }
+            throw new VilLanguageException("cannot assign value of type " + oTypeName 
                 + " to " + var.getName() + " of type " + var.getType().getVilName(), 
                 VilLanguageException.ID_RUNTIME_TYPE);
         }

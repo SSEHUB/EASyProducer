@@ -1,8 +1,11 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions;
 
 import java.io.Writer;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression.CallType;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Constants;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IStringValueProvider.StringComparator;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.StringValueHelper;
@@ -82,6 +85,10 @@ public abstract class StreamTracer extends AbstractWriter implements ITracer {
         }
         return result;
     }
+    
+    @Override
+    public void visitingCallExpression(OperationDescriptor descriptor, CallType callType, Object[] args) {
+    }
 
     @Override
     public void visitedCallExpression(OperationDescriptor descriptor, CallType callType, Object[] args, Object result) {
@@ -104,12 +111,40 @@ public abstract class StreamTracer extends AbstractWriter implements ITracer {
                     if (a > 0) {
                         print(", ");
                     }
-                    print(makeRelative(args[a]));
+                    Object tmp = args[a];
+                    if (descriptor.acceptsImplicitParameters() && a == args.length - 1 
+                        && tmp instanceof Map<?, ?>) {
+                        tmp = skipImplicitArguments((Map<?, ?>) tmp);
+                    }
+                    print(makeRelative(tmp));
                 }
             }
             print(") = ");
             println(makeRelative(result));
         }
+    }
+
+    /**
+     * Skips the implicit named arguments from <code>inMap</code>.
+     * 
+     * @param inMap the map to be processed
+     * @return a copy of <code>inMap</code> without implicit arguments
+     */
+    private Map<?, ?> skipImplicitArguments(Map<?, ?> inMap) {
+        Map<Object, Object> outMap = new HashMap<Object, Object>();
+        for (Map.Entry<?, ?> ent : inMap.entrySet()) {
+            boolean skip = false;
+            if (ent.getKey() instanceof String) {
+                if (Constants.IMPLICIT_PARENT_PARAMETER_NAME.equals(ent.getKey()) 
+                    || Constants.IMPLICIT_PATHS_PARAMETER_NAME.equals(ent.getKey())) {
+                    skip = true;
+                }
+            } 
+            if (!skip) {
+                outMap.put(ent.getKey(), ent.getValue());
+            }
+        }
+        return outMap;
     }
 
     @Override

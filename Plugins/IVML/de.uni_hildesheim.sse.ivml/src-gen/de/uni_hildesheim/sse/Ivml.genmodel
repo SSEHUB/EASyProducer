@@ -4,7 +4,7 @@
     editorDirectory="/de.uni_hildesheim.sse.ivml.editor/src" modelPluginID="de.uni_hildesheim.sse.ivml"
     forceOverwrite="true" modelName="Ivml" updateClasspath="false" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
     complianceLevel="5.0" copyrightFields="false" editPluginID="de.uni_hildesheim.sse.ivml.edit"
-    editorPluginID="de.uni_hildesheim.sse.ivml.editor" runtimeVersion="2.7">
+    editorPluginID="de.uni_hildesheim.sse.ivml.editor" runtimeVersion="2.9">
   <genPackages prefix="Ivml" basePackage="de.uni_hildesheim.sse" disposableProviderFactory="true"
       ecorePackage="Ivml.ecore#/">
     <genClasses ecoreClass="Ivml.ecore#//VariabilityUnit">
@@ -86,7 +86,6 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//Value/sValue"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Value/qValue"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//Value/bValue"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//Value/rValue"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//Value/nullValue"/>
     </genClasses>
     <genClasses ecoreClass="Ivml.ecore#//DerivedType">

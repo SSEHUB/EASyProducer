@@ -388,7 +388,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
         for (Map.Entry<TypedefMapping, DerivedDatatype> entry : typedefMapping.entrySet()) {
             TypedefMapping mapping = entry.getKey();
             DerivedDatatype type = entry.getValue();
-            context.pushLayer();
+            context.pushLayer(null);
             try {
                 context.addToContext(type.getTypeDeclaration());
                 EList<Expression> expressions = mapping.getConstraint().getExpressions();
@@ -435,7 +435,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
             if (null != tCompound) {
                 Compound compound = compoundMapping.get(typedef.getTCompound());
                 if (null != compound) {
-                    context.pushLayer();
+                    context.pushLayer(compound);
                     context.addToContext(compound);
                     SplitResult split = Utils.split(tCompound.getElements());
                     if (null != split.getExprs()) {
@@ -466,10 +466,9 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
      * @see #processExpressions(List, List, List, TypeContext)
      */
     private void processAttributeAssignmentExpressions(List<AttrAssignment> assignments, TypeContext context) {
-        // TODO unify with compound
         for (AttrAssignment assgn : assignments) {
             AttributeAssignment assignment = assignmentMapping.get(assgn);
-            context.pushLayer();
+            context.pushLayer(null);
             context.addToContext(assignment);
             try {
                 for (AttrAssignmentPart part : assgn.getParts()) {
@@ -829,7 +828,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
         boolean done = true;
         Project project = context.getProject();
         IDatatype resultType = context.resolveType(op.getResult());
-        context.pushLayer();
+        context.pushLayer(null);
         Comment comment = handleBasicComment(op, context);
         OperationDefinition opDef = new OperationDefinition(context.getProject());
         try {
@@ -1166,20 +1165,24 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
         } else {
             superCompound = null;
         }
-        Compound compound = new Compound(tcomp.getName(), context.getProject(), superCompound);
+        Compound stored = compoundMapping.get(tcomp);
+        Compound compound = (null != stored ? stored 
+            : new Compound(tcomp.getName(), context.getProject(), superCompound));
         SplitResult split = Utils.split(tcomp.getElements());
         if (!force) {
             resolvable &= variableDeclarationsResolvable(split.getVarDecls(), context, compound, force);
             resolvable &= attributeAssignmentsResolvable(split.getAttrAssignments(), context, compound, force);
         }
-        if (resolvable) {
+        if (null == stored) {
             compoundMapping.put(tcomp, compound);
-         // assignments first to find duplicates
-            resolveAssignments(split.getAttrAssignments(), context, compound, force);
-            resolveDeclarations(split.getVarDecls(), context, compound, force);
             Comment comment = CommentUtils.toComment(tcomp, context.getProject());
             context.addToProject(null, null, comment);
             context.addToProject(tcomp, comment, compound);
+        }
+        if (resolvable) {
+            // assignments first to find duplicates
+            resolveAssignments(split.getAttrAssignments(), context, compound, force);
+            resolveDeclarations(split.getVarDecls(), context, compound, force);
             // constraints are resolved afterwards
         }
         return resolvable;

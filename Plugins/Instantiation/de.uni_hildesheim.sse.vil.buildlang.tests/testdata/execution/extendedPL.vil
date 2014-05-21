@@ -1,0 +1,9 @@
+import basePL;
+
+vilScript extendedPL (Project source, Project target, Configuration config) {
+
+    main(Project source, Project target, Configuration config) = : {
+        basePL::main(source, target, config);
+    }
+
+}

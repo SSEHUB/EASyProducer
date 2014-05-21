@@ -16,6 +16,18 @@ public abstract class AbstractArrayWrapper<T> extends AbstractCollectionWrapper<
 
     private T[] array;
     private TypeDescriptor<? extends IVilType>[] params;
+
+    /**
+     * Creates a new array collection wrapper.
+     * 
+     * @param array the wrapped array
+     * @param registry the type registry to use for the conversion of <code>param</code>
+     * @param param the type parameter characterizing <T>
+     */
+    public AbstractArrayWrapper(T[] array, TypeRegistry registry, Class<? extends IVilType> param) {
+        this.array = array;
+        this.params = registry.convert(param);
+    }
     
     /**
      * Creates a new array collection wrapper.

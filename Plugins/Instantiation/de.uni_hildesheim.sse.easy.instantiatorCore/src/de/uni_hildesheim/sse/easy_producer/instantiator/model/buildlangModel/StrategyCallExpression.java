@@ -42,23 +42,25 @@ public class StrategyCallExpression extends CallExpression {
     /**
      * Creates a new instantiator strategy call.
      * 
+     * @param parent the parent language unit (if given used as optional parameter during calls)
      * @param name the name of the call
      * @param arguments the parameter for the call
      * @throws ExpressionException in case that no argument is given
      */
-    public StrategyCallExpression(String name, Expression... arguments) throws ExpressionException {
-        this(name, CallArgument.createUnnamedArguments(arguments));
+    public StrategyCallExpression(Object parent, String name, Expression... arguments) throws ExpressionException {
+        this(parent, name, CallArgument.createUnnamedArguments(arguments));
     }
 
     /**
      * Creates a new instantator strategy call.
      * 
+     * @param parent the parent language unit (if given used as optional parameter during calls)
      * @param name the name of the call
      * @param arguments the parameter for the call
      * @throws ExpressionException in case that no argument is given
      */
-    public StrategyCallExpression(String name, CallArgument... arguments) throws ExpressionException {
-        super(name, arguments);
+    public StrategyCallExpression(Object parent, String name, CallArgument... arguments) throws ExpressionException {
+        super(parent, name, arguments);
         this.type = Type.INSTANTIATOR;
     }
     
@@ -81,7 +83,7 @@ public class StrategyCallExpression extends CallExpression {
      * @throws ExpressionException in case that no argument is given
      */
     public StrategyCallExpression(VariableDeclaration nameVar, CallArgument... arguments) throws ExpressionException {
-        super(nameVar.getName(), arguments);
+        super(null, nameVar.getName(), arguments);
         this.type = Type.EXECUTE;
         this.nameVar = nameVar;
     }
@@ -147,12 +149,12 @@ public class StrategyCallExpression extends CallExpression {
             }
             execResolved = true;
         }
-        return TypeDescriptor.VOID; // cannot return something
+        return TypeRegistry.voidType(); // cannot return something
     }
 
     @Override
     protected TypeDescriptor<? extends IVilType> determineOperand() throws ExpressionException {
-        TypeDescriptor<? extends IVilType> instantiator = TypeRegistry.getInstantiator(getName());
+        TypeDescriptor<? extends IVilType> instantiator = TypeRegistry.DEFAULT.getInstantiator(getName());
         if (null == instantiator) {
             throw new ExpressionException("unknown instantiator " + getName(), 
                 ExpressionException.ID_CANNOT_RESOLVE);

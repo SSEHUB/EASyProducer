@@ -5,8 +5,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,7 +23,7 @@ import de.uni_hildesheim.sse.utils.modelManagement.VersionFormatException;
 public class ProjectInfoTest {
 
     private Version version;
-    private ModelInfo pi;
+    private ModelInfo<?> pi;
     private URI location;
     
     /**
@@ -41,6 +40,7 @@ public class ProjectInfoTest {
     /**
      * Creating a project info.
      */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Test
     public void creatingProjectInfo() {
         IModelLoader loader = null;

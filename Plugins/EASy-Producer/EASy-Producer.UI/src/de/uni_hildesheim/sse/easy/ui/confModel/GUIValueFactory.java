@@ -24,9 +24,7 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Sequence;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Set;
 import de.uni_hildesheim.sse.model.varModel.datatypes.StringType;
-import de.uni_hildesheim.sse.model.varModel.filter.DeclarationFinder;
-import de.uni_hildesheim.sse.model.varModel.filter.DeclarationFinder.VisibilityType;
-import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
+import de.uni_hildesheim.sse.model.varModel.filter.ReferenceValuesFinder;
 /**
  * Creates a {@link GUIVariable} for a given {@link IDecisionVariable}.
  * @author El-Sharkawy
@@ -111,10 +109,8 @@ class GUIValueFactory {
 
         @Override
         public void visitReference(Reference reference) {
-            Project project = (Project) variable.getDeclaration().getTopLevelParent();
-            DeclarationFinder finder = new DeclarationFinder(project, FilterType.ALL, reference.getType());
-            //TODO SE: check whether VisibilityType.ALL or ONLY Exported must be used.
-            List<AbstractVariable> possibleDeclarations = finder.getVariableDeclarations(VisibilityType.ALL);
+            Project project = variable.getConfiguration().getProject();
+            List<AbstractVariable> possibleDeclarations = ReferenceValuesFinder.findPossibleValues(project, reference);
             ComboboxGUIVariable.ComboItem[] items = null;
             
             if (possibleDeclarations.size() > 0) {
@@ -122,8 +118,7 @@ class GUIValueFactory {
                 for (int i = 0; i < possibleDeclarations.size(); i++) {
                     AbstractVariable declaration = possibleDeclarations.get(i);
                     String name = declaration.getUniqueName();
-                    items[i] = new ComboboxGUIVariable.ComboItem(name, declaration);
-                    
+                    items[i] = new ComboboxGUIVariable.ComboItem(name, declaration);  
                 }
             }
             resultVariable = new ComboboxGUIVariable(variable, parent, reference, items, confParent);
@@ -163,7 +158,7 @@ class GUIValueFactory {
             ComboboxGUIVariable.ComboItem[] items = null;
             if (enumType.getLiteralCount() > 0) {
                 items = new ComboboxGUIVariable.ComboItem[enumType.getLiteralCount()];
-                for (int i = 0; i < items.length; i++) {
+                for (int i = 0; i < enumType.getLiteralCount(); i++) {
                     EnumLiteral literal = enumType.getLiteral(i);
                     String literalName = literal.getName();
                     items[i] = new ComboboxGUIVariable.ComboItem(literalName, literal);

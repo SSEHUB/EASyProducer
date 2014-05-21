@@ -6,7 +6,8 @@ import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 
-import de.uni_hildesheim.sse.easy_producer.persistence.mgmt.PLPInfo;
+import de.uni_hildesheim.sse.easy_producer.core.mgmt.PLPInfo;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.Configuration;
 
 /**
  * For contributions to the EASY core. (preliminary, to be aligned with self-bootstrapping 
@@ -23,11 +24,6 @@ public abstract class Contributions {
      * @author Holger Eichelberger
      */
     public enum CoreFunction {
-        
-        /**
-         * The button for deriving PL members.
-         */
-        DERIVE_NEW_MEMBER(true),
         
         /**
          * The button for pulling the configuration.
@@ -129,26 +125,28 @@ public abstract class Contributions {
 
     
     /**
-     * Determines the most appropriate EASy configuration path.
+     * Determines the most appropriate configuration paths.
      * 
      * @param project the project to determine the configuration path for
-     * @return the configuration path or <b>null</b> if there is no suggestion
+     * @param config the configuration to be modified as a side effect
+     * @return <code>true</code> if the configuration was changed, <code>false</code> else
      */
-    public static String determineEasyConfigPath(IProject project) {
-        String result = null;
-        for (int c = 0; null == result && c < REGISTERED.size(); c++) {
-            result = REGISTERED.get(c).determineEasyConfigPathImpl(project);
+    public static boolean determineConfigurationPaths(IProject project, Configuration config) {
+        boolean result = false;
+        for (int c = 0; c < REGISTERED.size(); c++) {
+            result |= REGISTERED.get(c).determineConfigurationPathsImpl(project, config);
         }
         return result;
     }
     
     /**
-     * Determines the EASy configuration path from the given <code>project</code>.
+     * Determines the configuration paths for the given <code>project</code>.
      * 
      * @param project the project to consider
-     * @return the relative configuration path or <b>null</b> if no path shall be suggested
+     * @param config the configuration to be modified as a side effect
+     * @return <code>true</code> if the configuration was changed, <code>false</code> else
      */
-    protected abstract String determineEasyConfigPathImpl(IProject project);
+    protected abstract boolean determineConfigurationPathsImpl(IProject project, Configuration config);
 
     /**
      * Initializes a recently created PLP.

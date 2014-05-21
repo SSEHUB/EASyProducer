@@ -6,8 +6,15 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="imports" upperBound="-1"
         eType="ecore:EClass ../../../../../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/ExpressionDsl.ecore#//Import"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="requires" upperBound="-1"
+        eType="#//Require" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="scripts" upperBound="-1"
         eType="#//LanguageUnit" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Require">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="versionSpec" eType="ecore:EClass ../../../../../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/ExpressionDsl.ecore#//VersionSpec"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="LanguageUnit" eSuperTypes="../../../../../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/ExpressionDsl.ecore#//LanguageUnit">
     <eStructuralFeatures xsi:type="ecore:EReference" name="param" eType="ecore:EClass ../../../../../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/ExpressionDsl.ecore#//ParameterList"
@@ -69,6 +76,17 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="map" eType="#//Map" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="join" eType="#//Join" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="instantiate" eType="#//Instantiate"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Instantiate">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="project" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rule" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ruleName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="param" eType="ecore:EClass ../../../../../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/ExpressionDsl.ecore#//ArgumentList"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="versionSpec" eType="ecore:EClass ../../../../../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/ExpressionDsl.ecore#//VersionSpec"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Map">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="var" unique="false" upperBound="-1"

@@ -108,5 +108,14 @@ public interface IVisitor extends de.uni_hildesheim.sse.easy_producer.instantiat
      * @throws ExpressionException in case that visiting fails (e.g., execution)
      */
     public Object visitMapExpression(MapExpression map) throws ExpressionException;
+    
+    /**
+     * Visits an instantiate expression.
+     * 
+     * @param inst the instantiation expression
+     * @return the result of visiting the given expression (may be <b>null</b>)
+     * @throws ExpressionException in case that visiting fails (e.g., execution)
+     */
+    public Object visitInstantiateExpression(InstantiateExpression inst) throws ExpressionException;
 
 }

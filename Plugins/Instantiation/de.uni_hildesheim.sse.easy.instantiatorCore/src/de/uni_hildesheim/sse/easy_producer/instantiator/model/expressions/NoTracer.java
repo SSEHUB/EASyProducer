@@ -13,6 +13,10 @@ public class NoTracer implements ITracer {
     public static final ITracer INSTANCE = new NoTracer();
 
     @Override
+    public void visitingCallExpression(OperationDescriptor descriptor, CallType callType, Object[] args) {
+    }
+    
+    @Override
     public void visitedCallExpression(OperationDescriptor descriptor, CallType callType, Object[] args, Object result) {
     }
 

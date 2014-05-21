@@ -1,0 +1,5 @@
+project HelloWorldExtended {
+
+    version v0;
+    String hello;
+}

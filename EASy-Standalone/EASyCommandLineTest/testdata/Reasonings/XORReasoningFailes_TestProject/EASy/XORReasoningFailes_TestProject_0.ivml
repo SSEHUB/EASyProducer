@@ -1,0 +1,8 @@
+project XORReasoningFailes_TestProject {
+
+    version v0;
+    Boolean boolA = true;
+    Boolean boolB = false;
+    Boolean boolC = false;
+    (boolB implies boolA) xor not (boolC);
+}

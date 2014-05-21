@@ -19,10 +19,6 @@
 		<pathelement path="${libs.reasonerCore}"/>
         <!-- EASy-Producer -->
         <pathelement path="${libs.easy.persistence}"/>
-		<!-- lib -->
-        <fileset dir="lib">
-            <include name="**/*.jar" />
-        </fileset>
 		<!-- Eclipse-Plugins -->
 		<fileset dir="${eclipse.plugins.dir}">
 			<include name="**/*.jar" />
@@ -52,7 +48,6 @@
 		<!-- Copy needed non class files -->
         <copy todir="${build.classes.dir}" failonerror="true" overwrite="true">
             <fileset dir="${basedir}">
-		        <include name="lib/**/*" />
                 <include name="testdata/**/*" />
             </fileset>
 	    </copy>

@@ -3,7 +3,9 @@ package de.uni_hildesheim.sse.model.varModel;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.uni_hildesheim.sse.model.varModel.datatypes.CustomOperation;
 import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
@@ -33,6 +35,7 @@ public class Project extends ModelElement implements IModel, IAttributableElemen
     private ProjectType type = new ProjectType(this);
     private int interfaceCount = 0; // speeds up search, consider when removing elements!
     private Project parent;
+    private Map<String, ContainableModelElement> names = new HashMap<String, ContainableModelElement>();
 
     /**
      * Stores the (pseudo) variable for this project. We need this variable
@@ -147,6 +150,7 @@ public class Project extends ModelElement implements IModel, IAttributableElemen
      * @return <tt>true</tt> if this project changed as a result of the call
      */
     public boolean removeElements(List<ContainableModelElement> elementsToRemove) {
+        names.clear();
         return modelElements.removeAll(elementsToRemove);
     }
     
@@ -260,25 +264,22 @@ public class Project extends ModelElement implements IModel, IAttributableElemen
     }
     
     /**
-     * Returns whether this project contains an element (of the specified type)
-     * and its name.
+     * Returns whether this project contains an element and its name.
      * 
      * @param name the name to search for
-     * @param cls optional type, may be <b>null</b>
      * @return <code>true</code> if this project contains the specified element, 
      *     <code>false</code> else
      */
-    public boolean containsByName(String name, Class<? extends ContainableModelElement> cls) {
-        boolean found = false;
-        for (int m = 0; !found && m < modelElements.size(); m++) {
-            ContainableModelElement tmp = modelElements.get(m);
-            if (null == cls || cls.isInstance(tmp)) {
-                // unsure - do we need the namespace here
-                // getName may be null, e.g. in case of unnamed constraints
-                found = null != tmp.getName() && tmp.getName().equals(name);
-            }
-        }
-        return found;
+    public boolean containsByName(String name) {
+        // unsure - do we need the namespace here
+        return null != name && names.containsKey(name);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public ContainableModelElement getElement(String name) {
+        return null == name ? null : names.get(name);
     }
     
     /**
@@ -295,13 +296,17 @@ public class Project extends ModelElement implements IModel, IAttributableElemen
             if (!(element instanceof Attribute) && !(element instanceof AttributeAssignment)) {
                 // attributes are checked on the attributable element
                 if (null != element.getName() && element.getName().length() > 0) {
-                    found = containsByName(element.getName(), null);
+                    found = containsByName(element.getName());
                 }
             }
             if (!found) {
                 modelElements.add(element);
                 if (element instanceof ProjectInterface) {
                     interfaceCount++;
+                }
+                if (null != element.getName()) {
+                    names.put(element.getName(), element);
+                    names.put(element.getQualifiedName(), element);
                 }
             }
         }
@@ -334,6 +339,9 @@ public class Project extends ModelElement implements IModel, IAttributableElemen
         boolean result = false;
         result |= modelElements.remove(definition);
         result |= type.removeOperation(definition.getOperation());
+        if (result && null != definition.getName()) {
+            names.remove(definition.getName());
+        }
         return result;
     }
     

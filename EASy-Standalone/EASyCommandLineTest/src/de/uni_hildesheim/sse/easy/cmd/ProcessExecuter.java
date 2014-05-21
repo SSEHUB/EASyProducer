@@ -93,17 +93,31 @@ class ProcessExecuter {
         return errStream;
     }
     
+    /**
+     * Executes the given command.
+     * @return in case of an error the caught error message, <tt>null</tt> otherwise.
+     * @throws IOException
+     */
     public String execute() throws IOException {
         // TODO check: typically this is done in an own thread! fails for reasoning - waitFor workaround
         StringBuffer msg = new StringBuffer();
         String line = null;
+        
+        // Collect all normal messages, before collecting all errors.
         while((line = getInStream().readLine()) != null) {
             msg.append(line);
             msg.append("\n");
         }
         System.out.println(msg);
         
-        return getErrStream().readLine();
+        //Collect and return all errors
+        msg = new StringBuffer();
+        while((line = getErrStream().readLine()) != null) {
+            msg.append(line);
+            msg.append("\n");
+        }
+        
+        return msg.length() == 0 ? null : msg.toString();
     }
     
     /**

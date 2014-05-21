@@ -4,8 +4,8 @@
  */
 package de.uni_hildesheim.sse.ui;
 
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.xtext.ui.DefaultUiModule;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 /**
  * Manual modifications go to {de.uni_hildesheim.sse.ui.IvmlUiModule}
@@ -231,11 +231,6 @@ public abstract class AbstractIvmlUiModule extends DefaultUiModule {
 	// contributed by org.eclipse.xtext.ui.generator.refactoring.RefactorElementNameFragment
 	public Class<? extends org.eclipse.xtext.ui.refactoring.ui.IRenameSupport.Factory> bindIRenameSupport$Factory() {
 		return org.eclipse.xtext.ui.refactoring.ui.DefaultRenameSupport.Factory.class;
-	}
-
-	// contributed by org.eclipse.xtext.ui.generator.refactoring.RefactorElementNameFragment
-	public Class<? extends org.eclipse.xtext.ui.refactoring.ui.IRenameElementHandler> bindIRenameElementHandler() {
-		return org.eclipse.xtext.ui.refactoring.ui.DefaultRenameElementHandler.class;
 	}
 
 	// contributed by org.eclipse.xtext.ui.generator.compare.CompareFragment

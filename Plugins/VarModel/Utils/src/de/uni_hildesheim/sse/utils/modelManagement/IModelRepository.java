@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.List;
 
 import de.uni_hildesheim.sse.utils.messages.IMessage;
+import de.uni_hildesheim.sse.utils.modelManagement.ModelLocations.Location;
 
 /**
  * Defines the interface of a model repository.
@@ -50,4 +51,12 @@ public interface IModelRepository <M extends IModel> {
      */
     public ModelInfo<M> getModelInfo(String name, Version version, URI uri);
 
+    /**
+     * Returns the location for <code>uri</code>.
+     * 
+     * @param uri the URI to search for
+     * @return the related location
+     */
+    public Location getLocationFor(URI uri);
+    
 }

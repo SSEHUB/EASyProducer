@@ -1,0 +1,22 @@
+project referencesFail {
+
+    version v0;
+    
+    compound ProcessingElement {
+    }
+    
+    ProcessingElement elt1 = {
+    	
+    };
+    
+    compound Pipeline {
+    	setOf(refTo(ProcessingElement)) elements;
+    }
+    
+    Pipeline pipeline = Pipeline {
+        elements = {elt1}
+    };
+    
+    pipeline.elements = {refBy(elt1)};
+    
+}

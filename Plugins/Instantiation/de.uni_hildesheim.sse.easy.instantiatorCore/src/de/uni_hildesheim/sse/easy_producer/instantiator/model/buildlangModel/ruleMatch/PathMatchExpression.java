@@ -27,7 +27,7 @@ public class PathMatchExpression extends AbstractPathRuleMatchExpression {
      * @throws ExpressionException in case that the expression is invalid
      */
     public PathMatchExpression(Expression expression) throws ExpressionException {
-        if (TypeRegistry.getType(Path.class) != expression.inferType()) {
+        if (TypeRegistry.DEFAULT.getType(Path.class) != expression.inferType()) {
             throw new ExpressionException("expression does not evaluate to a path", ExpressionException.ID_SEMANTIC);
         }
         this.pathExpression = expression;
@@ -44,7 +44,7 @@ public class PathMatchExpression extends AbstractPathRuleMatchExpression {
     
     @Override
     public TypeDescriptor<? extends IVilType> getEntryType() {
-        return TypeRegistry.getType(IFileSystemArtifact.class);
+        return TypeRegistry.DEFAULT.getType(IFileSystemArtifact.class);
     }
 
 

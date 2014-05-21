@@ -74,6 +74,18 @@ public class PseudoBoolean implements IVilType {
         return b1 == b2;
     }
 
+    /**
+     * Represents the unequality operation for Booleans.
+     * 
+     * @param b1 the first boolean to be considered
+     * @param b2 the second boolean to be considered
+     * @return b1 != b2
+     */
+    @OperationMeta(name = {Constants.UNEQUALITY, Constants.UNEQUALITY_ALIAS }, opType = OperationType.INFIX)
+    public static boolean unequals(boolean b1, boolean b2) {
+        return b1 != b2;
+    }
+
     // TODO complete operations
 
 }

@@ -3,6 +3,7 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallArgument;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IRuntimeEnvironment;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 
 /**
  * A specific resolver for the rule-based build language.
@@ -24,9 +25,11 @@ public class Resolver extends de.uni_hildesheim.sse.easy_producer.instantiator.m
     
     /**
      * Creates a new resolver instance.
+     * 
+     * @param registry a specific (local) registry
      */
-    public Resolver() {
-        super();
+    public Resolver(TypeRegistry registry) {
+        super(registry);
     }
     
     /**

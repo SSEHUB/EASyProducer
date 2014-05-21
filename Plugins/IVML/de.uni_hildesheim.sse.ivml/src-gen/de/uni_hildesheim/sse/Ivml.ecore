@@ -108,7 +108,6 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="qValue" eType="#//QualifiedName"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="bValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="nullValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DerivedType">

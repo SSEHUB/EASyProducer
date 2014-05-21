@@ -43,5 +43,5 @@ public class VariableDeclaration
     public Object accept(IVisitor visitor) throws VilLanguageException {
         return accept((de.uni_hildesheim.sse.easy_producer.instantiator.model.common.IVisitor) visitor);
     }
-    
+        
 }

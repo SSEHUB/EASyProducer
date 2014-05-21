@@ -3,10 +3,10 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Test
 Bundle-SymbolicName: de.uni_hildesheim.sse.easy_producer.core.test
 Bundle-Version: 0.0.1
-Fragment-Host: de.uni_hildesheim.sse.EASy-Producer.persistence;bundle-version="0.6.0"
+Fragment-Host: de.uni_hildesheim.sse.easy_producer.core;bundle-version="0.7.2"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Require-Bundle: org.junit4;bundle-version="4.8.1",
+Bundle-ClassPath: .
+Require-Bundle: org.junit;bundle-version="4.8.1",
  de.uni-hildesheim.sse.easy.instantiator.velocity;bundle-version="1.7.13",
- de.uni-hildesheim.sse.easy.instantiator.velocitylib;bundle-version="1.7.4"
-Bundle-ClassPath: lib/apache-commons-io/commons-io-2.4.jar,
- .
+ de.uni-hildesheim.sse.easy.instantiator.velocitylib;bundle-version="1.7.4",
+ org.apache.commons.io;bundle-version="2.0.1"

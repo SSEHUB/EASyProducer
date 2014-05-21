@@ -409,6 +409,17 @@ public class ExecutionTests extends AbstractTest {
     }
 
     /**
+     * Tests a template with implicit conversion of IVML values.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testIvml3() throws IOException {
+        Configuration cfg = new Configuration(DefaultConfiguration.createDefaultConfiguration());
+        assertEqual("ivml3", "main", cfg);
+    }
+    
+    /**
      * Tests a template with a collection iterator.
      * 
      * @throws IOException should not occur

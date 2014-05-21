@@ -2,6 +2,7 @@ package de.uni_hildesheim.sse.reasoning.drools;
 
 import java.io.File;
 import java.io.IOException;
+
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.model.confModel.AssignmentState;
@@ -48,6 +49,7 @@ public class DroolsValuePropagationTest extends AbstractTest{
     
     //@Test
     public void testNestedEnumsValuePropagation() throws IOException {
+        @SuppressWarnings("unused")
         Configuration config = propagate(DIRPATH + "NestedEnumValuePropagation.ivml");
         
         
@@ -67,6 +69,7 @@ public class DroolsValuePropagationTest extends AbstractTest{
     public void testGoodsExample() throws IOException {
         
         projectCount = 1;
+        @SuppressWarnings("unused")
         Configuration config = propagate(DIRPATH + "GoodsIn_Instances.ivml");
         projectCount = 0;
         

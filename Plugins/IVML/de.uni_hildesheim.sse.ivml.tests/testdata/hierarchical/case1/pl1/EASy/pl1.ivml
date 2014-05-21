@@ -1,0 +1,7 @@
+project pl1 {
+
+    version v0;
+    import pl0;
+    Boolean pl1_bool;
+    pl1_bool = pl0_bool;
+}

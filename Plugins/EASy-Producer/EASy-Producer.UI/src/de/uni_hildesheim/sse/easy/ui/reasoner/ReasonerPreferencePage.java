@@ -45,6 +45,16 @@ public class ReasonerPreferencePage extends PreferencePage implements
     private static final boolean DEBUG = false;
     private static final ReasonerDescriptor[] DEBUG_REASONERS;
     
+    private Table reasoners;
+    private Text license;
+    private Text licenseRestriction;
+    private Text version;
+    private Text url;
+    private Button file;
+    private Button dir;
+    private Button upgrade;
+    private ReasonerFrontend frontend;
+    
     /**
      * A virtual reasoner for debugging.
      */
@@ -67,16 +77,7 @@ public class ReasonerPreferencePage extends PreferencePage implements
         DEBUG_REASONERS = debugReasoners;
     }
     
-    private Table reasoners;
-    private Text license;
-    private Text licenseRestriction;
-    private Text version;
-    private Text url;
-    private Button file;
-    private Button dir;
-    private Button upgrade;
-    private ReasonerFrontend frontend;
-
+    
     /**
      * {@inheritDoc}
      */

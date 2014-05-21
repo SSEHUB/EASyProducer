@@ -1,0 +1,2 @@
+Test files for creating a JAR with a given manifest file.
+Further, it is tested that this Readme file will not included in the JAR.

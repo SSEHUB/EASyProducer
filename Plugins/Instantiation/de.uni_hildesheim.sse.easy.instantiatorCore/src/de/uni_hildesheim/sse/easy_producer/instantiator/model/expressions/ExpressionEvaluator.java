@@ -89,7 +89,7 @@ public class ExpressionEvaluator extends Expression implements IVilType, IString
     
     @Override
     public TypeDescriptor<? extends IVilType> inferType() throws ExpressionException {
-        return TypeRegistry.getType(ExpressionEvaluator.class);
+        return TypeRegistry.DEFAULT.getType(ExpressionEvaluator.class);
     }
 
     @Override

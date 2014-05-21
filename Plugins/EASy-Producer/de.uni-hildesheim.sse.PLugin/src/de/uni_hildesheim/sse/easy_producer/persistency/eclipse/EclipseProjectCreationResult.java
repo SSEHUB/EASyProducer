@@ -4,8 +4,8 @@ import java.io.File;
 
 import org.eclipse.core.resources.IProject;
 
-import de.uni_hildesheim.sse.easy_producer.persistence.datatypes.IProjectCreationResult;
-import de.uni_hildesheim.sse.easy_producer.persistence.standard.ProjectCreationResult;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.IProjectCreationResult;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.standard.ProjectCreationResult;
 
 /**
  * This result will be returned after calling the

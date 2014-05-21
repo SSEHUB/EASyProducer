@@ -8,11 +8,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import junit.framework.Assert;
-
 import org.eclipse.emf.common.util.URI;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Assert;
 
 import de.uni_hildesheim.sse.ModelUtility;
 import de.uni_hildesheim.sse.dslCore.TranslationResult;
@@ -64,7 +63,11 @@ public abstract class AbstractTest extends de.uni_hildesheim.sse.dslCore.test.Ab
      */
     @AfterClass
     public static void shutDown() {
-        VarModel.INSTANCE.locations().removeLocation(TESTDATA_DIR, OBSERVER);
+        try {
+            VarModel.INSTANCE.locations().removeLocation(TESTDATA_DIR, OBSERVER);
+        } catch (ModelManagementException e) {
+            Assert.fail();
+        }
         VarModel.INSTANCE.loaders().unregisterLoader(ModelUtility.INSTANCE, OBSERVER);
     }
 

@@ -91,7 +91,7 @@ class TooltipCreator implements IDatatypeVisitor {
 
     @Override
     public void visitReference(Reference reference) {
-        tooltip.append("Refernce of ");
+        tooltip.append("Reference of ");
         reference.getType().accept(this);
     }
 

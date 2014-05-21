@@ -1,0 +1,10 @@
+vilScript HelloWorldExtended (Project source, Configuration config, Project target) {
+
+    version v0;
+
+    main(Project source, Configuration config, Project target) = : {
+        String className = target.getName();
+        vilTemplateProcessor("ClassTemplate", config, "$target/src/${className}.java");
+    }
+
+}

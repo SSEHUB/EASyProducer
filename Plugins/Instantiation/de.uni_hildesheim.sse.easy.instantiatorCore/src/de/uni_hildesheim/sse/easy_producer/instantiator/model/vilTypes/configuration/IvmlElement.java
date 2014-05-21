@@ -2,7 +2,6 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configur
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IResolvable;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Constants;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Conversion;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IStringValueProvider;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
@@ -196,17 +195,6 @@ public abstract class IvmlElement implements IVilType, IResolvable, IStringValue
         return (i1 == null && i2 == null) || (i1 != null && i1.equals(i2));
     }
     
-    /**
-     * Converts an IVML element into a String by returning its name.
-     * 
-     * @param element the element to be converted
-     * @return the converted element (the simple name)
-     */
-    @Conversion
-    public static String convert(IvmlElement element) {
-        return element.getQualifiedName();
-    }
-
     @Invisible
     @Override
     public String getStringValue(StringComparator comparator) {

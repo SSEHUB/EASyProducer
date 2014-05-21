@@ -1,0 +1,9 @@
+vilScript implicitVars () {
+
+    String path = SCRIPTDIR + "/Test.vtl";
+    Boolean empty = OTHERPROJECTS.isEmpty();
+
+    main() = : {
+    }
+
+}

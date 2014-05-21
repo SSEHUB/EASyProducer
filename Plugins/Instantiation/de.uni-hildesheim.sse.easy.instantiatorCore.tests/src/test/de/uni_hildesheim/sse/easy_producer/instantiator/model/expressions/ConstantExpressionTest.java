@@ -1,7 +1,6 @@
 package test.de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import test.de.uni_hildesheim.sse.easy_producer.instantiator.model.AbstractTest;
@@ -48,23 +47,23 @@ public class ConstantExpressionTest extends AbstractTest {
      */
     private static void testType(String vilTypeName, Object value, String stringValue) {
         try {
-            TypeDescriptor<? extends IVilType> type = TypeRegistry.getType(vilTypeName);
+            TypeDescriptor<? extends IVilType> type = TypeRegistry.DEFAULT.getType(vilTypeName);
             
             // test null
-            ConstantExpression expr = new ConstantExpression(type, null);
+            ConstantExpression expr = new ConstantExpression(type, null, TypeRegistry.DEFAULT);
             Assert.assertNotNull(expr);
             Assert.assertTrue("type must match", type == expr.getType());
             Assert.assertTrue("value must match", null == expr.getValue());
             
             // test direct value
-            expr = new ConstantExpression(type, value);
+            expr = new ConstantExpression(type, value, TypeRegistry.DEFAULT);
             Assert.assertNotNull(expr);
             Assert.assertTrue("type must match", type == expr.getType());
             Assert.assertTrue("value must match", value.equals(expr.getValue()));
             
             // test conversion if specified
             if (null != stringValue) {
-                expr = new ConstantExpression(type, stringValue);                
+                expr = new ConstantExpression(type, stringValue, TypeRegistry.DEFAULT);
                 Assert.assertNotNull(expr);
                 Assert.assertTrue("type must match", type == expr.getType());
                 Assert.assertTrue("value must match", stringValue.equals(expr.getValue().toString()));

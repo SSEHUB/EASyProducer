@@ -5,8 +5,8 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 
-import de.uni_hildesheim.sse.easy_producer.persistence.mgmt.PLPInfo;
-import de.uni_hildesheim.sse.easy_producer.persistence.mgmt.SPLsManager;
+import de.uni_hildesheim.sse.easy_producer.core.mgmt.PLPInfo;
+import de.uni_hildesheim.sse.easy_producer.core.mgmt.SPLsManager;
 
 /**
  * LabelProvider for the {@link PtnSelectionDialog}.

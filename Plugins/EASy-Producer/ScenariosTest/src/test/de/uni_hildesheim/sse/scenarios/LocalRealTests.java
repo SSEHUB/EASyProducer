@@ -3,8 +3,7 @@ package test.de.uni_hildesheim.sse.scenarios;
 import java.io.File;
 import java.io.IOException;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 

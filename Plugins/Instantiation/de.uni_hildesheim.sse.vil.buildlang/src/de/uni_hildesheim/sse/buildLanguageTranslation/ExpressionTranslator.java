@@ -9,6 +9,7 @@ import de.uni_hildesheim.sse.dslCore.translation.ErrorCodes;
 import de.uni_hildesheim.sse.dslCore.translation.TranslatorException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ExpressionStatement;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.IRuleElement;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.InstantiateExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.JoinExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.JoinVariableDeclaration;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.MapExpression;
@@ -23,8 +24,11 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expres
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ValueAssignmentExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
+import de.uni_hildesheim.sse.utils.modelManagement.VersionRestriction;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Call;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
+import de.uni_hildesheim.sse.vil.expressions.translation.ImportTranslator;
 import de.uni_hildesheim.sse.vilBuildLanguage.Join;
 import de.uni_hildesheim.sse.vilBuildLanguage.JoinVariable;
 import de.uni_hildesheim.sse.vilBuildLanguage.PrimaryExpression;
@@ -52,22 +56,86 @@ public class ExpressionTranslator
      */
     public Expression processPrimaryExpression(de.uni_hildesheim.sse.vil.expressions.expressionDsl.PrimaryExpression ex, 
         Resolver resolver) throws TranslatorException {
-        Expression result = super.processPrimaryExpression(ex, resolver);
-        PrimaryExpression pEx = (PrimaryExpression) ex;
-        SystemExecution systemEx = pEx.getSysEx();
-        if (null != systemEx) {
-            result = processCall(null, systemEx.getCall(), CallType.SYSTEM, null, resolver);
-            result = processSubCalls(result, systemEx.getCalls(), resolver);
-        }
-        if (null != pEx.getJoin()) {
-            result = processJoin(pEx.getJoin(), resolver);
-        }
-        if (null != pEx.getMap()) {
-            result = processMap(pEx.getMap(), resolver);
-        }
+    	Expression result = null;
+    	if (ex != null) {
+    		result = super.processPrimaryExpression(ex, resolver);
+    		PrimaryExpression pEx = (PrimaryExpression) ex;
+    		SystemExecution systemEx = pEx.getSysEx();
+    		if (null != systemEx) {
+    			result = processCall(null, systemEx.getCall(), CallType.SYSTEM, null, resolver);
+    			result = processSubCalls(result, systemEx.getCalls(), resolver);
+    		}
+    		if (null != pEx.getJoin()) {
+    			result = processJoin(pEx.getJoin(), resolver);
+    		}
+    		if (null != pEx.getMap()) {
+    			result = processMap(pEx.getMap(), resolver);
+    		}
+    		if (null != pEx.getInstantiate()) {
+    			result = processInstantiate(pEx.getInstantiate(), resolver);
+    		}
+    	}
         return result;
     }
 
+    /**
+     * Processes an instantiate expression. Here, many must be deferred to runtime as the main parameter determining
+     * the rule to be executed can only be determined at runtime.
+     * 
+     * @param inst
+     * @param resolver
+     * @return
+     * @throws TranslatorException
+     */
+    private InstantiateExpression processInstantiate(de.uni_hildesheim.sse.vilBuildLanguage.Instantiate inst, 
+        Resolver resolver) throws TranslatorException {
+        InstantiateExpression result;
+        List<CallArgument> arguments = new ArrayList<CallArgument>();
+        if (null != inst.getParam()) {
+            for (de.uni_hildesheim.sse.vil.expressions.expressionDsl.NamedArgument param : inst.getParam().getParam()) {
+                arguments.add(new CallArgument(param.getName(), processExpression(param.getEx(), resolver)));
+            }
+        }
+        CallArgument[] args = new CallArgument[arguments.size()];
+        arguments.toArray(args);
+        
+        VariableDeclaration var = null;
+        if (null != inst.getProject()) {
+            // check what can be checked... remainder happens at runtime
+            var = resolver.resolve(inst.getProject(), false);
+            if (null != var) {
+                if (!TypeRegistry.projectType().isAssignableFrom(var.getType())) {
+                    throw new TranslatorException(inst.getProject() + " is not of type Project", inst, 
+                         VilBuildLanguagePackage.Literals.INSTANTIATE__PROJECT, ErrorCodes.TYPE_CONSISTENCY);
+                }
+            } else {
+                throw new TranslatorException("cannot resolve " + inst.getProject(), inst, 
+                    VilBuildLanguagePackage.Literals.INSTANTIATE__PROJECT, ExpressionException.ID_CANNOT_RESOLVE);
+            }
+        } else {
+            if (0 == convertString(inst.getRuleName()).length()) {
+                throw new TranslatorException("the rule name must not be empty", inst, 
+                    VilBuildLanguagePackage.Literals.INSTANTIATE__PROJECT, ErrorCodes.UNKNOWN_ELEMENT);
+            }
+        }
+
+        try {
+            if (null != inst.getProject()) {
+                VersionRestriction[] vRestrict = null;
+                if (null != inst.getVersionSpec()) {
+                    warnVersionRestrictions(inst.getVersionSpec());
+                    vRestrict = ImportTranslator.processRestrictions(inst.getProject(), inst.getVersionSpec());
+                }
+                result = new InstantiateExpression(var, vRestrict, convertString(inst.getRule()), args);
+            } else {
+                result = new InstantiateExpression(convertString(inst.getRuleName()), args);
+            }
+        } catch (ExpressionException e) {
+            throw new TranslatorException(e, inst, VilBuildLanguagePackage.Literals.INSTANTIATE__PARAM);
+        }
+        return result;
+    }
+    
     /**
      * Processes a map statement.
      * 
@@ -281,7 +349,7 @@ public class ExpressionTranslator
             if ((null == result || continueResolution(semanticException)) && Resolver.ContextType.RULE_BODY == resolver.getContextType()) {
                 // grammar supports system executions only on top-level
                 try {
-                    result = new StrategyCallExpression(name, arg);
+                    result = new StrategyCallExpression(resolver.getCurrentModel(), name, arg);
                     semanticException = checkSemantics(result);
                 } catch (ExpressionException e) {
                     // wrong expression
@@ -289,7 +357,7 @@ public class ExpressionTranslator
             }
             if (null == result || continueResolution(semanticException)) {
                 try {
-                    result = new CallExpression(name, arg);
+                    result = new CallExpression(null, name, arg);
                     semanticException = checkSemantics(result);
                 } catch (ExpressionException e) {
                     // wrong expression

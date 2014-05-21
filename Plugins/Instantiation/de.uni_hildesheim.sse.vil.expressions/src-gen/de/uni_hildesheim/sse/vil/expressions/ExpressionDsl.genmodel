@@ -5,7 +5,7 @@
     modelPluginID="de.uni_hildesheim.sse.vil.expressions" forceOverwrite="true" modelName="ExpressionDsl"
     updateClasspath="false" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
     complianceLevel="5.0" copyrightFields="false" editPluginID="de.uni_hildesheim.sse.vil.expressions.edit"
-    editorPluginID="de.uni_hildesheim.sse.vil.expressions.editor" runtimeVersion="2.7">
+    editorPluginID="de.uni_hildesheim.sse.vil.expressions.editor" runtimeVersion="2.9">
   <genPackages prefix="ExpressionDsl" basePackage="de.uni_hildesheim.sse.vil.expressions"
       disposableProviderFactory="true" ecorePackage="ExpressionDsl.ecore#/">
     <genClasses ecoreClass="ExpressionDsl.ecore#//LanguageUnit">

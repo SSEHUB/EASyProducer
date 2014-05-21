@@ -1,7 +1,8 @@
 package de.uni_hildesheim.sse.varModel;
 
-import junit.framework.Assert;
 
+
+import org.junit.Assert;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.utils.modelManagement.Version;

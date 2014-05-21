@@ -33,7 +33,7 @@ class OtherProjects implements Set<IArtifact> {
      */
     OtherProjects() {
         parameter = TypeDescriptor.createArray(1);
-        parameter[0] = TypeRegistry.getType(IArtifact.class);
+        parameter[0] = TypeRegistry.artifactType();
     }
     
     @Override

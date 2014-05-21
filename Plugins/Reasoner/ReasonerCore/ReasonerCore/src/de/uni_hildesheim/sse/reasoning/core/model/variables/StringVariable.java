@@ -27,7 +27,7 @@ public class StringVariable extends ReasonerVariable {
         
         // value and configVariable.getValue() can share the same instance, since strings are immutable.
         value = null;
-        if (null != configVariable.getValue()) {
+        if (configVariable.getValue() != null) {
             value = (String) configVariable.getValue().getValue();
         }
     }

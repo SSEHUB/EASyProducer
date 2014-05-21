@@ -1,17 +1,16 @@
 package test.de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactmodel;
 
+import static de.uni_hildesheim.sse.varModel.testSupport.TextTestUtils.*;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.LineNumberReader;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
-
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -79,6 +78,8 @@ public class XmlFileArtifactTest extends AbstractTest {
     private static String newIndentDir = "";
     private static String newXsdDir = "";
     private static String newMenubarDir = "";
+
+    private static boolean used = false;
     
     /**
      * Load Test-files, check whether rootelements are existing
@@ -136,19 +137,6 @@ public class XmlFileArtifactTest extends AbstractTest {
         //initiate copying
         createCopies(workingDir, mapperDir, springDir, indentDir, xsdDir);
         createMoreCopies(menubarDir);
-    }
-
-    /**
-     * Test in order to check whether one integer holds the same
-     * value as another integer.
-     * 
-     * @param origInt First integer which should be compared to the second one.
-     * @param copyInt Second integer which should be compared to the first one.
-     * @return true - integers hold the same values.
-     *         false - integers hold NOT the dame values.
-     */
-    public static boolean compareTo(int origInt, int copyInt) {
-        return (origInt == copyInt);
     }
     
     /**
@@ -245,7 +233,10 @@ public class XmlFileArtifactTest extends AbstractTest {
         File xsdFileCopy = new File(newXsdDir);
         
         createArtifacts(fileCopy, mapperFileCopy, springFileCopy, indentFileCopy, xsdFileCopy);
-        createMoreCopies(menubarDir);
+        if (!used) {
+            createMoreCopies(menubarDir);
+            used = true;
+        }
     }
     
     /**
@@ -257,6 +248,7 @@ public class XmlFileArtifactTest extends AbstractTest {
         //Erase ".xml" and append "copy.xml"
         newMenubarDir = menubarDir.substring(0, menubarDir.length() - 4) + "Copy.xml";
         
+        deletemoreTestFiles(newMenubarDir);
         File menuFileCopy = new File(newMenubarDir);
         
         createMoreArtifacts(menuFileCopy);
@@ -274,21 +266,23 @@ public class XmlFileArtifactTest extends AbstractTest {
     public static void createArtifacts(File fileCopy, File mapperFileCopy, File springFileCopy,
         File indentFileCopy, File xsdFileCopy) {
         
+        copyArtifacts(fileCopy, mapperFileCopy, springFileCopy, indentFileCopy, xsdFileCopy);
+        
         try {
             artifactCopy = (XmlFileArtifact) creator.createArtifactInstance(
-                new File(workingDir), null);
+                fileCopy, null);
             artifactSpringFragmentCopy = (XmlFileArtifact) creator.createArtifactInstance(
-                new File(springDir), null);
+                springFileCopy, null);
             artifactMapperFragmentCopy = (XmlFileArtifact) creator.createArtifactInstance(
-                    new File(mapperDir), null);
+                    mapperFileCopy, null);
             artifactCopyForIndentation = (XmlFileArtifact) creator.createArtifactInstance(
-                new File(indentDir), null);
+                indentFileCopy, null);
             artifactXsdFragmentCopy = (XmlFileArtifact) creator.createArtifactInstance(
-                new File(xsdDir), null);
+                xsdFileCopy, null);
         } catch (ArtifactException e) {
             Assert.fail(e.getMessage());
         }
-        copyArtifacts(fileCopy, mapperFileCopy, springFileCopy, indentFileCopy, xsdFileCopy);
+
     }
     
     /**
@@ -297,13 +291,14 @@ public class XmlFileArtifactTest extends AbstractTest {
      * @param menuFileCopy sixth file to copy.
      */
     public static void createMoreArtifacts(File menuFileCopy) {
+        copyMoreArtifacts(menuFileCopy);
         try {
             artifactMenubarCopy = (XmlFileArtifact) creator.createArtifactInstance(
-                new File(menubarDir), null);
+                menuFileCopy, null);
         } catch (ArtifactException e) {
             Assert.fail(e.getMessage());
         }
-        copyMoreArtifacts(menuFileCopy);
+        
     }
     
     /**
@@ -660,7 +655,7 @@ public class XmlFileArtifactTest extends AbstractTest {
         }
     
         //Check whether four elements are deleted or just the first ones
-        Assert.assertTrue(compareTo(elementCount, newElementCount + 4));
+        Assert.assertTrue(elementCount == (newElementCount + 4));
     }
     
 
@@ -672,10 +667,8 @@ public class XmlFileArtifactTest extends AbstractTest {
     @Test
     public void testDTD() throws ArtifactException {
     
-        //The two files should have the same amount of lines
-        int menubarLines = 0;
-        int newMenubarLines = 0;
-    
+        switchToOriginal();
+        
         File originalMenubarFile = new File(menubarDir);
 
         try {
@@ -687,47 +680,13 @@ public class XmlFileArtifactTest extends AbstractTest {
         
         File menubarFileAfter = new File(newMenubarDir);
             
-        //Now check whether the artifacts share the same content by counting the lines.
+        //Now check whether the artifacts share the same content
         
         try {
-            menubarLines = countLines(originalMenubarFile);
-            newMenubarLines = countLines(menubarFileAfter);
-
+            assertFileEquality(menubarFileAfter, originalMenubarFile);
         } catch (IOException e) {
-            Assert.fail(e.getMessage());
+            Assert.fail("unexpected exception: " + e.getMessage());
         }
-        
-        //This assert-statement checks whether the two xml-files share the same amount of lines.
-        Assert.assertTrue(compareTo(menubarLines, newMenubarLines));
-    }
-    
-    /**
-     * Get the files amount of lines.
-     * 
-     * @param aFile Name of the file.
-     * @return lines the number of lines.
-     * @throws IOException Exception.
-     */
-    private static int countLines(File aFile) throws IOException {
-        LineNumberReader reader = null;
-        int sol = 0;
-        
-        try {
-            reader = new LineNumberReader(new FileReader(aFile));
-            
-            while ((reader.readLine()) != null) {
-                sol = reader.getLineNumber();
-            }
-            
-        } catch (IOException e) {
-            sol = -1;
-        } finally { 
-            if (reader != null) {
-                reader.close(); 
-                
-            }
-        }
-        return sol;
     }
     
     /**
@@ -987,7 +946,7 @@ public class XmlFileArtifactTest extends AbstractTest {
             
             int newElemSize = artifactCopy.getRootElement().elements().size();
             
-            Assert.assertTrue(compareTo(elemSize - 2, newElemSize));
+            Assert.assertTrue((elemSize - 2) == newElemSize);
             
         } catch (ArtifactException e) {
             Assert.fail(e.getMessage());
@@ -1043,7 +1002,7 @@ public class XmlFileArtifactTest extends AbstractTest {
                 XmlAttribute.create(artifactCopy.selectByPath("project").iterator().next(), "test", "test");
                 
                 newAttSize = artifactCopy.getRootElement().attributes().size();
-                Assert.assertTrue(compareTo(newAttSize, size + 1));
+                Assert.assertTrue(newAttSize == (size + 1));
             } catch (NoSuchElementException e) {
                 Assert.fail(e.getMessage());
             }
@@ -1070,7 +1029,7 @@ public class XmlFileArtifactTest extends AbstractTest {
                     XmlAttribute.create(artifactCopy.selectByPath("project").iterator().next(), "test3", "test3");
                  
                     newAttSize = artifactCopy.getRootElement().attributes().size();
-                    Assert.assertTrue(compareTo(newAttSize, size + 3));
+                    Assert.assertTrue(newAttSize == (size + 3));
                 
                     switchToOriginal();
                     size = artifactCopy.getRootElement().attributes().size();
@@ -1081,12 +1040,12 @@ public class XmlFileArtifactTest extends AbstractTest {
                 
                     newAttSize = artifactCopy.getRootElement().attributes().size();
 
-                    Assert.assertTrue(compareTo(newAttSize, size + 3));
+                    Assert.assertTrue(newAttSize == (size + 3));
                  
                     artifactCopy.getRootElement().attributes().iterator().next().delete();               
                     newAttSize = artifactCopy.getRootElement().attributes().size();
                     
-                    Assert.assertTrue(compareTo(newAttSize, size + 3)); 
+                    Assert.assertTrue(newAttSize == (size + 3)); 
                     Assert.assertFalse(compareXmlFilesManually(artifact, artifactCopy));                   
                 } catch (NoSuchElementException e) {
                     Assert.fail(e.getMessage());
@@ -1164,7 +1123,11 @@ public class XmlFileArtifactTest extends AbstractTest {
     public static void switchToOriginal() {
         tearDownTestFiles();
         createCopies(workingDir, mapperDir, springDir, indentDir, xsdDir);
-        createMoreCopies(menubarDir);
+        
+        if (!used) {
+            createMoreCopies(menubarDir);
+            used = true;
+        }
     }
     
     /**
@@ -1192,7 +1155,7 @@ public class XmlFileArtifactTest extends AbstractTest {
      * @param dir1 Directory of the sixth file - menubar.xml
      */
     public static void deletemoreTestFiles(String dir1) {
-        deleteFile(new File(dir1));
+        //deleteFile(new File(dir1));
     }
     
     /**

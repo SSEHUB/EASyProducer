@@ -1,5 +1,7 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Conversion;
+
 /**
  * Represents an IVML enum value.
  * 
@@ -109,6 +111,17 @@ public class EnumValue extends IvmlElement {
     @Override
     protected void initializeNested() {
         // has no attributes
+    }
+    
+    /**
+     * Converts an Enum value to a String by returning its (qualified) name.
+     * 
+     * @param value the value to be converted
+     * @return the qualified name
+     */
+    @Conversion
+    public static String convert(EnumValue value) {
+        return value.getQualifiedName();
     }
     
 }

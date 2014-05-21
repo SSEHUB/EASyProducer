@@ -12,6 +12,7 @@ import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.reasoning.core.frontend.ReasonerFrontend;
 import de.uni_hildesheim.sse.reasoning.core.model.ReasonerModel;
 import de.uni_hildesheim.sse.reasoning.core.model.ReasoningOperation;
+import de.uni_hildesheim.sse.reasoning.core.model.Statistic;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.EvaluationResult;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.IReasoner;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.IReasonerMessage;
@@ -54,21 +55,17 @@ public class DroolsReasoner implements IReasoner {
 
     @Override
     public ReasoningResult check(Project project, Configuration cfg, ReasonerConfiguration reasonerConfig,
-        ProgressObserver observer) {
-        
+        ProgressObserver observer) { 
         ReasonerModel model = new ReasonerModel(cfg, reasonerConfig);
-        DroolsEngine engine = new DroolsEngine(model, ReasoningOperation.VALIDATION, observer);
-           
+        DroolsEngine engine = new DroolsEngine(model, ReasoningOperation.PROPAGATION, observer);           
         return engine.reason();
     }
 
     @Override
     public ReasoningResult propagate(Project project, Configuration cfg, ReasonerConfiguration reasonerConfig,
-        ProgressObserver observer) {
-        
+        ProgressObserver observer) {        
         ReasonerModel model = new ReasonerModel(cfg, reasonerConfig);
         DroolsEngine engine = new DroolsEngine(model, ReasoningOperation.PROPAGATION, observer);
-           
         return engine.reason();
     }
 

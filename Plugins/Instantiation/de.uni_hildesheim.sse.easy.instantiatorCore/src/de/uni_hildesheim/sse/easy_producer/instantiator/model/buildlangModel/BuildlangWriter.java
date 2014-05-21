@@ -10,6 +10,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.rul
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.WriterVisitor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Template;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Constants;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
 
@@ -28,6 +29,17 @@ public class BuildlangWriter extends WriterVisitor<VariableDeclaration> implemen
      */
     public BuildlangWriter(Writer out) {
         super(out);
+    }
+    
+    /**
+     * Prints a string in quotes.
+     * 
+     * @param string the string to be printed
+     */
+    private void printString(String string) {
+        print("\"");
+        print(string);
+        print("\"");
     }
                 
     @Override
@@ -57,6 +69,7 @@ public class BuildlangWriter extends WriterVisitor<VariableDeclaration> implemen
     @Override
     public Object visitScript(Script script) throws VilLanguageException {
         printImports(script);
+        printVtlRestrictions(script);
         for (int a = 0; a < script.getAdviceCount(); a++) {
             script.getAdvice(a).accept(this);
         }
@@ -138,12 +151,32 @@ public class BuildlangWriter extends WriterVisitor<VariableDeclaration> implemen
         }
     }
     
+    /**
+     * Prints the VTL restrictions.
+     * 
+     * @param script the script the versions shall be printed for
+     * @throws VilLanguageException in case of problems while printing the version restrictions
+     */
+    private void printVtlRestrictions(Script script) throws VilLanguageException {
+        if (script.getVtlRestrictionsCount() > 0) {
+            for (int i = 0; i < script.getVtlRestrictionsCount(); i++) {
+                ModelImport<Template> imp = script.getVtlRestriction(i);
+                printIndentation();
+                print("requireVTL ");
+                printString(imp.getName());
+                printVersionRestrictions(imp);
+                println(";");
+            }
+            println();
+        }
+    }
+    
     @Override
     public Object visitLoadProperties(LoadProperties properties) throws VilLanguageException {
         printIndentation();
-        print("load properties \"");
-        print(properties.getPath());
-        println("\";");
+        print("load properties ");
+        printString(properties.getPath());
+        println(";");
         return null;
     }
     
@@ -241,9 +274,7 @@ public class BuildlangWriter extends WriterVisitor<VariableDeclaration> implemen
 
     @Override
     public Object visitStringMatchExpression(StringMatchExpression expression) throws ExpressionException {
-        print("\"");
-        print(expression.getText());
-        print("\"");
+        printString(expression.getText());
         return null;
     }
     
@@ -313,6 +344,28 @@ public class BuildlangWriter extends WriterVisitor<VariableDeclaration> implemen
         print(") ");
         try {
             printBlock(map);
+        } catch (VilLanguageException e) {
+            throw new ExpressionException(e);
+        }
+        return null;
+    }
+
+    @Override
+    public Object visitInstantiateExpression(InstantiateExpression inst) throws ExpressionException {
+        print("instantiate ");
+        if (null != inst.getProject()) {
+            print(inst.getProject().getName());
+            if (null != inst.getName()) {
+                print(" rule ");
+                printString(inst.getName());
+            }
+        } else {
+            printString(inst.getQualifiedName());
+        }
+        print(" ");
+        printArgumentList(inst, 0);
+        try {
+            printVersionRestrictions(inst);
         } catch (VilLanguageException e) {
             throw new ExpressionException(e);
         }

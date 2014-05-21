@@ -1,8 +1,4 @@
 /**
- * <copyright>
- * </copyright>
- *
-
  */
 package de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl;
 
@@ -34,7 +30,7 @@ public class ExpressionDslFactoryImpl extends EFactoryImpl implements Expression
   {
     try
     {
-      ExpressionDslFactory theExpressionDslFactory = (ExpressionDslFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.uni_hildesheim.de/sse/vil/expressions/ExpressionDsl"); 
+      ExpressionDslFactory theExpressionDslFactory = (ExpressionDslFactory)EPackage.Registry.INSTANCE.getEFactory(ExpressionDslPackage.eNS_URI);
       if (theExpressionDslFactory != null)
       {
         return theExpressionDslFactory;

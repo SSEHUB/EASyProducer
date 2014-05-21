@@ -6,7 +6,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
 import de.uni_hildesheim.sse.persistency.StringProvider;
+import de.uni_hildesheim.sse.reasoning.core.model.ConstraintPatternFactory;
 import de.uni_hildesheim.sse.reasoning.core.model.ReasonerModel;
 import de.uni_hildesheim.sse.reasoning.core.model.ReasoningOperation;
 import de.uni_hildesheim.sse.reasoning.core.model.datatypes.CompoundType;
@@ -86,13 +88,16 @@ public class ModelTranslator extends AbstractModelTranslator {
         appendComment("--Normal constraint translation--");
         append(LINEBREAK);
         for (int i = 0; i < getModel().getConstraintCount(); i++) {
-            if (!StringProvider.toIvmlString(getModel().getConstraint(i)).contains("{")) {
-                ConstraintTranslator translator = new ConstraintTranslator(getModel().getConstraint(i), i,
-                    model, writer, reasoningID);
-                translator.setReasoningOperation(operation);
-                translator.translate();
-                append(LINEBREAK);
-                append(LINEBREAK);
+            ConstraintSyntaxTree cst = getModel().getConstraint(i);
+            if (!ConstraintPatternFactory.isDefaultAssignmentConstraint(cst)) {                
+                if (!StringProvider.toIvmlString(cst).contains("{")) {
+                    //System.out.println(ConstraintPatternFactory.isDefaultAssignmentConstraint(cst));
+                    ConstraintTranslator translator = new ConstraintTranslator(cst, i, model, writer, reasoningID);
+                    translator.setReasoningOperation(operation);
+                    translator.translate();
+                    append(LINEBREAK);
+                    append(LINEBREAK);
+                }
             }
         }
         
@@ -102,13 +107,13 @@ public class ModelTranslator extends AbstractModelTranslator {
         List<CompoundType> constrainedCompounds = getModel().getConstrainedCompounds();
         for (int i = 0; i < constrainedCompounds.size(); i++) {
             for (int j = 0; j < constrainedCompounds.get(i).getConstraintCount(); j++) { 
+                ConstraintSyntaxTree cst = constrainedCompounds.get(i).getConstrain(j);                                
                 CompoundConstraintTranslator translator 
-                    = new CompoundConstraintTranslator(constrainedCompounds.get(i).getConstrain(j), j,
-                        getModel(), getWriter(), getReasoningID());
+                    = new CompoundConstraintTranslator(cst, j, getModel(), getWriter(), getReasoningID());
                 translator.setReasoningOperation(operation);
                 translator.setCompoundType(constrainedCompounds.get(i));
                 translator.isCompoundConstraint(false);
-                translator.translate();
+                translator.translate();                
             }
         }
         

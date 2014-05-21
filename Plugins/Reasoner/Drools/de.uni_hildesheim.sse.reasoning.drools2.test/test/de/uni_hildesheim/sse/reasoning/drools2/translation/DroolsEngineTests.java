@@ -7,8 +7,8 @@ import java.io.IOException;
 import org.eclipse.emf.common.util.URI;
 import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.Test;
 import org.junit.Ignore;
+import org.junit.Test;
 
 import de.uni_hildesheim.sse.ModelUtility;
 import de.uni_hildesheim.sse.dslCore.StandaloneInitializer;
@@ -25,6 +25,7 @@ import de.uni_hildesheim.sse.reasoning.drools2.DroolsEngine;
 import de.uni_hildesheim.sse.reasoning.drools2.DroolsReasonerDescriptor;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
+import de.uni_hildesheim.sse.utils.messages.Status;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
 import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
 
@@ -130,7 +131,7 @@ public class DroolsEngineTests extends AbstractTest<Project> {
         
         // Test whether reasoning detected correct result  
         int failedConstraints = 0;
-        if (result.getMessageCount() > 0) {
+        if (result.getMessageCount() > 0 && result.getMessage(0).getStatus() == Status.ERROR) {            
             de.uni_hildesheim.sse.reasoning.core.reasoner.Message cause = result.getMessage(0);
             failedConstraints = Math.max(cause.getConflicts().size(), result.getMessageCount());
         }

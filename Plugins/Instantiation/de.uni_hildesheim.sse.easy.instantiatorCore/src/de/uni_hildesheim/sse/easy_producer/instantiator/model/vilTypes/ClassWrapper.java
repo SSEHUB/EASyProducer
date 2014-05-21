@@ -14,14 +14,17 @@ public class ClassWrapper implements IMetaType {
 
     private Class<?> cls;
     private OperationDescriptor[] operations;
+    private TypeRegistry registry;
     
     /**
      * Creates a new class wrapper for the given class.
      * 
      * @param cls the class to be wrapped
+     * @param registry the registry this wrapper is registered with
      */
-    public ClassWrapper(Class<?> cls) {
+    public ClassWrapper(Class<?> cls, TypeRegistry registry) {
         this.cls = cls;
+        this.registry = registry;
         Method[] methods = cls.getDeclaredMethods();
         if (null != methods) {
             List<OperationDescriptor> tmp = new ArrayList<OperationDescriptor>();
@@ -31,7 +34,7 @@ public class ClassWrapper implements IMetaType {
                 if (Modifier.isPublic(modifier) && Modifier.isStatic(modifier) 
                     && !Modifier.isAbstract(modifier)) {
                     // null as type is dangerous
-                    tmp.add(new OperationDescriptor(null, methods[m]));
+                    tmp.add(new ReflectionOperationDescriptor(null, methods[m]));
                 }
             }
             operations = new OperationDescriptor[tmp.size()];
@@ -42,6 +45,11 @@ public class ClassWrapper implements IMetaType {
     @Override
     public String getName() {
         return cls.getSimpleName();
+    }
+    
+    @Override
+    public String getQualifiedName() {
+        return getName(); // TODO preliminary, needs introduction of qualified names in grammar
     }
 
     @Override
@@ -62,6 +70,16 @@ public class ClassWrapper implements IMetaType {
     @Override
     public IMetaOperation findConversion(IMetaType sourceType, IMetaType targetType) {
         return null;
+    }
+
+    @Override
+    public boolean isBasicType() {
+        return TypeHelper.isBasicType(cls);
+    }
+    
+    @Override
+    public TypeRegistry getTypeRegistry() {
+        return registry;
     }
 
 }

@@ -5,6 +5,8 @@ import java.io.IOException;
 
 import org.junit.Test;
 
+import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
+
 /**
  * A test class for blackbox testing parser and type resolution of 
  * IVML files contributed from "external" sources. 
@@ -47,6 +49,28 @@ public class ExternalTests extends AbstractTest {
     @Test
     public void scaleLogGoodsIn() throws IOException {
         assertEqual(createFile("GoodsIn_Instances"), null, null);
+    }
+
+    /**
+     * Topology test case. Use of ref and refBy in compounds and sequences.
+     * Simplified version contributed by QualiMaster.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testReferences() throws IOException {
+        assertEqual(createFile("references"), null, null);
+    }
+
+    /**
+     * Failing Topology test case as variable is not dereferenced (omitting refBy).
+     * Simplified version contributed by QualiMaster.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testReferencesFail() throws IOException {
+        assertEqual(createFile("referencesFail"), null, null, CSTSemanticException.TYPE_MISMATCH);
     }
 
 }

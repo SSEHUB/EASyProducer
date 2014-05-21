@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: de.uni-hildesheim.sse.easy.help
 Bundle-SymbolicName: de.uni-hildesheim.sse.easy.help;singleton:=true
-Bundle-Version: 0.7.0
+Bundle-Version: 0.8.0
 Bundle-Activator: de.uni_hildesheim.sse.easy.help.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime

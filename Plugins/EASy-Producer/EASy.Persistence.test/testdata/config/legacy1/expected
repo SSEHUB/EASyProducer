@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <path kind="IVML" value="EASy2/" />
+    <path kind="VIL" value="src/main/easy/" />
+    <path kind="VTL" value="src/main/easy/" />
+</configuration>

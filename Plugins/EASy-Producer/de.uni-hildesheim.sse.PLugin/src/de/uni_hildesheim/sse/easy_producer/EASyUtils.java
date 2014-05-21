@@ -22,15 +22,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 
 import de.uni_hildesheim.sse.easy_producer.contributions.Contributions;
+import de.uni_hildesheim.sse.easy_producer.core.mgmt.PLPInfo;
+import de.uni_hildesheim.sse.easy_producer.core.mgmt.SPLsManager;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.Configuration;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Rule;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
-import de.uni_hildesheim.sse.easy_producer.persistence.PersistenceException;
-import de.uni_hildesheim.sse.easy_producer.persistence.mgmt.PLPInfo;
-import de.uni_hildesheim.sse.easy_producer.persistence.mgmt.SPLsManager;
 import de.uni_hildesheim.sse.easy_producer.persistency.EASyPersistencer;
 import de.uni_hildesheim.sse.easy_producer.persistency.ResourcesMgmt;
 import de.uni_hildesheim.sse.easy_producer.persistency.eclipse.PersistenceUtils;
@@ -86,12 +88,13 @@ public class EASyUtils {
      * 
      * @param project the project to determine the configuration path for
      */
-    public static void determineConfigurationPath(IProject project) {
-        String easyPath = Contributions.determineEasyConfigPath(project);
-        if (null != easyPath) {
+    public static void determineConfigurationPaths(IProject project) {
+        Configuration config = PersistenceUtils.getConfiguration(project);
+        if (Contributions.determineConfigurationPaths(project, config)) {
+            config.store();
             try {
-                PersistenceUtils.storeConfigLocation(project, easyPath);
-            } catch (IOException ioe) {
+                project.refreshLocal(IProject.DEPTH_ONE, null);
+            } catch (CoreException e) {
             }
         }
     }
@@ -116,7 +119,7 @@ public class EASyUtils {
             }
             // support case where project is not fully loaded (add-easy-nature)
             hasBuildScript |= predecessor.hasDefaultMainBuildScript();
-            addImport(plp, predecessor.getProjectName(), predecessor.getVersion(), hasBuildScript);
+            addImport(plp, predecessor, hasBuildScript);
         }
         Script script = plp.getBuildScript();
         if (null != script) {
@@ -142,65 +145,56 @@ public class EASyUtils {
             }
         }
     }
-        
+    
     /**
-     * Adds an import to the project <code>projectName</code> with version <code>version</code>.
+     * Adds an import to the {@link de.uni_hildesheim.sse.model.varModel.Project} and to the {@link Script} of a given
+     * {@link PLPInfo} to the {@link de.uni_hildesheim.sse.model.varModel.Project} and {@link Script} of a predecessor
+     * project.
      * 
      * @param plp the product line project to add the import to
-     * @param projectName the name of the project
-     * @param version the version of the import (may be <b>null</b>)
+     * @param predecessor A predecessor project of plp, where the {@link de.uni_hildesheim.sse.model.varModel.Project}
+     *     <b>and</b> the {@link Script} should be included.
      * @param considerVIL <tt>true</tt> if the parent project has also a build script which should be considered,
      *     <tt>false</tt> otherwise
      */
-    public static final void addImport(PLPInfo plp, String projectName, String version,
-        boolean considerVIL) {
+    public static final void addImport(PLPInfo plp, PLPInfo predecessor, boolean considerVIL) {
+        String projectName = predecessor.getProjectName();
+        boolean hasProjectVersion = null != predecessor.getProject() && null != predecessor.getProject().getVersion();
+        boolean hasScriptVersion = null != predecessor.getBuildScript()
+            && null != predecessor.getBuildScript().getVersion();
         
-        Version ver;
-        if (null == version) {
-            ver = null;
-        } else {
-            try {
-                ver = new Version(version);
-            } catch (VersionFormatException e) {
-                ver = null;
-            }
-        }
-        addImport(plp, projectName, ver, considerVIL);
-    }
-
-    /**
-     * Adds an import to the project <code>projectName</code> with version <code>version</code>.
-     * 
-     * @param plp the product line project to add the import to
-     * @param projectName the name of the project
-     * @param version the version of the import (may be <b>null</b>)
-     * @param considerVIL <tt>true</tt> if the parent project has also a build script which should be considered,
-     *     <tt>false</tt> otherwise
-     */
-    public static final void addImport(PLPInfo plp, String projectName, Version version,
-        boolean considerVIL) {
         
         // Variability Model
         ProjectImport parentImport = new ProjectImport(projectName, null);
-        VersionRestriction[] vr = {new VersionRestriction(projectName, Operator.EQUALS, version)};
-        parentImport.setRestrictions(vr);
+        
+        if (hasProjectVersion) {
+            Version clonedVersion = null;
+            try {
+                clonedVersion = new Version(predecessor.getProject().getVersion().getVersion());
+            } catch (VersionFormatException e) {
+                // Can not happen, since a valid version was used
+                LOGGER.exception(e);
+            }
+            VersionRestriction[] vr = {new VersionRestriction(projectName, Operator.EQUALS, clonedVersion)};
+            parentImport.setRestrictions(vr);
+        }
         plp.getProject().addImport(parentImport);
         
         // Build Script
         if (considerVIL) {
             ModelImport<Script> scriptImport = new ModelImport<Script>(projectName);
-            //Currently not working
-            Version scriptVersion = null;
-            if (null != version) {
+            
+            if (hasScriptVersion) {
+                Version clonedVersion = null;
                 try {
-                    scriptVersion = new Version(version.getVersion());
+                    clonedVersion = new Version(predecessor.getBuildScript().getVersion().getVersion());
                 } catch (VersionFormatException e) {
                     // Can not happen, since a valid version was used
                     LOGGER.exception(e);
                 }
+                VersionRestriction[] vrScript = {new VersionRestriction(projectName, Operator.EQUALS, clonedVersion)};
+                scriptImport.setRestrictions(vrScript);
             }
-            VersionRestriction[] vrScript = {new VersionRestriction(projectName, Operator.EQUALS, scriptVersion)};
-            scriptImport.setRestrictions(vrScript);
             plp.getBuildScript().addImport(scriptImport);
         }
     }

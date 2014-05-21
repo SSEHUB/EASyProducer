@@ -16,6 +16,7 @@
 		<!-- Var Model -->
 		<pathelement path="${libs.utils}"/>
         <pathelement path="${libs.model}"/>
+        <pathelement path="${libs.model.tests}"/>
         <!-- DSL core common classes -->
         <pathelement path="${libs.dslCore}"/>        
 		<pathelement path="${libs.ivml}"/>

@@ -29,6 +29,12 @@ public class ModelQuery {
 
     // TODO further ambiguity checks
 
+    public static final String MQ_SHORT_SET = "s";
+    public static final String MQ_SHORT_SEQUENCE = "q";
+    public static final String MQ_SHORT_REFERENCE = "r";
+    
+    private static final QualifiedNameMode TYPE_SEARCH_MODE = QualifiedNameMode.UNQUALIFIED;
+    
     private static final List<MqDatatypeVisitor> VIS_INSTANCES = new ArrayList<MqDatatypeVisitor>();
 
     /**
@@ -42,8 +48,39 @@ public class ModelQuery {
          * Constructs a visitor.
          */
         public MqDatatypeVisitor() {
-            super("s", "q", "r");
+            super(MQ_SHORT_SET, MQ_SHORT_SEQUENCE, MQ_SHORT_REFERENCE);
         }
+    }
+    
+    /**
+     * Returns a pooled datatype visitor instance.
+     * 
+     * @param mode the name mode
+     * @return the visitor instance
+     * 
+     * @see #releaseDatatypeVisitor
+     */
+    private static final synchronized MqDatatypeVisitor getDatatypeVisitorInstance(QualifiedNameMode mode) {
+        MqDatatypeVisitor vis;
+        if (!VIS_INSTANCES.isEmpty()) {
+            vis = VIS_INSTANCES.remove(VIS_INSTANCES.size() - 1);
+        } else {
+            vis = new MqDatatypeVisitor();
+        }
+        if (null != mode) {
+            vis.setQualifiedNameMode(mode);
+        }
+        return vis;
+    }
+    
+    /**
+     * Releases a datatype visitor instance.
+     * 
+     * @param vis the instance to be released
+     */
+    private static final synchronized void releaseDatatypeVisitor(MqDatatypeVisitor vis) {
+        vis.clear();
+        VIS_INSTANCES.add(vis);
     }
 
     /**
@@ -53,18 +90,25 @@ public class ModelQuery {
      * @param mode the name mode
      * @return the textual representation
      */
-    private static final synchronized String getType(ContainableModelElement element, QualifiedNameMode mode) {
-        MqDatatypeVisitor vis;
-        if (!VIS_INSTANCES.isEmpty()) {
-            vis = VIS_INSTANCES.remove(VIS_INSTANCES.size() - 1);
-        } else {
-            vis = new MqDatatypeVisitor();
-        }
-        vis.setQualifiedNameMode(mode);
+    private static final String getType(ContainableModelElement element, QualifiedNameMode mode) {
+        MqDatatypeVisitor vis = getDatatypeVisitorInstance(mode);
         element.accept(vis);
         String result = vis.getResult();
-        vis.clear();
-        VIS_INSTANCES.add(vis);
+        releaseDatatypeVisitor(vis);
+        return result;
+    }
+
+    /**
+     * Returns the name to be used for searching for a reference with contained type <code>type</code>.
+     * 
+     * @param type the contained type
+     * @return the search name
+     */
+    public static final String getReferenceTypeSearchName(IDatatype type) {
+        MqDatatypeVisitor vis = getDatatypeVisitorInstance(TYPE_SEARCH_MODE);
+        vis.constructReferenceName(type);
+        String result = vis.getResult();
+        releaseDatatypeVisitor(vis);
         return result;
     }
 
@@ -183,7 +227,7 @@ public class ModelQuery {
         for (int c = 0; c < elements.getElementCount(); c++) {
             ContainableModelElement element = elements.getElement(c);
             if (type.isAssignableFrom(element.getClass())) {
-                String elName = getType(element, QualifiedNameMode.UNQUALIFIED);
+                String elName = getType(element, TYPE_SEARCH_MODE);
                 if (elName.equals(typeName)) {
                     result = (IDatatype) element;
                     break;
@@ -241,60 +285,6 @@ public class ModelQuery {
         }
         return result;
     }
-    
-    /*
-    // look into all namespace parts from left to right and 
-    // successively determine the scope. namespaceStart contains
-    // the part we are looking into, namespaceTail the remainder
-    // to be resolved
-    String namespaceStart;
-    String namespaceTail = namespace;
-    IResolutionScope curScope = scope;
-    IResolutionScope imported = null;
-    do {
-        pos = namespaceTail.indexOf(IvmlKeyWords.NAMESPACE_SEPARATOR);
-        if (pos > 0) {
-            // this looks like namespaceStart::tail - split them
-            namespaceStart = namespaceTail.substring(0, pos);
-            namespaceTail = namespaceTail.substring(pos + IvmlKeyWords.NAMESPACE_SEPARATOR.length());
-        } else {
-            // this is just a name - end of loop
-            namespaceStart = namespace;
-            namespaceTail = null;
-        }
-        // search within scope, check name of scope, search imports
-        IResolutionScope tmp = (IResolutionScope) findElementByName(
-            curScope, namespaceStart, IResolutionScope.class);
-        if (null == tmp) {
-            if (namespaceStart.equals(curScope.getName())) {
-                tmp = curScope;
-            } else {
-                for (int i = 0; null == tmp && i < curScope.getImportsCount(); i++) {
-                    ProjectImport imp = curScope.getImport(i);
-                    if (!imp.isConflict() && namespaceStart.equals(imp.getProjectName())) {
-                        IResolutionScope impScope = imp.getScope();
-                        if (null != impScope) {
-                            
-                        }
-                        if (null == imp.getInterfaceName() || imp.get)
-                        imported = imp.getResolved(); // this may be null!
-                        tmp = imported;
-                    }
-                }
-            }
-        } 
-        curScope = tmp;
-    } while (null != curScope && (null != namespaceTail && namespaceTail.length() > 0));
-    if (null != curScope) {
-        if (null != imported) {
-            boolean isCurScopeInterface = (curScope instanceof ProjectInterface);
-            if (imported.hasInterfaces() && !isCurScopeInterface) {
-                // the inverse case cannot happen (or hasInterfaces is broken)
-                curScope = null;
-            }
-        }
-        result = curScope;
-    }*/
 
     /**
      * Returns the current scope due to imports.
@@ -316,23 +306,36 @@ public class ModelQuery {
         IResolutionScope imported = null;
         do {
             ispace.shiftRight();
+            
             // search within scope, check name of scope, search imports
             IResolutionScope tmp = (IResolutionScope) findElementByName(
                 curScope, ispace.namespaceStart, IResolutionScope.class);
             if (null == tmp) {
-                if (ispace.namespaceStart.equals(curScope.getName())) {
-                    tmp = curScope;
-                } else {
-                    for (int i = 0; null == tmp && i < curScope.getImportsCount(); i++) {
-                        ProjectImport imp = curScope.getImport(i);
-                        if (checkScopeForImport(ispace.namespaceStart, imp, namespace)) {
-                            // set resolved but not scope as this will happen in the next iteration
-                            imported = imp.getResolved();
-                            tmp = checkInterfaceImport(imp.getScope(), ispace, namespace, imported);
+                IResolutionScope iter = curScope;
+                do {
+                    if (ispace.namespaceStart.equals(iter.getName())) {
+                        tmp = iter;
+                    } else {
+                        for (int i = 0; null == tmp && i < iter.getImportsCount(); i++) {
+                            ProjectImport imp = iter.getImport(i);
+                            if (checkScopeForImport(ispace.namespaceStart, imp, namespace)) {
+                                // set resolved but not scope as this will happen in the next iteration
+                                imported = imp.getResolved();
+                                tmp = checkInterfaceImport(imp.getScope(), ispace, namespace, imported);
+                            }
                         }
                     }
-                }
+                    if (null == tmp) {
+                        IModelElement par = iter.getParent();
+                        if (par instanceof IResolutionScope) {
+                            iter = (IResolutionScope) par;
+                        } else {
+                            iter = null;
+                        }
+                    }
+                } while (null == tmp && iter != null);
             } 
+            
             curScope = tmp;
         } while (null != curScope && ispace.hasTail());
         if (null != curScope) {
@@ -663,6 +666,7 @@ public class ModelQuery {
             elements = importedScope;
         }
         // TODO use visitor
+        result = checkElement(elements.getElement(name), name, type);
         for (int c = 0; null == result && c < elements.getElementCount(); c++) {
             ContainableModelElement element = elements.getElement(c);
             result = checkElement(element, name, type);
@@ -710,7 +714,7 @@ public class ModelQuery {
     private static ContainableModelElement checkElement(ContainableModelElement element, 
         String name, Class<?> type) {
         ContainableModelElement result = null;
-        if (null == type || type.isAssignableFrom(element.getClass())) {
+        if (null != element && (null == type || type.isAssignableFrom(element.getClass()))) {
             // actually search for the name
             if (element.getUniqueName().equals(name) || element.getQualifiedName().equals(name)) {
                 result = element;

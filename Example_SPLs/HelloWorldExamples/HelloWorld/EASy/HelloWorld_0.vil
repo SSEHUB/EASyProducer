@@ -1,0 +1,9 @@
+vilScript HelloWorld (Project source, Configuration config, Project target) {
+
+    version v0;
+
+    main(Project source, Configuration config, Project target) = : {
+        velocity("$target/src/**/*.java", config);
+    }
+
+}

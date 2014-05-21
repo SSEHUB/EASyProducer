@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,8 +57,6 @@ public class DtdParser {
         int start = -1;
         String string = "";
         String subString = "";
-        
-        System.out.println(stringList.size());
         
         for (int i = 0; i < stringList.size(); i++) {
             
@@ -111,23 +108,23 @@ public class DtdParser {
         
         List<String> oldContent = this.readFile(file);
         
-        Writer writer = null;
+        BufferedWriter writer = null;
 
         if (null != dtd && null != file) {
         
             try {
                 writer = new BufferedWriter(new OutputStreamWriter(
-                        new FileOutputStream(file), "utf-8"));
+                        new FileOutputStream(file), "UTF-8"));
                 for (int i = 0; i < oldContent.size(); i++) {
                     if (i == dtd.getLine()) {
                         List<String> dtdContent = dtd.getContent();
                         for (int j = 0; j < dtdContent.size(); j++) {
                             writer.write(dtdContent.get(j));
-                            writer.write(System.getProperty("line.separator"));
+                            writer.write("\r\n");
                         }
                     }
                     writer.write(oldContent.get(i));
-                    writer.write(System.getProperty("line.separator"));
+                    writer.write("\r\n");
                 }
             } catch (IOException ex) {
                 ex.printStackTrace();
@@ -160,7 +157,7 @@ public class DtdParser {
             while ((line = br.readLine()) != null) {
                 if (line.isEmpty()) {
                     String addString = stringList.get(stringList.size() - 1);
-                    addString += "\n";
+                    addString += "\r\n";
                     stringList.remove(stringList.size() - 1);
                     stringList.add(addString);
                 } else {

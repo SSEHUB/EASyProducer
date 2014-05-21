@@ -1,0 +1,10 @@
+
+template MultipleFoldersTemplate(Configuration config, FileArtifact target) {
+	version v0;
+	
+	def main(Configuration config, FileArtifact target) {
+		 for (DecisionVariable v: config.variables()) {
+            '${v.value()}'
+        }
+	}
+}

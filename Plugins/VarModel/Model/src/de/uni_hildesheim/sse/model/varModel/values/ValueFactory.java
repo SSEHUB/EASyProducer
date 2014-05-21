@@ -286,6 +286,10 @@ public class ValueFactory {
     private static void assignReferenceValue() {
         map.put(Reference.class, new IValueCreator() {
             public ReferenceValue createValue(IDatatype type, Object... value) throws ValueDoesNotMatchTypeException {
+                if (!(type instanceof Reference)) {
+                    throw new ValueDoesNotMatchTypeException("type '" + type.getName() + "' is not a reference", 
+                        ValueDoesNotMatchTypeException.TYPE_MISMATCH);
+                }
                 Reference ref = (Reference) type;
                 return new ReferenceValue(ref, value);
             }
@@ -302,7 +306,7 @@ public class ValueFactory {
      */
     public static Value createValue(IDatatype type, Object... value) throws ValueDoesNotMatchTypeException {
         Value returnValue = null;
-        if (Reference.TYPE.isAssignableFrom(type) && Reference.TYPE != type) {
+        if (Reference.TYPE.isAssignableFrom(type)) {
             returnValue = map.get(type.getTypeClass()).createValue(type, value);
         } else {
             returnValue = map.get(type.getTypeClass()).createValue(type.getType(), value);

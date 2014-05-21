@@ -7,6 +7,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expres
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 
 /**
  * Implements a value switch.
@@ -206,13 +207,13 @@ public class SwitchStatement implements ITemplateElement {
     public TypeDescriptor<? extends IVilType> inferType() throws VilLanguageException {
         try {
             TypeDescriptor<? extends IVilType> result = null;
-            for (int a = 0; TypeDescriptor.ANY != result && a < alternatives.length; a++) {
+            for (int a = 0; TypeRegistry.anyType() != result && a < alternatives.length; a++) {
                 Alternative alt = alternatives[a];
                 TypeDescriptor<? extends IVilType> tmp = alt.inferType();
                 if (null == result) {
                     result = tmp;
                 } else if (!tmp.equals(result)) {
-                    result = TypeDescriptor.ANY;
+                    result = TypeRegistry.anyType();
                 }
             }
             return result;

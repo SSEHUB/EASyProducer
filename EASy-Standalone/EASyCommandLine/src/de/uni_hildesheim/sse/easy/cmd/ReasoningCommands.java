@@ -1,3 +1,19 @@
+/*
+ * Copyright 2009-2013 University of Hildesheim, Software Systems Engineering
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package de.uni_hildesheim.sse.easy.cmd;
 
 import java.io.File;
@@ -35,7 +51,9 @@ public class ReasoningCommands {
      */
     public static boolean checkValidity(File project, File ivmlFile) 
         throws ModelManagementException {
-        PersistenceUtils.addLocation(project, ProgressObserver.NO_OBSERVER);    
+        de.uni_hildesheim.sse.easy_producer.persistence.Configuration config 
+            = PersistenceUtils.getConfiguration(project);
+        PersistenceUtils.addLocation(config, ProgressObserver.NO_OBSERVER);    
         Project ivmlProject = PersistenceUtils.loadModel(VarModel.INSTANCE, ivmlFile);      
         return checkValidity(ivmlProject);
     }

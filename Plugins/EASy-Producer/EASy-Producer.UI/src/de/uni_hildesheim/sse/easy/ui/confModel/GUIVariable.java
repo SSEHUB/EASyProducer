@@ -9,6 +9,7 @@ import de.uni_hildesheim.sse.model.confModel.IAssignmentState;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
+import de.uni_hildesheim.sse.model.varModel.values.NullValue;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
 import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
 import de.uni_hildesheim.sse.persistency.StringProvider;
@@ -19,6 +20,12 @@ import de.uni_hildesheim.sse.persistency.StringProvider;
  *
  */
 public abstract class GUIVariable implements IGUIConfigurableElement, Comparable<GUIVariable> {
+    
+    /**
+     * Label, how {@link NullValue}s should be displayed in GUI.
+     */
+    public static final String NULL_VALUE_LABEL = "[NULL]";
+    
     private GUIConfiguration parentConfig;
     private IDecisionVariable variable;
     private String tooltip;
@@ -170,6 +177,7 @@ public abstract class GUIVariable implements IGUIConfigurableElement, Comparable
     
     /**
      * Returns a string representation of the current value.
+     * This is used when <b>no</b> cursor is inside the cell (if the user is <b>not</b> editing the variable).
      * @return A string representation of the current value or <tt>null</tt>.
      */
     public abstract String getValueText();
@@ -212,22 +220,6 @@ public abstract class GUIVariable implements IGUIConfigurableElement, Comparable
         // This action is handled in ContainerGUIVariable class.
     }
     
-//    /**
-//     * Returns whether is variable is expanded or not.
-//     * Should Only be used if {@link #isExpandable()} returns <tt>true</tt>.
-//     * @return <tt>true</tt> if this variable is expanded, otherwise <tt>false</tt>.
-//     */
-//    public boolean isExpanded() {
-//        return isExpanded;
-//    }
-    
-//    /**
-//     * Notifies that the expended state is about to change, i.e. the state changed
-//     * but the parents are not informed about redrawing.
-//     */
-//    protected void expandedStateChanged() {
-//    }
-    
     /** 
      * Returns the comment of the model element.
      * 
@@ -236,16 +228,7 @@ public abstract class GUIVariable implements IGUIConfigurableElement, Comparable
     public String getComment() {
         return variable.getDeclaration().getComment();
     }
-    
-//    /**
-//     * Returns the number of elements related to this variable.
-//     * @return <tt>1</tt> if this variable is not expanded, shall be greater than <tt>1</tt>
-//     * if if expandable and expanded!
-//     */
-//    int elementCount() {
-//        return 1;
-//    }
-    
+ 
     /**
      * Returns the number of nested elements.
      * The return value should be 0 unless this {@link IDecisionVariable} is an {@link AbstractExpandableGUIVariable}.
@@ -384,5 +367,46 @@ public abstract class GUIVariable implements IGUIConfigurableElement, Comparable
      */
     public GUIHistory getHistory() {
         return history;
+    }
+    
+    /**
+     * Checks whether the variable has a configured {@link Value}.
+     * @return <tt>true</tt> if the variable has a value, <tt>false</tt> otherwise.
+     */
+    public boolean hasValue() {
+        return getVariable().hasValue();
+    }
+    
+    /**
+     * Checks whether the variable has a {@link NullValue}.
+     * Note: this method does not check whether the variable <b>has</b> a value.
+     * @return <tt>true</tt> if the variable has a {@link NullValue}, <tt>false</tt> otherwise.
+     */
+    public boolean hasNullValue() {
+        return getVariable().hasNullValue();
+    }
+    
+    /**
+     * Removes the current {@link Value}.
+     */
+    public void setEmptyValue() {
+        try {
+            getVariable().setValue(null, AssignmentState.UNDEFINED);
+        } catch (ConfigurationException e) {
+            EasyProducerDialog.showErrorDialog(e.getLocalizedMessage());
+        }
+        parentConfig.changed(this);
+    }
+    
+    /**
+     * Sets a {@link NullValue}.
+     */
+    public void setNULLValue() {
+        try {
+            getVariable().setValue(NullValue.INSTANCE, AssignmentState.ASSIGNED);
+        } catch (ConfigurationException e) {
+            EasyProducerDialog.showErrorDialog(e.getLocalizedMessage());
+        }
+        parentConfig.changed(this);
     }
 }

@@ -1,9 +1,6 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.PseudoBoolean;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.PseudoInteger;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.PseudoReal;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 
@@ -22,9 +19,11 @@ public class ConstantExpression extends Expression {
      * 
      * @param type the type of this constant
      * @param value the assigned value of this constant
+     * @param registry the type registry to resolve (local) types
      * @throws ExpressionException in case of type incompatibilities
      */
-    public ConstantExpression(TypeDescriptor<? extends IVilType> type, Object value) throws ExpressionException {
+    public ConstantExpression(TypeDescriptor<? extends IVilType> type, Object value, TypeRegistry registry) 
+        throws ExpressionException {
         assert null != type;
         if (null == type) {
             throw new ExpressionException("type must not be null", ExpressionException.ID_INTERNAL); 
@@ -32,8 +31,8 @@ public class ConstantExpression extends Expression {
         this.type = type;
         this.value = value;
         if (null != value) {
-            boolean ok = checkAndConvert(TypeRegistry.getType(value.getClass().getName()));
-            ok |= checkAndConvert(TypeRegistry.getType(value.getClass().getSimpleName())); // for artifacts
+            boolean ok = checkAndConvert(registry.getType(value.getClass().getName()));
+            ok |= checkAndConvert(registry.getType(value.getClass().getSimpleName())); // for artifacts
             if (!ok) {
                 throw new ExpressionException("type " + type.getName() + " is not compatible to value " + value, 
                     ExpressionException.ID_SEMANTIC); 
@@ -54,13 +53,13 @@ public class ConstantExpression extends Expression {
             if (!type.isAssignableFrom(checkFor)) {
                 if (String.class == value.getClass()) {
                     try {
-                        if (type == TypeRegistry.getType(PseudoBoolean.class.getName())) {
+                        if (type == TypeRegistry.booleanType()) {
                             value = Boolean.valueOf((String) value);
                             ok = true;
-                        } else if (type == TypeRegistry.getType(PseudoInteger.class.getName())) {
+                        } else if (type == TypeRegistry.integerType()) {
                             value = Integer.valueOf((String) value);
                             ok = true;
-                        } else if (type == TypeRegistry.getType(PseudoReal.class.getName())) {
+                        } else if (type == TypeRegistry.realType()) {
                             value = Double.valueOf((String) value);
                             ok = true;
                         } 

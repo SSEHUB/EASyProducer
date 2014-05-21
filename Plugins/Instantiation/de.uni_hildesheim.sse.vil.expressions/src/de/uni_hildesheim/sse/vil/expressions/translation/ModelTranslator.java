@@ -20,6 +20,8 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VariableDec
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Resolver;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypeResolver;
+import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.utils.messages.IMessage;
 import de.uni_hildesheim.sse.utils.modelManagement.AvailableModels;
 import de.uni_hildesheim.sse.utils.modelManagement.IModel;
@@ -35,7 +37,6 @@ import de.uni_hildesheim.sse.vil.expressions.expressionDsl.LanguageUnit;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ParameterList;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VersionSpec;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VersionStmt;
-import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VersionedId;
 
 /**
  * A reusable model translator.
@@ -196,6 +197,7 @@ public abstract class ModelTranslator
                         name, adv.getVersionSpec());                
                     StringBuilder warning = new StringBuilder();
                     result[a] = Advice.create(name, restrictions, warning);
+                    buildLocalTypeRegistry(result[a]);
                     if (warning.length() > 0) {
                         warning(warning.toString(), adv, ExpressionDslPackage.Literals.ADVICE__NAME, ErrorCodes.IMPORT);
                     }
@@ -206,6 +208,18 @@ public abstract class ModelTranslator
         }
         return result;
     }
+
+    /**
+     * Builds a local type registry for <code>advice</code>.
+     * 
+     * @param advice the advice to build the local type registry for
+     */
+    private void buildLocalTypeRegistry(Advice advice) {
+        Project varModel = advice.getResolved();
+        if (null != varModel) {
+            resolver.getTypeRegistry().addTypeResolver(new IvmlTypeResolver(varModel));
+        }
+    }
     
     /**
      * Issues implementation warnings about version restrictions.
@@ -213,15 +227,7 @@ public abstract class ModelTranslator
      * @param spec the version specification (may be <b>null</b>)
      */
     protected void warnVersionRestrictions(VersionSpec spec) {
-        if (null != spec) {
-            int size = spec.getConflicts().size();
-            for (int v = 0; v < size; v++) {
-                VersionedId vId = spec.getConflicts().get(v);
-    
-                warning("currently not (fully) supported", vId, 
-                    ExpressionDslPackage.Literals.VERSIONED_ID__VERSION, 0);
-            }        
-        }
+        getExpressionTranslator().warnVersionRestrictions(spec);
     }
 
     /**
@@ -254,7 +260,7 @@ public abstract class ModelTranslator
         if (null != parameters) {
             List<I> tmp = new ArrayList<I>();
             for (de.uni_hildesheim.sse.vil.expressions.expressionDsl.Parameter p : parameters) {
-                TypeDescriptor<? extends IVilType> type = getExpressionTranslator().processType(p.getType());
+                TypeDescriptor<? extends IVilType> type = getExpressionTranslator().processType(p.getType(), resolver);
                 if (null != type) {
                     for (int t = 0; t < tmp.size(); t++) {
                         if (tmp.get(t).getName().equals(p.getName())) {

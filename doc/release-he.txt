@@ -1,8 +1,4 @@
-ReasonerCore
-  - 8064 loggified 
-Model
-  - 8059 loggified
-IVML.ui
-  - 8058 loggified
-IVML
-  - 8058 loggified, unqualified variables warning for compounds
+IVML: resolution of dependent compounds (10038)
+IVML: namspace fix
+IVML: lookup-resolution
+VIL/VTL: version restrictions for VTL and instantiate (10057)

@@ -1,7 +1,6 @@
 package test.de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildlangExecution;
@@ -40,7 +39,7 @@ public class VariableExpressionTest extends AbstractTest {
      * @param defineVariable define the variable or not (and cause and catch an exception)
      */
     public void testStaticExpression(boolean defineVariable) {
-        TypeDescriptor<? extends IVilType> iDesc = TypeRegistry.getType(Integer.class.getName());
+        TypeDescriptor<? extends IVilType> iDesc = TypeRegistry.integerType();
         Assert.assertNotNull("integer type descriptor must exist", iDesc);
         try {
             VariableDeclaration xVar = new VariableDeclaration("x", iDesc);
@@ -55,8 +54,9 @@ public class VariableExpressionTest extends AbstractTest {
                 }
             }
             CallArgument param1 = new CallArgument(new VariableExpression(xVar));
-            CallArgument param2 = new CallArgument(new ConstantExpression(iDesc, Integer.valueOf(2)));
-            CallExpression ex = new CallExpression("+", param1, param2);
+            CallArgument param2 = new CallArgument(
+                 new ConstantExpression(iDesc, Integer.valueOf(2), TypeRegistry.DEFAULT));
+            CallExpression ex = new CallExpression(null, "+", param1, param2);
             TypeDescriptor<? extends IVilType> eDesc = ex.inferType();
             Assert.assertNotNull("result type must not be null", eDesc);
             Assert.assertTrue("result must be of type Integer", eDesc == iDesc);

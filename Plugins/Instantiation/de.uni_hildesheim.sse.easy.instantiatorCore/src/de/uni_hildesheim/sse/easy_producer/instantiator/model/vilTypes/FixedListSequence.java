@@ -11,25 +11,16 @@ import java.util.List;
  * @param <T> the element type
  */
 public class FixedListSequence<T> extends ListSequence<T> {
-
-    /**
-     * Creates a new array collection wrapper.
-     * 
-     * @param list the wrapped list
-     * @param param the only type parameter characterizing <T>
-     */
-    public FixedListSequence(List<T> list, Class<? extends IVilType> param) {
-        super(list, TypeRegistry.convert(param));
-    }
     
     /**
      * Creates a new array collection wrapper.
      * 
      * @param list the wrapped list
+     * @param registry the type registry to convert <code>params</code>
      * @param params the type parameter characterizing <T>
      */
-    public FixedListSequence(List<T> list, Class<? extends IVilType>... params) {
-        super(list, TypeRegistry.convert(params));
+    public FixedListSequence(List<T> list, TypeRegistry registry, Class<? extends IVilType>... params) {
+        super(list, registry.convert(params));
     }
     
     /**

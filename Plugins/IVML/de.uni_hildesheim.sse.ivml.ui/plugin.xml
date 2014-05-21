@@ -51,20 +51,21 @@
     <extension
             point="org.eclipse.ui.preferencePages">
         <page
+            category="de.uni_hildesheim.sse.EASy"
             class="de.uni_hildesheim.sse.ui.IvmlExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
             id="de.uni_hildesheim.sse.Ivml"
-            name="EASy-Producer">
+            name="Variability Modeling Language (IVML)">
             <keywordReference id="de.uni_hildesheim.sse.ui.keyword_Ivml"/>
         </page>
         <page
-            category="de.uni_hildesheim.sse.Ivml"
+            category="de.uni_hildesheim.sse.EASy/de.uni_hildesheim.sse.Ivml"
             class="de.uni_hildesheim.sse.ui.IvmlExecutableExtensionFactory:org.eclipse.xtext.ui.editor.syntaxcoloring.SyntaxColoringPreferencePage"
             id="de.uni_hildesheim.sse.Ivml.coloring"
             name="Syntax Coloring">
             <keywordReference id="de.uni_hildesheim.sse.ui.keyword_Ivml"/>
         </page>
         <page
-            category="de.uni_hildesheim.sse.Ivml"
+            category="de.uni_hildesheim.sse.EASy/de.uni_hildesheim.sse.Ivml"
             class="de.uni_hildesheim.sse.ui.IvmlExecutableExtensionFactory:org.eclipse.xtext.ui.editor.templates.XtextTemplatePreferencePage"
             id="de.uni_hildesheim.sse.Ivml.templates"
             name="Templates">

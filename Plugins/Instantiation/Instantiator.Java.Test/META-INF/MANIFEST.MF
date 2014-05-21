@@ -9,4 +9,5 @@ Require-Bundle: de.uni_hildesheim.sse.vil.buildlang.tests;bundle-version="0.0.1"
  org.junit;bundle-version="4.8.2",
  de.uni-hildesheim.sse.easy.instantiatorCore;bundle-version="0.5.5",
  de.uni_hildesheim.sse.varModel;bundle-version="0.5.5",
- de.uni_hildesheim.sse.easy.instantiator.java;bundle-version="0.0.1"
+ de.uni_hildesheim.sse.easy.instantiator.java;bundle-version="0.0.1",
+ de.uni_hildesheim.sse.varModel.tests;bundle-version="0.0.10"

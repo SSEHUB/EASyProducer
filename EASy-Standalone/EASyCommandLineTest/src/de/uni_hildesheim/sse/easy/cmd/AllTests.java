@@ -10,7 +10,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({CommandLineExecuterTests.class})
+@SuiteClasses({CommandLineExecuterTests.class, ReasoningTests.class})
 public class AllTests {
 
     /**
@@ -23,9 +23,18 @@ public class AllTests {
      */
     public final static File AUT_DIR = determineAUTDir();
     public final static File AUT_LIBS = determineAUTLibs();
-    private final static File TESTDATA_DIR_ORIGINALS = determineTestdataDir();
     
+    /**
+     * Temporary elevator examples. Will be cleaned up before running all tests.
+     */
     public static final File ELEVATOR_DIR = new File(AllTests.TESTDATA_DIR, "elevator");
+    
+    /**
+     * Temporary reasonings examples. Will be cleaned up before running all tests.
+     */
+    public static final File REASONINGS_DIR = new File(AllTests.TESTDATA_DIR, "Reasonings");
+    
+    private final static File TESTDATA_DIR_ORIGINALS = determineTestdataDir();
     
     /**
      * Determines the toplevel directory of the test data files.

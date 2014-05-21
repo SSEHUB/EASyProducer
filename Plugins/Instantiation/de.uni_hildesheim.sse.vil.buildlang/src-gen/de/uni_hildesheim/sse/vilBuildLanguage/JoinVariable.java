@@ -1,14 +1,10 @@
 /**
- * <copyright>
- * </copyright>
- *
-
  */
 package de.uni_hildesheim.sse.vilBuildLanguage;
 
-import org.eclipse.emf.ecore.EObject;
-
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Expression;
+
+import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->

@@ -2,7 +2,9 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.xml
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.LineNumberReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -17,6 +19,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.w3c.dom.CDATASection;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
@@ -34,7 +38,14 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Operation
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
 
 /**
- * Represents a parsed XML file artifact.
+ * Represents a parsed XML file artifact. Due to Java internal intelligent processing, it 
+ * might be that the original encoding name is replaced by a normalized one. If this is not
+ * intended, the official encoding table of the JDK needs to be redefined (system property
+ * "com.sun.org.apache.xalan.internal.serialize.encodings"), e.g., to exclude the specific
+ * encoding... with possible side effects. Please note, that there is a comment end-of-line 
+ * workaround in this class which is required for proper operation on some JDKs (OpenJDK 1.7). 
+ * In future, this may be circumvented by using a distinct version of XALAN instead of the builtin
+ * one....
  * 
  * @author Holger Eichelberger
  * @author Patrik Pastuschek
@@ -154,7 +165,7 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
      * @throws ArtifactException in case domTree could not be built.
      */
     private void load(File file) throws ArtifactException {
-             
+        
         if (file != null && file.length() > 0) {
         
             DocumentBuilder builder;
@@ -253,6 +264,85 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
         return element;
         
     }
+
+    /**
+     * Return all line ended comments in sequence of their occurrence in {@link #file}. This is part of a workaround
+     * as in some JDKs the line ends of comments seem to be omitted.
+     * 
+     * @return the line ends in sequence
+     */
+    private List<String> getLineEndedComments() {
+        List<String> lineEndedComments = new ArrayList<String>();
+        LineNumberReader reader = null;
+        try {
+            reader = new LineNumberReader(new FileReader(this.file));
+            String line;
+            do {
+                line = reader.readLine();
+                if (null != line && line.endsWith("-->")) {
+                    lineEndedComments.add(line);
+                }
+            } while (null != line);
+            reader.close();
+        } catch (IOException e) {
+            IOUtils.closeQuietly(reader);
+            // don't care for exception
+        }
+        return lineEndedComments;
+    }
+    
+    /**
+     * Ensures line the line ends in {@link #file} according to the previously collected line ends 
+     * by {@link #getLineEndedComments()}. This is part of a workaround
+     * as in some JDKs the line ends of comments seem to be omitted.
+     * 
+     * @param lineEndedComments the line ended comments in sequence of their occurrence
+     */
+    private void ensureLineEndedComments(List<String> lineEndedComments) {
+        try {
+            final String sep = System.getProperty("line.separator");
+            List<String> lines = FileUtils.readLines(file);
+            int c = 0;
+            int l = 0;
+            int lPos = 0;
+            while (c < lineEndedComments.size() && l < lines.size()) {
+                String line = lines.get(l);
+                String comment = lineEndedComments.get(c);
+                int pos = line.indexOf(comment, lPos);
+                if (pos >= 0) {
+                    int ePos = pos + comment.length();
+                    if (ePos < line.length()) {
+                        int tmpPos = ePos;
+                        while (ePos < line.length() && isLineEndChar(line.charAt(ePos))) {
+                            ePos++;
+                        }
+                        if (tmpPos == ePos) {
+                            line = line.substring(0, ePos) + sep + line.substring(ePos);
+                            lines.set(l, line);
+                            lPos = ePos + sep.length();
+                        }
+                    }
+                    c++;
+                } else {
+                    l++;
+                    lPos = 0;
+                }
+            }
+            FileUtils.writeLines(file, lines);
+        } catch (IOException e) {
+            // don't care
+        }
+    }
+
+    /**
+     * Returns whether <code>ch</code> is a line end character.
+     * 
+     * @param ch the character to be analyzed
+     * @return <code>true</code> if it is a line end character, <code>false</code> else
+     */
+    private static boolean isLineEndChar(char ch) {
+        return '\r' == ch || '\n' == ch;
+    }
     
     /**
      * Writes the Dom tree back to the file.
@@ -260,26 +350,47 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
     private void writeToFile() {
         
         if (null != doc) {
-        
+            
+            //Added for Testing: Add Element wiht number of elements in this Document (-1 this element)
+            /*int amount = 0;
+            for (int i = 0; i < doc.getChildNodes().getLength() - 1; i++) {
+                amount += countNodes(doc.getChildNodes().item(i)) + 1;
+            }
+            Node counter = doc.createElement("Amount");
+            counter.setTextContent("" + amount);
+            doc.getDocumentElement().appendChild(counter);*/
+            
+            List<String> lineEndedComments = getLineEndedComments();
+            
             DOMSource source = new DOMSource(doc);
             StreamResult result = null;
 
             result = new StreamResult(this.file);
             
             try {
+                transformerFactory = TransformerFactory.newInstance();
                 transformer = transformerFactory.newTransformer();
+                // might be doc.getXmlEncoding();  but this is properly taken over... but may also normalized
+                //transformer.setOutputProperty("encoding", encoding); 
                 transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
                 transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+                //transformer.setOutputProperty("{http://xml.apache.org/xalan}line-separator", "\r\n");
                 transformer.transform(source, result);
             } catch (TransformerException exc) {
                 exc.printStackTrace();
             }
-        
-            try {
-                this.dtdParser.writeDtd(this.file, this.dtd);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
+            
+            if (!lineEndedComments.isEmpty()) {
+                ensureLineEndedComments(lineEndedComments);
             }
+        
+            if (this.dtd != null && this.dtd.getContent() != null && !this.dtd.getContent().isEmpty()) {
+                try {
+                    this.dtdParser.writeDtd(this.file, this.dtd);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }            
             
         }
         

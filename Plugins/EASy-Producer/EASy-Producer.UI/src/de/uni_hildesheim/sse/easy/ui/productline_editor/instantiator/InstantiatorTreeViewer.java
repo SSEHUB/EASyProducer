@@ -11,10 +11,10 @@ import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.dialogs.ContainerCheckedTreeViewer;
 
+import de.uni_hildesheim.sse.easy_producer.core.mgmt.PLPInfo;
+import de.uni_hildesheim.sse.easy_producer.core.mgmt.SPLsManager;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.standard.PersistenceConstants;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.FileInstantiator;
-import de.uni_hildesheim.sse.easy_producer.persistence.mgmt.PLPInfo;
-import de.uni_hildesheim.sse.easy_producer.persistence.mgmt.SPLsManager;
-import de.uni_hildesheim.sse.easy_producer.persistence.standard.PersistenceConstants;
 
 /**
  * A tree viewer for an instantiator model. It does not only show the file tree but also computes checked files.

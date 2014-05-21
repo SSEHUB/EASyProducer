@@ -26,7 +26,10 @@ public abstract class Value {
     }
 
     /**
-     * Abstract getValue method.
+     * Abstract getValue method. The result of this method <b>must</b> comply to 
+     * the input conventions of {@link ValueFactory} and the constructor
+     * of the respective implementing class.
+     * 
      * @return the Value of the Datatype
      */
     public abstract Object getValue();

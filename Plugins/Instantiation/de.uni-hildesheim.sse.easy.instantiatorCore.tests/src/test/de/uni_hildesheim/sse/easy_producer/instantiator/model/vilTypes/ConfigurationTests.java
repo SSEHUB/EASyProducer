@@ -4,8 +4,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
@@ -64,12 +63,12 @@ public class ConfigurationTests {
             Assert.assertNull(bindingTime); // just a x-check
             bindingTime = Utils.getAttributeDeclaration(configuration, "bindingTime");
             Assert.assertNotNull(bindingTime);
-            compare(configuration.selectByAttribute(IvmlElement.convert(bindingTime), 1), cfg, 
+            compare(configuration.selectByAttribute(bindingTime.getQualifiedName(), 1), cfg, 
                 new AttributeSelector("bindingTime", 1));
-            compare(configuration.selectByAttribute(IvmlElement.convert(bindingTime), 100), cfg, 
+            compare(configuration.selectByAttribute(bindingTime.getQualifiedName(), 100), cfg, 
                 new AttributeSelector("bindingTime", 100));
             Assert.assertEquals(configuration.selectByAttribute(
-                IvmlElement.convert(bindingTime), null).variables().size(), 0);
+                bindingTime.getQualifiedName(), null).variables().size(), 0);
             // the case that the element was not resolved
             Assert.assertEquals(configuration.selectByAttribute(null, 100).variables().size(), 0);
         } catch (ArtifactException e) {

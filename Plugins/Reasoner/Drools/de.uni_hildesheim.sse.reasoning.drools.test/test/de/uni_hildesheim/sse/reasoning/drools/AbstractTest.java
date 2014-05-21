@@ -6,8 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
@@ -79,9 +78,11 @@ public abstract class AbstractTest {
     * Tears down up the {@link VarModel} by unregistering {@link #TESTDATA_DIR}
     * as model directory and unregistering {@link ModelUtility} as model
     * loader.
+    * 
+    * @throws ModelManagementException shall not occur
     */
    @AfterClass
-   public static void shutDown() {
+   public static void shutDown() throws ModelManagementException {
        VarModel.INSTANCE.locations().removeLocation(TESTDATA_DIR, OBSERVER);
        VarModel.INSTANCE.loaders().unregisterLoader(ModelUtility.INSTANCE, OBSERVER);
    }

@@ -27,7 +27,7 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
      * @return <code>true</code> if both collections contain the same elements in the same sequence, 
      *     <code>false</code> else
      */
-    public  static boolean equals(Collection<?> c1, Collection<?> c2) {
+    public static boolean equals(Collection<?> c1, Collection<?> c2) {
         boolean equals = c1.size() == c2.size();
         if (equals) {
             Iterator<?> thisIter = c1.iterator();
@@ -98,7 +98,7 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
      * @return the elements of type <code>type</code>
      */
     public static <T> List<T> selectByType(Collection<T> collection, Class<?> type) {
-        TypeDescriptor<? extends IVilType> desc = TypeRegistry.getType(TypeDescriptor.getRegName(type));
+        TypeDescriptor<? extends IVilType> desc = TypeRegistry.DEFAULT.findType(type); // TODO -> dynamic
         List<T> result = new ArrayList<T>();
         Iterator<T> iter = collection.iterator();
         while (iter.hasNext()) {

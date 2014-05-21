@@ -90,6 +90,9 @@ abstract class AbstractExpandableGUIVariable extends GUIVariable {
     @Override
     public void extend() {
         if (isExtendable()) {
+            if (hasValue() && hasNullValue()) {
+                setEmptyValue();
+            }
             super.extend();
             ContainerVariable variable = (ContainerVariable) getVariable();
             variable.addNestedElement();

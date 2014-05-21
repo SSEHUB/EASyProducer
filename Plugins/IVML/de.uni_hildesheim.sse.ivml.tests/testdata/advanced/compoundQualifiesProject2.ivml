@@ -1,0 +1,13 @@
+project testCompoundQualifiesProject2 {
+
+    version v0;
+    Integer a;
+    attribute Boolean b = false to testCompoundQualifiesProject2;
+    compound Test {
+        assign (b = true) to {
+            Boolean a;
+            a implies testCompoundQualifiesProject2::a > 0;
+        }
+    }
+
+}

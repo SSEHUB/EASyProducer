@@ -78,6 +78,7 @@
 			<fileset dir="${coverage.instr.dir}/lib"/>
 			<fileset dir="${home.utils.dir}/${build.jar.dir}" includes="**/*.jar" />
 			<fileset dir="${home.model.dir}/${build.jar.dir}" includes="**/*.jar" />
+			<fileset dir="${home.model.tests.dir}/${build.jar.dir}" includes="**/*.jar" />
 			<fileset dir="${home.dslCore.dir}/${build.jar.dir}" includes="**/*.jar" />
 			<fileset dir="${home.ivml.dir}/${build.jar.dir}" includes="**/*.jar" />
 			<fileset dir="${home.reasonerCore.dir}/${build.jar.dir}" includes="**/*.jar" />

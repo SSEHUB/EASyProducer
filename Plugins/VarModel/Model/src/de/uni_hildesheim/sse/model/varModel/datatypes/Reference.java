@@ -27,7 +27,12 @@ public class Reference extends CustomDatatype {
     public static final IDatatype TYPE = DTYPE;
 
     public static final Operation TYPE_OF = new Operation(MetaType.TYPE, OclKeyWords.TYPE_OF, TYPE);
-    // no further operations such as assignments here as assignments are represented as the base type assignments
+    public static final Operation EQUALS 
+        = Operation.createInfixOperator(BooleanType.TYPE, OclKeyWords.EQUALS, TYPE, TYPE);
+    public static final Operation UNEQUALS 
+        = Operation.createInfixOperator(BooleanType.TYPE, OclKeyWords.UNEQUALS, TYPE, TYPE);
+    public static final Operation ASSIGNMENT 
+        = Operation.createInfixOperator(BooleanType.TYPE, OclKeyWords.ASSIGNMENT, TYPE, TYPE);
     public static final Operation IS_DEFINED = new Operation(BooleanType.TYPE, OclKeyWords.IS_DEFINED, TYPE);    
  
     // checkstyle: resume declaration order check
@@ -36,6 +41,9 @@ public class Reference extends CustomDatatype {
         DTYPE.setDelegate(new Reference());
         DTYPE.addOperation(TYPE_OF);
         DTYPE.addOperation(IS_DEFINED);
+        DTYPE.addOperation(EQUALS);
+        DTYPE.addOperation(UNEQUALS);
+        DTYPE.addOperation(ASSIGNMENT);
     }
     
     private IDatatype type;
@@ -93,7 +101,48 @@ public class Reference extends CustomDatatype {
     *   supertype of <code>type</code>, <code>true</code> else
     */
     public boolean isAssignableFrom(IDatatype type) {
-        return super.isAssignableFrom(type) || (this.type != null && this.type.isAssignableFrom(type));
+        boolean isAssignable = AnyType.TYPE == type;
+        if (super.isAssignableFrom(type) && type instanceof Reference) {
+            Reference r = (Reference) type;
+            if (null == this.type) {
+                isAssignable = true; // this is akin to Reference.INSTANCE so everything reference can be assinged
+            } else {
+                if (null != r.type) {
+                    isAssignable = this.type.isAssignableFrom(r.type);
+                }
+            }
+        }
+        return isAssignable;
+    }
+    
+    /**
+     * Aims at dereference <code>type</code> in case that it is a reference.
+     * 
+     * @param type the type to dereference
+     * @return the dereferenced type (or <code>type</code> if <code>type</code> was not a reference)
+     */
+    public static IDatatype dereference(IDatatype type) {
+        // TODO actually I'm not happy about this explicit dereferencing
+        IDatatype result;
+        if (type instanceof Reference) {
+            result = ((Reference) type).getType();
+        } else {
+            result = type;
+        }
+        return result;
+    }
+
+    /**
+     * Dereferences all datatypes in <code>type</code>.
+     * 
+     * @param types the types to be dereferenced
+     */
+    public static void dereference(IDatatype[] types) {
+        if (null != types) {
+            for (int p = 0; p < types.length; p++) {
+                types[p] = Reference.dereference(types[p]);
+            }            
+        }
     }
 
 }

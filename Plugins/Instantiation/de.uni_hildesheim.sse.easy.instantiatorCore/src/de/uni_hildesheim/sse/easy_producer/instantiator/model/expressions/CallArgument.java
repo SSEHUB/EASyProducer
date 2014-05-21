@@ -4,6 +4,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaOper
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 
 /**
  * Describes an optionally named call argument.
@@ -139,7 +140,7 @@ public class CallArgument {
         TypeDescriptor<? extends IVilType> result;
         if (null == expr) {
             if (null == type) {
-                result = TypeDescriptor.VOID;
+                result = TypeRegistry.voidType();
             } else {
                 result = type;
             }

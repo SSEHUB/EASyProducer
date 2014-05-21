@@ -1,0 +1,10 @@
+project ADDReasoningFails_TestProject {
+
+    version v0;
+    Real a = 2.0;
+    Real b = 3.0;
+    Real c = 4.0;
+    
+    a + b = c;
+    
+}

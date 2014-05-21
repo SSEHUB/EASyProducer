@@ -89,15 +89,15 @@ public class VarModelTest implements IProjectListener {
         Assert.assertTrue(events.removeModelListener(pro3, this));  // true as pro3 is still there
         
         //SE: Folder which contains files and no system specific folders like recycle.bin
-        File file = new File(System.getProperty("java.class.path"));
+        File file = new File(".");
         try {
             vm.locations().addLocation(file, ProgressObserver.NO_OBSERVER);
             // TODO HE: this will typically work as no loader is defined. A loader shall not be defined for an 
             // entire disk (time consuming) but rather for a very specific test directory
+            vm.locations().removeLocation(file, ProgressObserver.NO_OBSERVER);
         } catch (ModelManagementException e) {
-            Assert.assertTrue(false); // shall not happen
+            Assert.fail("unexpected exception " + e.getMessage()); // shall not happen
         }
-        vm.locations().removeLocation(file, ProgressObserver.NO_OBSERVER);
     }
     
     // moved testUpdateProjectInformation to ivml.tests as the IVML loader is required!

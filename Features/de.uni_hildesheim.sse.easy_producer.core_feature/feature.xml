@@ -2,7 +2,7 @@
 <feature
       id="de.uni_hildesheim.sse.easy_producer.core_feature"
       label="EASy Producer Core"
-      version="0.7.0"
+      version="0.10.0"
       provider-name="University of Hildesheim - SSE"
       plugin="de.uni_hildesheim.sse.EASy-Producer">
 
@@ -34,45 +34,52 @@ limitations under the License.
    </url>
 
    <plugin
-         id="de.uni_hildesheim.sse.EASy-Producer.persistence"
-         download-size="0"
-         install-size="0"
-         version="0.7.0"
-         unpack="false"/>
-
-   <plugin
          id="ReasonerCore"
          download-size="0"
          install-size="0"
-         version="0.7.0"
-         unpack="false"/>
-
-   <plugin
-         id="de.uni_hildesheim.sse.EASy-Producer"
-         download-size="0"
-         install-size="0"
-         version="0.7.0"
+         version="0.10.0"
          unpack="false"/>
 
    <plugin
          id="de.uni-hildesheim.sse.easy.instantiatorCore"
          download-size="0"
          install-size="0"
-         version="0.7.0"
+         version="0.10.0"
          unpack="false"/>
 
    <plugin
          id="de.uni_hildesheim.sse.instantiator.copy.java"
          download-size="0"
          install-size="0"
-         version="0.4.0"
+         version="0.4.1"
          unpack="false"/>
 
    <plugin
          id="de.uni_hildesheim.sse.easy.instantiator.copy.core"
          download-size="0"
          install-size="0"
-         version="0.7.0"
+         version="0.10.0"
+         unpack="false"/>
+
+   <plugin
+         id="de.uni_hildesheim.sse.easy_producer.core"
+         download-size="0"
+         install-size="0"
+         version="0.10.0"
+         unpack="false"/>
+
+   <plugin
+         id="de.uni_hildesheim.sse.easy_producer.eclipse"
+         download-size="0"
+         install-size="0"
+         version="0.10.0"
+         unpack="false"/>
+
+   <plugin
+         id="de.uni_hildesheim.sse.easy.ui"
+         download-size="0"
+         install-size="0"
+         version="0.10.0"
          unpack="false"/>
 
 </feature>

@@ -3,10 +3,7 @@ package de.uni_hildesheim.sse.reasoning.drools;
 import java.io.File;
 import java.io.IOException;
 
-import junit.framework.Assert;
-
-import org.junit.Test;
-
+import org.junit.Assert;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasoningResult;
 
 public class DroolsContainerTest extends AbstractTest {

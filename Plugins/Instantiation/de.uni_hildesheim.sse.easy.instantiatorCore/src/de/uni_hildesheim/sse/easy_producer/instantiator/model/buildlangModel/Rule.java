@@ -365,6 +365,7 @@ public class Rule extends RuleBlock implements IResolvableOperation<VariableDecl
                 name = target.getParent().getName() + Constants.QUALIFICATION_SEPARATOR + name;
             }
             RuleCallExpression call = new RuleCallExpression(target.getParent(), false, name, args);
+            call.inferType(); // resolve the call
             append(new ExpressionStatement(call));
         }
     }

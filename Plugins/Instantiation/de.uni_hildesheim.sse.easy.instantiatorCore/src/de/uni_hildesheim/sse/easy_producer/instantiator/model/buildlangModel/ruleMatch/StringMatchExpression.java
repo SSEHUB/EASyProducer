@@ -39,7 +39,7 @@ public class StringMatchExpression extends AbstractPathRuleMatchExpression {
 
     @Override
     public TypeDescriptor<? extends IVilType> getEntryType() {
-        return TypeRegistry.getType(IFileSystemArtifact.class);
+        return TypeRegistry.DEFAULT.getType(IFileSystemArtifact.class);
     }
 
     @Override

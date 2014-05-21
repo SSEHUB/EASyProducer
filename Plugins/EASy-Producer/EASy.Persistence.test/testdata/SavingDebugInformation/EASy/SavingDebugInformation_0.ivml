@@ -1,0 +1,7 @@
+project SavingDebugInformation {
+
+    version v0;
+    Integer userInput;
+    Integer reasonerInput;
+    Integer frozenInput;
+}

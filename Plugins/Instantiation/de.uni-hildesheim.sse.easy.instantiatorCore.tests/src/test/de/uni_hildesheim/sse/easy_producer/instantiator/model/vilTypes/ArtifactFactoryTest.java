@@ -2,8 +2,7 @@ package test.de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes;
 
 import java.io.File;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import test.de.uni_hildesheim.sse.easy_producer.instantiator.model.AbstractTest;

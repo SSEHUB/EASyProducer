@@ -1,5 +1,6 @@
 package de.uni_hildesheim.sse.model.cst;
 
+import de.uni_hildesheim.sse.model.varModel.IvmlDatatypeVisitor;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Container;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 
@@ -21,13 +22,22 @@ public class ContainerInitializer extends ConstraintSyntaxTree {
      * 
      * @param type the type of the compound
      * @param expressions the initializing expressions (in sequence for containers which support sequences)
-     * @throws CSTSemanticException in case that the initialization fails
+     * @throws CSTSemanticException in case that the initialization fails, element type mismatch
      */
     public ContainerInitializer(Container type, ConstraintSyntaxTree[] expressions) throws CSTSemanticException {
         this.type = type;
         this.expressions = expressions;
         if (null == expressions) {
             throw new CSTSemanticException("expressions is null", CSTSemanticException.INTERNAL);
+        }
+        IDatatype containedType = type.getContainedType();
+        for (int e = 0; e < expressions.length; e++) {
+            IDatatype eType = expressions[e].inferDatatype();
+            if (!containedType.isAssignableFrom(eType)) {
+                throw new CSTSemanticException("value " + e + " in initializer is of type '" 
+                    + IvmlDatatypeVisitor.getQualifiedType(eType) + "' but not of expected type '" 
+                    + IvmlDatatypeVisitor.getQualifiedType(containedType) + "'", CSTSemanticException.TYPE_MISMATCH);
+            }
         }
     }
 

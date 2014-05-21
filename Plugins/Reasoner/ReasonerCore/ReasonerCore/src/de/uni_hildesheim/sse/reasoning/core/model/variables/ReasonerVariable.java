@@ -52,14 +52,18 @@ public abstract class ReasonerVariable {
      */
     protected ReasonerVariable(IDecisionVariable configVariable, String name, ReasonerModel model,
             ReasonerVariable parent) {
-        LOGGER.debug("");
+//        LOGGER.debug("");
         this.configVariable = configVariable;
         this.name = name;
         this.model = model;
         this.parent = parent;
         this.valueAssignedByReasoner = false;
         String aState = configVariable.getState().toString();
-        if (null == configVariable.getValue()) {
+        if (aState.equalsIgnoreCase(AssignmentState.DERIVED.toString())) {
+            propagateNull();
+        }
+        // was null == configVariable.getValue()
+        if (configVariable.getState() == AssignmentState.UNDEFINED) {
             state = ReasoningState.UNASSIGNED;
         } else {
             state = ReasoningState.DEFAULT_SAME;
@@ -240,7 +244,7 @@ public abstract class ReasonerVariable {
      * Method for propagating assignment state and value to {@link IDecisionVariable}.
      */
     public void propagate() {
-        AssignmentState aState = translateState(); 
+        AssignmentState aState = translateState();
         if (null != getValue()) {
             try {
                 IDatatype type = configVariable.getDeclaration().getType();
@@ -252,6 +256,7 @@ public abstract class ReasonerVariable {
                     value = ValueFactory.createValue(type, getValue());
                 }
                 configVariable.setValue(value, aState);
+                model.addPropagatedVariable(this);
             } catch (ValueDoesNotMatchTypeException e) {
                 LOGGER.exception(e);
             } catch (ConfigurationException e) {

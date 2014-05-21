@@ -12,9 +12,9 @@ import org.eclipse.core.runtime.QualifiedName;
 
 import de.uni_hildesheim.sse.easy.instantiator.copy.core.IResourceMgmt;
 import de.uni_hildesheim.sse.easy_producer.ProjectConstants;
-import de.uni_hildesheim.sse.easy_producer.persistence.PersistenceException;
-import de.uni_hildesheim.sse.easy_producer.persistence.mgmt.PLPInfo;
-import de.uni_hildesheim.sse.easy_producer.persistence.mgmt.SPLsManager;
+import de.uni_hildesheim.sse.easy_producer.core.mgmt.PLPInfo;
+import de.uni_hildesheim.sse.easy_producer.core.mgmt.SPLsManager;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceException;
 import de.uni_hildesheim.sse.easy_producer.persistency.eclipse.EASyNature;
 
 /**
@@ -52,12 +52,7 @@ public class ResourcesMgmt implements IResourceMgmt {
     public String getResourcesFolder() {
         return ProjectConstants.FOLDER_RES;
     }
-
-    @Override
-    public String getLibFolder() {
-        return ProjectConstants.FOLDER_LIBS;
-    }
-
+    
     @Override
     public String getConfigFolder() {
         return ProjectConstants.EASY_FILES;

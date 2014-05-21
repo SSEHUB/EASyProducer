@@ -4,8 +4,8 @@
 package de.uni_hildesheim.sse.ui.contentassist.antlr;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.HashMap;
 
 import org.antlr.runtime.RecognitionException;
 import org.eclipse.xtext.AbstractElement;
@@ -85,7 +85,6 @@ public class IvmlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getQualifiedNameAccess().getGroup_0(), "rule__QualifiedName__Group_0__0");
 					put(grammarAccess.getQualifiedNameAccess().getGroup_0_2(), "rule__QualifiedName__Group_0_2__0");
 					put(grammarAccess.getAccessNameAccess().getGroup(), "rule__AccessName__Group__0");
-					put(grammarAccess.getValueAccess().getGroup_4(), "rule__Value__Group_4__0");
 					put(grammarAccess.getDerivedTypeAccess().getGroup(), "rule__DerivedType__Group__0");
 					put(grammarAccess.getDslContextAccess().getGroup(), "rule__DslContext__Group__0");
 					put(grammarAccess.getAttributeToAccess().getGroup(), "rule__AttributeTo__Group__0");
@@ -223,8 +222,7 @@ public class IvmlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getValueAccess().getSValueAssignment_1(), "rule__Value__SValueAssignment_1");
 					put(grammarAccess.getValueAccess().getQValueAssignment_2(), "rule__Value__QValueAssignment_2");
 					put(grammarAccess.getValueAccess().getBValueAssignment_3(), "rule__Value__BValueAssignment_3");
-					put(grammarAccess.getValueAccess().getRValueAssignment_4_2(), "rule__Value__RValueAssignment_4_2");
-					put(grammarAccess.getValueAccess().getNullValueAssignment_5(), "rule__Value__NullValueAssignment_5");
+					put(grammarAccess.getValueAccess().getNullValueAssignment_4(), "rule__Value__NullValueAssignment_4");
 					put(grammarAccess.getDerivedTypeAccess().getOpAssignment_0_0(), "rule__DerivedType__OpAssignment_0_0");
 					put(grammarAccess.getDerivedTypeAccess().getOpAssignment_0_1(), "rule__DerivedType__OpAssignment_0_1");
 					put(grammarAccess.getDerivedTypeAccess().getOpAssignment_0_2(), "rule__DerivedType__OpAssignment_0_2");

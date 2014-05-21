@@ -14,27 +14,28 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expres
 public class ListSequence<T> extends AbstractListWrapper<T> implements Sequence<T> {
 
     /**
-     * Creates a new array collection wrapper.
+     * Creates a new array collection wrapper using the default type registry.
      * 
      * @param list the wrapped list
      * @param param the only type parameter characterizing <T>
      */
     public ListSequence(List<T> list, Class<? extends IVilType> param) {
-        super(list, TypeRegistry.convert(param));
-    }
-    
-    /**
-     * Creates a new array collection wrapper.
-     * 
-     * @param list the wrapped list
-     * @param params the type parameter characterizing <T>
-     */
-    public ListSequence(List<T> list, Class<? extends IVilType>... params) {
-        super(list, TypeRegistry.convert(params));
+        super(list, TypeRegistry.DEFAULT, param);
     }
 
     /**
      * Creates a new array collection wrapper.
+     * 
+     * @param list the wrapped list
+     * @param registry the registry to convert <code>param</code>
+     * @param param the only type parameter characterizing <T>
+     */
+    public ListSequence(List<T> list, TypeRegistry registry, Class<? extends IVilType> param) {
+        super(list, registry, param);
+    }
+
+    /**
+     * Creates a new array collection wrapper using the default type registry.
      * 
      * @param list the wrapped list
      * @param params the type parameter characterizing <T>
@@ -58,18 +59,6 @@ public class ListSequence<T> extends AbstractListWrapper<T> implements Sequence<
     @Override
     public T get(int index) {
         return at(index);
-    }
-
-    /**
-     * Returns an empty sequence for one type parameter.
-     * 
-     * @param param the type parameter characterizing <T>
-     * @return an empty sequence
-     * @param <T> the element type
-     */
-    @Invisible
-    public static final <T> Sequence<T> empty(Class<? extends IVilType> param) {
-        return empty(TypeRegistry.getType(TypeDescriptor.getRegName(param)));
     }
     
     /**

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.uni_hildesheim.sse.utils.logger.ILogger;
-import de.uni_hildesheim.sse.utils.logger.LoggingLevel;
 
 /**
  * Logger for testing correct behavior of {@link LoggingLevel}s inside the {@link EASyLoggerFactoryTest} test suite.

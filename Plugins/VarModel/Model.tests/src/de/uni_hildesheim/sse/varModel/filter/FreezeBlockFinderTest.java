@@ -1,8 +1,8 @@
 package de.uni_hildesheim.sse.varModel.filter;
 
 import static org.hamcrest.CoreMatchers.allOf;
-import static org.junit.matchers.JUnitMatchers.hasItem;
-import static org.junit.matchers.JUnitMatchers.hasItems;
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.hasItems;
 
 import java.util.List;
 
@@ -52,7 +52,6 @@ public class FreezeBlockFinderTest extends AbstractFrozenElementsFinderTest {
     /**
      * Tests whether only imported elements can be found.
      */
-    @SuppressWarnings("unchecked")
     @Test
     public void testFindImportedFreezeBlocks() {
         finder = new FreezeBlockFinder(ORIGIN_PROJECT, FilterType.ONLY_IMPORTS);

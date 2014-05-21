@@ -2,6 +2,7 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 
 /**
  * Represents a VIL type.
@@ -44,7 +45,7 @@ public class VilTypeExpression extends Expression {
 
     @Override
     public TypeDescriptor<? extends IVilType> inferType() throws ExpressionException {
-        return TypeDescriptor.TYPE;
+        return TypeRegistry.typeType();
     }
 
     @Override

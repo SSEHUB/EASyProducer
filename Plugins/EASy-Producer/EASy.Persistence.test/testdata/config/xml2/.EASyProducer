@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <path kind="IVML" value="src/productline/resources/varmodel/" />
+    <path kind="VIL" value="src/productline/resources/varimpl/" />
+    <path kind="VTL" value="src/productline/resources/varimpl/" />
+</configuration>

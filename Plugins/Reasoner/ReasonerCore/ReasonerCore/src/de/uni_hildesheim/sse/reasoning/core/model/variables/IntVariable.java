@@ -1,5 +1,6 @@
 package de.uni_hildesheim.sse.reasoning.core.model.variables;
 
+import de.uni_hildesheim.sse.model.confModel.AssignmentState;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.reasoning.core.model.ReasonerModel;
 
@@ -26,9 +27,22 @@ public class IntVariable extends ReasonerVariable {
     IntVariable(IDecisionVariable configVariable, String name, ReasonerModel model, ReasonerVariable parent) {
         super(configVariable, name, model, parent);
         value = null;
-        if (null != configVariable.getValue()) {
+//        System.out.println(configVariable.getDeclaration().getName() 
+//              + " : " 
+//              + configVariable.getState().toString()
+//              + " : "
+//              + configVariable.getValue());
+        if (configVariable.getState() != AssignmentState.UNDEFINED) {
             value = (Integer) configVariable.getValue().getValue();
         } 
+//        if (configVariable.getValue() != null) {
+//            value = (Integer) configVariable.getValue().getValue();
+//            System.out.println(configVariable.getDeclaration().getName() 
+//                    + " : " 
+//                    + configVariable.getState().toString()
+//                    + " : "
+//                    + configVariable.getValue());
+//        } 
     }
     
     @Override

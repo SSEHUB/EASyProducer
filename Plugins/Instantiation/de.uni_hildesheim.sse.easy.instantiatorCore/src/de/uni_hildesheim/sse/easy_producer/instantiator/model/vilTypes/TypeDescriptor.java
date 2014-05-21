@@ -1,340 +1,77 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor.CompatibilityResult;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
-
 /**
- * A set of reflective operations on VilTypes. Instances of this class are created upon
- * registration. Thereby, the available operations are determined and cached for fast access.
+ * Represents an actual VIL type, its meta information and operations.
  * 
  * @author Holger Eichelberger
  *
  * @param <T> the specific VilType or Artifact
  */
-public class TypeDescriptor <T extends IVilType> implements IMetaType {
+public abstract class TypeDescriptor <T extends IVilType> implements IMetaType {
 
-    public static final TypeDescriptor<PseudoVoid> VOID;
-    public static final TypeDescriptor<PseudoType> TYPE;
-    public static final TypeDescriptor<PseudoAny> ANY;
-    private static final EASyLogger LOGGER = EASyLoggerFactory.INSTANCE.getLogger(OperationDescriptor.class, Bundle.ID);
-    
-    static {
-        TypeDescriptor<PseudoVoid> v = null; 
-        TypeDescriptor<PseudoType> t = null; 
-        TypeDescriptor<PseudoAny> a = null; 
-        try {
-            v = new TypeDescriptor<PseudoVoid>(PseudoVoid.class) {
-                {
-                    this.name = "Void";
-                }
-
-            };
-        } catch (VilException e) {
-            LOGGER.exception(e);
-        }
-        try {
-            t = new TypeDescriptor<PseudoType>(PseudoType.class) {
-                @Override
-                public boolean isAssignableFrom(IMetaType type) {
-                    return TypeDescriptor.class.isAssignableFrom(type.getClass());
-                }
-
-                @Override
-                public boolean isAssignableFrom(TypeDescriptor<? extends IVilType> desc) {
-                    return true;
-                }
-
-                {
-                    this.name = "Type";
-                }
-
-            };
-        } catch (VilException e) {
-            LOGGER.exception(e);
-        }
-        try {
-            a = new TypeDescriptor<PseudoAny>(PseudoAny.class) {
-                @Override
-                public boolean isAssignableFrom(IMetaType type) {
-                    return TypeDescriptor.class.isAssignableFrom(type.getClass());
-                }
-
-                @Override
-                public boolean isAssignableFrom(TypeDescriptor<? extends IVilType> desc) {
-                    return true;
-                }
-                
-                {
-                    this.name = "Any";
-                }
-            };
-        } catch (VilException e) {
-            LOGGER.exception(e);
-        }
-        VOID = v;
-        TYPE = t;
-        ANY = a;
-    }
-
-    protected String name;
-    private Class<T> cls;
+    private String name;
     private OperationDescriptor[] operations;
     private OperationDescriptor[] conversions;
     private TypeDescriptor<? extends IVilType>[] parameter;
-    
-    /**
-     * Stores non-assignable classes.
-     * 
-     * @see ClassMeta#nAssign()
-     */
-    private Class<?>[] nAssign;
 
     /**
-     * Creates a new type descriptor.
+     * Creates a new type descriptor. Overridden constructors shall call {@link #setOperations(java.util.Collection)}
+     * and {@link #setConversions(java.util.Collection)}.
      * 
-     * @param cls the class to create the type descriptor for
-     * @throws VilException if analyzing the class fails for some reason
-     */
-    TypeDescriptor(Class<T> cls) throws VilException {
-        this(cls, (TypeDescriptor<? extends IVilType>[]) null);
-    }
-    
-    /**
-     * Creates a new type descriptor.
-     * 
-     * @param cls the class to create the type descriptor for
      * @param parameter type parameter (may be <b>null</b>)
      * @throws VilException if analyzing the class fails for some reason
      */
-    TypeDescriptor(Class<T> cls, TypeDescriptor<? extends IVilType>... parameter) throws VilException {
-        this.cls = cls;
+    TypeDescriptor(TypeDescriptor<? extends IVilType>... parameter) throws VilException {
         this.parameter = parameter;
-        ClassMeta meta = cls.getAnnotation(ClassMeta.class);
-        Instantiator inst = cls.getAnnotation(Instantiator.class);
-        name = getAlias(meta);
-        Class<?> further = null;
-        if (null != meta) {
-            nAssign = meta.nAssign();
-            further = meta.furtherOperations();
-        }
-        java.util.Map<String, OperationDescriptor> tmp = new HashMap<String, OperationDescriptor>();
-        List<OperationDescriptor> convs = new ArrayList<OperationDescriptor>();
-        addMethods(tmp, cls, cls, null != inst ? inst.value() : null);
-        addConversions(cls, convs);
-        if (null != further && Object.class != further) {
-            addMethods(tmp, further, further, null != inst ? inst.value() : null);
-            addConversions(further, convs);
-        }
-        operations = new OperationDescriptor[tmp.size()];
-        tmp.values().toArray(operations);
-        conversions = new OperationDescriptor[convs.size()];
-        convs.toArray(conversions);
     }
     
     /**
-     * Adds the the conversions in <code>cls</code> to <code>convs</code>.
+     * Defines the name of this descriptor explicitly.
      * 
-     * @param cls the class to analyze
-     * @param convs the conversions (to be modified as a side effect)
+     * @param name the name of this descriptor
      */
-    private void addConversions(Class<?> cls, List<OperationDescriptor> convs) {
-        Method[] methods = cls.getDeclaredMethods();
-        if (null != methods) {
-            for (int m = 0; m < methods.length; m++) {
-                Method method = methods[m];
-                int mod = method.getModifiers();
-                Conversion conv = method.getAnnotation(Conversion.class);
-                if (null != conv && !Modifier.isAbstract(mod) && Modifier.isStatic(mod) && Modifier.isPublic(mod)) {
-                    if (Void.TYPE == method.getReturnType()) {
-                        LOGGER.warn("conversion operations must return a value (" + method + "). Ignored.");
-                    } else {
-                        Class<?>[] param = method.getParameterTypes();
-                        if (1 == param.length) {
-                            // no type check/assignment to class for the moment
-                            convs.add(new OperationDescriptor(this, method));
-                        } else {
-                            LOGGER.warn("conversion operations must have exactly one parameter (" 
-                                + method + "). Ignored.");
-                        }
-                    }
-                }
-            }
-        }
+    protected void setName(String name) {
+        this.name = name;
     }
 
     /**
-     * Returns the name how a class shall be registered based on {@link ClassMeta}.
-     * @param cls the class to be considered
-     * @return the name
+     * Defines the operations for this type.
+     *  
+     * @param operations the operations
      */
-    public static String getRegName(Class<?> cls) {
-        String name = getAlias(cls);
-        if (null == name) {
-            name = cls.getSimpleName();
-        }
-        return name;
+    protected void setOperations(java.util.Collection<OperationDescriptor> operations) {
+        this.operations = new OperationDescriptor[operations.size()];
+        operations.toArray(this.operations);
     }
     
     /**
-     * Returns a possible alias for <code>cls</code> based on {@link ClassMeta}.
-     * @param cls the class to be considered
-     * @return the alias or <b>null</b> if there is none
-     */
-    public static String getAlias(Class<?> cls) {
-        return getAlias(cls.getAnnotation(ClassMeta.class));
-    }
-
-    /**
-     * Returns a possible alias for {@link ClassMeta}.
-     * @param meta the annotation to query
-     * @return the alias or <b>null</b> if there is none
-     */
-    private static String getAlias(ClassMeta meta) {
-        String name = null;
-        if (null != meta && null != meta.name()) {
-            name = meta.name();
-        }
-        return name;
-    }
-
-    /**
-     * Adds all (relevant and not invisible) methods provided by <code>cls</code>.
-     * This method works recursively on superclasses of <code>cls</code>.
+     * Defines the conversions for this type.
      * 
-     * @param operations the map of operations (signature-descriptor) to be modified as a side effect
-     * @param cls the class to be analyzed
-     * @param start the class for which this call was initiated
-     * @param instantiatorName the name of the instantiator (may be <b>null</b>)
+     * @param conversions the conversions
      */
-    private void addMethods(java.util.Map<String, OperationDescriptor> operations, Class<?> cls, Class<?> start, 
-        String instantiatorName) {
-        if (Object.class != cls) {
-            TypeDescriptor<?> tDesc = TypeRegistry.getType(getRegName(cls));
-            if (null != tDesc) {
-                int count = tDesc.getOperationsCount();
-                for (int o = 0; o < count; o++) {
-                    OperationDescriptor op = tDesc.getOperation(o);
-                    if (!op.isConstructor() || (op.isConstructor() && cls == start)) {
-                        String sig = op.getJavaSignature();
-                        if (!operations.containsKey(sig)) {
-                            operations.put(sig, tDesc.getOperation(o));
-                        }
-                    }
-                }
-            } else {
-                Method[] methods = cls.getDeclaredMethods();
-                for (int m = 0; m < methods.length; m++) {
-                    addMethod(operations, methods[m], instantiatorName);
-                }
-            }
-            Class<?> superCls = cls.getSuperclass();
-            if (null != superCls) {
-                addMethods(operations, superCls, start, instantiatorName);
-            }
-            Class<?>[] ifaces = cls.getInterfaces();
-            if (null != ifaces) {
-                for (int i = 0; i < ifaces.length; i++) {
-                    addMethods(operations, ifaces[i], start, instantiatorName);
-                }
-            }
-        }
-    }
-
-    /**
-     * Adds the given method to the operations map.
-     * 
-     * @param operations the map of operations (signature-descriptor) to be modified as a side effect
-     * @param method the method to be added
-     * @param instantiatorName the name of the instantiator (may be <b>null</b>)
-     * 
-     * @see OperationDescriptor#isOperationOrConstructor(Method)
-     */
-    private void addMethod(java.util.Map<String, OperationDescriptor> operations, Method method, 
-        String instantiatorName) {
-        if (Modifier.isPublic(method.getModifiers())) {
-            Invisible invAnnotation = method.getAnnotation(Invisible.class);
-            String sig = OperationDescriptor.getJavaSignature(method);
-            if (null == invAnnotation && !TypeRegistry.hasInheritedInvisibleAnnotation(
-                sig, method.getDeclaringClass()) && filterMethodByName(method, instantiatorName)) {
-                if (!operations.containsKey(sig) && OperationDescriptor.isOperationOrConstructor(method)) {
-                    if (registerAliasOperation(operations, method)) {
-                        operations.put(sig, new OperationDescriptor(this, method));
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Returns whether the method shall be considered based on its name. In instantiators, 
-     * only methods with the instantiator name or constructors are considered.
-     * 
-     * @param method the method to be checked
-     * @param instantiatorName the instantiator name signalling that we check for an instantiator (may be <b>null</b> 
-     * in case of an ordinary {@link IVilType} or an artifact)
-     * @return <code>true</code> if it shall be considered, <code>false</code> else
-     */
-    private static boolean filterMethodByName(Method method, String instantiatorName) {
-        boolean result = false;
-        if (null == instantiatorName) {
-            result = true;
-        } else {
-            result = instantiatorName.equals(method.getName()) || OperationDescriptor.isConstructor(method);
-        }
-        return result;
+    protected void setConversions(java.util.Collection<OperationDescriptor> conversions) {
+        this.conversions = new OperationDescriptor[conversions.size()];
+        conversions.toArray(this.conversions);
     }
     
-    /**
-     * Register the given <code>method</code> as an alias operation, i.e., getters without "get".
-     * This method considers {@link OperationMeta}.
-     * 
-     * @param operations the map of operations (signature-descriptor) to be modified as a side effect
-     * @param method the method to be considered
-     * @return <code>true</code> register also the original operation, <code>false</code> do not register
-     *   the original operation
-     */
-    private boolean registerAliasOperation(java.util.Map<String, OperationDescriptor> operations, Method method) {
-        boolean regOriginal = true;
-        OperationMeta meta = method.getAnnotation(OperationMeta.class);
-        if (null != meta) {
-            String[] names = meta.name();
-            if (null != names) {
-                for (int n = 0; n < names.length; n++) {
-                    OperationDescriptor desc = new OperationDescriptor(this, method, names[n]);
-                    operations.put(desc.getJavaSignature(), desc);
-                }
-                regOriginal = names.length == 0;
-            }
-        } else {
-            String name = method.getName();
-            if (name.startsWith("get") && name.length() > 3) {
-                name = name.substring(3);
-                if (Character.isUpperCase(name.charAt(0))) {
-                    name = Character.toLowerCase(name.charAt(0)) + name.substring(1);
-                }
-                OperationDescriptor desc = new OperationDescriptor(this, method, name);
-                operations.put(desc.getJavaSignature(), desc);
-            }
-        }
-        return regOriginal;
-    }
-    
-    /**
-     * Returns the (simple) name of this type.
-     * 
-     * @return the simple name
-     */
+    @Override
     public String getName() {
-        return null == name ? cls.getSimpleName() : name;
+        return name;
     }
+    
+    @Override
+    public String getQualifiedName() {
+        return getName(); // TODO preliminary, needs introduction of qualified names in grammars
+    }
+    
+    /**
+     * Returns the class of the described VIL type. Please use this
+     * method sparingly as the required functionality is provided by
+     * this class.
+     * 
+     * @return the class
+     */
+    public abstract Class<T> getTypeClass();
     
     /**
      * Creates an instance of the type according to the given parameters. 
@@ -343,31 +80,7 @@ public class TypeDescriptor <T extends IVilType> implements IMetaType {
      * @return the created instance
      * @throws VilException in case that the creation does not work
      */
-    public T create(Object...params) throws VilException {
-        boolean found = false;
-        T result = null;
-        for (int o = 0; !found && o < operations.length; o++) {
-            OperationDescriptor op = operations[o];            
-            if (op.isConstructor() && CompatibilityResult.COMPATIBLE == op.isCompatible(getTypeClass(), params)) {
-                found = true;
-                Object res = op.invoke(params);
-                if (null == res) {
-                    throw new VilException("VIL constructor does not return a result", VilException.ID_NO_RESULT);
-                } else {
-                    try {
-                        result = getTypeClass().cast(res);
-                    } catch (ClassCastException e) {
-                        throw new VilException("VIL constructor returns wrong result type", 
-                            VilException.ID_TYPE_INCOMPATIBILITY);
-                    }
-                }
-            }
-        }
-        if (!found) {
-            throw new VilException("VIL constructor not found", VilException.ID_NOT_FOUND);
-        }
-        return result;
-    }
+    public abstract T create(Object...params) throws VilException;
     
     /**
      * Returns the available operations.
@@ -400,17 +113,6 @@ public class TypeDescriptor <T extends IVilType> implements IMetaType {
     }
     
     /**
-     * Returns the class of the described VIL type. Please use this
-     * method sparingly as the required functionality is provided by
-     * this class.
-     * 
-     * @return the class
-     */
-    public Class<T> getTypeClass() {
-        return cls;
-    }
-    
-    /**
      * Returns the number of conversions provided by this type descriptor.
      * 
      * @return the number of conversions, i.e., from this type to other types
@@ -432,69 +134,19 @@ public class TypeDescriptor <T extends IVilType> implements IMetaType {
     }
     
     /**
-     * Checks whether the given class <code>cls</code> is considered as a 
-     * non-assignable class for this type descriptor.
-     * 
-     * @param cls the class to be tested
-     * @return <code>true</code> if it is non-assignable, <code>false</code> else
-     * @see ClassMeta#nAssign()
-     */
-    private boolean isNAssign(Class<?> cls) {
-        boolean found = false;
-        if (null != nAssign) {
-            for (int n = 0; !found && n < nAssign.length; n++) {
-                found = (cls == nAssign[n]);
-            }
-        }
-        return found;
-    }
-
-    /**
-     * Returns whether this type is the same or a super class of <code>type</code>.
-     * 
-     * @param type the descriptor to be tested
-     * @return <code>true</code> if both types are assignment compatible, <code>false</code> else
-     */
-    @SuppressWarnings("unchecked")
-    public boolean isAssignableFrom(IMetaType type) {
-        boolean result = false;
-        if (getClass().isInstance(type)) {
-            result = isAssignableFrom(getClass().cast(type));
-        }
-        return result;
-    }
-    
-    /**
      * Returns whether this descriptor is the same or a super class of <code>desc</code>.
      * 
      * @param desc the descriptor to be tested
      * @return <code>true</code> if both descriptors are assignment compatible, <code>false</code> else
      */
-    public boolean isAssignableFrom(TypeDescriptor<? extends IVilType> desc) {
-        boolean assignable;
-        Class<?> descC = desc.getTypeClass();
-        assignable = !isNAssign(descC) && !desc.isNAssign(cls);
-        if (assignable) {
-            assignable = cls.isAssignableFrom(descC) || desc == ANY;
-            if (assignable && getParameterCount() > 0) {
-                assignable = (getParameterCount() == desc.getParameterCount());
-                for (int p = 0; assignable && p < getParameterCount(); p++) {
-                    if (null != getParameterType(p)) {
-                        // generic type without specific generic parameter e.g. in set -> match
-                        assignable = getParameterType(p).isAssignableFrom(desc.getParameterType(p));
-                    }
-                }
-            }
-        }
-        return assignable;
-    }
+    public abstract boolean isAssignableFrom(TypeDescriptor<? extends IVilType> desc);
     
     /**
-     * Returns the conversion operation from this type to target type (if there is any).
+     * Returns the most specific conversion operation from this type to target type (if there is any).
      * 
      * @param sourceType the source type to convert from
      * @param targetType the target type to convert to
-     * @return the conversion operation as defined in the underlying implementation class, 
+     * @return the most specific conversion operation as defined in the underlying implementation class, 
      *   <b>null</b> if no matching can be found
      */
     public IMetaOperation findConversion(IMetaType sourceType, IMetaType targetType) {
@@ -503,50 +155,39 @@ public class TypeDescriptor <T extends IVilType> implements IMetaType {
             IMetaOperation desc = conversions[c];
             if (desc.getParameterType(0).isAssignableFrom(sourceType) 
                 && desc.getReturnType().isAssignableFrom(targetType)) {
-                result = desc;
+                result = TypeHelper.getMoreSpecificParam1(desc, result);
             }
         }
         return result;
     }
     
     /**
-     * Returns the conversion operation from this type to target type considering
+     * Returns the most specific conversion operation from this type to target type considering
      * both types as declarators of the conversion operation (if there is any).
      * 
      * @param sourceType the source type to convert from
      * @param targetType the target type to convert to
-     * @return the conversion operation as defined in the underlying implementation class, 
+     * @return the most specific conversion operation as defined in the underlying implementation class, 
      *   <b>null</b> if no matching can be found
      */
     public static final OperationDescriptor findConversionOnBoth(TypeDescriptor<? extends IVilType> sourceType, 
         TypeDescriptor<? extends IVilType> targetType) {
-        OperationDescriptor conversion = targetType.findConversion(sourceType, targetType);
-        if (null == conversion) {
-            conversion = sourceType.findConversion(sourceType, targetType);
-        }
-        return conversion;
+        OperationDescriptor c1 = targetType.findConversion(sourceType, targetType);
+        OperationDescriptor c2 = sourceType.findConversion(sourceType, targetType);
+        return TypeHelper.getMoreSpecificParam1(c1, c2);
     }
     
     /**
-     * Returns the conversion operation from this type to target type (if there is any).
+     * Returns the most specific conversion operation from this type to target type (if there is any).
      * 
      * @param sourceType the source type to convert from
      * @param targetType the target type to convert to
-     * @return the conversion operation as defined in the underlying implementation class, 
+     * @return the most specific conversion operation as defined in the underlying implementation class, 
      *   <b>null</b> if no matching can be found
      */
     public OperationDescriptor findConversion(TypeDescriptor<? extends IVilType> sourceType, 
         TypeDescriptor<? extends IVilType> targetType) {
-        // duplicated code with findConversion :(
-        OperationDescriptor result = null;
-        for (int c = 0; null == result && c < conversions.length; c++) {
-            OperationDescriptor desc = conversions[c];
-            if (desc.getParameterType(0).isAssignableFrom(sourceType) 
-                && desc.getReturnType().isAssignableFrom(targetType)) {
-                result = desc;
-            }
-        }
-        return result;
+        return (OperationDescriptor) findConversion((IMetaType) sourceType, (IMetaType) targetType);
     }
     
     /**
@@ -556,7 +197,7 @@ public class TypeDescriptor <T extends IVilType> implements IMetaType {
      */
     @Override
     public String toString() {
-        return getName() + " representing " + cls.getName();
+        return getName();
     }
     
     /**
@@ -596,7 +237,7 @@ public class TypeDescriptor <T extends IVilType> implements IMetaType {
      * @param name the VIL name of this type
      * @return the VIL name including parameter types if applicable
      */
-    private String appendParameter(String name) {
+    protected String appendParameter(String name) {
         StringBuilder tmp = new StringBuilder(name);
         int count = getParameterCount();
         if (count > 0) {
@@ -623,49 +264,7 @@ public class TypeDescriptor <T extends IVilType> implements IMetaType {
      * @return the name of this type
      */
     public String getVilName() {
-        String result;
-        if (Set.class.isAssignableFrom(cls)) {
-            result = appendParameter("setOf"); 
-        } else if (Sequence.class.isAssignableFrom(cls)) {
-            result = appendParameter("sequenceOf"); 
-        } else if (Map.class.isAssignableFrom(cls)) {
-            result = appendParameter("mapOf"); 
-        } else if (getParameterCount() > 0) {
-            result = appendParameter(getName()); 
-        } else {
-            result = getName();
-        }
-        return result;
-    }
-
-    /**
-     * Returns whether the given class represents a VIL collection.
-     * 
-     * @param cls the class to be checked
-     * @return <code>true</code> if it is a VIL collection, <code>false</code> else
-     */
-    static boolean isCollection(Class<?> cls) {
-        return Collection.class.isAssignableFrom(cls);
-    }
-    
-    /**
-     * Returns whether the given class represents a VIL set.
-     * 
-     * @param cls the class to be checked
-     * @return <code>true</code> if it is a VIL set, <code>false</code> else
-     */
-    static boolean isSet(Class<?> cls) {
-        return Set.class.isAssignableFrom(cls);
-    }
-
-    /**
-     * Returns whether the given class represents a VIL sequence.
-     * 
-     * @param cls the class to be checked
-     * @return <code>true</code> if it is a VIL sequence, <code>false</code> else
-     */
-    static boolean isSequence(Class<?> cls) {
-        return Sequence.class.isAssignableFrom(cls);
+        return getName();
     }
 
     /**
@@ -673,27 +272,21 @@ public class TypeDescriptor <T extends IVilType> implements IMetaType {
      * 
      * @return <code>true</code> if this is a VIL collection, <code>false</code> else
      */
-    public boolean isCollection() {
-        return isSet() || isSequence() || isCollection(cls);
-    }
+    public abstract boolean isCollection();
 
     /**
      * Returns whether this descriptor represents a VIL set.
      * 
      * @return <code>true</code> if this is a VIL set, <code>false</code> else
      */
-    public boolean isSet() {
-        return isSet(cls);
-    }
+    public abstract boolean isSet();
 
     /**
      * Returns whether this descriptor represents a VIL sequence.
      * 
      * @return <code>true</code> if this is a VIL sequence, <code>false</code> else
      */
-    public boolean isSequence() {
-        return isSequence(cls);
-    }
+    public abstract boolean isSequence();
     
     /**
      * Returns whether the given <code>object</code> is an instance of this descriptor.
@@ -701,18 +294,6 @@ public class TypeDescriptor <T extends IVilType> implements IMetaType {
      * @param object the object to be checked
      * @return <code>true</code> if it is an instance, <code>false</code> else
      */
-    public boolean isInstance(Object object) {
-        boolean ok = cls.isInstance(object);
-        if (!ok) {
-            ClassMeta meta = cls.getAnnotation(ClassMeta.class);
-            if (null != meta && null != meta.equiv()) {
-                Class<?>[] equiv = meta.equiv();
-                for (int e = 0; !ok && e < equiv.length; e++) {
-                    ok = equiv[e].isInstance(object);
-                }
-            }
-        }
-        return ok;
-    }
+    public abstract boolean isInstance(Object object);
 
 }

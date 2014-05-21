@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProductLineProject id="cdbeb59a-ec75-44cb-a475-1330fbc604c5" name="MultipleProjectsInIVMLFile" version="0" location="MultipleProjectsInIVMLFile">
+	<predecessors>
+	</predecessors>
+	<successors>
+	</successors>
+	<settings>
+	</settings>
+	<reasoners>
+	</reasoners>
+	<instantiators>
+	</instantiators>
+	<copy>
+	</copy>
+</ProductLineProject>

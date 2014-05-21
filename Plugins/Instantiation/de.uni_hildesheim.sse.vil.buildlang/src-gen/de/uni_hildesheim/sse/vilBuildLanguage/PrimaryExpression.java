@@ -1,8 +1,4 @@
 /**
- * <copyright>
- * </copyright>
- *
-
  */
 package de.uni_hildesheim.sse.vilBuildLanguage;
 
@@ -18,6 +14,7 @@ package de.uni_hildesheim.sse.vilBuildLanguage;
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.PrimaryExpression#getSysEx <em>Sys Ex</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.PrimaryExpression#getMap <em>Map</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.PrimaryExpression#getJoin <em>Join</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.PrimaryExpression#getInstantiate <em>Instantiate</em>}</li>
  * </ul>
  * </p>
  *
@@ -104,5 +101,31 @@ public interface PrimaryExpression extends de.uni_hildesheim.sse.vil.expressions
    * @generated
    */
   void setJoin(Join value);
+
+  /**
+   * Returns the value of the '<em><b>Instantiate</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Instantiate</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Instantiate</em>' containment reference.
+   * @see #setInstantiate(Instantiate)
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage#getPrimaryExpression_Instantiate()
+   * @model containment="true"
+   * @generated
+   */
+  Instantiate getInstantiate();
+
+  /**
+   * Sets the value of the '{@link de.uni_hildesheim.sse.vilBuildLanguage.PrimaryExpression#getInstantiate <em>Instantiate</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Instantiate</em>' containment reference.
+   * @see #getInstantiate()
+   * @generated
+   */
+  void setInstantiate(Instantiate value);
 
 } // PrimaryExpression

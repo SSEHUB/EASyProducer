@@ -51,20 +51,21 @@
     <extension
             point="org.eclipse.ui.preferencePages">
         <page
+            category="de.uni_hildesheim.sse.EASy"
             class="de.uni_hildesheim.sse.ui.VilBuildLanguageExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
             id="de.uni_hildesheim.sse.VilBuildLanguage"
-            name="VilBuildLanguage">
+            name="Variability Implementation Language (VIL)">
             <keywordReference id="de.uni_hildesheim.sse.ui.keyword_VilBuildLanguage"/>
         </page>
         <page
-            category="de.uni_hildesheim.sse.VilBuildLanguage"
+            category="de.uni_hildesheim.sse.EASy/de.uni_hildesheim.sse.VilBuildLanguage"
             class="de.uni_hildesheim.sse.ui.VilBuildLanguageExecutableExtensionFactory:org.eclipse.xtext.ui.editor.syntaxcoloring.SyntaxColoringPreferencePage"
             id="de.uni_hildesheim.sse.VilBuildLanguage.coloring"
             name="Syntax Coloring">
             <keywordReference id="de.uni_hildesheim.sse.ui.keyword_VilBuildLanguage"/>
         </page>
         <page
-            category="de.uni_hildesheim.sse.VilBuildLanguage"
+            category="de.uni_hildesheim.sse.EASy/de.uni_hildesheim.sse.VilBuildLanguage"
             class="de.uni_hildesheim.sse.ui.VilBuildLanguageExecutableExtensionFactory:org.eclipse.xtext.ui.editor.templates.XtextTemplatePreferencePage"
             id="de.uni_hildesheim.sse.VilBuildLanguage.templates"
             name="Templates">
@@ -74,9 +75,10 @@
     <extension
             point="org.eclipse.ui.propertyPages">
         <page
+            category="de.uni_hildesheim.sse.EASy"
             class="de.uni_hildesheim.sse.ui.VilBuildLanguageExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
             id="de.uni_hildesheim.sse.VilBuildLanguage"
-            name="VilBuildLanguage">
+            name="Variability Implementation Language (VIL)">
             <keywordReference id="de.uni_hildesheim.sse.ui.keyword_VilBuildLanguage"/>
             <enabledWhen>
 	            <adapt type="org.eclipse.core.resources.IProject"/>
@@ -181,6 +183,7 @@
             class="de.uni_hildesheim.sse.ui.VilBuildLanguageExecutableExtensionFactory:org.eclipse.xtext.builder.IXtextBuilderParticipant">
       </participant>
    </extension>
+   <!-- disable the compiler settings
    <extension
             point="org.eclipse.ui.preferencePages">
         <page
@@ -204,7 +207,7 @@
 			</enabledWhen>
 	        <filter name="projectNature" value="org.eclipse.xtext.ui.shared.xtextNature"/>
         </page>
-    </extension>
+    </extension>-->
 
 	<!-- Quick Outline -->
 	<extension

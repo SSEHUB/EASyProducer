@@ -10,6 +10,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 
+import de.uni_hildesheim.sse.easy_producer.core.persistence.Configuration.PathKind;
 import de.uni_hildesheim.sse.easy_producer.persistency.eclipse.PersistenceUtils;
 import de.uni_hildesheim.sse.integration.common.IModelInfo;
 import de.uni_hildesheim.sse.integration.common.ModelException;
@@ -77,7 +78,7 @@ public abstract class IModelAccess extends de.uni_hildesheim.sse.integration.com
     public List<IModelInfo> getAvailableModels(IProject project) {
         List<IModelInfo> result = new ArrayList<IModelInfo>();
         if (project.exists()) {
-            IFolder folder = PersistenceUtils.getConfigLocationFolder(project);
+            IFolder folder = PersistenceUtils.getLocationFolder(project, PathKind.IVML);
             IPath folderPath;
             if (!folder.exists()) {
                 folderPath = project.getFullPath();

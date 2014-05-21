@@ -15,14 +15,15 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
 
-import de.uni_hildesheim.sse.easy_producer.persistence.PersistenceException;
-import de.uni_hildesheim.sse.easy_producer.persistence.PersistenceUtils;
-import de.uni_hildesheim.sse.easy_producer.persistence.datatypes.IPersistencer;
-import de.uni_hildesheim.sse.easy_producer.persistence.datatypes.IProjectCreationResult;
-import de.uni_hildesheim.sse.easy_producer.persistence.datatypes.PathEnvironment;
-import de.uni_hildesheim.sse.easy_producer.persistence.datatypes.PersistentProject;
-import de.uni_hildesheim.sse.easy_producer.persistence.mgmt.PLPInfo;
-import de.uni_hildesheim.sse.easy_producer.persistence.standard.Persistencer;
+import de.uni_hildesheim.sse.easy_producer.core.mgmt.PLPInfo;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceException;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceUtils;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.Configuration.PathKind;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.IPersistencer;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.IProjectCreationResult;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.PathEnvironment;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.PersistentProject;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.standard.Persistencer;
 import de.uni_hildesheim.sse.model.management.VarModel;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.ProjectImport;
@@ -81,7 +82,7 @@ public class EclipsePersistencer implements IPersistencer {
         project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
         PathEnvironment pathEnv = PathEnvironmentFactory.createPathEnvironment(project);
         File projectFolder2 = new File(pathEnv.getBaseFolder(), projectName);
-        File storageFile = PersistenceUtils.getConfigLocationFile(projectFolder2);
+        File storageFile = PersistenceUtils.getLocationFile(projectFolder2, PathKind.IVML);
         persistencer = new Persistencer(pathEnv, projectFolder2, 
             storageFile.getAbsolutePath(), ProgressObserver.NO_OBSERVER);
         if (null == monitor) {

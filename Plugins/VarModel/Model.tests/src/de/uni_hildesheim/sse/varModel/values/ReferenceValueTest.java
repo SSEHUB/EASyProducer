@@ -1,7 +1,6 @@
 package de.uni_hildesheim.sse.varModel.values;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -66,8 +65,9 @@ public class ReferenceValueTest {
         
         //Test precondition: Variable must not be assigned
         Assert.assertEquals(AssignmentState.UNDEFINED, refVar.getState());
-        
-        Value refValue = ValueFactory.createValue(Reference.TYPE, cmpDecl);
+
+        // generic use of Reference.TYPE for creating values is deprecated - specific types must be used
+        Value refValue = ValueFactory.createValue(refVar.getDeclaration().getType(), cmpDecl);
         refVar.setValue(refValue, AssignmentState.ASSIGNED);
         
         // Test postcondition: variable must be assigned.

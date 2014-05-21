@@ -1,5 +1,8 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes;
 
+import java.util.Collections;
+import java.util.HashSet;
+
 /**
  * Just some constants.
  * 
@@ -21,6 +24,10 @@ public class Constants {
 
     public static final String EQUALITY = "==";
 
+    public static final String UNEQUALITY = "!=";
+
+    public static final String UNEQUALITY_ALIAS = "<>";
+    
     public static final String NEGATION = "!";
 
     public static final String NEGATION_ALIAS = "not";
@@ -42,5 +49,17 @@ public class Constants {
     public static final String TYPE_BOOLEAN = "Boolean";
     
     public static final String ARRAY_ACCESS = "[]";
+    
+    public static final String IMPLICIT_PARENT_PARAMETER_NAME = "$parent";
 
+    public static final String IMPLICIT_PATHS_PARAMETER_NAME = "$paths";
+    
+    public static final java.util.Set<String> IMPLICIT_PARAMETER;
+    
+    static {
+        java.util.Set<String> tmp = new HashSet<String>();
+        tmp.add(IMPLICIT_PARENT_PARAMETER_NAME);
+        tmp.add(IMPLICIT_PATHS_PARAMETER_NAME);
+        IMPLICIT_PARAMETER = Collections.unmodifiableSet(tmp);
+    }
 }

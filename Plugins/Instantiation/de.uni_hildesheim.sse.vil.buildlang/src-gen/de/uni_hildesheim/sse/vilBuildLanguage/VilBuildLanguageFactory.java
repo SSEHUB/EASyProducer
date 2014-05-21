@@ -1,8 +1,4 @@
 /**
- * <copyright>
- * </copyright>
- *
-
  */
 package de.uni_hildesheim.sse.vilBuildLanguage;
 
@@ -34,6 +30,15 @@ public interface VilBuildLanguageFactory extends EFactory
    * @generated
    */
   ImplementationUnit createImplementationUnit();
+
+  /**
+   * Returns a new object of class '<em>Require</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Require</em>'.
+   * @generated
+   */
+  Require createRequire();
 
   /**
    * Returns a new object of class '<em>Language Unit</em>'.
@@ -124,6 +129,15 @@ public interface VilBuildLanguageFactory extends EFactory
    * @generated
    */
   PrimaryExpression createPrimaryExpression();
+
+  /**
+   * Returns a new object of class '<em>Instantiate</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Instantiate</em>'.
+   * @generated
+   */
+  Instantiate createInstantiate();
 
   /**
    * Returns a new object of class '<em>Map</em>'.

@@ -32,4 +32,14 @@ public class ConstraintPatternFactory {
         }
         return cstType;
     }
+    
+    /**
+     * Method for identifying default assignment constraints.
+     * @param cst Constraint to be analyzed.
+     * @return true if constraint is a default value assignment constraint.
+     */
+    public static boolean isDefaultAssignmentConstraint(ConstraintSyntaxTree cst) {
+        DefaultAssignmentPatternFinder patternFinder = new DefaultAssignmentPatternFinder(cst);
+        return patternFinder.isDefaultAssignmentConstraint();
+    }
 }

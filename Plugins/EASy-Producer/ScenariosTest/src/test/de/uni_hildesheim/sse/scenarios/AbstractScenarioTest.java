@@ -35,7 +35,7 @@ import test.de.uni_hildesheim.sse.vil.buildlang.AbstractTest;
  */
 public abstract class AbstractScenarioTest extends AbstractTest {
 
-    protected static boolean debug = false;
+    protected static boolean debug = true;
 
     /**
      * Defines the default model paths (IVML, VIL, VTL).
@@ -140,9 +140,13 @@ public abstract class AbstractScenarioTest extends AbstractTest {
             System.out.println(tFactory);
         }
         TracerFactory.setInstance(current);
-        VarModel.INSTANCE.locations().removeLocation(ivmlFolder, observer);
-        BuildModel.INSTANCE.locations().removeLocation(vilFolder, observer);
-        TemplateModel.INSTANCE.locations().removeLocation(vtlFolder, observer);
+        try {
+            VarModel.INSTANCE.locations().removeLocation(ivmlFolder, observer);
+            BuildModel.INSTANCE.locations().removeLocation(vilFolder, observer);
+            TemplateModel.INSTANCE.locations().removeLocation(vtlFolder, observer);
+        } catch (ModelManagementException e) {
+            Assert.fail("unexpected exception: " + e.getMessage());
+        }
 
         return targetFile;
     }

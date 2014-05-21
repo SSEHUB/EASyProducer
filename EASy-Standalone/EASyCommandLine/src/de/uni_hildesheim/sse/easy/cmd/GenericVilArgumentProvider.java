@@ -21,7 +21,7 @@ public class GenericVilArgumentProvider extends VilArgumentProvider {
      * 
      * @param arguments the arguments as name-value mapping (please note that
      *   the values shall comply to VIL conventions, see in particular 
-     *   {@link Executor#addCustomArgument(String, Object))}
+     *   {@link Executor#addCustomArgument(String, Object)}
      */
     public GenericVilArgumentProvider(Map<String, Object> arguments) {
         assert null != arguments;

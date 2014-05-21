@@ -1,26 +1,27 @@
 /**
- * <copyright>
- * </copyright>
- *
-
  */
 package de.uni_hildesheim.sse.vilBuildLanguage.impl;
+
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Expression;
+
+import de.uni_hildesheim.sse.vilBuildLanguage.Map;
+import de.uni_hildesheim.sse.vilBuildLanguage.RuleElementBlock;
+import de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage;
 
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-import org.eclipse.emf.ecore.util.EDataTypeEList;
 
-import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Expression;
-import de.uni_hildesheim.sse.vilBuildLanguage.Map;
-import de.uni_hildesheim.sse.vilBuildLanguage.RuleElementBlock;
-import de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage;
+import org.eclipse.emf.ecore.util.EDataTypeEList;
 
 /**
  * <!-- begin-user-doc -->

@@ -5,6 +5,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguage
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 
 /**
  * Implements a template language subtemplate ('def').
@@ -111,7 +112,7 @@ public class Def extends TemplateBlock implements ITemplateLangElement, IResolva
 
     @Override
     public TypeDescriptor<? extends IVilType> getReturnType() {
-        return TypeDescriptor.ANY; // let's see at runtime
+        return TypeRegistry.anyType(); // let's see at runtime
     }
 
     @Override

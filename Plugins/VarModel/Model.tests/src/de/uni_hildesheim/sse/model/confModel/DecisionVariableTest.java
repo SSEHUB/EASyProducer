@@ -1,7 +1,6 @@
 package de.uni_hildesheim.sse.model.confModel;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -12,11 +11,15 @@ import de.uni_hildesheim.sse.model.cst.Variable;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.Project;
+import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
 import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
+import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IntegerType;
+import de.uni_hildesheim.sse.model.varModel.values.NullValue;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
 import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
 import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
+import de.uni_hildesheim.sse.varModel.testSupport.ProjectTestUtilities;
 
 /**
  * this class tests whether for all <code>IDatatype</code> {@link DecisionVariable}s can be created.
@@ -34,7 +37,7 @@ public class DecisionVariableTest {
      */
     @Before
     public void setUp() {
-        project = new Project("project");
+        project = new Project("testProject");
         config = new Configuration(project);
     }
     
@@ -80,6 +83,7 @@ public class DecisionVariableTest {
     public void testSetValueWithFreeze() throws ValueDoesNotMatchTypeException, ConfigurationException {
         DecisionVariableDeclaration decl = new DecisionVariableDeclaration("a", IntegerType.TYPE, project);
         project.add(decl);
+        ProjectTestUtilities.validateProject(project);
         config.refresh();
         IDecisionVariable var = config.getDecision(decl);
         Assert.assertNotNull(var);
@@ -92,4 +96,69 @@ public class DecisionVariableTest {
         Assert.assertEquals("1", var.getValue().getValue().toString());
     }
 
+    /**
+     * Tests whether the {@link IDecisionVariable#hasValue()} and {@link IDecisionVariable#hasNullValue()}
+     * are working correctly.
+     */
+    @Test
+    public void testHasValue() {
+        // Create project with an instance for all IDatatypes
+        final int noOfVariables = ProjectTestUtilities.createInstancesForAllDatatypes(project);
+        ProjectTestUtilities.validateProject(project);
+        config.refresh();
+        
+        // Test whether all variables did not have a value
+        int noOfIterations = 0;
+        for (IDecisionVariable var : config) {
+            noOfIterations++;
+            // Compounds are allowed to have an empty value...
+            if (!Compound.TYPE.isAssignableFrom(var.getDeclaration().getType())) {
+                Assert.assertFalse("Error: " + var.getDeclaration().getName() + " should not have a value, but it has.",
+                    var.hasValue());
+            }
+        }
+        Assert.assertEquals("Error: More or less variables were tested than expected.", noOfVariables, noOfIterations);
+        
+        // Test whether all variables can have a null value.
+        noOfIterations = 0;
+        for (IDecisionVariable var : config) {
+            noOfIterations++;
+            //checkstyle: stop exception type check 
+            try {
+                var.setValue(NullValue.INSTANCE, AssignmentState.ASSIGNED);
+                Assert.assertTrue("Error: Variable should have a NullValue, but it is not shown.", var.hasValue());
+                Assert.assertTrue("Error: Variable should have a NullValue, but it is not shown.", var.hasNullValue());
+            } catch (Exception e) {
+                IDatatype type = var.getDeclaration().getType();
+                Assert.fail("Error: Could not assign NullValue to a " + type + " variable.");
+            }
+            //checkstyle: resume exception type check
+        }
+        Assert.assertEquals("Error: More or less variables were tested than expected.", noOfVariables, noOfIterations);
+        
+        // Test whether the NullValue can be removed easily
+        noOfIterations = 0;
+        for (IDecisionVariable var : config) {
+            noOfIterations++;
+            IDatatype type = var.getDeclaration().getType();
+            try {
+                Value value = ValueFactory.createValue(type, (Object[]) null);
+                var.setValue(value, AssignmentState.UNDEFINED);
+            } catch (ValueDoesNotMatchTypeException e) {
+                Assert.fail(e.getMessage());
+            } catch (ConfigurationException e) {
+                Assert.fail(e.getMessage());
+            }
+            
+            // Compounds are allowed to have an empty value...
+            if (!Compound.TYPE.isAssignableFrom(var.getDeclaration().getType())) {
+                Assert.assertFalse("Error: " + var.getDeclaration().getName() + " should not have a value, but it has.",
+                    var.hasValue());
+            } else {
+                Assert.assertTrue("Error: " + var.getDeclaration().getName() + " should have a value, but it has not.",
+                    var.hasValue());
+            }
+        }
+        Assert.assertEquals("Error: More or less variables were tested than expected.", noOfVariables, noOfIterations);
+    }
 }

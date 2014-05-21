@@ -5,9 +5,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Assert;
-
 import org.eclipse.emf.common.util.URI;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 

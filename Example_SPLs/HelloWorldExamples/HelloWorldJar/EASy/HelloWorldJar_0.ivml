@@ -1,0 +1,13 @@
+project HelloWorldJar {
+
+    version v0;
+    String title;
+    String msg;
+    compound Dimension {
+        Integer width;
+        Integer height;
+    }
+
+    Dimension windowSize;
+    windowSize = {width = 250, height = 70};
+}

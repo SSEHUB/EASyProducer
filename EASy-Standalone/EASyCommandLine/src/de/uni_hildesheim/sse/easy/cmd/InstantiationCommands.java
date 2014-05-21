@@ -12,6 +12,8 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Scr
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ScriptContainer;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
 import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
+import de.uni_hildesheim.sse.easy_producer.persistence.Configuration;
+import de.uni_hildesheim.sse.easy_producer.persistence.Configuration.PathKind;
 import de.uni_hildesheim.sse.easy_producer.persistence.PersistenceException;
 import de.uni_hildesheim.sse.easy_producer.persistence.PersistenceUtils;
 import de.uni_hildesheim.sse.easy_producer.persistence.mgmt.PLPInfo;
@@ -24,10 +26,12 @@ import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
 import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
 
 /**
- * Static commands for instantiating projects via the command line or by a build tool.<br/>
+ * Static commands for instantiating projects via the command line or by a build tool. Files/Folders 
+ * to be passed in through this interface shall be absolute!<br/>
+ * 
  * <b>Before calling any of the methods here, EASy must be loaded via calling {@link LowlevelCommands#startEASy()}.</b>
+ * 
  * @author El-Sharkawy
- *
  */
 public final class InstantiationCommands {
 
@@ -45,7 +49,7 @@ public final class InstantiationCommands {
      * <li>contain VIL script which can be applied to itself</li>
      * </ul>
      * 
-     * @param project The toplevel folder of the project (must have a valid EASy structure)
+     * @param project The toplevel absolute folder of the project (must have a valid EASy structure)
      * 
      * @throws PersistenceException Will be thrown if the project could not be loaded, e.g. if the project has no
      *     valid EASy structure.
@@ -64,7 +68,7 @@ public final class InstantiationCommands {
      * <li>contain VIL script which can be applied to itself</li>
      * </ul>
      * 
-     * @param project The toplevel folder of the project (must have a valid EASy structure)
+     * @param project The toplevel absolute folder of the project (must have a valid EASy structure)
      * @param arguments a name-element mapping specifying the top-level parameter of a VIL instantiation (may 
      *   be <b>null</b>)
      * 
@@ -96,7 +100,7 @@ public final class InstantiationCommands {
      * </ul>
      * This method is a convenience wrapper for {@link #instantiateSelf(File, File, Map)} with <b>null</b> as arguments.
      * 
-     * @param project The toplevel folder of the project
+     * @param project The toplevel absolute folder of the project
      * @param ivmlFile A frozen configuration, which should be used for instantiation.
      * 
      * @throws ModelManagementException In case that the available information
@@ -117,7 +121,7 @@ public final class InstantiationCommands {
      *     VIL scripts in Version 0.</li>
      * </ul>
      * 
-     * @param project The toplevel folder of the project
+     * @param project The toplevel absolute folder of the project
      * @param ivmlFile A frozen configuration, which should be used for instantiation.
      * @param arguments a name-element mapping specifying the top-level parameter of a VIL instantiation (may 
      *   be <b>null</b>)
@@ -133,7 +137,7 @@ public final class InstantiationCommands {
         // This is an unusual way (a hack):  
         // Determine default build script location
         String projectName = project.getName();
-        File configFolder = PersistenceUtils.getConfigLocationFile(project);
+        File configFolder = PersistenceUtils.getLocationFile(project, PathKind.IVML);
         String path = PersistenceUtils.vilFileLocation(projectName, "0", configFolder.getAbsolutePath());
         File buildScriptFile = new File(path);
         
@@ -145,7 +149,7 @@ public final class InstantiationCommands {
      * It's <b>not</b> necessary that the project has a valid EASy structure. This method is a convenience wrapper for 
      * {@link #instantiateSelf(File, File, File, Map)} with <b>null</b> as arguments.
      * 
-     * @param project The toplevel folder of the project
+     * @param project The toplevel absolute folder of the project
      * @param ivmlFile A frozen configuration, which should be used for instantiation.
      * @param buildScriptFile The main build script (starting point) which should be used for instantiation.
      * 
@@ -163,7 +167,7 @@ public final class InstantiationCommands {
      * Instatiates the given project. <br />
      * It's <b>not</b> necessary that the project has a valid EASy structure.
      * 
-     * @param project The toplevel folder of the project
+     * @param project The toplevel absolute folder of the project
      * @param ivmlFile A frozen configuration, which should be used for instantiation.
      * @param buildScriptFile The main build script (starting point) which should be used for instantiation.
      * @param arguments a name-element mapping specifying the top-level parameter of a VIL instantiation (may 
@@ -183,14 +187,15 @@ public final class InstantiationCommands {
         // Load build script
         Script buildScript = PersistenceUtils.loadModel(BuildModel.INSTANCE, buildScriptFile);
         // Adds the project folder to all 3 models. In case of an error, only the last exception will be thrown.
-        PersistenceUtils.addLocation(project, ProgressObserver.NO_OBSERVER);
+        Configuration config = PersistenceUtils.getConfiguration(project);
+        PersistenceUtils.addLocation(config, ProgressObserver.NO_OBSERVER);
         
         // Create temporary PLP
         if (null != ivmlProject && null != buildScript) {
             VilArgumentProvider provider = createArgumentProvider(arguments);
             String projectName = project.getName();
-            ProjectContainer pCont = new ProjectContainer(ivmlProject);
-            ScriptContainer sCont = new ScriptContainer(buildScript);
+            ProjectContainer pCont = new ProjectContainer(ivmlProject, ivmlFile.getParentFile());
+            ScriptContainer sCont = new ScriptContainer(buildScript, buildScriptFile.getParentFile());
             PLPInfo plp = new ProductLineProject(UUID.randomUUID().toString(), projectName, pCont, project, sCont);
             plp.instantiate(null);
             VilArgumentProvider.remove(provider); // ok if provider is null
@@ -231,10 +236,10 @@ public final class InstantiationCommands {
      * included in <tt>projectSource</tt>.
      * This method is a convenience wrapper for {@link #instantiate(File, File, Map)} with <b>null</b> as arguments.
      * 
-     * @param projectSource The toplevel folder of an EASy project (must have a valid EASy structure), which serves as
-     *     a basis for instantiation.
-     * @param projectTarget The toplevel folder of an EASy project (must have a valid EASy structure), which should be
-     *     instantiated.
+     * @param projectSource The toplevel absolute folder of an EASy project (must have a valid EASy structure), which 
+     *     serves as a basis for instantiation.
+     * @param projectTarget The toplevel absolute folder of an EASy project (must have a valid EASy structure), which 
+     *     should be instantiated.
      * 
      * @throws PersistenceException Will be thrown if one of the projects could not be loaded,
      *     e.g. if the project has no valid EASy structure.
@@ -261,10 +266,10 @@ public final class InstantiationCommands {
      * If <tt>projectTarget</tt> does not exist, this method will create the folder. In this case, 2.) and 3.) must be
      * included in <tt>projectSource</tt>.
      * 
-     * @param projectSource The toplevel folder of an EASy project (must have a valid EASy structure), which serves as
-     *     a basis for instantiation.
-     * @param projectTarget The toplevel folder of an EASy project (must have a valid EASy structure), which should be
-     *     instantiated.
+     * @param projectSource The toplevel absolute folder of an EASy project (must have a valid EASy structure), which 
+     *     serves as a basis for instantiation.
+     * @param projectTarget The toplevel absolute folder of an EASy project (must have a valid EASy structure), which 
+     *     should be instantiated.
      * @param arguments a name-element mapping specifying the top-level parameter of a VIL instantiation (may 
      *   be <b>null</b>)
      * 
@@ -293,12 +298,17 @@ public final class InstantiationCommands {
             
             // 3. Extract variability information
             Project ivmlProject = plpPre.getProject();
+            Configuration configTarget = PersistenceUtils.getConfiguration(projectTarget);
+            String projectFolderPath = configTarget.getPath(PathKind.IVML);
+            File projectFolder = new File(projectFolderPath);
             Script buildScript = plpPre.getBuildScript();
+            String scriptFolderPath = configTarget.getPath(PathKind.VIL);
+            File scriptFolder = new File(scriptFolderPath);
             
             // 4. Create successor with extracted information.
             String projectNameTrg = projectTarget.getName();
-            ProjectContainer pCont = new ProjectContainer(ivmlProject);
-            ScriptContainer sCont = new ScriptContainer(buildScript);
+            ProjectContainer pCont = new ProjectContainer(ivmlProject, projectFolder);
+            ScriptContainer sCont = new ScriptContainer(buildScript, scriptFolder);
             PLPInfo plpSuc = new ProductLineProject(UUID.randomUUID().toString(), projectNameTrg, pCont,
                 projectTarget, sCont);
             plpSuc.getMemberController().addPredecessor(plpPre);
@@ -321,10 +331,10 @@ public final class InstantiationCommands {
      *     </li>
      * </ul>
      * 
-     * @param projectSource The toplevel folder of an EASy project (must have a valid EASy structure), which serves as
-     *     a basis for instantiation.
-     * @param projectTarget The toplevel folder of an EASy project (must have a valid EASy structure), which should be
-     *     instantiated.
+     * @param projectSource The toplevel absolute folder of an EASy project (must have a valid EASy structure), which 
+     *     serves as a basis for instantiation.
+     * @param projectTarget The toplevel absolute folder of an EASy project (must have a valid EASy structure), which 
+     *     should be instantiated.
      * @param arguments a name-element mapping specifying the top-level parameter of a VIL instantiation (may 
      *   be <b>null</b>)
      * 
@@ -357,9 +367,10 @@ public final class InstantiationCommands {
      * The folder <tt>projectTarget</tt> will be created, if it does not exist. This method is a convenience wrapper 
      * for {@link #instantiate(File, File, File, File, Map)} with <b>null</b> as arguments.
      * 
-     * @param projectSource A folder/project, which contains the product line infrastructure, i.e. files to instantiate.
-     * @param projectTarget A folder/project where the files should be instantiated in. The folder will be created if
-     *     it does not exist.
+     * @param projectSource An absolute folder/project, which contains the product line infrastructure, i.e. files to 
+     *     instantiate.
+     * @param projectTarget An absolute folder/project where the files should be instantiated in. The folder will be 
+     *     created if it does not exist.
      * @param ivmlFile The model definition including its frozen configuration, which should be used for instantiation.
      *     (Must be inside either of <tt>projectSource</tt> or <tt>projectTarget</tt>).
      * @param scriptFile The main build script (starting point) which should be used for instantiation.
@@ -383,9 +394,10 @@ public final class InstantiationCommands {
      * Uses <tt>projectSource</tt> to instantiate <tt>projectTarget</tt>.
      * The folder <tt>projectTarget</tt> will be created, if it does not exist.
      * 
-     * @param projectSource A folder/project, which contains the product line infrastructure, i.e. files to instantiate.
-     * @param projectTarget A folder/project where the files should be instantiated in. The folder will be created if
-     *     it does not exist.
+     * @param projectSource An absolute folder/project, which contains the product line infrastructure, i.e. files 
+     *     to instantiate.
+     * @param projectTarget An absolute folder/project where the files should be instantiated in. The folder will be 
+     *     created if it does not exist.
      * @param ivmlFile The model definition including its frozen configuration, which should be used for instantiation.
      *     (Must be inside either of <tt>projectSource</tt> or <tt>projectTarget</tt>).
      * @param scriptFile The main build script (starting point) which should be used for instantiation.
@@ -423,8 +435,10 @@ public final class InstantiationCommands {
         createTargetFolder(projectSource, projectTarget);
         
         // Adds the project folder to all 3 models. In case of an error, only the last exception will be thrown.
-        PersistenceUtils.addLocation(projectSource, ProgressObserver.NO_OBSERVER);    
-        PersistenceUtils.addLocation(projectTarget, ProgressObserver.NO_OBSERVER);
+        Configuration configSource = PersistenceUtils.getConfiguration(projectSource);
+        PersistenceUtils.addLocation(configSource, ProgressObserver.NO_OBSERVER);    
+        Configuration configTarget = PersistenceUtils.getConfiguration(projectTarget);
+        PersistenceUtils.addLocation(configTarget, ProgressObserver.NO_OBSERVER);
 
         // Load ivml file
         Project ivmlProject = PersistenceUtils.loadModel(VarModel.INSTANCE, ivmlFile);      
@@ -442,8 +456,9 @@ public final class InstantiationCommands {
     /**
      * Creates two (temporary) {@link PLPInfo}s, links them (sets prede-/successor), and instantiates the successor.
      * 
-     * @param projectSource A folder/project, which contains the product line infrastructure, i.e. files to instantiate.
-     * @param projectTarget An existing folder/project where the files should be instantiated in.
+     * @param projectSource An absolute folder/project, which contains the product line infrastructure, i.e. files to 
+     *     instantiate.
+     * @param projectTarget An existing absolute folder/project where the files should be instantiated in.
      * @param ivmlProject A loaded configuration, which should be used for instantiation (Must not be <tt>null</tt>).
      * @param buildScript A loaded build script, which should be used for instantiation (Must not be <tt>null</tt>).
      * @param arguments a name-element mapping specifying the top-level parameter of a VIL instantiation (may 
@@ -461,9 +476,13 @@ public final class InstantiationCommands {
         PLPInfo plpPre = new ProductLineProject(projectNameSrc, projectSource);
         
         // Create Successor
+        Configuration config = PersistenceUtils.getConfiguration(projectTarget);
+        File projectFolder = new File(config.getPath(PathKind.IVML));
+        File scriptFolder = new File(config.getPath(PathKind.VIL));
+        
         String projectNameTrg = projectTarget.getName();
-        ProjectContainer pCont = new ProjectContainer(ivmlProject);
-        ScriptContainer sCont = new ScriptContainer(buildScript);
+        ProjectContainer pCont = new ProjectContainer(ivmlProject, projectFolder);
+        ScriptContainer sCont = new ScriptContainer(buildScript, scriptFolder);
         PLPInfo plpSuc = new ProductLineProject(UUID.randomUUID().toString(), projectNameTrg, pCont,
             projectTarget, sCont);
         plpSuc.getMemberController().addPredecessor(plpPre);
@@ -478,9 +497,10 @@ public final class InstantiationCommands {
      * for {@link #instantiate(File, File, ModelLoadDefinition, ModelLoadDefinition, Map)} with <b>null</b> 
      * as arguments.
      * 
-     * @param projectSource A folder/project, which contains the product line infrastructure, i.e. files to instantiate.
-     * @param projectTarget A folder/project where the files should be instantiated in. The folder will be created if
-     *     it does not exist.
+     * @param projectSource An absolute folder/project, which contains the product line infrastructure, i.e. files to 
+     *     instantiate.
+     * @param projectTarget An absolute folder/project where the files should be instantiated in. The folder will be 
+     *     created if it does not exist.
      * @param ivmlDefinition A (model name, version) pair for specifying which {@link Project} should be used for
      *     instantantion.
      *     The {@link Project} must be located inside of <tt>projectTarget</tt> or <tt>projectSource</tt>.
@@ -510,9 +530,10 @@ public final class InstantiationCommands {
      * Uses <tt>projectSource</tt> to instantiate <tt>projectTarget</tt>.
      * The folder <tt>projectTarget</tt> will be created, if it does not exist.
      * 
-     * @param projectSource A folder/project, which contains the product line infrastructure, i.e. files to instantiate.
-     * @param projectTarget A folder/project where the files should be instantiated in. The folder will be created if
-     *     it does not exist.
+     * @param projectSource An absolute folder/project, which contains the product line infrastructure, i.e. files to 
+     *     instantiate.
+     * @param projectTarget An absolute folder/project where the files should be instantiated in. The folder will be 
+     *     created if it does not exist.
      * @param ivmlDefinition A (model name, version) pair for specifying which {@link Project} should be used for
      *     instantantion.
      *     The {@link Project} must be located inside of <tt>projectTarget</tt> or <tt>projectSource</tt>.
@@ -545,8 +566,10 @@ public final class InstantiationCommands {
         createTargetFolder(projectSource, projectTarget);
         
         // Adds the project folder to all 3 models. In case of an error, only the last exception will be thrown.
-        PersistenceUtils.addLocation(projectSource, ProgressObserver.NO_OBSERVER);    
-        PersistenceUtils.addLocation(projectTarget, ProgressObserver.NO_OBSERVER);
+        Configuration configSource = PersistenceUtils.getConfiguration(projectSource);
+        Configuration configTarget = PersistenceUtils.getConfiguration(projectTarget);
+        PersistenceUtils.addLocation(configSource, ProgressObserver.NO_OBSERVER);    
+        PersistenceUtils.addLocation(configTarget, ProgressObserver.NO_OBSERVER);
         
         Project ivmlProject = Utils.loadPreferredModel(VarModel.INSTANCE, ivmlDefinition, projectTarget, projectSource);
         Script script = Utils.loadPreferredModel(BuildModel.INSTANCE, vilDefinition, projectTarget, projectSource);

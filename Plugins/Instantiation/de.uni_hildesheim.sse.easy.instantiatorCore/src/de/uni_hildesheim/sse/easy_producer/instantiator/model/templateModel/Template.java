@@ -10,6 +10,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.IVariableDe
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaOperation;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaType;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.utils.modelManagement.IndentationConfiguration;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
 import de.uni_hildesheim.sse.utils.modelManagement.Version;
@@ -39,11 +40,12 @@ public class Template extends AbstractResolvableModel<VariableDeclaration, Templ
      * @param name the name
      * @param extension the extended template (may be <b>null</b>)
      * @param descriptor information to create the template from
+     * @param registry the registry responsible for this template
      * @throws VilLanguageException in case of erroneous input
      */
-    public Template(String name, ModelImport<Template> extension, TemplateDescriptor descriptor) 
+    public Template(String name, ModelImport<Template> extension, TemplateDescriptor descriptor, TypeRegistry registry) 
         throws VilLanguageException {
-        super(descriptor.getImports());
+        super(descriptor.getImports(), registry);
         if (null == name || name.length() == 0) {
             throw new VilLanguageException("no name given", VilLanguageException.ID_SEMANTIC);
         }
@@ -83,12 +85,13 @@ public class Template extends AbstractResolvableModel<VariableDeclaration, Templ
         return false; // VTL does not have implicit variables for now
     }
     
-    /**
-     * The name of this template.
-     * 
-     * @return the name
-     */
+    @Override
     public String getName() {
+        return name;
+    }
+    
+    @Override
+    public String getQualifiedName() {
         return name;
     }
 
@@ -293,6 +296,11 @@ public class Template extends AbstractResolvableModel<VariableDeclaration, Templ
     @Override
     public IndentationConfiguration getIndentationConfiguration() {
         return indentationConfiguration;
+    }
+
+    @Override
+    public boolean isBasicType() {
+        return false;
     }
 
 }

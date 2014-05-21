@@ -8,9 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import junit.framework.Assert;
-
 import org.eclipse.emf.common.util.URI;
+import org.junit.Assert;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
@@ -55,7 +54,7 @@ public abstract class AbstractTest extends de.uni_hildesheim.sse.dslCore.test.Ab
         BuiltIn.initialize();
         ExtensionClassLoaders.registerLoader(AbstractTest.class.getClassLoader());
         try {
-            TypeRegistry.registerType(StringArtifact.class);
+            TypeRegistry.DEFAULT.registerType(StringArtifact.class);
         } catch (VilException e) {
             if (VilException.ID_ALREADY_REGISTERED != e.getId()) {
                 Assert.fail("unexpected exception: " + e.getMessage());

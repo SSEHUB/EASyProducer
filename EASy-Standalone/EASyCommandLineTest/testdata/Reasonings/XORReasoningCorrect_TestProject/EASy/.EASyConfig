@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProductLineProject id="6b3274dc-4dbb-4b53-a4ca-a234c392f53a" name="XORReasoningCorrect_TestProject" version="0" location="XORReasoningCorrect_TestProject">
+	<predecessors>
+	</predecessors>
+	<successors>
+	</successors>
+	<instantiators>
+	</instantiators>
+	<reasoners>
+	</reasoners>
+	<copy>
+	</copy>
+</ProductLineProject>

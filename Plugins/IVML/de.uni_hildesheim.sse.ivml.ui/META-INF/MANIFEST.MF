@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: IVML User Interface (Editor)
 Bundle-Vendor: University of Hildesheim - SSE
-Bundle-Version: 0.7.0
+Bundle-Version: 0.9.0
 Bundle-SymbolicName: de.uni_hildesheim.sse.ivml.ui; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: de.uni_hildesheim.sse.ivml;visibility:=reexport,
@@ -27,5 +27,6 @@ Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Export-Package: de.uni_hildesheim.sse.ui.contentassist,
  de.uni_hildesheim.sse.ui.contentassist.antlr,
  de.uni_hildesheim.sse.ui.embed,
- de.uni_hildesheim.sse.ui.internal
+ de.uni_hildesheim.sse.ui.internal,
+ de.uni_hildesheim.sse.ui.quickfix
 Bundle-Activator: de.uni_hildesheim.sse.ui.Activator

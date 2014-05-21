@@ -1,5 +1,7 @@
 package test.de.uni_hildesheim.sse.scenarios;
 
+import static de.uni_hildesheim.sse.varModel.testSupport.TextTestUtils.assertFileEquality;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
@@ -11,10 +13,9 @@ import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
-import junit.framework.Assert;
-
 import org.apache.commons.io.FileUtils;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -26,6 +27,7 @@ import org.junit.Test;
 public class RealTests extends AbstractScenarioTest {
 
     protected static final String[] RELATIVE_CURL_EXECUTABLES = {"curl/curl.bat", "curl/curl.sh"};
+    
     
     private static RealTests tests;
     
@@ -40,6 +42,7 @@ public class RealTests extends AbstractScenarioTest {
     @BeforeClass
     public static void startUp() {
         tests = new RealTests();
+        tests.cleanTemp();
     }
 
     /**
@@ -47,7 +50,7 @@ public class RealTests extends AbstractScenarioTest {
      */
     @AfterClass
     public static void shutDown() {
-        if (null != tests) {
+        if (!debug && null != tests) {
             tests.cleanTemp();
             tests = null;
         }
@@ -56,6 +59,17 @@ public class RealTests extends AbstractScenarioTest {
     @Override
     protected File getTestFolder() {
         return new File(getTestDataDir(), "real");
+    }
+    
+    /**
+     * Deletes a newly created folder inside the temp folder.
+     * Should be called after the creation of new tests.
+     * @param baseFolder A project folder created during a test.
+     */
+    protected void cleanTempFolder(File baseFolder) {
+        if (!debug) {
+            FileUtils.deleteQuietly(baseFolder);
+        }
     }
 
     /**
@@ -170,7 +184,7 @@ public class RealTests extends AbstractScenarioTest {
         FileUtils.deleteQuietly(base);
         base = executeIndenicaCase("PL_RMS_Platform2", "0", "1", RELATIVE_CURL_EXECUTABLES);
         assertCurlOut(base);
-        FileUtils.deleteQuietly(base);
+        cleanTempFolder(base);
     }
     
     /**
@@ -181,14 +195,19 @@ public class RealTests extends AbstractScenarioTest {
     @Test
     public void testIndenicaPlYmsPlatform() throws IOException {
         String projectName = "PL_YMS_Platform";
+
+        // Original files
         File base = executeIndenicaCase(projectName, "0", "0", RELATIVE_CURL_EXECUTABLES);
-        assertCurlOut(base);
+        
+        // Generated files
         File resources = new File(base, "src/main/resources/");
+
+        assertCurlOut(base);
         String fileName = projectName + ".var";
-        assertFileEquality(new File(resources, fileName), new File(base, "curl/" + fileName));
+        assertFileEquality(new File(base, "curl/" + fileName), new File(resources, fileName));
         fileName = "resolution.res";
-        assertFileEquality(new File(resources, fileName), new File(base, "curl/" + fileName));
-        FileUtils.deleteQuietly(base);
+        assertFileEquality(new File(base, "curl/" + fileName), new File(resources, fileName));
+        cleanTempFolder(base);
     }
 
     /**
@@ -239,7 +258,7 @@ public class RealTests extends AbstractScenarioTest {
         }
         Assert.assertTrue("compile problems: " + writer.toString(), success);
 
-        FileUtils.deleteQuietly(base);
+        cleanTempFolder(base);
     }
 
     /**

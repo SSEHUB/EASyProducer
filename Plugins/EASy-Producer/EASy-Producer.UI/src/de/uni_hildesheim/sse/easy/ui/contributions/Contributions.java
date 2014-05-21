@@ -38,12 +38,12 @@ public abstract class Contributions {
         /**
          * The button for deriving PL members.
          */
-        DERIVE_NEW_MEMBER(true, CoreFunction.DERIVE_NEW_MEMBER),
+        DERIVE_NEW_MEMBER(true, null),
         
         /**
          * The button for pulling the configuration.
          */
-        PULL_CONFIGURATION(true, CoreFunction.PULL_CONFIGURATION),
+        PULL_CONFIGURATION(true, null),
         
         /**
          * The selection list for copy mechanisms.

@@ -130,32 +130,6 @@
 		</copy>
 	</target>		
 	
-	<!-- Creates Javadoc -->
-  <target name="javadoc">
-    <javadoc packagenames="de.*" 
-		private="true"
-		defaultexcludes="yes"
-		destdir="${doc.dir}"
-		author="true"
-		version="true"
-		use="true"
-		Encoding="${javadoc.encoding}"
-		windowtitle="${ant.project.name} API">
-        <classpath>
-            <fileset dir="${home.model.persistency.dir}/lib">
-                <include name="**/*.jar"/>
-            </fileset>
-        </classpath>
-		<fileset dir="${home.model.persistency.dir}/src">
-			<exclude name="**/*Activator.java"/>
-		</fileset>
-		<fileset dir="${home.model.dir}/src">
-			<exclude name="**/*Activator.java"/>
-		</fileset>
-			<doctitle><![CDATA[<h1>${ant.project.name}</h1>]]></doctitle>
-		<bottom><![CDATA[<i>Copyright &#169; 2009 - 2013 SSE. All Rights Reserved.</i>]]></bottom>
-    </javadoc>
-  </target>
-	
-	<target name="all" depends="init, compile, test, javadoc"/>
+	<target name="all" depends="init, compile, test"/>
+	<target name="only.compile" depends="init, compile"/>
 </project>

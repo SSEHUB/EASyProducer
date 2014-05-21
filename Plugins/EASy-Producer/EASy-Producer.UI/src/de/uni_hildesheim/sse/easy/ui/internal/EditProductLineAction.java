@@ -21,10 +21,10 @@ import org.eclipse.ui.PlatformUI;
 
 import de.uni_hildesheim.sse.easy.ui.productline_editor.ProductLineEditorInput;
 import de.uni_hildesheim.sse.easy_producer.ProjectConstants;
+import de.uni_hildesheim.sse.easy_producer.core.mgmt.PLPInfo;
+import de.uni_hildesheim.sse.easy_producer.core.mgmt.SPLsManager;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.standard.PersistenceConstants;
 import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
-import de.uni_hildesheim.sse.easy_producer.persistence.mgmt.PLPInfo;
-import de.uni_hildesheim.sse.easy_producer.persistence.mgmt.SPLsManager;
-import de.uni_hildesheim.sse.easy_producer.persistence.standard.PersistenceConstants;
 import de.uni_hildesheim.sse.easy_producer.persistency.ResourcesMgmt;
 
 /**
@@ -55,7 +55,7 @@ public class EditProductLineAction implements IObjectActionDelegate {
 
     @Override
     public void run(IAction action) {
-
+        // TODO check... unclear why this can open ScaleLog projects with other settings
         // Get the config.xml and open it in the ProductLineEditor
         IFile configfile = selectedProject.getFile(ProjectConstants.EASY_FILES + ResourcesMgmt.INSTANCE.getSeperator()
             + PersistenceConstants.CONFIG_FILE);

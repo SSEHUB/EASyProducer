@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <path kind="IVML" value="IVMLFolder" />
+    <path kind="VIL" value="VILFolder" />
+    <path kind="VTL" value="VTLFolder" />
+</configuration>

@@ -34,7 +34,10 @@ public class TypeQueries {
                 } else if (parameter.length == tmpParamCount) {
                     boolean eq = true;
                     for (int p = 0; eq && p < tmpParamCount; p++) {
-                        eq = (tmp.getParameter(p).isAssignableFrom(parameter[p]));
+                        IDatatype specifiedType = tmp.getParameter(p);
+                        IDatatype givenType = parameter[p];
+                        eq = (specifiedType.isAssignableFrom(givenType)
+                            || givenType.getTypeClass() == specifiedType.getTypeClass());
                     }
                     if (eq) {
                         result = tmp;

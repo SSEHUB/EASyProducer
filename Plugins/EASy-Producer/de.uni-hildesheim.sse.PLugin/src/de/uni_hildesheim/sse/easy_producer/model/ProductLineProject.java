@@ -11,24 +11,20 @@ import java.util.Set;
 import java.util.UUID;
 
 import de.uni_hildesheim.sse.easy_producer.Activator;
-import de.uni_hildesheim.sse.easy_producer.contributions.Contributions;
-import de.uni_hildesheim.sse.easy_producer.contributions.Contributions.CoreFunction;
+import de.uni_hildesheim.sse.easy_producer.core.mgmt.MemberIterator;
+import de.uni_hildesheim.sse.easy_producer.core.mgmt.PLPInfo;
+import de.uni_hildesheim.sse.easy_producer.core.mgmt.SPLsManager;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceException;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceUtils;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.standard.EASyConfigFileImporter;
+import de.uni_hildesheim.sse.easy_producer.core.varMod.container.ProjectContainer;
+import de.uni_hildesheim.sse.easy_producer.core.varMod.container.ScriptContainer;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.FileInstantiator;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildModel;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ScriptContainer;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateModel;
 import de.uni_hildesheim.sse.easy_producer.internal.ReasoningProgressObserver;
-import de.uni_hildesheim.sse.easy_producer.persistence.PersistenceException;
-import de.uni_hildesheim.sse.easy_producer.persistence.PersistenceUtils;
-import de.uni_hildesheim.sse.easy_producer.persistence.mgmt.MemberIterator;
-import de.uni_hildesheim.sse.easy_producer.persistence.mgmt.PLPInfo;
-import de.uni_hildesheim.sse.easy_producer.persistence.mgmt.SPLsManager;
-import de.uni_hildesheim.sse.easy_producer.persistence.standard.EASyConfigFileImporter;
 import de.uni_hildesheim.sse.easy_producer.persistency.EASyPersistencer;
 import de.uni_hildesheim.sse.easy_producer.persistency.ResourcesMgmt;
 import de.uni_hildesheim.sse.model.management.VarModel;
 import de.uni_hildesheim.sse.model.varModel.Project;
-import de.uni_hildesheim.sse.modelManagement.ProjectContainer;
 import de.uni_hildesheim.sse.reasoning.core.frontend.IReasonerListener;
 import de.uni_hildesheim.sse.reasoning.core.frontend.ReasoningProcess;
 import de.uni_hildesheim.sse.reasoning.core.model.ReasoningOperation;
@@ -80,7 +76,7 @@ public class ProductLineProject extends PLPInfo {
             LOGGER.exception(e1);
         }
         project.setVersion(version);
-        ProjectContainer varModel = new ProjectContainer(project, getConfigLocation());
+        ProjectContainer varModel = new ProjectContainer(project, PersistenceUtils.getConfiguration(projectLocation));
         setProject(varModel);
         createMainRule();
         SPLsManager.INSTANCE.addPLP(this);
@@ -146,43 +142,36 @@ public class ProductLineProject extends PLPInfo {
     /**
      * This method copies the variability model, configuration,
      * and instantiator settings of the predecessor projects to this project.
-     * This function is only enabled if
-     * {@link de.uni_hildesheim.sse.easy_producer.contributions.Contributions.CoreFunction#PULL_CONFIGURATION}
-     * is enabled.
      * 
      * @throws VarModelConflictException
      * @since 23.07.2012
      */
+    @Override
     public void pullConfigFromPredecessors() {
-        if (Contributions.isEnabled(CoreFunction.PULL_CONFIGURATION)) {
-            File configLocation = EASyPersistencer.configLocation(getProjectLocation());
-            File destinationPath = new File(configLocation.getPath());
-            EASyConfigFileImporter importer = new EASyConfigFileImporter(destinationPath);
-            // These list temporarily save the instantiators from all predecessors
-            List<FileInstantiator> compareTransformators = new ArrayList<FileInstantiator>();
+        // TODO SE: Remove this as far as Transformators are not longer needed.
+        EASyConfigFileImporter importer = new EASyConfigFileImporter(this);
+        // These list temporarily save the instantiators from all predecessors
+        List<FileInstantiator> compareTransformators = new ArrayList<FileInstantiator>();
+        
+        MemberIterator predecessors = getMemberController().predecessors();
+        while (predecessors.hasNext()) {
+            PLPInfo predecessorPLP = predecessors.next();
             
-            MemberIterator predecessors = getMemberController().predecessors();
-            while (predecessors.hasNext()) {
-                PLPInfo predecessorPLP = predecessors.next();
-                
-                // Copy Instantiator settings
-                compareTransformators.addAll(predecessorPLP.getInstantiatorController().getTransformators());
-                
-                //Copy (imported) ivml files
-                File sourceLocation = EASyPersistencer.configLocation(predecessorPLP.getProjectLocation());
-                File sourcePath = new File(sourceLocation.toString());
-                // Insert a dot to hide imported folders
-                importer.copyIVMLFiles(sourcePath, "." + predecessorPLP.getProjectName());
-            }
-    
-            // compare this PTNs Decisions and Dependencies with the compareLists
-            compareAndMerge(compareTransformators);
+            // Copy Instantiator settings
+            compareTransformators.addAll(predecessorPLP.getInstantiatorController().getTransformators());
             
-            //Refresh
-            EASyPersistencer.refreshModels(this);
-            getConfiguration().refresh();
-            configurationPulled();
+            // Copy (imported) ivml files
+            // Insert a dot to hide imported folders
+            importer.copyConfigFiles(predecessorPLP, "." + predecessorPLP.getProjectName());
         }
+
+        // compare this PTNs Decisions and Dependencies with the compareLists
+        compareAndMerge(compareTransformators);
+        
+        //Refresh
+        EASyPersistencer.refreshModels(this);
+        getConfiguration().refresh();
+        configurationPulled();
     }
 
     /**
@@ -290,30 +279,6 @@ public class ProductLineProject extends PLPInfo {
          * Workaround für ScaleLog (Oder-Block)
          */
         return result && found || getInstantiatorController().getTransformators().size() > 0;
-    }
-    
-    /**
-     * Closes this project, which also removes this project from the {@link SPLsManager} and closes all editors.
-     * This method shall be called if the related EASy/IProject will be removed/closed.
-     */
-    public void close() {
-        projectClosed();
-        
-        /*
-         * To avoid potential project reloads during the unload process,
-         * first remove location for loading models and than unload the project
-         */
-        VarModel.INSTANCE.locations().removeLocation(getConfigLocation(), ProgressObserver.NO_OBSERVER);
-        BuildModel.INSTANCE.locations().removeLocation(getConfigLocation(), ProgressObserver.NO_OBSERVER);
-        TemplateModel.INSTANCE.locations().removeLocation(getConfigLocation(), ProgressObserver.NO_OBSERVER);
-        try {
-            VarModel.INSTANCE.unload(getProject(), ProgressObserver.NO_OBSERVER);
-        } catch (ModelManagementException e) {
-            // TODO SE: Use logging here
-            e.printStackTrace();
-        }
-            
-        SPLsManager.INSTANCE.removePLP(getProjectID());
     }
     
     @Override

@@ -1,15 +1,21 @@
 package de.uni_hildesheim.sse.easy.ui.productline_editor.configuration;
 
 import org.eclipse.jface.viewers.CellLabelProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MenuEvent;
+import org.eclipse.swt.events.MenuListener;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Tree;
 
 import de.uni_hildesheim.sse.easy.ui.confModel.GUIConfiguration;
+import de.uni_hildesheim.sse.easy.ui.confModel.GUIVariable;
 import de.uni_hildesheim.sse.easy.ui.confModel.IGUIConfigChangeListener;
-import de.uni_hildesheim.sse.easy.ui.productline_editor.AbstractEASyEditorPage;
+import de.uni_hildesheim.sse.easy.ui.productline_editor.IEASyEditorPage;
 import de.uni_hildesheim.sse.model.confModel.Configuration;
 import de.uni_hildesheim.sse.model.confModel.IConfigurationChangeListener;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
@@ -20,12 +26,12 @@ import de.uni_hildesheim.sse.model.varModel.values.Value;
  * @author El-Sharkawy
  *
  */
-class ConfigurationTableEditor extends TreeViewer implements IGUIConfigChangeListener, IConfigurationChangeListener,
-    IGUIConfigurationContainer {
+public class ConfigurationTableEditor extends TreeViewer implements IGUIConfigChangeListener, 
+    IConfigurationChangeListener, IGUIConfigurationContainer {
 
     private Configuration config;
     private GUIConfiguration guiConfig;
-    private AbstractEASyEditorPage parentPage;
+    private IEASyEditorPage parentPage;
     private IUpdateListener listener;
 
     /**
@@ -44,15 +50,16 @@ class ConfigurationTableEditor extends TreeViewer implements IGUIConfigChangeLis
     /**
      * Sole constructor for this editor.
      * @param configuration The configuration which should be edited in this editor.
-     * @param parent The {@link AbstractEASyEditorPage} holding this table.
+     * @param parent The {@link IEASyEditorPage} holding this table.
      */
-    protected ConfigurationTableEditor(Configuration configuration, AbstractEASyEditorPage parent) {
+    protected ConfigurationTableEditor(Configuration configuration, IEASyEditorPage parent) {
         super(parent.getContentPane(), SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL | SWT.FULL_SELECTION);
         parentPage = parent;
         setContentProvider(new ConfigurationContentProvider());
         guiConfig = new GUIConfiguration(configuration, this.getTree());
         guiConfig.register(this);
         createProductEditorTableColumns();
+        createContextMenu();
         setInput(guiConfig);
         super.refresh();
         config = configuration;
@@ -137,6 +144,36 @@ class ConfigurationTableEditor extends TreeViewer implements IGUIConfigChangeLis
          */
         data.heightHint = 60;
         table.setLayoutData(data);
+    }
+    
+    /**
+     * Creates a context menu inside the cells.
+     * Part of the constructor.
+     */
+    private void createContextMenu() {
+        Menu menu = new Menu(getControl());
+        final MenuItem nullValues = new MenuItem(menu, SWT.PUSH);
+        menu.addMenuListener(new MenuListener() {
+            
+            @Override
+            public void menuShown(MenuEvent evt) {
+                IStructuredSelection selection = (IStructuredSelection) getSelection();
+                GUIVariable var = (GUIVariable) selection.getFirstElement();
+                if (!var.hasValue() || !var.hasNullValue()) {
+                    nullValues.setText("set NULL");
+                } else {
+                    nullValues.setText("remove NULL value");
+                }
+            }
+            
+            @Override
+            public void menuHidden(MenuEvent evt) {
+                // TODO Auto-generated method stub
+                
+            }
+        });
+        nullValues.addSelectionListener(new EditorContextMenuListener(this));
+        getTree().setMenu(menu);
     }
     
     @Override

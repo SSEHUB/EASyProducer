@@ -3,7 +3,7 @@ package de.uni_hildesheim.sse.easy_producer;
 import org.eclipse.core.runtime.Plugin;
 import org.osgi.framework.BundleContext;
 
-import de.uni_hildesheim.sse.easy_producer.persistence.standard.EASyInitializer;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.standard.EASyInitializer;
 import de.uni_hildesheim.sse.easy_producer.persistency.ResourcesMgmt;
 import de.uni_hildesheim.sse.easy_producer.persistency.eclipse.PathEnvironmentFactory;
 import de.uni_hildesheim.sse.utils.Environment;

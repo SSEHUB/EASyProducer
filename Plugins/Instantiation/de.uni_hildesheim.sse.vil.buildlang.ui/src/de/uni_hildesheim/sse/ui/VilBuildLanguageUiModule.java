@@ -4,12 +4,37 @@
 package de.uni_hildesheim.sse.ui;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.xtext.ui.editor.syntaxcoloring.IHighlightingConfiguration;
+import org.eclipse.xtext.ui.editor.syntaxcoloring.ISemanticHighlightingCalculator;
+
+import de.uni_hildesheim.sse.vil.expressions.ui.highlighting.VilHighlightingCalculator;
+import de.uni_hildesheim.sse.vil.expressions.ui.highlighting.VilHighlightingConfiguration;
 
 /**
  * Use this class to register components to be used within the IDE.
  */
 public class VilBuildLanguageUiModule extends de.uni_hildesheim.sse.ui.AbstractVilBuildLanguageUiModule {
-	public VilBuildLanguageUiModule(AbstractUIPlugin plugin) {
+	
+    public VilBuildLanguageUiModule(AbstractUIPlugin plugin) {
 		super(plugin);
 	}
+	
+    /**
+     * Bind the initial configuration of the highlighting (bold) for the customized
+     * highlighting. May be overridden by the user's preferences stored by Eclipse.
+     * 
+     * @return the class which defines the initial configuration
+     */
+	public Class<? extends IHighlightingConfiguration> bindIHighlightingConfiguration () {
+	    return VilHighlightingConfiguration.class;
+	}
+	
+	/**
+	 * Bind the actual highlighting (what and how to highlight).
+	 * 
+	 * @return the class which determines what and how to highlight
+	 */
+	public Class<? extends ISemanticHighlightingCalculator> bindISemanticHighlightingCalculator(){
+        return VilHighlightingCalculator.class;   
+    }
 }

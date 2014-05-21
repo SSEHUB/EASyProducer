@@ -1,6 +1,7 @@
 package de.uni_hildesheim.sse.model.varModel.values;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import de.uni_hildesheim.sse.model.varModel.datatypes.Container;
@@ -28,7 +29,8 @@ public class ContainerValue extends StructuredValue implements Cloneable {
         this(container);
         // Check whether this is a SetValue and the given values contain duplicates.
         if (duplicateValues(value)) {
-            throw new ValueDoesNotMatchTypeException("Duplicates are not allowed for a Set.",
+            throw new ValueDoesNotMatchTypeException("Duplicates in '" 
+                + Arrays.toString(value) + "' are not allowed for a Set.",
                 ValueDoesNotMatchTypeException.NOT_ALLOWED_VALUE_STRUCTURE);
         }
         
@@ -109,6 +111,24 @@ public class ContainerValue extends StructuredValue implements Cloneable {
      */
     @Override
     public Object getValue() {
+        Object[] result = null;
+        if (null != nestedElements) {
+            result = new Object[nestedElements.size()];
+            nestedElements.toArray(result);
+        }
+        return result;
+        
+        // nestedValuesToString() was here before
+        // sorry (including me) ... the value of a container cannot be a String. 
+        // This is nonsense as it prevents further value instantiation
+    }
+    
+    /**
+     * Turns the nested values into a string.
+     * 
+     * @return the nested values as string
+     */
+    public String nestedValuesToString() {
         StringBuffer str = new StringBuffer();
         str.append("{");
         for (int i = 0; i < nestedElements.size() - 1; i++) {
@@ -120,6 +140,11 @@ public class ContainerValue extends StructuredValue implements Cloneable {
         }
         str.append("}");
         return str.toString();
+    }
+    
+    @Override
+    public String toString() {
+        return nestedValuesToString() + " : " + getType().toString();
     }
 
     @Override
@@ -238,11 +263,16 @@ public class ContainerValue extends StructuredValue implements Cloneable {
     private boolean duplicateValues(Object[] values) {
         boolean dupplicatesFound = false;
         if (isSetValue() && null != values) {
+            // TODO improve - quadratic runtime complexity
             for (int i = 0; !dupplicatesFound && i < values.length - 1; i++) {
                 if (null != values[i]) {
                     for (int j = i + 1; !dupplicatesFound && j < values.length; j++) {
                         if (values[i].equals(values[j])) {
-                            dupplicatesFound = true;
+                            // TODO equals for values is defined based on hashcode, which is not refined 
+                            // for Compound/Container -> breaks in ScaleLog
+                            if (!(values[i] instanceof CompoundValue) && !(values[i] instanceof ContainerValue) ) {
+                                dupplicatesFound = true;
+                            }
                         }
                     }
                 }

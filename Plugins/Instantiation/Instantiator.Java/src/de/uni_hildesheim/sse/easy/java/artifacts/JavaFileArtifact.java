@@ -8,7 +8,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.jdt.core.ToolFactory;
 import org.eclipse.jdt.core.dom.AST;
@@ -244,7 +246,7 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
     private void initialize(char[] data) {
         // TODO seperate inner classes
         classList = new ArrayList<JavaClass>();
-        ASTParser parser = ASTParser.newParser(AST.JLS3);
+        ASTParser parser = ASTParser.newParser(AST.JLS4);
         parser.setSource(data);
         parser.setKind(ASTParser.K_COMPILATION_UNIT);
         // Create AST
@@ -299,6 +301,35 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
     @Override
     public void deleteChild(FragmentArtifact child) throws ArtifactException {
         // implement if substructures are stored / cached
+    }
+    
+    /**
+     * Renames all (qualified) package names in this Java artifact from <code>oldName</code>
+     * to <code>newName</code>. Nothing happens, if <code>oldName</code> cannot be found.
+     * However, the caller is responsible for potential name clashes due to the execution 
+     * of this operation.
+     * 
+     * @param oldName the old package name
+     * @param newName the new package name
+     * @throws ArtifactException in case that the operation cannot be executed due to syntax or I/O problems
+     */
+    public void renamePackages(String oldName, String newName) throws ArtifactException {
+        Map<String, String> tmp = new HashMap<String, String>();
+        tmp.put(oldName, newName);
+        renamePackages(tmp);
+    }
+
+    /**
+     * Renames all (qualified) package names in this Java artifact as stated by <code>nameMapping</code>. 
+     * Nothing happens, if package names cannot be found.
+     * However, the caller is responsible for potential name clashes due to the execution 
+     * of this operation.
+     * 
+     * @param nameMapping pairs of old and new package names (key = old, value = new)
+     * @throws ArtifactException in case that the operation cannot be executed due to syntax or I/O problems
+     */
+    public void renamePackages(Map<?, ?> nameMapping) throws ArtifactException {
+        // TODO put in Robin's stuff here
     }
     
 }

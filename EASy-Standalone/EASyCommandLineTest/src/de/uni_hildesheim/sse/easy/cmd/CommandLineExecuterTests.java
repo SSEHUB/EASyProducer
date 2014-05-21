@@ -12,8 +12,7 @@ import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -37,7 +36,6 @@ import org.junit.Test;
 public class CommandLineExecuterTests {
     
     private static final String MAIN_CLASS = "de.uni_hildesheim.sse.easy.cmd.CommandLineExecuter";
-    //private static final File RMS_DIR = new File(AllTests.TESTDATA_DIR, "RMS");
     private static final String DEFAULT_JDK_LOCATION = "C:\\Program Files (x86)\\Java\\jdk1.7.0_45";
 
     /**
@@ -220,31 +218,5 @@ public class CommandLineExecuterTests {
         } else {
             Assert.assertFalse("Files should not be compileable, but they are.", success);
         }
-    }
-    
-    /**
-     * Checks the validity of a configuration. Basically, this test aims at validating whether the
-     * reasoner classes are properly loaded for the command line interface.
-     * 
-     * @throws IOException If an I/O error occurs while passing the command to the shell/command line.
-     */
-    @Test
-    public void testSimpleReasoning() throws IOException {
-        File src = new File(AllTests.ELEVATOR_DIR, "PL_SimElevator_frozen");
-        ProcessExecuter executor = new ProcessExecuter(MAIN_CLASS + " checkValidity " + src.getCanonicalPath()
-            + " PL_SimElevator_frozen 0", false);
-        try {
-            executor.waitFor();
-        } catch (InterruptedException e) {
-            Assert.fail("unexpected exception: " + e);
-        }
-
-        String errMsg = executor.execute();
-        if (null != errMsg) {
-            Assert.fail(errMsg);
-        }
-        
-        File test = new File(src, ".result");
-        Assert.assertTrue(test.exists());
     }
 }

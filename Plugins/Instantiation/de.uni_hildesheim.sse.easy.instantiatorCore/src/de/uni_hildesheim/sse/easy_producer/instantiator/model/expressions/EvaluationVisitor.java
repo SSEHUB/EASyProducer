@@ -6,6 +6,7 @@ import java.util.List;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VariableDeclaration;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Constants;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ListSequence;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
@@ -60,6 +61,10 @@ public class EvaluationVisitor implements IExpressionVisitor {
                     named.put(arg.getName(), arg.accept(this));
                 }
             }
+            if (null != call.getParent() && resolved.acceptsImplicitParameters()) {
+                named.put(Constants.IMPLICIT_PARENT_PARAMETER_NAME, call.getParent());
+                named.put(Constants.IMPLICIT_PATHS_PARAMETER_NAME, environment.getContextPaths());
+            }
         }
         int pCount = resolved.getParameterCount();
         if (acceptsNamed) {
@@ -77,7 +82,9 @@ public class EvaluationVisitor implements IExpressionVisitor {
             args[pCount - 1] = named;
         }
         try {
-            resolved = AbstractCallExpression.dynamicDispatch(resolved, args, OperationDescriptor.class);
+            resolved = AbstractCallExpression.dynamicDispatch(resolved, args, OperationDescriptor.class, 
+                environment.getTypeRegistry());
+            tracer.visitingCallExpression(resolved, call.getCallType(), args);
             Object result = resolved.invoke(args);
             tracer.visitedCallExpression(resolved, call.getCallType(), args, result);
             return result;

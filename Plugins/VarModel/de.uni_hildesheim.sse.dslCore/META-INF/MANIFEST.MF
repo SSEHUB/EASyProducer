@@ -2,11 +2,11 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Common functionalities for xText based languages in EASy
 Bundle-SymbolicName: de.uni_hildesheim.sse.dslCore;singleton:=true
-Bundle-Version: 0.7.0
+Bundle-Version: 0.8.0
 Bundle-Vendor: SSE University of Hildesheim
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.eclipse.emf.ecore,
- org.eclipse.xtext;bundle-version="2.3.1",
+ org.eclipse.xtext;bundle-version="2.5.0",
  de.uni_hildesheim.sse.utils;bundle-version="0.0.1";visibility:=reexport
 Export-Package: de.uni_hildesheim.sse.dslCore,
  de.uni_hildesheim.sse.dslCore.test,

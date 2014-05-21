@@ -6,6 +6,7 @@ import java.util.Map;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
 import de.uni_hildesheim.sse.model.varModel.values.CompoundValue;
+import de.uni_hildesheim.sse.model.varModel.values.NullValue;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
 import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
 import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
@@ -103,7 +104,7 @@ public class CompoundVariable extends StructuredVariable {
      */
     public void setValue(Value value, IAssignmentState state) throws ConfigurationException {
         super.setValue(value, state); // TODO if state==FREEZE this leads to Exception in second part
-        if (null != value) {
+        if (null != value && value != NullValue.INSTANCE) {
             CompoundValue cmpValue = (CompoundValue) value;
             Compound cmpType = (Compound) getDeclaration().getType();
             for (int i = 0; i < cmpType.getInheritedElementCount(); i++) {

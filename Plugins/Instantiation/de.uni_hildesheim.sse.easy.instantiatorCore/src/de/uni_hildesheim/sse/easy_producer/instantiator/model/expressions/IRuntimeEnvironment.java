@@ -1,6 +1,7 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 
 /**
  * Defines the type of a runtime environment to evaluate expressions in.
@@ -9,6 +10,13 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguage
  */
 public interface IRuntimeEnvironment {
 
+    /**
+     * Returns the (local) type registry of this runtime environment.
+     * 
+     * @return the type registry
+     */
+    public TypeRegistry getTypeRegistry();
+    
     /**
      * Returns the value of <code>resolvable</code>.
      * 
@@ -44,5 +52,12 @@ public interface IRuntimeEnvironment {
      * @throws VilLanguageException in case of an attempt of modifying a constant
      */
     public void setValue(IResolvable var, Object object) throws VilLanguageException;
+
+    /**
+     * Returns the search paths of the current context.
+     * 
+     * @return the (qualified) search paths (may be <b>null</b>)
+     */
+    public String[] getContextPaths();
 
 }

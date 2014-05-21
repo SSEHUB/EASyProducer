@@ -1,16 +1,13 @@
 /**
- * <copyright>
- * </copyright>
- *
-
  */
 package de.uni_hildesheim.sse.vilBuildLanguage;
 
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EObject;
-
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.LogicalExpression;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ParameterList;
+
+import org.eclipse.emf.common.util.EList;
+
+import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->

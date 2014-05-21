@@ -14,6 +14,7 @@ import de.uni_hildesheim.sse.BuildLangModelUtility;
 import de.uni_hildesheim.sse.dslCore.translation.ErrorCodes;
 import de.uni_hildesheim.sse.dslCore.translation.TranslatorException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildModel;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Imports;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.LoadProperties;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Resolver;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Rule;
@@ -21,18 +22,24 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Rul
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.RuleDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.RuleDescriptorException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script.ScriptDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.VariableDeclaration;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.Advice;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.Imports;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Template;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagement;
 import de.uni_hildesheim.sse.utils.modelManagement.Version;
 import de.uni_hildesheim.sse.utils.modelManagement.VersionFormatException;
+import de.uni_hildesheim.sse.vil.expressions.ResourceRegistry;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Import;
+import de.uni_hildesheim.sse.vil.expressions.translation.ImportTranslator;
 import de.uni_hildesheim.sse.vilBuildLanguage.ImplementationUnit;
+import de.uni_hildesheim.sse.vilBuildLanguage.Require;
 import de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration;
 import de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage;
 
@@ -47,13 +54,22 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
     private ExpressionTranslator expressionTranslator;
     private Resolver resolver;
     
+    // a temporary model for resolving recursive calls - not nice but temporarily adding them to template fails
+    private Script recursiveResolutionModel;
+    
     /**
      * Creates a model translator.
      */
     public ModelTranslator() {
-        super(new ExpressionTranslator(), new Resolver());
+        super(new ExpressionTranslator(), new Resolver(new TypeRegistry(TypeRegistry.DEFAULT)));
         expressionTranslator = getExpressionTranslator();
         resolver = getResolver();
+        //try {
+            recursiveResolutionModel = new Script("$$");
+            resolver.setRecursiveResolutionModel(recursiveResolutionModel);
+        //} catch (VilLanguageException e) {
+        //    e.printStackTrace();
+        //}
     }
     
     /**
@@ -67,12 +83,13 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
      * @return the corresponding build model
      */
     public List<Script> createModel(ImplementationUnit unit, URI uri, boolean registerSuccessful) {
+        ResourceRegistry.register(unit.eResource(), resolver.getTypeRegistry());
         List<Script> result = new ArrayList<Script>();
         if (null != unit.getScripts()) {
             HashSet<String> names = new HashSet<String>();
-            Imports<Script> imports = null;
+            Imports imports = null;
             try {
-                imports = processImports(unit.getImports());
+                imports = processImports(unit.getImports(), unit.getRequires());
             } catch (TranslatorException e) {
                 error(e);
             }
@@ -95,6 +112,31 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
     }
     
     /**
+     * Processes the imports and returns an summarizing instance.
+     * 
+     * @param imports the imports to be processed
+     * @return the summarizing instance
+     * @throws TranslatorException in case that processing the imports fails
+     */
+    protected Imports processImports(EList<Import> imports, EList<Require> requires) throws TranslatorException {
+        List<ModelImport<Template>> restrictions = null;
+        if (null != requires) {
+            restrictions = new ArrayList<ModelImport<Template>>();
+            for (int r = 0; r < requires.size(); r++) {
+                Require req = requires.get(r);
+                warnVersionRestrictions(req.getVersionSpec());
+                String name = req.getName(); // this is a STRING!
+                if (name.startsWith("\"") && name.startsWith("\"")) {
+                    name = name.substring(1, name.length() - 1).trim();
+                }
+                restrictions.add(new ModelImport<Template>(name, false, 
+                    ImportTranslator.processRestrictions(name, req.getVersionSpec())));
+            }
+        }
+        return new Imports(processImports(imports), restrictions);
+    }
+    
+    /**
      * Creates a script instance from an EMF instance.
      * 
      * @param script the EMF instance to work on
@@ -108,7 +150,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
      */
     private Script createScript(de.uni_hildesheim.sse.vilBuildLanguage.LanguageUnit script, URI uri, 
         boolean registerSuccessful, List<de.uni_hildesheim.sse.vilBuildLanguage.LanguageUnit> inProgress, 
-        Imports<Script> imports) throws TranslatorException {
+        Imports imports) throws TranslatorException {
         int errorCount = getErrorCount();
         VariableDeclaration[] param = resolveParameters(script.getParam());
         Advice[] advices = processAdvices(script.getAdvices(), uri);
@@ -117,7 +159,8 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
             parent = getExtensionImport(script.getParent().getName(), imports, script.getParent(), 
                 VilBuildLanguagePackage.Literals.SCRIPT_PARENT_DECL__NAME);
         }
-        Script result = new Script(script.getName(), parent, param, advices, imports);
+        ScriptDescriptor desc = new ScriptDescriptor(param, advices, imports);
+        Script result = new Script(script.getName(), parent, desc, resolver.getTypeRegistry());
         resolver.pushModel(result);
         if (null != script.getVersion()) {
             try {
@@ -291,12 +334,14 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
                 throw new TranslatorException(e, rule, VilBuildLanguagePackage.Literals.RULE_DECLARATION__NAME);
             }
             resolver.setContextType(Resolver.ContextType.RULE_BODY);
+            result = new Rule(rule.getName(), descriptor, isProtected(rule), parent);
+            recursiveResolutionModel.addRule(result);
             try {
-                descriptor.setBody(getExpressionTranslator().resolveBlock(rule.getBlock(), resolver));
+                result.setBody(getExpressionTranslator().resolveBlock(rule.getBlock(), resolver));
             } catch (TranslatorException e) {
                 error(e); // allow rule completion if only errors in body
             }
-            result = new Rule(rule.getName(), descriptor, isProtected(rule), parent);
+            recursiveResolutionModel.removeRule(result);
         } catch (TranslatorException e) {
             throw e;
         } finally {

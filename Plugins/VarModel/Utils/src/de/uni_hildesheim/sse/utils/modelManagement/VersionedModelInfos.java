@@ -209,7 +209,8 @@ public class VersionedModelInfos <M extends IModel> {
                     if (isSame(uri, info.getLocation())) {
                         result = info;
                     }
-                }                
+                }
+                // precedence to own hierarchy
                 String searchUriText = pathWithoutLastFragment(uri.normalize());
                 if (null == result) {
                     // search according to hierarchical IVML convention
@@ -217,6 +218,17 @@ public class VersionedModelInfos <M extends IModel> {
                     // this may fail, in particular for parent projects imported according to EASy convention
                     if (null == result) { 
                         result = searchOnParentLevel(uri, modelPath);
+                    }
+                }
+                // containment in model path
+                if (null != modelPath) {
+                    for (int i = 0; null == result && i < size; i++) {
+                        ModelInfo<M> info = infos.get(i);
+                        for (int m = 0; null == result && m < modelPath.size(); m++) {
+                            if (isMatching(info.getLocation().toString(), modelPath.get(m), false)) {
+                                result = info;
+                            }
+                        }
                     }
                 }
             }

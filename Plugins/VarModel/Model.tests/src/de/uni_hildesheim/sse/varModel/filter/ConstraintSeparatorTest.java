@@ -1,6 +1,6 @@
 package de.uni_hildesheim.sse.varModel.filter;
 
-import static org.junit.matchers.JUnitMatchers.hasItems;
+import static org.hamcrest.CoreMatchers.hasItems;
 
 import java.util.List;
 

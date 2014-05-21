@@ -70,7 +70,12 @@ public abstract class ContainableModelElement extends ModelElement implements ID
             if (null == p) {
                 namespace = "";
             } else {
-                namespace = p.getNameSpace();
+                if (p instanceof DecisionVariableDeclaration) {
+                    // actually a special case for container
+                    namespace = p.getNameSpace();
+                } else {
+                    namespace = p.getQualifiedName();
+                }
             }
         }
         return namespace;

@@ -12,23 +12,24 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expres
 public class ArraySequence<T> extends AbstractArrayWrapper<T> implements Sequence<T> {
 
     /**
-     * Creates a new array collection wrapper.
+     * Creates a new array collection wrapper using the default type registry.
      * 
      * @param array the wrapped array
      * @param param the only type parameter characterizing <T>
      */
     public ArraySequence(T[] array, Class<? extends IVilType> param) {
-        super(array, TypeRegistry.convert(param));
+        super(array, TypeRegistry.DEFAULT, param);
     }
     
     /**
      * Creates a new array collection wrapper.
      * 
      * @param array the wrapped array
-     * @param params the type parameter characterizing <T>
+     * @param param the only type parameter characterizing <T>
+     * @param registry the type registry to be used for conversion of <code>param</code>
      */
-    public ArraySequence(T[] array, Class<? extends IVilType>... params) {
-        super(array, TypeRegistry.convert(params));
+    public ArraySequence(T[] array, Class<? extends IVilType> param, TypeRegistry registry) {
+        super(array, registry, param);
     }
 
     /**
@@ -62,12 +63,13 @@ public class ArraySequence<T> extends AbstractArrayWrapper<T> implements Sequenc
      * Returns an empty sequence for one type parameter.
      * 
      * @param param the type parameter characterizing <T>
+     * @param registry the type registry to use
      * @return an empty sequence
      * @param <T> the element type
      */
     @Invisible
-    public static final <T> Sequence<T> empty(Class<? extends IVilType> param) {
-        return empty(TypeRegistry.getType(TypeDescriptor.getRegName(param)));
+    public static final <T> Sequence<T> empty(Class<? extends IVilType> param, TypeRegistry registry) {
+        return empty(registry.findType(param));
     }
     
     /**

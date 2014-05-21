@@ -4,7 +4,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 import java.net.URISyntaxException;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.ecore.util.Diagnostician;
 import org.eclipse.xtext.resource.XtextResource;
@@ -18,50 +17,18 @@ import de.uni_hildesheim.sse.dslCore.validation.ValidationUtils;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
+import de.uni_hildesheim.sse.vil.AbstractXTextEditor;
 import de.uni_hildesheim.sse.vilBuildLanguage.ImplementationUnit;
 
 /**
- * This class extends the official xText editor in order to hook into
- * the saving mechanism. The <code>afterSave</code> event provided
- * by the xText Editor Callback is not sufficient, as it is also called
- * when a in an editor is changed from outside and pushed back into 
- * the editor via the Eclipse refresh mechanism.
+ * A specific editor class for VIL.
  * 
  * @author Holger Eichelberger
  */
-public class XtextEditor extends org.eclipse.xtext.ui.editor.XtextEditor {
+public class XtextEditor extends AbstractXTextEditor<ImplementationUnit> {
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public void doSaveAs() {
-        super.doSaveAs();
-        onSave();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void doSave(IProgressMonitor progressMonitor) {
-        super.doSave(progressMonitor);
-        onSave();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void doRevertToSaved() {
-        super.doRevertToSaved();
-        onSave();
-    }
-
-    /**
-     * Builds up the IVML model on saving the document in the editor.
-     */
-    private void onSave() {
+    protected void onSave() {
         IXtextDocument doc = getDocument();
         doc.readOnly(new IUnitOfWork<ImplementationUnit, XtextResource>() {
             public ImplementationUnit exec(XtextResource resource) {
@@ -95,5 +62,5 @@ public class XtextEditor extends org.eclipse.xtext.ui.editor.XtextEditor {
         });
 
     }
-    
+
 }

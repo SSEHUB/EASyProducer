@@ -11,7 +11,8 @@ import org.junit.runners.Suite.SuiteClasses;
  */
 @RunWith(Suite.class)
 @SuiteClasses({BasicTests.class, AdvancedTests.class, VarModelTests.class, 
-    LanguageSpecTests.class, AdditionalTests.class, ExternalTests.class })
+    LanguageSpecTests.class, AdditionalTests.class, ExternalTests.class, 
+    HierarchicalTests.class })
 public class AllTests {
 
 }

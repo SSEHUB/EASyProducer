@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.model.varModel.IvmlKeyWords;
 import de.uni_hildesheim.sse.utils.modelManagement.VersionRestriction;
 
@@ -86,11 +87,15 @@ public abstract class Resolver<V extends IResolvable> implements IResolver<V> {
     
     private Stack<Level<V>> levels = new Stack<Level<V>>();
     private IRuntimeEnvironment environment;
+    private TypeRegistry registry;
     
     /**
      * Creates a new resolver.
+     * 
+     * @param registry the local type registry
      */
-    public Resolver() {
+    public Resolver(TypeRegistry registry) {
+        this.registry = registry;
         pushLevel(); // push the basic level
     }
     
@@ -101,8 +106,17 @@ public abstract class Resolver<V extends IResolvable> implements IResolver<V> {
      * @param environment the runtime environment
      */
     public Resolver(IRuntimeEnvironment environment) {
-        this();
+        this(environment.getTypeRegistry());
         this.environment = environment;
+    }
+    
+    /**
+     * Returns the (local) type registry.
+     * 
+     * @return the local type registry (from the {@link #environment}).
+     */
+    public TypeRegistry getTypeRegistry() {
+        return registry;
     }
     
     @SuppressWarnings("unchecked")

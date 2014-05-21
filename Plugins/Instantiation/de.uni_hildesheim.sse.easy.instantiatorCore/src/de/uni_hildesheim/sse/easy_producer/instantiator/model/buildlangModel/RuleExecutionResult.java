@@ -81,9 +81,9 @@ public class RuleExecutionResult implements IVilType {
     static {
         TypeDescriptor<? extends IVilType> type;
         try {
-            type = TypeRegistry.registerType(RuleExecutionResult.class);
+            type = TypeRegistry.DEFAULT.registerType(RuleExecutionResult.class);
         } catch (VilException e) {
-            type = TypeDescriptor.VOID; // that there is at least a type
+            type = TypeRegistry.voidType(); // that there is at least a type
             EASyLoggerFactory.INSTANCE.getLogger(Resolver.class, Bundle.ID).exception(e);
         }
         TYPE = type;

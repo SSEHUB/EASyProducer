@@ -129,4 +129,21 @@ public class Version {
         return result;
     }
     
+    /**
+     * Checks whether the version is within a certain range of versions.
+     * @param min Minimal version that is allowed. Can be null to represent no minimum.
+     * @param max Maximal version that is allowed. Can be null to represent no maximum.
+     * @return boolean True if version is within the range.
+     */
+    public boolean isInRange(Version min, Version max) {
+        boolean result = true;
+        if (min != null && this.compareTo(min) == -1) {
+            result = false;
+        }
+        if (max != null && this.compareTo(max) == 1) {
+            result = false;
+        }
+        return result;
+    }
+    
 }

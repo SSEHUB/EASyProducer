@@ -2,9 +2,11 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configur
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArraySequence;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArraySet;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Conversion;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Sequence;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 
 /**
@@ -51,13 +53,70 @@ public class Attribute extends AbstractIvmlVariable {
     @Invisible
     @Override
     public Sequence<DecisionVariable> variables() {
-        return ArraySequence.empty(DecisionVariable.class);
+        return ArraySequence.empty(DecisionVariable.class, TypeRegistry.DEFAULT); // DecisionVariable -> DEFAULT
     }
 
     @Invisible
     @Override
     public Set<Attribute> attributes() {
         return ArraySet.empty(DecisionVariable.class);
+    }
+
+    // ---------------------------- conversions -----------------------------
+    
+    /**
+     * Conversion operation to Real.
+     * 
+     * @param val the value (variable) to be converted
+     * @return the converted value (may be <b>null</b>, depends on the type of the attribute)
+     */
+    @Conversion
+    public static double convert2Real(Attribute val) {
+        return val.getRealValue();
+    }
+
+    /**
+     * Conversion operation to Integer.
+     * 
+     * @param val the value (variable) to be converted
+     * @return the converted value (may be <b>null</b>, depends on the type of the attribute)
+     */
+    @Conversion
+    public static int convert2Integer(Attribute val) {
+        return val.getIntegerValue();
+    }
+
+    /**
+     * Conversion operation to Boolean.
+     * 
+     * @param val the value (variable) to be converted
+     * @return the converted value (may be <b>null</b>, depends on the type of the attribute)
+     */
+    @Conversion
+    public static boolean convert2Boolean(Attribute val) {
+        return val.getBooleanValue();
+    }
+
+    /**
+     * Conversion operation to String.
+     * 
+     * @param val the value (variable) to be converted
+     * @return the converted value (may be <b>null</b>, depends on the type of the attribute)
+     */
+    @Conversion
+    public static String convert2String(Attribute val) {
+        return val.getStringValue();
+    }
+
+    /**
+     * Conversion operation to an EnumValue.
+     * 
+     * @param val the value (variable) to be converted
+     * @return the converted value (may be <b>null</b>, depends on the type of the attribute)
+     */
+    @Conversion
+    public static EnumValue convert2EnumValue(Attribute val) {
+        return val.getEnumValue();
     }
 
 }

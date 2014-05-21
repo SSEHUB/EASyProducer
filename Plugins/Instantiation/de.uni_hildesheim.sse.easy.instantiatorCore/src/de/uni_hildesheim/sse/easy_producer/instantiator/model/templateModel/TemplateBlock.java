@@ -3,6 +3,7 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 
 /**
  * Implements a template block.
@@ -68,7 +69,7 @@ public class TemplateBlock implements ITemplateElement {
     public TypeDescriptor<? extends IVilType> inferType() throws VilLanguageException {
         TypeDescriptor<? extends IVilType> result;
         if (null == body || 0 == body.length) {
-            result = TypeDescriptor.VOID;
+            result = TypeRegistry.voidType();
         } else {
             result = body[body.length - 1].inferType();
         }

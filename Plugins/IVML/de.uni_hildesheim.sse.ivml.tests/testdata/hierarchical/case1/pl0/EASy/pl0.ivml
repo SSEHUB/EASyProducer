@@ -1,0 +1,5 @@
+project pl0 {
+
+    version v0;
+    Boolean pl0_bool;
+}

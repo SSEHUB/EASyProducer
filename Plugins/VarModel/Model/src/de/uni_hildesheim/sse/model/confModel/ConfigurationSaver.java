@@ -53,14 +53,48 @@ class ConfigurationSaver {
     private Project destProject;
     
     /**
-     * Sole constructor for this class for saving the configuration.
+     * Specifies whether only user Input should be stored:
+     * <ul>
+     * <li><tt>true:</tt> Assignments in state {@link AssignmentState#ASSIGNED} and {@link AssignmentState#FROZEN}
+     *     will be saved.</li>
+     * <li><tt>false: Assignments in state {@link AssignmentState#ASSIGNED}, {@link AssignmentState#FROZEN}, and
+     *     {@link AssignmentState#DERIVED} will be saved (i.e. also computed values).</tt></li>
+     * </ul>
+     */
+    private boolean onlyUserInput;
+    
+    /**
+     * Default constructor for this class. This Constructor will save only user input.
      * @param srcConfiguration The configuration which should be saved.
      * @param ownProject return an own project (<code>true</code>) or add the 
      *   configuration to {@link Configuration#getProject()} (<code>false</code>)
      * @throws ConfigurationException in case of any configuration errors
+     * @see #ConfigurationSaver(Configuration, boolean, boolean)
      */
     ConfigurationSaver(Configuration srcConfiguration, boolean ownProject) throws ConfigurationException {
+        this(srcConfiguration, ownProject, true);
+    }
+    
+    /**
+     * Constructor for this class for saving the configuration. With this constructor it is possible to decide whether
+     * only user input should be saved or all configured values.
+     * @param srcConfiguration The configuration which should be saved.
+     * @param ownProject return an own project (<code>true</code>) or add the 
+     *   configuration to {@link Configuration#getProject()} (<code>false</code>)
+     * @param onlyUserInput Specifies whether only user Input should be stored:
+     *     <ul>
+     *     <li><tt>true:</tt> Assignments in state {@link AssignmentState#ASSIGNED} and {@link AssignmentState#FROZEN}
+     *         will be saved.</li>
+     *     <li><tt>false: Assignments in state {@link AssignmentState#ASSIGNED}, {@link AssignmentState#FROZEN}, and
+     *         {@link AssignmentState#DERIVED} will be saved (i.e. also computed values).</tt></li>
+     *     </ul>
+     * @throws ConfigurationException in case of any configuration errors
+     */
+    ConfigurationSaver(Configuration srcConfiguration, boolean ownProject, boolean onlyUserInput)
+        throws ConfigurationException {
+        
         this.srcConfiguration = srcConfiguration;
+        this.onlyUserInput = onlyUserInput;
         // prepare project instance
         if (ownProject) {
             destProject = new Project(srcConfiguration.getProject().getName() + "_conf");
@@ -158,19 +192,23 @@ class ConfigurationSaver {
         int code = 0;
         
         if (null != value & AssignmentState.UNDEFINED != var.getState() && AssignmentState.DEFAULT != var.getState()) {
-            OCLFeatureCall call = new OCLFeatureCall(deriveOperand(decl, var), 
-                OclKeyWords.ASSIGNMENT, new ConstantValue(toSaveableValue(value)));
-            try {
-                confProject.add(new Constraint(call, confProject));
-            } catch (CSTSemanticException e) {
-                if (0 == errors.length()) {
-                    // just take the first one; not nice...
-                    code = e.getCode();
+            // If only user input should be stored, than also ignore Derived states.
+            if (!onlyUserInput || AssignmentState.DERIVED != var.getState()) {
+                
+                OCLFeatureCall call = new OCLFeatureCall(deriveOperand(decl, var), 
+                    OclKeyWords.ASSIGNMENT, new ConstantValue(toSaveableValue(value)));
+                try {
+                    confProject.add(new Constraint(call, confProject));
+                } catch (CSTSemanticException e) {
+                    if (0 == errors.length()) {
+                        // just take the first one; not nice...
+                        code = e.getCode();
+                    }
+                    if (errors.length() > 0) {
+                        errors.append(", ");
+                    }
+                    errors.append(e.getMessage());
                 }
-                if (errors.length() > 0) {
-                    errors.append(", ");
-                }
-                errors.append(e.getMessage());
             }
         }
         return code;

@@ -13,7 +13,7 @@ import org.eclipse.xtext.ui.editor.outline.impl.DocumentRootNode;
 
 import com.google.inject.Inject;
 
-import de.uni_hildesheim.sse.ui.resources.Images;
+import de.uni_hildesheim.sse.vil.buildlang.ui.resources.Images;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Advice;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Import;
@@ -237,7 +237,7 @@ public class VilBuildLanguageOutlineTreeProvider extends DefaultOutlineTreeProvi
                     displayString.append(" : Rule", StyledString.QUALIFIER_STYLER);
                     createEStructuralFeatureNode(parentNode, ruleCast,
                             VilBuildLanguagePackage.Literals.RULE_DECLARATION__NAME,
-                            imageHelper.getImage(Images.NAME_RULE), displayString, true);
+                            imageHelper.getImage(Images.NAME_RULE_INSTANCE), displayString, true);
                 }
             } catch (ClassCastException e) {
                 // Do nothing

@@ -99,6 +99,18 @@ public abstract class ModelCallExpression<V extends IResolvable, M extends IReso
     }
     
     /**
+     * Changes the owning model. Required, if a temporary model was used
+     * for resolution, e.g., in case of recursive calls.
+     * 
+     * @param model the new model (<b>null</b> will be ignored)
+     */
+    void setModel(M model) {
+        if (null != model) {
+            this.model = model;
+        }
+    }
+    
+    /**
      * Returns the resolved operation. {@link #inferType()} must be called before.
      * 
      * @return the resolved operation or <b>null</b> if {@link #inferType()} was not called before or the operation 

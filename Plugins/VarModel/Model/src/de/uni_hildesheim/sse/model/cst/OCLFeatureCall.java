@@ -1,10 +1,13 @@
 package de.uni_hildesheim.sse.model.cst;
 
+import de.uni_hildesheim.sse.model.varModel.IvmlKeyWords;
 import de.uni_hildesheim.sse.model.varModel.datatypes.BaseTypeVisitor;
+import de.uni_hildesheim.sse.model.varModel.datatypes.Container;
 import de.uni_hildesheim.sse.model.varModel.datatypes.ICustomOperationAccessor;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.MetaType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Operation;
+import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Operation.ReturnTypeMode;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Sequence;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Set;
@@ -75,7 +78,7 @@ public class OCLFeatureCall extends ConstraintSyntaxTree {
             //we need an operation (name) and the data type to call on
             if (null != operation) {
                 if (null != operand) {
-                    dfltInferDatatype();   
+                    dfltInferDatatype();
                 } else {
                     customInferDatatype();
                 }
@@ -89,13 +92,36 @@ public class OCLFeatureCall extends ConstraintSyntaxTree {
     }
 
     /**
+     * Performs specific type compliance checks for found operations, e.g., in case of equality or assignments.
+     * 
+     * @param op the operation to be checked
+     * @param operandType the actual operand type
+     * @param parameterTypes the actual parameter types
+     * @throws CSTSemanticException in case that operand type and parameter types shall match somehow but do not match
+     */
+    public static void checkTypeCompliance(Operation op, IDatatype operandType, IDatatype[] parameterTypes) 
+        throws CSTSemanticException {
+        if (null != op && (IvmlKeyWords.EQUALS.equals(op.getName()) || IvmlKeyWords.ASSIGNMENT.equals(op.getName()))) {
+            if (null != parameterTypes && 1 == parameterTypes.length) {
+                IDatatype pType = parameterTypes[0];
+                if (!(pType.isAssignableFrom(operandType) || operandType.isAssignableFrom(pType))) {
+                    throw new CSTSemanticException("operand and parameter type must be assignable", 
+                        CSTSemanticException.TYPE_MISMATCH);
+                }
+            }
+        }
+    }
+
+    /**
      * Performs the default infer operation, i.e. resolve operation on operand or search for
      * a custom operation.
      * 
      * @throws CSTSemanticException in case of type resolution problems
      */
     private void dfltInferDatatype() throws CSTSemanticException {
-        IDatatype[] paramTypes;
+        IDatatype operandType = operand.inferDatatype();
+        // determine parameter types
+        IDatatype[] paramTypes = null;
         if (null == parameters) {
             paramTypes = null;
         } else {
@@ -104,16 +130,32 @@ public class OCLFeatureCall extends ConstraintSyntaxTree {
                 paramTypes[p] = parameters[p].inferDatatype();
             }
         }
-        // just ask the operand for the operation, perform type conversion on operand if required
-        IDatatype operandType = BaseTypeVisitor.getBaseType(operand.inferDatatype());
-        Operation op = TypeQueries.getOperation(operandType, operation, paramTypes);
+        // check for reference-based operation
+        Operation op = null;
+        IDatatype relevantType = operandType;
+        if (Container.TYPE.isAssignableFrom(operandType.getType())) {
+            relevantType = ((Container) operandType.getType()).getContainedType();
+        } 
+        if (Reference.TYPE.isAssignableFrom(relevantType)) {
+            op = TypeQueries.getOperation(operandType, operation, paramTypes);
+            checkTypeCompliance(op, operandType, paramTypes);
+        }
+        // normal operations
+        operandType = BaseTypeVisitor.getBaseType(operandType);
         if (null == op) {
-            op = customInferDatatype();
+            operandType = Reference.dereference(operandType);
+            Reference.dereference(paramTypes);
+            op = TypeQueries.getOperation(operandType, operation, paramTypes);
             if (null == op) {
-                throw new UnknownOperationException(operation, CSTSemanticException.UNKNOWN_OPERATION, 
-                    operandType, paramTypes);
+                op = customInferDatatype();
+                if (null == op) {
+                    throw new UnknownOperationException(operation, CSTSemanticException.UNKNOWN_OPERATION, 
+                        operandType, paramTypes);
+                }
+                op = null;
             }
-        } else {
+        }
+        if (null != op) {
             // done on individual types by customInferDatatype
             checkRequiredAssignableParameter(op, operandType, paramTypes);
             result = getActualReturnType(op, operandType, paramTypes);
@@ -206,7 +248,7 @@ public class OCLFeatureCall extends ConstraintSyntaxTree {
                     paramTypes[0] = fcOperandType;
                 }
                 for (int p = fcOperandIncrement; p < paramCount; p++) {
-                    paramTypes[p] = parameters[p - fcOperandIncrement].inferDatatype();
+                    paramTypes[p] = Reference.dereference(parameters[p - fcOperandIncrement].inferDatatype());
                 }
             }
             op = getCustomOperation(operandType, paramTypes);

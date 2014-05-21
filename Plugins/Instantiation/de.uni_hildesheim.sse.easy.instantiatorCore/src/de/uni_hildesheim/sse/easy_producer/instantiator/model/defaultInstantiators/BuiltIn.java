@@ -17,9 +17,9 @@ public class BuiltIn {
     public static synchronized void initialize() {
         if (!initialized) {
             initialized = true;
-            TypeRegistry.register(Zip.class);
-            TypeRegistry.register(Unzip.class);
-            TypeRegistry.register(VilTemplateProcessor.class);
+            TypeRegistry.DEFAULT.register(Zip.class);
+            TypeRegistry.DEFAULT.register(Unzip.class);
+            TypeRegistry.DEFAULT.register(VilTemplateProcessor.class);
         }
     }
 

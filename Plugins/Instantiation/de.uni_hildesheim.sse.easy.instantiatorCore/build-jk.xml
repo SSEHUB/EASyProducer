@@ -14,10 +14,6 @@
 		<pathelement path="${libs.model}"/>
 		<!-- Instantiation Copy Core -->
 		<pathelement path="${libs.instantiator.copy.core}"/>
-        <!-- lib -->
-		<fileset dir="lib">
-			<include name="**/*.jar" />
-		</fileset>
 		<!-- Eclipse-Plugins -->
 		<fileset dir="${eclipse.plugins.dir}">
 			<include name="**/*.jar" />
@@ -51,9 +47,12 @@
 				<include name="OSGI-INF/**/*" />
 				<include name="src.zip" />
 				<include name="javadoc.zip" />
-				<include name="lib/**/*" />
 			</fileset>
 		</copy>
 		<jar destfile="${build.jar.dir}/${ant.project.name}.jar" basedir="${build.classes.dir}" manifest="META-INF/MANIFEST.MF"/>
+		<!-- Copy created jar to global EASy Plug-ins directory -->
+		<copy todir="${easy.bundles.dir}">
+			<fileset dir="${build.jar.dir}" includes="**/*.jar"/>
+		</copy>
 	</target>
 </project>

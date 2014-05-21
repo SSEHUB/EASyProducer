@@ -17,6 +17,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Variab
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Collection;
 import de.uni_hildesheim.sse.utils.modelManagement.IModel;
+import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
 
 /**
  * Extends the basic expression evaluation visitor for the execution of those classes being
@@ -206,15 +207,35 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends
             environment.switchContext(model);
             processModelParameter(model);
             for (int i = 0; i < model.getImportsCount(); i++) {
-                visitModelHeader((IResolvableModel<V>) model.getImport(i).getResolved(), visited);
+                ModelImport<?> imp = model.getImport(i);
+                IResolvableModel<V> imported = (IResolvableModel<V>) model.getImport(i).getResolved();
+                if (null != imported) {
+                    visitModelHeader(imported, visited);
+                } else {
+                    throw new VilLanguageException(imp.getName() + " is not resolved ", 
+                        VilLanguageException.ID_RUNTIME_NOT_RESOLVED);
+                }
             }
+            initializeImplicitVariables(model);
             for (int v = 0; v < model.getVariableDeclarationCount(); v++) {
-                model.getVariableDeclaration(v).accept((IVisitor) this);
+                V varDecl = model.getVariableDeclaration(v);
+                if (!model.isImplicit(varDecl)) {
+                    model.getVariableDeclaration(v).accept((IVisitor) this);
+                }
             }
         } else {
             throw new VilLanguageException("cyclic inclusion at " + model.getName(), 
                 VilLanguageException.ID_RUNTIME_CYCLE);
         }
+    }
+
+    /**
+     * Initializes implicit variables of a model (before explicitly defined variables).
+     * 
+     * @param model the model being initialized
+     * @throws VilLanguageException in case that the initialization fails, e.g., assigning values
+     */
+    protected void initializeImplicitVariables(IResolvableModel<V> model) throws VilLanguageException {
     }
 
     /**
@@ -296,6 +317,10 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends
         IModel contextModel = environment.getContextModel();
         environment.switchContext(call.getModel());
         environment.pushLevel();
+        if (null == call.getResolved()) {
+            throw new ExpressionException("model call " + call.getQualifiedName() + " is not resolved", 
+                ExpressionException.ID_RUNTIME);
+        }
         O operation = dynamicDispatch(call.getResolved(), args);
         Object result;
         try {

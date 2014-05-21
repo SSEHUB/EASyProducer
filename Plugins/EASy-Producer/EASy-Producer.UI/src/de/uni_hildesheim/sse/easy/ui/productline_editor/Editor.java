@@ -29,11 +29,11 @@ import de.uni_hildesheim.sse.easy.ui.productline_editor.configuration.AttributeV
 import de.uni_hildesheim.sse.easy.ui.productline_editor.configuration.ConfigurationPage;
 import de.uni_hildesheim.sse.easy.ui.productline_editor.instantiator.InstantiatorConfigPage;
 import de.uni_hildesheim.sse.easy.ui.productline_editor.project_configuration.ProjectConfigurationPage;
+import de.uni_hildesheim.sse.easy_producer.core.mgmt.IProductLineProjectListener;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceUtils;
+import de.uni_hildesheim.sse.easy_producer.core.varMod.container.SemanticErrorDescription;
 import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
-import de.uni_hildesheim.sse.easy_producer.persistence.PersistenceUtils;
-import de.uni_hildesheim.sse.easy_producer.persistence.mgmt.IProductLineProjectListener;
 import de.uni_hildesheim.sse.easy_producer.persistency.ResourcesMgmt;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelContainer.SemanticErrorDescription;
 
 /**
  * Multipage editor for editing and configuring one product line project.

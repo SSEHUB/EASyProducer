@@ -1,7 +1,6 @@
 package de.uni_hildesheim.sse.model.validation;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.model.varModel.IvmlKeyWords;

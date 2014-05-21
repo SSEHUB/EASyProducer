@@ -110,8 +110,17 @@ public class CompoundValue extends StructuredValue implements Cloneable {
      */
     private void initialize(IDecisionVariableContainer container, Map<String, Object> initialValues) 
         throws ValueDoesNotMatchTypeException {
-        for (int i = 0; i < container.getElementCount(); i++) {
-            DecisionVariableDeclaration decl = container.getElement(i);
+        
+        boolean isCompound = container instanceof Compound;
+        Compound cmpContainer = null;
+        if (isCompound) {
+            cmpContainer = (Compound) container;
+        }
+        
+        int elementCount = isCompound ? cmpContainer.getInheritedElementCount() : container.getElementCount();
+        for (int i = 0; i < elementCount; i++) {
+            DecisionVariableDeclaration decl = isCompound ? cmpContainer.getInheritedElement(i)
+                : container.getElement(i);
             IDatatype type = decl.getType();
             String name = decl.getName();
             Object oVal = initialValues.get(name); //objectValue
@@ -188,15 +197,22 @@ public class CompoundValue extends StructuredValue implements Cloneable {
     public Value getNestedValue(String name) {
         return nestedElements.get(name);
     }
-    /**
-     * Getter for the value. Do not use! This value instance has substructures 
-     * and does not hold a single value. Use {@link #getNestedValue(String)} instead.
-     * 
-     * @return <b>null</b> always
-     */
+
     @Override
     public Object getValue() {
-        return null;
+        // following the constructor and ValueFactory convention
+        // null would prevent subsequent value initialization
+        int size = 2 + (null != nestedElements ? 2 * nestedElements.size() : 0);
+        Object[] result = new Object[size];
+        
+        int pos = 0;
+        result[pos++] = SPECIAL_SLOT_NAME_TYPE;
+        result[pos++] = getType();
+        for (Map.Entry<String, Value> ent : nestedElements.entrySet()) {
+            result[pos++] = ent.getKey();
+            result[pos++] = ent.getValue();
+        }
+        return result;
     }
 
     @Override
@@ -250,8 +266,8 @@ public class CompoundValue extends StructuredValue implements Cloneable {
         Compound sourceType = (Compound) source.getType();
         Compound myType = (Compound) getType();
         if (sourceType.isAssignableFrom(myType)) {
-            for (int i = 0; i < myType.getElementCount(); i++) {
-                DecisionVariableDeclaration decl = myType.getElement(i);
+            for (int i = 0; i < myType.getInheritedElementCount(); i++) {
+                DecisionVariableDeclaration decl = myType.getInheritedElement(i);
                 String name = decl.getName();
                 /*
                  * Avoid deletion of already configured nested values.
@@ -320,7 +336,7 @@ public class CompoundValue extends StructuredValue implements Cloneable {
 
     @Override
     public String toString() {
-        return nestedElements.toString();
+        return nestedElements.toString(); // TODO consider + " : " + getType().toString(); from Value superclass
     }
+    
 }
-

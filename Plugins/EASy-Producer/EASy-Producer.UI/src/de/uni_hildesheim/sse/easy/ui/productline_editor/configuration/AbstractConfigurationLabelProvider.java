@@ -10,12 +10,12 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 
 import de.uni_hildesheim.sse.easy.ui.confModel.GUIConfiguration;
 import de.uni_hildesheim.sse.easy.ui.confModel.GUIVariable;
 import de.uni_hildesheim.sse.easy.ui.internal.Activator;
+import de.uni_hildesheim.sse.easy.ui.productline_editor.ImageProvider;
+import de.uni_hildesheim.sse.easy.ui.productline_editor.ImageProvider.ImageType;
 import de.uni_hildesheim.sse.model.confModel.AssignmentState;
 import de.uni_hildesheim.sse.model.confModel.IAssignmentState;
 
@@ -32,11 +32,11 @@ import de.uni_hildesheim.sse.model.confModel.IAssignmentState;
 abstract class AbstractConfigurationLabelProvider extends CellLabelProvider implements
     ITableLabelProvider, IColorProvider {
     
-    protected static final Image ADD = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD);
-    protected static final Image REMOVE = PlatformUI.getWorkbench().getSharedImages().
-        getImage(ISharedImages.IMG_TOOL_DELETE);
+    protected static final Image ADD = ImageProvider.getInstance().getImage(ImageType.ADD);
+    protected static final Image REMOVE = ImageProvider.getInstance().getImage(ImageType.DELETE);
     private static final Image UNCHECKED = Activator.getImageDescriptor("icons/open.png").createImage();
     private static final Image ASSIGNED = Activator.getImageDescriptor("icons/editor/assigned.png").createImage();
+    private static final Image NULL = Activator.getImageDescriptor("icons/editor/null.png").createImage();
     private static final Image CHECKED = Activator.getImageDescriptor("icons/checkmark.png").createImage();
     private static final Color ERROR_COLOR = Display.getDefault().getSystemColor(SWT.COLOR_RED);
     private static final Color NESTED_ELEMENT_COLOR = new Color(Display.getDefault(), new RGB(232, 242, 254));
@@ -130,8 +130,6 @@ abstract class AbstractConfigurationLabelProvider extends CellLabelProvider impl
              * Same color for elements having the same getNestedDepth()
              */
             backgroundColor = NESTED_ELEMENT_COLOR;
-//            backgroundColor = Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_BACKGROUND_GRADIENT);
-//            backgroundColor = Display.getCurrent().getSystemColor(SWT.COLOR_INFO_BACKGROUND);
         }
         
         return backgroundColor;
@@ -149,8 +147,11 @@ abstract class AbstractConfigurationLabelProvider extends CellLabelProvider impl
                 im = UNCHECKED;
             } else if (AssignmentState.ASSIGNED == state || AssignmentState.DERIVED == state
                     || AssignmentState.DEFAULT == state) {
-                
-                im = ASSIGNED;
+                if (value.hasValue() && value.hasNullValue()) {
+                    im = NULL;
+                } else {
+                    im = ASSIGNED;
+                }
             }
         } else {
             im = getSpecializedColumnImage(value, columnIndex);

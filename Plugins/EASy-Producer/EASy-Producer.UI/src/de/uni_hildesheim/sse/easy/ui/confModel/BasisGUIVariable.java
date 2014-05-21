@@ -40,8 +40,14 @@ class BasisGUIVariable extends GUIVariable {
 
     @Override
     public String getValueText() {
-        ConfigEditorValueRetriever retriever = new ConfigEditorValueRetriever(getVariable());
-        return retriever.getValue().toString();
+        String value = null;
+        if (hasNullValue()) {
+            value = NULL_VALUE_LABEL;
+        } else {
+            ConfigEditorValueRetriever retriever = new ConfigEditorValueRetriever(getVariable());
+            value = retriever.getValue().toString();
+        }
+        return value;
     }
 
     @Override
@@ -58,8 +64,12 @@ class BasisGUIVariable extends GUIVariable {
     @Override
     public Object getValue() {
         String value = "";
-        if (null != getVariable().getValue() && null != getVariable().getValue().getValue()) {
-            value = getVariable().getValue().getValue().toString();
+        if (hasValue()) {
+            if (hasNullValue()) {
+                value = NULL_VALUE_LABEL;
+            } else {
+                value = getVariable().getValue().getValue().toString();
+            }
         }
         
         return value;

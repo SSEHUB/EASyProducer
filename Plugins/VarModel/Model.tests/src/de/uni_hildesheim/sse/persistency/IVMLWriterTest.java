@@ -3,9 +3,9 @@ package de.uni_hildesheim.sse.persistency;
 import java.io.IOException;
 import java.io.StringWriter;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
@@ -26,6 +26,7 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.Container;
 import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Enum;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IntegerType;
+import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
 import de.uni_hildesheim.sse.model.varModel.datatypes.RealType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Sequence;
@@ -35,9 +36,11 @@ import de.uni_hildesheim.sse.model.varModel.values.CompoundValue;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
 import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
 import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
+import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
 import de.uni_hildesheim.sse.utils.modelManagement.Version;
 import de.uni_hildesheim.sse.utils.modelManagement.VersionFormatException;
 import de.uni_hildesheim.sse.utils.modelManagement.VersionRestriction;
+import de.uni_hildesheim.sse.varModel.testSupport.ProjectTestUtilities;
 
 /**
  * Test cases for the IVMLWriter class.
@@ -534,7 +537,7 @@ public class IVMLWriterTest {
         expected += "    enum e {};\r\n";
         expected += "}\r\n";
         CompoundValue group1Value = (CompoundValue) ValueFactory.createValue(cp2, (Object[]) null);
-        Value group2Value = ValueFactory.createValue(cp2, new Object[]{"s1", "a"});
+        Value group2Value = ValueFactory.createValue(cp1, new Object[]{"s1", "a"});
         group1Value.configureValue("group2", group2Value);
         
         //Start testing
@@ -723,24 +726,84 @@ public class IVMLWriterTest {
      * @throws ValueDoesNotMatchTypeException 
      * @throws IOException 
      */
-    //@Test 
-    public void writungReferenceTest() throws ValueDoesNotMatchTypeException, IOException {
+    @Test 
+    public void testWritingReferences() throws ValueDoesNotMatchTypeException, IOException {
         
         DecisionVariableDeclaration integ = new DecisionVariableDeclaration("oneInteger", IntegerType.TYPE, pro);
-        DecisionVariableDeclaration ref = new DecisionVariableDeclaration("oneReference", Reference.TYPE, pro);
+        Reference refType = new Reference("Reference_of_Int", IntegerType.TYPE, pro);
+        DecisionVariableDeclaration ref = new DecisionVariableDeclaration("oneReference", refType, pro);
         
         integ.setValue("5");
         
         pro.add(integ);
+        pro.add(refType);
         pro.add(ref);
         pro.accept(writer);
         
-        String expected = "project p {\r\n\r\n";
+        String expected = "project " + pro.getName() + " {\r\n\r\n";
         expected += "    Integer oneInteger = 5;\r\n";
-        expected += "    refto(Integer) oneReference;\r\n";
+        expected += "    refTo(Integer) oneReference;\r\n";
         expected += "}\r\n";
         
         writer.flush();
         Assert.assertEquals(expected, strWriter.toString());
     }
+    
+    /**
+     * Tests whether qualified names are used if they are needed.
+     * This test will create two projects whith one variable, having exactly the same name and import botch projects
+     * in {@link #pro}. Afterwards a constraint is created including both variables and {@link #pro} is saved usind the
+     * {@link IVMLWriter}.
+     */
+    @Test
+    @Ignore
+    public void testWriteQualifiedNames() {
+        // Create imported projects and their declarations
+        DecisionVariableDeclaration var1 = createIdenticalVariable("predecessor1");
+        DecisionVariableDeclaration var2 = createIdenticalVariable("predecessor2");
+                
+        // Create main project (including a constraint using both variables)
+        Variable cstVar1 = new Variable(var1);
+        Variable cstVar2 = new Variable(var2);
+        OCLFeatureCall call = new OCLFeatureCall(cstVar1, OclKeyWords.EQUALS, cstVar2);
+        Constraint constraint = new Constraint(pro);
+        pro.add(constraint);
+        try {
+            constraint.setConsSyntax(call);
+        } catch (CSTSemanticException e) {
+            Assert.fail(e.getMessage());
+        }
+        
+        // Check whether the project can be used for testing 
+        ProjectTestUtilities.validateProject(pro);
+        
+        // Save contents of main project into a String
+        pro.accept(writer);
+        String result = strWriter.toString();
+        String expectedConstraint = var1.getQualifiedName() + " " + OclKeyWords.EQUALS + " " + var2.getQualifiedName();
+        int pos = result.indexOf(expectedConstraint);
+        boolean found = pos >= 0;
+        Assert.assertTrue("Error: Expected constraint not found, maybe because qualified names are not used.", found);
+    }
+
+    /**
+     * Helping method of {@link #testWriteQualifiedNames()} for creating a variable in a new project.
+     * All variables should have the same name to check the usage of qualified names.
+     * @param projectName The name of the (imported) project to create.
+     * @return The {@link DecisionVariableDeclaration} of the newly created variable.
+     */
+    private DecisionVariableDeclaration createIdenticalVariable(String projectName) {
+        Project predecessor = new Project(projectName);
+        DecisionVariableDeclaration var = new DecisionVariableDeclaration("variable", IntegerType.TYPE, predecessor);
+        predecessor.add(var);
+        ProjectImport imp = new ProjectImport(predecessor.getName(), null);
+        try {
+            imp.setResolved(predecessor);
+        } catch (ModelManagementException e) {
+            Assert.fail(e.getMessage());
+        }
+        pro.addImport(imp);
+        return var;
+    }
+
 }

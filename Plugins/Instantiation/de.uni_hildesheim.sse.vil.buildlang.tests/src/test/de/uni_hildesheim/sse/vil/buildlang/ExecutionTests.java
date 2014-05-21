@@ -1,5 +1,7 @@
 package test.de.uni_hildesheim.sse.vil.buildlang;
 
+import static de.uni_hildesheim.sse.varModel.testSupport.TextTestUtils.*;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -8,7 +10,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
-
 /**
  * Tests for the basic language.
  * 
@@ -377,6 +378,38 @@ public class ExecutionTests extends AbstractExecutionTest {
     @Test
     public void testText() throws IOException {
         assertSelfInstantiate("text");
+    }
+
+    /**
+     * Tests implicit variables.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testImplicitVars() throws IOException {
+        assertSelfInstantiate("implicitVars");
+    }
+
+    /**
+     * Tests the instantiation command. However, we cannot test
+     * all variants of the call as currently the main script cannot
+     * easily be determined in tests (projects are fed in as files).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testInstantiate() throws IOException {
+        assertSelfInstantiate("instantiate");
+    }
+
+    /**
+     * Tests a main rule call to a base PL from an extended PL (contributed by Sascha).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testExtendedPL() throws IOException {
+        assertSelfInstantiate("extendedPL");
     }
 
 }

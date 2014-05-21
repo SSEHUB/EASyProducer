@@ -36,7 +36,7 @@ import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerConfiguration;
  *
  */
 public class ReasonerModel implements IConstraintContainer, Iterable<ReasonerVariable>, IVariableContainer {
-
+    
     // Project information
     private Project project;
     private Configuration config;
@@ -87,6 +87,11 @@ public class ReasonerModel implements IConstraintContainer, Iterable<ReasonerVar
      */
     private AttributeValues attributeValues;
     
+    // Reasoning results
+    private List<IDecisionVariable> propagatedVariables;
+   
+    private String reasoningID;
+    
     /**
      * Default constructor for this class.
      * This constructor should be used whenever a configuration is given, i.e., if a reasoning over the variables
@@ -97,7 +102,11 @@ public class ReasonerModel implements IConstraintContainer, Iterable<ReasonerVar
      *    may be <b>null</b>)  
      */
     public ReasonerModel(Configuration configuration, ReasonerConfiguration settings) {
-        System.out.println("Create rModel: " + System.currentTimeMillis());
+        /*** Start time measurement ***/
+        this.reasoningID = Statistic.createNewReasoningID(configuration.getProject().getName());
+        Statistic.createTimePerformanceMeasurement(reasoningID);
+        Statistic.addTimestamp(reasoningID, System.currentTimeMillis());
+        /***    ***/        
         this.project = configuration.getProject();
         this.config = configuration;
         this.settings = settings;
@@ -108,6 +117,7 @@ public class ReasonerModel implements IConstraintContainer, Iterable<ReasonerVar
         variables = new HashMap<String, ReasonerVariable>();
         variablesOfCurrentView = new HashSet<ReasonerVariable>();
         variablesInCompounds = new HashMap<String, Set<ReasonerVariable>>();
+        propagatedVariables = new ArrayList<IDecisionVariable>();
         
         // Retrieve all custom datatypes
         retrieveCustomDatatypes();
@@ -512,5 +522,38 @@ public class ReasonerModel implements IConstraintContainer, Iterable<ReasonerVar
     @Override
     public int getConstraintCount() {
         return constraints.getConstraintCount();
+    }
+    
+    /**
+     * Method for adding a propagated variable to the list of propagated variables.
+     * @param variable Variable that was propagated.
+     */
+    public void addPropagatedVariable(ReasonerVariable variable) {
+        propagatedVariables.add(variable.getDecisionVariable());
+    }
+    
+    /**
+     * Method for retrieving the overall number of propagated variables.
+     * @return Number of propagated variables.
+     */
+    public int getCountPropagatedVariables() {
+        return propagatedVariables.size();
+    }
+    
+    /**
+     * Method for retrieving a specific propagated variable from the propagated variable list.
+     * @param index Number of propagated variable.
+     * @return Propagated variable.
+     */
+    public IDecisionVariable getPropagatedVariable(int index) {
+        return propagatedVariables.get(index);
+    }
+    
+    /**
+     * Method for returning reasoningID.
+     * @return ID of an individual reasoning process.
+     */
+    public String getReasoningID() {
+        return reasoningID;
     }
 }

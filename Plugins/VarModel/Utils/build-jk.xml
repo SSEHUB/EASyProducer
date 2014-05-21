@@ -36,5 +36,10 @@
 	<!-- Creates a jar file -->
 	<target name="jar" depends="compile">
 		<jar destfile="${build.jar.dir}/${ant.project.name}.jar" basedir="${build.classes.dir}" manifest="META-INF/MANIFEST.MF"/>
+		<!-- Copy created jar to global EASy Plug-ins directory -->
+		<copy todir="${easy.bundles.dir}">
+			<fileset dir="${build.jar.dir}" includes="**/*.jar"/>
+		</copy>
     </target>
+	
 </project>

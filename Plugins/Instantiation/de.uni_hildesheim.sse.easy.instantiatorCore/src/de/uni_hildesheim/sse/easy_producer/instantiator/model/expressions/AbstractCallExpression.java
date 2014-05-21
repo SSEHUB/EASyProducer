@@ -9,6 +9,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaOper
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeHelper;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.utils.modelManagement.IModel;
 
@@ -34,7 +35,7 @@ public abstract class AbstractCallExpression extends Expression {
      */
     protected AbstractCallExpression(String name, boolean unqualify) throws ExpressionException {
         this.name = name;
-        if (unqualify) {
+        if (unqualify && null != name) {
             int pos = name.lastIndexOf(Constants.QUALIFICATION_SEPARATOR);
             if (pos > 0) {
                 this.prefix = name.substring(0, pos);
@@ -62,6 +63,21 @@ public abstract class AbstractCallExpression extends Expression {
      */
     public String getPrefix() {
         return prefix;
+    }
+    
+    /**
+     * Returns the qualified name consisting of {@link #getPrefix()} (if present) and {@link #getName()}.
+     * 
+     * @return the qualified name
+     */
+    public String getQualifiedName() {
+        String result;
+        if (null == prefix) {
+            result = name;
+        } else {
+            result = prefix + Constants.QUALIFICATION_SEPARATOR + name;
+        }
+        return result;
     }
 
     /**
@@ -198,22 +214,6 @@ public abstract class AbstractCallExpression extends Expression {
             return score;
         }
     }
-
-    /**
-     * Tries to find a conversion among the given types. Defined conversions on both
-     * types are taken into account.
-     * 
-     * @param argType the argument type
-     * @param paramType the parameter type
-     * @return the conversion operation or <b>null</b> if there is none
-     */
-    private static IMetaOperation findConversion(IMetaType argType, IMetaType paramType) {
-        IMetaOperation conversion = argType.findConversion(argType, paramType);
-        if (null == conversion) {
-            conversion = paramType.findConversion(argType, paramType);
-        }
-        return conversion;
-    }
     
     /**
      * Derives the convertible candidates from <code>operand</code>, i.e., operations which 
@@ -238,7 +238,7 @@ public abstract class AbstractCallExpression extends Expression {
                     IMetaType paramType = desc.getParameterType(p);
                     IMetaType argType = arguments[p].inferType();
                     if (!paramType.isAssignableFrom(argType)) {
-                        conversionOps[p] = findConversion(argType, paramType);
+                        conversionOps[p] = TypeHelper.findConversion(argType, paramType);
                         if (null != conversionOps[p]) {
                             conversionCount++;
                         }
@@ -324,10 +324,10 @@ public abstract class AbstractCallExpression extends Expression {
                     // string may shadow artifact operations; this conversion is last resort on artifact level
                     IMetaType opType = arguments[0].inferType();
                     IMetaType stringType = TypeRegistry.stringType();
-                    IMetaOperation convOp = findConversion(opType, stringType); // this includes Any->String ;)
+                    IMetaOperation convOp = TypeHelper.findConversion(opType, stringType); // this includes Any->String
                     if (null != convOp) {
                         op = resolveOperation(stringType, name, arguments, true);
-                        if (opType == TypeDescriptor.ANY) {
+                        if (opType == TypeRegistry.anyType()) {
                             arguments[0].insertConversion(convOp);
                             // ANY is assignable by itself, other conversion
                             // will be added on the way but for ANY the conversion
@@ -432,10 +432,12 @@ public abstract class AbstractCallExpression extends Expression {
      * @param operation the operation to be considered
      * @param args the arguments
      * @param cls the type of operation
+     * @param registry the (local) type registry
      * @return <code>operation</code> or the one determined dynamically
      */
     @SuppressWarnings("unchecked")
-    public static <O extends IMetaOperation> O dynamicDispatch(O operation, Object[] args, Class<O> cls) {
+    public static <O extends IMetaOperation> O dynamicDispatch(O operation, Object[] args, Class<O> cls, 
+        TypeRegistry registry) {
         O result = operation;
         int offset = 0;
         if (!operation.isStatic()) {
@@ -457,7 +459,7 @@ public abstract class AbstractCallExpression extends Expression {
                         failure = true;
                     } else {
                         IMetaType tmp;
-                        tmp = TypeRegistry.findType(args[a].getClass());
+                        tmp = registry.findType(args[a].getClass());
                         if (null == tmp) {
                             tmp = operation.getParameterType(a);
                         } else {

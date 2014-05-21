@@ -12,25 +12,26 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expres
 public class ArraySet<T> extends AbstractArrayWrapper<T> implements Set<T> {
 
     /**
-     * Creates a new array collection wrapper.
+     * Creates a new array collection wrapper using the default type registry.
      * 
      * @param array the wrapped array
      * @param param the only type parameter characterizing <T>
      */
     public ArraySet(T[] array, Class<? extends IVilType> param) {
-        super(removeDuplicates(array), TypeRegistry.convert(param));
+        this(array, param, TypeRegistry.DEFAULT);
     }
-    
+
     /**
      * Creates a new array collection wrapper.
      * 
      * @param array the wrapped array
-     * @param params the type parameter characterizing <T>
+     * @param registry the type registry to use
+     * @param param the only type parameter characterizing <T>
      */
-    public ArraySet(T[] array, Class<? extends IVilType>... params) {
-        super(removeDuplicates(array), TypeRegistry.convert(params));
+    public ArraySet(T[] array, Class<? extends IVilType> param, TypeRegistry registry) {
+        super(removeDuplicates(array), registry.convert(param));
     }
-    
+
     /**
      * Creates a new array collection wrapper.
      * 
@@ -40,9 +41,9 @@ public class ArraySet<T> extends AbstractArrayWrapper<T> implements Set<T> {
     public ArraySet(T[] array, TypeDescriptor<? extends IVilType>... params) {
         super(removeDuplicates(array), params);
     }
-    
+
     /**
-     * Returns an empty set for one type parameter.
+     * Returns an empty set for one type parameter using the default type registry.
      * 
      * @param param the type parameter characterizing <T>
      * @return an empty set
@@ -50,7 +51,20 @@ public class ArraySet<T> extends AbstractArrayWrapper<T> implements Set<T> {
      */
     @Invisible
     public static final <T> Set<T> empty(Class<? extends IVilType> param) {
-        return empty(TypeRegistry.getType(TypeDescriptor.getRegName(param)));
+        return empty(param, TypeRegistry.DEFAULT);
+    }
+    
+    /**
+     * Returns an empty set for one type parameter.
+     * 
+     * @param param the type parameter characterizing <T>
+     * @param registry the type registry used for resolution
+     * @return an empty set
+     * @param <T> the element type
+     */
+    @Invisible
+    public static final <T> Set<T> empty(Class<? extends IVilType> param, TypeRegistry registry) {
+        return empty(registry.findType(param));
     }
     
     /**

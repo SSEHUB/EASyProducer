@@ -2,8 +2,7 @@ package de.uni_hildesheim.sse.easy_producer.persistency.eclipse;
 
 import org.eclipse.core.resources.IProject;
 
-import de.uni_hildesheim.sse.easy_producer.persistence.datatypes.
-    IProjectCreationResult;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.IProjectCreationResult;
 
 /**
  * An instance of this class will be returned after calling

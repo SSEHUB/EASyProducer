@@ -1,6 +1,5 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ruleMatch;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IArtifact;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.Path;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ConstantExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
@@ -19,8 +18,8 @@ public class MatchFactory {
     public static final MatchFactory INSTANCE = new MatchFactory();
     
     private static final TypeDescriptor <? extends IVilType> STRING = TypeRegistry.stringType();
-    private static final TypeDescriptor <? extends IVilType> PATH = TypeRegistry.getType(Path.class);
-    private static final TypeDescriptor <? extends IVilType> ARTIFACT = TypeRegistry.getType(IArtifact.class);
+    private static final TypeDescriptor <? extends IVilType> PATH = TypeRegistry.DEFAULT.getType(Path.class);
+    private static final TypeDescriptor <? extends IVilType> ARTIFACT = TypeRegistry.artifactType();
 
     
     /**

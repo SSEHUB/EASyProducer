@@ -66,5 +66,14 @@ public abstract class RuleBlock extends ProjectElement implements IRuleBlock {
             body[body.length - 1] = elt;
         }
     }
+    
+    /**
+     * Changes the body elements.
+     * 
+     * @param body the new body elements
+     */
+    public void setBody(IRuleElement[] body) {
+        this.body = body;
+    }
 
 }

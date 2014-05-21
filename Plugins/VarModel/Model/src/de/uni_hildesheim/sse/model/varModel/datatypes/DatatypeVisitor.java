@@ -134,7 +134,16 @@ public abstract class DatatypeVisitor implements IDatatypeVisitor {
      * {@inheritDoc}
      */
     public void visitReference(Reference ref) {
-        constructSurrounded(refPrefix, ref.getType());
+        constructReferenceName(ref.getType());
+    }
+    
+    /**
+     * Constructs a reference name from the given contained <code>type</code>.
+     * 
+     * @param type the contained type
+     */
+    public void constructReferenceName(IDatatype type) {
+        constructSurrounded(refPrefix, type);
     }
 
     /**

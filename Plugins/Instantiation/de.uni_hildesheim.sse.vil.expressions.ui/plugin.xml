@@ -47,23 +47,25 @@
             </and>
         </definition>
     </extension>
+    <!-- abstract language - no direct configuratio needed
     <extension
             point="org.eclipse.ui.preferencePages">
         <page
+            category="de.uni_hildesheim.sse.EASy"
             class="de.uni_hildesheim.sse.vil.expressions.ui.ExpressionDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
             id="de.uni_hildesheim.sse.vil.expressions.ExpressionDsl"
-            name="ExpressionDsl">
+            name="VIL/VTL expressions">
             <keywordReference id="de.uni_hildesheim.sse.vil.expressions.ui.keyword_ExpressionDsl"/>
         </page>
         <page
-            category="de.uni_hildesheim.sse.vil.expressions.ExpressionDsl"
+            category="de.uni_hildesheim.sse.EASy/de.uni_hildesheim.sse.vil.expressions.ExpressionDsl"
             class="de.uni_hildesheim.sse.vil.expressions.ui.ExpressionDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.syntaxcoloring.SyntaxColoringPreferencePage"
             id="de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.coloring"
             name="Syntax Coloring">
             <keywordReference id="de.uni_hildesheim.sse.vil.expressions.ui.keyword_ExpressionDsl"/>
         </page>
         <page
-            category="de.uni_hildesheim.sse.vil.expressions.ExpressionDsl"
+            category="de.uni_hildesheim.sse.EASy/de.uni_hildesheim.sse.vil.expressions.ExpressionDsl"
             class="de.uni_hildesheim.sse.vil.expressions.ui.ExpressionDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.templates.XtextTemplatePreferencePage"
             id="de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.templates"
             name="Templates">
@@ -73,16 +75,17 @@
     <extension
             point="org.eclipse.ui.propertyPages">
         <page
+            category="de.uni_hildesheim.sse.EASy"
             class="de.uni_hildesheim.sse.vil.expressions.ui.ExpressionDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
             id="de.uni_hildesheim.sse.vil.expressions.ExpressionDsl"
-            name="ExpressionDsl">
+            name="VIT/VTL expressions">
             <keywordReference id="de.uni_hildesheim.sse.vil.expressions.ui.keyword_ExpressionDsl"/>
             <enabledWhen>
 	            <adapt type="org.eclipse.core.resources.IProject"/>
 			</enabledWhen>
 	        <filter name="projectNature" value="org.eclipse.xtext.ui.shared.xtextNature"/>
         </page>
-    </extension>
+    </extension>-->
     <extension
         point="org.eclipse.ui.keywords">
         <keyword
@@ -180,6 +183,7 @@
             class="de.uni_hildesheim.sse.vil.expressions.ui.ExpressionDslExecutableExtensionFactory:org.eclipse.xtext.builder.IXtextBuilderParticipant">
       </participant>
    </extension>
+   <!--
    <extension
             point="org.eclipse.ui.preferencePages">
         <page
@@ -204,7 +208,7 @@
 	        <filter name="projectNature" value="org.eclipse.xtext.ui.shared.xtextNature"/>
         </page>
     </extension>
-
+    -->
 	<!-- Quick Outline -->
 	<extension
 		point="org.eclipse.ui.handlers">
@@ -291,6 +295,7 @@
          </command>
       </menuContribution>
    </extension>
+   <!--
    <extension point="org.eclipse.ui.preferencePages">
 	    <page
 	        category="de.uni_hildesheim.sse.vil.expressions.ExpressionDsl"
@@ -300,6 +305,7 @@
 	        <keywordReference id="de.uni_hildesheim.sse.vil.expressions.ui.keyword_ExpressionDsl"/>
 	    </page>
 	</extension>
+	-->
 
   <extension point="org.eclipse.compare.contentViewers">
     <viewer id="de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.compare.contentViewers"

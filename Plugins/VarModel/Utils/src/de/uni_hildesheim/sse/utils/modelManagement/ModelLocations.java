@@ -1,9 +1,13 @@
 package de.uni_hildesheim.sse.utils.modelManagement;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import de.uni_hildesheim.sse.utils.progress.ObservableTask;
@@ -21,8 +25,156 @@ import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
  */
 public class ModelLocations <M extends IModel> {
 
+    /**
+     * Represents a location with dependent locations (to be considered while loading a model).
+     * 
+     * @author Holger Eichelberger
+     */
+    public static class Location {
+        private File location;
+        private List<Location> dependent;
+        
+        /**
+         * Creates a new location. This constructor is not visible as {@link ModelLocations} acts as a factory
+         * for instances of this class.
+         * 
+         * @param location the file location to be represented by this class
+         */
+        private Location(File location) {
+            this.location = location;
+        }
+        
+        /**
+         * Returns the file location represented by this instance.
+         * 
+         * @return the file location
+         */
+        public File getLocation() {
+            return location;
+        }
+        
+        /**
+         * Returns the number of dependent locations.
+         * 
+         * @return the number of dependent locations
+         */
+        public int getDependentLocationCount() {
+            return null == dependent ? 0 : dependent.size();
+        }
+        
+        /**
+         * The specified dependent locations.
+         * 
+         * @param index the index of the location to be returned
+         * @return the dependent location
+         * @throws IndexOutOfBoundsException in case that 
+         *   <code>index &lt; 0 || index &gt;={@link #getDependentLocationCount()}</code>
+         */
+        public Location getDependentLocation(int index) {
+            return dependent.get(index);
+        }
+        
+        /**
+         * Adds a dependent location.
+         * 
+         * @param location the location to be added
+         */
+        public void addDependentLocation(Location location) {
+            if (null != location) {
+                if (null == dependent) {
+                    dependent = new ArrayList<Location>();
+                }
+                if (!dependent.contains(location)) {
+                    dependent.add(location);
+                }
+            }
+        }
+
+        /**
+         * Counts the files in this and dependent locations.
+         * 
+         * @param excludedLocations locations not to be considered
+         * @param done already processed locations (required to excluded circles)
+         * @return the number of files in this and related locations (excluding given and already processed locations)
+         */
+        private int countFilesInLocations(Set<File> excludedLocations, Set<Location> done) {
+            int count = 0;
+            if (!done.contains(this)) {
+                done.add(this);
+                count = count(location, excludedLocations);
+                if (null != dependent) {
+                    for (int d = 0; d < dependent.size(); d++) {
+                        count += dependent.get(d).countFilesInLocations(excludedLocations, done);
+                    }
+                }
+            }
+            return count;
+        }
+
+        /**
+         * Returns whether this location contains the given <code>file</code> (based
+         * on name inclusion).
+         * 
+         * @param file the file to check for
+         * @return <code>true</code> if <code>file</code> is contained in this location,
+         *   <code>false</code> else
+         */
+        private boolean contains(File file) {
+            boolean result;
+            try {
+                String sFile = file.toString();
+                result = sFile.startsWith(location.toString()) 
+                    || sFile.startsWith(location.getCanonicalPath().toString());
+            } catch (IOException e) {
+                result = false;
+            }
+            return result;
+        }
+        
+        /**
+         * Removes <code>location</code> from the dependent locations.
+         * 
+         * @param location the location to be removed
+         * @param processed the already processed locations (in order to avoid loops)
+         */
+        private void removeFromDependentLocations(Location location, Set<Location> processed) {
+            if (!processed.contains(location)) {
+                processed.add(location);
+                if (null != dependent) {
+                    dependent.remove(location);
+                    for (int d = 0; d < dependent.size(); d++) {
+                        dependent.get(d).removeFromDependentLocations(location, processed);
+                    }
+                }
+            }
+        }
+
+        /**
+         * Returns whether <code>location</code> is a dependent location.
+         * 
+         * @param location the location to be searched for
+         * @param processed the already processed locations (in order to avoid loops)
+         * @return <code>true</code> if <code>locatoin</code> is a dependent location, <code>false</code> else
+         */
+        private boolean isDependentLocation(Location location, Set<Location> processed) {
+            boolean found = false;
+            if (!processed.contains(location)) {
+                processed.add(location);
+                if (null != dependent) {
+                    for (int d = 0; !found && d < dependent.size(); d++) {
+                        Location dep = dependent.get(d);
+                        found = (location == dep) || dep.isDependentLocation(location, processed);
+                    }
+                }
+            }
+            return found;
+        }
+ 
+    }
+    
+    private static Map<String, Location> knownLocations = new HashMap<String, Location>();
     private IModelManagementRepository<M> repository;
-    private List<File> locations = new ArrayList<File>();
+    private List<Location> locations = new ArrayList<Location>();
     private Set<File> excludedLocations = new HashSet<File>();
 
     /**
@@ -57,6 +209,73 @@ public class ModelLocations <M extends IModel> {
     }
     
     /**
+     * Returns the location for <code>uri</code>.
+     * 
+     * @param uri the URI to search for
+     * @return the related location
+     */
+    public Location getLocationFor(URI uri) {
+        Location result = null;
+        try {
+            File f = new File(uri).getCanonicalFile();
+            while (null == result) {
+                for (int l = 0; l < locations.size(); l++) {
+                    Location tmp = locations.get(l);
+                    if (tmp.contains(f)) {
+                        if (null == result || tmp.contains(result.getLocation())) {
+                            // current assumption: return the most general location!
+                            result = tmp;
+                        }
+                    }
+                }
+                if (null != result || null == f.getParentFile()) {
+                    break;
+                }
+                f = f.getParentFile();
+            }
+        } catch (IOException e) {
+        }
+        return result;
+    }
+
+    /**
+     * Returns the location for <code>file</code>.
+     * 
+     * @param file the file to return the location for
+     * @return the location (or <b>null</b> if the related location is currently not known)
+     * @throws ModelManagementException in case that <code>file</code> cannot be accessed / resolved
+     * 
+     * @see {@link #getLocationFor(File, boolean)}
+     */
+    public static Location getLocationFor(File file) throws ModelManagementException {
+        return getLocationFor(file, false);
+    }
+    
+    /**
+     * Returns the location for <code>file</code>.
+     * 
+     * @param file the file to return the location for
+     * @param create <code>true</code> if a location shall be created for <code>file</code> if no location is known, 
+     *     <code>false</code> if no new location shall be created
+     * @return the location related to <code>file</code>, may be <b>null</b> depending on <code>create</code>
+     * @throws ModelManagementException in case that <code>file</code> cannot be accessed / resolved
+     */
+    public static synchronized Location getLocationFor(File file, boolean create) throws ModelManagementException {
+        try {
+            File cFile = file.getCanonicalFile();
+            String key = cFile.toString();
+            Location location = knownLocations.get(key);
+            if (null == location && create) {
+                location = new Location(file);
+                knownLocations.put(key, location);
+            }
+            return location;
+        } catch (IOException e) {
+            throw new ModelManagementException(e.getMessage(), ModelManagementException.INTERNAL);
+        }
+    }
+    
+    /**
      * Adds a file location, i.e., a location from where models can be loaded. Please not that <code>file</code> 
      * is considered recursively, i.e., nested folders will be considered automatically and do not need to be added
      * separately.
@@ -64,13 +283,35 @@ public class ModelLocations <M extends IModel> {
      * @param file the file location (<b>null</b> is ignored)
      * @param observer an optional progress observer (use {@link ProgressObserver#NO_OBSERVER} but 
      *   not <b>null</b> in case that no observation is intended)
+     * @return the actual location object corresponding to <code>file</code>
      * @throws ModelManagementException in case that the available information
-     *   may be come inconsistent due to the new location
+     *   may be come inconsistent due to the new location or that <code>file</code> cannot be accessed / resolved
      */
-    public synchronized void addLocation(File file, ProgressObserver observer) throws ModelManagementException {
-        if (null != file && !locations.contains(file)) {
-            locations.add(file);
+    public synchronized Location addLocation(File file, ProgressObserver observer) throws ModelManagementException {
+        Location location = null;
+        if (null != file) {
+            location = getLocationFor(file, true);
+            if (!locations.contains(location)) {
+                locations.add(location);
+            }
             repository.updateModelInformation(file, observer);
+        }
+        return location;
+    }
+
+    /**
+     * Removes a location, i.e. a location from where models can be loaded.
+     * 
+     * @param location the location (<b>null</b> is ignored)
+     * @param observer an optional progress observer (use {@link ProgressObserver#NO_OBSERVER} but 
+     *   not <b>null</b> in case that no observation is intended)
+     * @throws ModelManagementException in case that <code>file</code> cannot be accessed
+     */
+    public synchronized void removeLocation(Location location, ProgressObserver observer) 
+        throws ModelManagementException {
+        if (null != location) {
+            repository.clearLocation(location.getLocation(), observer); 
+            // supposed to call removeLocationFor as clearLocation is public!
         }
     }
     
@@ -80,11 +321,12 @@ public class ModelLocations <M extends IModel> {
      * @param file the file location (<b>null</b> is ignored)
      * @param observer an optional progress observer (use {@link ProgressObserver#NO_OBSERVER} but 
      *   not <b>null</b> in case that no observation is intended)
+     * @throws ModelManagementException in case that <code>file</code> cannot be accessed
      */
-    public synchronized void removeLocation(File file, ProgressObserver observer) {
+    public synchronized void removeLocation(File file, ProgressObserver observer) throws ModelManagementException {
         if (null != file) {
-            locations.remove(file);
-            repository.clearLocation(file, observer);
+            Location location = getLocationFor(file, false);
+            removeLocation(location, observer);
         }
     }
     
@@ -96,11 +338,14 @@ public class ModelLocations <M extends IModel> {
      * @param observer an optional progress observer (use {@link ProgressObserver#NO_OBSERVER} but 
      *   not <b>null</b> in case that no observation is intended)
      * @throws ModelManagementException in case that the available information
-     *   may be come inconsistent due to the new location
+     *   may be come inconsistent due to the new location or <code>file</code> cannot be accessed
      */
     public synchronized void updateLocation(File file, ProgressObserver observer) throws ModelManagementException {
-        if (null != file && locations.contains(file)) {
-            repository.updateModelInformation(file, observer);
+        if (null != file) {
+            Location location = getLocationFor(file, false);
+            if (null != location && locations.contains(location)) {
+                repository.updateModelInformation(file, observer);
+            }
         }
     }
     
@@ -118,11 +363,12 @@ public class ModelLocations <M extends IModel> {
      * Returns the number of files in the given location.
      * 
      * @param location the location to scan
+     * @param excludedLocations explicitly excluded locations (may be <b>null</b> if no locations shall be excluded)
      * @return the number of files
      */
-    private int count(File location) {
+    private static int count(File location, Set<File> excludedLocations) {
         int count = 0;
-        if (null != location && !excludedLocations.contains(location)) {
+        if (null != location && (null == excludedLocations || !excludedLocations.contains(location))) {
             if (location.isDirectory()) {
                 File[] files = location.listFiles();
                 /*
@@ -131,7 +377,7 @@ public class ModelLocations <M extends IModel> {
                  */
                 if (null != files) {
                     for (int f = 0; f < files.length; f++) {
-                        count += count(files[f]);
+                        count += count(files[f], excludedLocations);
                     }
                 }
             } else {
@@ -148,8 +394,9 @@ public class ModelLocations <M extends IModel> {
      */
     int countFilesInLocations() {
         int count = 0;
+        Set<Location> done = new HashSet<Location>();
         for (int f = 0; f < locations.size(); f++) {
-            count += count(locations.get(f));
+            count += locations.get(f).countFilesInLocations(excludedLocations, done);
         }
         return count;
     }
@@ -170,7 +417,7 @@ public class ModelLocations <M extends IModel> {
      * @return the specified location
      * @throws IndexOutOfBoundsException if <code>index &lt; 0 || index &gt;={@link #getLocationCount()}</code>
      */
-    public synchronized File getLocation(int index) {
+    public synchronized Location getLocation(int index) {
         return locations.get(index);
     }
     
@@ -203,6 +450,55 @@ public class ModelLocations <M extends IModel> {
                     repository.loaders().scanAll(location, holder);
                 }
                 task.notifyProgress();
+            }
+        }
+    }
+
+    /**
+     * Removes the location for <code>file</code> from the set of model locations of this instance as well as from all 
+     * dependent locations.
+     * 
+     * @param file the file pointing to the location
+     * @throws ModelManagementException in case that <code>file</code> cannot be resolved
+     */
+    synchronized void removeLocationFor(File file) throws ModelManagementException {
+        Location location = getLocationFor(file);
+        removeLocation(location);
+    }
+    
+    /**
+     * Removes the given location from the set of model locations of this instance as well as from all 
+     * dependent locations.
+     * 
+     * @param location the location to be removed
+     */
+    synchronized void removeLocation(Location location) {
+        if (null != location) {
+            Set<Location> done = new HashSet<Location>();
+
+            // remove from locations
+            locations.remove(location);
+
+            // remove from remaining locations
+            for (int l = 0; l < locations.size(); l++) {
+                locations.get(l).removeFromDependentLocations(location, done);
+                done.clear();
+            }
+            
+            // check whether location is left over... and remove from knownLocations if no references exist
+            String toRemove = null;
+            boolean depsExist = false;
+            for (Map.Entry<String, Location> entry : knownLocations.entrySet()) {
+                Location loc = entry.getValue();
+                if (loc == location) {
+                    toRemove = entry.getKey();
+                } else {
+                    depsExist = loc.isDependentLocation(location, done);
+                    done.clear();
+                }
+            }
+            if (!depsExist && null != toRemove) {
+                knownLocations.remove(toRemove);
             }
         }
     }

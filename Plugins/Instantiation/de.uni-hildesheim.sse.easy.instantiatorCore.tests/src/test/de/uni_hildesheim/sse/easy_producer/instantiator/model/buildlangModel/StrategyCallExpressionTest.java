@@ -2,8 +2,7 @@ package test.de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangMod
 
 import java.io.File;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -40,9 +39,10 @@ public class StrategyCallExpressionTest extends AbstractTest {
      */
     @Test
     public void testInstantiator() {
+        TypeRegistry registry = TypeRegistry.DEFAULT;
         Class<?extends IVilType> cls = StaticInstantiator.class;
         try {
-            TypeRegistry.registerType(cls);
+            registry.registerType(cls);
         } catch (VilException e) {
             // don't care for duplicates
         }
@@ -56,15 +56,15 @@ public class StrategyCallExpressionTest extends AbstractTest {
         } catch (ArtifactException e) {
             Assert.fail("unexpected exception:" + e.getMessage());
         }
-        TypeDescriptor<? extends IVilType> artifactType = TypeRegistry.getType(FileArtifact.class.getSimpleName());
+        TypeDescriptor<? extends IVilType> artifactType = registry.getType(FileArtifact.class.getSimpleName());
         Assert.assertNotNull("file artifact not found", artifactType);
         Assert.assertTrue("wrong artifact type", artifact instanceof FileArtifact);
         try {
-            StrategyCallExpression ex = new StrategyCallExpression(inst.value(), 
-                new ConstantExpression(artifactType, artifact));
+            StrategyCallExpression ex = new StrategyCallExpression(null, inst.value(), 
+                new ConstantExpression(artifactType, artifact, TypeRegistry.DEFAULT));
             TypeDescriptor<? extends IVilType> resultType = ex.inferType();
             Assert.assertTrue("result type does not match", 
-                 TypeRegistry.getType(Set.class).isAssignableFrom(resultType));
+                 registry.getType(Set.class).isAssignableFrom(resultType));
             ex.accept(createExecutionInstance());
         } catch (ExpressionException e) {
             Assert.fail("unexpected exception:" + e.getMessage());
@@ -84,17 +84,17 @@ public class StrategyCallExpressionTest extends AbstractTest {
             if (System.getProperty("os.name").toLowerCase().contains("windows")) {
                 varNameValue = "cmd";
                 ex = new StrategyCallExpression(varName, 
-                    new ConstantExpression(stringType, "/c"),
-                    new ConstantExpression(stringType, "dir"), 
-                    new ConstantExpression(stringType, "."));
+                    new ConstantExpression(stringType, "/c", TypeRegistry.DEFAULT),
+                    new ConstantExpression(stringType, "dir", TypeRegistry.DEFAULT), 
+                    new ConstantExpression(stringType, ".", TypeRegistry.DEFAULT));
             } else {
                 varNameValue = "ls";
                 ex = new StrategyCallExpression(varName, 
-                    new ConstantExpression(stringType, "-l"),
-                    new ConstantExpression(stringType, "."));
+                    new ConstantExpression(stringType, "-l", TypeRegistry.DEFAULT),
+                    new ConstantExpression(stringType, ".", TypeRegistry.DEFAULT));
             }
             TypeDescriptor<? extends IVilType> result = ex.inferType();
-            Assert.assertTrue("result is not of correct type", result == TypeDescriptor.VOID);
+            Assert.assertTrue("result is not of correct type", result == TypeRegistry.voidType());
             BuildlangExecution exec = createExecutionInstance();
             exec.getRuntimeEnvironment().switchContext(new Script("test"));
             exec.getRuntimeEnvironment().addValue(varName, varNameValue);

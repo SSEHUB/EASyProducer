@@ -24,6 +24,9 @@ public class EclipseConsole {
      */
     public static final EclipseConsole INSTANCE = new EclipseConsole();
     
+    private static final String CONSOLE_NAME = "EASy-Producer";
+    
+    
     /**
      * The MessageConsole of the currently running Eclipse-instance.
      */
@@ -35,14 +38,9 @@ public class EclipseConsole {
     private EclipseConsole() {
         /*
          *  Retrieve the MessageConsole of the currently running Elcipse-instance.
-         *  
-         *  Please note that it is currently unclear how to use the string-parameter
-         *  as typically no other console-instance is available. Thus, the string
-         *  for searching for a specific console-instance by its name is empty.
-         *  
          *  This results in a new console-instance created by the method below.
          */
-        this.msgConsole = getMessageConsole("");
+        this.msgConsole = getMessageConsole(CONSOLE_NAME);
         // Ensure that the MessageConsole will be displayed.
         displayConsole();
     }

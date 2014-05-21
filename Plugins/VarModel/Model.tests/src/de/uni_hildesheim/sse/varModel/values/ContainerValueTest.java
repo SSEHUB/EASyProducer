@@ -1,7 +1,6 @@
 package de.uni_hildesheim.sse.varModel.values;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 

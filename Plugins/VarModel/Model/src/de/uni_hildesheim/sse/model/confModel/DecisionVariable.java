@@ -14,6 +14,7 @@ import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.IAttributeAccess;
 import de.uni_hildesheim.sse.model.varModel.IModelElement;
 import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
+import de.uni_hildesheim.sse.model.varModel.values.NullValue;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
 
 /**
@@ -329,5 +330,19 @@ abstract class DecisionVariable implements IDecisionVariable {
      */
     public void setHistoryValue(Value value, IAssignmentState state) throws ConfigurationException {
         configProvider.setHistoryValue(value, state);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public boolean hasValue() {
+        return null != getValue() && null != getValue().getValue();
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public boolean hasNullValue() {
+        return getValue() instanceof NullValue;
     }
 }

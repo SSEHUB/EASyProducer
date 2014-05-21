@@ -40,8 +40,12 @@ public class VarModelTests extends AbstractTest {
         // Create one new Project for testing and save it in temp location
         String projectName = "Project_4_testUpdateProjectInformation";
         Project project = new Project(projectName);
-        File ivmlFile = File.createTempFile(projectName, ".ivml");
-        ivmlFile.deleteOnExit();
+        // create tmp folder otherwise all temp files will be considered. In case of existing IVML files,
+        // this may lead to wrong infoCount at the end (due to ScaleLog.reasoningServer-tmp)
+        File tmpFolder = File.createTempFile(projectName, ".ivml");
+        tmpFolder.delete();
+        tmpFolder.mkdirs();
+        File ivmlFile = new File(tmpFolder, projectName + ".ivml");
         FileWriter fileWriter = new FileWriter(ivmlFile);
         BufferedWriter bufWriter = new BufferedWriter(fileWriter);
         IVMLWriter writer = new IVMLWriter(bufWriter);
@@ -69,7 +73,11 @@ public class VarModelTests extends AbstractTest {
         Assert.assertEquals(projectCount, VarModel.INSTANCE.getModelCount());
         // Test: ProjectInfo/LocationCount should be incremented by one
         Assert.assertEquals(++locationCount, VarModel.INSTANCE.locations().getLocationCount());
+        // unclear
         Assert.assertEquals(++infoCount, VarModel.INSTANCE.availableModels().getModelInfoCount(true));
+        
+        ivmlFile.delete();
+        tmpFolder.delete();
     }
     
 }

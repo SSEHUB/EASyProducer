@@ -20,22 +20,22 @@ public class BuiltIn {
     public static synchronized void initialize() {
         if (!initialized) {
             initialized = true;
-            TypeRegistry.register(PseudoBoolean.class);
-            TypeRegistry.register(PseudoInteger.class);
-            TypeRegistry.register(PseudoReal.class);
-            TypeRegistry.register(PseudoString.class);
-            TypeRegistry.register(PseudoType.class);
-            TypeRegistry.register(Collection.class);
-            TypeRegistry.register(Set.class);
-            TypeRegistry.register(Sequence.class);
-            TypeRegistry.register(Map.class);
+            TypeRegistry.DEFAULT.register(PseudoBoolean.class);
+            TypeRegistry.DEFAULT.register(PseudoInteger.class);
+            TypeRegistry.DEFAULT.register(PseudoReal.class);
+            TypeRegistry.DEFAULT.register(PseudoString.class);
+            TypeRegistry.DEFAULT.register(PseudoType.class);
+            TypeRegistry.DEFAULT.register(Collection.class);
+            TypeRegistry.DEFAULT.register(Set.class);
+            TypeRegistry.DEFAULT.register(Sequence.class);
+            TypeRegistry.DEFAULT.register(Map.class);
 
-            TypeRegistry.register(Project.class);
+            TypeRegistry.DEFAULT.register(Project.class);
 
-            TypeRegistry.register(IvmlElement.class);
-            TypeRegistry.register(Attribute.class);
-            TypeRegistry.register(DecisionVariable.class);
-            TypeRegistry.register(Configuration.class);
+            TypeRegistry.DEFAULT.register(IvmlElement.class);
+            TypeRegistry.DEFAULT.register(Attribute.class);
+            TypeRegistry.DEFAULT.register(DecisionVariable.class);
+            TypeRegistry.DEFAULT.register(Configuration.class);
         }
     }
 

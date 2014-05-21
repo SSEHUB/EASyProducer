@@ -16,6 +16,7 @@ import de.uni_hildesheim.sse.model.confModel.ConfigurationTest;
 import de.uni_hildesheim.sse.model.confModel.DecisionVariableTest;
 import de.uni_hildesheim.sse.model.confModel.SetVariableTest;
 import de.uni_hildesheim.sse.model.validation.IvmlIdentifierCheckTest;
+import de.uni_hildesheim.sse.model.varModel.datatypes.TypeMapperTests;
 import de.uni_hildesheim.sse.persistency.IVMLWriterTest;
 import de.uni_hildesheim.sse.varModel.ContainableModelElementListTest;
 import de.uni_hildesheim.sse.varModel.FreezeBlockTest;
@@ -24,15 +25,15 @@ import de.uni_hildesheim.sse.varModel.PartialEvaluationBlockTest;
 import de.uni_hildesheim.sse.varModel.ProjectInfoTest;
 import de.uni_hildesheim.sse.varModel.ProjectInterfaceTest;
 import de.uni_hildesheim.sse.varModel.VersionTest;
-import de.uni_hildesheim.sse.varModel.datatypes.AttributeTest;
-import de.uni_hildesheim.sse.varModel.datatypes.BasisDatatypeTest;
-import de.uni_hildesheim.sse.varModel.datatypes.CompoundTest;
-import de.uni_hildesheim.sse.varModel.datatypes.ContainerTest;
-import de.uni_hildesheim.sse.varModel.datatypes.DerivedDatatypeTest;
-import de.uni_hildesheim.sse.varModel.datatypes.EnumTest;
-import de.uni_hildesheim.sse.varModel.datatypes.OperationTest;
-import de.uni_hildesheim.sse.varModel.datatypes.ReferenceTest;
-import de.uni_hildesheim.sse.varModel.datatypes.SequenceTestTMP;
+import de.uni_hildesheim.sse.varModel.datytypes.AttributeTest;
+import de.uni_hildesheim.sse.varModel.datytypes.BasisDatatypeTest;
+import de.uni_hildesheim.sse.varModel.datytypes.CompoundTest;
+import de.uni_hildesheim.sse.varModel.datytypes.ContainerTest;
+import de.uni_hildesheim.sse.varModel.datytypes.DerivedDatatypeTest;
+import de.uni_hildesheim.sse.varModel.datytypes.EnumTest;
+import de.uni_hildesheim.sse.varModel.datytypes.OperationTest;
+import de.uni_hildesheim.sse.varModel.datytypes.ReferenceTest;
+import de.uni_hildesheim.sse.varModel.datytypes.SequenceTestTMP;
 import de.uni_hildesheim.sse.varModel.filter.ConstraintSeparatorTest;
 import de.uni_hildesheim.sse.varModel.filter.FreezeBlockFinderTest;
 import de.uni_hildesheim.sse.varModel.filter.FrozenElementsFinderTest;
@@ -43,6 +44,7 @@ import de.uni_hildesheim.sse.varModel.management.VersionedProjectInfosTest;
 import de.uni_hildesheim.sse.varModel.values.CompoundValueTest;
 import de.uni_hildesheim.sse.varModel.values.DerivedDatatypeValueTest;
 import de.uni_hildesheim.sse.varModel.values.IntValueTest;
+import de.uni_hildesheim.sse.varModel.values.NullValueTest;
 import de.uni_hildesheim.sse.varModel.values.RealValueTest;
 import de.uni_hildesheim.sse.varModel.values.ReferenceValueTest;
 import de.uni_hildesheim.sse.varModel.values.SequenceValueTest;
@@ -87,6 +89,7 @@ import de.uni_hildesheim.sse.varModel.values.ValueFactoryTest;
     SequenceValueTest.class,
     SetValueTest.class,
     StringValueTest.class,
+    NullValueTest.class,
     ValueFactoryTest.class,
     // VarModelTest must be executed before VarModelListenerTest
     VarModelTest.class,
@@ -106,7 +109,8 @@ import de.uni_hildesheim.sse.varModel.values.ValueFactoryTest;
 //    IVMLValidationVisitorTest.class,
     EASyLoggerFactoryTest.class,
     JavaLoggerTest.class,
-    IvmlIdentifierCheckTest.class
+    IvmlIdentifierCheckTest.class,
+    TypeMapperTests.class
     })
 public class AllTests {
 

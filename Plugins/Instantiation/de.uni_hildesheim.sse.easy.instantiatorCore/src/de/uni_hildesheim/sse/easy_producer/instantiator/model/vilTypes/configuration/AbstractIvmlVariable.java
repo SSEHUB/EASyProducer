@@ -7,6 +7,9 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Sequence;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
 import de.uni_hildesheim.sse.model.confModel.ContainerVariable;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
+import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
+import de.uni_hildesheim.sse.model.varModel.values.ReferenceValue;
+import de.uni_hildesheim.sse.model.varModel.values.Value;
 
 /**
  * Wraps a decision variable. Primitive values may be obtained using the getter methods. Complex
@@ -17,16 +20,25 @@ import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 public abstract class AbstractIvmlVariable extends IvmlElement {
 
     private static final ValueVisitor VALUE_VISITOR = new ValueVisitor();
+    protected IDecisionVariable origVariable;
     protected IDecisionVariable variable;
     private DecisionVariable[] nested;
-
+    
     /**
      * Creates a new IVML variable.
      * 
      * @param variable the variable to be wrapped
      */
     protected AbstractIvmlVariable(IDecisionVariable variable) {
-        this.variable = variable;
+        origVariable = variable; // keep the variable before dereferencing it
+        Value val = variable.getValue();
+        if (val instanceof ReferenceValue) {
+            // dereference
+            DecisionVariableDeclaration referenced = ((ReferenceValue) val).getValue();
+            this.variable = variable.getConfiguration().getDecision(referenced);
+        } else {
+            this.variable = variable;
+        }
     }
 
     @Override
@@ -45,7 +57,7 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
      * @return the simple name
      */
     public String getName() {
-        IDecisionVariable var = variable;
+        IDecisionVariable var = origVariable;
         // somebody decided that it is cool to add the index to the name of a container variable 
         // trying to access the container variable itself
         while (var.getParent() instanceof ContainerVariable) {
@@ -60,9 +72,31 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
      * @return the qualified name
      */
     public String getQualifiedName() {
-        return variable.getDeclaration().getQualifiedName();
+        return origVariable.getDeclaration().getQualifiedName();
     }
 
+    /**
+     * Returns the name of the underlying decision variable.
+     * If the variable is referenced (via a reference), then the name of the referenced variable
+     * will be returned instead of the variable representing the reference.
+     * 
+     * @return the name of the underlying decision variable 
+     */
+    public String getVarName() {
+        return variable.getDeclaration().getName();
+    }
+
+    /**
+     * Returns the name of the underlying decision variable.
+     * If the variable is referenced (via a reference), then the qualified name of the referenced variable
+     * will be returned instead of the variable representing the reference.
+     * 
+     * @return the qualified name of the underlying decision variable 
+     */
+    public String getQualifiedVarName() {
+        return variable.getDeclaration().getName();
+    }
+    
     /**
      * Returns the simple type name of the decision variable.
      * 
@@ -78,7 +112,7 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
      * @return the qualified type name
      */
     public String getQualifiedType() {
-        return variable.getDeclaration().getType().getQualifiedName();
+        return origVariable.getDeclaration().getType().getQualifiedName();
     }
 
     @Override
@@ -102,6 +136,12 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
                 VALUE_VISITOR.clear();
                 variable.getValue().accept(VALUE_VISITOR);
                 result = VALUE_VISITOR.getStringValue();
+            }
+            if (null == result) {
+                Object o = variable.getValue().getValue();
+                if (null != o) {
+                    result = o.toString();
+                }
             }
         }
         return result;

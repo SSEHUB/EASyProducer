@@ -6,6 +6,5 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="lib/aspectJ/runtime"/>
 	<classpathentry kind="lib" path="lib/aspectJ/aspectjtools.jar"/>
-	<classpathentry kind="lib" path="lib/apache-commons-io/commons-io-2.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

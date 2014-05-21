@@ -125,7 +125,7 @@ public class DeclarationFinder extends AbstractDeclarationFinder {
      * {@inheritDoc}
      */
     public void visitDecisionVariableDeclaration(DecisionVariableDeclaration decl) {
-        if (type == null || type == decl.getType()) {
+        if (type == null || type.isAssignableFrom(decl.getType())) {
             addDeclaration(decl);    
         }
     }

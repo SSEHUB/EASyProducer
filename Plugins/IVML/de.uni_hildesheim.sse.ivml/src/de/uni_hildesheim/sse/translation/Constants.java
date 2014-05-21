@@ -15,7 +15,7 @@ class Constants {
     /**
      * Enables translation to CompoundInitializer and ContainerInitializer for LiteralCollections.
      */
-    public static final boolean USE_NEW_LITERALS = false;
+    public static final boolean USE_NEW_LITERALS = true;
     // when this constant is removed, please adjust initializersCustom.ivml in order to have an expression in the test
     
     /**

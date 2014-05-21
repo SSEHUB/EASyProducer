@@ -6,31 +6,24 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import de.uni_hildesheim.sse.easy_producer.Activator;
-import de.uni_hildesheim.sse.easy_producer.ProjectConstants;
+import de.uni_hildesheim.sse.easy_producer.core.mgmt.PLPInfo;
+import de.uni_hildesheim.sse.easy_producer.core.mgmt.SPLsManager;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.Configuration;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceException;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceUtils;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.Configuration.PathKind;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.Entity;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.IPersistencer;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.Model;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.ModelType;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.PersistentProject;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.standard.PersistenceConstants;
+import de.uni_hildesheim.sse.easy_producer.core.varMod.container.ProjectContainer;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.FileInstantiator;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildModel;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateModel;
 import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
-import de.uni_hildesheim.sse.easy_producer.persistence.PersistenceException;
-import de.uni_hildesheim.sse.easy_producer.persistence.PersistenceUtils;
-import de.uni_hildesheim.sse.easy_producer.persistence.datatypes.Entity;
-import de.uni_hildesheim.sse.easy_producer.persistence.datatypes.IPersistencer;
-import de.uni_hildesheim.sse.easy_producer.persistence.datatypes.Model;
-import de.uni_hildesheim.sse.easy_producer.persistence.datatypes.ModelType;
-import de.uni_hildesheim.sse.easy_producer.persistence.datatypes.PersistentProject;
-import de.uni_hildesheim.sse.easy_producer.persistence.mgmt.PLPInfo;
-import de.uni_hildesheim.sse.easy_producer.persistence.mgmt.SPLsManager;
-import de.uni_hildesheim.sse.easy_producer.persistence.standard.PersistenceConstants;
-import de.uni_hildesheim.sse.model.management.VarModel;
-import de.uni_hildesheim.sse.modelManagement.ProjectContainer;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.AttributeException;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.AttributeValues;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerConfiguration;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
-import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
 
 /**
  * Abstraction Layer for saving/reading persistent EASy-Producer information.
@@ -39,9 +32,6 @@ import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
  */
 public class EASyPersistencer implements PersistenceConstants {
     
-    private static final EASyLogger LOGGER
-        = EASyLoggerFactory.INSTANCE.getLogger(EASyPersistencer.class, Activator.PLUGIN_ID);
-
     private IPersistencer persistencer;
     
     /**
@@ -62,6 +52,7 @@ public class EASyPersistencer implements PersistenceConstants {
         PLPInfo plp = null;
         PersistentProject project = persistencer.load();
         plp = persistentProject2PLP(project);
+        PersistenceUtils.refreshModels(plp);
         
         return plp;
     }
@@ -72,19 +63,7 @@ public class EASyPersistencer implements PersistenceConstants {
      */
     public static void refreshModels(PLPInfo plp) {
         ResourcesMgmt.INSTANCE.refreshProject(plp.getProjectName());
-        File configFolder = plp.getConfigLocation();
-        try {
-            VarModel.INSTANCE.updateModelInformation(configFolder, ProgressObserver.NO_OBSERVER);
-            BuildModel.INSTANCE.updateModelInformation(configFolder, ProgressObserver.NO_OBSERVER);
-            TemplateModel.INSTANCE.updateModelInformation(configFolder, ProgressObserver.NO_OBSERVER);
-            if (null != plp.getProject()) {
-                VarModel.INSTANCE.resolveImports(plp.getProject(), projectPath(plp).toURI(), null);
-            }
-        } catch (ModelManagementException e) {
-            LOGGER.exception(e);
-        } catch (NullPointerException e) {
-            LOGGER.exception(e);
-        }
+        PersistenceUtils.refreshModels(plp);
     }
     
     /**
@@ -93,20 +72,12 @@ public class EASyPersistencer implements PersistenceConstants {
      * @return The location of the ivml file or <tt>null</tt> if the location could not be determined.
      */
     public static File projectPath(PLPInfo plp) {
-        File configFolder = configLocation(plp.getProjectLocation());
+        //File configFolder = configLocation(plp.getProjectLocation());
+        Configuration config = PersistenceUtils.getConfiguration(plp.getProjectLocation());
+        File configFolder = config.getPathFile(PathKind.IVML);
         String filename = PersistenceUtils.ivmlFileLocation(plp.getProject(), configFolder.getAbsolutePath());
         
         return new File(filename);
-    }
-    
-    /**
-     * Returns the top layer location for all configuration files specified by the given plp.
-     * @param plpLocation the top layer location of the whole project (plp).
-     * @return The location for all configuration files or <tt>null</tt> if the location could not be determined.
-     */
-    public static File configLocation(File plpLocation) {
-        File configLocation = new File(plpLocation, ProjectConstants.EASY_FILES);
-        return configLocation;
     }
     
     /**
@@ -141,6 +112,12 @@ public class EASyPersistencer implements PersistenceConstants {
                 break;
             case REASONERS:
                 createReasonerConfiguration(plp, model);
+                break;
+            case SETTINGS:
+                if (model.getEntityCount() > 0) {
+                    String debug = model.getEntity(0).getAttributeValue(SETTINGS_DEBUG);
+                    plp.setSaveDebugInformation(Boolean.valueOf(debug));
+                }
                 break;
             case COPY:
                 if (model.getEntityCount() > 0) {

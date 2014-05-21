@@ -2,17 +2,27 @@ package de.uni_hildesheim.sse.model.confModel;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
+import de.uni_hildesheim.sse.model.cst.Variable;
 import de.uni_hildesheim.sse.model.management.VarModel;
+import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
+import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
+import de.uni_hildesheim.sse.model.varModel.FreezeBlock;
+import de.uni_hildesheim.sse.model.varModel.IFreezable;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IntegerType;
+import de.uni_hildesheim.sse.model.varModel.filter.ConstraintFinder;
+import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
+import de.uni_hildesheim.sse.model.varModel.filter.FreezeBlockFinder;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
 import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
 import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
@@ -131,7 +141,7 @@ public class ConfigurationTest {
         // Save precondition
         int elementsInProject = project.getElementCount();
         
-        // Save into same and different project
+        // Save into same project
         Project confInSameProject = configuration.toProject(false);
         
         // Test post condition for saving into same project
@@ -161,13 +171,111 @@ public class ConfigurationTest {
         // Save precondition
         int elementsInProject = project.getElementCount();
         
-        // Save into same and different project
+        // Save into different project
         Project confInNewProject = configuration.toProject(true);
         
         // Test post condition for saving into different project
         Assert.assertNotSame(project, confInNewProject);
         Assert.assertEquals(elementsInProject, project.getElementCount());
         Assert.assertEquals(elementsInProject, confInNewProject.getElementCount());
+    }
+    
+    /**
+     * Helping method for assigning values to a variable.
+     * @param decl The Declaration inside the {@link #project}.
+     * @param state The desired {@link IAssignmentState} state for the {@link IDecisionVariable}
+     *     inside the {@link #configuration}.
+     * @param value The value for the {@link IDecisionVariable}.
+     */
+    private void assignValue(AbstractVariable decl, IAssignmentState state, Object... value) {
+        IDecisionVariable variable = configuration.getDecision(decl);
+        try {
+            Value variablesValue = ValueFactory.createValue(decl.getType(), value);
+            variable.setValue(variablesValue, state);
+        } catch (ValueDoesNotMatchTypeException e) {
+            Assert.fail("Error in creating a value for a variable: " + e.getMessage());
+        } catch (ConfigurationException e) {
+            Assert.fail("Error in assigning a value to a variable: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Checks whether a given declaration is in a given project.
+     * @param declarations A List of declarations, retrieved by a
+     * {@link de.uni_hildesheim.sse.model.varModel.filter.DeclarationFinder}.
+     * @param decl The desired variable Declaration, which should (not) be included in the given list.
+     * @param shouldBeFound <tt>true</tt> if the given declaration should be found in the given project,
+     *     <tt>false</tt> otherwise.
+     */
+    private void checkDeclarationIsInList(List<AbstractVariable> declarations, AbstractVariable decl,
+        boolean shouldBeFound) {
+        
+        boolean found = false;
+        for (int i = 0; i < declarations.size(); i++) {
+            AbstractVariable declarationOfList = declarations.get(i);
+            if (declarationOfList.getName().equals(decl.getName())) {
+                found = declarationOfList.getType() == decl.getType();
+                break;
+            }
+        }
+        
+        if (shouldBeFound) {
+            Assert.assertTrue("Declaration " + decl + " should be included in project, but is not.", found);
+        } else {
+            Assert.assertFalse("Declaration " + decl + " must not be included in project, but was found.", found);
+        }
+    }
+    
+    /**
+     * Tests whether only user contents will be saved inside the configuration (derived values will be ignored).
+     * @throws ConfigurationException 
+     */
+    @Test
+    public void testSaveUserContentOnly() throws ConfigurationException {
+        // Create project with configured variables in different states.
+        DecisionVariableDeclaration intAssigned
+            = new DecisionVariableDeclaration("intAssigned", IntegerType.TYPE, project);
+        project.add(intAssigned);
+        DecisionVariableDeclaration intDerived
+            = new DecisionVariableDeclaration("intDerived", IntegerType.TYPE, project);
+        project.add(intDerived);
+        DecisionVariableDeclaration intFrozen
+            = new DecisionVariableDeclaration("intFrozen", IntegerType.TYPE, project);
+        project.add(intFrozen);
+        configuration.refresh();
+        // I like prime numbers ;-)
+        assignValue(intAssigned, AssignmentState.ASSIGNED, "2");
+        assignValue(intDerived, AssignmentState.DERIVED, "3");
+        assignValue(intFrozen, AssignmentState.FROZEN, "5");
+        
+        // Save configuration into new project (easier for testing)
+        Project confInNewProject = configuration.toProject(true);
+        
+        // Test post condition for saving into different project       
+        Assert.assertEquals(3, confInNewProject.getElementCount());
+        
+        // Find all assigned variables of saved configuration
+        ConstraintFinder cFinder = new ConstraintFinder(confInNewProject, false);
+        List<Constraint> constraints = cFinder.getConstraints();
+        List<AbstractVariable> declarations = new ArrayList<AbstractVariable>();
+        for (int i = 0; i < constraints.size(); i++) {
+            OCLFeatureCall call = (OCLFeatureCall) constraints.get(i).getConsSyntax();
+            Variable var = (Variable) call.getOperand();
+            declarations.add(var.getVariable());
+        }
+        checkDeclarationIsInList(declarations, intAssigned, true);
+        checkDeclarationIsInList(declarations, intFrozen, true);
+        checkDeclarationIsInList(declarations, intDerived, false);
+        
+        // Check frozen variables.
+        FreezeBlockFinder fFinder = new FreezeBlockFinder(confInNewProject, FilterType.NO_IMPORTS);
+        List<FreezeBlock> freezeBlocks = fFinder.getFreezeBlocks();
+        Assert.assertEquals(1, freezeBlocks.size());
+        FreezeBlock freezeBlock = freezeBlocks.get(0);
+        Assert.assertEquals(1, freezeBlock.getFreezableCount());
+        IFreezable frozenVar = freezeBlock.getFreezable(0);
+        Assert.assertEquals(intFrozen.getName(), frozenVar.getName());
+        
     }
 
 }

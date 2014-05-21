@@ -34,4 +34,10 @@ public @interface Instantiator {
      * keywords shall not be used as name as such instantiators will not be available!
      */
     String value();
+    
+    /**
+     * Whether this instantiator may react on implicit parameters 
+     * such as {@link Constants#IMPLICIT_PARENT_PARAMETER_NAME}.
+     */
+    boolean acceptsImplicitParameters() default false;
 }

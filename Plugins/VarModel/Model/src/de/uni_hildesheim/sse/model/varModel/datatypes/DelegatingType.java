@@ -222,6 +222,15 @@ class DelegatingType implements IDatatype {
     public boolean isPseudoType() {
         return false; // represents a real type
     }
+    
+    /**
+     * Returns the delegate type.
+     * 
+     * @return the delegate type
+     */
+    public IDatatype getDelegate() {
+        return delegate;
+    }
 
     @Override
     public String toString() {

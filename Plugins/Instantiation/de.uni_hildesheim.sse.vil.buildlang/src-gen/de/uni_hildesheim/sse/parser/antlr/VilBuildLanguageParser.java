@@ -3,10 +3,9 @@
 */
 package de.uni_hildesheim.sse.parser.antlr;
 
-import org.eclipse.xtext.parser.antlr.XtextTokenStream;
-
 import com.google.inject.Inject;
 
+import org.eclipse.xtext.parser.antlr.XtextTokenStream;
 import de.uni_hildesheim.sse.services.VilBuildLanguageGrammarAccess;
 
 public class VilBuildLanguageParser extends org.eclipse.xtext.parser.antlr.AbstractAntlrParser {

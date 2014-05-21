@@ -5,6 +5,7 @@ import java.net.URI;
 import java.util.List;
 
 import de.uni_hildesheim.sse.utils.messages.IMessage;
+import de.uni_hildesheim.sse.utils.modelManagement.ModelLocations.Location;
 import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
 
 /**
@@ -84,6 +85,16 @@ class ModelRepository <M extends IModel> implements IModelManagementRepository<M
     public synchronized void updateForLoader(IModelLoader<M> loader, ProgressObserver observer) 
         throws ModelManagementException {
         modelMgmt.updateForLoader(loader, observer);
+    }
+    
+    /**
+     * Returns the location for <code>uri</code>.
+     * 
+     * @param uri the URI to search for
+     * @return the related location
+     */
+    public Location getLocationFor(URI uri) {
+        return modelMgmt.locations().getLocationFor(uri);
     }
     
     /**

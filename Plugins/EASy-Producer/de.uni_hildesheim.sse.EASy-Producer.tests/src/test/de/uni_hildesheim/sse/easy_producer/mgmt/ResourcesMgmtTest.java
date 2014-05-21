@@ -26,6 +26,8 @@ import de.uni_hildesheim.sse.easy_producer.persistency.ResourcesMgmt;
  */
 public class ResourcesMgmtTest {
 
+    private static boolean projectsImported = false;
+    
     private static File[] childs;
     private ResourcesMgmt mgmt = ResourcesMgmt.INSTANCE;
 
@@ -35,18 +37,23 @@ public class ResourcesMgmtTest {
     @BeforeClass
     public static void setUpBeforeClass() {
 
-        if (AllTests.TESTDATA_DIR.isDirectory()) {
-            childs = AllTests.TESTDATA_DIR.listFiles();
-        }
-        // Schleife
-        if (null != childs) {
-            for (int i = 0; i < childs.length; i++) {
-
-                copyIntoWorkspace(childs[i]);
-
+        if (!projectsImported) {
+            AllTests.setUpBeforeClass();
+            
+            if (AllTests.TESTDATA_DIR_COPY.isDirectory()) {
+                childs = AllTests.TESTDATA_DIR_COPY.listFiles();
             }
-        } else {
-            Assert.fail("Could not load testdata directory.");
+    
+            if (null != childs) {
+                for (int i = 0; i < childs.length; i++) {
+                    copyIntoWorkspace(childs[i]);
+    
+                }
+            } else {
+                Assert.fail("Could not load testdata directory.");
+            }
+            
+            projectsImported = true;
         }
     }
 
@@ -87,7 +94,7 @@ public class ResourcesMgmtTest {
         File[] childs = null;
 
         IWorkspace workspace = ResourcesPlugin.getWorkspace();
-        String relativePath = AllTests.TESTDATA_DIR.toURI().relativize(file.toURI()).getPath();
+        String relativePath = AllTests.TESTDATA_DIR_COPY.toURI().relativize(file.toURI()).getPath();
         File target = new File(workspace.getRoot().getLocation().toOSString() + File.separator + relativePath);
 
         if (file.isDirectory()) {

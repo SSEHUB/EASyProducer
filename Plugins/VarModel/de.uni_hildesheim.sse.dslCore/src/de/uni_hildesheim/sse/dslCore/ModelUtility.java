@@ -239,7 +239,7 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
                 if (grammar == null) {
                     resourceSet.setClasspathURIContext(getLanguageClassLoader());
                     grammar = (Grammar) BaseEPackageAccess.loadGrammarFile(
-                        ClasspathUriUtil.CLASSPATH_SCHEME + ":/" + getLanguageName().replace('.', '/') + ".xmi",
+                        ClasspathUriUtil.CLASSPATH_SCHEME + ":/" + getLanguageName().replace('.', '/') + ".xtextbin",
                         resourceSet);
                 }
             }

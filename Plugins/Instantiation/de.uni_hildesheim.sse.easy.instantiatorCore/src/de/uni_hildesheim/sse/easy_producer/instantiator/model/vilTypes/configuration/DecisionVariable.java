@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArraySet;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Conversion;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationMeta;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
 import de.uni_hildesheim.sse.model.confModel.AssignmentState;
@@ -72,6 +73,63 @@ public class DecisionVariable extends AbstractIvmlVariable {
     int getAttributeCount() {
         initializeAttributes();
         return null == attributes ? 0 : attributes.length; 
+    }
+
+    // ---------------------------- conversions -----------------------------
+    
+    /**
+     * Conversion operation to Real.
+     * 
+     * @param val the value (variable) to be converted
+     * @return the converted value (may be <b>null</b>, depends on the type of the variable)
+     */
+    @Conversion
+    public static double convert2Real(DecisionVariable val) {
+        return val.getRealValue();
+    }
+
+    /**
+     * Conversion operation to Integer.
+     * 
+     * @param val the value (variable) to be converted
+     * @return the converted value (may be <b>null</b>, depends on the type of the variable)
+     */
+    @Conversion
+    public static int convert2Integer(DecisionVariable val) {
+        return val.getIntegerValue();
+    }
+
+    /**
+     * Conversion operation to Boolean.
+     * 
+     * @param val the value (variable) to be converted
+     * @return the converted value (may be <b>null</b>, depends on the type of the variable)
+     */
+    @Conversion
+    public static boolean convert2Boolean(DecisionVariable val) {
+        return val.getBooleanValue();
+    }
+
+    /**
+     * Conversion operation to String.
+     * 
+     * @param val the value (variable) to be converted
+     * @return the converted value (may be <b>null</b>, depends on the type of the variable)
+     */
+    @Conversion
+    public static String convert2String(DecisionVariable val) {
+        return val.getStringValue();
+    }
+    
+    /**
+     * Conversion operation to an EnumValue.
+     * 
+     * @param val the value (variable) to be converted
+     * @return the converted value (may be <b>null</b>, depends on the type of the variable)
+     */
+    @Conversion
+    public static EnumValue convert2EnumValue(DecisionVariable val) {
+        return val.getEnumValue();
     }
     
 }

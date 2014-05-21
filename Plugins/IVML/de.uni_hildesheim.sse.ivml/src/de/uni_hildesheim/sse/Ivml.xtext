@@ -168,7 +168,6 @@ Value :
 	| qValue = QualifiedName
 	| bValue = ('true' | 'false')
 	//#> Compounds
-	| ('refby' '(' rValue=Identifier ')')
 	| nullValue = 'null'
 	//#< Compounds
 	;

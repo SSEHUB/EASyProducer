@@ -4,7 +4,6 @@ import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.Attribute;
 import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
 
 /**
  * Class for a variable value.
@@ -42,9 +41,9 @@ public class Variable extends Leaf {
         // define a method in IDatatype for this???
         if (result instanceof DerivedDatatype) {
             result = ((DerivedDatatype) result).getBasisType();
-        } else if (result instanceof Reference) {
+        } /*else if (result instanceof Reference) {
             result = ((Reference) result).getType();
-        }
+        }*/
         return result;
     }
     

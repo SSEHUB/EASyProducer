@@ -18,7 +18,7 @@ public class TypePrinter {
      * @param args ignored
      */
     public static void main(String[] args) {
-        for (TypeDescriptor<? extends IVilType> type : TypeRegistry.allTypes()) {
+        for (TypeDescriptor<? extends IVilType> type : TypeRegistry.DEFAULT.allTypes()) {
             System.out.println(type.getName());
             for (OperationDescriptor op : type.getOperations()) {
                 System.out.println(" - " + op.getJavaSignature());

@@ -18,6 +18,7 @@ import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
 import de.uni_hildesheim.sse.model.varModel.FreezeBlock;
 import de.uni_hildesheim.sse.model.varModel.IFreezable;
+import de.uni_hildesheim.sse.model.varModel.IModelElement;
 import de.uni_hildesheim.sse.model.varModel.IPartialEvaluable;
 import de.uni_hildesheim.sse.model.varModel.ModelElement;
 import de.uni_hildesheim.sse.model.varModel.PartialEvaluationBlock;
@@ -465,6 +466,26 @@ public abstract class AbstractVarModelWriter extends AbstractVisitor
      * @param element the element (no specific type needed, see {@link Comment}
      */
     protected void beforeNestedElement(Object element) {
+    }
+    
+    /**
+     * Returns the number of hierarchically visited parents.
+     * 
+     * @return the number of hierarchically visited parents
+     */
+    protected int getParentCount() {
+        return parents.size();
+    }
+    
+    /**
+     * Returns the specified hierarchically visited parent.
+     * 
+     * @param index the 0-based index of the visited parent
+     * @return the specified visited parent
+     * @throws IndexOutOfBoundsException if <code>index &lt; 0 || index &gt;= {@link #getParentCount()}</code>
+     */
+    protected IModelElement getParent(int index) {
+        return parents.get(index);
     }
 
 }

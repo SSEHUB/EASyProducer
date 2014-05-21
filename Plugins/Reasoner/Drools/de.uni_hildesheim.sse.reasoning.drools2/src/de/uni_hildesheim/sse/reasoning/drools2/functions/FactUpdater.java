@@ -5,12 +5,18 @@ import org.drools.runtime.rule.FactHandle;
 
 import de.uni_hildesheim.sse.reasoning.core.model.IModelChangeListener;
 import de.uni_hildesheim.sse.reasoning.core.model.variables.ReasonerVariable;
+import de.uni_hildesheim.sse.reasoning.drools2.DroolsReasonerDescriptor;
+import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
+import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
 
 /**
  * Class for updating facts in Drools session.
  * @author Sizonenko
  */
 public class FactUpdater implements IModelChangeListener {
+    
+    private static final EASyLogger LOGGER = EASyLoggerFactory.INSTANCE.getLogger(FactUpdater.class,
+        DroolsReasonerDescriptor.BUNDLE_NAME);
     
     private StatefulKnowledgeSession session;
     
@@ -42,16 +48,16 @@ public class FactUpdater implements IModelChangeListener {
             if (rVariable.getParent() == null) {
                 fact = session.getFactHandle(rVariable);
                 session.update(fact, rVariable);
-                System.out.println("No parrent: " + session.getFactHandle(rVariable).toString() 
+                LOGGER.debug("No parrent: " + session.getFactHandle(rVariable).toString() 
                     + " : " + rVariable.getName());               
             } else {
                 fact = session.getFactHandle(rVariable.getParent());
                 rVariable = rVariable.getParent();
                 session.update(fact, rVariable);
-                System.out.println("Parent: " + session.getFactHandle(rVariable));
+                LOGGER.debug("Parent: " + session.getFactHandle(rVariable));
             }
         } finally {
-            System.out.println("Updating: " + rVariable.getName());
+            LOGGER.debug("Updating: " + rVariable.getName());
         }        
     }
 }

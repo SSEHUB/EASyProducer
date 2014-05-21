@@ -1,7 +1,12 @@
 package de.uni_hildesheim.sse.utils.modelManagement;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import de.uni_hildesheim.sse.utils.modelManagement.ModelLocations.Location;
 
 /**
  * Defines an internal class representing the context of a model import resolution.
@@ -97,8 +102,45 @@ class ResolutionContext <M extends IModel> {
      * 
      * @return the model paths
      */
-    public ModelPaths getModelPaths() {
-        return paths;
+    public List<String> getModelPaths() {
+        List<String> result = null;
+        URI uri = getModelURI();
+        if (null != uri) {
+            Location location = repository.getLocationFor(uri);
+            if (null != location && location.getDependentLocationCount() > 0) {
+                result = new ArrayList<String>();
+                Set<Location> done = new HashSet<Location>();
+                enumerateDependent(location, result, done);
+            }
+        }
+        List<String> tmp = paths.getModelPath(getModelURI());
+        if (null != tmp) {
+            if (result == null) {
+                result = tmp;
+            } else {
+                result.addAll(tmp);
+            }
+        }
+        return result;
+    }
+    
+    /**
+     * Enumerate the dependent locations in terms of model paths.
+     * 
+     * @param location the location to enumerate
+     * @param results the resulting model paths (modified as a side effect)
+     * @param done the already processed locations in order to avoid cycles
+     */
+    private void enumerateDependent(Location location, List<String> results, Set<Location> done) {
+        if (!done.contains(location)) {
+            if (!done.isEmpty()) { // do not add top-level location
+                results.add(location.getLocation().toURI().toString());
+            }
+            done.add(location);
+            for (int d = 0; d < location.getDependentLocationCount(); d++) {
+                enumerateDependent(location.getDependentLocation(d), results, done);
+            }
+        }
     }
     
     /**

@@ -51,20 +51,21 @@
     <extension
             point="org.eclipse.ui.preferencePages">
         <page
+            category="de.uni_hildesheim.sse.EASy"
             class="de.uni_hildesheim.sse.vil.templatelang.ui.TemplateLangExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
             id="de.uni_hildesheim.sse.vil.templatelang.TemplateLang"
-            name="TemplateLang">
+            name="Variability Template Language (VTL)">
             <keywordReference id="de.uni_hildesheim.sse.vil.templatelang.ui.keyword_TemplateLang"/>
         </page>
         <page
-            category="de.uni_hildesheim.sse.vil.templatelang.TemplateLang"
+            category="de.uni_hildesheim.sse.EASy/de.uni_hildesheim.sse.vil.templatelang.TemplateLang"
             class="de.uni_hildesheim.sse.vil.templatelang.ui.TemplateLangExecutableExtensionFactory:org.eclipse.xtext.ui.editor.syntaxcoloring.SyntaxColoringPreferencePage"
             id="de.uni_hildesheim.sse.vil.templatelang.TemplateLang.coloring"
             name="Syntax Coloring">
             <keywordReference id="de.uni_hildesheim.sse.vil.templatelang.ui.keyword_TemplateLang"/>
         </page>
         <page
-            category="de.uni_hildesheim.sse.vil.templatelang.TemplateLang"
+            category="de.uni_hildesheim.sse.EASy/de.uni_hildesheim.sse.vil.templatelang.TemplateLang"
             class="de.uni_hildesheim.sse.vil.templatelang.ui.TemplateLangExecutableExtensionFactory:org.eclipse.xtext.ui.editor.templates.XtextTemplatePreferencePage"
             id="de.uni_hildesheim.sse.vil.templatelang.TemplateLang.templates"
             name="Templates">
@@ -74,9 +75,10 @@
     <extension
             point="org.eclipse.ui.propertyPages">
         <page
+            category="de.uni_hildesheim.sse.EASy"
             class="de.uni_hildesheim.sse.vil.templatelang.ui.TemplateLangExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
             id="de.uni_hildesheim.sse.vil.templatelang.TemplateLang"
-            name="TemplateLang">
+            name="Variability Template Language (VTL)">
             <keywordReference id="de.uni_hildesheim.sse.vil.templatelang.ui.keyword_TemplateLang"/>
             <enabledWhen>
 	            <adapt type="org.eclipse.core.resources.IProject"/>
@@ -181,6 +183,7 @@
             class="de.uni_hildesheim.sse.vil.templatelang.ui.TemplateLangExecutableExtensionFactory:org.eclipse.xtext.builder.IXtextBuilderParticipant">
       </participant>
    </extension>
+   <!-- disable the compiler settings
    <extension
             point="org.eclipse.ui.preferencePages">
         <page
@@ -204,7 +207,7 @@
 			</enabledWhen>
 	        <filter name="projectNature" value="org.eclipse.xtext.ui.shared.xtextNature"/>
         </page>
-    </extension>
+    </extension>-->
 
 	<!-- Quick Outline -->
 	<extension
@@ -292,6 +295,7 @@
          </command>
       </menuContribution>
    </extension>
+   <!-- disable refactoring settings
    <extension point="org.eclipse.ui.preferencePages">
 	    <page
 	        category="de.uni_hildesheim.sse.vil.templatelang.TemplateLang"
@@ -300,7 +304,7 @@
 	        name="Refactoring">
 	        <keywordReference id="de.uni_hildesheim.sse.vil.templatelang.ui.keyword_TemplateLang"/>
 	    </page>
-	</extension>
+	</extension>-->
 
   <extension point="org.eclipse.compare.contentViewers">
     <viewer id="de.uni_hildesheim.sse.vil.templatelang.TemplateLang.compare.contentViewers"

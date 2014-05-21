@@ -17,7 +17,7 @@ public class BuiltIn {
     public static synchronized void initialize() {
         if (!initialized) {
             initialized = true;
-            TypeRegistry.register(ExpressionEvaluator.class);
+            TypeRegistry.DEFAULT.register(ExpressionEvaluator.class);
         }
     }
 

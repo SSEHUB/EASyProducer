@@ -58,9 +58,6 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
      */
     public static final String PARAM_TARGET_SURE = INTERNAL_PARAM_PREFIX + PARAM_TARGET;
 
-    
-    
-    
     private static IExpressionParser expressionParser;
     private RuntimeEnvironment environment;
     private PrintWriter out;
@@ -204,9 +201,8 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
             }
         } catch (VilLanguageException e) {
             throw e;
-        } finally {
-            environment.decreaseIndentation();
         }
+        environment.decreaseIndentation();
         return value;
     }
 
@@ -294,12 +290,11 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
                 tracer.visitedLoop(iterVar);
             } catch (VilLanguageException e) {
                 throw e;
-            } finally {
-                try {
-                    environment.popLevel();
-                } catch (ArtifactException e) {
-                    throw new VilLanguageException(e);
-                }
+            } 
+            try {
+                environment.popLevel();
+            } catch (ArtifactException e) {
+                throw new VilLanguageException(e);
             }
         } else {
             if (null != object) {
@@ -331,12 +326,11 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
             tracer.visitedSwitch(select, found, value);
         } catch (ExpressionException e) {
             throw new VilLanguageException(e);
-        } finally {
-            try {
-                environment.popLevel();
-            } catch (ArtifactException e) {
-                throw new VilLanguageException(e);
-            }
+        } 
+        try {
+            environment.popLevel();
+        } catch (ArtifactException e) {
+            throw new VilLanguageException(e);
         }
         return value;
     }
@@ -408,7 +402,7 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
 
     @Override
     protected Def dynamicDispatch(Def operation, Object[] args) {
-        return AbstractCallExpression.dynamicDispatch(operation, args, Def.class);
+        return AbstractCallExpression.dynamicDispatch(operation, args, Def.class, environment.getTypeRegistry());
     }
 
     @Override

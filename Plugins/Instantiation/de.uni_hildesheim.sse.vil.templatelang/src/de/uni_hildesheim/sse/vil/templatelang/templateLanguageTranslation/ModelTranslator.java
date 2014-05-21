@@ -44,6 +44,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegis
 import de.uni_hildesheim.sse.utils.modelManagement.IndentationConfiguration;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagement;
+import de.uni_hildesheim.sse.vil.expressions.ResourceRegistry;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.PrimaryExpression;
 import de.uni_hildesheim.sse.vil.templatelang.TemplateLangModelUtility;
@@ -77,11 +78,11 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
      * Creates the model translator.
      */
     public ModelTranslator() {
-        super(new ExpressionTranslator(), new Resolver());
+        super(new ExpressionTranslator(), new Resolver(new TypeRegistry(TypeRegistry.DEFAULT)));
         expressionTranslator = getExpressionTranslator();
         resolver = getResolver();
         try {
-            recursiveResolutionModel  = new Template("$$", null, new TemplateDescriptor());
+            recursiveResolutionModel  = new Template("$$", null, new TemplateDescriptor(), resolver.getTypeRegistry());
             resolver.setRecursiveResolutionModel(recursiveResolutionModel);
         } catch (VilLanguageException e) {
             e.printStackTrace();
@@ -103,6 +104,8 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
         Template result = null;
         boolean pushed = false;
         int errorCount = getErrorCount();
+// TODO build up dynamic types
+        ResourceRegistry.register(tpl.eResource(), resolver.getTypeRegistry());
         try {
             TemplateDescriptor desc = new TemplateDescriptor();
             Imports<Template> imports = processImports(tpl.getImports());
@@ -116,7 +119,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
             if (null != tpl.getIndent()) {
                 desc.setIndentationConfiguration(processIndentHint(tpl.getIndent()));
             }
-            result = new Template(tpl.getName(), extension, desc);
+            result = new Template(tpl.getName(), extension, desc, resolver.getTypeRegistry());
             resolver.pushModel(result);
             pushed = true;
             if (null != tpl.getVars()) {
@@ -210,7 +213,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
         if (null != tpl.getJavaExts()) {
             Set<String> knownTypes = new HashSet<String>();
             Set<String> knownSignatures = new HashSet<String>();
-            Iterator<TypeDescriptor<? extends IVilType>> iter = TypeRegistry.allTypes().iterator();
+            Iterator<TypeDescriptor<? extends IVilType>> iter = resolver.getTypeRegistry().allTypes().iterator();
             while (iter.hasNext()) {
                 knownTypes.add(iter.next().getName());
             }
@@ -233,7 +236,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
         throws TranslatorException {
         JavaExtension javaExt;
         try {
-            javaExt = new JavaExtension(getJavaQualifiedNameString(ext.getName()));
+            javaExt = new JavaExtension(getJavaQualifiedNameString(ext.getName()), resolver.getTypeRegistry());
             IMetaType resolved = javaExt.getResolved();
             if (null != resolved) {
                 String typeName = resolved.getName();
@@ -342,7 +345,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
             resolver.add(param);
             TypeDescriptor<? extends IVilType> specifiedType = null;
             if (null != def.getType()) {
-                specifiedType = getExpressionTranslator().processType(def.getType());
+                specifiedType = getExpressionTranslator().processType(def.getType(), resolver);
             }
             result = new Def(def.getId(), param, null, specifiedType, template); 
             recursiveResolutionModel.addDef(result);
@@ -477,7 +480,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
             throw new TranslatorException("loop expression is not generic", loop, 
                 TemplateLangPackage.Literals.LOOP__EXPR, ErrorCodes.TYPE_CONSISTENCY);
         }
-        TypeDescriptor<? extends IVilType> type = expressionTranslator.processType(loop.getType());
+        TypeDescriptor<? extends IVilType> type = expressionTranslator.processType(loop.getType(), resolver);
         if (!type.isAssignableFrom(exprType.getParameterType(0))) {
             throw new TranslatorException("loop variable type " + type.getVilName() 
                 + " must match the element type of the collection " + exprType.getVilName(), loop, 

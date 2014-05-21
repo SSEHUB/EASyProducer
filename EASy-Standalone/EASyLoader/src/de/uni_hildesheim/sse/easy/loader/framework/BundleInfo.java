@@ -74,7 +74,7 @@ public class BundleInfo {
      * @throws BundleException in case that the name is illegal (or if the bundle shall be ignored, 
      *     see {@link BundleException#dueTognored()})
      */
-    private BundleInfo(String name, String versionRestriction) throws BundleException {
+    private BundleInfo(String name, EasyDependency versionRestriction) throws BundleException {
         if (null == name || 0 == name.length()) {
             throw new BundleException("no symbolic name given");
         }
@@ -93,7 +93,7 @@ public class BundleInfo {
      * @return the corresponding bundle information object (or <b>null</b>)
      * @throws BundleException in case that relevant information is missing
      */
-    public static BundleInfo createInstance(String name, String versionSpec) throws BundleException {
+    public static BundleInfo createInstance(String name, EasyDependency versionSpec) throws BundleException {
         BundleInfo info = null;
         if (!BundleRegistry.getInstance().ignoreBundle(name)) {
             info = BundleRegistry.getInstance().get(name, versionSpec);
@@ -116,6 +116,7 @@ public class BundleInfo {
         BundleInfo info = null;
         JarFile jarFile = null;
         InputStream is = null;
+        EasyDependency dependancy = new EasyDependency();
         try {
             jarFile = new JarFile(file);
             Manifest mf = jarFile.getManifest();
@@ -123,11 +124,13 @@ public class BundleInfo {
             String name = parseSymbolicName(attributes);
             if (!BundleRegistry.getInstance().ignoreBundle(name)) {
                 Version version = parseVersion(attributes);
-                info = BundleRegistry.getInstance().get(name, version.toString());
+                dependancy.setBundleVersionMin(version);
+                info = BundleRegistry.getInstance().get(name, dependancy);
                 if (null == info) {
                     info = new BundleInfo(file, mf);
                 } else {
-                    info.resolve(file, mf);
+                    info = new BundleInfo(file, mf);
+                    //info.resolve(file, mf);
                 }
                 if (null != info.getDsSpec()) {
                     ZipEntry entry = jarFile.getEntry(info.getDsSpec());
@@ -295,19 +298,16 @@ public class BundleInfo {
                 for (int i = 0; i < bundles.size(); i++) {
                     String bundle = bundles.get(i);
                     String name = null;
-                    String versionSpec = null;
+                    EasyDependency versionSpec = new EasyDependency(bundle);
                     int pos = bundle.indexOf(";");
                     if (pos > 0) {
                         name = bundle.substring(0, pos);
-                        if (pos + 1 < bundle.length()) {
-                            versionSpec = bundle.substring(pos + 1);
-                        }
                     } else {
                         name = bundle;
                     }
                     boolean optional = false;
                     if (null != versionSpec) {
-                        optional = versionSpec.matches(".*resolution\\s*:=\\s*(\"?)optional(\"?).*");
+                        optional = !versionSpec.getMandatory();
                     }
                     if (!optional) {
                         BundleInfo info = createInstance(name, versionSpec);

@@ -5,9 +5,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-import junit.framework.Assert;
-
 import org.junit.Test;
+import org.junit.Assert;
 
 import de.uni_hildesheim.sse.Config;
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
@@ -282,14 +281,33 @@ public class AdvancedTests extends AbstractTest {
     /**
      * Tests references.
      * 
-     * @throws IOException
-     *             should not occur
+     * @throws IOException should not occur
      */
     @Test
     public void testRefs() throws IOException {
         assertEqual(createFile("refs"), "testRefs", "0");
     }
 
+    /**
+     * Tests reference assignments.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testRefAssignments() throws IOException {
+        assertEqual(createFile("refAssignments"), null, null);
+    }
+
+    /**
+     * Tests failing reference assignments (type incompatbility).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testRefAssignmentsFail() throws IOException {
+        assertEqual(createFile("refAssignmentsFail"), null, null, CSTSemanticException.TYPE_MISMATCH);
+    }
+    
     /**
      * Tests a versioned project.
      * 
@@ -452,6 +470,46 @@ public class AdvancedTests extends AbstractTest {
     @Test
     public void testAttributeAssignmentFail2() throws IOException {
         assertEqual(createFile("attributeAssignmentFail2"), null, null, ErrorCodes.REDEFINITION);
+    }
+
+    /**
+     * For dependent compounds.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testDependentCompounds() throws IOException {
+        assertEqual(createFile("dependentCompounds"), null, null);
+    }
+
+    /**
+     * Test references taken from a container (contributed by QualiMaster).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testRefAssignmentContainer() throws IOException {
+        assertEqual(createFile("refAssignmentContainer"), null, null);
+    }
+    
+    /**
+     * Test qualification of the project from a compound (contributed by ScaleLog).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testCompoundQualifiesProject() throws IOException {
+        assertEqual(createFile("compoundQualifiesProject"), null, null);
+    }
+
+    /**
+     * Test qualification of the project from an assignment block inside a compound (contributed by ScaleLog).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testCompoundQualifiesProject2() throws IOException {
+        assertEqual(createFile("compoundQualifiesProject2"), null, null);
     }
 
 }

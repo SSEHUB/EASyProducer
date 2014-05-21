@@ -105,6 +105,8 @@ public class BundleRegistry {
                     + ") This is currently not supported and version " + info.getVersion() + " is ignored.");
             }
             //sameName.get(0).resolve(info);
+            //sameName.remove(0);
+            sameName.add(info); //patrik: added these lines to add them anyways since version should be checked now!
         }
     }
     
@@ -154,7 +156,7 @@ public class BundleRegistry {
      * @param versionSpec the version specification (currently not considered in resolution, just stored)
      * @return the related bundle information object, resolved or unresolved or <b>null</b> if not found
      */
-    public BundleInfo get(String name, String versionSpec) {
+    public BundleInfo get(String name, EasyDependency versionSpec) {
         BundleInfo result;
         List<BundleInfo> sameName = bundles.get(name);
         if (null == sameName || sameName.isEmpty()) {
@@ -167,7 +169,19 @@ public class BundleRegistry {
                 result = null;
             }
         } else {
-            result = sameName.get(0);
+            //versionSpec needs to be supported here!
+            result = null;
+            for (int i = 0; i < sameName.size(); i++) {
+                if (sameName.get(i).getVersion()
+                    .isInRange(versionSpec.getBundleVersionMin(), versionSpec.getBundleVersionMax())) {
+                    if (null == result || result.getVersion()
+                            .compareTo(sameName.get(i).getVersion()) == -1) {
+                        result = sameName.get(i);
+                    }
+                }
+            }
+        
+            //result = sameName.get(0);
         }
         return result;
     }

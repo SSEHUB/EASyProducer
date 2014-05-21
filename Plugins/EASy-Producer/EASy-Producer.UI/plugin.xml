@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension
-         id="de.uni_hildesheim.sse.EASy-Producer"
-         name="EASy-Producer 2.0"
-         point="org.eclipse.core.resources.natures">
-      <runtime>
-         <run class="de.uni_hildesheim.sse.easy_producer.persistency.eclipse.EASyNature">
-         </run>
-      </runtime>
-   </extension>
 
    <extension
          point="org.eclipse.ui.newWizards">
@@ -26,6 +17,7 @@
             project="true">
       </wizard>
    </extension>
+   
    <extension
          point="org.eclipse.ui.editors">
       <editor
@@ -36,9 +28,19 @@
             name="Product Line Configuration Editor">
       </editor>
    </extension>
+   <extension
+         id="de.uni_hildesheim.sse.EASy-Producer"
+         name="EASy-Producer 2.0"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run class="de.uni_hildesheim.sse.easy_producer.persistency.eclipse.EASyNature">
+         </run>
+      </runtime>
+   </extension>
    <extension point="org.eclipse.ui.startup">
      <startup class="de.uni_hildesheim.sse.easy.ui.internal.Startup"/>
    </extension>
+   
    <extension point="org.eclipse.ui.popupMenus">
       <objectContribution
             adaptable="true"
@@ -98,6 +100,7 @@
          </visibility>
       </objectContribution>
    </extension>
+   
    <extension point="org.eclipse.ui.decorators">
       <decorator
             adaptable="true"
@@ -115,14 +118,46 @@
          </enablement>
       </decorator>
    </extension>
+   
+   
    <extension point="org.eclipse.ui.preferencePages">
       <page
-            category="de.uni_hildesheim.sse.Ivml"
-            class="de.uni_hildesheim.sse.easy.ui.reasoner.ReasonerPreferencePage"
-            id="de.uni_hildesheim.sse.Ivml.reasoners"
-            name="Reasoners">
-            <keywordReference id="de.uni_hildesheim.sse.ui.keyword_Ivml"/>
+            class="de.uni_hildesheim.sse.easy.ui.configuration.MainPreferencePage"
+            id="de.uni_hildesheim.sse.EASy"
+            name="EASy-Producer">
       </page>
-   </extension>   
+      <page
+            category="de.uni_hildesheim.sse.EASy"
+            class="de.uni_hildesheim.sse.easy.ui.reasoner.ReasonerPreferencePage"
+            id="de.uni_hildesheim.sse.EASy.reasoners"
+            name="Reasoners">
+      </page>
+      <page
+            category="de.uni_hildesheim.sse.EASy"
+            class="de.uni_hildesheim.sse.easy.ui.configuration.GlobalPathPreferencePage"
+            id="de.uni_hildesheim.sse.EASy.paths"
+            name="Model paths">
+      </page>
+       <page
+            category="de.uni_hildesheim.sse.EASy"
+            class="de.uni_hildesheim.sse.easy.ui.configuration.VtlArgumentProviderPreferencePage"
+            id="de.uni_hildesheim.sse.EASy.paths"
+            name="VTL Argument Provider">
+      </page>
+   </extension>
+   
+   <extension point="org.eclipse.ui.propertyPages">
+     <page
+        class="de.uni_hildesheim.sse.easy.ui.configuration.MainPropertyPage"
+        id="de.uni_hildesheim.sse.EASy"
+        name="EASy-Producer">
+     </page>
+     <page
+        category="de.uni_hildesheim.sse.EASy"
+        name="Model paths"
+        class="de.uni_hildesheim.sse.easy.ui.configuration.PathPropertyPage"
+        id="de.uni_hildesheim.sse.easy.ui.configuration.ProjectConfigurationPage">
+     </page>
+   </extension>
 
 </plugin>

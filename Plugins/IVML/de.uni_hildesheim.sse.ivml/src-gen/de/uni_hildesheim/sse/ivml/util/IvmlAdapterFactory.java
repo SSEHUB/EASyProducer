@@ -1,85 +1,15 @@
 /**
- * <copyright>
- * </copyright>
- *
-
  */
 package de.uni_hildesheim.sse.ivml.util;
 
+import de.uni_hildesheim.sse.ivml.*;
+
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
-import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
-import org.eclipse.emf.ecore.EObject;
 
-import de.uni_hildesheim.sse.ivml.AccessName;
-import de.uni_hildesheim.sse.ivml.ActualParameterList;
-import de.uni_hildesheim.sse.ivml.AdditiveExpression;
-import de.uni_hildesheim.sse.ivml.AdditiveExpressionPart;
-import de.uni_hildesheim.sse.ivml.AssignmentExpression;
-import de.uni_hildesheim.sse.ivml.AssignmentExpressionPart;
-import de.uni_hildesheim.sse.ivml.AttrAssignment;
-import de.uni_hildesheim.sse.ivml.AttrAssignmentPart;
-import de.uni_hildesheim.sse.ivml.AttributeTo;
-import de.uni_hildesheim.sse.ivml.BasicType;
-import de.uni_hildesheim.sse.ivml.Call;
-import de.uni_hildesheim.sse.ivml.CollectionInitializer;
-import de.uni_hildesheim.sse.ivml.ConflictStmt;
-import de.uni_hildesheim.sse.ivml.Declaration;
-import de.uni_hildesheim.sse.ivml.Declarator;
-import de.uni_hildesheim.sse.ivml.DerivedType;
-import de.uni_hildesheim.sse.ivml.DslContext;
-import de.uni_hildesheim.sse.ivml.EqualityExpression;
-import de.uni_hildesheim.sse.ivml.EqualityExpressionPart;
-import de.uni_hildesheim.sse.ivml.Eval;
-import de.uni_hildesheim.sse.ivml.Export;
-import de.uni_hildesheim.sse.ivml.Expression;
-import de.uni_hildesheim.sse.ivml.ExpressionAccess;
-import de.uni_hildesheim.sse.ivml.ExpressionListEntry;
-import de.uni_hildesheim.sse.ivml.ExpressionListOrRange;
-import de.uni_hildesheim.sse.ivml.ExpressionStatement;
-import de.uni_hildesheim.sse.ivml.FeatureCall;
-import de.uni_hildesheim.sse.ivml.Freeze;
-import de.uni_hildesheim.sse.ivml.FreezeButExpression;
-import de.uni_hildesheim.sse.ivml.FreezeButList;
-import de.uni_hildesheim.sse.ivml.FreezeStatement;
-import de.uni_hildesheim.sse.ivml.IfExpression;
-import de.uni_hildesheim.sse.ivml.ImplicationExpression;
-import de.uni_hildesheim.sse.ivml.ImplicationExpressionPart;
-import de.uni_hildesheim.sse.ivml.ImportStmt;
-import de.uni_hildesheim.sse.ivml.InterfaceDeclaration;
-import de.uni_hildesheim.sse.ivml.IvmlPackage;
-import de.uni_hildesheim.sse.ivml.LetExpression;
-import de.uni_hildesheim.sse.ivml.Literal;
-import de.uni_hildesheim.sse.ivml.LogicalExpression;
-import de.uni_hildesheim.sse.ivml.LogicalExpressionPart;
-import de.uni_hildesheim.sse.ivml.MultiplicativeExpression;
-import de.uni_hildesheim.sse.ivml.MultiplicativeExpressionPart;
-import de.uni_hildesheim.sse.ivml.NumValue;
-import de.uni_hildesheim.sse.ivml.OpDefParameter;
-import de.uni_hildesheim.sse.ivml.OpDefParameterList;
-import de.uni_hildesheim.sse.ivml.OpDefStatement;
-import de.uni_hildesheim.sse.ivml.PostfixExpression;
-import de.uni_hildesheim.sse.ivml.PrimaryExpression;
-import de.uni_hildesheim.sse.ivml.Project;
-import de.uni_hildesheim.sse.ivml.ProjectContents;
-import de.uni_hildesheim.sse.ivml.QualifiedName;
-import de.uni_hildesheim.sse.ivml.RelationalExpression;
-import de.uni_hildesheim.sse.ivml.RelationalExpressionPart;
-import de.uni_hildesheim.sse.ivml.SetOp;
-import de.uni_hildesheim.sse.ivml.Type;
-import de.uni_hildesheim.sse.ivml.Typedef;
-import de.uni_hildesheim.sse.ivml.TypedefCompound;
-import de.uni_hildesheim.sse.ivml.TypedefConstraint;
-import de.uni_hildesheim.sse.ivml.TypedefEnum;
-import de.uni_hildesheim.sse.ivml.TypedefEnumLiteral;
-import de.uni_hildesheim.sse.ivml.TypedefMapping;
-import de.uni_hildesheim.sse.ivml.UnaryExpression;
-import de.uni_hildesheim.sse.ivml.Value;
-import de.uni_hildesheim.sse.ivml.VariabilityUnit;
-import de.uni_hildesheim.sse.ivml.VariableDeclaration;
-import de.uni_hildesheim.sse.ivml.VariableDeclarationPart;
-import de.uni_hildesheim.sse.ivml.VersionStmt;
-import de.uni_hildesheim.sse.ivml.VersionedId;
+import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
+
+import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->

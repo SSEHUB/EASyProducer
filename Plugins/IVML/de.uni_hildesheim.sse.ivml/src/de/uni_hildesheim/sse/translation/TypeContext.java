@@ -27,6 +27,7 @@ import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
 import de.uni_hildesheim.sse.model.varModel.ContainableModelElementList;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.IModelElement;
+import de.uni_hildesheim.sse.model.varModel.IvmlDatatypeVisitor;
 import de.uni_hildesheim.sse.model.varModel.IvmlException;
 import de.uni_hildesheim.sse.model.varModel.IvmlKeyWords;
 import de.uni_hildesheim.sse.model.varModel.ModelElement;
@@ -38,6 +39,7 @@ import de.uni_hildesheim.sse.model.varModel.ProjectImport;
 import de.uni_hildesheim.sse.model.varModel.datatypes.BooleanType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Container;
+import de.uni_hildesheim.sse.model.varModel.datatypes.CustomDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IContainableElementsSorter;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IResolutionScope;
@@ -76,7 +78,7 @@ import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
  */
 public class TypeContext implements IResolutionScope {
 
-    private ContainableModelElementList implicitDefinitions = new ContainableModelElementList();
+    private ContainableModelElementList implicitDefinitions = new ContainableModelElementList(null);
     private Project project;
     private MessageReceiver messageReceiver;
 
@@ -100,9 +102,15 @@ public class TypeContext implements IResolutionScope {
     /**
      * Push a resolution layer in case that intermediary variables shell be considered, e.g.
      * within a compound.
+     * 
+     * @param parent the parent (scope, may be <b>null</b> - in this case the parent scope of the previous 
+     *   layer is considered)
      */
-    public void pushLayer() {
-        directContext.push(new ContainableModelElementList());
+    public void pushLayer(IModelElement parent) {
+        if (null == parent && !directContext.isEmpty()) {
+            parent = directContext.peek().getParent();
+        }
+        directContext.push(new ContainableModelElementList(parent));
     }
 
     /**
@@ -198,34 +206,26 @@ public class TypeContext implements IResolutionScope {
             } else if (derived.getOp().equals(IvmlKeyWords.REFTO)) {
                 restriction = Reference.class;
             } else {
-                throw new TranslatorException("<unspecified type>", type,
-                        causingFeature, TranslatorException.INTERNAL);
+                throw new TranslatorException("<unspecified type>", type, causingFeature, TranslatorException.INTERNAL);
             }
             // search the implicit ones
             try {
-                result = ModelQuery.findElementByTypeName(this, typeName,
-                        restriction);
+                String searchName = ModelUtility.stringValue(derived.getType(), true);
+                result = ModelQuery.findElementByTypeName(this, searchName, restriction);
             } catch (ModelQueryException e) {
                 throw new TranslatorException(e, type, causingFeature);
             }
             if (null == result) {
                 IDatatype containedType = resolveType(derived.getType());
-                ContainableModelElement tmp = null;
                 if (derived.getOp().equals(IvmlKeyWords.SETOF)) {
-                    tmp = addImplicitDefinition(new Set(typeName,
-                            containedType, project));
+                    result = addImplicitDefinition(new Set(typeName, containedType, project));
                     restriction = Set.class;
                 } else if (derived.getOp().equals(IvmlKeyWords.SEQUENCEOF)) {
-                    tmp = addImplicitDefinition(new Sequence(typeName,
-                            containedType, project));
+                    result = addImplicitDefinition(new Sequence(typeName, containedType, project));
                     restriction = Sequence.class;
                 } else if (derived.getOp().equals(IvmlKeyWords.REFTO)) {
-                    tmp = addImplicitDefinition(new Reference(typeName,
-                            containedType, project));
+                    result = addImplicitDefinition(new Reference(typeName, containedType, project));
                     restriction = Reference.class;
-                }
-                if (null != tmp) {
-                    result = (IDatatype) tmp;
                 }
             }
         }
@@ -239,6 +239,30 @@ public class TypeContext implements IResolutionScope {
             if (null == result) {
                 throw new UnknownTypeException(typeName, type, causingFeature);
             }
+        }
+        return result;
+    }
+
+    /**
+     * Finds a reference type (declaration or defines an implicit type) for a given contained type.
+     * 
+     * @param contained the contained type
+     * @return the reference type declaration
+     */
+    public IDatatype findRefType(IDatatype contained) {
+        IDatatype result = null;
+        try {
+            String typeName = ModelQuery.getReferenceTypeSearchName(contained);
+            result = ModelQuery.findElementByTypeName(this, typeName, Reference.class);
+        } catch (ModelQueryException e) {
+            // ???
+        }
+        if (null == result) {
+            String typeName = IvmlKeyWords.REFTO + "(" + IvmlDatatypeVisitor.getUnqualifiedType(contained) + ")";
+            result = addImplicitDefinition(new Reference(typeName, contained, project));
+        }
+        if (null == result) {
+            result = Reference.TYPE; // last resort, shall not be used, avoid NPE
         }
         return result;
     }
@@ -343,19 +367,17 @@ public class TypeContext implements IResolutionScope {
     }
 
     /**
-     * Adds an implicit element or type definition.
+     * Adds an implicit type definition.
      * 
-     * @param element
-     *            the implicitly defined element
-     * @return <code>element</code>
+     * @param type the implicitly defined type
+     * @return <code>type</code>
      * 
      * @see #getElement(int)
      * @see #getElementCount()
      */
-    ContainableModelElement addImplicitDefinition(
-            ContainableModelElement element) {
-        implicitDefinitions.add(element);
-        return element;
+    CustomDatatype addImplicitDefinition(CustomDatatype type) {
+        implicitDefinitions.add(type);
+        return type;
     }
 
     /**
@@ -417,23 +439,7 @@ public class TypeContext implements IResolutionScope {
                     }
                 } else {
                     result = new Variable(var);
-                    if (Constants.REASONER_UNQUALIFIED_NAME_WARNING && isInCompound(var)) {
-                        messageReceiver.warning("Unqualified compound variable '" + var.getName() 
-                            + "' is currently not supported in reasoning. Please qualify with name " 
-                            + "of containing compound", object, feature, Message.CODE_IGNORE);
-                    }
                 }
-            } catch (IvmlException e) {
-                throw new TranslatorException(e, object, feature);
-            }
-        } else if (null != value.getRValue()) { // referenced value (refby)
-            String sValue = value.getRValue();
-            try { // TODO check whether required at all
-                AbstractVariable var = findVariable(sValue, null);
-                if (null == var) {
-                    throw new UnknownVariableException(sValue, object, feature);
-                }
-                result = new Variable(var);
             } catch (IvmlException e) {
                 throw new TranslatorException(e, object, feature);
             }
@@ -449,25 +455,6 @@ public class TypeContext implements IResolutionScope {
             throw new TranslatorException("<no type alternative>", object, feature, ErrorCodes.INTERNAL);
         }
         return result;
-    }
-    
-    /**
-     * Returns whether the given model element <code>elt</code> is located within a compound.
-     * 
-     * @param elt the element to analyze
-     * @return <code>true</code> if <code>elt</code> is in a compound, <code>false</code> else
-     */
-    private boolean isInCompound(IModelElement elt) {
-        boolean found = false;
-        IModelElement tmp = elt.getParent();
-        while (!found && null != tmp) {
-            if (tmp instanceof Compound)  {
-                found = true;
-            } else {
-                tmp = tmp.getParent();
-            }
-        }
-        return found;
     }
 
     /**
@@ -502,6 +489,11 @@ public class TypeContext implements IResolutionScope {
      */
     public ProjectImport getImport(int index) {
         throw new IndexOutOfBoundsException();
+    }
+    
+    @Override
+    public IModelElement getParent() {
+        return null;
     }
 
     /**
@@ -631,6 +623,13 @@ public class TypeContext implements IResolutionScope {
             c.clear();
         }
         elementSortMaps.clear();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public ContainableModelElement getElement(String name) {
+        return project.getElement(name);
     }
     
 }

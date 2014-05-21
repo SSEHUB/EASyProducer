@@ -1,16 +1,6 @@
 /**
- * <copyright>
- * </copyright>
- *
-
  */
 package de.uni_hildesheim.sse.ivml.impl;
-
-import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import de.uni_hildesheim.sse.ivml.AccessName;
 import de.uni_hildesheim.sse.ivml.ActualParameterList;
@@ -82,6 +72,13 @@ import de.uni_hildesheim.sse.ivml.VariableDeclaration;
 import de.uni_hildesheim.sse.ivml.VariableDeclarationPart;
 import de.uni_hildesheim.sse.ivml.VersionStmt;
 import de.uni_hildesheim.sse.ivml.VersionedId;
+
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EReference;
+
+import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -1245,19 +1242,9 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getValue_RValue()
-  {
-    return (EAttribute)valueEClass.getEStructuralFeatures().get(4);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public EAttribute getValue_NullValue()
   {
-    return (EAttribute)valueEClass.getEStructuralFeatures().get(5);
+    return (EAttribute)valueEClass.getEStructuralFeatures().get(4);
   }
 
   /**
@@ -3029,7 +3016,6 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     createEAttribute(valueEClass, VALUE__SVALUE);
     createEReference(valueEClass, VALUE__QVALUE);
     createEAttribute(valueEClass, VALUE__BVALUE);
-    createEAttribute(valueEClass, VALUE__RVALUE);
     createEAttribute(valueEClass, VALUE__NULL_VALUE);
 
     derivedTypeEClass = createEClass(DERIVED_TYPE);
@@ -3358,7 +3344,6 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     initEAttribute(getValue_SValue(), ecorePackage.getEString(), "sValue", null, 0, 1, Value.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getValue_QValue(), this.getQualifiedName(), null, "qValue", null, 0, 1, Value.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getValue_BValue(), ecorePackage.getEString(), "bValue", null, 0, 1, Value.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getValue_RValue(), ecorePackage.getEString(), "rValue", null, 0, 1, Value.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getValue_NullValue(), ecorePackage.getEString(), "nullValue", null, 0, 1, Value.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(derivedTypeEClass, DerivedType.class, "DerivedType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);

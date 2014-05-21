@@ -4,10 +4,10 @@
     <property name="src.all.files" value="src"/>
     
     <path id ="includes">
+		<pathelement path="${eclipse.plugins.dir}/org.apache.commons.io_2.0.1.v201105210651.jar"/>
 		<!-- Libs of VarModel -->
         <fileset dir="${home.model.persistency.dir}/lib" includes="**/*.jar"/>
         <!-- Libs of Instantiator -->
-        <fileset dir="${home.instantiatorCore.dir}/lib" includes="**/*.jar"/>
         <fileset dir="${home.instantiator.xvcl.dir}/lib" includes="**/*.jar"/>
         <fileset dir="${home.instantiator.velocityLib.dir}/lib" includes="**/*.jar"/>
         <!-- Eclipse-Plugins -->

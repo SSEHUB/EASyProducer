@@ -71,9 +71,9 @@ vilScript PL_YMS_Platform(Project source, Project target, Configuration config) 
         // sortAlpha required for comparable results in recursion test
         execute curlExePath("-d", "\"{\\\"com.sap.ym.services.jockey\\\":{\\\"items\\\":[
             {\\\"${jockeyConfigs[1].name()}\\\":\\\"${jockeyConfigs[1].value()}\\\"},
-            {\\\"${jockeyConfigs[2].name()}\\\":\\\"${jockeyConfigs[1].value()}\\\"},
-            {\\\"${jockeyConfigs[3].name()}\\\":\\\"${jockeyConfigs[1].value()}\\\"},
-            {\\\"${jockeyConfigs[4].name()}\\\":\\\"${jockeyConfigs[1].value()}\\\"}],
+            {\\\"${jockeyConfigs[2].name()}\\\":\\\"${jockeyConfigs[2].value()}\\\"},
+            {\\\"${jockeyConfigs[3].name()}\\\":\\\"${jockeyConfigs[3].value()}\\\"},
+            {\\\"${jockeyConfigs[4].name()}\\\":\\\"${jockeyConfigs[4].value()}\\\"}],
             \\\"children\\\":null}}\"", "-H", "\"Content-Type:application/json\"", "-H", "\"Accept:application/json\"",
             "https://indenicaym2.netweaver.ondemand.com/cocktail/api/resolutions/com.sap.ym.services.jockey", "-k", "-i");        
     }

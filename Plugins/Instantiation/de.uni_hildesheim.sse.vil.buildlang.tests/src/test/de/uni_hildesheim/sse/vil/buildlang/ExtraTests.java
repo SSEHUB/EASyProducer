@@ -34,11 +34,6 @@ public class ExtraTests extends AbstractTest {
             tests = null;
         }
     }
-    
-    @Override
-    protected File getTestFolder() {
-        return new File(getTestDataDir(), "extra");
-    }
 
     /**
      * Asserts equality of the models and the parsed/analyzed result, i.e. it
@@ -111,6 +106,11 @@ public class ExtraTests extends AbstractTest {
         assertEqual(data, expectedErrorCodes);
     }
 
+    @Override
+    protected File getTestFolder() {
+        return new File(getTestDataDir(), "extra");
+    }
+    
     /**
      * Tests the copy parameter problem (contributed by Christian).
      * 
@@ -120,5 +120,5 @@ public class ExtraTests extends AbstractTest {
     public void testCopy() throws IOException {
         assertEqual("copy");
     }
-    
+   
 }

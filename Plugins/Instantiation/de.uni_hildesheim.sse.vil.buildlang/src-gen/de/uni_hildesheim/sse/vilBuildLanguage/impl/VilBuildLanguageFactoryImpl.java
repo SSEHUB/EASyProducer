@@ -1,34 +1,16 @@
 /**
- * <copyright>
- * </copyright>
- *
-
  */
 package de.uni_hildesheim.sse.vilBuildLanguage.impl;
+
+import de.uni_hildesheim.sse.vilBuildLanguage.*;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.impl.EFactoryImpl;
-import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
-import de.uni_hildesheim.sse.vilBuildLanguage.DeferDeclaration;
-import de.uni_hildesheim.sse.vilBuildLanguage.ImplementationUnit;
-import de.uni_hildesheim.sse.vilBuildLanguage.Join;
-import de.uni_hildesheim.sse.vilBuildLanguage.JoinVariable;
-import de.uni_hildesheim.sse.vilBuildLanguage.LanguageUnit;
-import de.uni_hildesheim.sse.vilBuildLanguage.LoadProperties;
-import de.uni_hildesheim.sse.vilBuildLanguage.Map;
-import de.uni_hildesheim.sse.vilBuildLanguage.PrimaryExpression;
-import de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration;
-import de.uni_hildesheim.sse.vilBuildLanguage.RuleElement;
-import de.uni_hildesheim.sse.vilBuildLanguage.RuleElementBlock;
-import de.uni_hildesheim.sse.vilBuildLanguage.RuleModifier;
-import de.uni_hildesheim.sse.vilBuildLanguage.ScriptContents;
-import de.uni_hildesheim.sse.vilBuildLanguage.ScriptParentDecl;
-import de.uni_hildesheim.sse.vilBuildLanguage.SystemExecution;
-import de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguageFactory;
-import de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage;
+import org.eclipse.emf.ecore.impl.EFactoryImpl;
+
+import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 /**
  * <!-- begin-user-doc -->
@@ -48,7 +30,7 @@ public class VilBuildLanguageFactoryImpl extends EFactoryImpl implements VilBuil
   {
     try
     {
-      VilBuildLanguageFactory theVilBuildLanguageFactory = (VilBuildLanguageFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.uni_hildesheim.de/sse/VilBuildLanguage"); 
+      VilBuildLanguageFactory theVilBuildLanguageFactory = (VilBuildLanguageFactory)EPackage.Registry.INSTANCE.getEFactory(VilBuildLanguagePackage.eNS_URI);
       if (theVilBuildLanguageFactory != null)
       {
         return theVilBuildLanguageFactory;
@@ -83,6 +65,7 @@ public class VilBuildLanguageFactoryImpl extends EFactoryImpl implements VilBuil
     switch (eClass.getClassifierID())
     {
       case VilBuildLanguagePackage.IMPLEMENTATION_UNIT: return createImplementationUnit();
+      case VilBuildLanguagePackage.REQUIRE: return createRequire();
       case VilBuildLanguagePackage.LANGUAGE_UNIT: return createLanguageUnit();
       case VilBuildLanguagePackage.SCRIPT_PARENT_DECL: return createScriptParentDecl();
       case VilBuildLanguagePackage.LOAD_PROPERTIES: return createLoadProperties();
@@ -93,6 +76,7 @@ public class VilBuildLanguageFactoryImpl extends EFactoryImpl implements VilBuil
       case VilBuildLanguagePackage.RULE_MODIFIER: return createRuleModifier();
       case VilBuildLanguagePackage.DEFER_DECLARATION: return createDeferDeclaration();
       case VilBuildLanguagePackage.PRIMARY_EXPRESSION: return createPrimaryExpression();
+      case VilBuildLanguagePackage.INSTANTIATE: return createInstantiate();
       case VilBuildLanguagePackage.MAP: return createMap();
       case VilBuildLanguagePackage.JOIN: return createJoin();
       case VilBuildLanguagePackage.JOIN_VARIABLE: return createJoinVariable();
@@ -111,6 +95,17 @@ public class VilBuildLanguageFactoryImpl extends EFactoryImpl implements VilBuil
   {
     ImplementationUnitImpl implementationUnit = new ImplementationUnitImpl();
     return implementationUnit;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Require createRequire()
+  {
+    RequireImpl require = new RequireImpl();
+    return require;
   }
 
   /**
@@ -221,6 +216,17 @@ public class VilBuildLanguageFactoryImpl extends EFactoryImpl implements VilBuil
   {
     PrimaryExpressionImpl primaryExpression = new PrimaryExpressionImpl();
     return primaryExpression;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Instantiate createInstantiate()
+  {
+    InstantiateImpl instantiate = new InstantiateImpl();
+    return instantiate;
   }
 
   /**

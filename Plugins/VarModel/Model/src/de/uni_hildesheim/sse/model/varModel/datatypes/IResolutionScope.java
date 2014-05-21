@@ -1,6 +1,7 @@
 package de.uni_hildesheim.sse.model.varModel.datatypes;
 
 import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
+import de.uni_hildesheim.sse.model.varModel.IModelElement;
 import de.uni_hildesheim.sse.model.varModel.ProjectImport;
 
 /**
@@ -17,6 +18,13 @@ public interface IResolutionScope {
     public String getName();
     
     /**
+     * Returns the parent model element.
+     * 
+     * @return the parent model element (may be <b>null</b>)
+     */
+    public IModelElement getParent();
+    
+    /**
      * Returns a contained model element specified by <code>index</code>.
      * 
      * @param index a 0-based index specifying the operation to be returned
@@ -26,6 +34,14 @@ public interface IResolutionScope {
      */
     public ContainableModelElement getElement(int index);
 
+    /**
+     * Returns a contained model element specified by its <code>name</code>.
+     * 
+     * @param name the qualified or unqualified name to search for
+     * @return the related element or <b>null</b> if no such element is known
+     */
+    public ContainableModelElement getElement(String name);
+    
     /**
      * Returns the number of contained elements.
      * 

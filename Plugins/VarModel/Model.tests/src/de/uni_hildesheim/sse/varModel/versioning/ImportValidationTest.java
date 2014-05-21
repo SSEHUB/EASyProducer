@@ -4,8 +4,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.model.management.VarModel;

@@ -1,0 +1,20 @@
+project MultipleProjectsInIVMLFile {
+
+    version v0;
+    import InternalProject;
+    import InterfacedProject::exportedVars;
+}
+
+project InternalProject {
+
+    Integer internalProjectVar;
+}
+
+project InterfacedProject {
+
+    interface exportedVars {
+        export publicVar;
+    }
+    Integer publicVar;
+    Integer privateVar;
+}

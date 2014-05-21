@@ -70,7 +70,7 @@ public class ExpressionTranslator
             }
             if (null == result || continueResolution(semanticException)) {
                 try {
-                    result = new CallExpression(name, arg);
+                    result = new CallExpression(null, name, arg);
                     semanticException = checkSemantics(result);
                 } catch (ExpressionException e) {
                     // wrong expression

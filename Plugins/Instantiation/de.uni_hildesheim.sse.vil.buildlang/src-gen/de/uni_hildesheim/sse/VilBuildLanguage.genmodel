@@ -4,13 +4,18 @@
     editorDirectory="/de.uni_hildesheim.sse.vil.buildlang.editor/src" modelPluginID="de.uni_hildesheim.sse.vil.buildlang"
     forceOverwrite="true" modelName="VilBuildLanguage" updateClasspath="false" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
     complianceLevel="5.0" copyrightFields="false" editPluginID="de.uni_hildesheim.sse.vil.buildlang.edit"
-    editorPluginID="de.uni_hildesheim.sse.vil.buildlang.editor" runtimeVersion="2.7"
+    editorPluginID="de.uni_hildesheim.sse.vil.buildlang.editor" runtimeVersion="2.9"
     usedGenPackages="../../../../../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/ExpressionDsl.genmodel#//expressionDsl">
   <genPackages prefix="VilBuildLanguage" basePackage="de.uni_hildesheim.sse" disposableProviderFactory="true"
       ecorePackage="VilBuildLanguage.ecore#/">
     <genClasses ecoreClass="VilBuildLanguage.ecore#//ImplementationUnit">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//ImplementationUnit/imports"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//ImplementationUnit/requires"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//ImplementationUnit/scripts"/>
+    </genClasses>
+    <genClasses ecoreClass="VilBuildLanguage.ecore#//Require">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute VilBuildLanguage.ecore#//Require/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//Require/versionSpec"/>
     </genClasses>
     <genClasses ecoreClass="VilBuildLanguage.ecore#//LanguageUnit">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//LanguageUnit/param"/>
@@ -54,6 +59,14 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//PrimaryExpression/sysEx"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//PrimaryExpression/map"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//PrimaryExpression/join"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//PrimaryExpression/instantiate"/>
+    </genClasses>
+    <genClasses ecoreClass="VilBuildLanguage.ecore#//Instantiate">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute VilBuildLanguage.ecore#//Instantiate/project"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute VilBuildLanguage.ecore#//Instantiate/rule"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute VilBuildLanguage.ecore#//Instantiate/ruleName"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//Instantiate/param"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//Instantiate/versionSpec"/>
     </genClasses>
     <genClasses ecoreClass="VilBuildLanguage.ecore#//Map">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute VilBuildLanguage.ecore#//Map/var"/>

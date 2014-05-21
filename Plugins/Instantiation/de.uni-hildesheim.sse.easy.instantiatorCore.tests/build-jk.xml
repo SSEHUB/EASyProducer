@@ -9,7 +9,7 @@
 	<property name="javacTarget" value="1.6"/>
 	
 	<path id ="includes">
-        <!-- Model -->
+		<!-- Model -->
 		<pathelement path="${libs.utils}"/>
         <pathelement path="${libs.model}"/>
         <pathelement path="${libs.model.tests}"/>

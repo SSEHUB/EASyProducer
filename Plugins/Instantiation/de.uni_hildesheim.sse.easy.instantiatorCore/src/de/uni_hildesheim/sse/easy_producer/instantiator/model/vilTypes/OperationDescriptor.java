@@ -1,12 +1,8 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionEvaluator;
 
@@ -18,7 +14,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expres
  * 
  * @author Holger Eichelberger
  */
-public class OperationDescriptor implements IMetaOperation {
+public abstract class OperationDescriptor implements IMetaOperation {
 
     /**
      * Declares different types of alias.
@@ -48,19 +44,8 @@ public class OperationDescriptor implements IMetaOperation {
      * We do not rely on constructors, as constructor methods simplify reflection analysis.
      */
     public static final String CONSTRUCTOR_NAME = "create";
-    
-    /**
-     * Stores implicit type equalities handled by boxing/unboxing in Java reflection.
-     */
-    private static final Map<Class<?>, Class<?>> REFLECTION_EQUALITIES = new HashMap<Class<?>, Class<?>>();
-
-    /**
-     * Stores lazy default values (primitives are sufficient).
-     */
-    private static final Map<Class<?>, Object> LAZY_DEFAULTS = new HashMap<Class<?>, Object>();
 
     private String name; // only used if alias
-    private Method method;
     private boolean isConstructor = false;
     private OperationType opType = OperationType.NORMAL;
     private TypeDescriptor<? extends IVilType> declaringType;
@@ -68,145 +53,90 @@ public class OperationDescriptor implements IMetaOperation {
     private AliasType aliasType = AliasType.NONE;
     private List<TypeDescriptor<? extends IVilType>> parameter; // lazy
     private boolean acceptsNamedParameters = false; // lazy
+    private boolean acceptsImplicitParameters = false; // lazy
     private boolean isConversion;
-    
-    /**
-     * Creates a new operation descriptor.
-     * 
-     * @param declaringType the declaring type
-     * @param method the reflection method to be called
-     */
-    OperationDescriptor(TypeDescriptor<? extends IVilType> declaringType, Method method) {
-        this(declaringType, method, null);
-    }
 
     /**
-     * Creates a new operation descriptor as an alias.
+     * Creates a new operation descriptor. Overriding constructors shall call 
+     * {@link #setCharacteristics(OperationType, AliasType, boolean)} in order to redefined the 
+     * default values.
      * 
      * @param declaringType the declaring type
-     * @param method the reflection method to be called
      * @param name the alias name (may be <b>null</b> if the original name of <code>method</code> shall be used)
+     * @param isConstructor whether the operation is a constructor
      */
-    OperationDescriptor(TypeDescriptor<? extends IVilType> declaringType, Method method, String name) {
+    OperationDescriptor(TypeDescriptor<? extends IVilType> declaringType, String name, boolean isConstructor) {
         this.declaringType = declaringType;
-        this.method = method;
-        isConstructor = isConstructor(method);
-        if (null != name && !name.equals(method.getName()) && name.length() > 0) {
-            this.name = name; // ensure proper use
-            aliasType = AliasType.IMPLICIT;
-        }
-        OperationMeta meta = method.getAnnotation(OperationMeta.class);
-        if (null != meta) {
-            opType = meta.opType();
-            if (null != meta.name() && meta.name().length > 0) {
-                aliasType = AliasType.EXPLICIT;
-            }
-        }
-        isConversion = null != method.getAnnotation(Conversion.class);
+        this.name = name;
+        this.isConstructor = isConstructor;
+    }
+    
+    /**
+     * Sets the characteristics of this operation descriptor. To be called by overridden
+     * constructors.
+     * 
+     * @param opType the operation type
+     * @param aliasType the alias type
+     * @param isConversion whether the operation is a conversion
+     * @param name the actual name of the operation
+     */
+    protected void setCharacteristics(OperationType opType, AliasType aliasType, boolean isConversion, String name) {
+        this.opType = opType;
+        this.aliasType = aliasType;
+        this.isConversion = isConversion;
+        this.name = name;
     }
     
     /**
      * Initializes the parameter and the return type if necessary (lazy, due to 
      * linked descriptor structures which may not have been completely initialized
      * during the constructor execution).
+     * 
+     * @see #initializeParameter()
+     * @see #initializeReturnType()
      */
-    private synchronized void initialize() {
+    private void initialize() {
         if (null == parameter) {
-            parameter = new ArrayList<TypeDescriptor<? extends IVilType>>();
-            if (!Modifier.isStatic(method.getModifiers()) && null != declaringType) {
-                parameter.add(declaringType);
-            }
-            Class<?>[] params = method.getParameterTypes();
-            for (int i = 0; i < params.length; i++) {
-                if (i == params.length - 1 && Map.class.isAssignableFrom(params[i])) {
-                    acceptsNamedParameters = true;
-                } else {
-                    parameter.add(resolveType(params[i]));
-                }
-            }
+            initializeParameters();
         }
         if (null == returnType) {
-            returnType = resolveType(method.getReturnType());
+            initializeReturnType();
         }
     }
+    
+    /**
+     * Initializes the parameters (lazy init). Is called by {@link #initialize()}. 
+     * Shall call {@link #setParameters(List, boolean, boolean)}.
+     */
+    protected abstract void initializeParameters();
 
     /**
-     * Adds a new bi-directional reflection equality.
+     * Initializes the return type (lazy init). Is called by {@link #initialize()}. 
+     * Shall call {@link #setReturnType(TypeDescriptor)}.
+     */
+    protected abstract void initializeReturnType();
+    
+    /**
+     * Sets the parameters. Shall only be called in {@link #initializeParameters()}.
      * 
-     * @param cls1 a class to be considered equivalent / assignment compatible to <code>cls2</code>
-     * @param cls2 a class to be considered equivalent / assignment compatible to <code>cls1</code>
+     * @param parameters the parameters
+     * @param acceptsNamedParameters whether this operation accepts named parameters
+     * @param acceptsImplicitParameters whether this operation accepts implicit parameters
      */
-    private static final void addReflectionEquality(Class<?> cls1, Class<?> cls2) {
-        REFLECTION_EQUALITIES.put(cls1, cls2);
-        REFLECTION_EQUALITIES.put(cls2, cls1);
+    protected void setParameters(List<TypeDescriptor<? extends IVilType>> parameters, boolean acceptsNamedParameters, 
+        boolean acceptsImplicitParameters) {
+        this.parameter = parameters;
+        this.acceptsNamedParameters = acceptsNamedParameters;
+        this.acceptsImplicitParameters = acceptsImplicitParameters;
     }
-    
-    static {
-        addReflectionEquality(Integer.TYPE, Integer.class);
-        addReflectionEquality(Long.TYPE, Long.class);
-        addReflectionEquality(Float.TYPE, Float.class);
-        addReflectionEquality(Double.TYPE, Double.class);
-        addReflectionEquality(Boolean.TYPE, Boolean.class);
-        addReflectionEquality(Character.TYPE, Character.class);
-        addReflectionEquality(Byte.TYPE, Byte.class);
-        addReflectionEquality(Short.TYPE, Short.class);
 
-        LAZY_DEFAULTS.put(Integer.TYPE, 0);
-        LAZY_DEFAULTS.put(Long.TYPE, 0L);
-        LAZY_DEFAULTS.put(Float.TYPE, 0.0F);
-        LAZY_DEFAULTS.put(Double.TYPE, 0.0D);
-        LAZY_DEFAULTS.put(Boolean.TYPE, false);
-        LAZY_DEFAULTS.put(Character.TYPE, 0);
-        LAZY_DEFAULTS.put(Byte.TYPE, 0);
-        LAZY_DEFAULTS.put(Short.TYPE, 0);
-    }
-    
     /**
-     * Resolves the given type to a type descriptor.
-     *  
-     * @param cls the class to be resolved
-     * @return the resolved type descriptor
+     * Sets the return type. Shall only be called in {@link #initializeReturnType()}.
+     * 
+     * @param returnType the return type of this operation
      */
-    private TypeDescriptor<? extends IVilType> resolveType(Class<?> cls) {
-        TypeDescriptor<? extends IVilType> result = null;
-        if (Void.TYPE == cls) {
-            result = TypeDescriptor.VOID;
-        } else {
-            OperationMeta opMeta = method.getAnnotation(OperationMeta.class);
-            TypeDescriptor<?>[] parameter;
-            if (null != opMeta) {
-                Class<?>[] param = opMeta.returnGenerics();
-                parameter = TypeDescriptor.createArray(param.length);
-                for (int i = 0; i < param.length; i++) {
-                    parameter[i] = TypeRegistry.getType(TypeDescriptor.getRegName(param[i]));
-                }
-            } else {
-                parameter = null;
-            }
-            try {
-                if (TypeDescriptor.isSet(cls)) {
-                    result = TypeRegistry.getSetType(parameter);
-                } else if (TypeDescriptor.isSequence(cls)) {
-                    result = TypeRegistry.getSequenceType(parameter);
-                }
-            } catch (VilException e) {
-                // no type -> handled later
-            }
-            if (null == result) {
-                result = TypeRegistry.getType(cls.getName());
-                if (null == result) {
-                    result = TypeRegistry.getType(cls.getSimpleName()); // artifacts
-                }
-            }
-            if (null == result) {
-                if (Object.class == cls) {
-                    result = TypeDescriptor.ANY;
-                } else {
-                    result = TypeDescriptor.VOID;
-                }
-            }
-        }
-        return result;
+    protected void setReturnType(TypeDescriptor<? extends IVilType> returnType) {
+        this.returnType = returnType;
     }
     
     /**
@@ -219,12 +149,30 @@ public class OperationDescriptor implements IMetaOperation {
     }
 
     /**
+     * Returns whether the operation accepts implicit named parameters.
+     * 
+     * @return <code>true</code> if it accepts implicit named parameters, <code>false</code> else
+     */
+    public boolean acceptsImplicitParameters() {
+        return acceptsImplicitParameters;
+    }
+    
+    /**
      * Returns the name of the method.
      * 
      * @return the name of the method
      */
     public String getName() {
-        return null != name ? name : method.getName();
+        return name;
+    }
+    
+    /**
+     * Returns the name stored in this instance.
+     * 
+     * @return the name stored in this instance
+     */
+    protected final String getStoredName() {
+        return name;
     }
     
     /**
@@ -235,10 +183,21 @@ public class OperationDescriptor implements IMetaOperation {
     public OperationType getOperationType() {
         return opType;
     }
+    
+    /**
+     * Returns the alias type.
+     * 
+     * @return the alias type
+     */
+    protected AliasType getAliasType() {
+        return aliasType;
+    }
 
     /**
-     * Returns the name of the declaring type. This method works even if 
-     * {@link #getDeclaringType()} is null due to a mapped external Java operation.
+     * Returns the name of the declaring type. In case that 
+     * {@link #getDeclaringType()} is <b>null</b>, the result of 
+     * {@link #getDeclaringTypeNameFallback()}
+     * is returned.
      * 
      * @return the name of the declaring type
      */
@@ -247,57 +206,39 @@ public class OperationDescriptor implements IMetaOperation {
         if (null != declaringType) {
             result = declaringType.getName();
         } else {
-            result = method.getDeclaringClass().getSimpleName();
+            result = getDeclaringTypeNameFallback();
         }
         return result;
     }
+    
+    /**
+     * Returns the name of the declaring type in case that {@link #getDeclaringType()}
+     * is <b>null</b>.
+     * 
+     * @return the name of the declaring type
+     */
+    protected abstract String getDeclaringTypeNameFallback();
     
     /**
      * Returns the signature of the method.
      * 
      * @return the signature of the method
      */
-    public String getSignature() {
-        StringBuilder tmp = new StringBuilder();
-        if (isConstructor) {
-            tmp.append("new ");
-            tmp.append(getDeclaringTypeName());
-            tmp.append(" ");
-        } else {
-            tmp.append(getName());
-        }
-        tmp.append("(");
-        Class<?>[] param = method.getParameterTypes();
-        if (null != param) {
-            for (int p = 0; p < param.length; p++) {
-                tmp.append(param[p].getSimpleName());
-                if (p < param.length - 1) {
-                    tmp.append(",");
-                }
-            }
-        }
-        tmp.append(")");
-        return tmp.toString();
-    }
+    public abstract String getSignature();
     
     /**
      * Returns whether this operation is static.
      * 
      * @return <code>true</code> if it is static, <code>false</code> else
      */
-    public boolean isStatic() {
-        return Modifier.isStatic(method.getModifiers());
-    }
+    public abstract boolean isStatic();
 
     /**
      * Returns the Java signature of the method (public for testing).
      * 
      * @return the Java signature of the method
-     * @see #getJavaSignature(Method)
      */
-    public String getJavaSignature() {
-        return getJavaSignature(method, name, acceptsNamedParameters);
-    }
+    public abstract String getJavaSignature();
     
     /**
      * Returns whether this operation represents a constructor. Basically, for VIL a 
@@ -360,44 +301,7 @@ public class OperationDescriptor implements IMetaOperation {
      * @param params the parameters (may be <b>null</b> if there are none, may be classes)
      * @return an instance of {@link CompatibilityResult} denoting the actual compatibility level
      */
-    public CompatibilityResult isCompatible(Class<?> retType, Object... params) {
-        Class<?>[] par = method.getParameterTypes();
-        boolean lazyPossible = true;
-        boolean compatible = (null == params ? 0 : params.length) == par.length;
-        if (null != retType) {
-            compatible &= method.getReturnType().isAssignableFrom(retType);
-        }
-        for (int p = 0; p < par.length; p++) { // no early end!
-            Class<?> cls;
-            if (null != params[p]) {
-                if (params[p] instanceof Class) {
-                    cls = (Class<?>) params[p];
-                } else {
-                    cls = params[p].getClass();
-                }
-            } else {
-                cls = Void.TYPE;
-            }
-            boolean parCompatible = par[p].isAssignableFrom(cls) // instances match?
-                || REFLECTION_EQUALITIES.get(par[p]) == cls // basic types match?
-                || (par[p] == Class.class && params[p] instanceof Class); // parameter is class
-            if (!parCompatible) {
-                lazyPossible &= params[p] == null;
-            }
-            compatible &= parCompatible;
-        }
-        CompatibilityResult result;
-        if (compatible) {
-            result = CompatibilityResult.COMPATIBLE;
-        } else {
-            if (lazyPossible) {
-                result = CompatibilityResult.LAZY_POSSIBLE;
-            } else {
-                result = CompatibilityResult.INCOMPATIBLE;
-            }
-        }
-        return result;
-    }
+    public abstract CompatibilityResult isCompatible(Class<?> retType, Object... params); 
     
     // disable assignment Integer
     // reflection translation table
@@ -415,68 +319,7 @@ public class OperationDescriptor implements IMetaOperation {
      * 
      * @see #isCompatible
      */
-    public Object invoke(Object... args) throws VilException {
-        Object[] callArgs;
-        Object object;
-        boolean exec = true;
-        if (isStatic()) {
-            object = null;
-            callArgs = args;
-        } else {
-            if (0 == args.length) {
-                throw new VilException("object missing (first implicit parameter)", VilException.ID_EXECUTION_ERROR);
-            }
-            object = args[0];
-            callArgs = new Object[args.length - 1];
-            System.arraycopy(args, 1, callArgs, 0, callArgs.length);
-            exec = null != object; // lazy execution
-        }
-        Object result = null;
-        if (!exec) {
-            result = null; // lazy execution
-        } else {
-            CompatibilityResult comp = isCompatible(null, callArgs);
-            if (CompatibilityResult.INCOMPATIBLE == comp) {
-                throwIncompatibleParameter(args);
-            } else if (CompatibilityResult.LAZY_POSSIBLE == comp) {
-                result = lazyExecutionResult();
-            } else {
-                try {
-                    result = method.invoke(object, callArgs);
-                } catch (IllegalArgumentException e) {
-                    throw new VilException(e, VilException.ID_TYPE_INCOMPATIBILITY);
-                } catch (IllegalAccessException e) {
-                    throw new VilException(e, VilException.ID_SECURITY_ERROR);
-                } catch (InvocationTargetException e) {
-                    if (e.getCause() instanceof NullPointerException) {
-                        result = null; // fail-termination-semantics
-                    } else {
-                        throw new VilException(e.getCause(), VilException.ID_EXECUTION_ERROR);
-                    }
-                }
-            }
-        }
-        return result;
-    }
-    
-    /**
-     * Determines the (assumed) lazy execution result from the return type.
-     * 
-     * @return the lazy execution result
-     */
-    private Object lazyExecutionResult() {
-        Class<?> returnType = method.getReturnType();
-        Object result;
-        if (!returnType.isPrimitive()) {
-            // get rid of wrappers
-            Class<?> eq = REFLECTION_EQUALITIES.get(returnType);
-            if (null != eq) {
-                returnType = eq;
-            }
-        }
-        result = LAZY_DEFAULTS.get(returnType); // primitives are covered, all others are null
-        return result;
-    }
+    public abstract Object invoke(Object... args) throws VilException;
     
     /**
      * Throws an exception for the case that parameter are incompatible.
@@ -484,7 +327,7 @@ public class OperationDescriptor implements IMetaOperation {
      * @param args the actual arguments
      * @throws VilException the created exception (happens in any case)
      */
-    private void throwIncompatibleParameter(Object[] args) throws VilException {
+    protected void throwIncompatibleParameter(Object[] args) throws VilException {
         StringBuilder tmp = new StringBuilder("(");
         int start = 0;
         if (!isStatic()) {
@@ -503,55 +346,6 @@ public class OperationDescriptor implements IMetaOperation {
         tmp.append(")");
         throw new VilException("incompatible parameter " + tmp + " cannot be applied to " 
             + getJavaSignature(), VilException.ID_TYPE_INCOMPATIBILITY);
-    }
-
-    /**
-     * Returns a normalized Java signature for <code>method</code>. The signature
-     * consists of name and parameters. This method may be simplified in future to 
-     * optimize performance (public for testing). This method does not consider possible
-     * unnamed parameter rather than the underlying Java parameter.
-     * 
-     * @param method the method to return the signature for
-     * @return the signature
-     */
-    public static String getJavaSignature(Method method) {
-        return getJavaSignature(method, null, false);
-    }
-    
-    /**
-     * Returns a normalized Java signature for <code>method</code>. The signature
-     * consists of name and parameters. This method may be simplified in future to 
-     * optimize performance (public for testing).
-     * 
-     * @param method the method to return the signature for
-     * @param name an alias name
-     * @param acceptsNamedParameter whether the method accepts named parameter
-     * @return the signature
-     */
-    public static String getJavaSignature(Method method, String name, boolean acceptsNamedParameter) {
-        StringBuilder tmp = new StringBuilder(null == name ? method.getName() : name);
-        tmp.append("(");
-        Class<?>[] param = method.getParameterTypes();
-        if (null != param) {
-            int count = param.length;
-            if (acceptsNamedParameter) {
-                count--;
-            }
-            for (int p = 0; p < count; p++) {
-                tmp.append(param[p].getName());
-                if (p < count - 1) {
-                    tmp.append(",");
-                }
-            }
-            if (acceptsNamedParameter) {
-                if (count > 0) {
-                    tmp.append(",");
-                }
-                tmp.append("...");
-            }
-        }
-        tmp.append(")");
-        return tmp.toString();
     }
     
     /**
@@ -672,7 +466,8 @@ public class OperationDescriptor implements IMetaOperation {
         boolean ok = false;
         if (!isStatic()) {
             initialize();
-            ok = returnType.isCollection() && 2 == getParameterCount() && (TypeDescriptor.TYPE == getParameterType(1));
+            ok = returnType.isCollection() && 2 == getParameterCount() 
+                && (TypeRegistry.typeType() == getParameterType(1));
         }
         return ok;
     }

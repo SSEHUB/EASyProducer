@@ -6,15 +6,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.uni_hildesheim.sse.easy_producer.core.mgmt.MemberController;
+import de.uni_hildesheim.sse.easy_producer.core.mgmt.MemberIterator;
+import de.uni_hildesheim.sse.easy_producer.core.mgmt.PLPInfo;
 import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
-import de.uni_hildesheim.sse.easy_producer.persistence.mgmt.MemberController;
-import de.uni_hildesheim.sse.easy_producer.persistence.mgmt.MemberIterator;
-import de.uni_hildesheim.sse.easy_producer.persistence.mgmt.PLPInfo;
 
 /**
  * Tests the MemberController and its functions.

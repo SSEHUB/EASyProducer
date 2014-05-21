@@ -9,7 +9,7 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 
-import de.uni_hildesheim.sse.easy_producer.persistence.datatypes.PathEnvironment;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.PathEnvironment;
 import de.uni_hildesheim.sse.easy_producer.persistency.eclipse.PathEnvironmentFactory.IProjectHandler;
 
 /**

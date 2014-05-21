@@ -35,7 +35,7 @@ public class VarModelIdentifierExpression extends Expression {
 
     @Override
     public TypeDescriptor<? extends IVilType> inferType() throws ExpressionException {
-        return TypeRegistry.getType(IvmlElement.class);
+        return TypeRegistry.DEFAULT.getType(IvmlElement.class);
     }
 
     @Override

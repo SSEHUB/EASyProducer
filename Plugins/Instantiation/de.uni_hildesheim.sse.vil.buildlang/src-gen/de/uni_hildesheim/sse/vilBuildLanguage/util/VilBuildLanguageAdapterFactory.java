@@ -1,32 +1,15 @@
 /**
- * <copyright>
- * </copyright>
- *
-
  */
 package de.uni_hildesheim.sse.vilBuildLanguage.util;
 
+import de.uni_hildesheim.sse.vilBuildLanguage.*;
+
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
-import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
-import org.eclipse.emf.ecore.EObject;
 
-import de.uni_hildesheim.sse.vilBuildLanguage.DeferDeclaration;
-import de.uni_hildesheim.sse.vilBuildLanguage.ImplementationUnit;
-import de.uni_hildesheim.sse.vilBuildLanguage.Join;
-import de.uni_hildesheim.sse.vilBuildLanguage.JoinVariable;
-import de.uni_hildesheim.sse.vilBuildLanguage.LanguageUnit;
-import de.uni_hildesheim.sse.vilBuildLanguage.LoadProperties;
-import de.uni_hildesheim.sse.vilBuildLanguage.Map;
-import de.uni_hildesheim.sse.vilBuildLanguage.PrimaryExpression;
-import de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration;
-import de.uni_hildesheim.sse.vilBuildLanguage.RuleElement;
-import de.uni_hildesheim.sse.vilBuildLanguage.RuleElementBlock;
-import de.uni_hildesheim.sse.vilBuildLanguage.RuleModifier;
-import de.uni_hildesheim.sse.vilBuildLanguage.ScriptContents;
-import de.uni_hildesheim.sse.vilBuildLanguage.ScriptParentDecl;
-import de.uni_hildesheim.sse.vilBuildLanguage.SystemExecution;
-import de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage;
+import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
+
+import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -97,6 +80,11 @@ public class VilBuildLanguageAdapterFactory extends AdapterFactoryImpl
         return createImplementationUnitAdapter();
       }
       @Override
+      public Adapter caseRequire(Require object)
+      {
+        return createRequireAdapter();
+      }
+      @Override
       public Adapter caseLanguageUnit(LanguageUnit object)
       {
         return createLanguageUnitAdapter();
@@ -145,6 +133,11 @@ public class VilBuildLanguageAdapterFactory extends AdapterFactoryImpl
       public Adapter casePrimaryExpression(PrimaryExpression object)
       {
         return createPrimaryExpressionAdapter();
+      }
+      @Override
+      public Adapter caseInstantiate(Instantiate object)
+      {
+        return createInstantiateAdapter();
       }
       @Override
       public Adapter caseMap(Map object)
@@ -209,6 +202,21 @@ public class VilBuildLanguageAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createImplementationUnitAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.vilBuildLanguage.Require <em>Require</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.Require
+   * @generated
+   */
+  public Adapter createRequireAdapter()
   {
     return null;
   }
@@ -359,6 +367,21 @@ public class VilBuildLanguageAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createPrimaryExpressionAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.vilBuildLanguage.Instantiate <em>Instantiate</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.Instantiate
+   * @generated
+   */
+  public Adapter createInstantiateAdapter()
   {
     return null;
   }

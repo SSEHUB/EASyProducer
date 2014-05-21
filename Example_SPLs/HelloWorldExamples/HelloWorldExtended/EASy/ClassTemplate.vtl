@@ -1,0 +1,16 @@
+template ClassTemplate(Configuration config, FileArtifact target) {
+
+	def main(Configuration config, FileArtifact target) {
+        String className = target.plainName();
+    	DecisionVariable output = config.getByName("hello");
+    
+    
+        'public class $className {
+
+			public static void main(String[] args) {
+				System.out.println("${output.value()}");
+			}
+		}'
+		
+	}
+}

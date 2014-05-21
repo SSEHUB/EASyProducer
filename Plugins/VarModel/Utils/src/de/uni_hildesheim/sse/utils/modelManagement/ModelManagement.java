@@ -28,10 +28,12 @@ import java.util.Set;
 
 import de.uni_hildesheim.sse.utils.internal.Bundle;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
+import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
 import de.uni_hildesheim.sse.utils.messages.IMessage;
 import de.uni_hildesheim.sse.utils.messages.Message;
 import de.uni_hildesheim.sse.utils.messages.Status;
 import de.uni_hildesheim.sse.utils.modelManagement.IModelLoader.LoadResult;
+import de.uni_hildesheim.sse.utils.modelManagement.ModelLocations.Location;
 import de.uni_hildesheim.sse.utils.progress.ObservableTask;
 import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
 import de.uni_hildesheim.sse.utils.progress.ProgressObserver.ITask;
@@ -44,7 +46,7 @@ import de.uni_hildesheim.sse.utils.progress.ProgressObserver.ITask;
  * source parts and tools may access the information concurrently. Please note that specific
  * information and settings are available via {@link #availableModels()},  
  * {@link #events()}, {@link #loaders()}, {@link #locale()} and {@link #locations()}.
- * The variability model needs a loader and a location to operate. After providing this 
+ * The model needs a loader and a location to operate. After providing this 
  * information, available models can be accessed via {@link #availableModels()}.
  * 
  * @param <M> the specific model type
@@ -52,6 +54,8 @@ import de.uni_hildesheim.sse.utils.progress.ProgressObserver.ITask;
  * @author Holger Eichelberger
  */
 public abstract class ModelManagement <M extends IModel> {
+
+    private static final EASyLogger LOGGER = EASyLoggerFactory.INSTANCE.getLogger(ModelManagement.class, Bundle.ID);
 
     private ModelPaths paths = new ModelPaths();
     private ModelLocale locale = new ModelLocale();
@@ -172,13 +176,14 @@ public abstract class ModelManagement <M extends IModel> {
         if (null != uri) {
             uri = uri.normalize();
         }
+        M oldModel = null;
         List<VersionedModelInfos<M>> vList = availableModels.getAvailable(model.getName());
         VersionedModelInfos<M> vInfos = VersionedModelInfos.find(vList, model.getVersion());
         boolean done = false;
         if (null != vInfos) {
             ModelInfo<M> info = vInfos.find(uri);
             if (null != info) {
-                setResolved(info, model);
+                oldModel = setResolved(info, model);
                 if (null == info.getLocale()) {
                     info.setLocale(locale.getActualLocale());
                 }
@@ -193,7 +198,7 @@ public abstract class ModelManagement <M extends IModel> {
         if (!done) {
             // however, resolution and loading is disabled
             ModelInfo<M> info = new ModelInfo<M>(model, uri, loader);
-            setResolved(info, model);
+            oldModel = setResolved(info, model);
             if (null == vList) {
                 vList = new ArrayList<VersionedModelInfos<M>>();
                 availableModels.putAvailable(model.getName(), vList);
@@ -204,7 +209,38 @@ public abstract class ModelManagement <M extends IModel> {
             }
             vInfos.add(info);
         }
+        if (null != oldModel) {
+            // TODO turn this into an incremental updated structure -> performance
+            reload(ModelUpdateUtils.determineUpdateSeqence(oldModel, ModelUpdateUtils.collectImporting(models)));
+        }
     }
+
+    /**
+     * Loads a set of models. Errors are logged.
+     * 
+     * @param models the models to be loaded (entries may be <b>null</b>)
+     */
+    private void reload(List<M> models) {
+        for (int m = 0; m < models.size(); m++) {
+            M tmp = models.get(m);
+            if (null != tmp) {
+                ModelInfo<M> info = availableModels.getModelInfo(tmp);
+                if (null != info) {
+                    try {
+                        M loaded = load(info, true);
+                        setResolved(info, loaded);
+                    } catch (ModelManagementException e) {
+                        LOGGER.warn("loading / updating model " + info.getName() + " " 
+                            + Version.toString(info.getVersion()) + " failed: " + e.getMessage());
+                    }
+                } else {
+                    LOGGER.warn("loading / updating model: no information object found for " + tmp.getName() + " " 
+                        + Version.toString(tmp.getVersion()));
+                }
+            }
+        }
+    }
+    
     
     /**
      * Unloads <code>model</code> as well as unloadable imported models, but not the related 
@@ -270,7 +306,7 @@ public abstract class ModelManagement <M extends IModel> {
     }
     
     /**
-     * Add a model to this variability model. Existing models are overwritten
+     * Add a model to this management instance. Existing models are overwritten
      * in case of same name and version.
      * 
      * @param model the model to be added
@@ -285,8 +321,9 @@ public abstract class ModelManagement <M extends IModel> {
      * 
      * @param info the information object to be updated
      * @param model the resolving model
+     * @return the current model known before <code>model</code>
      */
-    private void setResolved(ModelInfo<M> info, M model) {
+    private M setResolved(ModelInfo<M> info, M model) {
         M current = info.getResolved();
         info.setResolved(model);
         int pos = null == current ? -1 : models.indexOf(current);
@@ -296,6 +333,7 @@ public abstract class ModelManagement <M extends IModel> {
             models.add(model);    
         }
         events.notifyModelReplacement(current, model);
+        return current;
     }
     
     /**
@@ -426,11 +464,35 @@ public abstract class ModelManagement <M extends IModel> {
         ModelInfoHolder<M> holder = new ModelInfoHolder<M>(availableModels);
         ITask task = observer.registerTask("update model model information");
         observer.notifyStart(task, locations.getLocationCount());
+        Set<Location> done = new HashSet<Location>();
         for (int l = 0; l < locations.getLocationCount(); l++) {
-            updateModelInformation(locations.getLocation(l), holder, observer, task);
+            updateModelInformation(locations.getLocation(l), holder, observer, task, done);
             observer.notifyProgress(task, l);
         }
         observer.notifyEnd(task);
+    }
+    
+    /**
+     * Updates the model information in the given <code>location</code> and the dependent locations.
+     * 
+     * @param location the location to update the information for
+     * @param holder the combined information and result collection instance
+     * @param observer an optional progress observer (use {@link ProgressObserver#NO_OBSERVER} but 
+     *   not <b>null</b> in case that no observation is intended)
+     * @param task the task to run in (may be <b>null</b> in order to start a new task)
+     * @param done already processed locations (in order to avoid cycles)
+     * @throws ModelManagementException in case that the available information
+     *   may be come inconsistent due to this update
+     */
+    private void updateModelInformation(Location location, ModelInfoHolder<M> holder, ProgressObserver observer, 
+        ITask task, Set<Location> done) throws ModelManagementException  {
+        if (!done.contains(location)) {
+            done.add(location);
+            updateModelInformation(location.getLocation(), holder, observer, task);
+            for (int d = 0; d < location.getDependentLocationCount(); d++) {
+                updateModelInformation(location.getDependentLocation(d), holder, observer, task, done);
+            }
+        }
     }
 
     // ----------------------- package local functionality needed by ModelRepository ------------
@@ -449,16 +511,14 @@ public abstract class ModelManagement <M extends IModel> {
         throws ModelManagementException {
         StringBuilder errors = new StringBuilder();
         ModelInfoHolder<M> holder = new ModelInfoHolder<M>(availableModels);
-        ObservableTask task = new ObservableTask("register variability model loader", 
+        ObservableTask task = new ObservableTask("register model loader", 
             locations.countFilesInLocations(), observer);
         int locationsCount = locations.getLocationCount();
         if (locationsCount > 0) {
-            Set<File> done = new HashSet<File>();
+            Set<Location> done = new HashSet<Location>();
             for (int l = 0; l < locationsCount; l++) {
-                locations.scan(locations.getLocation(l), holder, loader, task, done);
-                done.clear();
+                updateForLoader(locations.getLocation(l), loader, holder, task, done);
             }
-            done = null;
         }
         Utils.appendErrors(errors, updateAvailableModels(holder));
         task.notifyEnd();
@@ -466,6 +526,27 @@ public abstract class ModelManagement <M extends IModel> {
             throw new ModelManagementException(
                 "inconsistencies in model information (location, model loader) for: " 
                 + errors, ModelManagementException.MODEL_INFO_INCONSISTENCY);
+        }
+    }
+    
+    /**
+     * Updates <code>location</code> via <code>loader</code>.
+     * 
+     * @param location the location to be updated
+     * @param holder the combined information and result collection instance
+     * @param loader the specific loader to consider (may be <b>null</b>)
+     * @param task the task to be informed
+     * @param done already processed locations in order to prevent loops
+     */
+    private void updateForLoader(Location location, IModelLoader<M> loader, ModelInfoHolder<M> holder, 
+        ObservableTask task, Set<Location> done) {
+        if (!done.contains(location)) {
+            done.add(location);
+            Set<File> fileDone = new HashSet<File>();
+            locations.scan(location.getLocation(), holder, loader, task, fileDone);
+            for (int d = 0; d < location.getDependentLocationCount(); d++) {
+                updateForLoader(location.getDependentLocation(d), loader, holder, task, done); 
+            }
         }
     }
 
@@ -495,6 +576,11 @@ public abstract class ModelManagement <M extends IModel> {
                         events.removeAllListeners(resolved);
                     }
                 }
+            }
+            try {
+                locations.removeLocationFor(file);
+            } catch (ModelManagementException e) {
+                // ignore
             }
         }
     }
@@ -563,7 +649,7 @@ public abstract class ModelManagement <M extends IModel> {
         StringBuilder errors = new StringBuilder();
         
         // update model information objects by adding unknown ones
-        ObservableTask subtask = new ObservableTask("update variability model model information", 
+        ObservableTask subtask = new ObservableTask("update model information", 
             locations.countFilesInLocations(), observer, task);
         Set<File> done = new HashSet<File>();
         locations.scan(file, holder, null, subtask, done);
@@ -635,7 +721,7 @@ public abstract class ModelManagement <M extends IModel> {
         M result = info.getResolved();
         if (null == result || force) {
             ArrayList<IMessage> messages = new ArrayList<IMessage>();
-            if (!info.isResolved() || info.isOutdated() || outdated.contains(info)) {
+            if (!info.isResolved() || info.isOutdated() || outdated.contains(info) || force) {
                 result = load(info, messages);
                 if (null != result) {
                     List<IMessage> rmessages = resolveImports(result, info.getLocation(), null);

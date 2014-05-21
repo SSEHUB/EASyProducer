@@ -1,0 +1,9 @@
+project MultipleFolders {
+
+    version v0;
+    String hWorld;
+    hWorld = "\"Hello World\"";
+    freeze {
+        hWorld;
+    }
+}

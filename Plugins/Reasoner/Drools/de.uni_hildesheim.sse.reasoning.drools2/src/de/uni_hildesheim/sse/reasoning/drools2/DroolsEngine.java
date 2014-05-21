@@ -24,6 +24,7 @@ import de.uni_hildesheim.sse.persistency.StringProvider;
 import de.uni_hildesheim.sse.reasoning.core.model.ReasonerModel;
 import de.uni_hildesheim.sse.reasoning.core.model.ReasoningOperation;
 import de.uni_hildesheim.sse.reasoning.core.model.ReasoningState;
+import de.uni_hildesheim.sse.reasoning.core.model.Statistic;
 import de.uni_hildesheim.sse.reasoning.core.model.variables.CompoundVariable;
 import de.uni_hildesheim.sse.reasoning.core.model.variables.ReasonerVariable;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.Message;
@@ -87,7 +88,8 @@ public class DroolsEngine {
         this.rModel = model;
         this.caughtExceptions = new StringBuffer();
         this.result = new ReasoningResult();        
-        this.reasoningID = FailedRules.createNewList(rModel.getProject().getName());
+        this.reasoningID = rModel.getReasoningID();
+        FailedRules.createNewList(reasoningID);
         //this.operation = operation;
         
         try {
@@ -117,7 +119,7 @@ public class DroolsEngine {
             }
             LOGGER.debug(translationWriter.toString());
         }
-        System.out.println("Create KB: " + System.currentTimeMillis());
+//        System.out.println("Create KB: " + System.currentTimeMillis());
         // Get the KnowledgeSession
         knowledgeBase = createKnowledgeBase(); 
         session = knowledgeBase.newStatefulKnowledgeSession();
@@ -133,7 +135,7 @@ public class DroolsEngine {
     private void fillKnowledgeBase() {
         Set<ReasonerVariable> variables = rModel.getVariablesUsedInConstraints();        
         Iterator<ReasonerVariable> iterator = variables.iterator();
-        System.out.println("Insert FactSet: " + System.currentTimeMillis());
+//        System.out.println("Insert FactSet: " + System.currentTimeMillis());
         while (iterator.hasNext()) {
             ReasonerVariable rVariable = iterator.next();
             session.insert(rVariable);
@@ -170,44 +172,16 @@ public class DroolsEngine {
         
         if (null != translator && !result.hasConflict()) {
             if (translator.getExceptionCount() == 0) {
-                System.out.println("Fire rules: " + System.currentTimeMillis());
+//                System.out.println("Fire rules: " + System.currentTimeMillis());
                 session.fireAllRules();
                 session.dispose();
-                System.out.println("Create result: " + System.currentTimeMillis());
+//                System.out.println("Create result: " + System.currentTimeMillis());
                 FailedElements failedElements = FailedRules.getFailedRuleList(reasoningID);
                 failedModelElements = null;
                 if (failedElements.hasErrors()) {
-                    if (failedElements.failedConstraintCount() > 0) {
-                        failedModelElements = new ArrayList<ModelElement>(failedElements.failedConstraintCount());
-                        Iterator<Integer> failedRules = failedElements.getFailedRules();
-                        while (failedRules.hasNext()) {
-                            int failedRuleNo = failedRules.next();
-                            failedModelElements.add(rModel.getConflictingElement(failedRuleNo));
-                            LOGGER.debug("Failed rule nr: " + failedRuleNo + " : " 
-                                + StringProvider.toIvmlString(rModel.getConstraint(failedRuleNo)));
-                        }
-                        result.addMessage(new Message(VIOLATED_CONSTRAINTS, failedModelElements, Status.ERROR));
-                    }
-                    if (failedElements.failedRulesInCompoundsCount() > 0) {
-                        Map<String, Set<Integer>> failedRulesInCmps = failedElements.getFailedRulesInCompounds();
-                        Set<String> failedCmpsNames = failedElements.getFailedCompoundsNames();
-                        for (String cmpName : failedCmpsNames) {
-                            failedModelElements = new ArrayList<ModelElement>();
-                            LOGGER.debug("Compound Variables with failed rules: " + cmpName);
-                            CompoundVariable cmpVar = (CompoundVariable) rModel.getVariable(cmpName);
-                            Set<Integer> failedRules = failedRulesInCmps.get(cmpName);
-                            for (Integer failedRule : failedRules) {
-                                LOGGER.debug(StringProvider.toIvmlString(
-                                    cmpVar.getType().getConflictingConstrain(failedRule)));
-                                failedModelElements.add(cmpVar.getType().getConflictingConstrain(failedRule));
-                            }
-                            result.addMessage(new Message("Constraints in compound " 
-                                + cmpName + " not satisfied", failedModelElements, Status.ERROR));
-                        }
-                    }                    
-                }
-                if (rModel.getVariablesUsedInConstraints().size() > 0) {                    
-                    variableAssignmentResult();
+                    validationFailed(failedElements);                    
+                } else if (rModel.getVariablesUsedInConstraints().size() > 0) {                    
+                    validationSuccessful();
                 }
             } else {
                 StringBuffer errorMsg = new StringBuffer();
@@ -221,8 +195,61 @@ public class DroolsEngine {
         } else {
             result.addMessage(new Message(caughtExceptions.toString(), new ArrayList<ModelElement>(), Status.ERROR));
         }
-        System.out.println("Finish: " + System.currentTimeMillis());
+        /*** Finish measurement ***/
+        Statistic.addTimestamp(reasoningID, System.currentTimeMillis());
+        //Statistic.getStats(reasoningID);   
+        /*** ***/
         return result;
+    }
+
+    /**
+     * End of Reasoning: this method will be executed if the reasoner detected violated constraints.
+     * @param failedElements All failed constraints.
+     */
+    private void validationFailed(FailedElements failedElements) {
+        if (failedElements.failedConstraintCount() > 0) {
+            failedModelElements = new ArrayList<ModelElement>(failedElements.failedConstraintCount());
+            Iterator<Integer> failedRules = failedElements.getFailedRules();
+            while (failedRules.hasNext()) {
+                int failedRuleNo = failedRules.next();
+                failedModelElements.add(rModel.getConflictingElement(failedRuleNo));
+                LOGGER.debug("Failed rule nr: " + failedRuleNo + " : " 
+                    + StringProvider.toIvmlString(rModel.getConstraint(failedRuleNo)));
+            }
+            result.addMessage(new Message(VIOLATED_CONSTRAINTS, failedModelElements, Status.ERROR));
+        }
+        if (failedElements.failedRulesInCompoundsCount() > 0) {
+            Map<String, Set<Integer>> failedRulesInCmps = failedElements.getFailedRulesInCompounds();
+            Set<String> failedCmpsNames = failedElements.getFailedCompoundsNames();
+            for (String cmpName : failedCmpsNames) {
+                failedModelElements = new ArrayList<ModelElement>();
+                LOGGER.debug("Compound Variables with failed rules: " + cmpName);
+                CompoundVariable cmpVar = (CompoundVariable) rModel.getVariable(cmpName);
+                Set<Integer> failedRules = failedRulesInCmps.get(cmpName);
+                for (Integer failedRule : failedRules) {
+                    LOGGER.debug(StringProvider.toIvmlString(
+                        cmpVar.getType().getConflictingConstrain(failedRule)));
+                    failedModelElements.add(cmpVar.getType().getConflictingConstrain(failedRule));
+                }
+                result.addMessage(new Message("Constraints in compound " 
+                    + cmpName + " not satisfied", failedModelElements, Status.ERROR));
+            }
+        }
+    }
+
+    /**
+     * End of Reasoning: this method will be executed if the reasoner has not detected any violated constraints.
+     */
+    private void validationSuccessful() {
+        variableAssignmentResult();
+        int nPropagatedVariables = rModel.getCountPropagatedVariables();
+        if (nPropagatedVariables > 0) {
+            List<ModelElement> propagatedVariables = new ArrayList<ModelElement>();
+            for (int i = 0; i < nPropagatedVariables; i++) {
+                propagatedVariables.add(rModel.getPropagatedVariable(i).getDeclaration());
+            }
+            result.addMessage(new Message("Values have been propagated", propagatedVariables, Status.INFO));
+        }
     }
 
     /**

@@ -1,20 +1,19 @@
 /**
- * <copyright>
- * </copyright>
- *
-
  */
 package de.uni_hildesheim.sse.ivml.impl;
+
+import de.uni_hildesheim.sse.ivml.Export;
+import de.uni_hildesheim.sse.ivml.IvmlPackage;
 
 import java.util.Collection;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-import org.eclipse.emf.ecore.util.EDataTypeEList;
 
-import de.uni_hildesheim.sse.ivml.Export;
-import de.uni_hildesheim.sse.ivml.IvmlPackage;
+import org.eclipse.emf.ecore.EClass;
+
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+
+import org.eclipse.emf.ecore.util.EDataTypeEList;
 
 /**
  * <!-- begin-user-doc -->

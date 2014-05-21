@@ -1,0 +1,10 @@
+project testCompoundQualifiesProject {
+
+    version v0;
+    Integer a;
+    compound Test {
+        Boolean a;
+        a implies testCompoundQualifiesProject::a > 0;
+    }
+
+}

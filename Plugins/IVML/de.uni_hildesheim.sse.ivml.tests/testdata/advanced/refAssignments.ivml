@@ -1,0 +1,10 @@
+project testRefAssignments {
+
+    Integer int;
+    refTo(Integer) rInt = refBy(int);
+    refBy(rInt) = 5;
+    refTo(Integer) rInt2 = rInt;
+    rInt2 = rInt;
+    refTo(Real) rReal;
+    rInt2 = rReal;
+}

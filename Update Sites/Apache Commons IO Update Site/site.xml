@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/de.uni_hildesheim.sse.apache.commons.io.feature_2.4.0.jar" id="de.uni_hildesheim.sse.apache.commons.io.feature" version="2.4.0">
+      <category name="Apache Commons IO"/>
+   </feature>
+   <category-def name="Apache Commons IO" label="Apache Commons IO">
+      <description>
+         This category provides the Apache Commons IO feature which will install the Apache Commons IO library. This library is mandatory for EASy-Producer.
+      </description>
+   </category-def>
+</site>

@@ -3,9 +3,402 @@
 */
 package de.uni_hildesheim.sse.ui.contentassist;
 
+import java.util.List;
+
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jface.text.contentassist.ICompletionProposal;
+import org.eclipse.jface.viewers.StyledString;
+import org.eclipse.xtext.Assignment;
+import org.eclipse.xtext.Keyword;
+import org.eclipse.xtext.RuleCall;
+import org.eclipse.xtext.ui.IImageHelper;
+import org.eclipse.xtext.ui.editor.contentassist.ContentAssistContext;
+import org.eclipse.xtext.ui.editor.contentassist.ICompletionProposalAcceptor;
+
+import com.google.inject.Inject;
+
+import de.uni_hildesheim.sse.vil.buildlang.ui.resources.Images;
+import de.uni_hildesheim.sse.vil.expressions.ResourceRegistry;
+
 /**
  * see http://www.eclipse.org/Xtext/documentation/latest/xtext.html#contentAssist on how to customize content assistant
+ * 
+ * @author kroeher
+ * @author dernek
  */
 public class VilBuildLanguageProposalProvider extends AbstractVilBuildLanguageProposalProvider {
+    
+    @Inject
+    private IImageHelper imageHelper;
+    
+    @Override
+    public void completeKeyword(Keyword keyword, ContentAssistContext contentAssistContext,
+            ICompletionProposalAcceptor acceptor) {
+        System.err.println("completeKeyword");
+        // Currently, leave this method empty - used to remove default keyword proposals.
+    }
+    
+    @Override
+    public void completeLanguageUnit_Advices(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        System.err.println("completeLanguageUnit_Advices");
+        String ivmlModelName = VilBuildLangProposalProviderUtility.INSTANCE.getIvmlModelName(context.getRootModel());
+        if (ivmlModelName == null || ivmlModelName.isEmpty()) {
+            ivmlModelName = "<IvmlModel>";
+        }
+        String proposalString = "@advice(" + ivmlModelName + ")";
+        acceptor.accept(createCompletionProposal(proposalString, new StyledString("Advice"),
+                imageHelper.getImage(Images.NAME_ADVICE), 1000, context.getPrefix(), context));
+    }
+    
+    @Override
+    public void completeImplementationUnit_Imports(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        System.err.println("completeImplementationUnit_Imports");
+        String proposalString = "import <ScriptName>;";
+        // Propose simple script import
+        acceptor.accept(createCompletionProposal(proposalString, new StyledString("Script import"),
+                imageHelper.getImage(Images.NAME_IMPORT), 960, context.getPrefix(), context));
+        // Propose restricted script import
+        proposalString = "import <ScriptName> with (version <VersionOperator> v<VersionNumber>);";
+        acceptor.accept(createCompletionProposal(proposalString, new StyledString("Script import (restricted)"),
+                imageHelper.getImage(Images.NAME_IMPORT), 950, context.getPrefix(), context));
+    }
+    
+    @Override
+    public void completeImplementationUnit_Scripts(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        System.err.println("completeImplementationUnit_Scripts");
+        if (!VilBuildLangProposalProviderUtility.INSTANCE.hasScript(context.getLastCompleteNode())) {            
+            String vilFileName = VilBuildLangProposalProviderUtility.INSTANCE.getVilFileName(context.getRootModel());
+            if (vilFileName == null || vilFileName.isEmpty()) {
+                vilFileName = "<ScriptName>";
+            }
+            String proposalString = "vilScript " + vilFileName + " (Project source, Configuration conf, Project target) {\n\n}";
+            acceptor.accept(createCompletionProposal(proposalString, new StyledString("VIL script"),
+                    imageHelper.getImage(Images.NAME_VILSCRIPT), 990, context.getPrefix(), context));
+        }
+    }
+    
+    @Override
+    public void complete_ScriptParentDecl(EObject model, RuleCall ruleCall, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        System.err.println("complete_ScriptParentDecl");
+        String proposalString = "extends <ExtendingScriptName>";
+        acceptor.accept(createCompletionProposal(proposalString, new StyledString("Script extension"),
+                imageHelper.getImage(Images.NAME_VILSCRIPTEXTENSION), 980, context.getPrefix(), context));
+    }
+    
+    @Override
+    public void completeScriptContents_Elements(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        System.err.println("completeScriptContents_Elements");
+        // Propose script parameters and already declared/defined variables
+        proposeScriptParamsVars(model, assignment, context, acceptor, false);        
+        // Propose version definition (only if no version exists)
+        completeLanguageUnit_Version(model, assignment, context, acceptor);
+        // Propose load properties definition
+        completeLanguageUnit_LoadProperties(model, assignment, context, acceptor);
+        // Propose new variable declaration
+        completeVariableDeclaration_Type(model, assignment, context, acceptor);
+        // Propose new rule definition
+        complete_RuleDeclaration(model, (RuleCall) assignment.getTerminal(), context, acceptor);
+    }
+    
+    @Override
+    public void completeLanguageUnit_Version(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        System.err.println("completeLanguageUnit_Version");
+        if (!VilBuildLangProposalProviderUtility.INSTANCE.hasVersion(context.getLastCompleteNode())) {
+            String proposalString = "version v<VersionNumber>;";
+            acceptor.accept(createCompletionProposal(proposalString, new StyledString("Version"),
+                    imageHelper.getImage(Images.NAME_VERSION), 970, context.getPrefix(), context));
+        }
+    }
+    
+    @Override
+    public void completeLanguageUnit_LoadProperties(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        System.err.println("completeLanguageUnit_LoadProperties");
+        String proposalString = "load properties \"<PathToPropertiesFile>\";";
+        acceptor.accept(createCompletionProposal(proposalString, new StyledString("Load properties"),
+                imageHelper.getImage(Images.NAME_PROP), 940, context.getPrefix(), context));
+    }
+    
+    //TODO: move to ExpressionDslProposalProvider
+    @Override
+    public void completeVariableDeclaration_Type(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        System.err.println("completeVariableDeclaration_Type");
+        List<String> allTypes = VilBuildLangProposalProviderUtility.INSTANCE.getAllTypes(ResourceRegistry.getTypeRegistry(model));
+        for (String type : allTypes) {
+            acceptor.accept(createCompletionProposal(type, new StyledString(type),
+                    imageHelper.getImage(Images.NAME_TYPE), 80, context.getPrefix(), context));
+        }
+    }
+    
+    //TODO: move to ExpressionDslProposalProvider   
+    @Override
+    public void completeVariableDeclaration_Expression(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        System.err.println("completeVariableDeclaration_Expression");
+        // Propose script parameters and already declared/defined variables
+        proposeScriptParamsVars(model, assignment, context, acceptor, true); 
+        // Propose all operations (as we do not know what the user wants to define)
+        List<StyledString> proposalList = VilBuildLangProposalProviderUtility.INSTANCE.getValidTypeOperations(context.getLastCompleteNode(), true);
+        if (proposalList != null) {
+            for (StyledString opDescr : proposalList) {
+                String plainOpDescr = opDescr.toString();
+                String toEditor = plainOpDescr.substring(0, plainOpDescr.indexOf(":") - 1);
+                acceptor.accept(createCompletionProposal(toEditor, opDescr,
+                        imageHelper.getImage(Images.NAME_OPERATION), 50, context.getPrefix(), context));
+            }
+        }
+        // Propose join expression
+        proposeJoinExpression(model, assignment, context, acceptor);
+        // Propose instantiators
+        proposeInstantiators(model, assignment, context, acceptor);
+        /*
+         *  In case, that the variable declaration expression is nested in a rule, a map-
+         *  or join-expression, or any combination of this, propose the already defined
+         *  variables and parameters of these parent-elements.
+         */
+        proposeParentParamsVars(model, assignment, context, acceptor, true);
+    }
+    
+    //TODO: move to ExpressionDslProposalProvider   
+    @Override
+    public void completeParameterList_Param(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        System.err.println("completeParameterList_Param");
+        // Reuse variable declaration type proposal as parameters are defined equal to variables in VIL
+        completeVariableDeclaration_Type(model, assignment, context, acceptor);
+    }
 
+    @Override
+    public void completeSubCall_Call(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        System.err.println("completeSubCall_Call");
+        /*
+         * TODO Currently, concatenated sub-calls are not supported sufficiently!
+         * Example: fa.copy(...). <- call for content assist
+         * In this case the content assist will provide proposals on the basis of "first match"
+         * with respect to the name of the previous operation ("copy"). If the right "copy"-operation
+         * is determined, and thus the right return type of this operation, is currently not checked.
+         * 
+         *  Problem: the named argument may be an expression which must be parsed (currently not implemented
+         *  for the content assist). After parsing, the result - which may be a call or an id of a variable - must be
+         *  used as a starting point for determining the type and name (or another call) of each named argument to
+         *  construct the final sub call in terms of name and arguments.
+         *  
+         *  Only on this basis, the exact operation can be found and, thus, the right operations can be
+         *  proposed based on the return type of the exact operation.
+         */
+        
+        /*
+         *  Propose (only) all valid operations with respect to the type of the element for which the operation call shall be defined.
+         *  This is configured by the value (false) of the last parameter of the proposal-method below.
+         */
+        proposeOperations(model, assignment, context, acceptor, false);
+    }
+    
+    @Override
+    public void complete_RuleDeclaration(EObject model, RuleCall ruleCall, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        System.err.println("complete_RuleDeclaration");
+        String proposalString = "<RuleName>() = : {\n\n    }";
+        acceptor.accept(createCompletionProposal(proposalString, new StyledString("Rule"),
+                imageHelper.getImage(Images.NAME_RULE), 700, context.getPrefix(), context));
+    }
+    
+    @Override
+    public void completeRuleDeclaration_Preconditions(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        System.err.println("completeRuleDeclaration_Preconditions");
+        // Propose path-pattern
+        proposePathPattern(model, assignment, context, acceptor);
+        /*
+         * Propose an individual artifact or artifact collection in terms of a global script variables and parameters.
+         * Operations on a variable that yield such an artifact (collection) will be proposed
+         * by the completeSubCall_Call-method.
+         */
+        proposeScriptParamsVars(model, assignment, context, acceptor, false);
+        // Propose already defined rules (without the rule for which this complete is called)
+        proposeDefinedRules(model, assignment, context, acceptor, true);
+    }
+    
+    @Override
+    public void completeRuleDeclaration_Postcondition(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        System.err.println("completeRuleDeclaration_Postcondition");
+        // Propose path-pattern
+        proposePathPattern(model, assignment, context, acceptor);
+        /*
+         * Propose an individual artifact or artifact collection in terms of a global script variable and parameter.
+         * Operations on a variable that yield such an artifact (collection) will be proposed
+         * by the completeSubCall_Call-method.
+         */
+        proposeScriptParamsVars(model, assignment, context, acceptor, false);
+    }
+    
+    @Override
+    public void completeRuleElementBlock_Elements(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        System.err.println("completeRuleElementBlock_Elements");
+        /*
+         * Propose an individual artifact or artifact collection in terms of a global script variable and parameter.
+         * Operations on a variable that yield such an artifact (collection) will be proposed
+         * by the completeSubCall_Call-method.
+         */
+        proposeScriptParamsVars(model, assignment, context, acceptor, false);
+        /*
+         *  Propose further parent parameters and/or variables (e.g. in case of surrounding maps [this includes also
+         *  the proposal of exisint rule parameters and variables])
+         */
+        proposeParentParamsVars(model, assignment, context, acceptor, false);
+        // Propose already defined rules
+        proposeDefinedRules(model, assignment, context, acceptor, false);     
+        // Propose "execute", "map", "join", and "instantiate" 
+        proposeBasicRuleCommands(model, assignment, context, acceptor);
+        // Propose all available instantiators
+        proposeInstantiators(model, assignment, context, acceptor);
+        // Propose all (last parameter = true) available operations
+        proposeOperations(model, assignment, context, acceptor, true);
+    }
+    
+    public void completeMap_Block(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        System.err.println("completeRuleElementBlock_Elements");
+        proposeParentParamsVars(model, assignment, context, acceptor, false);
+    }
+    
+    private void proposeBasicRuleCommands(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        // Propose operating system command ("execute")
+        String proposalString = "execute <StringOrPath>(<ArgumentList>)";
+        StyledString execDisplayString = new StyledString("execute <StringOrPath>(<ArgumentList>)");
+        execDisplayString.append(" : Void", StyledString.QUALIFIER_STYLER);
+        acceptor.accept(createCompletionProposal(proposalString, execDisplayString,
+                imageHelper.getImage(Images.NAME_INSTANTIATOR), 300, context.getPrefix(), context));
+        // Propose iterated execution ("map")
+        proposeIteratedExecution(model, assignment, context, acceptor, 8);
+        // Propose join expression ("join")
+        proposeJoinExpression(model, assignment, context, acceptor);
+        // Propose instantiate expression ("instantiate")
+        proposeInstantiateExpression(model, assignment, context, acceptor);
+    }
+    
+    private void proposeIteratedExecution(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor, int indentation) {
+        String proposalString = "map(<Expression>) { };";
+        StyledString mapDisplayString = new StyledString("Iterated execution - \"map\"");
+        acceptor.accept(createCompletionProposal(proposalString, mapDisplayString,
+                imageHelper.getImage(Images.NAME_MAP), 280, context.getPrefix(), context));
+    }
+    
+    private void proposeJoinExpression(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        String proposalString = "join(<Name1>:<Expression>, <Name2>:<Expression>) with (<Expression>)";
+        StyledString joinDisplayString = new StyledString("Join expression - \"join\"");
+        joinDisplayString.append(" : Sequence", StyledString.QUALIFIER_STYLER);
+        acceptor.accept(createCompletionProposal(proposalString, joinDisplayString,
+                imageHelper.getImage(Images.NAME_JOIN), 260, context.getPrefix(), context));
+    }
+    
+    private void proposeInstantiateExpression(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        String proposalString = "instantiate <ProjectVariableName> (<ArgumentList>)";
+        StyledString instantiateDisplayString = new StyledString("instantiate <VariableName> (<ArgumentList>)");
+        instantiateDisplayString.append(" : Void", StyledString.QUALIFIER_STYLER);
+        acceptor.accept(createCompletionProposal(proposalString, instantiateDisplayString,
+                imageHelper.getImage(Images.NAME_INSTANTIATE), 240, context.getPrefix(), context));
+        
+        proposalString = "instantiate <ProjectVariableName> <ProjectVersion> (<ArgumentList>)";
+        instantiateDisplayString = new StyledString("instantiate <ProjectVariableName> <ProjectVersion> (<ArgumentList>)");
+        instantiateDisplayString.append(" : Void", StyledString.QUALIFIER_STYLER);
+        acceptor.accept(createCompletionProposal(proposalString, instantiateDisplayString,
+                imageHelper.getImage(Images.NAME_INSTANTIATE), 230, context.getPrefix(), context));
+        
+        proposalString = "instantiate <ProjectVariableName> <ProjectVersion> rule <RuleName> (<ArgumentList>)";
+        instantiateDisplayString = new StyledString("instantiate <ProjectVariableName> <ProjectVersion> rule <RuleName> (<ArgumentList>)");
+        instantiateDisplayString.append(" : Void", StyledString.QUALIFIER_STYLER);
+        acceptor.accept(createCompletionProposal(proposalString, instantiateDisplayString,
+                imageHelper.getImage(Images.NAME_INSTANTIATE), 220, context.getPrefix(), context));
+        
+        proposalString = "instantiate <RuleName> (<ArgumentList>)";
+        instantiateDisplayString = new StyledString("instantiate <RuleName> (<ArgumentList>");
+        instantiateDisplayString.append(" : Void", StyledString.QUALIFIER_STYLER);
+        acceptor.accept(createCompletionProposal(proposalString, instantiateDisplayString,
+                imageHelper.getImage(Images.NAME_INSTANTIATE), 210, context.getPrefix(), context));
+    }
+    
+    private void proposeInstantiators(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        List<StyledString> proposalList = VilBuildLangProposalProviderUtility.INSTANCE.getAllInstantiators(ResourceRegistry.getTypeRegistry(model));
+        if (proposalList != null) {
+            for (StyledString opDescr : proposalList) {
+                String plainOpDescr = opDescr.toString();
+                String toEditor = plainOpDescr.substring(0, plainOpDescr.indexOf(":") - 1);
+                acceptor.accept(createCompletionProposal(toEditor, opDescr,
+                        imageHelper.getImage(Images.NAME_INSTANTIATOR), 200, context.getPrefix(), context));
+            }
+        }
+    }
+    
+    private void proposePathPattern(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        StyledString patternDisplayString = new StyledString("Path-pattern");
+        ICompletionProposal patternProposal = createCompletionProposal("\"<PathPattern>\"", patternDisplayString,
+                imageHelper.getImage(Images.NAME_PATHPATTERN), 100, context.getPrefix(), context);
+        acceptor.accept(patternProposal);
+    }
+    
+    private void proposeScriptParamsVars(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor, boolean completeDefsOnly) {
+        // Propose script parameters
+        List<StyledString> proposalList = VilBuildLangProposalProviderUtility.INSTANCE.getScriptParameters(context.getLastCompleteNode());
+        if (proposalList != null) {
+            for (StyledString displayString : proposalList) {
+                String toEditor = displayString.getString().substring(0, displayString.getString().indexOf(":") - 1);
+                ICompletionProposal proposal = createCompletionProposal(toEditor, displayString,
+                        imageHelper.getImage(Images.NAME_PARAM), 900, context.getPrefix(), context);
+                acceptor.accept(proposal);
+            }
+            proposalList.clear();
+        }
+        // Propose script variables
+        proposalList = VilBuildLangProposalProviderUtility.INSTANCE.getScriptVariables(context.getLastCompleteNode(), completeDefsOnly);
+        if (proposalList != null) {
+            for (StyledString displayString : proposalList) {
+                String toEditor = displayString.getString().substring(0, displayString.getString().indexOf(":") - 1);
+                ICompletionProposal proposal = createCompletionProposal(toEditor, displayString,
+                        imageHelper.getImage(Images.NAME_VARIABLEDECLARATION), 890, context.getPrefix(), context);
+                acceptor.accept(proposal);
+            }
+        }
+    }
+    
+    private void proposeDefinedRules(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor, boolean deleteSelf) {
+        List<StyledString> proposalList = VilBuildLangProposalProviderUtility.INSTANCE.getAllRules(context.getLastCompleteNode(), deleteSelf);
+        if (proposalList != null) {
+            for (StyledString displayString : proposalList) {
+                // For the editor, delete the type information " : Rule" at the end of the string.
+                String toEditor = displayString.getString().substring(0, displayString.getString().length() - 7);;
+                ICompletionProposal proposal = createCompletionProposal(toEditor, displayString,
+                        imageHelper.getImage(Images.NAME_RULE_INSTANCE), 750, context.getPrefix(), context);
+                acceptor.accept(proposal);
+            }
+        }
+    }
+    
+    private void proposeOperations(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor, boolean allOperations) {
+        List<StyledString> proposalList = VilBuildLangProposalProviderUtility.INSTANCE.getValidTypeOperations(context.getLastCompleteNode(), allOperations);
+        if (proposalList != null) {
+            for (StyledString opDescr : proposalList) {
+                String plainOpDescr = opDescr.toString();
+                String toEditor = plainOpDescr.substring(0, plainOpDescr.indexOf(":") - 1);
+                acceptor.accept(createCompletionProposal(toEditor, opDescr,
+                        imageHelper.getImage(Images.NAME_OPERATION), 50, context.getPrefix(), context));
+            }
+        }
+    }
+    
+    private void proposeParentParamsVars(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor, boolean completeDefsOnly) {
+        List<StyledString> proposalList = VilBuildLangProposalProviderUtility.INSTANCE.getParentParameters(context.getLastCompleteNode());
+        if (proposalList != null) {
+            for (StyledString param : proposalList) {
+                String plainParam = param.toString();
+                String toEditor = plainParam.substring(0, plainParam.indexOf(":") - 1);
+                acceptor.accept(createCompletionProposal(toEditor, param,
+                        imageHelper.getImage(Images.NAME_PARAM), 800, context.getPrefix(), context));
+            }
+            proposalList.clear();
+        }
+        proposalList = VilBuildLangProposalProviderUtility.INSTANCE.getParentVariables(context.getLastCompleteNode(), completeDefsOnly);
+        if (proposalList != null) {
+            for (StyledString varDecl : proposalList) {
+                String plainVarDecl = varDecl.toString();
+                String toEditor = plainVarDecl.substring(0, plainVarDecl.indexOf(":") - 1);
+                acceptor.accept(createCompletionProposal(toEditor, varDecl,
+                        imageHelper.getImage(Images.NAME_PARAM), 800, context.getPrefix(), context));
+            }
+        }
+    }
 }

@@ -25,7 +25,7 @@ public class BooleanVariable extends ReasonerVariable {
     BooleanVariable(IDecisionVariable configVariable, String name, ReasonerModel model, ReasonerVariable parent) {
         super(configVariable, name, model, parent);
         value = null;
-        if (null != configVariable.getValue()) {
+        if (configVariable.getValue() != null) {
             value = (Boolean) configVariable.getValue().getValue();
         }
     }
@@ -44,7 +44,7 @@ public class BooleanVariable extends ReasonerVariable {
      * Method for getting value of {@link BooleanVariable} type variable.
      * @return boolean type value.
      */
-    public Object getValue() {
+    public Boolean getValue() {
         return value;
     }
 

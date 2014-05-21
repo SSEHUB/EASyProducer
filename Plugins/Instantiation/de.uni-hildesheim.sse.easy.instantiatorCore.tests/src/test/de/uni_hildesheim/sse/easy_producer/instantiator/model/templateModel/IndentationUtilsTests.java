@@ -1,7 +1,6 @@
 package test.de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.IndentationUtils;

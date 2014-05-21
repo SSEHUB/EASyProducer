@@ -11,6 +11,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IRunti
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Constants;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaOperation;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaType;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.utils.modelManagement.IModel;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
 
@@ -33,9 +34,11 @@ public abstract class Resolver<M extends IResolvableModel<V>, O extends IResolva
 
     /**
      * Creates a new resolver instance.
+     * 
+     * @param registry a specific (local) registry
      */
-    public Resolver() {
-        super();
+    public Resolver(TypeRegistry registry) {
+        super(registry);
     }
     
     /**
@@ -78,6 +81,21 @@ public abstract class Resolver<M extends IResolvableModel<V>, O extends IResolva
         for (int p = 0; p < model.getParameterCount(); p++) {
             add(model.getParameter(p));
         }
+        for (int v = 0; v < model.getVariableDeclarationCount(); v++) {
+            V varDecl = model.getVariableDeclaration(v);
+            if (model.isImplicit(varDecl)) {
+                add(varDecl, "");
+            }
+        }
+    }
+    
+    /**
+     * Returns the current model.
+     * 
+     * @return the current model (or <b>null</b> if there is none)
+     */
+    public M getCurrentModel() {
+        return models.isEmpty() ? null : models.peek();
     }
 
     /**
@@ -177,6 +195,11 @@ public abstract class Resolver<M extends IResolvableModel<V>, O extends IResolva
             try {
                 E tmp = createCallExpression(model, isSuper, name, arguments);
                 tmp.inferType();
+                if (model == recursiveResolutionModel && !models.isEmpty()) {
+                    // the recursive resolution model is temporary - use the most current model instead
+                    // otherwise, this call will be executed in the wrong context
+                    tmp.setModel(models.peek());
+                }
                 // if this does not fail, we've found the rule ;)
                 result = tmp;
             } catch (ExpressionException e) {
@@ -284,12 +307,14 @@ public abstract class Resolver<M extends IResolvableModel<V>, O extends IResolva
                 // if qualified and not found -> exception thrown, else null==N/A or qModel exists
                 result = tester.createAndCheckCall(qModel, false); // qualified cannot be super
             }
-            result = tester.createAndCheckCall(model, isSuper);
-            model = (M) models.peek();
-            while (null != model && null == result) {
+            if (null == result) {
                 result = tester.createAndCheckCall(model, isSuper);
-                if (null == result) {
-                    model = (M) model.getParent();
+                model = (M) models.peek();
+                while (null != model && null == result) {
+                    result = tester.createAndCheckCall(model, isSuper);
+                    if (null == result) {
+                        model = (M) model.getParent();
+                    }
                 }
             }
             for (int s = models.size() - 1; null == result && s >= 0; s--) {

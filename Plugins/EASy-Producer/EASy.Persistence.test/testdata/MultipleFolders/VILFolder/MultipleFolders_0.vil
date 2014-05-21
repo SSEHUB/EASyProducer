@@ -1,0 +1,10 @@
+requireVTL "MultipleFoldersTemplate" with (version==v0);
+
+vilScript MultipleFolders (Project source, Configuration config, Project target) {
+
+    version v0;
+	
+	main(Project source, Configuration config, Project target) = : {
+        vilTemplateProcessor("MultipleFoldersTemplate", config, "$target/out.txt");
+    }
+}

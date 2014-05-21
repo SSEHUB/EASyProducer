@@ -28,7 +28,7 @@ class FileArtifactExecutableOperandType implements IExecutableOperandType {
 
     @Override
     public boolean sameType(TypeDescriptor<? extends IVilType> type) {
-        return TypeRegistry.getType(FileArtifact.class.getSimpleName()).isAssignableFrom(type);
+        return TypeRegistry.DEFAULT.getType(FileArtifact.class.getSimpleName()).isAssignableFrom(type);
     }
 
     @Override

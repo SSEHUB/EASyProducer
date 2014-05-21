@@ -3,6 +3,7 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
@@ -14,7 +15,9 @@ import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
 
 /**
- * Used to register the actual types (also replacements by extensions).
+ * Used to register the actual types (also replacements by extensions). Optional type
+ * resolvers ({@link ITypeResolver}) allow deferred type resolution on other models, 
+ * e.g., variability models.
  * 
  * @author Holger Eichelberger
  */
@@ -25,25 +28,32 @@ public class TypeRegistry {
      * <code>java.lang.Object</code>. (public also for testing)
      */
     public static final Class<?>[] INVISIBLE_BY_DEFAULT = {Object.class};
+    
+    public static final TypeRegistry DEFAULT = new TypeRegistry();
 
     private static final EASyLogger LOGGER = EASyLoggerFactory.INSTANCE.getLogger(TypeRegistry.class, Bundle.ID);
-    
-    /**
-     * Stores the registered types.
-     */
-    private static final java.util.Map<String, TypeDescriptor<? extends IVilType>> TYPES 
-        = new HashMap<String, TypeDescriptor<? extends IVilType>>();
-
-    /**
-     * Stores the registered instantiators.
-     */
-    private static final java.util.Map<String, TypeDescriptor<? extends IVilType>> INSTANTIATORS 
-        = new HashMap<String, TypeDescriptor<? extends IVilType>>();
 
     /**
      * Caches the operations vs. inheriting invisible methods.
      */
     private static final java.util.Map<String, List<Method>> INVISIBLE_INHERITED = new HashMap<String, List<Method>>();
+    
+    /**
+     * Stores the registered types.
+     */
+    private java.util.Map<String, TypeDescriptor<? extends IVilType>> types 
+        = new HashMap<String, TypeDescriptor<? extends IVilType>>();
+
+    /**
+     * Stores the registered instantiators.
+     */
+    private java.util.Map<String, TypeDescriptor<? extends IVilType>> instantiators 
+        = new HashMap<String, TypeDescriptor<? extends IVilType>>();
+
+    
+    private TypeRegistry parentRegistry;
+    
+    private List<ITypeResolver> resolver;
     
     static {
         for (int i = 0; i < INVISIBLE_BY_DEFAULT.length; i++) {
@@ -51,6 +61,49 @@ public class TypeRegistry {
             for (int m = 0; m < methods.length; m++) {
                 addInvisibleInherited(methods[m]);
             }
+        }
+    }
+    
+    /**
+     * Creates the default type registry.
+     */
+    private TypeRegistry() {
+    }
+    
+    /**
+     * Creates a (local) type registry, which delegates unknown types to the
+     * <code>parentRegistry</code>.
+     * 
+     * @param parentRegistry the parent registry, if <b>null</b> {@link #DEFAULT} is used
+     */
+    public TypeRegistry(TypeRegistry parentRegistry) {
+        this.parentRegistry = null == parentRegistry ? DEFAULT : parentRegistry;
+    }
+    
+    /**
+     * Adds a type resolver.
+     * 
+     * @param resolver the resolver to be added (may be <b>null</b>, but is ignored then)
+     */
+    public void addTypeResolver(ITypeResolver resolver) {
+        if (null != resolver) {
+            if (null == this.resolver) {
+                this.resolver = new LinkedList<ITypeResolver>();
+            }
+            if (!this.resolver.contains(resolver)) {
+                this.resolver.add(resolver);
+            }
+        }
+    }
+
+    /**
+     * Renoves a type resolver.
+     * 
+     * @param resolver the resolver to be added (may be <b>null</b>, but is ignored then)
+     */
+    public void removeTypeResolver(ITypeResolver resolver) {
+        if (null != resolver && null != this.resolver) {
+            this.resolver.remove(resolver);
         }
     }
     
@@ -63,7 +116,7 @@ public class TypeRegistry {
      *   <code>false</code> else
      */
     private static boolean addInvisibleInherited(Method method) {
-        String sig = OperationDescriptor.getJavaSignature(method);
+        String sig = SignatureUtils.getJavaSignature(method);
         List<Method> registered = INVISIBLE_INHERITED.get(sig);
         if (null == registered) {
             registered = new ArrayList<Method>();
@@ -86,14 +139,14 @@ public class TypeRegistry {
      * @throws VilException in case that <code>type</code> cannot be registered for some reason
      */
     @SuppressWarnings({ "unchecked" })
-    public static final <T extends IVilType> TypeDescriptor<T> registerType(Class<T> type) 
+    public <T extends IVilType> TypeDescriptor<T> registerType(Class<T> type) 
         throws VilException {
-        String key = TypeDescriptor.getRegName(type);
+        String key = ReflectionTypeDescriptor.getRegName(type);
         Instantiator inst = type.getAnnotation(Instantiator.class);
         TypeDescriptor<? extends IVilType> registered;
         if (null == inst) {
             // not an instantiator, handle it as a type / artifact
-            registered = TYPES.get(key);
+            registered = getType(key);
             if (null != registered) {
                 String msg = ArtifactFactory.checkReplacement(registered.getTypeClass(), type);
                 if (null != msg) {
@@ -106,7 +159,7 @@ public class TypeRegistry {
                 throw new VilException("instantiator annotation at " + type.getName() 
                     + "does not provide the instantiator name ", VilException.ID_MISSING_DATA);
             }
-            registered = INSTANTIATORS.get(name);
+            registered = instantiators.get(name);
         }
         if (null != registered) {
             if (type.equals(registered.getTypeClass())) {
@@ -120,9 +173,9 @@ public class TypeRegistry {
         cacheInheritedAnnotations(type);
         TypeDescriptor<T> desc;
         if (type.equals(PseudoType.class)) {
-            desc = (TypeDescriptor<T>) TypeDescriptor.TYPE;
+            desc = (TypeDescriptor<T>) ReflectionTypeDescriptor.TYPE;
         } else {    
-            desc = new TypeDescriptor<T>(type);
+            desc = new ReflectionTypeDescriptor<T>(type);
         }
         if (null == inst) {
             register(key, desc);
@@ -134,7 +187,7 @@ public class TypeRegistry {
             ArtifactFactory.registered(type);
         } else {
             testInstantiatorType(desc, inst);
-            INSTANTIATORS.put(inst.value(), desc);
+            instantiators.put(inst.value(), desc);
         }
         return desc;
     }
@@ -188,8 +241,8 @@ public class TypeRegistry {
      * @param key the type name to register for
      * @param desc the type descriptor being registered
      */
-    private static void register(String key, TypeDescriptor<? extends IVilType> desc) {
-        TypeDescriptor<? extends IVilType> previous = TYPES.put(key, desc);
+    private void register(String key, TypeDescriptor<? extends IVilType> desc) {
+        TypeDescriptor<? extends IVilType> previous = types.put(key, desc);
         String prevString = "";
         if (null != previous) {
             prevString = " (overriding)";
@@ -204,7 +257,7 @@ public class TypeRegistry {
      * @param desc the already created descriptor for <code>type</code>
      * @param <T> the actual VIL type
      */
-    private static final <T extends IVilType> void registerEquivalentClasses(Class<T> type, TypeDescriptor<T> desc) {
+    private <T extends IVilType> void registerEquivalentClasses(Class<T> type, TypeDescriptor<T> desc) {
         ClassMeta meta = type.getAnnotation(ClassMeta.class);
         if (null != meta && null != meta.equiv()) {
             for (Class<?> eq : meta.equiv()) {
@@ -291,7 +344,7 @@ public class TypeRegistry {
      * @param type the type class to be registered
      * @param <T> the actual type
      */
-    public static final <T extends IVilType> void register(Class<T> type) {
+    public <T extends IVilType> void register(Class<T> type) {
         try {
             registerType(type);
         } catch (VilException e) {
@@ -304,8 +357,8 @@ public class TypeRegistry {
      * 
      * @return all type descriptors (without a specific sequence)
      */
-    public static final Iterable<TypeDescriptor<? extends IVilType>> allTypes() {
-        return TYPES.values();
+    public Iterable<TypeDescriptor<? extends IVilType>> allTypes() {
+        return types.values();
     }
     
     /**
@@ -313,8 +366,8 @@ public class TypeRegistry {
      * 
      * @return all instantiators (without a specific sequence)
      */
-    public static final Iterable<TypeDescriptor<? extends IVilType>> allInstantiators() {
-        return INSTANTIATORS.values();
+    public Iterable<TypeDescriptor<? extends IVilType>> allInstantiators() {
+        return instantiators.values();
     }
 
     /**
@@ -323,9 +376,9 @@ public class TypeRegistry {
      * @param prefix the prefix to look for
      * @return the type descriptors matching the prefix (without a specific sequence)
      */
-    public static final Iterable<TypeDescriptor<? extends IVilType>> typesByNamePrefix(String prefix) {
+    public Iterable<TypeDescriptor<? extends IVilType>> typesByNamePrefix(String prefix) {
         List<TypeDescriptor<? extends IVilType>> result = new ArrayList<TypeDescriptor<? extends IVilType>>();
-        for (TypeDescriptor<? extends IVilType> type : TYPES.values()) {
+        for (TypeDescriptor<? extends IVilType> type : types.values()) {
             if (type.getName().startsWith(prefix)) {
                 result.add(type);
             }
@@ -334,13 +387,28 @@ public class TypeRegistry {
     }
     
     /**
-     * Returns the registered type descriptor for the given <code>name</code>.
+     * Returns the registered type descriptor for the given <code>name</code> also in {@link #parentRegistry}.
      * 
      * @param name the name to look for
      * @return the type descriptor or <b>null</b> if no one is registered for <code>name</code>
      */
-    public static final TypeDescriptor<? extends IVilType> getType(String name) {
-        return TYPES.get(name);
+    public TypeDescriptor<? extends IVilType> getType(String name) {
+        TypeDescriptor<? extends IVilType> result;
+        if (null != parentRegistry) {
+            result = parentRegistry.getType(name);
+        } else {
+            result = types.get(name);
+        }
+        if (null == result && null != resolver) {
+            for (int r = 0; null == result && r < resolver.size(); r++) {
+                result = resolver.get(r).resolveType(name);
+            }
+            if (null != result) {
+                types.put(result.getName(), result);
+                types.put(result.getQualifiedName(), result);
+            }
+        }
+        return result;
     }
 
     /**
@@ -353,7 +421,7 @@ public class TypeRegistry {
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public static final TypeDescriptor<? extends Map<? extends IVilType, ? extends IVilType>> getMapType(
         TypeDescriptor<? extends IVilType>... parameter) throws VilException {
-        return new TypeDescriptor(Map.class, parameter);
+        return new ReflectionTypeDescriptor(Map.class, parameter);
     }
 
     /**
@@ -366,7 +434,7 @@ public class TypeRegistry {
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public static final TypeDescriptor<? extends Collection<? extends IVilType>> getCollectionType(
         TypeDescriptor<? extends IVilType>... parameter) throws VilException {
-        return new TypeDescriptor(Collection.class, parameter);
+        return new ReflectionTypeDescriptor(Collection.class, parameter);
     }
     
     /**
@@ -379,7 +447,7 @@ public class TypeRegistry {
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public static final TypeDescriptor<? extends Set<? extends IVilType>> getSetType(
         TypeDescriptor<? extends IVilType>... parameter) throws VilException {
-        return new TypeDescriptor(Set.class, parameter);
+        return new ReflectionTypeDescriptor(Set.class, parameter);
     }
 
     /**
@@ -392,17 +460,32 @@ public class TypeRegistry {
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public static final TypeDescriptor<? extends Sequence<? extends IVilType>> getSequenceType(
         TypeDescriptor<? extends IVilType>... parameter) throws VilException {
-        return new TypeDescriptor(Sequence.class, parameter);
+        return new ReflectionTypeDescriptor(Sequence.class, parameter);
     }
     
     /**
-     * Returns the registered instantiator type descriptor for the given <code>name</code>.
+     * Returns the registered instantiator type descriptor for the given <code>name</code> also 
+     * in {@link #parentRegistry}.
      * 
      * @param name the name to look for
      * @return the type descriptor or <b>null</b> if no one is registered for <code>name</code>
      */
-    public static final TypeDescriptor<? extends IVilType> getInstantiator(String name) {
-        return INSTANTIATORS.get(name);
+    public TypeDescriptor<? extends IVilType> getInstantiator(String name) {
+        TypeDescriptor<? extends IVilType> result;
+        if (null != parentRegistry) {
+            result = parentRegistry.getInstantiator(name);
+        } else {
+            result = instantiators.get(name);
+        }
+        if (null == result && null != resolver) {
+            for (int r = 0; null == result && r < resolver.size(); r++) {
+                result = resolver.get(r).resolveInstantiator(name);
+            }
+            if (null != result) {
+                instantiators.put(result.getName(), result);
+            }
+        }
+        return result;
     }
     
     /**
@@ -411,43 +494,70 @@ public class TypeRegistry {
      * @return the type descriptor
      */
     public static final TypeDescriptor<? extends IVilType> stringType() {
-        return getType(Constants.TYPE_STRING);
+        return DEFAULT.getType(Constants.TYPE_STRING);
     }
 
     /**
-     * Returns the type descriptor for the built-in type Boolean.
+     * Returns the type descriptor for the built-in type 'Boolean'.
      * 
      * @return the type descriptor
      */
     public static final TypeDescriptor<? extends IVilType> booleanType() {
-        return getType(Constants.TYPE_BOOLEAN);
+        return DEFAULT.getType(Constants.TYPE_BOOLEAN);
+    }
+    
+    /**
+     * Returns the type descriptor for the built-in type 'any'.
+     * 
+     * @return the type descriptor
+     */
+    public static final TypeDescriptor<? extends IVilType> anyType() {
+        return ReflectionTypeDescriptor.ANY;
     }
 
     /**
-     * Returns the type descriptor for the built-in type Integer.
+     * Returns the type descriptor for the built-in type 'void'.
+     * 
+     * @return the type descriptor
+     */
+    public static final TypeDescriptor<? extends IVilType> voidType() {
+        return ReflectionTypeDescriptor.VOID;
+    }
+
+    /**
+     * Returns the type descriptor for the built-in type 'Type'.
+     * 
+     * @return the type descriptor
+     */
+    public static final TypeDescriptor<? extends IVilType> typeType() {
+        return ReflectionTypeDescriptor.TYPE;
+    }
+
+    /**
+     * Returns the type descriptor for the built-in type 'Integer'.
      * 
      * @return the type descriptor
      */
     public static final TypeDescriptor<? extends IVilType> integerType() {
-        return getType(Constants.TYPE_INTEGER);
+        return DEFAULT.getType(Constants.TYPE_INTEGER);
     }
 
     /**
-     * Returns the type descriptor for the built-in type Real.
+     * Returns the type descriptor for the built-in type 'Real'.
      * 
      * @return the type descriptor
      */
     public static final TypeDescriptor<? extends IVilType> realType() {
-        return getType(Constants.TYPE_REAL);
+        return DEFAULT.getType(Constants.TYPE_REAL);
     }
 
     /**
-     * Returns the type descriptor for the built-in type Configuration.
+     * Returns the type descriptor for the built-in type 'Configuration'.
      * 
      * @return the type descriptor
      */
     public static final TypeDescriptor<? extends IVilType> configurationType() {
-        return getType(Configuration.class);
+        return DEFAULT.getType(Configuration.class);
     }
 
     /**
@@ -456,7 +566,7 @@ public class TypeRegistry {
      * @return the type descriptor
      */
     public static final TypeDescriptor<? extends IVilType> projectType() {
-        return getType(Project.class);
+        return DEFAULT.getType(Project.class);
     }
 
     /**
@@ -465,7 +575,7 @@ public class TypeRegistry {
      * @return the type descriptor
      */
     public static final TypeDescriptor<? extends IVilType> artifactType() {
-        return getType(IArtifact.class);
+        return DEFAULT.getType(IArtifact.class);
     }
     
     /**
@@ -474,8 +584,8 @@ public class TypeRegistry {
      * @param cls the classes to be converted
      * @return the corresponding type descriptor or <b>null</b>
      */
-    public static final TypeDescriptor<? extends IVilType> getType(Class<? extends IVilType> cls) {
-        return TypeRegistry.getType(TypeDescriptor.getRegName(cls));
+    public TypeDescriptor<? extends IVilType> getType(Class<? extends IVilType> cls) {
+        return getType(ReflectionTypeDescriptor.getRegName(cls));
     }
 
     /**
@@ -484,8 +594,8 @@ public class TypeRegistry {
      * @param cls the classes to be converted
      * @return the corresponding type descriptor or <b>null</b>
      */
-    public static final TypeDescriptor<? extends IVilType> findType(Class<?> cls) {
-        return TypeRegistry.getType(TypeDescriptor.getRegName(cls));
+    public TypeDescriptor<? extends IVilType> findType(Class<?> cls) {
+        return getType(ReflectionTypeDescriptor.getRegName(cls));
     }
     
     /**
@@ -495,7 +605,7 @@ public class TypeRegistry {
      * @return the resulting type descriptors, <code>null</code> if <code>params</code> is <b>null</b> or empty. If a 
      *     type descriptor cannot be found, {@link TypeDescriptor#VOID} is used instead.
      */
-    public static final TypeDescriptor<? extends IVilType>[] convert(Class<? extends IVilType> param) {
+    public TypeDescriptor<? extends IVilType>[] convert(Class<? extends IVilType> param) {
         TypeDescriptor<? extends IVilType>[] result;
         if (null == param ) {
             result = null;
@@ -503,7 +613,7 @@ public class TypeRegistry {
             result = TypeDescriptor.createArray(1);
             result[0] = getType(param);
             if (null == result[0]) {
-                result[0] = TypeDescriptor.VOID;
+                result[0] = ReflectionTypeDescriptor.VOID;
             }
         }
         return result;
@@ -516,7 +626,7 @@ public class TypeRegistry {
      * @return the resulting type descriptors, <code>null</code> if <code>params</code> is <b>null</b> or empty. If a 
      *     type descriptor cannot be found, {@link TypeDescriptor#VOID} is used instead.
      */
-    public static final TypeDescriptor<? extends IVilType>[] convert(Class<? extends IVilType>... params) {
+    public TypeDescriptor<? extends IVilType>[] convert(Class<? extends IVilType>... params) {
         TypeDescriptor<? extends IVilType>[] result;
         if (null == params || 0 == params.length) {
             result = null;
@@ -525,7 +635,7 @@ public class TypeRegistry {
             for (int p = 0; p < params.length; p++) {
                 result[p] = getType(params[p]);
                 if (null == result[p]) {
-                    result[p] = TypeDescriptor.VOID;
+                    result[p] = ReflectionTypeDescriptor.VOID;
                 }
             }
         }

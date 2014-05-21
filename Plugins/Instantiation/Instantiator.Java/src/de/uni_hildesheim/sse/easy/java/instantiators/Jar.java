@@ -49,7 +49,7 @@ public class Jar implements IVilType {
     @OperationMeta(returnGenerics = FileArtifact.class)
     public static Set<FileArtifact> jar(Path base, Collection<FileArtifact> artifacts, Path jar, Path manifest) 
         throws ArtifactException {
-        return Zip.add(base, artifacts, jar, new JarHandler());
+        return Zip.add(base, artifacts, jar, createJarHandler(manifest));
     }
 
     /**
@@ -85,7 +85,18 @@ public class Jar implements IVilType {
     public static Set<FileArtifact> jar(Path base, Path artifacts, Path jar, Path manifest) 
         throws ArtifactException {
         // needed as paths are typically expressed as strings and string->path->collection conversion is not supported
-        return Zip.add(base, artifacts.selectAll(), jar, new JarHandler());
+        return Zip.add(base, artifacts.selectAll(), jar, createJarHandler(manifest));
+    }
+    
+    /**
+     * Creates the JarHandler for creating a new JAR archive.
+     * @param manifest A path for a manifest file which shall be included in the jar. Maybe <tt>null</tt>, than a
+     * default manifest file will be created.
+     * @return A {@link JarHandler} which will use the given manifest file or create a new one if <tt>manifest</tt>
+     * was <tt>null</tt>.
+     */
+    private static JarHandler createJarHandler(Path manifest) {
+        return null == manifest ? new JarHandler() : new JarHandler(manifest.getAbsolutePath(), false);
     }
 
 }

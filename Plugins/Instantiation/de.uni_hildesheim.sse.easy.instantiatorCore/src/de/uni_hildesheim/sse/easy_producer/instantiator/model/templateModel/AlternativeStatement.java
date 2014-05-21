@@ -4,6 +4,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguage
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 
 /**
  * Representation of an alternative-statement in VIL templates which allows conditional
@@ -97,7 +98,7 @@ public class AlternativeStatement implements ITemplateElement {
             if (ifType.equals(elseType)) {
                 result = ifType;
             } else {
-                result = TypeDescriptor.ANY;
+                result = TypeRegistry.anyType();
             }
         }
         return result;

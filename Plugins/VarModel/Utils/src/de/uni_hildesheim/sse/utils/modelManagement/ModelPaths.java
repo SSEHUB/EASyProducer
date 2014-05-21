@@ -21,7 +21,7 @@ public class ModelPaths {
      * Returns the model path for a given URI.
      * 
      * @param uri the URI pointing to the model path
-     * @return the model path (always <b>null</b>)
+     * @return the model path in terms of URIs (always <b>null</b>)
      */
     public List<String> getModelPath(URI uri) {
         // currently we do not have model paths ;)

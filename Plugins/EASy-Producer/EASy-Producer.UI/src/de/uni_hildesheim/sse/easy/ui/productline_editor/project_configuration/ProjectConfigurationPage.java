@@ -55,6 +55,9 @@ public class ProjectConfigurationPage extends AbstractEASyEditorPage {
         
         copyComboMenu = new CopyCombobox(pnlAdvanced, plp.getCopyModel(), this);
         reasonerSettings = new ReasonerSettings(pnlAdvanced, plp.getReasonerConfig(), this);
+        
+        // Specification whether debug information should be saved
+        new EASyDebugInformationButton(pnlAdvanced, plp, this);
     }
     
     @Override

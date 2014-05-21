@@ -3,8 +3,7 @@ package de.uni_hildesheim.sse.varModel.management;
 import java.io.File;
 import java.net.URI;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.model.management.VarModel;

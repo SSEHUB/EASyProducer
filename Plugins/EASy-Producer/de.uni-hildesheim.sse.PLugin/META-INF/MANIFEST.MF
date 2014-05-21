@@ -1,14 +1,14 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: EASy-Producer
-Bundle-SymbolicName: de.uni_hildesheim.sse.EASy-Producer;singleton:=true
-Bundle-Version: 0.7.0
+Bundle-Name: EASy-Producer - Eclipse
+Bundle-SymbolicName: de.uni_hildesheim.sse.easy_producer.eclipse;singleton:=true
+Bundle-Version: 0.10.0
 Bundle-Activator: de.uni_hildesheim.sse.easy_producer.Activator
 Require-Bundle: 
  org.eclipse.core.runtime,
  org.eclipse.core.resources,
  de.uni_hildesheim.sse.ivml;bundle-version="0.0.5",
- de.uni_hildesheim.sse.EASy-Producer.persistence;bundle-version="0.0.1";visibility:=reexport,
+ de.uni_hildesheim.sse.easy_producer.core;bundle-version="0.7.2";visibility:=reexport,
  ReasonerCore;bundle-version="0.0.1",
  de.uni-hildesheim.sse.easy.instantiatorCore;bundle-version="0.0.1";visibility:=reexport,
  de.uni_hildesheim.sse.easy.instantiator.copy.core;bundle-version="0.0.1";visibility:=reexport,
@@ -21,5 +21,6 @@ Export-Package: de.uni_hildesheim.sse.easy_producer,
  de.uni_hildesheim.sse.easy_producer.model,
  de.uni_hildesheim.sse.easy_producer.observer,
  de.uni_hildesheim.sse.easy_producer.persistency,
- de.uni_hildesheim.sse.easy_producer.persistency.eclipse
+ de.uni_hildesheim.sse.easy_producer.persistency.eclipse,
+ de.uni_hildesheim.sse.easy_producer.persistency.project_creation
 Bundle-ClassPath: .

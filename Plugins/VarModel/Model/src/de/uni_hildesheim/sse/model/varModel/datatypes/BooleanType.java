@@ -7,11 +7,7 @@ package de.uni_hildesheim.sse.model.varModel.datatypes;
  *
  */
 public class BooleanType extends BasisDatatype {
-    
-    // DO !NOT! touch the // checkstyle: comments!
-    
-    // checkstyle: stop declaration order check
-    
+      
     public static final IDatatype TYPE = AnyType.BOOLEAN_TYPE;
     
     // basic from any
@@ -32,11 +28,8 @@ public class BooleanType extends BasisDatatype {
     public static final Operation AND = Operation.createInfixOperator(TYPE, OclKeyWords.AND, TYPE, TYPE);
     public static final Operation IMPLIES = Operation.createInfixOperator(TYPE, OclKeyWords.IMPLIES, TYPE, TYPE);
 
-    // IVML
-   
+    // IVML  
     public static final Operation IFF = new Operation(TYPE, OclKeyWords.IFF, TYPE, TYPE);
-    
-    // checkstyle: resume declaration order check
     
     static {
         AnyType.BOOLEAN_TYPE.setDelegate(new BooleanType());

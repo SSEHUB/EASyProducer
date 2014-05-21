@@ -28,7 +28,7 @@ public class ArtifactMatchExpression extends AbstractRuleMatchExpression {
      * @throws ExpressionException in case that the expression does not evaluate to a collection
      */
     public ArtifactMatchExpression(Expression expression) throws ExpressionException {
-        if (!TypeRegistry.getType(IArtifact.class).isAssignableFrom(expression.inferType())) {
+        if (!TypeRegistry.artifactType().isAssignableFrom(expression.inferType())) {
             throw new ExpressionException("expression does not evaluate to an artifact", 
                 ExpressionException.ID_SEMANTIC);
         }
@@ -46,7 +46,7 @@ public class ArtifactMatchExpression extends AbstractRuleMatchExpression {
     
     @Override
     public TypeDescriptor<? extends IVilType> getEntryType() {
-        return TypeRegistry.getType(IArtifact.class);
+        return TypeRegistry.artifactType();
     }
 
     @Override

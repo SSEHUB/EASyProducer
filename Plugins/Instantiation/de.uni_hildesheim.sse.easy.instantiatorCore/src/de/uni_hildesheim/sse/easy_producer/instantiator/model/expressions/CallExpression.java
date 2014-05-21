@@ -42,6 +42,7 @@ public class CallExpression extends AbstractCallExpression implements IArgumentP
         EXTERNAL;
     }
     
+    private Object parent;
     private CallArgument[] arguments;
     private OperationDescriptor resolved;
     private TypeDescriptor<? extends IVilType> type;
@@ -51,39 +52,44 @@ public class CallExpression extends AbstractCallExpression implements IArgumentP
     /**
      * Creates a new (undotted) call expression.
      * 
+     * @param parent the parent language unit (if given used as optional parameter during calls)
      * @param name the name of the call
      * @param arguments the arguments for the call
      * @throws ExpressionException in case that no argument is given
      */
-    public CallExpression(String name, Expression... arguments) throws ExpressionException {
-        this(name, false, CallArgument.createUnnamedArguments(arguments));
+    public CallExpression(Object parent, String name, Expression... arguments) throws ExpressionException {
+        this(parent, name, false, CallArgument.createUnnamedArguments(arguments));
     }
     
     /**
      * Creates a new (undotted) call expression.
      * 
+     * @param parent the parent language unit (if given used as optional parameter during calls)
      * @param name the name of the call.
      * @param arguments the arguments for the call
      * @throws ExpressionException in case that no argument is given
      */
-    public CallExpression(String name, CallArgument... arguments) throws ExpressionException {
-        this(name, false, arguments);
+    public CallExpression(Object parent, String name, CallArgument... arguments) throws ExpressionException {
+        this(parent, name, false, arguments);
     }
     
     /**
      * Creates a new call expression which may be part of a dot expression.
      * 
+     * @param parent the parent language unit (if given used as optional parameter during calls)
      * @param name the name of the call
      * @param dotRight if this expression occurred on the right side of a "."
      * @param arguments the arguments for the call
      * @throws ExpressionException in case that no argument is given
      */
-    public CallExpression(String name, boolean dotRight, CallArgument... arguments) throws ExpressionException {
+    public CallExpression(Object parent, String name, boolean dotRight, CallArgument... arguments) 
+        throws ExpressionException {
         super(name, true);
         if (doZeroArgumentTest() && 0 == arguments.length) {
             throw new ExpressionException("at least one argument must be provided to '" + name + "'(owner)", 
                 ExpressionException.ID_INTERNAL);
         }
+        this.parent = parent;
         this.dotRight = dotRight;
         this.arguments = arguments;
     }
@@ -101,7 +107,7 @@ public class CallExpression extends AbstractCallExpression implements IArgumentP
             throw new ExpressionException("operation " + operation.getJavaSignature()  
                 + " does not accept exactly one parameter", ExpressionException.ID_INTERNAL);
         }
-        if (TypeDescriptor.VOID == operation.getReturnType()) {
+        if (TypeRegistry.voidType() == operation.getReturnType()) {
             throw new ExpressionException("operation " + operation.getJavaSignature()  
                 + " does not return a return value", ExpressionException.ID_INTERNAL);
         }
@@ -126,6 +132,15 @@ public class CallExpression extends AbstractCallExpression implements IArgumentP
         resolved = (OperationDescriptor) operation;
         callType = CallType.EXTERNAL;
         arguments = param;
+    }
+    
+    /**
+     * Returns the parent language unit.
+     * 
+     * @return the parent language unit (may be <b>null</b> if not given or implicit operation)
+     */
+    public Object getParent() {
+        return parent;
     }
 
     /**
@@ -232,7 +247,7 @@ public class CallExpression extends AbstractCallExpression implements IArgumentP
                 returnGenerics = TypeDescriptor.createArray(1);
                 returnGenerics[0] = arguments[0].getExpression().inferType().getParameterType(0);
             }
-            if (!resolved.isStatic() && TypeDescriptor.ANY == result) {
+            if (!resolved.isStatic() && TypeRegistry.anyType() == result) {
                 // the operation has a generic return value -> implicit parameter determines actual type
                 // current assumption: ANY points to original template parameter 
                 TypeDescriptor<? extends IVilType> arg0Type = arguments[0].getExpression().inferType();

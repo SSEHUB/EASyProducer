@@ -11,6 +11,16 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Operation
 public interface ITracer {
 
     /**
+     * Is called before a resolved call expression is actually executed. Do <b>not</b>
+     * modify the parameters!
+     * 
+     * @param descriptor the descriptor to be called
+     * @param callType the type of the call
+     * @param args the actual arguments
+     */
+    public void visitingCallExpression(OperationDescriptor descriptor, CallType callType, Object[] args);
+    
+    /**
      * Is called after a resolved call expression is actually executed. Do <b>not</b>
      * modify the parameters!
      * 

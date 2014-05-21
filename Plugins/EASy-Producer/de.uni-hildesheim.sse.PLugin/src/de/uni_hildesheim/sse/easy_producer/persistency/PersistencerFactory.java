@@ -2,10 +2,11 @@ package de.uni_hildesheim.sse.easy_producer.persistency;
 
 import java.io.File;
 
-import de.uni_hildesheim.sse.easy_producer.persistence.PersistenceUtils;
-import de.uni_hildesheim.sse.easy_producer.persistence.datatypes.IPersistencer;
-import de.uni_hildesheim.sse.easy_producer.persistence.datatypes.PathEnvironment;
-import de.uni_hildesheim.sse.easy_producer.persistence.standard.Persistencer;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceUtils;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.Configuration.PathKind;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.IPersistencer;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.PathEnvironment;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.standard.Persistencer;
 import de.uni_hildesheim.sse.easy_producer.persistency.eclipse.EclipsePersistencer;
 import de.uni_hildesheim.sse.utils.Environment;
 import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
@@ -34,7 +35,7 @@ public class PersistencerFactory {
             persistencer = new EclipsePersistencer(projectFolder, null);
         } else {
             PathEnvironment projectsWorkspace = new PathEnvironment(projectFolder.getParentFile());
-            File easyConfigFile = PersistenceUtils.getConfigLocationFile(projectFolder);
+            File easyConfigFile = PersistenceUtils.getLocationFile(projectFolder, PathKind.IVML);
             persistencer = new Persistencer(projectsWorkspace, projectFolder, easyConfigFile.getAbsolutePath(),
                 ProgressObserver.NO_OBSERVER);
         }

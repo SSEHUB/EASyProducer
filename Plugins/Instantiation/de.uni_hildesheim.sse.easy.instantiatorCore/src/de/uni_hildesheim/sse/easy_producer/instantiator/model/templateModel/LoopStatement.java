@@ -4,6 +4,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguage
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 
 /**
  * Representation of a loop-statement in VIL which allows multiple
@@ -101,7 +102,7 @@ public class LoopStatement implements ITemplateElement {
 
     @Override
     public TypeDescriptor<? extends IVilType> inferType() throws VilLanguageException {
-        return TypeDescriptor.VOID;
+        return TypeRegistry.voidType();
     }
 
 }
