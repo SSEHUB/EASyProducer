@@ -1,0 +1,127 @@
+@indent(indentation = 4, additional = 1)
+template CompileUiTemplate(Configuration config, FileArtifact target, FileArtifact injectionTarget, DecisionVariable var) {
+
+    // JavaFileArtifact, would provide access to its JavaPath and its annotations...
+
+    def main(Configuration config, FileArtifact target, FileArtifact injectionTarget, DecisionVariable var) {
+        JavaPath itPath = injectionTarget.path().toJavaPath();
+        JavaPath tPath = target.path().toJavaPath();
+        String package = tPath.package();
+        String name = tPath.name();
+        String itName = itPath.name();
+        String decisionId = var.name();
+
+        'package $package;
+
+         import static gui.MessageConstant.MAINTAB_PERMISSIONS;
+         import static gui.MessageConstant.MAINTAB_SCHEDULER;
+
+         import java.awt.*;
+         import javax.swing.*;
+
+         import de.uni_hildesheim.sse.variability.runtime.*;
+
+         // needs to be privileged for private variable access
+         privileged aspect $name {
+
+             pointcut targetClass(): within(MainWindow);
+      
+             // replace factory call
+  
+             pointcut componentFactory(JFrame f, JTabbedPane p, Client c): targetClass() 
+                 && call(void $itName.create(JFrame, JTabbedPane, Client)) 
+                 && args(f, p, c)
+                 && if(!variability.StaticConfiguration.$decisionId);
+
+             // just delete the component constructor  
+             void around(JFrame f, JTabbedPane p, Client c): componentFactory(f, p, c) {
+                 final String[] afterTitle = { MAINTAB_SCHEDULER.format(), MAINTAB_PERMISSIONS.format() };
+                 final JTabbedPane fTabs = p;
+
+                 int pos = p.getComponentCount();
+                 proceed(f, p, c);
+                 final Component fComponent = p.getComponentAt(pos);
+                 final String fString = p.getTitleAt(pos);
+                 if (!variability.RuntimeConfiguration.$decisionId.getBooleanValue()) {
+                     p.removeTabAt(pos);
+                 }
+
+                 DecisionChangeListener listener = new DecisionChangeListener() {
+                     public void decisionChanged(UserDecision decision, Object oldValue, Object newValue) {
+                           if (variability.RuntimeConfiguration.$decisionId == decision) {
+                             setTabbedPaneVisible(fTabs, fComponent, fString, 
+                                 afterTitle, Boolean.TRUE == newValue);
+                         }
+                     }
+                 };
+                 UserDecisionValues.addDecisionChangeListener(listener);
+             }
+      
+             // inject runtime selection call
+
+             pointcut decisionCall(MainWindow core): targetClass() 
+                   && call(void tools.Tools.center(Component)) 
+                   && this(core)
+                   && if(ProcessingState.hasKey("decisionMethod", "$name"));
+
+             after(MainWindow core): decisionCall(core) {
+                 if (null == core.getJMenuBar()) {
+                     core.setJMenuBar(new javax.swing.JMenuBar());
+                 }
+                 JMenuBar menuBar = core.getJMenuBar();
+                 String itemText = "Variability";
+                 boolean found = false;
+                 for (int i = 0; !found && i < menuBar.getComponentCount(); i++) {
+                     if (menuBar.getComponent(i) instanceof JMenuItem) {
+                         found = itemText.equals(((JMenuItem) menuBar.getComponent(i)).getText());
+                     }
+                 }
+                 if (!found) {
+                     JMenuItem menu = new JMenuItem("Variability");
+                     menu.addActionListener(new java.awt.event.ActionListener() {
+                         public void actionPerformed(java.awt.event.ActionEvent event) {
+                             SwingUserDecisionDialog.showDialog(null, 
+                                 variability.RuntimeConfiguration.allElements());
+                         }
+                     });
+                     menuBar.add(menu);
+                 }
+            }
+
+            public static void setTabbedPaneVisible(JTabbedPane tabs, Component tab, String tabTitle, String[] afterTitle, boolean visible) {
+                int insertPos = -1;
+                if (null != afterTitle) {
+                    for (int t = 0; insertPos < 0 && t < afterTitle.length; t++) {
+                        for (int i = 0; insertPos < 0 && i < tabs.getTabCount(); i++) {
+                            if (tabs.getTitleAt(i).equals(afterTitle[t])) {
+                                insertPos = i;
+                            }
+                        }
+                    }
+                }
+                insertPos++;
+                if (visible) {
+                    int pos = tabs.indexOfComponent(tab);
+                    if (pos < 0) {
+                        tabs.add(tab, insertPos);
+                        tabs.setTitleAt(insertPos, tabTitle);
+                    }
+                } else {
+                    int pos = tabs.indexOfComponent(tab);
+                    if (pos >= 0) {
+                        tabs.removeTabAt(pos);
+                    }
+                }
+            }
+
+            // avoid multiple weaving
+      
+            static {
+                ProcessingState.setKey("addMethod", "$name");
+                ProcessingState.setKey("decisionMethod", "$name");
+            }
+
+        }'
+    
+    }
+}

@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!DOCTYPE x-frame SYSTEM "?@dtd?">
+<x-frame name="FloorChainDisplay">
+
+package gui.views.inside.displays;
+
+import java.util.Hashtable;
+
+import javax.swing.JLabel;
+import javax.swing.JSlider;
+
+import properties.ProgramSettings;
+
+public class FloorChainDisplay extends JSlider {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 841340392425621437L;
+
+	public FloorChainDisplay() {
+		super(0, <value-of expr="?@floors?"/>, 0);
+		init();
+	}
+	
+	private void init() {
+		setPaintTrack(false);
+		Hashtable&lt;Integer, JLabel&gt; labelTable = new Hashtable&lt;Integer, JLabel&gt;(this.getMaximum());
+		JLabel nn;
+		for (int i = 0; i &lt;= this.getMaximum(); i++) {
+			// #if($floors_names)
+			<select option="floors_names">
+				<option value="{}">
+			nn = new JLabel("" + i);
+				</option>
+				<otherwise>
+			nn = new JLabel(ProgramSettings.FLOORS_NAMES[i]);
+			// #else
+			// #end
+				</otherwise>
+			</select>
+			
+			labelTable.put(i, nn);
+		}
+		this.setLabelTable(labelTable);
+		this.setPaintLabels(true);
+		this.setOpaque(false);
+	}
+}
+
+
+</x-frame>

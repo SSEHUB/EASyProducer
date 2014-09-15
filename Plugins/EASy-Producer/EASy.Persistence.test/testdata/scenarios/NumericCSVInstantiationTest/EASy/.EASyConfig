@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProductLineProject id="ceb533c0-c378-4abb-bfaa-2892d9a368ad" name="NumericCSVInstantiationTest" version="0" location="NumericCSVInstantiationTest">
+	<predecessors>
+	</predecessors>
+	<successors>
+	</successors>
+	<settings>
+	</settings>
+	<reasoners>
+	</reasoners>
+	<instantiators>
+	</instantiators>
+	<copy>
+	</copy>
+</ProductLineProject>

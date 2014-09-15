@@ -1,0 +1,36 @@
+template TxtTemplate(Configuration config, FileArtifact target) {
+
+    def main(Configuration config, FileArtifact target) {
+		String varName;
+		
+		// Write not nested var
+        DecisionVariable notNestedVar = config.byName("notNestedVar");
+        varName = notNestedVar.name();
+        writeLine(varName, notNestedVar);
+
+		// Write nested on layer 1
+        DecisionVariable cmp1 = config.byName("cmp1");
+		varName = cmp1.name();
+        DecisionVariable nested = cmp1.byName("nestedVar");
+        varName = varName + "." + nested.name();
+        writeLine(varName, nested);
+        
+        DecisionVariable cmp2 = config.byName("cmp2");
+        varName = cmp2.name();
+        DecisionVariable nestedCmp = cmp2.byName("slot1");
+        varName = varName + "." + nestedCmp.name();
+        nested = nestedCmp.byName("nestedVar");
+        varName = varName + "." + nested.name();
+        writeLine(varName, nested);
+        varName = cmp2.name();
+        nestedCmp = cmp2.byName("slot2");
+        varName = varName + "." + nestedCmp.name();
+        nested = nestedCmp.byName("nestedVar");
+        varName = varName + "." + nested.name();
+        writeLine(varName, nested);
+    }
+    
+    def writeLine(String name, DecisionVariable dv) {
+        '${name} = ${dv.value()}'
+    }
+}

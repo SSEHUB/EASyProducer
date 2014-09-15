@@ -1,0 +1,767 @@
+<?xml version="1.0"?>
+<!DOCTYPE x-frame SYSTEM "?@dtd?">
+<x-frame name="MainWindow">
+
+package gui.windows;
+
+
+import gui.views.ScrollPanel;
+import gui.views.inside.ControlPanel;
+import gui.views.inside.DisplayPanel;
+import gui.views.outside.ElevatorPanel;
+
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Point;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.WindowConstants;
+import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
+
+import main.ElevatorSimulator;
+
+import properties.ProgramSettings;
+import simulator.model.Elevator;
+
+/**
+ * Die Klasse MainWindow hier wird Das Hauptfenster erstellt mit dem dann
+ * spaeter im Programm die Oberflaeche fuer den Benutzer ersichtlich
+ * wird
+ * 
+ * 
+ */
+public class MainWindow {
+
+	private static MainWindow instance = null;
+
+	private JFrame frame;
+	private Border loweredbevel = BorderFactory.createLoweredBevelBorder();
+	<select option="elevators">
+		<option value="1">
+	private ElevatorPanel elevatorPanel = new ElevatorPanel(1);
+	private DisplayPanel displayPanel = new DisplayPanel("<value-of expr="?@controlling_controllertype?"/>");
+	private ControlPanel controlPanel = new ControlPanel(1);
+	private JScrollPane scrollPane = new JScrollPane();
+			
+		</option>
+		<option value="1" comp-operator="&gt;">
+	// #if($elevators &gt; 1)
+	private ArrayList&lt;ElevatorPanel&gt; lElevatorPanels = new ArrayList&lt;ElevatorPanel&gt;(<value-of expr="?@elevators?"/>);
+	private ArrayList&lt;DisplayPanel&gt; lDisplayPanels = new ArrayList&lt;DisplayPanel&gt;(<value-of expr="?@elevators?"/>);
+	private ArrayList&lt;ControlPanel&gt; lControlPanels = new ArrayList&lt;ControlPanel&gt;(<value-of expr="?@elevators?"/>);
+	private ArrayList&lt;JScrollPane&gt; lScrollPanes = new ArrayList&lt;JScrollPane&gt;(<value-of expr="?@elevators?"/>);
+	// #else
+	// #end
+		</option>
+	</select>
+	
+
+	/**
+	 * Standardkonstruktor des Hauptfensters
+	 */
+	public MainWindow() {
+		instance = this;
+		
+		createWindow();
+	}
+
+	
+	// getter und setter
+	
+	/**
+	 * 
+	 * Statische Methode, liefert die einzige Instanz dieser
+	 * 
+	 * Klasse zurueck
+	 */
+
+	public static MainWindow getInstance() {
+
+		if (instance == null) {
+
+			instance = new MainWindow();
+
+		}
+
+		return instance;
+	}
+	
+	public static void setInstance(MainWindow mw) {
+		instance = mw;
+	}
+
+	
+	/**
+	 * Getter fuer das Hauptframe
+	 * 
+	 * @return frame
+	 */
+	public JFrame getFrame() {
+		return frame;
+	}
+
+	
+	/**
+	 * @return the lElevatorPanels
+	 */
+	public ElevatorPanel getElevatorPanel(
+	<select option="elevators">
+		<option value="1">
+			) {
+		return elevatorPanel;
+		</option>
+		<option value="1" comp-operator="&gt;">
+		// #if($elevators &gt; 1)
+			int i) {
+		return lElevatorPanels.get(i);
+		// #else
+		// #end
+		</option>
+	</select>
+	}
+	
+	
+	/**
+	 * @return the lStatusPanels
+	 */
+	public DisplayPanel getDisplayPanel(
+	<select option="elevators">
+		<option value="1">
+		) {
+		return displayPanel;
+		</option>
+		<option value="1" comp-operator="&gt;">
+		// #if($elevators &gt; 1)
+			int i) {
+		return lDisplayPanels.get(i);
+		// #else
+		// #end
+		</option>	
+	</select>
+	}
+	
+	public ControlPanel getControlPanel(
+	<select option="elevators">
+		<option value="1">
+		) {
+		return controlPanel;
+		</option>
+		<option value="1" comp-operator="&gt;">
+		// #if($elevators &gt; 1)
+			int i) {
+		return lControlPanels.get(i);
+		// #else
+		// #end
+		</option>	
+	</select>
+	}
+
+	/**
+	 * @return the lScrollPanes
+	 */
+	public JScrollPane getScrollPane(
+	<select option="elevators">
+		<option value="1">
+			) {
+		return scrollPane;
+		</option>
+		<option value="1" comp-operator="&gt;">
+		//#if($elevators)
+			int i) {
+		return lScrollPanes.get(i);
+		//#else
+		//#end
+		</option>
+	</select>
+	}
+	
+
+
+	/**
+	 * Fuer die Gestaltung des GridBagLayouts.
+	 */
+	private void addComponent(Container cont, GridBagLayout gbl, Component c,
+			int x, int y, int width, int height, double weightx, double weighty) {
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.gridx = x;
+		gbc.gridy = y;
+		gbc.gridwidth = width;
+		gbc.gridheight = height;
+		gbc.weightx = weightx;
+		gbc.weighty = weighty;
+		gbl.setConstraints(c, gbc);
+		cont.add(c);
+	}
+
+	/**
+	 * Beschreibt die Elemente des das Hauptfenster.
+	 */
+	private void createWindow() {
+
+		frame = new JFrame("ElevatorSimulator");
+		Container pane = frame.getContentPane();
+		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		frame.setResizable(false);
+		JMenuBar menubar = new JMenuBar();
+		frame.setJMenuBar(menubar);
+
+		// Erstellen der Menueleiste inkl. deren Eintraege
+		JMenu mainMenu = new JMenu("Datei");
+		JMenuItem beenden = new JMenuItem("Beenden");
+		mainMenu.add(beenden);
+		JMenu helper = new JMenu("?");
+
+		JMenuItem helpMain = new JMenuItem("Hilfe");
+		helpMain.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				new InfoWindow("Hilfe zum ElevatorSimulator","/ressource/helpMain.htm").setVisible(true);
+			}
+		});
+		JMenuItem info = new JMenuItem("Info");
+		info.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				new InfoWindow("Info zum ElevatorSimulator","/ressource/info.htm").setVisible(true);
+			}
+		});
+		helper.add(helpMain);
+		helper.add(info);
+		menubar.add(mainMenu);
+		menubar.add(helper);
+		frame.setSize(900, 900);
+
+		ScrollPanel jpAll = new ScrollPanel();
+		jpAll.setAlignmentX(Component.LEFT_ALIGNMENT);
+		// in jpAll sind alle Steuerelemente
+		GridBagLayout gbl = new GridBagLayout();
+		jpAll.setLayout(gbl);
+
+		// Added das Elevator-Panel in der scrollpane
+
+		int vsbPolicy = ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED;
+		int hsbPolicy = ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS;
+
+		
+		// x y w h wx wy
+		addComponent(jpAll, gbl, createTopArea(), 0, 0, 1, 1, 0, 1.0);
+		addComponent(jpAll, gbl, createBottomArea(), 0, 1, 1, 1, 0, 0);
+
+		JScrollPane scpane = new JScrollPane(jpAll, vsbPolicy, hsbPolicy);
+		scpane.getHorizontalScrollBar();
+		// scpane.setPreferredSize(new Dimension(300, 400));
+		pane.add(scpane);
+
+		beenden.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int iAnswer = JOptionPane.showConfirmDialog(null,
+						"Moechten Sie das Programm beenden?",
+						"Programm Beenden", JOptionPane.YES_NO_OPTION,
+						JOptionPane.WARNING_MESSAGE);
+				if (iAnswer == JOptionPane.YES_OPTION) {
+					System.exit(1);
+				}
+
+			}
+		});
+		frame.setLocation(
+				(Toolkit.getDefaultToolkit().getScreenSize().width - frame
+						.getSize().width) / 2, (Toolkit.getDefaultToolkit()
+						.getScreenSize().height - frame.getSize().height) / 2);
+
+		frame.setVisible(true);
+
+	}
+
+	
+	public ScrollPanel createTopArea() {
+		ScrollPanel jpElevatorArea = new ScrollPanel();
+		jpElevatorArea.setLayout(new BoxLayout(jpElevatorArea, BoxLayout.LINE_AXIS));
+		jpElevatorArea.setAlignmentX(Component.LEFT_ALIGNMENT);
+		
+		// ElevatorPanels erzeugen und im Fahrstuhlbereich einfuegen
+		<select option="elevators">
+			<option value="1">
+			// #else
+		jpElevatorArea.add(buildElevatorPanel(0));
+		// #end
+			</option>
+			<option value="1" comp-operator="&gt;">
+			// #if($elevators &gt; 1)
+		for (int i = 0; i &lt; <value-of expr="?@elevators?"/>; i++) {
+			jpElevatorArea.add(buildElevatorPanel(i));
+		}
+			</option>
+		</select>
+		return jpElevatorArea;
+		
+		
+	}
+	
+	
+	public Component createBottomArea() {
+		<select option="elevators">
+			<option value="1">
+			// #else
+		
+		JPanel bottomArea = buildBottomPanel(0);
+		
+		// #end
+			</option>
+			<option value="1" comp-operator="&gt;">
+		// #if($elevators &gt; 1)
+		JTabbedPane bottomArea = new JTabbedPane();
+		bottomArea.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+		
+		for (int i = 0; i &lt; <value-of expr="?@elevators?"/>; i++) {
+			JLabel lbl = new JLabel(String.valueOf("Fahrstuhl " + (i + 1)));
+			lbl.setPreferredSize(new Dimension(184, 10));
+			
+			bottomArea.addTab(Integer.toString(i + 1), buildBottomPanel(i));
+			bottomArea.setTabComponentAt(i, lbl);
+			bottomArea.setMnemonicAt(i, KeyEvent.VK_2);
+		}
+		
+		ScrollPanel scrollpanel = new ScrollPanel();
+		scrollpanel.setLayout(new FlowLayout());
+		scrollpanel.setPreferredSize(new Dimension(350, 35 *
+			(<value-of expr="?@floors?"/>) / 4 + 40));
+		bottomArea.add(scrollpanel);
+		
+			</option>
+		</select>
+		return bottomArea;
+	}
+	
+	
+	public JPanel buildBottomPanel(int iElevatorIndex) {
+		
+		JPanel resultPanel = new JPanel();
+		
+		resultPanel.setPreferredSize(new Dimension(1000, 320));
+		resultPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		
+		<select option="elevators">
+			<option value="1" comp-operator="&gt;">
+		DisplayPanel pnlDisplays = new DisplayPanel(ElevatorSimulator.getInstance().getController(iElevatorIndex).getClass().getSimpleName());
+			</option>
+			<option value="1">
+		DisplayPanel pnlDisplays = new DisplayPanel(ElevatorSimulator.getInstance().getController().getClass().getSimpleName());
+			
+			</option>
+		</select>
+		ControlPanel pnlControls = new ControlPanel(iElevatorIndex);
+		<select option="elevators">
+			<option value="1" comp-operator="&gt;">
+		lDisplayPanels.add(pnlDisplays);
+		lControlPanels.add(pnlControls);
+			</option>
+			<otherwise>
+			displayPanel = pnlDisplays;
+			controlPanel = pnlControls;
+			</otherwise>
+		</select>
+		
+		// Scrollbalken Einstellungen
+		int vsbPolicy = ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED;
+		int hsbPolicy = ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER;
+		JScrollPane pane = new JScrollPane(pnlControls, vsbPolicy, hsbPolicy);
+		pane.setPreferredSize(new Dimension(370, 300));
+		// in das parentpanel setzen
+		JPanel jpAll = new JPanel();
+		jpAll.setLayout(new BorderLayout());
+		JPanel jpInlay = new JPanel(new BorderLayout());
+
+		jpInlay.add(pnlDisplays, BorderLayout.WEST);
+		jpInlay.add(pnlControls, BorderLayout.CENTER);
+		
+		resultPanel.add(jpInlay, BorderLayout.SOUTH);
+		return resultPanel;
+
+	}
+
+	/**
+	 * Erstellt ein Panel fuer die Scrollbar links beim Elevator
+	 * 
+	 * 
+	 */
+	public JScrollPane buildElevatorPanel(int iElevatorIndex) {
+		/*
+		 * Groesse des Elevator-Panels berechnet sich ueber die Anzahl
+		 * der Stockwerke.
+		 */
+		ElevatorPanel elevator = new ElevatorPanel(iElevatorIndex);
+		<select option="elevators">
+			<option value="1" comp-operator="&gt;">
+		lElevatorPanels.add(elevator);
+			</option>
+		</select>
+
+		/*
+		 * Scrollbalken Einstellungen
+		 */
+		int vsbPolicy = ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED;
+		int hsbPolicy = ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED;
+		JScrollPane scrollpane = new JScrollPane(elevator, vsbPolicy, hsbPolicy);
+		scrollpane.setPreferredSize(new Dimension(205, 550));
+
+		// Titel border
+		TitledBorder titleElevator = BorderFactory.createTitledBorder(
+				loweredbevel, "Fahrstuhl" + (iElevatorIndex + 1));
+		scrollpane.setBorder(titleElevator);
+
+		/*
+		 * Scrollbar nach unten setzten
+		 */
+		scrollpane.getViewport().setViewPosition(
+				new Point(1, <value-of expr="?@floors?"/>
+						* ProgramSettings.getTotalHeight(<value-of expr="?@floors?"/>)));
+		<select option="elevators">
+			<option value="1" comp-operator="&gt;">				
+		lScrollPanes.add(scrollpane);
+			</option>
+			<otherwise>
+		elevatorPanel = elevator;
+		scrollPane = scrollpane;
+			</otherwise>
+		</select>
+		return scrollpane;
+	}
+
+
+
+	/**
+	 * Animiert die Tueren beim oeffnen und schliessen und simuliert die
+	 * Wartezeit.
+	 * 
+	 * @param iTargetIndex
+	 *            Current Floor des Elevators.
+	 * 
+	 */
+	public void animateDoors(int iControllerIndex, int iTargetIndex) {
+		<select option="elevators">
+			<option value="1" comp-operator="&gt;">
+		ElevatorPanel pnlElevator = getElevatorPanel(iControllerIndex);
+		ControlPanel pnlControls = getControlPanel(iControllerIndex);
+		DisplayPanel pnlDisplays = getDisplayPanel(iControllerIndex);
+		
+		// Tuersteuerung fuer richtungsgebundene tueroeffnung
+		int etage = ElevatorSimulator.getInstance().getController(iControllerIndex)
+				.getElevator().getCurrentFloor();
+			</option>
+			<option value="1">
+			ElevatorPanel pnlElevator = getElevatorPanel();
+			ControlPanel pnlControls = getControlPanel();
+				<select option="floors_doorsides">
+					<option value="{}">
+					</option>
+					<otherwise>
+			DisplayPanel pnlDisplays = getDisplayPanel();
+		
+		// Tuersteuerung fuer richtungsgebundene tueroeffnung
+			int etage = ElevatorSimulator.getInstance().getController()
+				.getElevator().getCurrentFloor();
+					</otherwise>
+				</select>
+			</option>
+		</select>
+		<select option="floors_doorsides">
+			<option value="{}">
+			</option>
+			<otherwise>
+		// #if($floors_doorsides != "{}  ")
+		Icon icon = new ImageIcon();
+		switch(ProgramSettings.FLOORS_DOORSIDES[iTargetIndex]) {
+			case 0:
+				icon = new ImageIcon(getClass().getResource(
+				"/ressource/leftOpen.gif"));
+				break;
+			case 1:
+				icon = new ImageIcon(getClass().getResource(
+				"/ressource/rightOpen.gif"));
+				break;
+			case 2:
+				icon = new ImageIcon(getClass().getResource(
+				"/ressource/bothOpen.gif"));
+				break;
+			default:
+				break;
+			
+
+			pnlDisplays.getLblDoorOpen().setIcon(icon);
+		}
+		// #end
+			</otherwise>
+		</select>
+
+		// Buttons disablen, damit waehrend der Animation kein erneuter
+		// Fahrwunsch auf der selben Etage getaetigt werden kann
+		// und highlights entfernen
+	
+			if (pnlElevator.getCallButtons().size() != 0) {
+			<select option="controlling_synchronized">	
+				<option value="true">
+			// #if($controlling_synchronized)
+				
+				setFloorButtonsEnabled(iTargetIndex, false);
+				highlightFloorButtons(iTargetIndex, false, 0);
+					<select option="outerview_buttontype">
+						<option value="ArrowButton">
+				// #if($outerview_buttontype == "ArrowButton")
+					highlightFloorButtons(iTargetIndex, false, 1);
+				// #end
+						</option>
+					</select>
+				</option>
+				<otherwise>
+			// #else
+			
+				pnlElevator.getCallButtons().get(iTargetIndex).setEnabled(false);
+				// Highlight entfernen
+					<select option="outerview_buttontype">
+						<option value="ArrowButton">
+				// #if($outerview_buttontype == "ArrowButton")
+				pnlElevator.getCallButtons().get(iTargetIndex).setHighlight(0, false);
+				pnlElevator.getCallButtons().get(iTargetIndex).setHighlight(1, false);
+						</option>
+						<otherwise>
+				// #else
+				pnlElevator.getCallButtons().get(iTargetIndex).setHighlight(false);
+				// #end
+						</otherwise>
+					</select>
+			// #end
+				</otherwise>
+			</select>
+
+			}
+		
+
+		
+		// Highlight im Statuspanel entfernen und Button disablen
+		pnlControls.getButtons().get(iTargetIndex)
+			.setHighlight(false);
+		pnlControls.getButtons().get(iTargetIndex)
+			.setEnabled(false);
+		
+		<select option="elevators">
+			<option value="1" comp-operator="&gt;">
+		Elevator elevator = ElevatorSimulator.getInstance().getController(iControllerIndex)
+				.getElevator();
+			</option>
+			<option value="1">
+			Elevator elevator = ElevatorSimulator.getInstance().getController()
+				.getElevator();
+			</option>
+		</select>
+
+		// Tueranimation
+		try {
+			// Animation fuer das oeffnen der Tueren
+			changeImage("/ressource/doorsOpening.gif", iControllerIndex);
+			Thread.sleep(780);
+
+			// Ein einzelnes Bild, das die offenen Tueren darstellt
+			changeImage("/ressource/doorsOpened.gif", iControllerIndex);
+
+			/*
+			 * Es wird maximal 3000 Millisekunden gewartet, bevor die Tueren sich
+			 * wieder schliessen, wird waehrend dessen auf den Tueren schliessen
+			 * Button gedrueckt, wird sofort abgebrochen.
+			 */
+
+			for (int i = 1; i &lt;= 2000; i++) {
+				Thread.sleep(1);
+				if (elevator.isbCloseDoorsNow()) {
+					break;
+				}
+			}
+
+			/*
+			 * Sollen die Tueren geoeffnet bleiben, wird die while Schleife,
+			 * solange durchlaufen, bis der Tueren oeffnen Button erneut gedrueckt
+			 * wird, oder der Tueren schliessen Button betaetigt wurde
+			 */
+			while (elevator.isbKeepDoorsOpen() &amp;&amp; !elevator.isbCloseDoorsNow()) {
+				Thread.sleep(1);
+			}
+
+			changeImage("/ressource/doorsClosing.gif", iControllerIndex);
+			Thread.sleep(800);
+
+			changeImage("/ressource/doorsClosed.gif", iControllerIndex);
+
+		} catch (InterruptedException e) {
+
+		}
+		<select option="floors_securitylevels">
+			<option value="{}">
+			// #else
+			pnlControls.getButtons().get(
+					iTargetIndex).setEnabled(true);
+		// #end
+			</option>
+			<otherwise>
+		// #if($floors_securitylevels != "{}")
+			if (ProgramSettings.FLOORS_SECURITY_LEVELS[iTargetIndex] == 0) {
+				pnlControls.getButtons().get(
+						iTargetIndex).setEnabled(true);
+			}
+			</otherwise>
+		</select>
+
+		// Buttons wieder enablen
+		<select option="controlling_synchronized">
+			<option value="true">
+		// #if($controlling_synchronized)
+			
+			setFloorButtonsEnabled(iTargetIndex, true);
+			activateEmergencyButtons(iTargetIndex, false);
+			</option>
+			<otherwise>
+		// #else
+			
+			if(pnlElevator.getCallButtons().size() != 0) {
+				pnlElevator.getCallButtons()
+					.get(iTargetIndex).setEnabled(true);
+			<select option="outerview_emergencybuttons">
+				<option value="true">	
+			pnlElevator.getEmergencyButtons().get(
+					iTargetIndex).setActivated(false);
+				</option>
+			</select>		
+		
+			}
+		// #end
+			</otherwise>
+		</select>
+			
+		
+	
+
+	}
+
+	/**
+	 * Diese Methode wechselt das Bild des Fahrstuhls in dem GUI.
+	 * 
+	 * @param path
+	 */
+	private void changeImage(String path, int iControllerIndex) {
+		Icon icon = new ImageIcon(getClass().getResource(path));
+		<select option="elevators">
+			<option value="1" comp-operator="&gt;">
+		getElevatorPanel(iControllerIndex).getElevatorImage().setIcon(
+				icon);
+			</option>
+			<option value="1">
+			getElevatorPanel().getElevatorImage().setIcon(
+				icon);
+			</option>
+		</select>
+	}
+	<select option="controlling_synchronized">
+		<option value="true">
+	//#if($controlling_synchronized)
+	/**
+	 * Highlighted alle Buttons auf einer Etage (auf allen Fahrstuehlen)
+	 * 
+	 * @param iFloor
+	 *            - Etage, die gehighlighted werden soll
+	 * @param bHighlight
+	 *            - Highlight hinzufuegen/entfernen
+	 */
+	public void highlightFloorButtons(int iFloor, boolean bHighlight, int iComponent) {
+		for (int i = 0; i &lt; <value-of expr="?@elevators?"/>; i++) {
+			<select option="outerview_buttontype">
+				<option value="ArrowButton">
+			if(lElevatorPanels.get(i).getCallButtons().size() != 0) {
+				getElevatorPanel(i).getCallButtons().get(iFloor)
+				.setHighlight(iComponent, bHighlight);
+			}
+				</option>
+				<option value="DefaultButton">
+
+			if(lElevatorPanels.get(i).getCallButtons().size() != 0) {
+				getElevatorPanel(i).getCallButtons().get(iFloor)
+				.setHighlight(bHighlight);
+			}
+				</option>
+			</select>
+
+			
+
+		}
+	}
+	
+	
+	/**
+	 * aktiviert oder deaktiviert die Rufknoepfe aller Fahrstuehle auf einer bestimmten Etage
+	 * @param iFloor - Stockwerk
+	 * @param bEnabled - aktiviert/deaktiviert
+	 */
+	public void setFloorButtonsEnabled(int iFloor, boolean bEnabled) {
+		for (int i = 0; i &lt; <value-of expr="?@elevators?"/>; i++) {
+				if(lElevatorPanels.get(i).getCallButtons().size() != 0) {
+					getElevatorPanel(i).getCallButtons().get(iFloor)
+					.setEnabled(bEnabled);
+				}
+
+		}
+	}
+
+
+	/**
+	 * Aktiviert bzw. Deaktiviert die Notrufbuttons auf einer Etage
+	 * @param iFloor - Etage, deren NotrufButtons deaktiviert werden soll
+	 * @param bActive - aktivieren/deaktivieren
+	 */
+	public void activateEmergencyButtons(int iFloor, boolean bActive) {
+		for (int i = 0; i &lt; <value-of expr="?@elevators?"/>; i++) {
+
+			if(lElevatorPanels.get(i).getEmergencyButtons().size() != 0) {
+				lElevatorPanels.get(i).getEmergencyButtons().get(iFloor).setActivated(bActive);
+			}
+			
+		}
+	}
+	//#end
+		</option>
+	</select>
+	
+	public void close() {
+		frame.dispose();
+		instance = null;
+	}
+
+}
+
+</x-frame>

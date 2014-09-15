@@ -1,0 +1,14 @@
+project Project_gen {
+
+    Boolean bool_0 = false;
+    Boolean bool_1 = true;
+    Boolean bool_2 = false;
+    Boolean bool_3 = true;
+    Integer int_0 = 10;
+    Integer int_1 = 1;
+    Integer int_2 = 11;
+    Real real_0 = 2.424873;
+    Real real_1 = 9.827122;
+    Real real_2 = 6.992447;
+    bool_0 or bool_1;
+}

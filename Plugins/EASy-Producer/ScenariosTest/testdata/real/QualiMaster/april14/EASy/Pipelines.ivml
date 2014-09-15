@@ -1,0 +1,34 @@
+project Pipelines {
+
+	import Families;
+
+	compound Flow {
+		String name;
+		refTo(ProcessingElement) destination;
+	}
+	
+	compound ProcessingElement { // alternative: abstract element, refined via type
+	    String test;
+	}
+	
+	compound Source refines ProcessingElement {
+		setOf(refTo(Flow)) output;
+	}
+	
+	compound Sink refines ProcessingElement {
+	}
+	
+	compound FamilyElement refines ProcessingElement {
+		refTo(Family) family;
+		setOf(refTo(Flow)) output;
+	}
+	
+	compound Pipeline {
+		String name;
+		setOf(refTo(Source)) sources;
+	}
+	
+	// TODO constraints for HW-subpipeline (Apostolos: avoid/warn in/out/in/...)
+	setOf(refTo(Pipeline)) pipelines;
+	
+}

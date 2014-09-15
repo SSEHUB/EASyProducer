@@ -1,0 +1,18 @@
+vilScript PL_1 (Project source, Configuration config, Project target) {
+
+    version v0;
+    load properties "settings_p1.properties";
+	String p1;
+	
+	
+	test (Project source, Configuration config, Project target) = : {
+		String so = p1;    	
+    	source.convert();
+	}
+
+    main(Project source, Configuration config, Project target) = : {
+    	String so = p1;    	
+    	source.convert();
+    }
+
+}

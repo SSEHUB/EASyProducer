@@ -1,0 +1,11 @@
+vilScript CompoundInstantiationTest (Project source, Configuration config, Project target) {
+
+    version v0;
+
+    main(Project source, Configuration config, Project target) = : {
+    	FileArtifact destination = "${target.getPath()}/${target.name()}.txt";
+    	destination.delete();
+    	vilTemplateProcessor("TxtTemplate", config, destination);
+    }
+
+}

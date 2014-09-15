@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<!DOCTYPE x-frame SYSTEM "?@dtd?">
+<x-frame name="IElevatorController">
+
+package simulator.controllers;
+
+import simulator.model.Elevator;
+import simulator.model.Target;
+
+/**
+ * Jeder ElevatorController muss folgende Methoden implementieren
+ *
+ */
+public interface IElevatorController {
+	
+	/**
+	 * Diese Methode simuliert das Fahrstuhlverhalten fuer diesen Controller.
+	 * @return Ziel erreicht
+	 */
+	public boolean simulate();
+	
+	
+	/**
+	 * Wird aufgerufen, wenn der Fahrstuhl sein Ziel erreicht hat und die
+	 * Animation der Tueren abgeschlossen ist. Es wird ein neues Ziel über die
+	 * updateTarget Methode gefunden, wenn hasPriorityCall false ist.
+	 */
+	public void doAfterAnimate();
+	
+	
+	/**
+	 * Diese Methode fuegt ein neues Target in die Liste lTargetList ein und
+	 * ruft, wenn keine hasPriorityCall false ist, die updateTarget Methode auf.
+	 * @param target
+	 */
+	public void addFloor(Target target);
+	
+	
+	/**
+	 * Fuegt einen Stornierungswunsch in die Stornierungsliste ein. Die Verarbeitung
+	 * erfolgt erst in der processDeletions-Methode
+	 * @param iFloor - Stockwerk
+	 */
+	public void addDeletion(int iFloor);
+	
+	
+	/**
+	 * Findet das Stockwerk, welches der Fahrstuhl als naechstes anfahren soll und
+	 * setzt es als aktuelle Ziel 
+	 * @return Stockwerk gefunden
+	 */
+	public boolean updateTarget();
+	
+	public boolean updateTarget(int iDir, boolean bAttendTargetDir);
+	
+	
+	/**
+	 * Verarbeitet alle Fahrtwunsch-Stornierungen, die waehrend des letzten Schrittes
+	 * durch die addDeletion-Methode in Auftrag gegeben wurden. 
+	 */
+	public void processDeletions();
+	
+	
+	/**
+	 * Verarbeitet die PriorityCalls, die in der clqProrityQueue abgelegt wurden
+	 * und setzt das hasPriorityCall Attribut auf true.
+	 */
+	public void processPriorityCall();
+	
+	
+}
+
+</x-frame>

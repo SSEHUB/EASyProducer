@@ -1,0 +1,13 @@
+project FilteredInstantiationTest {
+
+	version v0;
+	import HighLevelVars;
+	import LowLevelVars;
+	
+	highInt = 3;
+	profile = Profile.SettingA;
+	
+	lowInt = highInt;
+	profile == Profile.SettingA implies profileSetting = 5;
+	profile == Profile.SettingB implies profileSetting = 7;
+}

@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<!DOCTYPE x-frame SYSTEM "?@dtd?">
+<x-frame name="AuthorizeButton">
+
+package gui.buttons;
+
+import gui.views.inside.ControlPanel;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+
+import properties.ProgramSettings;
+
+public class AuthorizeButton extends JButton {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5747868174847160408L;
+
+	public AuthorizeButton() {
+		Icon icon = new ImageIcon(getClass().getResource("/ressource/key.gif"));
+		setIcon(icon);
+		addActionListener(new AuthorizeButtonListener());
+	}
+	
+	
+	private class AuthorizeButtonListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			// TODO Auto-generated method stub
+			try {
+				int result = Integer.valueOf(JOptionPane.showInputDialog(null,
+						"Geben sie Ihre Authorisierungstufe ein!\n"
+								+ "(Stufe/n: 0-keine Authorisierung\n"
+								+ "sonst: 1-7: Schutzbereiche)"));
+				if (result &lt; 0 || result &gt; 7) {
+					JOptionPane.showMessageDialog(null, "Ungueltige Sicherheitsstufe", "Fehler",
+							JOptionPane.ERROR_MESSAGE);
+				} else {
+				<select option="floors_securitylevels">
+					<option value="{}">
+					</option>
+					<otherwise>
+					for (int i = 0; i &lt; ProgramSettings.FLOORS_SECURITY_LEVELS.length; i++) {
+						if (ProgramSettings.FLOORS_SECURITY_LEVELS[i] == result &amp;&amp; result != 0) {
+							((ControlPanel)AuthorizeButton.this.getParent()).getButtons().get(i).setEnabled(true);
+						} else if (result == 0) {
+							if (ProgramSettings.FLOORS_SECURITY_LEVELS[i] &gt; 0) {
+								((ControlPanel)AuthorizeButton.this.getParent()).getButtons().get(i).setEnabled(false);
+							}
+						}
+					}
+					</otherwise>
+				</select>
+				}
+			} catch (NumberFormatException e) {
+
+			}
+		}
+		
+	}
+	
+	
+}
+
+</x-frame>

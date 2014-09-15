@@ -1,0 +1,248 @@
+<?xml version="1.0"?>
+<!DOCTYPE x-frame SYSTEM "?@dtd?">
+<x-frame name="Main" outdir="?@out?main">
+
+package main;
+
+import gui.windows.MainWindow;
+
+/**
+ * Diese Klasse ist der Programmeinstieg.
+ */
+public class Main {
+
+
+	/**
+	 * Diese Methode startet das Programm.
+	 * 
+	 * @param args
+	 */
+	public static void main(String[] args) {
+	 	
+		new MainWindow();
+		
+	}
+
+}
+<!-- ElevatorEngine required -->
+
+<adapt x-frame="?@dir?\engine\ElevatorEngine.xvcl"
+			outdir="?@out?\engine" 
+			outfile="ElevatorEngine.java"/>
+
+<!-- ControlPanel required -->
+
+<adapt x-frame="?@dir?\gui\views\inside\ControlPanel.xvcl"
+			outdir="?@out?\gui\views\inside" 
+			outfile="ControlPanel.java"/>
+
+
+<!-- DisplayPanel required -->
+
+<adapt x-frame="?@dir?\gui\views\inside\DisplayPanel.xvcl"
+			outdir="?@out?\gui\views\inside" 
+			outfile="DisplayPanel.java"/>
+
+
+
+<!-- ElevatorPanel required -->
+
+<adapt x-frame="?@dir?\gui\views\outside\ElevatorPanel.xvcl"
+			outdir="?@out?\gui\views\outside" 
+			outfile="ElevatorPanel.java"/>
+
+
+<!-- ScrollPanel required -->
+
+<adapt x-frame="?@dir?\gui\views\ScrollPanel.xvcl"
+			outdir="?@out?\gui\views" 
+			outfile="ScrollPanel.java"/>
+
+
+
+<!-- Info required -->
+
+<adapt x-frame="?@dir?\gui\windows\Info.xvcl"
+			outdir="?@out?\gui\windows" 
+			outfile="Info.java"/>
+
+
+<!-- InfoWindow required -->
+
+<adapt x-frame="?@dir?\gui\windows\InfoWindow.xvcl"
+			outdir="?@out?\gui\windows" 
+			outfile="InfoWindow.java"/>
+
+
+<!-- MainWindow required -->
+
+<adapt x-frame="?@dir?\gui\windows\MainWindow.xvcl"
+			outdir="?@out?\gui\windows" 
+			outfile="MainWindow.java"/>
+
+
+<!-- StartUpScreen required -->
+
+<adapt x-frame="?@dir?\gui\windows\StartUpScreen.xvcl"
+			outdir="?@out?\gui\windows" 
+			outfile="StartUpScreen.java"/>
+
+
+<!-- ElevatorSimulator required -->
+
+<adapt x-frame="?@dir?\main\ElevatorSimulator.xvcl"
+			outdir="?@out?\main" 
+			outfile="ElevatorSimulator.java"/>
+
+
+
+<!-- ProgramSettings required -->
+
+<adapt x-frame="?@dir?\properties\ProgramSettings.xvcl"
+			outdir="?@out?\properties" 
+			outfile="ProgramSettings.java"/>
+
+
+
+<!-- Speed required -->
+
+<adapt x-frame="?@dir?\properties\Speed.xvcl"
+			outdir="?@out?\properties" 
+			outfile="Speed.java"/>
+
+
+
+
+<!-- Elevator required -->
+
+<adapt x-frame="?@dir?\simulator\model\Elevator.xvcl"
+			outdir="?@out?\simulator\model" 
+			outfile="Elevator.java"/>
+
+
+
+<!-- Target required -->
+
+<adapt x-frame="?@dir?\simulator\model\Target.xvcl"
+			outdir="?@out?\simulator\model" 
+			outfile="Target.java"/>
+
+
+<!-- DefaultButton required -->
+
+<adapt x-frame="?@dir?\gui\buttons\DefaultButton.xvcl" 
+		outdir="?@out?\gui\buttons" 
+		outfile="DefaultButton.java" />
+
+
+
+
+
+
+
+
+
+
+
+<!-- wenn die variable definiert ist muss es einen controller geben  -->
+<ifdef var="controlling_controllertype">
+
+<!-- der dann adapted wird  -->
+<adapt x-frame="?@dir?\simulator\controllers\?@controlling_controllertype?.xvcl" 
+		outdir="?@out?\simulator\controllers" 
+		outfile="?@controlling_controllertype?.java" />
+</ifdef>
+
+<!-- wenn ArrowButton gewaehlt ist dann adapte ArrowButton-->
+<select option="outerview_buttontype">
+	<option value="ArrowButton">
+		<adapt x-frame="?@dir?\gui\buttons\ArrowButton.xvcl" 
+			outdir="?@out?\gui\buttons" 
+			outfile="ArrowButton.java" />
+	</option>
+</select>
+
+
+<!-- wenn emergencybutton true ist muss die klasse EmergencyButton adapted werden-->
+
+<select option="outerview_emergencybuttons">
+	<option value="true">
+	<ifndef var="emergency">
+	<set var="emergency" value="true"/>
+		<adapt x-frame="?@dir?\gui\buttons\EmergencyButton.xvcl"
+			outdir="?@out?\gui\buttons" 
+			outfile="EmergencyButton.java"/>
+	</ifndef>
+	</option>
+</select>
+
+
+<select option="innerview_emergencybutton">
+	<option value="true">
+	<ifndef var="emergency">
+	<set var="emergency" value="true"/>
+		<adapt x-frame="?@dir?\gui\buttons\EmergencyButton.xvcl"
+			outdir="?@out?\gui\buttons" 
+			outfile="EmergencyButton.java"/>
+	</ifndef>
+	</option>
+</select>
+
+
+
+<!-- wenn authorizebutton true ist muss die klasse AuthorizeButton adapted werden-->
+
+<select option="innerview_authorization">
+	<option value="true">
+		<adapt x-frame="?@dir?\gui\buttons\AuthorizeButton.xvcl"
+			outdir="?@out?\gui\buttons" 
+			outfile="AuthorizeButton.java"/>
+			
+	</option>
+</select>
+
+
+<!-- wenn doorbutton true ist muss die klasse OpenCloseDoorButton adapted werden-->
+
+<select option="innerview_doorbutton">
+	<option value="true">
+		<adapt x-frame="?@dir?\gui\buttons\OpenCloseDoorButton.xvcl"
+			outdir="?@out?\gui\buttons" 
+			outfile="OpenCloseDoorButton.java"/>
+	</option>
+</select>
+
+
+
+<!-- wenn synchronized true ist muss die klasse SuperController adapted werden-->
+
+<select option="controlling_synchronized">
+	<option value="true">
+		<adapt x-frame="?@dir?\simulator\SuperController.xvcl"
+			outdir="?@out?\simulator" 
+			outfile="SuperController.java"/>
+	</option>
+</select>
+
+<!-- wenn accelerated true ist muss die klasse SpeedController adapted werden-->
+
+<select option="controlling_accelerated">
+	<option value="true">
+		<adapt x-frame="?@dir?\engine\SpeedController.xvcl"
+			outdir="?@out?\engine" 
+			outfile="SpeedController.java"/>
+	</option>
+</select>
+
+<!-- wenn floorchain true ist muss die klasse FloorChainDisplay adapted werden-->
+
+<select option="display_currfloor_chain">
+	<option value="true">
+		<adapt x-frame="?@dir?\gui\views\inside\displays\FloorChainDisplay.xvcl"
+			outdir="?@out?\gui\views\inside\displays" 
+			outfile="FloorChainDisplay.java"/>
+	</option>
+</select>
+
+
+</x-frame>

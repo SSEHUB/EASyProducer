@@ -1,0 +1,7 @@
+-> main(Configuration, Artifact) with (<config>, test.texts)
+    -> byName(Configuration, String) with (<config>, pEnum) = test::pEnum
+    e <- val2
+    -> integerValue(EnumValue) with (val2) = 1
+    i <- 1
+    -> ordinal(EnumValue) with (val2) = 1
+    o <- 1

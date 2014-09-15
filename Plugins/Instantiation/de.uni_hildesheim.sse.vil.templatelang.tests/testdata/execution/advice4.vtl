@@ -1,0 +1,17 @@
+@advice(adviceTestVM4)
+template adviceTest4(Configuration config, FileArtifact target) {
+
+    def main(Configuration config, FileArtifact target) {
+        adviceTestVM1 prj = config.selectByProject("adviceTestVM1");
+        TestCompoundType cmp = prj.c1();
+        String varName = cmp.$variable().name();
+        String typeName = cmp.$declaration().type();
+        '$varName $typeName'
+        adviceTestVM4 prj4 = config;
+        cmp = prj4.c1();
+        varName = cmp.$variable().name();
+        typeName = cmp.$declaration().type();
+        '$varName $typeName'
+    }
+
+}

@@ -1,0 +1,7 @@
+-> main()
+    -> randomInteger() with () = 1
+    i <- 1
+    -> >(Integer, Integer) with (1, 0) = true
+    -> random() with () = 0.1
+    r <- 0.1
+    -> >(Real, Real) with (0.1, 0.0) = true

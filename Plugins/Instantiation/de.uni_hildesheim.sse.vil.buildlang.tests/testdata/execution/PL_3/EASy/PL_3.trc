@@ -1,0 +1,6 @@
+-> main(Project, Configuration, Project) with (<project>, <config>, <project>)
+    -> main(Project, Configuration, Project) with (<project>, <config>, <project>)
+-> main(Configuration, FileArtifact) with (<config>, test.txt)
+    -> test(Configuration) with (<config>)
+        -> vilTemplateProcessor(String, Configuration, Artifact) with (t1, <config>, test.txt, {}) = {test.txt}
+        -> main(Project, Configuration, Project) with (<project>, <config>, <project>)

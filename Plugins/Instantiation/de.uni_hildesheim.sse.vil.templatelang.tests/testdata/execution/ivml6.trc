@@ -1,0 +1,3 @@
+-> main(Configuration, FileArtifact) with (<config>, test.texts)
+    -> path(FileArtifact) with (test.texts) = test.texts
+    -> store(Configuration, Path) with (<config>, test.texts) = test.texts

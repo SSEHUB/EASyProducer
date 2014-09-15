@@ -1,0 +1,11 @@
+template attribute(Configuration config, FileArtifact target, IvmlElement bindingTime) {
+
+    def main(Configuration config, FileArtifact target, IvmlElement bindingTime) {
+        Boolean hasEnabledElements = false;
+        for (DecisionVariable v : config.variables(), ",\n\n") {
+            Boolean isEnabled = (v.element("bindingTime").value() == bindingTime);
+            print '${v.name()}("", ${valueRange(v)}, ${value(v)}, ${v.element("bindingTime").value() == bindingTime})' | 4;
+        }
+    }
+
+}

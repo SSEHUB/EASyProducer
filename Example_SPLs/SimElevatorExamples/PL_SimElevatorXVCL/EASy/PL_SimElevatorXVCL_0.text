@@ -1,0 +1,16 @@
+PL_SimElevatorXVCL::elevators = How many different elevators shall be part of the simulator?
+PL_SimElevatorXVCL::floors = How many floors shall be accessible?
+PL_SimElevatorXVCL::controlling_controllertype = Which controller shall be used? DefaultEController = Normal behavior, DistanceEController = Near targets first.
+PL_SimElevatorXVCL::controlling_accelerated = Shall the elevator increase its velocity if there are many floors which shall be passed?
+PL_SimElevatorXVCL::outerview_buttontype = Is it possible to specify the direction of travel?
+PL_SimElevatorXVCL::outerview_emergencybuttons = Shall emergency buttons be provided outside of the elevator? 
+PL_SimElevatorXVCL::outerview_cancellation = Are certain floors only accessible by key (card)?
+PL_SimElevatorXVCL::innerview_emergencybutton = Shall emergency buttons be provided inside of the elevator? 
+PL_SimElevatorXVCL::innerview_authorization = Are certain floors only accessible by key (card)?
+PL_SimElevatorXVCL::innerview_doorbutton = 
+PL_SimElevatorXVCL::display_direction = 
+PL_SimElevatorXVCL::display_currfloor_number = 
+PL_SimElevatorXVCL::display_currfloor_chain = 
+PL_SimElevatorXVCL::display_target = 
+PL_SimElevatorXVCL::display_openingside = Does the elvator have more than one door?
+PL_SimElevatorXVCL::outerview_autoscroll = Shall the simulator focus the elevators while moving?

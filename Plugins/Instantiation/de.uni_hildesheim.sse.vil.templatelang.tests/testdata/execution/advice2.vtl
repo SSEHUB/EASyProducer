@@ -1,0 +1,31 @@
+@advice(adviceTestVM1)
+template adviceTest2(Configuration config, FileArtifact target) {
+
+    def processCompound(TestCompoundType cmp) {
+        Integer i = cmp.iVal();
+        String s = cmp.sVal();
+        LevelType t = cmp.type();
+        'test compound type: $i $s $t'
+        if (t == LevelType.high) {
+            'high type'
+        } else {
+            'other type'
+        }
+    }
+
+    def processCompound(SubTestCompoundType cmp) {
+        Integer i = cmp.iVal();
+        String s = cmp.sVal();
+        Boolean b = cmp.bVal();
+        LevelType t = cmp.type();
+        'sub test compound type: $i $s $b $t'
+    }
+
+    def main(Configuration config, FileArtifact target) {
+        TestCompoundType cmp = config.byName("c1");
+        processCompound(cmp);
+        cmp = config.byName("c2");
+        processCompound(cmp);
+    }
+
+}

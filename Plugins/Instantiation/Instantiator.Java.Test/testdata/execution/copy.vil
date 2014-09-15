@@ -1,0 +1,23 @@
+vilScript PL_New (Project source, Configuration config, Project target) {
+
+    version v0;
+
+    String folder = "javaCopy";
+
+    postCopy(JavaFileArtifact j, String name) = : {
+        j.modifyNamespace("test", "${name}.test");
+    }
+
+    doCopy(String nsName, Path destination) = "$destination/$nsName/**/*.java" : "$source/$folder/**/*.java" {
+        RHS.copy(LHS);
+        postCopy(LHS, nsName);
+    }
+
+    main(Project source, Configuration config, Project target) = : {
+        String name = "instantiated";
+        Path destination = "$target/$folder/dest";
+        destination.delete();
+        doCopy(name, destination);
+    }
+
+}

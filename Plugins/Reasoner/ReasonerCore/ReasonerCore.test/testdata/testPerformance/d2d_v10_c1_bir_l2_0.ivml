@@ -1,0 +1,14 @@
+project d2d_v10_c1_bir_l2 {
+
+    Boolean bool_0 = true;
+    Boolean bool_1 = true;
+    Boolean bool_2 = false;
+    Boolean bool_3 = false;
+    Boolean bool_4 = true;
+    Boolean bool_5 = false;
+    Boolean bool_6 = false;
+    Boolean bool_7 = false;
+    Boolean bool_8 = true;
+    Boolean bool_9 = true;
+    (bool_3 xor bool_9) and bool_8;
+}

@@ -1,0 +1,22 @@
+project constraintDispatchCall {
+
+    version v0;
+    compound Flow {
+        refTo(PipelineNode) destination;
+    }
+
+    compound PipelineNode {
+    }
+
+    compound Source refines PipelineNode {
+        setOf(refTo(Flow)) output;
+    }
+
+    compound Pipeline {
+        setOf(refTo(Source)) sources;
+    }
+
+    setOf(refTo(Pipeline)) pipelines;
+    Constraint pipelineControl = pipelines->forAll(p|p.sources->forAll(s|s.output->forAll(f|checkFlow(s, f.destination))));
+    def Boolean checkFlow(PipelineNode start, PipelineNode end) = false;
+}

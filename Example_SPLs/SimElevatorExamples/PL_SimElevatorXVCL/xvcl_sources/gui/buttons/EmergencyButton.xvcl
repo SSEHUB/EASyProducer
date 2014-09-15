@@ -1,0 +1,177 @@
+<?xml version="1.0"?>
+<!DOCTYPE x-frame SYSTEM "?@dtd?">
+<x-frame name="EmergencyButton">
+package gui.buttons;
+
+import gui.windows.MainWindow;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+
+import main.ElevatorSimulator;
+
+/**
+ * Klasse, die von JButton erbt und den Notrufbutton repraesentiert.
+ * 
+ */
+public class EmergencyButton extends JButton {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private boolean bActivated = false;
+	private int id;
+	private int iElevatorIndex;
+	private boolean inside;
+	private Icon iconActive;
+	private Icon iconNotActive;
+
+	/**
+	 * Konstruktor
+	 * 
+	 * @param id
+	 *            - Nummer des Stockwerks
+	 * @param iControllerIndex
+	 *            - Index des Controllers, der dieser Button zugeordnet ist
+	 * @param inside
+	 *            - Button innen (StatusPanel) oder aussen (ElevatorPanel)
+	 */
+	public EmergencyButton(int id, int iElevatorIndex, boolean inside) {
+		super();
+		this.id = id;
+		this.inside = inside;
+		this.iElevatorIndex = iElevatorIndex;
+
+		// Icons initialisieren
+		this.iconActive = new ImageIcon(getClass().getResource(
+				"/ressource/flame_activated.gif"));
+		this.iconNotActive = new ImageIcon(getClass().getResource(
+				"/ressource/flame.gif"));
+		this.setIcon(iconNotActive);
+
+		// this.addActionListener(new MyActionListener());
+		this.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				if (isActivated()) {
+					
+					setActivated(false);
+					
+				} else {
+					setActivated(true);
+					if (!isInside()) {
+						<select option="controlling_synchronized">
+							<option value="true">
+						// #if($controlling_synchronized)
+						ElevatorSimulator.getInstance().getSuperController()
+								.addPriorityCall(
+										EmergencyButton.this.iElevatorIndex,
+										EmergencyButton.this.id,
+										EmergencyButton.this.inside);
+
+						MainWindow.getInstance().activateEmergencyButtons(
+									EmergencyButton.this.id, true);
+							</option>
+							<otherwise>
+						// #else
+								<select option="elevators">
+									<option value="1" comp-operator="&gt;">
+						ElevatorSimulator.getInstance().getController(
+								EmergencyButton.this.iElevatorIndex)
+								.addPriorityCall(EmergencyButton.this.id);
+									</option>
+									<option value="1">
+						ElevatorSimulator.getInstance().getController()
+								.addPriorityCall(EmergencyButton.this.id);			
+									</option>
+								</select>
+						// #end
+							</otherwise>
+						</select>
+					}
+
+				}
+
+			}
+		});
+	}
+
+	/**
+	 * @return Button innen oder aussen
+	 */
+	public boolean isInside() {
+		return inside;
+	}
+
+	/**
+	 * @param setzt
+	 *            innen/aussen Status
+	 */
+	public void setInside(boolean inside) {
+		this.inside = inside;
+	}
+
+	/**
+	 * @return Button aktiviert? (nicht zu verwechseln mit enabled)
+	 */
+	public boolean isActivated() {
+		return bActivated;
+	}
+
+	/**
+	 * @param Button
+	 *            (de-)aktivieren
+	 */
+	public void setActivated(boolean bActivated) {
+		if (bActivated) {
+			this.setIcon(iconActive);
+		} else {
+			this.setIcon(iconNotActive);
+		}
+		this.bActivated = bActivated;
+	}
+
+	/**
+	 * innere Klasse, die den ActionListener des EmergencyButtons darstellt
+	 * 
+	 */
+	// private class MyActionListener implements ActionListener {
+	//
+	// @Override
+	// public void actionPerformed(ActionEvent e) {
+	//
+	// if (isActivated()) {
+	// if (isInside()) {
+	// setActivated(false);
+	// }
+	// } else {
+	// setActivated(true);
+	// if (!isInside()) {
+	// MainWindow.getInstance().getSuperController()
+	// .addPriorityCall(
+	// EmergencyButton.this.iControllerIndex,
+	// EmergencyButton.this.id,
+	// EmergencyButton.this.inside);
+	//
+	// if (PropertiesSingle.getInstance().isbSync()) {
+	// MainWindow.getInstance().activateEmergencyButtons(
+	// EmergencyButton.this.id, true);
+	// }
+	// }
+	//
+	// }
+	//
+	// }
+	//
+	// }
+
+}
+
+</x-frame>

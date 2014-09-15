@@ -1,0 +1,4 @@
+project InterfaceImportFail {
+    version v1;
+    import InterfaceImportFail::common;
+}   

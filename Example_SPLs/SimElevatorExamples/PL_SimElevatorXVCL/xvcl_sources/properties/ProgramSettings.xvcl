@@ -1,0 +1,121 @@
+<?xml version="1.0"?>
+<!DOCTYPE x-frame SYSTEM "?@dtd?">
+<x-frame name="ProgramSettings">
+
+package properties;
+
+
+import java.util.ArrayList;
+
+
+/**
+ * Diese Klasse stellt wichtige Konstanten bereit, die die Programmeinstellungen
+ * darstellen.
+ */
+public class ProgramSettings {
+	
+
+	/**
+	 * Geschwindigkeit der Fahrstuehle.
+	 */
+	public static final Speed ELEVATORS_SPEED = Speed.MEDIUM;
+	
+
+	/**
+	 * automatisches scrollen der ElevatorPanels, wenn der Fahrstuhl. 
+	 */
+	public static final boolean ELEVATORS_AUTOSCROLL = true;
+	<select option="controlling_synchronized">
+		<option value="true">
+	// #if($synchronized)
+	/**
+	 * Anzahl Rufknoepfe pro Stockwerk. 
+	 */
+	public static final int FLOORS_BUTTONS = <value-of expr="?@elevators?"/>;	
+	// #end
+		</option>
+	</select>
+	
+	
+
+	<select option="floors_names">
+		<option value="{}">
+		/**
+	 * Namen der Stockwerke.
+	 */
+	public static final String[] FLOORS_NAMES = <value-of expr="?@floors_names?"/>;
+	// #end
+		</option>
+	</select>
+
+	<select option="floors_securitylevels">
+		<option value="{}">
+		
+		</option>
+		<otherwise>
+	// #if($floors_securitylevels != "{}")
+	/**
+	 * gesperrte Sicherheitsbereiche.
+	 */
+	public static final int[] FLOORS_SECURITY_LEVELS = <value-of expr="?@floors_securitylevels?"/>;
+	// #end
+	
+		</otherwise>
+	</select>
+	
+	<select option="floors_doorsides">
+		<option value="{}">
+		
+		</option>
+		<otherwise>
+	/**
+	 * oeffnungsseite der Tuer pro Stockwerk.
+	 */
+	public static final int[] FLOORS_DOORSIDES = <value-of expr="?@floors_doorsides?"/>;
+		</otherwise>
+	</select>
+	
+	<select option="floors_heights">
+		<option value="{}">
+		// #else
+	/**
+	 * Hoehe aller Stockwerke.
+	 */
+	public static final int FLOORS_HEIGHT = 50;
+	// #end
+		</option>
+		<otherwise>
+	// #if($floors_heights != "{}")
+	/**
+	 * individuelle Hoehen der einzelnen Stockwerke.
+	 */
+	public static final int[] FLOORS_HEIGHTS = <value-of expr="?@floors_heights?"/>;
+		</otherwise>
+	</select>
+
+	
+	
+	public static int getTotalHeight(int iFloor) {
+		int result = 0;
+		<select option="floors_heights">
+			<option value="{}">
+			// #else
+		result = <value-of expr="?@floors?"/> * FLOORS_HEIGHT;
+		// #end
+			</option>
+			<otherwise>
+			
+		// #if($floors_heights != "{}")
+		for(int i = 0; i &lt; iFloor; i++) {
+			result += FLOORS_HEIGHTS[i];
+		}
+			</otherwise>
+			
+		</select>
+		
+		return result;
+	}
+
+}
+
+</x-frame>

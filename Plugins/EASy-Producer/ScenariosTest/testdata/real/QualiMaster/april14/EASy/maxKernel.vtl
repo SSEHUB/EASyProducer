@@ -1,0 +1,58 @@
+template maxKernel(Configuration config, FileArtifact target, DecisionVariable pipeline) {
+
+    String streamInType = "dfeInt(32)";  // fixed for now
+    String streamOutType = "dfeInt(32)"; // fixed for now
+
+    def main(Configuration config, FileArtifact target, DecisionVariable pipeline) {
+    	DecisionVariable name = pipeline.byName("name");
+
+    	'package qm;'
+    	''
+    	'import com.maxeler.maxcompiler.v2.kernelcompiler.Kernel;'
+		'import com.maxeler.maxcompiler.v2.kernelcompiler.KernelParameters;'
+		'import com.maxeler.maxcompiler.v2.kernelcompiler.stdlib.memory.Memory;'
+		'import com.maxeler.maxcompiler.v2.kernelcompiler.types.base.DFEVar;'
+		''
+		'class PipelineKernel extends Kernel {'
+        '    PipelineKernel(KernelParameters parameters) {'
+		'        super(parameters);'
+		'        DFEVar inData = io.input("inData", $streamInType);'
+    	for (DecisionVariable r : pipeline.byName("sources").variables()) {
+    		processElement(r, "inData");
+    	}
+		'    }'
+		'}'
+    }
+
+    def processElement(DecisionVariable elt, String lastName) {
+        Integer indent = 8;
+    	String name = elt.varName();
+    	if (elt.type() == "FamilyElement") {
+    	    DecisionVariable family = elt.byName("family");
+    	    for (DecisionVariable alg : family.byName("members").variables()) {
+                if (alg.byName("hwType").stringValue() <> "NONE") {
+	            	String familyName = elt.varName();
+	            	String enabledSwitch = "${familyName}Enabled";
+	            	String resultName = "${familyName}Result";
+			        'DFEVar $enabledSwitch = io.scalarInput("$familyName", dfeInt(32));' | indent;
+			        'DFEVar $resultName;' | indent;
+			        '$resultName = ($enabledSwitch != 0 ? ${alg.byName("artifact")}($lastName) : $lastName);' | indent;
+			        lastName = resultName;
+	            }
+            }
+			for (DecisionVariable flow : elt.byName("output").variables()) {
+				processElement(flow.byName("destination"), lastName);
+			}
+		} else if (elt.type() == "Source") {
+			// simplifying assumption - only family elements are suitable for hw
+			for (DecisionVariable flow : elt.byName("output").variables()) {
+				processElement(flow.byName("destination"), lastName);
+			}
+		} else if (elt.type() == "Sink") {
+			// simplifying assumption - only family elements are suitable for hw
+			// simplifying assumption - exactly one output stream :o
+    		'io.output("outData", $lastName, $streamInType);' | indent;
+		}
+    }
+        
+}

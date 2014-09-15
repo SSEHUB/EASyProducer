@@ -1,0 +1,23 @@
+-> main(Configuration, FileArtifact) with (<config>, test.texts)
+    -> byName(Configuration, String) with (<config>, c1) = adviceTestVM1::c1
+    cmp <- adviceTestVM1::c1
+    -> processCompound(TestCompoundType) with (adviceTestVM1::c1)
+        -> iVal(TestCompoundType) with (adviceTestVM1::c1) = adviceTestVM1::TestCompoundType::iVal
+        i <- 1
+        -> sVal(TestCompoundType) with (adviceTestVM1::c1) = adviceTestVM1::TestCompoundType::sVal
+        s <- here
+        -> type(TestCompoundType) with (adviceTestVM1::c1) = adviceTestVM1::TestCompoundType::type
+        t <- adviceTestVM1::TestCompoundType::type
+        -> ==(LevelType, LevelType) with (adviceTestVM1::TestCompoundType::type, high) = true
+        visit if-branch
+    -> byName(Configuration, String) with (<config>, c2) = adviceTestVM1::c2
+    cmp <- adviceTestVM1::c2
+    -> processCompound(SubTestCompoundType) with (adviceTestVM1::c2)
+        -> iVal(TestCompoundType) with (adviceTestVM1::c2) = adviceTestVM1::TestCompoundType::iVal
+        i <- 2
+        -> sVal(TestCompoundType) with (adviceTestVM1::c2) = adviceTestVM1::TestCompoundType::sVal
+        s <- sub
+        -> bVal(SubTestCompoundType) with (adviceTestVM1::c2) = adviceTestVM1::SubTestCompoundType::bVal
+        b <- false
+        -> type(TestCompoundType) with (adviceTestVM1::c2) = adviceTestVM1::TestCompoundType::type
+        t <- adviceTestVM1::TestCompoundType::type

@@ -1,0 +1,37 @@
+###############################################
+###    Properties of SVNControl server      ###
+###############################################
+
+# optional name of this repository, to be displayed on the GUI
+repositoryName=SVNControl-Test
+
+# default server communication port for the administration protocol
+defaultPort=10080
+# optional password port for handling password change requests only
+passwordPort=10081
+
+# path to the repository home directory (also path to auth, the password file, and 
+# access, the user permissions file)
+svnHome=C\:/localUserFiles/eichelberger/svnControlTest/javaI/
+authFile = auth
+accessFile = access
+
+# path to svnadmin.exe (may be empty to indicate that svnkit should be used instead 
+# of native process calls to svnadmin - required if SVNControl should run as Windows service)
+svnadminPath=
+
+# mapping of administrator users from auth, separated by commas, otherwise taken from config
+admins=eichelberger,schmid
+baseURL=https\://localhost.localnet
+
+# disallowed user names, arbitrary number of names or Java regular expressions
+disallowedUserName.0 = Administrator
+
+### If multiple repository directories should be served by this server instance,
+### create an own properties file and append the number, i.e. 
+### properties, properties1, properties2 etc.
+
+hooks.considerSvnTemplates=false
+svn.pre15compatible=true
+server.nossl=true
+client.hiddentabs=

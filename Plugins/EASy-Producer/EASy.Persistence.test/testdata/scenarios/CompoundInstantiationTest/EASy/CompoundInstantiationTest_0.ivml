@@ -1,0 +1,24 @@
+project CompoundInstantiationTest {
+
+	version v0;
+	String notNestedVar = "Not nested";
+	compound CP1 {
+		String nestedVar;
+	}
+
+	compound CP2 {
+		CP1 slot1;
+		CP1 slot2;
+	}
+
+	CP1 cmp1 = {nestedVar = "Nested, layer 1"};
+	CP2 cmp2 = {slot1 = {nestedVar = "1. nested, layer 2"}, slot2 = {nestedVar = "2. nested, layer 2"}};
+	notNestedVar = "Not nested";
+	cmp1 = {nestedVar = "Nested, layer 1"};
+	cmp2 = {slot1 = {nestedVar = "1. nested, layer 2"}, slot2 = {nestedVar = "2. nested, layer 2"}};
+	freeze {
+		notNestedVar;
+		cmp1;
+		cmp2;
+	}
+}

@@ -1,0 +1,20 @@
+project testopdefDispatch2 {
+
+    version v0;
+    compound Base {
+        Integer i;
+    }
+
+    compound Refined refines Base {
+        Integer j;
+    }
+
+    typedef BaseSet setOf(Base);
+    typedef RefinedSet setOf(Refined);
+    def Boolean test(BaseSet b) = b->forAll(e|e.i > 0);
+    def Boolean test(RefinedSet r) = r->forAll(e|e.i > 0 and e.j > 0);
+    RefinedSet r;
+    test(r);
+    setOf(Refined) r2;
+    test(r2);
+}

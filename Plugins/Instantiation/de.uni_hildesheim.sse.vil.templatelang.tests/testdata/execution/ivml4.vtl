@@ -1,0 +1,12 @@
+template ivml4(Configuration config, Artifact target) {
+
+    def main(Configuration config, Artifact target) {
+        EnumValue e = config.byName("pEnum");
+        Integer i = e.integerValue();
+        Integer o = e.ordinal();
+        '$e'
+        '$i'
+        '$o'
+    }
+
+}

@@ -1,0 +1,5 @@
+project PL_3 {
+
+	version v0;
+	import PL_2 with (PL_2.version == v0);
+}

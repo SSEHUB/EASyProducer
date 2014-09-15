@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!DOCTYPE x-frame SYSTEM "?@dtd?">
+<x-frame name="OpenCloseDoorButton">
+
+package gui.buttons;
+
+import javax.swing.JButton;
+
+public class OpenCloseDoorButton extends JButton {
+
+}
+
+
+</x-frame>

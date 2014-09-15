@@ -1,0 +1,11 @@
+import PL_2 with (version == v0);
+
+vilScript PL_3 (Project source, Configuration config, Project target) {
+
+    version v0;
+
+    main(Project source, Configuration config, Project target) = : {
+        PL_2::main(source, config, target);
+    }
+
+}

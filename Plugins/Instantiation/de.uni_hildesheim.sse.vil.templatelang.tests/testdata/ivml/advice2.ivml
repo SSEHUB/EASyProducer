@@ -1,0 +1,12 @@
+project adviceTestVM4 {
+  version v0;
+  import adviceTestVM1;
+  
+  Integer myIntVal;
+  
+  myIntVal=42;
+  freeze {
+    myIntVal;
+  };
+  
+}

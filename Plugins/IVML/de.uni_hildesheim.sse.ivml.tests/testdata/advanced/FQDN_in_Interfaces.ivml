@@ -1,0 +1,17 @@
+project importedProject1 {
+
+    Integer aVariable;
+}
+project importedProject2 {
+
+    Integer aVariable;
+}
+project FQDN_in_Interfaces {
+
+    version v0;
+    import importedProject1;
+    import importedProject2;
+    interface aInterface {
+        export importedProject2::aVariable;
+    }
+}

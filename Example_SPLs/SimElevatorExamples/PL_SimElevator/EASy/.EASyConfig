@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProductLineProject id="60d317a0-36ef-4f5d-892f-17b47a4d6099" name="PL_SimElevator" version="0" location="PL_SimElevator">
+	<predecessors>
+	</predecessors>
+	<successors>
+		<entity id="c43153a3-1f0c-43b1-991e-c52d08dbfb6b" name="PL_Eco" location="PL_Eco" />
+		<entity id="bdde0048-6fd7-432d-9b79-ce3779567f91" name="PL_Product" location="PL_Product" />
+		<entity id="da6fd5fb-4735-4c93-b4c9-d7350d1b281c" name="PL_1" version="0" location="PL_1" />
+	</successors>
+	<settings>
+		<entity debug="false" />
+	</settings>
+	<reasoners>
+		<entity timeout="0" />
+	</reasoners>
+	<instantiators>
+	</instantiators>
+	<copy>
+		<entity copyID="de.uni_hildesheim.sse.instantiator.copy.java" />
+	</copy>
+</ProductLineProject>

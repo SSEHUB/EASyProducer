@@ -1,0 +1,197 @@
+<?xml version="1.0"?>
+<!DOCTYPE x-frame SYSTEM "?@dtd?">
+<x-frame name="SuperController">
+
+
+package simulator;
+
+import java.util.ArrayList;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
+import properties.ProgramSettings;
+import simulator.controllers.<value-of expr="?@controlling_controllertype?"/>;
+import simulator.model.Target;
+
+
+
+/**
+ * Der SuperController verwaltet die Fahrtwuensche,
+ * wenn mehrere Fahrstuehle synchron gesteuert werden sollen.
+ * Ansonsten gibt er die Rufe einfach an die jeweiligen Fahrstuehle
+ * weiter.
+ */
+public class SuperController {
+	
+	
+	private ArrayList&lt;<value-of expr="?@controlling_controllertype?"/>&gt; lControllers;
+	private ConcurrentLinkedQueue&lt;Target&gt; clqPriorityTargets;
+	
+	
+	/**
+	 * Konstruktor des SuperController. Es wird das dem ControllerType entsprechende
+	 * Controller Objekt erstellt und in einer Liste gespeichert.
+	 * 
+	 * @param iControllerType
+	 */
+	public SuperController(ArrayList&lt;<value-of expr="?@controlling_controllertype?"/>&gt; controllers) {
+		lControllers = controllers;
+		clqPriorityTargets = new ConcurrentLinkedQueue&lt;Target&gt;();
+
+		
+
+	}
+
+	/**
+	 * @return the lControllers
+	 */
+	public <value-of expr="?@controlling_controllertype?"/> getController(int i) {
+		return lControllers.get(i);
+	}
+
+	public void setController(int i, <value-of expr="?@controlling_controllertype?"/> controller) {
+		lControllers.set(i, controller);
+	}
+
+
+	/**
+	 * @return the PriorityTargets
+	 */
+	public ConcurrentLinkedQueue&lt;Target&gt; getPriorityTargets() {
+		return clqPriorityTargets;
+	}
+
+	
+	/**
+	 * Verarbeitet die Fahrtwuensche fuer eine synchrone Fahrstuhlsteuerung
+	 * und teilt sie dem naechsten bzw. sich gerade in die entsprechende
+	 * Richtung bewegenden Fahrstuhl-Controller zu.
+	 * @param target
+	 * @param priority
+	 */
+	private void delegateCall(Target target, boolean priority) {
+		int bestMatch = Integer.MAX_VALUE;
+		int iCurrent = Integer.MAX_VALUE;
+		//Es werden alle Controller durchgegangen
+		for (int i = 0; i &lt; lControllers.size(); i++) {
+			
+			/*
+			 * Hier wird herausgefunden, welcher Controller die besten Voraussetzungen
+			 * hat den Call zu uebernehmen. Zunaechst wird ueberprueft, ob das Stockwerk
+			 * auf der IgnoreList des Controllers ist. 
+			 * UND
+			 * Das Ziel liegt ueber dem Fahrstuhl des Controllers UND die derzeitige
+			 * Bewegung des Fahrstuhls ist 1.
+			 * ODER
+			 * Das Ziel liegt unter dem Fahrstuhl des Controllers UND die derzeitige
+			 * Bewgung des Fahrstuhls ist -1.
+			 * ODER
+			 * Der Fahrstuhl hat die Richtung 0 und steht somit im Moment.
+			 */
+			if ((!lControllers.get(i).getlIgnoreList().get(target.getFloor()))
+					&amp;&amp; ((target.getFloor() &gt; lControllers.get(i).getElevator()
+							.getCurrentFloor() &amp;&amp; lControllers.get(i)
+							.getElevator().getDirection() == 1)
+							|| (target.getFloor() &lt; lControllers.get(i)
+									.getElevator().getCurrentFloor() &amp;&amp; lControllers
+									.get(i).getElevator().getDirection() == -1) || (lControllers
+							.get(i).getElevator().getDirection() == 0))) {
+				//Berechnung der Distanz zwischen dem Fahrstuhl und dem Zielstockwerk
+				int iNext = Math.abs(target.getFloor()
+						- lControllers.get(i).getElevator().getCurrentFloor());
+				//Ist die Distanz kuerzer als beim letzten Fahrstuhl, wird bestMatch neu gesetzt
+				if (iCurrent &gt; iNext) {
+					iCurrent = iNext;
+					bestMatch = i;
+				}
+			}
+		}
+		
+		<value-of expr="?@controlling_controllertype?"/> bestController = lControllers.get(bestMatch); 
+		
+		/*
+		 * Handelt es sich um einen PriorityCall, wird das Target
+		 * in die PriorityQueue uebergeben und anschliessend ueber
+		 * processPriorityCall abgearbeitet
+		 */
+		if (priority) {
+			bestController.getClqPriorityQueue().add(target);
+			bestController.processPriorityCall();
+		} else {
+			//Hinzufuegen des Targets zur TargetList des bestMatch Controllers
+			bestController.addFloor(target);
+		}
+		bestController.startSimulation();
+	}
+	
+	/**
+	 * Entweder wird das Target hier an delegateCall oder direkt an den spezifizierten
+	 * Controller uebergeben.
+	 * 
+	 * @param iFloor - Stockwerk des Fahrwunsches
+	 * @param iDirection - Richtung des Fahrtwunsches. 0, wenn keine uebergeben wurde
+	 * @param iControllerIndex - Handelt es sich um einen controllerspezifischen Call,
+	 * wird dieser hier spezifiziert
+	 * @param insideElevator - true, wenn der Fahrtwunsch im Fahrstuhl ausgeloest wurde, sonst false
+	 */
+	public void addTarget(Target target, int iControllerIndex,
+			boolean insideElevator) {
+		
+		<value-of expr="?@controlling_controllertype?"/> controller = lControllers.get(iControllerIndex);
+		//ueberpruefung, ob die Fahrstuehle synchron laufen
+			if (insideElevator) {
+				controller.addFloor(target);
+				controller.startSimulation();
+			} else {
+				delegateCall(target, false);
+			}
+
+	}
+	
+	/**
+	 * 
+	 * @param iControllerIndex
+	 * @param iFloor
+	 */
+	public void deleteTarget(int iControllerIndex, int iFloor) {
+			// bei synchronisierten Fahrstuehlen muss der Fahrstuhl gesucht werden,
+			// der das Stockwerk anfaehrt
+			for(int i = 0; i &lt; lControllers.size(); i++) {
+				if(lControllers.get(i).getTargetList().get(iFloor) != null) {
+					lControllers.get(i).addDeletion(iFloor);
+					break;
+				}
+			}
+	}
+	
+	/**
+	 * Bei asynchroner Verarbeitung wird ein PriorityCall in die clqPriorityQueue des
+	 * Controllers eingefuegt.
+	 * Bei synchroner Verarbeitung wird das Ziel in die clqPriorityTargets
+	 * dieser Klasse eingefuegt und delegateCall aufgerufen, um den passenden Controller zu finden.
+	 * 
+	 * @param iControllerIndex - Handelt es sich um einen controllerspezifischen Call,
+	 * wird dieser hier spezifiziert
+	 * @param iFloor - Stockwerk des Fahrwunsches
+	 * @param insideElevator - true, wenn der Fahrtwunsch im Fahrstuhl ausgeloest wurde, sonst false
+	 */
+	public void addPriorityCall(int iControllerIndex, int iFloor,
+			boolean insideElevator) {
+		
+		Target target = new Target(iFloor, 0);
+		<value-of expr="?@controlling_controllertype?"/> controller = lControllers.get(iControllerIndex); 
+		
+			if (insideElevator) {
+				controller.getClqPriorityQueue().add(
+						target);
+				controller.processPriorityCall();
+				controller.startSimulation();
+
+			} else {
+				clqPriorityTargets.add(target);
+				delegateCall(clqPriorityTargets.poll(), true);
+			}
+	}
+
+}
+
+</x-frame>

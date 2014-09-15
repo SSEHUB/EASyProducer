@@ -1,0 +1,13 @@
+@advice(adviceTestVM6)
+template adviceTest6(Configuration config, FileArtifact target) {
+
+    def main(Configuration config, FileArtifact target) {
+        adviceTestVM6 prj = config;
+        TestCompoundType cmp = prj.c1();
+        BindingTime bt = cmp.bindingTime();
+        'compound binding time $bt'
+        Integer i = cmp.meta();
+        'compound meta $i'
+    }
+
+}

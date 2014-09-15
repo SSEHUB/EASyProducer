@@ -1,0 +1,54 @@
+project PipelinesCfg {
+
+	import Pipelines;
+	import FamiliesCfg;
+
+	Source src;
+
+    Sink snk;
+
+	FamilyElement pe1;
+	pe1 = {
+    	test="pe1",
+		//family = families[0]
+		family = refBy(causality) // not considered by configuration
+	};
+	
+	Flow f1;
+	f1 = {
+		name = "f1",
+		destination = refBy(pe1)
+	};
+	
+	Flow f2;
+	f2 = {
+		name = "f2",
+		destination = refBy(snk)
+	};
+
+    src.test = "src";
+	src.output = {refBy(f1)};
+    snk.test = "snk";
+    pe1.test="pe1";
+    pe1.output = {refBy(f2)};
+
+	Pipeline p = Pipeline {
+		name = "test",
+		sources = {refBy(src)}
+	};
+	
+
+    pipelines = {refBy(p)};
+	
+	freeze {
+        p;
+        f1;
+        f2;
+        pe1;
+        src;
+        snk;
+        pe1;
+		pipelines;
+    }
+
+}

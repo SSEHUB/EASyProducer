@@ -1,0 +1,12 @@
+extension de.uni_hildesheim.sse.easy_producer.vtl.Random;
+
+template javaExtension() {
+
+    def main() {
+        Integer i = randomInteger();
+        'random ${i > 0}'
+        Real r = random();
+        'random ${r > 0}'
+    }
+
+}

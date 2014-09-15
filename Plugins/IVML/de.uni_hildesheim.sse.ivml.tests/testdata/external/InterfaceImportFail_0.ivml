@@ -1,0 +1,7 @@
+project InterfaceImportFail {
+    version v0;
+    interface common {
+        export varA;
+    }
+    Boolean varA = true;
+}   

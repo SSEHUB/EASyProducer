@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProductLineProject id="60d317a0-36ea-4f5e-892f-18b47a4d6099" name="svncontrol" version="0" location="svncontrol">
+	<predecessors>
+	</predecessors>
+	<successors>
+	</successors>
+	<instantiators>
+	</instantiators>
+	<reasoners>
+		<entity timeout="0" />
+	</reasoners>
+	<copy>
+		<entity copyID="de.uni_hildesheim.sse.instantiator.copy.java" />
+	</copy>
+</ProductLineProject>

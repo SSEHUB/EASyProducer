@@ -1,0 +1,18 @@
+project HardwareCfg {
+
+    import Hardware;
+
+	machines = {
+    	Machine{
+    		name={"a", "b"}, 
+    		memory=1000000, 
+    		processors=4, 
+    		stormThreads=5
+    	}
+    };
+
+	freeze {
+        machines;
+    }
+
+}

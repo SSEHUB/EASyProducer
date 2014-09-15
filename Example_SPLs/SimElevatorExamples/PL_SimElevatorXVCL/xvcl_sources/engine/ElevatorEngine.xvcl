@@ -1,0 +1,246 @@
+<?xml version="1.0"?>
+<!DOCTYPE x-frame SYSTEM "?@dtd?">
+<x-frame name="ElevatorEngine">
+package engine;
+
+import gui.views.inside.ControlPanel;
+import gui.views.inside.DisplayPanel;
+import gui.windows.MainWindow;
+
+import java.awt.Point;
+
+import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+
+import main.ElevatorSimulator;
+import properties.ProgramSettings;
+import simulator.controllers.<value-of expr="?@controlling_controllertype?"/>;
+import properties.Speed;
+import simulator.model.Elevator;
+
+/**
+ * Klasse mit eigener RunnableInstanz
+ * 
+ */
+public class ElevatorEngine implements Runnable {
+
+	private MainWindow mw;
+	private int iControllerIndex;
+
+	private <value-of expr="?@controlling_controllertype?"/> myController;
+	private Elevator myElevator;
+	private JLabel myElevatorImage;
+	private ControlPanel myControls;
+	private DisplayPanel myDisplays;
+	
+	<select option="controlling_accelerated">
+		<option value="true">
+	// #if($controlling_accelerated)
+	private SpeedController speedController;
+	// #end
+		</option>
+	</select>
+	
+	/**
+	 * Konstruktor der Klasse ElevatorThread
+	 * 
+	 * @param iControllerIndex
+	 */
+	public ElevatorEngine(<value-of expr="?@controlling_controllertype?"/> controller) {
+		mw = MainWindow.getInstance();
+		iControllerIndex = controller.getIndex();
+		
+		<select option="elevators">
+			<option value="1" comp-operator="&gt;">
+		myController = ElevatorSimulator.getInstance().getController(iControllerIndex);
+		myElevatorImage = mw.getElevatorPanel(iControllerIndex).getElevatorImage();
+		myElevator = myController.getElevator();
+		myControls = mw.getControlPanel(iControllerIndex);
+		myDisplays = mw.getDisplayPanel(iControllerIndex);
+			</option>
+			<option value="1">
+		myController = ElevatorSimulator.getInstance().getController();
+		myElevatorImage = mw.getElevatorPanel().getElevatorImage();
+		myElevator = myController.getElevator();
+		myControls = mw.getControlPanel();
+		myDisplays = mw.getDisplayPanel();	
+			</option>
+		</select>
+		
+		<select option="controlling_accelerated">
+			<option value="true">
+		speedController = new SpeedController();
+			</option>
+		</select>
+	}
+
+	@Override
+	/**
+	 * Ueberladene run-Methode, welche mittels Schleife die Position des Grafikelements veraendert
+	 */
+	public void run() {
+		// synchronized (mw.getlElevatorPanels().get(iControllerIndex)) {
+		<select option="innerview_doorbutton">
+			<option value="true">
+		myControls.getCloseButton().setEnabled(false);
+		myControls.getOpenButton().setEnabled(false);
+			</option>
+		</select>
+
+		while (myController.getCurrentTarget() != null) {
+
+			if (myController.isUpdateNecessary()) {
+				myController.updateTarget();
+			}
+
+			if (!myController.getDeletionQueue().contains(
+					myController.getCurrentTarget().getFloor())) {
+				
+				int floorHeight;
+				
+				// #if($floors_heights != "{}")
+				<select option="floors_heights">
+					<option value="{}">
+					floorHeight = ProgramSettings.FLOORS_HEIGHT;
+					</option>
+					<otherwise>
+					floorHeight = ProgramSettings.FLOORS_HEIGHTS[myController.getCurrentTarget().getFloor()]; 
+					</otherwise>
+				</select>
+				// #else
+				// #end	
+				
+				
+				
+				// Bewegungsanimation des Fahrstuhls
+				for (int i = 0; i &lt; floorHeight; i++) {
+
+					myElevatorImage.setLocation((int) myElevatorImage.getLocation().getX(),
+							(int) myElevatorImage.getLocation().getY() - myElevator.getDirection());
+					<select option="outerview_autoscroll">
+						<option value="true">
+					scrollWithElevator(myElevator);
+						</option>
+					</select>	
+					<select option="controlling_accelerated">
+							<option value="true">
+						// #if($controlling_accelerated)
+						try {
+							speedController.adaptSpeed(i, myElevator, myControls.getButtons());
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						// #end
+							</option>
+							<otherwise>
+							Thread.sleep(Speed.MEDIUM.getValue());
+							</otherwise>
+						</select>
+				}
+			}
+
+			
+
+			myElevator.setbCloseDoorsNow(false);
+			myElevator.setbKeepDoorsOpen(false);
+
+			myDisplays.updateValues(myElevator, myController.getCurrentTarget());
+
+			boolean targetFound = myController.simulate();
+
+			myDisplays.changeImageDirection(myElevator.getDirection());
+
+			if (targetFound) {
+
+				/*
+				 * Tueren oeffnen und schliessen Buttons koennen nur betaetigt
+				 * werden, wenn der Fahrstuhl sein Ziel erreicht hat bzw. steht.
+				 */
+				 <select option="innerview_doorbutton">
+				 	<option value="true">
+				myControls.getCloseButton().setEnabled(true);
+				myControls.getOpenButton().setEnabled(true);
+					</option>
+				</select>
+
+				mw.animateDoors(iControllerIndex, myElevator.getCurrentFloor());
+				myController.doAfterAnimate();
+
+			 <select option="innerview_doorbutton">
+				 	<option value="true">
+				myControls.getCloseButton().setEnabled(false);
+				myControls.getOpenButton().setEnabled(false);
+					</option>
+				</select>
+
+			}
+
+		}
+ 				<select option="innerview_doorbutton">
+				 	<option value="true">
+				myControls.getCloseButton().setEnabled(true);
+				myControls.getOpenButton().setEnabled(true);
+					</option>
+				</select>
+
+
+	}
+
+	<select option="outerview_autoscroll">
+		<option value="true">
+
+	/**
+	 * Diese Methode laesst die Scrollbar mit dem Elevator scrollen, wenn er aus
+	 * dem Bild laeuft. wenn der Elevator aus dem Viewpoint rausfaehrt, dannsoll
+	 * die scrollbar mitscrollen, also der viewpoint soll sich verschieben.
+	 * 
+	 * wenn die y-koordinate von dem Elevator kleiner ist alsDifferenz aus
+	 * Gesamthoehe des Panels und der hoehe des Viewport, dann soll der
+	 * viewpoint verschoben werden.
+	 * 
+	 * @param elevator
+	 *            - der Elevator fuer die Location
+	 * 
+	 */
+	public void scrollWithElevator(Elevator elevator) {
+
+		/*
+		 * wenn der Elevator aus dem Viewpoint rausfaehrt, dannsoll die
+		 * scrollbar mitscrollen, also der viewpoint soll sich verschieben.
+		 */
+		<select option="elevators">
+			<option value="1" comp-operator="&gt;">
+		JLabel image = mw.getElevatorPanel(iControllerIndex).getElevatorImage();
+		Point pImage = new Point(image.getLocation());
+		JScrollPane jscroll = mw.getScrollPane(iControllerIndex);
+			</option>
+			<option value="1">
+		JLabel image = mw.getElevatorPanel().getElevatorImage();
+		Point pImage = new Point(image.getLocation());
+		JScrollPane jscroll = mw.getScrollPane();
+			</option>
+		</select>
+
+		if (elevator.getDirection() == 1) {
+			if (pImage.getY() &lt; (jscroll.getViewport().getViewPosition().getY())) {
+				jscroll.getViewport().setViewPosition(
+						new Point((int) 1, (int) jscroll.getViewport().getViewPosition().getY()
+								- (elevator.getDirection() * jscroll.getHeight())));
+			}
+		} else if (elevator.getDirection() == -1) {
+			if (pImage.getY() &gt; (jscroll.getViewport().getViewPosition().getY() + 500)) {
+				jscroll.getViewport().setViewPosition(
+						new Point((int) 1, (int) jscroll.getViewport().getViewPosition().getY()
+								- (elevator.getDirection() * jscroll.getHeight())));
+
+			}
+		}
+
+	}
+		</option>
+	</select>
+
+}
+
+</x-frame>

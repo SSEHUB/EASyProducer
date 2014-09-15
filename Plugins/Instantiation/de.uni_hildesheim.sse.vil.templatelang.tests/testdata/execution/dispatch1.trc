@@ -1,0 +1,38 @@
+-> main(Configuration, Artifact) with (<config>, test.texts)
+    -> variables(Configuration) with (<config>) = {import::iInt, test::pBoolean, test::pComp, test::pCompSeq, test::pEnum, test::pInt, test::pReal, test::pString}
+    -> sortAlpha(Sequence) with ({import::iInt, test::pBoolean, test::pComp, test::pCompSeq, test::pEnum, test::pInt, test::pReal, test::pString}) = {import::iInt, test::pBoolean, test::pComp, test::pCompSeq, test::pEnum, test::pInt, test::pReal, test::pString}
+    for dv {
+        dv <- import::iInt
+        -> value(DecisionVariable) with (import::iInt) = -1
+        -> createValueAssignment(DecisionVariable, Integer) with (import::iInt, -1)
+            -> name(DecisionVariable) with (import::iInt) = iInt
+        dv <- test::pBoolean
+        -> value(DecisionVariable) with (test::pBoolean) = true
+        -> createValueAssignment(DecisionVariable, Boolean) with (test::pBoolean, true)
+            -> name(DecisionVariable) with (test::pBoolean) = pBoolean
+        dv <- test::pComp
+        -> value(DecisionVariable) with (test::pComp) = null
+        -> createValueAssignment(DecisionVariable, Any) with (test::pComp, null)
+            -> name(DecisionVariable) with (test::pComp) = pComp
+        dv <- test::pCompSeq
+        -> value(DecisionVariable) with (test::pCompSeq) = null
+        -> createValueAssignment(DecisionVariable, Any) with (test::pCompSeq, null)
+            -> name(DecisionVariable) with (test::pCompSeq) = pCompSeq
+        dv <- test::pEnum
+        -> value(DecisionVariable) with (test::pEnum) = val2
+        -> createValueAssignment(DecisionVariable, EnumValue) with (test::pEnum, val2)
+            -> name(DecisionVariable) with (test::pEnum) = pEnum
+            -> ordinal(EnumValue) with (val2) = 1
+        dv <- test::pInt
+        -> value(DecisionVariable) with (test::pInt) = 0
+        -> createValueAssignment(DecisionVariable, Integer) with (test::pInt, 0)
+            -> name(DecisionVariable) with (test::pInt) = pInt
+        dv <- test::pReal
+        -> value(DecisionVariable) with (test::pReal) = 1.23
+        -> createValueAssignment(DecisionVariable, Any) with (test::pReal, 1.23)
+            -> name(DecisionVariable) with (test::pReal) = pReal
+        dv <- test::pString
+        -> value(DecisionVariable) with (test::pString) = Hello
+        -> createValueAssignment(DecisionVariable, String) with (test::pString, Hello)
+            -> name(DecisionVariable) with (test::pString) = pString
+    }

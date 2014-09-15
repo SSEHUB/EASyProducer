@@ -1,0 +1,8 @@
+seq1 <- {1, 2, 3, 4}
+-> selectByType(Sequence, Type) with ({1, 2, 3, 4}, Integer representing de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.PseudoInteger) = {1, 2, 3, 4}
+seq8 <- {1, 2, 3, 4}
+-> toSet(Sequence) with ({1, 2, 3, 4}) = {1, 2, 3, 4}
+set1 <- {1, 2, 3, 4}
+-> selectByType(Set, Type) with ({1, 2, 3, 4}, Integer representing de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.PseudoInteger) = {1, 2, 3, 4}
+set2 <- {1, 2, 3, 4}
+-> main()

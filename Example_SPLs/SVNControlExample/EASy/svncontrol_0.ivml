@@ -1,0 +1,19 @@
+project svncontrol {
+    version v0;
+	
+	enum BindingTime {compile, startup, runtime};
+	attribute BindingTime bindingTime to svncontrol;
+	
+	Boolean OPT_HOOKS;
+	Boolean OPT_SCHEDULES;
+	
+	OPT_HOOKS = false;
+	OPT_HOOKS.bindingTime = BindingTime.runtime;
+	OPT_SCHEDULES = true;
+	OPT_SCHEDULES.bindingTime = BindingTime.compile;
+	
+	freeze {
+	    OPT_HOOKS;
+	    OPT_SCHEDULES;
+	}
+}

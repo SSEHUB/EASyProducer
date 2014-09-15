@@ -1,0 +1,12 @@
+template defTest(Configuration config, FileArtifact target) {
+
+    def String type() {
+        String result = "type";
+        result;
+    }
+
+    def main(Configuration config, FileArtifact target) {
+        '${type()}'
+    }
+
+}

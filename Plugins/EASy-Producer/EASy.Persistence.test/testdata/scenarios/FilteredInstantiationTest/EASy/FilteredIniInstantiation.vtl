@@ -1,0 +1,14 @@
+template FilteredIniInstantiation(Configuration config, FileArtifact target) {
+
+	def main(Configuration config, FileArtifact target) {
+		for (DecisionVariable dv : config.variables().sortAlpha()) {
+			if (!dv.qualifiedName().matches(".*HighLevelVars.*")) {
+				writeLine(dv);
+			}
+		}
+	}
+	
+	def writeLine(DecisionVariable dv) {
+		'${dv.name()} = ${dv.value()}'
+	}
+}

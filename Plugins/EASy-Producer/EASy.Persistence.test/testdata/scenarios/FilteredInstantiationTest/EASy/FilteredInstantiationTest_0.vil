@@ -1,0 +1,11 @@
+vilScript FilteredInstantiationTest (Project source, Configuration config, Project target) {
+
+    version v0;
+
+    main(Project source, Configuration config, Project target) = : {
+    	FileArtifact destination = "${target.getPath()}/${target.name()}.ini";
+    	destination.delete();
+    	vilTemplateProcessor("FilteredIniInstantiation", config, destination);
+    }
+
+}

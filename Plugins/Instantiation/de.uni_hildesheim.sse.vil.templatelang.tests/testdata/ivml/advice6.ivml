@@ -1,0 +1,48 @@
+project adviceTestVM6 {
+  version v0;
+  Integer intVal;
+  enum BindingTime {compile, runtime};
+  enum LevelType {high, medium, low};
+  
+  attribute BindingTime bindingTime = BindingTime.compile to adviceTestVM6;
+  
+  compound TestCompoundType {
+      Integer iVal;
+      String sVal;
+      LevelType type;
+  };
+  
+  compound SubTestCompoundType refines TestCompoundType {
+      Boolean bVal;
+  }
+
+  intVal.bindingTime = BindingTime.compile;
+  
+  intVal=50;
+
+  TestCompoundType c1;
+  c1 = {
+    iVal=1,
+    sVal="here",
+    type=LevelType.high
+  };
+  attribute Integer meta = 0 to c1;
+  c1.bindingTime = BindingTime.compile;
+  c1.meta = 0; // default values not properly considered
+
+  SubTestCompoundType c2;
+  c2 = {
+    iVal=2,
+    sVal="sub",
+    type=LevelType.low,
+    bVal=false
+  };
+  c2.bindingTime = BindingTime.compile;
+  
+  freeze {
+    intVal;
+    c1;
+    c2;
+  };
+  
+}

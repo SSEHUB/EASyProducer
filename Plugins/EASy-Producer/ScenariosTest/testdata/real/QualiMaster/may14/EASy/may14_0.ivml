@@ -1,0 +1,12 @@
+project may14 {
+
+    version v0;
+    import InfrastructureCfg;
+    import ReconfigurableHardwareCfg;
+	import PipelinesCfg;
+	import ObservablesCfg;
+	import AdaptivityCfg;
+	import HardwareCfg;
+	import FamiliesCfg;
+
+}

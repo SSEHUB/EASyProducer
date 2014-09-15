@@ -1,0 +1,18 @@
+project InfrastructureCfg {
+	
+	import Infrastructure;
+	import PipelinesCfg;
+	
+	//refTo(Pipeline) pipeline;
+	Pipeline pipeline;
+	
+	pipeline = Pipeline {
+		name = "test",
+		sources = {refBy(src)}
+	};
+	
+	freeze {
+	    pipeline;
+	}
+
+}

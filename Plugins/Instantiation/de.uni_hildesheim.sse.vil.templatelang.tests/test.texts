@@ -1,0 +1,24 @@
+project test_conf {
+
+    version v1.0;
+    import test with (test.version == v1.0);
+    iInt = -1;
+    pInt = 0;
+    pString = "Hello";
+    pReal = 1.23;
+    pBoolean = true;
+    pBooleanUnfrozen = true;
+    pEnum = pEnumeration.val2;
+    pComp = {pcInt = 10, pcString = "inst1"};
+    pCompSeq = {{pcInt = 10, pcString = "inst1"}, {pcInt = 11, pcString = "inst2"}};
+    freeze {
+        iInt;
+        pInt;
+        pString;
+        pReal;
+        pBoolean;
+        pEnum;
+        pComp;
+        pCompSeq;
+    }
+}

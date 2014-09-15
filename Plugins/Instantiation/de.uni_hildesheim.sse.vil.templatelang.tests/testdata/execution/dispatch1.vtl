@@ -1,0 +1,33 @@
+template dispatch1(Configuration config, Artifact target) {
+
+    def main(Configuration config, Artifact target) {
+        for (DecisionVariable dv : config.variables().sortAlpha()) {
+            createValueAssignment(dv, dv.value());
+        }
+    }
+
+    def createValueAssignment(DecisionVariable variable, Boolean value) {
+        'Boolean ${variable.name()} $value'
+    }
+
+    def createValueAssignment(DecisionVariable variable, EnumValue value) {
+        'enum ${variable.name()} $value ${value.ordinal()}'
+    }
+
+    def createValueAssignment(DecisionVariable variable, Integer value) {
+        'integer ${variable.name()} ${value}'
+    }
+
+    def createValueAssignment(DecisionVariable variable, Real value) {
+        'real ${variable.name()} ${value}'
+    }
+
+    def createValueAssignment(DecisionVariable variable, String value) {
+        'string ${variable.name()} ${value}'
+    }
+
+    def createValueAssignment(DecisionVariable variable, Any value) {
+        'unknown ${variable.name()}'
+    }
+
+}

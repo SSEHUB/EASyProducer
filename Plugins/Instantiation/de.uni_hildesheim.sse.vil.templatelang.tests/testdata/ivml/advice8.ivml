@@ -1,0 +1,13 @@
+project adviceTestVM8 {
+  version v0;
+  
+  enum BindingTime {runtime, compile};
+  enum LevelType {high, medium, low};
+
+  LevelType type = LevelType.high;
+  
+  freeze {
+    type;
+  };
+  
+}

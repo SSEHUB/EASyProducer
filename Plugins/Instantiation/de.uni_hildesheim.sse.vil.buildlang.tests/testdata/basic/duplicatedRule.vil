@@ -1,0 +1,11 @@
+vilScript duplicatedRule () {
+
+    version v0.1;
+    
+    compileGoal() = "$target/bin/*.class" : "$source/bin/*.java" {
+    }
+
+    compileGoal() = : {
+    }
+
+}

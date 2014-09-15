@@ -1,0 +1,76 @@
+@advice(may14)
+template stormPipeline(Configuration config, FileArtifact target, Pipeline pipeline) {
+
+    // check for endless recursions
+
+    def main(Configuration config, FileArtifact target, Pipeline pip) {
+    	DecisionVariable name = pip.name();
+    	Integer timeout = 120;
+    	'import backtype.storm.*;'
+    	'import backtype.storm.topology.*;'
+    	''
+    	'public class Topology {'
+    	'    static final String TOPOLOGY_NAME = "$name";'
+    	''
+    	'    public static void main(String[] args) {'
+    	'        Config config = new Config();'
+    	'        config.setMessageTimeoutSecs($timeout);'
+    	'        TopologyBuilder b = new TopologyBuilder();'
+    	for (DecisionVariable r : pip.sources()) {
+    		processElement(r, "");
+    	}
+    	''
+    	'        final LocalCluster cluster = new LocalCluster();'
+		'        cluster.submitTopology(TOPOLOGY_NAME, config, b.createTopology());'
+    	'    }'
+    	'}'
+    }
+    
+    def processElement(DecisionVariable elt, String lastName) {
+		'// unhandled type ${elt.type()}' | 8;
+    }
+
+    def processElement(FamilyElement elt, String lastName) {
+    	produceStatement(elt, lastName, true);
+    	String name = elt.$varName();
+		for (Flow flow : elt.output()) {
+			processElement(flow.destination(), name);
+		}
+    }
+    
+    def processElement(Source elt, String lastName) {
+    	produceStatement(elt, lastName, false);
+    	String name = elt.$varName();
+		for (Flow flow : elt.output()) {
+			processElement(flow.destination(), name);
+		}
+    }
+    
+    def processElement(Sink elt, String lastName) {
+    	produceStatement(elt, lastName, true);
+    }
+    
+    def produceStatement(DecisionVariable elt, String lastName, Boolean bolt) {
+    	String name = elt.varName();
+    	String clsName = className(elt);
+
+        if (bolt) {
+    	    String grouping = grouping(elt, lastName);
+    	    'b.setBolt("$name", new $clsName())$grouping;' | 8;
+        } else {
+		    'b.setSpout("$name", new $clsName());' | 8;
+        }
+    }
+    
+    def grouping(DecisionVariable elt, String lastName) {
+    	"";
+    	if (elt.varName().length() > 0) {
+    		'.shuffleGrouping("$lastName")';
+    	}    	
+    }
+    
+    def className(DecisionVariable elt) {
+    	elt.varName().firstToUpperCase() + elt.type();
+    }
+    
+}

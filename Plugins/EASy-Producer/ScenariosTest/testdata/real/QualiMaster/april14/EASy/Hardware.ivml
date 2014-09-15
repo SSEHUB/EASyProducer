@@ -1,0 +1,15 @@
+project Hardware {
+
+	typedef PositiveInteger Integer with (PositiveInteger > 0);
+	
+	compound Machine {
+		setOf(String) name;
+		PositiveInteger memory;       // open
+		PositiveInteger processors;   // open
+		PositiveInteger frequency;    // open
+		PositiveInteger stormThreads; // from TSI
+	}
+	
+	setOf(Machine) machines;
+
+}

@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<!DOCTYPE x-frame SYSTEM "?@dtd?">
+<x-frame name="SpeedController">
+
+package engine;
+
+import gui.buttons.DefaultButton;
+
+import java.util.ArrayList;
+
+import properties.ProgramSettings;
+import simulator.model.Elevator;
+
+public class SpeedController {
+
+	private int currDelay;
+
+	public SpeedController() {
+		currDelay = ProgramSettings.ELEVATORS_SPEED.getValue();
+	}
+
+	/**
+	 * Diese Methode gibt den Speed an fuer die Beschleunigung.
+	 * 
+	 * @throws InterruptedException
+	 */
+	public void adaptSpeed(int iPos, Elevator elevator,
+			ArrayList&lt;DefaultButton&gt; buttons) throws InterruptedException {
+
+		/*
+		 * wenn mehr als 2 Buttons auf dem Weg zum target ausgegraut sind, dann
+		 * soll der fahrstuhl schneller fahren.
+		 */
+
+		// darueber wird der naechste Button ausgewaehlt
+		// aktueller Button + iPlus
+		int iPlus = elevator.getDirection();
+		// damit keine IndexOutOfBouce Ex kommt, wird
+		// iPlus null, falls anfang- oder endstockwerk.
+		if (elevator.getCurrentFloor() &lt;= 1
+				|| (elevator.getCurrentFloor() == <value-of expr="?@floors?"/>)) {
+			iPlus = 0;
+		}
+
+		int iSpeed = ProgramSettings.ELEVATORS_SPEED.getValue();
+		boolean currentIgnored = buttons.get(elevator.getCurrentFloor())
+				.isIgnored();
+		boolean nextIgnored = buttons.get(elevator.getCurrentFloor() + iPlus)
+				.isIgnored();
+		boolean prevIgnored = buttons.get(elevator.getCurrentFloor() - iPlus)
+				.isIgnored();
+		<select option="floors_heights">
+			<option value="{}">
+		int halfFloorHeight = ProgramSettings.FLOORS_HEIGHT / 2;
+			</option>
+			<otherwise>
+		int halfFloorHeight = ProgramSettings.FLOORS_HEIGHTS[elevator.getCurrentFloor()] / 2;	
+			</otherwise>
+		</select>
+
+		
+		if (currentIgnored) {
+			// wenn vorheriger nicht ignoriert, dann erste haelfte
+			// schneller
+			if (!prevIgnored) {
+				// erste haelfte
+
+				if (iPos &lt;= halfFloorHeight) {
+					// beschleunigen (entspricht geringer Verzoegerung)
+					Thread.sleep(iSpeed - Math.min(iSpeed, 2 * iPos));
+				} else { 
+					if (!nextIgnored &amp;&amp; iPos &gt; halfFloorHeight) {
+						Thread.sleep(iSpeed + (2 * iPos));
+					} else {
+						Thread.sleep(40);
+					}
+					// sonst langsamer
+				}
+			} else {
+				Thread.sleep(40);
+			}
+
+		} else if (!currentIgnored) {
+			if (!nextIgnored) {
+				Thread.sleep(iSpeed);
+			} else {
+				if(iPos &gt; halfFloorHeight) {
+					Thread.sleep(iSpeed + (2 * iPos));
+				}
+			}
+
+		}
+		
+	}
+}
+
+</x-frame>

@@ -1,0 +1,6 @@
+project LowLevelVars {
+	
+	Integer lowInt;
+	Integer profileSetting;
+
+}

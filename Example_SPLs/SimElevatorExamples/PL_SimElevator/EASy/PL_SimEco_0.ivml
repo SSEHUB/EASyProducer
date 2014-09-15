@@ -1,0 +1,15 @@
+project PL_SimEco {
+
+    import PL_SimElevator;
+    
+    interface Elevator {
+    	export numElevators;
+    	export numFloors;
+    }
+    
+    Integer numElevators;
+    Integer numFloors;
+
+    PL_SimElevator::elevators = numElevators;
+    PL_SimElevator::floors = numFloors;
+}

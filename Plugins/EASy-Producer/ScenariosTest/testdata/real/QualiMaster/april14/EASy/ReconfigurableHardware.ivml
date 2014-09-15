@@ -1,0 +1,20 @@
+project ReconfigurableHardware {
+	
+	enum Sharing {shared, exclusive}; // could be helpful
+	enum CardType {NONE, MAX, MAX2};        // further types missing 
+	
+	compound CardGroup {
+		CardType type;
+		setOf(String) names;
+		type <> CardType.NONE;
+	}
+	
+	compound HwCluster {
+		String host;
+		Sharing sharing;              // just an idea
+		setOf(CardGroup) cards;
+	}
+	
+	setOf(HwCluster) clusters;
+	
+}

@@ -1,0 +1,308 @@
+<?xml version="1.0"?>
+<!DOCTYPE x-frame SYSTEM "?@dtd?">
+<x-frame name="DisplayPanel">
+
+package gui.views.inside;
+
+import gui.views.inside.displays.FloorChainDisplay;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridLayout;
+
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import simulator.model.Elevator;
+import simulator.model.Target;
+
+/**
+ * 
+ * @author Rob
+ * Diese Klasse repraesentiert ein Panel, welches alle Anzeige-Elemente
+ * des Fahrstuhls enthaelt
+ */
+public class DisplayPanel extends JPanel {
+	
+	private static final long serialVersionUID = -7053155399480364159L;
+	
+	
+	<select option="display_currfloor_number">
+		<option value="true">
+	//VARIATIONSPUNKT
+	//Feature: aktuelle Etage (Zahl)
+	// #if($display_FloorAsNumber)
+	
+	private JLabel lblCurrentFloor;
+	
+	// #end
+		</option>
+	</select>
+	
+	
+	
+	<break name="floor_as_chain">
+	//VARIATIONSPUNKT
+	//Feature: aktuelle Etage (Kette)
+	// #if($display_FloorAsChain)
+	
+	private FloorChainDisplay chainDisplay;
+	
+	// #end
+	</break>
+	
+	
+	<select option="display_target">
+		<option value="true">
+	// #if($display_target)
+	private JLabel lblTargetFloor;
+	
+	// #end
+		</option>
+	</select>
+	
+	
+	<select option="display_openingside">
+		<option value="true">
+	// #if($display_openingside)
+	private JLabel lblDoorOpen;
+	
+	// #end
+		</option>
+	</select>
+	
+	
+	<select option="display_direction">
+		<option value="true">
+	// #if($display_direction)
+	private JLabel lblDirection;
+	
+	// #end
+		</option>
+	</select>
+	
+	private JLabel lblController;
+	
+	private String sControllerName;
+	
+	private final int PANEL_WIDTH = 500;
+	private final int PANEL_HEIGHT = 320;
+	
+
+	
+	
+	<select option="display_target">
+		<option value="true">
+	// #if($display_target)
+	/**
+	 * @return the lblTargetFloor
+	 */
+	public JLabel getLblTargetFloor() {
+		return lblTargetFloor;
+	}
+	
+	// #end
+		</option>
+	</select>
+
+	<select option="display_openingside">
+		<option value="true">
+	// #if($display_openingside)
+	
+	/**
+	 * @return the lblDoorOpen
+	 */
+	public JLabel getLblDoorOpen() {
+		return lblDoorOpen;
+	}
+	// #end
+		</option>
+	</select>
+
+	<select option="display_direction">
+		<option value="true">
+	// #if($display_direction)
+	
+	/**
+	 * @return the lblDirection
+	 */
+	public JLabel getLblDirection() {
+		return lblDirection;
+	}
+	
+	// #end
+		</option>
+	</select>
+
+	/**
+	 * @return the lblController
+	 */
+	public JLabel getLblController() {
+		return lblController;
+	}
+	
+
+	
+	public DisplayPanel(String sControllerName) {
+		super();
+		this.sControllerName = sControllerName;
+		init();
+	}
+	
+	public void init() {
+		
+		this.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
+		this.setLayout(new BorderLayout());
+		// das Panel fur space, darein kommt jpStatus
+
+		JPanel jpStatus = new JPanel();
+		jpStatus.setLayout(new GridLayout(7, 2));
+
+		// font fuer die Anzeigen
+		Font font = new Font("Arial", Font.PLAIN, 13);
+		
+		// Controller-Typ
+		lblController = new JLabel();
+		lblController.setFont(font);
+		
+		
+		lblController.setText(sControllerName);
+		
+		jpStatus.add(new JLabel("Controller:"));
+		jpStatus.add(lblController);
+		
+		<select option="display_currfloor_number">
+			<option value="true">
+		// #if($display_floornumber)
+		
+		// aktuelle Etage (Zahl)
+		lblCurrentFloor = new JLabel("0");
+		lblCurrentFloor.setFont(font);
+		jpStatus.add(new JLabel("Aktuelle Etage: "));
+		jpStatus.add(lblCurrentFloor);
+		// #end
+			</option>
+		</select>
+		
+		
+		<select option="display_currfloor_chain">
+			<option value="true">
+		// #if($display_floorchain)
+		// aktuelle Etage (Kette)
+		chainDisplay = new FloorChainDisplay();
+		this.add(chainDisplay, BorderLayout.NORTH);
+		// #end
+			</option>
+		</select>
+		
+		<select option="display_target">
+			<option value="true">
+		// #if($display_target)
+		// Zieletage
+		lblTargetFloor = new JLabel("keine");
+		lblTargetFloor.setFont(font);
+		jpStatus.add(new JLabel("Zieletage:"));
+		jpStatus.add(lblTargetFloor);
+		// #end
+			</option>
+		</select>
+		<select option="display_openingside">
+			<option value="true">
+		// #if($display_openingside)
+		// Tuer-Zustand
+		lblDoorOpen = new JLabel();
+		lblDoorOpen.setFont(font);
+		jpStatus.add(new JLabel("Tuer:"));
+		jpStatus.add(lblDoorOpen);
+		// #end	
+			</option>
+		</select>
+		<select option="display_direction">
+			<option value="true">
+		// #if($display_direction)
+		// Fahrtrichtung
+		lblDirection = new JLabel();
+		Icon icArrowZ = new ImageIcon(getClass().getResource("/ressource/stop.gif"));
+		lblDirection.setIcon(icArrowZ);
+		jpStatus.add(new JLabel("Richtung:"));
+		jpStatus.add(lblDirection);
+		// #end
+			</option>
+		</select>
+		
+		jpStatus.setPreferredSize(new Dimension(400, 300));
+		this.add(jpStatus, BorderLayout.CENTER);
+
+		// Panels fuer abstaende
+		this.add(new JPanel(), BorderLayout.EAST);
+		
+	}
+	
+	/**
+	 * Anzeige der Statuswerte des Fahrstuhls aktualisieren
+	 */
+	public void updateValues(Elevator elevator, Target currentTarget) {
+		
+		int iCurrentFloor = elevator.getCurrentFloor();
+		int iDirection = elevator.getDirection();
+		
+		<select option="display_currfloor_number">
+			<option value="true">
+		// #if($display_FloorAsNumber)
+		lblCurrentFloor.setText(Integer.toString(iCurrentFloor + iDirection));
+		// #end
+			</option>
+		</select>
+		<select option="display_currfloor_chain">
+			<option value="true">
+		// #if($display_FloorAsChain)
+		chainDisplay.setValue(iCurrentFloor + iDirection);
+		// #end	
+			</option>
+		</select>
+		<select option="display_target">
+			<option value="true">
+		// #if($display_target)
+		if (currentTarget != null) {
+			lblTargetFloor.setText(Integer.toString(currentTarget.getFloor()));
+		}
+		// #end
+			</option>
+		</select>
+	}
+	
+	<select option="display_direction">
+		<option value="true">
+	// #if($display_direction)
+	/**
+	 * Diese Methode wechselt das Bild der Richtungsanzeige, je nachedem, ob der
+	 * Fahrstuhl steht, nach oben oder nach unten faehrt.
+	 */
+	public void changeImageDirection(int iDirection) {
+
+		switch(iDirection) {
+			case 1:
+				lblDirection.setIcon(new ImageIcon(getClass().getResource(
+				"/ressource/up.gif")));
+				break;
+			case -1:
+				lblDirection.setIcon(new ImageIcon(getClass().getResource(
+				"/ressource/down.gif")));
+				break;
+			default:
+				lblDirection.setIcon(new ImageIcon(getClass().getResource(
+				"/ressource/stop.gif")));
+				break;
+		}
+		
+	}
+	// #end
+		</option>
+	</select>
+	
+}
+
+</x-frame>

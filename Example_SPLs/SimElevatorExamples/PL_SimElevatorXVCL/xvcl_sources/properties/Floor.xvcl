@@ -1,0 +1,116 @@
+<?xml version="1.0"?>
+<!DOCTYPE x-frame SYSTEM "?@dtd?">
+<x-frame name="Floor">
+
+/**
+ * 
+ */
+package properties;
+
+/**
+ * Ausgelagerte Klasse fuer die Stockwerkinitialisierung
+ * 
+ */
+public class Floor {
+
+	private int stockwerk;
+	
+	private int schutzbereich;
+	
+	private int tuerSeite;
+	
+	private int height;
+	
+	private String name;
+
+	/**
+	 * Konstruktor der Klasse Stockwerk
+	 * 
+	 * @param stockwerk
+	 *            die ID des Stockwerks, fuer die Verknuepfung mit den
+	 *            Buttons
+	 * @param schutzbereich
+	 *            Level der Sicherheitsbereiche, 0 = kein Sicherheitsbereich 1-n
+	 *            = Schutzbereich
+	 * @param tuerSeite
+	 *            gibt an auf welcher Seite die Fahrstuhltueren oeffnen
+	 * @param name
+	 *            der Name der Etage
+	 */
+	public Floor(int stockwerk, int schutzbereich, int tuerSeite, int height, String name) {
+		this.stockwerk = stockwerk;
+		this.schutzbereich = schutzbereich;
+		this.tuerSeite = tuerSeite;
+		this.height = height;
+		this.name = name;
+	}
+
+	/**
+	 * @return the stockwerk
+	 */
+	public int getStockwerk() {
+		return stockwerk;
+	}
+
+	/**
+	 * @param stockwerk
+	 *            the stockwerk to set
+	 */
+	public void setStockwerk(int stockwerk) {
+		this.stockwerk = stockwerk;
+	}
+
+	/**
+	 * @return the schutzbereich
+	 */
+	public int getSchutzbereich() {
+		return schutzbereich;
+	}
+
+	/**
+	 * @param schutzbereich
+	 *            the schutzbereich to set
+	 */
+	public void setSchutzbereich(int schutzbereich) {
+		this.schutzbereich = schutzbereich;
+	}
+
+	/**
+	 * @return the tuerSeite
+	 */
+	public int getTuerSeite() {
+		return tuerSeite;
+	}
+
+	/**
+	 * @param tuerSeite
+	 *            the tuerSeite to set
+	 */
+	public void setTuerSeite(int tuerSeite) {
+		this.tuerSeite = tuerSeite;
+	}
+
+	/**
+	 * @return the height
+	 */
+	public int getHeight() {
+		return height;
+	}
+
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @param name
+	 *            the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+
+}
+</x-frame>

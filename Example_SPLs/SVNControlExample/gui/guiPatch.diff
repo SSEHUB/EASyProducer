@@ -1,0 +1,46 @@
+### Eclipse Workspace Patch 1.0
+#P SVNControl
+Index: gui/HooksTab.java
+===================================================================
+--- gui/HooksTab.java	(revision 244)
++++ gui/HooksTab.java	(working copy)
+@@ -44,6 +44,8 @@
+ 
+ import comm.Repository;
+ 
++import de.uni_hildesheim.sse.variability.runtime.annotations.Component;
++
+ import tools.SynchronizingListModel;
+ import tools.TitledPanel;
+ import tools.Tools;
+@@ -57,6 +59,8 @@
+  * @since 1.00
+  * @version 1.50
+  */
++@Component(boundTo = "OPT_HOOKS", packageAlways = false, 
++    replaceThis = false)
+ @SuppressWarnings("serial")
+ public class HooksTab extends FrameParentComponentListenerPanel {
+ 
+Index: gui/ScheduleTab.java
+===================================================================
+--- gui/ScheduleTab.java	(revision 244)
++++ gui/ScheduleTab.java	(working copy)
+@@ -57,6 +57,8 @@
+ import comm.PermissionScheduleTask;
+ import comm.RepositoryPath;
+ 
++import de.uni_hildesheim.sse.variability.runtime.annotations.Component;
++
+ import tools.AdaptableTreeCellRenderer;
+ import tools.JSubdirectoryTree;
+ import tools.SynchronizingListModel;
+@@ -72,6 +74,8 @@
+  * @since 1.00
+  * @version 1.50
+  */
++@Component (boundTo = "OPT_SCHEDULES", packageAlways = false, 
++    replaceThis = false)
+ @SuppressWarnings("serial")
+ public class ScheduleTab extends FrameParentComponentListenerPanel implements
+     ScheduleModificationListener {

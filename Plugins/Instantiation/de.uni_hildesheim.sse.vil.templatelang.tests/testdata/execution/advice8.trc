@@ -1,0 +1,4 @@
+-> main(Configuration, FileArtifact) with (<config>, test.texts)
+    type <- low
+    -> emit(LevelType) with (low)
+    -> injectAspects(Configuration, IvmlElement) with (<config>, compile)

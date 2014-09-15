@@ -1,0 +1,190 @@
+<?xml version="1.0"?>
+<!DOCTYPE x-frame SYSTEM "?@dtd?">
+<x-frame name="ElevatorController">
+
+package simulator.controllers;
+
+
+import java.util.ArrayList;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
+import engine.ElevatorEngine;
+
+import simulator.model.Elevator;
+import simulator.model.Target;
+/**
+ * Diese abstrakte Klasse stellt Methoden und Attribute bereit, die
+ * ein Controller zur Steuerung einer Elevator-Instanz besitzen muss.
+ */
+public abstract class ElevatorController implements IElevatorController {
+
+
+	protected int index;
+	protected boolean bSameFloor = false;
+	protected boolean hasPriorityCall = false;
+	protected boolean updateNecessary = false;
+	
+	protected Elevator eElevator = new Elevator();
+	protected Target currentTarget = null;
+	protected Thread simuThread = null;
+	
+	protected ArrayList&lt;Target&gt; lTargetList = new ArrayList&lt;Target&gt;();
+	protected ArrayList&lt;Boolean&gt; lIgnoreList = new ArrayList&lt;Boolean&gt;();
+	
+	protected ConcurrentLinkedQueue&lt;Target&gt; clqPriorityQueue = new ConcurrentLinkedQueue&lt;Target&gt;();
+	protected ConcurrentLinkedQueue&lt;Integer&gt; clqDeletionQueue = new ConcurrentLinkedQueue&lt;Integer&gt;();
+	
+	
+	/**
+	 * @return ControllerIndex
+	 */
+	public int getIndex() {
+		return index;
+	}
+	
+
+	/**
+	 * @return the clqPriorityQueue
+	 */
+	public ConcurrentLinkedQueue&lt;Target&gt; getClqPriorityQueue() {
+		return clqPriorityQueue;
+	}
+	
+	/**
+	 * @param clqPriorityQueue the clqPriorityQueue to set
+	 */
+	public void setClqPriorityQueue(ConcurrentLinkedQueue&lt;Target&gt; clqPriorityQueue) {
+		this.clqPriorityQueue = clqPriorityQueue;
+	}
+	
+	
+	/**
+	 * 
+	 * @return geplante Stornierungen
+	 */
+	public ConcurrentLinkedQueue&lt;Integer&gt; getDeletionQueue() {
+		return clqDeletionQueue;
+	}
+	
+	
+	/**
+	 * @return the hasPriorityCall
+	 */
+	public boolean isHasPriorityCall() {
+		return hasPriorityCall;
+	}
+	
+	/**
+	 * @param hasPriorityCall the hasPriorityCall to set
+	 */
+	public void setHasPriorityCall(boolean hasPriorityCall) {
+		this.hasPriorityCall = hasPriorityCall;
+	}
+	
+	
+	/**
+	 * @return the currentTarget
+	 */
+	public Target getCurrentTarget() {
+		return currentTarget;
+	}
+	
+	/**
+	 * @param currentTarget the currentTarget to set
+	 */
+	public void setCurrentTarget(Target currentTarget) {
+		this.currentTarget = currentTarget;
+	}
+	
+	
+	/**
+	 * @return the simuThread
+	 */
+	public Thread getSimuThread() {
+		return simuThread;
+	}
+
+	/**
+	 * @return the lTargetList
+	 */
+	public ArrayList&lt;Target&gt; getTargetList() {
+		return lTargetList;
+	}
+	
+	/**
+	 * @param lTargetList the lTargetList to set
+	 */
+	public void setTargetList(ArrayList&lt;Target&gt; lTargetList) {
+		this.lTargetList = lTargetList;
+	}
+
+	/**
+	 * @return the lIgnoreList
+	 */
+	public ArrayList&lt;Boolean&gt; getlIgnoreList() {
+		return lIgnoreList;
+	}
+	
+	/**
+	 * @param iIndex the lIgnoreList to set
+	 */
+	public void setlItemIgnoreList(int iIndex) {
+		this.lIgnoreList.set(iIndex, true);
+	}
+	
+	
+	
+	/**
+	 * @return the eElevator
+	 */
+	public Elevator getElevator() {
+		return eElevator;
+	}
+	
+	
+	/**
+	 * @return bSameFloor
+	 */
+	public boolean isSameFloor() {
+		return bSameFloor;
+	}
+	
+	
+	/**
+	 * 
+	 * @return updateNecessary
+	 */
+	public boolean isUpdateNecessary() {
+		return updateNecessary;
+	}
+	
+	public void addPriorityCall(int iFloor) {
+
+	}
+	
+	/**
+	 * startet den Simulations-Thread
+	 */
+	public void startSimulation() {
+		if(simuThread == null || !simuThread.isAlive()) {
+			simuThread = new Thread(new ElevatorEngine(this));
+			simuThread.start();
+		}
+	}
+
+	
+	/**
+	 * fuehrt bestimmte Anzahl an Simulationsschritten durch
+	 * @param iSteps - Anzahl Simulationsschritte
+	 */
+	public void doSimulation(int iSteps) {
+		for(int i = 0; i &lt; iSteps; i++) {
+			if(simulate()) {
+				doAfterAnimate();
+			}
+		}
+	}
+	
+}
+
+</x-frame>

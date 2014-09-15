@@ -1,0 +1,36 @@
+project Families {
+	
+	import ReconfigurableHardware;
+	
+	compound Stream { 
+	    // abstract/arbitrary
+	}
+	
+	compound LabeledStream refines Stream {
+		String label;
+	}
+	
+	compound StructuredStream refines Stream {
+		// go on with data types
+	}
+	
+	compound Algorithm {
+		String name;
+		String artifact; // unclear, Jar, visualization
+		// missing: quality attributes
+		//setOf(Stream) input;
+		//setOf(Stream) output;
+		CardType hwType; // optional, preliminary
+	}
+	
+	compound Family {
+		String name;
+		//setOf(Stream) input;  // constrain members
+		//setOf(Stream) output; // constrain members
+		// unclear member properties
+		setOf(refTo(Algorithm)) members; 
+	}
+	
+	setOf(refTo(Family)) families;
+	
+}

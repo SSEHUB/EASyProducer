@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE x-frame SYSTEM "?@dtd?">
+<x-frame name="ButtonTypes">
+
+/**
+ * 
+ */
+package gui.buttons;
+
+/**
+ * Moegliche Typen von Rufknoepfen, die im Fahrstuhlschacht pro Etage angezeigt werden.
+ * @author Robert Kapeluch
+ *
+ */
+public enum ButtonTypes {
+	/**
+	 * Standard-Etagenbutton zum Rufen des Fahrstuhls 
+	 */
+	DEFAULT,
+	
+	/**
+	 * Pfeil-Button für richtungsgebundenen Fahrtwunsch
+	 */
+	ARROW;
+}
+
+</x-frame>

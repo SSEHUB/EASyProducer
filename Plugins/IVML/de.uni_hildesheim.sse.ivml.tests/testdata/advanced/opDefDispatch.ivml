@@ -1,0 +1,16 @@
+project testopdefDispatch {
+
+    version v0;
+    compound Base {
+        Integer i;
+    }
+
+    compound Refined refines Base {
+        Integer j;
+    }
+
+    def Boolean test(Base b) = b.i > 0;
+    def Boolean test(Refined r) = r.i > 0 and r.j > 0;
+    Refined r;
+    test(r);
+}

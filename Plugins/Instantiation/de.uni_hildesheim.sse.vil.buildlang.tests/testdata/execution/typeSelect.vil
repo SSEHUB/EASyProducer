@@ -1,0 +1,11 @@
+vilScript typeOf () {
+
+    sequenceOf(Integer) seq1 = {1, 2, 3, 4};
+    sequenceOf(Integer) seq8 = seq1.selectByType(Integer);
+    setOf(Integer) set1 = seq1.toSet();
+    setOf(Integer) set2 = set1.selectByType(Integer);
+
+    main() = : {
+    }
+
+}

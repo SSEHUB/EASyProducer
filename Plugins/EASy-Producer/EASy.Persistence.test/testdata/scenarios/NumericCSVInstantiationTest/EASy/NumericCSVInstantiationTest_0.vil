@@ -1,0 +1,13 @@
+vilScript NumericCSVInstantiationTest (Project source, Configuration config, Project target) {
+
+    version v0;
+
+    main(Project source, Configuration config, Project target) = : {
+    	FileArtifact destFile = "$target/NumericCSVInstantiationTest.csv";
+    	destFile.delete();
+    	
+    	// Creates a CSV file containing only variable names and their numeric value
+    	vilTemplateProcessor("NumericCSVTemplate", config, destFile);
+    }
+
+}

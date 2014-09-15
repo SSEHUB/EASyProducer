@@ -1,0 +1,33 @@
+template XVCLSpecificationTemplate(Configuration config, FileArtifact destFile, Project target) {
+	
+	def main(Configuration config, FileArtifact destFile, Project target) {
+		String codeSourceDir = "${target.getPath()}/xvcl_sources";
+		String codeDestination = "${target.getPath()}/src";		
+		
+		// Template for creating the specification file
+		// Header	
+		'<?xml version="1.0"?>'
+		'<!DOCTYPE x-frame SYSTEM "null">'
+		'<x-frame name="${destFile.name()}" outdir="${codeDestination}">'
+		// Product specific value settings (sort alpha is not needed, but can also be used for a test case)
+		for (DecisionVariable dv : config.variables().sortAlpha()) {
+			createVariableAssignment(dv);
+		}
+		// Currently not supported variables
+		'<set var="floors_heights" value="{}" />'
+		'<set var="floors_names" value="{}" />'
+		'<set var="floors_securitylevels" value="{}" />'
+		'<set var="floors_doorsides" value="{}" />'
+		// Footer
+		'<set var="dir" value="${codeSourceDir}"/>'
+		'<set var="dtd" value="null"/>'
+		'<set var="out" value="${codeDestination}"/>'
+		'<adapt x-frame="?@dir?\\main\\Main.xvcl" outfile="${codeDestination}\\main\\Main.java"/>'
+		'</x-frame>'
+	}
+	
+	def createVariableAssignment(DecisionVariable variable) {
+		'<set var="${variable.name()}" value="${variable.getValue()}" />'
+	}
+
+}

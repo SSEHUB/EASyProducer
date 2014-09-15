@@ -1,0 +1,9 @@
+template ivml5(Configuration config, Artifact target) {
+
+    def main(Configuration config, Artifact target) {
+        DecisionVariable variable = config.byName("pEnum");
+        EnumValue value = variable.getEnumValue();
+        ';${variable.name()};${value.getOrdinal()}'
+    }
+
+}

@@ -1,0 +1,137 @@
+project april14 {
+
+    version v0;
+    import Infrastructure;
+    import Families;
+    import ReconfigurableHardware;
+
+    // server hardware
+    
+    machines = {
+    	Machine{
+    		name={"a", "b"}, 
+    		memory=1000000, 
+    		processors=4, 
+    		stormThreads=5
+    	}
+    };
+    
+    // --------------------- specialized hardware ---------
+    
+    clusters = {};
+    
+    // --------------------- families ---------------------
+
+    Algorithm alg_c1;
+    alg_c1 = {
+    	name = "L3S causality",
+    	artifact = "de.l3s.Causality",
+    	hwType = CardType.NONE
+    };
+    
+    Algorithm alg_c2;
+    alg_c2 = {
+    	name = "TSI causality",
+    	artifact = "gr.tsi.Causality2",
+    	hwType = CardType.NONE
+    };
+
+    Algorithm alg_c3;
+    alg_c3 = {
+    	name = "TSI HW causality",
+    	artifact = "gr.tsi.CausalityHW",
+    	hwType = CardType.MAX2 // just preliminary link to HW
+    };
+
+    Family causality;
+    causality = {
+		name = "causality",
+		members = {refBy(alg_c1), refBy(alg_c2), refBy(alg_c3)}
+	};
+
+    Algorithm alg_f1;
+    alg_f1 = {
+    	name = "Apache Filter",
+    	artifact = "com.apache.SlowFilter",
+    	hwType = CardType.NONE
+    };
+    
+    Algorithm alg_f2;
+    alg_f2 = {
+    	name = "Maxeler Filter",
+    	artifact = "com.maxeler.FastFilterKernel",
+    	hwType = CardType.NONE
+    };
+
+	Family filter;
+	filter = {
+		name = "filter",
+		members = {refBy(alg_f1), refBy(alg_f2)}
+	};
+
+    families = { refBy(causality), refBy(filter) };
+
+    // --------------------- topology ---------------------
+
+    Source src;
+
+    Sink snk;
+
+	FamilyElement pe1;
+	pe1 = {
+    	test="pe1",
+		//family = families[0]
+		family = refBy(causality) // not considered by configuration
+	};
+	
+	Flow f1;
+	f1 = {
+		name = "f1",
+		destination = refBy(pe1)
+	};
+	
+	Flow f2;
+	f2 = {
+		name = "f2",
+		destination = refBy(snk)
+	};
+
+    src.test = "src";
+	src.output = {refBy(f1)};
+    snk.test = "snk";
+    pe1.test="pe1";
+    pe1.output = {refBy(f2)};
+
+	pipeline = Pipeline {
+		name = "test",
+		sources = {refBy(src)}
+	};
+	
+
+    pipelines = {refBy(pipeline)};
+
+    // ----------------------- freeze for instantiation ----------------------
+
+    freeze {
+    	causality;
+    	filter;
+    	families;
+        machines;
+        pipelines;
+        pipeline;
+        f1;
+        f2;
+        pe1;
+        src;
+        snk;
+        pe1;
+    }
+
+}
+
+
+    // FIXME EASy bug... mixed initializer with constraints does not work!
+    // editor remains inconsistent if models change
+    // compounds shall also be frozen if slots are undefined
+    // saving - imports are discarded, result is not valid
+    // even default constant collections prevent compounds from freezing

@@ -1,0 +1,408 @@
+<?xml version="1.0"?>
+<!DOCTYPE x-frame SYSTEM "?@dtd?">
+<x-frame name="DefaultEController">
+
+package simulator.controllers;
+
+import simulator.model.Elevator;
+import simulator.model.Target;
+import engine.ElevatorEngine;
+import java.util.ArrayList;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
+
+/**
+ * Diese Klasse ist unser Default Controller zur Steuerung einer
+ * Elevator-Instanz.
+ */
+public class DefaultEController{
+
+
+	protected int index;
+	protected boolean bSameFloor = false;
+	protected boolean hasPriorityCall = false;
+	protected boolean updateNecessary = false;
+	
+	protected Elevator eElevator = new Elevator();
+	protected Target currentTarget = null;
+	protected Thread simuThread = null;
+	
+	protected ArrayList&lt;Target&gt; lTargetList = new ArrayList&lt;Target&gt;();
+	protected ArrayList&lt;Boolean&gt; lIgnoreList = new ArrayList&lt;Boolean&gt;();
+	
+	protected ConcurrentLinkedQueue&lt;Target&gt; clqPriorityQueue = new ConcurrentLinkedQueue&lt;Target&gt;();
+	protected ConcurrentLinkedQueue&lt;Integer&gt; clqDeletionQueue = new ConcurrentLinkedQueue&lt;Integer&gt;();
+
+	/**
+	 * Ueberladener Konstruktor
+	 * 
+	 * @param iFloors
+	 *            - Anzahl der Stockwerke, wird ueber das GUI eingestellt
+	 * @param iSpeed
+	 *            - Geschwindigkeit des Fahrstuhl, wird ueber das GUI
+	 *            eingestellt
+	 * @param iWaiting
+	 *            - Wie lange die Tueren bei dem Erreichen eines Ziels offen
+	 *            bleiben wird ueber das GUI eingestellt
+	 */
+	public DefaultEController(int index, int iFloors) {
+		this.index = index;
+		for (int i = 0; i &lt;= iFloors; i++) {
+			lTargetList.add(null);
+			lIgnoreList.add(false);
+		}
+		
+	}
+
+	/**
+	 * startet die Simulation
+	 */
+	public boolean simulate() {
+		synchronized (lTargetList) {
+			
+			// Verarbeitung der Stornierungen
+			processDeletions();
+			
+			// Verarbeitung eines PriorityCalls.
+			if (!clqPriorityQueue.isEmpty() &amp;&amp; !hasPriorityCall) {
+				processPriorityCall();
+			}
+
+			// Bewegt werden darf der Fahrstuhl nur, wenn er im Rahmen des
+			// Schachtes bleibt
+			if (eElevator.getCurrentFloor() + eElevator.getDirection() &lt;= lTargetList.size()
+					&amp;&amp; eElevator.getCurrentFloor() + eElevator.getDirection() &gt;= 0) {
+				eElevator.setCurrentFloor(eElevator.getCurrentFloor()
+						+ eElevator.getDirection());
+			}
+
+			if (eElevator.getDirection() != 0 || bSameFloor) {
+				bSameFloor = false;
+			}
+
+			return currentTarget != null
+					&amp;&amp; eElevator.getCurrentFloor() == currentTarget.getFloor()
+					|| bSameFloor;
+		}
+	}
+
+	
+	
+	public void doAfterAnimate() {
+		//synchronized (lTargetList) {
+			processDeletions();
+
+			lTargetList.set(currentTarget.getFloor(), null);
+			currentTarget = null;
+			if (hasPriorityCall &amp;&amp; clqPriorityQueue.isEmpty()) {
+				hasPriorityCall = false;
+			} else if (!clqPriorityQueue.isEmpty()) {
+				processPriorityCall();
+			}
+			
+			// neues Ziel in Fahrtrichtung suchen. Erst mit Beachtung der Richtung des Ziels und
+			// dann ohne, da sonst Ziele evtl. nicht angefahren werden
+			if (!hasPriorityCall &amp;&amp; (!updateTarget(eElevator.getDirection(), true) 
+					&amp;&amp; !updateTarget(eElevator.getDirection(), false))) {
+
+				eElevator.setDirection(eElevator.getDirection() * -1);
+				// wenn auch in der anderen Richtung kein weiteres Ziel vorhanden
+				// ist, dann warten
+				if (!updateTarget(eElevator.getDirection(), true) 
+						&amp;&amp; !updateTarget(eElevator.getDirection(), false)) {
+					eElevator.setDirection(0);
+				}
+			}
+		//}
+	}
+
+	
+	
+	public void addFloor(Target target) {
+		synchronized (lTargetList) {
+			if (lTargetList.get(target.getFloor()) == null) {
+				lTargetList.set(target.getFloor(), target);
+			}
+
+			// falls der Fahrstuhl kein Ziel hat, dann muss die Richtung neu
+			// ermittelt werden
+			if (eElevator.getDirection() == 0) {
+				// bSameFloor = false;
+				if (target.getFloor() &gt; eElevator.getCurrentFloor()) {
+					eElevator.setDirection(1);
+				} else if (target.getFloor() &lt; eElevator.getCurrentFloor()) {
+					eElevator.setDirection(-1);
+				} else {
+					bSameFloor = true;
+					if (currentTarget == null) {
+						currentTarget = target;
+						return;
+					}
+				}
+			}
+
+			// Fahrtwunsch in Fahrtrichtung suchen, desses Richtungswunsch der Fahrtrichtung
+			// entspricht, falls Ziel nicht gerade erreicht wurde
+			if(currentTarget == null || currentTarget.getFloor() != eElevator.getCurrentFloor()) {
+				if (target.getFloor() != eElevator.getCurrentFloor()
+						&amp;&amp; !hasPriorityCall &amp;&amp; !updateTarget(eElevator.getDirection(), true)) {
+					
+					// falls kein Ziel gefunden wurde, dann Ziel in Fahrtrichtung ohne Beachtung
+					// des Richtungswunsches suchen
+					updateTarget(eElevator.getDirection(), false);
+
+					// wenn noch immer kein Ziel gefunden wurde, dann in entgegengesetzter Richtung
+					// ohne Beachtung der Target-Direction suchen
+					if (currentTarget == null) {
+						updateTarget(eElevator.getDirection() * -1, false);
+					}
+				}
+			}
+			startSimulation();
+		}
+	}
+
+
+	
+	public boolean updateTarget(int iDir, boolean bAttendTargetDir) {
+		synchronized (lTargetList) {
+			
+			// Target vom aktuellen Stockwerk bis Erdgeschoss oder Dach suchen
+			// abhaengig von der Richtung iDir
+			for (int i = eElevator.getCurrentFloor(); i &lt; lTargetList.size()
+					&amp;&amp; i &gt;= 0 &amp;&amp; eElevator.getDirection() != 0; i += iDir) {
+				
+				if(bAttendTargetDir) {
+					
+					if (lTargetList.get(i) != null
+							&amp;&amp; ((lTargetList.get(i).getiDirection() == eElevator
+									.getDirection()) || lTargetList.get(i)
+									.getiDirection() == 0)) {
+
+						currentTarget = lTargetList.get(i);
+						return true;
+					}
+					
+				} else {
+					
+					if (lTargetList.get(i) != null) {
+						currentTarget = lTargetList.get(i);
+						return true;
+					}
+					
+				}
+				
+			}
+
+			return false;
+		}
+	}
+	
+	
+	public void addPriorityCall(int i) {
+		clqPriorityQueue.add(new Target(i, 0));
+		if(currentTarget == null)
+			processPriorityCall();
+		startSimulation();
+	}
+
+	
+	public void processPriorityCall() {
+		hasPriorityCall = true;
+
+		currentTarget = clqPriorityQueue.poll();
+
+		if (currentTarget.getFloor() &gt; eElevator.getCurrentFloor()) {
+			eElevator.setDirection(1);
+		} else if (currentTarget.getFloor() &lt; eElevator.getCurrentFloor()) {
+			eElevator.setDirection(-1);
+		} else {
+			bSameFloor = true;
+		}
+	}
+	
+	
+	public void processDeletions(){
+		synchronized (lTargetList) {
+			while(!clqDeletionQueue.isEmpty()) {
+				Integer iDelFloor = clqDeletionQueue.poll();
+				
+				if (currentTarget == lTargetList.get(iDelFloor)) {
+					
+					lTargetList.set(iDelFloor, null);
+					currentTarget = null;
+					
+					// Ziele in beiden Richtungen suchen
+					if (!updateTarget(eElevator.getDirection(), true)) {
+						
+						if(updateTarget(eElevator.getDirection() * -1, true)) {
+							eElevator.setCurrentFloor(eElevator.getCurrentFloor() + eElevator.getDirection());
+							eElevator.setCurrentFloor(eElevator.getCurrentFloor() + eElevator.getDirection());
+							eElevator.setDirection(eElevator.getDirection() * -1);
+						} else {
+							eElevator.setCurrentFloor(eElevator.getCurrentFloor() + eElevator.getDirection());
+							eElevator.setDirection(0);
+						}
+
+					}
+					//updateTarget(eElevator.getDirection(), true);
+				} else {
+					lTargetList.set(iDelFloor, null);
+				}
+			}
+
+		}
+	}
+
+	
+	public void addDeletion(int iFloor) {
+		clqDeletionQueue.add(iFloor);
+		startSimulation();
+	}
+
+	
+	public boolean updateTarget() {
+		return false;
+	}
+	
+	
+	
+	/**
+	 * @return ControllerIndex
+	 */
+	public int getIndex() {
+		return index;
+	}
+	
+
+	/**
+	 * @return the clqPriorityQueue
+	 */
+	public ConcurrentLinkedQueue&lt;Target&gt; getClqPriorityQueue() {
+		return clqPriorityQueue;
+	}
+	
+	/**
+	 * @param clqPriorityQueue the clqPriorityQueue to set
+	 */
+	public void setClqPriorityQueue(ConcurrentLinkedQueue&lt;Target&gt; clqPriorityQueue) {
+		this.clqPriorityQueue = clqPriorityQueue;
+	}
+	
+	
+	/**
+	 * 
+	 * @return geplante Stornierungen
+	 */
+	public ConcurrentLinkedQueue&lt;Integer&gt; getDeletionQueue() {
+		return clqDeletionQueue;
+	}
+	
+	
+	/**
+	 * @return the hasPriorityCall
+	 */
+	public boolean isHasPriorityCall() {
+		return hasPriorityCall;
+	}
+	
+	/**
+	 * @param hasPriorityCall the hasPriorityCall to set
+	 */
+	public void setHasPriorityCall(boolean hasPriorityCall) {
+		this.hasPriorityCall = hasPriorityCall;
+	}
+	
+	
+	/**
+	 * @return the currentTarget
+	 */
+	public Target getCurrentTarget() {
+		return currentTarget;
+	}
+	
+	/**
+	 * @param currentTarget the currentTarget to set
+	 */
+	public void setCurrentTarget(Target currentTarget) {
+		this.currentTarget = currentTarget;
+	}
+	
+	
+	/**
+	 * @return the simuThread
+	 */
+	public Thread getSimuThread() {
+		return simuThread;
+	}
+
+	/**
+	 * @return the lTargetList
+	 */
+	public ArrayList&lt;Target&gt; getTargetList() {
+		return lTargetList;
+	}
+	
+	/**
+	 * @param lTargetList the lTargetList to set
+	 */
+	public void setTargetList(ArrayList&lt;Target&gt; lTargetList) {
+		this.lTargetList = lTargetList;
+	}
+
+	/**
+	 * @return the lIgnoreList
+	 */
+	public ArrayList&lt;Boolean&gt; getlIgnoreList() {
+		return lIgnoreList;
+	}
+	
+	/**
+	 * @param iIndex the lIgnoreList to set
+	 */
+	public void setlItemIgnoreList(int iIndex) {
+		this.lIgnoreList.set(iIndex, true);
+	}
+	
+	
+	
+	/**
+	 * @return the eElevator
+	 */
+	public Elevator getElevator() {
+		return eElevator;
+	}
+	
+	
+	/**
+	 * @return bSameFloor
+	 */
+	public boolean isSameFloor() {
+		return bSameFloor;
+	}
+	
+	
+	/**
+	 * 
+	 * @return updateNecessary
+	 */
+	public boolean isUpdateNecessary() {
+		return updateNecessary;
+	}
+	
+	
+	
+	/**
+	 * startet den Simulations-Thread
+	 */
+	public void startSimulation() {
+		if(simuThread == null || !simuThread.isAlive()) {
+			simuThread = new Thread(new ElevatorEngine(this));
+			simuThread.start();
+		}
+	}
+	
+
+}
+
+</x-frame>

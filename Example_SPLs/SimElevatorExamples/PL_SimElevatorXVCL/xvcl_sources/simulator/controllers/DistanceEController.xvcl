@@ -1,0 +1,479 @@
+<?xml version="1.0"?>
+<!DOCTYPE x-frame SYSTEM "?@dtd?">
+<x-frame name="DistanceEController">
+
+package simulator.controllers;
+
+import java.util.ArrayList;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
+import properties.ProgramSettings;
+import simulator.model.Elevator;
+import simulator.model.Target;
+import engine.ElevatorEngine;
+
+
+/**
+ * Diese Klasse beschreibt einen Fahrstuhlcontroller, der
+ * die Entfernung zwischen Stockwerken miteinbezieht und
+ * sich nicht an der Fahrtrichtung orientiert. ueber ein Prioritaetensystem
+ * wird sichergestellt, dass kein Fahrtwunsch ignoriert wird.
+ */
+public class DistanceEController{
+
+	protected int index;
+	protected boolean bSameFloor = false;
+	protected boolean hasPriorityCall = false;
+	protected boolean updateNecessary = false;
+	
+	protected Elevator eElevator = new Elevator();
+	protected Target currentTarget = null;
+	protected Thread simuThread = null;
+	
+	protected ArrayList&lt;Target&gt; lTargetList = new ArrayList&lt;Target&gt;();
+	protected ArrayList&lt;Boolean&gt; lIgnoreList = new ArrayList&lt;Boolean&gt;();
+	
+	protected ConcurrentLinkedQueue&lt;Target&gt; clqPriorityQueue = new ConcurrentLinkedQueue&lt;Target&gt;();
+	protected ConcurrentLinkedQueue&lt;Integer&gt; clqDeletionQueue = new ConcurrentLinkedQueue&lt;Integer&gt;();
+
+	private int iTravelledDistance = 0;
+	private int iPriorityThreshold;
+
+	public DistanceEController(int index, int iFloors) {
+		this.index = index;
+		eElevator = new Elevator();
+		lTargetList = new ArrayList&lt;Target&gt;();
+		lIgnoreList = new ArrayList&lt;Boolean&gt;();
+		iPriorityThreshold = iFloors / 2;
+		clqPriorityQueue = new ConcurrentLinkedQueue&lt;Target&gt;();
+		for (int i = 0; i &lt;= iFloors; i++) {
+			lTargetList.add(null);
+			lIgnoreList.add(false);
+		}
+		currentTarget = null;
+
+	}
+
+	
+	public boolean simulate() {
+		synchronized (lTargetList) {
+			
+			processDeletions();
+
+			if (!clqPriorityQueue.isEmpty() &amp;&amp; !hasPriorityCall) {
+				processPriorityCall();
+			}
+
+			if (eElevator.getCurrentFloor() + eElevator.getDirection() &lt;= lTargetList.size()
+					&amp;&amp; eElevator.getCurrentFloor() + eElevator.getDirection() &gt;= 0) {
+
+				eElevator.setCurrentFloor(eElevator.getCurrentFloor()
+						+ eElevator.getDirection());
+				iTravelledDistance++;
+			}
+
+			boolean targetFound = currentTarget != null
+					&amp;&amp; eElevator.getCurrentFloor() == currentTarget.getFloor();
+
+			if (eElevator.getDirection() != 0 || bSameFloor) {
+				bSameFloor = false;
+
+				if (targetFound) {
+
+					lTargetList.set(currentTarget.getFloor(), null);
+					currentTarget = null;
+					/*
+					 * ueberpruefen, ob es sich um einen PriorityCall handelte und
+					 * ob noch weitere vorliegen
+					 */
+					if (hasPriorityCall &amp;&amp; clqPriorityQueue.isEmpty()) {
+						hasPriorityCall = false;
+					} else if (!clqPriorityQueue.isEmpty()) {
+						processPriorityCall();
+					}
+
+					for (int i = 0; i &lt; lTargetList.size(); i++) {
+						if (lTargetList.get(i) != null) {
+							lTargetList.get(i).calculatePriority(
+									iTravelledDistance);
+						}
+					}
+					updateTargetByPriority();
+
+					// wenn in der anderen Richtung kein weiteres Ziel vorhanden
+					// ist, dann warten
+					if (currentTarget == null) {
+						eElevator.setDirection(0);
+					}
+					iTravelledDistance = 0;
+				}
+
+			}
+
+			return targetFound;
+		}
+	}
+
+	public void addFloor(Target target) {
+		synchronized (lTargetList) {
+			if (lTargetList.get(target.getFloor()) == null) {
+				lTargetList.set(target.getFloor(), target);
+			}
+
+			// falls der Fahrstuhl kein Ziel hat, dann muss die Richtung neu
+			// ermittelt werden
+			if (eElevator.getDirection() == 0) {
+				bSameFloor = false;
+				if (target.getFloor() &gt; eElevator.getCurrentFloor()) {
+					eElevator.setDirection(1);
+				} else if (target.getFloor() &lt; eElevator.getCurrentFloor()) {
+					eElevator.setDirection(-1);
+				} else {
+					bSameFloor = true;
+				}
+			}
+
+			// Prioritaeten aktualisieren
+			for (int i = 0; i &lt; lTargetList.size(); i++) {
+				if (lTargetList.get(i) != null &amp;&amp; i != target.getFloor()) {
+					lTargetList.get(i).calculatePriority(iTravelledDistance);
+				}
+			}
+			iTravelledDistance = 0;
+			
+			// wenn es kein Ziel gibt, dann dieses Stockwerk als Ziel setzen, damit
+			// der Fahrstuhl startet
+			if(currentTarget == null) {
+				currentTarget = target;
+				
+			// sonst updateNecessary auf true setzen, damit das Ziel nach einem Schritt
+			// des Fahrstuhls aktualisiert wird 
+			} else {
+				updateNecessary = true;
+			}
+			startSimulation();
+		}
+	}
+
+
+	public boolean updateTarget() {
+			updateNecessary = false;
+			// naechstes Ziel zwischen aktuellem Stockwerk und aktuellem Ziel
+			// suchen,
+			// falls vorhanden
+			if(!hasPriorityCall) {
+				if (currentTarget == null) {
+					for (int i = 0; i &lt; lTargetList.size(); i++) {
+						if (lTargetList.get(i) != null) {
+							currentTarget = lTargetList.get(i);
+							return true;
+						}
+					}
+				} else {
+					return updateTargetByPriority();
+				}
+			}
+
+			return false;
+
+	}
+
+
+	/**
+	 * Es wird das neue Zielstockwerk gesucht. Dabei wird die Prioritaet
+	 * jedes Stockwerks miteinbezogen, damit keins ausgelassen wird. Beim
+	 * ueberschreiten des PriorityThresholds wird das Target mit der
+	 * groessten ueberschreitung angewaehlt.
+	 * 
+	 * @return true, wenn ein Ziel gefunden wurde, sonst false
+	 */
+	public boolean updateTargetByPriority() {
+		synchronized (lTargetList) {
+			Target bestPriority = null;
+			// Ziel mit der hoechsten Prioritaet ueber der Schwelle finden
+			for (int i = 0; i &lt; lTargetList.size(); i++) {
+
+				if (lTargetList.get(i) != null
+						&amp;&amp; lTargetList.get(i).getPriority() &gt;= iPriorityThreshold) {
+
+					if (bestPriority == null
+							|| lTargetList.get(i).getPriority() &gt; bestPriority
+									.getPriority()) {
+						bestPriority = lTargetList.get(i);
+					}
+				}
+			}
+
+			// Wenn Ziel ueber Schwelle gefunden wurde, dann als naechstes Ziel
+			// setzen
+			// und true zurueckgeben
+			if (bestPriority != null) {
+				currentTarget = bestPriority;
+
+				if (eElevator.getCurrentFloor() &lt; bestPriority.getFloor()) {
+					eElevator.setDirection(1);
+				} else if (eElevator.getCurrentFloor() &gt; bestPriority
+						.getFloor()) {
+					eElevator.setDirection(-1);
+				}
+
+				return true;
+
+				// sonst naechstes Ziel waehlen (Distanz)
+			} else {
+				int down;
+				int up;
+				for (int i = 1; i &lt; lTargetList.size(); i++) {
+					down = eElevator.getCurrentFloor() - i;
+					up = eElevator.getCurrentFloor() + i;
+
+					// oberhalb vom aktuellen Stockwerk pruefen, ob Ziel
+					// vorhanden
+					if (up &lt; lTargetList.size() &amp;&amp; lTargetList.get(up) != null) {
+						currentTarget = lTargetList.get(up);
+						eElevator.setDirection(1);
+						return true;
+					}
+
+					// unterhalb vom aktuellen Stockwerk pruefen, ob Ziel
+					// vorhanden
+					if (down &gt;= 0 &amp;&amp; lTargetList.get(down) != null) {
+						currentTarget = lTargetList.get(down);
+						eElevator.setDirection(-1);
+						return true;
+					}
+				}
+				return false;
+			}
+		}
+
+	}
+
+	/**
+	 * 
+	 * @return iTravelledDistance
+	 */
+	public int getiTravelledDistance() {
+		return iTravelledDistance;
+	}
+
+
+//	public void deleteCall(int iFloor) {
+//		synchronized (lTargetList) {
+//			if (currentTarget == lTargetList.get(iFloor)) {
+//				lTargetList.set(iFloor, null);
+//				currentTarget = null;
+//				updateTarget();
+//			} else {
+//				lTargetList.set(iFloor, null);
+//			}
+//		}
+//	}
+	
+	
+	public void addPriorityCall(int i) {
+		clqPriorityQueue.add(new Target(i, 0));
+		if(currentTarget == null)
+			processPriorityCall();
+		startSimulation();
+	}
+
+	
+	public void processPriorityCall() {
+		hasPriorityCall = true;
+
+		currentTarget = clqPriorityQueue.poll();
+
+		if (currentTarget.getFloor() &gt; eElevator.getCurrentFloor()) {
+			eElevator.setDirection(1);
+		} else if (currentTarget.getFloor() &lt; eElevator.getCurrentFloor()) {
+			eElevator.setDirection(-1);
+		} else {
+			bSameFloor = true;
+		}
+	}
+	
+	
+	public void processDeletions(){
+		synchronized (lTargetList) {
+			while(!clqDeletionQueue.isEmpty()) {
+				Integer iDelFloor = clqDeletionQueue.poll();
+				
+				if (currentTarget == lTargetList.get(iDelFloor)) {
+					
+					lTargetList.set(iDelFloor, null);
+					currentTarget = null;
+					
+					if(updateTargetByPriority()) {
+						eElevator.setCurrentFloor(eElevator.getCurrentFloor() + (- eElevator.getDirection()));
+						eElevator.setCurrentFloor(eElevator.getCurrentFloor() + (- eElevator.getDirection()));
+					} else {
+						eElevator.setCurrentFloor(eElevator.getCurrentFloor() + eElevator.getDirection());
+						eElevator.setDirection(0);
+					}
+					
+				} else {
+					lTargetList.set(iDelFloor, null);
+				}
+			}
+
+		}
+	}
+
+	
+	public void addDeletion(int iFloor) {
+		clqDeletionQueue.add(iFloor);
+		startSimulation();
+	}
+
+	
+	public void doAfterAnimate() {
+		
+	}
+
+	
+	public boolean updateTarget(int iDir, boolean bAttendTargetDir) {
+		return false;
+	}
+
+
+
+
+/**
+	 * @return ControllerIndex
+	 */
+	public int getIndex() {
+		return index;
+	}
+	
+
+	/**
+	 * @return the clqPriorityQueue
+	 */
+	public ConcurrentLinkedQueue&lt;Target&gt; getClqPriorityQueue() {
+		return clqPriorityQueue;
+	}
+	
+	/**
+	 * @param clqPriorityQueue the clqPriorityQueue to set
+	 */
+	public void setClqPriorityQueue(ConcurrentLinkedQueue&lt;Target&gt; clqPriorityQueue) {
+		this.clqPriorityQueue = clqPriorityQueue;
+	}
+	
+	
+	/**
+	 * 
+	 * @return geplante Stornierungen
+	 */
+	public ConcurrentLinkedQueue&lt;Integer&gt; getDeletionQueue() {
+		return clqDeletionQueue;
+	}
+	
+	
+	/**
+	 * @return the hasPriorityCall
+	 */
+	public boolean isHasPriorityCall() {
+		return hasPriorityCall;
+	}
+	
+	/**
+	 * @param hasPriorityCall the hasPriorityCall to set
+	 */
+	public void setHasPriorityCall(boolean hasPriorityCall) {
+		this.hasPriorityCall = hasPriorityCall;
+	}
+	
+	
+	/**
+	 * @return the currentTarget
+	 */
+	public Target getCurrentTarget() {
+		return currentTarget;
+	}
+	
+	/**
+	 * @param currentTarget the currentTarget to set
+	 */
+	public void setCurrentTarget(Target currentTarget) {
+		this.currentTarget = currentTarget;
+	}
+	
+	
+	/**
+	 * @return the simuThread
+	 */
+	public Thread getSimuThread() {
+		return simuThread;
+	}
+
+	/**
+	 * @return the lTargetList
+	 */
+	public ArrayList&lt;Target&gt; getTargetList() {
+		return lTargetList;
+	}
+	
+	/**
+	 * @param lTargetList the lTargetList to set
+	 */
+	public void setTargetList(ArrayList&lt;Target&gt; lTargetList) {
+		this.lTargetList = lTargetList;
+	}
+
+	/**
+	 * @return the lIgnoreList
+	 */
+	public ArrayList&lt;Boolean&gt; getlIgnoreList() {
+		return lIgnoreList;
+	}
+	
+	/**
+	 * @param iIndex the lIgnoreList to set
+	 */
+	public void setlItemIgnoreList(int iIndex) {
+		this.lIgnoreList.set(iIndex, true);
+	}
+	
+	
+	
+	/**
+	 * @return the eElevator
+	 */
+	public Elevator getElevator() {
+		return eElevator;
+	}
+	
+	
+	/**
+	 * @return bSameFloor
+	 */
+	public boolean isSameFloor() {
+		return bSameFloor;
+	}
+	
+	
+	/**
+	 * 
+	 * @return updateNecessary
+	 */
+	public boolean isUpdateNecessary() {
+		return updateNecessary;
+	}
+	
+	
+	
+	/**
+	 * startet den Simulations-Thread
+	 */
+	public void startSimulation() {
+		if(simuThread == null || !simuThread.isAlive()) {
+			simuThread = new Thread(new ElevatorEngine(this));
+			simuThread.start();
+		}
+	}
+
+}
+
+</x-frame>

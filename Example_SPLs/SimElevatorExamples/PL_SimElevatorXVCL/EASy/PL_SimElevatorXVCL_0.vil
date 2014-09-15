@@ -1,0 +1,19 @@
+vilScript PL_SimElevatorXVCL (Project source, Configuration config, Project target) {
+
+    version v0;
+
+    main(Project source, Configuration config, Project target) = : {
+    	FileArtifact specificationFile = "${target.getPath()}/xvcl_sources/0spc.xvcl";
+    	clean(specificationFile, target);
+    	
+    	vilTemplateProcessor("XVCLSpecificationTemplate", config, specificationFile, target=target);
+    	xvcl(specificationFile);
+    }
+
+	clean(FileArtifact specificationFile, Project target) = : {
+		specificationFile.delete();
+		Path srcPath = "${target.getPath()}/src";
+		srcPath.delete();
+		srcPath.mkdir();
+	}
+}

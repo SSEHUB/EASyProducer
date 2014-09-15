@@ -1,0 +1,17 @@
+@advice(adviceTestVM8)
+template adviceTest8(Configuration config, FileArtifact target) {
+
+    def main(Configuration config, FileArtifact target) {
+        LevelType type = LevelType.low;
+        emit(type);
+        injectAspects(config, BindingTime.compile);
+    }
+
+    def emit(LevelType type) {
+        '$type'
+    }
+
+    def injectAspects(Configuration config, IvmlElement time) {
+    }
+
+}

@@ -1,0 +1,18 @@
+@advice(adviceTestVM1)
+template adviceTest1(Configuration config, FileArtifact target) {
+
+    def main(Configuration config, FileArtifact target) {
+        TestCompoundType cmp = config.byName("c1");
+        cmp = config.byName("c2");
+        if (cmp == null) {
+            'cmp is null'
+        }
+        if (cmp != null) {
+            'cmp is not null'
+        }
+        if (config.byName("c2") != null) {
+            'cmp is not null'
+        }
+    }
+
+}

@@ -1,0 +1,299 @@
+<?xml version="1.0"?>
+<!DOCTYPE x-frame SYSTEM "?@dtd?">
+<x-frame name="ControlPanel">
+
+package gui.views.inside;
+<select option="innerview_authorization">
+	<option value="true">
+import gui.buttons.AuthorizeButton;
+	</option>
+</select>
+import gui.buttons.DefaultButton;
+<select option="outerview_emergencybuttons">
+	<option value="true">
+import gui.buttons.EmergencyButton;
+	</option>
+</select>
+<select option="innerview_emergencybutton">
+	<option value="true">
+import gui.buttons.EmergencyButton;
+	</option>
+</select>
+import gui.views.ScrollPanel;
+
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
+import main.ElevatorSimulator;
+import properties.ProgramSettings;
+import simulator.controllers.<value-of expr="?@controlling_controllertype?"/>;
+
+
+
+
+public class ControlPanel extends ScrollPanel {
+	
+
+	private static final long serialVersionUID = 1048074068165896521L;
+	
+	private ArrayList&lt;DefaultButton&gt; lButtons;
+	
+    private <value-of expr="?@controlling_controllertype?"/> controller;
+	private int iElevatorIndex;
+	
+	
+	// #if($innerview_doorbutton)
+	<select option="innerview_doorbutton">
+		<option value="true">
+	private JButton openButton;
+	
+	private JButton closeButton;
+	
+	/**
+	 * @return the openButton
+	 */
+	public JButton getOpenButton() {
+		return openButton;
+	}
+
+	/**
+	 * @return the closeButton
+	 */
+	public JButton getCloseButton() {
+		return closeButton;
+	}
+		</option>
+	</select>
+	// #end
+	
+	/**
+	 * @return the lButtons
+	 */
+	public ArrayList&lt;DefaultButton&gt; getButtons() {
+		return lButtons;
+	}
+	
+	
+	public ControlPanel(int iElevatorIndex) {
+		super();
+		this.iElevatorIndex = iElevatorIndex;
+		lButtons = new ArrayList&lt;DefaultButton&gt;(<value-of expr="?@floors?"/>);
+		
+		init();
+	}
+
+	public void init() {
+		int iwButton = 30;
+		int ihButton = 15;
+		// neue Scrollklasse, damit in durch die Tabs gescrollt werden kann.
+
+		this.setLayout(new GridLayout(2 + (<value-of expr="?@floors?"/> / 6),
+				6));
+		this.setPreferredSize(new Dimension(350, (ihButton + 5)
+				* (<value-of expr="?@floors?"/> / 4) + 40));
+		
+		//Button zum offen halten und schliessen der Tuer
+		// #if($innerview_doorbutton)
+		<select option="innerview_doorbutton">
+			<option value="true">
+		addOpenCloseButtons();
+			</option>
+			<otherwise>
+		this.add(new JLabel());
+			</otherwise>
+		</select>
+		// #end
+		
+		//Notrufbutton
+		// #if($innerview_emergencybutton)
+		<select option="innerview_emergencybutton">
+			<option value="true">
+		addEmergencyButton();
+			</option>
+			<otherwise>
+		// #else
+		this.add(new JLabel());
+			</otherwise>
+		</select>
+		// #end
+		
+		//Button fuer Schutzbereiche 
+		<select option="innerview_authorization">
+			<option value="true">
+		// #if($innerview_authorization)
+		this.add(new AuthorizeButton());
+			</option>
+			<otherwise>
+		// #else
+		this.add(new JLabel());
+			</otherwise>
+		</select>
+		// #end
+
+		
+		// leere Labels adden, damit der erste Etagenbutton nicht direkt
+		// neben dem Notrufbutton erscheint
+		this.add(new JLabel());
+		this.add(new JLabel());
+		
+		// Buttons erzeugen
+		for (int i = 0; i &lt;= <value-of expr="?@floors?"/>; i++) {
+			DefaultButton mjbButton = new DefaultButton(i, iElevatorIndex);
+			mjbButton.setPreferredSize(new Dimension(iwButton, ihButton));
+			<select option="innerview_authorization">
+				<option value="true">
+			// #if($innerview_authorization)
+				<select option="floors_names">
+					<option value="{}">
+					</option>
+					<otherwise>
+			mjbButton.setText(ProgramSettings.FLOORS_NAMES[i]);
+			// #end
+					</otherwise>
+				</select>
+				</option>
+			</select>
+
+
+			lButtons.add(mjbButton);
+			this.add(mjbButton);
+		}
+		
+		
+		<select option="innerview_authorization">
+			<option value="true">
+		// #if($innerview_authorization)
+		initSavedAreas();
+		
+		// #end
+			</option>
+		</select>
+	}
+	<select option="innerview_doorbutton">
+		<option value="true">
+	// #if($innerview_doorbutton)
+	
+	/**
+	 * fuegt die Buttons fuer Tuer auf/zu in die GUI ein
+	 */
+	public void addOpenCloseButtons() {
+		Icon close = new ImageIcon(getClass().getResource("/ressource/close.gif"));
+		Icon open = new ImageIcon(getClass().getResource("/ressource/open.gif"));
+
+		openButton = new JButton();
+		openButton.setIcon(open);
+
+		closeButton = new JButton();
+		closeButton.setIcon(close);
+
+		openButton.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				// Die Variable wird mit jedem Klick auf den Button invertiert.
+				<select option="elevators">
+					<option value="1" comp-operator="&gt;">
+				ElevatorSimulator.getInstance().getController(iElevatorIndex).getElevator()
+						.setbKeepDoorsOpen(
+								!ElevatorSimulator.getInstance().getController(iElevatorIndex)
+										.getElevator().isbKeepDoorsOpen());
+					</option>
+					<option value="1">
+				ElevatorSimulator.getInstance().getController().getElevator()
+						.setbKeepDoorsOpen(
+								!ElevatorSimulator.getInstance().getController()
+										.getElevator().isbKeepDoorsOpen());	
+					</option>
+				</select>
+			}
+		});
+		closeButton.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+			<select option="controlling_synchronized">
+				<option value="true">
+				// Die Variable wird mit jedem Klick auf den Button invertiert.
+				ElevatorSimulator.getInstance().getSuperController().getController(iElevatorIndex).getElevator()
+						.setbCloseDoorsNow(
+								!ElevatorSimulator.getInstance().getSuperController().getController(iElevatorIndex)
+										.getElevator().isbCloseDoorsNow());
+				</option>
+				<otherwise>
+					<select option="elevators">
+						<option value="1" comp-operator="&gt;">
+				ElevatorSimulator.getInstance().getController(iElevatorIndex).getElevator()
+						.setbCloseDoorsNow(
+								!ElevatorSimulator.getInstance().getController(iElevatorIndex)
+										.getElevator().isbCloseDoorsNow());
+						</option>
+						<option value="1">
+				ElevatorSimulator.getInstance().getController().getElevator()
+						.setbCloseDoorsNow(
+								!ElevatorSimulator.getInstance().getController()
+										.getElevator().isbCloseDoorsNow());		
+						</option>
+					</select>
+				</otherwise>
+			</select>
+			}
+
+		});
+
+		this.add(openButton);
+		this.add(closeButton);
+	}
+	
+	// #end
+		</option>
+	</select>
+	
+	<select option="innerview_emergencybutton">
+		<option value="true">
+	// #if($innerview_emergencybutton)
+	
+	/**
+	 * Erzeugt Notruf-Button.
+	 */
+	private void addEmergencyButton() {
+		EmergencyButton btnEmergency = new EmergencyButton(-1, iElevatorIndex, true);
+		btnEmergency.setPreferredSize(new Dimension(20, 20));
+		this.add(btnEmergency);
+	}
+	
+	// #end
+		</option>
+	</select>
+	<select option="innerview_authorization">
+		<option value="true">
+	// #if(innerview_authorization)
+	/**
+	 * initialisiert die gesperrten stockwerke
+	 */
+	public void initSavedAreas() {
+		<select option="floors_securitylevels">
+			<option value="{}">
+			
+			</option>
+			<otherwise>
+		for (int i = 0; i &lt; ProgramSettings.FLOORS_SECURITY_LEVELS.length; i++) {
+			if (ProgramSettings.FLOORS_SECURITY_LEVELS[i] &gt; 0) {
+				lButtons.get(i).setEnabled(false);
+			}
+		}
+			</otherwise>
+		</select>
+	}
+	// #end
+		</option>
+	</select>			
+
+	
+}
+
+</x-frame>

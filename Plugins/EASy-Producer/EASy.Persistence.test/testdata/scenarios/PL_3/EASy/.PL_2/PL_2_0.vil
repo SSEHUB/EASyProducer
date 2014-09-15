@@ -1,0 +1,23 @@
+import PL_1 with (version == v0);
+
+vilScript PL_2 (Project source, Configuration config, Project target) {
+
+    version v0;
+load properties "settings.properties";
+String lokal;
+
+    main(Project source, Configuration config, Project target) = : {
+    	String abc = lokal;
+    	
+        Project p = source.predecessors().toSequence().first();
+        String name = p.getName();
+        
+        //Ruft man hier "main" auf oder ohne Regel wird das Projekt PL2 aufgerufen!
+		instantiate p rule "test" (p, config, target);
+		
+		//Bug (?) : Aufruf PL2
+		//instantiate p (source, config, target);
+       
+    }
+
+}

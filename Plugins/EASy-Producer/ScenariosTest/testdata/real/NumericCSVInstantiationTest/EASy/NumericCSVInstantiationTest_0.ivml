@@ -1,0 +1,23 @@
+project NumericCSVInstantiationTest {
+
+	version v0;
+	typedef PosInt Integer with (PosInt > 0);
+	enum Color {RED = 1, BLUE = 2, GREEN = 4};
+	Color color;
+	Boolean enabled;
+	Boolean disabled;
+	Integer aIntValue;
+	PosInt aPosIntValue;
+	color = Color.GREEN;
+	enabled = true;
+	disabled = false;
+	aIntValue = 5;
+	aPosIntValue = 3;
+	freeze {
+		color;
+		enabled;
+		disabled;
+		aIntValue;
+		aPosIntValue;
+	}
+}

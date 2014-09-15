@@ -1,0 +1,8 @@
+integer iInt -1
+Boolean pBoolean true
+unknown pComp
+unknown pCompSeq
+enum pEnum val2 1
+integer pInt 0
+unknown pReal
+unknown pString

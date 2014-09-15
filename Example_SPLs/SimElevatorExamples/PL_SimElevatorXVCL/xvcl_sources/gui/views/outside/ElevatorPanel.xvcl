@@ -1,0 +1,329 @@
+<?xml version="1.0"?>
+<!DOCTYPE x-frame SYSTEM "?@dtd?">
+<x-frame name="ElevatorPanel">
+
+package gui.views.outside;
+
+<select option="outerview_buttontype">
+	<option value="ArrowButton">
+import gui.buttons.ArrowButton;
+	</option>
+</select>
+
+import gui.buttons.DefaultButton;
+<select option="outerview_emergencybuttons">
+	<option value="true">
+import gui.buttons.EmergencyButton;
+	</option>
+</select>
+<select option="innerview_emergencybutton">
+	<option value="true">
+import gui.buttons.EmergencyButton;
+	</option>
+</select>
+import gui.views.ScrollPanel;
+
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.util.ArrayList;
+
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+
+import properties.ProgramSettings;
+
+
+/**
+ * Eigene Klasse die von JPanel erbt und die einzelnen Etagen aufs Panel
+ * zeichnet. Implementiert Scrollable, damit es Scrollbar ist.
+ * 
+ */
+public class ElevatorPanel extends ScrollPanel {
+
+	private static final long serialVersionUID = 1L;
+	
+	private JLabel elevatorImage;
+	
+	private int iElevatorIndex;
+	
+	private ArrayList&lt;<value-of expr="?@outerview_buttontype?"/>&gt; callButtons;
+	
+	<select option="outerview_emergencybuttons">
+		<option value="true">
+	// #if($outerview_emergencybuttonss)
+	private ArrayList&lt;EmergencyButton&gt; emergencyButtons;
+	
+	/**
+	 * @return the emergencyButtons
+	 */
+	public ArrayList&lt;EmergencyButton&gt; getEmergencyButtons() {
+		return emergencyButtons;
+	}
+	// #end
+		</option>
+	</select>
+	
+	
+	
+	public ArrayList&lt;<value-of expr="?@outerview_buttontype?"/>&gt; getCallButtons() {
+		return callButtons;
+	}
+
+	public int getElevatorIndex() {
+		return iElevatorIndex;
+	}
+
+	/**
+	 * @return the elevatorImage
+	 */
+	public JLabel getElevatorImage() {
+		return elevatorImage;
+	}
+
+	/**
+	 * Ueberladener Konstruktor.
+	 */
+	public ElevatorPanel(int iIndex) {
+
+		this.iElevatorIndex = iIndex;
+		this.callButtons = new ArrayList&lt;<value-of expr="?@outerview_buttontype?"/>&gt;(<value-of expr="?@floors?"/>);
+		
+		createPanel();
+	}
+
+	/**
+	 * zeichnet das Panel mit dem Elevator-Image.
+	 */
+	public void createPanel() {
+		this.setLayout(null);
+		/*
+		 * Ist fuer das repaint des Graphic-Objektes nun nicht mehr selber
+		 * verantwortlich.
+		 */
+		this.setOpaque(false);
+		
+		this.setPreferredSize(new Dimension(200, Math.max(470, (ProgramSettings.getTotalHeight(<value-of expr="?@floors?"/>)) + 81)));
+
+		this.elevatorImage = new JLabel();
+		Icon icon = new ImageIcon(getClass().getResource("/ressource/doorsClosed.gif"));
+		this.elevatorImage.setIcon(icon);
+
+		this.elevatorImage.setBounds(55, this.getPreferredSize().height - 64, 40, 40);
+		this.add(elevatorImage);
+
+		// anzahl buttons pro etage
+		<select option="controlling_synchronized">
+			<option value="true">
+		// #if($controller_synchronized)
+			if (ProgramSettings.FLOORS_BUTTONS == <value-of expr="?@elevators?"/>) {
+				createButtons();
+			} else {
+				int iii = Math.round(<value-of expr="?@elevators?"/>
+						/ ProgramSettings.FLOORS_BUTTONS);
+
+				// wenn iii == 1, falls kommazahl und abgerundet wird, dann nur
+				// buttons, wenn kleiner als anzahl knoepfe/etage
+				if ((iii == 1)
+						&amp;&amp; iElevatorIndex &lt; ProgramSettings.FLOORS_BUTTONS) {
+
+					createButtons();
+
+				}
+				// wenn iControllerIndex vielfache von iii
+				if ((iii != 1) &amp;&amp; ((iElevatorIndex + 1) % iii) == 0) {
+					createButtons();
+				}
+
+			}
+		// #else
+			</option>
+			<otherwise>
+			createButtons();
+		// #end
+			</otherwise>
+		</select>
+
+	}
+
+
+
+	/**
+	 * Diese Methode added Buttons zum hoch oder runterfahren neben die
+	 * Fahrstuehle.
+	 */
+	public void createButtons() {
+		// Spinner-Buttons fuer richtungsgebundenen Fahrtwunsch erzeugen
+
+			for (int i = 0; i &lt;= <value-of expr="?@floors?"/>; i++) {
+				
+				// ArrowButton initialisieren
+				<value-of expr="?@outerview_buttontype?"/> tmpButton = new <value-of expr="?@outerview_buttontype?"/>(i, iElevatorIndex);
+				<select option="floors_heights">
+					<option value="{}">
+				// #if($floors_heights != "{}")
+				tmpButton.setBounds(110, this.getPreferredSize().height
+					- (i * ProgramSettings.FLOORS_HEIGHT)
+					- 55, 50, 20);
+					</option>
+					<otherwise>
+				tmpButton.setBounds(110, this.getPreferredSize().height
+						- ProgramSettings.getTotalHeight(i)
+						- 45, 50, 20);
+				// #else
+				// #end
+					</otherwise>
+				</select>
+				
+				
+				callButtons.add(tmpButton);
+
+				// Label fuer Etagennamen initialisieren, falls vorhanden
+				<select option="floors_names">
+					<option value="{}"/>
+					<otherwise>
+					// #if($floors_names != "{}")
+					JLabel lblFloorName = new JLabel(ProgramSettings.FLOORS_NAMES[i]);
+					lblFloorName.setBounds(30, this.getPreferredSize().height
+							- (i * <value-of expr="?@floors?"/>) - 66, 30, 45);
+					this.add(lblFloorName);
+				// #end
+					</otherwise>
+				</select>
+				// Label fuer Etagennummer initialisieren
+				JLabel lblFloorNum = new JLabel(Integer.toString(i));
+
+				lblFloorNum.setPreferredSize(new Dimension(10, 5));
+				<select option="floors_heights">
+					<option value="{}">
+					lblFloorNum.setBounds(35 - (5 * lblFloorNum.getText().length()), this.getPreferredSize().height
+							- (i * ProgramSettings.FLOORS_HEIGHT)
+							- 55, lblFloorNum.getText().length() * 10, 45);
+					</option>
+					<otherwise>		
+				// #if($floors_heights != "{}")
+					lblFloorNum.setBounds(35 - (5 * lblFloorNum.getText().length()), this.getPreferredSize().height
+							- ProgramSettings.getTotalHeight(i)
+							- 55, lblFloorNum.getText().length() * 10, 45);
+				// #else
+					
+				// #end
+					</otherwise>		
+				</select>
+
+				this.add(tmpButton);
+				this.add(lblFloorNum);
+			}
+
+
+			/* *******************************************************************
+			 * normale Buttons
+			 * ***************************************************
+			 * ****************
+			 */
+//			for (int i = 0; i &lt;= ProgramSettings.getInstance().getFloorCount(); i++) {
+//				DefaultButton btnDefault = new DefaultButton(i, iElevatorIndex);
+//				
+//				if(ProgramSettings.getInstance().getFloorInfos() != null) {
+//					btnDefault.setBounds(110, this.getPreferredSize().height
+//							- (i * ProgramSettings.getInstance().getFloorInfos().get(i).getHeight())
+//							- 55, 50, 20);
+//				} else {
+//					btnDefault.setBounds(110, this.getPreferredSize().height
+//							- (i * ProgramSettings.getInstance().getFloorHeight())
+//							- 55, 50, 20);
+//				}
+//				
+//				defaultButtons.add(btnDefault);
+//
+//				if (ProgramSettings.getInstance().getFloorInfos() != null) {
+//					JLabel lblFloorName = new JLabel(ProgramSettings.getInstance().getFloorInfos()
+//							.get(i).getName());
+//					lblFloorName.setBounds(30, this.getPreferredSize().height
+//							- (i * ProgramSettings.getInstance().getFloorInfos().get(i)
+//									.getHeight()) - 66, 30, 45);
+//					this.add(lblFloorName);
+//
+//				}
+//
+//				this.add(btnDefault);
+//
+//			}
+
+		<select option="outerview_emergencybuttons">
+			<option value="true">	
+		// #if($outerview_emergencybuttonss)
+		createEmergencyButtons();
+		// #end
+			</option>
+		</select>
+	}
+
+	<select option="outerview_emergencybuttons">
+		<option value="true">
+	// #if($outerview_emergencybuttonss)
+	/**
+	 * Diese Methode erzeugt neben jeder Etage einen Notruf-Button
+	 */
+	private void createEmergencyButtons() {
+		this.emergencyButtons = new ArrayList&lt;EmergencyButton&gt;();
+		for (int i = 0; i &lt;= <value-of expr="?@floors?"/>; i++) {
+			EmergencyButton emButton = new EmergencyButton(i, iElevatorIndex, false);
+			<select option="floors_heights">
+				<option value="{}">
+				emButton.setBounds(170, this.getPreferredSize().height
+					- (i * ProgramSettings.FLOORS_HEIGHT) - 45,
+						20, 20);
+				</option>
+				<otherwise>
+			// #if($floors_names != "{}")
+				emButton.setBounds(170, this.getPreferredSize().height
+						- ProgramSettings.getTotalHeight(i) - 45,
+						20, 20);
+			// #else
+			// #end
+				</otherwise>
+			</select>
+			
+			emergencyButtons.add(emButton);
+			this.add(emButton);
+		}
+	}
+	// #end
+		</option>
+	</select>
+
+	/**
+	 * Diese Methode zeichnet die Rechtecke fuer die Etagen.
+	 * 
+	 * @param g
+	 *            die gezeichnete Grafik
+	 */
+	public void paintComponent(Graphics g) {
+
+		for (int i = 0; i &lt;= <value-of expr="?@floors?"/>; i++) {
+			<select option="floors_heights">
+				<option value="{}">
+			g.drawRect(ProgramSettings.FLOORS_HEIGHT, this
+						.getPreferredSize().height
+						- (i * ProgramSettings.FLOORS_HEIGHT) - 70,
+						ProgramSettings.FLOORS_HEIGHT,
+						ProgramSettings.FLOORS_HEIGHT);
+				</option>		
+				<otherwise>
+			// #if($floors_heights != "{}")
+				g.drawRect(50, this
+						.getPreferredSize().height
+						- ProgramSettings.getTotalHeight(i) - ProgramSettings.FLOORS_HEIGHTS[i] -20,
+						50,	ProgramSettings.FLOORS_HEIGHTS[i]);
+			// #else
+			// #end
+				</otherwise>
+			</select>
+		}
+	}
+
+}
+
+
+</x-frame>

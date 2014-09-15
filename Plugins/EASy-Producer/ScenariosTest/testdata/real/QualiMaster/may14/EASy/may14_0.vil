@@ -1,0 +1,43 @@
+@advice(may14)
+vilScript may14 (Project source, Configuration config, Project target) {
+
+    version v0;
+
+    Path srcGen = "$target/src-gen";
+    Path maxJ = "$target/hw-gen/EngineCode/src/qm";
+    Path maxC = "$target/hw-gen/CPUCode";
+
+    cleanup(Project target) = : {
+    	srcGen.delete();
+    }
+
+    processElement(sequenceOf(DecisionVariable) output, Configuration config) = : {
+        map(Flow v = output) {
+        	DecisionVariable elt = v.destination();
+        	String name = elt.varName().firstToUpperCase() + elt.type();
+        	vilTemplateProcessor("storm" + elt.type(), config, "$srcGen/$name.java", elt=elt);
+        	processElement(elt.byName("output").variables(), config);
+        };
+    }
+    
+    main(Project source, Configuration config, Project target) = : cleanup(target) {
+    	Pipeline pip = config.byName("pipeline");
+        vilTemplateProcessor("stormPipeline", config, "$srcGen/Topology.java", pipeline=pip);
+        map(DecisionVariable v = pip.sources()) {
+        	String name = v.varName().firstToUpperCase() + v.type();
+        	vilTemplateProcessor("storm" + v.type(), config, "$srcGen/$name.java", elt=v);
+        	processElement(v.byName("output").variables(), config);
+        };
+        
+		// call Java compiler on storm artifacts
+		// package storm artifacts (JAR)        
+        
+        vilTemplateProcessor("maxKernel", config, "$maxJ/Pipeline.maxj", pipeline=pip);
+        vilTemplateProcessor("maxManager", config, "$maxJ/PipelineManager.maxj", pipeline=pip);
+        vilTemplateProcessor("maxHost", config, "$maxC/PipelineCpuCode.c", pipeline=pip);
+        
+        // call MAX Makefile
+    }
+    
+
+}

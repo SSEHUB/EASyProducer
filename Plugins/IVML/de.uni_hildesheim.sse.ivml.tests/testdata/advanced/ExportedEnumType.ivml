@@ -1,0 +1,14 @@
+project enumTypeDef {
+
+    interface defInterface {
+        export enumVar;
+    }
+    enum EnumType {A, B};
+    EnumType enumVar;
+}
+project ExportedEnumType {
+
+    version v0;
+    import enumTypeDef::defInterface;
+    enumVar = EnumType.A;
+}

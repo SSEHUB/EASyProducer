@@ -1,0 +1,4 @@
+notNestedVar = Not nested
+nestedVar = Nested, layer 1
+nestedVar = 1. nested, layer 2
+nestedVar = 2. nested, layer 2

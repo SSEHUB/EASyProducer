@@ -1,0 +1,12 @@
+import PL_1 with (version == v0);
+
+vilScript PL_2 (Project source, Configuration config, Project target) {
+
+    version v0;
+
+    main(Project source, Configuration config, Project target) = : {
+    	vilTemplateProcessor("t1", config, source.convert());
+        PL_1::main(source, config, target);
+    }
+
+}

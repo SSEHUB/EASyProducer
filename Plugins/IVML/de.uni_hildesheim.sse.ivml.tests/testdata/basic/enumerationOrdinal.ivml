@@ -1,0 +1,8 @@
+project testEnumerationOrdinal {
+
+    version v0;
+    enum colors {red, green, blue};
+    colors c1 = colors.red;
+    //* ordinal(c1) == ordinal(colors.red);
+    c1.ordinal() == ordinal(colors.red);
+}

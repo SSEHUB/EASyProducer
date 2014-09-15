@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE x-frame SYSTEM "?@dtd?">
+<x-frame name="Speed">
+
+package properties;
+
+public enum Speed {
+	SLOW(70), MEDIUM(40), FAST(10);
+
+	private int value;
+
+	private Speed(int speed) {
+		this.value = speed;
+	}
+
+	public int getValue() {
+		return value;
+	}
+
+}
+
+</x-frame>

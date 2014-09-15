@@ -1,0 +1,12 @@
+project Infrastructure {
+	
+	import Hardware;
+	import ReconfigurableHardware;
+	import Families;
+	import Observables;
+	import Adaptivity;
+	import Pipelines;
+	
+	//refTo(Pipeline) pipeline;
+	Pipeline pipeline;
+}

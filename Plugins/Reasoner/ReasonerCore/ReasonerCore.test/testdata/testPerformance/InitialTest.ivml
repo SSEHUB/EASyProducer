@@ -1,0 +1,9 @@
+project InitialTest {
+
+	version v0;
+	
+	Integer a = 1;
+	Boolean b;
+	Real c;
+	b = true;
+}

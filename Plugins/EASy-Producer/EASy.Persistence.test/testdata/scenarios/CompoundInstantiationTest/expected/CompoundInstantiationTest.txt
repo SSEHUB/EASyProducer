@@ -1,0 +1,4 @@
+notNestedVar = Not nested
+cmp1.nestedVar = Nested, layer 1
+cmp2.slot1.nestedVar = 1. nested, layer 2
+cmp2.slot2.nestedVar = 2. nested, layer 2

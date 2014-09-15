@@ -1,0 +1,7 @@
+vilScript constructor (Project source, Project target, Configuration config) {
+
+    main() = : {
+        Configuration cfg = new Configuration();
+    }
+
+}

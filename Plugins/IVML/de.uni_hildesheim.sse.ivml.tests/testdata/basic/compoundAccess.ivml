@@ -1,0 +1,16 @@
+project testCompoundAccess {
+
+    version v0;
+    compound further {
+        Integer f = 0;
+    }
+
+    compound position {
+        refTo(further) rf;
+        further f;
+    }
+
+    position p;
+    p.f.f > 0;
+    p.rf.f > 0;
+}

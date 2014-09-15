@@ -1,0 +1,11 @@
+project freezeFail {
+
+    version v0;
+    compound c {
+        Integer j;
+    }
+
+    freeze {
+        c.j;
+    } but (c*)
+}

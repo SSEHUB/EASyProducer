@@ -1,0 +1,123 @@
+<?xml version="1.0"?>
+<!DOCTYPE x-frame SYSTEM "?@dtd?">
+<x-frame name="ElevatorSimulator">
+
+package main;
+
+import gui.windows.MainWindow;
+
+import java.util.ArrayList;
+
+import properties.ProgramSettings;
+<select option="controlling_synchronized">
+	<option value="true">
+import simulator.SuperController;
+	</option>
+</select>
+import simulator.controllers.<value-of expr="?@controlling_controllertype?"/>;
+
+
+public class ElevatorSimulator {
+	
+	private static ElevatorSimulator instance = null;
+	
+	
+	// Liste nur bei mehr als einem Fahrstuhl noetig
+	<select option="elevators">
+		<option value="1">
+	private <value-of expr="?@controlling_controllertype?"/> controller;
+	
+	public <value-of expr="?@controlling_controllertype?"/> getController() {
+		return controller;
+	}
+		</option>
+		<option value="1" comp-operator="&gt;">
+	// #if($elevators &gt; 1)
+	
+	private ArrayList&lt;<value-of expr="?@controlling_controllertype?"/>&gt; lControllers;
+	
+	public <value-of expr="?@controlling_controllertype?"/> getController(int i) {
+		return lControllers.get(i);
+	}
+	
+	// #else
+	// #end
+		</option>
+	</select>
+		
+	<select option="controlling_synchronized">
+		<option value="true">
+	// #if($controlling_synchronized)
+	
+	private SuperController superController;
+	
+	public SuperController getSuperController() {
+		return superController;
+	}
+	
+	public void setSuperController(SuperController aSuperController) {
+		this.superController = aSuperController;
+	}
+	
+	// #end
+		</option>
+	</select>
+	
+	
+	public static ElevatorSimulator getInstance() {
+
+		if (instance == null) {
+
+			instance = new ElevatorSimulator();
+
+		}
+
+		return instance;
+	}
+	
+	
+	
+	private ElevatorSimulator() {
+		initController();
+		initGUI();
+	}
+	
+	public void initGUI() {
+		MainWindow.getInstance();
+	}
+
+	public void initController() {
+		<select option="elevators">	
+			<option value="1">
+			// #else
+		
+		this.controller = new <value-of expr="?@controlling_controllertype?"/>(0, <value-of expr="?@floors?"/>);
+		
+		// #end
+			</option>
+			<option value="1" comp-operator="&gt;">
+		// #if($elevators &gt; 1)
+		
+			
+		lControllers = new ArrayList&lt;<value-of expr="?@controlling_controllertype?"/>&gt;();
+		for (int i = 0; i &lt; <value-of expr="?@elevators?"/>; i++) {
+				lControllers.add(new <value-of expr="?@controlling_controllertype?"/>(i, <value-of expr="?@floors?"/>));
+		}
+				
+			</option>
+		</select>
+		
+		<select option="controlling_synchronized">
+			<option value="true">
+		// #if($controlling_synchronized)
+		
+		this.superController = new SuperController(lControllers);
+		
+		// #end
+			</option>
+		</select>
+	}
+	
+}
+
+</x-frame>

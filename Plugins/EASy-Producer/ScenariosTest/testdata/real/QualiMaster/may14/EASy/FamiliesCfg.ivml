@@ -1,0 +1,66 @@
+project FamiliesCfg {
+
+    import ReconfigurableHardware;	
+	import Families;
+
+    Algorithm alg_c1;
+    alg_c1 = {
+    	name = "L3S causality",
+    	artifact = "de.l3s.Causality",
+    	hwType = null
+    };
+    
+    Algorithm alg_c2;
+    alg_c2 = {
+    	name = "TSI causality",
+    	artifact = "gr.tsi.Causality2",
+    	hwType = null
+    };
+
+    Algorithm alg_c3;
+    alg_c3 = {
+    	name = "TSI HW causality",
+    	artifact = "gr.tsi.CausalityHW",
+    	hwType = CardType.MAX2 // just preliminary link to HW
+    };
+	
+	Family causality;
+    causality = {
+		name = "causality",
+		members = {refBy(alg_c1), refBy(alg_c2), refBy(alg_c3)}
+	};
+
+    Algorithm alg_f1;
+    alg_f1 = {
+    	name = "Apache Filter",
+    	artifact = "com.apache.SlowFilter",
+    	hwType = null
+    };
+    
+    Algorithm alg_f2;
+    alg_f2 = {
+    	name = "Maxeler Filter",
+    	artifact = "com.maxeler.FastFilterKernel",
+    	hwType = null
+    };
+
+	Family filter;
+	filter = {
+		name = "filter",
+		members = {refBy(alg_f1), refBy(alg_f2)}
+	};
+
+    families = { refBy(causality), refBy(filter) };
+	
+	freeze {
+	    alg_c1;
+	    alg_c2;
+    	alg_c3;
+		causality;
+		alg_f1;
+		alg_f2;
+    	filter;
+		families;
+    }
+	
+}

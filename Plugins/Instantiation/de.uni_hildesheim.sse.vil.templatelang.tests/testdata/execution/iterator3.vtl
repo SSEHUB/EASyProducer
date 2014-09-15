@@ -1,0 +1,9 @@
+template iterator1(Configuration config, Artifact target) {
+
+    def main(Configuration config, Artifact target) {
+        for (DecisionVariable d : config.variables()->select(DecisionVariable i | i.name() == "pInt")) {
+            'value ${d.value()}'
+        }
+    }
+
+}

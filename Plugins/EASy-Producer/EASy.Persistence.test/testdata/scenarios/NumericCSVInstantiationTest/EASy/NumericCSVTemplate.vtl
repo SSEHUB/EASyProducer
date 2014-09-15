@@ -1,0 +1,30 @@
+template NumericCSVTemplate(Configuration config, FileArtifact target) {
+
+    def main(Configuration config, FileArtifact target) {
+    	for (DecisionVariable dv : config.variables().sortAlpha()) {
+			createValueAssignment(dv, dv.value());
+		}
+    }
+    def createValueAssignment(DecisionVariable variable, Boolean value) {
+		String row = "${variable.name()};";
+		if (value) {
+			row = row + "1";
+		} else {
+			row = row + "0";
+		}
+		'$row'
+	}
+	
+    def createValueAssignment(DecisionVariable variable, EnumValue value) {
+		'${variable.name()};${value.getOrdinal()}'
+	}
+	
+	def createValueAssignment(DecisionVariable variable, Integer value) {
+		'${variable.name()};${value}'
+	}
+	
+	def createValueAssignment(DecisionVariable variable, Any value) {
+		// No action desired
+	}
+	
+}

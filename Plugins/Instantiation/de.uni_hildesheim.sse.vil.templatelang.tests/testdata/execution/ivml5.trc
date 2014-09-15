@@ -1,0 +1,7 @@
+-> main(Configuration, Artifact) with (<config>, test.texts)
+    -> byName(Configuration, String) with (<config>, pEnum) = test::pEnum
+    variable <- test::pEnum
+    -> getEnumValue(DecisionVariable) with (test::pEnum) = val2
+    value <- val2
+    -> name(DecisionVariable) with (test::pEnum) = pEnum
+    -> getOrdinal(EnumValue) with (val2) = 1

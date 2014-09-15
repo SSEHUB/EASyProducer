@@ -1,0 +1,53 @@
+template stormPipeline(Configuration config, FileArtifact target, DecisionVariable pipeline) {
+
+    // enable IVML types as VIL types -> dynamic type registry
+    // check for endless recursions
+
+    def main(Configuration config, FileArtifact target, DecisionVariable pipeline) {
+    	DecisionVariable name = pipeline.byName("name");
+    	Integer timeout = 120;
+    	'import backtype.storm.*;'
+    	'import backtype.storm.topology.*;'
+    	''
+    	'public class Topology {'
+    	'    static final String TOPOLOGY_NAME = "$name";'
+    	''
+    	'    public static void main(String[] args) {'
+    	'        Config config = new Config();'
+    	'        config.setMessageTimeoutSecs($timeout);'
+    	'        TopologyBuilder b = new TopologyBuilder();'
+    	for (DecisionVariable r : pipeline.byName("sources").variables()) {
+    		processElement(r, "");
+    	}
+    	''
+    	'        final LocalCluster cluster = new LocalCluster();'
+		'        cluster.submitTopology(TOPOLOGY_NAME, config, b.createTopology());'
+    	'    }'
+    	'}'
+    }
+    
+    def processElement(DecisionVariable elt, String lastName) {
+    	String name = elt.varName();
+    	String grouping = "";
+    	if (name.length() > 0) {
+    		grouping = '.shuffleGrouping("$lastName")';
+    	}
+        String clsName = elt.varName().firstToUpperCase() + elt.type();
+		if (elt.type() == "FamilyElement") {
+			'b.setBolt("$name", new $clsName())$grouping;' | 8;
+			for (DecisionVariable flow : elt.byName("output").variables()) {
+				processElement(flow.byName("destination"), name);
+			}
+		} else if (elt.type() == "Source") {
+			'b.setSpout("$name", new $clsName());' | 8;
+			for (DecisionVariable flow : elt.byName("output").variables()) {
+				processElement(flow.byName("destination"), name);
+			}
+		} else if (elt.type() == "Sink") {
+			'b.setBolt("$name", new $clsName())$grouping;' | 8;
+		} else {
+			'// unhandled type ${elt.type()}' | 8;
+		}
+    }
+    
+}

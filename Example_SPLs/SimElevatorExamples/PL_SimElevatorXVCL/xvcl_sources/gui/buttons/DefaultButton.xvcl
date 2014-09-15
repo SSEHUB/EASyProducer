@@ -1,0 +1,236 @@
+<?xml version="1.0"?>
+<!DOCTYPE x-frame SYSTEM "?@dtd?">
+<x-frame name="DefaultButton">
+
+package gui.buttons;
+
+import gui.windows.MainWindow;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
+import javax.swing.JButton;
+
+import main.ElevatorSimulator;
+import properties.ProgramSettings;
+import simulator.controllers.<value-of expr="?@controlling_controllertype?"/>;
+import simulator.model.Target;
+
+/**
+ * ausgelagerte Klasse fuer spezielle Instanzen von JButton. hier bekommen die
+ * Buttons noch eine ID um sie spaeter mit den Stockwerken verknuepfen
+ * zu koennen
+ * 
+ */
+public class DefaultButton extends JButton {
+
+	/**
+	 * Serialisierung
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private boolean isIgnored;
+	private boolean bHighlighted = false;
+	private int id;
+	private int iElevatorIndex;
+
+	/**
+	 * Standardkonstruktor
+	 */
+	public DefaultButton() {
+
+	}
+
+	/**
+	 * Konstruktor fuer die Button-ID
+	 * 
+	 * @param id
+	 */
+	public DefaultButton(int id, int iElevatorIndex) {
+		this.isIgnored = false;
+		this.id = id;
+		this.iElevatorIndex = iElevatorIndex;
+		this.setText(Integer.toString(id));
+		this.setFont(new Font("Arial", Font.PLAIN, 10));
+		this.setIconTextGap(0);
+		this.addActionListener(new DefaultButtonActionListener());
+		this.addMouseListener(new DefaultButtonMouseListener());
+	}
+
+	/**
+	 * Getter fuer die Button-ID
+	 * 
+	 * @return id
+	 */
+	public int getId() {
+		return id;
+	}
+
+	/**
+	 * @param id
+	 *            the id to set
+	 */
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	/**
+	 * @param isIgnored
+	 *            the isIgnored to set
+	 */
+	public void setIgnored(boolean isIgnored) {
+		this.isIgnored = isIgnored;
+	}
+
+	/**
+	 * @return the isIgnored
+	 */
+	public boolean isIgnored() {
+		return isIgnored;
+	}
+
+	/**
+	 * @return Button highlighted
+	 */
+	public boolean isHighlighted() {
+		return bHighlighted;
+	}
+
+	public void setHighlight(boolean aHighlight) {
+		if (aHighlight) {
+			this.setBackground(Color.GREEN);
+		} else {
+			this.setBackground(null);
+		}
+
+		this.bHighlighted = aHighlight;
+	}
+
+	
+	private class DefaultButtonActionListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			<select option="elevators">
+				<option value="1" comp-operator="&gt;">
+			<value-of expr="?@controlling_controllertype?"/> controller = ElevatorSimulator.getInstance().getController(iElevatorIndex);
+				</option>
+				<option value="1">
+			<value-of expr="?@controlling_controllertype?"/> controller = ElevatorSimulator.getInstance().getController();
+				
+				</option>
+			</select>
+			// wenn Button gehighlighted ist, dann muss Highlight
+			// entfernt werden
+			if (isHighlighted()) {
+				controller.addDeletion(
+						id);
+				<select option="elevators">
+					<option value="1" comp-operator="&gt;">		
+				MainWindow.getInstance().getControlPanel(iElevatorIndex).getButtons()
+						.get(id).setHighlight(false);
+					</option>
+					<option value="1">
+				MainWindow.getInstance().getControlPanel().getButtons()
+						.get(id).setHighlight(false);	
+					</option>
+				</select>	
+				<select option="controlling_synchronized">
+					<option value="true">
+				//#if($controlling_synchronized)
+					MainWindow.getInstance().highlightFloorButtons(id, false, 0);
+					</option>
+					<otherwise>
+				//#else
+					setHighlight(false);
+				//#end
+					</otherwise>
+				</select>
+				
+				// ansonsten highlighten
+			} else {
+				Target target = new Target(id, 0);
+				
+				// wenn Fahrstuehle synchronisiert, dann muessen alle
+				// Buttons auf der Etage gehighlighted werden
+				<select option="controlling_synchronized">
+					<option value="true">
+				//#if($controlling_synchronized)
+					MainWindow.getInstance().highlightFloorButtons(id, true, 0);
+					ElevatorSimulator.getInstance().getSuperController().addTarget(target, controller.getIndex(),
+							getParent().getClass().getSimpleName().equals("ControlPanel"));
+										</option>
+					<otherwise>
+				//#else
+					setHighlight(true);
+					controller.addFloor(target);
+					<select option="elevators">
+						<option value="1" comp-operator="&gt;">
+					MainWindow.getInstance().getControlPanel(iElevatorIndex).getButtons()
+							.get(id).setHighlight(true);
+						</option>
+						<option value="1">
+					MainWindow.getInstance().getControlPanel().getButtons()
+							.get(id).setHighlight(true);	
+						</option>
+					</select>
+				//#end
+					</otherwise>
+				</select>
+			}
+			controller.startSimulation();
+		}
+		
+	}
+	
+	private class DefaultButtonMouseListener extends MouseAdapter implements MouseListener {
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			DefaultButton self = DefaultButton.this;
+			if (e.getButton() == MouseEvent.BUTTON3) {
+				<select option="elevators">
+					<option value="1" comp-operator="&gt;">
+				DefaultButton untenbutton = MainWindow.getInstance().getControlPanel(iElevatorIndex).getButtons()
+						.get(self.getId());
+					</option>
+					<option value="1">
+				DefaultButton untenbutton = MainWindow.getInstance().getControlPanel().getButtons()
+						.get(self.getId());	
+					</option>
+				</select>
+
+				if (!self.isIgnored() || !untenbutton.isIgnored()) {
+					self.setIgnored(true);
+					self.setEnabled(false);
+					<select option="elevators">
+						<option value="1" comp-operator="&gt;">
+					ElevatorSimulator.getInstance().getController(iElevatorIndex)
+							.getlIgnoreList().set(self.getId(), true);
+						</option>
+						<option value="1">
+					ElevatorSimulator.getInstance().getController()
+							.getlIgnoreList().set(self.getId(), true);
+						</option>
+					</select>
+					
+
+					untenbutton.setIgnored(true);
+					untenbutton.setEnabled(false);
+				} else {
+					self.setIgnored(false);
+					self.setEnabled(true);
+					untenbutton.setIgnored(false);
+					untenbutton.setEnabled(true);
+				}
+			}
+		}
+	}
+	
+}
+
+</x-frame>

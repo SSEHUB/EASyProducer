@@ -1,0 +1,11 @@
+project impliesFail {
+
+    version v0;
+    Boolean b;
+    Boolean c;
+    Integer i;
+    enum test {c, d};
+    test t;
+    i = 0 implies b = c;
+    i == 0 implies t == test.c;
+}

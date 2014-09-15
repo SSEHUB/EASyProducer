@@ -1,0 +1,13 @@
+@advice(adviceTestVM1)
+template adviceTest7(Configuration config, FileArtifact target) {
+
+    def main(Configuration config, FileArtifact target) {
+        DecisionVariable c1 = config.byName("c1");
+        'int val ${c1.byName("iVal")}'
+        TestCompoundType cmp = c1;
+        'int val ${cmp.iVal()}'
+        DecisionVariable c2 = cmp;
+        'int val ${c2.byName("iVal")}'
+    }
+
+}

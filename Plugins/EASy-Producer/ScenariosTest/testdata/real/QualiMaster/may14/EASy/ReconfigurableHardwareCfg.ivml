@@ -1,0 +1,7 @@
+project ReconfigurableHardwareCfg {
+
+    import ReconfigurableHardware;	
+	
+	clusters = {};
+
+}

@@ -1,0 +1,156 @@
+<?xml version="1.0"?>
+<!DOCTYPE x-frame SYSTEM "?@dtd?">
+<x-frame name="ImportFloors">
+
+package gui;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.LineNumberReader;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
+
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+import properties.Floor;
+import properties.ProgramSettings;
+
+
+
+/**
+ * Klasse die einen JFileChooser stellt zum auswaehlen der Etagennamen
+ * 
+ */
+public class ImportFloors {
+
+	private String[] line;
+	private String buf = "";
+	private LineNumberReader lnr;
+
+	private ArrayList&lt;Floor&gt; etagen;
+
+	private JFileChooser fc;
+
+	/**
+	 * Konstruktor der einen FileChooser zur Verfuegung stellt
+	 */
+	public ImportFloors() {
+		etagen = new ArrayList&lt;Floor&gt;();
+		fc = new JFileChooser("./");
+
+		FileFilter ff = new FileNameExtensionFilter(".txt", "txt");
+		fc.addChoosableFileFilter(ff);
+		fc.setFileFilter(ff);
+
+	}
+
+	/**
+	 * liest die ausgewaehlte txt-Datei ein und liefert die Etagennamen als
+	 * String[] zur&uuml;ck
+	 * 
+	 * @return line String[]
+	 */
+	public boolean readFloor(File file) throws FileNotFoundException,
+			IOException {
+		boolean isErfolgreich = false;
+
+		if (file != null) {
+
+			lnr = new LineNumberReader(new BufferedReader(new FileReader(file)));
+			while (lnr.ready()) {
+				buf += lnr.readLine();
+				line = buf.split(";");
+				isErfolgreich = true;
+			}
+		}
+		String floor = "";
+		String left = "";
+		String autho = "";
+		int count = 0;
+		if (line != null) {
+			for (String s : line) {
+				StringTokenizer tok = new StringTokenizer(s, ",");
+				while (tok.hasMoreTokens()) {
+					floor = tok.nextToken();
+					left = tok.nextToken();
+					autho = tok.nextToken();
+				}
+				Floor etage = new Floor(count, Integer.valueOf(autho), Integer
+						.valueOf(left), 50, floor);
+				etagen.add(etage);
+				count++;
+			}
+			ProgramSettings.getInstance().setFloorInfos(etagen);
+			for (Floor et : etagen) {
+				System.out.println(et.getName());
+				System.out.println(et.getSchutzbereich());
+				System.out.println(et.getTuerSeite());
+				System.out.println(et.getStockwerk());
+				System.out.println();
+			}
+
+			lnr.close();
+		}
+		return isErfolgreich;
+
+	}
+
+	/**
+	 * getter fuer die gelesene Zeile
+	 * 
+	 * @return line
+	 */
+	public String[] getLine() {
+		return line;
+	}
+
+	/**
+	 * setter der gelesenen Zeile
+	 * 
+	 * @param line
+	 */
+	public void setLine(String[] line) {
+		this.line = line;
+	}
+
+	/**
+	 * getter des Filechoosers
+	 * 
+	 * @return fc
+	 */
+	public JFileChooser getFc() {
+		return fc;
+	}
+
+	/**
+	 * setter des filechoosers
+	 * 
+	 * @param fc
+	 */
+	public void setFc(JFileChooser fc) {
+		this.fc = fc;
+	}
+
+	
+
+	/**
+	 * @param etagen
+	 *            the etagen to set
+	 */
+	public void setEtagen(ArrayList&lt;Floor&gt; etagen) {
+		this.etagen = etagen;
+	}
+
+	/**
+	 * @return the etagen
+	 */
+	public ArrayList&lt;Floor&gt; getEtagen() {
+		return etagen;
+	}
+}
+</x-frame>

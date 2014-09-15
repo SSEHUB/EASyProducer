@@ -1,0 +1,8 @@
+vilScript random () {
+
+    main() = : {
+        Real r = random();
+        Integer i = randomInteger();
+    }
+
+}

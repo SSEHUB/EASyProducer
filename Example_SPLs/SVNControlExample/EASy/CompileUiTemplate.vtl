@@ -1,0 +1,43 @@
+@indent(indentation = 4, additional = 1)
+template CompileUiTemplate(Configuration config, FileArtifact target, FileArtifact injectionTarget, DecisionVariable var) {
+
+    // assuming a JavaFileArtifact, it would provide access to its JavaPath and its annotations...
+
+    def main(Configuration config, FileArtifact target, FileArtifact injectionTarget, DecisionVariable var) {
+        JavaPath itPath = injectionTarget.path().toJavaPath();
+        JavaPath tPath = target.path().toJavaPath();
+        String package = tPath.package();
+        String name = tPath.name();
+        String itName = itPath.name();
+        String decisionId = var.name();
+        
+        'package $package;
+
+         import javax.swing.*;
+
+         import de.uni_hildesheim.sse.variability.runtime.*;
+
+         aspect $name {
+
+             pointcut targetClass(): within(MainWindow);
+
+             // replace factory call
+  
+             pointcut componentFactory(): targetClass() 
+                 && call(void $itName.create(JFrame, JTabbedPane, Client)) 
+                   && if(!variability.StaticConfiguration.$decisionId);
+
+             // just delete the component constructor  
+             void around(): componentFactory() {
+             }
+    
+             // avoid multiple weaving
+      
+            static {
+                ProcessingState.setKey("addMethod", "$name");
+            }
+
+         }'
+
+    }
+}

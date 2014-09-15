@@ -1,0 +1,37 @@
+project adviceTestVM1 {
+  version v0;
+  Integer intVal;
+  enum LevelType {high, medium, low};
+  compound TestCompoundType {
+      Integer iVal;
+      String sVal;
+      LevelType type;
+  };
+  
+  compound SubTestCompoundType refines TestCompoundType {
+      Boolean bVal;
+  }
+  
+  intVal=50;
+  TestCompoundType c1;
+  c1 = {
+    iVal=1,
+    sVal="here",
+    type=LevelType.high
+  };
+
+  SubTestCompoundType c2;
+  c2 = {
+    iVal=2,
+    sVal="sub",
+    type=LevelType.low,
+    bVal=false
+  };
+  
+  freeze {
+    intVal;
+    c1;
+    c2;
+  };
+  
+}

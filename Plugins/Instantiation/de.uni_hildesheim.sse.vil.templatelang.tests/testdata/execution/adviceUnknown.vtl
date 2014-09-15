@@ -1,0 +1,20 @@
+@advice(adviceTestVM1)
+template adviceTest1(Configuration config, FileArtifact target) {
+
+    def processCompound(SubTestCompoundType cmp) {
+        'sub test compound type'
+    }
+
+    def processCompound(TestCompoundType5 cmp) {
+        'test compound type'
+    }
+
+    def main(Configuration config, FileArtifact target) {
+        TestCompoundType cmp = config.byName("c1");
+        cmp = config.byName("c2");
+        TestCompoundType5 cmp4 = config.byName("c1");
+        processCompound(cmp4);
+        'out ${cmp4.name()}'
+    }
+
+}

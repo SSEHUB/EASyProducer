@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProductLineProject id="3b0ec3b1-a31c-44e1-87f2-c50e13aa158e" name="FilteredInstantiationTest" version="0" location="FilteredInstantiationTest">
+	<predecessors>
+	</predecessors>
+	<successors>
+	</successors>
+	<settings>
+	</settings>
+	<reasoners>
+	</reasoners>
+	<instantiators>
+	</instantiators>
+	<copy>
+	</copy>
+</ProductLineProject>

@@ -1,0 +1,7 @@
+project HighLevelVars {
+	
+	Integer highInt;
+	enum Profile {SettingA, SettingB};
+	Profile profile;
+
+}

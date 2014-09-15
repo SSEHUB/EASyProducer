@@ -1,0 +1,19 @@
+project BooleanAlgebraOpTest {
+
+    Boolean t = true;
+    Boolean f = false;
+    (t and t) == true;
+    (t and f) == false;
+    (f and t) == false;
+    (f and f) == false;
+    (t or t) == true;
+    (t or f) == true;
+    (f or t) == true;
+    (f or f) == false;
+    (t xor t) == false;
+    (f xor t) == true;
+    (t xor f) == true;
+    (f xor f) == false;
+    not (true) == false;
+    not (false) == true;
+}
