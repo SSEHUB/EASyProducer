@@ -174,7 +174,7 @@ public class ModelUtility extends de.uni_hildesheim.sse.dslCore.ModelUtility<Var
                     try {
                         imp.add(ImportTranslator.processConflict(importStmt));
                     } catch (TranslatorException e) {
-                        throw new IOException(e);
+                        //throw new IOException(e); // do not consider semantic errors here
                     }
                 }
                 
@@ -269,7 +269,12 @@ public class ModelUtility extends de.uni_hildesheim.sse.dslCore.ModelUtility<Var
                 ExpressionTranslator translator = new ExpressionTranslator();
                 MessageReceiver messageReceiver = translator;
                 if (asStatement) {
-                    expr = ((ExpressionStatement) result.getRootASTElement()).getExpr();
+                    ExpressionStatement stm = (ExpressionStatement) result.getRootASTElement();
+                    if (null != stm) {
+                        expr = stm.getExpr();
+                    } else {
+                        expr = null;
+                    }
                 } else {
                     expr = (Expression) result.getRootASTElement();
                 }

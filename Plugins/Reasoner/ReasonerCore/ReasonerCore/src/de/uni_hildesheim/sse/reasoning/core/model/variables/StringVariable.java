@@ -1,5 +1,6 @@
 package de.uni_hildesheim.sse.reasoning.core.model.variables;
 
+import de.uni_hildesheim.sse.model.confModel.AssignmentState;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.reasoning.core.model.ReasonerModel;
 
@@ -27,8 +28,10 @@ public class StringVariable extends ReasonerVariable {
         
         // value and configVariable.getValue() can share the same instance, since strings are immutable.
         value = null;
-        if (configVariable.getValue() != null) {
-            value = (String) configVariable.getValue().getValue();
+        if (configVariable.getState() != AssignmentState.UNDEFINED) {
+            if (configVariable.getValue().getType().getName().equals("String")) {                
+                value = (String) configVariable.getValue().getValue();
+            }            
         }
     }
 

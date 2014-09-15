@@ -1,4 +1,21 @@
+/*
+ * Copyright 2009-2014 University of Hildesheim, Software Systems Engineering
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.uni_hildesheim.sse.model.cst;
+
+import java.util.Arrays;
 
 import de.uni_hildesheim.sse.model.varModel.IvmlKeyWords;
 import de.uni_hildesheim.sse.model.varModel.datatypes.BaseTypeVisitor;
@@ -40,7 +57,8 @@ public class OCLFeatureCall extends ConstraintSyntaxTree {
      * of an operation/feature call while resolution whether
      * the name is valid will be done in {@link #inferDatatype()}.
      * 
-     * @param operand the constraint syntax tree to execute the feature call / operation on
+     * @param operand the constraint syntax tree to execute the feature call / operation on (may be <b>null</b>
+     *   in case of a custom operation)
      * @param operation the name of the operation / feature call
      * @param parameters the parameters for the operation (may be <b>null</b>
      *   in case of no parameter)
@@ -56,7 +74,8 @@ public class OCLFeatureCall extends ConstraintSyntaxTree {
      * the name is valid will be done in {@link #inferDatatype()}.
      * The <code>opHolder</code> is required to resolve custom operations.
      * 
-     * @param operand the constraint syntax tree to execute the feature call / operation on
+     * @param operand the constraint syntax tree to execute the feature call / operation on (may be <b>null</b>
+     *   in case of a custom operation)
      * @param operation the name of the operation / feature call
      * @param opAccessor an optional instance which stores additional operation definitions, 
      *   typically the containing project, may be <b>null</b>
@@ -288,7 +307,11 @@ public class OCLFeatureCall extends ConstraintSyntaxTree {
                         // feature call has parameter and also the same number of parameters, check types
                         boolean eq = true;
                         for (int p = 0; eq && p < tmpParamCount; p++) {
-                            eq = (tmp.getParameter(p).isAssignableFrom(paramTypes[p]));
+                            boolean ok = tmp.getParameter(p).isAssignableFrom(paramTypes[p]);
+                            if (!ok) {
+                                ok = tmp.getParameter(p).isAssignableFrom(Reference.dereference(paramTypes[p]));
+                            }
+                            eq = ok;
                         }
                         if (eq) {
                             op = tmp;
@@ -363,36 +386,39 @@ public class OCLFeatureCall extends ConstraintSyntaxTree {
     
     @Override
     public boolean equals(Object obj) {
-        //Two objects are equal if they instances of the same class and have the same hashCode
         boolean equals = false;
-        
         if (obj instanceof OCLFeatureCall) {
-            equals = this.hashCode() == obj.hashCode();
+            OCLFeatureCall other = (OCLFeatureCall) obj;
+            equals = operation.equals(other.operation);
+            equals &= operand.equals(other.operand);
+            // result hashcode/equals unclear
+            if (null != opAccessor) {
+                equals &= opAccessor.equals(other.opAccessor);    
+            }
+            equals &= Arrays.equals(parameters, other.parameters);
         }
-        
         return equals;
     }
     
     @Override
     public int hashCode() {
         int hashCode = operand.hashCode();
-        if (null != parameters) {
-            for (int i = 0; i < parameters.length; i++) {
-                hashCode *= parameters[i].hashCode();
-            }
-        }
+        hashCode *= Arrays.hashCode(parameters);
         hashCode *= operation.hashCode();
         if (null != opAccessor) {
             hashCode *= opAccessor.hashCode();
         }
-        
+        // result hashcode/equals unclear
         return hashCode;
     }
 
     @Override
     public String toString() {
-        String result = operand.toString() + operation.toString();
-        
-        return result;
+        StringBuffer result = new StringBuffer(operand.toString() + " " + operation.toString());
+        for (int i = 0, n = parameters.length; i < n; i++) {
+            result.append(" ");
+            result.append(parameters[i].toString());
+        }
+        return result.toString();
     }
 }

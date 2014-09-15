@@ -1562,9 +1562,9 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getExport_Names()
+  public EReference getExport_Names()
   {
-    return (EAttribute)exportEClass.getEStructuralFeatures().get(0);
+    return (EReference)exportEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -2592,9 +2592,9 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getDeclaration_Id()
+  public EReference getDeclaration_Type()
   {
-    return (EAttribute)declarationEClass.getEStructuralFeatures().get(0);
+    return (EReference)declarationEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -2602,9 +2602,9 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getDeclaration_Type()
+  public EAttribute getDeclaration_Id()
   {
-    return (EReference)declarationEClass.getEStructuralFeatures().get(1);
+    return (EAttribute)declarationEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -3058,7 +3058,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     createEReference(interfaceDeclarationEClass, INTERFACE_DECLARATION__EXPORTS);
 
     exportEClass = createEClass(EXPORT);
-    createEAttribute(exportEClass, EXPORT__NAMES);
+    createEReference(exportEClass, EXPORT__NAMES);
 
     importStmtEClass = createEClass(IMPORT_STMT);
     createEAttribute(importStmtEClass, IMPORT_STMT__NAME);
@@ -3192,8 +3192,8 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     createEReference(declaratorEClass, DECLARATOR__DECL);
 
     declarationEClass = createEClass(DECLARATION);
-    createEAttribute(declarationEClass, DECLARATION__ID);
     createEReference(declarationEClass, DECLARATION__TYPE);
+    createEAttribute(declarationEClass, DECLARATION__ID);
     createEReference(declarationEClass, DECLARATION__INIT);
 
     actualParameterListEClass = createEClass(ACTUAL_PARAMETER_LIST);
@@ -3386,7 +3386,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     initEReference(getInterfaceDeclaration_Exports(), this.getExport(), null, "exports", null, 0, -1, InterfaceDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(exportEClass, Export.class, "Export", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getExport_Names(), ecorePackage.getEString(), "names", null, 0, -1, Export.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getExport_Names(), this.getQualifiedName(), null, "names", null, 0, -1, Export.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(importStmtEClass, ImportStmt.class, "ImportStmt", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getImportStmt_Name(), ecorePackage.getEString(), "name", null, 0, 1, ImportStmt.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -3520,8 +3520,8 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     initEReference(getDeclarator_Decl(), this.getDeclaration(), null, "decl", null, 0, -1, Declarator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(declarationEClass, Declaration.class, "Declaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getDeclaration_Id(), ecorePackage.getEString(), "id", null, 0, -1, Declaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getDeclaration_Type(), this.getType(), null, "type", null, 0, 1, Declaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getDeclaration_Id(), ecorePackage.getEString(), "id", null, 0, -1, Declaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getDeclaration_Init(), this.getExpression(), null, "init", null, 0, 1, Declaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(actualParameterListEClass, ActualParameterList.class, "ActualParameterList", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);

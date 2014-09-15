@@ -200,13 +200,22 @@ ConstructorExecution:
     ;
     
 SubCall:
-    '.' call=Call 
+    type=('.' | '->') call=Call 
     | '[' arrayEx=Expression ']' // IVML addition to OCL
 ;
 
+Declarator:
+    decl+=Declaration (';' decl+=Declaration)* '|'
+    ;
+
+Declaration:    
+    type=Type? id+=Identifier (',' id+=Identifier)*
+    ;
+    
 Call:    
     name=QualifiedPrefix 
-    '(' 
+    '('
+    decl=Declarator? 
     param=ArgumentList? 
     ')'
     ;
@@ -237,6 +246,7 @@ Constant:
     | sValue = STRING
     | qValue = QualifiedName
     | bValue = ('true' | 'false')
+    | null = 'null'
 ;
 
 NumValue :  
@@ -248,7 +258,7 @@ Identifier:
 ;
 
 Type:
-    name=Identifier // specific types will be dynamically loaded at start-up
+    name=QualifiedPrefix // specific types will be dynamically loaded at start-up
     | (set='setOf' param=TypeParameters)
     | (seq='sequenceOf' param=TypeParameters)
     | (map='mapOf' param=TypeParameters)
@@ -277,8 +287,9 @@ terminal VERSION:
 
 // adjust de.uni_hildesheim.sse.model.validation.IvmlIdentifierCheck
 // never allow identifiers starting with $ -> Reasoner name prefixes
+// here $ goes for meta names in dynamic IVML types
 terminal ID: 
-    ('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'_'|'0'..'9')*
+    ('a'..'z'|'A'..'Z'|'_'|'$') ('a'..'z'|'A'..'Z'|'_'|'0'..'9')*
 ;
 
 terminal NUMBER:

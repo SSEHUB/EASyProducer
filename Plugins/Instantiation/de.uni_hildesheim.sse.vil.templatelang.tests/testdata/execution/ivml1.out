@@ -9,9 +9,7 @@ pBoolean = true
 compile at 100
 pEnum = val2
 compile at 100
-pComp = null
 compile at 100
-pCompSeq = null
 compile at 100
 1.23
 1.23

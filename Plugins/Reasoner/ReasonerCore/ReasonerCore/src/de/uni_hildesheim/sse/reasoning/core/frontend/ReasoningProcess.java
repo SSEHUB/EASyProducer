@@ -108,6 +108,7 @@ public class ReasoningProcess implements Runnable {
                 StringBuffer errorMsg = new StringBuffer("Not expected exception caught:\n"); 
                 errorMsg.append(e.getMessage());
                 setErrorResult(errorMsg.toString());
+                e.printStackTrace();
             }
         }
         

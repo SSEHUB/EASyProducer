@@ -1,9 +1,25 @@
+/*
+ * Copyright 2009-2013 University of Hildesheim, Software Systems Engineering
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.uni_hildesheim.sse.model.varModel.datatypes;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
+import de.uni_hildesheim.sse.model.varModel.IvmlDatatypeVisitor;
 
 /**
  * Describes an operation. Operations may be operators or function calls. Actually, this class
@@ -64,7 +80,15 @@ public class Operation {
          * Change it to the first generic parameter. If no generic
          * parameter is available, {@link #IMMEDIATE_OPERAND} is applied.
          */
-        GENERIC_PARAM_1(0, -1);
+        GENERIC_PARAM_1(0, -1),
+        
+        /**
+         * Change it to the first generic operation parameter as generic type of the immediate 
+         * operand in case that that is a collection. If the {@link #IMMEDIATE_OPERAND} is not a collection,
+         * {@link #PARAM_1} will be applied. If no parameter
+         * parameter is available, {@link #IMMEDIATE_OPERAND} is applied.
+         */
+        IMMEDIATE_OPERAND_COLLECTION_PARAM_1(-1, 0);
         
         /**
          * Stores the index of the affected generic type. Negative if none
@@ -163,6 +187,8 @@ public class Operation {
     private boolean containerOperation;
     
     private boolean requiresAssignableParameter = false;
+    
+    private boolean acceptsNull = false;
     
     private FormattingHint formattingHint = FormattingHint.FUNCTION_CALL;
     
@@ -333,10 +359,10 @@ public class Operation {
             break;
         case TYPED_OPERAND_1:
             // currently only type conversion is needed, else TYPED_PARAM_1
-            if (immediateOperand instanceof Set && getReturns() instanceof Sequence) {
+            if (Set.TYPE.isAssignableFrom(immediateOperand) && Sequence.TYPE.isAssignableFrom(getReturns())) {
                 Set set = (Set) immediateOperand;
                 result = new Sequence("", set.getContainedType(), set.getParent());
-            } else if (immediateOperand instanceof Sequence && getReturns() instanceof Set) {
+            } else if (Sequence.TYPE.isAssignableFrom(immediateOperand) && Set.TYPE.isAssignableFrom(getReturns())) {
                 Sequence sequence = (Sequence) immediateOperand;
                 result = new Set("", sequence.getContainedType(), sequence.getParent());
             } else {
@@ -363,6 +389,22 @@ public class Operation {
                 result = immediateOperand;
             }
             break;
+        case IMMEDIATE_OPERAND_COLLECTION_PARAM_1:
+            index = mode.getParameterIndex();
+            if (null != parameter && index >= 0 && index < parameter.length) {
+                if (Set.TYPE.isAssignableFrom(immediateOperand)) {
+                    Set set = (Set) immediateOperand;
+                    result = new Set("", parameter[index], set.getParent());
+                } else if (Sequence.TYPE.isAssignableFrom(immediateOperand)) {
+                    Sequence sequence = (Sequence) immediateOperand;
+                    result = new Sequence("", parameter[index], sequence.getParent());
+                } else {
+                    result = parameter[index];
+                }
+            } else {
+                result = immediateOperand;
+            }
+            break;
         default:
             result = immediateOperand;
             break;
@@ -377,6 +419,15 @@ public class Operation {
      */
     public boolean isContainerOperation() {
         return containerOperation;
+    }
+    
+    /**
+     * Returns whether this operation accepts <b>null</b> as argument.
+     * 
+     * @return whether it accepts null
+     */
+    public boolean acceptsNull() {
+        return acceptsNull;
     }
     
     /**
@@ -398,6 +449,16 @@ public class Operation {
      */
     Operation markAsAssignableParameterOperation() {
         requiresAssignableParameter = true;
+        return this;
+    }
+
+    /**
+     * Marks that this operation accepts <b>null</b> as argument. 
+     * 
+     * @return <b>this</b>
+     */
+    Operation markAsAcceptsNull() {
+        acceptsNull = true;
         return this;
     }
     
@@ -476,6 +537,32 @@ public class Operation {
      */
     protected boolean registerAsOperation() {
         return true;
+    }
+    
+    /**
+     * Returns the signature of the operation.
+     * 
+     * @return the signature of the operation
+     */
+    public String getSignature() {
+        StringBuilder tmp = new StringBuilder();
+        String operand = IvmlDatatypeVisitor.getQualifiedType(getOperand());
+        if (operand.isEmpty()) {
+            IDatatype oType = getOperand();
+            operand = oType.getName();
+        }     
+        tmp.append(operand);
+        tmp.append(".");
+        tmp.append(getName());
+        tmp.append("(");
+        for (int p = 0; p < getParameterCount(); p++) {
+            if (p > 0) {
+                tmp.append(", ");
+            }
+            tmp.append(IvmlDatatypeVisitor.getQualifiedType(getParameter(p).getType()));
+        }
+        tmp.append(")");
+        return tmp.toString();
     }
 
 }

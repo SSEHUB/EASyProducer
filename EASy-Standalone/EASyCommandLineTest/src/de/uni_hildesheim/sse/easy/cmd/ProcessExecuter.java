@@ -116,6 +116,7 @@ class ProcessExecuter {
             msg.append(line);
             msg.append("\n");
         }
+        System.err.println(msg);
         
         return msg.length() == 0 ? null : msg.toString();
     }

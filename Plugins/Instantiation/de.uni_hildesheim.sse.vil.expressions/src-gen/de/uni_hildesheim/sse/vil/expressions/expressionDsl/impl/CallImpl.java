@@ -4,6 +4,7 @@ package de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl;
 
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ArgumentList;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Call;
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Declarator;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.QualifiedPrefix;
 
@@ -24,6 +25,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * The following features are implemented:
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.CallImpl#getName <em>Name</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.CallImpl#getDecl <em>Decl</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.CallImpl#getParam <em>Param</em>}</li>
  * </ul>
  * </p>
@@ -41,6 +43,16 @@ public class CallImpl extends MinimalEObjectImpl.Container implements Call
    * @ordered
    */
   protected QualifiedPrefix name;
+
+  /**
+   * The cached value of the '{@link #getDecl() <em>Decl</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getDecl()
+   * @generated
+   * @ordered
+   */
+  protected Declarator decl;
 
   /**
    * The cached value of the '{@link #getParam() <em>Param</em>}' containment reference.
@@ -126,6 +138,54 @@ public class CallImpl extends MinimalEObjectImpl.Container implements Call
    * <!-- end-user-doc -->
    * @generated
    */
+  public Declarator getDecl()
+  {
+    return decl;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetDecl(Declarator newDecl, NotificationChain msgs)
+  {
+    Declarator oldDecl = decl;
+    decl = newDecl;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ExpressionDslPackage.CALL__DECL, oldDecl, newDecl);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setDecl(Declarator newDecl)
+  {
+    if (newDecl != decl)
+    {
+      NotificationChain msgs = null;
+      if (decl != null)
+        msgs = ((InternalEObject)decl).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ExpressionDslPackage.CALL__DECL, null, msgs);
+      if (newDecl != null)
+        msgs = ((InternalEObject)newDecl).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ExpressionDslPackage.CALL__DECL, null, msgs);
+      msgs = basicSetDecl(newDecl, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, ExpressionDslPackage.CALL__DECL, newDecl, newDecl));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public ArgumentList getParam()
   {
     return param;
@@ -181,6 +241,8 @@ public class CallImpl extends MinimalEObjectImpl.Container implements Call
     {
       case ExpressionDslPackage.CALL__NAME:
         return basicSetName(null, msgs);
+      case ExpressionDslPackage.CALL__DECL:
+        return basicSetDecl(null, msgs);
       case ExpressionDslPackage.CALL__PARAM:
         return basicSetParam(null, msgs);
     }
@@ -199,6 +261,8 @@ public class CallImpl extends MinimalEObjectImpl.Container implements Call
     {
       case ExpressionDslPackage.CALL__NAME:
         return getName();
+      case ExpressionDslPackage.CALL__DECL:
+        return getDecl();
       case ExpressionDslPackage.CALL__PARAM:
         return getParam();
     }
@@ -217,6 +281,9 @@ public class CallImpl extends MinimalEObjectImpl.Container implements Call
     {
       case ExpressionDslPackage.CALL__NAME:
         setName((QualifiedPrefix)newValue);
+        return;
+      case ExpressionDslPackage.CALL__DECL:
+        setDecl((Declarator)newValue);
         return;
       case ExpressionDslPackage.CALL__PARAM:
         setParam((ArgumentList)newValue);
@@ -238,6 +305,9 @@ public class CallImpl extends MinimalEObjectImpl.Container implements Call
       case ExpressionDslPackage.CALL__NAME:
         setName((QualifiedPrefix)null);
         return;
+      case ExpressionDslPackage.CALL__DECL:
+        setDecl((Declarator)null);
+        return;
       case ExpressionDslPackage.CALL__PARAM:
         setParam((ArgumentList)null);
         return;
@@ -257,6 +327,8 @@ public class CallImpl extends MinimalEObjectImpl.Container implements Call
     {
       case ExpressionDslPackage.CALL__NAME:
         return name != null;
+      case ExpressionDslPackage.CALL__DECL:
+        return decl != null;
       case ExpressionDslPackage.CALL__PARAM:
         return param != null;
     }

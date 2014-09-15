@@ -12,8 +12,12 @@
 		<!-- Model -->
 		<pathelement path="${libs.utils}"/>
 		<pathelement path="${libs.model}"/>
+		<!-- Reasoning -->
+		<pathelement path="${libs.reasonerCore}"/>
 		<!-- Instantiation Copy Core -->
 		<pathelement path="${libs.instantiator.copy.core}"/>
+        <!-- Reasoner Core -->
+        <pathelement path="${libs.reasonerCore}"/>
 		<!-- Eclipse-Plugins -->
 		<fileset dir="${eclipse.plugins.dir}">
 			<include name="**/*.jar" />

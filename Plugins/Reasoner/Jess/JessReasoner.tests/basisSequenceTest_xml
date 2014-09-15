@@ -1,3 +1,0 @@
-(MAIN::CMP (compound_name "CMP") (intA 10) (realB 10.0))
-(MAIN::hochRegal (compound_name "hochRegal") (compounds ))
-(MAIN::project (projectName basisSequenceTest))

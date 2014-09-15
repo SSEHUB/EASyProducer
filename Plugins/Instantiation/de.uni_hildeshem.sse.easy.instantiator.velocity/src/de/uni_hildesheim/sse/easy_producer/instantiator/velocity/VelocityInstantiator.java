@@ -134,7 +134,7 @@ public class VelocityInstantiator implements IVilType {
      */
     private static final VelocityContext createContext(Configuration config, Map<?, ?> nameMapping) {
         VelocityContext context = new VelocityContext();
-        for (DecisionVariable var : config.variables()) { // TODO check with original version
+        for (DecisionVariable var : config.variables()) {
             IDecisionVariable dVar = var.getDecisionVariable();
             VelocityContextInitializer initializer = new VelocityContextInitializer(dVar);
             List<VelocityContextItem> items = initializer.getItems();
@@ -146,7 +146,10 @@ public class VelocityInstantiator implements IVilType {
                         name = StringValueHelper.getStringValue(tmp, null);
                     }
                 }
-                context.put(name, items.get(i).getValue());
+                Object value = items.get(i).getValue();
+                if (null != value) {
+                    context.put(name, items.get(i).getValue());
+                }
             }
         }
         return context;

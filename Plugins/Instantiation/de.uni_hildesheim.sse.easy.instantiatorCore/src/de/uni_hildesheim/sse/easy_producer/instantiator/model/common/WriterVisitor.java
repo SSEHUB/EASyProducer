@@ -4,8 +4,6 @@ import java.io.Writer;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionWriter;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.model.varModel.IvmlKeyWords;
 import de.uni_hildesheim.sse.utils.modelManagement.IVersionRestrictable;
 import de.uni_hildesheim.sse.utils.modelManagement.Version;
@@ -70,15 +68,6 @@ public class WriterVisitor<V extends VariableDeclaration> extends ExpressionWrit
         }
         println(";");
         return null;
-    }
-
-    /**
-     * Prints the given type.
-     * 
-     * @param type the type to be printed
-     */
-    protected void printType(TypeDescriptor<? extends IVilType> type) {
-        print(type.getVilName());
     }
 
     @Override

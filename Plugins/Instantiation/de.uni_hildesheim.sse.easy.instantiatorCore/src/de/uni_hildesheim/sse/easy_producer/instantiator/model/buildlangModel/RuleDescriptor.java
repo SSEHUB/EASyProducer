@@ -25,8 +25,6 @@ public class RuleDescriptor {
     private RuleCallExpression[] lhsRuleCalls;
     private AbstractRuleMatchExpression[] rhsRuleMatches;
     private RuleCallExpression[] rhsRuleCalls;
-    private VariableDeclaration[] parameters;
-    private IRuleElement[] body;
     private VariableDeclaration[] lhsVariables;
     private VariableDeclaration[] rhsVariables;
     private VariableDeclaration[] lhsMatchVariables;
@@ -36,15 +34,6 @@ public class RuleDescriptor {
      * Creates an empty descriptor.
      */
     public RuleDescriptor() {
-    }
-
-    /**
-     * Creates a rule descriptor carrying the complex parts of a rule (here for an empty rule).
-     * 
-     * @param parameters the parameters of this rule (may be <b>null</b>)
-     */
-    public RuleDescriptor(VariableDeclaration[] parameters) {
-        this.parameters = parameters;
     }
     
     /**
@@ -155,45 +144,9 @@ public class RuleDescriptor {
         RuleCallExpression[] calls = getRuleCalls(side);
         return null == calls ? 0 : calls.length;
     }
-    
-    /**
-     * Changes the body. 
-     * 
-     * @param body the body
-     */
-    public void setBody(IRuleElement[] body) {
-        this.body = body;
-    }
 
     /**
-     * Returns the body.
-     * 
-     * @return the body (may be <b>null</b>)
-     */
-    public IRuleElement[] getBody() {
-        return body;
-    }
-    
-    /**
-     * Changes the parameters. 
-     * 
-     * @param parameters the parameters
-     */
-    public void setParameters(VariableDeclaration[] parameters) {
-        this.parameters = parameters;
-    }
-    
-    /**
-     * Returns the parameters.
-     * 
-     * @return the parameters (may be <b>null</b>)
-     */
-    public VariableDeclaration[] getParameters() {
-        return parameters;
-    }
-
-    /**
-     * Registers the LHS variable in <code>resolver</code> if applicable.
+     * Registers the LHS/RHS variables in <code>resolver</code> if applicable.
      * 
      * @param resolver the resolver instance
      * @throws ExpressionException in case that resolving one of the expressions fails
@@ -273,7 +226,7 @@ public class RuleDescriptor {
         matchResult = toArray(matchVars);
         if (Side.LHS == side) {
             lhsVariables = result;
-            //lhsMatchVariables = matchResult;
+            lhsMatchVariables = matchResult;
         } else {
             rhsVariables = result;
             rhsMatchVariables = matchResult;

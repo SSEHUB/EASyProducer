@@ -14,7 +14,9 @@
 		<pathelement path="${libs.utils}"/>
         <pathelement path="${libs.model}"/>
         <!-- DSL core common classes -->
-        <pathelement path="${libs.dslCore}"/>        
+        <pathelement path="${libs.dslCore}"/>
+	    <!-- DSL core ui common classes -->
+	    <pathelement path="${libs.dslCore.ui}"/>
         <!-- VIL expressions sublanguage -->
         <pathelement path="${libs.vil.expressions.core}"/>
         <!-- and here also the VIL expressions sublanguage ui -->

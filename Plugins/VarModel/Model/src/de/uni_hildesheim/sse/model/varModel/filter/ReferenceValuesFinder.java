@@ -1,14 +1,30 @@
+/*
+ * Copyright 2009-2013 University of Hildesheim, Software Systems Engineering
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.uni_hildesheim.sse.model.varModel.filter;
 
 import java.util.List;
 
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.Project;
+import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
 import de.uni_hildesheim.sse.model.varModel.filter.DeclarationFinder.VisibilityType;
 
 /**
- * Class for finding relevant {@link AbstractVariable}s mathicng to the data type of a given {@link Reference}.
+ * Class for finding relevant {@link AbstractVariable}s matching to the data type of a given {@link Reference}.
  * @author El-Sharkawy
  *
  */
@@ -17,7 +33,7 @@ public class ReferenceValuesFinder {
     /**
      * Searches inside the whole {@link Project} for {@link AbstractVariable}s, which can be referenced by
      * {@link de.uni_hildesheim.sse.model.confModel.IDecisionVariable}s of the given {@link Reference} type.
-     * @param project The project which should contain all relevant possible variable, which cen be used
+     * @param project The project which should contain all relevant possible variable, which can be used
      *     to configure the given {@link Reference} variable.
      * @param refType A given {@link Reference}, for which relevant/possible {@link AbstractVariable}s should be
      *     found.
@@ -25,7 +41,20 @@ public class ReferenceValuesFinder {
      *     This list is maybe empty, but not <tt>null</tt>.
      */
     public static List<AbstractVariable> findPossibleValues(Project project, Reference refType) {
-        DeclarationFinder finder = new DeclarationFinder(project, FilterType.ALL, refType.getType());
+        return findPossibleValues(project, refType.getType());
+    }
+    
+    /**
+     * Searches inside the whole {@link Project} for {@link AbstractVariable}s, which are of the specified 
+     * <code>type</code>.
+     * @param project The project which should contain all relevant possible variable, which can be used
+     *     to configure the given {@link Reference} variable.
+     * @param type A given type for which relevant/possible {@link AbstractVariable}s should be found.
+     * @return A list of all relevant {@link AbstractVariable} found in the given project with the correct data type.
+     *     This list is maybe empty, but not <tt>null</tt>.
+     */
+    public static List<AbstractVariable> findPossibleValues(Project project, IDatatype type) {
+        DeclarationFinder finder = new DeclarationFinder(project, FilterType.ALL, type);
         
         /*
          * Slots of a compound are currently not supported by
@@ -33,4 +62,5 @@ public class ReferenceValuesFinder {
          */
         return finder.getVariableDeclarations(VisibilityType.ONLY_EXPORTED);
     }
+
 }

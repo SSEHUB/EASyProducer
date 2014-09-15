@@ -34,7 +34,7 @@ public class EASyLoggerFactory {
      * <li><tt>true</tt>: For development.</li>
      * </ul>
      */
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
 
     private static final String LOGGING_LEVEL_PROPERTY = "de.uni_hildesheim.sse.easy.logging.level";
     
@@ -201,9 +201,12 @@ public class EASyLoggerFactory {
      * 
      * @param logger The new {@link ILogger} which shall be used to log all info, warnings, and errors.
      *     Must not be <tt>null</tt>.
+     * @return the active logger before this operation 
      */
-    public void setLogger(ILogger logger) {
+    public ILogger setLogger(ILogger logger) {
+        ILogger old = this.logger;
         this.logger = logger;
+        return old;
     }
 
     /**

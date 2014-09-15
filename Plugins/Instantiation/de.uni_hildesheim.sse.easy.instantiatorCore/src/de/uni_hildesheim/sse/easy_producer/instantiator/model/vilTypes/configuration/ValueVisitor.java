@@ -1,5 +1,6 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.model.varModel.values.BooleanValue;
 import de.uni_hildesheim.sse.model.varModel.values.CompoundValue;
 import de.uni_hildesheim.sse.model.varModel.values.ConstraintValue;
@@ -149,6 +150,7 @@ class ValueVisitor implements IValueVisitor {
 
     @Override
     public void visitNullValue(NullValue value) {
+        this.value = TypeRegistry.NULL;
     }
 
 }

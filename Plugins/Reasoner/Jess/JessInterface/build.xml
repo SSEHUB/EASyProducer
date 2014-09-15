@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project default="jar">
-    <target name="jar">
-		<jar destfile="jess.jar" basedir="bin"/>
-    </target>
-</project>

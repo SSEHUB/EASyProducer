@@ -1,3 +1,18 @@
+/*
+ * Copyright 2009-2013 University of Hildesheim, Software Systems Engineering
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.uni_hildesheim.sse.model.confModel;
 
 import java.util.HashMap;
@@ -245,11 +260,19 @@ abstract class DecisionVariable implements IDecisionVariable {
      */
     public void freeze() {
         configProvider.freeze();
-        // >> needed for VIL!
         for (int a = 0; a < getAttributesCount(); a++) {
             getAttribute(a).freeze();
         }
-        // >> needed for VIL!
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void unfreeze(IAssignmentState state) {
+        configProvider.unfreeze(state);
+        for (int a = 0; a < getAttributesCount(); a++) {
+            getAttribute(a).unfreeze(state);
+        }
     }
     
     @Override
@@ -344,5 +367,16 @@ abstract class DecisionVariable implements IDecisionVariable {
      */
     public boolean hasNullValue() {
         return getValue() instanceof NullValue;
+    }
+    
+    /**
+     * For setting states of nested variables.
+     * @param state The state of the parent, which should the nested variable also have.
+     */
+    void setState(IAssignmentState state) {
+        configProvider.setState(state);
+        for (int i = 0, n = getNestedElementsCount(); i < n; i++) {
+            ((DecisionVariable) getNestedElement(i)).setState(state);
+        }
     }
 }

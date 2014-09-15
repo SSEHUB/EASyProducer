@@ -7,6 +7,7 @@ import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
 import de.uni_hildesheim.sse.model.varModel.Attribute;
 import de.uni_hildesheim.sse.model.varModel.AttributeAssignment;
 import de.uni_hildesheim.sse.model.varModel.Comment;
+import de.uni_hildesheim.sse.model.varModel.CompoundAccessStatement;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.FreezeBlock;
@@ -173,4 +174,10 @@ class CompoundConstraintFinder implements IModelVisitor {
     public void visitProjectImport(ProjectImport pImport) {
         // Not needed here
     }
+
+    @Override
+    public void visitCompoundAccessStatement(CompoundAccessStatement access) {
+        // Not needed here
+    }
+    
 }

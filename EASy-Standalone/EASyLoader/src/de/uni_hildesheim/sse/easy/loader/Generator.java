@@ -45,6 +45,8 @@ public class Generator extends AbstractLoader {
     private List<URL> urls;
     private Map<URL, BundleInfo> urlBundleMapping = new HashMap<URL, BundleInfo>();
     private List<BundleInfo> checkedBundles;
+    private List<String> checkedClasspaths = new ArrayList<String>();
+    private boolean aspectJProcessed;
 
     static {
         Options.setConsiderLoadedClasses(false);
@@ -70,6 +72,7 @@ public class Generator extends AbstractLoader {
     protected Generator(File base) {
         super(base);
         bootstrap();
+        aspectJProcessed = false;
         
         List<BundleInfo> roots = BundleRegistry.getInstance().getRootBundles();
         
@@ -92,36 +95,136 @@ public class Generator extends AbstractLoader {
             }
         }
     }
+    
+    /**
+     * Returns all files that are called feature.xml, even in subfolders.
+     * @param file The basefile.
+     * @return A list of all files.
+     */
+    public static List<File> getFeatureFilesFromDir(File file) {
+    
+        List<File> files = new ArrayList<File>();
+    
+        String[] sub = file.list();
+    
+        if (null != sub) {
+            for (String name : sub) {
+    
+                File subFile = new File(file.getAbsolutePath() + "\\" + name);
+                if (subFile.isDirectory()) {
+                    files.addAll(getFeatureFilesFromDir(subFile));
+                } else if (subFile.isFile() && subFile.getName().equalsIgnoreCase("feature.xml")) {
+                    files.add(subFile);
+                }
+    
+            }
+        }
 
+        return files;
+    
+    }
+    
+    /**
+     * Transforms a list of files into a list of Features.
+     * @param files A list of the files to use.
+     * @return A list of features. Can be empty if no (valid) files were given.
+     */
+    public static List<Feature> filesToFeature(List<File> files) {
+    
+        List<Feature> features = new ArrayList<Feature>();
+    
+        for (int i = 0; i < files.size(); i++) {
+        
+            Feature feat = new Feature(files.get(i));
+            features.add(feat);
+        
+        }
+        
+        return features;
+        
+    }
+    
+    /**
+     * Returns (if possible) the feature with given symbolic name.
+     * @param features A list of features from which to extract.
+     * @param name The symbolic name of the feature.
+     * @return The feature (or null).
+     */
+    public static Feature getFeatureFromListByName(List<Feature> features, String name) {
+    
+        Feature found = null;
+    
+        for (int i = 0; i < features.size(); i++) {
+            if (features.get(i).getId().equals(name)) {
+                found = features.get(i);
+                i = features.size();
+            }
+        }
+    
+        return found;
+    
+    }
+    
+    /**
+     * Wrapps the generation into one single method for easier access.
+     * @param mainFeature The file or path where the main feature(s) are.
+     * @param allFeatures The file or path where other features are.
+     * @param forceBuild False will interrupt the build if problem occur.
+     * @return The list of generated Bundles.
+     */
+    public static List<BundleInfo> autoGenerate(List<File> mainFeature, List<File> allFeatures, boolean forceBuild) {
+    
+        List<BundleInfo> bundles = new ArrayList<BundleInfo>();
+    
+        List<File> mainFeatFiles = new ArrayList<File>();
+        List<File> allFeatureFiles = new ArrayList<File>();
+        for (File file : mainFeature) {
+            mainFeatFiles.addAll(getFeatureFilesFromDir(file));
+        }
+        List<Feature> mainFeat = filesToFeature(mainFeatFiles);
+     
+        for (File file: allFeatures) {
+            allFeatureFiles.addAll(getFeatureFilesFromDir(file));
+        }
+        List<Feature> allFeat = filesToFeature(allFeatureFiles);
+        
+        bundles = generate(mainFeat, allFeat, forceBuild);
+        
+        return bundles;
+    
+    }
+    
     /**
      * Gathers Bundles for a list of features, depending on version restrictions.
      * @param features A list of features for the build.
      * @param forceBuild if true, ignore missing plugins and version issues.
+     * @param additionalFeatures A list of features that could be used by the main features.
      * @return List<BundleInfo> a list containing all needed Bundles.
      */
-    public static List<BundleInfo> generate(List<Feature> features, boolean forceBuild) {
-    
+    public static List<BundleInfo> generate(
+        List<Feature> features, List<Feature> additionalFeatures, boolean forceBuild) { 
         Generator gen = new Generator(new File("."));
-        
+        boolean failed = false;     
+        gen.checkedClasspaths = new ArrayList<String>();    
         System.out.println("Generating...");
-        System.out.println("ForceBuild = " + forceBuild);
-        
+        System.out.println("ForceBuild = " + forceBuild);    
         List<BundleInfo> bundles = new ArrayList<BundleInfo>();
-        Map<String, EasyDependency> dependencies = new HashMap<String, EasyDependency>();
-        
-        dependencies = collectDependencies(features);
-        
+        Map<String, EasyDependency> dependencies = new HashMap<String, EasyDependency>();     
+        dependencies = collectDependencies(features, additionalFeatures);      
         Object[] keys = dependencies.keySet().toArray();
         for (int i = 0; i < keys.length; i++) {
             BundleInfo bundle = BundleRegistry.getInstance().get(dependencies.get(keys[i]).getBundleSymbolicName(), 
                     dependencies.get(keys[i]));
-            if (bundle != null) {
+            if (bundle != null && !bundles.contains(bundle)) {
                 bundles.add(bundle);
             } else {
                 String error = "ERROR - missing BundleInfo for the following Plugin: " 
                         + dependencies.get(keys[i]).getBundleSymbolicName() + " [" 
-                        + dependencies.get(keys[i]).getBundleVersionMin()
-                        + ";" + dependencies.get(keys[i]).getBundleVersionMax() + "]";
+                        + dependencies.get(keys[i]).getBundleVersionMin();
+                if (null != dependencies.get(keys[i]).getBundleVersionMax()) {
+                    error += ";" + dependencies.get(keys[i]).getBundleVersionMax();
+                }
+                error += "]";
                 System.out.println(error);
                 if (forceBuild) {
                     dependencies.get(keys[i]).setBundleVersionMin(null);
@@ -133,59 +236,150 @@ public class Generator extends AbstractLoader {
                         System.out.println("    Plugin compensated with: " + bundle.getName() + " " 
                             + bundle.getVersion());
                     }
-                } 
+                } else {
+                    failed = true;
+                }
             }
-        }        
-        
-        //just for testing purposes --- creating a jar.
+        }              
+        subGenerate(bundles);      
+        for (BundleInfo test : bundles) {
+            System.out.println(test.getName() + " " + test.getVersion());
+            for (int i = 0; i < test.getClasspathEntryCount(); i++) {
+                gen.checkedClasspaths.add(test.getClasspathEntry(i));
+                System.out.println("# " + test.getName() + " WANTS " + test.getClasspathEntry(i));
+            }
+        }       
+        List<String> solved = new ArrayList<String>();
+        for (String path : gen.checkedClasspaths) {      
+            boolean doubled = false;
+            for (BundleInfo test: bundles) {
+                if (path.contains(test.getName())) {
+                    doubled = true;
+                }
+            }
+            if (!solved.contains(path) && !doubled) {
+                solved.add(path);
+            }      
+        }       
+        gen.checkedClasspaths = solved;        
         gen.checkedBundles = new ArrayList<BundleInfo>();
-        gen.checkedBundles = bundles;
-        gen.generateJarFiles(new File("newGenerator/"), true);
+        gen.checkedBundles = bundles;      
+        if (!failed) {
+            gen.generateJarFiles(new File("newGenerator/bundles/"), true);
+            gen.generateJarFiles(new File("newGenerator/unbundled/"), false);
+        } else {
+            System.out.println("BUILD FAILED! Please consider a forced build.");
+        }
+        return bundles;     
+    }
+    
+    /**
+     * .
+     * @param bundles .
+     */
+    private static void subGenerate(List<BundleInfo> bundles) {
+        boolean changed = false;
+        for (int i = 0; i < bundles.size(); i++) {
+            for (int k = 0; k < bundles.get(i).getRequiredBundlesCount(); k++) {
+                boolean found = false;
+                BundleInfo toAdd = null;
+                for (BundleInfo check : bundles) {
+                    if (check.getName().equalsIgnoreCase(bundles.get(i).getRequiredBundle(k).getName())) {
+                        
+                        found = true;
+                        
+                        if (bundles.get(i).getRequiredBundle(k).getVersion() != null 
+                                && check.getVersion() != null ) {
+                            if (check.getVersion().compareTo(bundles.get(i).getRequiredBundle(k).getVersion()) == -1) {
+                                bundles.remove(check);
+                                EasyDependency vs = new EasyDependency();
+                                vs.setBundleVersionMin(bundles.get(i).getRequiredBundle(k).getVersion());
+                                BundleInfo nB = BundleRegistry.getInstance().get(
+                                    bundles.get(i).getRequiredBundle(k).getName(), vs);
+                                toAdd = nB;
+                            }
+                        } 
+                        
+                    } 
+                }
+                
+                if (!found) {
+                    BundleInfo nB = BundleRegistry.getInstance().get(
+                            bundles.get(i).getRequiredBundle(k).getName(), new EasyDependency());
+                    toAdd = nB;
+                }
+                
+                if (null != toAdd) {
+                    bundles.add(toAdd);
+                    changed = true;
+                } else if (!found) {
+                    System.err.println("MISSING " + bundles.get(i).getRequiredBundle(k).getName());
+                }
+
+            }
+        }
+        if (changed) {
+            subGenerate(bundles);
+        }
+    }
+    
+    /**
+     * Collects all required features.
+     * @param features A list of features.
+     * @param additionalFeatures A list of additional Features that maybe required by the main features.
+     * @return Map<String, EasyDependency> a map with all required dependencies.
+     */
+    private static List<Feature> collectFeatures(List<Feature> features, List<Feature> additionalFeatures) {
+        List<Feature> result = features;
         
-        return bundles;
+        for (int i = 0; i < features.size(); i++) {
+            
+            for (int j = 0; j < features.get(i).getRequirements().size(); j++) {
+
+                Feature feat = getFeatureFromListByName(
+                    additionalFeatures, features.get(i).getRequirements().get(j).getBundleSymbolicName());
+                if (!result.contains(feat)) {
+                    result.add(feat);
+                }
+                List<Feature> newFeat = new ArrayList<Feature>();
+                List<Feature> result2 = new ArrayList<Feature>();
+                newFeat.add(feat);
+                result2.addAll(collectFeatures(newFeat, additionalFeatures));
+                
+                for (int k = 0; k < result2.size(); k++) {
+                    if (!result.contains(result2.get(k))) {
+                        result.add(result2.get(k));
+                    }
+                }
+                
+                System.err.println(feat.getId() + " CAME FROM: " + features.get(i).getId());
+            }
+            
+        }
         
+        return result;
     }
     
     /**
      * Collects all required dependencies for a list of features.
      * @param features A list of features.
+     * @param additionalFeatures A list of additional Features that maybe required by the main features.
      * @return Map<String, EasyDependency> a map with all required dependencies.
      */
-    private static Map<String, EasyDependency> collectDependencies(List<Feature> features) {
+    private static Map<String, EasyDependency> collectDependencies(
+        List<Feature> features, List<Feature> additionalFeatures) {
         
         Map<String, EasyDependency> dependencies = new HashMap<String, EasyDependency>();
         
-        for (int i = 0; i < features.size(); i++) {
-    
-            List<Feature> reqFeatures = new ArrayList<Feature>();
+        List<Feature> allFeatures = collectFeatures(features, additionalFeatures);
+        
+        for (int i = 0; i < allFeatures.size(); i++) {
             
-            for (int j = 0; j < features.get(i).getRequirements().size(); j++) {
-                
-                //Place of "other" features?
-                Feature feat = new Feature(new File(
-                         features.get(i).getRequirements().get(j).getBundleSymbolicName() + "/feature.xml"));
-                reqFeatures.add(feat);
-            
-            }
-            
-            Map<String, EasyDependency> newDep = new HashMap<String, EasyDependency>();
-            newDep = collectDependencies(reqFeatures);
-            
-            Object[] depKey = newDep.keySet().toArray();
-            
-            for (int j = 0; j < depKey.length; j++) {
-                
-                if (dependencies.containsKey(depKey[j])) {
-                    dependencies.get(depKey[j]).mergeVersions(newDep.get(depKey[j]));
-                }
-                
-            }        
-            
-            Map<String, EasyDependency> featureDependencies = features.get(i).getDependencies();
+            Map<String, EasyDependency> featureDependencies = allFeatures.get(i).getDependencies();
             Object[] keys = featureDependencies.keySet().toArray();
     
             for (int j = 0; j < keys.length; j++) {
-    
+                
                 if (dependencies.containsKey(keys[j])) {
     
                     dependencies.get(keys[j]).mergeVersions(featureDependencies.get(keys[j]));
@@ -195,8 +389,7 @@ public class Generator extends AbstractLoader {
                 }
     
             }
-    
-        }       
+        }
         
         return dependencies;
     }
@@ -352,6 +545,7 @@ public class Generator extends AbstractLoader {
      * @param bundle whether libraries shall be bundled or not
      */
     protected void generateJarFiles(File targetDir, boolean bundle) {
+        List<BundleInfo> backup = new ArrayList<BundleInfo>();
         UnbundleInfo unbundle = bundle ? new UnbundleInfo() : new UnbundleInfo(targetDir);
         targetDir.mkdirs();
         Log.info("generating Jar files into " + targetDir.getPath());
@@ -369,18 +563,39 @@ public class Generator extends AbstractLoader {
             }
             URLProcessor processor = new URLProcessor(unbundle, easyJar, eclipseJar);
             for (URL url : urls) {
-                if (this.checkedBundles == null 
-                        || this.checkedBundles.contains(this.urlBundleMapping.get(url))) {
+                
+                boolean classpath = false;  
+                for (String classP : this.checkedClasspaths) {
+                    if (url.toString().contains(classP)) {
+                        classpath = true;
+                    }
+                }      
+                boolean fitsConditions = false;
+                if (this.checkedBundles == null
+                        || this.checkedBundles.contains(this.urlBundleMapping.get(url))
+                        || url.toString().contains("org.eclipse.osgi")
+                        || url.toString().contains("javax.inject")) {
+                    fitsConditions = true;
+                }
+                
+                if (classpath 
+                        || fitsConditions) {
+                    //|| url.getPath().contains("/eclipse/")) { //|| url.getPath().contains("/libs/")
+                    backup.add(this.urlBundleMapping.get(url));
+                    if (checkedBundles != null) {
+                        this.checkedBundles.remove(this.urlBundleMapping.get(url));
+                    }
                     if (processor.processURL(url, true)) {
                         deferList.add(url);
                     }
-                }
+                } 
             }
+            if (this.checkedBundles != null) {
+                System.out.println("***************************     " + backup.size());
+                this.checkedBundles.addAll(backup);
+            }            
             for (URL url : deferList) {
-                if (this.checkedBundles == null 
-                        || this.checkedBundles.contains(this.urlBundleMapping.get(url))) {
-                    processor.processURL(url, false);
-                }
+                processor.processURL(url, false);
             }
             Utils.closeQuietly(eclipseJar);
             Log.info("adding startup spec to " + easyJarFile);
@@ -393,6 +608,11 @@ public class Generator extends AbstractLoader {
             Utils.closeQuietly(easyJar);
             Utils.closeQuietly(eclipseJar);
         }
+        /*System.out.println("### ### Missing: " + this.checkedBundles.size());
+        for (BundleInfo miss : checkedBundles) {
+            System.out.println("      miss: " + miss.getName() + " " + miss.getVersion());
+        }*/
+
     }
 
     /**
@@ -489,8 +709,9 @@ public class Generator extends AbstractLoader {
         boolean include = false;
         if (unbundle.enabled()) {
             copy = unbundle.isEclipsePart() || !unbundle.isBundle(); // remainder shall be from EASy
-            if ("aspectjrt.jar".equals(unbundle.getName())) {
+            if ("aspectjrt.jar".equals(unbundle.getName()) && !aspectJProcessed) {
                 include = true; // special case for aspect library
+                aspectJProcessed = true;
             }
         } else {
             copy = false;
@@ -531,21 +752,60 @@ public class Generator extends AbstractLoader {
      * @throws IOException in case of problems writing to <code>os</code>
      */
     private void produceStartupList(JarOutputStream os) throws IOException {
+        List<BundleInfo> processed = new ArrayList<BundleInfo>(); 
+        List<String> processedDS = new ArrayList<String>();
         JarEntry listEntry = new JarEntry(ListLoader.EASY_STARTUP_FILE_NAME);
         os.putNextEntry(listEntry);
         PrintWriter out = new PrintWriter(new OutputStreamWriter(os));
         for (BundleInfo info : data) {
+            System.err.println(info);
             if (null != info.getActivatorClassName()) {
-                out.print(ListLoader.InitType.ACTIVATOR.name());
-                out.print(":");
-                out.println(info.getActivatorClassName());
+                
+                if (this.checkedBundles != null) {
+                    for (int i = 0; i < this.checkedBundles.size(); i++) {   
+                        if (this.checkedBundles.get(i) != null
+                                && !processed.contains(this.checkedBundles.get(i))
+                                && this.checkedBundles.get(i).getActivatorClassName() != null
+                                && info.getActivatorClassName().contains(
+                                    this.checkedBundles.get(i).getActivatorClassName())) {
+                            out.print(ListLoader.InitType.ACTIVATOR.name());
+                            out.print(":");
+                            out.println(info.getActivatorClassName());
+                            processed.add(this.checkedBundles.get(i));
+                        }
+                    }          
+                } else {
+                    out.print(ListLoader.InitType.ACTIVATOR.name());
+                    out.print(":");
+                    out.println(info.getActivatorClassName());
+                }
+
             }
-            // DS-methods are optional
-            for (int c = 0; c < info.getDsClassesCount(); c++) {
-                out.print(ListLoader.InitType.DS.name());
-                out.print(":");
-                out.println(info.getDsClass(c));
+            
+            for (int i = 0; i < this.checkedBundles.size(); i++) {
+                
+                if (this.checkedBundles.get(i) != null) {
+                    
+                    for (int j = 0; j < this.checkedBundles.get(i).getDsClassesCount(); j++) {
+                        
+                        for (int c = 0; c < info.getDsClassesCount(); c++) {
+                            
+                            if (!processedDS.contains(info.getDsClass(c))
+                                    && info.getDsClass(c).equals(this.checkedBundles.get(i).getDsClass(c))) {
+                                out.print(ListLoader.InitType.DS.name());
+                                out.print(":");
+                                out.println(info.getDsClass(c));
+                                processedDS.add(info.getDsClass(c));
+                            }
+        
+                        }
+                    
+                    }
+                    
+                }
+                
             }
+
         }
         out.flush();
         os.closeEntry();

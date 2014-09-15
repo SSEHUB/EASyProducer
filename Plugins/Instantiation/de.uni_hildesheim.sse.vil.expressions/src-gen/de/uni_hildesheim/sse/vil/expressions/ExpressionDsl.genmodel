@@ -125,11 +125,20 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ExpressionDsl.ecore#//ConstructorExecution/calls"/>
     </genClasses>
     <genClasses ecoreClass="ExpressionDsl.ecore#//SubCall">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ExpressionDsl.ecore#//SubCall/type"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ExpressionDsl.ecore#//SubCall/call"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ExpressionDsl.ecore#//SubCall/arrayEx"/>
     </genClasses>
+    <genClasses ecoreClass="ExpressionDsl.ecore#//Declarator">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ExpressionDsl.ecore#//Declarator/decl"/>
+    </genClasses>
+    <genClasses ecoreClass="ExpressionDsl.ecore#//Declaration">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ExpressionDsl.ecore#//Declaration/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ExpressionDsl.ecore#//Declaration/id"/>
+    </genClasses>
     <genClasses ecoreClass="ExpressionDsl.ecore#//Call">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ExpressionDsl.ecore#//Call/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ExpressionDsl.ecore#//Call/decl"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ExpressionDsl.ecore#//Call/param"/>
     </genClasses>
     <genClasses ecoreClass="ExpressionDsl.ecore#//ArgumentList">
@@ -151,12 +160,13 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ExpressionDsl.ecore#//Constant/sValue"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ExpressionDsl.ecore#//Constant/qValue"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ExpressionDsl.ecore#//Constant/bValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ExpressionDsl.ecore#//Constant/null"/>
     </genClasses>
     <genClasses ecoreClass="ExpressionDsl.ecore#//NumValue">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ExpressionDsl.ecore#//NumValue/val"/>
     </genClasses>
     <genClasses ecoreClass="ExpressionDsl.ecore#//Type">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ExpressionDsl.ecore#//Type/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ExpressionDsl.ecore#//Type/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ExpressionDsl.ecore#//Type/set"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ExpressionDsl.ecore#//Type/param"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ExpressionDsl.ecore#//Type/seq"/>

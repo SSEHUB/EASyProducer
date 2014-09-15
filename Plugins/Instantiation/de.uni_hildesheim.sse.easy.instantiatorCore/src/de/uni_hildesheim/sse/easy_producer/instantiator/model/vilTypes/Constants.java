@@ -2,6 +2,7 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Random;
 
 /**
  * Just some constants.
@@ -9,9 +10,19 @@ import java.util.HashSet;
  * @author Holger Eichelberger
  */
 public class Constants {
+    
+    public static final Random RANDOM = new Random();
+    
+    public static final String GETTER_PREFIX = "get";
 
     public static final String QUALIFICATION_SEPARATOR = "::";
 
+    public static final String COLON = ":";
+    
+    public static final String DECLARATOR_SEPARATOR = "|";
+    
+    public static final String ITER_CALL = "->";
+    
     public static final String ASSIGNMENT = "=";
 
     public static final String ADDITION = "+";

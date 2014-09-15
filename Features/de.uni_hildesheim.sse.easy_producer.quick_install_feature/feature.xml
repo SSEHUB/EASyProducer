@@ -2,7 +2,7 @@
 <feature
       id="de.uni_hildesheim.sse.easy_producer.quick_install_feature"
       label="EASy Producer Quick Installation"
-      version="0.10.0"
+      version="0.11.2"
       provider-name="University of Hildesheim - SSE">
 
    <description>
@@ -32,26 +32,26 @@ limitations under the License.
    </url>
 
    <requires>
-      <import feature="de.uni_hildesheim.sse.ivml.ui_feature" version="0.9.0" match="greaterOrEqual"/>
-      <import feature="de.uni_hildesheim.sse.easy_producer.instantiation.velocity_feature" version="0.7.0" match="greaterOrEqual"/>
-      <import feature="de.uni_hildesheim.sse.easy_producer.core_feature" version="0.10.0" match="greaterOrEqual"/>
-      <import feature="de.uni_hildesheim.sse.easy_producer.ui_feature" version="0.10.0" match="greaterOrEqual"/>
-      <import feature="de.uni_hildesheim.sse.vil.core_feature" version="0.4.0" match="greaterOrEqual"/>
-      <import feature="de.uni_hildesheim.sse.vil.ui_feature" version="0.4.0" match="greaterOrEqual"/>
+      <import feature="de.uni_hildesheim.sse.ivml.ui_feature" version="0.10.2" match="greaterOrEqual"/>
+      <import feature="de.uni_hildesheim.sse.easy_producer.instantiation.velocity_feature" version="0.7.1" match="greaterOrEqual"/>
+      <import feature="de.uni_hildesheim.sse.easy_producer.core_feature" version="0.10.2" match="greaterOrEqual"/>
+      <import feature="de.uni_hildesheim.sse.easy_producer.ui_feature" version="0.11.2" match="greaterOrEqual"/>
+      <import feature="de.uni_hildesheim.sse.vil.core_feature" version="0.5.2" match="greaterOrEqual"/>
+      <import feature="de.uni_hildesheim.sse.vil.ui_feature" version="0.5.2" match="greaterOrEqual"/>
    </requires>
 
    <plugin
          id="de.uni-hildesheim.sse.easy.instantiator.serializer"
          download-size="0"
          install-size="0"
-         version="0.4.1"
+         version="0.4.2"
          unpack="false"/>
 
    <plugin
          id="de.uni-hildesheim.sse.easy.instantiator.xvcl"
          download-size="0"
          install-size="0"
-         version="3.3.0.0"
+         version="3.3.0.2"
          unpack="false"/>
 
    <plugin
@@ -65,7 +65,7 @@ limitations under the License.
          id="de.uni_hildesheim.sse.integration.common.eclipse"
          download-size="0"
          install-size="0"
-         version="0.10.0"
+         version="0.10.1"
          unpack="false"/>
 
    <plugin
@@ -79,63 +79,63 @@ limitations under the License.
          id="de.uni_hildesheim.sse.ivml"
          download-size="0"
          install-size="0"
-         version="0.9.0"
+         version="0.10.2"
          unpack="false"/>
 
    <plugin
          id="de.uni_hildesheim.sse.varModel"
          download-size="0"
          install-size="0"
-         version="0.10.0"
+         version="0.11.2"
          unpack="false"/>
 
    <plugin
          id="de.uni_hildesheim.sse.varModel.persistency"
          download-size="0"
          install-size="0"
-         version="0.7.0"
+         version="0.7.1"
          unpack="false"/>
 
    <plugin
          id="de.uni_hildesheim.sse.easy.instantiator.copy.core"
          download-size="0"
          install-size="0"
-         version="0.10.0"
+         version="0.10.1"
          unpack="false"/>
 
    <plugin
          id="de.uni_hildesheim.sse.instantiator.copy.java"
          download-size="0"
          install-size="0"
-         version="0.4.1"
+         version="0.4.2"
          unpack="false"/>
 
    <plugin
          id="de.uni_hildesheim.sse.dslCore"
          download-size="0"
          install-size="0"
-         version="0.8.0"
+         version="0.8.2"
          unpack="false"/>
 
    <plugin
          id="de.uni_hildesheim.sse.utils"
          download-size="0"
          install-size="0"
-         version="0.3.0"
+         version="0.4.2"
          unpack="false"/>
 
    <plugin
          id="de.uni_hildesheim.sse.reasoning.drools2"
          download-size="0"
          install-size="0"
-         version="0.1.3"
+         version="0.1.5"
          unpack="false"/>
 
    <plugin
          id="de.uni_hildesheim.sse.easy.instantiator.java"
          download-size="0"
          install-size="0"
-         version="0.2.0"
+         version="0.2.2"
          unpack="false"/>
 
 </feature>

@@ -190,13 +190,7 @@ public class PseudoString implements IVilType {
      * @return the transformed string
      */
     public static String firstToUpperCase(String string) {
-        String result = string;
-        if (1 == string.length()) {
-            result = string.toUpperCase();
-        } else if (string.length() > 1) {
-            result = Character.toUpperCase(string.charAt(0)) + string.substring(1);
-        }
-        return result;
+        return StringValueHelper.firstToUpperCase(string);
     }
 
     /**
@@ -206,15 +200,26 @@ public class PseudoString implements IVilType {
      * @return the transformed string
      */
     public static String firstToLowerCase(String string) {
-        String result = string;
-        if (1 == string.length()) {
-            result = string.toLowerCase();
-        } else if (string.length() > 1) {
-            result = Character.toLowerCase(string.charAt(0)) + string.substring(1);
-        }
-        return result;
+        return StringValueHelper.firstToLowerCase(string);
     }
-    
+
+    /**
+     * Turns the given <code>string</code> into a typical (Java) programming language identifier by removing all
+     * non identifier characters.
+     * 
+     * @param string the string to be turned into an identifier
+     * @return the identifier (may be empty in the extreme case)
+     */
+    public static String toIdentifier(String string) {
+        StringBuilder tmp = new StringBuilder(string);
+        for (int i = tmp.length() - 1; i >= 0; i--) {
+            if (!Character.isJavaIdentifierPart(tmp.charAt(i))) {
+                tmp.deleteCharAt(i);
+            }
+        }
+        return tmp.toString();
+    }
+
     /**
      * The last resort - converts any object to a String using {@link StringValueHelper}.
      * This operation is absolutely necessary as the operation resolution in 
@@ -228,7 +233,5 @@ public class PseudoString implements IVilType {
     public static String convertAny(Object any) {
         return StringValueHelper.getStringValue(any, null);
     }
-
-    // TODO complete operations
     
 }

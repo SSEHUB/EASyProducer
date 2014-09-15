@@ -160,7 +160,12 @@ public abstract class AbstractExecutionTest extends AbstractTest {
         try {
             Project project = new Project(temp, ProgressObserver.NO_OBSERVER);
             Map<String, Object> param = createParameterMap(project, project, null);
-            EqualitySetup setup = new EqualitySetup(createFile(name), name, null, createTraceFile(name), param);
+            String pName = name;
+            int pos = pName.lastIndexOf("/");
+            if (pos > 0) {
+                pName = pName.substring(pos + 1);
+            }
+            EqualitySetup setup = new EqualitySetup(createFile(name), pName, null, createTraceFile(name), param);
             setup.setStartElement(startRuleName);
             assertEqual(setup, expectedExceptions);
             if (null != asserter) {

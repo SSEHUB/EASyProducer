@@ -12,6 +12,7 @@ import de.uni_hildesheim.sse.vilBuildLanguage.JoinVariable;
 import de.uni_hildesheim.sse.vilBuildLanguage.LanguageUnit;
 import de.uni_hildesheim.sse.vilBuildLanguage.LoadProperties;
 import de.uni_hildesheim.sse.vilBuildLanguage.Map;
+import de.uni_hildesheim.sse.vilBuildLanguage.MapVariable;
 import de.uni_hildesheim.sse.vilBuildLanguage.PrimaryExpression;
 import de.uni_hildesheim.sse.vilBuildLanguage.Require;
 import de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration;
@@ -129,6 +130,13 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * @generated
    */
   private EClass instantiateEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass mapVariableEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -699,6 +707,36 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  public EClass getMapVariable()
+  {
+    return mapVariableEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getMapVariable_Type()
+  {
+    return (EReference)mapVariableEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getMapVariable_Var()
+  {
+    return (EAttribute)mapVariableEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getMap()
   {
     return mapEClass;
@@ -709,9 +747,19 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getMap_Var()
+  public EReference getMap_Var()
   {
-    return (EAttribute)mapEClass.getEStructuralFeatures().get(0);
+    return (EReference)mapEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getMap_Separator()
+  {
+    return (EAttribute)mapEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -721,7 +769,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    */
   public EReference getMap_Expr()
   {
-    return (EReference)mapEClass.getEStructuralFeatures().get(1);
+    return (EReference)mapEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -731,7 +779,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    */
   public EReference getMap_Block()
   {
-    return (EReference)mapEClass.getEStructuralFeatures().get(2);
+    return (EReference)mapEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -934,8 +982,13 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
     createEReference(instantiateEClass, INSTANTIATE__PARAM);
     createEReference(instantiateEClass, INSTANTIATE__VERSION_SPEC);
 
+    mapVariableEClass = createEClass(MAP_VARIABLE);
+    createEReference(mapVariableEClass, MAP_VARIABLE__TYPE);
+    createEAttribute(mapVariableEClass, MAP_VARIABLE__VAR);
+
     mapEClass = createEClass(MAP);
-    createEAttribute(mapEClass, MAP__VAR);
+    createEReference(mapEClass, MAP__VAR);
+    createEAttribute(mapEClass, MAP__SEPARATOR);
     createEReference(mapEClass, MAP__EXPR);
     createEReference(mapEClass, MAP__BLOCK);
 
@@ -1050,8 +1103,13 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
     initEReference(getInstantiate_Param(), theExpressionDslPackage.getArgumentList(), null, "param", null, 0, 1, Instantiate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getInstantiate_VersionSpec(), theExpressionDslPackage.getVersionSpec(), null, "versionSpec", null, 0, 1, Instantiate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+    initEClass(mapVariableEClass, MapVariable.class, "MapVariable", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getMapVariable_Type(), theExpressionDslPackage.getType(), null, "type", null, 0, 1, MapVariable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getMapVariable_Var(), ecorePackage.getEString(), "var", null, 0, 1, MapVariable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
     initEClass(mapEClass, Map.class, "Map", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getMap_Var(), ecorePackage.getEString(), "var", null, 0, -1, Map.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getMap_Var(), this.getMapVariable(), null, "var", null, 0, -1, Map.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getMap_Separator(), ecorePackage.getEString(), "separator", null, 0, 1, Map.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getMap_Expr(), theExpressionDslPackage.getExpression(), null, "expr", null, 0, 1, Map.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getMap_Block(), this.getRuleElementBlock(), null, "block", null, 0, 1, Map.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 

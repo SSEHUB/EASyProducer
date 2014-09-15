@@ -130,7 +130,7 @@ public abstract class AbstractTest extends de.uni_hildesheim.sse.dslCore.test.Ab
 
             // parse the model
             TranslationResult<Project> result = ModelUtility.INSTANCE.parse(uri);
-            String errorCodesMsg = checkErrorCodes(result, expectedErrorCodes);
+            String errorCodesMsg = checkErrorCodes(result, null, expectedErrorCodes);
             Assert.assertNull(errorCodesMsg, errorCodesMsg);
 
             if (0 == result.getErrorCount()) {

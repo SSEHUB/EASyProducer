@@ -108,6 +108,21 @@ public class Path implements IVilType, IStringValueProvider {
     }
     
     /**
+     * Returns the parent of this path.
+     * 
+     * @return the parent, <b>this</b> if there is no further parent
+     */
+    public Path getParent() {
+        Path result = this;
+        File f = new File(path);
+        File parent = f.getParentFile();
+        if (null != parent) {
+            result = new Path(parent, ArtifactFactory.findModel(parent));
+        }
+        return result;
+    }
+    
+    /**
      * Returns the absolute path.
      * 
      * @param base the base path for turning relative paths into absolute paths
@@ -364,7 +379,7 @@ public class Path implements IVilType, IStringValueProvider {
     }
 
     /**
-     * Deletes the underlying artifact.
+     * Deletes the underlying artifact. Handles patterns through {@link ArtifactModel#delete(Path)}.
      * 
      * @throws ArtifactException in case that deletion fails
      */

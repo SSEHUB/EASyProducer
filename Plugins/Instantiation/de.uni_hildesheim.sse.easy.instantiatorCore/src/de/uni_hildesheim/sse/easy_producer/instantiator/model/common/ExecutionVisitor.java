@@ -16,7 +16,11 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expres
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VariableExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Collection;
-import de.uni_hildesheim.sse.utils.modelManagement.IModel;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ITypedModel;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.VilException;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
 
 /**
@@ -48,6 +52,18 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends
         this.environment = environment;
         this.tracer = tracer;
         this.parameter = parameter;
+    }
+    
+    /**
+     * Exchanges the current script parameter in case of context changes. [better - assign to context]
+     * 
+     * @param parameter the new parameter set
+     * @return the old parameter set
+     */
+    protected Map<String, Object> replaceParameter(Map<String, Object> parameter) {
+        Map<String, Object> result = parameter;
+        this.parameter = parameter;
+        return result;
     }
     
     /**
@@ -204,7 +220,7 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends
         throws VilLanguageException {
         if (!visited.contains(model)) {
             visited.add(model);
-            environment.switchContext(model);
+            ITypedModel oldContext = environment.switchContext(model);
             processModelParameter(model);
             for (int i = 0; i < model.getImportsCount(); i++) {
                 ModelImport<?> imp = model.getImport(i);
@@ -223,6 +239,7 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends
                     model.getVariableDeclaration(v).accept((IVisitor) this);
                 }
             }
+            environment.switchContext(oldContext);
         } else {
             throw new VilLanguageException("cyclic inclusion at " + model.getName(), 
                 VilLanguageException.ID_RUNTIME_CYCLE);
@@ -297,6 +314,36 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends
     protected void handleParameterInSequence(IResolvableModel<V> model, Map<String, V> varMap) 
         throws VilLanguageException {
     }
+
+    /**
+     * Determines script parameters from a call, i.e., takes over arguments and fixes them.
+     * 
+     * @param call the call to be executed
+     * @return the script parameter (may be <b>null</b>)
+     * @throws ExpressionException in case of evaluation problems
+     */
+    protected Map<String, Object> determineScriptParam(ModelCallExpression<V, M, O> call) throws ExpressionException {
+        Map<String, Object> result = null;
+        if (null != call) {
+            if (null == call.getResolved()) {
+                throw new ExpressionException("cannot execute rule " + call.getVilSignature() 
+                    + " as it is not resolved", VilLanguageException.ID_RUNTIME_NOT_RESOLVED);
+            }
+            O resolved = call.getResolved();
+            // fix the parameter for the call in this context, i.e., fix expressions into other context 
+            result = new HashMap<String, Object>();
+            for (int a = 0; a < call.getArgumentsCount(); a++) {
+                CallArgument arg = call.getArgument(a);
+                Object val = arg.fixValue(this);
+                String name = arg.getName();
+                if (null == name && a < resolved.getParameterCount()) {
+                    name = resolved.getParameter(a).getName();
+                }
+                result.put(name, val);
+            }
+        }
+        return result;
+    }
     
     /**
      * Visits a model call expression. Currently, this method is intended
@@ -309,35 +356,49 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends
      * @throws ExpressionException in case that the execution fails
      */
     protected Object visitModelCallExpression(ModelCallExpression<V, M, O> call) throws ExpressionException {
-        // evaluate in this context before context switch
-        Object[] args = new Object[call.getArgumentsCount()];
-        for (int a = 0; a < call.getArgumentsCount(); a++) {
-            args[a] = call.getArgument(a).accept(this);
-        }
-        IModel contextModel = environment.getContextModel();
-        environment.switchContext(call.getModel());
-        environment.pushLevel();
-        if (null == call.getResolved()) {
-            throw new ExpressionException("model call " + call.getQualifiedName() + " is not resolved", 
-                ExpressionException.ID_RUNTIME);
-        }
-        O operation = dynamicDispatch(call.getResolved(), args);
         Object result;
-        try {
-            for (int p = 0; p < operation.getParameterCount(); p++) {
-                environment.addValue(operation.getParameter(p), args[p]);
+        if (call.isPlaceholder()) {
+            result = null;
+        } else {
+            // should not be needed as handled as part of imports/model headers
+            /*Map<String, Object> scriptParam = null; 
+            if (call.getModel() != contextModel) {
+                // only if a real context change will happen
+                scriptParam = determineScriptParam(call);
             }
-            result = executeModelCall(operation);
-        } catch (VilLanguageException e) {
-            throw new ExpressionException(e);
-        } finally {
+            if (null != scriptParam) {
+                scriptParam = replaceParameter(scriptParam);
+            }*/
+            // evaluate in this context before context switch
+            Object[] args = new Object[call.getArgumentsCount()];
+            for (int a = 0; a < call.getArgumentsCount(); a++) {
+                args[a] = call.getArgument(a).accept(this);
+            }
+            ITypedModel oldContext = environment.switchContext(call.getModel());
+            environment.pushLevel();
+            if (null == call.getResolved()) {
+                throw new ExpressionException("model call " + call.getQualifiedName() + " is not resolved", 
+                    ExpressionException.ID_RUNTIME);
+            }
+            O operation = dynamicDispatch(call.getResolved(), args);
+    
+            try {
+                for (int p = 0; p < operation.getParameterCount(); p++) {
+                    environment.addValue(operation.getParameter(p), args[p]);
+                }
+                result = executeModelCall(operation);
+            } catch (VilLanguageException e) {
+                throw new ExpressionException(e);
+            } 
             try {
                 environment.popLevel();
             } catch (ArtifactException e) {
                 throw new ExpressionException(e);
-            } finally {
-                environment.switchContext(contextModel);
-            }
+            } 
+            environment.switchContext(oldContext);
+            /*if (null != scriptParam) {
+                scriptParam = replaceParameter(scriptParam);
+            }*/
         }
         return result;
     }
@@ -397,13 +458,12 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends
             //result = execute.accept(this);
         } catch (ExpressionException e) {
             throw new VilLanguageException(e);
-        } finally {
-            try {
-                environment.decreaseIndentation();
-                environment.popLevel();
-            } catch (ArtifactException e) {
-                throw new VilLanguageException(e);
-            }
+        } 
+        try {
+            environment.decreaseIndentation();
+            environment.popLevel();
+        } catch (ArtifactException e) {
+            throw new VilLanguageException(e);
         }
         return result;
     }
@@ -436,6 +496,34 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends
                 || ex instanceof MapExpression || ex instanceof ModelCallExpression);
         }
         return result;
+    }
+    
+    /**
+     * Converts the actual <code>value</code> of <code>expr</code> to a container
+     * if required and possible.
+     *  
+     * @param expr the expression
+     * @param value the actual value of expression 
+     * @param eltName the name of the language element / concept, e.g., "loop" or "map"
+     * @return the converted <code>value</code> or <code>value</code>
+     * @throws ExpressionException in case of conversion problems
+     */
+    protected Object convertToContainer(Expression expr, Object value, String eltName) throws ExpressionException {
+        TypeDescriptor<? extends IVilType> type = expr.inferType();
+        if (!type.isCollection()) {
+            OperationDescriptor desc = type.getConversionToSequence();
+            if (null != desc) {
+                try {
+                    value = desc.invoke(value);
+                } catch (VilException e) {
+                    throw new ExpressionException(e);
+                }
+            } else {
+                throw new ExpressionException("cannot convert " + eltName + " variable to container", 
+                    ExpressionException.ID_RUNTIME);
+            }
+        }
+        return value;
     }
 
 }

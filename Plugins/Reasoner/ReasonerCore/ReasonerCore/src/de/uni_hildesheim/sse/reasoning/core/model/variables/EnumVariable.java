@@ -34,7 +34,11 @@ public class EnumVariable extends ReasonerVariable {
         //value = type.getLiteralCount() > 0 ? type.getLiteral(0).getOrdinal() : 0;
         value = null;
         if (configVariable.getState() != AssignmentState.UNDEFINED) {
-            value = ((EnumLiteral) configVariable.getValue().getValue()).getOrdinal();
+            System.out.println("Value to cast: " + name.toString() 
+                    + " " + configVariable.getValue().getType().getName());
+            if (!configVariable.getValue().getType().getName().equals("AnyType")) {                
+                value = ((EnumLiteral) configVariable.getValue().getValue()).getOrdinal();
+            }            
         }
     }
 

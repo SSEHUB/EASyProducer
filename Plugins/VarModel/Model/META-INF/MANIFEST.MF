@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: SSE Variability Model (IVML)
 Bundle-SymbolicName: de.uni_hildesheim.sse.varModel; singleton:=true
-Bundle-Version: 0.10.0
+Bundle-Version: 0.11.2
 Import-Package: org.osgi.framework,
  org.osgi.service.log;version="1.3.0",
  org.osgi.util.tracker;version="1.5.0"
@@ -10,6 +10,7 @@ Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Export-Package: de.uni_hildesheim.sse.model,
  de.uni_hildesheim.sse.model.confModel,
  de.uni_hildesheim.sse.model.cst,
+ de.uni_hildesheim.sse.model.cstEvaluation,
  de.uni_hildesheim.sse.model.management,
  de.uni_hildesheim.sse.model.utils,
  de.uni_hildesheim.sse.model.validation,

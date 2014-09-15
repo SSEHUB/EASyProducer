@@ -73,4 +73,8 @@ public class NoTracer extends de.uni_hildesheim.sse.easy_producer.instantiator.m
     public void visitedScript(Script script) {
     }
 
+    @Override
+    public void reset() {
+    }
+
 }

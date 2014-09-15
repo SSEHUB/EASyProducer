@@ -5,6 +5,8 @@ import java.io.IOException;
 
 import org.junit.Test;
 
+import de.uni_hildesheim.sse.dslCore.translation.ErrorCodes;
+
 /**
  * Performs basic (syntactic) tests.
  * 
@@ -101,6 +103,16 @@ public class BasicTests extends AbstractTest {
         assertEqual("template");
     }
 
+    /**
+     * Tests a duplicated def (shall fail).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testDuplicatedDefFail() throws IOException {
+        assertEqual("duplicatedDef", ErrorCodes.REDEFINITION);
+    }
+    
     /**
      * Tests a plain version.
      * 
@@ -389,6 +401,16 @@ public class BasicTests extends AbstractTest {
     @Test
     public void testRecursion() throws IOException {
         assertEqual("recursion");
+    }
+
+    /**
+     * Tests a generic attribute expression.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testAttribute() throws IOException {
+        assertEqual("attribute");
     }
 
 }

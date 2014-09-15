@@ -93,6 +93,8 @@ public class ExpressionDslFactoryImpl extends EFactoryImpl implements Expression
       case ExpressionDslPackage.SUPER_EXECUTION: return createSuperExecution();
       case ExpressionDslPackage.CONSTRUCTOR_EXECUTION: return createConstructorExecution();
       case ExpressionDslPackage.SUB_CALL: return createSubCall();
+      case ExpressionDslPackage.DECLARATOR: return createDeclarator();
+      case ExpressionDslPackage.DECLARATION: return createDeclaration();
       case ExpressionDslPackage.CALL: return createCall();
       case ExpressionDslPackage.ARGUMENT_LIST: return createArgumentList();
       case ExpressionDslPackage.NAMED_ARGUMENT: return createNamedArgument();
@@ -426,6 +428,28 @@ public class ExpressionDslFactoryImpl extends EFactoryImpl implements Expression
   {
     SubCallImpl subCall = new SubCallImpl();
     return subCall;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Declarator createDeclarator()
+  {
+    DeclaratorImpl declarator = new DeclaratorImpl();
+    return declarator;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Declaration createDeclaration()
+  {
+    DeclarationImpl declaration = new DeclarationImpl();
+    return declaration;
   }
 
   /**

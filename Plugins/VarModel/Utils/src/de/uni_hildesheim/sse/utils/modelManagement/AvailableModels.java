@@ -171,6 +171,32 @@ public class AvailableModels<M extends IModel> {
     }
 
     /**
+     * Returns the available model information objects which are available for and 
+     * visible from the given URI, i.e. either same path, containing or contained path.
+     *
+     * @param name the name of the model (may be <b>null</b> but then <code>version</code> is ignored and all
+     *   visible model information objects are returned as done in {@link #getVisibleModelInfo(URI)}). 
+     * @param uri the URI to match
+     * @return the available information objects matching <code>uri</code>
+     */
+    public synchronized List<ModelInfo<M>> getVisibleModelInfo(String name, URI uri) {
+        List<ModelInfo<M>> result = new ArrayList<ModelInfo<M>>();
+        for (List<VersionedModelInfos<M>> vInfos : availableModels.values()) {
+            int vInfosSize = vInfos.size();
+            for (int i = 0; i < vInfosSize; i++) {
+                // currently we do not have model paths ;)
+                ModelInfo<M> info = vInfos.get(i).getByClosestUri(uri, repository.paths().getModelPath(uri));
+                if (null != info) {
+                    if ((null == name) || (name.equals(info.getName()))) {
+                        result.add(info);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
      * Returns the available model information objects which are located at <code>uri</code>.
      * 
      * @param uri the URI to match
@@ -293,12 +319,14 @@ public class AvailableModels<M extends IModel> {
     public synchronized ModelInfo<M> getModelInfo(M model) {
         ModelInfo<M> result = null;
         List<ModelInfo<M>> info = getModelInfos(model);
-        int size = info.size();
-        for (int i = 0; null == result && i < size; i++) {
-            ModelInfo<M> pInfo = info.get(i);
-            // no early termination just to be sure
-            if (pInfo.getResolved() == model) {
-                result = pInfo;
+        if (null != info) { // pathological case if the model is absent
+            int size = info.size();
+            for (int i = 0; null == result && i < size; i++) {
+                ModelInfo<M> pInfo = info.get(i);
+                // no early termination just to be sure
+                if (pInfo.getResolved() == model) {
+                    result = pInfo;
+                }
             }
         }
         return result;

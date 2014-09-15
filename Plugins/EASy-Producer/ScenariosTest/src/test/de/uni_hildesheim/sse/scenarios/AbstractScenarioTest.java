@@ -98,7 +98,6 @@ public abstract class AbstractScenarioTest extends AbstractTest {
         File vtlFolder = getVtlFolderIn(temp);
         activateBuildProperties(vilFolder);
         try {
-            VarModel.INSTANCE.loaders().registerLoader(de.uni_hildesheim.sse.ModelUtility.INSTANCE, observer);
             VarModel.INSTANCE.locations().addLocation(ivmlFolder, observer);
             // those loaders shall already be registered through subclassing AbstractTest
             BuildModel.INSTANCE.locations().addLocation(vilFolder, observer);

@@ -23,6 +23,38 @@ public class StringValueHelper {
     public static final String NULL_VALUE = "null"; // we do not really have a value for null in VIL
     
     /**
+     * Turns the first character into an upper case character.
+     * 
+     * @param string the string to be transformed
+     * @return the transformed string
+     */
+    public static String firstToUpperCase(String string) {
+        String result = string;
+        if (1 == string.length()) {
+            result = string.toUpperCase();
+        } else if (string.length() > 1) {
+            result = Character.toUpperCase(string.charAt(0)) + string.substring(1);
+        }
+        return result;
+    }
+
+    /**
+     * Turns the first character into a lower case character.
+     * 
+     * @param string the string to be transformed
+     * @return the transformed string
+     */
+    public static String firstToLowerCase(String string) {
+        String result = string;
+        if (1 == string.length()) {
+            result = string.toLowerCase();
+        } else if (string.length() > 1) {
+            result = Character.toLowerCase(string.charAt(0)) + string.substring(1);
+        }
+        return result;
+    }
+    
+    /**
      * Returns the string value in case of value or expression replacements. In this situation,
      * further conversions may apply, such as that {@link IvmlElement IvmlElements} are converted
      * into their actual value rather than returning their name.
@@ -56,7 +88,7 @@ public class StringValueHelper {
             result = ((IStringValueProvider) object).getStringValue(comparator);
         } else if (object instanceof java.util.Map) {
             result = Map.getStringValue((java.util.Map<?, ?>) object, comparator);
-        } else if (null == object) {
+        } else if (null == object || TypeRegistry.NULL == object) {
             result = NULL_VALUE; // we no 
         } else {
             // don't are for Pseudo* as they are just types and no instances

@@ -1,5 +1,6 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ruleMatch;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactTypes;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IArtifact;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
@@ -74,7 +75,7 @@ public abstract class AbstractRuleMatchExpression extends Expression {
         // (hopefully) of a collection
         try {
             TypeDescriptor<? extends IVilType>[] param = TypeDescriptor.createArray(1);
-            param[0] = TypeRegistry.artifactType();
+            param[0] = ArtifactTypes.artifactType();
             return ensureType(TypeRegistry.getCollectionType(param));
         } catch (VilException e) {
             throw new ExpressionException(e.getMessage(), ExpressionException.ID_INTERNAL); // shall not happen
@@ -109,7 +110,7 @@ public abstract class AbstractRuleMatchExpression extends Expression {
             throw new ExpressionException("collection in " + type.getVilName() + "is not generic over one type", 
                 ExpressionException.ID_SEMANTIC);
         }
-        if (!TypeRegistry.artifactType().isAssignableFrom(type.getParameterType(0))) {
+        if (!ArtifactTypes.artifactType().isAssignableFrom(type.getParameterType(0))) {
             throw new ExpressionException("collection in " + type.getVilName() + "is not generic over one type", 
                 ExpressionException.ID_SEMANTIC);
         }

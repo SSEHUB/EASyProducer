@@ -10,7 +10,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactE
  * 
  * @author Holger Eichelberger
  */
-public class NameRegExFilter implements IConfigurationFilter {
+class NameRegExFilter implements IConfigurationFilter {
 
     /**
      * Defines the data type to filter on.

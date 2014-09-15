@@ -5,9 +5,9 @@ import java.io.IOException;
 import java.util.Collection;
 
 import de.uni_hildesheim.sse.easy.loader.ListLoader;
-import de.uni_hildesheim.sse.easy_producer.persistence.PersistenceException;
-import de.uni_hildesheim.sse.easy_producer.persistence.mgmt.PLPInfo;
-import de.uni_hildesheim.sse.easy_producer.persistence.mgmt.SPLsManager;
+import de.uni_hildesheim.sse.easy_producer.core.mgmt.PLPInfo;
+import de.uni_hildesheim.sse.easy_producer.core.mgmt.SPLsManager;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceException;
 import de.uni_hildesheim.sse.easy_producer.persistency.EASyPersistencer;
 
 /**

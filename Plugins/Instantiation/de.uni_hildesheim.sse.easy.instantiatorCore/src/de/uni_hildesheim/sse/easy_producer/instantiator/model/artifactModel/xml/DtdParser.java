@@ -130,7 +130,9 @@ public class DtdParser {
                 ex.printStackTrace();
             } finally {
                 try {
-                    writer.close();
+                    if (null != writer) {
+                        writer.close();
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

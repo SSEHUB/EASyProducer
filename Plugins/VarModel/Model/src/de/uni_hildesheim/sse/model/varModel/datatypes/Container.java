@@ -1,3 +1,18 @@
+/*
+ * Copyright 2009-2013 University of Hildesheim, Software Systems Engineering
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.uni_hildesheim.sse.model.varModel.datatypes;
 
 import de.uni_hildesheim.sse.model.varModel.IModelElement;
@@ -59,23 +74,24 @@ public class Container extends StructuredDatatype {
     public static final Operation EXISTS = new Operation(BooleanType.TYPE, OclKeyWords.EXISTS, 
         TYPE, BooleanType.TYPE).markAsContainerOperation();
     public static final Operation ANY = new Operation(TYPE, ReturnTypeMode.GENERIC_PARAM_1, OclKeyWords.ANY, 
-        TYPE, BooleanType.TYPE).markAsContainerOperation().markAsContainerOperation();
+        TYPE, BooleanType.TYPE).markAsContainerOperation();
     public static final Operation ONE = new Operation(BooleanType.TYPE, OclKeyWords.ONE, 
-        TYPE, BooleanType.TYPE).markAsContainerOperation().markAsContainerOperation();
+        TYPE, BooleanType.TYPE).markAsContainerOperation();
     public static final Operation IS_UNIQUE = new Operation(TYPE, ReturnTypeMode.IMMEDIATE_OPERAND, 
-        OclKeyWords.IS_UNIQUE, TYPE, BooleanType.TYPE).markAsContainerOperation().markAsContainerOperation();
-    public static final Operation COLLECT = new Operation(TYPE, ReturnTypeMode.IMMEDIATE_OPERAND, OclKeyWords.COLLECT, 
-        TYPE, BooleanType.TYPE).markAsContainerOperation().markAsContainerOperation();
+        OclKeyWords.IS_UNIQUE, TYPE, AnyType.TYPE).markAsContainerOperation();
+    public static final Operation COLLECT = new Operation(TYPE, ReturnTypeMode.IMMEDIATE_OPERAND_COLLECTION_PARAM_1, 
+        OclKeyWords.COLLECT, TYPE, AnyType.TYPE).markAsContainerOperation();
     public static final Operation SELECT = new Operation(TYPE, ReturnTypeMode.IMMEDIATE_OPERAND, OclKeyWords.SELECT, 
-        TYPE, BooleanType.TYPE).markAsContainerOperation().markAsContainerOperation();
+        TYPE, BooleanType.TYPE).markAsContainerOperation();
     public static final Operation REJECT = new Operation(TYPE, ReturnTypeMode.IMMEDIATE_OPERAND, OclKeyWords.REJECT, 
-        TYPE, BooleanType.TYPE).markAsContainerOperation().markAsContainerOperation();
+        TYPE, BooleanType.TYPE).markAsContainerOperation();
 
-    public static final Operation IS_DEFINED = new Operation(BooleanType.TYPE, OclKeyWords.IS_DEFINED, TYPE);
+    public static final Operation IS_DEFINED = new Operation(BooleanType.TYPE, OclKeyWords.IS_DEFINED, TYPE)
+        .markAsAcceptsNull();
     public static final Operation TYPE_SELECT = new Operation(TYPE, ReturnTypeMode.TYPED_PARAM_1, 
-            OclKeyWords.TYPE_SELECT, TYPE, AnyType.TYPE);    
+        OclKeyWords.TYPE_SELECT, TYPE, AnyType.TYPE);    
     public static final Operation TYPE_REJECT = new Operation(TYPE, ReturnTypeMode.TYPED_PARAM_1, 
-            OclKeyWords.TYPE_REJECT, TYPE, AnyType.TYPE);
+        OclKeyWords.TYPE_REJECT, TYPE, AnyType.TYPE);
     // checkstyle: resume declaration order check
     
     static {
@@ -219,9 +235,9 @@ public class Container extends StructuredDatatype {
     public boolean isAssignableFrom(IDatatype type) {
         boolean result;
         if (super.isAssignableFrom(type)) {
-            if (type instanceof Container) {
+            if (type.getType() instanceof Container) {
                 // if the basic is fulfilled also the contained types must match
-                Container cType = (Container) type;
+                Container cType = (Container) type.getType();
                 IDatatype thisContained = getContainedType();
                 IDatatype typeContained = cType.getContainedType();
                 if (null == thisContained) {
@@ -242,4 +258,42 @@ public class Container extends StructuredDatatype {
         return result;
     }
         
+    /**
+     * Returns whether <code>type</code> is a container and the given <code>generics</code> match.
+     * 
+     * @param type the type to check for
+     * @param generics the generics to be considered
+     * @return <code>true</code> if <code>type</code> is a container with the given generics, <code>false</code> else
+     * @see #isReferencesContainer(IDatatype)
+     * @see #isReferencesContainer(IDatatype, IDatatype)
+     */
+    public static final boolean isContainer(IDatatype type, IDatatype... generics) {
+        return isType(TYPE, type, generics);
+    }
+
+    /**
+     * Returns if <code>type</code> is a container of references.
+     * 
+     * @param type the type to check
+     * @return <code>true</code> if <code>type</code> is a container of references, <code>false</code> else
+     */
+    public static final boolean isReferencesContainer(IDatatype type) {
+        return Container.TYPE.isAssignableFrom(type) 
+            && 1 == type.getGenericTypeCount() 
+            && Reference.TYPE.isAssignableFrom(type.getGenericType(0));
+    }
+
+    /**
+     * Returns if <code>type</code> is a container of references of the given <code>elementType</code>.
+     * 
+     * @param type the type to check
+     * @param elementType the element type within the references
+     * @return <code>true</code> if <code>type</code> is a container of references, <code>false</code> else
+     * @see #isContainer(IDatatype, IDatatype...)
+     */
+    public static boolean isReferencesContainer(IDatatype type, IDatatype elementType) {
+        return isReferencesContainer(type) 
+            && ((Reference) type.getGenericType(0)).getType().isAssignableFrom(elementType);
+    }
+
 }

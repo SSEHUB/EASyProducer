@@ -169,7 +169,10 @@
             <fileset dir="${home.utils.dir}/${build.jar.dir}" includes="**/*.jar" />
             <fileset dir="${home.model.dir}/${build.jar.dir}" includes="**/*.jar" />
             <fileset dir="${home.model.tests.dir}/${build.jar.dir}" includes="**/*.jar" />
-            <!-- IVML Parser -->
+            <!-- Reasoner (Check whether Drools2 is needed) -->
+			<fileset dir="${home.reasonerCore.dir}/${build.jar.dir}" includes="**/*.jar" />
+			<fileset dir="${home.drools2.dir}/${build.jar.dir}" includes="**/*.jar" />
+			<!-- IVML Parser -->
             <fileset dir="${home.dslCore.dir}/${build.jar.dir}" includes="**/*.jar" />
             <fileset dir="${home.ivml.dir}/${build.jar.dir}" includes="**/*.jar" />
             <fileset dir="${home.ivml.tests.dir}/${build.jar.dir}" includes="**/*.jar" />

@@ -235,13 +235,11 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
             // the resource set in the injector...
             XtextResourceSet resourceSet = getResourceSet();
             XtextPackage.eINSTANCE.getClass();
-            synchronized (ModelUtility.class) {
-                if (grammar == null) {
-                    resourceSet.setClasspathURIContext(getLanguageClassLoader());
-                    grammar = (Grammar) BaseEPackageAccess.loadGrammarFile(
-                        ClasspathUriUtil.CLASSPATH_SCHEME + ":/" + getLanguageName().replace('.', '/') + ".xtextbin",
-                        resourceSet);
-                }
+            synchronized (ModelUtility.class) { // started with if (null == grammar)
+                resourceSet.setClasspathURIContext(getLanguageClassLoader());
+                grammar = (Grammar) BaseEPackageAccess.loadGrammarFile(
+                    ClasspathUriUtil.CLASSPATH_SCHEME + ":/" + getLanguageName().replace('.', '/') + ".xtextbin",
+                    resourceSet);
             }
         }
         return grammar;

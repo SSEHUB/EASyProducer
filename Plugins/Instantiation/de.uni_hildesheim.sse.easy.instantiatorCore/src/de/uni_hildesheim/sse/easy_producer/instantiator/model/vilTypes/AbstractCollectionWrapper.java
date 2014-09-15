@@ -88,7 +88,55 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
         }
         return result;
     }
+    
+    /**
+     * Returns all elements from <code>base</code> including those in <code>elements</code>.
+     * 
+     * @param <T> the element type
+     * @param base the base collection to include the elements to
+     * @param elements the elements which must also be in the result
+     * @return the projected result
+     */
+    public static <T> List<T> including(Collection<T> base, Collection<T> elements) {
+        List<T> result = new ArrayList<T>();
+        java.util.Set<Object> known = new HashSet<Object>();
+        Iterator<T> iter = base.iterator();
+        while (iter.hasNext()) {
+            T elt = iter.next();
+            known.add(elt);
+            result.add(elt);
+        }
+        iter = elements.iterator();
+        while (iter.hasNext()) {
+            T elt = iter.next();
+            if (!known.contains(elt)) {
+                result.add(elt);
+            }
+        }
+        return result;
+    }
 
+    /**
+     * Appends all elements from <code>elements</code> to <code>base</code>.
+     * 
+     * @param <T> the element type
+     * @param base the base collection to include the elements to
+     * @param elements the elements which shall be appended
+     * @return the projected result
+     */
+    public static <T> List<T> append(Collection<T> base, Collection<T> elements) {
+        List<T> result = new ArrayList<T>();
+        Iterator<T> iter = base.iterator();
+        while (iter.hasNext()) {
+            result.add(iter.next());
+        }
+        iter = elements.iterator();
+        while (iter.hasNext()) {
+            result.add(iter.next());
+        }
+        return result;
+    }
+    
     /**
      * Returns the selection of elements from <code>collection</code> complying to the given <code>type</code>.
      * 
@@ -97,13 +145,12 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
      * @param type the type to select for
      * @return the elements of type <code>type</code>
      */
-    public static <T> List<T> selectByType(Collection<T> collection, Class<?> type) {
-        TypeDescriptor<? extends IVilType> desc = TypeRegistry.DEFAULT.findType(type); // TODO -> dynamic
+    public static <T> List<T> selectByType(Collection<T> collection, TypeDescriptor<? extends IVilType> type) {
         List<T> result = new ArrayList<T>();
         Iterator<T> iter = collection.iterator();
         while (iter.hasNext()) {
             T element = iter.next();
-            if (type.isInstance(element) || (null != desc && desc.isInstance(element))) {
+            if (null == type || type.isInstance(element)) {
                 result.add(element);
             }
             

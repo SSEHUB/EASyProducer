@@ -14,5 +14,5 @@ interface IConfigurationFilter {
      * @return <code>true</code> if <code>element</code> shall be included, <code>false</code> else
      */
     public boolean include(IvmlElement element);
-
+    
 }

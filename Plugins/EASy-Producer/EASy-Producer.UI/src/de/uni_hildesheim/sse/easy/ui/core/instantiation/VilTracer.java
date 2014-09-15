@@ -1,6 +1,8 @@
 package de.uni_hildesheim.sse.easy.ui.core.instantiation;
 
-import de.uni_hildesheim.sse.easy.ui.productline_editor.configuration.EclipseConsole;
+import org.eclipse.swt.widgets.Display;
+
+import de.uni_hildesheim.sse.easy.ui.productline_editor.EclipseConsole;
 import de.uni_hildesheim.sse.easy_producer.core.varMod.tracing.AbstractVilTracer;
 
 /**
@@ -19,8 +21,15 @@ public class VilTracer extends AbstractVilTracer {
     }
 
     @Override
-    protected void writeImpl(String msg) {
-        EclipseConsole.INSTANCE.writeToConsole(msg, true);
+    protected void writeImpl(final String msg) {
+        Display.getDefault().asyncExec(new Runnable() {
+
+            @Override
+            public void run() {
+                EclipseConsole.INSTANCE.writeToConsole(msg, true);
+            }
+            
+        });
     }
 
 }

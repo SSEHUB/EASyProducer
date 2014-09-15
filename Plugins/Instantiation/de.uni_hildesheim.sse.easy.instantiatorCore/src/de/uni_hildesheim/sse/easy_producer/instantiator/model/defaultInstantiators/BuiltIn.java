@@ -20,6 +20,8 @@ public class BuiltIn {
             TypeRegistry.DEFAULT.register(Zip.class);
             TypeRegistry.DEFAULT.register(Unzip.class);
             TypeRegistry.DEFAULT.register(VilTemplateProcessor.class);
+            TypeRegistry.DEFAULT.register(RandomDouble.class);
+            TypeRegistry.DEFAULT.register(RandomInteger.class);
         }
     }
 

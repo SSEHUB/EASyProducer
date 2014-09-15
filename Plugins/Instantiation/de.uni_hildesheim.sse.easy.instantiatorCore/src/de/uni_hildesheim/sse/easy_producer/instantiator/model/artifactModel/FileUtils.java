@@ -320,7 +320,7 @@ public class FileUtils {
          */
         public void checkForException() throws ArtifactException {
             if (null != errors && !errors.isEmpty()) {
-                new ArtifactException(errors);
+                throw new ArtifactException(errors);
             }
         }
         

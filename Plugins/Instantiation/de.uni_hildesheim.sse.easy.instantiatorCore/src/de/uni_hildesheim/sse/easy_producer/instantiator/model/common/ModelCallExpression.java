@@ -141,5 +141,15 @@ public abstract class ModelCallExpression<V extends IResolvable, M extends IReso
         }
         return resolved.getReturnType();
     }
+    
+    @Override
+    public boolean isPlaceholder() {
+        return isPlaceholder(resolved);
+    }
 
+    @Override
+    public String getVilSignature() {
+        return getVilSignature(resolved);
+    }
+    
 }

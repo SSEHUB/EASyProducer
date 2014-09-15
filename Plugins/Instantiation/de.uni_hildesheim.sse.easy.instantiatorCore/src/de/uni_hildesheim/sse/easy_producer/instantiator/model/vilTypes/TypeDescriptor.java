@@ -10,6 +10,7 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes;
 public abstract class TypeDescriptor <T extends IVilType> implements IMetaType {
 
     private String name;
+    private String qualifiedName;
     private OperationDescriptor[] operations;
     private OperationDescriptor[] conversions;
     private TypeDescriptor<? extends IVilType>[] parameter;
@@ -21,7 +22,7 @@ public abstract class TypeDescriptor <T extends IVilType> implements IMetaType {
      * @param parameter type parameter (may be <b>null</b>)
      * @throws VilException if analyzing the class fails for some reason
      */
-    TypeDescriptor(TypeDescriptor<? extends IVilType>... parameter) throws VilException {
+    protected TypeDescriptor(TypeDescriptor<? extends IVilType>... parameter) throws VilException {
         this.parameter = parameter;
     }
     
@@ -30,28 +31,61 @@ public abstract class TypeDescriptor <T extends IVilType> implements IMetaType {
      * 
      * @param name the name of this descriptor
      */
-    protected void setName(String name) {
-        this.name = name;
+    protected void setName(String name) { // TODO preliminary, needs introduction of qualified names in grammars
+        if (null == name) {
+            this.name = null;
+            this.qualifiedName = null;
+        } else {
+            int pos = name.lastIndexOf("::");
+            if (pos > 0 && pos < name.length() - 2) {
+                this.name = name.substring(pos + 2);
+                this.qualifiedName = name;
+            } else {
+                this.name = name;
+                this.qualifiedName = name;
+            }
+        }
     }
 
     /**
      * Defines the operations for this type.
      *  
-     * @param operations the operations
+     * @param operations the operations (may be <b>null</b>)
      */
     protected void setOperations(java.util.Collection<OperationDescriptor> operations) {
-        this.operations = new OperationDescriptor[operations.size()];
-        operations.toArray(this.operations);
+        if (null == operations) {
+            this.operations = new OperationDescriptor[0];
+        } else {
+            this.operations = new OperationDescriptor[operations.size()];
+            operations.toArray(this.operations);
+        }
+    }
+    
+    /**
+     * Adds an operation.
+     * 
+     * @param operation the operation to be added
+     */
+    protected void addOperation(OperationDescriptor operation) {
+        // adding operations was not intended and is typically only used by fake types
+        OperationDescriptor[] tmp = new OperationDescriptor[operations.length + 1];
+        System.arraycopy(operations, 0, tmp, 0, operations.length);
+        tmp[operations.length] = operation;
+        operations = tmp;
     }
     
     /**
      * Defines the conversions for this type.
      * 
-     * @param conversions the conversions
+     * @param conversions the conversions (may be <b>null</b>)
      */
     protected void setConversions(java.util.Collection<OperationDescriptor> conversions) {
-        this.conversions = new OperationDescriptor[conversions.size()];
-        conversions.toArray(this.conversions);
+        if (null == conversions) {
+            this.conversions = new OperationDescriptor[0];
+        } else {
+            this.conversions = new OperationDescriptor[conversions.size()];
+            conversions.toArray(this.conversions);
+        }
     }
     
     @Override
@@ -61,7 +95,12 @@ public abstract class TypeDescriptor <T extends IVilType> implements IMetaType {
     
     @Override
     public String getQualifiedName() {
-        return getName(); // TODO preliminary, needs introduction of qualified names in grammars
+        return qualifiedName;
+    }
+    
+    @Override
+    public boolean enableDynamicDispatch() {
+        return true;
     }
     
     /**
@@ -72,6 +111,13 @@ public abstract class TypeDescriptor <T extends IVilType> implements IMetaType {
      * @return the class
      */
     public abstract Class<T> getTypeClass();
+    
+    /**
+     * Returns whether {@link #create(Object...)} will return an instance.
+     * 
+     * @return <code>true</code> if this type can be instantiated from VIL/VTL, <code>false</code> else
+     */
+    public abstract boolean canBeInstantiated();
     
     /**
      * Creates an instance of the type according to the given parameters. 
@@ -191,6 +237,22 @@ public abstract class TypeDescriptor <T extends IVilType> implements IMetaType {
     }
     
     /**
+     * Returns the first registered conversion operation from this type to a sequence.
+     *   
+     * @return the conversion operation or <b>null</b> if none was found
+     */
+    public OperationDescriptor getConversionToSequence() {
+        OperationDescriptor result = null;
+        for (int c = 0; null == result && c < conversions.length; c++) {
+            OperationDescriptor desc = conversions[c];
+            if (desc.getReturnType().isSequence() && isAssignableFrom(desc.getParameterType(0))) {
+                result = desc;
+            }
+        }
+        return result;
+    }
+    
+    /**
      * Returns a textual representation of this descriptor (the Java signature).
      * 
      * @return the textual representation
@@ -295,5 +357,17 @@ public abstract class TypeDescriptor <T extends IVilType> implements IMetaType {
      * @return <code>true</code> if it is an instance, <code>false</code> else
      */
     public abstract boolean isInstance(Object object);
+
+    /**
+     * Adds a placeholder operation, i.e., in case that the original operation cannot be resolved
+     * but the script shall remain executable.
+     * 
+     * @param name the name of the operation
+     * @param parameterCount the number of parameters of the operation
+     * @param acceptsNamedParameters whether the operation accepts named parameters
+     * @return the added operation, <b>null</b> if this type is not a {@link #isPlaceholder() placeholder}
+     */
+    public abstract OperationDescriptor addPlaceholderOperation(String name, int parameterCount, 
+        boolean acceptsNamedParameters);
 
 }

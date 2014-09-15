@@ -11,6 +11,8 @@ import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Constant;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ConstructorExecution;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ContainerInitializer;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ContainerInitializerExpression;
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Declaration;
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Declarator;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.EqualityExpression;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.EqualityExpressionPart;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Expression;
@@ -132,6 +134,18 @@ public class TemplateLangSemanticSequencer extends ExpressionDslSemanticSequence
 			case ExpressionDslPackage.CONTAINER_INITIALIZER_EXPRESSION:
 				if(context == grammarAccess.getContainerInitializerExpressionRule()) {
 					sequence_ContainerInitializerExpression(context, (ContainerInitializerExpression) semanticObject); 
+					return; 
+				}
+				else break;
+			case ExpressionDslPackage.DECLARATION:
+				if(context == grammarAccess.getDeclarationRule()) {
+					sequence_Declaration(context, (Declaration) semanticObject); 
+					return; 
+				}
+				else break;
+			case ExpressionDslPackage.DECLARATOR:
+				if(context == grammarAccess.getDeclaratorRule()) {
+					sequence_Declarator(context, (Declarator) semanticObject); 
 					return; 
 				}
 				else break;

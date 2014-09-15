@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.AbstractResolvableModel;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.Advice;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.IResolvableModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.IVariableDeclarationReceiver;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
@@ -30,7 +29,6 @@ public class Template extends AbstractResolvableModel<VariableDeclaration, Templ
     private JavaExtension[] javaExtensions;
     private List<VariableDeclaration> declarations;
     private VariableDeclaration[] param;
-    private Advice[] advices;
     private List<Def> defs;
     private IndentationConfiguration indentationConfiguration;
     
@@ -45,14 +43,13 @@ public class Template extends AbstractResolvableModel<VariableDeclaration, Templ
      */
     public Template(String name, ModelImport<Template> extension, TemplateDescriptor descriptor, TypeRegistry registry) 
         throws VilLanguageException {
-        super(descriptor.getImports(), registry);
+        super(descriptor.getImports(), registry, descriptor.getAdvices());
         if (null == name || name.length() == 0) {
             throw new VilLanguageException("no name given", VilLanguageException.ID_SEMANTIC);
         }
         this.name = name;
         this.extension = extension;
         this.javaExtensions = descriptor.getJavaExtensions();
-        this.advices = descriptor.getAdvices();
         this.param = descriptor.getParameter();
         this.indentationConfiguration = descriptor.getIndentationConfiguration();
     }
@@ -125,30 +122,6 @@ public class Template extends AbstractResolvableModel<VariableDeclaration, Templ
             throw new IndexOutOfBoundsException();
         }
         return declarations.get(index);
-    }
-    
-    /**
-     * Get the number of advices of this template.
-     * 
-     * @return The number of advices of this template.
-     */
-    public int getAdviceCount() {
-        return null == advices ? 0 : advices.length;
-    }
-    
-    /**
-     * Get the advices of this template at the specified index.
-     * 
-     * @param index The 0-based index of the advices to be returned.
-     * @return The advices at the given index.
-     * @throws IndexOutOfBoundsException if 
-     *     <code>index &lt; 0 || index &gt;={@link #getAdviceCount()}</code>
-     */
-    public Advice getAdvice(int index) {
-        if (null == advices) {
-            throw new IndexOutOfBoundsException();
-        }
-        return advices[index];
     }
     
     /**
@@ -263,16 +236,6 @@ public class Template extends AbstractResolvableModel<VariableDeclaration, Templ
     }
 
     @Override
-    public boolean isIvmlElement(String name) {
-        boolean result = false;
-        // TODO consider parent?
-        for (int a = 0; !result && a < getAdviceCount(); a++) {
-            result = getAdvice(a).isIvmlElement(name);
-        }
-        return result;
-    }
-
-    @Override
     public Template getParent() {
         Template result;
         if (null == extension) {
@@ -302,5 +265,30 @@ public class Template extends AbstractResolvableModel<VariableDeclaration, Templ
     public boolean isBasicType() {
         return false;
     }
+    
+    @Override
+    public boolean enableDynamicDispatch() {
+        return true;
+    }
 
+    @Override
+    public boolean isPlaceholder() {
+        return false;
+    }
+
+    @Override
+    public IMetaOperation addPlaceholderOperation(String name, int parameterCount, boolean acceptsNamedParameters) {
+        return null;
+    }
+
+    @Override
+    public boolean isActualTypeOf(IMetaType type) {
+        return false; // shall not be handled by IActualTypeProvider
+    }
+    
+    @Override
+    protected void reload() {
+        TemplateModel.INSTANCE.reload(this);
+    }
+    
 }

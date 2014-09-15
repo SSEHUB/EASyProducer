@@ -1,6 +1,7 @@
 package de.uni_hildesheim.sse.reasoning.drools2.functions;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -15,6 +16,23 @@ public class FailedRules {
      * This map is in the form of: (name/id of individual reasoning task, list of failed rules for task).
      */
     private static final Map<String, FailedElements> FAILED_RULES = new HashMap<String, FailedElements>();
+    
+    /**
+     * Creates a new ID for an individual reasoning task.
+     * @param projectName Name of the project that is reasoned on.
+     * @return unique reasoning ID composed from the name of the project and a time when reasoning was started.
+     */
+    public static synchronized String createReasoningID(String projectName) {        
+//        String reasoningID = projectName;
+        String reasoningID = projectName + "_" + System.currentTimeMillis();
+        FailedElements timeStamps = FAILED_RULES.get(reasoningID);
+        if (null != timeStamps) {
+            int randomdigit = (int) (System.nanoTime() % 10);
+            // Recursive call
+            reasoningID = createReasoningID(projectName + randomdigit);
+        } 
+        return reasoningID;
+    }   
     
     /**
      * Creates a new empty list of failed rules for an individual reasoning task.

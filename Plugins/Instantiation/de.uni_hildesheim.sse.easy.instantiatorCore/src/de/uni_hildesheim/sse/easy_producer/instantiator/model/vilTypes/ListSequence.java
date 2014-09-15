@@ -1,3 +1,18 @@
+/*
+ * Copyright 2009-2014 University of Hildesheim, Software Systems Engineering
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes;
 
 import java.util.List;
@@ -75,26 +90,22 @@ public class ListSequence<T> extends AbstractListWrapper<T> implements Sequence<
         return new ListSequence<T>(null, params);
     }
 
-    /**
-     * Does type selection of artifacts.
-     * 
-     * @param type the target type
-     * @return the selected artifacts (the type will be adjusted to the actual
-     *   type for <code>type</code>)
-     */
+    @Override
     @OperationMeta(returnGenerics = IVilType.class)
-    public Sequence<T> selectByType(Class<?> type) {
+    public Sequence<T> selectByType(TypeDescriptor<? extends IVilType> type) {
         return new ListSequence<T>(selectByType(this, type), getParameter());
     }
-    
-    /**
-     * Exclude the elements in <code>sequence</code>.
-     * @param sequence the elements to be excluded
-     * @return this set without the elements in <code>set</code>
-     */
+
+    @Override
     @OperationMeta(returnGenerics = IVilType.class)
     public Sequence<T> excluding(Collection<T> sequence) {
         return new ListSequence<T>(excluding(this, sequence), getParameter());
+    }
+
+    @Override
+    @OperationMeta(returnGenerics = IVilType.class)
+    public Sequence<T> append(Collection<T> sequence) {
+        return new ListSequence<T>(append(this, sequence), getParameter());
     }
 
     @Override
@@ -129,12 +140,31 @@ public class ListSequence<T> extends AbstractListWrapper<T> implements Sequence<
 
     @Override
     public T first() {
-        return getList().get(0);
+        List<T> list = getList();
+        T result;
+        if (0 == list.size()) {
+            result = null;
+        } else {
+            result = list.get(0);
+        }
+        return result;
     }
 
     @Override
     public T last() {
-        return getList().get(size() - 1);
+        List<T> list = getList();
+        T result;
+        if (0 == list.size()) {
+            result = null;
+        } else {
+            result = list.get(size() - 1);
+        }
+        return result;
+    }
+    
+    @Override
+    public int indexOf(T element) {
+        return getList().indexOf(element);
     }
 
 }

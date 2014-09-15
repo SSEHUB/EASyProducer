@@ -4,6 +4,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArraySequ
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArraySet;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Conversion;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationMeta;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Sequence;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
@@ -20,9 +21,10 @@ public class Attribute extends AbstractIvmlVariable {
      * Creates a new attribute instance.
      * 
      * @param attribute the IVML attribute
+     * @param filter the variable filter to apply
      */
-    Attribute(IDecisionVariable attribute) {
-        super(attribute);
+    Attribute(IDecisionVariable attribute, IVariableFilter filter) {
+        super(attribute, filter);
     }
 
     @Override
@@ -117,6 +119,18 @@ public class Attribute extends AbstractIvmlVariable {
     @Conversion
     public static EnumValue convert2EnumValue(Attribute val) {
         return val.getEnumValue();
+    }
+
+    /**
+     * Conversion operation to an EnumValue.
+     * 
+     * @param val the value (variable) to be converted
+     * @return the converted value (may be <b>null</b>, depends on the type of the variable)
+     */
+    @Conversion
+    @OperationMeta(returnGenerics = { DecisionVariable.class } )
+    public static Sequence<DecisionVariable> convert2Sequence(Attribute val) {
+        return val.variables();
     }
 
 }

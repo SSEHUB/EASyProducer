@@ -20,6 +20,7 @@ import de.uni_hildesheim.sse.ivml.Value;
 import de.uni_hildesheim.sse.model.cst.ConstantValue;
 import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
 import de.uni_hildesheim.sse.model.cst.Variable;
+import de.uni_hildesheim.sse.model.cst.VariablePool;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.AttributeAssignment;
 import de.uni_hildesheim.sse.model.varModel.Comment;
@@ -81,6 +82,7 @@ public class TypeContext implements IResolutionScope {
     private ContainableModelElementList implicitDefinitions = new ContainableModelElementList(null);
     private Project project;
     private MessageReceiver messageReceiver;
+    private VariablePool variablePool;
 
     // may support shadowed variables
     private Stack<ContainableModelElementList> directContext = new Stack<ContainableModelElementList>();
@@ -97,6 +99,7 @@ public class TypeContext implements IResolutionScope {
     public TypeContext(Project project, MessageReceiver messageReceiver) {
         this.project = project;
         this.messageReceiver = messageReceiver;
+        this.variablePool = new VariablePool();
     }
 
     /**
@@ -173,7 +176,18 @@ public class TypeContext implements IResolutionScope {
     public Project getProject() {
         return project;
     }
-
+    
+    /**
+     * Obtains a CTS variable node for a given variable declaration, i.e., creates it
+     * or returns it from the variable pool of this context.
+     *  
+     * @param decl the declaration
+     * @return the variable
+     */
+    public final Variable obtainVariable(AbstractVariable decl) {
+        return variablePool.obtainVariable(decl);
+    }
+    
     /**
      * Resolves a given type to a type representation in the IVML object model.
      * 
@@ -296,11 +310,9 @@ public class TypeContext implements IResolutionScope {
     /**
      * Searches for a specified variable.
      * 
-     * @param name
-     *            the name of the variable to search for (may be qualified)
-     * @param type
-     *            the specific variable of datatype to be returned,
-     *            {@link AbstractVariable} is used if <b>null</b>
+     * @param name the name of the variable to search for (may be qualified)
+     * @param type the specific variable of datatype to be returned,
+     *             {@link AbstractVariable} is used if <b>null</b>
      * @return the corresponding variable or <b>null</b>
      * @throws ModelQueryException
      *             in case of semantic problems
@@ -319,6 +331,26 @@ public class TypeContext implements IResolutionScope {
         return result;
     }
 
+    /**
+     * Searches for the use of a specified variable (declaration or compound access).
+     * 
+     * @param name the name of the variable to search for (may be qualified)
+     * @return the corresponding variable or <b>null</b>
+     * @throws ModelQueryException in case of semantic problems
+     */
+    public IModelElement findVariableUse(String name) throws ModelQueryException {
+        IModelElement result = null;
+        // search contexts first, from newest to oldest
+        for (int c = directContext.size() - 1; null == result && c >= 0; c--) {
+            result = ModelQuery.findVariableUse(directContext.get(c), name, null);
+        }
+        if (null == result) {
+            // last resort - ask the project
+            result = ModelQuery.findVariableUse(project, name, null);
+        }
+        return result;
+    }
+    
     /**
      * Finds the specified data type definition.
      * 
@@ -438,7 +470,7 @@ public class TypeContext implements IResolutionScope {
                         throw new TranslatorException(e, object, feature);
                     }
                 } else {
-                    result = new Variable(var);
+                    result = obtainVariable(var);
                 }
             } catch (IvmlException e) {
                 throw new TranslatorException(e, object, feature);
@@ -449,7 +481,7 @@ public class TypeContext implements IResolutionScope {
             result = createValueTree(value.getBValue(), BooleanType.TYPE, object, feature);
         } else if (null != value.getNullValue()) {
             result = new ConstantValue(NullValue.INSTANCE);
-            messageReceiver.warning("'null' values may are currently not supported by the reasoner", object, feature, 
+            messageReceiver.warning("'null' values are currently not fully supported by the reasoner", object, feature, 
                 Message.CODE_IGNORE);
         } else {
             throw new TranslatorException("<no type alternative>", object, feature, ErrorCodes.INTERNAL);
@@ -491,7 +523,9 @@ public class TypeContext implements IResolutionScope {
         throw new IndexOutOfBoundsException();
     }
     
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public IModelElement getParent() {
         return null;
     }
@@ -607,7 +641,7 @@ public class TypeContext implements IResolutionScope {
             setIndexes(elements, sortMap);
             sorter.sortContainedElements(sortMap);
             sortMap.clear();
-            elementSortMaps.remove(sortMap);
+            elementSortMaps.remove(sorter);
         }
     }
     
@@ -615,6 +649,7 @@ public class TypeContext implements IResolutionScope {
      * Clears this type context (for possible reuse).
      */
     public void clear() {
+        variablePool.clear();
         implicitDefinitions.clear();
         project = null;
         directContext.clear();

@@ -1,3 +1,18 @@
+/*
+ * Copyright 2009-2014 University of Hildesheim, Software Systems Engineering
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.uni_hildesheim.sse.model.confModel;
 
 import java.net.URI;
@@ -13,6 +28,7 @@ import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
 import de.uni_hildesheim.sse.model.cst.Variable;
 import de.uni_hildesheim.sse.model.management.VarModel;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
+import de.uni_hildesheim.sse.model.varModel.Attribute;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.FreezeBlock;
@@ -26,6 +42,8 @@ import de.uni_hildesheim.sse.model.varModel.filter.FreezeBlockFinder;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
 import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
 import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
+import de.uni_hildesheim.sse.model.varModel.datatypes.Enum;
+import de.uni_hildesheim.sse.varModel.testSupport.ProjectTestUtilities;
 
 /**
  * This class tests the correct behavior of the configuration.
@@ -275,7 +293,40 @@ public class ConfigurationTest {
         Assert.assertEquals(1, freezeBlock.getFreezableCount());
         IFreezable frozenVar = freezeBlock.getFreezable(0);
         Assert.assertEquals(intFrozen.getName(), frozenVar.getName());
+    }
+     
+    /**
+     * Tests whether attributes are handled correctly inside the configuration.
+     */
+    @Test
+    public void testAttributeHandling() {
+        // Create project with attribute on project and on one variable
+        Enum enum1 = new Enum("Enum1", project, "A", "B");
+        project.add(enum1);
+        Enum enum2 = new Enum("Enum2", project, "C", "D");
+        project.add(enum2);
+        Attribute projectAttr = new Attribute("projectAttribute", enum1, project, project);
+        project.add(projectAttr);
+        project.attribute(projectAttr);
+        DecisionVariableDeclaration decl1 = new DecisionVariableDeclaration("intA", IntegerType.TYPE, project);
+        project.add(decl1);
+        DecisionVariableDeclaration decl2 = new DecisionVariableDeclaration("intB", IntegerType.TYPE, project);
+        project.add(decl2);
+        Attribute vartAttr = new Attribute("variableAttribute", enum2, project, decl2);
+        project.add(vartAttr);
+        decl2.attribute(vartAttr);
+        ProjectTestUtilities.validateProject(project);
         
+        // Create config
+        configuration.refresh();
+        
+        // Test correct number of Attributes in configuration.
+        // var1/decl1 should have one attribute (project attribute)
+        IDecisionVariable var1 = configuration.getDecision(decl1);
+        Assert.assertEquals(1, var1.getAttributesCount());
+        // var2/decl2 should have two attributes (project attribute and variable attribute)
+        IDecisionVariable var2 = configuration.getDecision(decl2);
+        Assert.assertEquals(2, var2.getAttributesCount());
     }
 
 }

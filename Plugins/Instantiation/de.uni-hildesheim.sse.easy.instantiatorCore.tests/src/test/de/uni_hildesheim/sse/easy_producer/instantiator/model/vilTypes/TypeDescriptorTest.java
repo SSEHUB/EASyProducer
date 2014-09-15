@@ -90,7 +90,7 @@ public class TypeDescriptorTest extends AbstractTest {
         } else {
             clsName = cls.getSimpleName();
         }
-        TypeDescriptor<? extends IVilType> descriptor = TypeRegistry.DEFAULT.getType(clsName);
+        TypeDescriptor<? extends IVilType> descriptor = getRegistry().getType(clsName);
         Assert.assertNotNull(descriptor);
         assertOperations(cls, descriptor.getOperations());
         assertOperations(cls, new OperationsIterator(descriptor));
@@ -242,16 +242,16 @@ public class TypeDescriptorTest extends AbstractTest {
      * @param primitiveName the name of the primitive type in Java (may be <b>null</b> to test for 
      *   <code>java.lang.String</code>)
      */
-    private static void testBasicType(Class<?> typeClass, String vilName, Class<?> wrapperClass, String primitiveName) {
-        TypeDescriptor<? extends IVilType> cDesc = TypeRegistry.DEFAULT.getType(typeClass.getName());
+    private void testBasicType(Class<?> typeClass, String vilName, Class<?> wrapperClass, String primitiveName) {
+        TypeDescriptor<? extends IVilType> cDesc = getRegistry().getType(typeClass.getName());
         Assert.assertNotNull(cDesc);
-        TypeDescriptor<? extends IVilType> vDesc = TypeRegistry.DEFAULT.getType(vilName);
+        TypeDescriptor<? extends IVilType> vDesc = getRegistry().getType(vilName);
         Assert.assertNotNull(vDesc);
-        TypeDescriptor<? extends IVilType> wDesc = TypeRegistry.DEFAULT.getType(wrapperClass.getName());
+        TypeDescriptor<? extends IVilType> wDesc = getRegistry().getType(wrapperClass.getName());
         Assert.assertNotNull(wDesc);
         TypeDescriptor<? extends IVilType> pDesc;
         if (null != primitiveName) {
-            pDesc = TypeRegistry.DEFAULT.getType(primitiveName);
+            pDesc = getRegistry().getType(primitiveName);
             Assert.assertNotNull(pDesc);
         } else {
             pDesc = null;

@@ -73,7 +73,7 @@ public class EASyUtils {
         String projectID = ResourcesMgmt.INSTANCE.getIDfromResource(project);
         if (null != projectID) {
             PLPInfo openedPLP = SPLsManager.INSTANCE.getPLP(projectID);
-            if (null == openedPLP) {
+            if (null == openedPLP || openedPLP.isPreliminary()) {
                 EASyPersistencer persistencer = new EASyPersistencer(project.getLocation().toFile());
                 // load method adds automatically the loaded PLP to the SPLsManager
                 persistencer.load();
@@ -195,7 +195,7 @@ public class EASyUtils {
                 VersionRestriction[] vrScript = {new VersionRestriction(projectName, Operator.EQUALS, clonedVersion)};
                 scriptImport.setRestrictions(vrScript);
             }
-            plp.getBuildScript().addImport(scriptImport);
+            plp.addScriptImport(scriptImport);
         }
     }
     

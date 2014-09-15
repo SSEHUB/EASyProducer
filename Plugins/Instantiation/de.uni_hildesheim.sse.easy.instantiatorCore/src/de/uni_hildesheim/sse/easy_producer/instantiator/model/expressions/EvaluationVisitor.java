@@ -106,7 +106,7 @@ public class EvaluationVisitor implements IExpressionVisitor {
 
     @Override
     public Object visitVilTypeExpression(VilTypeExpression typeExpression) throws ExpressionException {
-        return typeExpression.getResolved().getTypeClass();
+        return typeExpression.getResolved(); //.getTypeClass();
     }
     
     @Override

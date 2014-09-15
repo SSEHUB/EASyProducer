@@ -15,6 +15,8 @@ public class CallArgument {
     private String name;
     private Expression expr;
     private TypeDescriptor<? extends IVilType> type;
+    private Object fixedValue;
+    private boolean fixed;
 
     /**
      * Creates a call argument for runtime operation resolution.
@@ -201,10 +203,30 @@ public class CallArgument {
      * @throws ExpressionException in case that visiting fails (e.g., execution)
      */
     public Object accept(IExpressionVisitor visitor) throws ExpressionException {
-        if (null == expr) {
-            throw new ExpressionException("expr is null", ExpressionException.ID_INTERNAL);
+        Object result;
+        if (fixed) {
+            result = fixedValue;
+        } else {
+            if (null == expr) {
+                throw new ExpressionException("expr is null", ExpressionException.ID_INTERNAL);
+            }
+            result = expr.accept(visitor);
         }
-        return expr.accept(visitor);
+        return result;
+    }
+    
+    /**
+     * Fixes the value that will be returned by {@link #accept(IExpressionVisitor)} by calling
+     * {@link #accept(IExpressionVisitor)}.
+     * 
+     * @param visitor the visitor
+     * @return the result of visiting this expression (may be <b>null</b>)
+     * @throws ExpressionException in case that visiting fails (e.g., execution)
+     */
+    public Object fixValue(IExpressionVisitor visitor) throws ExpressionException {
+        fixedValue = accept(visitor);
+        fixed = true;
+        return fixedValue;
     }
 
 }

@@ -26,6 +26,13 @@ public interface IMetaOperation {
     public boolean isStatic();
     
     /**
+     * Returns whether the first parameter is the operand.
+     * 
+     * @return <code>true</code> if the first parameter is the operand, <code>false</code> else
+     */
+    public boolean isFirstParameterOperand();
+    
+    /**
      * Returns the number of parameters.
      * 
      * @return the number of parameter
@@ -76,4 +83,12 @@ public interface IMetaOperation {
      */
     public IMetaType getDeclaringType();
 
+    /**
+     * Returns whether this operation is valid or whether it is a placeholder operation in case that the original
+     * operation cannot be resolved but the script shall remain executable.
+     * 
+     * @return <code>true</code> if this operation is a placeholder, <code>false</code> else
+     */
+    public boolean isPlaceholder();
+    
 }

@@ -75,7 +75,7 @@ public class ImportTranslator {
         VersionRestriction[] restrictions = processVersionedId(conflictStmt.getConflicts());
         // no check for conflicts!
         if (!VarModel.INSTANCE.availableModels().hasModelInfo(name) && Utils.isImportResolutionEnabled()) {
-            new TranslatorException(
+            throw new TranslatorException(
                 "project '" + name + "' cannot be resolved", conflictStmt,
                 IvmlPackage.Literals.CONFLICT_STMT__NAME, ErrorCodes.IMPORT);
         }

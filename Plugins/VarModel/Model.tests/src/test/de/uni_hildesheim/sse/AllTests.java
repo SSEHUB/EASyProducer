@@ -11,11 +11,14 @@ import de.uni_hildesheim.sse.cst.OCLFeatureCallTest;
 import de.uni_hildesheim.sse.cst.ParenthesisTest;
 import de.uni_hildesheim.sse.logger.EASyLoggerFactoryTest;
 import de.uni_hildesheim.sse.logger.JavaLoggerTest;
+import de.uni_hildesheim.sse.model.confModel.AssignmentResolverTest;
 import de.uni_hildesheim.sse.model.confModel.CompoundVariableTest;
 import de.uni_hildesheim.sse.model.confModel.ConfigurationTest;
 import de.uni_hildesheim.sse.model.confModel.DecisionVariableTest;
 import de.uni_hildesheim.sse.model.confModel.SetVariableTest;
+import de.uni_hildesheim.sse.model.cstEvaluation.CstEvaluationTests;
 import de.uni_hildesheim.sse.model.validation.IvmlIdentifierCheckTest;
+import de.uni_hildesheim.sse.model.validation.IvmlValidationVisitorTest;
 import de.uni_hildesheim.sse.model.varModel.datatypes.TypeMapperTests;
 import de.uni_hildesheim.sse.persistency.IVMLWriterTest;
 import de.uni_hildesheim.sse.varModel.ContainableModelElementListTest;
@@ -60,6 +63,7 @@ import de.uni_hildesheim.sse.varModel.values.ValueFactoryTest;
  *
  */
 @RunWith(Suite.class)
+// TODO restructure into sub-test-suites and reference them here (done for cstEvaluation)
 @SuiteClasses({
     ConstraintReplacerTest.class,
     ContainerOperationCallTest.class,
@@ -110,7 +114,10 @@ import de.uni_hildesheim.sse.varModel.values.ValueFactoryTest;
     EASyLoggerFactoryTest.class,
     JavaLoggerTest.class,
     IvmlIdentifierCheckTest.class,
-    TypeMapperTests.class
+    IvmlValidationVisitorTest.class,
+    TypeMapperTests.class,
+    CstEvaluationTests.class,
+    AssignmentResolverTest.class
     })
 public class AllTests {
 

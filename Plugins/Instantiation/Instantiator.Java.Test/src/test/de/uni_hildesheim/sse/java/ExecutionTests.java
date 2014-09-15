@@ -121,5 +121,27 @@ public class ExecutionTests extends AbstractExecutionTest {
             
         });
     }
+    
+    /**
+     * The execution of copy with vil.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testJavaCopy() throws IOException {
+        assertSelfInstantiate("copy", "main", new SelfInstantiationAsserter() {
+            
+            @Override
+            public void assertIn(File base) {
+                File copyBla2 = new File(getArtifactsFolder(), "src2/test/CopyBla2.java");
+                File tempFile = new File(base, "javaCopy/dest/instantiated/test/Bla2.java");
+                assertFileEqualitySafe(tempFile, copyBla2);
+                
+                File copyBla = new File(getArtifactsFolder(), "src2/test/CopyBla.java");
+                tempFile = new File(base, "javaCopy/dest/instantiated/test/Bla.java");
+                assertFileEqualitySafe(tempFile, copyBla);
+            }
+        });
+    }
 
 }

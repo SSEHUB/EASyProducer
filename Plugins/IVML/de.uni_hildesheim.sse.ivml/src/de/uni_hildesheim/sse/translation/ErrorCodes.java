@@ -28,6 +28,16 @@ public class ErrorCodes extends de.uni_hildesheim.sse.dslCore.translation.ErrorC
     public static final int ATTRIBUTION = 20208;
 
     /**
+     * Error or warning due to a variable assignment. 
+     */
+    public static final int ASSIGNMENT = 20209;
+
+    /**
+     * Attempt to freeze the wrong type of elements. 
+     */
+    public static final int FREEZE = 20210;
+    
+    /**
      * Prevents creating instances of this class.
      */
     private ErrorCodes() {

@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.junit.Assert;
+
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Sequence;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.AbstractIvmlVariable;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.Configuration;
@@ -15,6 +16,7 @@ import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.Attribute;
 import de.uni_hildesheim.sse.model.varModel.AttributeAssignment;
 import de.uni_hildesheim.sse.model.varModel.Comment;
+import de.uni_hildesheim.sse.model.varModel.CompoundAccessStatement;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.FreezeBlock;
@@ -184,6 +186,10 @@ class TestVisitor implements IModelVisitor {
         for (int e = 0; e < assignment.getElementCount(); e++) {
             assignment.getElement(e).accept(this);
         }
+    }
+
+    @Override
+    public void visitCompoundAccessStatement(CompoundAccessStatement access) {
     }
     
 }

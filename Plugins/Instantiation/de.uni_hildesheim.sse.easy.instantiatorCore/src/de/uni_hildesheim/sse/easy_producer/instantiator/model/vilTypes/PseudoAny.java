@@ -5,8 +5,9 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes;
  * 
  * @author Holger Eichelberger
  */
+@ClassMeta(name = "Any")
 final class PseudoAny implements IVilType {
-
+    
     /**
      * Prevents external instantiation.
      */

@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: EASy-Producer - Eclipse
 Bundle-SymbolicName: de.uni_hildesheim.sse.easy_producer.eclipse;singleton:=true
-Bundle-Version: 0.10.0
+Bundle-Version: 0.11.2
 Bundle-Activator: de.uni_hildesheim.sse.easy_producer.Activator
 Require-Bundle: 
  org.eclipse.core.runtime,

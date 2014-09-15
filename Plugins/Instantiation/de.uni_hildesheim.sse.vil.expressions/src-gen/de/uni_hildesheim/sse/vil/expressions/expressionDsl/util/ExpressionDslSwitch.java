@@ -275,6 +275,20 @@ public class ExpressionDslSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case ExpressionDslPackage.DECLARATOR:
+      {
+        Declarator declarator = (Declarator)theEObject;
+        T result = caseDeclarator(declarator);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case ExpressionDslPackage.DECLARATION:
+      {
+        Declaration declaration = (Declaration)theEObject;
+        T result = caseDeclaration(declaration);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case ExpressionDslPackage.CALL:
       {
         Call call = (Call)theEObject;
@@ -816,6 +830,38 @@ public class ExpressionDslSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseSubCall(SubCall object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Declarator</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Declarator</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseDeclarator(Declarator object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Declaration</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Declaration</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseDeclaration(Declaration object)
   {
     return null;
   }

@@ -81,5 +81,25 @@ public class ClassWrapper implements IMetaType {
     public TypeRegistry getTypeRegistry() {
         return registry;
     }
+    
+    @Override
+    public boolean enableDynamicDispatch() {
+        return false;
+    }
+
+    @Override
+    public boolean isPlaceholder() {
+        return false;
+    }
+
+    @Override
+    public IMetaOperation addPlaceholderOperation(String name, int parameterCount, boolean acceptsNamedParameters) {
+        return null;
+    }
+
+    @Override
+    public boolean isActualTypeOf(IMetaType type) {
+        return false; // class wrapper shall not be handled by IActualTypeProvider
+    }
 
 }

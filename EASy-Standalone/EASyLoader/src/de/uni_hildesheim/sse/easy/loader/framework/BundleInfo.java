@@ -201,7 +201,7 @@ public class BundleInfo {
         Version result;
         String tmp = attributes.getValue("Bundle-Version");
         if (null == tmp) {
-            result = null;
+            result = new Version("0");
         } else {
             result = new Version(tmp);
         }
@@ -238,7 +238,7 @@ public class BundleInfo {
         if (null != tmp) {
             String[] tmpCp = tmp.split("\\s*,\\s*");
             for (int t = 0; t < tmpCp.length; t++) {
-                if (!tmpCp[t].equals(".")) {
+                if (!tmpCp[t].equals(".") && !tmpCp[t].equals("lib/")) {
                     res.add(tmpCp[t]);
                 }
             }
@@ -276,6 +276,9 @@ public class BundleInfo {
             }
             pos++;
         }
+        if (lastCut != text.length()) {
+            tmp.add(text.substring(lastCut, text.length()));
+        }
         return tmp;
     }
     
@@ -298,7 +301,7 @@ public class BundleInfo {
                 for (int i = 0; i < bundles.size(); i++) {
                     String bundle = bundles.get(i);
                     String name = null;
-                    EasyDependency versionSpec = new EasyDependency(bundle);
+                    EasyDependency versionSpec = new EasyDependency("bundle-symbolic-name:=" + bundle);
                     int pos = bundle.indexOf(";");
                     if (pos > 0) {
                         name = bundle.substring(0, pos);

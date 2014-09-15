@@ -45,25 +45,26 @@ public class ConstantExpressionTest extends AbstractTest {
      * @param value the object value to be tested for
      * @param stringValue a string for implicit conversion (may be <b>null</b> to disable this part)
      */
-    private static void testType(String vilTypeName, Object value, String stringValue) {
+    private void testType(String vilTypeName, Object value, String stringValue) {
+        TypeRegistry registry = getRegistry();
         try {
-            TypeDescriptor<? extends IVilType> type = TypeRegistry.DEFAULT.getType(vilTypeName);
+            TypeDescriptor<? extends IVilType> type = registry.getType(vilTypeName);
             
             // test null
-            ConstantExpression expr = new ConstantExpression(type, null, TypeRegistry.DEFAULT);
+            ConstantExpression expr = new ConstantExpression(type, null, registry);
             Assert.assertNotNull(expr);
             Assert.assertTrue("type must match", type == expr.getType());
             Assert.assertTrue("value must match", null == expr.getValue());
             
             // test direct value
-            expr = new ConstantExpression(type, value, TypeRegistry.DEFAULT);
+            expr = new ConstantExpression(type, value, registry);
             Assert.assertNotNull(expr);
             Assert.assertTrue("type must match", type == expr.getType());
             Assert.assertTrue("value must match", value.equals(expr.getValue()));
             
             // test conversion if specified
             if (null != stringValue) {
-                expr = new ConstantExpression(type, stringValue, TypeRegistry.DEFAULT);
+                expr = new ConstantExpression(type, stringValue, registry);
                 Assert.assertNotNull(expr);
                 Assert.assertTrue("type must match", type == expr.getType());
                 Assert.assertTrue("value must match", stringValue.equals(expr.getValue().toString()));

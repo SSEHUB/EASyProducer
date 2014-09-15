@@ -2,9 +2,9 @@ package de.uni_hildesheim.sse.easy.cmd;
 
 import java.util.Map;
 
+import de.uni_hildesheim.sse.easy_producer.core.mgmt.PLPInfo;
+import de.uni_hildesheim.sse.easy_producer.core.mgmt.VilArgumentProvider;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.Executor;
-import de.uni_hildesheim.sse.easy_producer.persistence.mgmt.PLPInfo;
-import de.uni_hildesheim.sse.easy_producer.persistence.mgmt.VilArgumentProvider;
 
 /**
  * A generic VIL argument provider which just maps all arguments given in terms
@@ -35,6 +35,36 @@ public class GenericVilArgumentProvider extends VilArgumentProvider {
                 executor.addCustomArgument(entry.getKey(), entry.getValue());
             }
         }
+    }
+
+    @Override
+    public boolean acceptsFreeArguments() {
+        return false;
+    }
+
+    @Override
+    public String getFreeArguments() {
+        return "";
+    }
+
+    @Override
+    public String getName() {
+        return "Command line argument provider";
+    }
+
+    @Override
+    public String getParameterName() {
+        return "";
+    }
+
+    @Override
+    public String getParameterType() {
+        return "";
+    }
+
+    @Override
+    public void setFreeArguments(String arg0) {
+        // No action needed
     }
 
 }

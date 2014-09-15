@@ -5,9 +5,18 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationMeta;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Sequence;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
+import de.uni_hildesheim.sse.model.confModel.ConfigurationException;
 import de.uni_hildesheim.sse.model.confModel.ContainerVariable;
+import de.uni_hildesheim.sse.model.confModel.IAssignmentState;
+import de.uni_hildesheim.sse.model.confModel.IConfigurationElement;
+import de.uni_hildesheim.sse.model.confModel.IConfigurationVisitor;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
+import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
+import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
+import de.uni_hildesheim.sse.model.varModel.values.CompoundValue;
+import de.uni_hildesheim.sse.model.varModel.values.ContainerValue;
+import de.uni_hildesheim.sse.model.varModel.values.NullValue;
 import de.uni_hildesheim.sse.model.varModel.values.ReferenceValue;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
 
@@ -22,15 +31,18 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
     private static final ValueVisitor VALUE_VISITOR = new ValueVisitor();
     protected IDecisionVariable origVariable;
     protected IDecisionVariable variable;
+    protected IVariableFilter filter;
     private DecisionVariable[] nested;
     
     /**
      * Creates a new IVML variable.
      * 
      * @param variable the variable to be wrapped
+     * @param filter the variable filter to apply
      */
-    protected AbstractIvmlVariable(IDecisionVariable variable) {
+    protected AbstractIvmlVariable(IDecisionVariable variable, IVariableFilter filter) {
         origVariable = variable; // keep the variable before dereferencing it
+        this.filter = filter;
         Value val = variable.getValue();
         if (val instanceof ReferenceValue) {
             // dereference
@@ -43,12 +55,189 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
 
     @Override
     protected void initializeNested() {
-        if (null == nested && variable.getNestedElementsCount() > 0) {
-            nested = new DecisionVariable[variable.getNestedElementsCount()];
-            for (int n = 0; n < nested.length; n++) {
-                nested[n] = new DecisionVariable(variable.getNestedElement(n));
+        if (null == nested) {
+            if (variable.getNestedElementsCount() > 0) {
+                nested = new DecisionVariable[variable.getNestedElementsCount()];
+                for (int n = 0; n < nested.length; n++) {
+                    nested[n] = new DecisionVariable(variable.getNestedElement(n), filter);
+                }
+            } else {
+                Value val = variable.getValue();
+                if (val instanceof ContainerValue) {
+                    ContainerValue cont = (ContainerValue) val;
+                    nested = new DecisionVariable[cont.getElementSize()];
+                    for (int n = 0; n < nested.length; n++) {
+                        nested[n] = new DecisionVariable(new DecVar(variable, cont.getElement(n), null), filter);
+                    }
+                }
             }
         }
+    }
+    
+    /**
+     * Implements a dynamic mapping of nested (container) values to temporary decision variables.
+     * Nested container values do not have attributes.
+     * 
+     * @author Holger Eichelberger
+     */
+    private static class DecVar implements IDecisionVariable {
+
+        private IDecisionVariable parent;
+        private Value value;
+        private DecisionVariableDeclaration decl;
+        private IDecisionVariable[] nested;
+        
+        /**
+         * Creates a temporary decision variable.
+         * 
+         * @param parent the parent variable
+         * @param value the actual value
+         * @param decl the related decision variable declaration (may be <b>null</b>, then a temporary one is created)
+         */
+        private DecVar(IDecisionVariable parent, Value value, DecisionVariableDeclaration decl) {
+            this.parent = parent;
+            this.value = value;
+            if (null == decl) {
+                this.decl = new DecisionVariableDeclaration("", value.getType(), parent.getDeclaration().getParent());
+            } else {
+                this.decl = decl;
+            }
+        }
+        
+        /**
+         * Initializes nested variables.
+         */
+        private void initializeNested() {
+            if (null == nested) {
+                if (value instanceof CompoundValue) {
+                    CompoundValue comp = (CompoundValue) value;
+                    Compound type = (Compound) comp.getType();
+                    nested = new IDecisionVariable[type.getElementCount()];
+                    for (int i = 0; i < nested.length; i++) {
+                        DecisionVariableDeclaration d = type.getElement(i);
+                        nested[i] = new DecVar(this, comp.getNestedValue(d.getName()), d);
+                    }
+                } else if (value instanceof ContainerValue) {
+                    ContainerValue cont = (ContainerValue) value;
+                    nested = new IDecisionVariable[cont.getElementSize()];
+                    for (int i = 0; i < nested.length; i++) {
+                        nested[i] = new DecVar(this, cont.getElement(i), null);
+                    }
+                }
+            }
+        }
+        
+        @Override
+        public IConfigurationElement getParent() {
+            return parent;
+        }
+
+        @Override
+        public de.uni_hildesheim.sse.model.confModel.Configuration getConfiguration() {
+            return parent.getConfiguration();
+        }
+
+        @Override
+        public boolean isNested() {
+            return true;
+        }
+
+        @Override
+        public IAssignmentState getState() {
+            return parent.getState();
+        }
+
+        @Override
+        public void setValue(Value value, IAssignmentState state, IConfigurationElement nested)
+            throws ConfigurationException {
+            // temporary only, do not allow setting
+        }
+
+        @Override
+        public void freeze() {
+            // temporary only, do not allow freeze
+        }
+
+        @Override
+        public void unfreeze(IAssignmentState state) {
+            // temporary only, do not allow freeze
+        }
+
+        @Override
+        public void freeze(String nestedElement) {
+            // temporary only, do not allow freeze
+        }
+
+        @Override
+        public AbstractVariable getDeclaration() {
+            return decl;
+        }
+
+        @Override
+        public void accept(IConfigurationVisitor visitor) {
+            visitor.visitDecisionVariable(this);
+        }
+
+        @Override
+        public Value getValue() {
+            return value;
+        }
+
+        @Override
+        public void setValue(Value value, IAssignmentState state) throws ConfigurationException {
+            // temporary only, do not allow setting
+        }
+
+        @Override
+        public void setHistoryValue(Value value, IAssignmentState state) throws ConfigurationException {
+            // temporary only, do not allow setting
+        }
+
+        @Override
+        public int getNestedElementsCount() {
+            initializeNested();
+            return null == nested ? 0 : nested.length;
+        }
+
+        @Override
+        public IDecisionVariable getNestedElement(int index) {
+            initializeNested();
+            if (null == nested) {
+                throw new IndexOutOfBoundsException();
+            } 
+            return nested[index];
+        }
+
+        @Override
+        public int getAttributesCount() {
+            return parent.getAttributesCount();
+        }
+
+        @Override
+        public IDecisionVariable getAttribute(int index) {
+            return parent.getAttribute(index);
+        }
+
+        @Override
+        public int getNestedDepth() {
+            return 0;
+        }
+
+        @Override
+        public boolean isVisible() {
+            return false;
+        }
+
+        @Override
+        public boolean hasValue() {
+            return value != null;
+        }
+
+        @Override
+        public boolean hasNullValue() {
+            return value == null || NullValue.INSTANCE == value;
+        }
+        
     }
 
     /**
@@ -219,7 +408,7 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
      */
     public Configuration selectAll() {
         initializeNested();
-        return new Configuration(variable.getConfiguration(), nested);
+        return new Configuration(variable.getConfiguration(), nested, filter);
     }
 
     /**
@@ -278,6 +467,15 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
     @Invisible
     public IDecisionVariable getDecisionVariable() {
         return variable;
+    }
+    
+    /**
+     * Returns the declaration of this variable in terms of VIL/VTL instances.
+     * 
+     * @return the declaration
+     */
+    public IvmlDeclaration getDeclaration() {
+        return new IvmlDeclaration(variable.getDeclaration());
     }
 
 }

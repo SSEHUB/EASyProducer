@@ -12,6 +12,8 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.WriterVisit
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Template;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Constants;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
 
 /**
@@ -334,12 +336,21 @@ public class BuildlangWriter extends WriterVisitor<VariableDeclaration> implemen
     public Object visitMapExpression(MapExpression map) throws ExpressionException {
         print("map(");
         for (int v = 0; v < map.getVariablesCount(); v++) {
+            TypeDescriptor<? extends IVilType> givenType = map.getGivenType(v);
+            if (null != givenType) {
+                print(givenType.getVilName());
+                print(" ");
+            }
             if (v > 0) {
                 print(",");
             }
             print(map.getVariable(v).getName());
         }
-        print("=");
+        if (map.isColonSeparator()) {
+            print(Constants.COLON);
+        } else {
+            print(Constants.ASSIGNMENT);
+        }
         map.getExpression().accept(this);
         print(") ");
         try {

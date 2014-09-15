@@ -67,6 +67,7 @@ import de.uni_hildesheim.sse.model.varModel.ModelElement;
 import de.uni_hildesheim.sse.model.varModel.ModelQueryException;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Container;
+import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Enum;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.MetaType;
@@ -89,6 +90,8 @@ import de.uni_hildesheim.sse.utils.messages.IIdentifiable;
  */
 public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translation.ExpressionTranslator {
 
+    private AssignmentDetector assignmentDetector = new AssignmentDetector();
+    
     /**
      * Creates an expression translator (to be used within this package only).
      */
@@ -304,15 +307,43 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
         ImplicationExpression expr, TypeContext context, IModelElement parent)
         throws TranslatorException {
         ConstraintSyntaxTree result = processAssignmentExpression(
-                expr.getLeft(), context, parent);
+            expr.getLeft(), context, parent);
         if (null != expr.getRight()) {
+            if (!expr.getRight().isEmpty()) {
+                checkForAssigment(result, true, expr, IvmlPackage.Literals.IMPLICATION_EXPRESSION__LEFT);
+            }
             for (ImplicationExpressionPart part : expr.getRight()) {
+                ConstraintSyntaxTree cst = processAssignmentExpression(part.getEx(), context, parent);
+                checkForAssigment(cst, false, part, IvmlPackage.Literals.IMPLICATION_EXPRESSION_PART__EX);
                 result = new OCLFeatureCall(result, part.getOp(),
-                    context.getProject(), processAssignmentExpression(
-                        part.getEx(), context, parent));
+                    context.getProject(), cst);
             }
         }
         return result;
+    }
+
+    /**
+     * Checks for an assignment operation directly in <code>cst</code> and emits an error
+     * or a warning in case that the operation is found.
+     * 
+     * @param cst the constraint syntax tree to be checked
+     * @param error emit an error or a warning
+     * @param cause the causing EObject
+     * @param causingFeature the causing feature in <code>cause</code>
+     */
+    private void checkForAssigment(ConstraintSyntaxTree cst, boolean error, EObject cause, 
+        EStructuralFeature causingFeature) {
+        assignmentDetector.setMaxLevel(AssignmentDetector.NO_DEEP_TRAVERSAL);
+        cst.accept(assignmentDetector);
+        if (assignmentDetector.isAssignment()) {
+            if (error) {
+                error("assignments are not allowed here", cause, causingFeature, ErrorCodes.ASSIGNMENT);
+            } else {
+                warning("discouraged use in expression as assignments are always true", cause, 
+                    causingFeature, ErrorCodes.ASSIGNMENT);
+            }
+        }
+        assignmentDetector.clear();
     }
     
     /**
@@ -334,9 +365,14 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
         throws TranslatorException {
         ConstraintSyntaxTree result = processEqualityExpression(expr.getLeft(), context, parent);
         if (null != expr.getRight()) {
+            if (!expr.getRight().isEmpty()) {
+                checkForAssigment(result, false, expr, IvmlPackage.Literals.LOGICAL_EXPRESSION__LEFT);
+            }
             for (LogicalExpressionPart part : expr.getRight()) {
+                ConstraintSyntaxTree cst = processEqualityExpression(part.getEx(), context, parent);
+                checkForAssigment(result, false, part, IvmlPackage.Literals.LOGICAL_EXPRESSION_PART__EX);
                 result = new OCLFeatureCall(result, part.getOp(),
-                    context.getProject(), processEqualityExpression(part.getEx(), context, parent));
+                    context.getProject(), cst);
             }
         }
         return result;
@@ -370,6 +406,7 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
             ConstraintSyntaxTree rhs = null;
             if (null != expr.getRight().getEx()) {
                 rhs = processRelationalExpression(right.getEx(), context, parent);
+                checkForAssigment(rhs, false, right, IvmlPackage.Literals.EQUALITY_EXPRESSION__RIGHT);
             } else if (null != right.getCollection()) {
                 try {
                     rhs = processCollectionInitializer(result.inferDatatype(),
@@ -405,9 +442,11 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
         throws TranslatorException {
         ConstraintSyntaxTree result = processAdditiveExpression(expr.getLeft(), context, parent);
         if (null != expr.getRight()) {
+            checkForAssigment(result, false, expr, IvmlPackage.Literals.RELATIONAL_EXPRESSION__LEFT);
             String op = expr.getRight().getOp();
-            result = new OCLFeatureCall(result, op, context.getProject(),
-                    processAdditiveExpression(expr.getRight().getEx(), context, parent));
+            ConstraintSyntaxTree cst = processAdditiveExpression(expr.getRight().getEx(), context, parent);
+            checkForAssigment(cst, false, expr, IvmlPackage.Literals.RELATIONAL_EXPRESSION__RIGHT);
+            result = new OCLFeatureCall(result, op, context.getProject(), cst);
         }
         return result;
     }
@@ -431,10 +470,13 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
         throws TranslatorException {
         ConstraintSyntaxTree result = processMultiplicativeExpression(expr.getLeft(), context, parent);
         if (null != expr.getRight()) {
+            if (!expr.getRight().isEmpty()) {
+                checkForAssigment(result, false, expr, IvmlPackage.Literals.ADDITIVE_EXPRESSION__LEFT);
+            }
             for (AdditiveExpressionPart part : expr.getRight()) {
-                result = new OCLFeatureCall(result, part.getOp(),
-                        context.getProject(), processMultiplicativeExpression(
-                                part.getEx(), context, parent));
+                ConstraintSyntaxTree cst = processMultiplicativeExpression(part.getEx(), context, parent);
+                checkForAssigment(cst, false, part, IvmlPackage.Literals.ADDITIVE_EXPRESSION_PART__EX);
+                result = new OCLFeatureCall(result, part.getOp(), context.getProject(), cst);
             }
         }
         return result;
@@ -459,9 +501,10 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
             IModelElement parent) throws TranslatorException {
         ConstraintSyntaxTree result = processUnaryExpression(expr.getLeft(), context, parent);
         if (null != expr.getRight()) {
-            result = new OCLFeatureCall(result, expr.getRight().getOp(),
-                    context.getProject(), processUnaryExpression(expr
-                            .getRight().getExpr(), context, parent));
+            checkForAssigment(result, false, expr, IvmlPackage.Literals.MULTIPLICATIVE_EXPRESSION__LEFT);
+            ConstraintSyntaxTree cst = processUnaryExpression(expr.getRight().getExpr(), context, parent);
+            checkForAssigment(cst, false, expr, IvmlPackage.Literals.MULTIPLICATIVE_EXPRESSION__RIGHT);
+            result = new OCLFeatureCall(result, expr.getRight().getOp(), context.getProject(), cst);
         }
         return result;
     }
@@ -591,6 +634,58 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
     }
 
     /**
+     * Processes a valid declaration.
+     * 
+     * @param lhs the operand expression the set operation runs on
+     * @param op the set operation
+     * @param context the type context to be considered
+     * @param parent the actual (intended) parent of the constraint to be created
+     * @param declaration the declaration to be processed
+     * @param declarators the declarators to be modified as a side effect
+     * @throws TranslatorException in case that the processing of the <code>lhs</code> must be terminated abnormally
+     */
+    private void processDeclaration(ConstraintSyntaxTree lhs, SetOp op, TypeContext context, IModelElement parent, 
+        Declaration declaration, List<DecisionVariableDeclaration> declarators) throws TranslatorException {
+        IDatatype type = null;
+        if (null != declaration.getType()) {
+            // if specified, take type from declaration (may collide)
+            type = context.resolveType(declaration.getType());
+        } else {
+            // if not specified, take type from collection
+            try {
+                IDatatype collectionType = lhs.inferDatatype();
+                if (collectionType instanceof Container) {
+                    type = ((Container) collectionType).getContainedType();
+                } else {
+                    error("left hand of " + IvmlKeyWords.CONTAINER_OP_ACCESS + " is not a collection", op,
+                        IvmlPackage.Literals.SET_OP__DECL_EX, ErrorCodes.LHS_NOT_COLLECTION);
+                }
+            } catch (IvmlException e) {
+                error(e, op, IvmlPackage.Literals.SET_OP__DECL_EX);
+            }
+        }
+        ConstraintSyntaxTree valueEx;
+        if (null != declaration.getInit()) {
+            valueEx = processExpression(type, declaration.getInit(), context, parent);
+        } else {
+            valueEx = null;
+        }
+        // process the default values
+        EList<String> ids = declaration.getId();
+        for (int i = 0; i < ids.size(); i++) {
+            DecisionVariableDeclaration declarator = new DecisionVariableDeclaration(ids.get(i), type, parent);
+            if (null != valueEx) {
+                try {
+                    declarator.setValue(valueEx);
+                } catch (IvmlException e) {
+                    error(e, op, IvmlPackage.Literals.SET_OP__DECL_EX);
+                }
+            }
+            declarators.add(declarator);
+        }
+    }
+
+    /**
      * Processes a set operation.
      * 
      * @param lhs
@@ -616,48 +711,14 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
         // declarators are local variable declarations for iteration
         for (int d = 0; d < declarations.size(); d++) {
             Declaration declaration = declarations.get(d);
-            ConstraintSyntaxTree valueEx;
-            if (null != declaration.getInit()) {
-                valueEx = processExpression(declaration.getInit(), context,
-                        parent);
+            List<String> ids = declaration.getId();
+            if (ids != null && ids.size() > 0 && ids.get(0) != null) {
+                processDeclaration(lhs, op, context, parent, declaration, declarators);
             } else {
-                valueEx = null;
+                throw new TranslatorException("set operations require at least one declarator", declaration, 
+                    IvmlPackage.Literals.SET_OP__DECL, ErrorCodes.SYNTAX);
             }
-            IDatatype type = null;
-            if (null != declaration.getType()) {
-                // if specified, take type from declaration (may collide)
-                type = context.resolveType(declaration.getType());
-            } else {
-                // if not specified, take type from collection
-                try {
-                    IDatatype collectionType = lhs.inferDatatype();
-                    if (collectionType instanceof Container) {
-                        type = ((Container) collectionType).getContainedType();
-                    } else {
-                        error("left hand of "
-                                + IvmlKeyWords.CONTAINER_OP_ACCESS
-                                + " is not a collection", op,
-                                IvmlPackage.Literals.SET_OP__DECL_EX,
-                                ErrorCodes.LHS_NOT_COLLECTION);
-                    }
-                } catch (IvmlException e) {
-                    error(e, op, IvmlPackage.Literals.SET_OP__DECL_EX);
-                }
-            }
-            // process the default values
-            EList<String> ids = declaration.getId();
-            for (int i = 0; i < ids.size(); i++) {
-                DecisionVariableDeclaration declarator = new DecisionVariableDeclaration(
-                        ids.get(i), type, parent);
-                if (null != valueEx) {
-                    try {
-                        declarator.setValue(valueEx);
-                    } catch (IvmlException e) {
-                        error(e, op, IvmlPackage.Literals.SET_OP__DECL_EX);
-                    }
-                }
-                declarators.add(declarator);
-            }
+            
         }
         context.pushLayer(parent);
         // construct container operation call
@@ -669,9 +730,12 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
         }
         try {
             lhs = new ContainerOperationCall(lhs, op.getName(),
-                    processExpression(op.getDeclEx(), context, parent), decls);
+                    processExpression(op.getDeclEx(), context, parent), decls); 
+            lhs.inferDatatype();
         } catch (TranslatorException e) {
             throw e;
+        } catch (CSTSemanticException e) {
+            throw new TranslatorException(e, op, IvmlPackage.Literals.SET_OP__DECL);
         } finally {
             context.popLayer();
         }
@@ -898,6 +962,11 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
                     attr = ModelElement.findAttribute(context.getProject(), name);
                 }
                 if (null != attr) {
+                    if (lhs instanceof ConstantValue) {
+                        throw new TranslatorException("project attributes are templates to declare attributes of "
+                            + "variables", access, IvmlPackage.Literals.EXPRESSION_ACCESS__NAME, 
+                            CSTSemanticException.UNKNOWN_ELEMENT);
+                    }
                     result = new AttributeVariable(lhs, attr);
                 }
             }
@@ -930,16 +999,7 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
     private ConstraintSyntaxTree processCollectionInitializer(IDatatype lhsType,
             EObject expr, CollectionInitializer initializer, TypeContext context,
             IModelElement parent) throws TranslatorException, IvmlException {
-        ConstraintSyntaxTree result;
-        if (Constants.USE_NEW_LITERALS) {
-            // TODO when decided, join method here
-            result = processLiteralCollection(lhsType, initializer, context, parent);        
-        } else {
-            Object[] values = collectionInitializerToArray(lhsType, initializer, context, parent);
-            values = translateToValues(values);
-            result = new ConstantValue(ValueFactory.createValue(lhsType, values));
-        }
-        return result;
+        return processLiteralCollection(lhsType, initializer, context, parent);        
     }
     
     /**
@@ -987,117 +1047,21 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
             try {
                 String sTypeName = Utils.getQualifiedNameString(initializer.getType());
                 specificType = context.findType(sTypeName, null);
+                if (null == specificType) {
+                    throw new TranslatorException("type '" + sTypeName + "' is not defined", initializer,
+                        IvmlPackage.Literals.COLLECTION_INITIALIZER__TYPE, ErrorCodes.TYPE_CONSISTENCY);
+                }
                 if (!lhsType.isAssignableFrom(specificType)) {
                     throw new TranslatorException("collection type '" + IvmlDatatypeVisitor.getQualifiedType(lhsType)
                         + "' does not match specified entry type'" + sTypeName + "'", initializer,
                         IvmlPackage.Literals.COLLECTION_INITIALIZER__TYPE, ErrorCodes.TYPE_CONSISTENCY);
                 }
-                lhsType = specificType;
+                //lhsType = specificType;
             } catch (ModelQueryException e) {
                 throw new TranslatorException(e, initializer, IvmlPackage.Literals.COLLECTION_INITIALIZER__TYPE);
             }
         }
         return specificType;
-    }
-    
-    /**
-     * Transforms a collection initializer to an array.
-     * 
-     * @param lhsType the left hand side which defines the type (part)
-     * @param initializer the initializer
-     * @param context the type context for resolving variables etc.
-     * @param parent the parent element
-     * @return the created array
-     * @throws TranslatorException in case that the processing of the <code>initializer</code> 
-     *   must be terminated abnormally
-     * @throws CSTSemanticException in case that the processing of the <code>initializer</code> 
-     *   must be terminated abnormally
-     */
-    private Object[] collectionInitializerToArray(IDatatype lhsType, CollectionInitializer initializer, 
-        TypeContext context, IModelElement parent) throws TranslatorException, CSTSemanticException {
-        Object[] result = null;
-        IDatatype specificType = getSpecificType(lhsType, initializer, context);
-        if (null != specificType) {
-            lhsType = specificType;            
-        }
-        ExpressionListOrRange init = initializer.getInit();
-        int withoutId = 0;
-        int withId = 0;
-        int entryCount = 0;
-        EList<ExpressionListEntry> entryList;
-        if (null != init) {
-            entryList = init.getList();
-            entryCount = entryList.size();
-            for (int e = 0; e < entryCount; e++) {
-                String name = entryList.get(e).getName();
-                if (null != name) {
-                    withId++;
-                } else {
-                    withoutId++;
-                }
-            }
-        } else {
-            entryCount = 0;
-            entryList = null;
-        }
-        boolean allWithId = (withId == entryCount);
-        boolean allWithoutId = (withoutId == entryCount);
-        if (!allWithId && !allWithoutId) {
-            throw new TranslatorException("value entries must either all have names or none", init, 
-                IvmlPackage.Literals.EXPRESSION_LIST_ENTRY__VALUE, ErrorCodes.INITIALIZER_CONSISTENCY);
-        }
-        boolean isContainer = lhsType instanceof Container;
-        boolean isCompound = lhsType instanceof Compound;
-        if (isContainer || isCompound) {
-            if (isContainer && allWithId && entryCount > 0) {
-                throw new TranslatorException("container initialization must not have name-value assignments", init,
-                    IvmlPackage.Literals.EXPRESSION_LIST_OR_RANGE__LIST, ErrorCodes.INITIALIZER_CONSISTENCY);
-            } else if (isCompound && allWithoutId && entryCount > 0) {
-                throw new TranslatorException("compound initialization requires name-value assignments", init,
-                    IvmlPackage.Literals.EXPRESSION_LIST_OR_RANGE__LIST, ErrorCodes.INITIALIZER_CONSISTENCY);
-            }
-            int typeAddOn = 0;
-            if (isCompound && null != specificType) {
-                typeAddOn += 2;
-            }
-            result = new Object[typeAddOn + (allWithId ? 2 * entryCount : entryCount)];
-            int valuePos = 0;
-            if (typeAddOn > 0) {
-                result[valuePos++] = CompoundValue.SPECIAL_SLOT_NAME_TYPE;
-                result[valuePos++] = specificType;
-            }
-            for (int e = 0; e < entryCount; e++) {
-                ExpressionListEntry entry = entryList.get(e);
-                DecisionVariableDeclaration field = null;
-                if (isCompound) {
-                    field = ((Compound) lhsType).getElement(entry.getName());
-                    if (null == field) {
-                        throw new TranslatorException("field '" + entry.getName() + "' does not exist in '"
-                            + lhsType.getName() + "'", entry, IvmlPackage.Literals.EXPRESSION_LIST_ENTRY__VALUE,
-                            ErrorCodes.UNKNOWN_ELEMENT);
-                    }
-                }
-                if (null != entry.getName()) {
-                    result[valuePos++] = entry.getName();
-                }
-                if (null != entry.getValue()) {
-                    result[valuePos++] = processLogicalExpression(entry.getValue(), context, parent);
-                }
-                if (null != entry.getCollection()) {
-                    IDatatype contained;
-                    if (null != field) {
-                        contained = field.getType();
-                    } else {
-                        contained = ((Container) lhsType).getContainedType();
-                    }
-                    result[valuePos++] = collectionInitializerToArray(
-                        contained, entry.getCollection(), context, parent);
-                }
-            }
-        } else {
-            throwNonContainerException(lhsType);
-        }
-        return result;
     }
 
     /**
@@ -1118,6 +1082,7 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
     private ConstraintSyntaxTree processLiteralCollection(IDatatype lhsType, CollectionInitializer initializer, 
         TypeContext context, IModelElement parent) throws TranslatorException, CSTSemanticException, IvmlException {
         ConstraintSyntaxTree result = null;
+        lhsType = DerivedDatatype.resolveToBasis(lhsType);
         IDatatype specificType = getSpecificType(lhsType, initializer, context);
         if (null != specificType) {
             lhsType = specificType;            
@@ -1297,7 +1262,6 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
         }
         return allConst;
     }
-    
     
     /**
      * Throws a non-container exception.

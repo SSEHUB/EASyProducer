@@ -190,6 +190,22 @@ public class FileArtifact extends CompositeArtifact implements IFileSystemArtifa
         Path path = Path.convert(val);
         return convert(path);
     }
+    
+    /**
+     * Conversion operation.
+     * 
+     * @param val the value to be converted
+     * @return the converted value
+     */
+    @Invisible
+    @Conversion
+    public static FileArtifact convert(IFileSystemArtifact val) {
+        FileArtifact convertedValue = null;
+        if (val instanceof FileArtifact) {
+            convertedValue = (FileArtifact) val;
+        }
+        return convertedValue;
+    }
 
     /**
      * Conversion operation.

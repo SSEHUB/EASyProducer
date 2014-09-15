@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project default="all">
-    <target name="all">
-        <javadoc access="public" author="true" classpath="W:\eclipse37\eclipse\plugins\org.eclipse.equinox.preferences_3.4.2.v20120111-2020.jar;W:\eclipse37\eclipse\plugins\org.eclipse.equinox.weaving.hook_1.0.100.HEAD.jar;W:\eclipse37\eclipse\plugins\org.eclipse.osgi_3.7.2.v20120110-1415.jar;W:\eclipse37\eclipse\plugins\org.eclipse.equinox.registry_3.5.101.R37x_v20110810-1611.jar;W:\eclipse37\eclipse\plugins\org.eclipse.equinox.common_3.6.0.v20110523.jar;W:\eclipse37\eclipse\plugins\org.eclipse.core.jobs_3.5.101.v20120113-1953.jar;../de.uni_hildesheim.sse.integration.common/bin;W:\eclipse37\eclipse\plugins\org.eclipse.core.resources_3.7.101.v20120125-1505.jar;W:\eclipse37\eclipse\plugins\org.hamcrest.core_1.1.0.v20090501071000.jar;W:\eclipse37\eclipse\plugins\org.eclipse.core.runtime.compatibility.registry_3.5.0.v20110505\runtime_registry_compatibility.jar;W:\eclipse37\eclipse\plugins\org.junit_4.8.2.v4_8_2_v20110321-1705\junit.jar;W:\eclipse37\eclipse\plugins\org.eclipse.core.runtime_3.7.0.v20110110.jar;W:\eclipse37\eclipse\plugins\org.eclipse.equinox.app_1.3.100.v20110321.jar;W:\eclipse37\eclipse\plugins\org.eclipse.core.contenttype_3.4.100.v20110423-0524.jar;../Model/bin;lib/xstream/xstream-1.4.3.jar" destdir="doc" doctitle="Optional model persistency" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" packagenames="de.uni_hildesheim.sse.persistency.xml" source="1.6" sourcepath="src" splitindex="true" use="true" version="true"/>
-		<delete file="javadoc.zip"/>
-		<zip destfile="javadoc.zip" basedir="doc"/>
-    </target>
-</project>

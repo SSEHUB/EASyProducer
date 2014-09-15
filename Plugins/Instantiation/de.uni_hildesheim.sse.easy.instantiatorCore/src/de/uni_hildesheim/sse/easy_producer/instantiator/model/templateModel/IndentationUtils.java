@@ -73,7 +73,7 @@ public class IndentationUtils {
      * whitespaces at each line start.
      * 
      * @param content the text to operate on
-     * @param indentation the actual indentation in number of whitespaces (positive number)
+     * @param indentation the actual indentation in number of whitespaces (<b>positive number</b>)
      * @return <code>content</code> without indentation
      */
     public static String insertIndentation(String content, int indentation) {

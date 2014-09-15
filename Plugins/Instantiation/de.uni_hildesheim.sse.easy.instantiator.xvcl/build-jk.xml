@@ -11,6 +11,7 @@
 	<path id ="includes">
 		<!-- Model -->
 		<pathelement path="${libs.model}"/>
+		<pathelement path="${libs.utils}"/>
         <!-- Lib -->
 		<fileset dir="lib">
 			<include name="**/*.jar" />
@@ -51,6 +52,9 @@
 				<include name="lib/**/*" />
 				<include name="about.html" />
 				<include name="about_files/**/*" />
+				<include name="processor.properties" />
+				<include name="logging.properties" />
+				<include name="default" />
 			</fileset>
 		</copy>
 		<jar destfile="${build.jar.dir}/${ant.project.name}.jar" basedir="${build.classes.dir}" manifest="META-INF/MANIFEST.MF"/>

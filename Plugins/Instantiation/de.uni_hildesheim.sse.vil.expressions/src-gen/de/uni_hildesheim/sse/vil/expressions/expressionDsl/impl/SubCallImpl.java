@@ -23,6 +23,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <p>
  * The following features are implemented:
  * <ul>
+ *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.SubCallImpl#getType <em>Type</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.SubCallImpl#getCall <em>Call</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.SubCallImpl#getArrayEx <em>Array Ex</em>}</li>
  * </ul>
@@ -32,6 +33,26 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  */
 public class SubCallImpl extends MinimalEObjectImpl.Container implements SubCall
 {
+  /**
+   * The default value of the '{@link #getType() <em>Type</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getType()
+   * @generated
+   * @ordered
+   */
+  protected static final String TYPE_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getType() <em>Type</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getType()
+   * @generated
+   * @ordered
+   */
+  protected String type = TYPE_EDEFAULT;
+
   /**
    * The cached value of the '{@link #getCall() <em>Call</em>}' containment reference.
    * <!-- begin-user-doc -->
@@ -71,6 +92,29 @@ public class SubCallImpl extends MinimalEObjectImpl.Container implements SubCall
   protected EClass eStaticClass()
   {
     return ExpressionDslPackage.Literals.SUB_CALL;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String getType()
+  {
+    return type;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setType(String newType)
+  {
+    String oldType = type;
+    type = newType;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, ExpressionDslPackage.SUB_CALL__TYPE, oldType, type));
   }
 
   /**
@@ -197,6 +241,8 @@ public class SubCallImpl extends MinimalEObjectImpl.Container implements SubCall
   {
     switch (featureID)
     {
+      case ExpressionDslPackage.SUB_CALL__TYPE:
+        return getType();
       case ExpressionDslPackage.SUB_CALL__CALL:
         return getCall();
       case ExpressionDslPackage.SUB_CALL__ARRAY_EX:
@@ -215,6 +261,9 @@ public class SubCallImpl extends MinimalEObjectImpl.Container implements SubCall
   {
     switch (featureID)
     {
+      case ExpressionDslPackage.SUB_CALL__TYPE:
+        setType((String)newValue);
+        return;
       case ExpressionDslPackage.SUB_CALL__CALL:
         setCall((Call)newValue);
         return;
@@ -235,6 +284,9 @@ public class SubCallImpl extends MinimalEObjectImpl.Container implements SubCall
   {
     switch (featureID)
     {
+      case ExpressionDslPackage.SUB_CALL__TYPE:
+        setType(TYPE_EDEFAULT);
+        return;
       case ExpressionDslPackage.SUB_CALL__CALL:
         setCall((Call)null);
         return;
@@ -255,12 +307,31 @@ public class SubCallImpl extends MinimalEObjectImpl.Container implements SubCall
   {
     switch (featureID)
     {
+      case ExpressionDslPackage.SUB_CALL__TYPE:
+        return TYPE_EDEFAULT == null ? type != null : !TYPE_EDEFAULT.equals(type);
       case ExpressionDslPackage.SUB_CALL__CALL:
         return call != null;
       case ExpressionDslPackage.SUB_CALL__ARRAY_EX:
         return arrayEx != null;
     }
     return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString()
+  {
+    if (eIsProxy()) return super.toString();
+
+    StringBuffer result = new StringBuffer(super.toString());
+    result.append(" (type: ");
+    result.append(type);
+    result.append(')');
+    return result.toString();
   }
 
 } //SubCallImpl

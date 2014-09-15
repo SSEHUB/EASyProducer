@@ -9,4 +9,5 @@ Bundle-ClassPath: .
 Require-Bundle: org.junit;bundle-version="4.8.1",
  de.uni-hildesheim.sse.easy.instantiator.velocity;bundle-version="1.7.13",
  de.uni-hildesheim.sse.easy.instantiator.velocitylib;bundle-version="1.7.4",
- org.apache.commons.io;bundle-version="2.0.1"
+ org.apache.commons.io;bundle-version="2.0.1",
+ de.uni_hildesheim.sse.reasoning.drools2;bundle-version="0.1.4"

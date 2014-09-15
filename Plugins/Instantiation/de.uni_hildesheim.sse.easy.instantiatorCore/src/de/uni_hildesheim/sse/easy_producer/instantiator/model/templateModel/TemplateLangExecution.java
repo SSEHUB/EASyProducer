@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactTypes;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.ExecutionVisitor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.IResolvableModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.ModelCallExpression;
@@ -21,7 +22,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.String
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Collection;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.StringValueHelper;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypes;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 import de.uni_hildesheim.sse.utils.modelManagement.IndentationConfiguration;
 
@@ -118,9 +119,9 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
     
     @Override
     public Object visitTemplate(Template template) throws VilLanguageException {
+        environment.switchContext(template); // initial context, assumption that method is only called from outside
         tracer.visitTemplate(template);
         visitModelHeader(template);
-        environment.switchContext(template);
         Def main = null;
         for (int d = 0; null == main && d < template.getDefCount(); d++) {
             Def def = template.getDef(d);
@@ -147,12 +148,16 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
     @Override
     public Object visitDef(Def def) throws VilLanguageException {
         Object result;
-        try {
-            tracer.visitDef(def, environment);
-            result = visitTemplateBlock(def); // increases indentation
-            tracer.visitedDef(def, environment, result);
-        } catch (VilLanguageException e) {
-            throw new VilLanguageException(e);
+        if (def.isPlaceholder()) {
+            result = null;
+        } else {
+            try {
+                tracer.visitDef(def, environment);
+                result = visitTemplateBlock(def); // increases indentation
+                tracer.visitedDef(def, environment, result);
+            } catch (VilLanguageException e) {
+                throw new VilLanguageException(e);
+            }
         }
         return result;
     }
@@ -258,7 +263,8 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
     public Object visitLoop(LoopStatement loop) throws VilLanguageException {
         Object object;
         try {
-            object = loop.getContainerExpression().accept(this);
+            Expression expr = loop.getContainerExpression();
+            object = convertToContainer(expr, expr.accept(this), "loop");
         } catch (ExpressionException e) {
             throw new VilLanguageException(e);
         }
@@ -337,35 +343,40 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
 
     @Override
     public Object visitContentStatement(ContentStatement cnt) throws VilLanguageException {
+        String content;
         try {
             // search for \r\n, \r, \n followed by indentation*step whitespaces or tabs +1
-            String content = StringReplacer.substitute(cnt.getContent(), environment, expressionParser, this);
-            int indentation = environment.getIndentation();
-            if (indentation > 0) {
-                IndentationConfiguration config = environment.getIndentationConfiguration();
-                // experiment... is this sufficient for '-indentation?
-                int indent = indentation + environment.getIndentationConfiguration().getAdditional();
-                content = IndentationUtils.removeIndentation(content, indent, config.getTabEmulation());
-            }
-            if (null != cnt.getIndentExpression()) {
-                Object val = cnt.getIndentExpression().accept(this);
-                if (val instanceof Integer) {
-                    int forced = ((Integer) val).intValue();
-                    content = IndentationUtils.insertIndentation(content, forced);
-                } else {
-                    throw new VilLanguageException("indentation value is no integer", 
-                        VilLanguageException.ID_SEMANTIC);
+            content = StringReplacer.substitute(cnt.getContent(), environment, expressionParser, this);
+            if (null != content) {
+                int indentation = environment.getIndentation();
+                if (indentation > 0) {
+                    IndentationConfiguration config = environment.getIndentationConfiguration();
+                    // experiment... is this sufficient for '-indentation?
+                    int indent = indentation + environment.getIndentationConfiguration().getAdditional();
+                    content = IndentationUtils.removeIndentation(content, indent, config.getTabEmulation());
                 }
-            }
-            if (cnt.printLineEnd()) {
-                out.println(content);
-            } else {
-                out.print(content);
+                if (null != cnt.getIndentExpression()) {
+                    Object val = cnt.getIndentExpression().accept(this);
+                    if (val instanceof Integer) {
+                        int forced = ((Integer) val).intValue();
+                        if (forced > 0) { // precondition of insertIndentation
+                            content = IndentationUtils.insertIndentation(content, forced);
+                        }
+                    } else {
+                        throw new VilLanguageException("indentation value is no integer", 
+                            VilLanguageException.ID_SEMANTIC);
+                    }
+                }
+                if (cnt.printLineEnd()) {
+                    out.println(content);
+                } else {
+                    out.print(content);
+                }
             }
         } catch (ExpressionException e) {
             throw new VilLanguageException(e);
         }
-        return Boolean.TRUE;
+        return content;
     }
     
     @Override
@@ -410,8 +421,8 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
         Map<String, VariableDeclaration> varMap) throws VilLanguageException {
         if (model.getParameterCount() >= 2) {
             // check default sequence instead, config, target
-            boolean ok = TypeRegistry.configurationType().isAssignableFrom(model.getParameter(0).getType());
-            ok &= TypeRegistry.artifactType().isAssignableFrom(model.getParameter(1).getType());
+            boolean ok = IvmlTypes.configurationType().isAssignableFrom(model.getParameter(0).getType());
+            ok &= ArtifactTypes.artifactType().isAssignableFrom(model.getParameter(1).getType());
             if (ok) {
                 // take sure values
                 setModelArgument(model.getParameter(0), getParameter(PARAM_CONFIG_SURE));

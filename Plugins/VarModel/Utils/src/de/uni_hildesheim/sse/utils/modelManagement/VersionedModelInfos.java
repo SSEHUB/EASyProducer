@@ -1,3 +1,18 @@
+/*
+ * Copyright 2009-2013 University of Hildesheim, Software Systems Engineering
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.uni_hildesheim.sse.utils.modelManagement;
 
 import java.io.File;
@@ -108,7 +123,7 @@ public class VersionedModelInfos <M extends IModel> {
         int size = infos.size();
         for (int i = 0; i < size; i++) {
             ModelInfo<M> tmp = infos.get(i);
-            if ((null == uri && tmp.getLocation() == uri) || uri.equals(tmp.getLocation())) {
+            if ((null == uri && tmp.getLocation() == uri) || (null != uri && uri.equals(tmp.getLocation()))) {
                 result = tmp;
             }
         }
@@ -219,6 +234,10 @@ public class VersionedModelInfos <M extends IModel> {
                     if (null == result) { 
                         result = searchOnParentLevel(uri, modelPath);
                     }
+                    // search in folders on the same level
+                    if (null == result) {
+                        result = searchOnSameFolderLevel(uri, modelPath);
+                    }
                 }
                 // containment in model path
                 if (null != modelPath) {
@@ -312,6 +331,43 @@ public class VersionedModelInfos <M extends IModel> {
         }
         return result;
     }
+    
+    /**
+     * Search in folders on the level of the parent folder of <code>uri</code>.
+     * 
+     * @param uri the URI to start searching 
+     * @param modelPath additional URIs prefixes which shall be considered for importing,
+     *   similar to the Java classpath 
+     * @return the matching model information but only if this is unique
+     */
+    private ModelInfo<M> searchOnSameFolderLevel(URI uri, List<String> modelPath) {
+        List<ModelInfo<M>> tmp = new ArrayList<ModelInfo<M>>();
+        File uriFile = new File(uri).getParentFile();
+        File searchFolder = uriFile.getParentFile();
+        if (null != searchFolder) {
+            File[] files = searchFolder.listFiles();
+            if (null != files) {
+                for (int f = 0; f < files.length; f++) {
+                    File file = files[f];
+                    if (file.isDirectory() && !file.equals(uriFile)) {
+                        String searchUriText = file.toURI().normalize().toString();
+                        ModelInfo<M> searchResult = search(searchUriText, modelPath);
+                        if (null != searchResult) {
+                            tmp.add(searchResult);
+                        }
+                    }
+                }
+            }
+        }
+        ModelInfo<M> result;
+        if (1 == tmp.size()) {
+            result = tmp.get(0);
+        } else {
+            result = null; // if not found or multiple are found
+        }
+        return result;
+    }
+    
     
     /**
      * Checks whether the <code>searchUriText</code> (with precedence) ore one of the 

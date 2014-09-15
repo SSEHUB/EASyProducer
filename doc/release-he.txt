@@ -1,4 +1,2 @@
-IVML: resolution of dependent compounds (10038)
-IVML: namspace fix
-IVML: lookup-resolution
-VIL/VTL: version restrictions for VTL and instantiate (10057)
+- IVML types in VIL/VTL via @advice #234
+- null values in VIL/VTL #235

@@ -11,7 +11,9 @@ import java.util.Map;
 import org.apache.commons.io.IOUtils;
 import org.aspectj.bridge.IMessage;
 import org.aspectj.bridge.MessageHandler;
+import org.aspectj.bridge.context.CompilationAndWeavingContext;
 import org.aspectj.tools.ajc.Main;
+import org.aspectj.weaver.Dump;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FileArtifact;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FileUtils;
@@ -48,7 +50,13 @@ public class AspectJ extends AbstractFileInstantiator {
     @OperationMeta(returnGenerics = FileArtifact.class)
     public static Set<FileArtifact> aspectJ(Path source, Path target, Map<String, Object> other) 
         throws ArtifactException {
-        return aspectJ(source.selectAll(), target, other);
+        Set<FileArtifact> result;
+        if (source.getAbsolutePath().isDirectory()) {
+            result = aspectJ(null, source.getAbsolutePath(), target, other);
+        } else {
+            result = aspectJ(source.selectAll(), null, target, other);
+        }
+        return result;
     }
     
     /**
@@ -63,6 +71,23 @@ public class AspectJ extends AbstractFileInstantiator {
     @OperationMeta(returnGenerics = FileArtifact.class)
     public static Set<FileArtifact> aspectJ(Collection<FileArtifact> source, Path target, Map<String, Object> other) 
         throws ArtifactException {
+        return aspectJ(source, null, target, other);
+    }
+
+    /**
+     * Compiles a source path to a target path.
+     * 
+     * @param source the source artifacts
+     * @param sourceRoot optional source root to search Java and AspectJ files within, may be <b>null</b>, 
+     *     supersedes <code>source</code> if given
+     * @param target the target path
+     * @param other the other parameter for the Java compiler, without leading "-"
+     * @return the created artifacts
+     * @throws ArtifactException in case that artifact creation fails
+     */
+    private static Set<FileArtifact> aspectJ(Collection<FileArtifact> source, File sourceRoot, Path target, 
+        Map<String, Object> other) throws ArtifactException {
+        
         long timestamp = PathUtils.normalizedTime();
         Main compiler = new Main();
 
@@ -88,10 +113,16 @@ public class AspectJ extends AbstractFileInstantiator {
             args.add("-" + CLASSPATH_ARG_NAME);
             args.add(classpath);
         }
-        for (FileArtifact fa : source) {
-            args.add(fa.getPath().getAbsolutePath().getAbsolutePath());
+        args.add("-source");
+        args.add("1.5");
+        if (null != sourceRoot) {
+            addAll(sourceRoot, args);
+        } else {
+            for (FileArtifact fa : source) {
+                args.add(fa.getPath().getAbsolutePath().getAbsolutePath());
+            }
         }
-        if (source.isEmpty()) {
+        if (null == sourceRoot && source.isEmpty()) {
             throw new ArtifactException("no source files to compile", ArtifactException.ID_INSUFFICIENT_ARGUMENT);
         }
         
@@ -107,13 +138,44 @@ public class AspectJ extends AbstractFileInstantiator {
             }
             throw new ArtifactException(tmp.toString(), ArtifactException.ID_RUNTIME_EXECUTION);
         }
-        
+        compiler.quit();
+        CompilationAndWeavingContext.reset();
+        Dump.reset();
+        try {
+            // try to wait for file system sync - some class files are sometimes missing
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+        }
+
         List<FileArtifact> result = new ArrayList<FileArtifact>();
         ScanResult<FileArtifact> scanResult = new ScanResult<FileArtifact>(result);
         FileUtils.scan(targetPath.getAbsoluteFile(), target.getArtifactModel(), timestamp, scanResult, 
             FileArtifact.class);
         scanResult.checkForException();
+        
         return new ListSet<FileArtifact>(result, FileArtifact.class);
+    }
+    
+    /**
+     * Adds all Java and AJ files to <code>args</code>.
+     * 
+     * @param file the file or folder to start from
+     * @param args the arguments to be modified as a side effect
+     */
+    private static final void addAll(File file, List<String> args) {
+        if (file.isDirectory()) {
+            File[] files = file.listFiles();
+            if (null != files) {
+                for (int f = 0; f < files.length; f++) {
+                    addAll(files[f], args);
+                }
+            }
+        } else {
+            String name = file.getName();
+            if (name.endsWith(".java") || name.endsWith(".aj")) {
+                args.add(file.getAbsolutePath());
+            }
+        }
     }
 
     /**

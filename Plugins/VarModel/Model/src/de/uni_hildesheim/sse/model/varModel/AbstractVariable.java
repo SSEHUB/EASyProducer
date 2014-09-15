@@ -1,3 +1,18 @@
+/*
+ * Copyright 2009-2013 University of Hildesheim, Software Systems Engineering
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.uni_hildesheim.sse.model.varModel;
 
 import de.uni_hildesheim.sse.Bundle;
@@ -100,6 +115,10 @@ public abstract class AbstractVariable extends ContainableModelElement implement
     public void setValue(Object... values) throws ValueDoesNotMatchTypeException {
         if (null == values) {
             defaultValue = null;
+        } else if (1 == values.length && values[0] instanceof Value) {
+            defaultValue = new ConstantValue((Value) values[0]);
+        } else if (1 == values.length && values[0] instanceof ConstantValue) {
+            defaultValue = (ConstantValue) values[0];
         } else {
             defaultValue = new ConstantValue(ValueFactory.createValue(type, values));
         }
@@ -131,37 +150,26 @@ public abstract class AbstractVariable extends ContainableModelElement implement
      * @return <code>true</code> if they are equal, <code>false</code> else
      */
     public boolean isSame(AbstractVariable var) {
-        return getName().equals(var.getName()) && getType().equals(var.getType()); 
+        return getQualifiedName().equals(var.getQualifiedName()) && getType().equals(var.getType()); 
     }
     
     @Override
     public boolean equals(Object obj) {
-        //Two objects are equal if they instances of the same class and have the same hashCode
         boolean equals = false;
-        
-        if (obj instanceof AbstractVariable) {
-            equals = this.hashCode() == obj.hashCode();
+        if (null != obj && getClass().equals(obj.getClass())) { // due to attributes
+            AbstractVariable objVar = (AbstractVariable) obj;
+            equals = isSame(objVar);
         }
-        
         return equals;
     }
     
     @Override
     public int hashCode() {
-        //Two Abstract Variables are equal if they have the same qualified (including parent) name and type.
         int hashCode = getQualifiedName().hashCode();
         int typeHashCode = type.hashCode();
         if (0 != typeHashCode) {
             hashCode *= typeHashCode;
         }
-        if (getParent() != getTopLevelParent()) {
-            int parentCode = getParent().getQualifiedName().hashCode();
-            
-            if (0 != parentCode) {
-                hashCode *= parentCode;
-            }
-        }
-        
         return hashCode;
     }
     

@@ -2,7 +2,7 @@
 <feature
       id="de.uni_hildesheim.sse.easy_producer.instantiation.velocity_feature"
       label="Velocity Instantiatior"
-      version="0.7.0"
+      version="0.7.1"
       provider-name="University of Hildesheim - SSE">
 
    <description url="http://velocity.apache.org/">
@@ -35,14 +35,14 @@ limitations under the License.
          id="de.uni-hildesheim.sse.easy.instantiator.velocity"
          download-size="0"
          install-size="0"
-         version="1.8.0"
+         version="1.8.1"
          unpack="false"/>
 
    <plugin
          id="de.uni-hildesheim.sse.easy.instantiator.velocitylib"
          download-size="0"
          install-size="0"
-         version="1.8.0"
+         version="1.8.1"
          unpack="false"/>
 
 </feature>

@@ -220,6 +220,16 @@ public class ExpressionDslAdapterFactory extends AdapterFactoryImpl
         return createSubCallAdapter();
       }
       @Override
+      public Adapter caseDeclarator(Declarator object)
+      {
+        return createDeclaratorAdapter();
+      }
+      @Override
+      public Adapter caseDeclaration(Declaration object)
+      {
+        return createDeclarationAdapter();
+      }
+      @Override
       public Adapter caseCall(Call object)
       {
         return createCallAdapter();
@@ -727,6 +737,36 @@ public class ExpressionDslAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createSubCallAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.Declarator <em>Declarator</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.Declarator
+   * @generated
+   */
+  public Adapter createDeclaratorAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.Declaration <em>Declaration</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.Declaration
+   * @generated
+   */
+  public Adapter createDeclarationAdapter()
   {
     return null;
   }

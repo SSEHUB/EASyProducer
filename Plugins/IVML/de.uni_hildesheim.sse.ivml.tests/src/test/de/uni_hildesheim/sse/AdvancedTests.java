@@ -5,10 +5,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-import org.junit.Test;
 import org.junit.Assert;
+import org.junit.Test;
 
-import de.uni_hildesheim.sse.Config;
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
 import de.uni_hildesheim.sse.model.management.VarModel;
 import de.uni_hildesheim.sse.model.varModel.ModelQueryException;
@@ -133,6 +132,17 @@ public class AdvancedTests extends AbstractTest {
     @Test
     public void testFreeze() throws IOException {
         assertEqual(createFile("freeze"), "freezes", "0");
+    }
+
+    /**
+     * Tests freezes (fails due to freezing a type).
+     * 
+     * @throws IOException
+     *             should not occur
+     */
+    @Test
+    public void testFreezeFail() throws IOException {
+        assertEqual(createFile("freezeFail"), "freezeFail", "0", ErrorCodes.FREEZE);
     }
 
     /**
@@ -265,6 +275,26 @@ public class AdvancedTests extends AbstractTest {
     @Test
     public void testOpDef() throws IOException {
         assertEqual(createFile("opDef"), "testopdef", "0");
+    }
+
+    /**
+     * Tests operation definitions indicating dynamic dispatch and typedefs (contributed by QualiMaster).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testOpDefDispatch2() throws IOException {
+        assertEqual(createFile("opDefDispatch2"), "testopdefDispatch2", "0");
+    }
+    
+    /**
+     * Tests operation definitions indicating dynamic dispatch (contributed by QualiMaster).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testOpDefDispatch() throws IOException {
+        assertEqual(createFile("opDefDispatch"), "testopdefDispatch", "0");
     }
 
     /**
@@ -410,15 +440,7 @@ public class AdvancedTests extends AbstractTest {
      */
     @Test
     public void testOpDefRecursive() throws IOException {
-        int[] expectedErrors;
-        if (Config.ENABLE_RECURSIVE_OPERATION_DEFINITIONS) {
-            expectedErrors = null;
-        } else {
-            expectedErrors = new int[2];
-            expectedErrors[0] = CSTSemanticException.UNKNOWN_OPERATION;
-            expectedErrors[1] = CSTSemanticException.UNKNOWN_OPERATION;
-        }
-        assertEqual(createFile("opDefRecursive"), "testopdefRecursive", "0", expectedErrors);
+        assertEqual(createFile("opDefRecursive"), "testopdefRecursive", "0", null);
     }
 
     /**
@@ -512,4 +534,22 @@ public class AdvancedTests extends AbstractTest {
         assertEqual(createFile("compoundQualifiesProject2"), null, null);
     }
 
+    /**
+     * Test whether variables can be exported in an interface using their full qualified decision name.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testFQDNInInterfaces() throws IOException {
+        assertEqual(createFile("FQDN_in_Interfaces"), null, null);
+    }
+    
+    /**
+     * Test whether a value can be assigned to an exported enumeration.
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testExportedEnumType() throws IOException {
+        assertEqual(createFile("ExportedEnumType"), null, null);
+    }
 }

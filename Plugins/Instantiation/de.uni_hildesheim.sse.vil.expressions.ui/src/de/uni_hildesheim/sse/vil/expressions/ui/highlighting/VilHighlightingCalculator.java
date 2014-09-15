@@ -28,7 +28,7 @@ public class VilHighlightingCalculator implements ISemanticHighlightingCalculato
      * The regex which identifies the string to be highlighted (single string).
      * Example: "$target/resources/" --> identifies: $target
      */
-    private static final String SIMPLE_HIGHLIGHT_REGEX = "\\$\\s*.*?/"; 
+    private static final String SIMPLE_HIGHLIGHT_REGEX = "\\$\\s*.*?[/\"]"; 
 
     @Override
     public void provideHighlightingFor(XtextResource resource, IHighlightedPositionAcceptor acceptor) {

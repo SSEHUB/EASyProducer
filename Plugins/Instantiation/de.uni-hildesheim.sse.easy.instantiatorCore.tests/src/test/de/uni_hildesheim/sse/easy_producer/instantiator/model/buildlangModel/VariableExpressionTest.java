@@ -55,7 +55,7 @@ public class VariableExpressionTest extends AbstractTest {
             }
             CallArgument param1 = new CallArgument(new VariableExpression(xVar));
             CallArgument param2 = new CallArgument(
-                 new ConstantExpression(iDesc, Integer.valueOf(2), TypeRegistry.DEFAULT));
+                 new ConstantExpression(iDesc, Integer.valueOf(2), getRegistry()));
             CallExpression ex = new CallExpression(null, "+", param1, param2);
             TypeDescriptor<? extends IVilType> eDesc = ex.inferType();
             Assert.assertNotNull("result type must not be null", eDesc);

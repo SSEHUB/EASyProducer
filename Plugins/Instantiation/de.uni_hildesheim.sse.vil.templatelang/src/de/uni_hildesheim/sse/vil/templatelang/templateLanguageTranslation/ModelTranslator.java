@@ -39,6 +39,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Temp
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.VariableDeclaration;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.utils.modelManagement.IndentationConfiguration;
@@ -71,9 +72,6 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
     private ExpressionTranslator expressionTranslator;
     private Resolver resolver;
     
-    // a temporary model for resolving recursive calls - not nice but temporarily adding them to template fails
-    private Template recursiveResolutionModel;
-    
     /**
      * Creates the model translator.
      */
@@ -81,12 +79,6 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
         super(new ExpressionTranslator(), new Resolver(new TypeRegistry(TypeRegistry.DEFAULT)));
         expressionTranslator = getExpressionTranslator();
         resolver = getResolver();
-        try {
-            recursiveResolutionModel  = new Template("$$", null, new TemplateDescriptor(), resolver.getTypeRegistry());
-            resolver.setRecursiveResolutionModel(recursiveResolutionModel);
-        } catch (VilLanguageException e) {
-            e.printStackTrace();
-        }
     }
     
     /**
@@ -104,18 +96,17 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
         Template result = null;
         boolean pushed = false;
         int errorCount = getErrorCount();
-// TODO build up dynamic types
         ResourceRegistry.register(tpl.eResource(), resolver.getTypeRegistry());
         try {
             TemplateDescriptor desc = new TemplateDescriptor();
             Imports<Template> imports = processImports(tpl.getImports());
             desc.setImports(imports);
+            desc.setAdvices(processAdvices(tpl.getAdvices(), uri));
             
             processJavaExtensions(tpl, desc);
             desc.setParameter(resolveParameters(tpl.getParam()), resolver);
             ModelImport<Template> extension = getExtensionImport(tpl.getExt(), imports, tpl, 
                 TemplateLangPackage.Literals.LANGUAGE_UNIT__EXT);
-            desc.setAdvices(processAdvices(tpl.getAdvices(), uri));
             if (null != tpl.getIndent()) {
                 desc.setIndentationConfiguration(processIndentHint(tpl.getIndent()));
             }
@@ -133,9 +124,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
                 new ArrayList<de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit>());
             resolver.enumerateImports(result);
             if (null != tpl.getDefs()) {
-                List<VilDef> tmp = new ArrayList<VilDef>(); // otherwise... concurrent modification exception -> select
-                tmp.addAll(tpl.getDefs());
-                processDefs(tmp, result);
+                processDefs(tpl, result);
             }
             if (registerSuccessful && errorCount == getErrorCount()) {
                 // required if models in the same file refer to each other
@@ -292,45 +281,39 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
      * @param defs the defs to be processed
      * @param template the target template to store the defs in
      */
-    protected void processDefs(List<VilDef> defs, Template template) {
-        int count;
-        do {
-            count = defs.size();
-            processDefs(defs, template, false);
-            if (count == defs.size()) {
-                break;
-            }
-        } while (count > 0);
-        if (defs.size() > 0) {
-            processDefs(defs, template, true);
-        }
-    }
-
-    /**
-     * Processes a set of template definitions.
-     * 
-     * @param defs the defs to be processed
-     * @param template the target template to store the defs in
-     * @param force if <code>true</code> a failing variable creation will be recorded as an error, 
-     *   <code>false</code> failing creations will be ignored
-     */
-    private void processDefs(List<VilDef> defs, Template template, boolean force) {
-        Iterator<VilDef> iter = defs.iterator();
-        while (iter.hasNext()) {
-            VilDef def = iter.next();
+    protected void processDefs(de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit tpl, 
+        Template template) {
+        Map<String, DefInfo> signatures = new HashMap<String, DefInfo>();
+        List<VilDef> defs = new ArrayList<VilDef>();
+        defs.addAll(tpl.getDefs()); // avoid concurrent modifications with xText (select function in other languages)
+        for (int d = 0; d < defs.size(); d++) {
             try {
-                template.addDef(processDef(def, template));
-                iter.remove();
-            } catch (TranslatorException e) {
-                if (force) {
-                    error(e);
+                VilDef vilDef = defs.get(d);
+                Def def = processDef(defs.get(d), template);
+                String fSig = def.getSignature() + "[" + template.getName() + ']';
+                if (signatures.containsKey(fSig)) {
+                    error("duplicated template definition", vilDef, TemplateLangPackage.Literals.VIL_DEF__ID, 
+                        ErrorCodes.REDEFINITION);
+                } else {
+                    DefInfo info = new DefInfo(vilDef, def);
+                    signatures.put(fSig, info);
+                    template.addDef(def);
                 }
+            } catch (TranslatorException e) {
+                error(e);
+            }
+        }
+        for (DefInfo info : signatures.values()) {
+            try {
+                processDefBody(info);
+            } catch (TranslatorException e) {
+                error(e);
             }
         }
     }
 
     /**
-     * Processes a (sub-)template definition.
+     * Processes a (sub-)template definition header.
      * 
      * @param def the sub-template
      * @param template the target template to store the def in
@@ -338,30 +321,35 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
      * @throws TranslatorException in case that processing the definition fail
      */
     private Def processDef(VilDef def, Template template) throws TranslatorException {
-        Def result = null;
+        VariableDeclaration[] param = resolveParameters(def.getParam());
+        TypeDescriptor<? extends IVilType> specifiedType = null;
+        if (null != def.getType()) {
+            specifiedType = getExpressionTranslator().processType(def.getType(), resolver);
+        }
+        return new Def(def.getId(), param, null, specifiedType, template);
+    }
+
+    /**
+     * Processes a (sub-)template body.
+     * 
+     * @param info the def information object relating Ecore and model instance
+     * @throws TranslatorException in case that processing the definition fail
+     */
+    private void processDefBody(DefInfo info) throws TranslatorException{
+        Def def = info.getDef();
+        VilDef vilDef = info.getVilDef();
         resolver.pushLevel();
+        for (int p = 0; p < def.getParameterCount(); p++) {
+            resolver.add(def.getParameter(p));
+        }
+        def.setBody(processBlock(vilDef.getStmts()));
         try {
-            VariableDeclaration[] param = resolveParameters(def.getParam());
-            resolver.add(param);
-            TypeDescriptor<? extends IVilType> specifiedType = null;
-            if (null != def.getType()) {
-                specifiedType = getExpressionTranslator().processType(def.getType(), resolver);
-            }
-            result = new Def(def.getId(), param, null, specifiedType, template); 
-            recursiveResolutionModel.addDef(result);
-            result.setBody(processBlock(def.getStmts()));
-            recursiveResolutionModel.removeDef(result);
-            try {
-                result.inferType();
-            } catch (VilLanguageException e) {
-                throw new TranslatorException(e, def, TemplateLangPackage.Literals.VIL_DEF__STMTS);
-            }
-        } catch (TranslatorException e) {
-            throw e;
+            def.inferType();
+        } catch (VilLanguageException e) {
+            throw new TranslatorException(e, vilDef, TemplateLangPackage.Literals.VIL_DEF__STMTS);
         } finally {
             resolver.popLevel();
         }
-        return result; 
     }
     
     /**
@@ -394,30 +382,32 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
      */
     private ITemplateElement processStatement(Stmt stmt) throws TranslatorException {
         ITemplateElement result = null;
-        if (null != stmt.getAlt()) {
-            result = processAlternative(stmt.getAlt());
-        } else if (null != stmt.getBlock()) {
-            resolver.pushLevel();
-            try {
-                result = new TemplateBlock(processBlock(stmt.getBlock()));
-            } catch (TranslatorException e) {
-                throw e;
-            } finally {
-                resolver.popLevel();
+        if (null != stmt) {
+            if (null != stmt.getAlt()) {
+                result = processAlternative(stmt.getAlt());
+            } else if (null != stmt.getBlock()) {
+                resolver.pushLevel();
+                try {
+                    result = new TemplateBlock(processBlock(stmt.getBlock()));
+                } catch (TranslatorException e) {
+                    throw e;
+                } finally {
+                    resolver.popLevel();
+                }
+            } else if (null != stmt.getCtn()) {
+                result = processContent(stmt.getCtn(), resolver);
+            } else if (null != stmt.getExprStmt()) {
+                result = processExpressionStatement(stmt.getExprStmt());
+            } else if (null != stmt.getLoop()) {
+                result = processLoop(stmt.getLoop());
+            } else if (null != stmt.getMulti()) {
+                warning("multi selection is currently not supported", stmt.getMulti(), 
+                    TemplateLangPackage.Literals.STMT__MULTI, 0);
+            } else if (null != stmt.getSwitch()) {
+                result = processSwitch(stmt.getSwitch());
+            } else if (null != stmt.getVar()) {
+                result = getExpressionTranslator().processVariableDeclaration(stmt.getVar(), resolver);
             }
-        } else if (null != stmt.getCtn()) {
-            result = processContent(stmt.getCtn(), resolver);
-        } else if (null != stmt.getExprStmt()) {
-            result = processExpressionStatement(stmt.getExprStmt());
-        } else if (null != stmt.getLoop()) {
-            result = processLoop(stmt.getLoop());
-        } else if (null != stmt.getMulti()) {
-            warning("multi selection is currently not supported", stmt.getMulti(), 
-                TemplateLangPackage.Literals.STMT__MULTI, 0);
-        } else if (null != stmt.getSwitch()) {
-            result = processSwitch(stmt.getSwitch());
-        } else if (null != stmt.getVar()) {
-            result = getExpressionTranslator().processVariableDeclaration(stmt.getVar(), resolver);
         }
         return result;
     }
@@ -473,8 +463,13 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
             throw new TranslatorException(e, loop, TemplateLangPackage.Literals.LOOP__EXPR);
         }
         if (!exprType.isCollection()) {
-            throw new TranslatorException("loop expression must be of type collection rather than " 
-                + exprType.getVilName(), loop, TemplateLangPackage.Literals.LOOP__EXPR, ErrorCodes.TYPE_CONSISTENCY);
+            OperationDescriptor conversion = exprType.getConversionToSequence();
+            if (null == conversion) {
+                throw new TranslatorException("loop expression must be of type collection rather than " 
+                    + exprType.getVilName(), loop, TemplateLangPackage.Literals.LOOP__EXPR, ErrorCodes.TYPE_CONSISTENCY);
+            } else {
+                exprType = conversion.getReturnType();
+            }
         }
         if (0 == exprType.getParameterCount()) {
             throw new TranslatorException("loop expression is not generic", loop, 
@@ -605,7 +600,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
         if (null != expr.getVar()) {
             VariableDeclaration decl = resolver.resolve(expr.getVar(), false);
             if (null == decl) {
-                throw new TranslatorException("cannot resolve '" + expr.getVar() + "'", expr, 
+                throw new TranslatorException("cannot resolve variable '" + expr.getVar() + "'", expr, 
                     ExpressionDslPackage.Literals.EXPRESSION_STATEMENT__VAR, ErrorCodes.UNKNOWN_ELEMENT);
             }
             try {

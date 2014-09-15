@@ -1,5 +1,7 @@
 package de.uni_hildesheim.sse.easy.loader.framework;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -10,13 +12,14 @@ import java.util.regex.Pattern;
  */
 public class EasyDependency {
 
-    private boolean isMandatory = false;
+    private boolean isMandatory = true;
     private Version versionMin = null;
     private Version versionMax = null;
     private String specificationVersion = "";
     private String bundleSymbolicName = "";
     private Version bundleVersionMin = null;
     private Version bundleVersionMax = null;
+    private List<String> reqBundles = new ArrayList<String>();
     
     
     /**
@@ -48,9 +51,17 @@ public class EasyDependency {
                 
                 this.bundleSymbolicName = piece.split("=")[1];
                 
+            } else if (piece.toLowerCase().contains("require-bundle")) {
+                
+                String[] req = piece.split(",");
+                
+                for (int j = 0; j < req.length; j++) {
+                    this.reqBundles.add(req[j]);
+                }
+                
             } else if (piece.toLowerCase().contains("bundle-version")) {
                 
-                String[] range = this.getRange(piece);
+                String[] range = getRange(piece);
                 try {
                     if (range != null && range.length > 0) {
                         this.bundleVersionMin = new Version(range[0]);
@@ -64,7 +75,7 @@ public class EasyDependency {
                 
             } else if (piece.toLowerCase().contains("version")) {
                 
-                String[] range = this.getRange(piece);
+                String[] range = getRange(piece);
                 try {
                     if (range != null && range.length > 0) {
                         this.versionMin = new Version(range[0]);
@@ -138,6 +149,14 @@ public class EasyDependency {
     }
     
     /**
+     * Getter for the required bundles.
+     * @return A List of Strings.
+     */
+    public List<String> getRequiredBundles() {
+        return reqBundles;
+    }
+    
+    /**
      * Main test method. 
      *
      * @param args main standard.
@@ -160,7 +179,7 @@ public class EasyDependency {
      * @param range The unsplit string.
      * @return Array of split strings.
      */
-    private String[] getRange(String range) {
+    public static String[] getRange(String range) {
         
         String[] result = null;
         
@@ -176,6 +195,24 @@ public class EasyDependency {
                 result[0] = (matcher.group(1));
             }
 
+        }
+        
+        if (null == result || result.length == 0) {
+            
+            Pattern pattern2 = Pattern.compile("\\[(.*?)\\)");
+            Matcher matcher2 = pattern2.matcher(range);
+            if (matcher2.find()) {
+                String sub = matcher2.group(1);
+
+                if (sub.toLowerCase().contains(",")) {
+                    result = sub.split(",");
+                } else {
+                    result = new String[1];
+                    result[0] = (matcher2.group(1));
+                }
+
+            } 
+            
         }
         
         return result;

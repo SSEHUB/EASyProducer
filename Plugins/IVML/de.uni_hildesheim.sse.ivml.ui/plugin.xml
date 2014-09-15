@@ -236,7 +236,7 @@
   <extension
         point="org.eclipse.ui.newWizards">
       <wizard
-            name="IVML File"
+            name="Variability Model (IVML)"
             icon="icons/file_icon.gif"
             category="de.uni_hildesheim.sse.EASy_Producer"
             class="de.uni_hildesheim.sse.ivml.ui.wizards.IVMLFiletypeWizard"

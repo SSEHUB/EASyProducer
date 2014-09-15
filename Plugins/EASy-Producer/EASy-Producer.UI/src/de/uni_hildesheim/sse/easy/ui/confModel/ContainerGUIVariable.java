@@ -1,14 +1,22 @@
 package de.uni_hildesheim.sse.easy.ui.confModel;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Text;
 
 import de.uni_hildesheim.sse.model.confModel.ContainerVariable;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
+import de.uni_hildesheim.sse.model.varModel.datatypes.Container;
+import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
+import de.uni_hildesheim.sse.model.varModel.datatypes.IntegerType;
+import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
+import de.uni_hildesheim.sse.model.varModel.datatypes.StringType;
 import de.uni_hildesheim.sse.persistency.StringProvider;
 
 /**
  * GUI representation of container values.
  * @author El-Sharkawy
+ * @author Dennis Konoppa
  *
  */
 class ContainerGUIVariable extends AbstractExpandableGUIVariable {
@@ -34,7 +42,7 @@ class ContainerGUIVariable extends AbstractExpandableGUIVariable {
     public String getValueText() {
         String result;
         if (hasValue() && hasNullValue()) {
-            result = GUIVariable.NULL_VALUE_LABEL;
+            result = getNullLabel();
         } else {
             //checkstyle: stop exception type check 
             try {
@@ -70,5 +78,32 @@ class ContainerGUIVariable extends AbstractExpandableGUIVariable {
         }
         
         return value;
+    }
+    
+    @Override
+    public GUIEditor getEditor() {
+        GUIEditor editor = null;
+        String content = getValueText();
+        IGUITextHandler handler = null;
+        Container type = (Container) getType();
+        IDatatype contType = type.getContainedType();
+        if (IntegerType.TYPE.isAssignableFrom(contType)) {
+            handler = new IntegerTextHandler();
+        } else if (StringType.TYPE.isAssignableFrom(contType)) {
+            handler = new StringCollectionHandler(", "); // parameter/separator can be changed
+        }
+        // further specific types may go here, and we will have further more specific editors ;)
+        if (null != handler) {
+            content = handler.format(content);
+            Text result = new Text(getComposite(), SWT.SINGLE | SWT.BORDER);
+            result.setText(content);
+            editor = new ContainerTextGUIEditor(result, handler);
+        } else if (Reference.TYPE.isAssignableFrom(contType)) {
+            // Create MutlipleSelectionEditor (table for references)
+            editor = new MultipleSelectionEditor(getComposite(), contType, getVariable());
+        } else {
+            editor = super.getEditor();
+        }
+        return editor;
     }
 }

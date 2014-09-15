@@ -1,5 +1,6 @@
 package de.uni_hildesheim.sse.reasoning.core.model.variables;
 
+import de.uni_hildesheim.sse.model.confModel.AssignmentState;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.reasoning.core.model.ReasonerModel;
 
@@ -24,9 +25,11 @@ public class BooleanVariable extends ReasonerVariable {
      */
     BooleanVariable(IDecisionVariable configVariable, String name, ReasonerModel model, ReasonerVariable parent) {
         super(configVariable, name, model, parent);
-        value = null;
-        if (configVariable.getValue() != null) {
-            value = (Boolean) configVariable.getValue().getValue();
+        value = null;        
+        if (configVariable.getState() != AssignmentState.UNDEFINED) {
+            if (configVariable.getValue().getType().getName().equals("Boolean")) {                
+                value = (Boolean) configVariable.getValue().getValue();
+            }
         }
     }
 

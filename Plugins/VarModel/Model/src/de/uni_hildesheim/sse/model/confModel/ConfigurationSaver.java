@@ -1,3 +1,18 @@
+/*
+ * Copyright 2009-2013 University of Hildesheim, Software Systems Engineering
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.uni_hildesheim.sse.model.confModel;
 
 import java.util.ArrayList;
@@ -36,11 +51,13 @@ import de.uni_hildesheim.sse.utils.modelManagement.VersionRestriction;
 
 /**
  * This method is part of the configuration and responsible for saving the values of the configuration
- * inside the {@link Configuration#toProject(boolean)} method.
+ * inside the {@link Configuration#toProject(boolean)} method. The visibility of this class has been relaxed 
+ * in order to serve as basis for refinements.
+ * 
  * @author El-Sharkawy
- *
+ * @author Holger Eichelberger
  */
-class ConfigurationSaver {
+public class ConfigurationSaver {
     
     /**
      * this configuration, which should be saved.
@@ -74,7 +91,7 @@ class ConfigurationSaver {
     ConfigurationSaver(Configuration srcConfiguration, boolean ownProject) throws ConfigurationException {
         this(srcConfiguration, ownProject, true);
     }
-    
+        
     /**
      * Constructor for this class for saving the configuration. With this constructor it is possible to decide whether
      * only user input should be saved or all configured values.
@@ -89,15 +106,19 @@ class ConfigurationSaver {
      *         {@link AssignmentState#DERIVED} will be saved (i.e. also computed values).</tt></li>
      *     </ul>
      * @throws ConfigurationException in case of any configuration errors
+     * @see #createProject(Configuration)
+     * @see #addVersion(Project, Configuration)
+     * @see #addImports(Project, Configuration)
+     * @see #addVariables(Project, Configuration)
      */
-    ConfigurationSaver(Configuration srcConfiguration, boolean ownProject, boolean onlyUserInput)
+    protected ConfigurationSaver(Configuration srcConfiguration, boolean ownProject, boolean onlyUserInput)
         throws ConfigurationException {
         
         this.srcConfiguration = srcConfiguration;
         this.onlyUserInput = onlyUserInput;
         // prepare project instance
         if (ownProject) {
-            destProject = new Project(srcConfiguration.getProject().getName() + "_conf");
+            destProject = createProject(srcConfiguration);
             Version ver = srcConfiguration.getProject().getVersion();
             VersionRestriction[] restrictions;
             if (null != ver) {
@@ -108,8 +129,10 @@ class ConfigurationSaver {
             } else {
                 restrictions = null;
             }
-            destProject.addImport(
-                new ProjectImport(srcConfiguration.getProject().getName(), null, false, false, restrictions));
+            addVersion(destProject, srcConfiguration);
+            addImports(destProject, srcConfiguration);
+            addAttributes(destProject, srcConfiguration);
+            addLocalVariables(destProject, srcConfiguration);
         } else {
             destProject = srcConfiguration.getProject();
             removedLocalConfigChanges();
@@ -122,20 +145,22 @@ class ConfigurationSaver {
         for (Map.Entry<AbstractVariable, IDecisionVariable> entry : decisions.entrySet()) {
             AbstractVariable varDecl = entry.getKey();
             IDecisionVariable var = entry.getValue();
-            int c = processAssignment(destProject, errors, varDecl, var, var.getValue());
-            if (0 == code) {
-                code = c;
-            }
-            for (int a = 0; a < varDecl.getAttributesCount(); a++) {
-                Value value = null;
-                ConstraintSyntaxTree cst = varDecl.getAttribute(a).getDefaultValue();
-                if (cst instanceof ConstantValue) {
-                    value = ((ConstantValue) cst).getConstantValue();
+            if (isSavingEnabled(destProject, var)) {
+                int c = processAssignment(destProject, errors, varDecl, var, var.getValue());
+                if (0 == code) {
+                    code = c;
                 }
-                if (null != value) {
-                    c = processAssignment(destProject, errors, varDecl.getAttribute(a), var, value);
-                    if (0 == code) {
-                        code = c;
+                for (int a = 0; a < varDecl.getAttributesCount(); a++) {
+                    Value value = null;
+                    ConstraintSyntaxTree cst = varDecl.getAttribute(a).getDefaultValue();
+                    if (cst instanceof ConstantValue) {
+                        value = ((ConstantValue) cst).getConstantValue();
+                    }
+                    if (null != value) {
+                        c = processAssignment(destProject, errors, varDecl.getAttribute(a), var, value);
+                        if (0 == code) {
+                            code = c;
+                        }
                     }
                 }
             }
@@ -154,8 +179,95 @@ class ConfigurationSaver {
      * @return {@link Configuration#getProject()} if the constructor was called with <tt>ownProject = false</tt>,
      * otherwise a new project which imports {@link Configuration#getProject()}.
      */
-    Project getSavedConfiguration() {
+    public Project getSavedConfiguration() {
         return destProject;
+    }
+
+    /**
+     * Creates the project to store the configuration into.
+     * 
+     * @param srcConfiguration the configuration to be stored
+     * @return the project to store the configuration into
+     */
+    protected Project createProject(Configuration srcConfiguration) {
+        return new Project(srcConfiguration.getProject().getName() + "_conf");
+    }
+    
+    /**
+     * Adds the current version to <code>destProject</code>.
+     * 
+     * @param destProject the destination project being set up
+     * @param srcConfiguration the source configuration
+     */
+    protected void addVersion(Project destProject, Configuration srcConfiguration) {
+        Version ver = srcConfiguration.getProject().getVersion();
+        if (null != ver) {
+            destProject.setVersion(ver);
+        }        
+    }
+
+    /**
+     * Adds the imports to <code>destProject</code>.
+     * 
+     * @param destProject the destination project being set up
+     * @param srcConfiguration the source configuration
+     */
+    protected void addImports(Project destProject, Configuration srcConfiguration) {
+        Version ver = srcConfiguration.getProject().getVersion();
+        VersionRestriction[] restrictions;
+        if (null != ver) {
+            restrictions = new VersionRestriction[1];
+            restrictions[0] = new VersionRestriction(srcConfiguration.getProject().getName(), 
+                VersionRestriction.Operator.EQUALS, ver);
+        } else {
+            restrictions = null;
+        }
+        destProject.addImport(
+            new ProjectImport(srcConfiguration.getProject().getName(), null, false, false, restrictions));
+    }
+
+    /**
+     * Adds local variables to <code>destProject</code>.
+     * 
+     * @param destProject the destination project being set up
+     * @param srcConfiguration the source configuration
+     */
+    protected void addLocalVariables(Project destProject, Configuration srcConfiguration) {
+    }
+
+    /**
+     * Adds attributes to <code>destProject</code>.
+     * 
+     * @param destProject the destination project being set up
+     * @param srcConfiguration the source configuration
+     */
+    protected void addAttributes(Project destProject, Configuration srcConfiguration) {
+    }
+    
+    /**
+     * Creates an assignment constraint.
+     * 
+     * @param dstProject the destination project
+     * @param decl the variable declaration
+     * @param var the configuration variable itself
+     * @param value the value assigned to <code>decl</code>
+     * @return the created constraint
+     */
+    protected ConstraintSyntaxTree createAssignmentConstraint(Project dstProject, AbstractVariable decl, 
+        IDecisionVariable var, Value value) {
+        return new OCLFeatureCall(deriveOperand(decl, var), 
+            OclKeyWords.ASSIGNMENT, new ConstantValue(toSaveableValue(value)));
+    }
+    
+    /**
+     * Returns whether saving this variable (for the destination project <code>destProject</code>) is enabled.
+     * 
+     * @param destProject the project being saved
+     * @param var the variable to be checked
+     * @return <code>true</code> if saving for <code>var</code> is enabled, <code>false</code> else
+     */
+    protected boolean isSavingEnabled(Project destProject, IDecisionVariable var) {
+        return true;
     }
     
     /**
@@ -195,8 +307,7 @@ class ConfigurationSaver {
             // If only user input should be stored, than also ignore Derived states.
             if (!onlyUserInput || AssignmentState.DERIVED != var.getState()) {
                 
-                OCLFeatureCall call = new OCLFeatureCall(deriveOperand(decl, var), 
-                    OclKeyWords.ASSIGNMENT, new ConstantValue(toSaveableValue(value)));
+                ConstraintSyntaxTree call = createAssignmentConstraint(confProject, decl, var, value);
                 try {
                     confProject.add(new Constraint(call, confProject));
                 } catch (CSTSemanticException e) {
@@ -221,7 +332,7 @@ class ConfigurationSaver {
      * @param var the related decision variable
      * @return the constraint syntax tree representing the operand for an assignment
      */
-    private ConstraintSyntaxTree deriveOperand(AbstractVariable decl, IDecisionVariable var) {
+    protected ConstraintSyntaxTree deriveOperand(AbstractVariable decl, IDecisionVariable var) {
         ConstraintSyntaxTree operand = null;
         if (var.getParent() instanceof IDecisionVariable) {
             IDecisionVariable parent = (IDecisionVariable) var.getParent();
@@ -251,7 +362,7 @@ class ConfigurationSaver {
      * @param value The value which should be saved.
      * @return the value where all problematic characters are escaped.
      */
-    private static Value toSaveableValue(Value value) {
+    protected static Value toSaveableValue(Value value) {
         if (null != value.getValue() && value instanceof StringValue) {
             StringValue sValue = (StringValue) value;
             String tmpValue = sValue.getValue();
@@ -280,10 +391,20 @@ class ConfigurationSaver {
         // Find (all) frozen elements
         List<IFreezable> frozenElements = new ArrayList<IFreezable>();
         for (IDecisionVariable decisionVariable : srcConfiguration) {
+//            int nNestedVars = decisionVariable.getNestedElementsCount();
             if (decisionVariable.getState() == AssignmentState.FROZEN
-                && decisionVariable.getDeclaration() instanceof IFreezable ) {
+                && decisionVariable.getDeclaration() instanceof IFreezable) {
                 
                 frozenElements.add((IFreezable) decisionVariable.getDeclaration());
+//            } else if (nNestedVars > 0) {
+//                for (int i = 0; i < nNestedVars; i++) {
+//                    IDecisionVariable nestedVar = decisionVariable.getNestedElement(i);
+//                    if (nestedVar.getState() == AssignmentState.FROZEN
+//                        && nestedVar.getDeclaration() instanceof IFreezable) {
+//                        
+//                        frozenElements.add((IFreezable) nestedVar.getDeclaration());
+//                    }
+//                }
             }
         }
         

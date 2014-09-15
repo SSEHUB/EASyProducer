@@ -22,12 +22,22 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
+import de.uni_hildesheim.sse.easy.instantiator.copy.core.AbstractCopyMechanism;
+import de.uni_hildesheim.sse.easy.instantiator.copy.core.CopyMechansimRegistry;
+import de.uni_hildesheim.sse.easy_producer.core.mgmt.PLPInfoSenariosTest;
 import de.uni_hildesheim.sse.easy_producer.core.mgmt.PLPInfoTest;
 import de.uni_hildesheim.sse.easy_producer.core.mgmt.SPLsManagerTest;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.ConfigurationTest;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.IntegrationTest;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.NatureHelperTest;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.TempDirectoryInitializer;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.standard.EASyInitializer;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.BuiltIn;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
+import de.uni_hildesheim.sse.easy_producer.instantiator.velocity.VelocityInstantiator;
+import de.uni_hildesheim.sse.reasoning.core.frontend.ReasonerFrontend;
+import de.uni_hildesheim.sse.reasoning.drools2.DroolsReasoner;
+import de.uni_hildesheim.sse.utils.Environment;
 
 /**
  * Test suite: runs all test classes.
@@ -38,7 +48,8 @@ import de.uni_hildesheim.sse.easy_producer.core.persistence.TempDirectoryInitial
 @SuiteClasses({
     IntegrationTest.class,
     SPLsManagerTest.class,
-    PLPInfoTest.class, 
+    PLPInfoTest.class,
+    PLPInfoSenariosTest.class,
     NatureHelperTest.class,
     ConfigurationTest.class })
 public class AllTests {
@@ -58,6 +69,8 @@ public class AllTests {
     public static final File TESTDATA_DIR_COPY = new File(TESTDATA_DIR_ORIGINS, "temp");
     
     public static final String PLUGIN_ID = "de.uni_hildesheim.sse.easy_producer.core.test";
+    
+    private static boolean initialized = false;
     
     /**
      * Determines folders, which should be used during testing.
@@ -83,5 +96,36 @@ public class AllTests {
     @BeforeClass
     public static void setUpBeforeClass() {
         TempDirectoryInitializer.INSTANCE.initTempFiles();
+        
+        // Facilitates plain java testing, registers bundles manually if not executed as a plug-in test
+        if (!Environment.runsInEclipse() && !initialized) {
+            initialized = true;
+            CopyMechansimRegistry.INSTANCE.register(new AbstractCopyMechanism() {
+                
+                @Override
+                public boolean useNameSpace() {
+                    return false;
+                }
+                
+                @Override
+                public String getName() {
+                    return "Test";
+                }
+                
+                @Override
+                public String getID() {
+                    return "de.uni_hildesheim.sse.easy.instantiator.copy.core.normal";
+                }
+                
+                @Override
+                public void copy(String sourceProjectName, String targetProjectName) {
+                    // Nothing to do
+                }
+            });
+            EASyInitializer.setInitializer();
+            ReasonerFrontend.getInstance().getRegistry().register(new DroolsReasoner());
+            BuiltIn.initialize();
+            TypeRegistry.DEFAULT.register(VelocityInstantiator.class);
+        }
     }
 }

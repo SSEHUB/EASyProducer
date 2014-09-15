@@ -1,3 +1,18 @@
+/*
+ * Copyright 2009-2013 University of Hildesheim, Software Systems Engineering
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.uni_hildesheim.sse.model.varModel;
 
 import java.util.ArrayList;
@@ -111,6 +126,46 @@ public class ModelQuery {
         releaseDatatypeVisitor(vis);
         return result;
     }
+    
+    /**
+     * Finds a project with given name.
+     * 
+     * @param project the project to start the search at (including imports) 
+     * @param name the name to search for
+     * @return the found project or <b>null</b> if there is none
+     */
+    public static Project findProject(Project project, String name) {
+        return findProject(project, name, "");
+    }
+    
+    /**
+     * Finds a project with given name.
+     *
+     * @param project the project to start the search at (including imports) 
+     * @param name the name to search for
+     * @param path the current qualified search path
+     * @return the found project or <b>null</b> if there is none
+     */
+    private static Project findProject(Project project, String name, String path) {
+        Project result;
+        String pName = project.getName();
+        if (path.length() > 0) {
+            path = path + IvmlKeyWords.NAMESPACE_SEPARATOR;
+        }
+        path += pName; 
+        if (pName.equals(name) || (path.length() > 0 && path.equals(name))) {
+            result = project;
+        } else {
+            result = null;
+            for (int i = 0; null == result && i < project.getImportsCount(); i++) {
+                Project imp = project.getImport(i).getResolved();
+                if (null != imp) {
+                    result = findProject(imp, name, path); 
+                }
+            }
+        }
+        return result;
+    }
 
     /**
      * Finds the specified data type definition in the given <code>project</code>.
@@ -142,14 +197,13 @@ public class ModelQuery {
      */
     private static IDatatype findType(IResolutionScope elements, String name, 
         boolean considerVariableDeclarations, Class<? extends IDatatype> type) throws ModelQueryException {
-
         // determine import scope
-        IResolutionScope initialScope = elements;
+        //IResolutionScope initialScope = elements;
         IResolutionScope importedScope = getScope(elements, name);
         if (null != importedScope) {
             name = removeNamespace(name);
             elements = importedScope;
-            considerVariableDeclarations = (elements != initialScope && elements.isInterface());
+            considerVariableDeclarations = (/*elements != initialScope &&*/ elements.isInterface());
         }
         
         if (null == type) {
@@ -496,12 +550,26 @@ public class ModelQuery {
      * @throws ModelQueryException in case of ambiguities
      */
     public static AbstractVariable findVariable(IResolutionScope elements, String name, 
-        Class<? extends AbstractVariable> type) throws ModelQueryException {
-        AbstractVariable result = null;
+                    Class<? extends AbstractVariable> type) throws ModelQueryException {
         if (null == type) {
             // set default value
             type = AbstractVariable.class;
         }
+        return (AbstractVariable) findVariableUse(elements, name, type);
+    }    
+    
+    /**
+     * Searches for a specified variable or variable use.
+     * @param elements the elements to search for
+     * @param name the name of the variable to search for (may be qualified)
+     * @param type the specific variable of datatype to be returned, {@link AbstractVariable} 
+     *   is used if <b>null</b>
+     * @return the corresponding variable or {@link CompoundAccessStatement}, <b>null</b> else
+     * @throws ModelQueryException in case of ambiguities
+     */
+    public static IModelElement findVariableUse(IResolutionScope elements, String name, 
+        Class<?> type) throws ModelQueryException {
+        IModelElement result = null;
         String originalName = name;
         Object directResult = findElementByName(elements, name, type);
         // determine import scope
@@ -518,8 +586,15 @@ public class ModelQuery {
             innerName = name.substring(pos + 1);
             name = name.substring(0, pos);
         }
-        result = (AbstractVariable) findElementByName(elements, name, type);
+        result = findElementByName(elements, name, type);
         result = findCompoundOrAttributeAccess(elements, name, innerName, result);
+        if (null != type && AbstractVariable.class.isAssignableFrom(type)) {
+            // support legacy results
+            if (result instanceof CompoundAccessStatement) {
+                CompoundAccessStatement acc = (CompoundAccessStatement) result;
+                result = acc.getSlotDeclaration();
+            }
+        }
         
         // search unqualified imported elements
         if (null == result) {
@@ -528,13 +603,13 @@ public class ModelQuery {
                 if (!imp.isConflict()) {
                     IResolutionScope imported = imp.getScope();
                     if (null != imported) {
-                        result = findVariable(imported, name, type);
+                        result = findVariableUse(imported, name, type);
                     }
                 }
             }
         }
         
-        if (null != result && !type.isAssignableFrom(result.getClass())) {
+        if (null != type && null != result && !type.isAssignableFrom(result.getClass())) {
             result = null;
         }
         if (null != directResult && !directResult.equals(result)) {
@@ -550,11 +625,11 @@ public class ModelQuery {
      * @param name the name of the variable to search for 
      * @param innerName the name of the compound element/attribute
      * @param result the result determined so far
-     * @return the subsequent compound or attribute access
+     * @return the subsequent compound, compound access or attribute access
      * @throws ModelQueryException in case of ambiguities
      */
-    private static AbstractVariable findCompoundOrAttributeAccess(IResolutionScope elements, String name, 
-        String innerName, AbstractVariable result) throws ModelQueryException {
+    private static IModelElement findCompoundOrAttributeAccess(IResolutionScope elements, String name, 
+        String innerName, IModelElement result) throws ModelQueryException {
         String fullInnerName = innerName;
         Project project;
         if (null == result && elements instanceof Project) {
@@ -577,32 +652,40 @@ public class ModelQuery {
                 innerNamePart = innerName;
                 innerName = null;
             }
-            AbstractVariable var = result;
-            Compound comp = null;
-            result = null;
-            if (null != var && var.getType().isAssignableFrom(Compound.TYPE)) {
-                comp = (Compound) var.getType();
-                result = findVariable(comp, innerNamePart);
-            }
-            if (null == result) {
-                comp = (Compound) findElementByTypeName(elements, name, Compound.class);
-                if (null != comp) {
+            if (result instanceof AbstractVariable) {
+                AbstractVariable var = (AbstractVariable) result;
+                Compound comp = null;
+                result = null;
+                if (null != var && var.getType().isAssignableFrom(Compound.TYPE)) {
+                    comp = (Compound) var.getType();
                     result = findVariable(comp, innerNamePart);
-                }
-            }
-            AbstractVariable compoundResult = result;
-            if (var instanceof IAttributableElement) {
-                result = findAttribute((IAttributableElement) var, innerNamePart);
-                if (null == result && null != project) {
-                    result = findAttribute(project.getVariable(), innerNamePart);
+                    if (null != result) {
+                        // parent may be wrong
+                        result = new CompoundAccessStatement(var, result.getName(), var.getParent());
+                    }
                 }
                 if (null == result) {
-                    result = compoundResult;
-                } else if (null != result && null == innerName && result.equals(compoundResult))  {
-                    // only when inner name is at full resolution!
-                    throw new ModelQueryException("ambiguity between attribute '" 
-                        + fullInnerName + "' and slot on compound '" + comp.getName() + "'", 
-                        ModelQueryException.AMBIGUITY);
+                    comp = (Compound) findElementByTypeName(elements, name, Compound.class);
+                    if (null != comp) {
+                        result = findVariable(comp, innerNamePart);
+                    }
+                }
+                if (null == result || result instanceof AbstractVariable) {
+                    AbstractVariable compoundResult = (AbstractVariable) result;
+                    if (var instanceof IAttributableElement) {
+                        result = findAttribute((IAttributableElement) var, innerNamePart);
+                        if (null == result && null != project) {
+                            result = findAttribute(project.getVariable(), innerNamePart);
+                        }
+                        if (null == result) {
+                            result = compoundResult;
+                        } else if (null != result && null == innerName && result.equals(compoundResult))  {
+                            // only when inner name is at full resolution!
+                            throw new ModelQueryException("ambiguity between attribute '" 
+                                + fullInnerName + "' and slot on compound '" + comp.getName() + "'", 
+                                ModelQueryException.AMBIGUITY);
+                        }
+                    }
                 }
             }
         }

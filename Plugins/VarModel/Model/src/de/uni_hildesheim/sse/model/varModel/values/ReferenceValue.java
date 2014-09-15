@@ -1,3 +1,18 @@
+/*
+ * Copyright 2009-2013 University of Hildesheim, Software Systems Engineering
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.uni_hildesheim.sse.model.varModel.values;
 
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
@@ -24,8 +39,7 @@ public class ReferenceValue extends Value {
         if (null != ref && ref.length > 0) {
             setValue(ref[0]);
         } else {
-            throw new ValueDoesNotMatchTypeException("null is not a valid reference", 
-                ValueDoesNotMatchTypeException.IS_NULL);
+            setValue(NullValue.INSTANCE);
         }
     }
 
@@ -44,6 +58,8 @@ public class ReferenceValue extends Value {
         if (value instanceof DecisionVariableDeclaration) {
             DecisionVariableDeclaration decl = (DecisionVariableDeclaration) value;
             this.value = decl;
+        } else if (NullValue.INSTANCE == value) {
+            this.value = null;
         } else if (value == null) {
             // TODO check - IVML has an explicit null value!!!
             throw new ValueDoesNotMatchTypeException("null is not a valid reference", 
@@ -61,7 +77,13 @@ public class ReferenceValue extends Value {
 
     @Override
     public Value clone() {
-        // TODO Auto-generated method stub
-        return null;
+        Value result;
+        try {
+            result = new ReferenceValue(getType(), getValue());
+        } catch (ValueDoesNotMatchTypeException e) {
+            result = NullValue.INSTANCE;
+        }
+        return result;
     }
+
 }

@@ -21,8 +21,7 @@
 		<mkdir dir="${coverage.results.dir}"/>
 		<mkdir dir="${doc.dir}"/>
 	</target>
-	
-	<target name="compile">
+		
         <echo>#########################################</echo>
         <echo>###  Compiling the Utility Functions  ###</echo>
         <echo>#########################################</echo>
@@ -47,6 +46,13 @@
         <echo>###  Compiling DSL Core  ###</echo>
         <echo>############################</echo>
         <ant dir="${home.dslCore.dir}" antfile="${build.script.name}" />
+
+        <target name="compile">
+        <echo>###############################</echo>
+        <echo>###  Compiling DSL Core UI  ###</echo>
+        <echo>###############################</echo> 
+        <ant dir="${home.dslCore.ui.dir}" antfile="${build.script.name}" />
+        
     </target>
 	
 	<target name="instrumment">
@@ -56,6 +62,7 @@
 				<filter excludes="*Activator*"/>
 				<filter excludes="*AllTests*"/>
 				<instrpath>
+					<fileset dir="${home.dslCore.ui.dir}/${build.jar.dir}/" includes="**/*.jar" />
                     <fileset dir="${home.utils.dir}/${build.jar.dir}/" includes="**/*.jar" />
 					<fileset dir="${home.model.dir}/${build.jar.dir}/" includes="**/*.jar" />
 					<fileset dir="${home.model.persistency.dir}/${build.jar.dir}/" includes="**/*.jar" />

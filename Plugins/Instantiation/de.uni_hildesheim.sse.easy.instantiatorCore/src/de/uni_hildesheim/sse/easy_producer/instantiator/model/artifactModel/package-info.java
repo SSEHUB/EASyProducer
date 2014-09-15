@@ -81,6 +81,8 @@
  * defined parameters. In this case, VIL allows to pass in named parameters. In the respective artifact or
  * instantiator operations, named parameters are represented by a <code>Map<String, Object></code> as last parameter 
  * which receives the names and the actual values of given named VIL parameters.
- * The interpretation of named parameters belongs to the respective method.
+ * The interpretation of named parameters belongs to the respective method.<br>
+ * Types implementing {@link de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IActualTypeProvider} may
+ * determine a more recent type during dynamic dispatch.
  */
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel;

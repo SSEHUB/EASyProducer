@@ -25,12 +25,14 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Resolv
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VarModelIdentifierExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VariableExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VilTypeExpression;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Constants;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlElement;
+import de.uni_hildesheim.sse.model.varModel.values.EnumValue;
 import de.uni_hildesheim.sse.utils.messages.AbstractException;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.AdditiveExpression;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.AdditiveExpressionPart;
@@ -39,6 +41,8 @@ import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Call;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Constant;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ConstructorExecution;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ContainerInitializer;
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Declaration;
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Declarator;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.EqualityExpression;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.EqualityExpressionPart;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionOrQualifiedExecution;
@@ -85,10 +89,14 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
     public Expression processExpression(de.uni_hildesheim.sse.vil.expressions.expressionDsl.Expression ex, 
         R resolver) throws TranslatorException {
         Expression result;
-        if (null != ex.getExpr()) {
-            result = processLogicalExpression(ex.getExpr(), resolver);
+        if (null != ex) {
+            if (null != ex.getExpr()) {
+                result = processLogicalExpression(ex.getExpr(), resolver);
+            } else {
+                result = processContainerInitializer(ex.getInit(), resolver);
+            }
         } else {
-            result = processContainerInitializer(ex.getInit(), resolver);
+            result = null;
         }
         return result;
     }
@@ -284,7 +292,86 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
         /**
          * Rule call, instantiator call or artifact call.
          */
-        OTHER
+        OTHER,
+        
+        /**
+         * Call with iterator variables (expected), else similar to {@link OTHER}
+         */
+        ITERATOR
+    }
+    
+    /**
+     * Resolves the iterator declarations. Existence of iterator declarations in <code>call</code> is already
+     * checked to be valid.
+     * 
+     * @param call the call holding the iterator declarations
+     * @param type the type of the call (not the return type)
+     * @return the iterator declarations in terms of variable declarations (may be <b>null</b> if there are none)
+     * @throws TranslatorException in case that the translation fails for some reason
+     */
+    protected List<I> resolveIteratorDeclarations(Call call, CallType type, List<CallArgument> arguments, R resolver) 
+        throws TranslatorException {
+        List<I> result = null;
+        if (null != call) {
+            Declarator decl = call.getDecl();
+            if (null != decl && null != decl.getDecl()) {
+                if (arguments.size() > 0) {
+                    TypeDescriptor<? extends IVilType> arg0Type = null; // implicit arg carries generic types
+                    try {
+                        arg0Type = arguments.get(0).inferType();
+                    } catch (ExpressionException e) {
+                        throw new TranslatorException(e, call, ExpressionDslPackage.Literals.CALL__PARAM);
+                    }
+                    if (null != arg0Type && arg0Type.isCollection() && arg0Type.getParameterCount() > 0) {
+                        result = new ArrayList<I>();
+                        for (Declaration d : decl.getDecl()) {
+                            // currently we consider only 1 dimension, see exception below
+                            TypeDescriptor<? extends IVilType> dimensionType = arg0Type.getParameterType(0); 
+                            TypeDescriptor<? extends IVilType> t;
+                            if (null != d.getType()) {
+                                t = processType(d.getType(), resolver);
+                                if (!t.isAssignableFrom(dimensionType)) {
+                                    throw new TranslatorException("type '" + t.getVilName() + "' of iterator '" 
+                                        + toString(d.getId()) + "' does not match type '" + dimensionType.getVilName() + 
+                                        "' of the expression", call, ExpressionDslPackage.Literals.CALL__PARAM, 
+                                        ErrorCodes.CANNOT_RESOLVE_ITER);
+                                }
+                            } else {
+                                t = dimensionType; // not explicitly given, take over
+                            }
+                            for (String name : d.getId()) {
+                                I var = createVariableDeclaration(name, t, false, null);
+                                var.setHasExplicitType(null != d.getType());
+                                result.add(var);
+                            }
+                        }
+                        
+                    }
+                    if (result.size() != 1) {
+                        throw new TranslatorException("currently an iterator call accepts exactly one iterator variable", 
+                            call, ExpressionDslPackage.Literals.CALL__DECL, ErrorCodes.CANNOT_RESOLVE_ITER);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+    
+    /**
+     * Turns a list of names into its string representation.
+     * 
+     * @param names the list of names
+     * @return the string representation
+     */
+    private static String toString(List<String> names) {
+        StringBuilder tmp = new StringBuilder();
+        for (String name : names) {
+            if (tmp.length() > 0) {
+                tmp.append(", ");
+            }
+            tmp.append(name);
+        }
+        return tmp.toString();
     }
     
     /**
@@ -297,15 +384,23 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
      * @return the resulting expression node
      * @throws TranslatorException in case that the translation fails for some reason
      */
-    protected String resolveCallArguments(Call call, List<CallArgument> arguments, 
+    protected String resolveCallArguments(Call call, List<I> iterators, List<CallArgument> arguments, 
         de.uni_hildesheim.sse.vil.expressions.expressionDsl.Expression arrayEx, R resolver) throws TranslatorException {
         String name;
+        // arguments already contains implicit parameter and in case of iteration its type
         if (null != call) {
             if (null != call.getParam()) {
+                if (null != iterators) {
+                    resolver.pushLevel();
+                    resolver.add(iterators);
+                }
                 for (de.uni_hildesheim.sse.vil.expressions.expressionDsl.NamedArgument param : call.getParam().getParam()) {
                     Expression ex;
                     try {
                         ex = processExpression(param.getEx(), resolver);
+                        if (null != iterators) {
+                            ex = new ExpressionEvaluator(ex, iterators.get(0)); // currently only 1 iterator        
+                        }
                     } catch (TranslatorException e) {
                         if (ErrorCodes.CANNOT_RESOLVE_ITER == e.getId()) {
                             ex = tryIteratorExpression(arguments, param, resolver);
@@ -314,6 +409,9 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                         }
                     }
                     arguments.add(new CallArgument(param.getName(), ex));
+                }
+                if (null != iterators) {
+                    resolver.popLevel();
                 }
             }
             name = Utils.getQualifiedNameString(call.getName());
@@ -336,6 +434,7 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
     private ExpressionEvaluator tryIteratorExpression(List<CallArgument> arguments, 
         de.uni_hildesheim.sse.vil.expressions.expressionDsl.NamedArgument param, R resolver) 
         throws TranslatorException {
+        // remove
         ExpressionEvaluator ex = null;
         if (arguments.size() > 0) {
             try {
@@ -411,7 +510,28 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
         Expression result = firstParam;
         if (null != followups) {
             for (SubCall call : followups) {
-                result = processCall(result, call.getCall(), CallType.OTHER, call.getArrayEx(), resolver);
+                CallType callType = CallType.OTHER;
+                if (Constants.ITER_CALL.equals(call.getType())) {
+                    callType = CallType.ITERATOR;
+                }
+                Call c = call.getCall();
+                if (null != c) {
+                    Declarator decl = c.getDecl();
+                    if (null == decl) {
+                        if (CallType.ITERATOR == callType) {
+                            // it is an iterator call but without declarators -> error
+                            throw new TranslatorException("iterator call without iterator variables", call, 
+                                ExpressionDslPackage.Literals.SUB_CALL__TYPE, ErrorCodes.CANNOT_RESOLVE_ITER);
+                        }
+                    } else {
+                        // it is a call with declarators but not a iterator call ->
+                        if (callType != CallType.ITERATOR) {
+                            throw new TranslatorException("iterator variables given but this is no iterator call", 
+                                 c, ExpressionDslPackage.Literals.CALL__DECL, ErrorCodes.CANNOT_RESOLVE_ITER);
+                        }
+                    }
+                }
+                result = processCall(result, c, callType, call.getArrayEx(), resolver);
             }
         }
         return result;
@@ -428,35 +548,37 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
     public Expression processPrimaryExpression(PrimaryExpression ex, R resolver) 
         throws TranslatorException {
         Expression result = null;
-        ExpressionOrQualifiedExecution otherEx = ex.getOtherEx();
-        if (null != otherEx) {
-            if (null != otherEx.getVal()) {
-                result = processConstant(otherEx.getVal(), resolver);
-            } else if (null != otherEx.getParenthesis()) {
-                result = new ParenthesisExpression(processExpression(otherEx.getParenthesis(), resolver));
+        if (null != ex) {
+            ExpressionOrQualifiedExecution otherEx = ex.getOtherEx();
+            if (null != otherEx) {
+                if (null != otherEx.getVal()) {
+                    result = processConstant(otherEx.getVal(), resolver);
+                } else if (null != otherEx.getParenthesis()) {
+                    result = new ParenthesisExpression(processExpression(otherEx.getParenthesis(), resolver));
+                }
+                if (null != otherEx.getCalls()) {
+                    result = processSubCalls(result, otherEx.getCalls(), resolver);
+                }
             }
-            if (null != otherEx.getCalls()) {
-                result = processSubCalls(result, otherEx.getCalls(), resolver);
+            UnqualifiedExecution unqEx = ex.getUnqEx();
+            if (null != unqEx) {
+                result = processCall(null, unqEx.getCall(), CallType.OTHER, null, resolver);
+                result = processSubCalls(result, unqEx.getCalls(), resolver);
             }
-        }
-        UnqualifiedExecution unqEx = ex.getUnqEx();
-        if (null != unqEx) {
-            result = processCall(null, unqEx.getCall(), CallType.OTHER, null, resolver);
-            result = processSubCalls(result, unqEx.getCalls(), resolver);
-        }
-        SuperExecution superEx = ex.getSuperEx();
-        if (null != superEx) {
-            result = processCall(null, superEx.getCall(), CallType.SUPER, null, resolver);
-            result = processSubCalls(result, superEx.getCalls(), resolver);
-        }
-        ConstructorExecution cEx = ex.getNewEx();
-        if (null != cEx) {
-            try {
-            CallArgument[] args = processArguments(cEx.getParam(), resolver);
-            result = new ConstructorCallExpression(processType(cEx.getType(), resolver), args);
-            result = processSubCalls(result, cEx.getCalls(), resolver);
-            } catch (ExpressionException e) {
-                throw new TranslatorException(e, cEx, ExpressionDslPackage.Literals.CONSTRUCTOR_EXECUTION__TYPE);
+            SuperExecution superEx = ex.getSuperEx();
+            if (null != superEx) {
+                result = processCall(null, superEx.getCall(), CallType.SUPER, null, resolver);
+                result = processSubCalls(result, superEx.getCalls(), resolver);
+            }
+            ConstructorExecution cEx = ex.getNewEx();
+            if (null != cEx) {
+                try {
+                    CallArgument[] args = processArguments(cEx.getParam(), resolver);
+                    result = new ConstructorCallExpression(processType(cEx.getType(), resolver), args);
+                    result = processSubCalls(result, cEx.getCalls(), resolver);
+                } catch (ExpressionException e) {
+                    throw new TranslatorException(e, cEx, ExpressionDslPackage.Literals.CONSTRUCTOR_EXECUTION__TYPE);
+                }
             }
         }
         return result;
@@ -519,6 +641,10 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
             result = createConstant(TypeRegistry.booleanType(), arg.getBValue(), arg, 
                 ExpressionDslPackage.Literals.CONSTANT__BVALUE, resolver.getTypeRegistry());
         }
+        if (null != arg.getNull()) {
+            result = createConstant(TypeRegistry.anyType(), TypeRegistry.NULL, arg,
+                ExpressionDslPackage.Literals.CONSTANT__NULL, resolver.getTypeRegistry());
+        }
         return result;
     }
 
@@ -539,14 +665,30 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                 throw new TranslatorException("iterator variable ITER cannot be resolved", arg, 
                     ExpressionDslPackage.Literals.CONSTANT__QVALUE, ErrorCodes.CANNOT_RESOLVE_ITER);
             }
-            TypeDescriptor<? extends IVilType> type = resolver.getTypeRegistry().getType(name);
+            TypeRegistry registry = resolver.getTypeRegistry();
+            TypeDescriptor<? extends IVilType> type = registry.getType(name);
             if (null == type) {
-                if (!resolver.isIvmlElement(name)) {
+                Object ivmlElement = resolver.getIvmlElement(name);
+                if (null == ivmlElement) {
                     warning("'" + name + "' is unknown, shall be a VIL variable, a VIL type or an IVML variable " 
                         + "/ attribute - may lead to a runtime error", arg, 
                         ExpressionDslPackage.Literals.CONSTANT__QVALUE, ErrorCodes.UNKNOWN_TYPE);
                 } 
-                result = new VarModelIdentifierExpression(name); // also if elt==null
+                if (ivmlElement instanceof EnumValue) {
+                    EnumValue eValue = (EnumValue) ivmlElement;
+                    type = registry.getType(eValue.getType());
+                    if (null != type) {
+                        try {
+                            result = new ConstantExpression(type, new de.uni_hildesheim.sse.easy_producer.instantiator.
+                                model.vilTypes.configuration.EnumValue(eValue), registry);
+                        } catch (ExpressionException e) {
+                            throw new TranslatorException(e, arg, ExpressionDslPackage.Literals.CONSTANT__QVALUE);
+                        }
+                    }
+                } 
+                if (null == result) {
+                    result = new VarModelIdentifierExpression(name); // also if elt==null
+                }
             } else {
                 result = new VilTypeExpression(name, type);
             }
@@ -614,12 +756,17 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                 throw new TranslatorException(e, type, ExpressionDslPackage.Literals.TYPE__SET);
             }
         } else {
-            String typeName = type.getName();
+            String typeName = Utils.getQualifiedNameString(type.getName());
             result = resolver.getTypeRegistry().getType(typeName);
             if (null == result) {
                 throw new TranslatorException("type '" + typeName + "' unknown", type, 
                     ExpressionDslPackage.Literals.TYPE__NAME, ErrorCodes.UNKNOWN_TYPE);
             }
+        }
+        if (result.isPlaceholder()) {
+            String typeName = Utils.getQualifiedNameString(type.getName());
+            warning("'" + typeName + "' is unknown, shall be an IVML type - may lead to a runtime error", type, 
+                ExpressionDslPackage.Literals.TYPE__NAME, ErrorCodes.UNKNOWN_TYPE);
         }
         return result;
     }

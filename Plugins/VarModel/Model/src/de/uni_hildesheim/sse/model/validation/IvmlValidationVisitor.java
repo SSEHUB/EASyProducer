@@ -1,6 +1,22 @@
+/*
+ * Copyright 2009-2014 University of Hildesheim, Software Systems Engineering
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.uni_hildesheim.sse.model.validation;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Stack;
 
@@ -18,10 +34,12 @@ import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
 import de.uni_hildesheim.sse.model.cst.Parenthesis;
 import de.uni_hildesheim.sse.model.cst.UnresolvedExpression;
 import de.uni_hildesheim.sse.model.cst.Variable;
+import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.AbstractVisitor;
 import de.uni_hildesheim.sse.model.varModel.Attribute;
 import de.uni_hildesheim.sse.model.varModel.AttributeAssignment;
 import de.uni_hildesheim.sse.model.varModel.Comment;
+import de.uni_hildesheim.sse.model.varModel.CompoundAccessStatement;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
@@ -43,6 +61,8 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.OrderedEnum;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Sequence;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Set;
+import de.uni_hildesheim.sse.model.varModel.filter.DatatypeFinder;
+import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
 import de.uni_hildesheim.sse.model.varModel.values.BooleanValue;
 import de.uni_hildesheim.sse.model.varModel.values.CompoundValue;
 import de.uni_hildesheim.sse.model.varModel.values.ConstraintValue;
@@ -67,6 +87,7 @@ public class IvmlValidationVisitor extends AbstractVisitor
 
     private List<ValidationMessage> messages = new ArrayList<ValidationMessage>();
     private Stack<String> location = new Stack<String>();
+    private java.util.Set<IDatatype> customTypes;
 
     /**
      * Returns the number of detected errors.
@@ -104,6 +125,20 @@ public class IvmlValidationVisitor extends AbstractVisitor
         return messages.get(index);
     }
 
+
+    /**
+     * Check whether the {@link IDatatype} of an {@link AbstractVariable} is part of the {@link Project}.
+     * @param decl The declaration to check, must be part of the project.
+     */
+    private void checkDeclaration(AbstractVariable decl) {
+        IDatatype type = decl.getType();
+        // Test IDatatypes, which must be added to the project separately
+        if ((type instanceof Enum || type instanceof Compound) && !customTypes.contains(type)) {
+            addError("datatype '" + type.getName() + "' of '" + decl.getName() + "' is not part of the project", decl,
+                ValidationMessage.MISSING_CUSTOM_DATATYPE);
+        }
+    }
+    
     /**
      * Checks for a valid (name) identifier and stores an error message if required.
      * 
@@ -257,6 +292,17 @@ public class IvmlValidationVisitor extends AbstractVisitor
                 imp.accept(this);
             }
         }
+        
+        /*
+         * Collect all custom datatypes.
+         * Sascha El-Sharkawy: This will only be a heuristic, but reduces the run time.
+         * I think this will be sufficient for most cases.
+         */
+        if (1 == location.size()) {
+            DatatypeFinder finder = new DatatypeFinder(project, FilterType.ALL, null);
+            customTypes = new HashSet<IDatatype>(finder.getFoundDatatypes());
+        }
+
         //Elements on top layer inside the project
         count = project.getElementCount();
         for (int c = 0; c < count; c++) {
@@ -269,7 +315,7 @@ public class IvmlValidationVisitor extends AbstractVisitor
             }
         }
 
-        super.visitProject(project);
+        //super.visitProject(project);
         location.pop();
     }
     
@@ -368,6 +414,8 @@ public class IvmlValidationVisitor extends AbstractVisitor
      */
     public void visitDecisionVariableDeclaration(DecisionVariableDeclaration decl) {
         checkNameIdentifier(decl.getName(), decl);
+        // Check presence of custom data types
+        checkDeclaration(decl);
     }
 
     /**
@@ -375,6 +423,8 @@ public class IvmlValidationVisitor extends AbstractVisitor
      */
     public void visitAttribute(Attribute attribute) {
         checkNameIdentifier(attribute.getName(), attribute);
+        // Check presence of custom data types
+        checkDeclaration(attribute);
     }
 
     /**
@@ -397,8 +447,10 @@ public class IvmlValidationVisitor extends AbstractVisitor
             if (null == freezable) {
                 addElementIsNullError("freezable", f, freeze);
             } else {
-                // no parent test as references are reused
-                checkIdentifier(freezable.getName(), "freezable " + f, freeze);
+                if (!(freezable instanceof CompoundAccessStatement)) {
+                    // no parent test as references are reused
+                    checkIdentifier(freezable.getName(), "freezable " + f, freeze);
+                }
             }
         }
         // TODO but
@@ -705,6 +757,13 @@ public class IvmlValidationVisitor extends AbstractVisitor
      */
     public void visitNullValue(NullValue value) {
         // ok
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void visitCompoundAccessStatement(CompoundAccessStatement access) {
+        // TODO check whether slot is in variable
     }
 
 }

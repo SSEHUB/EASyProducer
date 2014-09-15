@@ -9,6 +9,7 @@ import java.io.Writer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -69,11 +70,12 @@ public abstract class AbstractTest<R extends IModel> {
      * <code>result</code>.
      * 
      * @param result the result from parsing and analyzing a project
+     * @param warnings the warnings that occurred, to be modified as a side effect, may be <b>null</b>
      * @param expectedErrorCodes the allowed / expected error codes
      * @return the error message if the codes do not match, <code>null</code> else
      */
-    protected String checkErrorCodes(TranslationResult<R> result, int... expectedErrorCodes) {
-        return checkErrorCodes(result.getMessageListSpecific(), expectedErrorCodes);
+    protected String checkErrorCodes(TranslationResult<R> result, List<Message> warnings, int... expectedErrorCodes) {
+        return checkErrorCodes(result.getMessageListSpecific(), warnings, expectedErrorCodes);
     }
     
     /**
@@ -81,10 +83,12 @@ public abstract class AbstractTest<R extends IModel> {
      * <code>result</code>.
      * 
      * @param messages the actual messages to be analyzed
+     * @param warnings the warnings that occurred, to be modified as a side effect, may be <b>null</b>
      * @param expectedErrorCodes the allowed / expected error codes
      * @return the error message if the codes do not match, <code>null</code> else
      */
-    protected String checkErrorCodes(List<Message> messages, int... expectedErrorCodes) {
+    protected String checkErrorCodes(List<Message> messages, List<Message> warnings, 
+        int... expectedErrorCodes) {
         // test expected error codes - expected vs. actual and vice versa
         Set<Integer> expectedErrors = new HashSet<Integer>();
         HashMap<Integer, String> actualErrors = new HashMap<Integer, String>();
@@ -99,10 +103,16 @@ public abstract class AbstractTest<R extends IModel> {
         }
         for (int i = 0; i < size; i++) {
             Message msg = messages.get(i);
-            if (!msg.ignore() && Status.ERROR == msg.getStatus()) {
-                int code = msg.getCode();
-                actualErrors.put(code, msg.getDescription());
-                expectedErrors.remove(code);
+            if (!msg.ignore()) {
+                if (Status.ERROR == msg.getStatus()) {
+                    int code = msg.getCode();
+                    actualErrors.put(code, msg.getDescription());
+                    expectedErrors.remove(code);
+                } else if (Status.WARNING == msg.getStatus()) {
+                    if (null != warnings) {
+                        warnings.add(msg);
+                    }
+                }
             }
         }
         if (null != expectedErrorCodes) {
@@ -132,7 +142,7 @@ public abstract class AbstractTest<R extends IModel> {
         }
         return result;
     }
-
+    
     /**
      * Turns a file into a string for comparison.
      * 
@@ -152,7 +162,6 @@ public abstract class AbstractTest<R extends IModel> {
         } finally {
             stream.close();
         }
-        fileAsString.trim();
         return fileAsString;
     }
 
@@ -336,6 +345,10 @@ public abstract class AbstractTest<R extends IModel> {
     protected boolean checkEqualsAndPrint(String fileAsString, String modelAsString, PrintWriter writer) {
         boolean equals = true;
         int pos = isEqual(fileAsString, modelAsString);
+        /*
+        System.out.println("failPos " + pos+" fileLength " + fileAsString.length() + " modelLength " 
+            + modelAsString.length());        
+        */
         if (pos < 0 || pos <= fileAsString.length() || (0 == fileAsString.length() && modelAsString.length() > 0)) {
             if (pos > 0) {
                 writer.println(fileAsString.substring(0, pos));
@@ -404,6 +417,38 @@ public abstract class AbstractTest<R extends IModel> {
         pWriter.close();
         sWriter.close();
         return errorMsg;
+    }
+    
+    /**
+     * Returns the message for missing expected warnings.
+     * 
+     * @param warnings the warnings to check
+     * @param expectedWarnings the expected warnings
+     * @return <b>null</b> in case of no message, the message text else
+     */
+    protected static String checkWarnings(List<Message> warnings, int... expectedWarnings) {
+        String result = null;
+        if (null != warnings && expectedWarnings.length > 0) {
+            StringBuilder tmp = new StringBuilder();
+            List<Message> tmpWarning = new ArrayList<Message>();
+            tmpWarning.addAll(warnings);
+            for (int e = 0; e < expectedWarnings.length; e++) {
+                boolean found = false;
+                for (int w = 0; !found && w < tmpWarning.size(); w++) {
+                    found = (tmpWarning.get(w).getCode() == expectedWarnings[e]);
+                }
+                if (!found) {
+                    if (tmp.length() > 0) {
+                        tmp.append(", ");
+                    }
+                    tmp.append(expectedWarnings[e]);
+                }
+            }
+            if (tmp.length() > 0) {
+                result = "missing warning codes: " + tmp;
+            }
+        }
+        return result;
     }
     
     /**

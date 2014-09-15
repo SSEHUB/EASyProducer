@@ -14,11 +14,30 @@ import de.uni_hildesheim.sse.easy.loader.Generator;
  *
  */
 public class GeneratorTest {
+    
+    private static final File FEATURE_PATH = determineDir("easy.features.dir", "../Features");
+    
+    /**
+     * Determines folders, which should be used during testing.
+     * @param property A system property to specify the directory from outside.
+     * @param defaultFolder A folder relative to this project. Will only be used if no property was used.
+     * @return A folder which can be used for testing.
+     */
+    private static File determineDir(String property, String defaultFolder) {
+        File result;
+        String externalLocation = System.getProperty(property);
+        if (null == externalLocation) {
+            result = new File(defaultFolder);
+        } else {
+            result = new File(externalLocation);
+        }
+        return result;
+    }
 
     /**
      * Tests the Generation via Features.
      */
-    @Test
+    /*@Test
     public void testGenerator() {
         
         List<Feature> features = new ArrayList<Feature>();
@@ -28,7 +47,7 @@ public class GeneratorTest {
         features.add(feat1);
         features.add(feat2);
         
-        List<BundleInfo> bundles = Generator.generate(features, true);
+        List<BundleInfo> bundles = Generator.generate(features, null, true);
         
         System.out.println("");
         System.out.println("### Bundles Found: ###");
@@ -47,6 +66,38 @@ public class GeneratorTest {
             }      
         }        
 
+    }*/
+    
+    /**
+     * The actual major testcase.
+     */
+    @Test
+    public void testGenAutomatic() {
+        
+        List<File> baseFeat = new ArrayList<File>();
+        List<File> addFeat = new ArrayList<File>();
+        System.out.println(FEATURE_PATH.getAbsolutePath());
+        baseFeat.add(new File(
+                FEATURE_PATH, "de.uni_hildesheim.sse.easy_producer.core.no_eclipse_feature"));
+        baseFeat.add(new File(
+                FEATURE_PATH, "de.uni_hildesheim.sse.ivml.core_feature"));
+        baseFeat.add(new File(
+                FEATURE_PATH, "de.uni_hildesheim.sse.vil.core_feature"));
+        baseFeat.add(new File(
+                FEATURE_PATH, "de.uni_hildesheim.sse.reasoning.drools2_feature"));
+        baseFeat.add(new File(
+                FEATURE_PATH, "de.uni_hildesheim.sse.apache.commons.io.feature"));
+        baseFeat.add(new File(
+                FEATURE_PATH, "de.uni_hildesheim.sse.easy.instantiator.java.feature"));
+        baseFeat.add(new File(
+                FEATURE_PATH, "de.uni_hildesheim.sse.easy_producer.instantiation.velocity_feature"));
+        //addFeat.add(new File("C:/Users/pastuschek/workspace/Features"));
+        addFeat.add(new File("C:/Users/Patu/Desktop/Gen/Features"));
+
+        Generator.autoGenerate(baseFeat, addFeat, true);
+        
+        System.out.println(null == BundleRegistry.getInstance().get("org.eclipse.osgi.services", new EasyDependency()));
+    
     }
     
 }

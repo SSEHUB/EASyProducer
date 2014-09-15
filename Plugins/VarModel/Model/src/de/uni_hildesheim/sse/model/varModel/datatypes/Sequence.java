@@ -1,3 +1,18 @@
+/*
+ * Copyright 2009-2013 University of Hildesheim, Software Systems Engineering
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.uni_hildesheim.sse.model.varModel.datatypes;
 
 import de.uni_hildesheim.sse.model.varModel.IModelElement;
@@ -50,6 +65,7 @@ public class Sequence extends Container {
     public static final Operation INSERT_AT = new Operation(TYPE, ReturnTypeMode.IMMEDIATE_OPERAND,
         OclKeyWords.INSERT_AT, TYPE, IntegerType.TYPE, AnyType.TYPE);
     public static final Operation INDEX_OF = new Operation(IntegerType.TYPE, OclKeyWords.INDEX_OF, TYPE, AnyType.TYPE);
+    public static final Operation HAS_DUPLICATES = new Operation(BooleanType.TYPE, OclKeyWords.HAS_DUPLICATES, TYPE);
 
     // type specific 
     public static final Operation EQUALS = Operation.createInfixOperator(
@@ -74,6 +90,7 @@ public class Sequence extends Container {
         DTYPE.addOperation(PREPEND);
         DTYPE.addOperation(INSERT_AT);
         DTYPE.addOperation(INDEX_OF);
+        DTYPE.addOperation(HAS_DUPLICATES);
     }
     
     /**
@@ -107,6 +124,18 @@ public class Sequence extends Container {
      */
     public void accept(IDatatypeVisitor visitor) {
         visitor.visitSequence(this);
+    }
+
+    /**
+     * Returns whether <code>type</code> is a squence and the given <code>generics</code> match.
+     * 
+     * @param type the type to check for
+     * @param generics the generics to be considered
+     * @return <code>true</code> if <code>type</code> is <code>sequenceOf(<i>generics</i>)</code>, 
+     *     <code>false</code> else
+     */
+    public static final boolean isSequence(IDatatype type, IDatatype... generics) {
+        return isType(TYPE, type, generics);
     }
 
 }

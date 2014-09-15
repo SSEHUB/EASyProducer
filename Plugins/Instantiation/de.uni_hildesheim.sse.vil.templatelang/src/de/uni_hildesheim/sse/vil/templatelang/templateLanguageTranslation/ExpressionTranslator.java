@@ -5,6 +5,7 @@ import java.util.List;
 
 import de.uni_hildesheim.sse.dslCore.translation.ErrorCodes;
 import de.uni_hildesheim.sse.dslCore.translation.TranslatorException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.AbstractCallExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallArgument;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
@@ -38,23 +39,13 @@ public class ExpressionTranslator
     protected Expression processCall(Expression firstParam, Call call, CallType type,
         de.uni_hildesheim.sse.vil.expressions.expressionDsl.Expression arrayEx, Resolver resolver) 
         throws TranslatorException {
-        Expression result;
+        AbstractCallExpression result;
         List<CallArgument> arguments = new ArrayList<CallArgument>();
         if (null != firstParam) {
             arguments.add(new CallArgument(firstParam));
         }
-        String name = resolveCallArguments(call, arguments, arrayEx, resolver);
-        /*if (null != call) {
-            if (null != call.getParam()) {
-                for (de.uni_hildesheim.sse.vil.expressions.expressionDsl.NamedArgument param : call.getParam().getParam()) {
-                    arguments.add(new CallArgument(param.getName(), processExpression(param.getEx(), resolver)));
-                }
-            }
-            name = call.getName();
-        } else {
-            arguments.add(new CallArgument(processExpression(arrayEx, resolver)));
-            name = "[]";
-        }*/
+        List<VariableDeclaration> varDecls = resolveIteratorDeclarations(call, type, arguments, resolver);
+        String name = resolveCallArguments(call, varDecls, arguments, arrayEx, resolver);
         CallArgument[] arg = new CallArgument[arguments.size()];
         arguments.toArray(arg);
         if (CallType.SYSTEM == type) {
@@ -90,8 +81,13 @@ public class ExpressionTranslator
             }
         }
         if (null == result) {
-            throw new TranslatorException("cannot resolve " + name, call, 
+            throw new TranslatorException("cannot resolve call to '" + name + "'", call, 
                 ExpressionDslPackage.Literals.CALL__NAME, ErrorCodes.UNKNOWN_ELEMENT);
+        }
+        if (result.isPlaceholder()) {
+            warning("The operation '" + result.getVilSignature() 
+                + "' is unknown, shall be a VIL type - may lead to a runtime error", call, 
+                ExpressionDslPackage.Literals.CALL__NAME, ErrorCodes.UNKNOWN_TYPE);
         }
         return result;
     }

@@ -7,7 +7,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -48,10 +50,6 @@ public class ZipHandler {
         ZipOutputStream zos = null;
         try {
             zos = createOutputStream(new FileOutputStream(zip));
-            if (null != tmp) {
-                packInto(tmp.getAbsolutePath(), tmp, zos);
-                FileUtils.deleteQuietly(tmp);
-            }
             String basePath;
             if (null != base) {
                 basePath = FilenameUtils.normalize(base.getAbsolutePath());
@@ -61,9 +59,10 @@ public class ZipHandler {
             } else {
                 basePath = null;
             }
+            Set<String> done = new HashSet<String>();
             for (File file : files) {
                 String filePath = makeRelative(basePath, file);
-                ZipEntry entry = createEntry(filePath);
+                ZipEntry entry = createEntry(filePath, file);
                 zos.putNextEntry(entry);
                 FileInputStream in = null;
                 try {
@@ -75,6 +74,11 @@ public class ZipHandler {
                     throw e1;
                 }
                 zos.closeEntry();
+                done.add(filePath);
+            }
+            if (null != tmp) {
+                packInto(tmp.getAbsolutePath(), tmp, zos, done);
+                FileUtils.deleteQuietly(tmp);
             }
             zos.close();
         } catch (IOException e) {
@@ -130,9 +134,10 @@ public class ZipHandler {
      * for specialized ZIP types, e.g., JAR.
      * 
      * @param name the name of the entry
+     * @param file the underlying file
      * @return the ZIP entry
      */
-    protected ZipEntry createEntry(String name) {
+    protected ZipEntry createEntry(String name, File file) {
         return new ZipEntry(name);
     }
     
@@ -230,29 +235,37 @@ public class ZipHandler {
      * @param basePath the base path (shall be the absolute path of <code>source</code> for the first call
      * @param source the source directory to take the files from
      * @param out the ZIP output stream to write the files into
+     * @param done already processed ZIP paths
      * @throws IOException in case that reading or creating files fails
      */
-    private void packInto(String basePath, File source, ZipOutputStream out) throws IOException {
+    private void packInto(String basePath, File source, ZipOutputStream out, Set<String> done) throws IOException {
         if (source.isDirectory()) {
             File[] files = source.listFiles();
             if (null != files) {
                 for (File f: files) {
-                    packInto(basePath, f, out);
+                    packInto(basePath, f, out, done);
                 }
             }
         } else {
             if (include(source)) {
                 String sourcePath = makeRelative(basePath, source);
-                ZipEntry entry = createEntry(sourcePath);
-                out.putNextEntry(entry);
-                FileInputStream fis = null;
-                try {
-                    fis = new FileInputStream(source);
-                    IOUtils.copy(fis, out);
-                    fis.close();
-                } catch (IOException e) {
-                    IOUtils.closeQuietly(fis);
-                    throw e;
+                while (sourcePath.startsWith("/") || sourcePath.startsWith("\\")) {
+                    sourcePath = sourcePath.substring(1);
+                }
+                if (!done.contains(sourcePath)) {
+                    ZipEntry entry = createEntry(sourcePath, source);
+                    out.putNextEntry(entry);
+                    FileInputStream fis = null;
+                    try {
+                        fis = new FileInputStream(source);
+                        IOUtils.copy(fis, out);
+                        fis.close();
+                    } catch (IOException e) {
+                        IOUtils.closeQuietly(fis);
+                        throw e;
+                    }
+                    out.closeEntry();
+                    done.add(sourcePath);
                 }
             }
         }

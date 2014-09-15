@@ -261,7 +261,7 @@ InterfaceDeclaration :
 	;
 		
 Export :
-	'export' names+=Identifier (',' names+=Identifier)* ';'
+	'export' names+=QualifiedName (',' names+=QualifiedName)* ';'
 ;		
 	
 ImportStmt: 
@@ -505,8 +505,8 @@ Declarator:
 	;
 
 Declaration:	
-	id+=Identifier (',' id+=Identifier)*
-	(':' type=Type)?
+	(type=Type)? id+=Identifier (',' id+=Identifier)*
+	
 	('=' init=Expression)?
 	;	
 	

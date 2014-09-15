@@ -22,12 +22,14 @@ import de.uni_hildesheim.sse.ivml.InterfaceDeclaration;
 import de.uni_hildesheim.sse.ivml.OpDefStatement;
 import de.uni_hildesheim.sse.ivml.Project;
 import de.uni_hildesheim.sse.ivml.ProjectContents;
+import de.uni_hildesheim.sse.ivml.QualifiedName;
 import de.uni_hildesheim.sse.ivml.Typedef;
 import de.uni_hildesheim.sse.ivml.TypedefEnumLiteral;
 import de.uni_hildesheim.sse.ivml.TypedefMapping;
 import de.uni_hildesheim.sse.ivml.VariableDeclaration;
 import de.uni_hildesheim.sse.ivml.VariableDeclarationPart;
 import de.uni_hildesheim.sse.ivml.VersionStmt;
+import de.uni_hildesheim.sse.translation.Utils;
 import de.uni_hildesheim.sse.ui.resources.Images;
 
 /**
@@ -178,7 +180,8 @@ public class IvmlLabelProvider extends DefaultEObjectLabelProvider {
 	
 	protected Object text(Export stmt) {
 		StringBuilder names = new StringBuilder();
-		for (String name : stmt.getNames()) {
+		for (QualifiedName qn : stmt.getNames()) {
+		        String name = Utils.getQualifiedNameString(qn);
 			if (names.length() > 0) {
 				names.append(", ");
 			}

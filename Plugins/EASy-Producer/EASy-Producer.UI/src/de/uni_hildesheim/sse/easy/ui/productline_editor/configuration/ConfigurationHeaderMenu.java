@@ -25,6 +25,7 @@ import de.uni_hildesheim.sse.easy.ui.confModel.GUIVariable;
 import de.uni_hildesheim.sse.easy.ui.core.reasoning.AbstractReasonerListener;
 import de.uni_hildesheim.sse.easy.ui.productline_editor.AbstractEASyEditorPage;
 import de.uni_hildesheim.sse.easy.ui.productline_editor.EasyProducerDialog;
+import de.uni_hildesheim.sse.easy.ui.productline_editor.EclipseConsole;
 import de.uni_hildesheim.sse.easy.ui.productline_editor.TransformatorProgressDialog;
 import de.uni_hildesheim.sse.easy_producer.core.mgmt.IProductLineProjectListener;
 import de.uni_hildesheim.sse.easy_producer.core.mgmt.PLPInfo;
@@ -353,11 +354,28 @@ public class ConfigurationHeaderMenu extends AbstractConfigMenu implements Tranf
                  * then the new output of the new instantiation process will be written to the console
                  */
                 EclipseConsole.INSTANCE.clearConsole();
-                try {
-                    getProductLineProject().instantiate(ConfigurationHeaderMenu.this);
-                } catch (VilLanguageException e) {
-                    EasyProducerDialog.showErrorDialog(getParent().getShell(), e.getMessage());
-                }
+                // run execution in thread in order to enable update of the console
+                new Thread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        try {
+                            ProductLineProject plp = getProductLineProject();
+                            plp.instantiate(ConfigurationHeaderMenu.this);
+                            plp.refreshArtifacts(); // force Eclipse to show new files
+                        } catch (VilLanguageException e) {
+                            final VilLanguageException exc = e;
+                            Display.getDefault().asyncExec(new Runnable() {
+                                
+                                @Override
+                                public void run() {
+                                    EasyProducerDialog.showErrorDialog(null, exc.getMessage());
+                                }
+                            });
+                        }
+                    }
+                    
+                }).start();
             }
         });
     }

@@ -11,6 +11,8 @@ import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Constant;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ConstructorExecution;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ContainerInitializer;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ContainerInitializerExpression;
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Declaration;
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Declarator;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.EqualityExpression;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.EqualityExpressionPart;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Expression;
@@ -115,6 +117,18 @@ public class ExpressionDslSemanticSequencer extends AbstractDelegatingSemanticSe
 			case ExpressionDslPackage.CONTAINER_INITIALIZER_EXPRESSION:
 				if(context == grammarAccess.getContainerInitializerExpressionRule()) {
 					sequence_ContainerInitializerExpression(context, (ContainerInitializerExpression) semanticObject); 
+					return; 
+				}
+				else break;
+			case ExpressionDslPackage.DECLARATION:
+				if(context == grammarAccess.getDeclarationRule()) {
+					sequence_Declaration(context, (Declaration) semanticObject); 
+					return; 
+				}
+				else break;
+			case ExpressionDslPackage.DECLARATOR:
+				if(context == grammarAccess.getDeclaratorRule()) {
+					sequence_Declarator(context, (Declarator) semanticObject); 
 					return; 
 				}
 				else break;
@@ -356,7 +370,7 @@ public class ExpressionDslSemanticSequencer extends AbstractDelegatingSemanticSe
 	
 	/**
 	 * Constraint:
-	 *     (name=QualifiedPrefix param=ArgumentList?)
+	 *     (name=QualifiedPrefix decl=Declarator? param=ArgumentList?)
 	 */
 	protected void sequence_Call(EObject context, Call semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -365,7 +379,14 @@ public class ExpressionDslSemanticSequencer extends AbstractDelegatingSemanticSe
 	
 	/**
 	 * Constraint:
-	 *     (nValue=NumValue | sValue=STRING | qValue=QualifiedName | bValue='true' | bValue='false')
+	 *     (
+	 *         nValue=NumValue | 
+	 *         sValue=STRING | 
+	 *         qValue=QualifiedName | 
+	 *         bValue='true' | 
+	 *         bValue='false' | 
+	 *         null='null'
+	 *     )
 	 */
 	protected void sequence_Constant(EObject context, Constant semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -395,6 +416,24 @@ public class ExpressionDslSemanticSequencer extends AbstractDelegatingSemanticSe
 	 *     ((exprs+=ContainerInitializerExpression exprs+=ContainerInitializerExpression*)?)
 	 */
 	protected void sequence_ContainerInitializer(EObject context, ContainerInitializer semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (type=Type? id+=Identifier id+=Identifier*)
+	 */
+	protected void sequence_Declaration(EObject context, Declaration semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (decl+=Declaration decl+=Declaration*)
+	 */
+	protected void sequence_Declarator(EObject context, Declarator semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
@@ -654,7 +693,7 @@ public class ExpressionDslSemanticSequencer extends AbstractDelegatingSemanticSe
 	
 	/**
 	 * Constraint:
-	 *     (call=Call | arrayEx=Expression)
+	 *     (((type='.' | type='->') call=Call) | arrayEx=Expression)
 	 */
 	protected void sequence_SubCall(EObject context, SubCall semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -681,7 +720,7 @@ public class ExpressionDslSemanticSequencer extends AbstractDelegatingSemanticSe
 	
 	/**
 	 * Constraint:
-	 *     (name=Identifier | (set='setOf' param=TypeParameters) | (seq='sequenceOf' param=TypeParameters) | (map='mapOf' param=TypeParameters))
+	 *     (name=QualifiedPrefix | (set='setOf' param=TypeParameters) | (seq='sequenceOf' param=TypeParameters) | (map='mapOf' param=TypeParameters))
 	 */
 	protected void sequence_Type(EObject context, Type semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);

@@ -16,6 +16,7 @@ import de.uni_hildesheim.sse.easy.ui.confModel.GUIConfiguration;
 import de.uni_hildesheim.sse.easy.ui.confModel.GUIVariable;
 import de.uni_hildesheim.sse.easy.ui.confModel.IGUIConfigChangeListener;
 import de.uni_hildesheim.sse.easy.ui.productline_editor.IEASyEditorPage;
+import de.uni_hildesheim.sse.easy.ui.productline_editor.configuration.EditorContextMenuListener.Action;
 import de.uni_hildesheim.sse.model.confModel.Configuration;
 import de.uni_hildesheim.sse.model.confModel.IConfigurationChangeListener;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
@@ -151,28 +152,39 @@ public class ConfigurationTableEditor extends TreeViewer implements IGUIConfigCh
      * Part of the constructor.
      */
     private void createContextMenu() {
-        Menu menu = new Menu(getControl());
-        final MenuItem nullValues = new MenuItem(menu, SWT.PUSH);
+        final Menu menu = new Menu(getControl());
         menu.addMenuListener(new MenuListener() {
             
             @Override
             public void menuShown(MenuEvent evt) {
+                // Clear (old) menu
+                MenuItem[] items = menu.getItems();
+                for (int i = items.length - 1; i >= 0; i--) {
+                    items[i].dispose();
+                }
+
+                // (Re-) build menu (unfortunately there is no setVisible method) 
                 IStructuredSelection selection = (IStructuredSelection) getSelection();
                 GUIVariable var = (GUIVariable) selection.getFirstElement();
+                if (var.hasValue()) {
+                    final MenuItem removeValues = new MenuItem(menu, SWT.PUSH);
+                    removeValues.setText("remove value"); 
+                    removeValues.addSelectionListener(new EditorContextMenuListener(ConfigurationTableEditor.this,
+                        Action.REMOVE_VALUE));       
+                }
                 if (!var.hasValue() || !var.hasNullValue()) {
+                    final MenuItem nullValues = new MenuItem(menu, SWT.PUSH);
                     nullValues.setText("set NULL");
-                } else {
-                    nullValues.setText("remove NULL value");
+                    nullValues.addSelectionListener(new EditorContextMenuListener(ConfigurationTableEditor.this,
+                        Action.SET_NULL));
                 }
             }
             
             @Override
             public void menuHidden(MenuEvent evt) {
-                // TODO Auto-generated method stub
                 
             }
         });
-        nullValues.addSelectionListener(new EditorContextMenuListener(this));
         getTree().setMenu(menu);
     }
     

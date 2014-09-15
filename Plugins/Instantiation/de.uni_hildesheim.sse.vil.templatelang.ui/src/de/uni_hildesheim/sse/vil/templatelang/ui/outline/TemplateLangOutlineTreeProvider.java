@@ -19,6 +19,7 @@ import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Import;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Parameter;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VersionStmt;
+import de.uni_hildesheim.sse.vil.expressions.translation.Utils;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.Extension;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.IndentationHintPart;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit;
@@ -362,7 +363,7 @@ public class TemplateLangOutlineTreeProvider extends DefaultOutlineTreeProvider 
      */
     private boolean checkParameter(Parameter param) {
         return param != null && param.getName() != null && !param.getName().isEmpty() && param.getType() != null
-                && param.getType().getName() != null && !param.getType().getName().isEmpty();
+                && param.getType().getName() != null && !Utils.isEmpty(param.getType().getName());
     }
 
     /**
@@ -375,6 +376,6 @@ public class TemplateLangOutlineTreeProvider extends DefaultOutlineTreeProvider 
     private boolean checkVariableDeclaration(VariableDeclaration varDecl) {
         return varDecl != null && varDecl.getName() != null && !varDecl.getName().isEmpty()
                 && varDecl.getType() != null && varDecl.getType().getName() != null
-                && !varDecl.getType().getName().isEmpty();
+                && !Utils.isEmpty(varDecl.getType().getName());
     }
 }

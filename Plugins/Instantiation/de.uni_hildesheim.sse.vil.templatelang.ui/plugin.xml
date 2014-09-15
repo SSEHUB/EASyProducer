@@ -331,7 +331,7 @@
             class="de.uni_hildesheim.sse.vil.templatelang.ui.wizards.VTLFiletypeWizard"
             icon="icons/vil_template_file_icon.gif"
             id="de.uni_hildesheim.sse.ui.wizards.VTLFiletypeWizard"
-            name="VTL File">
+            name="Artifact Instantiation Template (VTL)">
       </wizard>
       <category
             id="de.uni_hildesheim.sse.EASy_Producer"

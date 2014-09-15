@@ -140,7 +140,6 @@ public class IvmlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getDeclaratorAccess().getGroup(), "rule__Declarator__Group__0");
 					put(grammarAccess.getDeclaratorAccess().getGroup_1(), "rule__Declarator__Group_1__0");
 					put(grammarAccess.getDeclarationAccess().getGroup(), "rule__Declaration__Group__0");
-					put(grammarAccess.getDeclarationAccess().getGroup_1(), "rule__Declaration__Group_1__0");
 					put(grammarAccess.getDeclarationAccess().getGroup_2(), "rule__Declaration__Group_2__0");
 					put(grammarAccess.getDeclarationAccess().getGroup_3(), "rule__Declaration__Group_3__0");
 					put(grammarAccess.getActualParameterListAccess().getGroup(), "rule__ActualParameterList__Group__0");
@@ -325,9 +324,9 @@ public class IvmlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getSetOpAccess().getDeclExAssignment_3(), "rule__SetOp__DeclExAssignment_3");
 					put(grammarAccess.getDeclaratorAccess().getDeclAssignment_0(), "rule__Declarator__DeclAssignment_0");
 					put(grammarAccess.getDeclaratorAccess().getDeclAssignment_1_1(), "rule__Declarator__DeclAssignment_1_1");
-					put(grammarAccess.getDeclarationAccess().getIdAssignment_0(), "rule__Declaration__IdAssignment_0");
-					put(grammarAccess.getDeclarationAccess().getIdAssignment_1_1(), "rule__Declaration__IdAssignment_1_1");
-					put(grammarAccess.getDeclarationAccess().getTypeAssignment_2_1(), "rule__Declaration__TypeAssignment_2_1");
+					put(grammarAccess.getDeclarationAccess().getTypeAssignment_0(), "rule__Declaration__TypeAssignment_0");
+					put(grammarAccess.getDeclarationAccess().getIdAssignment_1(), "rule__Declaration__IdAssignment_1");
+					put(grammarAccess.getDeclarationAccess().getIdAssignment_2_1(), "rule__Declaration__IdAssignment_2_1");
 					put(grammarAccess.getDeclarationAccess().getInitAssignment_3_1(), "rule__Declaration__InitAssignment_3_1");
 					put(grammarAccess.getActualParameterListAccess().getParamAssignment_0(), "rule__ActualParameterList__ParamAssignment_0");
 					put(grammarAccess.getActualParameterListAccess().getParamAssignment_1_1(), "rule__ActualParameterList__ParamAssignment_1_1");

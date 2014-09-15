@@ -13,6 +13,5 @@ project ivmlSpec_pc_contentSharing {
 // qualification detection -> Sascha    
     //* name = "myApp";
     ivmlSpec_pc_application::name = "myApp";
-    //* name = "myPlatform";
     ivmlSpec_pc_targetPlatform::name = "myPlatform";
 }

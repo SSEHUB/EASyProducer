@@ -1,3 +1,18 @@
+/*
+ * Copyright 2009-2013 University of Hildesheim, Software Systems Engineering
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.uni_hildesheim.sse.model.varModel.values;
 
 import java.util.HashMap;
@@ -337,6 +352,51 @@ public class CompoundValue extends StructuredValue implements Cloneable {
     @Override
     public String toString() {
         return nestedElements.toString(); // TODO consider + " : " + getType().toString(); from Value superclass
+    }
+    
+    @Override
+    public int hashCode() {
+        int result = getType().getName().hashCode();
+        Compound type = (Compound) getType(); // by construction
+        while (null != type) {
+            for (int s = 0; s < type.getElementCount(); s++) {
+                String slotName = type.getElement(s).getName();
+                Value myValue = getNestedValue(slotName);
+                if (null != myValue) {
+                    result += myValue.hashCode();
+                }
+            }        
+            type = type.getRefines();
+        }
+        return result;
+    }
+    
+    @Override
+    public boolean equals(Object object) {
+        boolean equals = false;
+        Compound type = (Compound) getType(); // by construction
+        if (object instanceof CompoundValue ) {
+            CompoundValue oCompound = (CompoundValue) object;
+            IDatatype oType = oCompound.getType(); 
+            if (type.isAssignableFrom(oType) && oType.isAssignableFrom(type)) {
+                CompoundValue otherValue = (CompoundValue) object;
+                equals = true;
+                while (equals && null != type) {
+                    for (int s = 0; equals && s < type.getElementCount(); s++) {
+                        String slotName = type.getElement(s).getName();
+                        Value myValue = getNestedValue(slotName);
+                        Value oValue = otherValue.getNestedValue(slotName);
+                        if (null == myValue) {
+                            equals = (null == oValue);
+                        } else {
+                            equals = myValue.equals(oValue);
+                        }
+                    }
+                    type = type.getRefines();
+                }
+            }
+        }
+        return equals;
     }
     
 }

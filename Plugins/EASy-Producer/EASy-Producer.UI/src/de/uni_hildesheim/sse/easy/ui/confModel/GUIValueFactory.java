@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.eclipse.swt.widgets.Composite;
 
+import de.uni_hildesheim.sse.easy.ui.productline_editor.DisplayNameProvider;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.Project;
@@ -25,12 +26,15 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.Sequence;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Set;
 import de.uni_hildesheim.sse.model.varModel.datatypes.StringType;
 import de.uni_hildesheim.sse.model.varModel.filter.ReferenceValuesFinder;
+import de.uni_hildesheim.sse.model.varModel.values.NullValue;
 /**
  * Creates a {@link GUIVariable} for a given {@link IDecisionVariable}.
  * @author El-Sharkawy
  *
  */
-class GUIValueFactory {
+public class GUIValueFactory {
+    
+    private static boolean createUpdatableCellEditors = false;
     
     /**
      * Part of the {@link GUIValueFactory} for creating a {@link GUIVariable}.
@@ -109,24 +113,13 @@ class GUIValueFactory {
 
         @Override
         public void visitReference(Reference reference) {
-            Project project = variable.getConfiguration().getProject();
-            List<AbstractVariable> possibleDeclarations = ReferenceValuesFinder.findPossibleValues(project, reference);
-            ComboboxGUIVariable.ComboItem[] items = null;
-            
-            if (possibleDeclarations.size() > 0) {
-                items = new ComboboxGUIVariable.ComboItem[possibleDeclarations.size()];
-                for (int i = 0; i < possibleDeclarations.size(); i++) {
-                    AbstractVariable declaration = possibleDeclarations.get(i);
-                    String name = declaration.getUniqueName();
-                    items[i] = new ComboboxGUIVariable.ComboItem(name, declaration);  
-                }
-            }
+            ComboboxGUIVariable.ComboItem[] items = createComboItems(variable, reference);
             resultVariable = new ComboboxGUIVariable(variable, parent, reference, items, confParent);
         }
-
+        
         @Override
         public void visitBooleanType(BooleanType type) {
-            ComboboxGUIVariable.ComboItem[] items = new ComboboxGUIVariable.ComboItem[2];
+            ComboboxGUIVariable.ComboItem[] items = createComboItemArray(variable, 2);
             items[0] = new ComboboxGUIVariable.ComboItem("true", true);
             items[1] = new ComboboxGUIVariable.ComboItem("false", false);
             
@@ -157,10 +150,11 @@ class GUIValueFactory {
         public void visitEnumType(Enum enumType) {
             ComboboxGUIVariable.ComboItem[] items = null;
             if (enumType.getLiteralCount() > 0) {
-                items = new ComboboxGUIVariable.ComboItem[enumType.getLiteralCount()];
+                DisplayNameProvider nameProvider = DisplayNameProvider.getInstance();
+                items = createComboItemArray(variable, enumType.getLiteralCount());
                 for (int i = 0; i < enumType.getLiteralCount(); i++) {
                     EnumLiteral literal = enumType.getLiteral(i);
-                    String literalName = literal.getName();
+                    String literalName = nameProvider.getDisplayName(literal);
                     items[i] = new ComboboxGUIVariable.ComboItem(literalName, literal);
                 }
             }
@@ -183,11 +177,79 @@ class GUIValueFactory {
      * is a top level variable stored inside the configuration.
      * @return A GUI representation of the {@link IDecisionVariable}
      */
-    static GUIVariable createVariable(IDecisionVariable variable, Composite parent, GUIConfiguration config,
+    public static GUIVariable createVariable(IDecisionVariable variable, Composite parent, GUIConfiguration config,
         GUIVariable varParent) {
         
         VariableVisitor visitor = new VariableVisitor(variable, parent, config, varParent); 
         return visitor.getVariable();
+    }
+
+    /**
+     * Creates the array for combobox items and pre-assigns the null value if required via 
+     * {@link DisplayNameProvider#enableNullValueInConfiguration(IDecisionVariable)}. The caller may
+     * utilize the result until <code>length</code> but not further.
+     * 
+     * @param variable the variable to create the combo items for
+     * @param length the length of the array to be created (except for null value entries)
+     * @return the created array
+     */
+    private static ComboboxGUIVariable.ComboItem[] createComboItemArray(IDecisionVariable variable, int length) {
+        DisplayNameProvider nameProvider = DisplayNameProvider.getInstance();
+        boolean enableNullValue = nameProvider.enableNullValueInConfiguration(variable);
+        if (enableNullValue) {
+            length++;
+        }
+        ComboboxGUIVariable.ComboItem[] result = new ComboboxGUIVariable.ComboItem[length];
+        if (enableNullValue) {
+            result[length - 1] = new ComboboxGUIVariable.ComboItem(nameProvider.getNullName(variable), 
+                NullValue.INSTANCE);
+        }
+        return result;
+    }
+
+    /**
+     * Creates combo items for the given <code>variable</code> of type <code>reference</code>.
+     * 
+     * @param variable the variable to be considered
+     * @param reference the (required) reference type of <code>variable</code>
+     * @return the combo items
+     */
+    public static ComboboxGUIVariable.ComboItem[] createComboItems(IDecisionVariable variable, 
+        Reference reference) {
+        Project project = variable.getConfiguration().getProject();
+        List<AbstractVariable> possibleDeclarations = ReferenceValuesFinder.findPossibleValues(project, reference);
+        ComboboxGUIVariable.ComboItem[] items = null;
+        
+        if (possibleDeclarations.size() > 0) {
+            DisplayNameProvider nameProvider = DisplayNameProvider.getInstance();
+            items = createComboItemArray(variable, possibleDeclarations.size());
+            for (int i = 0; i < possibleDeclarations.size(); i++) {
+                AbstractVariable declaration = possibleDeclarations.get(i);
+                String name = nameProvider.getDisplayName(declaration);
+                items[i] = new ComboboxGUIVariable.ComboItem(name, declaration);  
+            }
+        }
+        return items;
+    }
+
+    /**
+     * Defines whether updatable cell editors shall be created if possible.
+     * 
+     * @param updatable if <code>true</code>, updatable cell editors shall be created, 
+     *   <code>false</code> for usual ones
+     */
+    public static final void createUpdatableCellEditors(boolean updatable) {
+        createUpdatableCellEditors = updatable;
+    }
+
+    /**
+     * Returns whether updatable cell editors shall be created if possible.
+     * 
+     * @return <code>true</code> if updatable cell editors shall be created, 
+     *   <code>false</code> for usual ones
+     */
+    public static final boolean createUpdatableCellEditors() {
+        return createUpdatableCellEditors;
     }
 
 }

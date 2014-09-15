@@ -10,6 +10,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.defaultInstantiators.RandomDouble;
+
 /**
  * Tests for the basic language.
  * 
@@ -78,6 +80,18 @@ public class ExecutionTests extends AbstractExecutionTest {
         assertEqual("boolean");
     }
 
+    /**
+     * Tests the random "instantiators" (inspired by K. Schmid).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testRandom() throws IOException {
+        boolean inTests = RandomDouble.setInTests(true);
+        assertEqual("random");
+        RandomDouble.setInTests(inTests);
+    }
+    
     /**
      * Tests basic boolean functions.
      * 
@@ -412,4 +426,25 @@ public class ExecutionTests extends AbstractExecutionTest {
         assertSelfInstantiate("extendedPL");
     }
 
+    /**
+     * Tests type selects (actually a part of an existing test used for debugging).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testTypeSelect() throws IOException {
+        assertSelfInstantiate("typeSelect");
+    }
+    
+    /**
+     * Tests the selection of the right VTL script from a VIL script (contributed by Sebastian Bender).
+     * The correct scripts are nested in the <code>PL_3</code> folder, but the same are also present 
+     * in the <code>PL_2</code> folder
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testPL3() throws IOException {
+        assertSelfInstantiate("PL_3/EASy/PL_3");
+    }
 }

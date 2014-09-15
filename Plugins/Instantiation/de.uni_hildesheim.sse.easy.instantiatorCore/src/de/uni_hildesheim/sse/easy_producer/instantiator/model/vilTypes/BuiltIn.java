@@ -3,6 +3,8 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.Attribute;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.Configuration;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.DecisionVariable;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.EnumValue;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlDeclaration;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlElement;
 
 /**
@@ -24,7 +26,6 @@ public class BuiltIn {
             TypeRegistry.DEFAULT.register(PseudoInteger.class);
             TypeRegistry.DEFAULT.register(PseudoReal.class);
             TypeRegistry.DEFAULT.register(PseudoString.class);
-            TypeRegistry.DEFAULT.register(PseudoType.class);
             TypeRegistry.DEFAULT.register(Collection.class);
             TypeRegistry.DEFAULT.register(Set.class);
             TypeRegistry.DEFAULT.register(Sequence.class);
@@ -35,6 +36,8 @@ public class BuiltIn {
             TypeRegistry.DEFAULT.register(IvmlElement.class);
             TypeRegistry.DEFAULT.register(Attribute.class);
             TypeRegistry.DEFAULT.register(DecisionVariable.class);
+            TypeRegistry.DEFAULT.register(EnumValue.class);
+            TypeRegistry.DEFAULT.register(IvmlDeclaration.class);
             TypeRegistry.DEFAULT.register(Configuration.class);
         }
     }

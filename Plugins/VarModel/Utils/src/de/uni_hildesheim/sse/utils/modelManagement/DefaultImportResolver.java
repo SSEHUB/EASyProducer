@@ -1,3 +1,18 @@
+/*
+ * Copyright 2009-2013 University of Hildesheim, Software Systems Engineering
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.uni_hildesheim.sse.utils.modelManagement;
 
 import java.net.URI;
@@ -100,7 +115,7 @@ public abstract class DefaultImportResolver<M extends IModel> extends ImportReso
         // list and handled by the caller.
         
         if (patricksTestFlagIsActive) {
-
+            // TODO avoid that a model can import itself.
             IModelRepository<M> repository = context.getModelRepository();
             ArrayList<ModelInfo<M>> modelImportList;
             ImportValidation<M> importValidator = new ImportValidation<M>(repository, messages);
@@ -142,8 +157,45 @@ public abstract class DefaultImportResolver<M extends IModel> extends ImportReso
             }
             
         } else { // TODO: Delete, if my (=Patrick) method is working
-            oldMechanismWithoutImportValidation(context, done, messages, versions, imp); 
+            oldMechanismWithoutImportValidation(context, done, messages, versions, imp);
+            if (isSelfImport(context.getModel(), imp)) {
+                messages.add(new Message("model '" + imp.getName() + "' cannot import/conflict itself", Status.ERROR));
+            }
         }    
+    }
+    
+    /**
+     * Checks whether <code>imp</code> is a self-import of <code>project</code>. This is a simplified (not 
+     * comprehensive) implementation as bugfix/workaround!
+     * 
+     * @param project the project to consider
+     * @param imp the import to be tested
+     * @return <code>true</code> if it is a self import, <code>false</code> else
+     */
+    private boolean isSelfImport(M project, ModelImport<M> imp) {
+        boolean isSelf = false;
+        String projectName = project.getName();
+        if (projectName.equals(imp.getName())) {
+            if (0 == imp.getRestrictionsCount()) {
+                isSelf = true; // no version restriction specified
+            } else {
+                for (int r = 0; !isSelf && r < imp.getRestrictionsCount(); r++) {
+                    VersionRestriction restriction = imp.getRestriction(r);
+                    if (projectName.equals(restriction.getName())) {
+                        Version rVersion = restriction.getVersion();
+                        switch (restriction.getOperator()) {
+                        // currently, do this only for EQUALS
+                        case EQUALS: 
+                            isSelf = Version.equals(project.getVersion(), rVersion);
+                            break;
+                        default:
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return isSelf;
     }
 
     /**

@@ -2,11 +2,14 @@ package de.uni_hildesheim.sse.easy.ui.confModel;
 
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
 import de.uni_hildesheim.sse.easy.ui.productline_editor.EasyProducerDialog;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
+import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
 import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
 import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
@@ -92,20 +95,43 @@ class ComboboxGUIVariable extends GUIVariable {
         }
     }
 
-    @Override
-    public CellEditor getCellEditor() {
+    /**
+     * Creates the items to be displayed in the resulting combobox.
+     * 
+     * @return the items
+     */
+    private String[] createItems() {
         String[] items = new String[this.values.length];
         for (int i = 0; i < items.length; i++) {
             items[i] = this.values[i].getLabel();
         }
-        return new ComboBoxCellEditor(parent, items);
+        return items;
+    }
+    
+    @Override
+    public CellEditor getCellEditor() {
+        CellEditor result;
+        if (GUIValueFactory.createUpdatableCellEditors()) {
+            result = new ComboboxGUICellEditor(parent, createItems(), this);
+        } else {
+            result = new ComboBoxCellEditor(parent, createItems());
+        }
+        return result;
+    }
+    
+    @Override
+    public GUIEditor getEditor() {
+        Combo combo = new Combo(parent, SWT.SINGLE | SWT.BORDER);
+        combo.setItems(createItems());
+        combo.setText(getValueText());
+        return new ComboGUIEditor(combo, this);
     }
 
     @Override
     public String getValueText() {
         String result = null;
         if (hasValue() && hasNullValue()) {
-            result = GUIVariable.NULL_VALUE_LABEL;
+            result = getNullLabel();
         } else {
             int selectedIndex = (Integer) getValue();
             //If user has entered a valid value by hand, than also -1 is returned :-(
@@ -162,4 +188,21 @@ class ComboboxGUIVariable extends GUIVariable {
         
         return selectedIndex;
     }
+    
+    /**
+     * Refreshes the contents of this combobox variable.
+     * 
+     * @return the new combobox elements (may be <b>null</b> if nothing needs to be refreshed)
+     */
+    String[] refreshContents() {
+        String[] result;
+        if (Reference.TYPE.isAssignableFrom(type)) {
+            values = GUIValueFactory.createComboItems(getVariable(), (Reference) type);
+            result = createItems();
+        } else {
+            result = null;
+        }
+        return result;
+    }
+
 }

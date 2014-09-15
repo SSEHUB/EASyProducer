@@ -96,7 +96,10 @@ public class Def extends TemplateBlock implements ITemplateLangElement, IResolva
 
     @Override
     public String getSignature() {
-        StringBuilder signature = new StringBuilder(getName());
+        StringBuilder signature = new StringBuilder();
+        if (null != getName()) {
+            signature.append(getName());
+        }
         signature.append("(");
         if (null != param) {
             for (int p = 0; p < param.length; p++) {
@@ -130,6 +133,11 @@ public class Def extends TemplateBlock implements ITemplateLangElement, IResolva
         }
         return result;
     }
+    
+    @Override
+    public boolean isFirstParameterOperand() {
+        return false;
+    }
 
     @Override
     public boolean isStatic() {
@@ -139,6 +147,11 @@ public class Def extends TemplateBlock implements ITemplateLangElement, IResolva
     @Override
     public IMetaType getDeclaringType() {
         return parent;
+    }
+
+    @Override
+    public boolean isPlaceholder() {
+        return false;
     }
 
 }

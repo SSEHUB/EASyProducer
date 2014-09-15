@@ -140,6 +140,15 @@ public interface VilBuildLanguageFactory extends EFactory
   Instantiate createInstantiate();
 
   /**
+   * Returns a new object of class '<em>Map Variable</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Map Variable</em>'.
+   * @generated
+   */
+  MapVariable createMapVariable();
+
+  /**
    * Returns a new object of class '<em>Map</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

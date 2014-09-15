@@ -1526,7 +1526,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//SubCall:
-	//	"." call=Call | "[" arrayEx=Expression // IVML addition to OCL
+	//	type=("." | "->") call=Call | "[" arrayEx=Expression // IVML addition to OCL
 	//	"]";
 	public ExpressionDslGrammarAccess.SubCallElements getSubCallAccess() {
 		return gaExpressionDsl.getSubCallAccess();
@@ -1536,8 +1536,28 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 		return getSubCallAccess().getRule();
 	}
 
+	//Declarator:
+	//	decl+=Declaration (";" decl+=Declaration)* "|";
+	public ExpressionDslGrammarAccess.DeclaratorElements getDeclaratorAccess() {
+		return gaExpressionDsl.getDeclaratorAccess();
+	}
+	
+	public ParserRule getDeclaratorRule() {
+		return getDeclaratorAccess().getRule();
+	}
+
+	//Declaration:
+	//	type=Type? id+=Identifier ("," id+=Identifier)*;
+	public ExpressionDslGrammarAccess.DeclarationElements getDeclarationAccess() {
+		return gaExpressionDsl.getDeclarationAccess();
+	}
+	
+	public ParserRule getDeclarationRule() {
+		return getDeclarationAccess().getRule();
+	}
+
 	//Call:
-	//	name=QualifiedPrefix "(" param=ArgumentList? ")";
+	//	name=QualifiedPrefix "(" decl=Declarator? param=ArgumentList? ")";
 	public ExpressionDslGrammarAccess.CallElements getCallAccess() {
 		return gaExpressionDsl.getCallAccess();
 	}
@@ -1587,7 +1607,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//Constant:
-	//	nValue=NumValue | sValue=STRING | qValue=QualifiedName | bValue=("true" | "false");
+	//	nValue=NumValue | sValue=STRING | qValue=QualifiedName | bValue=("true" | "false") | null="null";
 	public ExpressionDslGrammarAccess.ConstantElements getConstantAccess() {
 		return gaExpressionDsl.getConstantAccess();
 	}
@@ -1618,7 +1638,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 
 	//Type:
 	//	name= // specific types will be dynamically loaded at start-up
-	//	Identifier | set="setOf" param=TypeParameters | seq="sequenceOf" param=TypeParameters | map="mapOf"
+	//	QualifiedPrefix | set="setOf" param=TypeParameters | seq="sequenceOf" param=TypeParameters | map="mapOf"
 	//	param=TypeParameters;
 	public ExpressionDslGrammarAccess.TypeElements getTypeAccess() {
 		return gaExpressionDsl.getTypeAccess();
@@ -1669,8 +1689,9 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 
 	//// adjust de.uni_hildesheim.sse.model.validation.IvmlIdentifierCheck
 	//// never allow identifiers starting with $ -> Reasoner name prefixes
+	//// here $ goes for meta names in dynamic IVML types
 	//terminal ID:
-	//	("a".."z" | "A".."Z" | "_") ("a".."z" | "A".."Z" | "_" | "0".."9")*;
+	//	("a".."z" | "A".."Z" | "_" | "$") ("a".."z" | "A".."Z" | "_" | "0".."9")*;
 	public TerminalRule getIDRule() {
 		return gaExpressionDsl.getIDRule();
 	} 

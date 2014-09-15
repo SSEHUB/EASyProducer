@@ -94,4 +94,15 @@ public class ReasonerDescriptor {
     public boolean isReadyForUse() {
         return true;
     }
+    
+    /**
+     * Returns whether the reasoner provides information about the affected variables
+     * via {@link ReasoningResult#getAffectedVariable(int)}.
+     * 
+     * @return <code>true</code> if the reasoner provides this information, <code>false</code> else
+     */
+    public boolean providesAffectedVariables() {
+        return true;
+    }
+    
 }

@@ -6,6 +6,7 @@ import java.util.Map;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.model.varModel.datatypes.BooleanType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
+import de.uni_hildesheim.sse.model.varModel.datatypes.ConstraintType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Enum;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
@@ -45,6 +46,7 @@ public class ReasonerVariableFactory {
         createRealHandler();
         createEnumHandler();
         createReferencesHandler();
+        createConstraintHandler();
         
         //Structured Datatypes
         createDerivedVariablesHandler();
@@ -166,6 +168,22 @@ public class ReasonerVariableFactory {
                     ReasonerVariable parent) {
                 
                 return new ReferenceVariable(configVariable, cleanName(configVariable.getDeclaration().getName()),
+                        model, parent);
+            }
+        });
+    }
+    
+    /**
+     * Adds a {@link IReasonerVariableCreator} to this map for creating {@link ConstraintVariable}s.
+     */
+    private static void createConstraintHandler() {
+        map.put(ConstraintType.class, new IReasonerVariableCreator() {
+            
+            @Override
+            public ReasonerVariable createReasonerVariable(IDecisionVariable configVariable, ReasonerModel model, 
+                    ReasonerVariable parent) {
+                
+                return new ConstraintVariable(configVariable, cleanName(configVariable.getDeclaration().getName()),
                         model, parent);
             }
         });

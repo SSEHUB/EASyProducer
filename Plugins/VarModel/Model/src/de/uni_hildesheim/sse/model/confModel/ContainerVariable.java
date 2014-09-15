@@ -1,3 +1,18 @@
+/*
+ * Copyright 2009-2013 University of Hildesheim, Software Systems Engineering
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.uni_hildesheim.sse.model.confModel;
 
 import java.util.ArrayList;
@@ -6,6 +21,7 @@ import java.util.List;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Container;
+import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 import de.uni_hildesheim.sse.model.varModel.values.ContainerValue;
 import de.uni_hildesheim.sse.model.varModel.values.NullValue;
@@ -66,6 +82,16 @@ public abstract class ContainerVariable extends StructuredVariable {
     public IDecisionVariable getNestedElement(int index) {
         return nestedElements.get(index);
     }
+    
+    /**
+     * Returns the 0-based index of <code>var</code> in this container.
+     * 
+     * @param var the variable to search for
+     * @return the index of <code>var</code> or <code>-1</code> if not found
+     */
+    public int indexOf(IDecisionVariable var) {
+        return nestedElements.indexOf(var);
+    }
 
     /**
      * {@inheritDoc}
@@ -94,7 +120,8 @@ public abstract class ContainerVariable extends StructuredVariable {
             nestedElements.clear();
         } else {
             conValue = (ContainerValue) value;
-            IDatatype type = ((Container) getDeclaration().getType()).getContainedType();
+            IDatatype type = DerivedDatatype.resolveToBasis(getDeclaration().getType());
+            type = ((Container) type).getContainedType();
             
             // Create nested Elements
             if (conValue != null) {
@@ -152,8 +179,10 @@ public abstract class ContainerVariable extends StructuredVariable {
     /**
      * Adds a new nested element to this variable. This nested element is empty, is in state
      * {@link AssignmentState#UNDEFINED} and can be configured afterwards.
+     * 
+     * @return the created decision variable
      */
-    public void addNestedElement() {
+    public IDecisionVariable addNestedElement() {
         if (null == getValue()) {
             try {
                 Value containerValue = ValueFactory.createValue(getDeclaration().getType(), (Object[]) null);
@@ -166,16 +195,17 @@ public abstract class ContainerVariable extends StructuredVariable {
                 e.printStackTrace();
             }
         }
+        IDecisionVariable result = null;
         IDatatype type = ((Container) getDeclaration().getType()).getContainedType();
         int elementPos = nestedElements.size();
         try {
             String name = getElementName(elementPos);
             DecisionVariableDeclaration decl = new DecisionVariableDeclaration(name, type, getDeclaration());
             VariableCreator creator = new VariableCreator(decl, this, isVisible());
-            IDecisionVariable var = creator.getVariable(false);
-            addNestedElement(var);
+            result = creator.getVariable(false);
+            addNestedElement(result);
             Value nullValue = ValueFactory.createValue(type, (Object[]) null);
-            var.setValue(nullValue, AssignmentState.UNDEFINED);
+            result.setValue(nullValue, AssignmentState.UNDEFINED);
         } catch (ConfigurationException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -183,6 +213,7 @@ public abstract class ContainerVariable extends StructuredVariable {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        return result;
     }
     
     /**

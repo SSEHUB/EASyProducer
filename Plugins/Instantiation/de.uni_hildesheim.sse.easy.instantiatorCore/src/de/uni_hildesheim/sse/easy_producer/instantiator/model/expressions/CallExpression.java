@@ -294,10 +294,30 @@ public class CallExpression extends AbstractCallExpression implements IArgumentP
         }
         return arguments[index];
     }
+    
+    @Override
+    public boolean isPlaceholder() {
+        return isPlaceholder(resolved);
+    }
 
     @Override
     public Object accept(IExpressionVisitor visitor) throws ExpressionException {
         return visitor.visitCallExpression(this);
+    }
+
+    @Override
+    public String getVilSignature() {
+        return getVilSignature(resolved);
+    }
+    
+    /**
+     * Returns whether this call is an iterator call.
+     * 
+     * @return <code>true</code> if it is an iterator call, <code>false</code> else
+     */
+    public boolean isIteratorCall() {
+        return null != resolved && getArgumentsCount() == 2 
+            && getArgument(1).getExpression() instanceof ExpressionEvaluator;
     }
 
 }

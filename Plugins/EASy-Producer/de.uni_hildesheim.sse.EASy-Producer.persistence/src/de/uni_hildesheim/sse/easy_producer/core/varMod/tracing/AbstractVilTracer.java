@@ -2,6 +2,7 @@ package de.uni_hildesheim.sse.easy_producer.core.varMod.tracing;
 
 import java.util.Map;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.IBuildlangElement;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.MapExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Rule;
@@ -14,9 +15,11 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallEx
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Def;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.ITemplateLangElement;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Template;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Collection;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Constants;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
+import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 import de.uni_hildesheim.sse.utils.modelManagement.Version;
 
 /**
@@ -222,7 +225,16 @@ public abstract class AbstractVilTracer
 
     @Override
     public void visitScript(Script script) {
-        write("executing script " + script.getName() + " " + Version.toString(script.getVersion()));
+        String ver = Version.toString(script.getVersion());
+        if (null != ver && ver.length() > 0) {
+            ver = " version " + ver;
+        }
+        String location = "";
+        ModelInfo<Script> info = BuildModel.INSTANCE.availableModels().getModelInfo(script);
+        if (null != info) {
+            location = " @ " + info.getLocation();
+        }
+        write("executing script " + script.getName() + ver + location);
         increaseIndentation();
     }
 
@@ -276,13 +288,23 @@ public abstract class AbstractVilTracer
 
     @Override
     public void visitTemplate(Template template) {
-        write(template.getName() + " " + Version.toString(template.getVersion()));
+        String location = "";
+        ModelInfo<Template> info = TemplateModel.INSTANCE.availableModels().getModelInfo(template);
+        if (null != info) {
+            location = " @ " + info.getLocation();
+        }
+        write(template.getName() + " " + Version.toString(template.getVersion()) + location);
         increaseIndentation();
     }
 
     @Override
     public void visitedTemplate(Template template) {
         decreaseIndentation();
+    }
+
+    @Override
+    public void reset() {
+        indentation = "";
     }
 
 }

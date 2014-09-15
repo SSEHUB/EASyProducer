@@ -11,3 +11,4 @@ details some extensions:
 
 - output file
   the actual expected output (to be compared as part of the tests)
+- IVML models go into the "ivml" folder or its subfolders if required

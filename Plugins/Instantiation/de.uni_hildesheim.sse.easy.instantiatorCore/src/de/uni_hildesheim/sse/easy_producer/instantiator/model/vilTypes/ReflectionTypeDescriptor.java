@@ -22,6 +22,8 @@ import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
  */
 class ReflectionTypeDescriptor <T extends IVilType> extends TypeDescriptor <T> {
 
+    // define the constants of the pseudo types here but register
+    // only those in the Type registry while startup thay may be used
     public static final TypeDescriptor<PseudoVoid> VOID;
     public static final TypeDescriptor<PseudoType> TYPE;
     public static final TypeDescriptor<PseudoAny> ANY;
@@ -29,11 +31,17 @@ class ReflectionTypeDescriptor <T extends IVilType> extends TypeDescriptor <T> {
         Bundle.ID);
     
     static {
-        TypeDescriptor<PseudoVoid> v = null; 
-        TypeDescriptor<PseudoType> t = null; 
-        TypeDescriptor<PseudoAny> a = null; 
+        ReflectionTypeDescriptor<PseudoVoid> v = null; 
+        ReflectionTypeDescriptor<PseudoType> t = null; 
+        ReflectionTypeDescriptor<PseudoAny> a = null; 
         try {
             v = new ReflectionTypeDescriptor<PseudoVoid>(PseudoVoid.class) {
+
+                @Override
+                public boolean canBeInstantiated() {
+                    return false;
+                }
+
                 {
                     setName("Void");
                 }
@@ -51,7 +59,12 @@ class ReflectionTypeDescriptor <T extends IVilType> extends TypeDescriptor <T> {
 
                 @Override
                 public boolean isAssignableFrom(TypeDescriptor<? extends IVilType> desc) {
-                    return true;
+                    return equals(desc); // true
+                }
+
+                @Override
+                public boolean canBeInstantiated() {
+                    return false;
                 }
 
                 {
@@ -74,6 +87,16 @@ class ReflectionTypeDescriptor <T extends IVilType> extends TypeDescriptor <T> {
                     return true;
                 }
                 
+                @Override
+                public boolean isInstance(Object object) {
+                    return true;
+                }
+
+                @Override
+                public boolean canBeInstantiated() {
+                    return false;
+                }
+
                 {
                     setName("Any");
                 }
@@ -84,9 +107,14 @@ class ReflectionTypeDescriptor <T extends IVilType> extends TypeDescriptor <T> {
         VOID = v;
         TYPE = t;
         ANY = a;
+
+        // build up a pseudo type and conversions for TypeDescriptor -> Select
+        // we must use the own class for the conversions due to class initialization sequence
+        TypeRegistry.addTypeMapping(TypeDescriptor.class.getSimpleName(), TYPE);
     }
     
     private Class<T> cls;
+    private boolean canBeInstantiated = false; // to be initialized while adding operations
 
     /**
      * Stores non-assignable classes.
@@ -167,6 +195,20 @@ class ReflectionTypeDescriptor <T extends IVilType> extends TypeDescriptor <T> {
     }
 
     /**
+     * Adds a specific operation descriptor via its signature to the temporary operation map.
+     * Adjusts {@link #canBeInstantiated}.
+     * 
+     * @param operations the map of operations (signature-descriptor) to be modified as a side effect
+     * @param sig the signature
+     * @param desc the operation descriptor to be added
+     */
+    private void addOperation(java.util.Map<String, OperationDescriptor> operations, String sig, 
+        OperationDescriptor desc) {
+        operations.put(sig, desc);
+        canBeInstantiated |= desc.isConstructor();
+    }
+
+    /**
      * Adds all (relevant and not invisible) methods provided by <code>cls</code>.
      * This method works recursively on superclasses of <code>cls</code>.
      * 
@@ -186,7 +228,7 @@ class ReflectionTypeDescriptor <T extends IVilType> extends TypeDescriptor <T> {
                     if (!op.isConstructor() || (op.isConstructor() && cls == start)) {
                         String sig = op.getJavaSignature();
                         if (!operations.containsKey(sig)) {
-                            operations.put(sig, tDesc.getOperation(o));
+                            addOperation(operations, sig, tDesc.getOperation(o));
                         }
                     }
                 }
@@ -227,7 +269,7 @@ class ReflectionTypeDescriptor <T extends IVilType> extends TypeDescriptor <T> {
                 sig, method.getDeclaringClass()) && filterMethodByName(method, instantiatorName)) {
                 if (!operations.containsKey(sig) && OperationDescriptor.isOperationOrConstructor(method)) {
                     if (registerAliasOperation(operations, method)) {
-                        operations.put(sig, new ReflectionOperationDescriptor(this, method));
+                        addOperation(operations, sig, new ReflectionOperationDescriptor(this, method));
                     }
                 }
             }
@@ -254,8 +296,8 @@ class ReflectionTypeDescriptor <T extends IVilType> extends TypeDescriptor <T> {
     }
     
     /**
-     * Register the given <code>method</code> as an alias operation, i.e., getters without "get".
-     * This method considers {@link OperationMeta}.
+     * Register the given <code>method</code> as an alias operation, i.e., getters without 
+     * {@link Constants#GETTER_PREFIX}. This method considers {@link OperationMeta}.
      * 
      * @param operations the map of operations (signature-descriptor) to be modified as a side effect
      * @param method the method to be considered
@@ -270,19 +312,19 @@ class ReflectionTypeDescriptor <T extends IVilType> extends TypeDescriptor <T> {
             if (null != names) {
                 for (int n = 0; n < names.length; n++) {
                     OperationDescriptor desc = new ReflectionOperationDescriptor(this, method, names[n]);
-                    operations.put(desc.getJavaSignature(), desc);
+                    addOperation(operations, desc.getJavaSignature(), desc);
                 }
                 regOriginal = names.length == 0;
             }
         } else {
             String name = method.getName();
-            if (name.startsWith("get") && name.length() > 3) {
+            if (name.startsWith(Constants.GETTER_PREFIX) && name.length() > 3) {
                 name = name.substring(3);
                 if (Character.isUpperCase(name.charAt(0))) {
                     name = Character.toLowerCase(name.charAt(0)) + name.substring(1);
                 }
                 OperationDescriptor desc = new ReflectionOperationDescriptor(this, method, name);
-                operations.put(desc.getJavaSignature(), desc);
+                addOperation(operations, desc.getJavaSignature(), desc);
             }
         }
         return regOriginal;
@@ -327,6 +369,16 @@ class ReflectionTypeDescriptor <T extends IVilType> extends TypeDescriptor <T> {
     public String getName() {
         String tmp = super.getName();
         return null == tmp ? cls.getSimpleName() : tmp;
+    }
+    
+    @Override
+    public String getQualifiedName() {
+        return getName();
+    }
+    
+    @Override
+    public boolean canBeInstantiated() {
+        return canBeInstantiated;
     }
     
     /**
@@ -516,6 +568,22 @@ class ReflectionTypeDescriptor <T extends IVilType> extends TypeDescriptor <T> {
     @Override
     public TypeRegistry getTypeRegistry() {
         return TypeRegistry.DEFAULT; // see class comment, default registry only
+    }
+
+    @Override
+    public boolean isPlaceholder() {
+        return false;
+    }
+
+    @Override
+    public OperationDescriptor addPlaceholderOperation(String name, int parameterCount, 
+        boolean acceptsNamedParameters) {
+        return null;
+    }
+
+    @Override
+    public boolean isActualTypeOf(IMetaType type) {
+        return false; // shall not be handled by IActualTypeProvider
     }
 
 }

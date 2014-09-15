@@ -17,24 +17,29 @@ public abstract class VariableDeclaration implements IResolvable {
     private TypeDescriptor<? extends IVilType> type;
     private boolean isConstant;
     private Expression expression;
+    private boolean hasExplicitType;
     
     /**
-     * Creates a new variable declaration.
+     * Creates a new variable declaration. Explicit type is assumed.
      * 
      * @param name the name of the variable
      * @param type the type of the variable
+     * 
+     * @see #hasExplicitType()
      */
     public VariableDeclaration(String name, TypeDescriptor<? extends IVilType> type) {
         this(name, type, false, null);
     }
 
     /**
-     * Creates a new variable declaration.
+     * Creates a new variable declaration. Explicit type is assumed.
      * 
      * @param name the name of the variable
      * @param type the type of the variable
      * @param isConstant whether this variable is a constant
      * @param expression an expression denoting the initial value (may be <b>null</b>)
+     * 
+     * @see #hasExplicitType()
      */
     public VariableDeclaration(String name, TypeDescriptor<? extends IVilType> type, boolean isConstant, 
         Expression expression) {
@@ -42,6 +47,7 @@ public abstract class VariableDeclaration implements IResolvable {
         this.type = type;
         this.isConstant = isConstant;
         this.expression = expression;
+        hasExplicitType = true;
     }
 
     /**
@@ -98,6 +104,24 @@ public abstract class VariableDeclaration implements IResolvable {
      */
     public Object accept(IVisitor visitor) throws VilLanguageException {
         return visitor.visitVariableDeclaration(this);
+    }
+    
+    /**
+     * Changes the formatting hint whether this declaration has an explicit type.
+     * 
+     * @param hasExplicitType the new status of the formatting hint
+     */
+    public void setHasExplicitType(boolean hasExplicitType) {
+        this.hasExplicitType = hasExplicitType;
+    }
+
+    /**
+     * Returns the formatting hint whether this declaration has an explicit type.
+     * 
+     * @return whether this declaration has an explicit type
+     */
+    public boolean hasExplicitType() {
+        return hasExplicitType;
     }
 
 }

@@ -68,8 +68,13 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//Instantiate/param"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//Instantiate/versionSpec"/>
     </genClasses>
+    <genClasses ecoreClass="VilBuildLanguage.ecore#//MapVariable">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//MapVariable/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute VilBuildLanguage.ecore#//MapVariable/var"/>
+    </genClasses>
     <genClasses ecoreClass="VilBuildLanguage.ecore#//Map">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute VilBuildLanguage.ecore#//Map/var"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//Map/var"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute VilBuildLanguage.ecore#//Map/separator"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//Map/expr"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//Map/block"/>
     </genClasses>

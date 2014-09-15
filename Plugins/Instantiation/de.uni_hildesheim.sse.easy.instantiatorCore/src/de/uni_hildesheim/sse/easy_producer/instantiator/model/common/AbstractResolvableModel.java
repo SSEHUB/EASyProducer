@@ -2,33 +2,75 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.common;
 
 import java.util.List;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IResolvable;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
+import de.uni_hildesheim.sse.model.management.VarModel;
+import de.uni_hildesheim.sse.model.varModel.Project;
+import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 import de.uni_hildesheim.sse.utils.modelManagement.IModel;
+import de.uni_hildesheim.sse.utils.modelManagement.IModelListener;
+import de.uni_hildesheim.sse.utils.modelManagement.ModelEvents;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
 
 /**
- * A basic implementation of {@link IResolvableModel}.
+ * A basic implementation of {@link IResolvableModel}. It registers itself
+ * as model listener in order to be informed when advices are updated causing
+ * the model to be flagged as dirty (direct reload may cause uncoordinated model 
+ * reloads).
  * 
  * @param <V> the actual type of variable declaration
  * @param <M> the actual type of model
  * 
  * @author Holger Eichelberger
  */
-public abstract class AbstractResolvableModel<V extends IResolvable, M extends IModel> implements IResolvableModel<V> {
+public abstract class AbstractResolvableModel<V extends IResolvable, M extends IModel> implements IResolvableModel<V>, 
+    IModelListener<Project> {
 
+    private boolean dirty = false;
     private Imports<M> imports;
     private TypeRegistry registry;
+    private Advice[] advices;
 
     /**
      * Creates an abstract resolvable model.
      * 
      * @param imports the imports
      * @param registry the registry which is responsible for this type
+     * @param advices the advices (may be <b>null</b>)
      */
-    protected AbstractResolvableModel(Imports<M> imports, TypeRegistry registry) {
+    protected AbstractResolvableModel(Imports<M> imports, TypeRegistry registry, Advice[] advices) {
         this.imports = imports;
         this.registry = registry;
+        this.advices = advices;
+        processModelListeners(true);
+    }
+    
+    /**
+     * Processes the model listeners for the advices.
+     * 
+     * @param add add or remove the model listeners
+     */
+    private void processModelListeners(boolean add) {
+        if (null != advices) {
+            ModelEvents<Project> events = VarModel.INSTANCE.events();
+            for (int a = 0; a < advices.length; a++) {
+                Project resolved = advices[a].getResolved();
+                if (null != resolved) {
+                    if (add) {
+                        events.addModelListener(resolved, this);
+                        EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).info("Added model listener to " 
+                            + resolved.getName() + " " + System.identityHashCode(resolved) + " from " + getName() 
+                            + " " + System.identityHashCode(this)); // for Cui
+                    } else {
+                        events.removeModelListener(resolved, this);
+                        EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).info("Removed model listener to " 
+                            + resolved.getName() + " " + System.identityHashCode(resolved) + " from " + getName() + " " 
+                            + System.identityHashCode(this)); // for Cui
+                    }
+                }
+            }
+        }
     }
     
     @Override
@@ -79,5 +121,71 @@ public abstract class AbstractResolvableModel<V extends IResolvable, M extends I
     public TypeRegistry getTypeRegistry() {
         return registry;
     }
+
+    /**
+     * Get the number of advices of this script.
+     * 
+     * @return The number of advices of this script.
+     */
+    public int getAdviceCount() {
+        return null == advices ? 0 : advices.length;
+    }
+    
+    /**
+     * Get the advice of this rule at the specified index.
+     * 
+     * @param index The 0-based index of the advice to be returned.
+     * @return The advice parameter at the given index.
+     * @throws IndexOutOfBoundsException if <code>index &lt; 0 || index &gt;={@link #getAdviceCount()}</code>
+     */
+    public Advice getAdvice(int index) {
+        if (null == advices) {
+            throw new IndexOutOfBoundsException();
+        }
+        return advices[index];
+    }
+
+    @Override
+    public void dispose() {
+        processModelListeners(false);
+    }
+
+    /**
+     * Returns whether this model has become dirty, e.g., due to updates
+     * of the underlying adviced models.
+     * 
+     * @return <code>true</code> if this model has become dirty and
+     *   shall be at least reloaded before execution, <code>false</code> else
+     */
+    public boolean isDirty() {
+        return dirty;
+    }
+
+    @Override
+    public void notifyReplaced(Project oldModel, Project newModel) {
+        if (null != newModel) {
+            EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).info("Model " + getName() + " " 
+                + System.identityHashCode(this) + " became dirty as " + newModel.getName() 
+                + " was changed."); // for Cui
+        }
+        // Use both as long as editor updates will not work every time
+        dirty = true;
+        reload();
+    }
+    
+    @Override
+    public Object getIvmlElement(String name) {
+        Object result = null;
+        // TODO consider parent?
+        for (int a = 0; null == result && a < getAdviceCount(); a++) {
+            result = getAdvice(a).getIvmlElement(name);
+        }
+        return result;
+    }
+    
+    /**
+     * Causes a reload of this model.
+     */
+    protected abstract void reload();
 
 }

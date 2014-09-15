@@ -3,6 +3,7 @@ package de.uni_hildesheim.sse.reasoning.core.reasoner;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.utils.messages.Status;
 
 /**
@@ -12,6 +13,7 @@ import de.uni_hildesheim.sse.utils.messages.Status;
  */
 public class ReasoningResult {
 
+    private List<IDecisionVariable> affected = null;
     private List<Message> messages = new ArrayList<Message>();
     private boolean hasConflict;
 
@@ -32,6 +34,19 @@ public class ReasoningResult {
         String message = "Reasoning not supported by " + reasonerName;
         Message unsupportedReasoning = new Message(message, null, Status.UNSUPPORTED);
         addMessage(unsupportedReasoning);
+    }
+    
+    /**
+     * Adds a variable affected by reasoning. A reasoner may use this method to communicate
+     * affected variables and, thus, support further language mechanisms, such as runtime instantiation.
+     * 
+     * @param var the affected variable
+     */
+    public void addAffected(IDecisionVariable var) {
+        if (null == affected) {
+            affected = new ArrayList<IDecisionVariable>();
+        }
+        affected.add(var);
     }
 
     /**
@@ -93,7 +108,7 @@ public class ReasoningResult {
     }
 
    /**
-    *  Returns the message specified by <code>index</code>.
+    * Returns the message specified by <code>index</code>.
     * 
     * @param index a 0-based index specifying the message to be returned
     * @return the message
@@ -103,4 +118,36 @@ public class ReasoningResult {
     public Message getMessage(int index) {
         return messages.get(index);
     }
+    
+    /**
+     * Returns whether information on affected variables is provided.
+     * 
+     * @return <code>true</code> if information of affected variables is provided, 
+     *   <code>false</code> else (then {@link #getAffectedVariablesCount()} will always be <code>0</code>).
+     */
+    public boolean providesInformationOnAffectedVariables() {
+        return affected != null;
+    }
+    
+    /**
+     * Return the number of affected variables.
+     * 
+     * @return the number of affected variables
+     */
+    public int getAffectedVariablesCount() {
+        return null != affected ? affected.size() : 0;
+    }
+    
+    /**
+     * Returns the affected variable specified by <code>index</code>.
+     * 
+     * @param index a 0-based index specifying the variable to be returned
+     * @return the affected variable
+     * @throws IndexOutOfBoundsException if 
+     *   <code>index&lt;0 || index&gt;={@link #getAffectedVariablesCount()}</code>
+     */
+    public IDecisionVariable getAffectedVariable(int index) {
+        return affected.get(index);
+    }
+    
 }

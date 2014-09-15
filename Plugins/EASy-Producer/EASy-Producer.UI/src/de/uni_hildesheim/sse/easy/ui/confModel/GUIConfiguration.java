@@ -4,16 +4,22 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.swt.widgets.Composite;
 
 import de.uni_hildesheim.sse.model.confModel.Configuration;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
+import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
+import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.ModelElement;
+import de.uni_hildesheim.sse.model.varModel.ProjectImport;
+import de.uni_hildesheim.sse.model.varModel.datatypes.IResolutionScope;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.Message;
 
 /**
@@ -40,19 +46,42 @@ public class GUIConfiguration implements IGUIConfigurableElement {
     }
     
     /**
+     * Determines the actually visible variables for the given resolution <code>scope</code>.
+     * 
+     * @param scope the resolution scope (project or interface)
+     * @param visible the visible variables (to be modified as a side effect)
+     */
+    private static void determineVisible(IResolutionScope scope, Set<AbstractVariable> visible) {
+        for (int e = 0; e < scope.getElementCount(); e++) {
+            ContainableModelElement elt = scope.getElement(e);
+            if (elt instanceof DecisionVariableDeclaration) {
+                visible.add((DecisionVariableDeclaration) elt);
+            }
+        }
+        for (int i = 0; i < scope.getImportsCount(); i++) {
+            ProjectImport imp = scope.getImport(i);
+            if (null != imp.getScope()) {
+                determineVisible(imp.getScope(), visible);
+            }
+        }
+    }
+    
+    /**
      * Resets the map and adds only all top level elements to this map.
      */
     public void initMap() {
-        topLevelVariables = new GUIVariable[config.getDecisionCount()];
+        //topLevelVariables = new GUIVariable[config.getDecisionCount()];
         ArrayList<GUIVariable> variables = new ArrayList<GUIVariable>();
         if (null != config) {
+            Set<AbstractVariable> visible = new HashSet<AbstractVariable>();
+            determineVisible(config.getProject(), visible);
             Iterator<IDecisionVariable> iterator = config.iterator();
             try {
                 while (iterator.hasNext()) {
                     IDecisionVariable configVariable = iterator.next();
-                    if (configVariable.isVisible()) {
+                    if (configVariable.isVisible() && visible.contains(configVariable.getDeclaration())) {
                         GUIVariable guiVariable = GUIValueFactory.createVariable(configVariable, parent, this, null);
-                        // Currently, no variables are created for constraitn variables.
+                        // Currently, no variables are created for constraint variables.
                         if (null != guiVariable) {
                             variables.add(guiVariable);
                         }

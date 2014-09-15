@@ -14,6 +14,5 @@ project ivmlSpec_imports_contentSharing {
 // qualification detection -> Sascha    
     //* name = "myApp";
     ivmlSpec_imports_application::name = "myApp";
-    //* name = "myPlatform";
     ivmlSpec_imports_targetPlatform::name = "myPlatform";
 }

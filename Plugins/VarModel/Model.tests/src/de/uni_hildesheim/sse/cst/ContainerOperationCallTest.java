@@ -77,6 +77,7 @@ public class ContainerOperationCallTest {
         DecisionVariableDeclaration tVar = new DecisionVariableDeclaration("t", IntegerType.TYPE, project);
         Variable tVarVar = new Variable(tVar);
         DecisionVariableDeclaration rVar = new DecisionVariableDeclaration("r", IntegerType.TYPE, project);
+        rVar.setValue(constCst0);
         Variable rVarVar = new Variable(rVar);
         OCLFeatureCall lambda = new OCLFeatureCall(tVarVar, "max", rVarVar); 
         // we just assume that the last declarator collects the results and will be returned

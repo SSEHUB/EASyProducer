@@ -1,6 +1,7 @@
 package test.de.uni_hildesheim.sse.scenarios;
 
 import static de.uni_hildesheim.sse.varModel.testSupport.TextTestUtils.assertFileEquality;
+import static de.uni_hildesheim.sse.varModel.testSupport.TextTestUtils.assertFileEqualityRec;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,6 +24,7 @@ import org.junit.Test;
  * Tests for the basic language.
  * 
  * @author Holger Eichelberger
+ * @author El-Sharkawy
  */
 public class RealTests extends AbstractScenarioTest {
 
@@ -30,6 +32,10 @@ public class RealTests extends AbstractScenarioTest {
     
     
     private static RealTests tests;
+    
+    @Override
+    protected void addTestDataLocations() {
+    }
     
     @Override
     protected String getSystemPropertyName() {
@@ -143,7 +149,6 @@ public class RealTests extends AbstractScenarioTest {
         assertEqual(data, expectedErrorCodes);
     }
     
-
     /**
      * Assert the output of the curl wrapper to be expected.
      * @param base the base directory
@@ -283,6 +288,22 @@ public class RealTests extends AbstractScenarioTest {
     }
     
     /**
+     * Tests whether the instantiation process of templates will work.
+     * @throws IOException If the produced file was not saved or the expected file was not found for comparison
+     */
+    @Test
+    public void testInstantiateNumericCSVInstantiation() throws IOException {
+        File base = executeCase("NumericCSVInstantiationTest", new String[] {"0", "0"}, "", null);
+        File expectedFile = new File(base, "NumericCSVInstantiationTest.csv");
+        File producedFile = new File(base, "expected/NumericCSVInstantiationTest.csv");
+        assertExists(expectedFile);
+        assertExists(producedFile);
+        String expectedContent = file2String(expectedFile).replace("\r", "");
+        String actualContent = file2String(producedFile).replace("\r", "");
+        Assert.assertEquals(expectedContent, actualContent);
+    }
+    
+    /**
      * Tests the SVNControl test case.
      * 
      * @throws IOException shall not occur
@@ -330,6 +351,30 @@ public class RealTests extends AbstractScenarioTest {
      */
     protected static void assertExists(File file) {
         Assert.assertTrue("file " + file.getPath() + " does not exist", file.exists());
+    }
+
+    /**
+     * Tests the very initial QualiMaster test case.
+     * 
+     * @throws IOException shall not occur
+     */
+    @Test
+    public void testQualiMasterApril14() throws IOException {
+        String[] versions = {"0", "0"};
+        File base = executeCase("april14", versions, "QualiMaster/", null);
+        assertFileEqualityRec(new File(base, "expected"), base);
+    }
+
+    /**
+     * Tests the very initial QualiMaster test case.
+     * 
+     * @throws IOException shall not occur
+     */
+    @Test
+    public void testQualiMasterMay14() throws IOException {
+        String[] versions = {"0", "0"};
+        File base = executeCase("may14", versions, "QualiMaster/", null);
+        assertFileEqualityRec(new File(base, "expected"), base);
     }
 
 }

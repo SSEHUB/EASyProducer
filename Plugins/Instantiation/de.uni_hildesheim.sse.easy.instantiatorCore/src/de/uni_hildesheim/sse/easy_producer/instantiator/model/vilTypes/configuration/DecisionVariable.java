@@ -5,17 +5,20 @@ import java.util.List;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArraySet;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Conversion;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IActualTypeProvider;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationMeta;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Sequence;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
-import de.uni_hildesheim.sse.model.confModel.AssignmentState;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
+import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 
 /**
  * Realizes the bridge to the decision variables.
  * 
  * @author Holger Eichelberger
  */
-public class DecisionVariable extends AbstractIvmlVariable {
+public class DecisionVariable extends AbstractIvmlVariable implements IActualTypeProvider {
 
     private Attribute[] attributes;
     
@@ -23,9 +26,10 @@ public class DecisionVariable extends AbstractIvmlVariable {
      * Creates a decision variable.
      * 
      * @param variable the underlying IVML variable
+     * @param filter the variable filter
      */
-    DecisionVariable(IDecisionVariable variable) {
-        super(variable);
+    DecisionVariable(IDecisionVariable variable, IVariableFilter filter) {
+        super(variable, filter);
     }
     
     @Override
@@ -34,8 +38,8 @@ public class DecisionVariable extends AbstractIvmlVariable {
             List<Attribute> tmp = new ArrayList<Attribute>();
             for (int a = 0; a < variable.getAttributesCount(); a++) {
                 IDecisionVariable attribute = variable.getAttribute(a);
-                if (AssignmentState.FROZEN == attribute.getState()) {
-                    tmp.add(new Attribute(attribute));
+                if (filter.isEnabled(attribute)) {
+                    tmp.add(new Attribute(attribute, filter));
                 }
             }
             attributes = new Attribute[tmp.size()];
@@ -130,6 +134,24 @@ public class DecisionVariable extends AbstractIvmlVariable {
     @Conversion
     public static EnumValue convert2EnumValue(DecisionVariable val) {
         return val.getEnumValue();
+    }
+    
+    /**
+     * Conversion operation to an EnumValue.
+     * 
+     * @param val the value (variable) to be converted
+     * @return the converted value (may be <b>null</b>, depends on the type of the variable)
+     */
+    @Conversion
+    @OperationMeta(returnGenerics = { DecisionVariable.class } )
+    public static Sequence<DecisionVariable> convert2Sequence(DecisionVariable val) {
+        return val.variables();
+    }
+    
+    @Override
+    @Invisible
+    public IDatatype determineActualTypeName() {
+        return getDecisionVariable().getDeclaration().getType();
     }
     
 }

@@ -8,6 +8,7 @@ import java.util.Set;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -20,8 +21,10 @@ import de.uni_hildesheim.sse.easy_producer.core.mgmt.PLPInfo;
 import de.uni_hildesheim.sse.easy_producer.core.mgmt.SPLsManager;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceUtils;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ExpressionStatement;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.IRuleElement;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.InstantiateExpression;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.MapExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Rule;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.RuleCallExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
 import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
@@ -96,7 +99,8 @@ public class EASyProjectCreatorFactoryTest {
                 configurator);
             configurator.checkExecution();
         } catch (ProjectCreationException e) {
-            Assert.fail(e.getLocalizedMessage());
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
         }
         
         Assert.assertNotNull("Error: No project was created", plp);
@@ -291,10 +295,10 @@ public class EASyProjectCreatorFactoryTest {
          *  - Predecessor has build script and variability model as defined inside the testdata directory.
          *  - Successor files include files of predecessor
          */
-        //Predecessor check
+        // Predecessor check
         testContents(ivmlFileOrg, ivmlFilePre);
         testContents(vilFileOrg, vilFilePre);
-        //Successor check
+        // Successor check
         Project varModel = plpSuc.getProject();
         Assert.assertEquals(1, varModel.getImportsCount());
         Assert.assertEquals(plpPre.getProject().getName(), varModel.getImport(0).getName());
@@ -304,8 +308,10 @@ public class EASyProjectCreatorFactoryTest {
         Rule mainRule = script.getMainRule(false);
         Assert.assertEquals(1, mainRule.getBodyElementCount());
         ExpressionStatement statement = (ExpressionStatement) mainRule.getBodyElement(0);
-        RuleCallExpression expression = (RuleCallExpression) statement.getExpression();
-        Assert.assertEquals(plpPre.getBuildScript().getName(), expression.getPrefix());        
+        MapExpression expression = (MapExpression) statement.getExpression();
+        Assert.assertEquals(1, expression.getBodyElementCount());
+        ExpressionStatement mapBody = (ExpressionStatement) expression.getBodyElement(0);
+        Assert.assertTrue(mapBody.getExpression() instanceof InstantiateExpression);       
     }
     
     /**
@@ -337,12 +343,65 @@ public class EASyProjectCreatorFactoryTest {
      */
     private void testContents(File originFile, File copiedFile) {
         try {
-            String originalContent = FileUtils.readFileToString(originFile).replaceAll("\r", "");
-            String copiedContent = FileUtils.readFileToString(copiedFile).replaceAll("\r", "");
+            String originalContent = FileUtils.readFileToString(originFile).replace("\r", "").replace("\t", "    ");
+            String copiedContent = FileUtils.readFileToString(copiedFile).replace("\r", "").replace("\t", "    ");
             Assert.assertEquals("Error: " + copiedFile.getAbsolutePath() + "was modiefied",
                 originalContent, copiedContent);
         } catch (IOException e) {
             Assert.fail("Error in reading EASy files: " + e.getLocalizedMessage());
         }
+    }
+    
+    /**
+     * Tests whether a project can be derived from a PLP, be deleted, and derived again with the same name.
+     * I.E.:
+     * <code>
+     * Derive project x. Delete project x (including deletion from harddisc).
+     * Derive new project x will result in missing/empty IVML/VIL-files in the derived project.
+     * </code>
+     * Bug was detected at the CeBit 2014.
+     */
+    @Test
+    public void testMultipleDerivation() {
+        PLPInfo plpPre = getPLPInfoByName("ProjectForMultipleDerivation");
+        String dervivedProjectName = "Successor_of_" + plpPre.getProjectName();
+        File expectedLocation = new File(workspace, dervivedProjectName);
+        
+        // Test precondition: Project must not exist before
+        Assert.assertFalse(expectedLocation.exists());
+        
+        // create derived project (No. 1)
+        ProductLineProject plpSuc = createProject(dervivedProjectName, plpPre.getProjectID());
+        
+        // Test postcondition: Project must be created
+        Assert.assertTrue(expectedLocation.exists());
+        Assert.assertEquals(plpPre.getProjectID(), plpSuc.getMemberController().getPredecessorIDs().toArray()[0]);
+        
+        // Delete derived project
+        usedProjectNames.remove(plpSuc.getProjectName());
+        plpSuc.close();
+        try {
+            ResourcesPlugin.getWorkspace().getRoot().getProject(dervivedProjectName).delete(true, null);
+        } catch (CoreException e) {
+            e.printStackTrace();
+        }
+        FileUtils.deleteQuietly(expectedLocation);
+        
+        // Test precondition: Project must not exist before
+        Assert.assertFalse(expectedLocation.exists());
+        
+        // Derive project again
+        //checkstyle: stop exception type check
+        try {
+            plpSuc = createProject(dervivedProjectName, plpPre.getProjectID());
+        } catch (Exception e) {
+            Assert.fail("Error: It's not possible to derive 2 projects with the same name. Detailed message:\n"
+                + e.getMessage());
+        }
+        //checkstyle: resume exception type check
+        
+        // Test postcondition: Project must be created
+        Assert.assertTrue(expectedLocation.exists());
+        Assert.assertEquals(plpPre.getProjectID(), plpSuc.getMemberController().getPredecessorIDs().toArray()[0]);
     }
 }

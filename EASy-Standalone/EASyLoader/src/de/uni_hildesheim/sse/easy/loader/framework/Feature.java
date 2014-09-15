@@ -22,6 +22,11 @@ import org.xml.sax.SAXException;
  *
  */
 
+/**
+ * Represents a feature.
+ * @author Patu
+ *
+ */
 public class Feature {
     
     private DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -105,19 +110,28 @@ public class Feature {
     
         }
          
-        if (node.getNodeName().equals("import")) {
+        if (node.getNodeName().equalsIgnoreCase("import")) {
     
             EasyDependency newDependency = new EasyDependency();
     
             try {
-                newDependency.setBundleVersionMin(new Version(node.getAttributes()
-                    .getNamedItem("version").getNodeValue()));
-                newDependency.setBundleVersionMax(new Version(node.getAttributes()
-                    .getNamedItem("version").getNodeValue()));
-                if (node.getAttributes().getNamedItem("match").getNodeValue().equals("greaterThan")) {
-                    newDependency.setBundleVersionMax(null);
-                } else if (node.getAttributes().getNamedItem("match").getNodeValue().equals("smallerThan")) {
-                    newDependency.setBundleVersionMin(null);
+                if (node.getAttributes().getNamedItem("version") != null) {
+                    String vers = node.getAttributes().getNamedItem("version").getNodeValue();
+                    String[] versions = EasyDependency.getRange(vers);
+                    if (versions != null) {
+                        newDependency.setBundleVersionMin(new Version(versions[0]));
+                        if (versions.length > 1) {
+                            newDependency.setBundleVersionMax(new Version(versions[1]));
+                        } else {
+                            newDependency.setBundleVersionMax(new Version(versions[0]));
+                        }
+                    }
+
+                    if (node.getAttributes().getNamedItem("match").getNodeValue().equals("greaterThan")) {
+                        newDependency.setBundleVersionMax(null);
+                    } else if (node.getAttributes().getNamedItem("match").getNodeValue().equals("smallerThan")) {
+                        newDependency.setBundleVersionMin(null);
+                    }
                 }
             } catch (DOMException e) {
                 e.printStackTrace();
@@ -180,6 +194,14 @@ public class Feature {
      */
     public List<EasyDependency> getRequirements() {
         return this.requiredFeatures;
+    }
+    
+    /**
+     * Returns the id of the feature.
+     * @return The Id of the feature.
+     */
+    public String getId() {
+        return this.id;
     }
     
 }

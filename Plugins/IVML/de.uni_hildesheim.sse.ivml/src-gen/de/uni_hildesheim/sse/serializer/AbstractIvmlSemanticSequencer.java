@@ -647,7 +647,7 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	
 	/**
 	 * Constraint:
-	 *     (id+=Identifier id+=Identifier* type=Type? init=Expression?)
+	 *     (type=Type? id+=Identifier id+=Identifier* init=Expression?)
 	 */
 	protected void sequence_Declaration(EObject context, Declaration semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -726,7 +726,7 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	
 	/**
 	 * Constraint:
-	 *     (names+=Identifier names+=Identifier*)
+	 *     (names+=QualifiedName names+=QualifiedName*)
 	 */
 	protected void sequence_Export(EObject context, Export semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);

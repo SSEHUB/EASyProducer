@@ -1,3 +1,18 @@
+/*
+ * Copyright 2009-2013 University of Hildesheim, Software Systems Engineering
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.uni_hildesheim.sse.model.varModel.values;
 
 import de.uni_hildesheim.sse.model.varModel.datatypes.BooleanType;
@@ -9,10 +24,14 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.BooleanType;
  */
 public class BooleanValue extends BasisDatatypeValue {
     
+    public static final BooleanValue TRUE = new BooleanValue(true);
+    public static final BooleanValue FALSE = new BooleanValue(false);
+    
     private Boolean value;
 
     /**
-     * Constructor.
+     * Constructor. Please avoid this constructor and use the constants instead.
+     * 
      * @param value Value of the Datatype
      * @throws ValueDoesNotMatchTypeException if the given value does not match this type
      */
@@ -22,7 +41,7 @@ public class BooleanValue extends BasisDatatypeValue {
     }
     
     /**
-     * Argumentless constructor.
+     * Argumentless constructor representing the type itself.
      */
     protected BooleanValue() {
         super(BooleanType.TYPE);
@@ -49,10 +68,9 @@ public class BooleanValue extends BasisDatatypeValue {
     @Override
     public void setValue(Object value) throws ValueDoesNotMatchTypeException {
         if (null != value) {
-            if ("true".equals(value)) {
-                this.value = true;
-            } else if ("false".equals(value)) {
-                this.value = false;
+            Boolean val = toValue(value);
+            if (null != val) {
+                this.value = val.booleanValue();
             } else {
                 throw new ValueDoesNotMatchTypeException(
                     stringValueOf(value), this, ValueDoesNotMatchTypeException.NO_LITERAL);
@@ -83,21 +101,74 @@ public class BooleanValue extends BasisDatatypeValue {
     public Value clone() {
         return new BooleanValue(value);
     }
-    
+
     /**
-     * {@inheritDoc}
+     * Converts a Java boolean into an IVML boolean value. To some degree, 
+     * this bypasses the value factory but - as the result is obvious, but 
+     * also simplifies some (evaluation) code.
+     * 
+     * @param value the value to be converted
+     * @return the IVML value
      */
-    @Override
-    public boolean equals(Object object) {
-        return value.equals(object);
+    public static final BooleanValue toBooleanValue(boolean value) {
+        return value ? TRUE : FALSE;
     }
 
     /**
-     * {@inheritDoc}
+     * Converts a String ("true", "false") into an IVML Boolean value.
+     * 
+     * @param value the value to be converted
+     * @return the IVML value (may be <b>null</b> if no match)
      */
-    @Override
-    public int hashCode() {
-        return value.hashCode();
+    private static final Boolean toValue(Object value) {
+        Boolean result;
+        if ("true".equals(value)) {
+            result = Boolean.TRUE;
+        } else if ("false".equals(value)) {
+            result = Boolean.FALSE;
+        } else {
+            result = null;
+        }
+        return result;
     }
-    
+
+    /**
+     * Converts a String ("true", "false") into an IVML boolean value. To some degree, 
+     * this bypasses the value factory but - as the result is obvious, but 
+     * also simplifies some (evaluation) code and may save resources.
+     * 
+     * @param value the value to be converted
+     * @return the IVML value (may be <b>null</b> if no match)
+     */
+    public static final BooleanValue toBooleanValue(String value) {
+        Boolean val = toValue(value);
+        BooleanValue result;
+        if (Boolean.TRUE == val) {
+            result = TRUE;
+        } else if (Boolean.FALSE == val) {
+            result = FALSE;
+        } else {
+            result = null;
+        }
+        return result;
+    }
+
+    /**
+     * Converts a String ("true", "false") into an IVML boolean value. To some degree, 
+     * this bypasses the value factory but - as the result is obvious, but 
+     * also simplifies some (evaluation) code and may save resources.
+     * 
+     * @param value the value to be converted
+     * @return the IVML value
+     * @throws ValueDoesNotMatchTypeException in case that the value does not match
+     */
+    public static final BooleanValue toBooleanValueEx(String value) throws ValueDoesNotMatchTypeException {
+        BooleanValue result = toBooleanValue(value);
+        if (null == result) {
+            throw new ValueDoesNotMatchTypeException(
+                value, "Boolean", ValueDoesNotMatchTypeException.NO_LITERAL);
+        }
+        return result;
+    }
+
 }

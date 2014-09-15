@@ -12,6 +12,7 @@ import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.Attribute;
 import de.uni_hildesheim.sse.model.varModel.AttributeAssignment;
 import de.uni_hildesheim.sse.model.varModel.Comment;
+import de.uni_hildesheim.sse.model.varModel.CompoundAccessStatement;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.FreezeBlock;
@@ -502,6 +503,10 @@ public class AttributeValues {
                     appendError(errors, "attribute '" + entry.getKey() + "' not found");
                 }
             }
+        }
+
+        @Override
+        public void visitCompoundAccessStatement(CompoundAccessStatement access) {
         }
 
     }

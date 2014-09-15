@@ -22,9 +22,10 @@ import java.util.HashMap;
 @SuppressWarnings("all")
 public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
     public static final String[] tokenNames = new String[] {
-        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "RULE_NUMBER", "RULE_STRING", "RULE_VERSION", "RULE_ID", "RULE_EXPONENT", "RULE_ML_COMMENT", "RULE_SL_COMMENT", "RULE_WS", "RULE_ANY_OTHER", "'template'", "'('", "')'", "'extends'", "'{'", "'}'", "'@indent'", "','", "'='", "'def'", "';'", "'if'", "'else'", "'print'", "'|'", "'switch'", "'default'", "':'", "'for'", "'multiSelect'", "'case'", "':='", "'generic-multiSelect'", "'extension'", "'.'", "'const'", "'@advice'", "'with'", "'version'", "'=='", "'>'", "'<'", "'>='", "'<='", "'import'", "'and'", "'or'", "'xor'", "'<>'", "'!='", "'+'", "'-'", "'*'", "'/'", "'not'", "'!'", "'super'", "'new'", "'['", "']'", "'::'", "'true'", "'false'", "'setOf'", "'sequenceOf'", "'mapOf'"
+        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "RULE_NUMBER", "RULE_STRING", "RULE_VERSION", "RULE_ID", "RULE_EXPONENT", "RULE_ML_COMMENT", "RULE_SL_COMMENT", "RULE_WS", "RULE_ANY_OTHER", "'template'", "'('", "')'", "'extends'", "'{'", "'}'", "'@indent'", "','", "'='", "'def'", "';'", "'if'", "'else'", "'print'", "'|'", "'switch'", "'default'", "':'", "'for'", "'multiSelect'", "'case'", "':='", "'generic-multiSelect'", "'extension'", "'.'", "'const'", "'@advice'", "'with'", "'version'", "'=='", "'>'", "'<'", "'>='", "'<='", "'import'", "'and'", "'or'", "'xor'", "'<>'", "'!='", "'+'", "'-'", "'*'", "'/'", "'not'", "'!'", "'super'", "'new'", "'->'", "'['", "']'", "'::'", "'true'", "'false'", "'null'", "'setOf'", "'sequenceOf'", "'mapOf'"
     };
     public static final int T__68=68;
+    public static final int T__69=69;
     public static final int RULE_ID=7;
     public static final int T__66=66;
     public static final int T__67=67;
@@ -84,6 +85,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
     public static final int T__33=33;
     public static final int T__34=34;
     public static final int T__35=35;
+    public static final int T__70=70;
     public static final int T__36=36;
     public static final int T__37=37;
     public static final int T__38=38;
@@ -471,7 +473,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
             int alt5=2;
             int LA5_0 = input.LA(1);
 
-            if ( ((LA5_0>=RULE_VERSION && LA5_0<=RULE_EXPONENT)||(LA5_0>=66 && LA5_0<=68)) ) {
+            if ( ((LA5_0>=RULE_VERSION && LA5_0<=RULE_EXPONENT)||(LA5_0>=68 && LA5_0<=70)) ) {
                 alt5=1;
             }
             switch (alt5) {
@@ -635,7 +637,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
                 int alt8=2;
                 int LA8_0 = input.LA(1);
 
-                if ( ((LA8_0>=RULE_VERSION && LA8_0<=RULE_EXPONENT)||LA8_0==38||(LA8_0>=66 && LA8_0<=68)) ) {
+                if ( ((LA8_0>=RULE_VERSION && LA8_0<=RULE_EXPONENT)||LA8_0==38||(LA8_0>=68 && LA8_0<=70)) ) {
                     alt8=1;
                 }
 
@@ -1198,7 +1200,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
                     {
                     int LA11_1 = input.LA(2);
 
-                    if ( ((LA11_1>=RULE_VERSION && LA11_1<=RULE_EXPONENT)) ) {
+                    if ( ((LA11_1>=RULE_VERSION && LA11_1<=RULE_EXPONENT)||LA11_1==64) ) {
                         alt11=1;
                     }
                     }
@@ -1207,7 +1209,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
                     {
                     int LA11_2 = input.LA(2);
 
-                    if ( ((LA11_2>=RULE_VERSION && LA11_2<=RULE_EXPONENT)) ) {
+                    if ( ((LA11_2>=RULE_VERSION && LA11_2<=RULE_EXPONENT)||LA11_2==64) ) {
                         alt11=1;
                     }
                     }
@@ -1216,14 +1218,14 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
                     {
                     int LA11_3 = input.LA(2);
 
-                    if ( ((LA11_3>=RULE_VERSION && LA11_3<=RULE_EXPONENT)) ) {
+                    if ( ((LA11_3>=RULE_VERSION && LA11_3<=RULE_EXPONENT)||LA11_3==64) ) {
                         alt11=1;
                     }
                     }
                     break;
-                case 66:
-                case 67:
                 case 68:
+                case 69:
+                case 70:
                     {
                     alt11=1;
                     }
@@ -1314,7 +1316,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
             int alt12=2;
             int LA12_0 = input.LA(1);
 
-            if ( ((LA12_0>=RULE_VERSION && LA12_0<=RULE_EXPONENT)||(LA12_0>=66 && LA12_0<=68)) ) {
+            if ( ((LA12_0>=RULE_VERSION && LA12_0<=RULE_EXPONENT)||(LA12_0>=68 && LA12_0<=70)) ) {
                 alt12=1;
             }
             switch (alt12) {
@@ -1531,7 +1533,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
                 int alt14=2;
                 int LA14_0 = input.LA(1);
 
-                if ( ((LA14_0>=RULE_NUMBER && LA14_0<=RULE_EXPONENT)||LA14_0==14||LA14_0==17||LA14_0==24||LA14_0==26||LA14_0==28||(LA14_0>=31 && LA14_0<=32)||LA14_0==38||LA14_0==54||(LA14_0>=57 && LA14_0<=60)||(LA14_0>=64 && LA14_0<=68)) ) {
+                if ( ((LA14_0>=RULE_NUMBER && LA14_0<=RULE_EXPONENT)||LA14_0==14||LA14_0==17||LA14_0==24||LA14_0==26||LA14_0==28||(LA14_0>=31 && LA14_0<=32)||LA14_0==38||LA14_0==54||(LA14_0>=57 && LA14_0<=60)||(LA14_0>=65 && LA14_0<=70)) ) {
                     alt14=1;
                 }
 
@@ -2663,7 +2665,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
                 if ( (LA19_0==20) ) {
                     int LA19_1 = input.LA(2);
 
-                    if ( ((LA19_1>=RULE_NUMBER && LA19_1<=RULE_EXPONENT)||LA19_1==14||LA19_1==17||LA19_1==54||(LA19_1>=57 && LA19_1<=60)||(LA19_1>=64 && LA19_1<=65)) ) {
+                    if ( ((LA19_1>=RULE_NUMBER && LA19_1<=RULE_EXPONENT)||LA19_1==14||LA19_1==17||LA19_1==54||(LA19_1>=57 && LA19_1<=60)||(LA19_1>=65 && LA19_1<=67)) ) {
                         alt19=1;
                     }
 
@@ -6377,7 +6379,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
             int alt35=2;
             int LA35_0 = input.LA(1);
 
-            if ( ((LA35_0>=RULE_NUMBER && LA35_0<=RULE_EXPONENT)||LA35_0==14||LA35_0==54||(LA35_0>=57 && LA35_0<=60)||(LA35_0>=64 && LA35_0<=65)) ) {
+            if ( ((LA35_0>=RULE_NUMBER && LA35_0<=RULE_EXPONENT)||LA35_0==14||LA35_0==54||(LA35_0>=57 && LA35_0<=60)||(LA35_0>=65 && LA35_0<=67)) ) {
                 alt35=1;
             }
             else if ( (LA35_0==17) ) {
@@ -9481,7 +9483,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
             int alt49=2;
             int LA49_0 = input.LA(1);
 
-            if ( ((LA49_0>=RULE_NUMBER && LA49_0<=RULE_EXPONENT)||(LA49_0>=64 && LA49_0<=65)) ) {
+            if ( ((LA49_0>=RULE_NUMBER && LA49_0<=RULE_EXPONENT)||(LA49_0>=65 && LA49_0<=67)) ) {
                 alt49=1;
             }
             else if ( (LA49_0==14) ) {
@@ -9604,7 +9606,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
                 int alt50=2;
                 int LA50_0 = input.LA(1);
 
-                if ( (LA50_0==37||LA50_0==61) ) {
+                if ( (LA50_0==37||(LA50_0>=61 && LA50_0<=62)) ) {
                     alt50=1;
                 }
 
@@ -9773,7 +9775,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
                 int alt51=2;
                 int LA51_0 = input.LA(1);
 
-                if ( (LA51_0==37||LA51_0==61) ) {
+                if ( (LA51_0==37||(LA51_0>=61 && LA51_0<=62)) ) {
                     alt51=1;
                 }
 
@@ -9956,7 +9958,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
                 int alt52=2;
                 int LA52_0 = input.LA(1);
 
-                if ( (LA52_0==37||LA52_0==61) ) {
+                if ( (LA52_0==37||(LA52_0>=61 && LA52_0<=62)) ) {
                     alt52=1;
                 }
 
@@ -10140,7 +10142,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
             int alt53=2;
             int LA53_0 = input.LA(1);
 
-            if ( ((LA53_0>=RULE_NUMBER && LA53_0<=RULE_EXPONENT)||LA53_0==14||LA53_0==17||LA53_0==54||(LA53_0>=57 && LA53_0<=60)||(LA53_0>=64 && LA53_0<=65)) ) {
+            if ( ((LA53_0>=RULE_NUMBER && LA53_0<=RULE_EXPONENT)||LA53_0==14||LA53_0==17||LA53_0==54||(LA53_0>=57 && LA53_0<=60)||(LA53_0>=65 && LA53_0<=67)) ) {
                 alt53=1;
             }
             switch (alt53) {
@@ -10194,7 +10196,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
                 int alt54=2;
                 int LA54_0 = input.LA(1);
 
-                if ( (LA54_0==37||LA54_0==61) ) {
+                if ( (LA54_0==37||(LA54_0>=61 && LA54_0<=62)) ) {
                     alt54=1;
                 }
 
@@ -10304,11 +10306,12 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleSubCall"
-    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3718:1: ruleSubCall returns [EObject current=null] : ( (otherlv_0= '.' ( (lv_call_1_0= ruleCall ) ) ) | (otherlv_2= '[' ( (lv_arrayEx_3_0= ruleExpression ) ) otherlv_4= ']' ) ) ;
+    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3718:1: ruleSubCall returns [EObject current=null] : ( ( ( ( (lv_type_0_1= '.' | lv_type_0_2= '->' ) ) ) ( (lv_call_1_0= ruleCall ) ) ) | (otherlv_2= '[' ( (lv_arrayEx_3_0= ruleExpression ) ) otherlv_4= ']' ) ) ;
     public final EObject ruleSubCall() throws RecognitionException {
         EObject current = null;
 
-        Token otherlv_0=null;
+        Token lv_type_0_1=null;
+        Token lv_type_0_2=null;
         Token otherlv_2=null;
         Token otherlv_4=null;
         EObject lv_call_1_0 = null;
@@ -10319,51 +10322,118 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3721:28: ( ( (otherlv_0= '.' ( (lv_call_1_0= ruleCall ) ) ) | (otherlv_2= '[' ( (lv_arrayEx_3_0= ruleExpression ) ) otherlv_4= ']' ) ) )
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3722:1: ( (otherlv_0= '.' ( (lv_call_1_0= ruleCall ) ) ) | (otherlv_2= '[' ( (lv_arrayEx_3_0= ruleExpression ) ) otherlv_4= ']' ) )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3721:28: ( ( ( ( ( (lv_type_0_1= '.' | lv_type_0_2= '->' ) ) ) ( (lv_call_1_0= ruleCall ) ) ) | (otherlv_2= '[' ( (lv_arrayEx_3_0= ruleExpression ) ) otherlv_4= ']' ) ) )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3722:1: ( ( ( ( (lv_type_0_1= '.' | lv_type_0_2= '->' ) ) ) ( (lv_call_1_0= ruleCall ) ) ) | (otherlv_2= '[' ( (lv_arrayEx_3_0= ruleExpression ) ) otherlv_4= ']' ) )
             {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3722:1: ( (otherlv_0= '.' ( (lv_call_1_0= ruleCall ) ) ) | (otherlv_2= '[' ( (lv_arrayEx_3_0= ruleExpression ) ) otherlv_4= ']' ) )
-            int alt55=2;
-            int LA55_0 = input.LA(1);
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3722:1: ( ( ( ( (lv_type_0_1= '.' | lv_type_0_2= '->' ) ) ) ( (lv_call_1_0= ruleCall ) ) ) | (otherlv_2= '[' ( (lv_arrayEx_3_0= ruleExpression ) ) otherlv_4= ']' ) )
+            int alt56=2;
+            int LA56_0 = input.LA(1);
 
-            if ( (LA55_0==37) ) {
-                alt55=1;
+            if ( (LA56_0==37||LA56_0==61) ) {
+                alt56=1;
             }
-            else if ( (LA55_0==61) ) {
-                alt55=2;
+            else if ( (LA56_0==62) ) {
+                alt56=2;
             }
             else {
                 if (state.backtracking>0) {state.failed=true; return current;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 55, 0, input);
+                    new NoViableAltException("", 56, 0, input);
 
                 throw nvae;
             }
-            switch (alt55) {
+            switch (alt56) {
                 case 1 :
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3722:2: (otherlv_0= '.' ( (lv_call_1_0= ruleCall ) ) )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3722:2: ( ( ( (lv_type_0_1= '.' | lv_type_0_2= '->' ) ) ) ( (lv_call_1_0= ruleCall ) ) )
                     {
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3722:2: (otherlv_0= '.' ( (lv_call_1_0= ruleCall ) ) )
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3722:4: otherlv_0= '.' ( (lv_call_1_0= ruleCall ) )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3722:2: ( ( ( (lv_type_0_1= '.' | lv_type_0_2= '->' ) ) ) ( (lv_call_1_0= ruleCall ) ) )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3722:3: ( ( (lv_type_0_1= '.' | lv_type_0_2= '->' ) ) ) ( (lv_call_1_0= ruleCall ) )
                     {
-                    otherlv_0=(Token)match(input,37,FOLLOW_37_in_ruleSubCall7695); if (state.failed) return current;
-                    if ( state.backtracking==0 ) {
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3722:3: ( ( (lv_type_0_1= '.' | lv_type_0_2= '->' ) ) )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3723:1: ( (lv_type_0_1= '.' | lv_type_0_2= '->' ) )
+                    {
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3723:1: ( (lv_type_0_1= '.' | lv_type_0_2= '->' ) )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3724:1: (lv_type_0_1= '.' | lv_type_0_2= '->' )
+                    {
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3724:1: (lv_type_0_1= '.' | lv_type_0_2= '->' )
+                    int alt55=2;
+                    int LA55_0 = input.LA(1);
 
-                          	newLeafNode(otherlv_0, grammarAccess.getSubCallAccess().getFullStopKeyword_0_0());
-                          
+                    if ( (LA55_0==37) ) {
+                        alt55=1;
                     }
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3726:1: ( (lv_call_1_0= ruleCall ) )
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3727:1: (lv_call_1_0= ruleCall )
+                    else if ( (LA55_0==61) ) {
+                        alt55=2;
+                    }
+                    else {
+                        if (state.backtracking>0) {state.failed=true; return current;}
+                        NoViableAltException nvae =
+                            new NoViableAltException("", 55, 0, input);
+
+                        throw nvae;
+                    }
+                    switch (alt55) {
+                        case 1 :
+                            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3725:3: lv_type_0_1= '.'
+                            {
+                            lv_type_0_1=(Token)match(input,37,FOLLOW_37_in_ruleSubCall7703); if (state.failed) return current;
+                            if ( state.backtracking==0 ) {
+
+                                      newLeafNode(lv_type_0_1, grammarAccess.getSubCallAccess().getTypeFullStopKeyword_0_0_0_0());
+                                  
+                            }
+                            if ( state.backtracking==0 ) {
+
+                              	        if (current==null) {
+                              	            current = createModelElement(grammarAccess.getSubCallRule());
+                              	        }
+                                     		setWithLastConsumed(current, "type", lv_type_0_1, null);
+                              	    
+                            }
+
+                            }
+                            break;
+                        case 2 :
+                            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3737:8: lv_type_0_2= '->'
+                            {
+                            lv_type_0_2=(Token)match(input,61,FOLLOW_61_in_ruleSubCall7732); if (state.failed) return current;
+                            if ( state.backtracking==0 ) {
+
+                                      newLeafNode(lv_type_0_2, grammarAccess.getSubCallAccess().getTypeHyphenMinusGreaterThanSignKeyword_0_0_0_1());
+                                  
+                            }
+                            if ( state.backtracking==0 ) {
+
+                              	        if (current==null) {
+                              	            current = createModelElement(grammarAccess.getSubCallRule());
+                              	        }
+                                     		setWithLastConsumed(current, "type", lv_type_0_2, null);
+                              	    
+                            }
+
+                            }
+                            break;
+
+                    }
+
+
+                    }
+
+
+                    }
+
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3752:2: ( (lv_call_1_0= ruleCall ) )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3753:1: (lv_call_1_0= ruleCall )
                     {
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3727:1: (lv_call_1_0= ruleCall )
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3728:3: lv_call_1_0= ruleCall
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3753:1: (lv_call_1_0= ruleCall )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3754:3: lv_call_1_0= ruleCall
                     {
                     if ( state.backtracking==0 ) {
                        
                       	        newCompositeNode(grammarAccess.getSubCallAccess().getCallCallParserRuleCall_0_1_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleCall_in_ruleSubCall7716);
+                    pushFollow(FOLLOW_ruleCall_in_ruleSubCall7769);
                     lv_call_1_0=ruleCall();
 
                     state._fsp--;
@@ -10394,29 +10464,29 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3745:6: (otherlv_2= '[' ( (lv_arrayEx_3_0= ruleExpression ) ) otherlv_4= ']' )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3771:6: (otherlv_2= '[' ( (lv_arrayEx_3_0= ruleExpression ) ) otherlv_4= ']' )
                     {
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3745:6: (otherlv_2= '[' ( (lv_arrayEx_3_0= ruleExpression ) ) otherlv_4= ']' )
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3745:8: otherlv_2= '[' ( (lv_arrayEx_3_0= ruleExpression ) ) otherlv_4= ']'
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3771:6: (otherlv_2= '[' ( (lv_arrayEx_3_0= ruleExpression ) ) otherlv_4= ']' )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3771:8: otherlv_2= '[' ( (lv_arrayEx_3_0= ruleExpression ) ) otherlv_4= ']'
                     {
-                    otherlv_2=(Token)match(input,61,FOLLOW_61_in_ruleSubCall7736); if (state.failed) return current;
+                    otherlv_2=(Token)match(input,62,FOLLOW_62_in_ruleSubCall7789); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                           	newLeafNode(otherlv_2, grammarAccess.getSubCallAccess().getLeftSquareBracketKeyword_1_0());
                           
                     }
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3749:1: ( (lv_arrayEx_3_0= ruleExpression ) )
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3750:1: (lv_arrayEx_3_0= ruleExpression )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3775:1: ( (lv_arrayEx_3_0= ruleExpression ) )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3776:1: (lv_arrayEx_3_0= ruleExpression )
                     {
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3750:1: (lv_arrayEx_3_0= ruleExpression )
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3751:3: lv_arrayEx_3_0= ruleExpression
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3776:1: (lv_arrayEx_3_0= ruleExpression )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3777:3: lv_arrayEx_3_0= ruleExpression
                     {
                     if ( state.backtracking==0 ) {
                        
                       	        newCompositeNode(grammarAccess.getSubCallAccess().getArrayExExpressionParserRuleCall_1_1_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleExpression_in_ruleSubCall7757);
+                    pushFollow(FOLLOW_ruleExpression_in_ruleSubCall7810);
                     lv_arrayEx_3_0=ruleExpression();
 
                     state._fsp--;
@@ -10440,7 +10510,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
                     }
 
-                    otherlv_4=(Token)match(input,62,FOLLOW_62_in_ruleSubCall7769); if (state.failed) return current;
+                    otherlv_4=(Token)match(input,63,FOLLOW_63_in_ruleSubCall7822); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                           	newLeafNode(otherlv_4, grammarAccess.getSubCallAccess().getRightSquareBracketKeyword_1_2());
@@ -10474,8 +10544,459 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
     // $ANTLR end "ruleSubCall"
 
 
+    // $ANTLR start "entryRuleDeclarator"
+    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3805:1: entryRuleDeclarator returns [EObject current=null] : iv_ruleDeclarator= ruleDeclarator EOF ;
+    public final EObject entryRuleDeclarator() throws RecognitionException {
+        EObject current = null;
+
+        EObject iv_ruleDeclarator = null;
+
+
+        try {
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3806:2: (iv_ruleDeclarator= ruleDeclarator EOF )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3807:2: iv_ruleDeclarator= ruleDeclarator EOF
+            {
+            if ( state.backtracking==0 ) {
+               newCompositeNode(grammarAccess.getDeclaratorRule()); 
+            }
+            pushFollow(FOLLOW_ruleDeclarator_in_entryRuleDeclarator7859);
+            iv_ruleDeclarator=ruleDeclarator();
+
+            state._fsp--;
+            if (state.failed) return current;
+            if ( state.backtracking==0 ) {
+               current =iv_ruleDeclarator; 
+            }
+            match(input,EOF,FOLLOW_EOF_in_entryRuleDeclarator7869); if (state.failed) return current;
+
+            }
+
+        }
+         
+            catch (RecognitionException re) { 
+                recover(input,re); 
+                appendSkippedTokens();
+            } 
+        finally {
+        }
+        return current;
+    }
+    // $ANTLR end "entryRuleDeclarator"
+
+
+    // $ANTLR start "ruleDeclarator"
+    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3814:1: ruleDeclarator returns [EObject current=null] : ( ( (lv_decl_0_0= ruleDeclaration ) ) (otherlv_1= ';' ( (lv_decl_2_0= ruleDeclaration ) ) )* otherlv_3= '|' ) ;
+    public final EObject ruleDeclarator() throws RecognitionException {
+        EObject current = null;
+
+        Token otherlv_1=null;
+        Token otherlv_3=null;
+        EObject lv_decl_0_0 = null;
+
+        EObject lv_decl_2_0 = null;
+
+
+         enterRule(); 
+            
+        try {
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3817:28: ( ( ( (lv_decl_0_0= ruleDeclaration ) ) (otherlv_1= ';' ( (lv_decl_2_0= ruleDeclaration ) ) )* otherlv_3= '|' ) )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3818:1: ( ( (lv_decl_0_0= ruleDeclaration ) ) (otherlv_1= ';' ( (lv_decl_2_0= ruleDeclaration ) ) )* otherlv_3= '|' )
+            {
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3818:1: ( ( (lv_decl_0_0= ruleDeclaration ) ) (otherlv_1= ';' ( (lv_decl_2_0= ruleDeclaration ) ) )* otherlv_3= '|' )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3818:2: ( (lv_decl_0_0= ruleDeclaration ) ) (otherlv_1= ';' ( (lv_decl_2_0= ruleDeclaration ) ) )* otherlv_3= '|'
+            {
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3818:2: ( (lv_decl_0_0= ruleDeclaration ) )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3819:1: (lv_decl_0_0= ruleDeclaration )
+            {
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3819:1: (lv_decl_0_0= ruleDeclaration )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3820:3: lv_decl_0_0= ruleDeclaration
+            {
+            if ( state.backtracking==0 ) {
+               
+              	        newCompositeNode(grammarAccess.getDeclaratorAccess().getDeclDeclarationParserRuleCall_0_0()); 
+              	    
+            }
+            pushFollow(FOLLOW_ruleDeclaration_in_ruleDeclarator7915);
+            lv_decl_0_0=ruleDeclaration();
+
+            state._fsp--;
+            if (state.failed) return current;
+            if ( state.backtracking==0 ) {
+
+              	        if (current==null) {
+              	            current = createModelElementForParent(grammarAccess.getDeclaratorRule());
+              	        }
+                     		add(
+                     			current, 
+                     			"decl",
+                      		lv_decl_0_0, 
+                      		"Declaration");
+              	        afterParserOrEnumRuleCall();
+              	    
+            }
+
+            }
+
+
+            }
+
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3836:2: (otherlv_1= ';' ( (lv_decl_2_0= ruleDeclaration ) ) )*
+            loop57:
+            do {
+                int alt57=2;
+                int LA57_0 = input.LA(1);
+
+                if ( (LA57_0==23) ) {
+                    alt57=1;
+                }
+
+
+                switch (alt57) {
+            	case 1 :
+            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3836:4: otherlv_1= ';' ( (lv_decl_2_0= ruleDeclaration ) )
+            	    {
+            	    otherlv_1=(Token)match(input,23,FOLLOW_23_in_ruleDeclarator7928); if (state.failed) return current;
+            	    if ( state.backtracking==0 ) {
+
+            	          	newLeafNode(otherlv_1, grammarAccess.getDeclaratorAccess().getSemicolonKeyword_1_0());
+            	          
+            	    }
+            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3840:1: ( (lv_decl_2_0= ruleDeclaration ) )
+            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3841:1: (lv_decl_2_0= ruleDeclaration )
+            	    {
+            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3841:1: (lv_decl_2_0= ruleDeclaration )
+            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3842:3: lv_decl_2_0= ruleDeclaration
+            	    {
+            	    if ( state.backtracking==0 ) {
+            	       
+            	      	        newCompositeNode(grammarAccess.getDeclaratorAccess().getDeclDeclarationParserRuleCall_1_1_0()); 
+            	      	    
+            	    }
+            	    pushFollow(FOLLOW_ruleDeclaration_in_ruleDeclarator7949);
+            	    lv_decl_2_0=ruleDeclaration();
+
+            	    state._fsp--;
+            	    if (state.failed) return current;
+            	    if ( state.backtracking==0 ) {
+
+            	      	        if (current==null) {
+            	      	            current = createModelElementForParent(grammarAccess.getDeclaratorRule());
+            	      	        }
+            	             		add(
+            	             			current, 
+            	             			"decl",
+            	              		lv_decl_2_0, 
+            	              		"Declaration");
+            	      	        afterParserOrEnumRuleCall();
+            	      	    
+            	    }
+
+            	    }
+
+
+            	    }
+
+
+            	    }
+            	    break;
+
+            	default :
+            	    break loop57;
+                }
+            } while (true);
+
+            otherlv_3=(Token)match(input,27,FOLLOW_27_in_ruleDeclarator7963); if (state.failed) return current;
+            if ( state.backtracking==0 ) {
+
+                  	newLeafNode(otherlv_3, grammarAccess.getDeclaratorAccess().getVerticalLineKeyword_2());
+                  
+            }
+
+            }
+
+
+            }
+
+            if ( state.backtracking==0 ) {
+               leaveRule(); 
+            }
+        }
+         
+            catch (RecognitionException re) { 
+                recover(input,re); 
+                appendSkippedTokens();
+            } 
+        finally {
+        }
+        return current;
+    }
+    // $ANTLR end "ruleDeclarator"
+
+
+    // $ANTLR start "entryRuleDeclaration"
+    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3870:1: entryRuleDeclaration returns [EObject current=null] : iv_ruleDeclaration= ruleDeclaration EOF ;
+    public final EObject entryRuleDeclaration() throws RecognitionException {
+        EObject current = null;
+
+        EObject iv_ruleDeclaration = null;
+
+
+        try {
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3871:2: (iv_ruleDeclaration= ruleDeclaration EOF )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3872:2: iv_ruleDeclaration= ruleDeclaration EOF
+            {
+            if ( state.backtracking==0 ) {
+               newCompositeNode(grammarAccess.getDeclarationRule()); 
+            }
+            pushFollow(FOLLOW_ruleDeclaration_in_entryRuleDeclaration7999);
+            iv_ruleDeclaration=ruleDeclaration();
+
+            state._fsp--;
+            if (state.failed) return current;
+            if ( state.backtracking==0 ) {
+               current =iv_ruleDeclaration; 
+            }
+            match(input,EOF,FOLLOW_EOF_in_entryRuleDeclaration8009); if (state.failed) return current;
+
+            }
+
+        }
+         
+            catch (RecognitionException re) { 
+                recover(input,re); 
+                appendSkippedTokens();
+            } 
+        finally {
+        }
+        return current;
+    }
+    // $ANTLR end "entryRuleDeclaration"
+
+
+    // $ANTLR start "ruleDeclaration"
+    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3879:1: ruleDeclaration returns [EObject current=null] : ( ( (lv_type_0_0= ruleType ) )? ( (lv_id_1_0= ruleIdentifier ) ) (otherlv_2= ',' ( (lv_id_3_0= ruleIdentifier ) ) )* ) ;
+    public final EObject ruleDeclaration() throws RecognitionException {
+        EObject current = null;
+
+        Token otherlv_2=null;
+        EObject lv_type_0_0 = null;
+
+        AntlrDatatypeRuleToken lv_id_1_0 = null;
+
+        AntlrDatatypeRuleToken lv_id_3_0 = null;
+
+
+         enterRule(); 
+            
+        try {
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3882:28: ( ( ( (lv_type_0_0= ruleType ) )? ( (lv_id_1_0= ruleIdentifier ) ) (otherlv_2= ',' ( (lv_id_3_0= ruleIdentifier ) ) )* ) )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3883:1: ( ( (lv_type_0_0= ruleType ) )? ( (lv_id_1_0= ruleIdentifier ) ) (otherlv_2= ',' ( (lv_id_3_0= ruleIdentifier ) ) )* )
+            {
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3883:1: ( ( (lv_type_0_0= ruleType ) )? ( (lv_id_1_0= ruleIdentifier ) ) (otherlv_2= ',' ( (lv_id_3_0= ruleIdentifier ) ) )* )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3883:2: ( (lv_type_0_0= ruleType ) )? ( (lv_id_1_0= ruleIdentifier ) ) (otherlv_2= ',' ( (lv_id_3_0= ruleIdentifier ) ) )*
+            {
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3883:2: ( (lv_type_0_0= ruleType ) )?
+            int alt58=2;
+            switch ( input.LA(1) ) {
+                case RULE_ID:
+                    {
+                    int LA58_1 = input.LA(2);
+
+                    if ( ((LA58_1>=RULE_VERSION && LA58_1<=RULE_EXPONENT)||LA58_1==64) ) {
+                        alt58=1;
+                    }
+                    }
+                    break;
+                case RULE_VERSION:
+                    {
+                    int LA58_2 = input.LA(2);
+
+                    if ( ((LA58_2>=RULE_VERSION && LA58_2<=RULE_EXPONENT)||LA58_2==64) ) {
+                        alt58=1;
+                    }
+                    }
+                    break;
+                case RULE_EXPONENT:
+                    {
+                    int LA58_3 = input.LA(2);
+
+                    if ( ((LA58_3>=RULE_VERSION && LA58_3<=RULE_EXPONENT)||LA58_3==64) ) {
+                        alt58=1;
+                    }
+                    }
+                    break;
+                case 68:
+                case 69:
+                case 70:
+                    {
+                    alt58=1;
+                    }
+                    break;
+            }
+
+            switch (alt58) {
+                case 1 :
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3884:1: (lv_type_0_0= ruleType )
+                    {
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3884:1: (lv_type_0_0= ruleType )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3885:3: lv_type_0_0= ruleType
+                    {
+                    if ( state.backtracking==0 ) {
+                       
+                      	        newCompositeNode(grammarAccess.getDeclarationAccess().getTypeTypeParserRuleCall_0_0()); 
+                      	    
+                    }
+                    pushFollow(FOLLOW_ruleType_in_ruleDeclaration8055);
+                    lv_type_0_0=ruleType();
+
+                    state._fsp--;
+                    if (state.failed) return current;
+                    if ( state.backtracking==0 ) {
+
+                      	        if (current==null) {
+                      	            current = createModelElementForParent(grammarAccess.getDeclarationRule());
+                      	        }
+                             		set(
+                             			current, 
+                             			"type",
+                              		lv_type_0_0, 
+                              		"Type");
+                      	        afterParserOrEnumRuleCall();
+                      	    
+                    }
+
+                    }
+
+
+                    }
+                    break;
+
+            }
+
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3901:3: ( (lv_id_1_0= ruleIdentifier ) )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3902:1: (lv_id_1_0= ruleIdentifier )
+            {
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3902:1: (lv_id_1_0= ruleIdentifier )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3903:3: lv_id_1_0= ruleIdentifier
+            {
+            if ( state.backtracking==0 ) {
+               
+              	        newCompositeNode(grammarAccess.getDeclarationAccess().getIdIdentifierParserRuleCall_1_0()); 
+              	    
+            }
+            pushFollow(FOLLOW_ruleIdentifier_in_ruleDeclaration8077);
+            lv_id_1_0=ruleIdentifier();
+
+            state._fsp--;
+            if (state.failed) return current;
+            if ( state.backtracking==0 ) {
+
+              	        if (current==null) {
+              	            current = createModelElementForParent(grammarAccess.getDeclarationRule());
+              	        }
+                     		add(
+                     			current, 
+                     			"id",
+                      		lv_id_1_0, 
+                      		"Identifier");
+              	        afterParserOrEnumRuleCall();
+              	    
+            }
+
+            }
+
+
+            }
+
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3919:2: (otherlv_2= ',' ( (lv_id_3_0= ruleIdentifier ) ) )*
+            loop59:
+            do {
+                int alt59=2;
+                int LA59_0 = input.LA(1);
+
+                if ( (LA59_0==20) ) {
+                    alt59=1;
+                }
+
+
+                switch (alt59) {
+            	case 1 :
+            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3919:4: otherlv_2= ',' ( (lv_id_3_0= ruleIdentifier ) )
+            	    {
+            	    otherlv_2=(Token)match(input,20,FOLLOW_20_in_ruleDeclaration8090); if (state.failed) return current;
+            	    if ( state.backtracking==0 ) {
+
+            	          	newLeafNode(otherlv_2, grammarAccess.getDeclarationAccess().getCommaKeyword_2_0());
+            	          
+            	    }
+            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3923:1: ( (lv_id_3_0= ruleIdentifier ) )
+            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3924:1: (lv_id_3_0= ruleIdentifier )
+            	    {
+            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3924:1: (lv_id_3_0= ruleIdentifier )
+            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3925:3: lv_id_3_0= ruleIdentifier
+            	    {
+            	    if ( state.backtracking==0 ) {
+            	       
+            	      	        newCompositeNode(grammarAccess.getDeclarationAccess().getIdIdentifierParserRuleCall_2_1_0()); 
+            	      	    
+            	    }
+            	    pushFollow(FOLLOW_ruleIdentifier_in_ruleDeclaration8111);
+            	    lv_id_3_0=ruleIdentifier();
+
+            	    state._fsp--;
+            	    if (state.failed) return current;
+            	    if ( state.backtracking==0 ) {
+
+            	      	        if (current==null) {
+            	      	            current = createModelElementForParent(grammarAccess.getDeclarationRule());
+            	      	        }
+            	             		add(
+            	             			current, 
+            	             			"id",
+            	              		lv_id_3_0, 
+            	              		"Identifier");
+            	      	        afterParserOrEnumRuleCall();
+            	      	    
+            	    }
+
+            	    }
+
+
+            	    }
+
+
+            	    }
+            	    break;
+
+            	default :
+            	    break loop59;
+                }
+            } while (true);
+
+
+            }
+
+
+            }
+
+            if ( state.backtracking==0 ) {
+               leaveRule(); 
+            }
+        }
+         
+            catch (RecognitionException re) { 
+                recover(input,re); 
+                appendSkippedTokens();
+            } 
+        finally {
+        }
+        return current;
+    }
+    // $ANTLR end "ruleDeclaration"
+
+
     // $ANTLR start "entryRuleCall"
-    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3779:1: entryRuleCall returns [EObject current=null] : iv_ruleCall= ruleCall EOF ;
+    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3949:1: entryRuleCall returns [EObject current=null] : iv_ruleCall= ruleCall EOF ;
     public final EObject entryRuleCall() throws RecognitionException {
         EObject current = null;
 
@@ -10483,13 +11004,13 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3780:2: (iv_ruleCall= ruleCall EOF )
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3781:2: iv_ruleCall= ruleCall EOF
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3950:2: (iv_ruleCall= ruleCall EOF )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3951:2: iv_ruleCall= ruleCall EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getCallRule()); 
             }
-            pushFollow(FOLLOW_ruleCall_in_entryRuleCall7806);
+            pushFollow(FOLLOW_ruleCall_in_entryRuleCall8149);
             iv_ruleCall=ruleCall();
 
             state._fsp--;
@@ -10497,7 +11018,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                current =iv_ruleCall; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleCall7816); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleCall8159); if (state.failed) return current;
 
             }
 
@@ -10515,38 +11036,40 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleCall"
-    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3788:1: ruleCall returns [EObject current=null] : ( ( (lv_name_0_0= ruleQualifiedPrefix ) ) otherlv_1= '(' ( (lv_param_2_0= ruleArgumentList ) )? otherlv_3= ')' ) ;
+    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3958:1: ruleCall returns [EObject current=null] : ( ( (lv_name_0_0= ruleQualifiedPrefix ) ) otherlv_1= '(' ( (lv_decl_2_0= ruleDeclarator ) )? ( (lv_param_3_0= ruleArgumentList ) )? otherlv_4= ')' ) ;
     public final EObject ruleCall() throws RecognitionException {
         EObject current = null;
 
         Token otherlv_1=null;
-        Token otherlv_3=null;
+        Token otherlv_4=null;
         EObject lv_name_0_0 = null;
 
-        EObject lv_param_2_0 = null;
+        EObject lv_decl_2_0 = null;
+
+        EObject lv_param_3_0 = null;
 
 
          enterRule(); 
             
         try {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3791:28: ( ( ( (lv_name_0_0= ruleQualifiedPrefix ) ) otherlv_1= '(' ( (lv_param_2_0= ruleArgumentList ) )? otherlv_3= ')' ) )
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3792:1: ( ( (lv_name_0_0= ruleQualifiedPrefix ) ) otherlv_1= '(' ( (lv_param_2_0= ruleArgumentList ) )? otherlv_3= ')' )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3961:28: ( ( ( (lv_name_0_0= ruleQualifiedPrefix ) ) otherlv_1= '(' ( (lv_decl_2_0= ruleDeclarator ) )? ( (lv_param_3_0= ruleArgumentList ) )? otherlv_4= ')' ) )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3962:1: ( ( (lv_name_0_0= ruleQualifiedPrefix ) ) otherlv_1= '(' ( (lv_decl_2_0= ruleDeclarator ) )? ( (lv_param_3_0= ruleArgumentList ) )? otherlv_4= ')' )
             {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3792:1: ( ( (lv_name_0_0= ruleQualifiedPrefix ) ) otherlv_1= '(' ( (lv_param_2_0= ruleArgumentList ) )? otherlv_3= ')' )
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3792:2: ( (lv_name_0_0= ruleQualifiedPrefix ) ) otherlv_1= '(' ( (lv_param_2_0= ruleArgumentList ) )? otherlv_3= ')'
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3962:1: ( ( (lv_name_0_0= ruleQualifiedPrefix ) ) otherlv_1= '(' ( (lv_decl_2_0= ruleDeclarator ) )? ( (lv_param_3_0= ruleArgumentList ) )? otherlv_4= ')' )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3962:2: ( (lv_name_0_0= ruleQualifiedPrefix ) ) otherlv_1= '(' ( (lv_decl_2_0= ruleDeclarator ) )? ( (lv_param_3_0= ruleArgumentList ) )? otherlv_4= ')'
             {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3792:2: ( (lv_name_0_0= ruleQualifiedPrefix ) )
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3793:1: (lv_name_0_0= ruleQualifiedPrefix )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3962:2: ( (lv_name_0_0= ruleQualifiedPrefix ) )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3963:1: (lv_name_0_0= ruleQualifiedPrefix )
             {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3793:1: (lv_name_0_0= ruleQualifiedPrefix )
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3794:3: lv_name_0_0= ruleQualifiedPrefix
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3963:1: (lv_name_0_0= ruleQualifiedPrefix )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3964:3: lv_name_0_0= ruleQualifiedPrefix
             {
             if ( state.backtracking==0 ) {
                
               	        newCompositeNode(grammarAccess.getCallAccess().getNameQualifiedPrefixParserRuleCall_0_0()); 
               	    
             }
-            pushFollow(FOLLOW_ruleQualifiedPrefix_in_ruleCall7862);
+            pushFollow(FOLLOW_ruleQualifiedPrefix_in_ruleCall8205);
             lv_name_0_0=ruleQualifiedPrefix();
 
             state._fsp--;
@@ -10570,33 +11093,75 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
             }
 
-            otherlv_1=(Token)match(input,14,FOLLOW_14_in_ruleCall7874); if (state.failed) return current;
+            otherlv_1=(Token)match(input,14,FOLLOW_14_in_ruleCall8217); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_1, grammarAccess.getCallAccess().getLeftParenthesisKeyword_1());
                   
             }
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3814:1: ( (lv_param_2_0= ruleArgumentList ) )?
-            int alt56=2;
-            int LA56_0 = input.LA(1);
-
-            if ( ((LA56_0>=RULE_NUMBER && LA56_0<=RULE_EXPONENT)||LA56_0==14||LA56_0==17||LA56_0==54||(LA56_0>=57 && LA56_0<=60)||(LA56_0>=64 && LA56_0<=65)) ) {
-                alt56=1;
-            }
-            switch (alt56) {
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3984:1: ( (lv_decl_2_0= ruleDeclarator ) )?
+            int alt60=2;
+            alt60 = dfa60.predict(input);
+            switch (alt60) {
                 case 1 :
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3815:1: (lv_param_2_0= ruleArgumentList )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3985:1: (lv_decl_2_0= ruleDeclarator )
                     {
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3815:1: (lv_param_2_0= ruleArgumentList )
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3816:3: lv_param_2_0= ruleArgumentList
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3985:1: (lv_decl_2_0= ruleDeclarator )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3986:3: lv_decl_2_0= ruleDeclarator
                     {
                     if ( state.backtracking==0 ) {
                        
-                      	        newCompositeNode(grammarAccess.getCallAccess().getParamArgumentListParserRuleCall_2_0()); 
+                      	        newCompositeNode(grammarAccess.getCallAccess().getDeclDeclaratorParserRuleCall_2_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleArgumentList_in_ruleCall7895);
-                    lv_param_2_0=ruleArgumentList();
+                    pushFollow(FOLLOW_ruleDeclarator_in_ruleCall8238);
+                    lv_decl_2_0=ruleDeclarator();
+
+                    state._fsp--;
+                    if (state.failed) return current;
+                    if ( state.backtracking==0 ) {
+
+                      	        if (current==null) {
+                      	            current = createModelElementForParent(grammarAccess.getCallRule());
+                      	        }
+                             		set(
+                             			current, 
+                             			"decl",
+                              		lv_decl_2_0, 
+                              		"Declarator");
+                      	        afterParserOrEnumRuleCall();
+                      	    
+                    }
+
+                    }
+
+
+                    }
+                    break;
+
+            }
+
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4002:3: ( (lv_param_3_0= ruleArgumentList ) )?
+            int alt61=2;
+            int LA61_0 = input.LA(1);
+
+            if ( ((LA61_0>=RULE_NUMBER && LA61_0<=RULE_EXPONENT)||LA61_0==14||LA61_0==17||LA61_0==54||(LA61_0>=57 && LA61_0<=60)||(LA61_0>=65 && LA61_0<=67)) ) {
+                alt61=1;
+            }
+            switch (alt61) {
+                case 1 :
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4003:1: (lv_param_3_0= ruleArgumentList )
+                    {
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4003:1: (lv_param_3_0= ruleArgumentList )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4004:3: lv_param_3_0= ruleArgumentList
+                    {
+                    if ( state.backtracking==0 ) {
+                       
+                      	        newCompositeNode(grammarAccess.getCallAccess().getParamArgumentListParserRuleCall_3_0()); 
+                      	    
+                    }
+                    pushFollow(FOLLOW_ruleArgumentList_in_ruleCall8260);
+                    lv_param_3_0=ruleArgumentList();
 
                     state._fsp--;
                     if (state.failed) return current;
@@ -10608,7 +11173,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
                              		set(
                              			current, 
                              			"param",
-                              		lv_param_2_0, 
+                              		lv_param_3_0, 
                               		"ArgumentList");
                       	        afterParserOrEnumRuleCall();
                       	    
@@ -10622,10 +11187,10 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
             }
 
-            otherlv_3=(Token)match(input,15,FOLLOW_15_in_ruleCall7908); if (state.failed) return current;
+            otherlv_4=(Token)match(input,15,FOLLOW_15_in_ruleCall8273); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
-                  	newLeafNode(otherlv_3, grammarAccess.getCallAccess().getRightParenthesisKeyword_3());
+                  	newLeafNode(otherlv_4, grammarAccess.getCallAccess().getRightParenthesisKeyword_4());
                   
             }
 
@@ -10651,7 +11216,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleArgumentList"
-    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3844:1: entryRuleArgumentList returns [EObject current=null] : iv_ruleArgumentList= ruleArgumentList EOF ;
+    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4032:1: entryRuleArgumentList returns [EObject current=null] : iv_ruleArgumentList= ruleArgumentList EOF ;
     public final EObject entryRuleArgumentList() throws RecognitionException {
         EObject current = null;
 
@@ -10659,13 +11224,13 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3845:2: (iv_ruleArgumentList= ruleArgumentList EOF )
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3846:2: iv_ruleArgumentList= ruleArgumentList EOF
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4033:2: (iv_ruleArgumentList= ruleArgumentList EOF )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4034:2: iv_ruleArgumentList= ruleArgumentList EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getArgumentListRule()); 
             }
-            pushFollow(FOLLOW_ruleArgumentList_in_entryRuleArgumentList7944);
+            pushFollow(FOLLOW_ruleArgumentList_in_entryRuleArgumentList8309);
             iv_ruleArgumentList=ruleArgumentList();
 
             state._fsp--;
@@ -10673,7 +11238,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                current =iv_ruleArgumentList; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleArgumentList7954); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleArgumentList8319); if (state.failed) return current;
 
             }
 
@@ -10691,7 +11256,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleArgumentList"
-    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3853:1: ruleArgumentList returns [EObject current=null] : ( ( (lv_param_0_0= ruleNamedArgument ) ) (otherlv_1= ',' ( (lv_param_2_0= ruleNamedArgument ) ) )* ) ;
+    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4041:1: ruleArgumentList returns [EObject current=null] : ( ( (lv_param_0_0= ruleNamedArgument ) ) (otherlv_1= ',' ( (lv_param_2_0= ruleNamedArgument ) ) )* ) ;
     public final EObject ruleArgumentList() throws RecognitionException {
         EObject current = null;
 
@@ -10704,24 +11269,24 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3856:28: ( ( ( (lv_param_0_0= ruleNamedArgument ) ) (otherlv_1= ',' ( (lv_param_2_0= ruleNamedArgument ) ) )* ) )
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3857:1: ( ( (lv_param_0_0= ruleNamedArgument ) ) (otherlv_1= ',' ( (lv_param_2_0= ruleNamedArgument ) ) )* )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4044:28: ( ( ( (lv_param_0_0= ruleNamedArgument ) ) (otherlv_1= ',' ( (lv_param_2_0= ruleNamedArgument ) ) )* ) )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4045:1: ( ( (lv_param_0_0= ruleNamedArgument ) ) (otherlv_1= ',' ( (lv_param_2_0= ruleNamedArgument ) ) )* )
             {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3857:1: ( ( (lv_param_0_0= ruleNamedArgument ) ) (otherlv_1= ',' ( (lv_param_2_0= ruleNamedArgument ) ) )* )
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3857:2: ( (lv_param_0_0= ruleNamedArgument ) ) (otherlv_1= ',' ( (lv_param_2_0= ruleNamedArgument ) ) )*
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4045:1: ( ( (lv_param_0_0= ruleNamedArgument ) ) (otherlv_1= ',' ( (lv_param_2_0= ruleNamedArgument ) ) )* )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4045:2: ( (lv_param_0_0= ruleNamedArgument ) ) (otherlv_1= ',' ( (lv_param_2_0= ruleNamedArgument ) ) )*
             {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3857:2: ( (lv_param_0_0= ruleNamedArgument ) )
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3858:1: (lv_param_0_0= ruleNamedArgument )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4045:2: ( (lv_param_0_0= ruleNamedArgument ) )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4046:1: (lv_param_0_0= ruleNamedArgument )
             {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3858:1: (lv_param_0_0= ruleNamedArgument )
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3859:3: lv_param_0_0= ruleNamedArgument
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4046:1: (lv_param_0_0= ruleNamedArgument )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4047:3: lv_param_0_0= ruleNamedArgument
             {
             if ( state.backtracking==0 ) {
                
               	        newCompositeNode(grammarAccess.getArgumentListAccess().getParamNamedArgumentParserRuleCall_0_0()); 
               	    
             }
-            pushFollow(FOLLOW_ruleNamedArgument_in_ruleArgumentList8000);
+            pushFollow(FOLLOW_ruleNamedArgument_in_ruleArgumentList8365);
             lv_param_0_0=ruleNamedArgument();
 
             state._fsp--;
@@ -10745,39 +11310,39 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
             }
 
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3875:2: (otherlv_1= ',' ( (lv_param_2_0= ruleNamedArgument ) ) )*
-            loop57:
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4063:2: (otherlv_1= ',' ( (lv_param_2_0= ruleNamedArgument ) ) )*
+            loop62:
             do {
-                int alt57=2;
-                int LA57_0 = input.LA(1);
+                int alt62=2;
+                int LA62_0 = input.LA(1);
 
-                if ( (LA57_0==20) ) {
-                    alt57=1;
+                if ( (LA62_0==20) ) {
+                    alt62=1;
                 }
 
 
-                switch (alt57) {
+                switch (alt62) {
             	case 1 :
-            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3875:4: otherlv_1= ',' ( (lv_param_2_0= ruleNamedArgument ) )
+            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4063:4: otherlv_1= ',' ( (lv_param_2_0= ruleNamedArgument ) )
             	    {
-            	    otherlv_1=(Token)match(input,20,FOLLOW_20_in_ruleArgumentList8013); if (state.failed) return current;
+            	    otherlv_1=(Token)match(input,20,FOLLOW_20_in_ruleArgumentList8378); if (state.failed) return current;
             	    if ( state.backtracking==0 ) {
 
             	          	newLeafNode(otherlv_1, grammarAccess.getArgumentListAccess().getCommaKeyword_1_0());
             	          
             	    }
-            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3879:1: ( (lv_param_2_0= ruleNamedArgument ) )
-            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3880:1: (lv_param_2_0= ruleNamedArgument )
+            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4067:1: ( (lv_param_2_0= ruleNamedArgument ) )
+            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4068:1: (lv_param_2_0= ruleNamedArgument )
             	    {
-            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3880:1: (lv_param_2_0= ruleNamedArgument )
-            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3881:3: lv_param_2_0= ruleNamedArgument
+            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4068:1: (lv_param_2_0= ruleNamedArgument )
+            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4069:3: lv_param_2_0= ruleNamedArgument
             	    {
             	    if ( state.backtracking==0 ) {
             	       
             	      	        newCompositeNode(grammarAccess.getArgumentListAccess().getParamNamedArgumentParserRuleCall_1_1_0()); 
             	      	    
             	    }
-            	    pushFollow(FOLLOW_ruleNamedArgument_in_ruleArgumentList8034);
+            	    pushFollow(FOLLOW_ruleNamedArgument_in_ruleArgumentList8399);
             	    lv_param_2_0=ruleNamedArgument();
 
             	    state._fsp--;
@@ -10806,7 +11371,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
             	    break;
 
             	default :
-            	    break loop57;
+            	    break loop62;
                 }
             } while (true);
 
@@ -10833,7 +11398,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleNamedArgument"
-    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3905:1: entryRuleNamedArgument returns [EObject current=null] : iv_ruleNamedArgument= ruleNamedArgument EOF ;
+    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4093:1: entryRuleNamedArgument returns [EObject current=null] : iv_ruleNamedArgument= ruleNamedArgument EOF ;
     public final EObject entryRuleNamedArgument() throws RecognitionException {
         EObject current = null;
 
@@ -10841,13 +11406,13 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3906:2: (iv_ruleNamedArgument= ruleNamedArgument EOF )
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3907:2: iv_ruleNamedArgument= ruleNamedArgument EOF
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4094:2: (iv_ruleNamedArgument= ruleNamedArgument EOF )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4095:2: iv_ruleNamedArgument= ruleNamedArgument EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getNamedArgumentRule()); 
             }
-            pushFollow(FOLLOW_ruleNamedArgument_in_entryRuleNamedArgument8072);
+            pushFollow(FOLLOW_ruleNamedArgument_in_entryRuleNamedArgument8437);
             iv_ruleNamedArgument=ruleNamedArgument();
 
             state._fsp--;
@@ -10855,7 +11420,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                current =iv_ruleNamedArgument; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleNamedArgument8082); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleNamedArgument8447); if (state.failed) return current;
 
             }
 
@@ -10873,7 +11438,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleNamedArgument"
-    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3914:1: ruleNamedArgument returns [EObject current=null] : ( ( ( (lv_name_0_0= ruleIdentifier ) ) otherlv_1= '=' )? ( (lv_ex_2_0= ruleExpression ) ) ) ;
+    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4102:1: ruleNamedArgument returns [EObject current=null] : ( ( ( (lv_name_0_0= ruleIdentifier ) ) otherlv_1= '=' )? ( (lv_ex_2_0= ruleExpression ) ) ) ;
     public final EObject ruleNamedArgument() throws RecognitionException {
         EObject current = null;
 
@@ -10886,60 +11451,60 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3917:28: ( ( ( ( (lv_name_0_0= ruleIdentifier ) ) otherlv_1= '=' )? ( (lv_ex_2_0= ruleExpression ) ) ) )
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3918:1: ( ( ( (lv_name_0_0= ruleIdentifier ) ) otherlv_1= '=' )? ( (lv_ex_2_0= ruleExpression ) ) )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4105:28: ( ( ( ( (lv_name_0_0= ruleIdentifier ) ) otherlv_1= '=' )? ( (lv_ex_2_0= ruleExpression ) ) ) )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4106:1: ( ( ( (lv_name_0_0= ruleIdentifier ) ) otherlv_1= '=' )? ( (lv_ex_2_0= ruleExpression ) ) )
             {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3918:1: ( ( ( (lv_name_0_0= ruleIdentifier ) ) otherlv_1= '=' )? ( (lv_ex_2_0= ruleExpression ) ) )
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3918:2: ( ( (lv_name_0_0= ruleIdentifier ) ) otherlv_1= '=' )? ( (lv_ex_2_0= ruleExpression ) )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4106:1: ( ( ( (lv_name_0_0= ruleIdentifier ) ) otherlv_1= '=' )? ( (lv_ex_2_0= ruleExpression ) ) )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4106:2: ( ( (lv_name_0_0= ruleIdentifier ) ) otherlv_1= '=' )? ( (lv_ex_2_0= ruleExpression ) )
             {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3918:2: ( ( (lv_name_0_0= ruleIdentifier ) ) otherlv_1= '=' )?
-            int alt58=2;
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4106:2: ( ( (lv_name_0_0= ruleIdentifier ) ) otherlv_1= '=' )?
+            int alt63=2;
             switch ( input.LA(1) ) {
                 case RULE_ID:
                     {
-                    int LA58_1 = input.LA(2);
+                    int LA63_1 = input.LA(2);
 
-                    if ( (LA58_1==21) ) {
-                        alt58=1;
+                    if ( (LA63_1==21) ) {
+                        alt63=1;
                     }
                     }
                     break;
                 case RULE_VERSION:
                     {
-                    int LA58_2 = input.LA(2);
+                    int LA63_2 = input.LA(2);
 
-                    if ( (LA58_2==21) ) {
-                        alt58=1;
+                    if ( (LA63_2==21) ) {
+                        alt63=1;
                     }
                     }
                     break;
                 case RULE_EXPONENT:
                     {
-                    int LA58_3 = input.LA(2);
+                    int LA63_3 = input.LA(2);
 
-                    if ( (LA58_3==21) ) {
-                        alt58=1;
+                    if ( (LA63_3==21) ) {
+                        alt63=1;
                     }
                     }
                     break;
             }
 
-            switch (alt58) {
+            switch (alt63) {
                 case 1 :
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3918:3: ( (lv_name_0_0= ruleIdentifier ) ) otherlv_1= '='
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4106:3: ( (lv_name_0_0= ruleIdentifier ) ) otherlv_1= '='
                     {
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3918:3: ( (lv_name_0_0= ruleIdentifier ) )
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3919:1: (lv_name_0_0= ruleIdentifier )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4106:3: ( (lv_name_0_0= ruleIdentifier ) )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4107:1: (lv_name_0_0= ruleIdentifier )
                     {
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3919:1: (lv_name_0_0= ruleIdentifier )
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3920:3: lv_name_0_0= ruleIdentifier
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4107:1: (lv_name_0_0= ruleIdentifier )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4108:3: lv_name_0_0= ruleIdentifier
                     {
                     if ( state.backtracking==0 ) {
                        
                       	        newCompositeNode(grammarAccess.getNamedArgumentAccess().getNameIdentifierParserRuleCall_0_0_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleIdentifier_in_ruleNamedArgument8129);
+                    pushFollow(FOLLOW_ruleIdentifier_in_ruleNamedArgument8494);
                     lv_name_0_0=ruleIdentifier();
 
                     state._fsp--;
@@ -10963,7 +11528,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
                     }
 
-                    otherlv_1=(Token)match(input,21,FOLLOW_21_in_ruleNamedArgument8141); if (state.failed) return current;
+                    otherlv_1=(Token)match(input,21,FOLLOW_21_in_ruleNamedArgument8506); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                           	newLeafNode(otherlv_1, grammarAccess.getNamedArgumentAccess().getEqualsSignKeyword_0_1());
@@ -10975,18 +11540,18 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
             }
 
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3940:3: ( (lv_ex_2_0= ruleExpression ) )
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3941:1: (lv_ex_2_0= ruleExpression )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4128:3: ( (lv_ex_2_0= ruleExpression ) )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4129:1: (lv_ex_2_0= ruleExpression )
             {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3941:1: (lv_ex_2_0= ruleExpression )
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3942:3: lv_ex_2_0= ruleExpression
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4129:1: (lv_ex_2_0= ruleExpression )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4130:3: lv_ex_2_0= ruleExpression
             {
             if ( state.backtracking==0 ) {
                
               	        newCompositeNode(grammarAccess.getNamedArgumentAccess().getExExpressionParserRuleCall_1_0()); 
               	    
             }
-            pushFollow(FOLLOW_ruleExpression_in_ruleNamedArgument8164);
+            pushFollow(FOLLOW_ruleExpression_in_ruleNamedArgument8529);
             lv_ex_2_0=ruleExpression();
 
             state._fsp--;
@@ -11033,7 +11598,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleQualifiedPrefix"
-    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3966:1: entryRuleQualifiedPrefix returns [EObject current=null] : iv_ruleQualifiedPrefix= ruleQualifiedPrefix EOF ;
+    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4154:1: entryRuleQualifiedPrefix returns [EObject current=null] : iv_ruleQualifiedPrefix= ruleQualifiedPrefix EOF ;
     public final EObject entryRuleQualifiedPrefix() throws RecognitionException {
         EObject current = null;
 
@@ -11041,13 +11606,13 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3967:2: (iv_ruleQualifiedPrefix= ruleQualifiedPrefix EOF )
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3968:2: iv_ruleQualifiedPrefix= ruleQualifiedPrefix EOF
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4155:2: (iv_ruleQualifiedPrefix= ruleQualifiedPrefix EOF )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4156:2: iv_ruleQualifiedPrefix= ruleQualifiedPrefix EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getQualifiedPrefixRule()); 
             }
-            pushFollow(FOLLOW_ruleQualifiedPrefix_in_entryRuleQualifiedPrefix8200);
+            pushFollow(FOLLOW_ruleQualifiedPrefix_in_entryRuleQualifiedPrefix8565);
             iv_ruleQualifiedPrefix=ruleQualifiedPrefix();
 
             state._fsp--;
@@ -11055,7 +11620,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                current =iv_ruleQualifiedPrefix; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleQualifiedPrefix8210); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleQualifiedPrefix8575); if (state.failed) return current;
 
             }
 
@@ -11073,7 +11638,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleQualifiedPrefix"
-    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3975:1: ruleQualifiedPrefix returns [EObject current=null] : ( ( (lv_qname_0_0= ruleIdentifier ) ) ( ( (lv_qname_1_0= '::' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )* ) ;
+    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4163:1: ruleQualifiedPrefix returns [EObject current=null] : ( ( (lv_qname_0_0= ruleIdentifier ) ) ( ( (lv_qname_1_0= '::' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )* ) ;
     public final EObject ruleQualifiedPrefix() throws RecognitionException {
         EObject current = null;
 
@@ -11086,24 +11651,24 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3978:28: ( ( ( (lv_qname_0_0= ruleIdentifier ) ) ( ( (lv_qname_1_0= '::' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )* ) )
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3979:1: ( ( (lv_qname_0_0= ruleIdentifier ) ) ( ( (lv_qname_1_0= '::' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )* )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4166:28: ( ( ( (lv_qname_0_0= ruleIdentifier ) ) ( ( (lv_qname_1_0= '::' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )* ) )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4167:1: ( ( (lv_qname_0_0= ruleIdentifier ) ) ( ( (lv_qname_1_0= '::' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )* )
             {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3979:1: ( ( (lv_qname_0_0= ruleIdentifier ) ) ( ( (lv_qname_1_0= '::' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )* )
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3979:2: ( (lv_qname_0_0= ruleIdentifier ) ) ( ( (lv_qname_1_0= '::' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )*
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4167:1: ( ( (lv_qname_0_0= ruleIdentifier ) ) ( ( (lv_qname_1_0= '::' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )* )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4167:2: ( (lv_qname_0_0= ruleIdentifier ) ) ( ( (lv_qname_1_0= '::' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )*
             {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3979:2: ( (lv_qname_0_0= ruleIdentifier ) )
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3980:1: (lv_qname_0_0= ruleIdentifier )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4167:2: ( (lv_qname_0_0= ruleIdentifier ) )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4168:1: (lv_qname_0_0= ruleIdentifier )
             {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3980:1: (lv_qname_0_0= ruleIdentifier )
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3981:3: lv_qname_0_0= ruleIdentifier
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4168:1: (lv_qname_0_0= ruleIdentifier )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4169:3: lv_qname_0_0= ruleIdentifier
             {
             if ( state.backtracking==0 ) {
                
               	        newCompositeNode(grammarAccess.getQualifiedPrefixAccess().getQnameIdentifierParserRuleCall_0_0()); 
               	    
             }
-            pushFollow(FOLLOW_ruleIdentifier_in_ruleQualifiedPrefix8256);
+            pushFollow(FOLLOW_ruleIdentifier_in_ruleQualifiedPrefix8621);
             lv_qname_0_0=ruleIdentifier();
 
             state._fsp--;
@@ -11127,28 +11692,28 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
             }
 
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3997:2: ( ( (lv_qname_1_0= '::' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )*
-            loop59:
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4185:2: ( ( (lv_qname_1_0= '::' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )*
+            loop64:
             do {
-                int alt59=2;
-                int LA59_0 = input.LA(1);
+                int alt64=2;
+                int LA64_0 = input.LA(1);
 
-                if ( (LA59_0==63) ) {
-                    alt59=1;
+                if ( (LA64_0==64) ) {
+                    alt64=1;
                 }
 
 
-                switch (alt59) {
+                switch (alt64) {
             	case 1 :
-            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3997:3: ( (lv_qname_1_0= '::' ) ) ( (lv_qname_2_0= ruleIdentifier ) )
+            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4185:3: ( (lv_qname_1_0= '::' ) ) ( (lv_qname_2_0= ruleIdentifier ) )
             	    {
-            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3997:3: ( (lv_qname_1_0= '::' ) )
-            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3998:1: (lv_qname_1_0= '::' )
+            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4185:3: ( (lv_qname_1_0= '::' ) )
+            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4186:1: (lv_qname_1_0= '::' )
             	    {
-            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3998:1: (lv_qname_1_0= '::' )
-            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:3999:3: lv_qname_1_0= '::'
+            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4186:1: (lv_qname_1_0= '::' )
+            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4187:3: lv_qname_1_0= '::'
             	    {
-            	    lv_qname_1_0=(Token)match(input,63,FOLLOW_63_in_ruleQualifiedPrefix8275); if (state.failed) return current;
+            	    lv_qname_1_0=(Token)match(input,64,FOLLOW_64_in_ruleQualifiedPrefix8640); if (state.failed) return current;
             	    if ( state.backtracking==0 ) {
 
             	              newLeafNode(lv_qname_1_0, grammarAccess.getQualifiedPrefixAccess().getQnameColonColonKeyword_1_0_0());
@@ -11168,18 +11733,18 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
             	    }
 
-            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4012:2: ( (lv_qname_2_0= ruleIdentifier ) )
-            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4013:1: (lv_qname_2_0= ruleIdentifier )
+            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4200:2: ( (lv_qname_2_0= ruleIdentifier ) )
+            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4201:1: (lv_qname_2_0= ruleIdentifier )
             	    {
-            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4013:1: (lv_qname_2_0= ruleIdentifier )
-            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4014:3: lv_qname_2_0= ruleIdentifier
+            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4201:1: (lv_qname_2_0= ruleIdentifier )
+            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4202:3: lv_qname_2_0= ruleIdentifier
             	    {
             	    if ( state.backtracking==0 ) {
             	       
             	      	        newCompositeNode(grammarAccess.getQualifiedPrefixAccess().getQnameIdentifierParserRuleCall_1_1_0()); 
             	      	    
             	    }
-            	    pushFollow(FOLLOW_ruleIdentifier_in_ruleQualifiedPrefix8309);
+            	    pushFollow(FOLLOW_ruleIdentifier_in_ruleQualifiedPrefix8674);
             	    lv_qname_2_0=ruleIdentifier();
 
             	    state._fsp--;
@@ -11208,7 +11773,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
             	    break;
 
             	default :
-            	    break loop59;
+            	    break loop64;
                 }
             } while (true);
 
@@ -11235,7 +11800,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleQualifiedName"
-    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4038:1: entryRuleQualifiedName returns [EObject current=null] : iv_ruleQualifiedName= ruleQualifiedName EOF ;
+    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4226:1: entryRuleQualifiedName returns [EObject current=null] : iv_ruleQualifiedName= ruleQualifiedName EOF ;
     public final EObject entryRuleQualifiedName() throws RecognitionException {
         EObject current = null;
 
@@ -11243,13 +11808,13 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4039:2: (iv_ruleQualifiedName= ruleQualifiedName EOF )
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4040:2: iv_ruleQualifiedName= ruleQualifiedName EOF
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4227:2: (iv_ruleQualifiedName= ruleQualifiedName EOF )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4228:2: iv_ruleQualifiedName= ruleQualifiedName EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getQualifiedNameRule()); 
             }
-            pushFollow(FOLLOW_ruleQualifiedName_in_entryRuleQualifiedName8347);
+            pushFollow(FOLLOW_ruleQualifiedName_in_entryRuleQualifiedName8712);
             iv_ruleQualifiedName=ruleQualifiedName();
 
             state._fsp--;
@@ -11257,7 +11822,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                current =iv_ruleQualifiedName; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleQualifiedName8357); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleQualifiedName8722); if (state.failed) return current;
 
             }
 
@@ -11275,7 +11840,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleQualifiedName"
-    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4047:1: ruleQualifiedName returns [EObject current=null] : ( ( (lv_prefix_0_0= ruleQualifiedPrefix ) ) ( ( (lv_qname_1_0= '.' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )? ) ;
+    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4235:1: ruleQualifiedName returns [EObject current=null] : ( ( (lv_prefix_0_0= ruleQualifiedPrefix ) ) ( ( (lv_qname_1_0= '.' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )? ) ;
     public final EObject ruleQualifiedName() throws RecognitionException {
         EObject current = null;
 
@@ -11288,24 +11853,24 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4050:28: ( ( ( (lv_prefix_0_0= ruleQualifiedPrefix ) ) ( ( (lv_qname_1_0= '.' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )? ) )
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4051:1: ( ( (lv_prefix_0_0= ruleQualifiedPrefix ) ) ( ( (lv_qname_1_0= '.' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )? )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4238:28: ( ( ( (lv_prefix_0_0= ruleQualifiedPrefix ) ) ( ( (lv_qname_1_0= '.' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )? ) )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4239:1: ( ( (lv_prefix_0_0= ruleQualifiedPrefix ) ) ( ( (lv_qname_1_0= '.' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )? )
             {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4051:1: ( ( (lv_prefix_0_0= ruleQualifiedPrefix ) ) ( ( (lv_qname_1_0= '.' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )? )
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4051:2: ( (lv_prefix_0_0= ruleQualifiedPrefix ) ) ( ( (lv_qname_1_0= '.' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )?
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4239:1: ( ( (lv_prefix_0_0= ruleQualifiedPrefix ) ) ( ( (lv_qname_1_0= '.' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )? )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4239:2: ( (lv_prefix_0_0= ruleQualifiedPrefix ) ) ( ( (lv_qname_1_0= '.' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )?
             {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4051:2: ( (lv_prefix_0_0= ruleQualifiedPrefix ) )
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4052:1: (lv_prefix_0_0= ruleQualifiedPrefix )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4239:2: ( (lv_prefix_0_0= ruleQualifiedPrefix ) )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4240:1: (lv_prefix_0_0= ruleQualifiedPrefix )
             {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4052:1: (lv_prefix_0_0= ruleQualifiedPrefix )
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4053:3: lv_prefix_0_0= ruleQualifiedPrefix
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4240:1: (lv_prefix_0_0= ruleQualifiedPrefix )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4241:3: lv_prefix_0_0= ruleQualifiedPrefix
             {
             if ( state.backtracking==0 ) {
                
               	        newCompositeNode(grammarAccess.getQualifiedNameAccess().getPrefixQualifiedPrefixParserRuleCall_0_0()); 
               	    
             }
-            pushFollow(FOLLOW_ruleQualifiedPrefix_in_ruleQualifiedName8403);
+            pushFollow(FOLLOW_ruleQualifiedPrefix_in_ruleQualifiedName8768);
             lv_prefix_0_0=ruleQualifiedPrefix();
 
             state._fsp--;
@@ -11329,53 +11894,53 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
             }
 
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4069:2: ( ( (lv_qname_1_0= '.' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )?
-            int alt60=2;
-            int LA60_0 = input.LA(1);
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4257:2: ( ( (lv_qname_1_0= '.' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )?
+            int alt65=2;
+            int LA65_0 = input.LA(1);
 
-            if ( (LA60_0==37) ) {
+            if ( (LA65_0==37) ) {
                 switch ( input.LA(2) ) {
                     case RULE_ID:
                         {
-                        int LA60_3 = input.LA(3);
+                        int LA65_3 = input.LA(3);
 
-                        if ( (LA60_3==EOF||LA60_3==15||(LA60_3>=17 && LA60_3<=18)||LA60_3==20||LA60_3==23||LA60_3==30||LA60_3==37||(LA60_3>=42 && LA60_3<=46)||(LA60_3>=48 && LA60_3<=56)||(LA60_3>=61 && LA60_3<=62)) ) {
-                            alt60=1;
+                        if ( (LA65_3==EOF||LA65_3==15||(LA65_3>=17 && LA65_3<=18)||LA65_3==20||LA65_3==23||LA65_3==30||LA65_3==37||(LA65_3>=42 && LA65_3<=46)||(LA65_3>=48 && LA65_3<=56)||(LA65_3>=61 && LA65_3<=63)) ) {
+                            alt65=1;
                         }
                         }
                         break;
                     case RULE_VERSION:
                         {
-                        int LA60_4 = input.LA(3);
+                        int LA65_4 = input.LA(3);
 
-                        if ( (LA60_4==EOF||LA60_4==15||(LA60_4>=17 && LA60_4<=18)||LA60_4==20||LA60_4==23||LA60_4==30||LA60_4==37||(LA60_4>=42 && LA60_4<=46)||(LA60_4>=48 && LA60_4<=56)||(LA60_4>=61 && LA60_4<=62)) ) {
-                            alt60=1;
+                        if ( (LA65_4==EOF||LA65_4==15||(LA65_4>=17 && LA65_4<=18)||LA65_4==20||LA65_4==23||LA65_4==30||LA65_4==37||(LA65_4>=42 && LA65_4<=46)||(LA65_4>=48 && LA65_4<=56)||(LA65_4>=61 && LA65_4<=63)) ) {
+                            alt65=1;
                         }
                         }
                         break;
                     case RULE_EXPONENT:
                         {
-                        int LA60_5 = input.LA(3);
+                        int LA65_5 = input.LA(3);
 
-                        if ( (LA60_5==EOF||LA60_5==15||(LA60_5>=17 && LA60_5<=18)||LA60_5==20||LA60_5==23||LA60_5==30||LA60_5==37||(LA60_5>=42 && LA60_5<=46)||(LA60_5>=48 && LA60_5<=56)||(LA60_5>=61 && LA60_5<=62)) ) {
-                            alt60=1;
+                        if ( (LA65_5==EOF||LA65_5==15||(LA65_5>=17 && LA65_5<=18)||LA65_5==20||LA65_5==23||LA65_5==30||LA65_5==37||(LA65_5>=42 && LA65_5<=46)||(LA65_5>=48 && LA65_5<=56)||(LA65_5>=61 && LA65_5<=63)) ) {
+                            alt65=1;
                         }
                         }
                         break;
                 }
 
             }
-            switch (alt60) {
+            switch (alt65) {
                 case 1 :
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4069:3: ( (lv_qname_1_0= '.' ) ) ( (lv_qname_2_0= ruleIdentifier ) )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4257:3: ( (lv_qname_1_0= '.' ) ) ( (lv_qname_2_0= ruleIdentifier ) )
                     {
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4069:3: ( (lv_qname_1_0= '.' ) )
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4070:1: (lv_qname_1_0= '.' )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4257:3: ( (lv_qname_1_0= '.' ) )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4258:1: (lv_qname_1_0= '.' )
                     {
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4070:1: (lv_qname_1_0= '.' )
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4071:3: lv_qname_1_0= '.'
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4258:1: (lv_qname_1_0= '.' )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4259:3: lv_qname_1_0= '.'
                     {
-                    lv_qname_1_0=(Token)match(input,37,FOLLOW_37_in_ruleQualifiedName8422); if (state.failed) return current;
+                    lv_qname_1_0=(Token)match(input,37,FOLLOW_37_in_ruleQualifiedName8787); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                               newLeafNode(lv_qname_1_0, grammarAccess.getQualifiedNameAccess().getQnameFullStopKeyword_1_0_0());
@@ -11395,18 +11960,18 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
                     }
 
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4084:2: ( (lv_qname_2_0= ruleIdentifier ) )
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4085:1: (lv_qname_2_0= ruleIdentifier )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4272:2: ( (lv_qname_2_0= ruleIdentifier ) )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4273:1: (lv_qname_2_0= ruleIdentifier )
                     {
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4085:1: (lv_qname_2_0= ruleIdentifier )
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4086:3: lv_qname_2_0= ruleIdentifier
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4273:1: (lv_qname_2_0= ruleIdentifier )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4274:3: lv_qname_2_0= ruleIdentifier
                     {
                     if ( state.backtracking==0 ) {
                        
                       	        newCompositeNode(grammarAccess.getQualifiedNameAccess().getQnameIdentifierParserRuleCall_1_1_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleIdentifier_in_ruleQualifiedName8456);
+                    pushFollow(FOLLOW_ruleIdentifier_in_ruleQualifiedName8821);
                     lv_qname_2_0=ruleIdentifier();
 
                     state._fsp--;
@@ -11459,7 +12024,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleConstant"
-    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4110:1: entryRuleConstant returns [EObject current=null] : iv_ruleConstant= ruleConstant EOF ;
+    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4298:1: entryRuleConstant returns [EObject current=null] : iv_ruleConstant= ruleConstant EOF ;
     public final EObject entryRuleConstant() throws RecognitionException {
         EObject current = null;
 
@@ -11467,13 +12032,13 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4111:2: (iv_ruleConstant= ruleConstant EOF )
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4112:2: iv_ruleConstant= ruleConstant EOF
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4299:2: (iv_ruleConstant= ruleConstant EOF )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4300:2: iv_ruleConstant= ruleConstant EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getConstantRule()); 
             }
-            pushFollow(FOLLOW_ruleConstant_in_entryRuleConstant8494);
+            pushFollow(FOLLOW_ruleConstant_in_entryRuleConstant8859);
             iv_ruleConstant=ruleConstant();
 
             state._fsp--;
@@ -11481,7 +12046,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                current =iv_ruleConstant; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleConstant8504); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleConstant8869); if (state.failed) return current;
 
             }
 
@@ -11499,13 +12064,14 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleConstant"
-    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4119:1: ruleConstant returns [EObject current=null] : ( ( (lv_nValue_0_0= ruleNumValue ) ) | ( (lv_sValue_1_0= RULE_STRING ) ) | ( (lv_qValue_2_0= ruleQualifiedName ) ) | ( ( (lv_bValue_3_1= 'true' | lv_bValue_3_2= 'false' ) ) ) ) ;
+    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4307:1: ruleConstant returns [EObject current=null] : ( ( (lv_nValue_0_0= ruleNumValue ) ) | ( (lv_sValue_1_0= RULE_STRING ) ) | ( (lv_qValue_2_0= ruleQualifiedName ) ) | ( ( (lv_bValue_3_1= 'true' | lv_bValue_3_2= 'false' ) ) ) | ( (lv_null_4_0= 'null' ) ) ) ;
     public final EObject ruleConstant() throws RecognitionException {
         EObject current = null;
 
         Token lv_sValue_1_0=null;
         Token lv_bValue_3_1=null;
         Token lv_bValue_3_2=null;
+        Token lv_null_4_0=null;
         EObject lv_nValue_0_0 = null;
 
         EObject lv_qValue_2_0 = null;
@@ -11514,59 +12080,64 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4122:28: ( ( ( (lv_nValue_0_0= ruleNumValue ) ) | ( (lv_sValue_1_0= RULE_STRING ) ) | ( (lv_qValue_2_0= ruleQualifiedName ) ) | ( ( (lv_bValue_3_1= 'true' | lv_bValue_3_2= 'false' ) ) ) ) )
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4123:1: ( ( (lv_nValue_0_0= ruleNumValue ) ) | ( (lv_sValue_1_0= RULE_STRING ) ) | ( (lv_qValue_2_0= ruleQualifiedName ) ) | ( ( (lv_bValue_3_1= 'true' | lv_bValue_3_2= 'false' ) ) ) )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4310:28: ( ( ( (lv_nValue_0_0= ruleNumValue ) ) | ( (lv_sValue_1_0= RULE_STRING ) ) | ( (lv_qValue_2_0= ruleQualifiedName ) ) | ( ( (lv_bValue_3_1= 'true' | lv_bValue_3_2= 'false' ) ) ) | ( (lv_null_4_0= 'null' ) ) ) )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4311:1: ( ( (lv_nValue_0_0= ruleNumValue ) ) | ( (lv_sValue_1_0= RULE_STRING ) ) | ( (lv_qValue_2_0= ruleQualifiedName ) ) | ( ( (lv_bValue_3_1= 'true' | lv_bValue_3_2= 'false' ) ) ) | ( (lv_null_4_0= 'null' ) ) )
             {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4123:1: ( ( (lv_nValue_0_0= ruleNumValue ) ) | ( (lv_sValue_1_0= RULE_STRING ) ) | ( (lv_qValue_2_0= ruleQualifiedName ) ) | ( ( (lv_bValue_3_1= 'true' | lv_bValue_3_2= 'false' ) ) ) )
-            int alt62=4;
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4311:1: ( ( (lv_nValue_0_0= ruleNumValue ) ) | ( (lv_sValue_1_0= RULE_STRING ) ) | ( (lv_qValue_2_0= ruleQualifiedName ) ) | ( ( (lv_bValue_3_1= 'true' | lv_bValue_3_2= 'false' ) ) ) | ( (lv_null_4_0= 'null' ) ) )
+            int alt67=5;
             switch ( input.LA(1) ) {
             case RULE_NUMBER:
                 {
-                alt62=1;
+                alt67=1;
                 }
                 break;
             case RULE_STRING:
                 {
-                alt62=2;
+                alt67=2;
                 }
                 break;
             case RULE_VERSION:
             case RULE_ID:
             case RULE_EXPONENT:
                 {
-                alt62=3;
+                alt67=3;
                 }
                 break;
-            case 64:
             case 65:
+            case 66:
                 {
-                alt62=4;
+                alt67=4;
+                }
+                break;
+            case 67:
+                {
+                alt67=5;
                 }
                 break;
             default:
                 if (state.backtracking>0) {state.failed=true; return current;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 62, 0, input);
+                    new NoViableAltException("", 67, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt62) {
+            switch (alt67) {
                 case 1 :
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4123:2: ( (lv_nValue_0_0= ruleNumValue ) )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4311:2: ( (lv_nValue_0_0= ruleNumValue ) )
                     {
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4123:2: ( (lv_nValue_0_0= ruleNumValue ) )
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4124:1: (lv_nValue_0_0= ruleNumValue )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4311:2: ( (lv_nValue_0_0= ruleNumValue ) )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4312:1: (lv_nValue_0_0= ruleNumValue )
                     {
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4124:1: (lv_nValue_0_0= ruleNumValue )
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4125:3: lv_nValue_0_0= ruleNumValue
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4312:1: (lv_nValue_0_0= ruleNumValue )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4313:3: lv_nValue_0_0= ruleNumValue
                     {
                     if ( state.backtracking==0 ) {
                        
                       	        newCompositeNode(grammarAccess.getConstantAccess().getNValueNumValueParserRuleCall_0_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleNumValue_in_ruleConstant8550);
+                    pushFollow(FOLLOW_ruleNumValue_in_ruleConstant8915);
                     lv_nValue_0_0=ruleNumValue();
 
                     state._fsp--;
@@ -11594,15 +12165,15 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4142:6: ( (lv_sValue_1_0= RULE_STRING ) )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4330:6: ( (lv_sValue_1_0= RULE_STRING ) )
                     {
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4142:6: ( (lv_sValue_1_0= RULE_STRING ) )
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4143:1: (lv_sValue_1_0= RULE_STRING )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4330:6: ( (lv_sValue_1_0= RULE_STRING ) )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4331:1: (lv_sValue_1_0= RULE_STRING )
                     {
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4143:1: (lv_sValue_1_0= RULE_STRING )
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4144:3: lv_sValue_1_0= RULE_STRING
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4331:1: (lv_sValue_1_0= RULE_STRING )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4332:3: lv_sValue_1_0= RULE_STRING
                     {
-                    lv_sValue_1_0=(Token)match(input,RULE_STRING,FOLLOW_RULE_STRING_in_ruleConstant8573); if (state.failed) return current;
+                    lv_sValue_1_0=(Token)match(input,RULE_STRING,FOLLOW_RULE_STRING_in_ruleConstant8938); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       			newLeafNode(lv_sValue_1_0, grammarAccess.getConstantAccess().getSValueSTRINGTerminalRuleCall_1_0()); 
@@ -11630,20 +12201,20 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 3 :
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4161:6: ( (lv_qValue_2_0= ruleQualifiedName ) )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4349:6: ( (lv_qValue_2_0= ruleQualifiedName ) )
                     {
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4161:6: ( (lv_qValue_2_0= ruleQualifiedName ) )
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4162:1: (lv_qValue_2_0= ruleQualifiedName )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4349:6: ( (lv_qValue_2_0= ruleQualifiedName ) )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4350:1: (lv_qValue_2_0= ruleQualifiedName )
                     {
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4162:1: (lv_qValue_2_0= ruleQualifiedName )
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4163:3: lv_qValue_2_0= ruleQualifiedName
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4350:1: (lv_qValue_2_0= ruleQualifiedName )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4351:3: lv_qValue_2_0= ruleQualifiedName
                     {
                     if ( state.backtracking==0 ) {
                        
                       	        newCompositeNode(grammarAccess.getConstantAccess().getQValueQualifiedNameParserRuleCall_2_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleQualifiedName_in_ruleConstant8605);
+                    pushFollow(FOLLOW_ruleQualifiedName_in_ruleConstant8970);
                     lv_qValue_2_0=ruleQualifiedName();
 
                     state._fsp--;
@@ -11671,36 +12242,36 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 4 :
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4180:6: ( ( (lv_bValue_3_1= 'true' | lv_bValue_3_2= 'false' ) ) )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4368:6: ( ( (lv_bValue_3_1= 'true' | lv_bValue_3_2= 'false' ) ) )
                     {
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4180:6: ( ( (lv_bValue_3_1= 'true' | lv_bValue_3_2= 'false' ) ) )
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4181:1: ( (lv_bValue_3_1= 'true' | lv_bValue_3_2= 'false' ) )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4368:6: ( ( (lv_bValue_3_1= 'true' | lv_bValue_3_2= 'false' ) ) )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4369:1: ( (lv_bValue_3_1= 'true' | lv_bValue_3_2= 'false' ) )
                     {
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4181:1: ( (lv_bValue_3_1= 'true' | lv_bValue_3_2= 'false' ) )
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4182:1: (lv_bValue_3_1= 'true' | lv_bValue_3_2= 'false' )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4369:1: ( (lv_bValue_3_1= 'true' | lv_bValue_3_2= 'false' ) )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4370:1: (lv_bValue_3_1= 'true' | lv_bValue_3_2= 'false' )
                     {
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4182:1: (lv_bValue_3_1= 'true' | lv_bValue_3_2= 'false' )
-                    int alt61=2;
-                    int LA61_0 = input.LA(1);
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4370:1: (lv_bValue_3_1= 'true' | lv_bValue_3_2= 'false' )
+                    int alt66=2;
+                    int LA66_0 = input.LA(1);
 
-                    if ( (LA61_0==64) ) {
-                        alt61=1;
+                    if ( (LA66_0==65) ) {
+                        alt66=1;
                     }
-                    else if ( (LA61_0==65) ) {
-                        alt61=2;
+                    else if ( (LA66_0==66) ) {
+                        alt66=2;
                     }
                     else {
                         if (state.backtracking>0) {state.failed=true; return current;}
                         NoViableAltException nvae =
-                            new NoViableAltException("", 61, 0, input);
+                            new NoViableAltException("", 66, 0, input);
 
                         throw nvae;
                     }
-                    switch (alt61) {
+                    switch (alt66) {
                         case 1 :
-                            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4183:3: lv_bValue_3_1= 'true'
+                            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4371:3: lv_bValue_3_1= 'true'
                             {
-                            lv_bValue_3_1=(Token)match(input,64,FOLLOW_64_in_ruleConstant8631); if (state.failed) return current;
+                            lv_bValue_3_1=(Token)match(input,65,FOLLOW_65_in_ruleConstant8996); if (state.failed) return current;
                             if ( state.backtracking==0 ) {
 
                                       newLeafNode(lv_bValue_3_1, grammarAccess.getConstantAccess().getBValueTrueKeyword_3_0_0());
@@ -11718,9 +12289,9 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
                             }
                             break;
                         case 2 :
-                            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4195:8: lv_bValue_3_2= 'false'
+                            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4383:8: lv_bValue_3_2= 'false'
                             {
-                            lv_bValue_3_2=(Token)match(input,65,FOLLOW_65_in_ruleConstant8660); if (state.failed) return current;
+                            lv_bValue_3_2=(Token)match(input,66,FOLLOW_66_in_ruleConstant9025); if (state.failed) return current;
                             if ( state.backtracking==0 ) {
 
                                       newLeafNode(lv_bValue_3_2, grammarAccess.getConstantAccess().getBValueFalseKeyword_3_0_1());
@@ -11740,6 +12311,38 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
                     }
 
+
+                    }
+
+
+                    }
+
+
+                    }
+                    break;
+                case 5 :
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4399:6: ( (lv_null_4_0= 'null' ) )
+                    {
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4399:6: ( (lv_null_4_0= 'null' ) )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4400:1: (lv_null_4_0= 'null' )
+                    {
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4400:1: (lv_null_4_0= 'null' )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4401:3: lv_null_4_0= 'null'
+                    {
+                    lv_null_4_0=(Token)match(input,67,FOLLOW_67_in_ruleConstant9065); if (state.failed) return current;
+                    if ( state.backtracking==0 ) {
+
+                              newLeafNode(lv_null_4_0, grammarAccess.getConstantAccess().getNullNullKeyword_4_0());
+                          
+                    }
+                    if ( state.backtracking==0 ) {
+
+                      	        if (current==null) {
+                      	            current = createModelElement(grammarAccess.getConstantRule());
+                      	        }
+                             		setWithLastConsumed(current, "null", lv_null_4_0, "null");
+                      	    
+                    }
 
                     }
 
@@ -11772,7 +12375,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleNumValue"
-    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4218:1: entryRuleNumValue returns [EObject current=null] : iv_ruleNumValue= ruleNumValue EOF ;
+    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4422:1: entryRuleNumValue returns [EObject current=null] : iv_ruleNumValue= ruleNumValue EOF ;
     public final EObject entryRuleNumValue() throws RecognitionException {
         EObject current = null;
 
@@ -11780,13 +12383,13 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4219:2: (iv_ruleNumValue= ruleNumValue EOF )
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4220:2: iv_ruleNumValue= ruleNumValue EOF
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4423:2: (iv_ruleNumValue= ruleNumValue EOF )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4424:2: iv_ruleNumValue= ruleNumValue EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getNumValueRule()); 
             }
-            pushFollow(FOLLOW_ruleNumValue_in_entryRuleNumValue8712);
+            pushFollow(FOLLOW_ruleNumValue_in_entryRuleNumValue9114);
             iv_ruleNumValue=ruleNumValue();
 
             state._fsp--;
@@ -11794,7 +12397,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                current =iv_ruleNumValue; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleNumValue8722); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleNumValue9124); if (state.failed) return current;
 
             }
 
@@ -11812,7 +12415,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleNumValue"
-    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4227:1: ruleNumValue returns [EObject current=null] : ( (lv_val_0_0= RULE_NUMBER ) ) ;
+    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4431:1: ruleNumValue returns [EObject current=null] : ( (lv_val_0_0= RULE_NUMBER ) ) ;
     public final EObject ruleNumValue() throws RecognitionException {
         EObject current = null;
 
@@ -11821,16 +12424,16 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4230:28: ( ( (lv_val_0_0= RULE_NUMBER ) ) )
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4231:1: ( (lv_val_0_0= RULE_NUMBER ) )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4434:28: ( ( (lv_val_0_0= RULE_NUMBER ) ) )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4435:1: ( (lv_val_0_0= RULE_NUMBER ) )
             {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4231:1: ( (lv_val_0_0= RULE_NUMBER ) )
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4232:1: (lv_val_0_0= RULE_NUMBER )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4435:1: ( (lv_val_0_0= RULE_NUMBER ) )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4436:1: (lv_val_0_0= RULE_NUMBER )
             {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4232:1: (lv_val_0_0= RULE_NUMBER )
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4233:3: lv_val_0_0= RULE_NUMBER
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4436:1: (lv_val_0_0= RULE_NUMBER )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4437:3: lv_val_0_0= RULE_NUMBER
             {
-            lv_val_0_0=(Token)match(input,RULE_NUMBER,FOLLOW_RULE_NUMBER_in_ruleNumValue8763); if (state.failed) return current;
+            lv_val_0_0=(Token)match(input,RULE_NUMBER,FOLLOW_RULE_NUMBER_in_ruleNumValue9165); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			newLeafNode(lv_val_0_0, grammarAccess.getNumValueAccess().getValNUMBERTerminalRuleCall_0()); 
@@ -11874,7 +12477,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleIdentifier"
-    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4257:1: entryRuleIdentifier returns [String current=null] : iv_ruleIdentifier= ruleIdentifier EOF ;
+    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4461:1: entryRuleIdentifier returns [String current=null] : iv_ruleIdentifier= ruleIdentifier EOF ;
     public final String entryRuleIdentifier() throws RecognitionException {
         String current = null;
 
@@ -11882,13 +12485,13 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4258:2: (iv_ruleIdentifier= ruleIdentifier EOF )
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4259:2: iv_ruleIdentifier= ruleIdentifier EOF
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4462:2: (iv_ruleIdentifier= ruleIdentifier EOF )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4463:2: iv_ruleIdentifier= ruleIdentifier EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getIdentifierRule()); 
             }
-            pushFollow(FOLLOW_ruleIdentifier_in_entryRuleIdentifier8804);
+            pushFollow(FOLLOW_ruleIdentifier_in_entryRuleIdentifier9206);
             iv_ruleIdentifier=ruleIdentifier();
 
             state._fsp--;
@@ -11896,7 +12499,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                current =iv_ruleIdentifier.getText(); 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleIdentifier8815); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleIdentifier9217); if (state.failed) return current;
 
             }
 
@@ -11914,7 +12517,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleIdentifier"
-    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4266:1: ruleIdentifier returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : (this_ID_0= RULE_ID | this_VERSION_1= RULE_VERSION | this_EXPONENT_2= RULE_EXPONENT ) ;
+    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4470:1: ruleIdentifier returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : (this_ID_0= RULE_ID | this_VERSION_1= RULE_VERSION | this_EXPONENT_2= RULE_EXPONENT ) ;
     public final AntlrDatatypeRuleToken ruleIdentifier() throws RecognitionException {
         AntlrDatatypeRuleToken current = new AntlrDatatypeRuleToken();
 
@@ -11925,40 +12528,40 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4269:28: ( (this_ID_0= RULE_ID | this_VERSION_1= RULE_VERSION | this_EXPONENT_2= RULE_EXPONENT ) )
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4270:1: (this_ID_0= RULE_ID | this_VERSION_1= RULE_VERSION | this_EXPONENT_2= RULE_EXPONENT )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4473:28: ( (this_ID_0= RULE_ID | this_VERSION_1= RULE_VERSION | this_EXPONENT_2= RULE_EXPONENT ) )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4474:1: (this_ID_0= RULE_ID | this_VERSION_1= RULE_VERSION | this_EXPONENT_2= RULE_EXPONENT )
             {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4270:1: (this_ID_0= RULE_ID | this_VERSION_1= RULE_VERSION | this_EXPONENT_2= RULE_EXPONENT )
-            int alt63=3;
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4474:1: (this_ID_0= RULE_ID | this_VERSION_1= RULE_VERSION | this_EXPONENT_2= RULE_EXPONENT )
+            int alt68=3;
             switch ( input.LA(1) ) {
             case RULE_ID:
                 {
-                alt63=1;
+                alt68=1;
                 }
                 break;
             case RULE_VERSION:
                 {
-                alt63=2;
+                alt68=2;
                 }
                 break;
             case RULE_EXPONENT:
                 {
-                alt63=3;
+                alt68=3;
                 }
                 break;
             default:
                 if (state.backtracking>0) {state.failed=true; return current;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 63, 0, input);
+                    new NoViableAltException("", 68, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt63) {
+            switch (alt68) {
                 case 1 :
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4270:6: this_ID_0= RULE_ID
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4474:6: this_ID_0= RULE_ID
                     {
-                    this_ID_0=(Token)match(input,RULE_ID,FOLLOW_RULE_ID_in_ruleIdentifier8855); if (state.failed) return current;
+                    this_ID_0=(Token)match(input,RULE_ID,FOLLOW_RULE_ID_in_ruleIdentifier9257); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       		current.merge(this_ID_0);
@@ -11973,9 +12576,9 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4278:10: this_VERSION_1= RULE_VERSION
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4482:10: this_VERSION_1= RULE_VERSION
                     {
-                    this_VERSION_1=(Token)match(input,RULE_VERSION,FOLLOW_RULE_VERSION_in_ruleIdentifier8881); if (state.failed) return current;
+                    this_VERSION_1=(Token)match(input,RULE_VERSION,FOLLOW_RULE_VERSION_in_ruleIdentifier9283); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       		current.merge(this_VERSION_1);
@@ -11990,9 +12593,9 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 3 :
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4286:10: this_EXPONENT_2= RULE_EXPONENT
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4490:10: this_EXPONENT_2= RULE_EXPONENT
                     {
-                    this_EXPONENT_2=(Token)match(input,RULE_EXPONENT,FOLLOW_RULE_EXPONENT_in_ruleIdentifier8907); if (state.failed) return current;
+                    this_EXPONENT_2=(Token)match(input,RULE_EXPONENT,FOLLOW_RULE_EXPONENT_in_ruleIdentifier9309); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       		current.merge(this_EXPONENT_2);
@@ -12029,7 +12632,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleType"
-    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4301:1: entryRuleType returns [EObject current=null] : iv_ruleType= ruleType EOF ;
+    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4505:1: entryRuleType returns [EObject current=null] : iv_ruleType= ruleType EOF ;
     public final EObject entryRuleType() throws RecognitionException {
         EObject current = null;
 
@@ -12037,13 +12640,13 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4302:2: (iv_ruleType= ruleType EOF )
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4303:2: iv_ruleType= ruleType EOF
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4506:2: (iv_ruleType= ruleType EOF )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4507:2: iv_ruleType= ruleType EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getTypeRule()); 
             }
-            pushFollow(FOLLOW_ruleType_in_entryRuleType8952);
+            pushFollow(FOLLOW_ruleType_in_entryRuleType9354);
             iv_ruleType=ruleType();
 
             state._fsp--;
@@ -12051,7 +12654,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                current =iv_ruleType; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleType8962); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleType9364); if (state.failed) return current;
 
             }
 
@@ -12069,14 +12672,14 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleType"
-    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4310:1: ruleType returns [EObject current=null] : ( ( (lv_name_0_0= ruleIdentifier ) ) | ( ( (lv_set_1_0= 'setOf' ) ) ( (lv_param_2_0= ruleTypeParameters ) ) ) | ( ( (lv_seq_3_0= 'sequenceOf' ) ) ( (lv_param_4_0= ruleTypeParameters ) ) ) | ( ( (lv_map_5_0= 'mapOf' ) ) ( (lv_param_6_0= ruleTypeParameters ) ) ) ) ;
+    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4514:1: ruleType returns [EObject current=null] : ( ( (lv_name_0_0= ruleQualifiedPrefix ) ) | ( ( (lv_set_1_0= 'setOf' ) ) ( (lv_param_2_0= ruleTypeParameters ) ) ) | ( ( (lv_seq_3_0= 'sequenceOf' ) ) ( (lv_param_4_0= ruleTypeParameters ) ) ) | ( ( (lv_map_5_0= 'mapOf' ) ) ( (lv_param_6_0= ruleTypeParameters ) ) ) ) ;
     public final EObject ruleType() throws RecognitionException {
         EObject current = null;
 
         Token lv_set_1_0=null;
         Token lv_seq_3_0=null;
         Token lv_map_5_0=null;
-        AntlrDatatypeRuleToken lv_name_0_0 = null;
+        EObject lv_name_0_0 = null;
 
         EObject lv_param_2_0 = null;
 
@@ -12088,59 +12691,59 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4313:28: ( ( ( (lv_name_0_0= ruleIdentifier ) ) | ( ( (lv_set_1_0= 'setOf' ) ) ( (lv_param_2_0= ruleTypeParameters ) ) ) | ( ( (lv_seq_3_0= 'sequenceOf' ) ) ( (lv_param_4_0= ruleTypeParameters ) ) ) | ( ( (lv_map_5_0= 'mapOf' ) ) ( (lv_param_6_0= ruleTypeParameters ) ) ) ) )
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4314:1: ( ( (lv_name_0_0= ruleIdentifier ) ) | ( ( (lv_set_1_0= 'setOf' ) ) ( (lv_param_2_0= ruleTypeParameters ) ) ) | ( ( (lv_seq_3_0= 'sequenceOf' ) ) ( (lv_param_4_0= ruleTypeParameters ) ) ) | ( ( (lv_map_5_0= 'mapOf' ) ) ( (lv_param_6_0= ruleTypeParameters ) ) ) )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4517:28: ( ( ( (lv_name_0_0= ruleQualifiedPrefix ) ) | ( ( (lv_set_1_0= 'setOf' ) ) ( (lv_param_2_0= ruleTypeParameters ) ) ) | ( ( (lv_seq_3_0= 'sequenceOf' ) ) ( (lv_param_4_0= ruleTypeParameters ) ) ) | ( ( (lv_map_5_0= 'mapOf' ) ) ( (lv_param_6_0= ruleTypeParameters ) ) ) ) )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4518:1: ( ( (lv_name_0_0= ruleQualifiedPrefix ) ) | ( ( (lv_set_1_0= 'setOf' ) ) ( (lv_param_2_0= ruleTypeParameters ) ) ) | ( ( (lv_seq_3_0= 'sequenceOf' ) ) ( (lv_param_4_0= ruleTypeParameters ) ) ) | ( ( (lv_map_5_0= 'mapOf' ) ) ( (lv_param_6_0= ruleTypeParameters ) ) ) )
             {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4314:1: ( ( (lv_name_0_0= ruleIdentifier ) ) | ( ( (lv_set_1_0= 'setOf' ) ) ( (lv_param_2_0= ruleTypeParameters ) ) ) | ( ( (lv_seq_3_0= 'sequenceOf' ) ) ( (lv_param_4_0= ruleTypeParameters ) ) ) | ( ( (lv_map_5_0= 'mapOf' ) ) ( (lv_param_6_0= ruleTypeParameters ) ) ) )
-            int alt64=4;
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4518:1: ( ( (lv_name_0_0= ruleQualifiedPrefix ) ) | ( ( (lv_set_1_0= 'setOf' ) ) ( (lv_param_2_0= ruleTypeParameters ) ) ) | ( ( (lv_seq_3_0= 'sequenceOf' ) ) ( (lv_param_4_0= ruleTypeParameters ) ) ) | ( ( (lv_map_5_0= 'mapOf' ) ) ( (lv_param_6_0= ruleTypeParameters ) ) ) )
+            int alt69=4;
             switch ( input.LA(1) ) {
             case RULE_VERSION:
             case RULE_ID:
             case RULE_EXPONENT:
                 {
-                alt64=1;
-                }
-                break;
-            case 66:
-                {
-                alt64=2;
-                }
-                break;
-            case 67:
-                {
-                alt64=3;
+                alt69=1;
                 }
                 break;
             case 68:
                 {
-                alt64=4;
+                alt69=2;
+                }
+                break;
+            case 69:
+                {
+                alt69=3;
+                }
+                break;
+            case 70:
+                {
+                alt69=4;
                 }
                 break;
             default:
                 if (state.backtracking>0) {state.failed=true; return current;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 64, 0, input);
+                    new NoViableAltException("", 69, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt64) {
+            switch (alt69) {
                 case 1 :
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4314:2: ( (lv_name_0_0= ruleIdentifier ) )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4518:2: ( (lv_name_0_0= ruleQualifiedPrefix ) )
                     {
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4314:2: ( (lv_name_0_0= ruleIdentifier ) )
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4315:1: (lv_name_0_0= ruleIdentifier )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4518:2: ( (lv_name_0_0= ruleQualifiedPrefix ) )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4519:1: (lv_name_0_0= ruleQualifiedPrefix )
                     {
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4315:1: (lv_name_0_0= ruleIdentifier )
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4316:3: lv_name_0_0= ruleIdentifier
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4519:1: (lv_name_0_0= ruleQualifiedPrefix )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4520:3: lv_name_0_0= ruleQualifiedPrefix
                     {
                     if ( state.backtracking==0 ) {
                        
-                      	        newCompositeNode(grammarAccess.getTypeAccess().getNameIdentifierParserRuleCall_0_0()); 
+                      	        newCompositeNode(grammarAccess.getTypeAccess().getNameQualifiedPrefixParserRuleCall_0_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleIdentifier_in_ruleType9008);
-                    lv_name_0_0=ruleIdentifier();
+                    pushFollow(FOLLOW_ruleQualifiedPrefix_in_ruleType9410);
+                    lv_name_0_0=ruleQualifiedPrefix();
 
                     state._fsp--;
                     if (state.failed) return current;
@@ -12153,7 +12756,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
                              			current, 
                              			"name",
                               		lv_name_0_0, 
-                              		"Identifier");
+                              		"QualifiedPrefix");
                       	        afterParserOrEnumRuleCall();
                       	    
                     }
@@ -12167,18 +12770,18 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4333:6: ( ( (lv_set_1_0= 'setOf' ) ) ( (lv_param_2_0= ruleTypeParameters ) ) )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4537:6: ( ( (lv_set_1_0= 'setOf' ) ) ( (lv_param_2_0= ruleTypeParameters ) ) )
                     {
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4333:6: ( ( (lv_set_1_0= 'setOf' ) ) ( (lv_param_2_0= ruleTypeParameters ) ) )
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4333:7: ( (lv_set_1_0= 'setOf' ) ) ( (lv_param_2_0= ruleTypeParameters ) )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4537:6: ( ( (lv_set_1_0= 'setOf' ) ) ( (lv_param_2_0= ruleTypeParameters ) ) )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4537:7: ( (lv_set_1_0= 'setOf' ) ) ( (lv_param_2_0= ruleTypeParameters ) )
                     {
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4333:7: ( (lv_set_1_0= 'setOf' ) )
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4334:1: (lv_set_1_0= 'setOf' )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4537:7: ( (lv_set_1_0= 'setOf' ) )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4538:1: (lv_set_1_0= 'setOf' )
                     {
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4334:1: (lv_set_1_0= 'setOf' )
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4335:3: lv_set_1_0= 'setOf'
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4538:1: (lv_set_1_0= 'setOf' )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4539:3: lv_set_1_0= 'setOf'
                     {
-                    lv_set_1_0=(Token)match(input,66,FOLLOW_66_in_ruleType9033); if (state.failed) return current;
+                    lv_set_1_0=(Token)match(input,68,FOLLOW_68_in_ruleType9435); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                               newLeafNode(lv_set_1_0, grammarAccess.getTypeAccess().getSetSetOfKeyword_1_0_0());
@@ -12198,18 +12801,18 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
                     }
 
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4348:2: ( (lv_param_2_0= ruleTypeParameters ) )
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4349:1: (lv_param_2_0= ruleTypeParameters )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4552:2: ( (lv_param_2_0= ruleTypeParameters ) )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4553:1: (lv_param_2_0= ruleTypeParameters )
                     {
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4349:1: (lv_param_2_0= ruleTypeParameters )
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4350:3: lv_param_2_0= ruleTypeParameters
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4553:1: (lv_param_2_0= ruleTypeParameters )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4554:3: lv_param_2_0= ruleTypeParameters
                     {
                     if ( state.backtracking==0 ) {
                        
                       	        newCompositeNode(grammarAccess.getTypeAccess().getParamTypeParametersParserRuleCall_1_1_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleTypeParameters_in_ruleType9067);
+                    pushFollow(FOLLOW_ruleTypeParameters_in_ruleType9469);
                     lv_param_2_0=ruleTypeParameters();
 
                     state._fsp--;
@@ -12240,18 +12843,18 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 3 :
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4367:6: ( ( (lv_seq_3_0= 'sequenceOf' ) ) ( (lv_param_4_0= ruleTypeParameters ) ) )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4571:6: ( ( (lv_seq_3_0= 'sequenceOf' ) ) ( (lv_param_4_0= ruleTypeParameters ) ) )
                     {
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4367:6: ( ( (lv_seq_3_0= 'sequenceOf' ) ) ( (lv_param_4_0= ruleTypeParameters ) ) )
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4367:7: ( (lv_seq_3_0= 'sequenceOf' ) ) ( (lv_param_4_0= ruleTypeParameters ) )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4571:6: ( ( (lv_seq_3_0= 'sequenceOf' ) ) ( (lv_param_4_0= ruleTypeParameters ) ) )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4571:7: ( (lv_seq_3_0= 'sequenceOf' ) ) ( (lv_param_4_0= ruleTypeParameters ) )
                     {
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4367:7: ( (lv_seq_3_0= 'sequenceOf' ) )
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4368:1: (lv_seq_3_0= 'sequenceOf' )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4571:7: ( (lv_seq_3_0= 'sequenceOf' ) )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4572:1: (lv_seq_3_0= 'sequenceOf' )
                     {
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4368:1: (lv_seq_3_0= 'sequenceOf' )
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4369:3: lv_seq_3_0= 'sequenceOf'
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4572:1: (lv_seq_3_0= 'sequenceOf' )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4573:3: lv_seq_3_0= 'sequenceOf'
                     {
-                    lv_seq_3_0=(Token)match(input,67,FOLLOW_67_in_ruleType9093); if (state.failed) return current;
+                    lv_seq_3_0=(Token)match(input,69,FOLLOW_69_in_ruleType9495); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                               newLeafNode(lv_seq_3_0, grammarAccess.getTypeAccess().getSeqSequenceOfKeyword_2_0_0());
@@ -12271,18 +12874,18 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
                     }
 
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4382:2: ( (lv_param_4_0= ruleTypeParameters ) )
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4383:1: (lv_param_4_0= ruleTypeParameters )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4586:2: ( (lv_param_4_0= ruleTypeParameters ) )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4587:1: (lv_param_4_0= ruleTypeParameters )
                     {
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4383:1: (lv_param_4_0= ruleTypeParameters )
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4384:3: lv_param_4_0= ruleTypeParameters
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4587:1: (lv_param_4_0= ruleTypeParameters )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4588:3: lv_param_4_0= ruleTypeParameters
                     {
                     if ( state.backtracking==0 ) {
                        
                       	        newCompositeNode(grammarAccess.getTypeAccess().getParamTypeParametersParserRuleCall_2_1_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleTypeParameters_in_ruleType9127);
+                    pushFollow(FOLLOW_ruleTypeParameters_in_ruleType9529);
                     lv_param_4_0=ruleTypeParameters();
 
                     state._fsp--;
@@ -12313,18 +12916,18 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 4 :
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4401:6: ( ( (lv_map_5_0= 'mapOf' ) ) ( (lv_param_6_0= ruleTypeParameters ) ) )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4605:6: ( ( (lv_map_5_0= 'mapOf' ) ) ( (lv_param_6_0= ruleTypeParameters ) ) )
                     {
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4401:6: ( ( (lv_map_5_0= 'mapOf' ) ) ( (lv_param_6_0= ruleTypeParameters ) ) )
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4401:7: ( (lv_map_5_0= 'mapOf' ) ) ( (lv_param_6_0= ruleTypeParameters ) )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4605:6: ( ( (lv_map_5_0= 'mapOf' ) ) ( (lv_param_6_0= ruleTypeParameters ) ) )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4605:7: ( (lv_map_5_0= 'mapOf' ) ) ( (lv_param_6_0= ruleTypeParameters ) )
                     {
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4401:7: ( (lv_map_5_0= 'mapOf' ) )
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4402:1: (lv_map_5_0= 'mapOf' )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4605:7: ( (lv_map_5_0= 'mapOf' ) )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4606:1: (lv_map_5_0= 'mapOf' )
                     {
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4402:1: (lv_map_5_0= 'mapOf' )
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4403:3: lv_map_5_0= 'mapOf'
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4606:1: (lv_map_5_0= 'mapOf' )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4607:3: lv_map_5_0= 'mapOf'
                     {
-                    lv_map_5_0=(Token)match(input,68,FOLLOW_68_in_ruleType9153); if (state.failed) return current;
+                    lv_map_5_0=(Token)match(input,70,FOLLOW_70_in_ruleType9555); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                               newLeafNode(lv_map_5_0, grammarAccess.getTypeAccess().getMapMapOfKeyword_3_0_0());
@@ -12344,18 +12947,18 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
                     }
 
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4416:2: ( (lv_param_6_0= ruleTypeParameters ) )
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4417:1: (lv_param_6_0= ruleTypeParameters )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4620:2: ( (lv_param_6_0= ruleTypeParameters ) )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4621:1: (lv_param_6_0= ruleTypeParameters )
                     {
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4417:1: (lv_param_6_0= ruleTypeParameters )
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4418:3: lv_param_6_0= ruleTypeParameters
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4621:1: (lv_param_6_0= ruleTypeParameters )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4622:3: lv_param_6_0= ruleTypeParameters
                     {
                     if ( state.backtracking==0 ) {
                        
                       	        newCompositeNode(grammarAccess.getTypeAccess().getParamTypeParametersParserRuleCall_3_1_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleTypeParameters_in_ruleType9187);
+                    pushFollow(FOLLOW_ruleTypeParameters_in_ruleType9589);
                     lv_param_6_0=ruleTypeParameters();
 
                     state._fsp--;
@@ -12408,7 +13011,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleTypeParameters"
-    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4442:1: entryRuleTypeParameters returns [EObject current=null] : iv_ruleTypeParameters= ruleTypeParameters EOF ;
+    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4646:1: entryRuleTypeParameters returns [EObject current=null] : iv_ruleTypeParameters= ruleTypeParameters EOF ;
     public final EObject entryRuleTypeParameters() throws RecognitionException {
         EObject current = null;
 
@@ -12416,13 +13019,13 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4443:2: (iv_ruleTypeParameters= ruleTypeParameters EOF )
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4444:2: iv_ruleTypeParameters= ruleTypeParameters EOF
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4647:2: (iv_ruleTypeParameters= ruleTypeParameters EOF )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4648:2: iv_ruleTypeParameters= ruleTypeParameters EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getTypeParametersRule()); 
             }
-            pushFollow(FOLLOW_ruleTypeParameters_in_entryRuleTypeParameters9224);
+            pushFollow(FOLLOW_ruleTypeParameters_in_entryRuleTypeParameters9626);
             iv_ruleTypeParameters=ruleTypeParameters();
 
             state._fsp--;
@@ -12430,7 +13033,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                current =iv_ruleTypeParameters; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleTypeParameters9234); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleTypeParameters9636); if (state.failed) return current;
 
             }
 
@@ -12448,7 +13051,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleTypeParameters"
-    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4451:1: ruleTypeParameters returns [EObject current=null] : (otherlv_0= '(' ( (lv_param_1_0= ruleIdentifier ) ) (otherlv_2= ',' ( (lv_param_3_0= ruleIdentifier ) ) )* otherlv_4= ')' ) ;
+    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4655:1: ruleTypeParameters returns [EObject current=null] : (otherlv_0= '(' ( (lv_param_1_0= ruleIdentifier ) ) (otherlv_2= ',' ( (lv_param_3_0= ruleIdentifier ) ) )* otherlv_4= ')' ) ;
     public final EObject ruleTypeParameters() throws RecognitionException {
         EObject current = null;
 
@@ -12463,30 +13066,30 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4454:28: ( (otherlv_0= '(' ( (lv_param_1_0= ruleIdentifier ) ) (otherlv_2= ',' ( (lv_param_3_0= ruleIdentifier ) ) )* otherlv_4= ')' ) )
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4455:1: (otherlv_0= '(' ( (lv_param_1_0= ruleIdentifier ) ) (otherlv_2= ',' ( (lv_param_3_0= ruleIdentifier ) ) )* otherlv_4= ')' )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4658:28: ( (otherlv_0= '(' ( (lv_param_1_0= ruleIdentifier ) ) (otherlv_2= ',' ( (lv_param_3_0= ruleIdentifier ) ) )* otherlv_4= ')' ) )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4659:1: (otherlv_0= '(' ( (lv_param_1_0= ruleIdentifier ) ) (otherlv_2= ',' ( (lv_param_3_0= ruleIdentifier ) ) )* otherlv_4= ')' )
             {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4455:1: (otherlv_0= '(' ( (lv_param_1_0= ruleIdentifier ) ) (otherlv_2= ',' ( (lv_param_3_0= ruleIdentifier ) ) )* otherlv_4= ')' )
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4455:3: otherlv_0= '(' ( (lv_param_1_0= ruleIdentifier ) ) (otherlv_2= ',' ( (lv_param_3_0= ruleIdentifier ) ) )* otherlv_4= ')'
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4659:1: (otherlv_0= '(' ( (lv_param_1_0= ruleIdentifier ) ) (otherlv_2= ',' ( (lv_param_3_0= ruleIdentifier ) ) )* otherlv_4= ')' )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4659:3: otherlv_0= '(' ( (lv_param_1_0= ruleIdentifier ) ) (otherlv_2= ',' ( (lv_param_3_0= ruleIdentifier ) ) )* otherlv_4= ')'
             {
-            otherlv_0=(Token)match(input,14,FOLLOW_14_in_ruleTypeParameters9271); if (state.failed) return current;
+            otherlv_0=(Token)match(input,14,FOLLOW_14_in_ruleTypeParameters9673); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_0, grammarAccess.getTypeParametersAccess().getLeftParenthesisKeyword_0());
                   
             }
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4459:1: ( (lv_param_1_0= ruleIdentifier ) )
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4460:1: (lv_param_1_0= ruleIdentifier )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4663:1: ( (lv_param_1_0= ruleIdentifier ) )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4664:1: (lv_param_1_0= ruleIdentifier )
             {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4460:1: (lv_param_1_0= ruleIdentifier )
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4461:3: lv_param_1_0= ruleIdentifier
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4664:1: (lv_param_1_0= ruleIdentifier )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4665:3: lv_param_1_0= ruleIdentifier
             {
             if ( state.backtracking==0 ) {
                
               	        newCompositeNode(grammarAccess.getTypeParametersAccess().getParamIdentifierParserRuleCall_1_0()); 
               	    
             }
-            pushFollow(FOLLOW_ruleIdentifier_in_ruleTypeParameters9292);
+            pushFollow(FOLLOW_ruleIdentifier_in_ruleTypeParameters9694);
             lv_param_1_0=ruleIdentifier();
 
             state._fsp--;
@@ -12510,39 +13113,39 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
             }
 
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4477:2: (otherlv_2= ',' ( (lv_param_3_0= ruleIdentifier ) ) )*
-            loop65:
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4681:2: (otherlv_2= ',' ( (lv_param_3_0= ruleIdentifier ) ) )*
+            loop70:
             do {
-                int alt65=2;
-                int LA65_0 = input.LA(1);
+                int alt70=2;
+                int LA70_0 = input.LA(1);
 
-                if ( (LA65_0==20) ) {
-                    alt65=1;
+                if ( (LA70_0==20) ) {
+                    alt70=1;
                 }
 
 
-                switch (alt65) {
+                switch (alt70) {
             	case 1 :
-            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4477:4: otherlv_2= ',' ( (lv_param_3_0= ruleIdentifier ) )
+            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4681:4: otherlv_2= ',' ( (lv_param_3_0= ruleIdentifier ) )
             	    {
-            	    otherlv_2=(Token)match(input,20,FOLLOW_20_in_ruleTypeParameters9305); if (state.failed) return current;
+            	    otherlv_2=(Token)match(input,20,FOLLOW_20_in_ruleTypeParameters9707); if (state.failed) return current;
             	    if ( state.backtracking==0 ) {
 
             	          	newLeafNode(otherlv_2, grammarAccess.getTypeParametersAccess().getCommaKeyword_2_0());
             	          
             	    }
-            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4481:1: ( (lv_param_3_0= ruleIdentifier ) )
-            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4482:1: (lv_param_3_0= ruleIdentifier )
+            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4685:1: ( (lv_param_3_0= ruleIdentifier ) )
+            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4686:1: (lv_param_3_0= ruleIdentifier )
             	    {
-            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4482:1: (lv_param_3_0= ruleIdentifier )
-            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4483:3: lv_param_3_0= ruleIdentifier
+            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4686:1: (lv_param_3_0= ruleIdentifier )
+            	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4687:3: lv_param_3_0= ruleIdentifier
             	    {
             	    if ( state.backtracking==0 ) {
             	       
             	      	        newCompositeNode(grammarAccess.getTypeParametersAccess().getParamIdentifierParserRuleCall_2_1_0()); 
             	      	    
             	    }
-            	    pushFollow(FOLLOW_ruleIdentifier_in_ruleTypeParameters9326);
+            	    pushFollow(FOLLOW_ruleIdentifier_in_ruleTypeParameters9728);
             	    lv_param_3_0=ruleIdentifier();
 
             	    state._fsp--;
@@ -12571,11 +13174,11 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
             	    break;
 
             	default :
-            	    break loop65;
+            	    break loop70;
                 }
             } while (true);
 
-            otherlv_4=(Token)match(input,15,FOLLOW_15_in_ruleTypeParameters9340); if (state.failed) return current;
+            otherlv_4=(Token)match(input,15,FOLLOW_15_in_ruleTypeParameters9742); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_4, grammarAccess.getTypeParametersAccess().getRightParenthesisKeyword_3());
@@ -12604,7 +13207,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleContainerInitializer"
-    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4511:1: entryRuleContainerInitializer returns [EObject current=null] : iv_ruleContainerInitializer= ruleContainerInitializer EOF ;
+    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4715:1: entryRuleContainerInitializer returns [EObject current=null] : iv_ruleContainerInitializer= ruleContainerInitializer EOF ;
     public final EObject entryRuleContainerInitializer() throws RecognitionException {
         EObject current = null;
 
@@ -12612,13 +13215,13 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4512:2: (iv_ruleContainerInitializer= ruleContainerInitializer EOF )
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4513:2: iv_ruleContainerInitializer= ruleContainerInitializer EOF
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4716:2: (iv_ruleContainerInitializer= ruleContainerInitializer EOF )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4717:2: iv_ruleContainerInitializer= ruleContainerInitializer EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getContainerInitializerRule()); 
             }
-            pushFollow(FOLLOW_ruleContainerInitializer_in_entryRuleContainerInitializer9376);
+            pushFollow(FOLLOW_ruleContainerInitializer_in_entryRuleContainerInitializer9778);
             iv_ruleContainerInitializer=ruleContainerInitializer();
 
             state._fsp--;
@@ -12626,7 +13229,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                current =iv_ruleContainerInitializer; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleContainerInitializer9386); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleContainerInitializer9788); if (state.failed) return current;
 
             }
 
@@ -12644,7 +13247,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleContainerInitializer"
-    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4520:1: ruleContainerInitializer returns [EObject current=null] : ( () otherlv_1= '{' ( ( (lv_exprs_2_0= ruleContainerInitializerExpression ) ) (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )* )? otherlv_5= '}' ) ;
+    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4724:1: ruleContainerInitializer returns [EObject current=null] : ( () otherlv_1= '{' ( ( (lv_exprs_2_0= ruleContainerInitializerExpression ) ) (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )* )? otherlv_5= '}' ) ;
     public final EObject ruleContainerInitializer() throws RecognitionException {
         EObject current = null;
 
@@ -12659,14 +13262,14 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4523:28: ( ( () otherlv_1= '{' ( ( (lv_exprs_2_0= ruleContainerInitializerExpression ) ) (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )* )? otherlv_5= '}' ) )
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4524:1: ( () otherlv_1= '{' ( ( (lv_exprs_2_0= ruleContainerInitializerExpression ) ) (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )* )? otherlv_5= '}' )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4727:28: ( ( () otherlv_1= '{' ( ( (lv_exprs_2_0= ruleContainerInitializerExpression ) ) (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )* )? otherlv_5= '}' ) )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4728:1: ( () otherlv_1= '{' ( ( (lv_exprs_2_0= ruleContainerInitializerExpression ) ) (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )* )? otherlv_5= '}' )
             {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4524:1: ( () otherlv_1= '{' ( ( (lv_exprs_2_0= ruleContainerInitializerExpression ) ) (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )* )? otherlv_5= '}' )
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4524:2: () otherlv_1= '{' ( ( (lv_exprs_2_0= ruleContainerInitializerExpression ) ) (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )* )? otherlv_5= '}'
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4728:1: ( () otherlv_1= '{' ( ( (lv_exprs_2_0= ruleContainerInitializerExpression ) ) (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )* )? otherlv_5= '}' )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4728:2: () otherlv_1= '{' ( ( (lv_exprs_2_0= ruleContainerInitializerExpression ) ) (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )* )? otherlv_5= '}'
             {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4524:2: ()
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4525:2: 
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4728:2: ()
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4729:2: 
             {
             if ( state.backtracking==0 ) {
                
@@ -12683,35 +13286,35 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
             }
 
-            otherlv_1=(Token)match(input,17,FOLLOW_17_in_ruleContainerInitializer9435); if (state.failed) return current;
+            otherlv_1=(Token)match(input,17,FOLLOW_17_in_ruleContainerInitializer9837); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_1, grammarAccess.getContainerInitializerAccess().getLeftCurlyBracketKeyword_1());
                   
             }
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4537:1: ( ( (lv_exprs_2_0= ruleContainerInitializerExpression ) ) (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )* )?
-            int alt67=2;
-            int LA67_0 = input.LA(1);
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4741:1: ( ( (lv_exprs_2_0= ruleContainerInitializerExpression ) ) (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )* )?
+            int alt72=2;
+            int LA72_0 = input.LA(1);
 
-            if ( ((LA67_0>=RULE_NUMBER && LA67_0<=RULE_EXPONENT)||LA67_0==14||LA67_0==17||LA67_0==54||(LA67_0>=57 && LA67_0<=60)||(LA67_0>=64 && LA67_0<=65)) ) {
-                alt67=1;
+            if ( ((LA72_0>=RULE_NUMBER && LA72_0<=RULE_EXPONENT)||LA72_0==14||LA72_0==17||LA72_0==54||(LA72_0>=57 && LA72_0<=60)||(LA72_0>=65 && LA72_0<=67)) ) {
+                alt72=1;
             }
-            switch (alt67) {
+            switch (alt72) {
                 case 1 :
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4537:2: ( (lv_exprs_2_0= ruleContainerInitializerExpression ) ) (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )*
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4741:2: ( (lv_exprs_2_0= ruleContainerInitializerExpression ) ) (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )*
                     {
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4537:2: ( (lv_exprs_2_0= ruleContainerInitializerExpression ) )
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4538:1: (lv_exprs_2_0= ruleContainerInitializerExpression )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4741:2: ( (lv_exprs_2_0= ruleContainerInitializerExpression ) )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4742:1: (lv_exprs_2_0= ruleContainerInitializerExpression )
                     {
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4538:1: (lv_exprs_2_0= ruleContainerInitializerExpression )
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4539:3: lv_exprs_2_0= ruleContainerInitializerExpression
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4742:1: (lv_exprs_2_0= ruleContainerInitializerExpression )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4743:3: lv_exprs_2_0= ruleContainerInitializerExpression
                     {
                     if ( state.backtracking==0 ) {
                        
                       	        newCompositeNode(grammarAccess.getContainerInitializerAccess().getExprsContainerInitializerExpressionParserRuleCall_2_0_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleContainerInitializerExpression_in_ruleContainerInitializer9457);
+                    pushFollow(FOLLOW_ruleContainerInitializerExpression_in_ruleContainerInitializer9859);
                     lv_exprs_2_0=ruleContainerInitializerExpression();
 
                     state._fsp--;
@@ -12735,39 +13338,39 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
                     }
 
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4555:2: (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )*
-                    loop66:
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4759:2: (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )*
+                    loop71:
                     do {
-                        int alt66=2;
-                        int LA66_0 = input.LA(1);
+                        int alt71=2;
+                        int LA71_0 = input.LA(1);
 
-                        if ( (LA66_0==20) ) {
-                            alt66=1;
+                        if ( (LA71_0==20) ) {
+                            alt71=1;
                         }
 
 
-                        switch (alt66) {
+                        switch (alt71) {
                     	case 1 :
-                    	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4555:4: otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) )
+                    	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4759:4: otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) )
                     	    {
-                    	    otherlv_3=(Token)match(input,20,FOLLOW_20_in_ruleContainerInitializer9470); if (state.failed) return current;
+                    	    otherlv_3=(Token)match(input,20,FOLLOW_20_in_ruleContainerInitializer9872); if (state.failed) return current;
                     	    if ( state.backtracking==0 ) {
 
                     	          	newLeafNode(otherlv_3, grammarAccess.getContainerInitializerAccess().getCommaKeyword_2_1_0());
                     	          
                     	    }
-                    	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4559:1: ( (lv_exprs_4_0= ruleContainerInitializerExpression ) )
-                    	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4560:1: (lv_exprs_4_0= ruleContainerInitializerExpression )
+                    	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4763:1: ( (lv_exprs_4_0= ruleContainerInitializerExpression ) )
+                    	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4764:1: (lv_exprs_4_0= ruleContainerInitializerExpression )
                     	    {
-                    	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4560:1: (lv_exprs_4_0= ruleContainerInitializerExpression )
-                    	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4561:3: lv_exprs_4_0= ruleContainerInitializerExpression
+                    	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4764:1: (lv_exprs_4_0= ruleContainerInitializerExpression )
+                    	    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4765:3: lv_exprs_4_0= ruleContainerInitializerExpression
                     	    {
                     	    if ( state.backtracking==0 ) {
                     	       
                     	      	        newCompositeNode(grammarAccess.getContainerInitializerAccess().getExprsContainerInitializerExpressionParserRuleCall_2_1_1_0()); 
                     	      	    
                     	    }
-                    	    pushFollow(FOLLOW_ruleContainerInitializerExpression_in_ruleContainerInitializer9491);
+                    	    pushFollow(FOLLOW_ruleContainerInitializerExpression_in_ruleContainerInitializer9893);
                     	    lv_exprs_4_0=ruleContainerInitializerExpression();
 
                     	    state._fsp--;
@@ -12796,7 +13399,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
                     	    break;
 
                     	default :
-                    	    break loop66;
+                    	    break loop71;
                         }
                     } while (true);
 
@@ -12806,7 +13409,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
             }
 
-            otherlv_5=(Token)match(input,18,FOLLOW_18_in_ruleContainerInitializer9507); if (state.failed) return current;
+            otherlv_5=(Token)match(input,18,FOLLOW_18_in_ruleContainerInitializer9909); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_5, grammarAccess.getContainerInitializerAccess().getRightCurlyBracketKeyword_3());
@@ -12835,7 +13438,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleContainerInitializerExpression"
-    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4589:1: entryRuleContainerInitializerExpression returns [EObject current=null] : iv_ruleContainerInitializerExpression= ruleContainerInitializerExpression EOF ;
+    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4793:1: entryRuleContainerInitializerExpression returns [EObject current=null] : iv_ruleContainerInitializerExpression= ruleContainerInitializerExpression EOF ;
     public final EObject entryRuleContainerInitializerExpression() throws RecognitionException {
         EObject current = null;
 
@@ -12843,13 +13446,13 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4590:2: (iv_ruleContainerInitializerExpression= ruleContainerInitializerExpression EOF )
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4591:2: iv_ruleContainerInitializerExpression= ruleContainerInitializerExpression EOF
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4794:2: (iv_ruleContainerInitializerExpression= ruleContainerInitializerExpression EOF )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4795:2: iv_ruleContainerInitializerExpression= ruleContainerInitializerExpression EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getContainerInitializerExpressionRule()); 
             }
-            pushFollow(FOLLOW_ruleContainerInitializerExpression_in_entryRuleContainerInitializerExpression9543);
+            pushFollow(FOLLOW_ruleContainerInitializerExpression_in_entryRuleContainerInitializerExpression9945);
             iv_ruleContainerInitializerExpression=ruleContainerInitializerExpression();
 
             state._fsp--;
@@ -12857,7 +13460,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                current =iv_ruleContainerInitializerExpression; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleContainerInitializerExpression9553); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleContainerInitializerExpression9955); if (state.failed) return current;
 
             }
 
@@ -12875,7 +13478,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleContainerInitializerExpression"
-    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4598:1: ruleContainerInitializerExpression returns [EObject current=null] : ( ( (lv_logical_0_0= ruleLogicalExpression ) ) | ( (lv_container_1_0= ruleContainerInitializer ) ) ) ;
+    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4802:1: ruleContainerInitializerExpression returns [EObject current=null] : ( ( (lv_logical_0_0= ruleLogicalExpression ) ) | ( (lv_container_1_0= ruleContainerInitializer ) ) ) ;
     public final EObject ruleContainerInitializerExpression() throws RecognitionException {
         EObject current = null;
 
@@ -12887,42 +13490,42 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4601:28: ( ( ( (lv_logical_0_0= ruleLogicalExpression ) ) | ( (lv_container_1_0= ruleContainerInitializer ) ) ) )
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4602:1: ( ( (lv_logical_0_0= ruleLogicalExpression ) ) | ( (lv_container_1_0= ruleContainerInitializer ) ) )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4805:28: ( ( ( (lv_logical_0_0= ruleLogicalExpression ) ) | ( (lv_container_1_0= ruleContainerInitializer ) ) ) )
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4806:1: ( ( (lv_logical_0_0= ruleLogicalExpression ) ) | ( (lv_container_1_0= ruleContainerInitializer ) ) )
             {
-            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4602:1: ( ( (lv_logical_0_0= ruleLogicalExpression ) ) | ( (lv_container_1_0= ruleContainerInitializer ) ) )
-            int alt68=2;
-            int LA68_0 = input.LA(1);
+            // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4806:1: ( ( (lv_logical_0_0= ruleLogicalExpression ) ) | ( (lv_container_1_0= ruleContainerInitializer ) ) )
+            int alt73=2;
+            int LA73_0 = input.LA(1);
 
-            if ( ((LA68_0>=RULE_NUMBER && LA68_0<=RULE_EXPONENT)||LA68_0==14||LA68_0==54||(LA68_0>=57 && LA68_0<=60)||(LA68_0>=64 && LA68_0<=65)) ) {
-                alt68=1;
+            if ( ((LA73_0>=RULE_NUMBER && LA73_0<=RULE_EXPONENT)||LA73_0==14||LA73_0==54||(LA73_0>=57 && LA73_0<=60)||(LA73_0>=65 && LA73_0<=67)) ) {
+                alt73=1;
             }
-            else if ( (LA68_0==17) ) {
-                alt68=2;
+            else if ( (LA73_0==17) ) {
+                alt73=2;
             }
             else {
                 if (state.backtracking>0) {state.failed=true; return current;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 68, 0, input);
+                    new NoViableAltException("", 73, 0, input);
 
                 throw nvae;
             }
-            switch (alt68) {
+            switch (alt73) {
                 case 1 :
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4602:2: ( (lv_logical_0_0= ruleLogicalExpression ) )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4806:2: ( (lv_logical_0_0= ruleLogicalExpression ) )
                     {
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4602:2: ( (lv_logical_0_0= ruleLogicalExpression ) )
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4603:1: (lv_logical_0_0= ruleLogicalExpression )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4806:2: ( (lv_logical_0_0= ruleLogicalExpression ) )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4807:1: (lv_logical_0_0= ruleLogicalExpression )
                     {
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4603:1: (lv_logical_0_0= ruleLogicalExpression )
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4604:3: lv_logical_0_0= ruleLogicalExpression
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4807:1: (lv_logical_0_0= ruleLogicalExpression )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4808:3: lv_logical_0_0= ruleLogicalExpression
                     {
                     if ( state.backtracking==0 ) {
                        
                       	        newCompositeNode(grammarAccess.getContainerInitializerExpressionAccess().getLogicalLogicalExpressionParserRuleCall_0_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleLogicalExpression_in_ruleContainerInitializerExpression9599);
+                    pushFollow(FOLLOW_ruleLogicalExpression_in_ruleContainerInitializerExpression10001);
                     lv_logical_0_0=ruleLogicalExpression();
 
                     state._fsp--;
@@ -12950,20 +13553,20 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4621:6: ( (lv_container_1_0= ruleContainerInitializer ) )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4825:6: ( (lv_container_1_0= ruleContainerInitializer ) )
                     {
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4621:6: ( (lv_container_1_0= ruleContainerInitializer ) )
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4622:1: (lv_container_1_0= ruleContainerInitializer )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4825:6: ( (lv_container_1_0= ruleContainerInitializer ) )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4826:1: (lv_container_1_0= ruleContainerInitializer )
                     {
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4622:1: (lv_container_1_0= ruleContainerInitializer )
-                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4623:3: lv_container_1_0= ruleContainerInitializer
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4826:1: (lv_container_1_0= ruleContainerInitializer )
+                    // ../de.uni_hildesheim.sse.vil.templatelang/src-gen/de/uni_hildesheim/sse/vil/templatelang/parser/antlr/internal/InternalTemplateLang.g:4827:3: lv_container_1_0= ruleContainerInitializer
                     {
                     if ( state.backtracking==0 ) {
                        
                       	        newCompositeNode(grammarAccess.getContainerInitializerExpressionAccess().getContainerContainerInitializerParserRuleCall_1_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleContainerInitializer_in_ruleContainerInitializerExpression9626);
+                    pushFollow(FOLLOW_ruleContainerInitializer_in_ruleContainerInitializerExpression10028);
                     lv_container_1_0=ruleContainerInitializer();
 
                     state._fsp--;
@@ -13270,23 +13873,24 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
 
     protected DFA15 dfa15 = new DFA15(this);
     protected DFA48 dfa48 = new DFA48(this);
+    protected DFA60 dfa60 = new DFA60(this);
     static final String DFA15_eotS =
-        "\31\uffff";
+        "\32\uffff";
     static final String DFA15_eofS =
-        "\31\uffff";
+        "\32\uffff";
     static final String DFA15_minS =
-        "\1\4\1\uffff\3\0\5\uffff\1\0\6\uffff\1\0\7\uffff";
+        "\1\4\1\uffff\3\0\5\uffff\1\0\6\uffff\1\0\10\uffff";
     static final String DFA15_maxS =
-        "\1\104\1\uffff\3\0\5\uffff\1\0\6\uffff\1\0\7\uffff";
+        "\1\106\1\uffff\3\0\5\uffff\1\0\6\uffff\1\0\10\uffff";
     static final String DFA15_acceptS =
-        "\1\uffff\1\1\6\uffff\1\2\1\3\1\uffff\1\5\1\6\1\7\11\uffff\1\10"+
+        "\1\uffff\1\1\6\uffff\1\2\1\3\1\uffff\1\5\1\6\1\7\12\uffff\1\10"+
         "\1\4";
     static final String DFA15_specialS =
-        "\2\uffff\1\0\1\1\1\2\5\uffff\1\3\6\uffff\1\4\7\uffff}>";
+        "\2\uffff\1\0\1\1\1\2\5\uffff\1\3\6\uffff\1\4\10\uffff}>";
     static final String[] DFA15_transitionS = {
             "\1\15\1\21\1\3\1\2\1\4\5\uffff\1\15\2\uffff\1\12\6\uffff\1"+
-            "\10\1\uffff\1\27\1\uffff\1\11\2\uffff\1\14\1\13\5\uffff\1\1"+
-            "\17\uffff\1\15\2\uffff\4\15\3\uffff\2\15\3\1",
+            "\10\1\uffff\1\30\1\uffff\1\11\2\uffff\1\14\1\13\5\uffff\1\1"+
+            "\17\uffff\1\15\2\uffff\4\15\4\uffff\3\15\3\1",
             "",
             "\1\uffff",
             "\1\uffff",
@@ -13304,6 +13908,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
             "",
             "",
             "\1\uffff",
+            "",
             "",
             "",
             "",
@@ -13407,7 +14012,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
                         int index15_10 = input.index();
                         input.rewind();
                         s = -1;
-                        if ( (synpred18_InternalTemplateLang()) ) {s = 24;}
+                        if ( (synpred18_InternalTemplateLang()) ) {s = 25;}
 
                         else if ( (synpred21_InternalTemplateLang()) ) {s = 13;}
 
@@ -13424,7 +14029,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
                         s = -1;
                         if ( (synpred21_InternalTemplateLang()) ) {s = 13;}
 
-                        else if ( (true) ) {s = 23;}
+                        else if ( (true) ) {s = 24;}
 
                          
                         input.seek(index15_17);
@@ -13445,30 +14050,30 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
     static final String DFA48_minS =
         "\1\4\1\uffff\3\16\2\uffff\1\6\1\uffff\3\16";
     static final String DFA48_maxS =
-        "\1\101\1\uffff\3\77\2\uffff\1\10\1\uffff\3\77";
+        "\1\103\1\uffff\3\100\2\uffff\1\10\1\uffff\3\100";
     static final String DFA48_acceptS =
         "\1\uffff\1\1\3\uffff\1\3\1\4\1\uffff\1\2\3\uffff";
     static final String DFA48_specialS =
         "\14\uffff}>";
     static final String[] DFA48_transitionS = {
-            "\2\1\1\3\1\2\1\4\5\uffff\1\1\54\uffff\1\5\1\6\3\uffff\2\1",
+            "\2\1\1\3\1\2\1\4\5\uffff\1\1\54\uffff\1\5\1\6\4\uffff\3\1",
             "",
             "\1\10\1\1\1\uffff\2\1\1\uffff\1\1\2\uffff\1\1\6\uffff\1\1"+
-            "\6\uffff\1\1\4\uffff\5\1\1\uffff\11\1\4\uffff\2\1\1\7",
+            "\6\uffff\1\1\4\uffff\5\1\1\uffff\11\1\4\uffff\3\1\1\7",
             "\1\10\1\1\1\uffff\2\1\1\uffff\1\1\2\uffff\1\1\6\uffff\1\1"+
-            "\6\uffff\1\1\4\uffff\5\1\1\uffff\11\1\4\uffff\2\1\1\7",
+            "\6\uffff\1\1\4\uffff\5\1\1\uffff\11\1\4\uffff\3\1\1\7",
             "\1\10\1\1\1\uffff\2\1\1\uffff\1\1\2\uffff\1\1\6\uffff\1\1"+
-            "\6\uffff\1\1\4\uffff\5\1\1\uffff\11\1\4\uffff\2\1\1\7",
+            "\6\uffff\1\1\4\uffff\5\1\1\uffff\11\1\4\uffff\3\1\1\7",
             "",
             "",
             "\1\12\1\11\1\13",
             "",
             "\1\10\1\1\1\uffff\2\1\1\uffff\1\1\2\uffff\1\1\6\uffff\1\1"+
-            "\6\uffff\1\1\4\uffff\5\1\1\uffff\11\1\4\uffff\2\1\1\7",
+            "\6\uffff\1\1\4\uffff\5\1\1\uffff\11\1\4\uffff\3\1\1\7",
             "\1\10\1\1\1\uffff\2\1\1\uffff\1\1\2\uffff\1\1\6\uffff\1\1"+
-            "\6\uffff\1\1\4\uffff\5\1\1\uffff\11\1\4\uffff\2\1\1\7",
+            "\6\uffff\1\1\4\uffff\5\1\1\uffff\11\1\4\uffff\3\1\1\7",
             "\1\10\1\1\1\uffff\2\1\1\uffff\1\1\2\uffff\1\1\6\uffff\1\1"+
-            "\6\uffff\1\1\4\uffff\5\1\1\uffff\11\1\4\uffff\2\1\1\7"
+            "\6\uffff\1\1\4\uffff\5\1\1\uffff\11\1\4\uffff\3\1\1\7"
     };
 
     static final short[] DFA48_eot = DFA.unpackEncodedString(DFA48_eotS);
@@ -13504,6 +14109,79 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
             return "3333:1: ( ( (lv_otherEx_0_0= ruleExpressionOrQualifiedExecution ) ) | ( (lv_unqEx_1_0= ruleUnqualifiedExecution ) ) | ( (lv_superEx_2_0= ruleSuperExecution ) ) | ( (lv_newEx_3_0= ruleConstructorExecution ) ) )";
         }
     }
+    static final String DFA60_eotS =
+        "\16\uffff";
+    static final String DFA60_eofS =
+        "\16\uffff";
+    static final String DFA60_minS =
+        "\1\4\3\6\2\uffff\1\6\1\4\3\6\3\16";
+    static final String DFA60_maxS =
+        "\1\106\3\100\2\uffff\1\10\1\103\6\100";
+    static final String DFA60_acceptS =
+        "\4\uffff\1\1\1\2\10\uffff";
+    static final String DFA60_specialS =
+        "\16\uffff}>";
+    static final String[] DFA60_transitionS = {
+            "\2\5\1\2\1\1\1\3\5\uffff\2\5\1\uffff\1\5\44\uffff\1\5\2\uffff"+
+            "\4\5\4\uffff\3\5\3\4",
+            "\3\4\5\uffff\2\5\4\uffff\1\7\1\5\1\uffff\1\4\3\uffff\1\4\11"+
+            "\uffff\1\5\4\uffff\5\5\1\uffff\11\5\4\uffff\2\5\1\uffff\1\6",
+            "\3\4\5\uffff\2\5\4\uffff\1\7\1\5\1\uffff\1\4\3\uffff\1\4\11"+
+            "\uffff\1\5\4\uffff\5\5\1\uffff\11\5\4\uffff\2\5\1\uffff\1\6",
+            "\3\4\5\uffff\2\5\4\uffff\1\7\1\5\1\uffff\1\4\3\uffff\1\4\11"+
+            "\uffff\1\5\4\uffff\5\5\1\uffff\11\5\4\uffff\2\5\1\uffff\1\6",
+            "",
+            "",
+            "\1\11\1\10\1\12",
+            "\2\5\1\14\1\13\1\15\5\uffff\1\5\2\uffff\1\5\44\uffff\1\5\2"+
+            "\uffff\4\5\4\uffff\3\5",
+            "\3\4\5\uffff\2\5\4\uffff\1\5\20\uffff\1\5\4\uffff\5\5\1\uffff"+
+            "\11\5\4\uffff\2\5\1\uffff\1\6",
+            "\3\4\5\uffff\2\5\4\uffff\1\5\20\uffff\1\5\4\uffff\5\5\1\uffff"+
+            "\11\5\4\uffff\2\5\1\uffff\1\6",
+            "\3\4\5\uffff\2\5\4\uffff\1\5\20\uffff\1\5\4\uffff\5\5\1\uffff"+
+            "\11\5\4\uffff\2\5\1\uffff\1\6",
+            "\2\5\4\uffff\1\7\1\5\1\uffff\1\4\3\uffff\1\4\11\uffff\1\5"+
+            "\4\uffff\5\5\1\uffff\11\5\4\uffff\2\5\1\uffff\1\5",
+            "\2\5\4\uffff\1\7\1\5\1\uffff\1\4\3\uffff\1\4\11\uffff\1\5"+
+            "\4\uffff\5\5\1\uffff\11\5\4\uffff\2\5\1\uffff\1\5",
+            "\2\5\4\uffff\1\7\1\5\1\uffff\1\4\3\uffff\1\4\11\uffff\1\5"+
+            "\4\uffff\5\5\1\uffff\11\5\4\uffff\2\5\1\uffff\1\5"
+    };
+
+    static final short[] DFA60_eot = DFA.unpackEncodedString(DFA60_eotS);
+    static final short[] DFA60_eof = DFA.unpackEncodedString(DFA60_eofS);
+    static final char[] DFA60_min = DFA.unpackEncodedStringToUnsignedChars(DFA60_minS);
+    static final char[] DFA60_max = DFA.unpackEncodedStringToUnsignedChars(DFA60_maxS);
+    static final short[] DFA60_accept = DFA.unpackEncodedString(DFA60_acceptS);
+    static final short[] DFA60_special = DFA.unpackEncodedString(DFA60_specialS);
+    static final short[][] DFA60_transition;
+
+    static {
+        int numStates = DFA60_transitionS.length;
+        DFA60_transition = new short[numStates][];
+        for (int i=0; i<numStates; i++) {
+            DFA60_transition[i] = DFA.unpackEncodedString(DFA60_transitionS[i]);
+        }
+    }
+
+    class DFA60 extends DFA {
+
+        public DFA60(BaseRecognizer recognizer) {
+            this.recognizer = recognizer;
+            this.decisionNumber = 60;
+            this.eot = DFA60_eot;
+            this.eof = DFA60_eof;
+            this.min = DFA60_min;
+            this.max = DFA60_max;
+            this.accept = DFA60_accept;
+            this.special = DFA60_special;
+            this.transition = DFA60_transition;
+        }
+        public String getDescription() {
+            return "3984:1: ( (lv_decl_2_0= ruleDeclarator ) )?";
+        }
+    }
  
 
     public static final BitSet FOLLOW_ruleLanguageUnit_in_entryRuleLanguageUnit81 = new BitSet(new long[]{0x0000000000000000L});
@@ -13514,14 +14192,14 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_ruleIndentationHint_in_ruleLanguageUnit203 = new BitSet(new long[]{0x0000000000002000L});
     public static final BitSet FOLLOW_13_in_ruleLanguageUnit216 = new BitSet(new long[]{0x00000000000001C0L});
     public static final BitSet FOLLOW_ruleIdentifier_in_ruleLanguageUnit237 = new BitSet(new long[]{0x0000000000004000L});
-    public static final BitSet FOLLOW_14_in_ruleLanguageUnit249 = new BitSet(new long[]{0x00000000000081C0L,0x000000000000001CL});
+    public static final BitSet FOLLOW_14_in_ruleLanguageUnit249 = new BitSet(new long[]{0x00000000000081C0L,0x0000000000000070L});
     public static final BitSet FOLLOW_ruleParameterList_in_ruleLanguageUnit270 = new BitSet(new long[]{0x0000000000008000L});
     public static final BitSet FOLLOW_15_in_ruleLanguageUnit283 = new BitSet(new long[]{0x0000000000030000L});
     public static final BitSet FOLLOW_16_in_ruleLanguageUnit296 = new BitSet(new long[]{0x00000000000001C0L});
     public static final BitSet FOLLOW_ruleIdentifier_in_ruleLanguageUnit317 = new BitSet(new long[]{0x0000000000020000L});
-    public static final BitSet FOLLOW_17_in_ruleLanguageUnit331 = new BitSet(new long[]{0x00000240004401C0L,0x000000000000001CL});
-    public static final BitSet FOLLOW_ruleVersionStmt_in_ruleLanguageUnit352 = new BitSet(new long[]{0x00000040004401C0L,0x000000000000001CL});
-    public static final BitSet FOLLOW_ruleVariableDeclaration_in_ruleLanguageUnit374 = new BitSet(new long[]{0x00000040004401C0L,0x000000000000001CL});
+    public static final BitSet FOLLOW_17_in_ruleLanguageUnit331 = new BitSet(new long[]{0x00000240004401C0L,0x0000000000000070L});
+    public static final BitSet FOLLOW_ruleVersionStmt_in_ruleLanguageUnit352 = new BitSet(new long[]{0x00000040004401C0L,0x0000000000000070L});
+    public static final BitSet FOLLOW_ruleVariableDeclaration_in_ruleLanguageUnit374 = new BitSet(new long[]{0x00000040004401C0L,0x0000000000000070L});
     public static final BitSet FOLLOW_ruleVilDef_in_ruleLanguageUnit396 = new BitSet(new long[]{0x0000000000440000L});
     public static final BitSet FOLLOW_18_in_ruleLanguageUnit409 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleIndentationHint_in_entryRuleIndentationHint445 = new BitSet(new long[]{0x0000000000000000L});
@@ -13539,18 +14217,18 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_RULE_NUMBER_in_ruleIndentationHintPart694 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleVilDef_in_entryRuleVilDef735 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleVilDef745 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_22_in_ruleVilDef782 = new BitSet(new long[]{0x00000000000001C0L,0x000000000000001CL});
+    public static final BitSet FOLLOW_22_in_ruleVilDef782 = new BitSet(new long[]{0x00000000000001C0L,0x0000000000000070L});
     public static final BitSet FOLLOW_ruleType_in_ruleVilDef803 = new BitSet(new long[]{0x00000000000001C0L});
     public static final BitSet FOLLOW_ruleIdentifier_in_ruleVilDef825 = new BitSet(new long[]{0x0000000000004000L});
-    public static final BitSet FOLLOW_14_in_ruleVilDef837 = new BitSet(new long[]{0x00000000000081C0L,0x000000000000001CL});
+    public static final BitSet FOLLOW_14_in_ruleVilDef837 = new BitSet(new long[]{0x00000000000081C0L,0x0000000000000070L});
     public static final BitSet FOLLOW_ruleParameterList_in_ruleVilDef858 = new BitSet(new long[]{0x0000000000008000L});
     public static final BitSet FOLLOW_15_in_ruleVilDef871 = new BitSet(new long[]{0x0000000000020000L});
     public static final BitSet FOLLOW_ruleStmtBlock_in_ruleVilDef892 = new BitSet(new long[]{0x0000000000800002L});
     public static final BitSet FOLLOW_23_in_ruleVilDef905 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleStmtBlock_in_entryRuleStmtBlock943 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleStmtBlock953 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_17_in_ruleStmtBlock1002 = new BitSet(new long[]{0x1E400041950641F0L,0x000000000000001FL});
-    public static final BitSet FOLLOW_ruleStmt_in_ruleStmtBlock1023 = new BitSet(new long[]{0x1E400041950641F0L,0x000000000000001FL});
+    public static final BitSet FOLLOW_17_in_ruleStmtBlock1002 = new BitSet(new long[]{0x1E400041950641F0L,0x000000000000007EL});
+    public static final BitSet FOLLOW_ruleStmt_in_ruleStmtBlock1023 = new BitSet(new long[]{0x1E400041950641F0L,0x000000000000007EL});
     public static final BitSet FOLLOW_18_in_ruleStmtBlock1036 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleStmt_in_entryRuleStmt1072 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleStmt1082 = new BitSet(new long[]{0x0000000000000002L});
@@ -13565,52 +14243,52 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_ruleAlternative_in_entryRuleAlternative1353 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleAlternative1363 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_24_in_ruleAlternative1400 = new BitSet(new long[]{0x0000000000004000L});
-    public static final BitSet FOLLOW_14_in_ruleAlternative1412 = new BitSet(new long[]{0x1E400000000241F0L,0x0000000000000003L});
+    public static final BitSet FOLLOW_14_in_ruleAlternative1412 = new BitSet(new long[]{0x1E400000000241F0L,0x000000000000000EL});
     public static final BitSet FOLLOW_ruleExpression_in_ruleAlternative1433 = new BitSet(new long[]{0x0000000000008000L});
-    public static final BitSet FOLLOW_15_in_ruleAlternative1445 = new BitSet(new long[]{0x1E400041950241F0L,0x000000000000001FL});
+    public static final BitSet FOLLOW_15_in_ruleAlternative1445 = new BitSet(new long[]{0x1E400041950241F0L,0x000000000000007EL});
     public static final BitSet FOLLOW_ruleStmt_in_ruleAlternative1466 = new BitSet(new long[]{0x0000000002000002L});
-    public static final BitSet FOLLOW_25_in_ruleAlternative1487 = new BitSet(new long[]{0x1E400041950241F0L,0x000000000000001FL});
+    public static final BitSet FOLLOW_25_in_ruleAlternative1487 = new BitSet(new long[]{0x1E400041950241F0L,0x000000000000007EL});
     public static final BitSet FOLLOW_ruleStmt_in_ruleAlternative1509 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleContent_in_entryRuleContent1547 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleContent1557 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_26_in_ruleContent1600 = new BitSet(new long[]{0x0000000000000020L});
     public static final BitSet FOLLOW_RULE_STRING_in_ruleContent1631 = new BitSet(new long[]{0x0000000008000002L});
-    public static final BitSet FOLLOW_27_in_ruleContent1649 = new BitSet(new long[]{0x1E400000000241F0L,0x0000000000000003L});
+    public static final BitSet FOLLOW_27_in_ruleContent1649 = new BitSet(new long[]{0x1E400000000241F0L,0x000000000000000EL});
     public static final BitSet FOLLOW_ruleExpression_in_ruleContent1670 = new BitSet(new long[]{0x0000000000800000L});
     public static final BitSet FOLLOW_23_in_ruleContent1682 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleSwitch_in_entryRuleSwitch1720 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleSwitch1730 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_28_in_ruleSwitch1767 = new BitSet(new long[]{0x0000000000004000L});
-    public static final BitSet FOLLOW_14_in_ruleSwitch1779 = new BitSet(new long[]{0x1E400000000241F0L,0x0000000000000003L});
+    public static final BitSet FOLLOW_14_in_ruleSwitch1779 = new BitSet(new long[]{0x1E400000000241F0L,0x000000000000000EL});
     public static final BitSet FOLLOW_ruleExpression_in_ruleSwitch1800 = new BitSet(new long[]{0x0000000000008000L});
     public static final BitSet FOLLOW_15_in_ruleSwitch1812 = new BitSet(new long[]{0x0000000000020000L});
-    public static final BitSet FOLLOW_17_in_ruleSwitch1824 = new BitSet(new long[]{0x1E400000000241F0L,0x0000000000000003L});
+    public static final BitSet FOLLOW_17_in_ruleSwitch1824 = new BitSet(new long[]{0x1E400000000241F0L,0x000000000000000EL});
     public static final BitSet FOLLOW_ruleSwitchPart_in_ruleSwitch1846 = new BitSet(new long[]{0x0000000000140000L});
-    public static final BitSet FOLLOW_20_in_ruleSwitch1859 = new BitSet(new long[]{0x1E400000000241F0L,0x0000000000000003L});
+    public static final BitSet FOLLOW_20_in_ruleSwitch1859 = new BitSet(new long[]{0x1E400000000241F0L,0x000000000000000EL});
     public static final BitSet FOLLOW_ruleSwitchPart_in_ruleSwitch1880 = new BitSet(new long[]{0x0000000000140000L});
     public static final BitSet FOLLOW_20_in_ruleSwitch1895 = new BitSet(new long[]{0x0000000020000000L});
     public static final BitSet FOLLOW_29_in_ruleSwitch1907 = new BitSet(new long[]{0x0000000040000000L});
-    public static final BitSet FOLLOW_30_in_ruleSwitch1919 = new BitSet(new long[]{0x1E400000000241F0L,0x0000000000000003L});
+    public static final BitSet FOLLOW_30_in_ruleSwitch1919 = new BitSet(new long[]{0x1E400000000241F0L,0x000000000000000EL});
     public static final BitSet FOLLOW_ruleExpression_in_ruleSwitch1940 = new BitSet(new long[]{0x0000000000040000L});
     public static final BitSet FOLLOW_18_in_ruleSwitch1955 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleSwitchPart_in_entryRuleSwitchPart1991 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleSwitchPart2001 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleExpression_in_ruleSwitchPart2047 = new BitSet(new long[]{0x0000000040000000L});
-    public static final BitSet FOLLOW_30_in_ruleSwitchPart2059 = new BitSet(new long[]{0x1E400000000241F0L,0x0000000000000003L});
+    public static final BitSet FOLLOW_30_in_ruleSwitchPart2059 = new BitSet(new long[]{0x1E400000000241F0L,0x000000000000000EL});
     public static final BitSet FOLLOW_ruleExpression_in_ruleSwitchPart2080 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleLoop_in_entryRuleLoop2116 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleLoop2126 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_31_in_ruleLoop2163 = new BitSet(new long[]{0x0000000000004000L});
-    public static final BitSet FOLLOW_14_in_ruleLoop2175 = new BitSet(new long[]{0x00000000000001C0L,0x000000000000001CL});
+    public static final BitSet FOLLOW_14_in_ruleLoop2175 = new BitSet(new long[]{0x00000000000001C0L,0x0000000000000070L});
     public static final BitSet FOLLOW_ruleType_in_ruleLoop2196 = new BitSet(new long[]{0x00000000000001C0L});
     public static final BitSet FOLLOW_ruleIdentifier_in_ruleLoop2217 = new BitSet(new long[]{0x0000000040000000L});
-    public static final BitSet FOLLOW_30_in_ruleLoop2229 = new BitSet(new long[]{0x1E400000000241F0L,0x0000000000000003L});
+    public static final BitSet FOLLOW_30_in_ruleLoop2229 = new BitSet(new long[]{0x1E400000000241F0L,0x000000000000000EL});
     public static final BitSet FOLLOW_ruleExpression_in_ruleLoop2250 = new BitSet(new long[]{0x0000000000108000L});
-    public static final BitSet FOLLOW_20_in_ruleLoop2263 = new BitSet(new long[]{0x1E400000000041F0L,0x0000000000000003L});
+    public static final BitSet FOLLOW_20_in_ruleLoop2263 = new BitSet(new long[]{0x1E400000000041F0L,0x000000000000000EL});
     public static final BitSet FOLLOW_rulePrimaryExpression_in_ruleLoop2284 = new BitSet(new long[]{0x0000000000108000L});
-    public static final BitSet FOLLOW_20_in_ruleLoop2297 = new BitSet(new long[]{0x1E400000000041F0L,0x0000000000000003L});
+    public static final BitSet FOLLOW_20_in_ruleLoop2297 = new BitSet(new long[]{0x1E400000000041F0L,0x000000000000000EL});
     public static final BitSet FOLLOW_rulePrimaryExpression_in_ruleLoop2318 = new BitSet(new long[]{0x0000000000008000L});
-    public static final BitSet FOLLOW_15_in_ruleLoop2334 = new BitSet(new long[]{0x1E400041950241F0L,0x000000000000001FL});
+    public static final BitSet FOLLOW_15_in_ruleLoop2334 = new BitSet(new long[]{0x1E400041950241F0L,0x000000000000007EL});
     public static final BitSet FOLLOW_ruleStmt_in_ruleLoop2355 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rulemultiselect_in_entryRulemultiselect2391 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRulemultiselect2401 = new BitSet(new long[]{0x0000000000000002L});
@@ -13625,7 +14303,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_ruleStmtBlock_in_rulegenericMultiselect2642 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rulemultiSelectPart_in_entryRulemultiSelectPart2678 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRulemultiSelectPart2688 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_33_in_rulemultiSelectPart2725 = new BitSet(new long[]{0x1E400000000241F0L,0x0000000000000003L});
+    public static final BitSet FOLLOW_33_in_rulemultiSelectPart2725 = new BitSet(new long[]{0x1E400000000241F0L,0x000000000000000EL});
     public static final BitSet FOLLOW_ruleExpression_in_rulemultiSelectPart2746 = new BitSet(new long[]{0x0000000000020000L});
     public static final BitSet FOLLOW_ruleStmtBlock_in_rulemultiSelectPart2767 = new BitSet(new long[]{0x0000000000020000L});
     public static final BitSet FOLLOW_ruleStmtBlock_in_rulemultiSelectPart2788 = new BitSet(new long[]{0x0000000000000002L});
@@ -13648,10 +14326,10 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_ruleIdentifier_in_ruleJavaQualifiedName3201 = new BitSet(new long[]{0x0000002000000002L});
     public static final BitSet FOLLOW_ruleVariableDeclaration_in_entryRuleVariableDeclaration3239 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleVariableDeclaration3249 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_38_in_ruleVariableDeclaration3292 = new BitSet(new long[]{0x00000000000001C0L,0x000000000000001CL});
+    public static final BitSet FOLLOW_38_in_ruleVariableDeclaration3292 = new BitSet(new long[]{0x00000000000001C0L,0x0000000000000070L});
     public static final BitSet FOLLOW_ruleType_in_ruleVariableDeclaration3327 = new BitSet(new long[]{0x00000000000001C0L});
     public static final BitSet FOLLOW_ruleIdentifier_in_ruleVariableDeclaration3348 = new BitSet(new long[]{0x0000000000A00000L});
-    public static final BitSet FOLLOW_21_in_ruleVariableDeclaration3361 = new BitSet(new long[]{0x1E400000000241F0L,0x0000000000000003L});
+    public static final BitSet FOLLOW_21_in_ruleVariableDeclaration3361 = new BitSet(new long[]{0x1E400000000241F0L,0x000000000000000EL});
     public static final BitSet FOLLOW_ruleExpression_in_ruleVariableDeclaration3382 = new BitSet(new long[]{0x0000000000800000L});
     public static final BitSet FOLLOW_23_in_ruleVariableDeclaration3396 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleAdvice_in_entryRuleAdvice3432 = new BitSet(new long[]{0x0000000000000000L});
@@ -13684,7 +14362,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_ruleParameterList_in_entryRuleParameterList4038 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleParameterList4048 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleParameter_in_ruleParameterList4094 = new BitSet(new long[]{0x0000000000100002L});
-    public static final BitSet FOLLOW_20_in_ruleParameterList4107 = new BitSet(new long[]{0x00000000000001C0L,0x000000000000001CL});
+    public static final BitSet FOLLOW_20_in_ruleParameterList4107 = new BitSet(new long[]{0x00000000000001C0L,0x0000000000000070L});
     public static final BitSet FOLLOW_ruleParameter_in_ruleParameterList4128 = new BitSet(new long[]{0x0000000000100002L});
     public static final BitSet FOLLOW_ruleParameter_in_entryRuleParameter4166 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleParameter4176 = new BitSet(new long[]{0x0000000000000002L});
@@ -13704,7 +14382,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_ruleExpressionStatement_in_entryRuleExpressionStatement4534 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleExpressionStatement4544 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleIdentifier_in_ruleExpressionStatement4591 = new BitSet(new long[]{0x0000000000200000L});
-    public static final BitSet FOLLOW_21_in_ruleExpressionStatement4603 = new BitSet(new long[]{0x1E400000000241F0L,0x0000000000000003L});
+    public static final BitSet FOLLOW_21_in_ruleExpressionStatement4603 = new BitSet(new long[]{0x1E400000000241F0L,0x000000000000000EL});
     public static final BitSet FOLLOW_ruleExpression_in_ruleExpressionStatement4626 = new BitSet(new long[]{0x0000000000800000L});
     public static final BitSet FOLLOW_23_in_ruleExpressionStatement4638 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleExpression_in_entryRuleExpression4674 = new BitSet(new long[]{0x0000000000000000L});
@@ -13717,7 +14395,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_ruleLogicalExpressionPart_in_ruleLogicalExpression4870 = new BitSet(new long[]{0x0007000000000002L});
     public static final BitSet FOLLOW_ruleLogicalExpressionPart_in_entryRuleLogicalExpressionPart4907 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleLogicalExpressionPart4917 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleLogicalOperator_in_ruleLogicalExpressionPart4963 = new BitSet(new long[]{0x1E400000000041F0L,0x0000000000000003L});
+    public static final BitSet FOLLOW_ruleLogicalOperator_in_ruleLogicalExpressionPart4963 = new BitSet(new long[]{0x1E400000000041F0L,0x000000000000000EL});
     public static final BitSet FOLLOW_ruleEqualityExpression_in_ruleLogicalExpressionPart4984 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleLogicalOperator_in_entryRuleLogicalOperator5021 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleLogicalOperator5032 = new BitSet(new long[]{0x0000000000000002L});
@@ -13730,7 +14408,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_ruleEqualityExpressionPart_in_ruleEqualityExpression5225 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleEqualityExpressionPart_in_entryRuleEqualityExpressionPart5262 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleEqualityExpressionPart5272 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleEqualityOperator_in_ruleEqualityExpressionPart5318 = new BitSet(new long[]{0x1E400000000041F0L,0x0000000000000003L});
+    public static final BitSet FOLLOW_ruleEqualityOperator_in_ruleEqualityExpressionPart5318 = new BitSet(new long[]{0x1E400000000041F0L,0x000000000000000EL});
     public static final BitSet FOLLOW_ruleRelationalExpression_in_ruleEqualityExpressionPart5339 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleEqualityOperator_in_entryRuleEqualityOperator5376 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleEqualityOperator5387 = new BitSet(new long[]{0x0000000000000002L});
@@ -13743,7 +14421,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_ruleRelationalExpressionPart_in_ruleRelationalExpression5580 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleRelationalExpressionPart_in_entryRuleRelationalExpressionPart5617 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleRelationalExpressionPart5627 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleRelationalOperator_in_ruleRelationalExpressionPart5673 = new BitSet(new long[]{0x1E400000000041F0L,0x0000000000000003L});
+    public static final BitSet FOLLOW_ruleRelationalOperator_in_ruleRelationalExpressionPart5673 = new BitSet(new long[]{0x1E400000000041F0L,0x000000000000000EL});
     public static final BitSet FOLLOW_ruleAdditiveExpression_in_ruleRelationalExpressionPart5694 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleRelationalOperator_in_entryRuleRelationalOperator5731 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleRelationalOperator5742 = new BitSet(new long[]{0x0000000000000002L});
@@ -13757,7 +14435,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_ruleAdditiveExpressionPart_in_ruleAdditiveExpression5954 = new BitSet(new long[]{0x0060000000000002L});
     public static final BitSet FOLLOW_ruleAdditiveExpressionPart_in_entryRuleAdditiveExpressionPart5991 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleAdditiveExpressionPart6001 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleAdditiveOperator_in_ruleAdditiveExpressionPart6047 = new BitSet(new long[]{0x1E400000000041F0L,0x0000000000000003L});
+    public static final BitSet FOLLOW_ruleAdditiveOperator_in_ruleAdditiveExpressionPart6047 = new BitSet(new long[]{0x1E400000000041F0L,0x000000000000000EL});
     public static final BitSet FOLLOW_ruleMultiplicativeExpression_in_ruleAdditiveExpressionPart6068 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleAdditiveOperator_in_entryRuleAdditiveOperator6105 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleAdditiveOperator6116 = new BitSet(new long[]{0x0000000000000002L});
@@ -13769,7 +14447,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_ruleMultiplicativeExpressionPart_in_ruleMultiplicativeExpression6290 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleMultiplicativeExpressionPart_in_entryRuleMultiplicativeExpressionPart6327 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleMultiplicativeExpressionPart6337 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleMultiplicativeOperator_in_ruleMultiplicativeExpressionPart6383 = new BitSet(new long[]{0x1E400000000041F0L,0x0000000000000003L});
+    public static final BitSet FOLLOW_ruleMultiplicativeOperator_in_ruleMultiplicativeExpressionPart6383 = new BitSet(new long[]{0x1E400000000041F0L,0x000000000000000EL});
     public static final BitSet FOLLOW_ruleUnaryExpression_in_ruleMultiplicativeExpressionPart6404 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleMultiplicativeOperator_in_entryRuleMultiplicativeOperator6441 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleMultiplicativeOperator6452 = new BitSet(new long[]{0x0000000000000002L});
@@ -13777,7 +14455,7 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_56_in_ruleMultiplicativeOperator6509 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleUnaryExpression_in_entryRuleUnaryExpression6549 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleUnaryExpression6559 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleUnaryOperator_in_ruleUnaryExpression6605 = new BitSet(new long[]{0x1E400000000041F0L,0x0000000000000003L});
+    public static final BitSet FOLLOW_ruleUnaryOperator_in_ruleUnaryExpression6605 = new BitSet(new long[]{0x1E400000000041F0L,0x000000000000000EL});
     public static final BitSet FOLLOW_rulePostfixExpression_in_ruleUnaryExpression6627 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleUnaryOperator_in_entryRuleUnaryOperator6664 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleUnaryOperator6675 = new BitSet(new long[]{0x0000000000000002L});
@@ -13795,109 +14473,124 @@ public class InternalTemplateLangParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_ruleConstructorExecution_in_rulePrimaryExpression7018 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleExpressionOrQualifiedExecution_in_entryRuleExpressionOrQualifiedExecution7054 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleExpressionOrQualifiedExecution7064 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleConstant_in_ruleExpressionOrQualifiedExecution7111 = new BitSet(new long[]{0x2000002000000002L});
-    public static final BitSet FOLLOW_14_in_ruleExpressionOrQualifiedExecution7130 = new BitSet(new long[]{0x1E400000000241F0L,0x0000000000000003L});
+    public static final BitSet FOLLOW_ruleConstant_in_ruleExpressionOrQualifiedExecution7111 = new BitSet(new long[]{0x6000002000000002L});
+    public static final BitSet FOLLOW_14_in_ruleExpressionOrQualifiedExecution7130 = new BitSet(new long[]{0x1E400000000241F0L,0x000000000000000EL});
     public static final BitSet FOLLOW_ruleExpression_in_ruleExpressionOrQualifiedExecution7151 = new BitSet(new long[]{0x0000000000008000L});
-    public static final BitSet FOLLOW_15_in_ruleExpressionOrQualifiedExecution7163 = new BitSet(new long[]{0x2000002000000002L});
-    public static final BitSet FOLLOW_ruleSubCall_in_ruleExpressionOrQualifiedExecution7186 = new BitSet(new long[]{0x2000002000000002L});
+    public static final BitSet FOLLOW_15_in_ruleExpressionOrQualifiedExecution7163 = new BitSet(new long[]{0x6000002000000002L});
+    public static final BitSet FOLLOW_ruleSubCall_in_ruleExpressionOrQualifiedExecution7186 = new BitSet(new long[]{0x6000002000000002L});
     public static final BitSet FOLLOW_ruleUnqualifiedExecution_in_entryRuleUnqualifiedExecution7223 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleUnqualifiedExecution7233 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleCall_in_ruleUnqualifiedExecution7279 = new BitSet(new long[]{0x2000002000000002L});
-    public static final BitSet FOLLOW_ruleSubCall_in_ruleUnqualifiedExecution7300 = new BitSet(new long[]{0x2000002000000002L});
+    public static final BitSet FOLLOW_ruleCall_in_ruleUnqualifiedExecution7279 = new BitSet(new long[]{0x6000002000000002L});
+    public static final BitSet FOLLOW_ruleSubCall_in_ruleUnqualifiedExecution7300 = new BitSet(new long[]{0x6000002000000002L});
     public static final BitSet FOLLOW_ruleSuperExecution_in_entryRuleSuperExecution7337 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleSuperExecution7347 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_59_in_ruleSuperExecution7384 = new BitSet(new long[]{0x0000002000000000L});
     public static final BitSet FOLLOW_37_in_ruleSuperExecution7396 = new BitSet(new long[]{0x00000000000001C0L});
-    public static final BitSet FOLLOW_ruleCall_in_ruleSuperExecution7417 = new BitSet(new long[]{0x2000002000000002L});
-    public static final BitSet FOLLOW_ruleSubCall_in_ruleSuperExecution7438 = new BitSet(new long[]{0x2000002000000002L});
+    public static final BitSet FOLLOW_ruleCall_in_ruleSuperExecution7417 = new BitSet(new long[]{0x6000002000000002L});
+    public static final BitSet FOLLOW_ruleSubCall_in_ruleSuperExecution7438 = new BitSet(new long[]{0x6000002000000002L});
     public static final BitSet FOLLOW_ruleConstructorExecution_in_entryRuleConstructorExecution7475 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleConstructorExecution7485 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_60_in_ruleConstructorExecution7522 = new BitSet(new long[]{0x00000000000001C0L,0x000000000000001CL});
+    public static final BitSet FOLLOW_60_in_ruleConstructorExecution7522 = new BitSet(new long[]{0x00000000000001C0L,0x0000000000000070L});
     public static final BitSet FOLLOW_ruleType_in_ruleConstructorExecution7543 = new BitSet(new long[]{0x0000000000004000L});
-    public static final BitSet FOLLOW_14_in_ruleConstructorExecution7555 = new BitSet(new long[]{0x1E4000000002C1F0L,0x0000000000000003L});
+    public static final BitSet FOLLOW_14_in_ruleConstructorExecution7555 = new BitSet(new long[]{0x1E4000000002C1F0L,0x000000000000000EL});
     public static final BitSet FOLLOW_ruleArgumentList_in_ruleConstructorExecution7576 = new BitSet(new long[]{0x0000000000008000L});
-    public static final BitSet FOLLOW_15_in_ruleConstructorExecution7589 = new BitSet(new long[]{0x2000002000000002L});
-    public static final BitSet FOLLOW_ruleSubCall_in_ruleConstructorExecution7610 = new BitSet(new long[]{0x2000002000000002L});
+    public static final BitSet FOLLOW_15_in_ruleConstructorExecution7589 = new BitSet(new long[]{0x6000002000000002L});
+    public static final BitSet FOLLOW_ruleSubCall_in_ruleConstructorExecution7610 = new BitSet(new long[]{0x6000002000000002L});
     public static final BitSet FOLLOW_ruleSubCall_in_entryRuleSubCall7647 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleSubCall7657 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_37_in_ruleSubCall7695 = new BitSet(new long[]{0x00000000000001C0L});
-    public static final BitSet FOLLOW_ruleCall_in_ruleSubCall7716 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_61_in_ruleSubCall7736 = new BitSet(new long[]{0x1E400000000241F0L,0x0000000000000003L});
-    public static final BitSet FOLLOW_ruleExpression_in_ruleSubCall7757 = new BitSet(new long[]{0x4000000000000000L});
-    public static final BitSet FOLLOW_62_in_ruleSubCall7769 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleCall_in_entryRuleCall7806 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleCall7816 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleQualifiedPrefix_in_ruleCall7862 = new BitSet(new long[]{0x0000000000004000L});
-    public static final BitSet FOLLOW_14_in_ruleCall7874 = new BitSet(new long[]{0x1E4000000002C1F0L,0x0000000000000003L});
-    public static final BitSet FOLLOW_ruleArgumentList_in_ruleCall7895 = new BitSet(new long[]{0x0000000000008000L});
-    public static final BitSet FOLLOW_15_in_ruleCall7908 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleArgumentList_in_entryRuleArgumentList7944 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleArgumentList7954 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleNamedArgument_in_ruleArgumentList8000 = new BitSet(new long[]{0x0000000000100002L});
-    public static final BitSet FOLLOW_20_in_ruleArgumentList8013 = new BitSet(new long[]{0x1E400000000241F0L,0x0000000000000003L});
-    public static final BitSet FOLLOW_ruleNamedArgument_in_ruleArgumentList8034 = new BitSet(new long[]{0x0000000000100002L});
-    public static final BitSet FOLLOW_ruleNamedArgument_in_entryRuleNamedArgument8072 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleNamedArgument8082 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_ruleNamedArgument8129 = new BitSet(new long[]{0x0000000000200000L});
-    public static final BitSet FOLLOW_21_in_ruleNamedArgument8141 = new BitSet(new long[]{0x1E400000000241F0L,0x0000000000000003L});
-    public static final BitSet FOLLOW_ruleExpression_in_ruleNamedArgument8164 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleQualifiedPrefix_in_entryRuleQualifiedPrefix8200 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleQualifiedPrefix8210 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_ruleQualifiedPrefix8256 = new BitSet(new long[]{0x8000000000000002L});
-    public static final BitSet FOLLOW_63_in_ruleQualifiedPrefix8275 = new BitSet(new long[]{0x00000000000001C0L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_ruleQualifiedPrefix8309 = new BitSet(new long[]{0x8000000000000002L});
-    public static final BitSet FOLLOW_ruleQualifiedName_in_entryRuleQualifiedName8347 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleQualifiedName8357 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleQualifiedPrefix_in_ruleQualifiedName8403 = new BitSet(new long[]{0x0000002000000002L});
-    public static final BitSet FOLLOW_37_in_ruleQualifiedName8422 = new BitSet(new long[]{0x00000000000001C0L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_ruleQualifiedName8456 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleConstant_in_entryRuleConstant8494 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleConstant8504 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleNumValue_in_ruleConstant8550 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_STRING_in_ruleConstant8573 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleQualifiedName_in_ruleConstant8605 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_64_in_ruleConstant8631 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_65_in_ruleConstant8660 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleNumValue_in_entryRuleNumValue8712 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleNumValue8722 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_NUMBER_in_ruleNumValue8763 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_entryRuleIdentifier8804 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleIdentifier8815 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_ID_in_ruleIdentifier8855 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_VERSION_in_ruleIdentifier8881 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_EXPONENT_in_ruleIdentifier8907 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleType_in_entryRuleType8952 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleType8962 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_ruleType9008 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_66_in_ruleType9033 = new BitSet(new long[]{0x0000000000004000L});
-    public static final BitSet FOLLOW_ruleTypeParameters_in_ruleType9067 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_67_in_ruleType9093 = new BitSet(new long[]{0x0000000000004000L});
-    public static final BitSet FOLLOW_ruleTypeParameters_in_ruleType9127 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_68_in_ruleType9153 = new BitSet(new long[]{0x0000000000004000L});
-    public static final BitSet FOLLOW_ruleTypeParameters_in_ruleType9187 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleTypeParameters_in_entryRuleTypeParameters9224 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleTypeParameters9234 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_14_in_ruleTypeParameters9271 = new BitSet(new long[]{0x00000000000001C0L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_ruleTypeParameters9292 = new BitSet(new long[]{0x0000000000108000L});
-    public static final BitSet FOLLOW_20_in_ruleTypeParameters9305 = new BitSet(new long[]{0x00000000000001C0L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_ruleTypeParameters9326 = new BitSet(new long[]{0x0000000000108000L});
-    public static final BitSet FOLLOW_15_in_ruleTypeParameters9340 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleContainerInitializer_in_entryRuleContainerInitializer9376 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleContainerInitializer9386 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_17_in_ruleContainerInitializer9435 = new BitSet(new long[]{0x1E400000000641F0L,0x0000000000000003L});
-    public static final BitSet FOLLOW_ruleContainerInitializerExpression_in_ruleContainerInitializer9457 = new BitSet(new long[]{0x0000000000140000L});
-    public static final BitSet FOLLOW_20_in_ruleContainerInitializer9470 = new BitSet(new long[]{0x1E400000000241F0L,0x0000000000000003L});
-    public static final BitSet FOLLOW_ruleContainerInitializerExpression_in_ruleContainerInitializer9491 = new BitSet(new long[]{0x0000000000140000L});
-    public static final BitSet FOLLOW_18_in_ruleContainerInitializer9507 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleContainerInitializerExpression_in_entryRuleContainerInitializerExpression9543 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleContainerInitializerExpression9553 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleLogicalExpression_in_ruleContainerInitializerExpression9599 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleContainerInitializer_in_ruleContainerInitializerExpression9626 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_37_in_ruleSubCall7703 = new BitSet(new long[]{0x00000000000001C0L});
+    public static final BitSet FOLLOW_61_in_ruleSubCall7732 = new BitSet(new long[]{0x00000000000001C0L});
+    public static final BitSet FOLLOW_ruleCall_in_ruleSubCall7769 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_62_in_ruleSubCall7789 = new BitSet(new long[]{0x1E400000000241F0L,0x000000000000000EL});
+    public static final BitSet FOLLOW_ruleExpression_in_ruleSubCall7810 = new BitSet(new long[]{0x8000000000000000L});
+    public static final BitSet FOLLOW_63_in_ruleSubCall7822 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleDeclarator_in_entryRuleDeclarator7859 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleDeclarator7869 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleDeclaration_in_ruleDeclarator7915 = new BitSet(new long[]{0x0000000008800000L});
+    public static final BitSet FOLLOW_23_in_ruleDeclarator7928 = new BitSet(new long[]{0x00000000000001C0L,0x0000000000000070L});
+    public static final BitSet FOLLOW_ruleDeclaration_in_ruleDeclarator7949 = new BitSet(new long[]{0x0000000008800000L});
+    public static final BitSet FOLLOW_27_in_ruleDeclarator7963 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleDeclaration_in_entryRuleDeclaration7999 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleDeclaration8009 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleType_in_ruleDeclaration8055 = new BitSet(new long[]{0x00000000000001C0L});
+    public static final BitSet FOLLOW_ruleIdentifier_in_ruleDeclaration8077 = new BitSet(new long[]{0x0000000000100002L});
+    public static final BitSet FOLLOW_20_in_ruleDeclaration8090 = new BitSet(new long[]{0x00000000000001C0L});
+    public static final BitSet FOLLOW_ruleIdentifier_in_ruleDeclaration8111 = new BitSet(new long[]{0x0000000000100002L});
+    public static final BitSet FOLLOW_ruleCall_in_entryRuleCall8149 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleCall8159 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleQualifiedPrefix_in_ruleCall8205 = new BitSet(new long[]{0x0000000000004000L});
+    public static final BitSet FOLLOW_14_in_ruleCall8217 = new BitSet(new long[]{0x1E4000000002C1F0L,0x000000000000007EL});
+    public static final BitSet FOLLOW_ruleDeclarator_in_ruleCall8238 = new BitSet(new long[]{0x1E4000000002C1F0L,0x000000000000000EL});
+    public static final BitSet FOLLOW_ruleArgumentList_in_ruleCall8260 = new BitSet(new long[]{0x0000000000008000L});
+    public static final BitSet FOLLOW_15_in_ruleCall8273 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleArgumentList_in_entryRuleArgumentList8309 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleArgumentList8319 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleNamedArgument_in_ruleArgumentList8365 = new BitSet(new long[]{0x0000000000100002L});
+    public static final BitSet FOLLOW_20_in_ruleArgumentList8378 = new BitSet(new long[]{0x1E400000000241F0L,0x000000000000000EL});
+    public static final BitSet FOLLOW_ruleNamedArgument_in_ruleArgumentList8399 = new BitSet(new long[]{0x0000000000100002L});
+    public static final BitSet FOLLOW_ruleNamedArgument_in_entryRuleNamedArgument8437 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleNamedArgument8447 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleIdentifier_in_ruleNamedArgument8494 = new BitSet(new long[]{0x0000000000200000L});
+    public static final BitSet FOLLOW_21_in_ruleNamedArgument8506 = new BitSet(new long[]{0x1E400000000241F0L,0x000000000000000EL});
+    public static final BitSet FOLLOW_ruleExpression_in_ruleNamedArgument8529 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleQualifiedPrefix_in_entryRuleQualifiedPrefix8565 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleQualifiedPrefix8575 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleIdentifier_in_ruleQualifiedPrefix8621 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000001L});
+    public static final BitSet FOLLOW_64_in_ruleQualifiedPrefix8640 = new BitSet(new long[]{0x00000000000001C0L});
+    public static final BitSet FOLLOW_ruleIdentifier_in_ruleQualifiedPrefix8674 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000001L});
+    public static final BitSet FOLLOW_ruleQualifiedName_in_entryRuleQualifiedName8712 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleQualifiedName8722 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleQualifiedPrefix_in_ruleQualifiedName8768 = new BitSet(new long[]{0x0000002000000002L});
+    public static final BitSet FOLLOW_37_in_ruleQualifiedName8787 = new BitSet(new long[]{0x00000000000001C0L});
+    public static final BitSet FOLLOW_ruleIdentifier_in_ruleQualifiedName8821 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleConstant_in_entryRuleConstant8859 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleConstant8869 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleNumValue_in_ruleConstant8915 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_STRING_in_ruleConstant8938 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleQualifiedName_in_ruleConstant8970 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_65_in_ruleConstant8996 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_66_in_ruleConstant9025 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_67_in_ruleConstant9065 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleNumValue_in_entryRuleNumValue9114 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleNumValue9124 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_NUMBER_in_ruleNumValue9165 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleIdentifier_in_entryRuleIdentifier9206 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleIdentifier9217 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_ID_in_ruleIdentifier9257 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_VERSION_in_ruleIdentifier9283 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_EXPONENT_in_ruleIdentifier9309 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleType_in_entryRuleType9354 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleType9364 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleQualifiedPrefix_in_ruleType9410 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_68_in_ruleType9435 = new BitSet(new long[]{0x0000000000004000L});
+    public static final BitSet FOLLOW_ruleTypeParameters_in_ruleType9469 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_69_in_ruleType9495 = new BitSet(new long[]{0x0000000000004000L});
+    public static final BitSet FOLLOW_ruleTypeParameters_in_ruleType9529 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_70_in_ruleType9555 = new BitSet(new long[]{0x0000000000004000L});
+    public static final BitSet FOLLOW_ruleTypeParameters_in_ruleType9589 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleTypeParameters_in_entryRuleTypeParameters9626 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleTypeParameters9636 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_14_in_ruleTypeParameters9673 = new BitSet(new long[]{0x00000000000001C0L});
+    public static final BitSet FOLLOW_ruleIdentifier_in_ruleTypeParameters9694 = new BitSet(new long[]{0x0000000000108000L});
+    public static final BitSet FOLLOW_20_in_ruleTypeParameters9707 = new BitSet(new long[]{0x00000000000001C0L});
+    public static final BitSet FOLLOW_ruleIdentifier_in_ruleTypeParameters9728 = new BitSet(new long[]{0x0000000000108000L});
+    public static final BitSet FOLLOW_15_in_ruleTypeParameters9742 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleContainerInitializer_in_entryRuleContainerInitializer9778 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleContainerInitializer9788 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_17_in_ruleContainerInitializer9837 = new BitSet(new long[]{0x1E400000000641F0L,0x000000000000000EL});
+    public static final BitSet FOLLOW_ruleContainerInitializerExpression_in_ruleContainerInitializer9859 = new BitSet(new long[]{0x0000000000140000L});
+    public static final BitSet FOLLOW_20_in_ruleContainerInitializer9872 = new BitSet(new long[]{0x1E400000000241F0L,0x000000000000000EL});
+    public static final BitSet FOLLOW_ruleContainerInitializerExpression_in_ruleContainerInitializer9893 = new BitSet(new long[]{0x0000000000140000L});
+    public static final BitSet FOLLOW_18_in_ruleContainerInitializer9909 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleContainerInitializerExpression_in_entryRuleContainerInitializerExpression9945 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleContainerInitializerExpression9955 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleLogicalExpression_in_ruleContainerInitializerExpression10001 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleContainerInitializer_in_ruleContainerInitializerExpression10028 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleVariableDeclaration_in_synpred15_InternalTemplateLang1128 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleStmtBlock_in_synpred18_InternalTemplateLang1209 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rulemultiselect_in_synpred19_InternalTemplateLang1236 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleExpressionStatement_in_synpred21_InternalTemplateLang1290 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_25_in_synpred23_InternalTemplateLang1487 = new BitSet(new long[]{0x1E400041950241F0L,0x000000000000001FL});
+    public static final BitSet FOLLOW_25_in_synpred23_InternalTemplateLang1487 = new BitSet(new long[]{0x1E400041950241F0L,0x000000000000007EL});
     public static final BitSet FOLLOW_ruleStmt_in_synpred23_InternalTemplateLang1509 = new BitSet(new long[]{0x0000000000000002L});
 
 }

@@ -5,9 +5,9 @@ import java.util.Iterator;
 
 import de.uni_hildesheim.sse.easy.cmd.InstantiationCommands;
 import de.uni_hildesheim.sse.easy.cmd.LowlevelCommands;
+import de.uni_hildesheim.sse.easy_producer.core.mgmt.PLPInfo;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
-import de.uni_hildesheim.sse.easy_producer.persistence.PersistenceException;
-import de.uni_hildesheim.sse.easy_producer.persistence.mgmt.PLPInfo;
 import de.uni_hildesheim.sse.model.confModel.Configuration;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;

@@ -355,6 +355,26 @@ public class BasicTests extends AbstractTest {
     }
 
     /**
+     * Tests a basic constructor on a non-instantiable type (shall fail).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testConstructorFail() throws IOException {
+        assertEqual("constructorFail", ExpressionException.ID_CANNOT_INSTANTIATE);
+    }
+
+    /**
+     * Tests a duplicated rule (shall fail).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testDuplicatedRuleFail() throws IOException {
+        assertEqual("duplicatedRule", ErrorCodes.REDEFINITION);
+    }
+    
+    /**
      * Tests a simple version declaration.
      * 
      * @throws IOException should not occur

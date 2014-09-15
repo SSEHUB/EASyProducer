@@ -88,8 +88,14 @@ public class JarHandler extends ZipHandler {
     }
 
     @Override
-    protected ZipEntry createEntry(String name) {
-        return new JarEntry(name);
+    protected ZipEntry createEntry(String name, File file) {
+        name = name.replace('\\', '/');
+        if (file.isDirectory() && !name.endsWith("/")) {
+            name = name + "/";
+        }
+        JarEntry entry = new JarEntry(name);
+        entry.setTime(file.lastModified());
+        return entry;
     }
     
     @Override

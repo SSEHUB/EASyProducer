@@ -1,6 +1,8 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions;
 
+import java.io.File;
 import java.io.Writer;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -84,6 +86,18 @@ public abstract class StreamTracer extends AbstractWriter implements ITracer {
             }
         }
         return result;
+    }
+
+    /**
+     * Aims at making the given URI relative to the base folders
+     * stored in this instance.
+     * 
+     * @param uri the URI to be made relative
+     * @return the relative string
+     */
+    protected String makeRelative(URI uri) {
+        File file = new File(uri);
+        return makeRelative(file.getAbsolutePath());
     }
     
     @Override

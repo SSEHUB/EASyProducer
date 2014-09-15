@@ -12,7 +12,8 @@ Require-Bundle: de.uni_hildesheim.sse.vil.templatelang,
  org.eclipse.ui.workbench;resolution:=optional,
  de.uni-hildesheim.sse.easy.instantiatorCore;bundle-version="0.5.0",
  de.uni_hildesheim.sse.varModel.tests;bundle-version="0.0.10",
- de.uni_hildesheim.sse.varModel;bundle-version="0.5.5"
+ de.uni_hildesheim.sse.varModel;bundle-version="0.5.5",
+ de.uni_hildesheim.sse.ivml;bundle-version="0.8.0"
 Import-Package: org.apache.log4j,
  org.junit,
  org.junit.runner;version="4.5.0",

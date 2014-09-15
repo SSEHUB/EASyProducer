@@ -1,5 +1,7 @@
 package test.de.uni_hildesheim.sse.scenarios;
 
+import static de.uni_hildesheim.sse.varModel.testSupport.TextTestUtils.*;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -55,4 +57,16 @@ public class LocalRealTests extends RealTests {
         */
     }
 
+    /**
+     * Tests the very initial QualiMaster test case.
+     * 
+     * @throws IOException shall not occur
+     */
+    @Test
+    public void testQualiMasterApril14() throws IOException {
+        String[] versions = {"0", "0"};
+        File base = executeCase("april14", versions, "QualiMaster/", null);
+        assertFileEqualityRec(new File(base, "expected"), base);
+    }
+    
 }

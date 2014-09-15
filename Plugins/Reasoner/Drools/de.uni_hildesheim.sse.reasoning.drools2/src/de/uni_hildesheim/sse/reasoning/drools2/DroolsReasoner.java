@@ -12,7 +12,7 @@ import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.reasoning.core.frontend.ReasonerFrontend;
 import de.uni_hildesheim.sse.reasoning.core.model.ReasonerModel;
 import de.uni_hildesheim.sse.reasoning.core.model.ReasoningOperation;
-import de.uni_hildesheim.sse.reasoning.core.model.Statistic;
+import de.uni_hildesheim.sse.reasoning.core.model.PerformanceStatistics;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.EvaluationResult;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.IReasoner;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.IReasonerMessage;

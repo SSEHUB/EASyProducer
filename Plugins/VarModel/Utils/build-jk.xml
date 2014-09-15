@@ -13,7 +13,11 @@
 		<fileset dir="${eclipse.plugins.dir}">
 			<include name="**/*.jar" />
 		</fileset>
-	</path>
+        <!-- Lib folder -->
+        <fileset dir="${lib.dir}">
+            <include name="**/*.jar" />
+        </fileset>
+    </path>
 	
 	<!-- Targets  -->
 	<target name="init">

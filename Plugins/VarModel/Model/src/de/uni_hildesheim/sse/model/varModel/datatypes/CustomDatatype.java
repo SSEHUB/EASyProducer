@@ -1,3 +1,18 @@
+/*
+ * Copyright 2009-2013 University of Hildesheim, Software Systems Engineering
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.uni_hildesheim.sse.model.varModel.datatypes;
 
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
@@ -108,6 +123,34 @@ public abstract class CustomDatatype extends ContainableModelElement implements 
      */
     public boolean isPseudoType() {
         return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isPrimitive() {
+        return false;
+    }
+
+    /**
+     * Returns whether <code>type</code> of <code>requestedType</code>and the given <code>generics</code> match.
+     * 
+     * @param requestedType the requested basic type
+     * @param type the type to check for
+     * @param generics the generics to be considered
+     * @return <code>true</code> if <code>type</code> is a <code>requestedType</code> with the matching generics, 
+     *   <code>false</code> else
+     */
+    protected static final boolean isType(IDatatype requestedType, IDatatype type, IDatatype... generics) {
+        boolean match = false;
+        if (requestedType.isAssignableFrom(type) && null != generics && generics.length == type.getGenericTypeCount()) {
+            match = true;
+            for (int g = 0; match && g < type.getGenericTypeCount(); g++) {
+                IDatatype generic = type.getGenericType(g);
+                match = generic.isAssignableFrom(generics[g]) || generics[g].isAssignableFrom(generic);
+            }
+        }
+        return match;
     }
 
 }

@@ -29,8 +29,8 @@ import org.eclipse.emf.ecore.util.EDataTypeEList;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link de.uni_hildesheim.sse.ivml.impl.DeclarationImpl#getId <em>Id</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.DeclarationImpl#getType <em>Type</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.ivml.impl.DeclarationImpl#getId <em>Id</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.DeclarationImpl#getInit <em>Init</em>}</li>
  * </ul>
  * </p>
@@ -40,16 +40,6 @@ import org.eclipse.emf.ecore.util.EDataTypeEList;
 public class DeclarationImpl extends MinimalEObjectImpl.Container implements Declaration
 {
   /**
-   * The cached value of the '{@link #getId() <em>Id</em>}' attribute list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getId()
-   * @generated
-   * @ordered
-   */
-  protected EList<String> id;
-
-  /**
    * The cached value of the '{@link #getType() <em>Type</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -58,6 +48,16 @@ public class DeclarationImpl extends MinimalEObjectImpl.Container implements Dec
    * @ordered
    */
   protected Type type;
+
+  /**
+   * The cached value of the '{@link #getId() <em>Id</em>}' attribute list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getId()
+   * @generated
+   * @ordered
+   */
+  protected EList<String> id;
 
   /**
    * The cached value of the '{@link #getInit() <em>Init</em>}' containment reference.
@@ -88,20 +88,6 @@ public class DeclarationImpl extends MinimalEObjectImpl.Container implements Dec
   protected EClass eStaticClass()
   {
     return IvmlPackage.Literals.DECLARATION;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EList<String> getId()
-  {
-    if (id == null)
-    {
-      id = new EDataTypeEList<String>(String.class, this, IvmlPackage.DECLARATION__ID);
-    }
-    return id;
   }
 
   /**
@@ -150,6 +136,20 @@ public class DeclarationImpl extends MinimalEObjectImpl.Container implements Dec
     }
     else if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, IvmlPackage.DECLARATION__TYPE, newType, newType));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EList<String> getId()
+  {
+    if (id == null)
+    {
+      id = new EDataTypeEList<String>(String.class, this, IvmlPackage.DECLARATION__ID);
+    }
+    return id;
   }
 
   /**
@@ -228,10 +228,10 @@ public class DeclarationImpl extends MinimalEObjectImpl.Container implements Dec
   {
     switch (featureID)
     {
-      case IvmlPackage.DECLARATION__ID:
-        return getId();
       case IvmlPackage.DECLARATION__TYPE:
         return getType();
+      case IvmlPackage.DECLARATION__ID:
+        return getId();
       case IvmlPackage.DECLARATION__INIT:
         return getInit();
     }
@@ -249,12 +249,12 @@ public class DeclarationImpl extends MinimalEObjectImpl.Container implements Dec
   {
     switch (featureID)
     {
+      case IvmlPackage.DECLARATION__TYPE:
+        setType((Type)newValue);
+        return;
       case IvmlPackage.DECLARATION__ID:
         getId().clear();
         getId().addAll((Collection<? extends String>)newValue);
-        return;
-      case IvmlPackage.DECLARATION__TYPE:
-        setType((Type)newValue);
         return;
       case IvmlPackage.DECLARATION__INIT:
         setInit((Expression)newValue);
@@ -273,11 +273,11 @@ public class DeclarationImpl extends MinimalEObjectImpl.Container implements Dec
   {
     switch (featureID)
     {
-      case IvmlPackage.DECLARATION__ID:
-        getId().clear();
-        return;
       case IvmlPackage.DECLARATION__TYPE:
         setType((Type)null);
+        return;
+      case IvmlPackage.DECLARATION__ID:
+        getId().clear();
         return;
       case IvmlPackage.DECLARATION__INIT:
         setInit((Expression)null);
@@ -296,10 +296,10 @@ public class DeclarationImpl extends MinimalEObjectImpl.Container implements Dec
   {
     switch (featureID)
     {
-      case IvmlPackage.DECLARATION__ID:
-        return id != null && !id.isEmpty();
       case IvmlPackage.DECLARATION__TYPE:
         return type != null;
+      case IvmlPackage.DECLARATION__ID:
+        return id != null && !id.isEmpty();
       case IvmlPackage.DECLARATION__INIT:
         return init != null;
     }

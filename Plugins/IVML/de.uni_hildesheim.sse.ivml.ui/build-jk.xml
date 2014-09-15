@@ -10,11 +10,13 @@
 	<property name="javacTarget" value="1.5"/>
 	
 	<path id ="includes">
+	    <!-- DSL core ui common classes -->
+	    <pathelement path="${libs.dslCore.ui}"/>
 		<!-- Model -->
 		<pathelement path="${libs.utils}"/>
 		<pathelement path="${libs.model}"/>
 		<!-- DSL core common classes -->
- 		<pathelement path="${libs.dslCore}"/>		
+ 		<pathelement path="${libs.dslCore}"/>
 		<!-- IVML Core -->
 		<pathelement path="${libs.ivml}"/>
 		<!-- Eclipse-Plugins -->
@@ -36,6 +38,7 @@
 	
 	<!-- Compile all files without test classes -->
 	<target name="compile" depends="init">
+		<echo> message="${toString:includes}" </echo>
 		<javac srcdir="${src.dir}" debug="on" destdir="${build.classes.dir}" includeAntRuntime="no" failonerror="true" source="${javacSource}" target="${javacTarget}" encoding="${javac.encoding}">
 			<src path="${src.gen.dir}" />
 			<classpath refid="includes" />	

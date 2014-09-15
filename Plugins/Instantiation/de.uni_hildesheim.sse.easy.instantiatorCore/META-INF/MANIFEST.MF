@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: InstantiatorCore
 Bundle-SymbolicName: de.uni-hildesheim.sse.easy.instantiatorCore;singleton:=true
-Bundle-Version: 0.10.0
+Bundle-Version: 0.11.2
 Bundle-Vendor: University of Hildesheim - SSE
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Service-Component: OSGI-INF/instantiator.xml
@@ -11,7 +11,9 @@ Require-Bundle: de.uni_hildesheim.sse.varModel;bundle-version="0.0.6",
  org.eclipse.core.runtime,
  de.uni_hildesheim.sse.easy.instantiator.copy.core;bundle-version="0.0.1",
  org.apache.ant,
- org.apache.commons.io;bundle-version="2.0.1"
+ org.apache.commons.io;bundle-version="2.0.1",
+ org.apache.commons.lang;bundle-version="2.6.0",
+ ReasonerCore;bundle-version="0.10.1"
 Export-Package: de.uni_hildesheim.sse.easy_producer.instantiator,
  de.uni_hildesheim.sse.easy_producer.instantiator.model,
  de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel,
@@ -26,7 +28,8 @@ Export-Package: de.uni_hildesheim.sse.easy_producer.instantiator,
  de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions,
  de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel,
  de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes,
- de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration
+ de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration,
+ de.uni_hildesheim.sse.easy_producer.vtl
 Bundle-ClassPath: .
 Import-Package: org.osgi.service.component
 Bundle-ActivationPolicy: lazy

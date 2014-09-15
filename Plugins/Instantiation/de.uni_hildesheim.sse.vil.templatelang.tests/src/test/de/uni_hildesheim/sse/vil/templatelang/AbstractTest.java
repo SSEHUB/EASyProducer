@@ -13,6 +13,7 @@ import org.junit.Assert;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
+import de.uni_hildesheim.sse.ModelUtility;
 import de.uni_hildesheim.sse.dslCore.TranslationResult;
 import de.uni_hildesheim.sse.dslCore.translation.Message;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.BuiltIn;
@@ -28,6 +29,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Temp
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.VilException;
+import de.uni_hildesheim.sse.model.management.VarModel;
 import de.uni_hildesheim.sse.utils.messages.Status;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
 import de.uni_hildesheim.sse.vil.templatelang.VtlExpressionParser;
@@ -60,19 +62,37 @@ public abstract class AbstractTest extends de.uni_hildesheim.sse.dslCore.test.Ab
                 Assert.fail("unexpected exception: " + e.getMessage());
             }
         }
-        initializeInfrastructure(TESTDATA_DIR);
+        initializeInfrastructure();
+        initializeLocations(TESTDATA_DIR);
         // TODO clean temp
     }
     
+    /**
+     * Initialize the model infrastructure.
+     */
+    public static final void initializeInfrastructure() {
+        TemplateLangExecution.setExpressionParser(new VtlExpressionParser());
+        try {
+            // for advices
+            VarModel.INSTANCE.loaders().registerLoader(ModelUtility.INSTANCE, OBSERVER);
+            // for VTL
+            TemplateModel.INSTANCE.loaders().registerLoader(TemplateLangModelUtility.INSTANCE, OBSERVER);
+        } catch (ModelManagementException e) {
+            e.printStackTrace(System.err);
+            Assert.assertTrue(false); // shall not happen
+        }
+    }
+
     /**
      * Initialize the model infrastructure for the given directory.
      * 
      * @param base the base directory to scan
      */
-    public static final void initializeInfrastructure(File base) {
-        TemplateLangExecution.setExpressionParser(new VtlExpressionParser());
+    public static final void initializeLocations(File base) {
         try {
-            TemplateModel.INSTANCE.loaders().registerLoader(TemplateLangModelUtility.INSTANCE, OBSERVER);
+            // for advices
+            VarModel.INSTANCE.locations().addLocation(new File(base, "ivml"), OBSERVER);
+            // for VTL
             TemplateModel.INSTANCE.locations().addLocation(base, OBSERVER);
         } catch (ModelManagementException e) {
             e.printStackTrace(System.err);
@@ -117,10 +137,12 @@ public abstract class AbstractTest extends de.uni_hildesheim.sse.dslCore.test.Ab
      * @param data the data describing the setup
      * @param expectedErrorCodes the expected and allowed error codes (errors occurring
      *   multiple times need to be listed multiple times here)
+     * @return the warnings collected (may be <b>null</b>)
      * @throws IOException problems finding or reading the model file
      */
-    protected void assertEqual(EqualitySetup data, int... expectedErrorCodes)
+    protected List<Message> assertEqual(EqualitySetup data, int... expectedErrorCodes)
         throws IOException {
+        List<Message> warnings = null;
         File file = data.getFile();
         if (file.exists()) {
             URI uri = URI.createFileURI(file.getAbsolutePath());
@@ -173,11 +195,24 @@ public abstract class AbstractTest extends de.uni_hildesheim.sse.dslCore.test.Ab
                     messages.add(new Message(e.getMessage(), Status.ERROR, null, null, e.getId()));
                 }
             }
-            String errorCodesMsg = checkErrorCodes(messages, expectedErrorCodes);
+            warnings = new ArrayList<Message>();
+            String errorCodesMsg = checkErrorCodes(messages, warnings, expectedErrorCodes);
             Assert.assertNull(errorCodesMsg, errorCodesMsg);
         } else {
             Assert.assertTrue("File '" + file + "' does not exist", false);
         }
+        return warnings;
+    }
+
+    /**
+     * Asserts that no expected warnings are missing.
+     * 
+     * @param warnings the warnings to check
+     * @param expectedWarnings the expected warnings
+     */
+    protected static void assertWarnings(List<Message> warnings, int... expectedWarnings) {
+        String msg = checkWarnings(warnings, expectedWarnings);
+        Assert.assertNull(msg, msg);
     }
     
     /**

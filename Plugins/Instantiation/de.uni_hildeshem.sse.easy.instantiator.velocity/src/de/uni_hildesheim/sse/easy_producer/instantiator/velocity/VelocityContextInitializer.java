@@ -92,36 +92,43 @@ class VelocityContextInitializer implements IDatatypeVisitor {
 
     @Override
     public void visitReference(Reference reference) {
-        variableName.append(variable.getDeclaration().getName());
-        //TODO SE: handle refernces.
+        reference.getType().accept(this); // configuration handles references transparently
     }
 
     @Override
     public void visitBooleanType(BooleanType type) {
         variableName.append(variable.getDeclaration().getName());
         BooleanValue booleanValue = (BooleanValue) variable.getValue();
-        values.add(new VelocityContextItem(variableName.toString(), booleanValue.getValue()));
+        if (null != booleanValue) {
+            values.add(new VelocityContextItem(variableName.toString(), booleanValue.getValue()));
+        }
     }
 
     @Override
     public void visitStringType(StringType type) {
         variableName.append(variable.getDeclaration().getName());
         StringValue stringValue = (StringValue) variable.getValue();
-        values.add(new VelocityContextItem(variableName.toString(), stringValue.getValue()));;
+        if (null != stringValue) {
+            values.add(new VelocityContextItem(variableName.toString(), stringValue.getValue()));
+        }
     }
 
     @Override
     public void visitIntegerType(IntegerType type) {
         variableName.append(variable.getDeclaration().getName());
         IntValue intValue = (IntValue) variable.getValue();
-        values.add(new VelocityContextItem(variableName.toString(), intValue.getValue()));
+        if (null != intValue) {
+            values.add(new VelocityContextItem(variableName.toString(), intValue.getValue()));
+        }
     }
 
     @Override
     public void visitRealType(RealType type) {
         variableName.append(variable.getDeclaration().getName());
         RealValue realValue = (RealValue) variable.getValue();
-        values.add(new VelocityContextItem(variableName.toString(), realValue.getValue()));
+        if (null != realValue) {
+            values.add(new VelocityContextItem(variableName.toString(), realValue.getValue()));
+        }
     }
 
     @Override
@@ -129,14 +136,18 @@ class VelocityContextInitializer implements IDatatypeVisitor {
         StringBuffer variableNameBeforeCMP = new StringBuffer(variableName);
         variableName.append(variable.getDeclaration().getName());
         CompoundValue cmpValue = (CompoundValue) variable.getValue();
-        for (int i = 0; i < compound.getElementCount(); i++) {
-            StringBuffer elementName = new StringBuffer(compound.getElement(i).getName());
-            Value nestedValue = cmpValue.getNestedValue(elementName.toString());
-            elementName.insert(0, SLOT_ACCESS);
-            elementName.insert(0, variableName);
-            values.add(new VelocityContextItem(elementName.toString(), nestedValue.getValue()));
+        if (null != cmpValue) {
+            for (int i = 0; i < compound.getElementCount(); i++) {
+                StringBuffer elementName = new StringBuffer(compound.getElement(i).getName());
+                Value nestedValue = cmpValue.getNestedValue(elementName.toString());
+                if (null != nestedValue) {
+                    elementName.insert(0, SLOT_ACCESS);
+                    elementName.insert(0, variableName);
+                    values.add(new VelocityContextItem(elementName.toString(), nestedValue.getValue()));
+                }
+            }
+            values.add(new VelocityContextItem(variable.getDeclaration().getName(), cmpValue));
         }
-        values.add(new VelocityContextItem(variable.getDeclaration().getName(), cmpValue));
         variableName = variableNameBeforeCMP;
     }
     
@@ -145,7 +156,9 @@ class VelocityContextInitializer implements IDatatypeVisitor {
     public void visitEnumType(Enum enumType) {
         variableName.append(variable.getDeclaration().getName());
         EnumValue enumValue = (EnumValue) variable.getValue();
-        values.add(new VelocityContextItem(variableName.toString(), enumValue.getValue().getName()));
+        if (null != enumValue) {
+            values.add(new VelocityContextItem(variableName.toString(), enumValue.getValue().getName()));
+        }
     }
 
     @Override

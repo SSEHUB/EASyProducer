@@ -42,6 +42,10 @@ public class ConstructorCallExpression extends CallExpression {
         if (null == type) {
             throw new ExpressionException("cannot resolve type", ExpressionException.ID_SEMANTIC);
         }
+        if (!type.canBeInstantiated()) {
+            throw new ExpressionException("'" + type.getVilName() + "' cannot be instantiated", 
+                ExpressionException.ID_CANNOT_INSTANTIATE);
+        }
         this.type = type;
     }
 

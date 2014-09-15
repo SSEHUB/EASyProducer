@@ -7,21 +7,21 @@ import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
 
+import de.uni_hildesheim.sse.easy_producer.core.mgmt.PLPInfo;
+import de.uni_hildesheim.sse.easy_producer.core.mgmt.VilArgumentProvider;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.Configuration;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.Configuration.PathKind;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceException;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceUtils;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.standard.PersistenceConstants;
+import de.uni_hildesheim.sse.easy_producer.core.varMod.container.ProjectContainer;
+import de.uni_hildesheim.sse.easy_producer.core.varMod.container.ScriptContainer;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ScriptContainer;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
 import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
-import de.uni_hildesheim.sse.easy_producer.persistence.Configuration;
-import de.uni_hildesheim.sse.easy_producer.persistence.Configuration.PathKind;
-import de.uni_hildesheim.sse.easy_producer.persistence.PersistenceException;
-import de.uni_hildesheim.sse.easy_producer.persistence.PersistenceUtils;
-import de.uni_hildesheim.sse.easy_producer.persistence.mgmt.PLPInfo;
-import de.uni_hildesheim.sse.easy_producer.persistence.mgmt.VilArgumentProvider;
-import de.uni_hildesheim.sse.easy_producer.persistence.standard.PersistenceConstants;
 import de.uni_hildesheim.sse.model.management.VarModel;
 import de.uni_hildesheim.sse.model.varModel.Project;
-import de.uni_hildesheim.sse.modelManagement.ProjectContainer;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
 import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
 
@@ -194,8 +194,8 @@ public final class InstantiationCommands {
         if (null != ivmlProject && null != buildScript) {
             VilArgumentProvider provider = createArgumentProvider(arguments);
             String projectName = project.getName();
-            ProjectContainer pCont = new ProjectContainer(ivmlProject, ivmlFile.getParentFile());
-            ScriptContainer sCont = new ScriptContainer(buildScript, buildScriptFile.getParentFile());
+            ProjectContainer pCont = new ProjectContainer(ivmlProject, config);
+            ScriptContainer sCont = new ScriptContainer(buildScript, config);
             PLPInfo plp = new ProductLineProject(UUID.randomUUID().toString(), projectName, pCont, project, sCont);
             plp.instantiate(null);
             VilArgumentProvider.remove(provider); // ok if provider is null
@@ -299,16 +299,12 @@ public final class InstantiationCommands {
             // 3. Extract variability information
             Project ivmlProject = plpPre.getProject();
             Configuration configTarget = PersistenceUtils.getConfiguration(projectTarget);
-            String projectFolderPath = configTarget.getPath(PathKind.IVML);
-            File projectFolder = new File(projectFolderPath);
             Script buildScript = plpPre.getBuildScript();
-            String scriptFolderPath = configTarget.getPath(PathKind.VIL);
-            File scriptFolder = new File(scriptFolderPath);
             
             // 4. Create successor with extracted information.
             String projectNameTrg = projectTarget.getName();
-            ProjectContainer pCont = new ProjectContainer(ivmlProject, projectFolder);
-            ScriptContainer sCont = new ScriptContainer(buildScript, scriptFolder);
+            ProjectContainer pCont = new ProjectContainer(ivmlProject, configTarget);
+            ScriptContainer sCont = new ScriptContainer(buildScript, configTarget);
             PLPInfo plpSuc = new ProductLineProject(UUID.randomUUID().toString(), projectNameTrg, pCont,
                 projectTarget, sCont);
             plpSuc.getMemberController().addPredecessor(plpPre);
@@ -477,12 +473,10 @@ public final class InstantiationCommands {
         
         // Create Successor
         Configuration config = PersistenceUtils.getConfiguration(projectTarget);
-        File projectFolder = new File(config.getPath(PathKind.IVML));
-        File scriptFolder = new File(config.getPath(PathKind.VIL));
         
         String projectNameTrg = projectTarget.getName();
-        ProjectContainer pCont = new ProjectContainer(ivmlProject, projectFolder);
-        ScriptContainer sCont = new ScriptContainer(buildScript, scriptFolder);
+        ProjectContainer pCont = new ProjectContainer(ivmlProject, config);
+        ScriptContainer sCont = new ScriptContainer(buildScript, config);
         PLPInfo plpSuc = new ProductLineProject(UUID.randomUUID().toString(), projectNameTrg, pCont,
             projectTarget, sCont);
         plpSuc.getMemberController().addPredecessor(plpPre);

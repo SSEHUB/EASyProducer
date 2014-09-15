@@ -140,6 +140,11 @@ public class VilBuildLanguageAdapterFactory extends AdapterFactoryImpl
         return createInstantiateAdapter();
       }
       @Override
+      public Adapter caseMapVariable(MapVariable object)
+      {
+        return createMapVariableAdapter();
+      }
+      @Override
       public Adapter caseMap(Map object)
       {
         return createMapAdapter();
@@ -382,6 +387,21 @@ public class VilBuildLanguageAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createInstantiateAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.vilBuildLanguage.MapVariable <em>Map Variable</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.MapVariable
+   * @generated
+   */
+  public Adapter createMapVariableAdapter()
   {
     return null;
   }

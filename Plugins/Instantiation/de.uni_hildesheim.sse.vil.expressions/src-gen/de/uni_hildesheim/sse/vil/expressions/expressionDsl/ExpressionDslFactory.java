@@ -284,6 +284,24 @@ public interface ExpressionDslFactory extends EFactory
   SubCall createSubCall();
 
   /**
+   * Returns a new object of class '<em>Declarator</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Declarator</em>'.
+   * @generated
+   */
+  Declarator createDeclarator();
+
+  /**
+   * Returns a new object of class '<em>Declaration</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Declaration</em>'.
+   * @generated
+   */
+  Declaration createDeclaration();
+
+  /**
    * Returns a new object of class '<em>Call</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

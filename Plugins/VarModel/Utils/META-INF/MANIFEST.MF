@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Utils
 Bundle-SymbolicName: de.uni_hildesheim.sse.utils;singleton:=true
-Bundle-Version: 0.3.0
+Bundle-Version: 0.4.2
 Bundle-Vendor: University of Hildesheim, SSE
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Export-Package: de.uni_hildesheim.sse.utils,
@@ -10,5 +10,8 @@ Export-Package: de.uni_hildesheim.sse.utils,
  de.uni_hildesheim.sse.utils.messages,
  de.uni_hildesheim.sse.utils.modelManagement,
  de.uni_hildesheim.sse.utils.pool,
- de.uni_hildesheim.sse.utils.progress
+ de.uni_hildesheim.sse.utils.progress,
+ edu.umd.cs.findbugs.annotations
 Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: lib/findbugs-annotations-3.0.0.jar,
+ .

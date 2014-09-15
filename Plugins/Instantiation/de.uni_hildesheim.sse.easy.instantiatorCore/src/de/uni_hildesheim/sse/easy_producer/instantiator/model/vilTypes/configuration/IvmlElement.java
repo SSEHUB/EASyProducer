@@ -7,6 +7,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationMeta;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationType;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 
 /**
  * Denotes an element resolved in IVML. This must not be an interface
@@ -96,6 +97,16 @@ public abstract class IvmlElement implements IVilType, IResolvable, IStringValue
      */
     public IvmlElement getAttribute(IvmlElement element) {
         return getAttribute(element.getQualifiedName());
+    }
+
+    /**
+     * Returns whether the {@link #getValue() value} of this element is null (in the semantics
+     * of IVML). This does not mean undefined!
+     * 
+     * @return <code>true</code> if the value is null, <code>false</code> else
+     */
+    public boolean isNull() {
+        return getValue() == TypeRegistry.NULL;
     }
     
     /**
@@ -193,6 +204,54 @@ public abstract class IvmlElement implements IVilType, IResolvable, IStringValue
     @OperationMeta(name = Constants.EQUALITY, opType = OperationType.INFIX)
     public static boolean equals(IvmlElement i1, IvmlElement i2) {
         return (i1 == null && i2 == null) || (i1 != null && i1.equals(i2));
+    }
+
+    /**
+     * Represents the equality operation for IvmlElements and AnyType, in particular the null value.
+     * 
+     * @param i1 the first element to be considered
+     * @param i2 the second element to be considered
+     * @return i1 == i2
+     */
+    @OperationMeta(name = Constants.EQUALITY, opType = OperationType.INFIX)
+    public static boolean equals2(IvmlElement i1, Object i2) {
+        boolean result;
+        if (i1 != null && i2 == TypeRegistry.NULL) {
+            result = i1.isNull();
+        } else {
+            result = (i1 == null && i2 == null) || (i1 != null && i1.equals(i2));
+        }
+        return result;
+    }
+
+    /**
+     * Represents the unequality operation for IvmlElements.
+     * 
+     * @param i1 the first element to be considered
+     * @param i2 the second element to be considered
+     * @return i1 == i2
+     */
+    @OperationMeta(name = {Constants.UNEQUALITY, Constants.UNEQUALITY_ALIAS }, opType = OperationType.INFIX)
+    public static boolean unequals(IvmlElement i1, IvmlElement i2) {
+        return (i1 == null && i2 == null) || (i1 != null && !i1.equals(i2));
+    }
+
+    /**
+     * Represents the unequality operation for IvmlElements and AnyTypes, in particular the null value.
+     * 
+     * @param i1 the first element to be considered
+     * @param i2 the second element to be considered
+     * @return i1 == i2
+     */
+    @OperationMeta(name = {Constants.UNEQUALITY, Constants.UNEQUALITY_ALIAS }, opType = OperationType.INFIX)
+    public static boolean unequals2(IvmlElement i1, Object i2) {
+        boolean result;
+        if (i1 != null && i2 == TypeRegistry.NULL) {
+            result = !i1.isNull();
+        } else {
+            result = (i1 == null && i2 == null) || (i1 != null && !i1.equals(i2));
+        }
+        return result;
     }
     
     @Invisible

@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 
 import de.uni_hildesheim.sse.model.confModel.ContainerVariable;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
@@ -43,6 +45,15 @@ abstract class AbstractExpandableGUIVariable extends GUIVariable {
     }
     
     /**
+     * Getter for Composite of class.
+     * 
+     * @return composite the composite
+     */
+    protected Composite getComposite() {
+        return composite;
+    }
+    
+    /**
      * Creates nested GUIVariables for this variable.
      * This method should be called inside the constructor and if the number of nested variables has been changed,
      * e.g. a nested sequence item has been added to this variable.
@@ -61,6 +72,14 @@ abstract class AbstractExpandableGUIVariable extends GUIVariable {
     public final CellEditor getCellEditor() {
         // Only the nested elements have CellEditors not the parent.
         return null;
+    }
+    
+    @Override
+    public GUIEditor getEditor() {
+        // basically, shall not be shown anywhere but also shall indicate that
+        Label label = new Label(composite, SWT.NONE);
+        label.setText(getValueText());
+        return new LabelGUIEditor(label);
     }
     
     @Override

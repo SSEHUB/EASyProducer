@@ -161,4 +161,8 @@ public class StreamTracer extends de.uni_hildesheim.sse.easy_producer.instantiat
         // for compatibility with existing tests
     }
 
+    @Override
+    public void reset() {
+    }
+
 }

@@ -110,8 +110,21 @@ public class Persistencer implements IPersistencer, PersistenceConstants {
         projectLoader.loadModel(projectName, projectVersion, PathKind.IVML);
         ModelLoader<Script> scriptLoader = new ModelLoader<Script>(project, config);
         scriptLoader.loadModel(projectName, projectVersion, PathKind.VIL);
+        project.setID(projectInformation.getAttributeValue(PTN_UUID));
 
         return project;
+    }
+    
+    /**
+     * Loads a {@link PLPInfo} from a storage (file system).
+     * @return The {@link PLPInfo} which should be loaded.
+     * @throws PersistenceException In case of an incorrect data format of the configuration file,
+     * this exception will be thrown.
+     */
+    public PLPInfo loadPLP() throws PersistenceException {
+        PersistentProject pProject = load();
+        PersistentProject2PLPConverter converter = new PersistentProject2PLPConverter(this, pProject);
+        return converter.persistentProject2PLP();
     }
 
     
@@ -163,11 +176,11 @@ public class Persistencer implements IPersistencer, PersistenceConstants {
             VariableDeclaration[] declarations = Script.createDefaultParameter();
             Script mainBuildScript = new Script(projectName, declarations);
             mainBuildScript.setVersion(PersistenceUtils.defaultVersion());
-            Rule main = new Rule("main", new RuleDescriptor(declarations), false, mainBuildScript);
+            Rule main = new Rule("main", false, declarations, new RuleDescriptor(), mainBuildScript);
             mainBuildScript.addRule(main);
             
             PersistentProject pProject = new PersistentProject(varModel, projectFolder, configFolder);
-            pProject.setScript(new ScriptContainer(mainBuildScript, config));
+            pProject.setScript(new ScriptContainer(mainBuildScript, null, config, true));
             pProject.setID(projectID);
             pProject.setName(projectName);
             save(pProject);
@@ -254,6 +267,7 @@ public class Persistencer implements IPersistencer, PersistenceConstants {
         ScriptContainer buildScript = project.getMainBuildScript();
         if (buildScript.isSaveable()) {
             PersistenceUtils.writeVILScript(buildScript.getModel(), scriptPath);
+            buildScript.setEdited(false);
         }
         
         //Write the non ivml data

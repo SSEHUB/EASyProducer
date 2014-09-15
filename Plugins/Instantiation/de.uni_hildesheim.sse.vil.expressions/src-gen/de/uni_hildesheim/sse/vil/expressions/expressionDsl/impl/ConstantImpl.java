@@ -27,6 +27,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ConstantImpl#getSValue <em>SValue</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ConstantImpl#getQValue <em>QValue</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ConstantImpl#getBValue <em>BValue</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ConstantImpl#getNull <em>Null</em>}</li>
  * </ul>
  * </p>
  *
@@ -93,6 +94,26 @@ public class ConstantImpl extends MinimalEObjectImpl.Container implements Consta
    * @ordered
    */
   protected String bValue = BVALUE_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getNull() <em>Null</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getNull()
+   * @generated
+   * @ordered
+   */
+  protected static final String NULL_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getNull() <em>Null</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getNull()
+   * @generated
+   * @ordered
+   */
+  protected String null_ = NULL_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -262,6 +283,29 @@ public class ConstantImpl extends MinimalEObjectImpl.Container implements Consta
    * <!-- end-user-doc -->
    * @generated
    */
+  public String getNull()
+  {
+    return null_;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setNull(String newNull)
+  {
+    String oldNull = null_;
+    null_ = newNull;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, ExpressionDslPackage.CONSTANT__NULL, oldNull, null_));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
@@ -293,6 +337,8 @@ public class ConstantImpl extends MinimalEObjectImpl.Container implements Consta
         return getQValue();
       case ExpressionDslPackage.CONSTANT__BVALUE:
         return getBValue();
+      case ExpressionDslPackage.CONSTANT__NULL:
+        return getNull();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -318,6 +364,9 @@ public class ConstantImpl extends MinimalEObjectImpl.Container implements Consta
         return;
       case ExpressionDslPackage.CONSTANT__BVALUE:
         setBValue((String)newValue);
+        return;
+      case ExpressionDslPackage.CONSTANT__NULL:
+        setNull((String)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -345,6 +394,9 @@ public class ConstantImpl extends MinimalEObjectImpl.Container implements Consta
       case ExpressionDslPackage.CONSTANT__BVALUE:
         setBValue(BVALUE_EDEFAULT);
         return;
+      case ExpressionDslPackage.CONSTANT__NULL:
+        setNull(NULL_EDEFAULT);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -367,6 +419,8 @@ public class ConstantImpl extends MinimalEObjectImpl.Container implements Consta
         return qValue != null;
       case ExpressionDslPackage.CONSTANT__BVALUE:
         return BVALUE_EDEFAULT == null ? bValue != null : !BVALUE_EDEFAULT.equals(bValue);
+      case ExpressionDslPackage.CONSTANT__NULL:
+        return NULL_EDEFAULT == null ? null_ != null : !NULL_EDEFAULT.equals(null_);
     }
     return super.eIsSet(featureID);
   }
@@ -386,6 +440,8 @@ public class ConstantImpl extends MinimalEObjectImpl.Container implements Consta
     result.append(sValue);
     result.append(", bValue: ");
     result.append(bValue);
+    result.append(", null: ");
+    result.append(null_);
     result.append(')');
     return result.toString();
   }

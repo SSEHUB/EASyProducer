@@ -22,7 +22,7 @@ import java.util.ArrayList;
 @SuppressWarnings("all")
 public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     public static final String[] tokenNames = new String[] {
-        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "RULE_ID", "RULE_VERSION", "RULE_EXPONENT", "RULE_NUMBER", "RULE_STRING", "RULE_DSL_CONTENT", "RULE_ML_COMMENT", "RULE_SL_COMMENT", "RULE_WS", "RULE_ANY_OTHER", "'='", "'true'", "'false'", "'=='", "'>'", "'<'", "'>='", "'<='", "'implies'", "'iff'", "'and'", "'or'", "'xor'", "'<>'", "'!='", "'+'", "'-'", "'*'", "'/'", "'not'", "'project'", "'{'", "'}'", "';'", "'enum'", "','", "'compound'", "'refines'", "'assign'", "'('", "')'", "'to'", "'typedef'", "'with'", "'DSL'", "'attribute'", "'freeze'", "'but'", "'eval'", "'interface'", "'export'", "'import'", "'::'", "'conflicts'", "'.version'", "'version'", "'def'", "'let'", "'in'", "'.'", "'->'", "'['", "']'", "'|'", "':'", "'refBy'", "'if'", "'then'", "'else'", "'endif'", "'Integer'", "'Real'", "'Boolean'", "'String'", "'Constraint'", "'null'", "'setOf'", "'sequenceOf'", "'refTo'"
+        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "RULE_ID", "RULE_VERSION", "RULE_EXPONENT", "RULE_NUMBER", "RULE_STRING", "RULE_DSL_CONTENT", "RULE_ML_COMMENT", "RULE_SL_COMMENT", "RULE_WS", "RULE_ANY_OTHER", "'='", "'true'", "'false'", "'=='", "'>'", "'<'", "'>='", "'<='", "'implies'", "'iff'", "'and'", "'or'", "'xor'", "'<>'", "'!='", "'+'", "'-'", "'*'", "'/'", "'not'", "'project'", "'{'", "'}'", "';'", "'enum'", "','", "'compound'", "'refines'", "'assign'", "'('", "')'", "'to'", "'typedef'", "'with'", "'DSL'", "'attribute'", "'freeze'", "'but'", "'eval'", "'interface'", "'export'", "'import'", "'::'", "'conflicts'", "'.version'", "'version'", "'def'", "'let'", "'in'", "'.'", "'->'", "'['", "']'", "'|'", "'refBy'", "'if'", "'then'", "'else'", "'endif'", "'Integer'", "'Real'", "'Boolean'", "'String'", "'Constraint'", "'null'", "'setOf'", "'sequenceOf'", "'refTo'"
     };
     public static final int T__68=68;
     public static final int T__69=69;
@@ -74,7 +74,6 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     public static final int T__46=46;
     public static final int T__81=81;
     public static final int T__47=47;
-    public static final int T__82=82;
     public static final int T__44=44;
     public static final int T__45=45;
     public static final int T__48=48;
@@ -6750,27 +6749,27 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
             // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:2399:1: ( ( ( rule__BasicType__TypeAssignment_0 ) ) | ( ( rule__BasicType__TypeAssignment_1 ) ) | ( ( rule__BasicType__TypeAssignment_2 ) ) | ( ( rule__BasicType__TypeAssignment_3 ) ) | ( ( rule__BasicType__TypeAssignment_4 ) ) )
             int alt6=5;
             switch ( input.LA(1) ) {
-            case 74:
+            case 73:
                 {
                 alt6=1;
                 }
                 break;
-            case 75:
+            case 74:
                 {
                 alt6=2;
                 }
                 break;
-            case 76:
+            case 75:
                 {
                 alt6=3;
                 }
                 break;
-            case 77:
+            case 76:
                 {
                 alt6=4;
                 }
                 break;
-            case 78:
+            case 77:
                 {
                 alt6=5;
                 }
@@ -6935,11 +6934,11 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
             // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:2439:1: ( ( ( rule__Type__TypeAssignment_0 ) ) | ( ( rule__Type__IdAssignment_1 ) ) | ( ( rule__Type__DerivedAssignment_2 ) ) )
             int alt7=3;
             switch ( input.LA(1) ) {
+            case 73:
             case 74:
             case 75:
             case 76:
             case 77:
-            case 78:
                 {
                 alt7=1;
                 }
@@ -6951,9 +6950,9 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
                 alt7=2;
                 }
                 break;
+            case 79:
             case 80:
             case 81:
-            case 82:
                 {
                 alt7=3;
                 }
@@ -7091,7 +7090,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
                 alt8=4;
                 }
                 break;
-            case 79:
+            case 78:
                 {
                 alt8=5;
                 }
@@ -7327,17 +7326,17 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
             // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:2533:1: ( ( ( rule__DerivedType__OpAssignment_0_0 ) ) | ( ( rule__DerivedType__OpAssignment_0_1 ) ) | ( ( rule__DerivedType__OpAssignment_0_2 ) ) )
             int alt10=3;
             switch ( input.LA(1) ) {
-            case 80:
+            case 79:
                 {
                 alt10=1;
                 }
                 break;
-            case 81:
+            case 80:
                 {
                 alt10=2;
                 }
                 break;
-            case 82:
+            case 81:
                 {
                 alt10=3;
                 }
@@ -8464,11 +8463,11 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
                 {
                 int LA22_1 = input.LA(2);
 
-                if ( (LA22_1==EOF||LA22_1==14||(LA22_1>=17 && LA22_1<=32)||(LA22_1>=36 && LA22_1<=37)||LA22_1==39||(LA22_1>=44 && LA22_1<=45)||LA22_1==56||(LA22_1>=62 && LA22_1<=67)||(LA22_1>=71 && LA22_1<=73)) ) {
-                    alt22=2;
-                }
-                else if ( (LA22_1==43) ) {
+                if ( (LA22_1==43) ) {
                     alt22=1;
+                }
+                else if ( (LA22_1==EOF||LA22_1==14||(LA22_1>=17 && LA22_1<=32)||(LA22_1>=36 && LA22_1<=37)||LA22_1==39||(LA22_1>=44 && LA22_1<=45)||LA22_1==56||(LA22_1>=62 && LA22_1<=67)||(LA22_1>=70 && LA22_1<=72)) ) {
+                    alt22=2;
                 }
                 else {
                     NoViableAltException nvae =
@@ -8482,7 +8481,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
                 {
                 int LA22_2 = input.LA(2);
 
-                if ( (LA22_2==EOF||LA22_2==14||(LA22_2>=17 && LA22_2<=32)||(LA22_2>=36 && LA22_2<=37)||LA22_2==39||(LA22_2>=44 && LA22_2<=45)||LA22_2==56||(LA22_2>=62 && LA22_2<=67)||(LA22_2>=71 && LA22_2<=73)) ) {
+                if ( (LA22_2==EOF||LA22_2==14||(LA22_2>=17 && LA22_2<=32)||(LA22_2>=36 && LA22_2<=37)||LA22_2==39||(LA22_2>=44 && LA22_2<=45)||LA22_2==56||(LA22_2>=62 && LA22_2<=67)||(LA22_2>=70 && LA22_2<=72)) ) {
                     alt22=2;
                 }
                 else if ( (LA22_2==43) ) {
@@ -8500,11 +8499,11 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
                 {
                 int LA22_3 = input.LA(2);
 
-                if ( (LA22_3==EOF||LA22_3==14||(LA22_3>=17 && LA22_3<=32)||(LA22_3>=36 && LA22_3<=37)||LA22_3==39||(LA22_3>=44 && LA22_3<=45)||LA22_3==56||(LA22_3>=62 && LA22_3<=67)||(LA22_3>=71 && LA22_3<=73)) ) {
-                    alt22=2;
-                }
-                else if ( (LA22_3==43) ) {
+                if ( (LA22_3==43) ) {
                     alt22=1;
+                }
+                else if ( (LA22_3==EOF||LA22_3==14||(LA22_3>=17 && LA22_3<=32)||(LA22_3>=36 && LA22_3<=37)||LA22_3==39||(LA22_3>=44 && LA22_3<=45)||LA22_3==56||(LA22_3>=62 && LA22_3<=67)||(LA22_3>=70 && LA22_3<=72)) ) {
+                    alt22=2;
                 }
                 else {
                     NoViableAltException nvae =
@@ -8519,9 +8518,9 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
             case 15:
             case 16:
             case 43:
+            case 68:
             case 69:
-            case 70:
-            case 79:
+            case 78:
                 {
                 alt22=2;
                 }
@@ -8743,7 +8742,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
             case RULE_STRING:
             case 15:
             case 16:
-            case 79:
+            case 78:
                 {
                 alt24=1;
                 }
@@ -8753,12 +8752,12 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
                 alt24=2;
                 }
                 break;
-            case 70:
+            case 69:
                 {
                 alt24=3;
                 }
                 break;
-            case 69:
+            case 68:
                 {
                 alt24=4;
                 }
@@ -10249,7 +10248,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
                 int alt33=2;
                 int LA33_0 = input.LA(1);
 
-                if ( ((LA33_0>=RULE_ID && LA33_0<=RULE_STRING)||(LA33_0>=15 && LA33_0<=16)||LA33_0==30||LA33_0==33||LA33_0==35||LA33_0==38||LA33_0==40||(LA33_0>=42 && LA33_0<=43)||LA33_0==46||(LA33_0>=48 && LA33_0<=50)||LA33_0==52||(LA33_0>=60 && LA33_0<=61)||(LA33_0>=69 && LA33_0<=70)||(LA33_0>=74 && LA33_0<=82)) ) {
+                if ( ((LA33_0>=RULE_ID && LA33_0<=RULE_STRING)||(LA33_0>=15 && LA33_0<=16)||LA33_0==30||LA33_0==33||LA33_0==35||LA33_0==38||LA33_0==40||(LA33_0>=42 && LA33_0<=43)||LA33_0==46||(LA33_0>=48 && LA33_0<=50)||LA33_0==52||(LA33_0>=60 && LA33_0<=61)||(LA33_0>=68 && LA33_0<=69)||(LA33_0>=73 && LA33_0<=81)) ) {
                     alt33=1;
                 }
 
@@ -11833,7 +11832,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
                 int alt38=2;
                 int LA38_0 = input.LA(1);
 
-                if ( ((LA38_0>=RULE_ID && LA38_0<=RULE_STRING)||(LA38_0>=15 && LA38_0<=16)||LA38_0==30||LA38_0==33||LA38_0==35||(LA38_0>=42 && LA38_0<=43)||LA38_0==48||LA38_0==61||(LA38_0>=69 && LA38_0<=70)||(LA38_0>=74 && LA38_0<=82)) ) {
+                if ( ((LA38_0>=RULE_ID && LA38_0<=RULE_STRING)||(LA38_0>=15 && LA38_0<=16)||LA38_0==30||LA38_0==33||LA38_0==35||(LA38_0>=42 && LA38_0<=43)||LA38_0==48||LA38_0==61||(LA38_0>=68 && LA38_0<=69)||(LA38_0>=73 && LA38_0<=81)) ) {
                     alt38=1;
                 }
 
@@ -12838,7 +12837,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
                 int alt41=2;
                 int LA41_0 = input.LA(1);
 
-                if ( ((LA41_0>=RULE_ID && LA41_0<=RULE_STRING)||(LA41_0>=15 && LA41_0<=16)||LA41_0==30||LA41_0==33||LA41_0==35||(LA41_0>=42 && LA41_0<=43)||LA41_0==48||LA41_0==61||(LA41_0>=69 && LA41_0<=70)||(LA41_0>=74 && LA41_0<=82)) ) {
+                if ( ((LA41_0>=RULE_ID && LA41_0<=RULE_STRING)||(LA41_0>=15 && LA41_0<=16)||LA41_0==30||LA41_0==33||LA41_0==35||(LA41_0>=42 && LA41_0<=43)||LA41_0==48||LA41_0==61||(LA41_0>=68 && LA41_0<=69)||(LA41_0>=73 && LA41_0<=81)) ) {
                     alt41=1;
                 }
 
@@ -19868,7 +19867,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
                 int alt58=2;
                 int LA58_0 = input.LA(1);
 
-                if ( ((LA58_0>=RULE_ID && LA58_0<=RULE_STRING)||(LA58_0>=15 && LA58_0<=16)||LA58_0==30||LA58_0==33||LA58_0==35||LA58_0==43||LA58_0==48||LA58_0==61||(LA58_0>=69 && LA58_0<=70)||LA58_0==79) ) {
+                if ( ((LA58_0>=RULE_ID && LA58_0<=RULE_STRING)||(LA58_0>=15 && LA58_0<=16)||LA58_0==30||LA58_0==33||LA58_0==35||LA58_0==43||LA58_0==48||LA58_0==61||(LA58_0>=68 && LA58_0<=69)||LA58_0==78) ) {
                     alt58=1;
                 }
 
@@ -24486,7 +24485,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
             int alt68=2;
             int LA68_0 = input.LA(1);
 
-            if ( ((LA68_0>=RULE_ID && LA68_0<=RULE_EXPONENT)||(LA68_0>=74 && LA68_0<=78)||(LA68_0>=80 && LA68_0<=82)) ) {
+            if ( ((LA68_0>=RULE_ID && LA68_0<=RULE_EXPONENT)||(LA68_0>=73 && LA68_0<=77)||(LA68_0>=79 && LA68_0<=81)) ) {
                 alt68=1;
             }
             switch (alt68) {
@@ -29653,7 +29652,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
             int alt81=2;
             int LA81_0 = input.LA(1);
 
-            if ( ((LA81_0>=RULE_ID && LA81_0<=RULE_STRING)||(LA81_0>=15 && LA81_0<=16)||LA81_0==30||LA81_0==33||LA81_0==35||LA81_0==43||LA81_0==48||LA81_0==61||(LA81_0>=69 && LA81_0<=70)||LA81_0==79) ) {
+            if ( ((LA81_0>=RULE_ID && LA81_0<=RULE_STRING)||(LA81_0>=15 && LA81_0<=16)||LA81_0==30||LA81_0==33||LA81_0==35||LA81_0==43||LA81_0==48||LA81_0==61||(LA81_0>=68 && LA81_0<=69)||LA81_0==78) ) {
                 alt81=1;
             }
             switch (alt81) {
@@ -30064,7 +30063,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
             int alt82=2;
             int LA82_0 = input.LA(1);
 
-            if ( ((LA82_0>=RULE_ID && LA82_0<=RULE_STRING)||(LA82_0>=15 && LA82_0<=16)||LA82_0==30||LA82_0==33||LA82_0==35||LA82_0==43||LA82_0==48||LA82_0==61||(LA82_0>=69 && LA82_0<=70)||LA82_0==79) ) {
+            if ( ((LA82_0>=RULE_ID && LA82_0<=RULE_STRING)||(LA82_0>=15 && LA82_0<=16)||LA82_0==30||LA82_0==33||LA82_0==35||LA82_0==43||LA82_0==48||LA82_0==61||(LA82_0>=68 && LA82_0<=69)||LA82_0==78) ) {
                 alt82=1;
             }
             switch (alt82) {
@@ -30626,31 +30625,79 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Declaration__Group__0__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11197:1: rule__Declaration__Group__0__Impl : ( ( rule__Declaration__IdAssignment_0 ) ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11197:1: rule__Declaration__Group__0__Impl : ( ( rule__Declaration__TypeAssignment_0 )? ) ;
     public final void rule__Declaration__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11201:1: ( ( ( rule__Declaration__IdAssignment_0 ) ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11202:1: ( ( rule__Declaration__IdAssignment_0 ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11201:1: ( ( ( rule__Declaration__TypeAssignment_0 )? ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11202:1: ( ( rule__Declaration__TypeAssignment_0 )? )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11202:1: ( ( rule__Declaration__IdAssignment_0 ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11203:1: ( rule__Declaration__IdAssignment_0 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11202:1: ( ( rule__Declaration__TypeAssignment_0 )? )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11203:1: ( rule__Declaration__TypeAssignment_0 )?
             {
-             before(grammarAccess.getDeclarationAccess().getIdAssignment_0()); 
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11204:1: ( rule__Declaration__IdAssignment_0 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11204:2: rule__Declaration__IdAssignment_0
-            {
-            pushFollow(FOLLOW_rule__Declaration__IdAssignment_0_in_rule__Declaration__Group__0__Impl22746);
-            rule__Declaration__IdAssignment_0();
+             before(grammarAccess.getDeclarationAccess().getTypeAssignment_0()); 
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11204:1: ( rule__Declaration__TypeAssignment_0 )?
+            int alt84=2;
+            switch ( input.LA(1) ) {
+                case 73:
+                case 74:
+                case 75:
+                case 76:
+                case 77:
+                case 79:
+                case 80:
+                case 81:
+                    {
+                    alt84=1;
+                    }
+                    break;
+                case RULE_ID:
+                    {
+                    int LA84_2 = input.LA(2);
 
-            state._fsp--;
+                    if ( ((LA84_2>=RULE_ID && LA84_2<=RULE_EXPONENT)||LA84_2==56) ) {
+                        alt84=1;
+                    }
+                    }
+                    break;
+                case RULE_VERSION:
+                    {
+                    int LA84_3 = input.LA(2);
 
+                    if ( ((LA84_3>=RULE_ID && LA84_3<=RULE_EXPONENT)||LA84_3==56) ) {
+                        alt84=1;
+                    }
+                    }
+                    break;
+                case RULE_EXPONENT:
+                    {
+                    int LA84_4 = input.LA(2);
+
+                    if ( ((LA84_4>=RULE_ID && LA84_4<=RULE_EXPONENT)||LA84_4==56) ) {
+                        alt84=1;
+                    }
+                    }
+                    break;
+            }
+
+            switch (alt84) {
+                case 1 :
+                    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11204:2: rule__Declaration__TypeAssignment_0
+                    {
+                    pushFollow(FOLLOW_rule__Declaration__TypeAssignment_0_in_rule__Declaration__Group__0__Impl22746);
+                    rule__Declaration__TypeAssignment_0();
+
+                    state._fsp--;
+
+
+                    }
+                    break;
 
             }
 
-             after(grammarAccess.getDeclarationAccess().getIdAssignment_0()); 
+             after(grammarAccess.getDeclarationAccess().getTypeAssignment_0()); 
 
             }
 
@@ -30682,12 +30729,12 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
             // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11218:1: ( rule__Declaration__Group__1__Impl rule__Declaration__Group__2 )
             // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11219:2: rule__Declaration__Group__1__Impl rule__Declaration__Group__2
             {
-            pushFollow(FOLLOW_rule__Declaration__Group__1__Impl_in_rule__Declaration__Group__122776);
+            pushFollow(FOLLOW_rule__Declaration__Group__1__Impl_in_rule__Declaration__Group__122777);
             rule__Declaration__Group__1__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__Declaration__Group__2_in_rule__Declaration__Group__122779);
+            pushFollow(FOLLOW_rule__Declaration__Group__2_in_rule__Declaration__Group__122780);
             rule__Declaration__Group__2();
 
             state._fsp--;
@@ -30711,49 +30758,31 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Declaration__Group__1__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11226:1: rule__Declaration__Group__1__Impl : ( ( rule__Declaration__Group_1__0 )* ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11226:1: rule__Declaration__Group__1__Impl : ( ( rule__Declaration__IdAssignment_1 ) ) ;
     public final void rule__Declaration__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11230:1: ( ( ( rule__Declaration__Group_1__0 )* ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11231:1: ( ( rule__Declaration__Group_1__0 )* )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11230:1: ( ( ( rule__Declaration__IdAssignment_1 ) ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11231:1: ( ( rule__Declaration__IdAssignment_1 ) )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11231:1: ( ( rule__Declaration__Group_1__0 )* )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11232:1: ( rule__Declaration__Group_1__0 )*
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11231:1: ( ( rule__Declaration__IdAssignment_1 ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11232:1: ( rule__Declaration__IdAssignment_1 )
             {
-             before(grammarAccess.getDeclarationAccess().getGroup_1()); 
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11233:1: ( rule__Declaration__Group_1__0 )*
-            loop84:
-            do {
-                int alt84=2;
-                int LA84_0 = input.LA(1);
+             before(grammarAccess.getDeclarationAccess().getIdAssignment_1()); 
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11233:1: ( rule__Declaration__IdAssignment_1 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11233:2: rule__Declaration__IdAssignment_1
+            {
+            pushFollow(FOLLOW_rule__Declaration__IdAssignment_1_in_rule__Declaration__Group__1__Impl22807);
+            rule__Declaration__IdAssignment_1();
 
-                if ( (LA84_0==39) ) {
-                    alt84=1;
-                }
+            state._fsp--;
 
 
-                switch (alt84) {
-            	case 1 :
-            	    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11233:2: rule__Declaration__Group_1__0
-            	    {
-            	    pushFollow(FOLLOW_rule__Declaration__Group_1__0_in_rule__Declaration__Group__1__Impl22806);
-            	    rule__Declaration__Group_1__0();
+            }
 
-            	    state._fsp--;
-
-
-            	    }
-            	    break;
-
-            	default :
-            	    break loop84;
-                }
-            } while (true);
-
-             after(grammarAccess.getDeclarationAccess().getGroup_1()); 
+             after(grammarAccess.getDeclarationAccess().getIdAssignment_1()); 
 
             }
 
@@ -30814,40 +30843,47 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Declaration__Group__2__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11255:1: rule__Declaration__Group__2__Impl : ( ( rule__Declaration__Group_2__0 )? ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11255:1: rule__Declaration__Group__2__Impl : ( ( rule__Declaration__Group_2__0 )* ) ;
     public final void rule__Declaration__Group__2__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11259:1: ( ( ( rule__Declaration__Group_2__0 )? ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11260:1: ( ( rule__Declaration__Group_2__0 )? )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11259:1: ( ( ( rule__Declaration__Group_2__0 )* ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11260:1: ( ( rule__Declaration__Group_2__0 )* )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11260:1: ( ( rule__Declaration__Group_2__0 )? )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11261:1: ( rule__Declaration__Group_2__0 )?
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11260:1: ( ( rule__Declaration__Group_2__0 )* )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11261:1: ( rule__Declaration__Group_2__0 )*
             {
              before(grammarAccess.getDeclarationAccess().getGroup_2()); 
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11262:1: ( rule__Declaration__Group_2__0 )?
-            int alt85=2;
-            int LA85_0 = input.LA(1);
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11262:1: ( rule__Declaration__Group_2__0 )*
+            loop85:
+            do {
+                int alt85=2;
+                int LA85_0 = input.LA(1);
 
-            if ( (LA85_0==68) ) {
-                alt85=1;
-            }
-            switch (alt85) {
-                case 1 :
-                    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11262:2: rule__Declaration__Group_2__0
-                    {
-                    pushFollow(FOLLOW_rule__Declaration__Group_2__0_in_rule__Declaration__Group__2__Impl22867);
-                    rule__Declaration__Group_2__0();
-
-                    state._fsp--;
+                if ( (LA85_0==39) ) {
+                    alt85=1;
+                }
 
 
-                    }
-                    break;
+                switch (alt85) {
+            	case 1 :
+            	    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11262:2: rule__Declaration__Group_2__0
+            	    {
+            	    pushFollow(FOLLOW_rule__Declaration__Group_2__0_in_rule__Declaration__Group__2__Impl22867);
+            	    rule__Declaration__Group_2__0();
 
-            }
+            	    state._fsp--;
+
+
+            	    }
+            	    break;
+
+            	default :
+            	    break loop85;
+                }
+            } while (true);
 
              after(grammarAccess.getDeclarationAccess().getGroup_2()); 
 
@@ -30962,177 +30998,22 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     // $ANTLR end "rule__Declaration__Group__3__Impl"
 
 
-    // $ANTLR start "rule__Declaration__Group_1__0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11308:1: rule__Declaration__Group_1__0 : rule__Declaration__Group_1__0__Impl rule__Declaration__Group_1__1 ;
-    public final void rule__Declaration__Group_1__0() throws RecognitionException {
-
-        		int stackSize = keepStackSize();
-            
-        try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11312:1: ( rule__Declaration__Group_1__0__Impl rule__Declaration__Group_1__1 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11313:2: rule__Declaration__Group_1__0__Impl rule__Declaration__Group_1__1
-            {
-            pushFollow(FOLLOW_rule__Declaration__Group_1__0__Impl_in_rule__Declaration__Group_1__022964);
-            rule__Declaration__Group_1__0__Impl();
-
-            state._fsp--;
-
-            pushFollow(FOLLOW_rule__Declaration__Group_1__1_in_rule__Declaration__Group_1__022967);
-            rule__Declaration__Group_1__1();
-
-            state._fsp--;
-
-
-            }
-
-        }
-        catch (RecognitionException re) {
-            reportError(re);
-            recover(input,re);
-        }
-        finally {
-
-            	restoreStackSize(stackSize);
-
-        }
-        return ;
-    }
-    // $ANTLR end "rule__Declaration__Group_1__0"
-
-
-    // $ANTLR start "rule__Declaration__Group_1__0__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11320:1: rule__Declaration__Group_1__0__Impl : ( ',' ) ;
-    public final void rule__Declaration__Group_1__0__Impl() throws RecognitionException {
-
-        		int stackSize = keepStackSize();
-            
-        try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11324:1: ( ( ',' ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11325:1: ( ',' )
-            {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11325:1: ( ',' )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11326:1: ','
-            {
-             before(grammarAccess.getDeclarationAccess().getCommaKeyword_1_0()); 
-            match(input,39,FOLLOW_39_in_rule__Declaration__Group_1__0__Impl22995); 
-             after(grammarAccess.getDeclarationAccess().getCommaKeyword_1_0()); 
-
-            }
-
-
-            }
-
-        }
-        catch (RecognitionException re) {
-            reportError(re);
-            recover(input,re);
-        }
-        finally {
-
-            	restoreStackSize(stackSize);
-
-        }
-        return ;
-    }
-    // $ANTLR end "rule__Declaration__Group_1__0__Impl"
-
-
-    // $ANTLR start "rule__Declaration__Group_1__1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11339:1: rule__Declaration__Group_1__1 : rule__Declaration__Group_1__1__Impl ;
-    public final void rule__Declaration__Group_1__1() throws RecognitionException {
-
-        		int stackSize = keepStackSize();
-            
-        try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11343:1: ( rule__Declaration__Group_1__1__Impl )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11344:2: rule__Declaration__Group_1__1__Impl
-            {
-            pushFollow(FOLLOW_rule__Declaration__Group_1__1__Impl_in_rule__Declaration__Group_1__123026);
-            rule__Declaration__Group_1__1__Impl();
-
-            state._fsp--;
-
-
-            }
-
-        }
-        catch (RecognitionException re) {
-            reportError(re);
-            recover(input,re);
-        }
-        finally {
-
-            	restoreStackSize(stackSize);
-
-        }
-        return ;
-    }
-    // $ANTLR end "rule__Declaration__Group_1__1"
-
-
-    // $ANTLR start "rule__Declaration__Group_1__1__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11350:1: rule__Declaration__Group_1__1__Impl : ( ( rule__Declaration__IdAssignment_1_1 ) ) ;
-    public final void rule__Declaration__Group_1__1__Impl() throws RecognitionException {
-
-        		int stackSize = keepStackSize();
-            
-        try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11354:1: ( ( ( rule__Declaration__IdAssignment_1_1 ) ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11355:1: ( ( rule__Declaration__IdAssignment_1_1 ) )
-            {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11355:1: ( ( rule__Declaration__IdAssignment_1_1 ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11356:1: ( rule__Declaration__IdAssignment_1_1 )
-            {
-             before(grammarAccess.getDeclarationAccess().getIdAssignment_1_1()); 
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11357:1: ( rule__Declaration__IdAssignment_1_1 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11357:2: rule__Declaration__IdAssignment_1_1
-            {
-            pushFollow(FOLLOW_rule__Declaration__IdAssignment_1_1_in_rule__Declaration__Group_1__1__Impl23053);
-            rule__Declaration__IdAssignment_1_1();
-
-            state._fsp--;
-
-
-            }
-
-             after(grammarAccess.getDeclarationAccess().getIdAssignment_1_1()); 
-
-            }
-
-
-            }
-
-        }
-        catch (RecognitionException re) {
-            reportError(re);
-            recover(input,re);
-        }
-        finally {
-
-            	restoreStackSize(stackSize);
-
-        }
-        return ;
-    }
-    // $ANTLR end "rule__Declaration__Group_1__1__Impl"
-
-
     // $ANTLR start "rule__Declaration__Group_2__0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11371:1: rule__Declaration__Group_2__0 : rule__Declaration__Group_2__0__Impl rule__Declaration__Group_2__1 ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11308:1: rule__Declaration__Group_2__0 : rule__Declaration__Group_2__0__Impl rule__Declaration__Group_2__1 ;
     public final void rule__Declaration__Group_2__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11375:1: ( rule__Declaration__Group_2__0__Impl rule__Declaration__Group_2__1 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11376:2: rule__Declaration__Group_2__0__Impl rule__Declaration__Group_2__1
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11312:1: ( rule__Declaration__Group_2__0__Impl rule__Declaration__Group_2__1 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11313:2: rule__Declaration__Group_2__0__Impl rule__Declaration__Group_2__1
             {
-            pushFollow(FOLLOW_rule__Declaration__Group_2__0__Impl_in_rule__Declaration__Group_2__023087);
+            pushFollow(FOLLOW_rule__Declaration__Group_2__0__Impl_in_rule__Declaration__Group_2__022964);
             rule__Declaration__Group_2__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__Declaration__Group_2__1_in_rule__Declaration__Group_2__023090);
+            pushFollow(FOLLOW_rule__Declaration__Group_2__1_in_rule__Declaration__Group_2__022967);
             rule__Declaration__Group_2__1();
 
             state._fsp--;
@@ -31156,21 +31037,21 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Declaration__Group_2__0__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11383:1: rule__Declaration__Group_2__0__Impl : ( ':' ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11320:1: rule__Declaration__Group_2__0__Impl : ( ',' ) ;
     public final void rule__Declaration__Group_2__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11387:1: ( ( ':' ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11388:1: ( ':' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11324:1: ( ( ',' ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11325:1: ( ',' )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11388:1: ( ':' )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11389:1: ':'
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11325:1: ( ',' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11326:1: ','
             {
-             before(grammarAccess.getDeclarationAccess().getColonKeyword_2_0()); 
-            match(input,68,FOLLOW_68_in_rule__Declaration__Group_2__0__Impl23118); 
-             after(grammarAccess.getDeclarationAccess().getColonKeyword_2_0()); 
+             before(grammarAccess.getDeclarationAccess().getCommaKeyword_2_0()); 
+            match(input,39,FOLLOW_39_in_rule__Declaration__Group_2__0__Impl22995); 
+             after(grammarAccess.getDeclarationAccess().getCommaKeyword_2_0()); 
 
             }
 
@@ -31193,16 +31074,16 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Declaration__Group_2__1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11402:1: rule__Declaration__Group_2__1 : rule__Declaration__Group_2__1__Impl ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11339:1: rule__Declaration__Group_2__1 : rule__Declaration__Group_2__1__Impl ;
     public final void rule__Declaration__Group_2__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11406:1: ( rule__Declaration__Group_2__1__Impl )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11407:2: rule__Declaration__Group_2__1__Impl
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11343:1: ( rule__Declaration__Group_2__1__Impl )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11344:2: rule__Declaration__Group_2__1__Impl
             {
-            pushFollow(FOLLOW_rule__Declaration__Group_2__1__Impl_in_rule__Declaration__Group_2__123149);
+            pushFollow(FOLLOW_rule__Declaration__Group_2__1__Impl_in_rule__Declaration__Group_2__123026);
             rule__Declaration__Group_2__1__Impl();
 
             state._fsp--;
@@ -31226,31 +31107,31 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Declaration__Group_2__1__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11413:1: rule__Declaration__Group_2__1__Impl : ( ( rule__Declaration__TypeAssignment_2_1 ) ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11350:1: rule__Declaration__Group_2__1__Impl : ( ( rule__Declaration__IdAssignment_2_1 ) ) ;
     public final void rule__Declaration__Group_2__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11417:1: ( ( ( rule__Declaration__TypeAssignment_2_1 ) ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11418:1: ( ( rule__Declaration__TypeAssignment_2_1 ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11354:1: ( ( ( rule__Declaration__IdAssignment_2_1 ) ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11355:1: ( ( rule__Declaration__IdAssignment_2_1 ) )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11418:1: ( ( rule__Declaration__TypeAssignment_2_1 ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11419:1: ( rule__Declaration__TypeAssignment_2_1 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11355:1: ( ( rule__Declaration__IdAssignment_2_1 ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11356:1: ( rule__Declaration__IdAssignment_2_1 )
             {
-             before(grammarAccess.getDeclarationAccess().getTypeAssignment_2_1()); 
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11420:1: ( rule__Declaration__TypeAssignment_2_1 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11420:2: rule__Declaration__TypeAssignment_2_1
+             before(grammarAccess.getDeclarationAccess().getIdAssignment_2_1()); 
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11357:1: ( rule__Declaration__IdAssignment_2_1 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11357:2: rule__Declaration__IdAssignment_2_1
             {
-            pushFollow(FOLLOW_rule__Declaration__TypeAssignment_2_1_in_rule__Declaration__Group_2__1__Impl23176);
-            rule__Declaration__TypeAssignment_2_1();
+            pushFollow(FOLLOW_rule__Declaration__IdAssignment_2_1_in_rule__Declaration__Group_2__1__Impl23053);
+            rule__Declaration__IdAssignment_2_1();
 
             state._fsp--;
 
 
             }
 
-             after(grammarAccess.getDeclarationAccess().getTypeAssignment_2_1()); 
+             after(grammarAccess.getDeclarationAccess().getIdAssignment_2_1()); 
 
             }
 
@@ -31273,21 +31154,21 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Declaration__Group_3__0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11434:1: rule__Declaration__Group_3__0 : rule__Declaration__Group_3__0__Impl rule__Declaration__Group_3__1 ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11371:1: rule__Declaration__Group_3__0 : rule__Declaration__Group_3__0__Impl rule__Declaration__Group_3__1 ;
     public final void rule__Declaration__Group_3__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11438:1: ( rule__Declaration__Group_3__0__Impl rule__Declaration__Group_3__1 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11439:2: rule__Declaration__Group_3__0__Impl rule__Declaration__Group_3__1
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11375:1: ( rule__Declaration__Group_3__0__Impl rule__Declaration__Group_3__1 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11376:2: rule__Declaration__Group_3__0__Impl rule__Declaration__Group_3__1
             {
-            pushFollow(FOLLOW_rule__Declaration__Group_3__0__Impl_in_rule__Declaration__Group_3__023210);
+            pushFollow(FOLLOW_rule__Declaration__Group_3__0__Impl_in_rule__Declaration__Group_3__023087);
             rule__Declaration__Group_3__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__Declaration__Group_3__1_in_rule__Declaration__Group_3__023213);
+            pushFollow(FOLLOW_rule__Declaration__Group_3__1_in_rule__Declaration__Group_3__023090);
             rule__Declaration__Group_3__1();
 
             state._fsp--;
@@ -31311,20 +31192,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Declaration__Group_3__0__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11446:1: rule__Declaration__Group_3__0__Impl : ( '=' ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11383:1: rule__Declaration__Group_3__0__Impl : ( '=' ) ;
     public final void rule__Declaration__Group_3__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11450:1: ( ( '=' ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11451:1: ( '=' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11387:1: ( ( '=' ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11388:1: ( '=' )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11451:1: ( '=' )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11452:1: '='
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11388:1: ( '=' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11389:1: '='
             {
              before(grammarAccess.getDeclarationAccess().getEqualsSignKeyword_3_0()); 
-            match(input,14,FOLLOW_14_in_rule__Declaration__Group_3__0__Impl23241); 
+            match(input,14,FOLLOW_14_in_rule__Declaration__Group_3__0__Impl23118); 
              after(grammarAccess.getDeclarationAccess().getEqualsSignKeyword_3_0()); 
 
             }
@@ -31348,16 +31229,16 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Declaration__Group_3__1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11465:1: rule__Declaration__Group_3__1 : rule__Declaration__Group_3__1__Impl ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11402:1: rule__Declaration__Group_3__1 : rule__Declaration__Group_3__1__Impl ;
     public final void rule__Declaration__Group_3__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11469:1: ( rule__Declaration__Group_3__1__Impl )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11470:2: rule__Declaration__Group_3__1__Impl
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11406:1: ( rule__Declaration__Group_3__1__Impl )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11407:2: rule__Declaration__Group_3__1__Impl
             {
-            pushFollow(FOLLOW_rule__Declaration__Group_3__1__Impl_in_rule__Declaration__Group_3__123272);
+            pushFollow(FOLLOW_rule__Declaration__Group_3__1__Impl_in_rule__Declaration__Group_3__123149);
             rule__Declaration__Group_3__1__Impl();
 
             state._fsp--;
@@ -31381,23 +31262,23 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Declaration__Group_3__1__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11476:1: rule__Declaration__Group_3__1__Impl : ( ( rule__Declaration__InitAssignment_3_1 ) ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11413:1: rule__Declaration__Group_3__1__Impl : ( ( rule__Declaration__InitAssignment_3_1 ) ) ;
     public final void rule__Declaration__Group_3__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11480:1: ( ( ( rule__Declaration__InitAssignment_3_1 ) ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11481:1: ( ( rule__Declaration__InitAssignment_3_1 ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11417:1: ( ( ( rule__Declaration__InitAssignment_3_1 ) ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11418:1: ( ( rule__Declaration__InitAssignment_3_1 ) )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11481:1: ( ( rule__Declaration__InitAssignment_3_1 ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11482:1: ( rule__Declaration__InitAssignment_3_1 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11418:1: ( ( rule__Declaration__InitAssignment_3_1 ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11419:1: ( rule__Declaration__InitAssignment_3_1 )
             {
              before(grammarAccess.getDeclarationAccess().getInitAssignment_3_1()); 
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11483:1: ( rule__Declaration__InitAssignment_3_1 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11483:2: rule__Declaration__InitAssignment_3_1
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11420:1: ( rule__Declaration__InitAssignment_3_1 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11420:2: rule__Declaration__InitAssignment_3_1
             {
-            pushFollow(FOLLOW_rule__Declaration__InitAssignment_3_1_in_rule__Declaration__Group_3__1__Impl23299);
+            pushFollow(FOLLOW_rule__Declaration__InitAssignment_3_1_in_rule__Declaration__Group_3__1__Impl23176);
             rule__Declaration__InitAssignment_3_1();
 
             state._fsp--;
@@ -31428,21 +31309,21 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ActualParameterList__Group__0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11497:1: rule__ActualParameterList__Group__0 : rule__ActualParameterList__Group__0__Impl rule__ActualParameterList__Group__1 ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11434:1: rule__ActualParameterList__Group__0 : rule__ActualParameterList__Group__0__Impl rule__ActualParameterList__Group__1 ;
     public final void rule__ActualParameterList__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11501:1: ( rule__ActualParameterList__Group__0__Impl rule__ActualParameterList__Group__1 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11502:2: rule__ActualParameterList__Group__0__Impl rule__ActualParameterList__Group__1
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11438:1: ( rule__ActualParameterList__Group__0__Impl rule__ActualParameterList__Group__1 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11439:2: rule__ActualParameterList__Group__0__Impl rule__ActualParameterList__Group__1
             {
-            pushFollow(FOLLOW_rule__ActualParameterList__Group__0__Impl_in_rule__ActualParameterList__Group__023333);
+            pushFollow(FOLLOW_rule__ActualParameterList__Group__0__Impl_in_rule__ActualParameterList__Group__023210);
             rule__ActualParameterList__Group__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__ActualParameterList__Group__1_in_rule__ActualParameterList__Group__023336);
+            pushFollow(FOLLOW_rule__ActualParameterList__Group__1_in_rule__ActualParameterList__Group__023213);
             rule__ActualParameterList__Group__1();
 
             state._fsp--;
@@ -31466,23 +31347,23 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ActualParameterList__Group__0__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11509:1: rule__ActualParameterList__Group__0__Impl : ( ( rule__ActualParameterList__ParamAssignment_0 ) ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11446:1: rule__ActualParameterList__Group__0__Impl : ( ( rule__ActualParameterList__ParamAssignment_0 ) ) ;
     public final void rule__ActualParameterList__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11513:1: ( ( ( rule__ActualParameterList__ParamAssignment_0 ) ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11514:1: ( ( rule__ActualParameterList__ParamAssignment_0 ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11450:1: ( ( ( rule__ActualParameterList__ParamAssignment_0 ) ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11451:1: ( ( rule__ActualParameterList__ParamAssignment_0 ) )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11514:1: ( ( rule__ActualParameterList__ParamAssignment_0 ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11515:1: ( rule__ActualParameterList__ParamAssignment_0 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11451:1: ( ( rule__ActualParameterList__ParamAssignment_0 ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11452:1: ( rule__ActualParameterList__ParamAssignment_0 )
             {
              before(grammarAccess.getActualParameterListAccess().getParamAssignment_0()); 
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11516:1: ( rule__ActualParameterList__ParamAssignment_0 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11516:2: rule__ActualParameterList__ParamAssignment_0
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11453:1: ( rule__ActualParameterList__ParamAssignment_0 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11453:2: rule__ActualParameterList__ParamAssignment_0
             {
-            pushFollow(FOLLOW_rule__ActualParameterList__ParamAssignment_0_in_rule__ActualParameterList__Group__0__Impl23363);
+            pushFollow(FOLLOW_rule__ActualParameterList__ParamAssignment_0_in_rule__ActualParameterList__Group__0__Impl23240);
             rule__ActualParameterList__ParamAssignment_0();
 
             state._fsp--;
@@ -31513,16 +31394,16 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ActualParameterList__Group__1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11526:1: rule__ActualParameterList__Group__1 : rule__ActualParameterList__Group__1__Impl ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11463:1: rule__ActualParameterList__Group__1 : rule__ActualParameterList__Group__1__Impl ;
     public final void rule__ActualParameterList__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11530:1: ( rule__ActualParameterList__Group__1__Impl )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11531:2: rule__ActualParameterList__Group__1__Impl
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11467:1: ( rule__ActualParameterList__Group__1__Impl )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11468:2: rule__ActualParameterList__Group__1__Impl
             {
-            pushFollow(FOLLOW_rule__ActualParameterList__Group__1__Impl_in_rule__ActualParameterList__Group__123393);
+            pushFollow(FOLLOW_rule__ActualParameterList__Group__1__Impl_in_rule__ActualParameterList__Group__123270);
             rule__ActualParameterList__Group__1__Impl();
 
             state._fsp--;
@@ -31546,20 +31427,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ActualParameterList__Group__1__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11537:1: rule__ActualParameterList__Group__1__Impl : ( ( rule__ActualParameterList__Group_1__0 )* ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11474:1: rule__ActualParameterList__Group__1__Impl : ( ( rule__ActualParameterList__Group_1__0 )* ) ;
     public final void rule__ActualParameterList__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11541:1: ( ( ( rule__ActualParameterList__Group_1__0 )* ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11542:1: ( ( rule__ActualParameterList__Group_1__0 )* )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11478:1: ( ( ( rule__ActualParameterList__Group_1__0 )* ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11479:1: ( ( rule__ActualParameterList__Group_1__0 )* )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11542:1: ( ( rule__ActualParameterList__Group_1__0 )* )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11543:1: ( rule__ActualParameterList__Group_1__0 )*
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11479:1: ( ( rule__ActualParameterList__Group_1__0 )* )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11480:1: ( rule__ActualParameterList__Group_1__0 )*
             {
              before(grammarAccess.getActualParameterListAccess().getGroup_1()); 
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11544:1: ( rule__ActualParameterList__Group_1__0 )*
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11481:1: ( rule__ActualParameterList__Group_1__0 )*
             loop87:
             do {
                 int alt87=2;
@@ -31572,9 +31453,9 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
                 switch (alt87) {
             	case 1 :
-            	    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11544:2: rule__ActualParameterList__Group_1__0
+            	    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11481:2: rule__ActualParameterList__Group_1__0
             	    {
-            	    pushFollow(FOLLOW_rule__ActualParameterList__Group_1__0_in_rule__ActualParameterList__Group__1__Impl23420);
+            	    pushFollow(FOLLOW_rule__ActualParameterList__Group_1__0_in_rule__ActualParameterList__Group__1__Impl23297);
             	    rule__ActualParameterList__Group_1__0();
 
             	    state._fsp--;
@@ -31611,21 +31492,21 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ActualParameterList__Group_1__0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11558:1: rule__ActualParameterList__Group_1__0 : rule__ActualParameterList__Group_1__0__Impl rule__ActualParameterList__Group_1__1 ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11495:1: rule__ActualParameterList__Group_1__0 : rule__ActualParameterList__Group_1__0__Impl rule__ActualParameterList__Group_1__1 ;
     public final void rule__ActualParameterList__Group_1__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11562:1: ( rule__ActualParameterList__Group_1__0__Impl rule__ActualParameterList__Group_1__1 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11563:2: rule__ActualParameterList__Group_1__0__Impl rule__ActualParameterList__Group_1__1
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11499:1: ( rule__ActualParameterList__Group_1__0__Impl rule__ActualParameterList__Group_1__1 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11500:2: rule__ActualParameterList__Group_1__0__Impl rule__ActualParameterList__Group_1__1
             {
-            pushFollow(FOLLOW_rule__ActualParameterList__Group_1__0__Impl_in_rule__ActualParameterList__Group_1__023455);
+            pushFollow(FOLLOW_rule__ActualParameterList__Group_1__0__Impl_in_rule__ActualParameterList__Group_1__023332);
             rule__ActualParameterList__Group_1__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__ActualParameterList__Group_1__1_in_rule__ActualParameterList__Group_1__023458);
+            pushFollow(FOLLOW_rule__ActualParameterList__Group_1__1_in_rule__ActualParameterList__Group_1__023335);
             rule__ActualParameterList__Group_1__1();
 
             state._fsp--;
@@ -31649,20 +31530,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ActualParameterList__Group_1__0__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11570:1: rule__ActualParameterList__Group_1__0__Impl : ( ',' ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11507:1: rule__ActualParameterList__Group_1__0__Impl : ( ',' ) ;
     public final void rule__ActualParameterList__Group_1__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11574:1: ( ( ',' ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11575:1: ( ',' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11511:1: ( ( ',' ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11512:1: ( ',' )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11575:1: ( ',' )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11576:1: ','
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11512:1: ( ',' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11513:1: ','
             {
              before(grammarAccess.getActualParameterListAccess().getCommaKeyword_1_0()); 
-            match(input,39,FOLLOW_39_in_rule__ActualParameterList__Group_1__0__Impl23486); 
+            match(input,39,FOLLOW_39_in_rule__ActualParameterList__Group_1__0__Impl23363); 
              after(grammarAccess.getActualParameterListAccess().getCommaKeyword_1_0()); 
 
             }
@@ -31686,16 +31567,16 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ActualParameterList__Group_1__1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11589:1: rule__ActualParameterList__Group_1__1 : rule__ActualParameterList__Group_1__1__Impl ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11526:1: rule__ActualParameterList__Group_1__1 : rule__ActualParameterList__Group_1__1__Impl ;
     public final void rule__ActualParameterList__Group_1__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11593:1: ( rule__ActualParameterList__Group_1__1__Impl )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11594:2: rule__ActualParameterList__Group_1__1__Impl
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11530:1: ( rule__ActualParameterList__Group_1__1__Impl )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11531:2: rule__ActualParameterList__Group_1__1__Impl
             {
-            pushFollow(FOLLOW_rule__ActualParameterList__Group_1__1__Impl_in_rule__ActualParameterList__Group_1__123517);
+            pushFollow(FOLLOW_rule__ActualParameterList__Group_1__1__Impl_in_rule__ActualParameterList__Group_1__123394);
             rule__ActualParameterList__Group_1__1__Impl();
 
             state._fsp--;
@@ -31719,23 +31600,23 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ActualParameterList__Group_1__1__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11600:1: rule__ActualParameterList__Group_1__1__Impl : ( ( rule__ActualParameterList__ParamAssignment_1_1 ) ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11537:1: rule__ActualParameterList__Group_1__1__Impl : ( ( rule__ActualParameterList__ParamAssignment_1_1 ) ) ;
     public final void rule__ActualParameterList__Group_1__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11604:1: ( ( ( rule__ActualParameterList__ParamAssignment_1_1 ) ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11605:1: ( ( rule__ActualParameterList__ParamAssignment_1_1 ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11541:1: ( ( ( rule__ActualParameterList__ParamAssignment_1_1 ) ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11542:1: ( ( rule__ActualParameterList__ParamAssignment_1_1 ) )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11605:1: ( ( rule__ActualParameterList__ParamAssignment_1_1 ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11606:1: ( rule__ActualParameterList__ParamAssignment_1_1 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11542:1: ( ( rule__ActualParameterList__ParamAssignment_1_1 ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11543:1: ( rule__ActualParameterList__ParamAssignment_1_1 )
             {
              before(grammarAccess.getActualParameterListAccess().getParamAssignment_1_1()); 
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11607:1: ( rule__ActualParameterList__ParamAssignment_1_1 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11607:2: rule__ActualParameterList__ParamAssignment_1_1
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11544:1: ( rule__ActualParameterList__ParamAssignment_1_1 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11544:2: rule__ActualParameterList__ParamAssignment_1_1
             {
-            pushFollow(FOLLOW_rule__ActualParameterList__ParamAssignment_1_1_in_rule__ActualParameterList__Group_1__1__Impl23544);
+            pushFollow(FOLLOW_rule__ActualParameterList__ParamAssignment_1_1_in_rule__ActualParameterList__Group_1__1__Impl23421);
             rule__ActualParameterList__ParamAssignment_1_1();
 
             state._fsp--;
@@ -31766,21 +31647,21 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ExpressionAccess__Group__0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11621:1: rule__ExpressionAccess__Group__0 : rule__ExpressionAccess__Group__0__Impl rule__ExpressionAccess__Group__1 ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11558:1: rule__ExpressionAccess__Group__0 : rule__ExpressionAccess__Group__0__Impl rule__ExpressionAccess__Group__1 ;
     public final void rule__ExpressionAccess__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11625:1: ( rule__ExpressionAccess__Group__0__Impl rule__ExpressionAccess__Group__1 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11626:2: rule__ExpressionAccess__Group__0__Impl rule__ExpressionAccess__Group__1
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11562:1: ( rule__ExpressionAccess__Group__0__Impl rule__ExpressionAccess__Group__1 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11563:2: rule__ExpressionAccess__Group__0__Impl rule__ExpressionAccess__Group__1
             {
-            pushFollow(FOLLOW_rule__ExpressionAccess__Group__0__Impl_in_rule__ExpressionAccess__Group__023578);
+            pushFollow(FOLLOW_rule__ExpressionAccess__Group__0__Impl_in_rule__ExpressionAccess__Group__023455);
             rule__ExpressionAccess__Group__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__ExpressionAccess__Group__1_in_rule__ExpressionAccess__Group__023581);
+            pushFollow(FOLLOW_rule__ExpressionAccess__Group__1_in_rule__ExpressionAccess__Group__023458);
             rule__ExpressionAccess__Group__1();
 
             state._fsp--;
@@ -31804,20 +31685,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ExpressionAccess__Group__0__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11633:1: rule__ExpressionAccess__Group__0__Impl : ( '.' ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11570:1: rule__ExpressionAccess__Group__0__Impl : ( '.' ) ;
     public final void rule__ExpressionAccess__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11637:1: ( ( '.' ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11638:1: ( '.' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11574:1: ( ( '.' ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11575:1: ( '.' )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11638:1: ( '.' )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11639:1: '.'
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11575:1: ( '.' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11576:1: '.'
             {
              before(grammarAccess.getExpressionAccessAccess().getFullStopKeyword_0()); 
-            match(input,63,FOLLOW_63_in_rule__ExpressionAccess__Group__0__Impl23609); 
+            match(input,63,FOLLOW_63_in_rule__ExpressionAccess__Group__0__Impl23486); 
              after(grammarAccess.getExpressionAccessAccess().getFullStopKeyword_0()); 
 
             }
@@ -31841,21 +31722,21 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ExpressionAccess__Group__1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11652:1: rule__ExpressionAccess__Group__1 : rule__ExpressionAccess__Group__1__Impl rule__ExpressionAccess__Group__2 ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11589:1: rule__ExpressionAccess__Group__1 : rule__ExpressionAccess__Group__1__Impl rule__ExpressionAccess__Group__2 ;
     public final void rule__ExpressionAccess__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11656:1: ( rule__ExpressionAccess__Group__1__Impl rule__ExpressionAccess__Group__2 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11657:2: rule__ExpressionAccess__Group__1__Impl rule__ExpressionAccess__Group__2
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11593:1: ( rule__ExpressionAccess__Group__1__Impl rule__ExpressionAccess__Group__2 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11594:2: rule__ExpressionAccess__Group__1__Impl rule__ExpressionAccess__Group__2
             {
-            pushFollow(FOLLOW_rule__ExpressionAccess__Group__1__Impl_in_rule__ExpressionAccess__Group__123640);
+            pushFollow(FOLLOW_rule__ExpressionAccess__Group__1__Impl_in_rule__ExpressionAccess__Group__123517);
             rule__ExpressionAccess__Group__1__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__ExpressionAccess__Group__2_in_rule__ExpressionAccess__Group__123643);
+            pushFollow(FOLLOW_rule__ExpressionAccess__Group__2_in_rule__ExpressionAccess__Group__123520);
             rule__ExpressionAccess__Group__2();
 
             state._fsp--;
@@ -31879,23 +31760,23 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ExpressionAccess__Group__1__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11664:1: rule__ExpressionAccess__Group__1__Impl : ( ( rule__ExpressionAccess__NameAssignment_1 ) ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11601:1: rule__ExpressionAccess__Group__1__Impl : ( ( rule__ExpressionAccess__NameAssignment_1 ) ) ;
     public final void rule__ExpressionAccess__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11668:1: ( ( ( rule__ExpressionAccess__NameAssignment_1 ) ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11669:1: ( ( rule__ExpressionAccess__NameAssignment_1 ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11605:1: ( ( ( rule__ExpressionAccess__NameAssignment_1 ) ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11606:1: ( ( rule__ExpressionAccess__NameAssignment_1 ) )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11669:1: ( ( rule__ExpressionAccess__NameAssignment_1 ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11670:1: ( rule__ExpressionAccess__NameAssignment_1 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11606:1: ( ( rule__ExpressionAccess__NameAssignment_1 ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11607:1: ( rule__ExpressionAccess__NameAssignment_1 )
             {
              before(grammarAccess.getExpressionAccessAccess().getNameAssignment_1()); 
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11671:1: ( rule__ExpressionAccess__NameAssignment_1 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11671:2: rule__ExpressionAccess__NameAssignment_1
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11608:1: ( rule__ExpressionAccess__NameAssignment_1 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11608:2: rule__ExpressionAccess__NameAssignment_1
             {
-            pushFollow(FOLLOW_rule__ExpressionAccess__NameAssignment_1_in_rule__ExpressionAccess__Group__1__Impl23670);
+            pushFollow(FOLLOW_rule__ExpressionAccess__NameAssignment_1_in_rule__ExpressionAccess__Group__1__Impl23547);
             rule__ExpressionAccess__NameAssignment_1();
 
             state._fsp--;
@@ -31926,21 +31807,21 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ExpressionAccess__Group__2"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11681:1: rule__ExpressionAccess__Group__2 : rule__ExpressionAccess__Group__2__Impl rule__ExpressionAccess__Group__3 ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11618:1: rule__ExpressionAccess__Group__2 : rule__ExpressionAccess__Group__2__Impl rule__ExpressionAccess__Group__3 ;
     public final void rule__ExpressionAccess__Group__2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11685:1: ( rule__ExpressionAccess__Group__2__Impl rule__ExpressionAccess__Group__3 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11686:2: rule__ExpressionAccess__Group__2__Impl rule__ExpressionAccess__Group__3
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11622:1: ( rule__ExpressionAccess__Group__2__Impl rule__ExpressionAccess__Group__3 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11623:2: rule__ExpressionAccess__Group__2__Impl rule__ExpressionAccess__Group__3
             {
-            pushFollow(FOLLOW_rule__ExpressionAccess__Group__2__Impl_in_rule__ExpressionAccess__Group__223700);
+            pushFollow(FOLLOW_rule__ExpressionAccess__Group__2__Impl_in_rule__ExpressionAccess__Group__223577);
             rule__ExpressionAccess__Group__2__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__ExpressionAccess__Group__3_in_rule__ExpressionAccess__Group__223703);
+            pushFollow(FOLLOW_rule__ExpressionAccess__Group__3_in_rule__ExpressionAccess__Group__223580);
             rule__ExpressionAccess__Group__3();
 
             state._fsp--;
@@ -31964,20 +31845,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ExpressionAccess__Group__2__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11693:1: rule__ExpressionAccess__Group__2__Impl : ( ( rule__ExpressionAccess__CallsAssignment_2 )* ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11630:1: rule__ExpressionAccess__Group__2__Impl : ( ( rule__ExpressionAccess__CallsAssignment_2 )* ) ;
     public final void rule__ExpressionAccess__Group__2__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11697:1: ( ( ( rule__ExpressionAccess__CallsAssignment_2 )* ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11698:1: ( ( rule__ExpressionAccess__CallsAssignment_2 )* )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11634:1: ( ( ( rule__ExpressionAccess__CallsAssignment_2 )* ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11635:1: ( ( rule__ExpressionAccess__CallsAssignment_2 )* )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11698:1: ( ( rule__ExpressionAccess__CallsAssignment_2 )* )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11699:1: ( rule__ExpressionAccess__CallsAssignment_2 )*
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11635:1: ( ( rule__ExpressionAccess__CallsAssignment_2 )* )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11636:1: ( rule__ExpressionAccess__CallsAssignment_2 )*
             {
              before(grammarAccess.getExpressionAccessAccess().getCallsAssignment_2()); 
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11700:1: ( rule__ExpressionAccess__CallsAssignment_2 )*
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11637:1: ( rule__ExpressionAccess__CallsAssignment_2 )*
             loop88:
             do {
                 int alt88=2;
@@ -32029,9 +31910,9 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
                 switch (alt88) {
             	case 1 :
-            	    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11700:2: rule__ExpressionAccess__CallsAssignment_2
+            	    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11637:2: rule__ExpressionAccess__CallsAssignment_2
             	    {
-            	    pushFollow(FOLLOW_rule__ExpressionAccess__CallsAssignment_2_in_rule__ExpressionAccess__Group__2__Impl23730);
+            	    pushFollow(FOLLOW_rule__ExpressionAccess__CallsAssignment_2_in_rule__ExpressionAccess__Group__2__Impl23607);
             	    rule__ExpressionAccess__CallsAssignment_2();
 
             	    state._fsp--;
@@ -32068,16 +31949,16 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ExpressionAccess__Group__3"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11710:1: rule__ExpressionAccess__Group__3 : rule__ExpressionAccess__Group__3__Impl ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11647:1: rule__ExpressionAccess__Group__3 : rule__ExpressionAccess__Group__3__Impl ;
     public final void rule__ExpressionAccess__Group__3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11714:1: ( rule__ExpressionAccess__Group__3__Impl )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11715:2: rule__ExpressionAccess__Group__3__Impl
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11651:1: ( rule__ExpressionAccess__Group__3__Impl )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11652:2: rule__ExpressionAccess__Group__3__Impl
             {
-            pushFollow(FOLLOW_rule__ExpressionAccess__Group__3__Impl_in_rule__ExpressionAccess__Group__323761);
+            pushFollow(FOLLOW_rule__ExpressionAccess__Group__3__Impl_in_rule__ExpressionAccess__Group__323638);
             rule__ExpressionAccess__Group__3__Impl();
 
             state._fsp--;
@@ -32101,20 +31982,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ExpressionAccess__Group__3__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11721:1: rule__ExpressionAccess__Group__3__Impl : ( ( rule__ExpressionAccess__AccessAssignment_3 )? ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11658:1: rule__ExpressionAccess__Group__3__Impl : ( ( rule__ExpressionAccess__AccessAssignment_3 )? ) ;
     public final void rule__ExpressionAccess__Group__3__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11725:1: ( ( ( rule__ExpressionAccess__AccessAssignment_3 )? ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11726:1: ( ( rule__ExpressionAccess__AccessAssignment_3 )? )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11662:1: ( ( ( rule__ExpressionAccess__AccessAssignment_3 )? ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11663:1: ( ( rule__ExpressionAccess__AccessAssignment_3 )? )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11726:1: ( ( rule__ExpressionAccess__AccessAssignment_3 )? )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11727:1: ( rule__ExpressionAccess__AccessAssignment_3 )?
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11663:1: ( ( rule__ExpressionAccess__AccessAssignment_3 )? )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11664:1: ( rule__ExpressionAccess__AccessAssignment_3 )?
             {
              before(grammarAccess.getExpressionAccessAccess().getAccessAssignment_3()); 
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11728:1: ( rule__ExpressionAccess__AccessAssignment_3 )?
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11665:1: ( rule__ExpressionAccess__AccessAssignment_3 )?
             int alt89=2;
             int LA89_0 = input.LA(1);
 
@@ -32123,9 +32004,9 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
             }
             switch (alt89) {
                 case 1 :
-                    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11728:2: rule__ExpressionAccess__AccessAssignment_3
+                    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11665:2: rule__ExpressionAccess__AccessAssignment_3
                     {
-                    pushFollow(FOLLOW_rule__ExpressionAccess__AccessAssignment_3_in_rule__ExpressionAccess__Group__3__Impl23788);
+                    pushFollow(FOLLOW_rule__ExpressionAccess__AccessAssignment_3_in_rule__ExpressionAccess__Group__3__Impl23665);
                     rule__ExpressionAccess__AccessAssignment_3();
 
                     state._fsp--;
@@ -32159,21 +32040,21 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__PrimaryExpression__Group__0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11746:1: rule__PrimaryExpression__Group__0 : rule__PrimaryExpression__Group__0__Impl rule__PrimaryExpression__Group__1 ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11683:1: rule__PrimaryExpression__Group__0 : rule__PrimaryExpression__Group__0__Impl rule__PrimaryExpression__Group__1 ;
     public final void rule__PrimaryExpression__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11750:1: ( rule__PrimaryExpression__Group__0__Impl rule__PrimaryExpression__Group__1 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11751:2: rule__PrimaryExpression__Group__0__Impl rule__PrimaryExpression__Group__1
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11687:1: ( rule__PrimaryExpression__Group__0__Impl rule__PrimaryExpression__Group__1 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11688:2: rule__PrimaryExpression__Group__0__Impl rule__PrimaryExpression__Group__1
             {
-            pushFollow(FOLLOW_rule__PrimaryExpression__Group__0__Impl_in_rule__PrimaryExpression__Group__023827);
+            pushFollow(FOLLOW_rule__PrimaryExpression__Group__0__Impl_in_rule__PrimaryExpression__Group__023704);
             rule__PrimaryExpression__Group__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__PrimaryExpression__Group__1_in_rule__PrimaryExpression__Group__023830);
+            pushFollow(FOLLOW_rule__PrimaryExpression__Group__1_in_rule__PrimaryExpression__Group__023707);
             rule__PrimaryExpression__Group__1();
 
             state._fsp--;
@@ -32197,23 +32078,23 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__PrimaryExpression__Group__0__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11758:1: rule__PrimaryExpression__Group__0__Impl : ( ( rule__PrimaryExpression__Alternatives_0 ) ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11695:1: rule__PrimaryExpression__Group__0__Impl : ( ( rule__PrimaryExpression__Alternatives_0 ) ) ;
     public final void rule__PrimaryExpression__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11762:1: ( ( ( rule__PrimaryExpression__Alternatives_0 ) ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11763:1: ( ( rule__PrimaryExpression__Alternatives_0 ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11699:1: ( ( ( rule__PrimaryExpression__Alternatives_0 ) ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11700:1: ( ( rule__PrimaryExpression__Alternatives_0 ) )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11763:1: ( ( rule__PrimaryExpression__Alternatives_0 ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11764:1: ( rule__PrimaryExpression__Alternatives_0 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11700:1: ( ( rule__PrimaryExpression__Alternatives_0 ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11701:1: ( rule__PrimaryExpression__Alternatives_0 )
             {
              before(grammarAccess.getPrimaryExpressionAccess().getAlternatives_0()); 
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11765:1: ( rule__PrimaryExpression__Alternatives_0 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11765:2: rule__PrimaryExpression__Alternatives_0
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11702:1: ( rule__PrimaryExpression__Alternatives_0 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11702:2: rule__PrimaryExpression__Alternatives_0
             {
-            pushFollow(FOLLOW_rule__PrimaryExpression__Alternatives_0_in_rule__PrimaryExpression__Group__0__Impl23857);
+            pushFollow(FOLLOW_rule__PrimaryExpression__Alternatives_0_in_rule__PrimaryExpression__Group__0__Impl23734);
             rule__PrimaryExpression__Alternatives_0();
 
             state._fsp--;
@@ -32244,21 +32125,21 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__PrimaryExpression__Group__1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11775:1: rule__PrimaryExpression__Group__1 : rule__PrimaryExpression__Group__1__Impl rule__PrimaryExpression__Group__2 ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11712:1: rule__PrimaryExpression__Group__1 : rule__PrimaryExpression__Group__1__Impl rule__PrimaryExpression__Group__2 ;
     public final void rule__PrimaryExpression__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11779:1: ( rule__PrimaryExpression__Group__1__Impl rule__PrimaryExpression__Group__2 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11780:2: rule__PrimaryExpression__Group__1__Impl rule__PrimaryExpression__Group__2
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11716:1: ( rule__PrimaryExpression__Group__1__Impl rule__PrimaryExpression__Group__2 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11717:2: rule__PrimaryExpression__Group__1__Impl rule__PrimaryExpression__Group__2
             {
-            pushFollow(FOLLOW_rule__PrimaryExpression__Group__1__Impl_in_rule__PrimaryExpression__Group__123887);
+            pushFollow(FOLLOW_rule__PrimaryExpression__Group__1__Impl_in_rule__PrimaryExpression__Group__123764);
             rule__PrimaryExpression__Group__1__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__PrimaryExpression__Group__2_in_rule__PrimaryExpression__Group__123890);
+            pushFollow(FOLLOW_rule__PrimaryExpression__Group__2_in_rule__PrimaryExpression__Group__123767);
             rule__PrimaryExpression__Group__2();
 
             state._fsp--;
@@ -32282,20 +32163,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__PrimaryExpression__Group__1__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11787:1: rule__PrimaryExpression__Group__1__Impl : ( ( rule__PrimaryExpression__CallsAssignment_1 )* ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11724:1: rule__PrimaryExpression__Group__1__Impl : ( ( rule__PrimaryExpression__CallsAssignment_1 )* ) ;
     public final void rule__PrimaryExpression__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11791:1: ( ( ( rule__PrimaryExpression__CallsAssignment_1 )* ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11792:1: ( ( rule__PrimaryExpression__CallsAssignment_1 )* )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11728:1: ( ( ( rule__PrimaryExpression__CallsAssignment_1 )* ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11729:1: ( ( rule__PrimaryExpression__CallsAssignment_1 )* )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11792:1: ( ( rule__PrimaryExpression__CallsAssignment_1 )* )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11793:1: ( rule__PrimaryExpression__CallsAssignment_1 )*
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11729:1: ( ( rule__PrimaryExpression__CallsAssignment_1 )* )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11730:1: ( rule__PrimaryExpression__CallsAssignment_1 )*
             {
              before(grammarAccess.getPrimaryExpressionAccess().getCallsAssignment_1()); 
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11794:1: ( rule__PrimaryExpression__CallsAssignment_1 )*
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11731:1: ( rule__PrimaryExpression__CallsAssignment_1 )*
             loop90:
             do {
                 int alt90=2;
@@ -32347,9 +32228,9 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
                 switch (alt90) {
             	case 1 :
-            	    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11794:2: rule__PrimaryExpression__CallsAssignment_1
+            	    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11731:2: rule__PrimaryExpression__CallsAssignment_1
             	    {
-            	    pushFollow(FOLLOW_rule__PrimaryExpression__CallsAssignment_1_in_rule__PrimaryExpression__Group__1__Impl23917);
+            	    pushFollow(FOLLOW_rule__PrimaryExpression__CallsAssignment_1_in_rule__PrimaryExpression__Group__1__Impl23794);
             	    rule__PrimaryExpression__CallsAssignment_1();
 
             	    state._fsp--;
@@ -32386,16 +32267,16 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__PrimaryExpression__Group__2"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11804:1: rule__PrimaryExpression__Group__2 : rule__PrimaryExpression__Group__2__Impl ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11741:1: rule__PrimaryExpression__Group__2 : rule__PrimaryExpression__Group__2__Impl ;
     public final void rule__PrimaryExpression__Group__2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11808:1: ( rule__PrimaryExpression__Group__2__Impl )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11809:2: rule__PrimaryExpression__Group__2__Impl
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11745:1: ( rule__PrimaryExpression__Group__2__Impl )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11746:2: rule__PrimaryExpression__Group__2__Impl
             {
-            pushFollow(FOLLOW_rule__PrimaryExpression__Group__2__Impl_in_rule__PrimaryExpression__Group__223948);
+            pushFollow(FOLLOW_rule__PrimaryExpression__Group__2__Impl_in_rule__PrimaryExpression__Group__223825);
             rule__PrimaryExpression__Group__2__Impl();
 
             state._fsp--;
@@ -32419,20 +32300,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__PrimaryExpression__Group__2__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11815:1: rule__PrimaryExpression__Group__2__Impl : ( ( rule__PrimaryExpression__AccessAssignment_2 )? ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11752:1: rule__PrimaryExpression__Group__2__Impl : ( ( rule__PrimaryExpression__AccessAssignment_2 )? ) ;
     public final void rule__PrimaryExpression__Group__2__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11819:1: ( ( ( rule__PrimaryExpression__AccessAssignment_2 )? ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11820:1: ( ( rule__PrimaryExpression__AccessAssignment_2 )? )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11756:1: ( ( ( rule__PrimaryExpression__AccessAssignment_2 )? ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11757:1: ( ( rule__PrimaryExpression__AccessAssignment_2 )? )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11820:1: ( ( rule__PrimaryExpression__AccessAssignment_2 )? )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11821:1: ( rule__PrimaryExpression__AccessAssignment_2 )?
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11757:1: ( ( rule__PrimaryExpression__AccessAssignment_2 )? )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11758:1: ( rule__PrimaryExpression__AccessAssignment_2 )?
             {
              before(grammarAccess.getPrimaryExpressionAccess().getAccessAssignment_2()); 
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11822:1: ( rule__PrimaryExpression__AccessAssignment_2 )?
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11759:1: ( rule__PrimaryExpression__AccessAssignment_2 )?
             int alt91=2;
             int LA91_0 = input.LA(1);
 
@@ -32441,9 +32322,9 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
             }
             switch (alt91) {
                 case 1 :
-                    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11822:2: rule__PrimaryExpression__AccessAssignment_2
+                    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11759:2: rule__PrimaryExpression__AccessAssignment_2
                     {
-                    pushFollow(FOLLOW_rule__PrimaryExpression__AccessAssignment_2_in_rule__PrimaryExpression__Group__2__Impl23975);
+                    pushFollow(FOLLOW_rule__PrimaryExpression__AccessAssignment_2_in_rule__PrimaryExpression__Group__2__Impl23852);
                     rule__PrimaryExpression__AccessAssignment_2();
 
                     state._fsp--;
@@ -32477,21 +32358,21 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__PrimaryExpression__Group_0_1__0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11838:1: rule__PrimaryExpression__Group_0_1__0 : rule__PrimaryExpression__Group_0_1__0__Impl rule__PrimaryExpression__Group_0_1__1 ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11775:1: rule__PrimaryExpression__Group_0_1__0 : rule__PrimaryExpression__Group_0_1__0__Impl rule__PrimaryExpression__Group_0_1__1 ;
     public final void rule__PrimaryExpression__Group_0_1__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11842:1: ( rule__PrimaryExpression__Group_0_1__0__Impl rule__PrimaryExpression__Group_0_1__1 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11843:2: rule__PrimaryExpression__Group_0_1__0__Impl rule__PrimaryExpression__Group_0_1__1
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11779:1: ( rule__PrimaryExpression__Group_0_1__0__Impl rule__PrimaryExpression__Group_0_1__1 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11780:2: rule__PrimaryExpression__Group_0_1__0__Impl rule__PrimaryExpression__Group_0_1__1
             {
-            pushFollow(FOLLOW_rule__PrimaryExpression__Group_0_1__0__Impl_in_rule__PrimaryExpression__Group_0_1__024012);
+            pushFollow(FOLLOW_rule__PrimaryExpression__Group_0_1__0__Impl_in_rule__PrimaryExpression__Group_0_1__023889);
             rule__PrimaryExpression__Group_0_1__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__PrimaryExpression__Group_0_1__1_in_rule__PrimaryExpression__Group_0_1__024015);
+            pushFollow(FOLLOW_rule__PrimaryExpression__Group_0_1__1_in_rule__PrimaryExpression__Group_0_1__023892);
             rule__PrimaryExpression__Group_0_1__1();
 
             state._fsp--;
@@ -32515,20 +32396,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__PrimaryExpression__Group_0_1__0__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11850:1: rule__PrimaryExpression__Group_0_1__0__Impl : ( '(' ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11787:1: rule__PrimaryExpression__Group_0_1__0__Impl : ( '(' ) ;
     public final void rule__PrimaryExpression__Group_0_1__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11854:1: ( ( '(' ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11855:1: ( '(' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11791:1: ( ( '(' ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11792:1: ( '(' )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11855:1: ( '(' )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11856:1: '('
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11792:1: ( '(' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11793:1: '('
             {
              before(grammarAccess.getPrimaryExpressionAccess().getLeftParenthesisKeyword_0_1_0()); 
-            match(input,43,FOLLOW_43_in_rule__PrimaryExpression__Group_0_1__0__Impl24043); 
+            match(input,43,FOLLOW_43_in_rule__PrimaryExpression__Group_0_1__0__Impl23920); 
              after(grammarAccess.getPrimaryExpressionAccess().getLeftParenthesisKeyword_0_1_0()); 
 
             }
@@ -32552,21 +32433,21 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__PrimaryExpression__Group_0_1__1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11869:1: rule__PrimaryExpression__Group_0_1__1 : rule__PrimaryExpression__Group_0_1__1__Impl rule__PrimaryExpression__Group_0_1__2 ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11806:1: rule__PrimaryExpression__Group_0_1__1 : rule__PrimaryExpression__Group_0_1__1__Impl rule__PrimaryExpression__Group_0_1__2 ;
     public final void rule__PrimaryExpression__Group_0_1__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11873:1: ( rule__PrimaryExpression__Group_0_1__1__Impl rule__PrimaryExpression__Group_0_1__2 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11874:2: rule__PrimaryExpression__Group_0_1__1__Impl rule__PrimaryExpression__Group_0_1__2
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11810:1: ( rule__PrimaryExpression__Group_0_1__1__Impl rule__PrimaryExpression__Group_0_1__2 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11811:2: rule__PrimaryExpression__Group_0_1__1__Impl rule__PrimaryExpression__Group_0_1__2
             {
-            pushFollow(FOLLOW_rule__PrimaryExpression__Group_0_1__1__Impl_in_rule__PrimaryExpression__Group_0_1__124074);
+            pushFollow(FOLLOW_rule__PrimaryExpression__Group_0_1__1__Impl_in_rule__PrimaryExpression__Group_0_1__123951);
             rule__PrimaryExpression__Group_0_1__1__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__PrimaryExpression__Group_0_1__2_in_rule__PrimaryExpression__Group_0_1__124077);
+            pushFollow(FOLLOW_rule__PrimaryExpression__Group_0_1__2_in_rule__PrimaryExpression__Group_0_1__123954);
             rule__PrimaryExpression__Group_0_1__2();
 
             state._fsp--;
@@ -32590,23 +32471,23 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__PrimaryExpression__Group_0_1__1__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11881:1: rule__PrimaryExpression__Group_0_1__1__Impl : ( ( rule__PrimaryExpression__ExAssignment_0_1_1 ) ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11818:1: rule__PrimaryExpression__Group_0_1__1__Impl : ( ( rule__PrimaryExpression__ExAssignment_0_1_1 ) ) ;
     public final void rule__PrimaryExpression__Group_0_1__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11885:1: ( ( ( rule__PrimaryExpression__ExAssignment_0_1_1 ) ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11886:1: ( ( rule__PrimaryExpression__ExAssignment_0_1_1 ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11822:1: ( ( ( rule__PrimaryExpression__ExAssignment_0_1_1 ) ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11823:1: ( ( rule__PrimaryExpression__ExAssignment_0_1_1 ) )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11886:1: ( ( rule__PrimaryExpression__ExAssignment_0_1_1 ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11887:1: ( rule__PrimaryExpression__ExAssignment_0_1_1 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11823:1: ( ( rule__PrimaryExpression__ExAssignment_0_1_1 ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11824:1: ( rule__PrimaryExpression__ExAssignment_0_1_1 )
             {
              before(grammarAccess.getPrimaryExpressionAccess().getExAssignment_0_1_1()); 
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11888:1: ( rule__PrimaryExpression__ExAssignment_0_1_1 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11888:2: rule__PrimaryExpression__ExAssignment_0_1_1
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11825:1: ( rule__PrimaryExpression__ExAssignment_0_1_1 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11825:2: rule__PrimaryExpression__ExAssignment_0_1_1
             {
-            pushFollow(FOLLOW_rule__PrimaryExpression__ExAssignment_0_1_1_in_rule__PrimaryExpression__Group_0_1__1__Impl24104);
+            pushFollow(FOLLOW_rule__PrimaryExpression__ExAssignment_0_1_1_in_rule__PrimaryExpression__Group_0_1__1__Impl23981);
             rule__PrimaryExpression__ExAssignment_0_1_1();
 
             state._fsp--;
@@ -32637,16 +32518,16 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__PrimaryExpression__Group_0_1__2"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11898:1: rule__PrimaryExpression__Group_0_1__2 : rule__PrimaryExpression__Group_0_1__2__Impl ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11835:1: rule__PrimaryExpression__Group_0_1__2 : rule__PrimaryExpression__Group_0_1__2__Impl ;
     public final void rule__PrimaryExpression__Group_0_1__2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11902:1: ( rule__PrimaryExpression__Group_0_1__2__Impl )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11903:2: rule__PrimaryExpression__Group_0_1__2__Impl
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11839:1: ( rule__PrimaryExpression__Group_0_1__2__Impl )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11840:2: rule__PrimaryExpression__Group_0_1__2__Impl
             {
-            pushFollow(FOLLOW_rule__PrimaryExpression__Group_0_1__2__Impl_in_rule__PrimaryExpression__Group_0_1__224134);
+            pushFollow(FOLLOW_rule__PrimaryExpression__Group_0_1__2__Impl_in_rule__PrimaryExpression__Group_0_1__224011);
             rule__PrimaryExpression__Group_0_1__2__Impl();
 
             state._fsp--;
@@ -32670,20 +32551,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__PrimaryExpression__Group_0_1__2__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11909:1: rule__PrimaryExpression__Group_0_1__2__Impl : ( ')' ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11846:1: rule__PrimaryExpression__Group_0_1__2__Impl : ( ')' ) ;
     public final void rule__PrimaryExpression__Group_0_1__2__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11913:1: ( ( ')' ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11914:1: ( ')' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11850:1: ( ( ')' ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11851:1: ( ')' )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11914:1: ( ')' )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11915:1: ')'
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11851:1: ( ')' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11852:1: ')'
             {
              before(grammarAccess.getPrimaryExpressionAccess().getRightParenthesisKeyword_0_1_2()); 
-            match(input,44,FOLLOW_44_in_rule__PrimaryExpression__Group_0_1__2__Impl24162); 
+            match(input,44,FOLLOW_44_in_rule__PrimaryExpression__Group_0_1__2__Impl24039); 
              after(grammarAccess.getPrimaryExpressionAccess().getRightParenthesisKeyword_0_1_2()); 
 
             }
@@ -32707,21 +32588,21 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__PrimaryExpression__Group_0_3__0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11934:1: rule__PrimaryExpression__Group_0_3__0 : rule__PrimaryExpression__Group_0_3__0__Impl rule__PrimaryExpression__Group_0_3__1 ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11871:1: rule__PrimaryExpression__Group_0_3__0 : rule__PrimaryExpression__Group_0_3__0__Impl rule__PrimaryExpression__Group_0_3__1 ;
     public final void rule__PrimaryExpression__Group_0_3__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11938:1: ( rule__PrimaryExpression__Group_0_3__0__Impl rule__PrimaryExpression__Group_0_3__1 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11939:2: rule__PrimaryExpression__Group_0_3__0__Impl rule__PrimaryExpression__Group_0_3__1
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11875:1: ( rule__PrimaryExpression__Group_0_3__0__Impl rule__PrimaryExpression__Group_0_3__1 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11876:2: rule__PrimaryExpression__Group_0_3__0__Impl rule__PrimaryExpression__Group_0_3__1
             {
-            pushFollow(FOLLOW_rule__PrimaryExpression__Group_0_3__0__Impl_in_rule__PrimaryExpression__Group_0_3__024199);
+            pushFollow(FOLLOW_rule__PrimaryExpression__Group_0_3__0__Impl_in_rule__PrimaryExpression__Group_0_3__024076);
             rule__PrimaryExpression__Group_0_3__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__PrimaryExpression__Group_0_3__1_in_rule__PrimaryExpression__Group_0_3__024202);
+            pushFollow(FOLLOW_rule__PrimaryExpression__Group_0_3__1_in_rule__PrimaryExpression__Group_0_3__024079);
             rule__PrimaryExpression__Group_0_3__1();
 
             state._fsp--;
@@ -32745,20 +32626,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__PrimaryExpression__Group_0_3__0__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11946:1: rule__PrimaryExpression__Group_0_3__0__Impl : ( 'refBy' ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11883:1: rule__PrimaryExpression__Group_0_3__0__Impl : ( 'refBy' ) ;
     public final void rule__PrimaryExpression__Group_0_3__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11950:1: ( ( 'refBy' ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11951:1: ( 'refBy' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11887:1: ( ( 'refBy' ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11888:1: ( 'refBy' )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11951:1: ( 'refBy' )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11952:1: 'refBy'
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11888:1: ( 'refBy' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11889:1: 'refBy'
             {
              before(grammarAccess.getPrimaryExpressionAccess().getRefByKeyword_0_3_0()); 
-            match(input,69,FOLLOW_69_in_rule__PrimaryExpression__Group_0_3__0__Impl24230); 
+            match(input,68,FOLLOW_68_in_rule__PrimaryExpression__Group_0_3__0__Impl24107); 
              after(grammarAccess.getPrimaryExpressionAccess().getRefByKeyword_0_3_0()); 
 
             }
@@ -32782,21 +32663,21 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__PrimaryExpression__Group_0_3__1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11965:1: rule__PrimaryExpression__Group_0_3__1 : rule__PrimaryExpression__Group_0_3__1__Impl rule__PrimaryExpression__Group_0_3__2 ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11902:1: rule__PrimaryExpression__Group_0_3__1 : rule__PrimaryExpression__Group_0_3__1__Impl rule__PrimaryExpression__Group_0_3__2 ;
     public final void rule__PrimaryExpression__Group_0_3__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11969:1: ( rule__PrimaryExpression__Group_0_3__1__Impl rule__PrimaryExpression__Group_0_3__2 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11970:2: rule__PrimaryExpression__Group_0_3__1__Impl rule__PrimaryExpression__Group_0_3__2
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11906:1: ( rule__PrimaryExpression__Group_0_3__1__Impl rule__PrimaryExpression__Group_0_3__2 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11907:2: rule__PrimaryExpression__Group_0_3__1__Impl rule__PrimaryExpression__Group_0_3__2
             {
-            pushFollow(FOLLOW_rule__PrimaryExpression__Group_0_3__1__Impl_in_rule__PrimaryExpression__Group_0_3__124261);
+            pushFollow(FOLLOW_rule__PrimaryExpression__Group_0_3__1__Impl_in_rule__PrimaryExpression__Group_0_3__124138);
             rule__PrimaryExpression__Group_0_3__1__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__PrimaryExpression__Group_0_3__2_in_rule__PrimaryExpression__Group_0_3__124264);
+            pushFollow(FOLLOW_rule__PrimaryExpression__Group_0_3__2_in_rule__PrimaryExpression__Group_0_3__124141);
             rule__PrimaryExpression__Group_0_3__2();
 
             state._fsp--;
@@ -32820,20 +32701,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__PrimaryExpression__Group_0_3__1__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11977:1: rule__PrimaryExpression__Group_0_3__1__Impl : ( '(' ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11914:1: rule__PrimaryExpression__Group_0_3__1__Impl : ( '(' ) ;
     public final void rule__PrimaryExpression__Group_0_3__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11981:1: ( ( '(' ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11982:1: ( '(' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11918:1: ( ( '(' ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11919:1: ( '(' )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11982:1: ( '(' )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11983:1: '('
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11919:1: ( '(' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11920:1: '('
             {
              before(grammarAccess.getPrimaryExpressionAccess().getLeftParenthesisKeyword_0_3_1()); 
-            match(input,43,FOLLOW_43_in_rule__PrimaryExpression__Group_0_3__1__Impl24292); 
+            match(input,43,FOLLOW_43_in_rule__PrimaryExpression__Group_0_3__1__Impl24169); 
              after(grammarAccess.getPrimaryExpressionAccess().getLeftParenthesisKeyword_0_3_1()); 
 
             }
@@ -32857,21 +32738,21 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__PrimaryExpression__Group_0_3__2"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11996:1: rule__PrimaryExpression__Group_0_3__2 : rule__PrimaryExpression__Group_0_3__2__Impl rule__PrimaryExpression__Group_0_3__3 ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11933:1: rule__PrimaryExpression__Group_0_3__2 : rule__PrimaryExpression__Group_0_3__2__Impl rule__PrimaryExpression__Group_0_3__3 ;
     public final void rule__PrimaryExpression__Group_0_3__2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12000:1: ( rule__PrimaryExpression__Group_0_3__2__Impl rule__PrimaryExpression__Group_0_3__3 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12001:2: rule__PrimaryExpression__Group_0_3__2__Impl rule__PrimaryExpression__Group_0_3__3
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11937:1: ( rule__PrimaryExpression__Group_0_3__2__Impl rule__PrimaryExpression__Group_0_3__3 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11938:2: rule__PrimaryExpression__Group_0_3__2__Impl rule__PrimaryExpression__Group_0_3__3
             {
-            pushFollow(FOLLOW_rule__PrimaryExpression__Group_0_3__2__Impl_in_rule__PrimaryExpression__Group_0_3__224323);
+            pushFollow(FOLLOW_rule__PrimaryExpression__Group_0_3__2__Impl_in_rule__PrimaryExpression__Group_0_3__224200);
             rule__PrimaryExpression__Group_0_3__2__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__PrimaryExpression__Group_0_3__3_in_rule__PrimaryExpression__Group_0_3__224326);
+            pushFollow(FOLLOW_rule__PrimaryExpression__Group_0_3__3_in_rule__PrimaryExpression__Group_0_3__224203);
             rule__PrimaryExpression__Group_0_3__3();
 
             state._fsp--;
@@ -32895,23 +32776,23 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__PrimaryExpression__Group_0_3__2__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12008:1: rule__PrimaryExpression__Group_0_3__2__Impl : ( ( rule__PrimaryExpression__RefNameAssignment_0_3_2 ) ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11945:1: rule__PrimaryExpression__Group_0_3__2__Impl : ( ( rule__PrimaryExpression__RefNameAssignment_0_3_2 ) ) ;
     public final void rule__PrimaryExpression__Group_0_3__2__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12012:1: ( ( ( rule__PrimaryExpression__RefNameAssignment_0_3_2 ) ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12013:1: ( ( rule__PrimaryExpression__RefNameAssignment_0_3_2 ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11949:1: ( ( ( rule__PrimaryExpression__RefNameAssignment_0_3_2 ) ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11950:1: ( ( rule__PrimaryExpression__RefNameAssignment_0_3_2 ) )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12013:1: ( ( rule__PrimaryExpression__RefNameAssignment_0_3_2 ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12014:1: ( rule__PrimaryExpression__RefNameAssignment_0_3_2 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11950:1: ( ( rule__PrimaryExpression__RefNameAssignment_0_3_2 ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11951:1: ( rule__PrimaryExpression__RefNameAssignment_0_3_2 )
             {
              before(grammarAccess.getPrimaryExpressionAccess().getRefNameAssignment_0_3_2()); 
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12015:1: ( rule__PrimaryExpression__RefNameAssignment_0_3_2 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12015:2: rule__PrimaryExpression__RefNameAssignment_0_3_2
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11952:1: ( rule__PrimaryExpression__RefNameAssignment_0_3_2 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11952:2: rule__PrimaryExpression__RefNameAssignment_0_3_2
             {
-            pushFollow(FOLLOW_rule__PrimaryExpression__RefNameAssignment_0_3_2_in_rule__PrimaryExpression__Group_0_3__2__Impl24353);
+            pushFollow(FOLLOW_rule__PrimaryExpression__RefNameAssignment_0_3_2_in_rule__PrimaryExpression__Group_0_3__2__Impl24230);
             rule__PrimaryExpression__RefNameAssignment_0_3_2();
 
             state._fsp--;
@@ -32942,16 +32823,16 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__PrimaryExpression__Group_0_3__3"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12025:1: rule__PrimaryExpression__Group_0_3__3 : rule__PrimaryExpression__Group_0_3__3__Impl ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11962:1: rule__PrimaryExpression__Group_0_3__3 : rule__PrimaryExpression__Group_0_3__3__Impl ;
     public final void rule__PrimaryExpression__Group_0_3__3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12029:1: ( rule__PrimaryExpression__Group_0_3__3__Impl )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12030:2: rule__PrimaryExpression__Group_0_3__3__Impl
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11966:1: ( rule__PrimaryExpression__Group_0_3__3__Impl )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11967:2: rule__PrimaryExpression__Group_0_3__3__Impl
             {
-            pushFollow(FOLLOW_rule__PrimaryExpression__Group_0_3__3__Impl_in_rule__PrimaryExpression__Group_0_3__324383);
+            pushFollow(FOLLOW_rule__PrimaryExpression__Group_0_3__3__Impl_in_rule__PrimaryExpression__Group_0_3__324260);
             rule__PrimaryExpression__Group_0_3__3__Impl();
 
             state._fsp--;
@@ -32975,20 +32856,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__PrimaryExpression__Group_0_3__3__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12036:1: rule__PrimaryExpression__Group_0_3__3__Impl : ( ')' ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11973:1: rule__PrimaryExpression__Group_0_3__3__Impl : ( ')' ) ;
     public final void rule__PrimaryExpression__Group_0_3__3__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12040:1: ( ( ')' ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12041:1: ( ')' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11977:1: ( ( ')' ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11978:1: ( ')' )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12041:1: ( ')' )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12042:1: ')'
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11978:1: ( ')' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:11979:1: ')'
             {
              before(grammarAccess.getPrimaryExpressionAccess().getRightParenthesisKeyword_0_3_3()); 
-            match(input,44,FOLLOW_44_in_rule__PrimaryExpression__Group_0_3__3__Impl24411); 
+            match(input,44,FOLLOW_44_in_rule__PrimaryExpression__Group_0_3__3__Impl24288); 
              after(grammarAccess.getPrimaryExpressionAccess().getRightParenthesisKeyword_0_3_3()); 
 
             }
@@ -33012,21 +32893,21 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__CollectionInitializer__Group__0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12063:1: rule__CollectionInitializer__Group__0 : rule__CollectionInitializer__Group__0__Impl rule__CollectionInitializer__Group__1 ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12000:1: rule__CollectionInitializer__Group__0 : rule__CollectionInitializer__Group__0__Impl rule__CollectionInitializer__Group__1 ;
     public final void rule__CollectionInitializer__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12067:1: ( rule__CollectionInitializer__Group__0__Impl rule__CollectionInitializer__Group__1 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12068:2: rule__CollectionInitializer__Group__0__Impl rule__CollectionInitializer__Group__1
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12004:1: ( rule__CollectionInitializer__Group__0__Impl rule__CollectionInitializer__Group__1 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12005:2: rule__CollectionInitializer__Group__0__Impl rule__CollectionInitializer__Group__1
             {
-            pushFollow(FOLLOW_rule__CollectionInitializer__Group__0__Impl_in_rule__CollectionInitializer__Group__024450);
+            pushFollow(FOLLOW_rule__CollectionInitializer__Group__0__Impl_in_rule__CollectionInitializer__Group__024327);
             rule__CollectionInitializer__Group__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__CollectionInitializer__Group__1_in_rule__CollectionInitializer__Group__024453);
+            pushFollow(FOLLOW_rule__CollectionInitializer__Group__1_in_rule__CollectionInitializer__Group__024330);
             rule__CollectionInitializer__Group__1();
 
             state._fsp--;
@@ -33050,21 +32931,21 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__CollectionInitializer__Group__0__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12075:1: rule__CollectionInitializer__Group__0__Impl : ( () ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12012:1: rule__CollectionInitializer__Group__0__Impl : ( () ) ;
     public final void rule__CollectionInitializer__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12079:1: ( ( () ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12080:1: ( () )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12016:1: ( ( () ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12017:1: ( () )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12080:1: ( () )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12081:1: ()
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12017:1: ( () )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12018:1: ()
             {
              before(grammarAccess.getCollectionInitializerAccess().getCollectionInitializerAction_0()); 
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12082:1: ()
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12084:1: 
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12019:1: ()
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12021:1: 
             {
             }
 
@@ -33087,21 +32968,21 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__CollectionInitializer__Group__1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12094:1: rule__CollectionInitializer__Group__1 : rule__CollectionInitializer__Group__1__Impl rule__CollectionInitializer__Group__2 ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12031:1: rule__CollectionInitializer__Group__1 : rule__CollectionInitializer__Group__1__Impl rule__CollectionInitializer__Group__2 ;
     public final void rule__CollectionInitializer__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12098:1: ( rule__CollectionInitializer__Group__1__Impl rule__CollectionInitializer__Group__2 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12099:2: rule__CollectionInitializer__Group__1__Impl rule__CollectionInitializer__Group__2
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12035:1: ( rule__CollectionInitializer__Group__1__Impl rule__CollectionInitializer__Group__2 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12036:2: rule__CollectionInitializer__Group__1__Impl rule__CollectionInitializer__Group__2
             {
-            pushFollow(FOLLOW_rule__CollectionInitializer__Group__1__Impl_in_rule__CollectionInitializer__Group__124511);
+            pushFollow(FOLLOW_rule__CollectionInitializer__Group__1__Impl_in_rule__CollectionInitializer__Group__124388);
             rule__CollectionInitializer__Group__1__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__CollectionInitializer__Group__2_in_rule__CollectionInitializer__Group__124514);
+            pushFollow(FOLLOW_rule__CollectionInitializer__Group__2_in_rule__CollectionInitializer__Group__124391);
             rule__CollectionInitializer__Group__2();
 
             state._fsp--;
@@ -33125,20 +33006,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__CollectionInitializer__Group__1__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12106:1: rule__CollectionInitializer__Group__1__Impl : ( ( rule__CollectionInitializer__TypeAssignment_1 )? ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12043:1: rule__CollectionInitializer__Group__1__Impl : ( ( rule__CollectionInitializer__TypeAssignment_1 )? ) ;
     public final void rule__CollectionInitializer__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12110:1: ( ( ( rule__CollectionInitializer__TypeAssignment_1 )? ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12111:1: ( ( rule__CollectionInitializer__TypeAssignment_1 )? )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12047:1: ( ( ( rule__CollectionInitializer__TypeAssignment_1 )? ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12048:1: ( ( rule__CollectionInitializer__TypeAssignment_1 )? )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12111:1: ( ( rule__CollectionInitializer__TypeAssignment_1 )? )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12112:1: ( rule__CollectionInitializer__TypeAssignment_1 )?
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12048:1: ( ( rule__CollectionInitializer__TypeAssignment_1 )? )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12049:1: ( rule__CollectionInitializer__TypeAssignment_1 )?
             {
              before(grammarAccess.getCollectionInitializerAccess().getTypeAssignment_1()); 
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12113:1: ( rule__CollectionInitializer__TypeAssignment_1 )?
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12050:1: ( rule__CollectionInitializer__TypeAssignment_1 )?
             int alt92=2;
             int LA92_0 = input.LA(1);
 
@@ -33147,9 +33028,9 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
             }
             switch (alt92) {
                 case 1 :
-                    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12113:2: rule__CollectionInitializer__TypeAssignment_1
+                    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12050:2: rule__CollectionInitializer__TypeAssignment_1
                     {
-                    pushFollow(FOLLOW_rule__CollectionInitializer__TypeAssignment_1_in_rule__CollectionInitializer__Group__1__Impl24541);
+                    pushFollow(FOLLOW_rule__CollectionInitializer__TypeAssignment_1_in_rule__CollectionInitializer__Group__1__Impl24418);
                     rule__CollectionInitializer__TypeAssignment_1();
 
                     state._fsp--;
@@ -33183,21 +33064,21 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__CollectionInitializer__Group__2"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12123:1: rule__CollectionInitializer__Group__2 : rule__CollectionInitializer__Group__2__Impl rule__CollectionInitializer__Group__3 ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12060:1: rule__CollectionInitializer__Group__2 : rule__CollectionInitializer__Group__2__Impl rule__CollectionInitializer__Group__3 ;
     public final void rule__CollectionInitializer__Group__2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12127:1: ( rule__CollectionInitializer__Group__2__Impl rule__CollectionInitializer__Group__3 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12128:2: rule__CollectionInitializer__Group__2__Impl rule__CollectionInitializer__Group__3
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12064:1: ( rule__CollectionInitializer__Group__2__Impl rule__CollectionInitializer__Group__3 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12065:2: rule__CollectionInitializer__Group__2__Impl rule__CollectionInitializer__Group__3
             {
-            pushFollow(FOLLOW_rule__CollectionInitializer__Group__2__Impl_in_rule__CollectionInitializer__Group__224572);
+            pushFollow(FOLLOW_rule__CollectionInitializer__Group__2__Impl_in_rule__CollectionInitializer__Group__224449);
             rule__CollectionInitializer__Group__2__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__CollectionInitializer__Group__3_in_rule__CollectionInitializer__Group__224575);
+            pushFollow(FOLLOW_rule__CollectionInitializer__Group__3_in_rule__CollectionInitializer__Group__224452);
             rule__CollectionInitializer__Group__3();
 
             state._fsp--;
@@ -33221,20 +33102,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__CollectionInitializer__Group__2__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12135:1: rule__CollectionInitializer__Group__2__Impl : ( '{' ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12072:1: rule__CollectionInitializer__Group__2__Impl : ( '{' ) ;
     public final void rule__CollectionInitializer__Group__2__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12139:1: ( ( '{' ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12140:1: ( '{' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12076:1: ( ( '{' ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12077:1: ( '{' )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12140:1: ( '{' )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12141:1: '{'
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12077:1: ( '{' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12078:1: '{'
             {
              before(grammarAccess.getCollectionInitializerAccess().getLeftCurlyBracketKeyword_2()); 
-            match(input,35,FOLLOW_35_in_rule__CollectionInitializer__Group__2__Impl24603); 
+            match(input,35,FOLLOW_35_in_rule__CollectionInitializer__Group__2__Impl24480); 
              after(grammarAccess.getCollectionInitializerAccess().getLeftCurlyBracketKeyword_2()); 
 
             }
@@ -33258,21 +33139,21 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__CollectionInitializer__Group__3"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12154:1: rule__CollectionInitializer__Group__3 : rule__CollectionInitializer__Group__3__Impl rule__CollectionInitializer__Group__4 ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12091:1: rule__CollectionInitializer__Group__3 : rule__CollectionInitializer__Group__3__Impl rule__CollectionInitializer__Group__4 ;
     public final void rule__CollectionInitializer__Group__3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12158:1: ( rule__CollectionInitializer__Group__3__Impl rule__CollectionInitializer__Group__4 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12159:2: rule__CollectionInitializer__Group__3__Impl rule__CollectionInitializer__Group__4
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12095:1: ( rule__CollectionInitializer__Group__3__Impl rule__CollectionInitializer__Group__4 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12096:2: rule__CollectionInitializer__Group__3__Impl rule__CollectionInitializer__Group__4
             {
-            pushFollow(FOLLOW_rule__CollectionInitializer__Group__3__Impl_in_rule__CollectionInitializer__Group__324634);
+            pushFollow(FOLLOW_rule__CollectionInitializer__Group__3__Impl_in_rule__CollectionInitializer__Group__324511);
             rule__CollectionInitializer__Group__3__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__CollectionInitializer__Group__4_in_rule__CollectionInitializer__Group__324637);
+            pushFollow(FOLLOW_rule__CollectionInitializer__Group__4_in_rule__CollectionInitializer__Group__324514);
             rule__CollectionInitializer__Group__4();
 
             state._fsp--;
@@ -33296,31 +33177,31 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__CollectionInitializer__Group__3__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12166:1: rule__CollectionInitializer__Group__3__Impl : ( ( rule__CollectionInitializer__InitAssignment_3 )? ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12103:1: rule__CollectionInitializer__Group__3__Impl : ( ( rule__CollectionInitializer__InitAssignment_3 )? ) ;
     public final void rule__CollectionInitializer__Group__3__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12170:1: ( ( ( rule__CollectionInitializer__InitAssignment_3 )? ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12171:1: ( ( rule__CollectionInitializer__InitAssignment_3 )? )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12107:1: ( ( ( rule__CollectionInitializer__InitAssignment_3 )? ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12108:1: ( ( rule__CollectionInitializer__InitAssignment_3 )? )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12171:1: ( ( rule__CollectionInitializer__InitAssignment_3 )? )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12172:1: ( rule__CollectionInitializer__InitAssignment_3 )?
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12108:1: ( ( rule__CollectionInitializer__InitAssignment_3 )? )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12109:1: ( rule__CollectionInitializer__InitAssignment_3 )?
             {
              before(grammarAccess.getCollectionInitializerAccess().getInitAssignment_3()); 
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12173:1: ( rule__CollectionInitializer__InitAssignment_3 )?
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12110:1: ( rule__CollectionInitializer__InitAssignment_3 )?
             int alt93=2;
             int LA93_0 = input.LA(1);
 
-            if ( ((LA93_0>=RULE_ID && LA93_0<=RULE_STRING)||(LA93_0>=15 && LA93_0<=16)||LA93_0==30||LA93_0==33||LA93_0==35||LA93_0==43||(LA93_0>=69 && LA93_0<=70)||LA93_0==79) ) {
+            if ( ((LA93_0>=RULE_ID && LA93_0<=RULE_STRING)||(LA93_0>=15 && LA93_0<=16)||LA93_0==30||LA93_0==33||LA93_0==35||LA93_0==43||(LA93_0>=68 && LA93_0<=69)||LA93_0==78) ) {
                 alt93=1;
             }
             switch (alt93) {
                 case 1 :
-                    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12173:2: rule__CollectionInitializer__InitAssignment_3
+                    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12110:2: rule__CollectionInitializer__InitAssignment_3
                     {
-                    pushFollow(FOLLOW_rule__CollectionInitializer__InitAssignment_3_in_rule__CollectionInitializer__Group__3__Impl24664);
+                    pushFollow(FOLLOW_rule__CollectionInitializer__InitAssignment_3_in_rule__CollectionInitializer__Group__3__Impl24541);
                     rule__CollectionInitializer__InitAssignment_3();
 
                     state._fsp--;
@@ -33354,16 +33235,16 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__CollectionInitializer__Group__4"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12183:1: rule__CollectionInitializer__Group__4 : rule__CollectionInitializer__Group__4__Impl ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12120:1: rule__CollectionInitializer__Group__4 : rule__CollectionInitializer__Group__4__Impl ;
     public final void rule__CollectionInitializer__Group__4() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12187:1: ( rule__CollectionInitializer__Group__4__Impl )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12188:2: rule__CollectionInitializer__Group__4__Impl
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12124:1: ( rule__CollectionInitializer__Group__4__Impl )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12125:2: rule__CollectionInitializer__Group__4__Impl
             {
-            pushFollow(FOLLOW_rule__CollectionInitializer__Group__4__Impl_in_rule__CollectionInitializer__Group__424695);
+            pushFollow(FOLLOW_rule__CollectionInitializer__Group__4__Impl_in_rule__CollectionInitializer__Group__424572);
             rule__CollectionInitializer__Group__4__Impl();
 
             state._fsp--;
@@ -33387,20 +33268,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__CollectionInitializer__Group__4__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12194:1: rule__CollectionInitializer__Group__4__Impl : ( '}' ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12131:1: rule__CollectionInitializer__Group__4__Impl : ( '}' ) ;
     public final void rule__CollectionInitializer__Group__4__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12198:1: ( ( '}' ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12199:1: ( '}' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12135:1: ( ( '}' ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12136:1: ( '}' )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12199:1: ( '}' )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12200:1: '}'
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12136:1: ( '}' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12137:1: '}'
             {
              before(grammarAccess.getCollectionInitializerAccess().getRightCurlyBracketKeyword_4()); 
-            match(input,36,FOLLOW_36_in_rule__CollectionInitializer__Group__4__Impl24723); 
+            match(input,36,FOLLOW_36_in_rule__CollectionInitializer__Group__4__Impl24600); 
              after(grammarAccess.getCollectionInitializerAccess().getRightCurlyBracketKeyword_4()); 
 
             }
@@ -33424,21 +33305,21 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ExpressionListOrRange__Group__0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12223:1: rule__ExpressionListOrRange__Group__0 : rule__ExpressionListOrRange__Group__0__Impl rule__ExpressionListOrRange__Group__1 ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12160:1: rule__ExpressionListOrRange__Group__0 : rule__ExpressionListOrRange__Group__0__Impl rule__ExpressionListOrRange__Group__1 ;
     public final void rule__ExpressionListOrRange__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12227:1: ( rule__ExpressionListOrRange__Group__0__Impl rule__ExpressionListOrRange__Group__1 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12228:2: rule__ExpressionListOrRange__Group__0__Impl rule__ExpressionListOrRange__Group__1
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12164:1: ( rule__ExpressionListOrRange__Group__0__Impl rule__ExpressionListOrRange__Group__1 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12165:2: rule__ExpressionListOrRange__Group__0__Impl rule__ExpressionListOrRange__Group__1
             {
-            pushFollow(FOLLOW_rule__ExpressionListOrRange__Group__0__Impl_in_rule__ExpressionListOrRange__Group__024764);
+            pushFollow(FOLLOW_rule__ExpressionListOrRange__Group__0__Impl_in_rule__ExpressionListOrRange__Group__024641);
             rule__ExpressionListOrRange__Group__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__ExpressionListOrRange__Group__1_in_rule__ExpressionListOrRange__Group__024767);
+            pushFollow(FOLLOW_rule__ExpressionListOrRange__Group__1_in_rule__ExpressionListOrRange__Group__024644);
             rule__ExpressionListOrRange__Group__1();
 
             state._fsp--;
@@ -33462,23 +33343,23 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ExpressionListOrRange__Group__0__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12235:1: rule__ExpressionListOrRange__Group__0__Impl : ( ( rule__ExpressionListOrRange__ListAssignment_0 ) ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12172:1: rule__ExpressionListOrRange__Group__0__Impl : ( ( rule__ExpressionListOrRange__ListAssignment_0 ) ) ;
     public final void rule__ExpressionListOrRange__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12239:1: ( ( ( rule__ExpressionListOrRange__ListAssignment_0 ) ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12240:1: ( ( rule__ExpressionListOrRange__ListAssignment_0 ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12176:1: ( ( ( rule__ExpressionListOrRange__ListAssignment_0 ) ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12177:1: ( ( rule__ExpressionListOrRange__ListAssignment_0 ) )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12240:1: ( ( rule__ExpressionListOrRange__ListAssignment_0 ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12241:1: ( rule__ExpressionListOrRange__ListAssignment_0 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12177:1: ( ( rule__ExpressionListOrRange__ListAssignment_0 ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12178:1: ( rule__ExpressionListOrRange__ListAssignment_0 )
             {
              before(grammarAccess.getExpressionListOrRangeAccess().getListAssignment_0()); 
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12242:1: ( rule__ExpressionListOrRange__ListAssignment_0 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12242:2: rule__ExpressionListOrRange__ListAssignment_0
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12179:1: ( rule__ExpressionListOrRange__ListAssignment_0 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12179:2: rule__ExpressionListOrRange__ListAssignment_0
             {
-            pushFollow(FOLLOW_rule__ExpressionListOrRange__ListAssignment_0_in_rule__ExpressionListOrRange__Group__0__Impl24794);
+            pushFollow(FOLLOW_rule__ExpressionListOrRange__ListAssignment_0_in_rule__ExpressionListOrRange__Group__0__Impl24671);
             rule__ExpressionListOrRange__ListAssignment_0();
 
             state._fsp--;
@@ -33509,16 +33390,16 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ExpressionListOrRange__Group__1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12252:1: rule__ExpressionListOrRange__Group__1 : rule__ExpressionListOrRange__Group__1__Impl ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12189:1: rule__ExpressionListOrRange__Group__1 : rule__ExpressionListOrRange__Group__1__Impl ;
     public final void rule__ExpressionListOrRange__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12256:1: ( rule__ExpressionListOrRange__Group__1__Impl )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12257:2: rule__ExpressionListOrRange__Group__1__Impl
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12193:1: ( rule__ExpressionListOrRange__Group__1__Impl )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12194:2: rule__ExpressionListOrRange__Group__1__Impl
             {
-            pushFollow(FOLLOW_rule__ExpressionListOrRange__Group__1__Impl_in_rule__ExpressionListOrRange__Group__124824);
+            pushFollow(FOLLOW_rule__ExpressionListOrRange__Group__1__Impl_in_rule__ExpressionListOrRange__Group__124701);
             rule__ExpressionListOrRange__Group__1__Impl();
 
             state._fsp--;
@@ -33542,20 +33423,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ExpressionListOrRange__Group__1__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12263:1: rule__ExpressionListOrRange__Group__1__Impl : ( ( rule__ExpressionListOrRange__Group_1__0 )* ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12200:1: rule__ExpressionListOrRange__Group__1__Impl : ( ( rule__ExpressionListOrRange__Group_1__0 )* ) ;
     public final void rule__ExpressionListOrRange__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12267:1: ( ( ( rule__ExpressionListOrRange__Group_1__0 )* ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12268:1: ( ( rule__ExpressionListOrRange__Group_1__0 )* )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12204:1: ( ( ( rule__ExpressionListOrRange__Group_1__0 )* ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12205:1: ( ( rule__ExpressionListOrRange__Group_1__0 )* )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12268:1: ( ( rule__ExpressionListOrRange__Group_1__0 )* )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12269:1: ( rule__ExpressionListOrRange__Group_1__0 )*
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12205:1: ( ( rule__ExpressionListOrRange__Group_1__0 )* )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12206:1: ( rule__ExpressionListOrRange__Group_1__0 )*
             {
              before(grammarAccess.getExpressionListOrRangeAccess().getGroup_1()); 
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12270:1: ( rule__ExpressionListOrRange__Group_1__0 )*
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12207:1: ( rule__ExpressionListOrRange__Group_1__0 )*
             loop94:
             do {
                 int alt94=2;
@@ -33568,9 +33449,9 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
                 switch (alt94) {
             	case 1 :
-            	    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12270:2: rule__ExpressionListOrRange__Group_1__0
+            	    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12207:2: rule__ExpressionListOrRange__Group_1__0
             	    {
-            	    pushFollow(FOLLOW_rule__ExpressionListOrRange__Group_1__0_in_rule__ExpressionListOrRange__Group__1__Impl24851);
+            	    pushFollow(FOLLOW_rule__ExpressionListOrRange__Group_1__0_in_rule__ExpressionListOrRange__Group__1__Impl24728);
             	    rule__ExpressionListOrRange__Group_1__0();
 
             	    state._fsp--;
@@ -33607,21 +33488,21 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ExpressionListOrRange__Group_1__0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12284:1: rule__ExpressionListOrRange__Group_1__0 : rule__ExpressionListOrRange__Group_1__0__Impl rule__ExpressionListOrRange__Group_1__1 ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12221:1: rule__ExpressionListOrRange__Group_1__0 : rule__ExpressionListOrRange__Group_1__0__Impl rule__ExpressionListOrRange__Group_1__1 ;
     public final void rule__ExpressionListOrRange__Group_1__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12288:1: ( rule__ExpressionListOrRange__Group_1__0__Impl rule__ExpressionListOrRange__Group_1__1 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12289:2: rule__ExpressionListOrRange__Group_1__0__Impl rule__ExpressionListOrRange__Group_1__1
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12225:1: ( rule__ExpressionListOrRange__Group_1__0__Impl rule__ExpressionListOrRange__Group_1__1 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12226:2: rule__ExpressionListOrRange__Group_1__0__Impl rule__ExpressionListOrRange__Group_1__1
             {
-            pushFollow(FOLLOW_rule__ExpressionListOrRange__Group_1__0__Impl_in_rule__ExpressionListOrRange__Group_1__024886);
+            pushFollow(FOLLOW_rule__ExpressionListOrRange__Group_1__0__Impl_in_rule__ExpressionListOrRange__Group_1__024763);
             rule__ExpressionListOrRange__Group_1__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__ExpressionListOrRange__Group_1__1_in_rule__ExpressionListOrRange__Group_1__024889);
+            pushFollow(FOLLOW_rule__ExpressionListOrRange__Group_1__1_in_rule__ExpressionListOrRange__Group_1__024766);
             rule__ExpressionListOrRange__Group_1__1();
 
             state._fsp--;
@@ -33645,20 +33526,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ExpressionListOrRange__Group_1__0__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12296:1: rule__ExpressionListOrRange__Group_1__0__Impl : ( ',' ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12233:1: rule__ExpressionListOrRange__Group_1__0__Impl : ( ',' ) ;
     public final void rule__ExpressionListOrRange__Group_1__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12300:1: ( ( ',' ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12301:1: ( ',' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12237:1: ( ( ',' ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12238:1: ( ',' )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12301:1: ( ',' )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12302:1: ','
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12238:1: ( ',' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12239:1: ','
             {
              before(grammarAccess.getExpressionListOrRangeAccess().getCommaKeyword_1_0()); 
-            match(input,39,FOLLOW_39_in_rule__ExpressionListOrRange__Group_1__0__Impl24917); 
+            match(input,39,FOLLOW_39_in_rule__ExpressionListOrRange__Group_1__0__Impl24794); 
              after(grammarAccess.getExpressionListOrRangeAccess().getCommaKeyword_1_0()); 
 
             }
@@ -33682,16 +33563,16 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ExpressionListOrRange__Group_1__1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12315:1: rule__ExpressionListOrRange__Group_1__1 : rule__ExpressionListOrRange__Group_1__1__Impl ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12252:1: rule__ExpressionListOrRange__Group_1__1 : rule__ExpressionListOrRange__Group_1__1__Impl ;
     public final void rule__ExpressionListOrRange__Group_1__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12319:1: ( rule__ExpressionListOrRange__Group_1__1__Impl )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12320:2: rule__ExpressionListOrRange__Group_1__1__Impl
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12256:1: ( rule__ExpressionListOrRange__Group_1__1__Impl )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12257:2: rule__ExpressionListOrRange__Group_1__1__Impl
             {
-            pushFollow(FOLLOW_rule__ExpressionListOrRange__Group_1__1__Impl_in_rule__ExpressionListOrRange__Group_1__124948);
+            pushFollow(FOLLOW_rule__ExpressionListOrRange__Group_1__1__Impl_in_rule__ExpressionListOrRange__Group_1__124825);
             rule__ExpressionListOrRange__Group_1__1__Impl();
 
             state._fsp--;
@@ -33715,23 +33596,23 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ExpressionListOrRange__Group_1__1__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12326:1: rule__ExpressionListOrRange__Group_1__1__Impl : ( ( rule__ExpressionListOrRange__ListAssignment_1_1 ) ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12263:1: rule__ExpressionListOrRange__Group_1__1__Impl : ( ( rule__ExpressionListOrRange__ListAssignment_1_1 ) ) ;
     public final void rule__ExpressionListOrRange__Group_1__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12330:1: ( ( ( rule__ExpressionListOrRange__ListAssignment_1_1 ) ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12331:1: ( ( rule__ExpressionListOrRange__ListAssignment_1_1 ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12267:1: ( ( ( rule__ExpressionListOrRange__ListAssignment_1_1 ) ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12268:1: ( ( rule__ExpressionListOrRange__ListAssignment_1_1 ) )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12331:1: ( ( rule__ExpressionListOrRange__ListAssignment_1_1 ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12332:1: ( rule__ExpressionListOrRange__ListAssignment_1_1 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12268:1: ( ( rule__ExpressionListOrRange__ListAssignment_1_1 ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12269:1: ( rule__ExpressionListOrRange__ListAssignment_1_1 )
             {
              before(grammarAccess.getExpressionListOrRangeAccess().getListAssignment_1_1()); 
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12333:1: ( rule__ExpressionListOrRange__ListAssignment_1_1 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12333:2: rule__ExpressionListOrRange__ListAssignment_1_1
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12270:1: ( rule__ExpressionListOrRange__ListAssignment_1_1 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12270:2: rule__ExpressionListOrRange__ListAssignment_1_1
             {
-            pushFollow(FOLLOW_rule__ExpressionListOrRange__ListAssignment_1_1_in_rule__ExpressionListOrRange__Group_1__1__Impl24975);
+            pushFollow(FOLLOW_rule__ExpressionListOrRange__ListAssignment_1_1_in_rule__ExpressionListOrRange__Group_1__1__Impl24852);
             rule__ExpressionListOrRange__ListAssignment_1_1();
 
             state._fsp--;
@@ -33762,21 +33643,21 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ExpressionListEntry__Group__0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12347:1: rule__ExpressionListEntry__Group__0 : rule__ExpressionListEntry__Group__0__Impl rule__ExpressionListEntry__Group__1 ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12284:1: rule__ExpressionListEntry__Group__0 : rule__ExpressionListEntry__Group__0__Impl rule__ExpressionListEntry__Group__1 ;
     public final void rule__ExpressionListEntry__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12351:1: ( rule__ExpressionListEntry__Group__0__Impl rule__ExpressionListEntry__Group__1 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12352:2: rule__ExpressionListEntry__Group__0__Impl rule__ExpressionListEntry__Group__1
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12288:1: ( rule__ExpressionListEntry__Group__0__Impl rule__ExpressionListEntry__Group__1 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12289:2: rule__ExpressionListEntry__Group__0__Impl rule__ExpressionListEntry__Group__1
             {
-            pushFollow(FOLLOW_rule__ExpressionListEntry__Group__0__Impl_in_rule__ExpressionListEntry__Group__025009);
+            pushFollow(FOLLOW_rule__ExpressionListEntry__Group__0__Impl_in_rule__ExpressionListEntry__Group__024886);
             rule__ExpressionListEntry__Group__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__ExpressionListEntry__Group__1_in_rule__ExpressionListEntry__Group__025012);
+            pushFollow(FOLLOW_rule__ExpressionListEntry__Group__1_in_rule__ExpressionListEntry__Group__024889);
             rule__ExpressionListEntry__Group__1();
 
             state._fsp--;
@@ -33800,27 +33681,27 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ExpressionListEntry__Group__0__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12359:1: rule__ExpressionListEntry__Group__0__Impl : ( ( rule__ExpressionListEntry__Group_0__0 )? ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12296:1: rule__ExpressionListEntry__Group__0__Impl : ( ( rule__ExpressionListEntry__Group_0__0 )? ) ;
     public final void rule__ExpressionListEntry__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12363:1: ( ( ( rule__ExpressionListEntry__Group_0__0 )? ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12364:1: ( ( rule__ExpressionListEntry__Group_0__0 )? )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12300:1: ( ( ( rule__ExpressionListEntry__Group_0__0 )? ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12301:1: ( ( rule__ExpressionListEntry__Group_0__0 )? )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12364:1: ( ( rule__ExpressionListEntry__Group_0__0 )? )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12365:1: ( rule__ExpressionListEntry__Group_0__0 )?
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12301:1: ( ( rule__ExpressionListEntry__Group_0__0 )? )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12302:1: ( rule__ExpressionListEntry__Group_0__0 )?
             {
              before(grammarAccess.getExpressionListEntryAccess().getGroup_0()); 
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12366:1: ( rule__ExpressionListEntry__Group_0__0 )?
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12303:1: ( rule__ExpressionListEntry__Group_0__0 )?
             int alt95=2;
             alt95 = dfa95.predict(input);
             switch (alt95) {
                 case 1 :
-                    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12366:2: rule__ExpressionListEntry__Group_0__0
+                    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12303:2: rule__ExpressionListEntry__Group_0__0
                     {
-                    pushFollow(FOLLOW_rule__ExpressionListEntry__Group_0__0_in_rule__ExpressionListEntry__Group__0__Impl25039);
+                    pushFollow(FOLLOW_rule__ExpressionListEntry__Group_0__0_in_rule__ExpressionListEntry__Group__0__Impl24916);
                     rule__ExpressionListEntry__Group_0__0();
 
                     state._fsp--;
@@ -33854,16 +33735,16 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ExpressionListEntry__Group__1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12376:1: rule__ExpressionListEntry__Group__1 : rule__ExpressionListEntry__Group__1__Impl ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12313:1: rule__ExpressionListEntry__Group__1 : rule__ExpressionListEntry__Group__1__Impl ;
     public final void rule__ExpressionListEntry__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12380:1: ( rule__ExpressionListEntry__Group__1__Impl )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12381:2: rule__ExpressionListEntry__Group__1__Impl
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12317:1: ( rule__ExpressionListEntry__Group__1__Impl )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12318:2: rule__ExpressionListEntry__Group__1__Impl
             {
-            pushFollow(FOLLOW_rule__ExpressionListEntry__Group__1__Impl_in_rule__ExpressionListEntry__Group__125070);
+            pushFollow(FOLLOW_rule__ExpressionListEntry__Group__1__Impl_in_rule__ExpressionListEntry__Group__124947);
             rule__ExpressionListEntry__Group__1__Impl();
 
             state._fsp--;
@@ -33887,23 +33768,23 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ExpressionListEntry__Group__1__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12387:1: rule__ExpressionListEntry__Group__1__Impl : ( ( rule__ExpressionListEntry__Alternatives_1 ) ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12324:1: rule__ExpressionListEntry__Group__1__Impl : ( ( rule__ExpressionListEntry__Alternatives_1 ) ) ;
     public final void rule__ExpressionListEntry__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12391:1: ( ( ( rule__ExpressionListEntry__Alternatives_1 ) ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12392:1: ( ( rule__ExpressionListEntry__Alternatives_1 ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12328:1: ( ( ( rule__ExpressionListEntry__Alternatives_1 ) ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12329:1: ( ( rule__ExpressionListEntry__Alternatives_1 ) )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12392:1: ( ( rule__ExpressionListEntry__Alternatives_1 ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12393:1: ( rule__ExpressionListEntry__Alternatives_1 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12329:1: ( ( rule__ExpressionListEntry__Alternatives_1 ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12330:1: ( rule__ExpressionListEntry__Alternatives_1 )
             {
              before(grammarAccess.getExpressionListEntryAccess().getAlternatives_1()); 
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12394:1: ( rule__ExpressionListEntry__Alternatives_1 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12394:2: rule__ExpressionListEntry__Alternatives_1
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12331:1: ( rule__ExpressionListEntry__Alternatives_1 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12331:2: rule__ExpressionListEntry__Alternatives_1
             {
-            pushFollow(FOLLOW_rule__ExpressionListEntry__Alternatives_1_in_rule__ExpressionListEntry__Group__1__Impl25097);
+            pushFollow(FOLLOW_rule__ExpressionListEntry__Alternatives_1_in_rule__ExpressionListEntry__Group__1__Impl24974);
             rule__ExpressionListEntry__Alternatives_1();
 
             state._fsp--;
@@ -33934,21 +33815,21 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ExpressionListEntry__Group_0__0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12408:1: rule__ExpressionListEntry__Group_0__0 : rule__ExpressionListEntry__Group_0__0__Impl rule__ExpressionListEntry__Group_0__1 ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12345:1: rule__ExpressionListEntry__Group_0__0 : rule__ExpressionListEntry__Group_0__0__Impl rule__ExpressionListEntry__Group_0__1 ;
     public final void rule__ExpressionListEntry__Group_0__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12412:1: ( rule__ExpressionListEntry__Group_0__0__Impl rule__ExpressionListEntry__Group_0__1 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12413:2: rule__ExpressionListEntry__Group_0__0__Impl rule__ExpressionListEntry__Group_0__1
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12349:1: ( rule__ExpressionListEntry__Group_0__0__Impl rule__ExpressionListEntry__Group_0__1 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12350:2: rule__ExpressionListEntry__Group_0__0__Impl rule__ExpressionListEntry__Group_0__1
             {
-            pushFollow(FOLLOW_rule__ExpressionListEntry__Group_0__0__Impl_in_rule__ExpressionListEntry__Group_0__025131);
+            pushFollow(FOLLOW_rule__ExpressionListEntry__Group_0__0__Impl_in_rule__ExpressionListEntry__Group_0__025008);
             rule__ExpressionListEntry__Group_0__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__ExpressionListEntry__Group_0__1_in_rule__ExpressionListEntry__Group_0__025134);
+            pushFollow(FOLLOW_rule__ExpressionListEntry__Group_0__1_in_rule__ExpressionListEntry__Group_0__025011);
             rule__ExpressionListEntry__Group_0__1();
 
             state._fsp--;
@@ -33972,23 +33853,23 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ExpressionListEntry__Group_0__0__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12420:1: rule__ExpressionListEntry__Group_0__0__Impl : ( ( rule__ExpressionListEntry__NameAssignment_0_0 ) ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12357:1: rule__ExpressionListEntry__Group_0__0__Impl : ( ( rule__ExpressionListEntry__NameAssignment_0_0 ) ) ;
     public final void rule__ExpressionListEntry__Group_0__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12424:1: ( ( ( rule__ExpressionListEntry__NameAssignment_0_0 ) ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12425:1: ( ( rule__ExpressionListEntry__NameAssignment_0_0 ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12361:1: ( ( ( rule__ExpressionListEntry__NameAssignment_0_0 ) ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12362:1: ( ( rule__ExpressionListEntry__NameAssignment_0_0 ) )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12425:1: ( ( rule__ExpressionListEntry__NameAssignment_0_0 ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12426:1: ( rule__ExpressionListEntry__NameAssignment_0_0 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12362:1: ( ( rule__ExpressionListEntry__NameAssignment_0_0 ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12363:1: ( rule__ExpressionListEntry__NameAssignment_0_0 )
             {
              before(grammarAccess.getExpressionListEntryAccess().getNameAssignment_0_0()); 
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12427:1: ( rule__ExpressionListEntry__NameAssignment_0_0 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12427:2: rule__ExpressionListEntry__NameAssignment_0_0
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12364:1: ( rule__ExpressionListEntry__NameAssignment_0_0 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12364:2: rule__ExpressionListEntry__NameAssignment_0_0
             {
-            pushFollow(FOLLOW_rule__ExpressionListEntry__NameAssignment_0_0_in_rule__ExpressionListEntry__Group_0__0__Impl25161);
+            pushFollow(FOLLOW_rule__ExpressionListEntry__NameAssignment_0_0_in_rule__ExpressionListEntry__Group_0__0__Impl25038);
             rule__ExpressionListEntry__NameAssignment_0_0();
 
             state._fsp--;
@@ -34019,21 +33900,21 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ExpressionListEntry__Group_0__1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12437:1: rule__ExpressionListEntry__Group_0__1 : rule__ExpressionListEntry__Group_0__1__Impl rule__ExpressionListEntry__Group_0__2 ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12374:1: rule__ExpressionListEntry__Group_0__1 : rule__ExpressionListEntry__Group_0__1__Impl rule__ExpressionListEntry__Group_0__2 ;
     public final void rule__ExpressionListEntry__Group_0__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12441:1: ( rule__ExpressionListEntry__Group_0__1__Impl rule__ExpressionListEntry__Group_0__2 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12442:2: rule__ExpressionListEntry__Group_0__1__Impl rule__ExpressionListEntry__Group_0__2
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12378:1: ( rule__ExpressionListEntry__Group_0__1__Impl rule__ExpressionListEntry__Group_0__2 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12379:2: rule__ExpressionListEntry__Group_0__1__Impl rule__ExpressionListEntry__Group_0__2
             {
-            pushFollow(FOLLOW_rule__ExpressionListEntry__Group_0__1__Impl_in_rule__ExpressionListEntry__Group_0__125191);
+            pushFollow(FOLLOW_rule__ExpressionListEntry__Group_0__1__Impl_in_rule__ExpressionListEntry__Group_0__125068);
             rule__ExpressionListEntry__Group_0__1__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__ExpressionListEntry__Group_0__2_in_rule__ExpressionListEntry__Group_0__125194);
+            pushFollow(FOLLOW_rule__ExpressionListEntry__Group_0__2_in_rule__ExpressionListEntry__Group_0__125071);
             rule__ExpressionListEntry__Group_0__2();
 
             state._fsp--;
@@ -34057,20 +33938,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ExpressionListEntry__Group_0__1__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12449:1: rule__ExpressionListEntry__Group_0__1__Impl : ( ( rule__ExpressionListEntry__Group_0_1__0 )? ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12386:1: rule__ExpressionListEntry__Group_0__1__Impl : ( ( rule__ExpressionListEntry__Group_0_1__0 )? ) ;
     public final void rule__ExpressionListEntry__Group_0__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12453:1: ( ( ( rule__ExpressionListEntry__Group_0_1__0 )? ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12454:1: ( ( rule__ExpressionListEntry__Group_0_1__0 )? )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12390:1: ( ( ( rule__ExpressionListEntry__Group_0_1__0 )? ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12391:1: ( ( rule__ExpressionListEntry__Group_0_1__0 )? )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12454:1: ( ( rule__ExpressionListEntry__Group_0_1__0 )? )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12455:1: ( rule__ExpressionListEntry__Group_0_1__0 )?
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12391:1: ( ( rule__ExpressionListEntry__Group_0_1__0 )? )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12392:1: ( rule__ExpressionListEntry__Group_0_1__0 )?
             {
              before(grammarAccess.getExpressionListEntryAccess().getGroup_0_1()); 
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12456:1: ( rule__ExpressionListEntry__Group_0_1__0 )?
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12393:1: ( rule__ExpressionListEntry__Group_0_1__0 )?
             int alt96=2;
             int LA96_0 = input.LA(1);
 
@@ -34079,9 +33960,9 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
             }
             switch (alt96) {
                 case 1 :
-                    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12456:2: rule__ExpressionListEntry__Group_0_1__0
+                    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12393:2: rule__ExpressionListEntry__Group_0_1__0
                     {
-                    pushFollow(FOLLOW_rule__ExpressionListEntry__Group_0_1__0_in_rule__ExpressionListEntry__Group_0__1__Impl25221);
+                    pushFollow(FOLLOW_rule__ExpressionListEntry__Group_0_1__0_in_rule__ExpressionListEntry__Group_0__1__Impl25098);
                     rule__ExpressionListEntry__Group_0_1__0();
 
                     state._fsp--;
@@ -34115,16 +33996,16 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ExpressionListEntry__Group_0__2"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12466:1: rule__ExpressionListEntry__Group_0__2 : rule__ExpressionListEntry__Group_0__2__Impl ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12403:1: rule__ExpressionListEntry__Group_0__2 : rule__ExpressionListEntry__Group_0__2__Impl ;
     public final void rule__ExpressionListEntry__Group_0__2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12470:1: ( rule__ExpressionListEntry__Group_0__2__Impl )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12471:2: rule__ExpressionListEntry__Group_0__2__Impl
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12407:1: ( rule__ExpressionListEntry__Group_0__2__Impl )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12408:2: rule__ExpressionListEntry__Group_0__2__Impl
             {
-            pushFollow(FOLLOW_rule__ExpressionListEntry__Group_0__2__Impl_in_rule__ExpressionListEntry__Group_0__225252);
+            pushFollow(FOLLOW_rule__ExpressionListEntry__Group_0__2__Impl_in_rule__ExpressionListEntry__Group_0__225129);
             rule__ExpressionListEntry__Group_0__2__Impl();
 
             state._fsp--;
@@ -34148,20 +34029,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ExpressionListEntry__Group_0__2__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12477:1: rule__ExpressionListEntry__Group_0__2__Impl : ( '=' ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12414:1: rule__ExpressionListEntry__Group_0__2__Impl : ( '=' ) ;
     public final void rule__ExpressionListEntry__Group_0__2__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12481:1: ( ( '=' ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12482:1: ( '=' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12418:1: ( ( '=' ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12419:1: ( '=' )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12482:1: ( '=' )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12483:1: '='
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12419:1: ( '=' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12420:1: '='
             {
              before(grammarAccess.getExpressionListEntryAccess().getEqualsSignKeyword_0_2()); 
-            match(input,14,FOLLOW_14_in_rule__ExpressionListEntry__Group_0__2__Impl25280); 
+            match(input,14,FOLLOW_14_in_rule__ExpressionListEntry__Group_0__2__Impl25157); 
              after(grammarAccess.getExpressionListEntryAccess().getEqualsSignKeyword_0_2()); 
 
             }
@@ -34185,21 +34066,21 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ExpressionListEntry__Group_0_1__0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12502:1: rule__ExpressionListEntry__Group_0_1__0 : rule__ExpressionListEntry__Group_0_1__0__Impl rule__ExpressionListEntry__Group_0_1__1 ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12439:1: rule__ExpressionListEntry__Group_0_1__0 : rule__ExpressionListEntry__Group_0_1__0__Impl rule__ExpressionListEntry__Group_0_1__1 ;
     public final void rule__ExpressionListEntry__Group_0_1__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12506:1: ( rule__ExpressionListEntry__Group_0_1__0__Impl rule__ExpressionListEntry__Group_0_1__1 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12507:2: rule__ExpressionListEntry__Group_0_1__0__Impl rule__ExpressionListEntry__Group_0_1__1
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12443:1: ( rule__ExpressionListEntry__Group_0_1__0__Impl rule__ExpressionListEntry__Group_0_1__1 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12444:2: rule__ExpressionListEntry__Group_0_1__0__Impl rule__ExpressionListEntry__Group_0_1__1
             {
-            pushFollow(FOLLOW_rule__ExpressionListEntry__Group_0_1__0__Impl_in_rule__ExpressionListEntry__Group_0_1__025317);
+            pushFollow(FOLLOW_rule__ExpressionListEntry__Group_0_1__0__Impl_in_rule__ExpressionListEntry__Group_0_1__025194);
             rule__ExpressionListEntry__Group_0_1__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__ExpressionListEntry__Group_0_1__1_in_rule__ExpressionListEntry__Group_0_1__025320);
+            pushFollow(FOLLOW_rule__ExpressionListEntry__Group_0_1__1_in_rule__ExpressionListEntry__Group_0_1__025197);
             rule__ExpressionListEntry__Group_0_1__1();
 
             state._fsp--;
@@ -34223,20 +34104,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ExpressionListEntry__Group_0_1__0__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12514:1: rule__ExpressionListEntry__Group_0_1__0__Impl : ( '.' ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12451:1: rule__ExpressionListEntry__Group_0_1__0__Impl : ( '.' ) ;
     public final void rule__ExpressionListEntry__Group_0_1__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12518:1: ( ( '.' ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12519:1: ( '.' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12455:1: ( ( '.' ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12456:1: ( '.' )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12519:1: ( '.' )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12520:1: '.'
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12456:1: ( '.' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12457:1: '.'
             {
              before(grammarAccess.getExpressionListEntryAccess().getFullStopKeyword_0_1_0()); 
-            match(input,63,FOLLOW_63_in_rule__ExpressionListEntry__Group_0_1__0__Impl25348); 
+            match(input,63,FOLLOW_63_in_rule__ExpressionListEntry__Group_0_1__0__Impl25225); 
              after(grammarAccess.getExpressionListEntryAccess().getFullStopKeyword_0_1_0()); 
 
             }
@@ -34260,16 +34141,16 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ExpressionListEntry__Group_0_1__1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12533:1: rule__ExpressionListEntry__Group_0_1__1 : rule__ExpressionListEntry__Group_0_1__1__Impl ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12470:1: rule__ExpressionListEntry__Group_0_1__1 : rule__ExpressionListEntry__Group_0_1__1__Impl ;
     public final void rule__ExpressionListEntry__Group_0_1__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12537:1: ( rule__ExpressionListEntry__Group_0_1__1__Impl )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12538:2: rule__ExpressionListEntry__Group_0_1__1__Impl
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12474:1: ( rule__ExpressionListEntry__Group_0_1__1__Impl )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12475:2: rule__ExpressionListEntry__Group_0_1__1__Impl
             {
-            pushFollow(FOLLOW_rule__ExpressionListEntry__Group_0_1__1__Impl_in_rule__ExpressionListEntry__Group_0_1__125379);
+            pushFollow(FOLLOW_rule__ExpressionListEntry__Group_0_1__1__Impl_in_rule__ExpressionListEntry__Group_0_1__125256);
             rule__ExpressionListEntry__Group_0_1__1__Impl();
 
             state._fsp--;
@@ -34293,23 +34174,23 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ExpressionListEntry__Group_0_1__1__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12544:1: rule__ExpressionListEntry__Group_0_1__1__Impl : ( ( rule__ExpressionListEntry__AttribAssignment_0_1_1 ) ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12481:1: rule__ExpressionListEntry__Group_0_1__1__Impl : ( ( rule__ExpressionListEntry__AttribAssignment_0_1_1 ) ) ;
     public final void rule__ExpressionListEntry__Group_0_1__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12548:1: ( ( ( rule__ExpressionListEntry__AttribAssignment_0_1_1 ) ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12549:1: ( ( rule__ExpressionListEntry__AttribAssignment_0_1_1 ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12485:1: ( ( ( rule__ExpressionListEntry__AttribAssignment_0_1_1 ) ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12486:1: ( ( rule__ExpressionListEntry__AttribAssignment_0_1_1 ) )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12549:1: ( ( rule__ExpressionListEntry__AttribAssignment_0_1_1 ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12550:1: ( rule__ExpressionListEntry__AttribAssignment_0_1_1 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12486:1: ( ( rule__ExpressionListEntry__AttribAssignment_0_1_1 ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12487:1: ( rule__ExpressionListEntry__AttribAssignment_0_1_1 )
             {
              before(grammarAccess.getExpressionListEntryAccess().getAttribAssignment_0_1_1()); 
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12551:1: ( rule__ExpressionListEntry__AttribAssignment_0_1_1 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12551:2: rule__ExpressionListEntry__AttribAssignment_0_1_1
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12488:1: ( rule__ExpressionListEntry__AttribAssignment_0_1_1 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12488:2: rule__ExpressionListEntry__AttribAssignment_0_1_1
             {
-            pushFollow(FOLLOW_rule__ExpressionListEntry__AttribAssignment_0_1_1_in_rule__ExpressionListEntry__Group_0_1__1__Impl25406);
+            pushFollow(FOLLOW_rule__ExpressionListEntry__AttribAssignment_0_1_1_in_rule__ExpressionListEntry__Group_0_1__1__Impl25283);
             rule__ExpressionListEntry__AttribAssignment_0_1_1();
 
             state._fsp--;
@@ -34340,21 +34221,21 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__IfExpression__Group__0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12565:1: rule__IfExpression__Group__0 : rule__IfExpression__Group__0__Impl rule__IfExpression__Group__1 ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12502:1: rule__IfExpression__Group__0 : rule__IfExpression__Group__0__Impl rule__IfExpression__Group__1 ;
     public final void rule__IfExpression__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12569:1: ( rule__IfExpression__Group__0__Impl rule__IfExpression__Group__1 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12570:2: rule__IfExpression__Group__0__Impl rule__IfExpression__Group__1
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12506:1: ( rule__IfExpression__Group__0__Impl rule__IfExpression__Group__1 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12507:2: rule__IfExpression__Group__0__Impl rule__IfExpression__Group__1
             {
-            pushFollow(FOLLOW_rule__IfExpression__Group__0__Impl_in_rule__IfExpression__Group__025440);
+            pushFollow(FOLLOW_rule__IfExpression__Group__0__Impl_in_rule__IfExpression__Group__025317);
             rule__IfExpression__Group__0__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__IfExpression__Group__1_in_rule__IfExpression__Group__025443);
+            pushFollow(FOLLOW_rule__IfExpression__Group__1_in_rule__IfExpression__Group__025320);
             rule__IfExpression__Group__1();
 
             state._fsp--;
@@ -34378,20 +34259,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__IfExpression__Group__0__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12577:1: rule__IfExpression__Group__0__Impl : ( 'if' ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12514:1: rule__IfExpression__Group__0__Impl : ( 'if' ) ;
     public final void rule__IfExpression__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12581:1: ( ( 'if' ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12582:1: ( 'if' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12518:1: ( ( 'if' ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12519:1: ( 'if' )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12582:1: ( 'if' )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12583:1: 'if'
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12519:1: ( 'if' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12520:1: 'if'
             {
              before(grammarAccess.getIfExpressionAccess().getIfKeyword_0()); 
-            match(input,70,FOLLOW_70_in_rule__IfExpression__Group__0__Impl25471); 
+            match(input,69,FOLLOW_69_in_rule__IfExpression__Group__0__Impl25348); 
              after(grammarAccess.getIfExpressionAccess().getIfKeyword_0()); 
 
             }
@@ -34415,21 +34296,21 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__IfExpression__Group__1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12596:1: rule__IfExpression__Group__1 : rule__IfExpression__Group__1__Impl rule__IfExpression__Group__2 ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12533:1: rule__IfExpression__Group__1 : rule__IfExpression__Group__1__Impl rule__IfExpression__Group__2 ;
     public final void rule__IfExpression__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12600:1: ( rule__IfExpression__Group__1__Impl rule__IfExpression__Group__2 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12601:2: rule__IfExpression__Group__1__Impl rule__IfExpression__Group__2
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12537:1: ( rule__IfExpression__Group__1__Impl rule__IfExpression__Group__2 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12538:2: rule__IfExpression__Group__1__Impl rule__IfExpression__Group__2
             {
-            pushFollow(FOLLOW_rule__IfExpression__Group__1__Impl_in_rule__IfExpression__Group__125502);
+            pushFollow(FOLLOW_rule__IfExpression__Group__1__Impl_in_rule__IfExpression__Group__125379);
             rule__IfExpression__Group__1__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__IfExpression__Group__2_in_rule__IfExpression__Group__125505);
+            pushFollow(FOLLOW_rule__IfExpression__Group__2_in_rule__IfExpression__Group__125382);
             rule__IfExpression__Group__2();
 
             state._fsp--;
@@ -34453,23 +34334,23 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__IfExpression__Group__1__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12608:1: rule__IfExpression__Group__1__Impl : ( ( rule__IfExpression__IfExAssignment_1 ) ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12545:1: rule__IfExpression__Group__1__Impl : ( ( rule__IfExpression__IfExAssignment_1 ) ) ;
     public final void rule__IfExpression__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12612:1: ( ( ( rule__IfExpression__IfExAssignment_1 ) ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12613:1: ( ( rule__IfExpression__IfExAssignment_1 ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12549:1: ( ( ( rule__IfExpression__IfExAssignment_1 ) ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12550:1: ( ( rule__IfExpression__IfExAssignment_1 ) )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12613:1: ( ( rule__IfExpression__IfExAssignment_1 ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12614:1: ( rule__IfExpression__IfExAssignment_1 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12550:1: ( ( rule__IfExpression__IfExAssignment_1 ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12551:1: ( rule__IfExpression__IfExAssignment_1 )
             {
              before(grammarAccess.getIfExpressionAccess().getIfExAssignment_1()); 
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12615:1: ( rule__IfExpression__IfExAssignment_1 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12615:2: rule__IfExpression__IfExAssignment_1
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12552:1: ( rule__IfExpression__IfExAssignment_1 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12552:2: rule__IfExpression__IfExAssignment_1
             {
-            pushFollow(FOLLOW_rule__IfExpression__IfExAssignment_1_in_rule__IfExpression__Group__1__Impl25532);
+            pushFollow(FOLLOW_rule__IfExpression__IfExAssignment_1_in_rule__IfExpression__Group__1__Impl25409);
             rule__IfExpression__IfExAssignment_1();
 
             state._fsp--;
@@ -34500,21 +34381,21 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__IfExpression__Group__2"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12625:1: rule__IfExpression__Group__2 : rule__IfExpression__Group__2__Impl rule__IfExpression__Group__3 ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12562:1: rule__IfExpression__Group__2 : rule__IfExpression__Group__2__Impl rule__IfExpression__Group__3 ;
     public final void rule__IfExpression__Group__2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12629:1: ( rule__IfExpression__Group__2__Impl rule__IfExpression__Group__3 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12630:2: rule__IfExpression__Group__2__Impl rule__IfExpression__Group__3
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12566:1: ( rule__IfExpression__Group__2__Impl rule__IfExpression__Group__3 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12567:2: rule__IfExpression__Group__2__Impl rule__IfExpression__Group__3
             {
-            pushFollow(FOLLOW_rule__IfExpression__Group__2__Impl_in_rule__IfExpression__Group__225562);
+            pushFollow(FOLLOW_rule__IfExpression__Group__2__Impl_in_rule__IfExpression__Group__225439);
             rule__IfExpression__Group__2__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__IfExpression__Group__3_in_rule__IfExpression__Group__225565);
+            pushFollow(FOLLOW_rule__IfExpression__Group__3_in_rule__IfExpression__Group__225442);
             rule__IfExpression__Group__3();
 
             state._fsp--;
@@ -34538,20 +34419,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__IfExpression__Group__2__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12637:1: rule__IfExpression__Group__2__Impl : ( 'then' ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12574:1: rule__IfExpression__Group__2__Impl : ( 'then' ) ;
     public final void rule__IfExpression__Group__2__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12641:1: ( ( 'then' ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12642:1: ( 'then' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12578:1: ( ( 'then' ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12579:1: ( 'then' )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12642:1: ( 'then' )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12643:1: 'then'
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12579:1: ( 'then' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12580:1: 'then'
             {
              before(grammarAccess.getIfExpressionAccess().getThenKeyword_2()); 
-            match(input,71,FOLLOW_71_in_rule__IfExpression__Group__2__Impl25593); 
+            match(input,70,FOLLOW_70_in_rule__IfExpression__Group__2__Impl25470); 
              after(grammarAccess.getIfExpressionAccess().getThenKeyword_2()); 
 
             }
@@ -34575,21 +34456,21 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__IfExpression__Group__3"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12656:1: rule__IfExpression__Group__3 : rule__IfExpression__Group__3__Impl rule__IfExpression__Group__4 ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12593:1: rule__IfExpression__Group__3 : rule__IfExpression__Group__3__Impl rule__IfExpression__Group__4 ;
     public final void rule__IfExpression__Group__3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12660:1: ( rule__IfExpression__Group__3__Impl rule__IfExpression__Group__4 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12661:2: rule__IfExpression__Group__3__Impl rule__IfExpression__Group__4
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12597:1: ( rule__IfExpression__Group__3__Impl rule__IfExpression__Group__4 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12598:2: rule__IfExpression__Group__3__Impl rule__IfExpression__Group__4
             {
-            pushFollow(FOLLOW_rule__IfExpression__Group__3__Impl_in_rule__IfExpression__Group__325624);
+            pushFollow(FOLLOW_rule__IfExpression__Group__3__Impl_in_rule__IfExpression__Group__325501);
             rule__IfExpression__Group__3__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__IfExpression__Group__4_in_rule__IfExpression__Group__325627);
+            pushFollow(FOLLOW_rule__IfExpression__Group__4_in_rule__IfExpression__Group__325504);
             rule__IfExpression__Group__4();
 
             state._fsp--;
@@ -34613,23 +34494,23 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__IfExpression__Group__3__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12668:1: rule__IfExpression__Group__3__Impl : ( ( rule__IfExpression__ThenExAssignment_3 ) ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12605:1: rule__IfExpression__Group__3__Impl : ( ( rule__IfExpression__ThenExAssignment_3 ) ) ;
     public final void rule__IfExpression__Group__3__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12672:1: ( ( ( rule__IfExpression__ThenExAssignment_3 ) ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12673:1: ( ( rule__IfExpression__ThenExAssignment_3 ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12609:1: ( ( ( rule__IfExpression__ThenExAssignment_3 ) ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12610:1: ( ( rule__IfExpression__ThenExAssignment_3 ) )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12673:1: ( ( rule__IfExpression__ThenExAssignment_3 ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12674:1: ( rule__IfExpression__ThenExAssignment_3 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12610:1: ( ( rule__IfExpression__ThenExAssignment_3 ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12611:1: ( rule__IfExpression__ThenExAssignment_3 )
             {
              before(grammarAccess.getIfExpressionAccess().getThenExAssignment_3()); 
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12675:1: ( rule__IfExpression__ThenExAssignment_3 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12675:2: rule__IfExpression__ThenExAssignment_3
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12612:1: ( rule__IfExpression__ThenExAssignment_3 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12612:2: rule__IfExpression__ThenExAssignment_3
             {
-            pushFollow(FOLLOW_rule__IfExpression__ThenExAssignment_3_in_rule__IfExpression__Group__3__Impl25654);
+            pushFollow(FOLLOW_rule__IfExpression__ThenExAssignment_3_in_rule__IfExpression__Group__3__Impl25531);
             rule__IfExpression__ThenExAssignment_3();
 
             state._fsp--;
@@ -34660,21 +34541,21 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__IfExpression__Group__4"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12685:1: rule__IfExpression__Group__4 : rule__IfExpression__Group__4__Impl rule__IfExpression__Group__5 ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12622:1: rule__IfExpression__Group__4 : rule__IfExpression__Group__4__Impl rule__IfExpression__Group__5 ;
     public final void rule__IfExpression__Group__4() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12689:1: ( rule__IfExpression__Group__4__Impl rule__IfExpression__Group__5 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12690:2: rule__IfExpression__Group__4__Impl rule__IfExpression__Group__5
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12626:1: ( rule__IfExpression__Group__4__Impl rule__IfExpression__Group__5 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12627:2: rule__IfExpression__Group__4__Impl rule__IfExpression__Group__5
             {
-            pushFollow(FOLLOW_rule__IfExpression__Group__4__Impl_in_rule__IfExpression__Group__425684);
+            pushFollow(FOLLOW_rule__IfExpression__Group__4__Impl_in_rule__IfExpression__Group__425561);
             rule__IfExpression__Group__4__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__IfExpression__Group__5_in_rule__IfExpression__Group__425687);
+            pushFollow(FOLLOW_rule__IfExpression__Group__5_in_rule__IfExpression__Group__425564);
             rule__IfExpression__Group__5();
 
             state._fsp--;
@@ -34698,20 +34579,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__IfExpression__Group__4__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12697:1: rule__IfExpression__Group__4__Impl : ( 'else' ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12634:1: rule__IfExpression__Group__4__Impl : ( 'else' ) ;
     public final void rule__IfExpression__Group__4__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12701:1: ( ( 'else' ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12702:1: ( 'else' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12638:1: ( ( 'else' ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12639:1: ( 'else' )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12702:1: ( 'else' )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12703:1: 'else'
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12639:1: ( 'else' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12640:1: 'else'
             {
              before(grammarAccess.getIfExpressionAccess().getElseKeyword_4()); 
-            match(input,72,FOLLOW_72_in_rule__IfExpression__Group__4__Impl25715); 
+            match(input,71,FOLLOW_71_in_rule__IfExpression__Group__4__Impl25592); 
              after(grammarAccess.getIfExpressionAccess().getElseKeyword_4()); 
 
             }
@@ -34735,21 +34616,21 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__IfExpression__Group__5"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12716:1: rule__IfExpression__Group__5 : rule__IfExpression__Group__5__Impl rule__IfExpression__Group__6 ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12653:1: rule__IfExpression__Group__5 : rule__IfExpression__Group__5__Impl rule__IfExpression__Group__6 ;
     public final void rule__IfExpression__Group__5() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12720:1: ( rule__IfExpression__Group__5__Impl rule__IfExpression__Group__6 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12721:2: rule__IfExpression__Group__5__Impl rule__IfExpression__Group__6
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12657:1: ( rule__IfExpression__Group__5__Impl rule__IfExpression__Group__6 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12658:2: rule__IfExpression__Group__5__Impl rule__IfExpression__Group__6
             {
-            pushFollow(FOLLOW_rule__IfExpression__Group__5__Impl_in_rule__IfExpression__Group__525746);
+            pushFollow(FOLLOW_rule__IfExpression__Group__5__Impl_in_rule__IfExpression__Group__525623);
             rule__IfExpression__Group__5__Impl();
 
             state._fsp--;
 
-            pushFollow(FOLLOW_rule__IfExpression__Group__6_in_rule__IfExpression__Group__525749);
+            pushFollow(FOLLOW_rule__IfExpression__Group__6_in_rule__IfExpression__Group__525626);
             rule__IfExpression__Group__6();
 
             state._fsp--;
@@ -34773,23 +34654,23 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__IfExpression__Group__5__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12728:1: rule__IfExpression__Group__5__Impl : ( ( rule__IfExpression__ElseExAssignment_5 ) ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12665:1: rule__IfExpression__Group__5__Impl : ( ( rule__IfExpression__ElseExAssignment_5 ) ) ;
     public final void rule__IfExpression__Group__5__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12732:1: ( ( ( rule__IfExpression__ElseExAssignment_5 ) ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12733:1: ( ( rule__IfExpression__ElseExAssignment_5 ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12669:1: ( ( ( rule__IfExpression__ElseExAssignment_5 ) ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12670:1: ( ( rule__IfExpression__ElseExAssignment_5 ) )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12733:1: ( ( rule__IfExpression__ElseExAssignment_5 ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12734:1: ( rule__IfExpression__ElseExAssignment_5 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12670:1: ( ( rule__IfExpression__ElseExAssignment_5 ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12671:1: ( rule__IfExpression__ElseExAssignment_5 )
             {
              before(grammarAccess.getIfExpressionAccess().getElseExAssignment_5()); 
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12735:1: ( rule__IfExpression__ElseExAssignment_5 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12735:2: rule__IfExpression__ElseExAssignment_5
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12672:1: ( rule__IfExpression__ElseExAssignment_5 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12672:2: rule__IfExpression__ElseExAssignment_5
             {
-            pushFollow(FOLLOW_rule__IfExpression__ElseExAssignment_5_in_rule__IfExpression__Group__5__Impl25776);
+            pushFollow(FOLLOW_rule__IfExpression__ElseExAssignment_5_in_rule__IfExpression__Group__5__Impl25653);
             rule__IfExpression__ElseExAssignment_5();
 
             state._fsp--;
@@ -34820,16 +34701,16 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__IfExpression__Group__6"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12745:1: rule__IfExpression__Group__6 : rule__IfExpression__Group__6__Impl ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12682:1: rule__IfExpression__Group__6 : rule__IfExpression__Group__6__Impl ;
     public final void rule__IfExpression__Group__6() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12749:1: ( rule__IfExpression__Group__6__Impl )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12750:2: rule__IfExpression__Group__6__Impl
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12686:1: ( rule__IfExpression__Group__6__Impl )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12687:2: rule__IfExpression__Group__6__Impl
             {
-            pushFollow(FOLLOW_rule__IfExpression__Group__6__Impl_in_rule__IfExpression__Group__625806);
+            pushFollow(FOLLOW_rule__IfExpression__Group__6__Impl_in_rule__IfExpression__Group__625683);
             rule__IfExpression__Group__6__Impl();
 
             state._fsp--;
@@ -34853,20 +34734,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__IfExpression__Group__6__Impl"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12756:1: rule__IfExpression__Group__6__Impl : ( 'endif' ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12693:1: rule__IfExpression__Group__6__Impl : ( 'endif' ) ;
     public final void rule__IfExpression__Group__6__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12760:1: ( ( 'endif' ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12761:1: ( 'endif' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12697:1: ( ( 'endif' ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12698:1: ( 'endif' )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12761:1: ( 'endif' )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12762:1: 'endif'
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12698:1: ( 'endif' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12699:1: 'endif'
             {
              before(grammarAccess.getIfExpressionAccess().getEndifKeyword_6()); 
-            match(input,73,FOLLOW_73_in_rule__IfExpression__Group__6__Impl25834); 
+            match(input,72,FOLLOW_72_in_rule__IfExpression__Group__6__Impl25711); 
              after(grammarAccess.getIfExpressionAccess().getEndifKeyword_6()); 
 
             }
@@ -34890,20 +34771,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__VariabilityUnit__ProjectsAssignment_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12790:1: rule__VariabilityUnit__ProjectsAssignment_1 : ( ruleProject ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12727:1: rule__VariabilityUnit__ProjectsAssignment_1 : ( ruleProject ) ;
     public final void rule__VariabilityUnit__ProjectsAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12794:1: ( ( ruleProject ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12795:1: ( ruleProject )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12731:1: ( ( ruleProject ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12732:1: ( ruleProject )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12795:1: ( ruleProject )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12796:1: ruleProject
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12732:1: ( ruleProject )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12733:1: ruleProject
             {
              before(grammarAccess.getVariabilityUnitAccess().getProjectsProjectParserRuleCall_1_0()); 
-            pushFollow(FOLLOW_ruleProject_in_rule__VariabilityUnit__ProjectsAssignment_125884);
+            pushFollow(FOLLOW_ruleProject_in_rule__VariabilityUnit__ProjectsAssignment_125761);
             ruleProject();
 
             state._fsp--;
@@ -34931,20 +34812,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Project__NameAssignment_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12805:1: rule__Project__NameAssignment_1 : ( ruleIdentifier ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12742:1: rule__Project__NameAssignment_1 : ( ruleIdentifier ) ;
     public final void rule__Project__NameAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12809:1: ( ( ruleIdentifier ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12810:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12746:1: ( ( ruleIdentifier ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12747:1: ( ruleIdentifier )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12810:1: ( ruleIdentifier )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12811:1: ruleIdentifier
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12747:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12748:1: ruleIdentifier
             {
              before(grammarAccess.getProjectAccess().getNameIdentifierParserRuleCall_1_0()); 
-            pushFollow(FOLLOW_ruleIdentifier_in_rule__Project__NameAssignment_125915);
+            pushFollow(FOLLOW_ruleIdentifier_in_rule__Project__NameAssignment_125792);
             ruleIdentifier();
 
             state._fsp--;
@@ -34972,20 +34853,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Project__VersionAssignment_3"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12820:1: rule__Project__VersionAssignment_3 : ( ruleVersionStmt ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12757:1: rule__Project__VersionAssignment_3 : ( ruleVersionStmt ) ;
     public final void rule__Project__VersionAssignment_3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12824:1: ( ( ruleVersionStmt ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12825:1: ( ruleVersionStmt )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12761:1: ( ( ruleVersionStmt ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12762:1: ( ruleVersionStmt )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12825:1: ( ruleVersionStmt )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12826:1: ruleVersionStmt
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12762:1: ( ruleVersionStmt )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12763:1: ruleVersionStmt
             {
              before(grammarAccess.getProjectAccess().getVersionVersionStmtParserRuleCall_3_0()); 
-            pushFollow(FOLLOW_ruleVersionStmt_in_rule__Project__VersionAssignment_325946);
+            pushFollow(FOLLOW_ruleVersionStmt_in_rule__Project__VersionAssignment_325823);
             ruleVersionStmt();
 
             state._fsp--;
@@ -35013,20 +34894,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Project__ImportsAssignment_4"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12835:1: rule__Project__ImportsAssignment_4 : ( ruleImportStmt ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12772:1: rule__Project__ImportsAssignment_4 : ( ruleImportStmt ) ;
     public final void rule__Project__ImportsAssignment_4() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12839:1: ( ( ruleImportStmt ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12840:1: ( ruleImportStmt )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12776:1: ( ( ruleImportStmt ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12777:1: ( ruleImportStmt )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12840:1: ( ruleImportStmt )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12841:1: ruleImportStmt
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12777:1: ( ruleImportStmt )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12778:1: ruleImportStmt
             {
              before(grammarAccess.getProjectAccess().getImportsImportStmtParserRuleCall_4_0()); 
-            pushFollow(FOLLOW_ruleImportStmt_in_rule__Project__ImportsAssignment_425977);
+            pushFollow(FOLLOW_ruleImportStmt_in_rule__Project__ImportsAssignment_425854);
             ruleImportStmt();
 
             state._fsp--;
@@ -35054,20 +34935,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Project__ConflictsAssignment_5"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12850:1: rule__Project__ConflictsAssignment_5 : ( ruleConflictStmt ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12787:1: rule__Project__ConflictsAssignment_5 : ( ruleConflictStmt ) ;
     public final void rule__Project__ConflictsAssignment_5() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12854:1: ( ( ruleConflictStmt ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12855:1: ( ruleConflictStmt )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12791:1: ( ( ruleConflictStmt ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12792:1: ( ruleConflictStmt )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12855:1: ( ruleConflictStmt )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12856:1: ruleConflictStmt
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12792:1: ( ruleConflictStmt )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12793:1: ruleConflictStmt
             {
              before(grammarAccess.getProjectAccess().getConflictsConflictStmtParserRuleCall_5_0()); 
-            pushFollow(FOLLOW_ruleConflictStmt_in_rule__Project__ConflictsAssignment_526008);
+            pushFollow(FOLLOW_ruleConflictStmt_in_rule__Project__ConflictsAssignment_525885);
             ruleConflictStmt();
 
             state._fsp--;
@@ -35095,20 +34976,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Project__InterfacesAssignment_6"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12865:1: rule__Project__InterfacesAssignment_6 : ( ruleInterfaceDeclaration ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12802:1: rule__Project__InterfacesAssignment_6 : ( ruleInterfaceDeclaration ) ;
     public final void rule__Project__InterfacesAssignment_6() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12869:1: ( ( ruleInterfaceDeclaration ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12870:1: ( ruleInterfaceDeclaration )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12806:1: ( ( ruleInterfaceDeclaration ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12807:1: ( ruleInterfaceDeclaration )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12870:1: ( ruleInterfaceDeclaration )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12871:1: ruleInterfaceDeclaration
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12807:1: ( ruleInterfaceDeclaration )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12808:1: ruleInterfaceDeclaration
             {
              before(grammarAccess.getProjectAccess().getInterfacesInterfaceDeclarationParserRuleCall_6_0()); 
-            pushFollow(FOLLOW_ruleInterfaceDeclaration_in_rule__Project__InterfacesAssignment_626039);
+            pushFollow(FOLLOW_ruleInterfaceDeclaration_in_rule__Project__InterfacesAssignment_625916);
             ruleInterfaceDeclaration();
 
             state._fsp--;
@@ -35136,20 +35017,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Project__ContentsAssignment_7"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12880:1: rule__Project__ContentsAssignment_7 : ( ruleProjectContents ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12817:1: rule__Project__ContentsAssignment_7 : ( ruleProjectContents ) ;
     public final void rule__Project__ContentsAssignment_7() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12884:1: ( ( ruleProjectContents ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12885:1: ( ruleProjectContents )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12821:1: ( ( ruleProjectContents ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12822:1: ( ruleProjectContents )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12885:1: ( ruleProjectContents )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12886:1: ruleProjectContents
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12822:1: ( ruleProjectContents )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12823:1: ruleProjectContents
             {
              before(grammarAccess.getProjectAccess().getContentsProjectContentsParserRuleCall_7_0()); 
-            pushFollow(FOLLOW_ruleProjectContents_in_rule__Project__ContentsAssignment_726070);
+            pushFollow(FOLLOW_ruleProjectContents_in_rule__Project__ContentsAssignment_725947);
             ruleProjectContents();
 
             state._fsp--;
@@ -35177,20 +35058,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ProjectContents__ElementsAssignment_1_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12895:1: rule__ProjectContents__ElementsAssignment_1_0 : ( ruleTypedef ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12832:1: rule__ProjectContents__ElementsAssignment_1_0 : ( ruleTypedef ) ;
     public final void rule__ProjectContents__ElementsAssignment_1_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12899:1: ( ( ruleTypedef ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12900:1: ( ruleTypedef )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12836:1: ( ( ruleTypedef ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12837:1: ( ruleTypedef )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12900:1: ( ruleTypedef )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12901:1: ruleTypedef
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12837:1: ( ruleTypedef )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12838:1: ruleTypedef
             {
              before(grammarAccess.getProjectContentsAccess().getElementsTypedefParserRuleCall_1_0_0()); 
-            pushFollow(FOLLOW_ruleTypedef_in_rule__ProjectContents__ElementsAssignment_1_026101);
+            pushFollow(FOLLOW_ruleTypedef_in_rule__ProjectContents__ElementsAssignment_1_025978);
             ruleTypedef();
 
             state._fsp--;
@@ -35218,20 +35099,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ProjectContents__ElementsAssignment_1_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12910:1: rule__ProjectContents__ElementsAssignment_1_1 : ( ruleVariableDeclaration ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12847:1: rule__ProjectContents__ElementsAssignment_1_1 : ( ruleVariableDeclaration ) ;
     public final void rule__ProjectContents__ElementsAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12914:1: ( ( ruleVariableDeclaration ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12915:1: ( ruleVariableDeclaration )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12851:1: ( ( ruleVariableDeclaration ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12852:1: ( ruleVariableDeclaration )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12915:1: ( ruleVariableDeclaration )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12916:1: ruleVariableDeclaration
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12852:1: ( ruleVariableDeclaration )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12853:1: ruleVariableDeclaration
             {
              before(grammarAccess.getProjectContentsAccess().getElementsVariableDeclarationParserRuleCall_1_1_0()); 
-            pushFollow(FOLLOW_ruleVariableDeclaration_in_rule__ProjectContents__ElementsAssignment_1_126132);
+            pushFollow(FOLLOW_ruleVariableDeclaration_in_rule__ProjectContents__ElementsAssignment_1_126009);
             ruleVariableDeclaration();
 
             state._fsp--;
@@ -35259,20 +35140,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ProjectContents__ElementsAssignment_1_2"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12925:1: rule__ProjectContents__ElementsAssignment_1_2 : ( ruleFreeze ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12862:1: rule__ProjectContents__ElementsAssignment_1_2 : ( ruleFreeze ) ;
     public final void rule__ProjectContents__ElementsAssignment_1_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12929:1: ( ( ruleFreeze ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12930:1: ( ruleFreeze )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12866:1: ( ( ruleFreeze ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12867:1: ( ruleFreeze )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12930:1: ( ruleFreeze )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12931:1: ruleFreeze
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12867:1: ( ruleFreeze )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12868:1: ruleFreeze
             {
              before(grammarAccess.getProjectContentsAccess().getElementsFreezeParserRuleCall_1_2_0()); 
-            pushFollow(FOLLOW_ruleFreeze_in_rule__ProjectContents__ElementsAssignment_1_226163);
+            pushFollow(FOLLOW_ruleFreeze_in_rule__ProjectContents__ElementsAssignment_1_226040);
             ruleFreeze();
 
             state._fsp--;
@@ -35300,20 +35181,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ProjectContents__ElementsAssignment_1_3"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12940:1: rule__ProjectContents__ElementsAssignment_1_3 : ( ruleEval ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12877:1: rule__ProjectContents__ElementsAssignment_1_3 : ( ruleEval ) ;
     public final void rule__ProjectContents__ElementsAssignment_1_3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12944:1: ( ( ruleEval ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12945:1: ( ruleEval )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12881:1: ( ( ruleEval ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12882:1: ( ruleEval )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12945:1: ( ruleEval )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12946:1: ruleEval
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12882:1: ( ruleEval )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12883:1: ruleEval
             {
              before(grammarAccess.getProjectContentsAccess().getElementsEvalParserRuleCall_1_3_0()); 
-            pushFollow(FOLLOW_ruleEval_in_rule__ProjectContents__ElementsAssignment_1_326194);
+            pushFollow(FOLLOW_ruleEval_in_rule__ProjectContents__ElementsAssignment_1_326071);
             ruleEval();
 
             state._fsp--;
@@ -35341,20 +35222,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ProjectContents__ElementsAssignment_1_4"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12955:1: rule__ProjectContents__ElementsAssignment_1_4 : ( ruleExpressionStatement ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12892:1: rule__ProjectContents__ElementsAssignment_1_4 : ( ruleExpressionStatement ) ;
     public final void rule__ProjectContents__ElementsAssignment_1_4() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12959:1: ( ( ruleExpressionStatement ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12960:1: ( ruleExpressionStatement )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12896:1: ( ( ruleExpressionStatement ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12897:1: ( ruleExpressionStatement )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12960:1: ( ruleExpressionStatement )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12961:1: ruleExpressionStatement
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12897:1: ( ruleExpressionStatement )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12898:1: ruleExpressionStatement
             {
              before(grammarAccess.getProjectContentsAccess().getElementsExpressionStatementParserRuleCall_1_4_0()); 
-            pushFollow(FOLLOW_ruleExpressionStatement_in_rule__ProjectContents__ElementsAssignment_1_426225);
+            pushFollow(FOLLOW_ruleExpressionStatement_in_rule__ProjectContents__ElementsAssignment_1_426102);
             ruleExpressionStatement();
 
             state._fsp--;
@@ -35382,20 +35263,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ProjectContents__ElementsAssignment_1_5"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12970:1: rule__ProjectContents__ElementsAssignment_1_5 : ( ruleAttributeTo ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12907:1: rule__ProjectContents__ElementsAssignment_1_5 : ( ruleAttributeTo ) ;
     public final void rule__ProjectContents__ElementsAssignment_1_5() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12974:1: ( ( ruleAttributeTo ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12975:1: ( ruleAttributeTo )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12911:1: ( ( ruleAttributeTo ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12912:1: ( ruleAttributeTo )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12975:1: ( ruleAttributeTo )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12976:1: ruleAttributeTo
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12912:1: ( ruleAttributeTo )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12913:1: ruleAttributeTo
             {
              before(grammarAccess.getProjectContentsAccess().getElementsAttributeToParserRuleCall_1_5_0()); 
-            pushFollow(FOLLOW_ruleAttributeTo_in_rule__ProjectContents__ElementsAssignment_1_526256);
+            pushFollow(FOLLOW_ruleAttributeTo_in_rule__ProjectContents__ElementsAssignment_1_526133);
             ruleAttributeTo();
 
             state._fsp--;
@@ -35423,20 +35304,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ProjectContents__ElementsAssignment_1_6"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12985:1: rule__ProjectContents__ElementsAssignment_1_6 : ( ruleOpDefStatement ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12922:1: rule__ProjectContents__ElementsAssignment_1_6 : ( ruleOpDefStatement ) ;
     public final void rule__ProjectContents__ElementsAssignment_1_6() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12989:1: ( ( ruleOpDefStatement ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12990:1: ( ruleOpDefStatement )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12926:1: ( ( ruleOpDefStatement ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12927:1: ( ruleOpDefStatement )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12990:1: ( ruleOpDefStatement )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12991:1: ruleOpDefStatement
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12927:1: ( ruleOpDefStatement )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12928:1: ruleOpDefStatement
             {
              before(grammarAccess.getProjectContentsAccess().getElementsOpDefStatementParserRuleCall_1_6_0()); 
-            pushFollow(FOLLOW_ruleOpDefStatement_in_rule__ProjectContents__ElementsAssignment_1_626287);
+            pushFollow(FOLLOW_ruleOpDefStatement_in_rule__ProjectContents__ElementsAssignment_1_626164);
             ruleOpDefStatement();
 
             state._fsp--;
@@ -35464,20 +35345,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ProjectContents__ElementsAssignment_1_7"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13000:1: rule__ProjectContents__ElementsAssignment_1_7 : ( ruleAttrAssignment ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12937:1: rule__ProjectContents__ElementsAssignment_1_7 : ( ruleAttrAssignment ) ;
     public final void rule__ProjectContents__ElementsAssignment_1_7() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13004:1: ( ( ruleAttrAssignment ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13005:1: ( ruleAttrAssignment )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12941:1: ( ( ruleAttrAssignment ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12942:1: ( ruleAttrAssignment )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13005:1: ( ruleAttrAssignment )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13006:1: ruleAttrAssignment
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12942:1: ( ruleAttrAssignment )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12943:1: ruleAttrAssignment
             {
              before(grammarAccess.getProjectContentsAccess().getElementsAttrAssignmentParserRuleCall_1_7_0()); 
-            pushFollow(FOLLOW_ruleAttrAssignment_in_rule__ProjectContents__ElementsAssignment_1_726318);
+            pushFollow(FOLLOW_ruleAttrAssignment_in_rule__ProjectContents__ElementsAssignment_1_726195);
             ruleAttrAssignment();
 
             state._fsp--;
@@ -35505,20 +35386,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Typedef__TEnumAssignment_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13015:1: rule__Typedef__TEnumAssignment_0 : ( ruleTypedefEnum ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12952:1: rule__Typedef__TEnumAssignment_0 : ( ruleTypedefEnum ) ;
     public final void rule__Typedef__TEnumAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13019:1: ( ( ruleTypedefEnum ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13020:1: ( ruleTypedefEnum )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12956:1: ( ( ruleTypedefEnum ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12957:1: ( ruleTypedefEnum )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13020:1: ( ruleTypedefEnum )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13021:1: ruleTypedefEnum
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12957:1: ( ruleTypedefEnum )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12958:1: ruleTypedefEnum
             {
              before(grammarAccess.getTypedefAccess().getTEnumTypedefEnumParserRuleCall_0_0()); 
-            pushFollow(FOLLOW_ruleTypedefEnum_in_rule__Typedef__TEnumAssignment_026349);
+            pushFollow(FOLLOW_ruleTypedefEnum_in_rule__Typedef__TEnumAssignment_026226);
             ruleTypedefEnum();
 
             state._fsp--;
@@ -35546,20 +35427,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Typedef__TCompoundAssignment_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13030:1: rule__Typedef__TCompoundAssignment_1 : ( ruleTypedefCompound ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12967:1: rule__Typedef__TCompoundAssignment_1 : ( ruleTypedefCompound ) ;
     public final void rule__Typedef__TCompoundAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13034:1: ( ( ruleTypedefCompound ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13035:1: ( ruleTypedefCompound )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12971:1: ( ( ruleTypedefCompound ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12972:1: ( ruleTypedefCompound )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13035:1: ( ruleTypedefCompound )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13036:1: ruleTypedefCompound
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12972:1: ( ruleTypedefCompound )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12973:1: ruleTypedefCompound
             {
              before(grammarAccess.getTypedefAccess().getTCompoundTypedefCompoundParserRuleCall_1_0()); 
-            pushFollow(FOLLOW_ruleTypedefCompound_in_rule__Typedef__TCompoundAssignment_126380);
+            pushFollow(FOLLOW_ruleTypedefCompound_in_rule__Typedef__TCompoundAssignment_126257);
             ruleTypedefCompound();
 
             state._fsp--;
@@ -35587,20 +35468,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Typedef__TMappingAssignment_2"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13045:1: rule__Typedef__TMappingAssignment_2 : ( ruleTypedefMapping ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12982:1: rule__Typedef__TMappingAssignment_2 : ( ruleTypedefMapping ) ;
     public final void rule__Typedef__TMappingAssignment_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13049:1: ( ( ruleTypedefMapping ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13050:1: ( ruleTypedefMapping )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12986:1: ( ( ruleTypedefMapping ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12987:1: ( ruleTypedefMapping )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13050:1: ( ruleTypedefMapping )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13051:1: ruleTypedefMapping
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12987:1: ( ruleTypedefMapping )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12988:1: ruleTypedefMapping
             {
              before(grammarAccess.getTypedefAccess().getTMappingTypedefMappingParserRuleCall_2_0()); 
-            pushFollow(FOLLOW_ruleTypedefMapping_in_rule__Typedef__TMappingAssignment_226411);
+            pushFollow(FOLLOW_ruleTypedefMapping_in_rule__Typedef__TMappingAssignment_226288);
             ruleTypedefMapping();
 
             state._fsp--;
@@ -35628,20 +35509,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__TypedefEnum__NameAssignment_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13060:1: rule__TypedefEnum__NameAssignment_1 : ( ruleIdentifier ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:12997:1: rule__TypedefEnum__NameAssignment_1 : ( ruleIdentifier ) ;
     public final void rule__TypedefEnum__NameAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13064:1: ( ( ruleIdentifier ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13065:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13001:1: ( ( ruleIdentifier ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13002:1: ( ruleIdentifier )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13065:1: ( ruleIdentifier )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13066:1: ruleIdentifier
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13002:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13003:1: ruleIdentifier
             {
              before(grammarAccess.getTypedefEnumAccess().getNameIdentifierParserRuleCall_1_0()); 
-            pushFollow(FOLLOW_ruleIdentifier_in_rule__TypedefEnum__NameAssignment_126442);
+            pushFollow(FOLLOW_ruleIdentifier_in_rule__TypedefEnum__NameAssignment_126319);
             ruleIdentifier();
 
             state._fsp--;
@@ -35669,20 +35550,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__TypedefEnum__LiteralsAssignment_3"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13075:1: rule__TypedefEnum__LiteralsAssignment_3 : ( ruleTypedefEnumLiteral ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13012:1: rule__TypedefEnum__LiteralsAssignment_3 : ( ruleTypedefEnumLiteral ) ;
     public final void rule__TypedefEnum__LiteralsAssignment_3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13079:1: ( ( ruleTypedefEnumLiteral ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13080:1: ( ruleTypedefEnumLiteral )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13016:1: ( ( ruleTypedefEnumLiteral ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13017:1: ( ruleTypedefEnumLiteral )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13080:1: ( ruleTypedefEnumLiteral )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13081:1: ruleTypedefEnumLiteral
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13017:1: ( ruleTypedefEnumLiteral )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13018:1: ruleTypedefEnumLiteral
             {
              before(grammarAccess.getTypedefEnumAccess().getLiteralsTypedefEnumLiteralParserRuleCall_3_0()); 
-            pushFollow(FOLLOW_ruleTypedefEnumLiteral_in_rule__TypedefEnum__LiteralsAssignment_326473);
+            pushFollow(FOLLOW_ruleTypedefEnumLiteral_in_rule__TypedefEnum__LiteralsAssignment_326350);
             ruleTypedefEnumLiteral();
 
             state._fsp--;
@@ -35710,20 +35591,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__TypedefEnum__LiteralsAssignment_4_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13090:1: rule__TypedefEnum__LiteralsAssignment_4_1 : ( ruleTypedefEnumLiteral ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13027:1: rule__TypedefEnum__LiteralsAssignment_4_1 : ( ruleTypedefEnumLiteral ) ;
     public final void rule__TypedefEnum__LiteralsAssignment_4_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13094:1: ( ( ruleTypedefEnumLiteral ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13095:1: ( ruleTypedefEnumLiteral )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13031:1: ( ( ruleTypedefEnumLiteral ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13032:1: ( ruleTypedefEnumLiteral )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13095:1: ( ruleTypedefEnumLiteral )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13096:1: ruleTypedefEnumLiteral
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13032:1: ( ruleTypedefEnumLiteral )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13033:1: ruleTypedefEnumLiteral
             {
              before(grammarAccess.getTypedefEnumAccess().getLiteralsTypedefEnumLiteralParserRuleCall_4_1_0()); 
-            pushFollow(FOLLOW_ruleTypedefEnumLiteral_in_rule__TypedefEnum__LiteralsAssignment_4_126504);
+            pushFollow(FOLLOW_ruleTypedefEnumLiteral_in_rule__TypedefEnum__LiteralsAssignment_4_126381);
             ruleTypedefEnumLiteral();
 
             state._fsp--;
@@ -35751,20 +35632,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__TypedefEnum__ConstraintAssignment_6"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13105:1: rule__TypedefEnum__ConstraintAssignment_6 : ( ruleTypedefConstraint ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13042:1: rule__TypedefEnum__ConstraintAssignment_6 : ( ruleTypedefConstraint ) ;
     public final void rule__TypedefEnum__ConstraintAssignment_6() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13109:1: ( ( ruleTypedefConstraint ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13110:1: ( ruleTypedefConstraint )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13046:1: ( ( ruleTypedefConstraint ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13047:1: ( ruleTypedefConstraint )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13110:1: ( ruleTypedefConstraint )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13111:1: ruleTypedefConstraint
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13047:1: ( ruleTypedefConstraint )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13048:1: ruleTypedefConstraint
             {
              before(grammarAccess.getTypedefEnumAccess().getConstraintTypedefConstraintParserRuleCall_6_0()); 
-            pushFollow(FOLLOW_ruleTypedefConstraint_in_rule__TypedefEnum__ConstraintAssignment_626535);
+            pushFollow(FOLLOW_ruleTypedefConstraint_in_rule__TypedefEnum__ConstraintAssignment_626412);
             ruleTypedefConstraint();
 
             state._fsp--;
@@ -35792,20 +35673,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__TypedefEnumLiteral__NameAssignment_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13120:1: rule__TypedefEnumLiteral__NameAssignment_0 : ( ruleIdentifier ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13057:1: rule__TypedefEnumLiteral__NameAssignment_0 : ( ruleIdentifier ) ;
     public final void rule__TypedefEnumLiteral__NameAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13124:1: ( ( ruleIdentifier ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13125:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13061:1: ( ( ruleIdentifier ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13062:1: ( ruleIdentifier )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13125:1: ( ruleIdentifier )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13126:1: ruleIdentifier
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13062:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13063:1: ruleIdentifier
             {
              before(grammarAccess.getTypedefEnumLiteralAccess().getNameIdentifierParserRuleCall_0_0()); 
-            pushFollow(FOLLOW_ruleIdentifier_in_rule__TypedefEnumLiteral__NameAssignment_026566);
+            pushFollow(FOLLOW_ruleIdentifier_in_rule__TypedefEnumLiteral__NameAssignment_026443);
             ruleIdentifier();
 
             state._fsp--;
@@ -35833,20 +35714,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__TypedefEnumLiteral__ValueAssignment_1_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13135:1: rule__TypedefEnumLiteral__ValueAssignment_1_1 : ( ruleNumValue ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13072:1: rule__TypedefEnumLiteral__ValueAssignment_1_1 : ( ruleNumValue ) ;
     public final void rule__TypedefEnumLiteral__ValueAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13139:1: ( ( ruleNumValue ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13140:1: ( ruleNumValue )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13076:1: ( ( ruleNumValue ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13077:1: ( ruleNumValue )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13140:1: ( ruleNumValue )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13141:1: ruleNumValue
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13077:1: ( ruleNumValue )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13078:1: ruleNumValue
             {
              before(grammarAccess.getTypedefEnumLiteralAccess().getValueNumValueParserRuleCall_1_1_0()); 
-            pushFollow(FOLLOW_ruleNumValue_in_rule__TypedefEnumLiteral__ValueAssignment_1_126597);
+            pushFollow(FOLLOW_ruleNumValue_in_rule__TypedefEnumLiteral__ValueAssignment_1_126474);
             ruleNumValue();
 
             state._fsp--;
@@ -35874,20 +35755,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__TypedefCompound__NameAssignment_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13150:1: rule__TypedefCompound__NameAssignment_1 : ( ruleIdentifier ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13087:1: rule__TypedefCompound__NameAssignment_1 : ( ruleIdentifier ) ;
     public final void rule__TypedefCompound__NameAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13154:1: ( ( ruleIdentifier ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13155:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13091:1: ( ( ruleIdentifier ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13092:1: ( ruleIdentifier )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13155:1: ( ruleIdentifier )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13156:1: ruleIdentifier
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13092:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13093:1: ruleIdentifier
             {
              before(grammarAccess.getTypedefCompoundAccess().getNameIdentifierParserRuleCall_1_0()); 
-            pushFollow(FOLLOW_ruleIdentifier_in_rule__TypedefCompound__NameAssignment_126628);
+            pushFollow(FOLLOW_ruleIdentifier_in_rule__TypedefCompound__NameAssignment_126505);
             ruleIdentifier();
 
             state._fsp--;
@@ -35915,20 +35796,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__TypedefCompound__SuperAssignment_2_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13165:1: rule__TypedefCompound__SuperAssignment_2_1 : ( ruleIdentifier ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13102:1: rule__TypedefCompound__SuperAssignment_2_1 : ( ruleIdentifier ) ;
     public final void rule__TypedefCompound__SuperAssignment_2_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13169:1: ( ( ruleIdentifier ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13170:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13106:1: ( ( ruleIdentifier ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13107:1: ( ruleIdentifier )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13170:1: ( ruleIdentifier )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13171:1: ruleIdentifier
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13107:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13108:1: ruleIdentifier
             {
              before(grammarAccess.getTypedefCompoundAccess().getSuperIdentifierParserRuleCall_2_1_0()); 
-            pushFollow(FOLLOW_ruleIdentifier_in_rule__TypedefCompound__SuperAssignment_2_126659);
+            pushFollow(FOLLOW_ruleIdentifier_in_rule__TypedefCompound__SuperAssignment_2_126536);
             ruleIdentifier();
 
             state._fsp--;
@@ -35956,20 +35837,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__TypedefCompound__ElementsAssignment_4_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13180:1: rule__TypedefCompound__ElementsAssignment_4_0 : ( ruleVariableDeclaration ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13117:1: rule__TypedefCompound__ElementsAssignment_4_0 : ( ruleVariableDeclaration ) ;
     public final void rule__TypedefCompound__ElementsAssignment_4_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13184:1: ( ( ruleVariableDeclaration ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13185:1: ( ruleVariableDeclaration )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13121:1: ( ( ruleVariableDeclaration ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13122:1: ( ruleVariableDeclaration )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13185:1: ( ruleVariableDeclaration )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13186:1: ruleVariableDeclaration
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13122:1: ( ruleVariableDeclaration )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13123:1: ruleVariableDeclaration
             {
              before(grammarAccess.getTypedefCompoundAccess().getElementsVariableDeclarationParserRuleCall_4_0_0()); 
-            pushFollow(FOLLOW_ruleVariableDeclaration_in_rule__TypedefCompound__ElementsAssignment_4_026690);
+            pushFollow(FOLLOW_ruleVariableDeclaration_in_rule__TypedefCompound__ElementsAssignment_4_026567);
             ruleVariableDeclaration();
 
             state._fsp--;
@@ -35997,20 +35878,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__TypedefCompound__ElementsAssignment_4_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13195:1: rule__TypedefCompound__ElementsAssignment_4_1 : ( ruleExpressionStatement ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13132:1: rule__TypedefCompound__ElementsAssignment_4_1 : ( ruleExpressionStatement ) ;
     public final void rule__TypedefCompound__ElementsAssignment_4_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13199:1: ( ( ruleExpressionStatement ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13200:1: ( ruleExpressionStatement )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13136:1: ( ( ruleExpressionStatement ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13137:1: ( ruleExpressionStatement )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13200:1: ( ruleExpressionStatement )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13201:1: ruleExpressionStatement
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13137:1: ( ruleExpressionStatement )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13138:1: ruleExpressionStatement
             {
              before(grammarAccess.getTypedefCompoundAccess().getElementsExpressionStatementParserRuleCall_4_1_0()); 
-            pushFollow(FOLLOW_ruleExpressionStatement_in_rule__TypedefCompound__ElementsAssignment_4_126721);
+            pushFollow(FOLLOW_ruleExpressionStatement_in_rule__TypedefCompound__ElementsAssignment_4_126598);
             ruleExpressionStatement();
 
             state._fsp--;
@@ -36038,20 +35919,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__TypedefCompound__ElementsAssignment_4_2"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13210:1: rule__TypedefCompound__ElementsAssignment_4_2 : ( ruleAttrAssignment ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13147:1: rule__TypedefCompound__ElementsAssignment_4_2 : ( ruleAttrAssignment ) ;
     public final void rule__TypedefCompound__ElementsAssignment_4_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13214:1: ( ( ruleAttrAssignment ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13215:1: ( ruleAttrAssignment )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13151:1: ( ( ruleAttrAssignment ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13152:1: ( ruleAttrAssignment )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13215:1: ( ruleAttrAssignment )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13216:1: ruleAttrAssignment
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13152:1: ( ruleAttrAssignment )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13153:1: ruleAttrAssignment
             {
              before(grammarAccess.getTypedefCompoundAccess().getElementsAttrAssignmentParserRuleCall_4_2_0()); 
-            pushFollow(FOLLOW_ruleAttrAssignment_in_rule__TypedefCompound__ElementsAssignment_4_226752);
+            pushFollow(FOLLOW_ruleAttrAssignment_in_rule__TypedefCompound__ElementsAssignment_4_226629);
             ruleAttrAssignment();
 
             state._fsp--;
@@ -36079,20 +35960,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__AttrAssignment__PartsAssignment_2"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13225:1: rule__AttrAssignment__PartsAssignment_2 : ( ruleAttrAssignmentPart ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13162:1: rule__AttrAssignment__PartsAssignment_2 : ( ruleAttrAssignmentPart ) ;
     public final void rule__AttrAssignment__PartsAssignment_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13229:1: ( ( ruleAttrAssignmentPart ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13230:1: ( ruleAttrAssignmentPart )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13166:1: ( ( ruleAttrAssignmentPart ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13167:1: ( ruleAttrAssignmentPart )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13230:1: ( ruleAttrAssignmentPart )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13231:1: ruleAttrAssignmentPart
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13167:1: ( ruleAttrAssignmentPart )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13168:1: ruleAttrAssignmentPart
             {
              before(grammarAccess.getAttrAssignmentAccess().getPartsAttrAssignmentPartParserRuleCall_2_0()); 
-            pushFollow(FOLLOW_ruleAttrAssignmentPart_in_rule__AttrAssignment__PartsAssignment_226783);
+            pushFollow(FOLLOW_ruleAttrAssignmentPart_in_rule__AttrAssignment__PartsAssignment_226660);
             ruleAttrAssignmentPart();
 
             state._fsp--;
@@ -36120,20 +36001,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__AttrAssignment__PartsAssignment_3_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13240:1: rule__AttrAssignment__PartsAssignment_3_1 : ( ruleAttrAssignmentPart ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13177:1: rule__AttrAssignment__PartsAssignment_3_1 : ( ruleAttrAssignmentPart ) ;
     public final void rule__AttrAssignment__PartsAssignment_3_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13244:1: ( ( ruleAttrAssignmentPart ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13245:1: ( ruleAttrAssignmentPart )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13181:1: ( ( ruleAttrAssignmentPart ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13182:1: ( ruleAttrAssignmentPart )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13245:1: ( ruleAttrAssignmentPart )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13246:1: ruleAttrAssignmentPart
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13182:1: ( ruleAttrAssignmentPart )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13183:1: ruleAttrAssignmentPart
             {
              before(grammarAccess.getAttrAssignmentAccess().getPartsAttrAssignmentPartParserRuleCall_3_1_0()); 
-            pushFollow(FOLLOW_ruleAttrAssignmentPart_in_rule__AttrAssignment__PartsAssignment_3_126814);
+            pushFollow(FOLLOW_ruleAttrAssignmentPart_in_rule__AttrAssignment__PartsAssignment_3_126691);
             ruleAttrAssignmentPart();
 
             state._fsp--;
@@ -36161,20 +36042,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__AttrAssignment__ElementsAssignment_7_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13255:1: rule__AttrAssignment__ElementsAssignment_7_0 : ( ruleVariableDeclaration ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13192:1: rule__AttrAssignment__ElementsAssignment_7_0 : ( ruleVariableDeclaration ) ;
     public final void rule__AttrAssignment__ElementsAssignment_7_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13259:1: ( ( ruleVariableDeclaration ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13260:1: ( ruleVariableDeclaration )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13196:1: ( ( ruleVariableDeclaration ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13197:1: ( ruleVariableDeclaration )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13260:1: ( ruleVariableDeclaration )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13261:1: ruleVariableDeclaration
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13197:1: ( ruleVariableDeclaration )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13198:1: ruleVariableDeclaration
             {
              before(grammarAccess.getAttrAssignmentAccess().getElementsVariableDeclarationParserRuleCall_7_0_0()); 
-            pushFollow(FOLLOW_ruleVariableDeclaration_in_rule__AttrAssignment__ElementsAssignment_7_026845);
+            pushFollow(FOLLOW_ruleVariableDeclaration_in_rule__AttrAssignment__ElementsAssignment_7_026722);
             ruleVariableDeclaration();
 
             state._fsp--;
@@ -36202,20 +36083,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__AttrAssignment__ElementsAssignment_7_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13270:1: rule__AttrAssignment__ElementsAssignment_7_1 : ( ruleExpressionStatement ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13207:1: rule__AttrAssignment__ElementsAssignment_7_1 : ( ruleExpressionStatement ) ;
     public final void rule__AttrAssignment__ElementsAssignment_7_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13274:1: ( ( ruleExpressionStatement ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13275:1: ( ruleExpressionStatement )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13211:1: ( ( ruleExpressionStatement ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13212:1: ( ruleExpressionStatement )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13275:1: ( ruleExpressionStatement )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13276:1: ruleExpressionStatement
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13212:1: ( ruleExpressionStatement )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13213:1: ruleExpressionStatement
             {
              before(grammarAccess.getAttrAssignmentAccess().getElementsExpressionStatementParserRuleCall_7_1_0()); 
-            pushFollow(FOLLOW_ruleExpressionStatement_in_rule__AttrAssignment__ElementsAssignment_7_126876);
+            pushFollow(FOLLOW_ruleExpressionStatement_in_rule__AttrAssignment__ElementsAssignment_7_126753);
             ruleExpressionStatement();
 
             state._fsp--;
@@ -36243,20 +36124,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__AttrAssignment__ElementsAssignment_7_2"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13285:1: rule__AttrAssignment__ElementsAssignment_7_2 : ( ruleAttrAssignment ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13222:1: rule__AttrAssignment__ElementsAssignment_7_2 : ( ruleAttrAssignment ) ;
     public final void rule__AttrAssignment__ElementsAssignment_7_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13289:1: ( ( ruleAttrAssignment ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13290:1: ( ruleAttrAssignment )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13226:1: ( ( ruleAttrAssignment ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13227:1: ( ruleAttrAssignment )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13290:1: ( ruleAttrAssignment )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13291:1: ruleAttrAssignment
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13227:1: ( ruleAttrAssignment )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13228:1: ruleAttrAssignment
             {
              before(grammarAccess.getAttrAssignmentAccess().getElementsAttrAssignmentParserRuleCall_7_2_0()); 
-            pushFollow(FOLLOW_ruleAttrAssignment_in_rule__AttrAssignment__ElementsAssignment_7_226907);
+            pushFollow(FOLLOW_ruleAttrAssignment_in_rule__AttrAssignment__ElementsAssignment_7_226784);
             ruleAttrAssignment();
 
             state._fsp--;
@@ -36284,20 +36165,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__AttrAssignmentPart__NameAssignment_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13300:1: rule__AttrAssignmentPart__NameAssignment_0 : ( ruleIdentifier ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13237:1: rule__AttrAssignmentPart__NameAssignment_0 : ( ruleIdentifier ) ;
     public final void rule__AttrAssignmentPart__NameAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13304:1: ( ( ruleIdentifier ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13305:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13241:1: ( ( ruleIdentifier ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13242:1: ( ruleIdentifier )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13305:1: ( ruleIdentifier )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13306:1: ruleIdentifier
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13242:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13243:1: ruleIdentifier
             {
              before(grammarAccess.getAttrAssignmentPartAccess().getNameIdentifierParserRuleCall_0_0()); 
-            pushFollow(FOLLOW_ruleIdentifier_in_rule__AttrAssignmentPart__NameAssignment_026938);
+            pushFollow(FOLLOW_ruleIdentifier_in_rule__AttrAssignmentPart__NameAssignment_026815);
             ruleIdentifier();
 
             state._fsp--;
@@ -36325,20 +36206,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__AttrAssignmentPart__ValueAssignment_2"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13315:1: rule__AttrAssignmentPart__ValueAssignment_2 : ( ruleLogicalExpression ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13252:1: rule__AttrAssignmentPart__ValueAssignment_2 : ( ruleLogicalExpression ) ;
     public final void rule__AttrAssignmentPart__ValueAssignment_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13319:1: ( ( ruleLogicalExpression ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13320:1: ( ruleLogicalExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13256:1: ( ( ruleLogicalExpression ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13257:1: ( ruleLogicalExpression )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13320:1: ( ruleLogicalExpression )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13321:1: ruleLogicalExpression
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13257:1: ( ruleLogicalExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13258:1: ruleLogicalExpression
             {
              before(grammarAccess.getAttrAssignmentPartAccess().getValueLogicalExpressionParserRuleCall_2_0()); 
-            pushFollow(FOLLOW_ruleLogicalExpression_in_rule__AttrAssignmentPart__ValueAssignment_226969);
+            pushFollow(FOLLOW_ruleLogicalExpression_in_rule__AttrAssignmentPart__ValueAssignment_226846);
             ruleLogicalExpression();
 
             state._fsp--;
@@ -36366,20 +36247,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__TypedefMapping__NewTypeAssignment_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13330:1: rule__TypedefMapping__NewTypeAssignment_1 : ( ruleIdentifier ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13267:1: rule__TypedefMapping__NewTypeAssignment_1 : ( ruleIdentifier ) ;
     public final void rule__TypedefMapping__NewTypeAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13334:1: ( ( ruleIdentifier ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13335:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13271:1: ( ( ruleIdentifier ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13272:1: ( ruleIdentifier )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13335:1: ( ruleIdentifier )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13336:1: ruleIdentifier
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13272:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13273:1: ruleIdentifier
             {
              before(grammarAccess.getTypedefMappingAccess().getNewTypeIdentifierParserRuleCall_1_0()); 
-            pushFollow(FOLLOW_ruleIdentifier_in_rule__TypedefMapping__NewTypeAssignment_127000);
+            pushFollow(FOLLOW_ruleIdentifier_in_rule__TypedefMapping__NewTypeAssignment_126877);
             ruleIdentifier();
 
             state._fsp--;
@@ -36407,20 +36288,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__TypedefMapping__TypeAssignment_2"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13345:1: rule__TypedefMapping__TypeAssignment_2 : ( ruleType ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13282:1: rule__TypedefMapping__TypeAssignment_2 : ( ruleType ) ;
     public final void rule__TypedefMapping__TypeAssignment_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13349:1: ( ( ruleType ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13350:1: ( ruleType )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13286:1: ( ( ruleType ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13287:1: ( ruleType )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13350:1: ( ruleType )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13351:1: ruleType
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13287:1: ( ruleType )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13288:1: ruleType
             {
              before(grammarAccess.getTypedefMappingAccess().getTypeTypeParserRuleCall_2_0()); 
-            pushFollow(FOLLOW_ruleType_in_rule__TypedefMapping__TypeAssignment_227031);
+            pushFollow(FOLLOW_ruleType_in_rule__TypedefMapping__TypeAssignment_226908);
             ruleType();
 
             state._fsp--;
@@ -36448,20 +36329,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__TypedefMapping__ConstraintAssignment_3"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13360:1: rule__TypedefMapping__ConstraintAssignment_3 : ( ruleTypedefConstraint ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13297:1: rule__TypedefMapping__ConstraintAssignment_3 : ( ruleTypedefConstraint ) ;
     public final void rule__TypedefMapping__ConstraintAssignment_3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13364:1: ( ( ruleTypedefConstraint ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13365:1: ( ruleTypedefConstraint )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13301:1: ( ( ruleTypedefConstraint ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13302:1: ( ruleTypedefConstraint )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13365:1: ( ruleTypedefConstraint )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13366:1: ruleTypedefConstraint
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13302:1: ( ruleTypedefConstraint )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13303:1: ruleTypedefConstraint
             {
              before(grammarAccess.getTypedefMappingAccess().getConstraintTypedefConstraintParserRuleCall_3_0()); 
-            pushFollow(FOLLOW_ruleTypedefConstraint_in_rule__TypedefMapping__ConstraintAssignment_327062);
+            pushFollow(FOLLOW_ruleTypedefConstraint_in_rule__TypedefMapping__ConstraintAssignment_326939);
             ruleTypedefConstraint();
 
             state._fsp--;
@@ -36489,20 +36370,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__TypedefConstraint__ExpressionsAssignment_2"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13375:1: rule__TypedefConstraint__ExpressionsAssignment_2 : ( ruleExpression ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13312:1: rule__TypedefConstraint__ExpressionsAssignment_2 : ( ruleExpression ) ;
     public final void rule__TypedefConstraint__ExpressionsAssignment_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13379:1: ( ( ruleExpression ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13380:1: ( ruleExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13316:1: ( ( ruleExpression ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13317:1: ( ruleExpression )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13380:1: ( ruleExpression )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13381:1: ruleExpression
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13317:1: ( ruleExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13318:1: ruleExpression
             {
              before(grammarAccess.getTypedefConstraintAccess().getExpressionsExpressionParserRuleCall_2_0()); 
-            pushFollow(FOLLOW_ruleExpression_in_rule__TypedefConstraint__ExpressionsAssignment_227093);
+            pushFollow(FOLLOW_ruleExpression_in_rule__TypedefConstraint__ExpressionsAssignment_226970);
             ruleExpression();
 
             state._fsp--;
@@ -36530,20 +36411,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__TypedefConstraint__ExpressionsAssignment_3_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13390:1: rule__TypedefConstraint__ExpressionsAssignment_3_1 : ( ruleExpression ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13327:1: rule__TypedefConstraint__ExpressionsAssignment_3_1 : ( ruleExpression ) ;
     public final void rule__TypedefConstraint__ExpressionsAssignment_3_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13394:1: ( ( ruleExpression ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13395:1: ( ruleExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13331:1: ( ( ruleExpression ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13332:1: ( ruleExpression )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13395:1: ( ruleExpression )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13396:1: ruleExpression
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13332:1: ( ruleExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13333:1: ruleExpression
             {
              before(grammarAccess.getTypedefConstraintAccess().getExpressionsExpressionParserRuleCall_3_1_0()); 
-            pushFollow(FOLLOW_ruleExpression_in_rule__TypedefConstraint__ExpressionsAssignment_3_127124);
+            pushFollow(FOLLOW_ruleExpression_in_rule__TypedefConstraint__ExpressionsAssignment_3_127001);
             ruleExpression();
 
             state._fsp--;
@@ -36571,20 +36452,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__VariableDeclaration__TypeAssignment_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13405:1: rule__VariableDeclaration__TypeAssignment_0 : ( ruleType ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13342:1: rule__VariableDeclaration__TypeAssignment_0 : ( ruleType ) ;
     public final void rule__VariableDeclaration__TypeAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13409:1: ( ( ruleType ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13410:1: ( ruleType )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13346:1: ( ( ruleType ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13347:1: ( ruleType )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13410:1: ( ruleType )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13411:1: ruleType
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13347:1: ( ruleType )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13348:1: ruleType
             {
              before(grammarAccess.getVariableDeclarationAccess().getTypeTypeParserRuleCall_0_0()); 
-            pushFollow(FOLLOW_ruleType_in_rule__VariableDeclaration__TypeAssignment_027155);
+            pushFollow(FOLLOW_ruleType_in_rule__VariableDeclaration__TypeAssignment_027032);
             ruleType();
 
             state._fsp--;
@@ -36612,20 +36493,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__VariableDeclaration__DeclsAssignment_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13420:1: rule__VariableDeclaration__DeclsAssignment_1 : ( ruleVariableDeclarationPart ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13357:1: rule__VariableDeclaration__DeclsAssignment_1 : ( ruleVariableDeclarationPart ) ;
     public final void rule__VariableDeclaration__DeclsAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13424:1: ( ( ruleVariableDeclarationPart ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13425:1: ( ruleVariableDeclarationPart )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13361:1: ( ( ruleVariableDeclarationPart ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13362:1: ( ruleVariableDeclarationPart )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13425:1: ( ruleVariableDeclarationPart )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13426:1: ruleVariableDeclarationPart
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13362:1: ( ruleVariableDeclarationPart )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13363:1: ruleVariableDeclarationPart
             {
              before(grammarAccess.getVariableDeclarationAccess().getDeclsVariableDeclarationPartParserRuleCall_1_0()); 
-            pushFollow(FOLLOW_ruleVariableDeclarationPart_in_rule__VariableDeclaration__DeclsAssignment_127186);
+            pushFollow(FOLLOW_ruleVariableDeclarationPart_in_rule__VariableDeclaration__DeclsAssignment_127063);
             ruleVariableDeclarationPart();
 
             state._fsp--;
@@ -36653,20 +36534,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__VariableDeclaration__DeclsAssignment_2_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13435:1: rule__VariableDeclaration__DeclsAssignment_2_1 : ( ruleVariableDeclarationPart ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13372:1: rule__VariableDeclaration__DeclsAssignment_2_1 : ( ruleVariableDeclarationPart ) ;
     public final void rule__VariableDeclaration__DeclsAssignment_2_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13439:1: ( ( ruleVariableDeclarationPart ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13440:1: ( ruleVariableDeclarationPart )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13376:1: ( ( ruleVariableDeclarationPart ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13377:1: ( ruleVariableDeclarationPart )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13440:1: ( ruleVariableDeclarationPart )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13441:1: ruleVariableDeclarationPart
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13377:1: ( ruleVariableDeclarationPart )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13378:1: ruleVariableDeclarationPart
             {
              before(grammarAccess.getVariableDeclarationAccess().getDeclsVariableDeclarationPartParserRuleCall_2_1_0()); 
-            pushFollow(FOLLOW_ruleVariableDeclarationPart_in_rule__VariableDeclaration__DeclsAssignment_2_127217);
+            pushFollow(FOLLOW_ruleVariableDeclarationPart_in_rule__VariableDeclaration__DeclsAssignment_2_127094);
             ruleVariableDeclarationPart();
 
             state._fsp--;
@@ -36694,20 +36575,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__VariableDeclarationPart__NameAssignment_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13450:1: rule__VariableDeclarationPart__NameAssignment_0 : ( ruleIdentifier ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13387:1: rule__VariableDeclarationPart__NameAssignment_0 : ( ruleIdentifier ) ;
     public final void rule__VariableDeclarationPart__NameAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13454:1: ( ( ruleIdentifier ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13455:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13391:1: ( ( ruleIdentifier ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13392:1: ( ruleIdentifier )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13455:1: ( ruleIdentifier )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13456:1: ruleIdentifier
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13392:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13393:1: ruleIdentifier
             {
              before(grammarAccess.getVariableDeclarationPartAccess().getNameIdentifierParserRuleCall_0_0()); 
-            pushFollow(FOLLOW_ruleIdentifier_in_rule__VariableDeclarationPart__NameAssignment_027248);
+            pushFollow(FOLLOW_ruleIdentifier_in_rule__VariableDeclarationPart__NameAssignment_027125);
             ruleIdentifier();
 
             state._fsp--;
@@ -36735,20 +36616,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__VariableDeclarationPart__DefaultAssignment_1_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13465:1: rule__VariableDeclarationPart__DefaultAssignment_1_1 : ( ruleExpression ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13402:1: rule__VariableDeclarationPart__DefaultAssignment_1_1 : ( ruleExpression ) ;
     public final void rule__VariableDeclarationPart__DefaultAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13469:1: ( ( ruleExpression ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13470:1: ( ruleExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13406:1: ( ( ruleExpression ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13407:1: ( ruleExpression )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13470:1: ( ruleExpression )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13471:1: ruleExpression
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13407:1: ( ruleExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13408:1: ruleExpression
             {
              before(grammarAccess.getVariableDeclarationPartAccess().getDefaultExpressionParserRuleCall_1_1_0()); 
-            pushFollow(FOLLOW_ruleExpression_in_rule__VariableDeclarationPart__DefaultAssignment_1_127279);
+            pushFollow(FOLLOW_ruleExpression_in_rule__VariableDeclarationPart__DefaultAssignment_1_127156);
             ruleExpression();
 
             state._fsp--;
@@ -36776,24 +36657,24 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__BasicType__TypeAssignment_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13480:1: rule__BasicType__TypeAssignment_0 : ( ( 'Integer' ) ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13417:1: rule__BasicType__TypeAssignment_0 : ( ( 'Integer' ) ) ;
     public final void rule__BasicType__TypeAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13484:1: ( ( ( 'Integer' ) ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13485:1: ( ( 'Integer' ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13421:1: ( ( ( 'Integer' ) ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13422:1: ( ( 'Integer' ) )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13485:1: ( ( 'Integer' ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13486:1: ( 'Integer' )
-            {
-             before(grammarAccess.getBasicTypeAccess().getTypeIntegerKeyword_0_0()); 
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13487:1: ( 'Integer' )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13488:1: 'Integer'
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13422:1: ( ( 'Integer' ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13423:1: ( 'Integer' )
             {
              before(grammarAccess.getBasicTypeAccess().getTypeIntegerKeyword_0_0()); 
-            match(input,74,FOLLOW_74_in_rule__BasicType__TypeAssignment_027315); 
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13424:1: ( 'Integer' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13425:1: 'Integer'
+            {
+             before(grammarAccess.getBasicTypeAccess().getTypeIntegerKeyword_0_0()); 
+            match(input,73,FOLLOW_73_in_rule__BasicType__TypeAssignment_027192); 
              after(grammarAccess.getBasicTypeAccess().getTypeIntegerKeyword_0_0()); 
 
             }
@@ -36821,24 +36702,24 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__BasicType__TypeAssignment_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13503:1: rule__BasicType__TypeAssignment_1 : ( ( 'Real' ) ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13440:1: rule__BasicType__TypeAssignment_1 : ( ( 'Real' ) ) ;
     public final void rule__BasicType__TypeAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13507:1: ( ( ( 'Real' ) ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13508:1: ( ( 'Real' ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13444:1: ( ( ( 'Real' ) ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13445:1: ( ( 'Real' ) )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13508:1: ( ( 'Real' ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13509:1: ( 'Real' )
-            {
-             before(grammarAccess.getBasicTypeAccess().getTypeRealKeyword_1_0()); 
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13510:1: ( 'Real' )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13511:1: 'Real'
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13445:1: ( ( 'Real' ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13446:1: ( 'Real' )
             {
              before(grammarAccess.getBasicTypeAccess().getTypeRealKeyword_1_0()); 
-            match(input,75,FOLLOW_75_in_rule__BasicType__TypeAssignment_127359); 
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13447:1: ( 'Real' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13448:1: 'Real'
+            {
+             before(grammarAccess.getBasicTypeAccess().getTypeRealKeyword_1_0()); 
+            match(input,74,FOLLOW_74_in_rule__BasicType__TypeAssignment_127236); 
              after(grammarAccess.getBasicTypeAccess().getTypeRealKeyword_1_0()); 
 
             }
@@ -36866,24 +36747,24 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__BasicType__TypeAssignment_2"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13526:1: rule__BasicType__TypeAssignment_2 : ( ( 'Boolean' ) ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13463:1: rule__BasicType__TypeAssignment_2 : ( ( 'Boolean' ) ) ;
     public final void rule__BasicType__TypeAssignment_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13530:1: ( ( ( 'Boolean' ) ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13531:1: ( ( 'Boolean' ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13467:1: ( ( ( 'Boolean' ) ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13468:1: ( ( 'Boolean' ) )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13531:1: ( ( 'Boolean' ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13532:1: ( 'Boolean' )
-            {
-             before(grammarAccess.getBasicTypeAccess().getTypeBooleanKeyword_2_0()); 
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13533:1: ( 'Boolean' )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13534:1: 'Boolean'
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13468:1: ( ( 'Boolean' ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13469:1: ( 'Boolean' )
             {
              before(grammarAccess.getBasicTypeAccess().getTypeBooleanKeyword_2_0()); 
-            match(input,76,FOLLOW_76_in_rule__BasicType__TypeAssignment_227403); 
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13470:1: ( 'Boolean' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13471:1: 'Boolean'
+            {
+             before(grammarAccess.getBasicTypeAccess().getTypeBooleanKeyword_2_0()); 
+            match(input,75,FOLLOW_75_in_rule__BasicType__TypeAssignment_227280); 
              after(grammarAccess.getBasicTypeAccess().getTypeBooleanKeyword_2_0()); 
 
             }
@@ -36911,24 +36792,24 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__BasicType__TypeAssignment_3"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13549:1: rule__BasicType__TypeAssignment_3 : ( ( 'String' ) ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13486:1: rule__BasicType__TypeAssignment_3 : ( ( 'String' ) ) ;
     public final void rule__BasicType__TypeAssignment_3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13553:1: ( ( ( 'String' ) ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13554:1: ( ( 'String' ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13490:1: ( ( ( 'String' ) ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13491:1: ( ( 'String' ) )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13554:1: ( ( 'String' ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13555:1: ( 'String' )
-            {
-             before(grammarAccess.getBasicTypeAccess().getTypeStringKeyword_3_0()); 
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13556:1: ( 'String' )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13557:1: 'String'
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13491:1: ( ( 'String' ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13492:1: ( 'String' )
             {
              before(grammarAccess.getBasicTypeAccess().getTypeStringKeyword_3_0()); 
-            match(input,77,FOLLOW_77_in_rule__BasicType__TypeAssignment_327447); 
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13493:1: ( 'String' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13494:1: 'String'
+            {
+             before(grammarAccess.getBasicTypeAccess().getTypeStringKeyword_3_0()); 
+            match(input,76,FOLLOW_76_in_rule__BasicType__TypeAssignment_327324); 
              after(grammarAccess.getBasicTypeAccess().getTypeStringKeyword_3_0()); 
 
             }
@@ -36956,24 +36837,24 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__BasicType__TypeAssignment_4"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13572:1: rule__BasicType__TypeAssignment_4 : ( ( 'Constraint' ) ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13509:1: rule__BasicType__TypeAssignment_4 : ( ( 'Constraint' ) ) ;
     public final void rule__BasicType__TypeAssignment_4() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13576:1: ( ( ( 'Constraint' ) ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13577:1: ( ( 'Constraint' ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13513:1: ( ( ( 'Constraint' ) ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13514:1: ( ( 'Constraint' ) )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13577:1: ( ( 'Constraint' ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13578:1: ( 'Constraint' )
-            {
-             before(grammarAccess.getBasicTypeAccess().getTypeConstraintKeyword_4_0()); 
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13579:1: ( 'Constraint' )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13580:1: 'Constraint'
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13514:1: ( ( 'Constraint' ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13515:1: ( 'Constraint' )
             {
              before(grammarAccess.getBasicTypeAccess().getTypeConstraintKeyword_4_0()); 
-            match(input,78,FOLLOW_78_in_rule__BasicType__TypeAssignment_427491); 
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13516:1: ( 'Constraint' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13517:1: 'Constraint'
+            {
+             before(grammarAccess.getBasicTypeAccess().getTypeConstraintKeyword_4_0()); 
+            match(input,77,FOLLOW_77_in_rule__BasicType__TypeAssignment_427368); 
              after(grammarAccess.getBasicTypeAccess().getTypeConstraintKeyword_4_0()); 
 
             }
@@ -37001,20 +36882,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Type__TypeAssignment_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13595:1: rule__Type__TypeAssignment_0 : ( ruleBasicType ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13532:1: rule__Type__TypeAssignment_0 : ( ruleBasicType ) ;
     public final void rule__Type__TypeAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13599:1: ( ( ruleBasicType ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13600:1: ( ruleBasicType )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13536:1: ( ( ruleBasicType ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13537:1: ( ruleBasicType )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13600:1: ( ruleBasicType )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13601:1: ruleBasicType
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13537:1: ( ruleBasicType )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13538:1: ruleBasicType
             {
              before(grammarAccess.getTypeAccess().getTypeBasicTypeParserRuleCall_0_0()); 
-            pushFollow(FOLLOW_ruleBasicType_in_rule__Type__TypeAssignment_027530);
+            pushFollow(FOLLOW_ruleBasicType_in_rule__Type__TypeAssignment_027407);
             ruleBasicType();
 
             state._fsp--;
@@ -37042,20 +36923,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Type__IdAssignment_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13610:1: rule__Type__IdAssignment_1 : ( ruleQualifiedName ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13547:1: rule__Type__IdAssignment_1 : ( ruleQualifiedName ) ;
     public final void rule__Type__IdAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13614:1: ( ( ruleQualifiedName ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13615:1: ( ruleQualifiedName )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13551:1: ( ( ruleQualifiedName ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13552:1: ( ruleQualifiedName )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13615:1: ( ruleQualifiedName )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13616:1: ruleQualifiedName
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13552:1: ( ruleQualifiedName )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13553:1: ruleQualifiedName
             {
              before(grammarAccess.getTypeAccess().getIdQualifiedNameParserRuleCall_1_0()); 
-            pushFollow(FOLLOW_ruleQualifiedName_in_rule__Type__IdAssignment_127561);
+            pushFollow(FOLLOW_ruleQualifiedName_in_rule__Type__IdAssignment_127438);
             ruleQualifiedName();
 
             state._fsp--;
@@ -37083,20 +36964,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Type__DerivedAssignment_2"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13625:1: rule__Type__DerivedAssignment_2 : ( ruleDerivedType ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13562:1: rule__Type__DerivedAssignment_2 : ( ruleDerivedType ) ;
     public final void rule__Type__DerivedAssignment_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13629:1: ( ( ruleDerivedType ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13630:1: ( ruleDerivedType )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13566:1: ( ( ruleDerivedType ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13567:1: ( ruleDerivedType )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13630:1: ( ruleDerivedType )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13631:1: ruleDerivedType
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13567:1: ( ruleDerivedType )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13568:1: ruleDerivedType
             {
              before(grammarAccess.getTypeAccess().getDerivedDerivedTypeParserRuleCall_2_0()); 
-            pushFollow(FOLLOW_ruleDerivedType_in_rule__Type__DerivedAssignment_227592);
+            pushFollow(FOLLOW_ruleDerivedType_in_rule__Type__DerivedAssignment_227469);
             ruleDerivedType();
 
             state._fsp--;
@@ -37124,20 +37005,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__NumValue__ValAssignment"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13640:1: rule__NumValue__ValAssignment : ( RULE_NUMBER ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13577:1: rule__NumValue__ValAssignment : ( RULE_NUMBER ) ;
     public final void rule__NumValue__ValAssignment() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13644:1: ( ( RULE_NUMBER ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13645:1: ( RULE_NUMBER )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13581:1: ( ( RULE_NUMBER ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13582:1: ( RULE_NUMBER )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13645:1: ( RULE_NUMBER )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13646:1: RULE_NUMBER
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13582:1: ( RULE_NUMBER )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13583:1: RULE_NUMBER
             {
              before(grammarAccess.getNumValueAccess().getValNUMBERTerminalRuleCall_0()); 
-            match(input,RULE_NUMBER,FOLLOW_RULE_NUMBER_in_rule__NumValue__ValAssignment27623); 
+            match(input,RULE_NUMBER,FOLLOW_RULE_NUMBER_in_rule__NumValue__ValAssignment27500); 
              after(grammarAccess.getNumValueAccess().getValNUMBERTerminalRuleCall_0()); 
 
             }
@@ -37161,20 +37042,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__QualifiedName__QNameAssignment_0_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13655:1: rule__QualifiedName__QNameAssignment_0_0 : ( ruleIdentifier ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13592:1: rule__QualifiedName__QNameAssignment_0_0 : ( ruleIdentifier ) ;
     public final void rule__QualifiedName__QNameAssignment_0_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13659:1: ( ( ruleIdentifier ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13660:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13596:1: ( ( ruleIdentifier ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13597:1: ( ruleIdentifier )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13660:1: ( ruleIdentifier )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13661:1: ruleIdentifier
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13597:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13598:1: ruleIdentifier
             {
              before(grammarAccess.getQualifiedNameAccess().getQNameIdentifierParserRuleCall_0_0_0()); 
-            pushFollow(FOLLOW_ruleIdentifier_in_rule__QualifiedName__QNameAssignment_0_027654);
+            pushFollow(FOLLOW_ruleIdentifier_in_rule__QualifiedName__QNameAssignment_0_027531);
             ruleIdentifier();
 
             state._fsp--;
@@ -37202,24 +37083,24 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__QualifiedName__QNameAssignment_0_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13670:1: rule__QualifiedName__QNameAssignment_0_1 : ( ( '::' ) ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13607:1: rule__QualifiedName__QNameAssignment_0_1 : ( ( '::' ) ) ;
     public final void rule__QualifiedName__QNameAssignment_0_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13674:1: ( ( ( '::' ) ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13675:1: ( ( '::' ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13611:1: ( ( ( '::' ) ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13612:1: ( ( '::' ) )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13675:1: ( ( '::' ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13676:1: ( '::' )
-            {
-             before(grammarAccess.getQualifiedNameAccess().getQNameColonColonKeyword_0_1_0()); 
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13677:1: ( '::' )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13678:1: '::'
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13612:1: ( ( '::' ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13613:1: ( '::' )
             {
              before(grammarAccess.getQualifiedNameAccess().getQNameColonColonKeyword_0_1_0()); 
-            match(input,56,FOLLOW_56_in_rule__QualifiedName__QNameAssignment_0_127690); 
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13614:1: ( '::' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13615:1: '::'
+            {
+             before(grammarAccess.getQualifiedNameAccess().getQNameColonColonKeyword_0_1_0()); 
+            match(input,56,FOLLOW_56_in_rule__QualifiedName__QNameAssignment_0_127567); 
              after(grammarAccess.getQualifiedNameAccess().getQNameColonColonKeyword_0_1_0()); 
 
             }
@@ -37247,20 +37128,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__QualifiedName__QNameAssignment_0_2_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13693:1: rule__QualifiedName__QNameAssignment_0_2_0 : ( ruleIdentifier ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13630:1: rule__QualifiedName__QNameAssignment_0_2_0 : ( ruleIdentifier ) ;
     public final void rule__QualifiedName__QNameAssignment_0_2_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13697:1: ( ( ruleIdentifier ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13698:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13634:1: ( ( ruleIdentifier ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13635:1: ( ruleIdentifier )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13698:1: ( ruleIdentifier )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13699:1: ruleIdentifier
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13635:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13636:1: ruleIdentifier
             {
              before(grammarAccess.getQualifiedNameAccess().getQNameIdentifierParserRuleCall_0_2_0_0()); 
-            pushFollow(FOLLOW_ruleIdentifier_in_rule__QualifiedName__QNameAssignment_0_2_027729);
+            pushFollow(FOLLOW_ruleIdentifier_in_rule__QualifiedName__QNameAssignment_0_2_027606);
             ruleIdentifier();
 
             state._fsp--;
@@ -37288,24 +37169,24 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__QualifiedName__QNameAssignment_0_2_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13708:1: rule__QualifiedName__QNameAssignment_0_2_1 : ( ( '::' ) ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13645:1: rule__QualifiedName__QNameAssignment_0_2_1 : ( ( '::' ) ) ;
     public final void rule__QualifiedName__QNameAssignment_0_2_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13712:1: ( ( ( '::' ) ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13713:1: ( ( '::' ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13649:1: ( ( ( '::' ) ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13650:1: ( ( '::' ) )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13713:1: ( ( '::' ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13714:1: ( '::' )
-            {
-             before(grammarAccess.getQualifiedNameAccess().getQNameColonColonKeyword_0_2_1_0()); 
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13715:1: ( '::' )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13716:1: '::'
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13650:1: ( ( '::' ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13651:1: ( '::' )
             {
              before(grammarAccess.getQualifiedNameAccess().getQNameColonColonKeyword_0_2_1_0()); 
-            match(input,56,FOLLOW_56_in_rule__QualifiedName__QNameAssignment_0_2_127765); 
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13652:1: ( '::' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13653:1: '::'
+            {
+             before(grammarAccess.getQualifiedNameAccess().getQNameColonColonKeyword_0_2_1_0()); 
+            match(input,56,FOLLOW_56_in_rule__QualifiedName__QNameAssignment_0_2_127642); 
              after(grammarAccess.getQualifiedNameAccess().getQNameColonColonKeyword_0_2_1_0()); 
 
             }
@@ -37333,20 +37214,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__QualifiedName__QNameAssignment_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13731:1: rule__QualifiedName__QNameAssignment_1 : ( ruleIdentifier ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13668:1: rule__QualifiedName__QNameAssignment_1 : ( ruleIdentifier ) ;
     public final void rule__QualifiedName__QNameAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13735:1: ( ( ruleIdentifier ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13736:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13672:1: ( ( ruleIdentifier ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13673:1: ( ruleIdentifier )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13736:1: ( ruleIdentifier )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13737:1: ruleIdentifier
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13673:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13674:1: ruleIdentifier
             {
              before(grammarAccess.getQualifiedNameAccess().getQNameIdentifierParserRuleCall_1_0()); 
-            pushFollow(FOLLOW_ruleIdentifier_in_rule__QualifiedName__QNameAssignment_127804);
+            pushFollow(FOLLOW_ruleIdentifier_in_rule__QualifiedName__QNameAssignment_127681);
             ruleIdentifier();
 
             state._fsp--;
@@ -37374,24 +37255,24 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__AccessName__ANameAssignment_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13746:1: rule__AccessName__ANameAssignment_0 : ( ( '.' ) ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13683:1: rule__AccessName__ANameAssignment_0 : ( ( '.' ) ) ;
     public final void rule__AccessName__ANameAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13750:1: ( ( ( '.' ) ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13751:1: ( ( '.' ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13687:1: ( ( ( '.' ) ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13688:1: ( ( '.' ) )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13751:1: ( ( '.' ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13752:1: ( '.' )
-            {
-             before(grammarAccess.getAccessNameAccess().getANameFullStopKeyword_0_0()); 
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13753:1: ( '.' )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13754:1: '.'
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13688:1: ( ( '.' ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13689:1: ( '.' )
             {
              before(grammarAccess.getAccessNameAccess().getANameFullStopKeyword_0_0()); 
-            match(input,63,FOLLOW_63_in_rule__AccessName__ANameAssignment_027840); 
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13690:1: ( '.' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13691:1: '.'
+            {
+             before(grammarAccess.getAccessNameAccess().getANameFullStopKeyword_0_0()); 
+            match(input,63,FOLLOW_63_in_rule__AccessName__ANameAssignment_027717); 
              after(grammarAccess.getAccessNameAccess().getANameFullStopKeyword_0_0()); 
 
             }
@@ -37419,20 +37300,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__AccessName__ANameAssignment_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13769:1: rule__AccessName__ANameAssignment_1 : ( ruleIdentifier ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13706:1: rule__AccessName__ANameAssignment_1 : ( ruleIdentifier ) ;
     public final void rule__AccessName__ANameAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13773:1: ( ( ruleIdentifier ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13774:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13710:1: ( ( ruleIdentifier ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13711:1: ( ruleIdentifier )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13774:1: ( ruleIdentifier )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13775:1: ruleIdentifier
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13711:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13712:1: ruleIdentifier
             {
              before(grammarAccess.getAccessNameAccess().getANameIdentifierParserRuleCall_1_0()); 
-            pushFollow(FOLLOW_ruleIdentifier_in_rule__AccessName__ANameAssignment_127879);
+            pushFollow(FOLLOW_ruleIdentifier_in_rule__AccessName__ANameAssignment_127756);
             ruleIdentifier();
 
             state._fsp--;
@@ -37460,20 +37341,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Value__NValueAssignment_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13784:1: rule__Value__NValueAssignment_0 : ( ruleNumValue ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13721:1: rule__Value__NValueAssignment_0 : ( ruleNumValue ) ;
     public final void rule__Value__NValueAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13788:1: ( ( ruleNumValue ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13789:1: ( ruleNumValue )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13725:1: ( ( ruleNumValue ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13726:1: ( ruleNumValue )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13789:1: ( ruleNumValue )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13790:1: ruleNumValue
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13726:1: ( ruleNumValue )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13727:1: ruleNumValue
             {
              before(grammarAccess.getValueAccess().getNValueNumValueParserRuleCall_0_0()); 
-            pushFollow(FOLLOW_ruleNumValue_in_rule__Value__NValueAssignment_027910);
+            pushFollow(FOLLOW_ruleNumValue_in_rule__Value__NValueAssignment_027787);
             ruleNumValue();
 
             state._fsp--;
@@ -37501,20 +37382,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Value__SValueAssignment_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13799:1: rule__Value__SValueAssignment_1 : ( RULE_STRING ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13736:1: rule__Value__SValueAssignment_1 : ( RULE_STRING ) ;
     public final void rule__Value__SValueAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13803:1: ( ( RULE_STRING ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13804:1: ( RULE_STRING )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13740:1: ( ( RULE_STRING ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13741:1: ( RULE_STRING )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13804:1: ( RULE_STRING )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13805:1: RULE_STRING
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13741:1: ( RULE_STRING )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13742:1: RULE_STRING
             {
              before(grammarAccess.getValueAccess().getSValueSTRINGTerminalRuleCall_1_0()); 
-            match(input,RULE_STRING,FOLLOW_RULE_STRING_in_rule__Value__SValueAssignment_127941); 
+            match(input,RULE_STRING,FOLLOW_RULE_STRING_in_rule__Value__SValueAssignment_127818); 
              after(grammarAccess.getValueAccess().getSValueSTRINGTerminalRuleCall_1_0()); 
 
             }
@@ -37538,20 +37419,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Value__QValueAssignment_2"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13814:1: rule__Value__QValueAssignment_2 : ( ruleQualifiedName ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13751:1: rule__Value__QValueAssignment_2 : ( ruleQualifiedName ) ;
     public final void rule__Value__QValueAssignment_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13818:1: ( ( ruleQualifiedName ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13819:1: ( ruleQualifiedName )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13755:1: ( ( ruleQualifiedName ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13756:1: ( ruleQualifiedName )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13819:1: ( ruleQualifiedName )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13820:1: ruleQualifiedName
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13756:1: ( ruleQualifiedName )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13757:1: ruleQualifiedName
             {
              before(grammarAccess.getValueAccess().getQValueQualifiedNameParserRuleCall_2_0()); 
-            pushFollow(FOLLOW_ruleQualifiedName_in_rule__Value__QValueAssignment_227972);
+            pushFollow(FOLLOW_ruleQualifiedName_in_rule__Value__QValueAssignment_227849);
             ruleQualifiedName();
 
             state._fsp--;
@@ -37579,23 +37460,23 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Value__BValueAssignment_3"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13829:1: rule__Value__BValueAssignment_3 : ( ( rule__Value__BValueAlternatives_3_0 ) ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13766:1: rule__Value__BValueAssignment_3 : ( ( rule__Value__BValueAlternatives_3_0 ) ) ;
     public final void rule__Value__BValueAssignment_3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13833:1: ( ( ( rule__Value__BValueAlternatives_3_0 ) ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13834:1: ( ( rule__Value__BValueAlternatives_3_0 ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13770:1: ( ( ( rule__Value__BValueAlternatives_3_0 ) ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13771:1: ( ( rule__Value__BValueAlternatives_3_0 ) )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13834:1: ( ( rule__Value__BValueAlternatives_3_0 ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13835:1: ( rule__Value__BValueAlternatives_3_0 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13771:1: ( ( rule__Value__BValueAlternatives_3_0 ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13772:1: ( rule__Value__BValueAlternatives_3_0 )
             {
              before(grammarAccess.getValueAccess().getBValueAlternatives_3_0()); 
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13836:1: ( rule__Value__BValueAlternatives_3_0 )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13836:2: rule__Value__BValueAlternatives_3_0
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13773:1: ( rule__Value__BValueAlternatives_3_0 )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13773:2: rule__Value__BValueAlternatives_3_0
             {
-            pushFollow(FOLLOW_rule__Value__BValueAlternatives_3_0_in_rule__Value__BValueAssignment_328003);
+            pushFollow(FOLLOW_rule__Value__BValueAlternatives_3_0_in_rule__Value__BValueAssignment_327880);
             rule__Value__BValueAlternatives_3_0();
 
             state._fsp--;
@@ -37626,24 +37507,24 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Value__NullValueAssignment_4"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13845:1: rule__Value__NullValueAssignment_4 : ( ( 'null' ) ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13782:1: rule__Value__NullValueAssignment_4 : ( ( 'null' ) ) ;
     public final void rule__Value__NullValueAssignment_4() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13849:1: ( ( ( 'null' ) ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13850:1: ( ( 'null' ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13786:1: ( ( ( 'null' ) ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13787:1: ( ( 'null' ) )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13850:1: ( ( 'null' ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13851:1: ( 'null' )
-            {
-             before(grammarAccess.getValueAccess().getNullValueNullKeyword_4_0()); 
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13852:1: ( 'null' )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13853:1: 'null'
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13787:1: ( ( 'null' ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13788:1: ( 'null' )
             {
              before(grammarAccess.getValueAccess().getNullValueNullKeyword_4_0()); 
-            match(input,79,FOLLOW_79_in_rule__Value__NullValueAssignment_428041); 
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13789:1: ( 'null' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13790:1: 'null'
+            {
+             before(grammarAccess.getValueAccess().getNullValueNullKeyword_4_0()); 
+            match(input,78,FOLLOW_78_in_rule__Value__NullValueAssignment_427918); 
              after(grammarAccess.getValueAccess().getNullValueNullKeyword_4_0()); 
 
             }
@@ -37671,24 +37552,24 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__DerivedType__OpAssignment_0_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13868:1: rule__DerivedType__OpAssignment_0_0 : ( ( 'setOf' ) ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13805:1: rule__DerivedType__OpAssignment_0_0 : ( ( 'setOf' ) ) ;
     public final void rule__DerivedType__OpAssignment_0_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13872:1: ( ( ( 'setOf' ) ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13873:1: ( ( 'setOf' ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13809:1: ( ( ( 'setOf' ) ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13810:1: ( ( 'setOf' ) )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13873:1: ( ( 'setOf' ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13874:1: ( 'setOf' )
-            {
-             before(grammarAccess.getDerivedTypeAccess().getOpSetOfKeyword_0_0_0()); 
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13875:1: ( 'setOf' )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13876:1: 'setOf'
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13810:1: ( ( 'setOf' ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13811:1: ( 'setOf' )
             {
              before(grammarAccess.getDerivedTypeAccess().getOpSetOfKeyword_0_0_0()); 
-            match(input,80,FOLLOW_80_in_rule__DerivedType__OpAssignment_0_028085); 
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13812:1: ( 'setOf' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13813:1: 'setOf'
+            {
+             before(grammarAccess.getDerivedTypeAccess().getOpSetOfKeyword_0_0_0()); 
+            match(input,79,FOLLOW_79_in_rule__DerivedType__OpAssignment_0_027962); 
              after(grammarAccess.getDerivedTypeAccess().getOpSetOfKeyword_0_0_0()); 
 
             }
@@ -37716,24 +37597,24 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__DerivedType__OpAssignment_0_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13891:1: rule__DerivedType__OpAssignment_0_1 : ( ( 'sequenceOf' ) ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13828:1: rule__DerivedType__OpAssignment_0_1 : ( ( 'sequenceOf' ) ) ;
     public final void rule__DerivedType__OpAssignment_0_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13895:1: ( ( ( 'sequenceOf' ) ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13896:1: ( ( 'sequenceOf' ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13832:1: ( ( ( 'sequenceOf' ) ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13833:1: ( ( 'sequenceOf' ) )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13896:1: ( ( 'sequenceOf' ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13897:1: ( 'sequenceOf' )
-            {
-             before(grammarAccess.getDerivedTypeAccess().getOpSequenceOfKeyword_0_1_0()); 
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13898:1: ( 'sequenceOf' )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13899:1: 'sequenceOf'
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13833:1: ( ( 'sequenceOf' ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13834:1: ( 'sequenceOf' )
             {
              before(grammarAccess.getDerivedTypeAccess().getOpSequenceOfKeyword_0_1_0()); 
-            match(input,81,FOLLOW_81_in_rule__DerivedType__OpAssignment_0_128129); 
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13835:1: ( 'sequenceOf' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13836:1: 'sequenceOf'
+            {
+             before(grammarAccess.getDerivedTypeAccess().getOpSequenceOfKeyword_0_1_0()); 
+            match(input,80,FOLLOW_80_in_rule__DerivedType__OpAssignment_0_128006); 
              after(grammarAccess.getDerivedTypeAccess().getOpSequenceOfKeyword_0_1_0()); 
 
             }
@@ -37761,24 +37642,24 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__DerivedType__OpAssignment_0_2"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13914:1: rule__DerivedType__OpAssignment_0_2 : ( ( 'refTo' ) ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13851:1: rule__DerivedType__OpAssignment_0_2 : ( ( 'refTo' ) ) ;
     public final void rule__DerivedType__OpAssignment_0_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13918:1: ( ( ( 'refTo' ) ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13919:1: ( ( 'refTo' ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13855:1: ( ( ( 'refTo' ) ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13856:1: ( ( 'refTo' ) )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13919:1: ( ( 'refTo' ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13920:1: ( 'refTo' )
-            {
-             before(grammarAccess.getDerivedTypeAccess().getOpRefToKeyword_0_2_0()); 
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13921:1: ( 'refTo' )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13922:1: 'refTo'
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13856:1: ( ( 'refTo' ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13857:1: ( 'refTo' )
             {
              before(grammarAccess.getDerivedTypeAccess().getOpRefToKeyword_0_2_0()); 
-            match(input,82,FOLLOW_82_in_rule__DerivedType__OpAssignment_0_228173); 
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13858:1: ( 'refTo' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13859:1: 'refTo'
+            {
+             before(grammarAccess.getDerivedTypeAccess().getOpRefToKeyword_0_2_0()); 
+            match(input,81,FOLLOW_81_in_rule__DerivedType__OpAssignment_0_228050); 
              after(grammarAccess.getDerivedTypeAccess().getOpRefToKeyword_0_2_0()); 
 
             }
@@ -37806,20 +37687,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__DerivedType__TypeAssignment_2"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13937:1: rule__DerivedType__TypeAssignment_2 : ( ruleType ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13874:1: rule__DerivedType__TypeAssignment_2 : ( ruleType ) ;
     public final void rule__DerivedType__TypeAssignment_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13941:1: ( ( ruleType ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13942:1: ( ruleType )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13878:1: ( ( ruleType ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13879:1: ( ruleType )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13942:1: ( ruleType )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13943:1: ruleType
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13879:1: ( ruleType )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13880:1: ruleType
             {
              before(grammarAccess.getDerivedTypeAccess().getTypeTypeParserRuleCall_2_0()); 
-            pushFollow(FOLLOW_ruleType_in_rule__DerivedType__TypeAssignment_228212);
+            pushFollow(FOLLOW_ruleType_in_rule__DerivedType__TypeAssignment_228089);
             ruleType();
 
             state._fsp--;
@@ -37847,20 +37728,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__DslContext__StopAssignment_2"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13952:1: rule__DslContext__StopAssignment_2 : ( RULE_STRING ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13889:1: rule__DslContext__StopAssignment_2 : ( RULE_STRING ) ;
     public final void rule__DslContext__StopAssignment_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13956:1: ( ( RULE_STRING ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13957:1: ( RULE_STRING )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13893:1: ( ( RULE_STRING ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13894:1: ( RULE_STRING )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13957:1: ( RULE_STRING )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13958:1: RULE_STRING
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13894:1: ( RULE_STRING )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13895:1: RULE_STRING
             {
              before(grammarAccess.getDslContextAccess().getStopSTRINGTerminalRuleCall_2_0()); 
-            match(input,RULE_STRING,FOLLOW_RULE_STRING_in_rule__DslContext__StopAssignment_228243); 
+            match(input,RULE_STRING,FOLLOW_RULE_STRING_in_rule__DslContext__StopAssignment_228120); 
              after(grammarAccess.getDslContextAccess().getStopSTRINGTerminalRuleCall_2_0()); 
 
             }
@@ -37884,20 +37765,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__DslContext__EscapeAssignment_4"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13967:1: rule__DslContext__EscapeAssignment_4 : ( RULE_STRING ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13904:1: rule__DslContext__EscapeAssignment_4 : ( RULE_STRING ) ;
     public final void rule__DslContext__EscapeAssignment_4() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13971:1: ( ( RULE_STRING ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13972:1: ( RULE_STRING )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13908:1: ( ( RULE_STRING ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13909:1: ( RULE_STRING )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13972:1: ( RULE_STRING )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13973:1: RULE_STRING
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13909:1: ( RULE_STRING )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13910:1: RULE_STRING
             {
              before(grammarAccess.getDslContextAccess().getEscapeSTRINGTerminalRuleCall_4_0()); 
-            match(input,RULE_STRING,FOLLOW_RULE_STRING_in_rule__DslContext__EscapeAssignment_428274); 
+            match(input,RULE_STRING,FOLLOW_RULE_STRING_in_rule__DslContext__EscapeAssignment_428151); 
              after(grammarAccess.getDslContextAccess().getEscapeSTRINGTerminalRuleCall_4_0()); 
 
             }
@@ -37921,20 +37802,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__DslContext__CommandAssignment_6"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13982:1: rule__DslContext__CommandAssignment_6 : ( RULE_STRING ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13919:1: rule__DslContext__CommandAssignment_6 : ( RULE_STRING ) ;
     public final void rule__DslContext__CommandAssignment_6() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13986:1: ( ( RULE_STRING ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13987:1: ( RULE_STRING )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13923:1: ( ( RULE_STRING ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13924:1: ( RULE_STRING )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13987:1: ( RULE_STRING )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13988:1: RULE_STRING
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13924:1: ( RULE_STRING )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13925:1: RULE_STRING
             {
              before(grammarAccess.getDslContextAccess().getCommandSTRINGTerminalRuleCall_6_0()); 
-            match(input,RULE_STRING,FOLLOW_RULE_STRING_in_rule__DslContext__CommandAssignment_628305); 
+            match(input,RULE_STRING,FOLLOW_RULE_STRING_in_rule__DslContext__CommandAssignment_628182); 
              after(grammarAccess.getDslContextAccess().getCommandSTRINGTerminalRuleCall_6_0()); 
 
             }
@@ -37958,20 +37839,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__DslContext__DslAssignment_8"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13997:1: rule__DslContext__DslAssignment_8 : ( RULE_DSL_CONTENT ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13934:1: rule__DslContext__DslAssignment_8 : ( RULE_DSL_CONTENT ) ;
     public final void rule__DslContext__DslAssignment_8() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14001:1: ( ( RULE_DSL_CONTENT ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14002:1: ( RULE_DSL_CONTENT )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13938:1: ( ( RULE_DSL_CONTENT ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13939:1: ( RULE_DSL_CONTENT )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14002:1: ( RULE_DSL_CONTENT )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14003:1: RULE_DSL_CONTENT
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13939:1: ( RULE_DSL_CONTENT )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13940:1: RULE_DSL_CONTENT
             {
              before(grammarAccess.getDslContextAccess().getDslDSL_CONTENTTerminalRuleCall_8_0()); 
-            match(input,RULE_DSL_CONTENT,FOLLOW_RULE_DSL_CONTENT_in_rule__DslContext__DslAssignment_828336); 
+            match(input,RULE_DSL_CONTENT,FOLLOW_RULE_DSL_CONTENT_in_rule__DslContext__DslAssignment_828213); 
              after(grammarAccess.getDslContextAccess().getDslDSL_CONTENTTerminalRuleCall_8_0()); 
 
             }
@@ -37995,20 +37876,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__AttributeTo__AttributeTypeAssignment_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14012:1: rule__AttributeTo__AttributeTypeAssignment_1 : ( ruleType ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13949:1: rule__AttributeTo__AttributeTypeAssignment_1 : ( ruleType ) ;
     public final void rule__AttributeTo__AttributeTypeAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14016:1: ( ( ruleType ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14017:1: ( ruleType )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13953:1: ( ( ruleType ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13954:1: ( ruleType )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14017:1: ( ruleType )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14018:1: ruleType
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13954:1: ( ruleType )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13955:1: ruleType
             {
              before(grammarAccess.getAttributeToAccess().getAttributeTypeTypeParserRuleCall_1_0()); 
-            pushFollow(FOLLOW_ruleType_in_rule__AttributeTo__AttributeTypeAssignment_128367);
+            pushFollow(FOLLOW_ruleType_in_rule__AttributeTo__AttributeTypeAssignment_128244);
             ruleType();
 
             state._fsp--;
@@ -38036,20 +37917,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__AttributeTo__AttributeDeclAssignment_2"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14027:1: rule__AttributeTo__AttributeDeclAssignment_2 : ( ruleVariableDeclarationPart ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13964:1: rule__AttributeTo__AttributeDeclAssignment_2 : ( ruleVariableDeclarationPart ) ;
     public final void rule__AttributeTo__AttributeDeclAssignment_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14031:1: ( ( ruleVariableDeclarationPart ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14032:1: ( ruleVariableDeclarationPart )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13968:1: ( ( ruleVariableDeclarationPart ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13969:1: ( ruleVariableDeclarationPart )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14032:1: ( ruleVariableDeclarationPart )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14033:1: ruleVariableDeclarationPart
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13969:1: ( ruleVariableDeclarationPart )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13970:1: ruleVariableDeclarationPart
             {
              before(grammarAccess.getAttributeToAccess().getAttributeDeclVariableDeclarationPartParserRuleCall_2_0()); 
-            pushFollow(FOLLOW_ruleVariableDeclarationPart_in_rule__AttributeTo__AttributeDeclAssignment_228398);
+            pushFollow(FOLLOW_ruleVariableDeclarationPart_in_rule__AttributeTo__AttributeDeclAssignment_228275);
             ruleVariableDeclarationPart();
 
             state._fsp--;
@@ -38077,20 +37958,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__AttributeTo__NamesAssignment_4"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14042:1: rule__AttributeTo__NamesAssignment_4 : ( ruleIdentifier ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13979:1: rule__AttributeTo__NamesAssignment_4 : ( ruleIdentifier ) ;
     public final void rule__AttributeTo__NamesAssignment_4() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14046:1: ( ( ruleIdentifier ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14047:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13983:1: ( ( ruleIdentifier ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13984:1: ( ruleIdentifier )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14047:1: ( ruleIdentifier )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14048:1: ruleIdentifier
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13984:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13985:1: ruleIdentifier
             {
              before(grammarAccess.getAttributeToAccess().getNamesIdentifierParserRuleCall_4_0()); 
-            pushFollow(FOLLOW_ruleIdentifier_in_rule__AttributeTo__NamesAssignment_428429);
+            pushFollow(FOLLOW_ruleIdentifier_in_rule__AttributeTo__NamesAssignment_428306);
             ruleIdentifier();
 
             state._fsp--;
@@ -38118,20 +37999,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__AttributeTo__NamesAssignment_5_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14057:1: rule__AttributeTo__NamesAssignment_5_1 : ( ruleIdentifier ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13994:1: rule__AttributeTo__NamesAssignment_5_1 : ( ruleIdentifier ) ;
     public final void rule__AttributeTo__NamesAssignment_5_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14061:1: ( ( ruleIdentifier ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14062:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13998:1: ( ( ruleIdentifier ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13999:1: ( ruleIdentifier )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14062:1: ( ruleIdentifier )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14063:1: ruleIdentifier
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:13999:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14000:1: ruleIdentifier
             {
              before(grammarAccess.getAttributeToAccess().getNamesIdentifierParserRuleCall_5_1_0()); 
-            pushFollow(FOLLOW_ruleIdentifier_in_rule__AttributeTo__NamesAssignment_5_128460);
+            pushFollow(FOLLOW_ruleIdentifier_in_rule__AttributeTo__NamesAssignment_5_128337);
             ruleIdentifier();
 
             state._fsp--;
@@ -38159,20 +38040,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Freeze__NamesAssignment_2"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14072:1: rule__Freeze__NamesAssignment_2 : ( ruleFreezeStatement ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14009:1: rule__Freeze__NamesAssignment_2 : ( ruleFreezeStatement ) ;
     public final void rule__Freeze__NamesAssignment_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14076:1: ( ( ruleFreezeStatement ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14077:1: ( ruleFreezeStatement )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14013:1: ( ( ruleFreezeStatement ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14014:1: ( ruleFreezeStatement )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14077:1: ( ruleFreezeStatement )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14078:1: ruleFreezeStatement
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14014:1: ( ruleFreezeStatement )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14015:1: ruleFreezeStatement
             {
              before(grammarAccess.getFreezeAccess().getNamesFreezeStatementParserRuleCall_2_0()); 
-            pushFollow(FOLLOW_ruleFreezeStatement_in_rule__Freeze__NamesAssignment_228491);
+            pushFollow(FOLLOW_ruleFreezeStatement_in_rule__Freeze__NamesAssignment_228368);
             ruleFreezeStatement();
 
             state._fsp--;
@@ -38200,20 +38081,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Freeze__ButAssignment_4_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14087:1: rule__Freeze__ButAssignment_4_1 : ( ruleFreezeButList ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14024:1: rule__Freeze__ButAssignment_4_1 : ( ruleFreezeButList ) ;
     public final void rule__Freeze__ButAssignment_4_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14091:1: ( ( ruleFreezeButList ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14092:1: ( ruleFreezeButList )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14028:1: ( ( ruleFreezeButList ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14029:1: ( ruleFreezeButList )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14092:1: ( ruleFreezeButList )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14093:1: ruleFreezeButList
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14029:1: ( ruleFreezeButList )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14030:1: ruleFreezeButList
             {
              before(grammarAccess.getFreezeAccess().getButFreezeButListParserRuleCall_4_1_0()); 
-            pushFollow(FOLLOW_ruleFreezeButList_in_rule__Freeze__ButAssignment_4_128522);
+            pushFollow(FOLLOW_ruleFreezeButList_in_rule__Freeze__ButAssignment_4_128399);
             ruleFreezeButList();
 
             state._fsp--;
@@ -38241,20 +38122,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__FreezeStatement__NameAssignment_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14102:1: rule__FreezeStatement__NameAssignment_0 : ( ruleQualifiedName ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14039:1: rule__FreezeStatement__NameAssignment_0 : ( ruleQualifiedName ) ;
     public final void rule__FreezeStatement__NameAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14106:1: ( ( ruleQualifiedName ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14107:1: ( ruleQualifiedName )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14043:1: ( ( ruleQualifiedName ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14044:1: ( ruleQualifiedName )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14107:1: ( ruleQualifiedName )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14108:1: ruleQualifiedName
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14044:1: ( ruleQualifiedName )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14045:1: ruleQualifiedName
             {
              before(grammarAccess.getFreezeStatementAccess().getNameQualifiedNameParserRuleCall_0_0()); 
-            pushFollow(FOLLOW_ruleQualifiedName_in_rule__FreezeStatement__NameAssignment_028553);
+            pushFollow(FOLLOW_ruleQualifiedName_in_rule__FreezeStatement__NameAssignment_028430);
             ruleQualifiedName();
 
             state._fsp--;
@@ -38282,20 +38163,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__FreezeStatement__AccessAssignment_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14117:1: rule__FreezeStatement__AccessAssignment_1 : ( ruleAccessName ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14054:1: rule__FreezeStatement__AccessAssignment_1 : ( ruleAccessName ) ;
     public final void rule__FreezeStatement__AccessAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14121:1: ( ( ruleAccessName ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14122:1: ( ruleAccessName )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14058:1: ( ( ruleAccessName ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14059:1: ( ruleAccessName )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14122:1: ( ruleAccessName )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14123:1: ruleAccessName
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14059:1: ( ruleAccessName )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14060:1: ruleAccessName
             {
              before(grammarAccess.getFreezeStatementAccess().getAccessAccessNameParserRuleCall_1_0()); 
-            pushFollow(FOLLOW_ruleAccessName_in_rule__FreezeStatement__AccessAssignment_128584);
+            pushFollow(FOLLOW_ruleAccessName_in_rule__FreezeStatement__AccessAssignment_128461);
             ruleAccessName();
 
             state._fsp--;
@@ -38323,20 +38204,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__FreezeButList__ListAssignment_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14132:1: rule__FreezeButList__ListAssignment_1 : ( ruleFreezeButExpression ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14069:1: rule__FreezeButList__ListAssignment_1 : ( ruleFreezeButExpression ) ;
     public final void rule__FreezeButList__ListAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14136:1: ( ( ruleFreezeButExpression ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14137:1: ( ruleFreezeButExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14073:1: ( ( ruleFreezeButExpression ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14074:1: ( ruleFreezeButExpression )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14137:1: ( ruleFreezeButExpression )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14138:1: ruleFreezeButExpression
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14074:1: ( ruleFreezeButExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14075:1: ruleFreezeButExpression
             {
              before(grammarAccess.getFreezeButListAccess().getListFreezeButExpressionParserRuleCall_1_0()); 
-            pushFollow(FOLLOW_ruleFreezeButExpression_in_rule__FreezeButList__ListAssignment_128615);
+            pushFollow(FOLLOW_ruleFreezeButExpression_in_rule__FreezeButList__ListAssignment_128492);
             ruleFreezeButExpression();
 
             state._fsp--;
@@ -38364,20 +38245,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__FreezeButList__ListAssignment_2_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14147:1: rule__FreezeButList__ListAssignment_2_1 : ( ruleFreezeButExpression ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14084:1: rule__FreezeButList__ListAssignment_2_1 : ( ruleFreezeButExpression ) ;
     public final void rule__FreezeButList__ListAssignment_2_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14151:1: ( ( ruleFreezeButExpression ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14152:1: ( ruleFreezeButExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14088:1: ( ( ruleFreezeButExpression ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14089:1: ( ruleFreezeButExpression )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14152:1: ( ruleFreezeButExpression )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14153:1: ruleFreezeButExpression
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14089:1: ( ruleFreezeButExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14090:1: ruleFreezeButExpression
             {
              before(grammarAccess.getFreezeButListAccess().getListFreezeButExpressionParserRuleCall_2_1_0()); 
-            pushFollow(FOLLOW_ruleFreezeButExpression_in_rule__FreezeButList__ListAssignment_2_128646);
+            pushFollow(FOLLOW_ruleFreezeButExpression_in_rule__FreezeButList__ListAssignment_2_128523);
             ruleFreezeButExpression();
 
             state._fsp--;
@@ -38405,20 +38286,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__FreezeButExpression__NameAssignment_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14162:1: rule__FreezeButExpression__NameAssignment_0 : ( ruleQualifiedName ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14099:1: rule__FreezeButExpression__NameAssignment_0 : ( ruleQualifiedName ) ;
     public final void rule__FreezeButExpression__NameAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14166:1: ( ( ruleQualifiedName ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14167:1: ( ruleQualifiedName )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14103:1: ( ( ruleQualifiedName ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14104:1: ( ruleQualifiedName )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14167:1: ( ruleQualifiedName )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14168:1: ruleQualifiedName
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14104:1: ( ruleQualifiedName )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14105:1: ruleQualifiedName
             {
              before(grammarAccess.getFreezeButExpressionAccess().getNameQualifiedNameParserRuleCall_0_0()); 
-            pushFollow(FOLLOW_ruleQualifiedName_in_rule__FreezeButExpression__NameAssignment_028677);
+            pushFollow(FOLLOW_ruleQualifiedName_in_rule__FreezeButExpression__NameAssignment_028554);
             ruleQualifiedName();
 
             state._fsp--;
@@ -38446,20 +38327,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__FreezeButExpression__AccessAssignment_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14177:1: rule__FreezeButExpression__AccessAssignment_1 : ( ruleAccessName ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14114:1: rule__FreezeButExpression__AccessAssignment_1 : ( ruleAccessName ) ;
     public final void rule__FreezeButExpression__AccessAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14181:1: ( ( ruleAccessName ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14182:1: ( ruleAccessName )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14118:1: ( ( ruleAccessName ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14119:1: ( ruleAccessName )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14182:1: ( ruleAccessName )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14183:1: ruleAccessName
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14119:1: ( ruleAccessName )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14120:1: ruleAccessName
             {
              before(grammarAccess.getFreezeButExpressionAccess().getAccessAccessNameParserRuleCall_1_0()); 
-            pushFollow(FOLLOW_ruleAccessName_in_rule__FreezeButExpression__AccessAssignment_128708);
+            pushFollow(FOLLOW_ruleAccessName_in_rule__FreezeButExpression__AccessAssignment_128585);
             ruleAccessName();
 
             state._fsp--;
@@ -38487,24 +38368,24 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__FreezeButExpression__WildcardAssignment_2"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14192:1: rule__FreezeButExpression__WildcardAssignment_2 : ( ( '*' ) ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14129:1: rule__FreezeButExpression__WildcardAssignment_2 : ( ( '*' ) ) ;
     public final void rule__FreezeButExpression__WildcardAssignment_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14196:1: ( ( ( '*' ) ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14197:1: ( ( '*' ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14133:1: ( ( ( '*' ) ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14134:1: ( ( '*' ) )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14197:1: ( ( '*' ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14198:1: ( '*' )
-            {
-             before(grammarAccess.getFreezeButExpressionAccess().getWildcardAsteriskKeyword_2_0()); 
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14199:1: ( '*' )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14200:1: '*'
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14134:1: ( ( '*' ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14135:1: ( '*' )
             {
              before(grammarAccess.getFreezeButExpressionAccess().getWildcardAsteriskKeyword_2_0()); 
-            match(input,31,FOLLOW_31_in_rule__FreezeButExpression__WildcardAssignment_228744); 
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14136:1: ( '*' )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14137:1: '*'
+            {
+             before(grammarAccess.getFreezeButExpressionAccess().getWildcardAsteriskKeyword_2_0()); 
+            match(input,31,FOLLOW_31_in_rule__FreezeButExpression__WildcardAssignment_228621); 
              after(grammarAccess.getFreezeButExpressionAccess().getWildcardAsteriskKeyword_2_0()); 
 
             }
@@ -38532,20 +38413,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Eval__NestedAssignment_2"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14215:1: rule__Eval__NestedAssignment_2 : ( ruleEval ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14152:1: rule__Eval__NestedAssignment_2 : ( ruleEval ) ;
     public final void rule__Eval__NestedAssignment_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14219:1: ( ( ruleEval ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14220:1: ( ruleEval )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14156:1: ( ( ruleEval ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14157:1: ( ruleEval )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14220:1: ( ruleEval )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14221:1: ruleEval
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14157:1: ( ruleEval )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14158:1: ruleEval
             {
              before(grammarAccess.getEvalAccess().getNestedEvalParserRuleCall_2_0()); 
-            pushFollow(FOLLOW_ruleEval_in_rule__Eval__NestedAssignment_228783);
+            pushFollow(FOLLOW_ruleEval_in_rule__Eval__NestedAssignment_228660);
             ruleEval();
 
             state._fsp--;
@@ -38573,20 +38454,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Eval__StatementsAssignment_3"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14230:1: rule__Eval__StatementsAssignment_3 : ( ruleExpressionStatement ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14167:1: rule__Eval__StatementsAssignment_3 : ( ruleExpressionStatement ) ;
     public final void rule__Eval__StatementsAssignment_3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14234:1: ( ( ruleExpressionStatement ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14235:1: ( ruleExpressionStatement )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14171:1: ( ( ruleExpressionStatement ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14172:1: ( ruleExpressionStatement )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14235:1: ( ruleExpressionStatement )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14236:1: ruleExpressionStatement
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14172:1: ( ruleExpressionStatement )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14173:1: ruleExpressionStatement
             {
              before(grammarAccess.getEvalAccess().getStatementsExpressionStatementParserRuleCall_3_0()); 
-            pushFollow(FOLLOW_ruleExpressionStatement_in_rule__Eval__StatementsAssignment_328814);
+            pushFollow(FOLLOW_ruleExpressionStatement_in_rule__Eval__StatementsAssignment_328691);
             ruleExpressionStatement();
 
             state._fsp--;
@@ -38614,20 +38495,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__InterfaceDeclaration__NameAssignment_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14245:1: rule__InterfaceDeclaration__NameAssignment_1 : ( ruleIdentifier ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14182:1: rule__InterfaceDeclaration__NameAssignment_1 : ( ruleIdentifier ) ;
     public final void rule__InterfaceDeclaration__NameAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14249:1: ( ( ruleIdentifier ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14250:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14186:1: ( ( ruleIdentifier ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14187:1: ( ruleIdentifier )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14250:1: ( ruleIdentifier )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14251:1: ruleIdentifier
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14187:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14188:1: ruleIdentifier
             {
              before(grammarAccess.getInterfaceDeclarationAccess().getNameIdentifierParserRuleCall_1_0()); 
-            pushFollow(FOLLOW_ruleIdentifier_in_rule__InterfaceDeclaration__NameAssignment_128845);
+            pushFollow(FOLLOW_ruleIdentifier_in_rule__InterfaceDeclaration__NameAssignment_128722);
             ruleIdentifier();
 
             state._fsp--;
@@ -38655,20 +38536,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__InterfaceDeclaration__ExportsAssignment_3"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14260:1: rule__InterfaceDeclaration__ExportsAssignment_3 : ( ruleExport ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14197:1: rule__InterfaceDeclaration__ExportsAssignment_3 : ( ruleExport ) ;
     public final void rule__InterfaceDeclaration__ExportsAssignment_3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14264:1: ( ( ruleExport ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14265:1: ( ruleExport )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14201:1: ( ( ruleExport ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14202:1: ( ruleExport )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14265:1: ( ruleExport )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14266:1: ruleExport
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14202:1: ( ruleExport )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14203:1: ruleExport
             {
              before(grammarAccess.getInterfaceDeclarationAccess().getExportsExportParserRuleCall_3_0()); 
-            pushFollow(FOLLOW_ruleExport_in_rule__InterfaceDeclaration__ExportsAssignment_328876);
+            pushFollow(FOLLOW_ruleExport_in_rule__InterfaceDeclaration__ExportsAssignment_328753);
             ruleExport();
 
             state._fsp--;
@@ -38696,25 +38577,25 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Export__NamesAssignment_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14275:1: rule__Export__NamesAssignment_1 : ( ruleIdentifier ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14212:1: rule__Export__NamesAssignment_1 : ( ruleQualifiedName ) ;
     public final void rule__Export__NamesAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14279:1: ( ( ruleIdentifier ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14280:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14216:1: ( ( ruleQualifiedName ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14217:1: ( ruleQualifiedName )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14280:1: ( ruleIdentifier )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14281:1: ruleIdentifier
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14217:1: ( ruleQualifiedName )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14218:1: ruleQualifiedName
             {
-             before(grammarAccess.getExportAccess().getNamesIdentifierParserRuleCall_1_0()); 
-            pushFollow(FOLLOW_ruleIdentifier_in_rule__Export__NamesAssignment_128907);
-            ruleIdentifier();
+             before(grammarAccess.getExportAccess().getNamesQualifiedNameParserRuleCall_1_0()); 
+            pushFollow(FOLLOW_ruleQualifiedName_in_rule__Export__NamesAssignment_128784);
+            ruleQualifiedName();
 
             state._fsp--;
 
-             after(grammarAccess.getExportAccess().getNamesIdentifierParserRuleCall_1_0()); 
+             after(grammarAccess.getExportAccess().getNamesQualifiedNameParserRuleCall_1_0()); 
 
             }
 
@@ -38737,25 +38618,25 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Export__NamesAssignment_2_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14290:1: rule__Export__NamesAssignment_2_1 : ( ruleIdentifier ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14227:1: rule__Export__NamesAssignment_2_1 : ( ruleQualifiedName ) ;
     public final void rule__Export__NamesAssignment_2_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14294:1: ( ( ruleIdentifier ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14295:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14231:1: ( ( ruleQualifiedName ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14232:1: ( ruleQualifiedName )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14295:1: ( ruleIdentifier )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14296:1: ruleIdentifier
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14232:1: ( ruleQualifiedName )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14233:1: ruleQualifiedName
             {
-             before(grammarAccess.getExportAccess().getNamesIdentifierParserRuleCall_2_1_0()); 
-            pushFollow(FOLLOW_ruleIdentifier_in_rule__Export__NamesAssignment_2_128938);
-            ruleIdentifier();
+             before(grammarAccess.getExportAccess().getNamesQualifiedNameParserRuleCall_2_1_0()); 
+            pushFollow(FOLLOW_ruleQualifiedName_in_rule__Export__NamesAssignment_2_128815);
+            ruleQualifiedName();
 
             state._fsp--;
 
-             after(grammarAccess.getExportAccess().getNamesIdentifierParserRuleCall_2_1_0()); 
+             after(grammarAccess.getExportAccess().getNamesQualifiedNameParserRuleCall_2_1_0()); 
 
             }
 
@@ -38778,20 +38659,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ImportStmt__NameAssignment_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14305:1: rule__ImportStmt__NameAssignment_1 : ( ruleIdentifier ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14242:1: rule__ImportStmt__NameAssignment_1 : ( ruleIdentifier ) ;
     public final void rule__ImportStmt__NameAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14309:1: ( ( ruleIdentifier ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14310:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14246:1: ( ( ruleIdentifier ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14247:1: ( ruleIdentifier )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14310:1: ( ruleIdentifier )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14311:1: ruleIdentifier
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14247:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14248:1: ruleIdentifier
             {
              before(grammarAccess.getImportStmtAccess().getNameIdentifierParserRuleCall_1_0()); 
-            pushFollow(FOLLOW_ruleIdentifier_in_rule__ImportStmt__NameAssignment_128969);
+            pushFollow(FOLLOW_ruleIdentifier_in_rule__ImportStmt__NameAssignment_128846);
             ruleIdentifier();
 
             state._fsp--;
@@ -38819,20 +38700,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ImportStmt__InterfaceAssignment_2_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14320:1: rule__ImportStmt__InterfaceAssignment_2_1 : ( ruleIdentifier ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14257:1: rule__ImportStmt__InterfaceAssignment_2_1 : ( ruleIdentifier ) ;
     public final void rule__ImportStmt__InterfaceAssignment_2_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14324:1: ( ( ruleIdentifier ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14325:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14261:1: ( ( ruleIdentifier ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14262:1: ( ruleIdentifier )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14325:1: ( ruleIdentifier )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14326:1: ruleIdentifier
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14262:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14263:1: ruleIdentifier
             {
              before(grammarAccess.getImportStmtAccess().getInterfaceIdentifierParserRuleCall_2_1_0()); 
-            pushFollow(FOLLOW_ruleIdentifier_in_rule__ImportStmt__InterfaceAssignment_2_129000);
+            pushFollow(FOLLOW_ruleIdentifier_in_rule__ImportStmt__InterfaceAssignment_2_128877);
             ruleIdentifier();
 
             state._fsp--;
@@ -38860,20 +38741,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ImportStmt__VersionsAssignment_3_2"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14335:1: rule__ImportStmt__VersionsAssignment_3_2 : ( ruleVersionedId ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14272:1: rule__ImportStmt__VersionsAssignment_3_2 : ( ruleVersionedId ) ;
     public final void rule__ImportStmt__VersionsAssignment_3_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14339:1: ( ( ruleVersionedId ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14340:1: ( ruleVersionedId )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14276:1: ( ( ruleVersionedId ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14277:1: ( ruleVersionedId )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14340:1: ( ruleVersionedId )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14341:1: ruleVersionedId
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14277:1: ( ruleVersionedId )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14278:1: ruleVersionedId
             {
              before(grammarAccess.getImportStmtAccess().getVersionsVersionedIdParserRuleCall_3_2_0()); 
-            pushFollow(FOLLOW_ruleVersionedId_in_rule__ImportStmt__VersionsAssignment_3_229031);
+            pushFollow(FOLLOW_ruleVersionedId_in_rule__ImportStmt__VersionsAssignment_3_228908);
             ruleVersionedId();
 
             state._fsp--;
@@ -38901,20 +38782,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ImportStmt__VersionsAssignment_3_3_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14350:1: rule__ImportStmt__VersionsAssignment_3_3_1 : ( ruleVersionedId ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14287:1: rule__ImportStmt__VersionsAssignment_3_3_1 : ( ruleVersionedId ) ;
     public final void rule__ImportStmt__VersionsAssignment_3_3_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14354:1: ( ( ruleVersionedId ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14355:1: ( ruleVersionedId )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14291:1: ( ( ruleVersionedId ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14292:1: ( ruleVersionedId )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14355:1: ( ruleVersionedId )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14356:1: ruleVersionedId
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14292:1: ( ruleVersionedId )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14293:1: ruleVersionedId
             {
              before(grammarAccess.getImportStmtAccess().getVersionsVersionedIdParserRuleCall_3_3_1_0()); 
-            pushFollow(FOLLOW_ruleVersionedId_in_rule__ImportStmt__VersionsAssignment_3_3_129062);
+            pushFollow(FOLLOW_ruleVersionedId_in_rule__ImportStmt__VersionsAssignment_3_3_128939);
             ruleVersionedId();
 
             state._fsp--;
@@ -38942,20 +38823,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ConflictStmt__NameAssignment_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14365:1: rule__ConflictStmt__NameAssignment_1 : ( ruleIdentifier ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14302:1: rule__ConflictStmt__NameAssignment_1 : ( ruleIdentifier ) ;
     public final void rule__ConflictStmt__NameAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14369:1: ( ( ruleIdentifier ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14370:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14306:1: ( ( ruleIdentifier ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14307:1: ( ruleIdentifier )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14370:1: ( ruleIdentifier )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14371:1: ruleIdentifier
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14307:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14308:1: ruleIdentifier
             {
              before(grammarAccess.getConflictStmtAccess().getNameIdentifierParserRuleCall_1_0()); 
-            pushFollow(FOLLOW_ruleIdentifier_in_rule__ConflictStmt__NameAssignment_129093);
+            pushFollow(FOLLOW_ruleIdentifier_in_rule__ConflictStmt__NameAssignment_128970);
             ruleIdentifier();
 
             state._fsp--;
@@ -38983,20 +38864,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ConflictStmt__ConflictsAssignment_2_2"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14380:1: rule__ConflictStmt__ConflictsAssignment_2_2 : ( ruleVersionedId ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14317:1: rule__ConflictStmt__ConflictsAssignment_2_2 : ( ruleVersionedId ) ;
     public final void rule__ConflictStmt__ConflictsAssignment_2_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14384:1: ( ( ruleVersionedId ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14385:1: ( ruleVersionedId )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14321:1: ( ( ruleVersionedId ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14322:1: ( ruleVersionedId )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14385:1: ( ruleVersionedId )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14386:1: ruleVersionedId
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14322:1: ( ruleVersionedId )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14323:1: ruleVersionedId
             {
              before(grammarAccess.getConflictStmtAccess().getConflictsVersionedIdParserRuleCall_2_2_0()); 
-            pushFollow(FOLLOW_ruleVersionedId_in_rule__ConflictStmt__ConflictsAssignment_2_229124);
+            pushFollow(FOLLOW_ruleVersionedId_in_rule__ConflictStmt__ConflictsAssignment_2_229001);
             ruleVersionedId();
 
             state._fsp--;
@@ -39024,20 +38905,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ConflictStmt__ConflictsAssignment_2_3_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14395:1: rule__ConflictStmt__ConflictsAssignment_2_3_1 : ( ruleVersionedId ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14332:1: rule__ConflictStmt__ConflictsAssignment_2_3_1 : ( ruleVersionedId ) ;
     public final void rule__ConflictStmt__ConflictsAssignment_2_3_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14399:1: ( ( ruleVersionedId ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14400:1: ( ruleVersionedId )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14336:1: ( ( ruleVersionedId ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14337:1: ( ruleVersionedId )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14400:1: ( ruleVersionedId )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14401:1: ruleVersionedId
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14337:1: ( ruleVersionedId )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14338:1: ruleVersionedId
             {
              before(grammarAccess.getConflictStmtAccess().getConflictsVersionedIdParserRuleCall_2_3_1_0()); 
-            pushFollow(FOLLOW_ruleVersionedId_in_rule__ConflictStmt__ConflictsAssignment_2_3_129155);
+            pushFollow(FOLLOW_ruleVersionedId_in_rule__ConflictStmt__ConflictsAssignment_2_3_129032);
             ruleVersionedId();
 
             state._fsp--;
@@ -39065,20 +38946,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__VersionedId__NameAssignment_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14410:1: rule__VersionedId__NameAssignment_0 : ( ruleIdentifier ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14347:1: rule__VersionedId__NameAssignment_0 : ( ruleIdentifier ) ;
     public final void rule__VersionedId__NameAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14414:1: ( ( ruleIdentifier ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14415:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14351:1: ( ( ruleIdentifier ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14352:1: ( ruleIdentifier )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14415:1: ( ruleIdentifier )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14416:1: ruleIdentifier
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14352:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14353:1: ruleIdentifier
             {
              before(grammarAccess.getVersionedIdAccess().getNameIdentifierParserRuleCall_0_0()); 
-            pushFollow(FOLLOW_ruleIdentifier_in_rule__VersionedId__NameAssignment_029186);
+            pushFollow(FOLLOW_ruleIdentifier_in_rule__VersionedId__NameAssignment_029063);
             ruleIdentifier();
 
             state._fsp--;
@@ -39106,20 +38987,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__VersionedId__OpAssignment_2"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14425:1: rule__VersionedId__OpAssignment_2 : ( ruleVersionOperator ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14362:1: rule__VersionedId__OpAssignment_2 : ( ruleVersionOperator ) ;
     public final void rule__VersionedId__OpAssignment_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14429:1: ( ( ruleVersionOperator ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14430:1: ( ruleVersionOperator )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14366:1: ( ( ruleVersionOperator ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14367:1: ( ruleVersionOperator )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14430:1: ( ruleVersionOperator )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14431:1: ruleVersionOperator
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14367:1: ( ruleVersionOperator )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14368:1: ruleVersionOperator
             {
              before(grammarAccess.getVersionedIdAccess().getOpVersionOperatorParserRuleCall_2_0()); 
-            pushFollow(FOLLOW_ruleVersionOperator_in_rule__VersionedId__OpAssignment_229217);
+            pushFollow(FOLLOW_ruleVersionOperator_in_rule__VersionedId__OpAssignment_229094);
             ruleVersionOperator();
 
             state._fsp--;
@@ -39147,20 +39028,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__VersionedId__VersionAssignment_3"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14440:1: rule__VersionedId__VersionAssignment_3 : ( RULE_VERSION ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14377:1: rule__VersionedId__VersionAssignment_3 : ( RULE_VERSION ) ;
     public final void rule__VersionedId__VersionAssignment_3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14444:1: ( ( RULE_VERSION ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14445:1: ( RULE_VERSION )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14381:1: ( ( RULE_VERSION ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14382:1: ( RULE_VERSION )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14445:1: ( RULE_VERSION )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14446:1: RULE_VERSION
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14382:1: ( RULE_VERSION )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14383:1: RULE_VERSION
             {
              before(grammarAccess.getVersionedIdAccess().getVersionVERSIONTerminalRuleCall_3_0()); 
-            match(input,RULE_VERSION,FOLLOW_RULE_VERSION_in_rule__VersionedId__VersionAssignment_329248); 
+            match(input,RULE_VERSION,FOLLOW_RULE_VERSION_in_rule__VersionedId__VersionAssignment_329125); 
              after(grammarAccess.getVersionedIdAccess().getVersionVERSIONTerminalRuleCall_3_0()); 
 
             }
@@ -39184,20 +39065,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__VersionStmt__VersionAssignment_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14455:1: rule__VersionStmt__VersionAssignment_1 : ( RULE_VERSION ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14392:1: rule__VersionStmt__VersionAssignment_1 : ( RULE_VERSION ) ;
     public final void rule__VersionStmt__VersionAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14459:1: ( ( RULE_VERSION ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14460:1: ( RULE_VERSION )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14396:1: ( ( RULE_VERSION ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14397:1: ( RULE_VERSION )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14460:1: ( RULE_VERSION )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14461:1: RULE_VERSION
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14397:1: ( RULE_VERSION )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14398:1: RULE_VERSION
             {
              before(grammarAccess.getVersionStmtAccess().getVersionVERSIONTerminalRuleCall_1_0()); 
-            match(input,RULE_VERSION,FOLLOW_RULE_VERSION_in_rule__VersionStmt__VersionAssignment_129279); 
+            match(input,RULE_VERSION,FOLLOW_RULE_VERSION_in_rule__VersionStmt__VersionAssignment_129156); 
              after(grammarAccess.getVersionStmtAccess().getVersionVERSIONTerminalRuleCall_1_0()); 
 
             }
@@ -39221,20 +39102,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__OpDefStatement__ResultAssignment_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14470:1: rule__OpDefStatement__ResultAssignment_1 : ( ruleType ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14407:1: rule__OpDefStatement__ResultAssignment_1 : ( ruleType ) ;
     public final void rule__OpDefStatement__ResultAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14474:1: ( ( ruleType ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14475:1: ( ruleType )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14411:1: ( ( ruleType ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14412:1: ( ruleType )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14475:1: ( ruleType )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14476:1: ruleType
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14412:1: ( ruleType )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14413:1: ruleType
             {
              before(grammarAccess.getOpDefStatementAccess().getResultTypeParserRuleCall_1_0()); 
-            pushFollow(FOLLOW_ruleType_in_rule__OpDefStatement__ResultAssignment_129310);
+            pushFollow(FOLLOW_ruleType_in_rule__OpDefStatement__ResultAssignment_129187);
             ruleType();
 
             state._fsp--;
@@ -39262,20 +39143,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__OpDefStatement__IdAssignment_2"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14485:1: rule__OpDefStatement__IdAssignment_2 : ( ruleIdentifier ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14422:1: rule__OpDefStatement__IdAssignment_2 : ( ruleIdentifier ) ;
     public final void rule__OpDefStatement__IdAssignment_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14489:1: ( ( ruleIdentifier ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14490:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14426:1: ( ( ruleIdentifier ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14427:1: ( ruleIdentifier )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14490:1: ( ruleIdentifier )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14491:1: ruleIdentifier
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14427:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14428:1: ruleIdentifier
             {
              before(grammarAccess.getOpDefStatementAccess().getIdIdentifierParserRuleCall_2_0()); 
-            pushFollow(FOLLOW_ruleIdentifier_in_rule__OpDefStatement__IdAssignment_229341);
+            pushFollow(FOLLOW_ruleIdentifier_in_rule__OpDefStatement__IdAssignment_229218);
             ruleIdentifier();
 
             state._fsp--;
@@ -39303,20 +39184,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__OpDefStatement__ParamAssignment_4"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14500:1: rule__OpDefStatement__ParamAssignment_4 : ( ruleOpDefParameterList ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14437:1: rule__OpDefStatement__ParamAssignment_4 : ( ruleOpDefParameterList ) ;
     public final void rule__OpDefStatement__ParamAssignment_4() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14504:1: ( ( ruleOpDefParameterList ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14505:1: ( ruleOpDefParameterList )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14441:1: ( ( ruleOpDefParameterList ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14442:1: ( ruleOpDefParameterList )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14505:1: ( ruleOpDefParameterList )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14506:1: ruleOpDefParameterList
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14442:1: ( ruleOpDefParameterList )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14443:1: ruleOpDefParameterList
             {
              before(grammarAccess.getOpDefStatementAccess().getParamOpDefParameterListParserRuleCall_4_0()); 
-            pushFollow(FOLLOW_ruleOpDefParameterList_in_rule__OpDefStatement__ParamAssignment_429372);
+            pushFollow(FOLLOW_ruleOpDefParameterList_in_rule__OpDefStatement__ParamAssignment_429249);
             ruleOpDefParameterList();
 
             state._fsp--;
@@ -39344,20 +39225,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__OpDefStatement__ImplAssignment_7"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14515:1: rule__OpDefStatement__ImplAssignment_7 : ( ruleExpression ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14452:1: rule__OpDefStatement__ImplAssignment_7 : ( ruleExpression ) ;
     public final void rule__OpDefStatement__ImplAssignment_7() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14519:1: ( ( ruleExpression ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14520:1: ( ruleExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14456:1: ( ( ruleExpression ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14457:1: ( ruleExpression )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14520:1: ( ruleExpression )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14521:1: ruleExpression
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14457:1: ( ruleExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14458:1: ruleExpression
             {
              before(grammarAccess.getOpDefStatementAccess().getImplExpressionParserRuleCall_7_0()); 
-            pushFollow(FOLLOW_ruleExpression_in_rule__OpDefStatement__ImplAssignment_729403);
+            pushFollow(FOLLOW_ruleExpression_in_rule__OpDefStatement__ImplAssignment_729280);
             ruleExpression();
 
             state._fsp--;
@@ -39385,20 +39266,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__OpDefParameterList__ListAssignment_1_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14530:1: rule__OpDefParameterList__ListAssignment_1_0 : ( ruleOpDefParameter ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14467:1: rule__OpDefParameterList__ListAssignment_1_0 : ( ruleOpDefParameter ) ;
     public final void rule__OpDefParameterList__ListAssignment_1_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14534:1: ( ( ruleOpDefParameter ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14535:1: ( ruleOpDefParameter )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14471:1: ( ( ruleOpDefParameter ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14472:1: ( ruleOpDefParameter )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14535:1: ( ruleOpDefParameter )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14536:1: ruleOpDefParameter
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14472:1: ( ruleOpDefParameter )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14473:1: ruleOpDefParameter
             {
              before(grammarAccess.getOpDefParameterListAccess().getListOpDefParameterParserRuleCall_1_0_0()); 
-            pushFollow(FOLLOW_ruleOpDefParameter_in_rule__OpDefParameterList__ListAssignment_1_029434);
+            pushFollow(FOLLOW_ruleOpDefParameter_in_rule__OpDefParameterList__ListAssignment_1_029311);
             ruleOpDefParameter();
 
             state._fsp--;
@@ -39426,20 +39307,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__OpDefParameterList__ListAssignment_1_1_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14545:1: rule__OpDefParameterList__ListAssignment_1_1_1 : ( ruleOpDefParameter ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14482:1: rule__OpDefParameterList__ListAssignment_1_1_1 : ( ruleOpDefParameter ) ;
     public final void rule__OpDefParameterList__ListAssignment_1_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14549:1: ( ( ruleOpDefParameter ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14550:1: ( ruleOpDefParameter )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14486:1: ( ( ruleOpDefParameter ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14487:1: ( ruleOpDefParameter )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14550:1: ( ruleOpDefParameter )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14551:1: ruleOpDefParameter
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14487:1: ( ruleOpDefParameter )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14488:1: ruleOpDefParameter
             {
              before(grammarAccess.getOpDefParameterListAccess().getListOpDefParameterParserRuleCall_1_1_1_0()); 
-            pushFollow(FOLLOW_ruleOpDefParameter_in_rule__OpDefParameterList__ListAssignment_1_1_129465);
+            pushFollow(FOLLOW_ruleOpDefParameter_in_rule__OpDefParameterList__ListAssignment_1_1_129342);
             ruleOpDefParameter();
 
             state._fsp--;
@@ -39467,20 +39348,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__OpDefParameter__TypeAssignment_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14560:1: rule__OpDefParameter__TypeAssignment_0 : ( ruleType ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14497:1: rule__OpDefParameter__TypeAssignment_0 : ( ruleType ) ;
     public final void rule__OpDefParameter__TypeAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14564:1: ( ( ruleType ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14565:1: ( ruleType )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14501:1: ( ( ruleType ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14502:1: ( ruleType )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14565:1: ( ruleType )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14566:1: ruleType
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14502:1: ( ruleType )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14503:1: ruleType
             {
              before(grammarAccess.getOpDefParameterAccess().getTypeTypeParserRuleCall_0_0()); 
-            pushFollow(FOLLOW_ruleType_in_rule__OpDefParameter__TypeAssignment_029496);
+            pushFollow(FOLLOW_ruleType_in_rule__OpDefParameter__TypeAssignment_029373);
             ruleType();
 
             state._fsp--;
@@ -39508,20 +39389,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__OpDefParameter__IdAssignment_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14575:1: rule__OpDefParameter__IdAssignment_1 : ( ruleIdentifier ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14512:1: rule__OpDefParameter__IdAssignment_1 : ( ruleIdentifier ) ;
     public final void rule__OpDefParameter__IdAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14579:1: ( ( ruleIdentifier ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14580:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14516:1: ( ( ruleIdentifier ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14517:1: ( ruleIdentifier )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14580:1: ( ruleIdentifier )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14581:1: ruleIdentifier
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14517:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14518:1: ruleIdentifier
             {
              before(grammarAccess.getOpDefParameterAccess().getIdIdentifierParserRuleCall_1_0()); 
-            pushFollow(FOLLOW_ruleIdentifier_in_rule__OpDefParameter__IdAssignment_129527);
+            pushFollow(FOLLOW_ruleIdentifier_in_rule__OpDefParameter__IdAssignment_129404);
             ruleIdentifier();
 
             state._fsp--;
@@ -39549,20 +39430,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__OpDefParameter__ValAssignment_2_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14590:1: rule__OpDefParameter__ValAssignment_2_1 : ( ruleExpression ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14527:1: rule__OpDefParameter__ValAssignment_2_1 : ( ruleExpression ) ;
     public final void rule__OpDefParameter__ValAssignment_2_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14594:1: ( ( ruleExpression ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14595:1: ( ruleExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14531:1: ( ( ruleExpression ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14532:1: ( ruleExpression )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14595:1: ( ruleExpression )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14596:1: ruleExpression
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14532:1: ( ruleExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14533:1: ruleExpression
             {
              before(grammarAccess.getOpDefParameterAccess().getValExpressionParserRuleCall_2_1_0()); 
-            pushFollow(FOLLOW_ruleExpression_in_rule__OpDefParameter__ValAssignment_2_129558);
+            pushFollow(FOLLOW_ruleExpression_in_rule__OpDefParameter__ValAssignment_2_129435);
             ruleExpression();
 
             state._fsp--;
@@ -39590,20 +39471,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ExpressionStatement__ExprAssignment_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14605:1: rule__ExpressionStatement__ExprAssignment_0 : ( ruleExpression ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14542:1: rule__ExpressionStatement__ExprAssignment_0 : ( ruleExpression ) ;
     public final void rule__ExpressionStatement__ExprAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14609:1: ( ( ruleExpression ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14610:1: ( ruleExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14546:1: ( ( ruleExpression ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14547:1: ( ruleExpression )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14610:1: ( ruleExpression )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14611:1: ruleExpression
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14547:1: ( ruleExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14548:1: ruleExpression
             {
              before(grammarAccess.getExpressionStatementAccess().getExprExpressionParserRuleCall_0_0()); 
-            pushFollow(FOLLOW_ruleExpression_in_rule__ExpressionStatement__ExprAssignment_029589);
+            pushFollow(FOLLOW_ruleExpression_in_rule__ExpressionStatement__ExprAssignment_029466);
             ruleExpression();
 
             state._fsp--;
@@ -39631,20 +39512,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Expression__LetAssignment_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14620:1: rule__Expression__LetAssignment_0 : ( ruleLetExpression ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14557:1: rule__Expression__LetAssignment_0 : ( ruleLetExpression ) ;
     public final void rule__Expression__LetAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14624:1: ( ( ruleLetExpression ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14625:1: ( ruleLetExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14561:1: ( ( ruleLetExpression ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14562:1: ( ruleLetExpression )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14625:1: ( ruleLetExpression )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14626:1: ruleLetExpression
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14562:1: ( ruleLetExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14563:1: ruleLetExpression
             {
              before(grammarAccess.getExpressionAccess().getLetLetExpressionParserRuleCall_0_0()); 
-            pushFollow(FOLLOW_ruleLetExpression_in_rule__Expression__LetAssignment_029620);
+            pushFollow(FOLLOW_ruleLetExpression_in_rule__Expression__LetAssignment_029497);
             ruleLetExpression();
 
             state._fsp--;
@@ -39672,20 +39553,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Expression__ExprAssignment_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14635:1: rule__Expression__ExprAssignment_1 : ( ruleImplicationExpression ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14572:1: rule__Expression__ExprAssignment_1 : ( ruleImplicationExpression ) ;
     public final void rule__Expression__ExprAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14639:1: ( ( ruleImplicationExpression ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14640:1: ( ruleImplicationExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14576:1: ( ( ruleImplicationExpression ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14577:1: ( ruleImplicationExpression )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14640:1: ( ruleImplicationExpression )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14641:1: ruleImplicationExpression
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14577:1: ( ruleImplicationExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14578:1: ruleImplicationExpression
             {
              before(grammarAccess.getExpressionAccess().getExprImplicationExpressionParserRuleCall_1_0()); 
-            pushFollow(FOLLOW_ruleImplicationExpression_in_rule__Expression__ExprAssignment_129651);
+            pushFollow(FOLLOW_ruleImplicationExpression_in_rule__Expression__ExprAssignment_129528);
             ruleImplicationExpression();
 
             state._fsp--;
@@ -39713,20 +39594,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Expression__CollectionAssignment_2"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14650:1: rule__Expression__CollectionAssignment_2 : ( ruleCollectionInitializer ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14587:1: rule__Expression__CollectionAssignment_2 : ( ruleCollectionInitializer ) ;
     public final void rule__Expression__CollectionAssignment_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14654:1: ( ( ruleCollectionInitializer ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14655:1: ( ruleCollectionInitializer )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14591:1: ( ( ruleCollectionInitializer ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14592:1: ( ruleCollectionInitializer )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14655:1: ( ruleCollectionInitializer )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14656:1: ruleCollectionInitializer
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14592:1: ( ruleCollectionInitializer )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14593:1: ruleCollectionInitializer
             {
              before(grammarAccess.getExpressionAccess().getCollectionCollectionInitializerParserRuleCall_2_0()); 
-            pushFollow(FOLLOW_ruleCollectionInitializer_in_rule__Expression__CollectionAssignment_229682);
+            pushFollow(FOLLOW_ruleCollectionInitializer_in_rule__Expression__CollectionAssignment_229559);
             ruleCollectionInitializer();
 
             state._fsp--;
@@ -39754,20 +39635,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Expression__DslAssignment_3"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14665:1: rule__Expression__DslAssignment_3 : ( ruleDslContext ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14602:1: rule__Expression__DslAssignment_3 : ( ruleDslContext ) ;
     public final void rule__Expression__DslAssignment_3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14669:1: ( ( ruleDslContext ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14670:1: ( ruleDslContext )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14606:1: ( ( ruleDslContext ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14607:1: ( ruleDslContext )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14670:1: ( ruleDslContext )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14671:1: ruleDslContext
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14607:1: ( ruleDslContext )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14608:1: ruleDslContext
             {
              before(grammarAccess.getExpressionAccess().getDslDslContextParserRuleCall_3_0()); 
-            pushFollow(FOLLOW_ruleDslContext_in_rule__Expression__DslAssignment_329713);
+            pushFollow(FOLLOW_ruleDslContext_in_rule__Expression__DslAssignment_329590);
             ruleDslContext();
 
             state._fsp--;
@@ -39795,20 +39676,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__LetExpression__TypeAssignment_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14680:1: rule__LetExpression__TypeAssignment_1 : ( ruleType ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14617:1: rule__LetExpression__TypeAssignment_1 : ( ruleType ) ;
     public final void rule__LetExpression__TypeAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14684:1: ( ( ruleType ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14685:1: ( ruleType )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14621:1: ( ( ruleType ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14622:1: ( ruleType )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14685:1: ( ruleType )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14686:1: ruleType
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14622:1: ( ruleType )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14623:1: ruleType
             {
              before(grammarAccess.getLetExpressionAccess().getTypeTypeParserRuleCall_1_0()); 
-            pushFollow(FOLLOW_ruleType_in_rule__LetExpression__TypeAssignment_129744);
+            pushFollow(FOLLOW_ruleType_in_rule__LetExpression__TypeAssignment_129621);
             ruleType();
 
             state._fsp--;
@@ -39836,20 +39717,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__LetExpression__NameAssignment_2"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14695:1: rule__LetExpression__NameAssignment_2 : ( ruleIdentifier ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14632:1: rule__LetExpression__NameAssignment_2 : ( ruleIdentifier ) ;
     public final void rule__LetExpression__NameAssignment_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14699:1: ( ( ruleIdentifier ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14700:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14636:1: ( ( ruleIdentifier ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14637:1: ( ruleIdentifier )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14700:1: ( ruleIdentifier )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14701:1: ruleIdentifier
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14637:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14638:1: ruleIdentifier
             {
              before(grammarAccess.getLetExpressionAccess().getNameIdentifierParserRuleCall_2_0()); 
-            pushFollow(FOLLOW_ruleIdentifier_in_rule__LetExpression__NameAssignment_229775);
+            pushFollow(FOLLOW_ruleIdentifier_in_rule__LetExpression__NameAssignment_229652);
             ruleIdentifier();
 
             state._fsp--;
@@ -39877,20 +39758,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__LetExpression__ValueExprAssignment_4"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14710:1: rule__LetExpression__ValueExprAssignment_4 : ( ruleExpression ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14647:1: rule__LetExpression__ValueExprAssignment_4 : ( ruleExpression ) ;
     public final void rule__LetExpression__ValueExprAssignment_4() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14714:1: ( ( ruleExpression ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14715:1: ( ruleExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14651:1: ( ( ruleExpression ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14652:1: ( ruleExpression )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14715:1: ( ruleExpression )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14716:1: ruleExpression
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14652:1: ( ruleExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14653:1: ruleExpression
             {
              before(grammarAccess.getLetExpressionAccess().getValueExprExpressionParserRuleCall_4_0()); 
-            pushFollow(FOLLOW_ruleExpression_in_rule__LetExpression__ValueExprAssignment_429806);
+            pushFollow(FOLLOW_ruleExpression_in_rule__LetExpression__ValueExprAssignment_429683);
             ruleExpression();
 
             state._fsp--;
@@ -39918,20 +39799,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__LetExpression__SubExprAssignment_6"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14725:1: rule__LetExpression__SubExprAssignment_6 : ( ruleExpression ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14662:1: rule__LetExpression__SubExprAssignment_6 : ( ruleExpression ) ;
     public final void rule__LetExpression__SubExprAssignment_6() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14729:1: ( ( ruleExpression ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14730:1: ( ruleExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14666:1: ( ( ruleExpression ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14667:1: ( ruleExpression )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14730:1: ( ruleExpression )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14731:1: ruleExpression
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14667:1: ( ruleExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14668:1: ruleExpression
             {
              before(grammarAccess.getLetExpressionAccess().getSubExprExpressionParserRuleCall_6_0()); 
-            pushFollow(FOLLOW_ruleExpression_in_rule__LetExpression__SubExprAssignment_629837);
+            pushFollow(FOLLOW_ruleExpression_in_rule__LetExpression__SubExprAssignment_629714);
             ruleExpression();
 
             state._fsp--;
@@ -39959,20 +39840,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__AssignmentExpression__LeftAssignment_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14740:1: rule__AssignmentExpression__LeftAssignment_0 : ( ruleLogicalExpression ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14677:1: rule__AssignmentExpression__LeftAssignment_0 : ( ruleLogicalExpression ) ;
     public final void rule__AssignmentExpression__LeftAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14744:1: ( ( ruleLogicalExpression ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14745:1: ( ruleLogicalExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14681:1: ( ( ruleLogicalExpression ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14682:1: ( ruleLogicalExpression )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14745:1: ( ruleLogicalExpression )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14746:1: ruleLogicalExpression
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14682:1: ( ruleLogicalExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14683:1: ruleLogicalExpression
             {
              before(grammarAccess.getAssignmentExpressionAccess().getLeftLogicalExpressionParserRuleCall_0_0()); 
-            pushFollow(FOLLOW_ruleLogicalExpression_in_rule__AssignmentExpression__LeftAssignment_029868);
+            pushFollow(FOLLOW_ruleLogicalExpression_in_rule__AssignmentExpression__LeftAssignment_029745);
             ruleLogicalExpression();
 
             state._fsp--;
@@ -40000,20 +39881,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__AssignmentExpression__RightAssignment_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14755:1: rule__AssignmentExpression__RightAssignment_1 : ( ruleAssignmentExpressionPart ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14692:1: rule__AssignmentExpression__RightAssignment_1 : ( ruleAssignmentExpressionPart ) ;
     public final void rule__AssignmentExpression__RightAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14759:1: ( ( ruleAssignmentExpressionPart ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14760:1: ( ruleAssignmentExpressionPart )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14696:1: ( ( ruleAssignmentExpressionPart ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14697:1: ( ruleAssignmentExpressionPart )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14760:1: ( ruleAssignmentExpressionPart )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14761:1: ruleAssignmentExpressionPart
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14697:1: ( ruleAssignmentExpressionPart )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14698:1: ruleAssignmentExpressionPart
             {
              before(grammarAccess.getAssignmentExpressionAccess().getRightAssignmentExpressionPartParserRuleCall_1_0()); 
-            pushFollow(FOLLOW_ruleAssignmentExpressionPart_in_rule__AssignmentExpression__RightAssignment_129899);
+            pushFollow(FOLLOW_ruleAssignmentExpressionPart_in_rule__AssignmentExpression__RightAssignment_129776);
             ruleAssignmentExpressionPart();
 
             state._fsp--;
@@ -40041,20 +39922,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__AssignmentExpressionPart__OpAssignment_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14770:1: rule__AssignmentExpressionPart__OpAssignment_0 : ( ruleAssignmentOperator ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14707:1: rule__AssignmentExpressionPart__OpAssignment_0 : ( ruleAssignmentOperator ) ;
     public final void rule__AssignmentExpressionPart__OpAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14774:1: ( ( ruleAssignmentOperator ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14775:1: ( ruleAssignmentOperator )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14711:1: ( ( ruleAssignmentOperator ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14712:1: ( ruleAssignmentOperator )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14775:1: ( ruleAssignmentOperator )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14776:1: ruleAssignmentOperator
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14712:1: ( ruleAssignmentOperator )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14713:1: ruleAssignmentOperator
             {
              before(grammarAccess.getAssignmentExpressionPartAccess().getOpAssignmentOperatorParserRuleCall_0_0()); 
-            pushFollow(FOLLOW_ruleAssignmentOperator_in_rule__AssignmentExpressionPart__OpAssignment_029930);
+            pushFollow(FOLLOW_ruleAssignmentOperator_in_rule__AssignmentExpressionPart__OpAssignment_029807);
             ruleAssignmentOperator();
 
             state._fsp--;
@@ -40082,20 +39963,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__AssignmentExpressionPart__ExAssignment_1_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14785:1: rule__AssignmentExpressionPart__ExAssignment_1_0 : ( ruleLogicalExpression ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14722:1: rule__AssignmentExpressionPart__ExAssignment_1_0 : ( ruleLogicalExpression ) ;
     public final void rule__AssignmentExpressionPart__ExAssignment_1_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14789:1: ( ( ruleLogicalExpression ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14790:1: ( ruleLogicalExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14726:1: ( ( ruleLogicalExpression ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14727:1: ( ruleLogicalExpression )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14790:1: ( ruleLogicalExpression )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14791:1: ruleLogicalExpression
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14727:1: ( ruleLogicalExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14728:1: ruleLogicalExpression
             {
              before(grammarAccess.getAssignmentExpressionPartAccess().getExLogicalExpressionParserRuleCall_1_0_0()); 
-            pushFollow(FOLLOW_ruleLogicalExpression_in_rule__AssignmentExpressionPart__ExAssignment_1_029961);
+            pushFollow(FOLLOW_ruleLogicalExpression_in_rule__AssignmentExpressionPart__ExAssignment_1_029838);
             ruleLogicalExpression();
 
             state._fsp--;
@@ -40123,20 +40004,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__AssignmentExpressionPart__CollectionAssignment_1_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14800:1: rule__AssignmentExpressionPart__CollectionAssignment_1_1 : ( ruleCollectionInitializer ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14737:1: rule__AssignmentExpressionPart__CollectionAssignment_1_1 : ( ruleCollectionInitializer ) ;
     public final void rule__AssignmentExpressionPart__CollectionAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14804:1: ( ( ruleCollectionInitializer ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14805:1: ( ruleCollectionInitializer )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14741:1: ( ( ruleCollectionInitializer ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14742:1: ( ruleCollectionInitializer )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14805:1: ( ruleCollectionInitializer )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14806:1: ruleCollectionInitializer
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14742:1: ( ruleCollectionInitializer )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14743:1: ruleCollectionInitializer
             {
              before(grammarAccess.getAssignmentExpressionPartAccess().getCollectionCollectionInitializerParserRuleCall_1_1_0()); 
-            pushFollow(FOLLOW_ruleCollectionInitializer_in_rule__AssignmentExpressionPart__CollectionAssignment_1_129992);
+            pushFollow(FOLLOW_ruleCollectionInitializer_in_rule__AssignmentExpressionPart__CollectionAssignment_1_129869);
             ruleCollectionInitializer();
 
             state._fsp--;
@@ -40164,20 +40045,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ImplicationExpression__LeftAssignment_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14815:1: rule__ImplicationExpression__LeftAssignment_0 : ( ruleAssignmentExpression ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14752:1: rule__ImplicationExpression__LeftAssignment_0 : ( ruleAssignmentExpression ) ;
     public final void rule__ImplicationExpression__LeftAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14819:1: ( ( ruleAssignmentExpression ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14820:1: ( ruleAssignmentExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14756:1: ( ( ruleAssignmentExpression ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14757:1: ( ruleAssignmentExpression )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14820:1: ( ruleAssignmentExpression )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14821:1: ruleAssignmentExpression
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14757:1: ( ruleAssignmentExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14758:1: ruleAssignmentExpression
             {
              before(grammarAccess.getImplicationExpressionAccess().getLeftAssignmentExpressionParserRuleCall_0_0()); 
-            pushFollow(FOLLOW_ruleAssignmentExpression_in_rule__ImplicationExpression__LeftAssignment_030023);
+            pushFollow(FOLLOW_ruleAssignmentExpression_in_rule__ImplicationExpression__LeftAssignment_029900);
             ruleAssignmentExpression();
 
             state._fsp--;
@@ -40205,20 +40086,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ImplicationExpression__RightAssignment_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14830:1: rule__ImplicationExpression__RightAssignment_1 : ( ruleImplicationExpressionPart ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14767:1: rule__ImplicationExpression__RightAssignment_1 : ( ruleImplicationExpressionPart ) ;
     public final void rule__ImplicationExpression__RightAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14834:1: ( ( ruleImplicationExpressionPart ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14835:1: ( ruleImplicationExpressionPart )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14771:1: ( ( ruleImplicationExpressionPart ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14772:1: ( ruleImplicationExpressionPart )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14835:1: ( ruleImplicationExpressionPart )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14836:1: ruleImplicationExpressionPart
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14772:1: ( ruleImplicationExpressionPart )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14773:1: ruleImplicationExpressionPart
             {
              before(grammarAccess.getImplicationExpressionAccess().getRightImplicationExpressionPartParserRuleCall_1_0()); 
-            pushFollow(FOLLOW_ruleImplicationExpressionPart_in_rule__ImplicationExpression__RightAssignment_130054);
+            pushFollow(FOLLOW_ruleImplicationExpressionPart_in_rule__ImplicationExpression__RightAssignment_129931);
             ruleImplicationExpressionPart();
 
             state._fsp--;
@@ -40246,20 +40127,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ImplicationExpressionPart__OpAssignment_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14845:1: rule__ImplicationExpressionPart__OpAssignment_0 : ( ruleImplicationOperator ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14782:1: rule__ImplicationExpressionPart__OpAssignment_0 : ( ruleImplicationOperator ) ;
     public final void rule__ImplicationExpressionPart__OpAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14849:1: ( ( ruleImplicationOperator ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14850:1: ( ruleImplicationOperator )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14786:1: ( ( ruleImplicationOperator ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14787:1: ( ruleImplicationOperator )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14850:1: ( ruleImplicationOperator )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14851:1: ruleImplicationOperator
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14787:1: ( ruleImplicationOperator )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14788:1: ruleImplicationOperator
             {
              before(grammarAccess.getImplicationExpressionPartAccess().getOpImplicationOperatorParserRuleCall_0_0()); 
-            pushFollow(FOLLOW_ruleImplicationOperator_in_rule__ImplicationExpressionPart__OpAssignment_030085);
+            pushFollow(FOLLOW_ruleImplicationOperator_in_rule__ImplicationExpressionPart__OpAssignment_029962);
             ruleImplicationOperator();
 
             state._fsp--;
@@ -40287,20 +40168,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ImplicationExpressionPart__ExAssignment_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14860:1: rule__ImplicationExpressionPart__ExAssignment_1 : ( ruleAssignmentExpression ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14797:1: rule__ImplicationExpressionPart__ExAssignment_1 : ( ruleAssignmentExpression ) ;
     public final void rule__ImplicationExpressionPart__ExAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14864:1: ( ( ruleAssignmentExpression ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14865:1: ( ruleAssignmentExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14801:1: ( ( ruleAssignmentExpression ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14802:1: ( ruleAssignmentExpression )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14865:1: ( ruleAssignmentExpression )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14866:1: ruleAssignmentExpression
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14802:1: ( ruleAssignmentExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14803:1: ruleAssignmentExpression
             {
              before(grammarAccess.getImplicationExpressionPartAccess().getExAssignmentExpressionParserRuleCall_1_0()); 
-            pushFollow(FOLLOW_ruleAssignmentExpression_in_rule__ImplicationExpressionPart__ExAssignment_130116);
+            pushFollow(FOLLOW_ruleAssignmentExpression_in_rule__ImplicationExpressionPart__ExAssignment_129993);
             ruleAssignmentExpression();
 
             state._fsp--;
@@ -40328,20 +40209,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__LogicalExpression__LeftAssignment_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14875:1: rule__LogicalExpression__LeftAssignment_0 : ( ruleEqualityExpression ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14812:1: rule__LogicalExpression__LeftAssignment_0 : ( ruleEqualityExpression ) ;
     public final void rule__LogicalExpression__LeftAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14879:1: ( ( ruleEqualityExpression ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14880:1: ( ruleEqualityExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14816:1: ( ( ruleEqualityExpression ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14817:1: ( ruleEqualityExpression )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14880:1: ( ruleEqualityExpression )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14881:1: ruleEqualityExpression
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14817:1: ( ruleEqualityExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14818:1: ruleEqualityExpression
             {
              before(grammarAccess.getLogicalExpressionAccess().getLeftEqualityExpressionParserRuleCall_0_0()); 
-            pushFollow(FOLLOW_ruleEqualityExpression_in_rule__LogicalExpression__LeftAssignment_030147);
+            pushFollow(FOLLOW_ruleEqualityExpression_in_rule__LogicalExpression__LeftAssignment_030024);
             ruleEqualityExpression();
 
             state._fsp--;
@@ -40369,20 +40250,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__LogicalExpression__RightAssignment_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14890:1: rule__LogicalExpression__RightAssignment_1 : ( ruleLogicalExpressionPart ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14827:1: rule__LogicalExpression__RightAssignment_1 : ( ruleLogicalExpressionPart ) ;
     public final void rule__LogicalExpression__RightAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14894:1: ( ( ruleLogicalExpressionPart ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14895:1: ( ruleLogicalExpressionPart )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14831:1: ( ( ruleLogicalExpressionPart ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14832:1: ( ruleLogicalExpressionPart )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14895:1: ( ruleLogicalExpressionPart )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14896:1: ruleLogicalExpressionPart
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14832:1: ( ruleLogicalExpressionPart )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14833:1: ruleLogicalExpressionPart
             {
              before(grammarAccess.getLogicalExpressionAccess().getRightLogicalExpressionPartParserRuleCall_1_0()); 
-            pushFollow(FOLLOW_ruleLogicalExpressionPart_in_rule__LogicalExpression__RightAssignment_130178);
+            pushFollow(FOLLOW_ruleLogicalExpressionPart_in_rule__LogicalExpression__RightAssignment_130055);
             ruleLogicalExpressionPart();
 
             state._fsp--;
@@ -40410,20 +40291,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__LogicalExpressionPart__OpAssignment_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14905:1: rule__LogicalExpressionPart__OpAssignment_0 : ( ruleLogicalOperator ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14842:1: rule__LogicalExpressionPart__OpAssignment_0 : ( ruleLogicalOperator ) ;
     public final void rule__LogicalExpressionPart__OpAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14909:1: ( ( ruleLogicalOperator ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14910:1: ( ruleLogicalOperator )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14846:1: ( ( ruleLogicalOperator ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14847:1: ( ruleLogicalOperator )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14910:1: ( ruleLogicalOperator )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14911:1: ruleLogicalOperator
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14847:1: ( ruleLogicalOperator )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14848:1: ruleLogicalOperator
             {
              before(grammarAccess.getLogicalExpressionPartAccess().getOpLogicalOperatorParserRuleCall_0_0()); 
-            pushFollow(FOLLOW_ruleLogicalOperator_in_rule__LogicalExpressionPart__OpAssignment_030209);
+            pushFollow(FOLLOW_ruleLogicalOperator_in_rule__LogicalExpressionPart__OpAssignment_030086);
             ruleLogicalOperator();
 
             state._fsp--;
@@ -40451,20 +40332,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__LogicalExpressionPart__ExAssignment_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14920:1: rule__LogicalExpressionPart__ExAssignment_1 : ( ruleEqualityExpression ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14857:1: rule__LogicalExpressionPart__ExAssignment_1 : ( ruleEqualityExpression ) ;
     public final void rule__LogicalExpressionPart__ExAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14924:1: ( ( ruleEqualityExpression ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14925:1: ( ruleEqualityExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14861:1: ( ( ruleEqualityExpression ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14862:1: ( ruleEqualityExpression )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14925:1: ( ruleEqualityExpression )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14926:1: ruleEqualityExpression
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14862:1: ( ruleEqualityExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14863:1: ruleEqualityExpression
             {
              before(grammarAccess.getLogicalExpressionPartAccess().getExEqualityExpressionParserRuleCall_1_0()); 
-            pushFollow(FOLLOW_ruleEqualityExpression_in_rule__LogicalExpressionPart__ExAssignment_130240);
+            pushFollow(FOLLOW_ruleEqualityExpression_in_rule__LogicalExpressionPart__ExAssignment_130117);
             ruleEqualityExpression();
 
             state._fsp--;
@@ -40492,20 +40373,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__EqualityExpression__LeftAssignment_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14935:1: rule__EqualityExpression__LeftAssignment_0 : ( ruleRelationalExpression ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14872:1: rule__EqualityExpression__LeftAssignment_0 : ( ruleRelationalExpression ) ;
     public final void rule__EqualityExpression__LeftAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14939:1: ( ( ruleRelationalExpression ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14940:1: ( ruleRelationalExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14876:1: ( ( ruleRelationalExpression ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14877:1: ( ruleRelationalExpression )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14940:1: ( ruleRelationalExpression )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14941:1: ruleRelationalExpression
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14877:1: ( ruleRelationalExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14878:1: ruleRelationalExpression
             {
              before(grammarAccess.getEqualityExpressionAccess().getLeftRelationalExpressionParserRuleCall_0_0()); 
-            pushFollow(FOLLOW_ruleRelationalExpression_in_rule__EqualityExpression__LeftAssignment_030271);
+            pushFollow(FOLLOW_ruleRelationalExpression_in_rule__EqualityExpression__LeftAssignment_030148);
             ruleRelationalExpression();
 
             state._fsp--;
@@ -40533,20 +40414,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__EqualityExpression__RightAssignment_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14950:1: rule__EqualityExpression__RightAssignment_1 : ( ruleEqualityExpressionPart ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14887:1: rule__EqualityExpression__RightAssignment_1 : ( ruleEqualityExpressionPart ) ;
     public final void rule__EqualityExpression__RightAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14954:1: ( ( ruleEqualityExpressionPart ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14955:1: ( ruleEqualityExpressionPart )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14891:1: ( ( ruleEqualityExpressionPart ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14892:1: ( ruleEqualityExpressionPart )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14955:1: ( ruleEqualityExpressionPart )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14956:1: ruleEqualityExpressionPart
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14892:1: ( ruleEqualityExpressionPart )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14893:1: ruleEqualityExpressionPart
             {
              before(grammarAccess.getEqualityExpressionAccess().getRightEqualityExpressionPartParserRuleCall_1_0()); 
-            pushFollow(FOLLOW_ruleEqualityExpressionPart_in_rule__EqualityExpression__RightAssignment_130302);
+            pushFollow(FOLLOW_ruleEqualityExpressionPart_in_rule__EqualityExpression__RightAssignment_130179);
             ruleEqualityExpressionPart();
 
             state._fsp--;
@@ -40574,20 +40455,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__EqualityExpressionPart__OpAssignment_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14965:1: rule__EqualityExpressionPart__OpAssignment_0 : ( ruleEqualityOperator ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14902:1: rule__EqualityExpressionPart__OpAssignment_0 : ( ruleEqualityOperator ) ;
     public final void rule__EqualityExpressionPart__OpAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14969:1: ( ( ruleEqualityOperator ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14970:1: ( ruleEqualityOperator )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14906:1: ( ( ruleEqualityOperator ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14907:1: ( ruleEqualityOperator )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14970:1: ( ruleEqualityOperator )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14971:1: ruleEqualityOperator
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14907:1: ( ruleEqualityOperator )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14908:1: ruleEqualityOperator
             {
              before(grammarAccess.getEqualityExpressionPartAccess().getOpEqualityOperatorParserRuleCall_0_0()); 
-            pushFollow(FOLLOW_ruleEqualityOperator_in_rule__EqualityExpressionPart__OpAssignment_030333);
+            pushFollow(FOLLOW_ruleEqualityOperator_in_rule__EqualityExpressionPart__OpAssignment_030210);
             ruleEqualityOperator();
 
             state._fsp--;
@@ -40615,20 +40496,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__EqualityExpressionPart__ExAssignment_1_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14980:1: rule__EqualityExpressionPart__ExAssignment_1_0 : ( ruleRelationalExpression ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14917:1: rule__EqualityExpressionPart__ExAssignment_1_0 : ( ruleRelationalExpression ) ;
     public final void rule__EqualityExpressionPart__ExAssignment_1_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14984:1: ( ( ruleRelationalExpression ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14985:1: ( ruleRelationalExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14921:1: ( ( ruleRelationalExpression ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14922:1: ( ruleRelationalExpression )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14985:1: ( ruleRelationalExpression )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14986:1: ruleRelationalExpression
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14922:1: ( ruleRelationalExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14923:1: ruleRelationalExpression
             {
              before(grammarAccess.getEqualityExpressionPartAccess().getExRelationalExpressionParserRuleCall_1_0_0()); 
-            pushFollow(FOLLOW_ruleRelationalExpression_in_rule__EqualityExpressionPart__ExAssignment_1_030364);
+            pushFollow(FOLLOW_ruleRelationalExpression_in_rule__EqualityExpressionPart__ExAssignment_1_030241);
             ruleRelationalExpression();
 
             state._fsp--;
@@ -40656,20 +40537,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__EqualityExpressionPart__CollectionAssignment_1_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14995:1: rule__EqualityExpressionPart__CollectionAssignment_1_1 : ( ruleCollectionInitializer ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14932:1: rule__EqualityExpressionPart__CollectionAssignment_1_1 : ( ruleCollectionInitializer ) ;
     public final void rule__EqualityExpressionPart__CollectionAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14999:1: ( ( ruleCollectionInitializer ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15000:1: ( ruleCollectionInitializer )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14936:1: ( ( ruleCollectionInitializer ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14937:1: ( ruleCollectionInitializer )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15000:1: ( ruleCollectionInitializer )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15001:1: ruleCollectionInitializer
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14937:1: ( ruleCollectionInitializer )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14938:1: ruleCollectionInitializer
             {
              before(grammarAccess.getEqualityExpressionPartAccess().getCollectionCollectionInitializerParserRuleCall_1_1_0()); 
-            pushFollow(FOLLOW_ruleCollectionInitializer_in_rule__EqualityExpressionPart__CollectionAssignment_1_130395);
+            pushFollow(FOLLOW_ruleCollectionInitializer_in_rule__EqualityExpressionPart__CollectionAssignment_1_130272);
             ruleCollectionInitializer();
 
             state._fsp--;
@@ -40697,20 +40578,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__RelationalExpression__LeftAssignment_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15010:1: rule__RelationalExpression__LeftAssignment_0 : ( ruleAdditiveExpression ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14947:1: rule__RelationalExpression__LeftAssignment_0 : ( ruleAdditiveExpression ) ;
     public final void rule__RelationalExpression__LeftAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15014:1: ( ( ruleAdditiveExpression ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15015:1: ( ruleAdditiveExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14951:1: ( ( ruleAdditiveExpression ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14952:1: ( ruleAdditiveExpression )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15015:1: ( ruleAdditiveExpression )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15016:1: ruleAdditiveExpression
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14952:1: ( ruleAdditiveExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14953:1: ruleAdditiveExpression
             {
              before(grammarAccess.getRelationalExpressionAccess().getLeftAdditiveExpressionParserRuleCall_0_0()); 
-            pushFollow(FOLLOW_ruleAdditiveExpression_in_rule__RelationalExpression__LeftAssignment_030426);
+            pushFollow(FOLLOW_ruleAdditiveExpression_in_rule__RelationalExpression__LeftAssignment_030303);
             ruleAdditiveExpression();
 
             state._fsp--;
@@ -40738,20 +40619,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__RelationalExpression__RightAssignment_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15025:1: rule__RelationalExpression__RightAssignment_1 : ( ruleRelationalExpressionPart ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14962:1: rule__RelationalExpression__RightAssignment_1 : ( ruleRelationalExpressionPart ) ;
     public final void rule__RelationalExpression__RightAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15029:1: ( ( ruleRelationalExpressionPart ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15030:1: ( ruleRelationalExpressionPart )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14966:1: ( ( ruleRelationalExpressionPart ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14967:1: ( ruleRelationalExpressionPart )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15030:1: ( ruleRelationalExpressionPart )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15031:1: ruleRelationalExpressionPart
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14967:1: ( ruleRelationalExpressionPart )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14968:1: ruleRelationalExpressionPart
             {
              before(grammarAccess.getRelationalExpressionAccess().getRightRelationalExpressionPartParserRuleCall_1_0()); 
-            pushFollow(FOLLOW_ruleRelationalExpressionPart_in_rule__RelationalExpression__RightAssignment_130457);
+            pushFollow(FOLLOW_ruleRelationalExpressionPart_in_rule__RelationalExpression__RightAssignment_130334);
             ruleRelationalExpressionPart();
 
             state._fsp--;
@@ -40779,20 +40660,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__RelationalExpressionPart__OpAssignment_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15040:1: rule__RelationalExpressionPart__OpAssignment_0 : ( ruleRelationalOperator ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14977:1: rule__RelationalExpressionPart__OpAssignment_0 : ( ruleRelationalOperator ) ;
     public final void rule__RelationalExpressionPart__OpAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15044:1: ( ( ruleRelationalOperator ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15045:1: ( ruleRelationalOperator )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14981:1: ( ( ruleRelationalOperator ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14982:1: ( ruleRelationalOperator )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15045:1: ( ruleRelationalOperator )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15046:1: ruleRelationalOperator
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14982:1: ( ruleRelationalOperator )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14983:1: ruleRelationalOperator
             {
              before(grammarAccess.getRelationalExpressionPartAccess().getOpRelationalOperatorParserRuleCall_0_0()); 
-            pushFollow(FOLLOW_ruleRelationalOperator_in_rule__RelationalExpressionPart__OpAssignment_030488);
+            pushFollow(FOLLOW_ruleRelationalOperator_in_rule__RelationalExpressionPart__OpAssignment_030365);
             ruleRelationalOperator();
 
             state._fsp--;
@@ -40820,20 +40701,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__RelationalExpressionPart__ExAssignment_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15055:1: rule__RelationalExpressionPart__ExAssignment_1 : ( ruleAdditiveExpression ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14992:1: rule__RelationalExpressionPart__ExAssignment_1 : ( ruleAdditiveExpression ) ;
     public final void rule__RelationalExpressionPart__ExAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15059:1: ( ( ruleAdditiveExpression ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15060:1: ( ruleAdditiveExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14996:1: ( ( ruleAdditiveExpression ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14997:1: ( ruleAdditiveExpression )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15060:1: ( ruleAdditiveExpression )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15061:1: ruleAdditiveExpression
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14997:1: ( ruleAdditiveExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:14998:1: ruleAdditiveExpression
             {
              before(grammarAccess.getRelationalExpressionPartAccess().getExAdditiveExpressionParserRuleCall_1_0()); 
-            pushFollow(FOLLOW_ruleAdditiveExpression_in_rule__RelationalExpressionPart__ExAssignment_130519);
+            pushFollow(FOLLOW_ruleAdditiveExpression_in_rule__RelationalExpressionPart__ExAssignment_130396);
             ruleAdditiveExpression();
 
             state._fsp--;
@@ -40861,20 +40742,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__AdditiveExpression__LeftAssignment_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15070:1: rule__AdditiveExpression__LeftAssignment_0 : ( ruleMultiplicativeExpression ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15007:1: rule__AdditiveExpression__LeftAssignment_0 : ( ruleMultiplicativeExpression ) ;
     public final void rule__AdditiveExpression__LeftAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15074:1: ( ( ruleMultiplicativeExpression ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15075:1: ( ruleMultiplicativeExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15011:1: ( ( ruleMultiplicativeExpression ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15012:1: ( ruleMultiplicativeExpression )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15075:1: ( ruleMultiplicativeExpression )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15076:1: ruleMultiplicativeExpression
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15012:1: ( ruleMultiplicativeExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15013:1: ruleMultiplicativeExpression
             {
              before(grammarAccess.getAdditiveExpressionAccess().getLeftMultiplicativeExpressionParserRuleCall_0_0()); 
-            pushFollow(FOLLOW_ruleMultiplicativeExpression_in_rule__AdditiveExpression__LeftAssignment_030550);
+            pushFollow(FOLLOW_ruleMultiplicativeExpression_in_rule__AdditiveExpression__LeftAssignment_030427);
             ruleMultiplicativeExpression();
 
             state._fsp--;
@@ -40902,20 +40783,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__AdditiveExpression__RightAssignment_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15085:1: rule__AdditiveExpression__RightAssignment_1 : ( ruleAdditiveExpressionPart ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15022:1: rule__AdditiveExpression__RightAssignment_1 : ( ruleAdditiveExpressionPart ) ;
     public final void rule__AdditiveExpression__RightAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15089:1: ( ( ruleAdditiveExpressionPart ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15090:1: ( ruleAdditiveExpressionPart )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15026:1: ( ( ruleAdditiveExpressionPart ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15027:1: ( ruleAdditiveExpressionPart )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15090:1: ( ruleAdditiveExpressionPart )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15091:1: ruleAdditiveExpressionPart
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15027:1: ( ruleAdditiveExpressionPart )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15028:1: ruleAdditiveExpressionPart
             {
              before(grammarAccess.getAdditiveExpressionAccess().getRightAdditiveExpressionPartParserRuleCall_1_0()); 
-            pushFollow(FOLLOW_ruleAdditiveExpressionPart_in_rule__AdditiveExpression__RightAssignment_130581);
+            pushFollow(FOLLOW_ruleAdditiveExpressionPart_in_rule__AdditiveExpression__RightAssignment_130458);
             ruleAdditiveExpressionPart();
 
             state._fsp--;
@@ -40943,20 +40824,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__AdditiveExpressionPart__OpAssignment_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15100:1: rule__AdditiveExpressionPart__OpAssignment_0 : ( ruleAdditiveOperator ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15037:1: rule__AdditiveExpressionPart__OpAssignment_0 : ( ruleAdditiveOperator ) ;
     public final void rule__AdditiveExpressionPart__OpAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15104:1: ( ( ruleAdditiveOperator ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15105:1: ( ruleAdditiveOperator )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15041:1: ( ( ruleAdditiveOperator ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15042:1: ( ruleAdditiveOperator )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15105:1: ( ruleAdditiveOperator )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15106:1: ruleAdditiveOperator
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15042:1: ( ruleAdditiveOperator )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15043:1: ruleAdditiveOperator
             {
              before(grammarAccess.getAdditiveExpressionPartAccess().getOpAdditiveOperatorParserRuleCall_0_0()); 
-            pushFollow(FOLLOW_ruleAdditiveOperator_in_rule__AdditiveExpressionPart__OpAssignment_030612);
+            pushFollow(FOLLOW_ruleAdditiveOperator_in_rule__AdditiveExpressionPart__OpAssignment_030489);
             ruleAdditiveOperator();
 
             state._fsp--;
@@ -40984,20 +40865,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__AdditiveExpressionPart__ExAssignment_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15115:1: rule__AdditiveExpressionPart__ExAssignment_1 : ( ruleMultiplicativeExpression ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15052:1: rule__AdditiveExpressionPart__ExAssignment_1 : ( ruleMultiplicativeExpression ) ;
     public final void rule__AdditiveExpressionPart__ExAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15119:1: ( ( ruleMultiplicativeExpression ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15120:1: ( ruleMultiplicativeExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15056:1: ( ( ruleMultiplicativeExpression ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15057:1: ( ruleMultiplicativeExpression )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15120:1: ( ruleMultiplicativeExpression )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15121:1: ruleMultiplicativeExpression
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15057:1: ( ruleMultiplicativeExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15058:1: ruleMultiplicativeExpression
             {
              before(grammarAccess.getAdditiveExpressionPartAccess().getExMultiplicativeExpressionParserRuleCall_1_0()); 
-            pushFollow(FOLLOW_ruleMultiplicativeExpression_in_rule__AdditiveExpressionPart__ExAssignment_130643);
+            pushFollow(FOLLOW_ruleMultiplicativeExpression_in_rule__AdditiveExpressionPart__ExAssignment_130520);
             ruleMultiplicativeExpression();
 
             state._fsp--;
@@ -41025,20 +40906,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__MultiplicativeExpression__LeftAssignment_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15130:1: rule__MultiplicativeExpression__LeftAssignment_0 : ( ruleUnaryExpression ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15067:1: rule__MultiplicativeExpression__LeftAssignment_0 : ( ruleUnaryExpression ) ;
     public final void rule__MultiplicativeExpression__LeftAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15134:1: ( ( ruleUnaryExpression ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15135:1: ( ruleUnaryExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15071:1: ( ( ruleUnaryExpression ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15072:1: ( ruleUnaryExpression )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15135:1: ( ruleUnaryExpression )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15136:1: ruleUnaryExpression
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15072:1: ( ruleUnaryExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15073:1: ruleUnaryExpression
             {
              before(grammarAccess.getMultiplicativeExpressionAccess().getLeftUnaryExpressionParserRuleCall_0_0()); 
-            pushFollow(FOLLOW_ruleUnaryExpression_in_rule__MultiplicativeExpression__LeftAssignment_030674);
+            pushFollow(FOLLOW_ruleUnaryExpression_in_rule__MultiplicativeExpression__LeftAssignment_030551);
             ruleUnaryExpression();
 
             state._fsp--;
@@ -41066,20 +40947,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__MultiplicativeExpression__RightAssignment_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15145:1: rule__MultiplicativeExpression__RightAssignment_1 : ( ruleMultiplicativeExpressionPart ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15082:1: rule__MultiplicativeExpression__RightAssignment_1 : ( ruleMultiplicativeExpressionPart ) ;
     public final void rule__MultiplicativeExpression__RightAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15149:1: ( ( ruleMultiplicativeExpressionPart ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15150:1: ( ruleMultiplicativeExpressionPart )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15086:1: ( ( ruleMultiplicativeExpressionPart ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15087:1: ( ruleMultiplicativeExpressionPart )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15150:1: ( ruleMultiplicativeExpressionPart )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15151:1: ruleMultiplicativeExpressionPart
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15087:1: ( ruleMultiplicativeExpressionPart )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15088:1: ruleMultiplicativeExpressionPart
             {
              before(grammarAccess.getMultiplicativeExpressionAccess().getRightMultiplicativeExpressionPartParserRuleCall_1_0()); 
-            pushFollow(FOLLOW_ruleMultiplicativeExpressionPart_in_rule__MultiplicativeExpression__RightAssignment_130705);
+            pushFollow(FOLLOW_ruleMultiplicativeExpressionPart_in_rule__MultiplicativeExpression__RightAssignment_130582);
             ruleMultiplicativeExpressionPart();
 
             state._fsp--;
@@ -41107,20 +40988,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__MultiplicativeExpressionPart__OpAssignment_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15160:1: rule__MultiplicativeExpressionPart__OpAssignment_0 : ( ruleMultiplicativeOperator ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15097:1: rule__MultiplicativeExpressionPart__OpAssignment_0 : ( ruleMultiplicativeOperator ) ;
     public final void rule__MultiplicativeExpressionPart__OpAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15164:1: ( ( ruleMultiplicativeOperator ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15165:1: ( ruleMultiplicativeOperator )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15101:1: ( ( ruleMultiplicativeOperator ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15102:1: ( ruleMultiplicativeOperator )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15165:1: ( ruleMultiplicativeOperator )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15166:1: ruleMultiplicativeOperator
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15102:1: ( ruleMultiplicativeOperator )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15103:1: ruleMultiplicativeOperator
             {
              before(grammarAccess.getMultiplicativeExpressionPartAccess().getOpMultiplicativeOperatorParserRuleCall_0_0()); 
-            pushFollow(FOLLOW_ruleMultiplicativeOperator_in_rule__MultiplicativeExpressionPart__OpAssignment_030736);
+            pushFollow(FOLLOW_ruleMultiplicativeOperator_in_rule__MultiplicativeExpressionPart__OpAssignment_030613);
             ruleMultiplicativeOperator();
 
             state._fsp--;
@@ -41148,20 +41029,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__MultiplicativeExpressionPart__ExprAssignment_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15175:1: rule__MultiplicativeExpressionPart__ExprAssignment_1 : ( ruleUnaryExpression ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15112:1: rule__MultiplicativeExpressionPart__ExprAssignment_1 : ( ruleUnaryExpression ) ;
     public final void rule__MultiplicativeExpressionPart__ExprAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15179:1: ( ( ruleUnaryExpression ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15180:1: ( ruleUnaryExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15116:1: ( ( ruleUnaryExpression ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15117:1: ( ruleUnaryExpression )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15180:1: ( ruleUnaryExpression )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15181:1: ruleUnaryExpression
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15117:1: ( ruleUnaryExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15118:1: ruleUnaryExpression
             {
              before(grammarAccess.getMultiplicativeExpressionPartAccess().getExprUnaryExpressionParserRuleCall_1_0()); 
-            pushFollow(FOLLOW_ruleUnaryExpression_in_rule__MultiplicativeExpressionPart__ExprAssignment_130767);
+            pushFollow(FOLLOW_ruleUnaryExpression_in_rule__MultiplicativeExpressionPart__ExprAssignment_130644);
             ruleUnaryExpression();
 
             state._fsp--;
@@ -41189,20 +41070,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__UnaryExpression__OpAssignment_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15190:1: rule__UnaryExpression__OpAssignment_0 : ( ruleUnaryOperator ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15127:1: rule__UnaryExpression__OpAssignment_0 : ( ruleUnaryOperator ) ;
     public final void rule__UnaryExpression__OpAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15194:1: ( ( ruleUnaryOperator ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15195:1: ( ruleUnaryOperator )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15131:1: ( ( ruleUnaryOperator ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15132:1: ( ruleUnaryOperator )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15195:1: ( ruleUnaryOperator )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15196:1: ruleUnaryOperator
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15132:1: ( ruleUnaryOperator )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15133:1: ruleUnaryOperator
             {
              before(grammarAccess.getUnaryExpressionAccess().getOpUnaryOperatorParserRuleCall_0_0()); 
-            pushFollow(FOLLOW_ruleUnaryOperator_in_rule__UnaryExpression__OpAssignment_030798);
+            pushFollow(FOLLOW_ruleUnaryOperator_in_rule__UnaryExpression__OpAssignment_030675);
             ruleUnaryOperator();
 
             state._fsp--;
@@ -41230,20 +41111,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__UnaryExpression__ExprAssignment_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15205:1: rule__UnaryExpression__ExprAssignment_1 : ( rulePostfixExpression ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15142:1: rule__UnaryExpression__ExprAssignment_1 : ( rulePostfixExpression ) ;
     public final void rule__UnaryExpression__ExprAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15209:1: ( ( rulePostfixExpression ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15210:1: ( rulePostfixExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15146:1: ( ( rulePostfixExpression ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15147:1: ( rulePostfixExpression )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15210:1: ( rulePostfixExpression )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15211:1: rulePostfixExpression
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15147:1: ( rulePostfixExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15148:1: rulePostfixExpression
             {
              before(grammarAccess.getUnaryExpressionAccess().getExprPostfixExpressionParserRuleCall_1_0()); 
-            pushFollow(FOLLOW_rulePostfixExpression_in_rule__UnaryExpression__ExprAssignment_130829);
+            pushFollow(FOLLOW_rulePostfixExpression_in_rule__UnaryExpression__ExprAssignment_130706);
             rulePostfixExpression();
 
             state._fsp--;
@@ -41271,20 +41152,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__PostfixExpression__CallAssignment_0_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15220:1: rule__PostfixExpression__CallAssignment_0_0 : ( ruleFeatureCall ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15157:1: rule__PostfixExpression__CallAssignment_0_0 : ( ruleFeatureCall ) ;
     public final void rule__PostfixExpression__CallAssignment_0_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15224:1: ( ( ruleFeatureCall ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15225:1: ( ruleFeatureCall )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15161:1: ( ( ruleFeatureCall ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15162:1: ( ruleFeatureCall )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15225:1: ( ruleFeatureCall )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15226:1: ruleFeatureCall
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15162:1: ( ruleFeatureCall )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15163:1: ruleFeatureCall
             {
              before(grammarAccess.getPostfixExpressionAccess().getCallFeatureCallParserRuleCall_0_0_0()); 
-            pushFollow(FOLLOW_ruleFeatureCall_in_rule__PostfixExpression__CallAssignment_0_030860);
+            pushFollow(FOLLOW_ruleFeatureCall_in_rule__PostfixExpression__CallAssignment_0_030737);
             ruleFeatureCall();
 
             state._fsp--;
@@ -41312,20 +41193,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__PostfixExpression__FCallsAssignment_0_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15235:1: rule__PostfixExpression__FCallsAssignment_0_1 : ( ruleCall ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15172:1: rule__PostfixExpression__FCallsAssignment_0_1 : ( ruleCall ) ;
     public final void rule__PostfixExpression__FCallsAssignment_0_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15239:1: ( ( ruleCall ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15240:1: ( ruleCall )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15176:1: ( ( ruleCall ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15177:1: ( ruleCall )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15240:1: ( ruleCall )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15241:1: ruleCall
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15177:1: ( ruleCall )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15178:1: ruleCall
             {
              before(grammarAccess.getPostfixExpressionAccess().getFCallsCallParserRuleCall_0_1_0()); 
-            pushFollow(FOLLOW_ruleCall_in_rule__PostfixExpression__FCallsAssignment_0_130891);
+            pushFollow(FOLLOW_ruleCall_in_rule__PostfixExpression__FCallsAssignment_0_130768);
             ruleCall();
 
             state._fsp--;
@@ -41353,20 +41234,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__PostfixExpression__AccessAssignment_0_2"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15250:1: rule__PostfixExpression__AccessAssignment_0_2 : ( ruleExpressionAccess ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15187:1: rule__PostfixExpression__AccessAssignment_0_2 : ( ruleExpressionAccess ) ;
     public final void rule__PostfixExpression__AccessAssignment_0_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15254:1: ( ( ruleExpressionAccess ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15255:1: ( ruleExpressionAccess )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15191:1: ( ( ruleExpressionAccess ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15192:1: ( ruleExpressionAccess )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15255:1: ( ruleExpressionAccess )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15256:1: ruleExpressionAccess
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15192:1: ( ruleExpressionAccess )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15193:1: ruleExpressionAccess
             {
              before(grammarAccess.getPostfixExpressionAccess().getAccessExpressionAccessParserRuleCall_0_2_0()); 
-            pushFollow(FOLLOW_ruleExpressionAccess_in_rule__PostfixExpression__AccessAssignment_0_230922);
+            pushFollow(FOLLOW_ruleExpressionAccess_in_rule__PostfixExpression__AccessAssignment_0_230799);
             ruleExpressionAccess();
 
             state._fsp--;
@@ -41394,20 +41275,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__PostfixExpression__LeftAssignment_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15265:1: rule__PostfixExpression__LeftAssignment_1 : ( rulePrimaryExpression ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15202:1: rule__PostfixExpression__LeftAssignment_1 : ( rulePrimaryExpression ) ;
     public final void rule__PostfixExpression__LeftAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15269:1: ( ( rulePrimaryExpression ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15270:1: ( rulePrimaryExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15206:1: ( ( rulePrimaryExpression ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15207:1: ( rulePrimaryExpression )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15270:1: ( rulePrimaryExpression )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15271:1: rulePrimaryExpression
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15207:1: ( rulePrimaryExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15208:1: rulePrimaryExpression
             {
              before(grammarAccess.getPostfixExpressionAccess().getLeftPrimaryExpressionParserRuleCall_1_0()); 
-            pushFollow(FOLLOW_rulePrimaryExpression_in_rule__PostfixExpression__LeftAssignment_130953);
+            pushFollow(FOLLOW_rulePrimaryExpression_in_rule__PostfixExpression__LeftAssignment_130830);
             rulePrimaryExpression();
 
             state._fsp--;
@@ -41435,20 +41316,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Call__CallAssignment_0_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15280:1: rule__Call__CallAssignment_0_1 : ( ruleFeatureCall ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15217:1: rule__Call__CallAssignment_0_1 : ( ruleFeatureCall ) ;
     public final void rule__Call__CallAssignment_0_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15284:1: ( ( ruleFeatureCall ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15285:1: ( ruleFeatureCall )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15221:1: ( ( ruleFeatureCall ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15222:1: ( ruleFeatureCall )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15285:1: ( ruleFeatureCall )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15286:1: ruleFeatureCall
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15222:1: ( ruleFeatureCall )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15223:1: ruleFeatureCall
             {
              before(grammarAccess.getCallAccess().getCallFeatureCallParserRuleCall_0_1_0()); 
-            pushFollow(FOLLOW_ruleFeatureCall_in_rule__Call__CallAssignment_0_130984);
+            pushFollow(FOLLOW_ruleFeatureCall_in_rule__Call__CallAssignment_0_130861);
             ruleFeatureCall();
 
             state._fsp--;
@@ -41476,20 +41357,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Call__SetOpAssignment_1_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15295:1: rule__Call__SetOpAssignment_1_1 : ( ruleSetOp ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15232:1: rule__Call__SetOpAssignment_1_1 : ( ruleSetOp ) ;
     public final void rule__Call__SetOpAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15299:1: ( ( ruleSetOp ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15300:1: ( ruleSetOp )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15236:1: ( ( ruleSetOp ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15237:1: ( ruleSetOp )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15300:1: ( ruleSetOp )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15301:1: ruleSetOp
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15237:1: ( ruleSetOp )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15238:1: ruleSetOp
             {
              before(grammarAccess.getCallAccess().getSetOpSetOpParserRuleCall_1_1_0()); 
-            pushFollow(FOLLOW_ruleSetOp_in_rule__Call__SetOpAssignment_1_131015);
+            pushFollow(FOLLOW_ruleSetOp_in_rule__Call__SetOpAssignment_1_130892);
             ruleSetOp();
 
             state._fsp--;
@@ -41517,20 +41398,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Call__ArrayExAssignment_2_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15310:1: rule__Call__ArrayExAssignment_2_1 : ( ruleExpression ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15247:1: rule__Call__ArrayExAssignment_2_1 : ( ruleExpression ) ;
     public final void rule__Call__ArrayExAssignment_2_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15314:1: ( ( ruleExpression ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15315:1: ( ruleExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15251:1: ( ( ruleExpression ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15252:1: ( ruleExpression )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15315:1: ( ruleExpression )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15316:1: ruleExpression
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15252:1: ( ruleExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15253:1: ruleExpression
             {
              before(grammarAccess.getCallAccess().getArrayExExpressionParserRuleCall_2_1_0()); 
-            pushFollow(FOLLOW_ruleExpression_in_rule__Call__ArrayExAssignment_2_131046);
+            pushFollow(FOLLOW_ruleExpression_in_rule__Call__ArrayExAssignment_2_130923);
             ruleExpression();
 
             state._fsp--;
@@ -41558,20 +41439,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__FeatureCall__NameAssignment_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15325:1: rule__FeatureCall__NameAssignment_0 : ( ruleIdentifier ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15262:1: rule__FeatureCall__NameAssignment_0 : ( ruleIdentifier ) ;
     public final void rule__FeatureCall__NameAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15329:1: ( ( ruleIdentifier ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15330:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15266:1: ( ( ruleIdentifier ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15267:1: ( ruleIdentifier )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15330:1: ( ruleIdentifier )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15331:1: ruleIdentifier
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15267:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15268:1: ruleIdentifier
             {
              before(grammarAccess.getFeatureCallAccess().getNameIdentifierParserRuleCall_0_0()); 
-            pushFollow(FOLLOW_ruleIdentifier_in_rule__FeatureCall__NameAssignment_031077);
+            pushFollow(FOLLOW_ruleIdentifier_in_rule__FeatureCall__NameAssignment_030954);
             ruleIdentifier();
 
             state._fsp--;
@@ -41599,20 +41480,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__FeatureCall__ParamAssignment_2"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15340:1: rule__FeatureCall__ParamAssignment_2 : ( ruleActualParameterList ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15277:1: rule__FeatureCall__ParamAssignment_2 : ( ruleActualParameterList ) ;
     public final void rule__FeatureCall__ParamAssignment_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15344:1: ( ( ruleActualParameterList ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15345:1: ( ruleActualParameterList )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15281:1: ( ( ruleActualParameterList ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15282:1: ( ruleActualParameterList )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15345:1: ( ruleActualParameterList )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15346:1: ruleActualParameterList
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15282:1: ( ruleActualParameterList )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15283:1: ruleActualParameterList
             {
              before(grammarAccess.getFeatureCallAccess().getParamActualParameterListParserRuleCall_2_0()); 
-            pushFollow(FOLLOW_ruleActualParameterList_in_rule__FeatureCall__ParamAssignment_231108);
+            pushFollow(FOLLOW_ruleActualParameterList_in_rule__FeatureCall__ParamAssignment_230985);
             ruleActualParameterList();
 
             state._fsp--;
@@ -41640,20 +41521,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__SetOp__NameAssignment_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15355:1: rule__SetOp__NameAssignment_0 : ( ruleIdentifier ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15292:1: rule__SetOp__NameAssignment_0 : ( ruleIdentifier ) ;
     public final void rule__SetOp__NameAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15359:1: ( ( ruleIdentifier ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15360:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15296:1: ( ( ruleIdentifier ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15297:1: ( ruleIdentifier )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15360:1: ( ruleIdentifier )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15361:1: ruleIdentifier
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15297:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15298:1: ruleIdentifier
             {
              before(grammarAccess.getSetOpAccess().getNameIdentifierParserRuleCall_0_0()); 
-            pushFollow(FOLLOW_ruleIdentifier_in_rule__SetOp__NameAssignment_031139);
+            pushFollow(FOLLOW_ruleIdentifier_in_rule__SetOp__NameAssignment_031016);
             ruleIdentifier();
 
             state._fsp--;
@@ -41681,20 +41562,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__SetOp__DeclAssignment_2"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15370:1: rule__SetOp__DeclAssignment_2 : ( ruleDeclarator ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15307:1: rule__SetOp__DeclAssignment_2 : ( ruleDeclarator ) ;
     public final void rule__SetOp__DeclAssignment_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15374:1: ( ( ruleDeclarator ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15375:1: ( ruleDeclarator )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15311:1: ( ( ruleDeclarator ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15312:1: ( ruleDeclarator )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15375:1: ( ruleDeclarator )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15376:1: ruleDeclarator
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15312:1: ( ruleDeclarator )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15313:1: ruleDeclarator
             {
              before(grammarAccess.getSetOpAccess().getDeclDeclaratorParserRuleCall_2_0()); 
-            pushFollow(FOLLOW_ruleDeclarator_in_rule__SetOp__DeclAssignment_231170);
+            pushFollow(FOLLOW_ruleDeclarator_in_rule__SetOp__DeclAssignment_231047);
             ruleDeclarator();
 
             state._fsp--;
@@ -41722,20 +41603,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__SetOp__DeclExAssignment_3"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15385:1: rule__SetOp__DeclExAssignment_3 : ( ruleExpression ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15322:1: rule__SetOp__DeclExAssignment_3 : ( ruleExpression ) ;
     public final void rule__SetOp__DeclExAssignment_3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15389:1: ( ( ruleExpression ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15390:1: ( ruleExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15326:1: ( ( ruleExpression ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15327:1: ( ruleExpression )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15390:1: ( ruleExpression )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15391:1: ruleExpression
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15327:1: ( ruleExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15328:1: ruleExpression
             {
              before(grammarAccess.getSetOpAccess().getDeclExExpressionParserRuleCall_3_0()); 
-            pushFollow(FOLLOW_ruleExpression_in_rule__SetOp__DeclExAssignment_331201);
+            pushFollow(FOLLOW_ruleExpression_in_rule__SetOp__DeclExAssignment_331078);
             ruleExpression();
 
             state._fsp--;
@@ -41763,20 +41644,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Declarator__DeclAssignment_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15400:1: rule__Declarator__DeclAssignment_0 : ( ruleDeclaration ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15337:1: rule__Declarator__DeclAssignment_0 : ( ruleDeclaration ) ;
     public final void rule__Declarator__DeclAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15404:1: ( ( ruleDeclaration ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15405:1: ( ruleDeclaration )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15341:1: ( ( ruleDeclaration ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15342:1: ( ruleDeclaration )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15405:1: ( ruleDeclaration )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15406:1: ruleDeclaration
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15342:1: ( ruleDeclaration )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15343:1: ruleDeclaration
             {
              before(grammarAccess.getDeclaratorAccess().getDeclDeclarationParserRuleCall_0_0()); 
-            pushFollow(FOLLOW_ruleDeclaration_in_rule__Declarator__DeclAssignment_031232);
+            pushFollow(FOLLOW_ruleDeclaration_in_rule__Declarator__DeclAssignment_031109);
             ruleDeclaration();
 
             state._fsp--;
@@ -41804,20 +41685,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Declarator__DeclAssignment_1_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15415:1: rule__Declarator__DeclAssignment_1_1 : ( ruleDeclaration ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15352:1: rule__Declarator__DeclAssignment_1_1 : ( ruleDeclaration ) ;
     public final void rule__Declarator__DeclAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15419:1: ( ( ruleDeclaration ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15420:1: ( ruleDeclaration )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15356:1: ( ( ruleDeclaration ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15357:1: ( ruleDeclaration )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15420:1: ( ruleDeclaration )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15421:1: ruleDeclaration
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15357:1: ( ruleDeclaration )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15358:1: ruleDeclaration
             {
              before(grammarAccess.getDeclaratorAccess().getDeclDeclarationParserRuleCall_1_1_0()); 
-            pushFollow(FOLLOW_ruleDeclaration_in_rule__Declarator__DeclAssignment_1_131263);
+            pushFollow(FOLLOW_ruleDeclaration_in_rule__Declarator__DeclAssignment_1_131140);
             ruleDeclaration();
 
             state._fsp--;
@@ -41844,108 +41725,26 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     // $ANTLR end "rule__Declarator__DeclAssignment_1_1"
 
 
-    // $ANTLR start "rule__Declaration__IdAssignment_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15430:1: rule__Declaration__IdAssignment_0 : ( ruleIdentifier ) ;
-    public final void rule__Declaration__IdAssignment_0() throws RecognitionException {
+    // $ANTLR start "rule__Declaration__TypeAssignment_0"
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15367:1: rule__Declaration__TypeAssignment_0 : ( ruleType ) ;
+    public final void rule__Declaration__TypeAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15434:1: ( ( ruleIdentifier ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15435:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15371:1: ( ( ruleType ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15372:1: ( ruleType )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15435:1: ( ruleIdentifier )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15436:1: ruleIdentifier
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15372:1: ( ruleType )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15373:1: ruleType
             {
-             before(grammarAccess.getDeclarationAccess().getIdIdentifierParserRuleCall_0_0()); 
-            pushFollow(FOLLOW_ruleIdentifier_in_rule__Declaration__IdAssignment_031294);
-            ruleIdentifier();
-
-            state._fsp--;
-
-             after(grammarAccess.getDeclarationAccess().getIdIdentifierParserRuleCall_0_0()); 
-
-            }
-
-
-            }
-
-        }
-        catch (RecognitionException re) {
-            reportError(re);
-            recover(input,re);
-        }
-        finally {
-
-            	restoreStackSize(stackSize);
-
-        }
-        return ;
-    }
-    // $ANTLR end "rule__Declaration__IdAssignment_0"
-
-
-    // $ANTLR start "rule__Declaration__IdAssignment_1_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15445:1: rule__Declaration__IdAssignment_1_1 : ( ruleIdentifier ) ;
-    public final void rule__Declaration__IdAssignment_1_1() throws RecognitionException {
-
-        		int stackSize = keepStackSize();
-            
-        try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15449:1: ( ( ruleIdentifier ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15450:1: ( ruleIdentifier )
-            {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15450:1: ( ruleIdentifier )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15451:1: ruleIdentifier
-            {
-             before(grammarAccess.getDeclarationAccess().getIdIdentifierParserRuleCall_1_1_0()); 
-            pushFollow(FOLLOW_ruleIdentifier_in_rule__Declaration__IdAssignment_1_131325);
-            ruleIdentifier();
-
-            state._fsp--;
-
-             after(grammarAccess.getDeclarationAccess().getIdIdentifierParserRuleCall_1_1_0()); 
-
-            }
-
-
-            }
-
-        }
-        catch (RecognitionException re) {
-            reportError(re);
-            recover(input,re);
-        }
-        finally {
-
-            	restoreStackSize(stackSize);
-
-        }
-        return ;
-    }
-    // $ANTLR end "rule__Declaration__IdAssignment_1_1"
-
-
-    // $ANTLR start "rule__Declaration__TypeAssignment_2_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15460:1: rule__Declaration__TypeAssignment_2_1 : ( ruleType ) ;
-    public final void rule__Declaration__TypeAssignment_2_1() throws RecognitionException {
-
-        		int stackSize = keepStackSize();
-            
-        try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15464:1: ( ( ruleType ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15465:1: ( ruleType )
-            {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15465:1: ( ruleType )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15466:1: ruleType
-            {
-             before(grammarAccess.getDeclarationAccess().getTypeTypeParserRuleCall_2_1_0()); 
-            pushFollow(FOLLOW_ruleType_in_rule__Declaration__TypeAssignment_2_131356);
+             before(grammarAccess.getDeclarationAccess().getTypeTypeParserRuleCall_0_0()); 
+            pushFollow(FOLLOW_ruleType_in_rule__Declaration__TypeAssignment_031171);
             ruleType();
 
             state._fsp--;
 
-             after(grammarAccess.getDeclarationAccess().getTypeTypeParserRuleCall_2_1_0()); 
+             after(grammarAccess.getDeclarationAccess().getTypeTypeParserRuleCall_0_0()); 
 
             }
 
@@ -41964,24 +41763,106 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__Declaration__TypeAssignment_2_1"
+    // $ANTLR end "rule__Declaration__TypeAssignment_0"
+
+
+    // $ANTLR start "rule__Declaration__IdAssignment_1"
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15382:1: rule__Declaration__IdAssignment_1 : ( ruleIdentifier ) ;
+    public final void rule__Declaration__IdAssignment_1() throws RecognitionException {
+
+        		int stackSize = keepStackSize();
+            
+        try {
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15386:1: ( ( ruleIdentifier ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15387:1: ( ruleIdentifier )
+            {
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15387:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15388:1: ruleIdentifier
+            {
+             before(grammarAccess.getDeclarationAccess().getIdIdentifierParserRuleCall_1_0()); 
+            pushFollow(FOLLOW_ruleIdentifier_in_rule__Declaration__IdAssignment_131202);
+            ruleIdentifier();
+
+            state._fsp--;
+
+             after(grammarAccess.getDeclarationAccess().getIdIdentifierParserRuleCall_1_0()); 
+
+            }
+
+
+            }
+
+        }
+        catch (RecognitionException re) {
+            reportError(re);
+            recover(input,re);
+        }
+        finally {
+
+            	restoreStackSize(stackSize);
+
+        }
+        return ;
+    }
+    // $ANTLR end "rule__Declaration__IdAssignment_1"
+
+
+    // $ANTLR start "rule__Declaration__IdAssignment_2_1"
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15397:1: rule__Declaration__IdAssignment_2_1 : ( ruleIdentifier ) ;
+    public final void rule__Declaration__IdAssignment_2_1() throws RecognitionException {
+
+        		int stackSize = keepStackSize();
+            
+        try {
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15401:1: ( ( ruleIdentifier ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15402:1: ( ruleIdentifier )
+            {
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15402:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15403:1: ruleIdentifier
+            {
+             before(grammarAccess.getDeclarationAccess().getIdIdentifierParserRuleCall_2_1_0()); 
+            pushFollow(FOLLOW_ruleIdentifier_in_rule__Declaration__IdAssignment_2_131233);
+            ruleIdentifier();
+
+            state._fsp--;
+
+             after(grammarAccess.getDeclarationAccess().getIdIdentifierParserRuleCall_2_1_0()); 
+
+            }
+
+
+            }
+
+        }
+        catch (RecognitionException re) {
+            reportError(re);
+            recover(input,re);
+        }
+        finally {
+
+            	restoreStackSize(stackSize);
+
+        }
+        return ;
+    }
+    // $ANTLR end "rule__Declaration__IdAssignment_2_1"
 
 
     // $ANTLR start "rule__Declaration__InitAssignment_3_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15475:1: rule__Declaration__InitAssignment_3_1 : ( ruleExpression ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15412:1: rule__Declaration__InitAssignment_3_1 : ( ruleExpression ) ;
     public final void rule__Declaration__InitAssignment_3_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15479:1: ( ( ruleExpression ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15480:1: ( ruleExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15416:1: ( ( ruleExpression ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15417:1: ( ruleExpression )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15480:1: ( ruleExpression )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15481:1: ruleExpression
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15417:1: ( ruleExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15418:1: ruleExpression
             {
              before(grammarAccess.getDeclarationAccess().getInitExpressionParserRuleCall_3_1_0()); 
-            pushFollow(FOLLOW_ruleExpression_in_rule__Declaration__InitAssignment_3_131387);
+            pushFollow(FOLLOW_ruleExpression_in_rule__Declaration__InitAssignment_3_131264);
             ruleExpression();
 
             state._fsp--;
@@ -42009,20 +41890,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ActualParameterList__ParamAssignment_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15490:1: rule__ActualParameterList__ParamAssignment_0 : ( ruleExpression ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15427:1: rule__ActualParameterList__ParamAssignment_0 : ( ruleExpression ) ;
     public final void rule__ActualParameterList__ParamAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15494:1: ( ( ruleExpression ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15495:1: ( ruleExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15431:1: ( ( ruleExpression ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15432:1: ( ruleExpression )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15495:1: ( ruleExpression )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15496:1: ruleExpression
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15432:1: ( ruleExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15433:1: ruleExpression
             {
              before(grammarAccess.getActualParameterListAccess().getParamExpressionParserRuleCall_0_0()); 
-            pushFollow(FOLLOW_ruleExpression_in_rule__ActualParameterList__ParamAssignment_031418);
+            pushFollow(FOLLOW_ruleExpression_in_rule__ActualParameterList__ParamAssignment_031295);
             ruleExpression();
 
             state._fsp--;
@@ -42050,20 +41931,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ActualParameterList__ParamAssignment_1_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15505:1: rule__ActualParameterList__ParamAssignment_1_1 : ( ruleExpression ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15442:1: rule__ActualParameterList__ParamAssignment_1_1 : ( ruleExpression ) ;
     public final void rule__ActualParameterList__ParamAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15509:1: ( ( ruleExpression ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15510:1: ( ruleExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15446:1: ( ( ruleExpression ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15447:1: ( ruleExpression )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15510:1: ( ruleExpression )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15511:1: ruleExpression
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15447:1: ( ruleExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15448:1: ruleExpression
             {
              before(grammarAccess.getActualParameterListAccess().getParamExpressionParserRuleCall_1_1_0()); 
-            pushFollow(FOLLOW_ruleExpression_in_rule__ActualParameterList__ParamAssignment_1_131449);
+            pushFollow(FOLLOW_ruleExpression_in_rule__ActualParameterList__ParamAssignment_1_131326);
             ruleExpression();
 
             state._fsp--;
@@ -42091,20 +41972,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ExpressionAccess__NameAssignment_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15520:1: rule__ExpressionAccess__NameAssignment_1 : ( ruleIdentifier ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15457:1: rule__ExpressionAccess__NameAssignment_1 : ( ruleIdentifier ) ;
     public final void rule__ExpressionAccess__NameAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15524:1: ( ( ruleIdentifier ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15525:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15461:1: ( ( ruleIdentifier ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15462:1: ( ruleIdentifier )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15525:1: ( ruleIdentifier )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15526:1: ruleIdentifier
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15462:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15463:1: ruleIdentifier
             {
              before(grammarAccess.getExpressionAccessAccess().getNameIdentifierParserRuleCall_1_0()); 
-            pushFollow(FOLLOW_ruleIdentifier_in_rule__ExpressionAccess__NameAssignment_131480);
+            pushFollow(FOLLOW_ruleIdentifier_in_rule__ExpressionAccess__NameAssignment_131357);
             ruleIdentifier();
 
             state._fsp--;
@@ -42132,20 +42013,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ExpressionAccess__CallsAssignment_2"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15535:1: rule__ExpressionAccess__CallsAssignment_2 : ( ruleCall ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15472:1: rule__ExpressionAccess__CallsAssignment_2 : ( ruleCall ) ;
     public final void rule__ExpressionAccess__CallsAssignment_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15539:1: ( ( ruleCall ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15540:1: ( ruleCall )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15476:1: ( ( ruleCall ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15477:1: ( ruleCall )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15540:1: ( ruleCall )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15541:1: ruleCall
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15477:1: ( ruleCall )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15478:1: ruleCall
             {
              before(grammarAccess.getExpressionAccessAccess().getCallsCallParserRuleCall_2_0()); 
-            pushFollow(FOLLOW_ruleCall_in_rule__ExpressionAccess__CallsAssignment_231511);
+            pushFollow(FOLLOW_ruleCall_in_rule__ExpressionAccess__CallsAssignment_231388);
             ruleCall();
 
             state._fsp--;
@@ -42173,20 +42054,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ExpressionAccess__AccessAssignment_3"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15550:1: rule__ExpressionAccess__AccessAssignment_3 : ( ruleExpressionAccess ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15487:1: rule__ExpressionAccess__AccessAssignment_3 : ( ruleExpressionAccess ) ;
     public final void rule__ExpressionAccess__AccessAssignment_3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15554:1: ( ( ruleExpressionAccess ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15555:1: ( ruleExpressionAccess )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15491:1: ( ( ruleExpressionAccess ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15492:1: ( ruleExpressionAccess )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15555:1: ( ruleExpressionAccess )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15556:1: ruleExpressionAccess
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15492:1: ( ruleExpressionAccess )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15493:1: ruleExpressionAccess
             {
              before(grammarAccess.getExpressionAccessAccess().getAccessExpressionAccessParserRuleCall_3_0()); 
-            pushFollow(FOLLOW_ruleExpressionAccess_in_rule__ExpressionAccess__AccessAssignment_331542);
+            pushFollow(FOLLOW_ruleExpressionAccess_in_rule__ExpressionAccess__AccessAssignment_331419);
             ruleExpressionAccess();
 
             state._fsp--;
@@ -42214,20 +42095,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__PrimaryExpression__LitAssignment_0_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15565:1: rule__PrimaryExpression__LitAssignment_0_0 : ( ruleLiteral ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15502:1: rule__PrimaryExpression__LitAssignment_0_0 : ( ruleLiteral ) ;
     public final void rule__PrimaryExpression__LitAssignment_0_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15569:1: ( ( ruleLiteral ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15570:1: ( ruleLiteral )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15506:1: ( ( ruleLiteral ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15507:1: ( ruleLiteral )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15570:1: ( ruleLiteral )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15571:1: ruleLiteral
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15507:1: ( ruleLiteral )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15508:1: ruleLiteral
             {
              before(grammarAccess.getPrimaryExpressionAccess().getLitLiteralParserRuleCall_0_0_0()); 
-            pushFollow(FOLLOW_ruleLiteral_in_rule__PrimaryExpression__LitAssignment_0_031573);
+            pushFollow(FOLLOW_ruleLiteral_in_rule__PrimaryExpression__LitAssignment_0_031450);
             ruleLiteral();
 
             state._fsp--;
@@ -42255,20 +42136,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__PrimaryExpression__ExAssignment_0_1_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15580:1: rule__PrimaryExpression__ExAssignment_0_1_1 : ( ruleExpression ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15517:1: rule__PrimaryExpression__ExAssignment_0_1_1 : ( ruleExpression ) ;
     public final void rule__PrimaryExpression__ExAssignment_0_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15584:1: ( ( ruleExpression ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15585:1: ( ruleExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15521:1: ( ( ruleExpression ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15522:1: ( ruleExpression )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15585:1: ( ruleExpression )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15586:1: ruleExpression
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15522:1: ( ruleExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15523:1: ruleExpression
             {
              before(grammarAccess.getPrimaryExpressionAccess().getExExpressionParserRuleCall_0_1_1_0()); 
-            pushFollow(FOLLOW_ruleExpression_in_rule__PrimaryExpression__ExAssignment_0_1_131604);
+            pushFollow(FOLLOW_ruleExpression_in_rule__PrimaryExpression__ExAssignment_0_1_131481);
             ruleExpression();
 
             state._fsp--;
@@ -42296,20 +42177,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__PrimaryExpression__IfExAssignment_0_2"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15595:1: rule__PrimaryExpression__IfExAssignment_0_2 : ( ruleIfExpression ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15532:1: rule__PrimaryExpression__IfExAssignment_0_2 : ( ruleIfExpression ) ;
     public final void rule__PrimaryExpression__IfExAssignment_0_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15599:1: ( ( ruleIfExpression ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15600:1: ( ruleIfExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15536:1: ( ( ruleIfExpression ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15537:1: ( ruleIfExpression )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15600:1: ( ruleIfExpression )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15601:1: ruleIfExpression
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15537:1: ( ruleIfExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15538:1: ruleIfExpression
             {
              before(grammarAccess.getPrimaryExpressionAccess().getIfExIfExpressionParserRuleCall_0_2_0()); 
-            pushFollow(FOLLOW_ruleIfExpression_in_rule__PrimaryExpression__IfExAssignment_0_231635);
+            pushFollow(FOLLOW_ruleIfExpression_in_rule__PrimaryExpression__IfExAssignment_0_231512);
             ruleIfExpression();
 
             state._fsp--;
@@ -42337,20 +42218,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__PrimaryExpression__RefNameAssignment_0_3_2"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15610:1: rule__PrimaryExpression__RefNameAssignment_0_3_2 : ( ruleIdentifier ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15547:1: rule__PrimaryExpression__RefNameAssignment_0_3_2 : ( ruleIdentifier ) ;
     public final void rule__PrimaryExpression__RefNameAssignment_0_3_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15614:1: ( ( ruleIdentifier ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15615:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15551:1: ( ( ruleIdentifier ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15552:1: ( ruleIdentifier )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15615:1: ( ruleIdentifier )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15616:1: ruleIdentifier
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15552:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15553:1: ruleIdentifier
             {
              before(grammarAccess.getPrimaryExpressionAccess().getRefNameIdentifierParserRuleCall_0_3_2_0()); 
-            pushFollow(FOLLOW_ruleIdentifier_in_rule__PrimaryExpression__RefNameAssignment_0_3_231666);
+            pushFollow(FOLLOW_ruleIdentifier_in_rule__PrimaryExpression__RefNameAssignment_0_3_231543);
             ruleIdentifier();
 
             state._fsp--;
@@ -42378,20 +42259,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__PrimaryExpression__CallsAssignment_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15625:1: rule__PrimaryExpression__CallsAssignment_1 : ( ruleCall ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15562:1: rule__PrimaryExpression__CallsAssignment_1 : ( ruleCall ) ;
     public final void rule__PrimaryExpression__CallsAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15629:1: ( ( ruleCall ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15630:1: ( ruleCall )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15566:1: ( ( ruleCall ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15567:1: ( ruleCall )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15630:1: ( ruleCall )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15631:1: ruleCall
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15567:1: ( ruleCall )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15568:1: ruleCall
             {
              before(grammarAccess.getPrimaryExpressionAccess().getCallsCallParserRuleCall_1_0()); 
-            pushFollow(FOLLOW_ruleCall_in_rule__PrimaryExpression__CallsAssignment_131697);
+            pushFollow(FOLLOW_ruleCall_in_rule__PrimaryExpression__CallsAssignment_131574);
             ruleCall();
 
             state._fsp--;
@@ -42419,20 +42300,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__PrimaryExpression__AccessAssignment_2"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15640:1: rule__PrimaryExpression__AccessAssignment_2 : ( ruleExpressionAccess ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15577:1: rule__PrimaryExpression__AccessAssignment_2 : ( ruleExpressionAccess ) ;
     public final void rule__PrimaryExpression__AccessAssignment_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15644:1: ( ( ruleExpressionAccess ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15645:1: ( ruleExpressionAccess )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15581:1: ( ( ruleExpressionAccess ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15582:1: ( ruleExpressionAccess )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15645:1: ( ruleExpressionAccess )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15646:1: ruleExpressionAccess
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15582:1: ( ruleExpressionAccess )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15583:1: ruleExpressionAccess
             {
              before(grammarAccess.getPrimaryExpressionAccess().getAccessExpressionAccessParserRuleCall_2_0()); 
-            pushFollow(FOLLOW_ruleExpressionAccess_in_rule__PrimaryExpression__AccessAssignment_231728);
+            pushFollow(FOLLOW_ruleExpressionAccess_in_rule__PrimaryExpression__AccessAssignment_231605);
             ruleExpressionAccess();
 
             state._fsp--;
@@ -42460,20 +42341,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__CollectionInitializer__TypeAssignment_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15655:1: rule__CollectionInitializer__TypeAssignment_1 : ( ruleQualifiedName ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15592:1: rule__CollectionInitializer__TypeAssignment_1 : ( ruleQualifiedName ) ;
     public final void rule__CollectionInitializer__TypeAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15659:1: ( ( ruleQualifiedName ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15660:1: ( ruleQualifiedName )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15596:1: ( ( ruleQualifiedName ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15597:1: ( ruleQualifiedName )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15660:1: ( ruleQualifiedName )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15661:1: ruleQualifiedName
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15597:1: ( ruleQualifiedName )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15598:1: ruleQualifiedName
             {
              before(grammarAccess.getCollectionInitializerAccess().getTypeQualifiedNameParserRuleCall_1_0()); 
-            pushFollow(FOLLOW_ruleQualifiedName_in_rule__CollectionInitializer__TypeAssignment_131759);
+            pushFollow(FOLLOW_ruleQualifiedName_in_rule__CollectionInitializer__TypeAssignment_131636);
             ruleQualifiedName();
 
             state._fsp--;
@@ -42501,20 +42382,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__CollectionInitializer__InitAssignment_3"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15670:1: rule__CollectionInitializer__InitAssignment_3 : ( ruleExpressionListOrRange ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15607:1: rule__CollectionInitializer__InitAssignment_3 : ( ruleExpressionListOrRange ) ;
     public final void rule__CollectionInitializer__InitAssignment_3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15674:1: ( ( ruleExpressionListOrRange ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15675:1: ( ruleExpressionListOrRange )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15611:1: ( ( ruleExpressionListOrRange ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15612:1: ( ruleExpressionListOrRange )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15675:1: ( ruleExpressionListOrRange )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15676:1: ruleExpressionListOrRange
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15612:1: ( ruleExpressionListOrRange )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15613:1: ruleExpressionListOrRange
             {
              before(grammarAccess.getCollectionInitializerAccess().getInitExpressionListOrRangeParserRuleCall_3_0()); 
-            pushFollow(FOLLOW_ruleExpressionListOrRange_in_rule__CollectionInitializer__InitAssignment_331790);
+            pushFollow(FOLLOW_ruleExpressionListOrRange_in_rule__CollectionInitializer__InitAssignment_331667);
             ruleExpressionListOrRange();
 
             state._fsp--;
@@ -42542,20 +42423,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ExpressionListOrRange__ListAssignment_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15685:1: rule__ExpressionListOrRange__ListAssignment_0 : ( ruleExpressionListEntry ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15622:1: rule__ExpressionListOrRange__ListAssignment_0 : ( ruleExpressionListEntry ) ;
     public final void rule__ExpressionListOrRange__ListAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15689:1: ( ( ruleExpressionListEntry ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15690:1: ( ruleExpressionListEntry )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15626:1: ( ( ruleExpressionListEntry ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15627:1: ( ruleExpressionListEntry )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15690:1: ( ruleExpressionListEntry )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15691:1: ruleExpressionListEntry
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15627:1: ( ruleExpressionListEntry )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15628:1: ruleExpressionListEntry
             {
              before(grammarAccess.getExpressionListOrRangeAccess().getListExpressionListEntryParserRuleCall_0_0()); 
-            pushFollow(FOLLOW_ruleExpressionListEntry_in_rule__ExpressionListOrRange__ListAssignment_031821);
+            pushFollow(FOLLOW_ruleExpressionListEntry_in_rule__ExpressionListOrRange__ListAssignment_031698);
             ruleExpressionListEntry();
 
             state._fsp--;
@@ -42583,20 +42464,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ExpressionListOrRange__ListAssignment_1_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15700:1: rule__ExpressionListOrRange__ListAssignment_1_1 : ( ruleExpressionListEntry ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15637:1: rule__ExpressionListOrRange__ListAssignment_1_1 : ( ruleExpressionListEntry ) ;
     public final void rule__ExpressionListOrRange__ListAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15704:1: ( ( ruleExpressionListEntry ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15705:1: ( ruleExpressionListEntry )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15641:1: ( ( ruleExpressionListEntry ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15642:1: ( ruleExpressionListEntry )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15705:1: ( ruleExpressionListEntry )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15706:1: ruleExpressionListEntry
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15642:1: ( ruleExpressionListEntry )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15643:1: ruleExpressionListEntry
             {
              before(grammarAccess.getExpressionListOrRangeAccess().getListExpressionListEntryParserRuleCall_1_1_0()); 
-            pushFollow(FOLLOW_ruleExpressionListEntry_in_rule__ExpressionListOrRange__ListAssignment_1_131852);
+            pushFollow(FOLLOW_ruleExpressionListEntry_in_rule__ExpressionListOrRange__ListAssignment_1_131729);
             ruleExpressionListEntry();
 
             state._fsp--;
@@ -42624,20 +42505,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ExpressionListEntry__NameAssignment_0_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15715:1: rule__ExpressionListEntry__NameAssignment_0_0 : ( ruleIdentifier ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15652:1: rule__ExpressionListEntry__NameAssignment_0_0 : ( ruleIdentifier ) ;
     public final void rule__ExpressionListEntry__NameAssignment_0_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15719:1: ( ( ruleIdentifier ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15720:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15656:1: ( ( ruleIdentifier ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15657:1: ( ruleIdentifier )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15720:1: ( ruleIdentifier )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15721:1: ruleIdentifier
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15657:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15658:1: ruleIdentifier
             {
              before(grammarAccess.getExpressionListEntryAccess().getNameIdentifierParserRuleCall_0_0_0()); 
-            pushFollow(FOLLOW_ruleIdentifier_in_rule__ExpressionListEntry__NameAssignment_0_031883);
+            pushFollow(FOLLOW_ruleIdentifier_in_rule__ExpressionListEntry__NameAssignment_0_031760);
             ruleIdentifier();
 
             state._fsp--;
@@ -42665,20 +42546,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ExpressionListEntry__AttribAssignment_0_1_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15730:1: rule__ExpressionListEntry__AttribAssignment_0_1_1 : ( ruleIdentifier ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15667:1: rule__ExpressionListEntry__AttribAssignment_0_1_1 : ( ruleIdentifier ) ;
     public final void rule__ExpressionListEntry__AttribAssignment_0_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15734:1: ( ( ruleIdentifier ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15735:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15671:1: ( ( ruleIdentifier ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15672:1: ( ruleIdentifier )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15735:1: ( ruleIdentifier )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15736:1: ruleIdentifier
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15672:1: ( ruleIdentifier )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15673:1: ruleIdentifier
             {
              before(grammarAccess.getExpressionListEntryAccess().getAttribIdentifierParserRuleCall_0_1_1_0()); 
-            pushFollow(FOLLOW_ruleIdentifier_in_rule__ExpressionListEntry__AttribAssignment_0_1_131914);
+            pushFollow(FOLLOW_ruleIdentifier_in_rule__ExpressionListEntry__AttribAssignment_0_1_131791);
             ruleIdentifier();
 
             state._fsp--;
@@ -42706,20 +42587,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ExpressionListEntry__ValueAssignment_1_0"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15745:1: rule__ExpressionListEntry__ValueAssignment_1_0 : ( ruleLogicalExpression ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15682:1: rule__ExpressionListEntry__ValueAssignment_1_0 : ( ruleLogicalExpression ) ;
     public final void rule__ExpressionListEntry__ValueAssignment_1_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15749:1: ( ( ruleLogicalExpression ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15750:1: ( ruleLogicalExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15686:1: ( ( ruleLogicalExpression ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15687:1: ( ruleLogicalExpression )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15750:1: ( ruleLogicalExpression )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15751:1: ruleLogicalExpression
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15687:1: ( ruleLogicalExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15688:1: ruleLogicalExpression
             {
              before(grammarAccess.getExpressionListEntryAccess().getValueLogicalExpressionParserRuleCall_1_0_0()); 
-            pushFollow(FOLLOW_ruleLogicalExpression_in_rule__ExpressionListEntry__ValueAssignment_1_031945);
+            pushFollow(FOLLOW_ruleLogicalExpression_in_rule__ExpressionListEntry__ValueAssignment_1_031822);
             ruleLogicalExpression();
 
             state._fsp--;
@@ -42747,20 +42628,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ExpressionListEntry__CollectionAssignment_1_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15760:1: rule__ExpressionListEntry__CollectionAssignment_1_1 : ( ruleCollectionInitializer ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15697:1: rule__ExpressionListEntry__CollectionAssignment_1_1 : ( ruleCollectionInitializer ) ;
     public final void rule__ExpressionListEntry__CollectionAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15764:1: ( ( ruleCollectionInitializer ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15765:1: ( ruleCollectionInitializer )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15701:1: ( ( ruleCollectionInitializer ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15702:1: ( ruleCollectionInitializer )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15765:1: ( ruleCollectionInitializer )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15766:1: ruleCollectionInitializer
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15702:1: ( ruleCollectionInitializer )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15703:1: ruleCollectionInitializer
             {
              before(grammarAccess.getExpressionListEntryAccess().getCollectionCollectionInitializerParserRuleCall_1_1_0()); 
-            pushFollow(FOLLOW_ruleCollectionInitializer_in_rule__ExpressionListEntry__CollectionAssignment_1_131976);
+            pushFollow(FOLLOW_ruleCollectionInitializer_in_rule__ExpressionListEntry__CollectionAssignment_1_131853);
             ruleCollectionInitializer();
 
             state._fsp--;
@@ -42788,20 +42669,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Literal__ValAssignment"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15775:1: rule__Literal__ValAssignment : ( ruleValue ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15712:1: rule__Literal__ValAssignment : ( ruleValue ) ;
     public final void rule__Literal__ValAssignment() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15779:1: ( ( ruleValue ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15780:1: ( ruleValue )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15716:1: ( ( ruleValue ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15717:1: ( ruleValue )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15780:1: ( ruleValue )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15781:1: ruleValue
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15717:1: ( ruleValue )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15718:1: ruleValue
             {
              before(grammarAccess.getLiteralAccess().getValValueParserRuleCall_0()); 
-            pushFollow(FOLLOW_ruleValue_in_rule__Literal__ValAssignment32007);
+            pushFollow(FOLLOW_ruleValue_in_rule__Literal__ValAssignment31884);
             ruleValue();
 
             state._fsp--;
@@ -42829,20 +42710,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__IfExpression__IfExAssignment_1"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15790:1: rule__IfExpression__IfExAssignment_1 : ( ruleExpression ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15727:1: rule__IfExpression__IfExAssignment_1 : ( ruleExpression ) ;
     public final void rule__IfExpression__IfExAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15794:1: ( ( ruleExpression ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15795:1: ( ruleExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15731:1: ( ( ruleExpression ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15732:1: ( ruleExpression )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15795:1: ( ruleExpression )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15796:1: ruleExpression
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15732:1: ( ruleExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15733:1: ruleExpression
             {
              before(grammarAccess.getIfExpressionAccess().getIfExExpressionParserRuleCall_1_0()); 
-            pushFollow(FOLLOW_ruleExpression_in_rule__IfExpression__IfExAssignment_132038);
+            pushFollow(FOLLOW_ruleExpression_in_rule__IfExpression__IfExAssignment_131915);
             ruleExpression();
 
             state._fsp--;
@@ -42870,20 +42751,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__IfExpression__ThenExAssignment_3"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15805:1: rule__IfExpression__ThenExAssignment_3 : ( ruleExpression ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15742:1: rule__IfExpression__ThenExAssignment_3 : ( ruleExpression ) ;
     public final void rule__IfExpression__ThenExAssignment_3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15809:1: ( ( ruleExpression ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15810:1: ( ruleExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15746:1: ( ( ruleExpression ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15747:1: ( ruleExpression )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15810:1: ( ruleExpression )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15811:1: ruleExpression
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15747:1: ( ruleExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15748:1: ruleExpression
             {
              before(grammarAccess.getIfExpressionAccess().getThenExExpressionParserRuleCall_3_0()); 
-            pushFollow(FOLLOW_ruleExpression_in_rule__IfExpression__ThenExAssignment_332069);
+            pushFollow(FOLLOW_ruleExpression_in_rule__IfExpression__ThenExAssignment_331946);
             ruleExpression();
 
             state._fsp--;
@@ -42911,20 +42792,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__IfExpression__ElseExAssignment_5"
-    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15820:1: rule__IfExpression__ElseExAssignment_5 : ( ruleExpression ) ;
+    // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15757:1: rule__IfExpression__ElseExAssignment_5 : ( ruleExpression ) ;
     public final void rule__IfExpression__ElseExAssignment_5() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15824:1: ( ( ruleExpression ) )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15825:1: ( ruleExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15761:1: ( ( ruleExpression ) )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15762:1: ( ruleExpression )
             {
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15825:1: ( ruleExpression )
-            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15826:1: ruleExpression
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15762:1: ( ruleExpression )
+            // ../de.uni_hildesheim.sse.ivml.ui/src-gen/de/uni_hildesheim/sse/ui/contentassist/antlr/internal/InternalIvml.g:15763:1: ruleExpression
             {
              before(grammarAccess.getIfExpressionAccess().getElseExExpressionParserRuleCall_5_0()); 
-            pushFollow(FOLLOW_ruleExpression_in_rule__IfExpression__ElseExAssignment_532100);
+            pushFollow(FOLLOW_ruleExpression_in_rule__IfExpression__ElseExAssignment_531977);
             ruleExpression();
 
             state._fsp--;
@@ -42968,7 +42849,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     static final String DFA2_minS =
         "\1\4\2\uffff\3\4\6\uffff\5\4";
     static final String DFA2_maxS =
-        "\1\122\2\uffff\3\101\6\uffff\1\6\3\101\1\6";
+        "\1\121\2\uffff\3\101\6\uffff\1\6\3\101\1\6";
     static final String DFA2_acceptS =
         "\1\uffff\1\1\1\2\3\uffff\1\3\1\4\1\5\1\6\1\7\1\10\5\uffff";
     static final String DFA2_specialS =
@@ -42976,7 +42857,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     static final String[] DFA2_transitionS = {
             "\1\3\1\4\1\5\2\10\6\uffff\2\10\15\uffff\1\10\2\uffff\1\10\1"+
             "\uffff\1\10\2\uffff\1\1\1\uffff\1\1\1\uffff\1\13\1\10\2\uffff"+
-            "\1\1\1\uffff\1\10\1\11\1\6\1\uffff\1\7\7\uffff\1\12\1\10\7\uffff"+
+            "\1\1\1\uffff\1\10\1\11\1\6\1\uffff\1\7\7\uffff\1\12\1\10\6\uffff"+
             "\2\10\3\uffff\5\2\1\10\3\2",
             "",
             "",
@@ -43042,14 +42923,14 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     static final String DFA4_minS =
         "\1\4\1\uffff\3\4\2\uffff\5\4";
     static final String DFA4_maxS =
-        "\1\122\1\uffff\3\101\2\uffff\1\6\3\101\1\6";
+        "\1\121\1\uffff\3\101\2\uffff\1\6\3\101\1\6";
     static final String DFA4_acceptS =
         "\1\uffff\1\1\3\uffff\1\2\1\3\5\uffff";
     static final String DFA4_specialS =
         "\14\uffff}>";
     static final String[] DFA4_transitionS = {
             "\1\2\1\3\1\4\2\5\6\uffff\2\5\15\uffff\1\5\2\uffff\1\5\1\uffff"+
-            "\1\5\6\uffff\1\6\1\5\4\uffff\1\5\14\uffff\1\5\7\uffff\2\5\3"+
+            "\1\5\6\uffff\1\6\1\5\4\uffff\1\5\14\uffff\1\5\6\uffff\2\5\3"+
             "\uffff\5\1\1\5\3\1",
             "",
             "\3\1\7\uffff\1\5\2\uffff\20\5\2\uffff\1\5\1\uffff\1\5\5\uffff"+
@@ -43110,14 +42991,14 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     static final String DFA5_minS =
         "\1\4\1\uffff\3\4\2\uffff\5\4";
     static final String DFA5_maxS =
-        "\1\122\1\uffff\3\101\2\uffff\1\6\3\101\1\6";
+        "\1\121\1\uffff\3\101\2\uffff\1\6\3\101\1\6";
     static final String DFA5_acceptS =
         "\1\uffff\1\1\3\uffff\1\2\1\3\5\uffff";
     static final String DFA5_specialS =
         "\14\uffff}>";
     static final String[] DFA5_transitionS = {
             "\1\2\1\3\1\4\2\5\6\uffff\2\5\15\uffff\1\5\2\uffff\1\5\1\uffff"+
-            "\1\5\6\uffff\1\6\1\5\4\uffff\1\5\14\uffff\1\5\7\uffff\2\5\3"+
+            "\1\5\6\uffff\1\6\1\5\4\uffff\1\5\14\uffff\1\5\6\uffff\2\5\3"+
             "\uffff\5\1\1\5\3\1",
             "",
             "\3\1\7\uffff\1\5\2\uffff\20\5\2\uffff\1\5\1\uffff\1\5\5\uffff"+
@@ -43178,32 +43059,32 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     static final String DFA12_minS =
         "\1\4\2\uffff\3\16\2\uffff\1\4\3\16\1\4";
     static final String DFA12_maxS =
-        "\1\117\2\uffff\3\111\2\uffff\1\6\3\111\1\6";
+        "\1\116\2\uffff\3\110\2\uffff\1\6\3\110\1\6";
     static final String DFA12_acceptS =
         "\1\uffff\1\1\1\2\3\uffff\1\3\1\4\5\uffff";
     static final String DFA12_specialS =
         "\15\uffff}>";
     static final String[] DFA12_transitionS = {
             "\1\3\1\4\1\5\2\2\6\uffff\2\2\15\uffff\1\2\2\uffff\1\2\1\uffff"+
-            "\1\6\7\uffff\1\2\4\uffff\1\7\14\uffff\1\1\7\uffff\2\2\10\uffff"+
+            "\1\6\7\uffff\1\2\4\uffff\1\7\14\uffff\1\1\6\uffff\2\2\10\uffff"+
             "\1\2",
             "",
             "",
             "\1\2\2\uffff\20\2\2\uffff\1\6\1\uffff\1\2\1\uffff\1\2\3\uffff"+
-            "\3\2\12\uffff\1\10\5\uffff\6\2\3\uffff\3\2",
+            "\3\2\12\uffff\1\10\5\uffff\6\2\2\uffff\3\2",
             "\1\2\2\uffff\20\2\2\uffff\1\6\1\uffff\1\2\1\uffff\1\2\3\uffff"+
-            "\3\2\12\uffff\1\10\5\uffff\6\2\3\uffff\3\2",
+            "\3\2\12\uffff\1\10\5\uffff\6\2\2\uffff\3\2",
             "\1\2\2\uffff\20\2\2\uffff\1\6\1\uffff\1\2\1\uffff\1\2\3\uffff"+
-            "\3\2\12\uffff\1\10\5\uffff\6\2\3\uffff\3\2",
+            "\3\2\12\uffff\1\10\5\uffff\6\2\2\uffff\3\2",
             "",
             "",
             "\1\11\1\12\1\13",
             "\1\2\2\uffff\20\2\2\uffff\1\6\1\uffff\1\2\1\uffff\1\2\4\uffff"+
-            "\2\2\12\uffff\1\14\5\uffff\6\2\3\uffff\3\2",
+            "\2\2\12\uffff\1\14\5\uffff\6\2\2\uffff\3\2",
             "\1\2\2\uffff\20\2\2\uffff\1\6\1\uffff\1\2\1\uffff\1\2\4\uffff"+
-            "\2\2\12\uffff\1\14\5\uffff\6\2\3\uffff\3\2",
+            "\2\2\12\uffff\1\14\5\uffff\6\2\2\uffff\3\2",
             "\1\2\2\uffff\20\2\2\uffff\1\6\1\uffff\1\2\1\uffff\1\2\4\uffff"+
-            "\2\2\12\uffff\1\14\5\uffff\6\2\3\uffff\3\2",
+            "\2\2\12\uffff\1\14\5\uffff\6\2\2\uffff\3\2",
             "\1\11\1\12\1\13"
     };
 
@@ -43247,29 +43128,29 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     static final String DFA13_minS =
         "\1\4\1\uffff\3\21\1\uffff\1\4\3\21\1\4";
     static final String DFA13_maxS =
-        "\1\117\1\uffff\3\111\1\uffff\1\6\3\111\1\6";
+        "\1\116\1\uffff\3\110\1\uffff\1\6\3\110\1\6";
     static final String DFA13_acceptS =
         "\1\uffff\1\1\3\uffff\1\2\5\uffff";
     static final String DFA13_specialS =
         "\13\uffff}>";
     static final String[] DFA13_transitionS = {
             "\1\2\1\3\1\4\2\1\6\uffff\2\1\15\uffff\1\1\2\uffff\1\1\1\uffff"+
-            "\1\5\7\uffff\1\1\31\uffff\2\1\10\uffff\1\1",
+            "\1\5\7\uffff\1\1\30\uffff\2\1\10\uffff\1\1",
             "",
             "\20\1\2\uffff\1\5\1\uffff\1\1\1\uffff\1\1\3\uffff\3\1\12\uffff"+
-            "\1\6\5\uffff\6\1\3\uffff\3\1",
+            "\1\6\5\uffff\6\1\2\uffff\3\1",
             "\20\1\2\uffff\1\5\1\uffff\1\1\1\uffff\1\1\3\uffff\3\1\12\uffff"+
-            "\1\6\5\uffff\6\1\3\uffff\3\1",
+            "\1\6\5\uffff\6\1\2\uffff\3\1",
             "\20\1\2\uffff\1\5\1\uffff\1\1\1\uffff\1\1\3\uffff\3\1\12\uffff"+
-            "\1\6\5\uffff\6\1\3\uffff\3\1",
+            "\1\6\5\uffff\6\1\2\uffff\3\1",
             "",
             "\1\7\1\10\1\11",
             "\20\1\2\uffff\1\5\1\uffff\1\1\1\uffff\1\1\4\uffff\2\1\12\uffff"+
-            "\1\12\5\uffff\6\1\3\uffff\3\1",
+            "\1\12\5\uffff\6\1\2\uffff\3\1",
             "\20\1\2\uffff\1\5\1\uffff\1\1\1\uffff\1\1\4\uffff\2\1\12\uffff"+
-            "\1\12\5\uffff\6\1\3\uffff\3\1",
+            "\1\12\5\uffff\6\1\2\uffff\3\1",
             "\20\1\2\uffff\1\5\1\uffff\1\1\1\uffff\1\1\4\uffff\2\1\12\uffff"+
-            "\1\12\5\uffff\6\1\3\uffff\3\1",
+            "\1\12\5\uffff\6\1\2\uffff\3\1",
             "\1\7\1\10\1\11"
     };
 
@@ -43313,29 +43194,29 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     static final String DFA16_minS =
         "\1\4\1\uffff\3\16\1\uffff\1\4\3\16\1\4";
     static final String DFA16_maxS =
-        "\1\117\1\uffff\3\111\1\uffff\1\6\3\111\1\6";
+        "\1\116\1\uffff\3\110\1\uffff\1\6\3\110\1\6";
     static final String DFA16_acceptS =
         "\1\uffff\1\1\3\uffff\1\2\5\uffff";
     static final String DFA16_specialS =
         "\13\uffff}>";
     static final String[] DFA16_transitionS = {
             "\1\2\1\3\1\4\2\1\6\uffff\2\1\15\uffff\1\1\2\uffff\1\1\1\uffff"+
-            "\1\5\7\uffff\1\1\31\uffff\2\1\10\uffff\1\1",
+            "\1\5\7\uffff\1\1\30\uffff\2\1\10\uffff\1\1",
             "",
             "\1\1\3\uffff\11\1\2\uffff\4\1\2\uffff\1\5\2\1\1\uffff\1\1"+
-            "\3\uffff\3\1\12\uffff\1\6\5\uffff\6\1\3\uffff\3\1",
+            "\3\uffff\3\1\12\uffff\1\6\5\uffff\6\1\2\uffff\3\1",
             "\1\1\3\uffff\11\1\2\uffff\4\1\2\uffff\1\5\2\1\1\uffff\1\1"+
-            "\3\uffff\3\1\12\uffff\1\6\5\uffff\6\1\3\uffff\3\1",
+            "\3\uffff\3\1\12\uffff\1\6\5\uffff\6\1\2\uffff\3\1",
             "\1\1\3\uffff\11\1\2\uffff\4\1\2\uffff\1\5\2\1\1\uffff\1\1"+
-            "\3\uffff\3\1\12\uffff\1\6\5\uffff\6\1\3\uffff\3\1",
+            "\3\uffff\3\1\12\uffff\1\6\5\uffff\6\1\2\uffff\3\1",
             "",
             "\1\7\1\10\1\11",
             "\1\1\3\uffff\11\1\2\uffff\4\1\2\uffff\1\5\2\1\1\uffff\1\1"+
-            "\4\uffff\2\1\12\uffff\1\12\5\uffff\6\1\3\uffff\3\1",
+            "\4\uffff\2\1\12\uffff\1\12\5\uffff\6\1\2\uffff\3\1",
             "\1\1\3\uffff\11\1\2\uffff\4\1\2\uffff\1\5\2\1\1\uffff\1\1"+
-            "\4\uffff\2\1\12\uffff\1\12\5\uffff\6\1\3\uffff\3\1",
+            "\4\uffff\2\1\12\uffff\1\12\5\uffff\6\1\2\uffff\3\1",
             "\1\1\3\uffff\11\1\2\uffff\4\1\2\uffff\1\5\2\1\1\uffff\1\1"+
-            "\4\uffff\2\1\12\uffff\1\12\5\uffff\6\1\3\uffff\3\1",
+            "\4\uffff\2\1\12\uffff\1\12\5\uffff\6\1\2\uffff\3\1",
             "\1\7\1\10\1\11"
     };
 
@@ -43379,14 +43260,14 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     static final String DFA25_minS =
         "\1\4\1\uffff\3\21\1\uffff\1\4\3\21\1\4";
     static final String DFA25_maxS =
-        "\1\117\1\uffff\3\101\1\uffff\1\6\3\101\1\6";
+        "\1\116\1\uffff\3\101\1\uffff\1\6\3\101\1\6";
     static final String DFA25_acceptS =
         "\1\uffff\1\1\3\uffff\1\2\5\uffff";
     static final String DFA25_specialS =
         "\13\uffff}>";
     static final String[] DFA25_transitionS = {
             "\1\2\1\3\1\4\2\1\6\uffff\2\1\15\uffff\1\1\2\uffff\1\1\1\uffff"+
-            "\1\5\7\uffff\1\1\31\uffff\2\1\10\uffff\1\1",
+            "\1\5\7\uffff\1\1\30\uffff\2\1\10\uffff\1\1",
             "",
             "\5\1\2\uffff\11\1\2\uffff\1\5\1\1\2\uffff\1\1\3\uffff\1\1"+
             "\14\uffff\1\6\6\uffff\3\1",
@@ -43445,14 +43326,14 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     static final String DFA95_minS =
         "\1\4\3\16\1\uffff\1\4\1\uffff\3\16";
     static final String DFA95_maxS =
-        "\1\117\3\101\1\uffff\1\6\1\uffff\3\101";
+        "\1\116\3\101\1\uffff\1\6\1\uffff\3\101";
     static final String DFA95_acceptS =
         "\4\uffff\1\2\1\uffff\1\1\3\uffff";
     static final String DFA95_specialS =
         "\12\uffff}>";
     static final String[] DFA95_transitionS = {
             "\1\1\1\2\1\3\2\4\6\uffff\2\4\15\uffff\1\4\2\uffff\1\4\1\uffff"+
-            "\1\4\7\uffff\1\4\31\uffff\2\4\10\uffff\1\4",
+            "\1\4\7\uffff\1\4\30\uffff\2\4\10\uffff\1\4",
             "\1\6\2\uffff\5\4\2\uffff\11\4\2\uffff\2\4\2\uffff\1\4\3\uffff"+
             "\1\4\14\uffff\1\4\6\uffff\1\5\2\4",
             "\1\6\2\uffff\5\4\2\uffff\11\4\2\uffff\2\4\2\uffff\1\4\3\uffff"+
@@ -43500,7 +43381,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
             this.transition = DFA95_transition;
         }
         public String getDescription() {
-            return "12366:1: ( rule__ExpressionListEntry__Group_0__0 )?";
+            return "12303:1: ( rule__ExpressionListEntry__Group_0__0 )?";
         }
     }
  
@@ -43830,19 +43711,19 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     public static final BitSet FOLLOW_rule__Project__Group__1__Impl_in_rule__Project__Group__16814 = new BitSet(new long[]{0x0000000800000000L});
     public static final BitSet FOLLOW_rule__Project__Group__2_in_rule__Project__Group__16817 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__Project__NameAssignment_1_in_rule__Project__Group__1__Impl6844 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Project__Group__2__Impl_in_rule__Project__Group__26874 = new BitSet(new long[]{0x3AB74D4A400181F0L,0x000000000007FC60L});
+    public static final BitSet FOLLOW_rule__Project__Group__2__Impl_in_rule__Project__Group__26874 = new BitSet(new long[]{0x3AB74D4A400181F0L,0x000000000003FE30L});
     public static final BitSet FOLLOW_rule__Project__Group__3_in_rule__Project__Group__26877 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_35_in_rule__Project__Group__2__Impl6905 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Project__Group__3__Impl_in_rule__Project__Group__36936 = new BitSet(new long[]{0x3AB74D4A400181F0L,0x000000000007FC60L});
+    public static final BitSet FOLLOW_rule__Project__Group__3__Impl_in_rule__Project__Group__36936 = new BitSet(new long[]{0x3AB74D4A400181F0L,0x000000000003FE30L});
     public static final BitSet FOLLOW_rule__Project__Group__4_in_rule__Project__Group__36939 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__Project__VersionAssignment_3_in_rule__Project__Group__3__Impl6966 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Project__Group__4__Impl_in_rule__Project__Group__46997 = new BitSet(new long[]{0x3AB74D4A400181F0L,0x000000000007FC60L});
+    public static final BitSet FOLLOW_rule__Project__Group__4__Impl_in_rule__Project__Group__46997 = new BitSet(new long[]{0x3AB74D4A400181F0L,0x000000000003FE30L});
     public static final BitSet FOLLOW_rule__Project__Group__5_in_rule__Project__Group__47000 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__Project__ImportsAssignment_4_in_rule__Project__Group__4__Impl7027 = new BitSet(new long[]{0x0080000000000002L});
-    public static final BitSet FOLLOW_rule__Project__Group__5__Impl_in_rule__Project__Group__57058 = new BitSet(new long[]{0x3AB74D4A400181F0L,0x000000000007FC60L});
+    public static final BitSet FOLLOW_rule__Project__Group__5__Impl_in_rule__Project__Group__57058 = new BitSet(new long[]{0x3AB74D4A400181F0L,0x000000000003FE30L});
     public static final BitSet FOLLOW_rule__Project__Group__6_in_rule__Project__Group__57061 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__Project__ConflictsAssignment_5_in_rule__Project__Group__5__Impl7088 = new BitSet(new long[]{0x0200000000000002L});
-    public static final BitSet FOLLOW_rule__Project__Group__6__Impl_in_rule__Project__Group__67119 = new BitSet(new long[]{0x3AB74D4A400181F0L,0x000000000007FC60L});
+    public static final BitSet FOLLOW_rule__Project__Group__6__Impl_in_rule__Project__Group__67119 = new BitSet(new long[]{0x3AB74D4A400181F0L,0x000000000003FE30L});
     public static final BitSet FOLLOW_rule__Project__Group__7_in_rule__Project__Group__67122 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__Project__InterfacesAssignment_6_in_rule__Project__Group__6__Impl7149 = new BitSet(new long[]{0x0020000000000002L});
     public static final BitSet FOLLOW_rule__Project__Group__7__Impl_in_rule__Project__Group__77180 = new BitSet(new long[]{0x0000001000000000L});
@@ -43853,10 +43734,10 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     public static final BitSet FOLLOW_36_in_rule__Project__Group__8__Impl7271 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__Project__Group__9__Impl_in_rule__Project__Group__97302 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_37_in_rule__Project__Group__9__Impl7331 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ProjectContents__Group__0__Impl_in_rule__ProjectContents__Group__07384 = new BitSet(new long[]{0x3AB74D4A400181F0L,0x000000000007FC60L});
+    public static final BitSet FOLLOW_rule__ProjectContents__Group__0__Impl_in_rule__ProjectContents__Group__07384 = new BitSet(new long[]{0x3AB74D4A400181F0L,0x000000000003FE30L});
     public static final BitSet FOLLOW_rule__ProjectContents__Group__1_in_rule__ProjectContents__Group__07387 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__ProjectContents__Group__1__Impl_in_rule__ProjectContents__Group__17445 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ProjectContents__Alternatives_1_in_rule__ProjectContents__Group__1__Impl7472 = new BitSet(new long[]{0x30174D4A400181F2L,0x000000000007FC60L});
+    public static final BitSet FOLLOW_rule__ProjectContents__Alternatives_1_in_rule__ProjectContents__Group__1__Impl7472 = new BitSet(new long[]{0x30174D4A400181F2L,0x000000000003FE30L});
     public static final BitSet FOLLOW_rule__TypedefEnum__Group__0__Impl_in_rule__TypedefEnum__Group__07507 = new BitSet(new long[]{0x0000000000000070L});
     public static final BitSet FOLLOW_rule__TypedefEnum__Group__1_in_rule__TypedefEnum__Group__07510 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_38_in_rule__TypedefEnum__Group__0__Impl7538 = new BitSet(new long[]{0x0000000000000002L});
@@ -43904,12 +43785,12 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     public static final BitSet FOLLOW_rule__TypedefCompound__Group__2__Impl_in_rule__TypedefCompound__Group__28500 = new BitSet(new long[]{0x0000020800000000L});
     public static final BitSet FOLLOW_rule__TypedefCompound__Group__3_in_rule__TypedefCompound__Group__28503 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__TypedefCompound__Group_2__0_in_rule__TypedefCompound__Group__2__Impl8530 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__TypedefCompound__Group__3__Impl_in_rule__TypedefCompound__Group__38561 = new BitSet(new long[]{0x30174D5A400181F0L,0x000000000007FC60L});
+    public static final BitSet FOLLOW_rule__TypedefCompound__Group__3__Impl_in_rule__TypedefCompound__Group__38561 = new BitSet(new long[]{0x30174D5A400181F0L,0x000000000003FE30L});
     public static final BitSet FOLLOW_rule__TypedefCompound__Group__4_in_rule__TypedefCompound__Group__38564 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_35_in_rule__TypedefCompound__Group__3__Impl8592 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__TypedefCompound__Group__4__Impl_in_rule__TypedefCompound__Group__48623 = new BitSet(new long[]{0x30174D5A400181F0L,0x000000000007FC60L});
+    public static final BitSet FOLLOW_rule__TypedefCompound__Group__4__Impl_in_rule__TypedefCompound__Group__48623 = new BitSet(new long[]{0x30174D5A400181F0L,0x000000000003FE30L});
     public static final BitSet FOLLOW_rule__TypedefCompound__Group__5_in_rule__TypedefCompound__Group__48626 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__TypedefCompound__Alternatives_4_in_rule__TypedefCompound__Group__4__Impl8653 = new BitSet(new long[]{0x30174D4A400181F2L,0x000000000007FC60L});
+    public static final BitSet FOLLOW_rule__TypedefCompound__Alternatives_4_in_rule__TypedefCompound__Group__4__Impl8653 = new BitSet(new long[]{0x30174D4A400181F2L,0x000000000003FE30L});
     public static final BitSet FOLLOW_rule__TypedefCompound__Group__5__Impl_in_rule__TypedefCompound__Group__58684 = new BitSet(new long[]{0x0000002000000000L});
     public static final BitSet FOLLOW_rule__TypedefCompound__Group__6_in_rule__TypedefCompound__Group__58687 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_36_in_rule__TypedefCompound__Group__5__Impl8715 = new BitSet(new long[]{0x0000000000000002L});
@@ -43938,13 +43819,13 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     public static final BitSet FOLLOW_rule__AttrAssignment__Group__5__Impl_in_rule__AttrAssignment__Group__59252 = new BitSet(new long[]{0x0000000800000000L});
     public static final BitSet FOLLOW_rule__AttrAssignment__Group__6_in_rule__AttrAssignment__Group__59255 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_45_in_rule__AttrAssignment__Group__5__Impl9283 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__AttrAssignment__Group__6__Impl_in_rule__AttrAssignment__Group__69314 = new BitSet(new long[]{0x30174D4A400181F0L,0x000000000007FC60L});
+    public static final BitSet FOLLOW_rule__AttrAssignment__Group__6__Impl_in_rule__AttrAssignment__Group__69314 = new BitSet(new long[]{0x30174D4A400181F0L,0x000000000003FE30L});
     public static final BitSet FOLLOW_rule__AttrAssignment__Group__7_in_rule__AttrAssignment__Group__69317 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_35_in_rule__AttrAssignment__Group__6__Impl9345 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__AttrAssignment__Group__7__Impl_in_rule__AttrAssignment__Group__79376 = new BitSet(new long[]{0x0000001000000000L});
     public static final BitSet FOLLOW_rule__AttrAssignment__Group__8_in_rule__AttrAssignment__Group__79379 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__AttrAssignment__Alternatives_7_in_rule__AttrAssignment__Group__7__Impl9408 = new BitSet(new long[]{0x30174D4A400181F2L,0x000000000007FC60L});
-    public static final BitSet FOLLOW_rule__AttrAssignment__Alternatives_7_in_rule__AttrAssignment__Group__7__Impl9420 = new BitSet(new long[]{0x30174D4A400181F2L,0x000000000007FC60L});
+    public static final BitSet FOLLOW_rule__AttrAssignment__Alternatives_7_in_rule__AttrAssignment__Group__7__Impl9408 = new BitSet(new long[]{0x30174D4A400181F2L,0x000000000003FE30L});
+    public static final BitSet FOLLOW_rule__AttrAssignment__Alternatives_7_in_rule__AttrAssignment__Group__7__Impl9420 = new BitSet(new long[]{0x30174D4A400181F2L,0x000000000003FE30L});
     public static final BitSet FOLLOW_rule__AttrAssignment__Group__8__Impl_in_rule__AttrAssignment__Group__89453 = new BitSet(new long[]{0x0000002000000000L});
     public static final BitSet FOLLOW_rule__AttrAssignment__Group__9_in_rule__AttrAssignment__Group__89456 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_36_in_rule__AttrAssignment__Group__8__Impl9484 = new BitSet(new long[]{0x0000000000000002L});
@@ -43958,7 +43839,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     public static final BitSet FOLLOW_rule__AttrAssignmentPart__Group__0__Impl_in_rule__AttrAssignmentPart__Group__09720 = new BitSet(new long[]{0x0000000000004000L});
     public static final BitSet FOLLOW_rule__AttrAssignmentPart__Group__1_in_rule__AttrAssignmentPart__Group__09723 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__AttrAssignmentPart__NameAssignment_0_in_rule__AttrAssignmentPart__Group__0__Impl9750 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__AttrAssignmentPart__Group__1__Impl_in_rule__AttrAssignmentPart__Group__19780 = new BitSet(new long[]{0x00000802400181F0L,0x0000000000008060L});
+    public static final BitSet FOLLOW_rule__AttrAssignmentPart__Group__1__Impl_in_rule__AttrAssignmentPart__Group__19780 = new BitSet(new long[]{0x00000802400181F0L,0x0000000000004030L});
     public static final BitSet FOLLOW_rule__AttrAssignmentPart__Group__2_in_rule__AttrAssignmentPart__Group__19783 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_14_in_rule__AttrAssignmentPart__Group__1__Impl9811 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__AttrAssignmentPart__Group__2__Impl_in_rule__AttrAssignmentPart__Group__29842 = new BitSet(new long[]{0x0000000000000002L});
@@ -43966,7 +43847,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     public static final BitSet FOLLOW_rule__TypedefMapping__Group__0__Impl_in_rule__TypedefMapping__Group__09905 = new BitSet(new long[]{0x0000000000000070L});
     public static final BitSet FOLLOW_rule__TypedefMapping__Group__1_in_rule__TypedefMapping__Group__09908 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_46_in_rule__TypedefMapping__Group__0__Impl9936 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__TypedefMapping__Group__1__Impl_in_rule__TypedefMapping__Group__19967 = new BitSet(new long[]{0x0000000000000070L,0x0000000000077C00L});
+    public static final BitSet FOLLOW_rule__TypedefMapping__Group__1__Impl_in_rule__TypedefMapping__Group__19967 = new BitSet(new long[]{0x0000000000000070L,0x000000000003BE00L});
     public static final BitSet FOLLOW_rule__TypedefMapping__Group__2_in_rule__TypedefMapping__Group__19970 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__TypedefMapping__NewTypeAssignment_1_in_rule__TypedefMapping__Group__1__Impl9997 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__TypedefMapping__Group__2__Impl_in_rule__TypedefMapping__Group__210027 = new BitSet(new long[]{0x0000802000000000L});
@@ -43980,7 +43861,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     public static final BitSet FOLLOW_rule__TypedefConstraint__Group__0__Impl_in_rule__TypedefConstraint__Group__010217 = new BitSet(new long[]{0x0000080000000000L});
     public static final BitSet FOLLOW_rule__TypedefConstraint__Group__1_in_rule__TypedefConstraint__Group__010220 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_47_in_rule__TypedefConstraint__Group__0__Impl10248 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__TypedefConstraint__Group__1__Impl_in_rule__TypedefConstraint__Group__110279 = new BitSet(new long[]{0x2001080A400181F0L,0x0000000000008060L});
+    public static final BitSet FOLLOW_rule__TypedefConstraint__Group__1__Impl_in_rule__TypedefConstraint__Group__110279 = new BitSet(new long[]{0x2001080A400181F0L,0x0000000000004030L});
     public static final BitSet FOLLOW_rule__TypedefConstraint__Group__2_in_rule__TypedefConstraint__Group__110282 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_43_in_rule__TypedefConstraint__Group__1__Impl10310 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__TypedefConstraint__Group__2__Impl_in_rule__TypedefConstraint__Group__210341 = new BitSet(new long[]{0x0000108000000000L});
@@ -43991,7 +43872,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     public static final BitSet FOLLOW_rule__TypedefConstraint__Group_3__0_in_rule__TypedefConstraint__Group__3__Impl10431 = new BitSet(new long[]{0x0000008000000002L});
     public static final BitSet FOLLOW_rule__TypedefConstraint__Group__4__Impl_in_rule__TypedefConstraint__Group__410462 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_44_in_rule__TypedefConstraint__Group__4__Impl10490 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__TypedefConstraint__Group_3__0__Impl_in_rule__TypedefConstraint__Group_3__010531 = new BitSet(new long[]{0x2001080A400181F0L,0x0000000000008060L});
+    public static final BitSet FOLLOW_rule__TypedefConstraint__Group_3__0__Impl_in_rule__TypedefConstraint__Group_3__010531 = new BitSet(new long[]{0x2001080A400181F0L,0x0000000000004030L});
     public static final BitSet FOLLOW_rule__TypedefConstraint__Group_3__1_in_rule__TypedefConstraint__Group_3__010534 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_39_in_rule__TypedefConstraint__Group_3__0__Impl10562 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__TypedefConstraint__Group_3__1__Impl_in_rule__TypedefConstraint__Group_3__110593 = new BitSet(new long[]{0x0000000000000002L});
@@ -44017,7 +43898,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     public static final BitSet FOLLOW_rule__VariableDeclarationPart__NameAssignment_0_in_rule__VariableDeclarationPart__Group__0__Impl11055 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__VariableDeclarationPart__Group__1__Impl_in_rule__VariableDeclarationPart__Group__111085 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__VariableDeclarationPart__Group_1__0_in_rule__VariableDeclarationPart__Group__1__Impl11112 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__VariableDeclarationPart__Group_1__0__Impl_in_rule__VariableDeclarationPart__Group_1__011147 = new BitSet(new long[]{0x2001080A400181F0L,0x0000000000008060L});
+    public static final BitSet FOLLOW_rule__VariableDeclarationPart__Group_1__0__Impl_in_rule__VariableDeclarationPart__Group_1__011147 = new BitSet(new long[]{0x2001080A400181F0L,0x0000000000004030L});
     public static final BitSet FOLLOW_rule__VariableDeclarationPart__Group_1__1_in_rule__VariableDeclarationPart__Group_1__011150 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_14_in_rule__VariableDeclarationPart__Group_1__0__Impl11178 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__VariableDeclarationPart__Group_1__1__Impl_in_rule__VariableDeclarationPart__Group_1__111209 = new BitSet(new long[]{0x0000000000000002L});
@@ -44048,7 +43929,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     public static final BitSet FOLLOW_rule__DerivedType__Group__0__Impl_in_rule__DerivedType__Group__011818 = new BitSet(new long[]{0x0000080000000000L});
     public static final BitSet FOLLOW_rule__DerivedType__Group__1_in_rule__DerivedType__Group__011821 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__DerivedType__Alternatives_0_in_rule__DerivedType__Group__0__Impl11848 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__DerivedType__Group__1__Impl_in_rule__DerivedType__Group__111878 = new BitSet(new long[]{0x0000000000000070L,0x0000000000077C00L});
+    public static final BitSet FOLLOW_rule__DerivedType__Group__1__Impl_in_rule__DerivedType__Group__111878 = new BitSet(new long[]{0x0000000000000070L,0x000000000003BE00L});
     public static final BitSet FOLLOW_rule__DerivedType__Group__2_in_rule__DerivedType__Group__111881 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_43_in_rule__DerivedType__Group__1__Impl11909 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__DerivedType__Group__2__Impl_in_rule__DerivedType__Group__211940 = new BitSet(new long[]{0x0000100000000000L});
@@ -44082,7 +43963,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     public static final BitSet FOLLOW_44_in_rule__DslContext__Group__7__Impl12526 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__DslContext__Group__8__Impl_in_rule__DslContext__Group__812557 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__DslContext__DslAssignment_8_in_rule__DslContext__Group__8__Impl12584 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__AttributeTo__Group__0__Impl_in_rule__AttributeTo__Group__012632 = new BitSet(new long[]{0x0000000000000070L,0x0000000000077C00L});
+    public static final BitSet FOLLOW_rule__AttributeTo__Group__0__Impl_in_rule__AttributeTo__Group__012632 = new BitSet(new long[]{0x0000000000000070L,0x000000000003BE00L});
     public static final BitSet FOLLOW_rule__AttributeTo__Group__1_in_rule__AttributeTo__Group__012635 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_49_in_rule__AttributeTo__Group__0__Impl12663 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__AttributeTo__Group__1__Impl_in_rule__AttributeTo__Group__112694 = new BitSet(new long[]{0x0000000000000070L});
@@ -44165,16 +44046,16 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     public static final BitSet FOLLOW_rule__Eval__Group__0__Impl_in_rule__Eval__Group__014458 = new BitSet(new long[]{0x0000000800000000L});
     public static final BitSet FOLLOW_rule__Eval__Group__1_in_rule__Eval__Group__014461 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_52_in_rule__Eval__Group__0__Impl14489 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Eval__Group__1__Impl_in_rule__Eval__Group__114520 = new BitSet(new long[]{0x2011080A400181F0L,0x0000000000008060L});
+    public static final BitSet FOLLOW_rule__Eval__Group__1__Impl_in_rule__Eval__Group__114520 = new BitSet(new long[]{0x2011080A400181F0L,0x0000000000004030L});
     public static final BitSet FOLLOW_rule__Eval__Group__2_in_rule__Eval__Group__114523 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_35_in_rule__Eval__Group__1__Impl14551 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Eval__Group__2__Impl_in_rule__Eval__Group__214582 = new BitSet(new long[]{0x2011080A400181F0L,0x0000000000008060L});
+    public static final BitSet FOLLOW_rule__Eval__Group__2__Impl_in_rule__Eval__Group__214582 = new BitSet(new long[]{0x2011080A400181F0L,0x0000000000004030L});
     public static final BitSet FOLLOW_rule__Eval__Group__3_in_rule__Eval__Group__214585 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__Eval__NestedAssignment_2_in_rule__Eval__Group__2__Impl14612 = new BitSet(new long[]{0x0010000000000002L});
     public static final BitSet FOLLOW_rule__Eval__Group__3__Impl_in_rule__Eval__Group__314643 = new BitSet(new long[]{0x0000001000000000L});
     public static final BitSet FOLLOW_rule__Eval__Group__4_in_rule__Eval__Group__314646 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Eval__StatementsAssignment_3_in_rule__Eval__Group__3__Impl14675 = new BitSet(new long[]{0x2011080A400181F2L,0x0000000000008060L});
-    public static final BitSet FOLLOW_rule__Eval__StatementsAssignment_3_in_rule__Eval__Group__3__Impl14687 = new BitSet(new long[]{0x2011080A400181F2L,0x0000000000008060L});
+    public static final BitSet FOLLOW_rule__Eval__StatementsAssignment_3_in_rule__Eval__Group__3__Impl14675 = new BitSet(new long[]{0x2011080A400181F2L,0x0000000000004030L});
+    public static final BitSet FOLLOW_rule__Eval__StatementsAssignment_3_in_rule__Eval__Group__3__Impl14687 = new BitSet(new long[]{0x2011080A400181F2L,0x0000000000004030L});
     public static final BitSet FOLLOW_rule__Eval__Group__4__Impl_in_rule__Eval__Group__414720 = new BitSet(new long[]{0x0000002000000000L});
     public static final BitSet FOLLOW_rule__Eval__Group__5_in_rule__Eval__Group__414723 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_36_in_rule__Eval__Group__4__Impl14751 = new BitSet(new long[]{0x0000000000000002L});
@@ -44300,7 +44181,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     public static final BitSet FOLLOW_rule__VersionStmt__VersionAssignment_1_in_rule__VersionStmt__Group__1__Impl17509 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__VersionStmt__Group__2__Impl_in_rule__VersionStmt__Group__217539 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_37_in_rule__VersionStmt__Group__2__Impl17567 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__OpDefStatement__Group__0__Impl_in_rule__OpDefStatement__Group__017604 = new BitSet(new long[]{0x0000000000000070L,0x0000000000077C00L});
+    public static final BitSet FOLLOW_rule__OpDefStatement__Group__0__Impl_in_rule__OpDefStatement__Group__017604 = new BitSet(new long[]{0x0000000000000070L,0x000000000003BE00L});
     public static final BitSet FOLLOW_rule__OpDefStatement__Group__1_in_rule__OpDefStatement__Group__017607 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_60_in_rule__OpDefStatement__Group__0__Impl17635 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__OpDefStatement__Group__1__Impl_in_rule__OpDefStatement__Group__117666 = new BitSet(new long[]{0x0000000000000070L});
@@ -44309,7 +44190,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     public static final BitSet FOLLOW_rule__OpDefStatement__Group__2__Impl_in_rule__OpDefStatement__Group__217726 = new BitSet(new long[]{0x0000080000000000L});
     public static final BitSet FOLLOW_rule__OpDefStatement__Group__3_in_rule__OpDefStatement__Group__217729 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__OpDefStatement__IdAssignment_2_in_rule__OpDefStatement__Group__2__Impl17756 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__OpDefStatement__Group__3__Impl_in_rule__OpDefStatement__Group__317786 = new BitSet(new long[]{0x0000000000000070L,0x0000000000077C00L});
+    public static final BitSet FOLLOW_rule__OpDefStatement__Group__3__Impl_in_rule__OpDefStatement__Group__317786 = new BitSet(new long[]{0x0000000000000070L,0x000000000003BE00L});
     public static final BitSet FOLLOW_rule__OpDefStatement__Group__4_in_rule__OpDefStatement__Group__317789 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_43_in_rule__OpDefStatement__Group__3__Impl17817 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__OpDefStatement__Group__4__Impl_in_rule__OpDefStatement__Group__417848 = new BitSet(new long[]{0x0000100000000000L});
@@ -44318,7 +44199,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     public static final BitSet FOLLOW_rule__OpDefStatement__Group__5__Impl_in_rule__OpDefStatement__Group__517908 = new BitSet(new long[]{0x0000000000004000L});
     public static final BitSet FOLLOW_rule__OpDefStatement__Group__6_in_rule__OpDefStatement__Group__517911 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_44_in_rule__OpDefStatement__Group__5__Impl17939 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__OpDefStatement__Group__6__Impl_in_rule__OpDefStatement__Group__617970 = new BitSet(new long[]{0x2001080A400181F0L,0x0000000000008060L});
+    public static final BitSet FOLLOW_rule__OpDefStatement__Group__6__Impl_in_rule__OpDefStatement__Group__617970 = new BitSet(new long[]{0x2001080A400181F0L,0x0000000000004030L});
     public static final BitSet FOLLOW_rule__OpDefStatement__Group__7_in_rule__OpDefStatement__Group__617973 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_14_in_rule__OpDefStatement__Group__6__Impl18001 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__OpDefStatement__Group__7__Impl_in_rule__OpDefStatement__Group__718032 = new BitSet(new long[]{0x0000002000000000L});
@@ -44326,7 +44207,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     public static final BitSet FOLLOW_rule__OpDefStatement__ImplAssignment_7_in_rule__OpDefStatement__Group__7__Impl18062 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__OpDefStatement__Group__8__Impl_in_rule__OpDefStatement__Group__818092 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_37_in_rule__OpDefStatement__Group__8__Impl18120 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__OpDefParameterList__Group__0__Impl_in_rule__OpDefParameterList__Group__018169 = new BitSet(new long[]{0x0000000000000070L,0x0000000000077C00L});
+    public static final BitSet FOLLOW_rule__OpDefParameterList__Group__0__Impl_in_rule__OpDefParameterList__Group__018169 = new BitSet(new long[]{0x0000000000000070L,0x000000000003BE00L});
     public static final BitSet FOLLOW_rule__OpDefParameterList__Group__1_in_rule__OpDefParameterList__Group__018172 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__OpDefParameterList__Group__1__Impl_in_rule__OpDefParameterList__Group__118230 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__OpDefParameterList__Group_1__0_in_rule__OpDefParameterList__Group__1__Impl18257 = new BitSet(new long[]{0x0000000000000002L});
@@ -44335,7 +44216,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     public static final BitSet FOLLOW_rule__OpDefParameterList__ListAssignment_1_0_in_rule__OpDefParameterList__Group_1__0__Impl18322 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__OpDefParameterList__Group_1__1__Impl_in_rule__OpDefParameterList__Group_1__118352 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__OpDefParameterList__Group_1_1__0_in_rule__OpDefParameterList__Group_1__1__Impl18379 = new BitSet(new long[]{0x0000008000000002L});
-    public static final BitSet FOLLOW_rule__OpDefParameterList__Group_1_1__0__Impl_in_rule__OpDefParameterList__Group_1_1__018414 = new BitSet(new long[]{0x0000000000000070L,0x0000000000077C00L});
+    public static final BitSet FOLLOW_rule__OpDefParameterList__Group_1_1__0__Impl_in_rule__OpDefParameterList__Group_1_1__018414 = new BitSet(new long[]{0x0000000000000070L,0x000000000003BE00L});
     public static final BitSet FOLLOW_rule__OpDefParameterList__Group_1_1__1_in_rule__OpDefParameterList__Group_1_1__018417 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_39_in_rule__OpDefParameterList__Group_1_1__0__Impl18445 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__OpDefParameterList__Group_1_1__1__Impl_in_rule__OpDefParameterList__Group_1_1__118476 = new BitSet(new long[]{0x0000000000000002L});
@@ -44348,7 +44229,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     public static final BitSet FOLLOW_rule__OpDefParameter__IdAssignment_1_in_rule__OpDefParameter__Group__1__Impl18627 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__OpDefParameter__Group__2__Impl_in_rule__OpDefParameter__Group__218657 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__OpDefParameter__Group_2__0_in_rule__OpDefParameter__Group__2__Impl18684 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__OpDefParameter__Group_2__0__Impl_in_rule__OpDefParameter__Group_2__018721 = new BitSet(new long[]{0x2001080A400181F0L,0x0000000000008060L});
+    public static final BitSet FOLLOW_rule__OpDefParameter__Group_2__0__Impl_in_rule__OpDefParameter__Group_2__018721 = new BitSet(new long[]{0x2001080A400181F0L,0x0000000000004030L});
     public static final BitSet FOLLOW_rule__OpDefParameter__Group_2__1_in_rule__OpDefParameter__Group_2__018724 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_14_in_rule__OpDefParameter__Group_2__0__Impl18752 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__OpDefParameter__Group_2__1__Impl_in_rule__OpDefParameter__Group_2__118783 = new BitSet(new long[]{0x0000000000000002L});
@@ -44358,7 +44239,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     public static final BitSet FOLLOW_rule__ExpressionStatement__ExprAssignment_0_in_rule__ExpressionStatement__Group__0__Impl18874 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__ExpressionStatement__Group__1__Impl_in_rule__ExpressionStatement__Group__118904 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_37_in_rule__ExpressionStatement__Group__1__Impl18932 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__LetExpression__Group__0__Impl_in_rule__LetExpression__Group__018967 = new BitSet(new long[]{0x0000000000000070L,0x0000000000077C00L});
+    public static final BitSet FOLLOW_rule__LetExpression__Group__0__Impl_in_rule__LetExpression__Group__018967 = new BitSet(new long[]{0x0000000000000070L,0x000000000003BE00L});
     public static final BitSet FOLLOW_rule__LetExpression__Group__1_in_rule__LetExpression__Group__018970 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_61_in_rule__LetExpression__Group__0__Impl18998 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__LetExpression__Group__1__Impl_in_rule__LetExpression__Group__119029 = new BitSet(new long[]{0x0000000000000070L});
@@ -44367,13 +44248,13 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     public static final BitSet FOLLOW_rule__LetExpression__Group__2__Impl_in_rule__LetExpression__Group__219089 = new BitSet(new long[]{0x0000000000004000L});
     public static final BitSet FOLLOW_rule__LetExpression__Group__3_in_rule__LetExpression__Group__219092 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__LetExpression__NameAssignment_2_in_rule__LetExpression__Group__2__Impl19119 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__LetExpression__Group__3__Impl_in_rule__LetExpression__Group__319149 = new BitSet(new long[]{0x2001080A400181F0L,0x0000000000008060L});
+    public static final BitSet FOLLOW_rule__LetExpression__Group__3__Impl_in_rule__LetExpression__Group__319149 = new BitSet(new long[]{0x2001080A400181F0L,0x0000000000004030L});
     public static final BitSet FOLLOW_rule__LetExpression__Group__4_in_rule__LetExpression__Group__319152 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_14_in_rule__LetExpression__Group__3__Impl19180 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__LetExpression__Group__4__Impl_in_rule__LetExpression__Group__419211 = new BitSet(new long[]{0x4000000000000000L});
     public static final BitSet FOLLOW_rule__LetExpression__Group__5_in_rule__LetExpression__Group__419214 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__LetExpression__ValueExprAssignment_4_in_rule__LetExpression__Group__4__Impl19241 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__LetExpression__Group__5__Impl_in_rule__LetExpression__Group__519271 = new BitSet(new long[]{0x2001080A400181F0L,0x0000000000008060L});
+    public static final BitSet FOLLOW_rule__LetExpression__Group__5__Impl_in_rule__LetExpression__Group__519271 = new BitSet(new long[]{0x2001080A400181F0L,0x0000000000004030L});
     public static final BitSet FOLLOW_rule__LetExpression__Group__6_in_rule__LetExpression__Group__519274 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_62_in_rule__LetExpression__Group__5__Impl19302 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__LetExpression__Group__6__Impl_in_rule__LetExpression__Group__619333 = new BitSet(new long[]{0x0000000000000002L});
@@ -44383,7 +44264,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     public static final BitSet FOLLOW_rule__AssignmentExpression__LeftAssignment_0_in_rule__AssignmentExpression__Group__0__Impl19434 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__AssignmentExpression__Group__1__Impl_in_rule__AssignmentExpression__Group__119464 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__AssignmentExpression__RightAssignment_1_in_rule__AssignmentExpression__Group__1__Impl19491 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__AssignmentExpressionPart__Group__0__Impl_in_rule__AssignmentExpressionPart__Group__019526 = new BitSet(new long[]{0x0000080A400181F0L,0x0000000000008060L});
+    public static final BitSet FOLLOW_rule__AssignmentExpressionPart__Group__0__Impl_in_rule__AssignmentExpressionPart__Group__019526 = new BitSet(new long[]{0x0000080A400181F0L,0x0000000000004030L});
     public static final BitSet FOLLOW_rule__AssignmentExpressionPart__Group__1_in_rule__AssignmentExpressionPart__Group__019529 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__AssignmentExpressionPart__OpAssignment_0_in_rule__AssignmentExpressionPart__Group__0__Impl19556 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__AssignmentExpressionPart__Group__1__Impl_in_rule__AssignmentExpressionPart__Group__119586 = new BitSet(new long[]{0x0000000000000002L});
@@ -44393,7 +44274,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     public static final BitSet FOLLOW_rule__ImplicationExpression__LeftAssignment_0_in_rule__ImplicationExpression__Group__0__Impl19677 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__ImplicationExpression__Group__1__Impl_in_rule__ImplicationExpression__Group__119707 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__ImplicationExpression__RightAssignment_1_in_rule__ImplicationExpression__Group__1__Impl19734 = new BitSet(new long[]{0x0000000000C00002L});
-    public static final BitSet FOLLOW_rule__ImplicationExpressionPart__Group__0__Impl_in_rule__ImplicationExpressionPart__Group__019769 = new BitSet(new long[]{0x00000802400181F0L,0x0000000000008060L});
+    public static final BitSet FOLLOW_rule__ImplicationExpressionPart__Group__0__Impl_in_rule__ImplicationExpressionPart__Group__019769 = new BitSet(new long[]{0x00000802400181F0L,0x0000000000004030L});
     public static final BitSet FOLLOW_rule__ImplicationExpressionPart__Group__1_in_rule__ImplicationExpressionPart__Group__019772 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__ImplicationExpressionPart__OpAssignment_0_in_rule__ImplicationExpressionPart__Group__0__Impl19799 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__ImplicationExpressionPart__Group__1__Impl_in_rule__ImplicationExpressionPart__Group__119829 = new BitSet(new long[]{0x0000000000000002L});
@@ -44403,7 +44284,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     public static final BitSet FOLLOW_rule__LogicalExpression__LeftAssignment_0_in_rule__LogicalExpression__Group__0__Impl19920 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__LogicalExpression__Group__1__Impl_in_rule__LogicalExpression__Group__119950 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__LogicalExpression__RightAssignment_1_in_rule__LogicalExpression__Group__1__Impl19977 = new BitSet(new long[]{0x0000000007000002L});
-    public static final BitSet FOLLOW_rule__LogicalExpressionPart__Group__0__Impl_in_rule__LogicalExpressionPart__Group__020012 = new BitSet(new long[]{0x00000802400181F0L,0x0000000000008060L});
+    public static final BitSet FOLLOW_rule__LogicalExpressionPart__Group__0__Impl_in_rule__LogicalExpressionPart__Group__020012 = new BitSet(new long[]{0x00000802400181F0L,0x0000000000004030L});
     public static final BitSet FOLLOW_rule__LogicalExpressionPart__Group__1_in_rule__LogicalExpressionPart__Group__020015 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__LogicalExpressionPart__OpAssignment_0_in_rule__LogicalExpressionPart__Group__0__Impl20042 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__LogicalExpressionPart__Group__1__Impl_in_rule__LogicalExpressionPart__Group__120072 = new BitSet(new long[]{0x0000000000000002L});
@@ -44413,7 +44294,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     public static final BitSet FOLLOW_rule__EqualityExpression__LeftAssignment_0_in_rule__EqualityExpression__Group__0__Impl20163 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__EqualityExpression__Group__1__Impl_in_rule__EqualityExpression__Group__120193 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__EqualityExpression__RightAssignment_1_in_rule__EqualityExpression__Group__1__Impl20220 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__EqualityExpressionPart__Group__0__Impl_in_rule__EqualityExpressionPart__Group__020255 = new BitSet(new long[]{0x0000080A400181F0L,0x0000000000008060L});
+    public static final BitSet FOLLOW_rule__EqualityExpressionPart__Group__0__Impl_in_rule__EqualityExpressionPart__Group__020255 = new BitSet(new long[]{0x0000080A400181F0L,0x0000000000004030L});
     public static final BitSet FOLLOW_rule__EqualityExpressionPart__Group__1_in_rule__EqualityExpressionPart__Group__020258 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__EqualityExpressionPart__OpAssignment_0_in_rule__EqualityExpressionPart__Group__0__Impl20285 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__EqualityExpressionPart__Group__1__Impl_in_rule__EqualityExpressionPart__Group__120315 = new BitSet(new long[]{0x0000000000000002L});
@@ -44423,7 +44304,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     public static final BitSet FOLLOW_rule__RelationalExpression__LeftAssignment_0_in_rule__RelationalExpression__Group__0__Impl20406 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__RelationalExpression__Group__1__Impl_in_rule__RelationalExpression__Group__120436 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__RelationalExpression__RightAssignment_1_in_rule__RelationalExpression__Group__1__Impl20463 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__RelationalExpressionPart__Group__0__Impl_in_rule__RelationalExpressionPart__Group__020498 = new BitSet(new long[]{0x00000802400181F0L,0x0000000000008060L});
+    public static final BitSet FOLLOW_rule__RelationalExpressionPart__Group__0__Impl_in_rule__RelationalExpressionPart__Group__020498 = new BitSet(new long[]{0x00000802400181F0L,0x0000000000004030L});
     public static final BitSet FOLLOW_rule__RelationalExpressionPart__Group__1_in_rule__RelationalExpressionPart__Group__020501 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__RelationalExpressionPart__OpAssignment_0_in_rule__RelationalExpressionPart__Group__0__Impl20528 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__RelationalExpressionPart__Group__1__Impl_in_rule__RelationalExpressionPart__Group__120558 = new BitSet(new long[]{0x0000000000000002L});
@@ -44433,7 +44314,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     public static final BitSet FOLLOW_rule__AdditiveExpression__LeftAssignment_0_in_rule__AdditiveExpression__Group__0__Impl20649 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__AdditiveExpression__Group__1__Impl_in_rule__AdditiveExpression__Group__120679 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__AdditiveExpression__RightAssignment_1_in_rule__AdditiveExpression__Group__1__Impl20706 = new BitSet(new long[]{0x0000000060000002L});
-    public static final BitSet FOLLOW_rule__AdditiveExpressionPart__Group__0__Impl_in_rule__AdditiveExpressionPart__Group__020741 = new BitSet(new long[]{0x00000802400181F0L,0x0000000000008060L});
+    public static final BitSet FOLLOW_rule__AdditiveExpressionPart__Group__0__Impl_in_rule__AdditiveExpressionPart__Group__020741 = new BitSet(new long[]{0x00000802400181F0L,0x0000000000004030L});
     public static final BitSet FOLLOW_rule__AdditiveExpressionPart__Group__1_in_rule__AdditiveExpressionPart__Group__020744 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__AdditiveExpressionPart__OpAssignment_0_in_rule__AdditiveExpressionPart__Group__0__Impl20771 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__AdditiveExpressionPart__Group__1__Impl_in_rule__AdditiveExpressionPart__Group__120801 = new BitSet(new long[]{0x0000000000000002L});
@@ -44443,12 +44324,12 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     public static final BitSet FOLLOW_rule__MultiplicativeExpression__LeftAssignment_0_in_rule__MultiplicativeExpression__Group__0__Impl20892 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__MultiplicativeExpression__Group__1__Impl_in_rule__MultiplicativeExpression__Group__120922 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__MultiplicativeExpression__RightAssignment_1_in_rule__MultiplicativeExpression__Group__1__Impl20949 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__MultiplicativeExpressionPart__Group__0__Impl_in_rule__MultiplicativeExpressionPart__Group__020984 = new BitSet(new long[]{0x00000802400181F0L,0x0000000000008060L});
+    public static final BitSet FOLLOW_rule__MultiplicativeExpressionPart__Group__0__Impl_in_rule__MultiplicativeExpressionPart__Group__020984 = new BitSet(new long[]{0x00000802400181F0L,0x0000000000004030L});
     public static final BitSet FOLLOW_rule__MultiplicativeExpressionPart__Group__1_in_rule__MultiplicativeExpressionPart__Group__020987 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__MultiplicativeExpressionPart__OpAssignment_0_in_rule__MultiplicativeExpressionPart__Group__0__Impl21014 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__MultiplicativeExpressionPart__Group__1__Impl_in_rule__MultiplicativeExpressionPart__Group__121044 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__MultiplicativeExpressionPart__ExprAssignment_1_in_rule__MultiplicativeExpressionPart__Group__1__Impl21071 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__UnaryExpression__Group__0__Impl_in_rule__UnaryExpression__Group__021105 = new BitSet(new long[]{0x00000802400181F0L,0x0000000000008060L});
+    public static final BitSet FOLLOW_rule__UnaryExpression__Group__0__Impl_in_rule__UnaryExpression__Group__021105 = new BitSet(new long[]{0x00000802400181F0L,0x0000000000004030L});
     public static final BitSet FOLLOW_rule__UnaryExpression__Group__1_in_rule__UnaryExpression__Group__021108 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__UnaryExpression__OpAssignment_0_in_rule__UnaryExpression__Group__0__Impl21135 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__UnaryExpression__Group__1__Impl_in_rule__UnaryExpression__Group__121166 = new BitSet(new long[]{0x0000000000000002L});
@@ -44471,7 +44352,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     public static final BitSet FOLLOW_64_in_rule__Call__Group_1__0__Impl21566 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__Call__Group_1__1__Impl_in_rule__Call__Group_1__121597 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__Call__SetOpAssignment_1_1_in_rule__Call__Group_1__1__Impl21624 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Call__Group_2__0__Impl_in_rule__Call__Group_2__021658 = new BitSet(new long[]{0x2001080A400181F0L,0x0000000000008060L});
+    public static final BitSet FOLLOW_rule__Call__Group_2__0__Impl_in_rule__Call__Group_2__021658 = new BitSet(new long[]{0x2001080A400181F0L,0x0000000000004030L});
     public static final BitSet FOLLOW_rule__Call__Group_2__1_in_rule__Call__Group_2__021661 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_65_in_rule__Call__Group_2__0__Impl21689 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__Call__Group_2__1__Impl_in_rule__Call__Group_2__121720 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000004L});
@@ -44482,10 +44363,10 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     public static final BitSet FOLLOW_rule__FeatureCall__Group__0__Impl_in_rule__FeatureCall__Group__021845 = new BitSet(new long[]{0x0000080000000000L});
     public static final BitSet FOLLOW_rule__FeatureCall__Group__1_in_rule__FeatureCall__Group__021848 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__FeatureCall__NameAssignment_0_in_rule__FeatureCall__Group__0__Impl21875 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__FeatureCall__Group__1__Impl_in_rule__FeatureCall__Group__121905 = new BitSet(new long[]{0x2001180A400181F0L,0x0000000000008060L});
+    public static final BitSet FOLLOW_rule__FeatureCall__Group__1__Impl_in_rule__FeatureCall__Group__121905 = new BitSet(new long[]{0x2001180A400181F0L,0x0000000000004030L});
     public static final BitSet FOLLOW_rule__FeatureCall__Group__2_in_rule__FeatureCall__Group__121908 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_43_in_rule__FeatureCall__Group__1__Impl21936 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__FeatureCall__Group__2__Impl_in_rule__FeatureCall__Group__221967 = new BitSet(new long[]{0x2001180A400181F0L,0x0000000000008060L});
+    public static final BitSet FOLLOW_rule__FeatureCall__Group__2__Impl_in_rule__FeatureCall__Group__221967 = new BitSet(new long[]{0x2001180A400181F0L,0x0000000000004030L});
     public static final BitSet FOLLOW_rule__FeatureCall__Group__3_in_rule__FeatureCall__Group__221970 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__FeatureCall__ParamAssignment_2_in_rule__FeatureCall__Group__2__Impl21997 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__FeatureCall__Group__3__Impl_in_rule__FeatureCall__Group__322028 = new BitSet(new long[]{0x0000000000000002L});
@@ -44493,13 +44374,13 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     public static final BitSet FOLLOW_rule__SetOp__Group__0__Impl_in_rule__SetOp__Group__022095 = new BitSet(new long[]{0x0000080000000000L});
     public static final BitSet FOLLOW_rule__SetOp__Group__1_in_rule__SetOp__Group__022098 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__SetOp__NameAssignment_0_in_rule__SetOp__Group__0__Impl22125 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__SetOp__Group__1__Impl_in_rule__SetOp__Group__122155 = new BitSet(new long[]{0x0000000000000070L});
+    public static final BitSet FOLLOW_rule__SetOp__Group__1__Impl_in_rule__SetOp__Group__122155 = new BitSet(new long[]{0x0000000000000070L,0x000000000003BE00L});
     public static final BitSet FOLLOW_rule__SetOp__Group__2_in_rule__SetOp__Group__122158 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_43_in_rule__SetOp__Group__1__Impl22186 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__SetOp__Group__2__Impl_in_rule__SetOp__Group__222217 = new BitSet(new long[]{0x2001180A400181F0L,0x0000000000008060L});
+    public static final BitSet FOLLOW_rule__SetOp__Group__2__Impl_in_rule__SetOp__Group__222217 = new BitSet(new long[]{0x2001180A400181F0L,0x0000000000004030L});
     public static final BitSet FOLLOW_rule__SetOp__Group__3_in_rule__SetOp__Group__222220 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__SetOp__DeclAssignment_2_in_rule__SetOp__Group__2__Impl22247 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__SetOp__Group__3__Impl_in_rule__SetOp__Group__322277 = new BitSet(new long[]{0x2001180A400181F0L,0x0000000000008060L});
+    public static final BitSet FOLLOW_rule__SetOp__Group__3__Impl_in_rule__SetOp__Group__322277 = new BitSet(new long[]{0x2001180A400181F0L,0x0000000000004030L});
     public static final BitSet FOLLOW_rule__SetOp__Group__4_in_rule__SetOp__Group__322280 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__SetOp__DeclExAssignment_3_in_rule__SetOp__Group__3__Impl22307 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__SetOp__Group__4__Impl_in_rule__SetOp__Group__422338 = new BitSet(new long[]{0x0000000000000002L});
@@ -44512,341 +44393,336 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     public static final BitSet FOLLOW_rule__Declarator__Group_1__0_in_rule__Declarator__Group__1__Impl22497 = new BitSet(new long[]{0x0000002000000002L});
     public static final BitSet FOLLOW_rule__Declarator__Group__2__Impl_in_rule__Declarator__Group__222528 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_67_in_rule__Declarator__Group__2__Impl22556 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Declarator__Group_1__0__Impl_in_rule__Declarator__Group_1__022593 = new BitSet(new long[]{0x0000000000000070L});
+    public static final BitSet FOLLOW_rule__Declarator__Group_1__0__Impl_in_rule__Declarator__Group_1__022593 = new BitSet(new long[]{0x0000000000000070L,0x000000000003BE00L});
     public static final BitSet FOLLOW_rule__Declarator__Group_1__1_in_rule__Declarator__Group_1__022596 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_37_in_rule__Declarator__Group_1__0__Impl22624 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__Declarator__Group_1__1__Impl_in_rule__Declarator__Group_1__122655 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__Declarator__DeclAssignment_1_1_in_rule__Declarator__Group_1__1__Impl22682 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Declaration__Group__0__Impl_in_rule__Declaration__Group__022716 = new BitSet(new long[]{0x0000008000004000L,0x0000000000000010L});
+    public static final BitSet FOLLOW_rule__Declaration__Group__0__Impl_in_rule__Declaration__Group__022716 = new BitSet(new long[]{0x0000000000000070L,0x000000000003BE00L});
     public static final BitSet FOLLOW_rule__Declaration__Group__1_in_rule__Declaration__Group__022719 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Declaration__IdAssignment_0_in_rule__Declaration__Group__0__Impl22746 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Declaration__Group__1__Impl_in_rule__Declaration__Group__122776 = new BitSet(new long[]{0x0000008000004000L,0x0000000000000010L});
-    public static final BitSet FOLLOW_rule__Declaration__Group__2_in_rule__Declaration__Group__122779 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Declaration__Group_1__0_in_rule__Declaration__Group__1__Impl22806 = new BitSet(new long[]{0x0000008000000002L});
-    public static final BitSet FOLLOW_rule__Declaration__Group__2__Impl_in_rule__Declaration__Group__222837 = new BitSet(new long[]{0x0000008000004000L,0x0000000000000010L});
+    public static final BitSet FOLLOW_rule__Declaration__TypeAssignment_0_in_rule__Declaration__Group__0__Impl22746 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Declaration__Group__1__Impl_in_rule__Declaration__Group__122777 = new BitSet(new long[]{0x0000008000004000L});
+    public static final BitSet FOLLOW_rule__Declaration__Group__2_in_rule__Declaration__Group__122780 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Declaration__IdAssignment_1_in_rule__Declaration__Group__1__Impl22807 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Declaration__Group__2__Impl_in_rule__Declaration__Group__222837 = new BitSet(new long[]{0x0000008000004000L});
     public static final BitSet FOLLOW_rule__Declaration__Group__3_in_rule__Declaration__Group__222840 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Declaration__Group_2__0_in_rule__Declaration__Group__2__Impl22867 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Declaration__Group_2__0_in_rule__Declaration__Group__2__Impl22867 = new BitSet(new long[]{0x0000008000000002L});
     public static final BitSet FOLLOW_rule__Declaration__Group__3__Impl_in_rule__Declaration__Group__322898 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__Declaration__Group_3__0_in_rule__Declaration__Group__3__Impl22925 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Declaration__Group_1__0__Impl_in_rule__Declaration__Group_1__022964 = new BitSet(new long[]{0x0000000000000070L});
-    public static final BitSet FOLLOW_rule__Declaration__Group_1__1_in_rule__Declaration__Group_1__022967 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_39_in_rule__Declaration__Group_1__0__Impl22995 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Declaration__Group_1__1__Impl_in_rule__Declaration__Group_1__123026 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Declaration__IdAssignment_1_1_in_rule__Declaration__Group_1__1__Impl23053 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Declaration__Group_2__0__Impl_in_rule__Declaration__Group_2__023087 = new BitSet(new long[]{0x0000000000000070L,0x0000000000077C00L});
-    public static final BitSet FOLLOW_rule__Declaration__Group_2__1_in_rule__Declaration__Group_2__023090 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_68_in_rule__Declaration__Group_2__0__Impl23118 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Declaration__Group_2__1__Impl_in_rule__Declaration__Group_2__123149 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Declaration__TypeAssignment_2_1_in_rule__Declaration__Group_2__1__Impl23176 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Declaration__Group_3__0__Impl_in_rule__Declaration__Group_3__023210 = new BitSet(new long[]{0x2001080A400181F0L,0x0000000000008060L});
-    public static final BitSet FOLLOW_rule__Declaration__Group_3__1_in_rule__Declaration__Group_3__023213 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_14_in_rule__Declaration__Group_3__0__Impl23241 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Declaration__Group_3__1__Impl_in_rule__Declaration__Group_3__123272 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Declaration__InitAssignment_3_1_in_rule__Declaration__Group_3__1__Impl23299 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ActualParameterList__Group__0__Impl_in_rule__ActualParameterList__Group__023333 = new BitSet(new long[]{0x0000008000000000L});
-    public static final BitSet FOLLOW_rule__ActualParameterList__Group__1_in_rule__ActualParameterList__Group__023336 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ActualParameterList__ParamAssignment_0_in_rule__ActualParameterList__Group__0__Impl23363 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ActualParameterList__Group__1__Impl_in_rule__ActualParameterList__Group__123393 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ActualParameterList__Group_1__0_in_rule__ActualParameterList__Group__1__Impl23420 = new BitSet(new long[]{0x0000008000000002L});
-    public static final BitSet FOLLOW_rule__ActualParameterList__Group_1__0__Impl_in_rule__ActualParameterList__Group_1__023455 = new BitSet(new long[]{0x2001080A400181F0L,0x0000000000008060L});
-    public static final BitSet FOLLOW_rule__ActualParameterList__Group_1__1_in_rule__ActualParameterList__Group_1__023458 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_39_in_rule__ActualParameterList__Group_1__0__Impl23486 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ActualParameterList__Group_1__1__Impl_in_rule__ActualParameterList__Group_1__123517 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ActualParameterList__ParamAssignment_1_1_in_rule__ActualParameterList__Group_1__1__Impl23544 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ExpressionAccess__Group__0__Impl_in_rule__ExpressionAccess__Group__023578 = new BitSet(new long[]{0x0000000000000070L});
-    public static final BitSet FOLLOW_rule__ExpressionAccess__Group__1_in_rule__ExpressionAccess__Group__023581 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_63_in_rule__ExpressionAccess__Group__0__Impl23609 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ExpressionAccess__Group__1__Impl_in_rule__ExpressionAccess__Group__123640 = new BitSet(new long[]{0x8000000000000000L,0x0000000000000003L});
-    public static final BitSet FOLLOW_rule__ExpressionAccess__Group__2_in_rule__ExpressionAccess__Group__123643 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ExpressionAccess__NameAssignment_1_in_rule__ExpressionAccess__Group__1__Impl23670 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ExpressionAccess__Group__2__Impl_in_rule__ExpressionAccess__Group__223700 = new BitSet(new long[]{0x8000000000000000L,0x0000000000000003L});
-    public static final BitSet FOLLOW_rule__ExpressionAccess__Group__3_in_rule__ExpressionAccess__Group__223703 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ExpressionAccess__CallsAssignment_2_in_rule__ExpressionAccess__Group__2__Impl23730 = new BitSet(new long[]{0x8000000000000002L,0x0000000000000003L});
-    public static final BitSet FOLLOW_rule__ExpressionAccess__Group__3__Impl_in_rule__ExpressionAccess__Group__323761 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ExpressionAccess__AccessAssignment_3_in_rule__ExpressionAccess__Group__3__Impl23788 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__PrimaryExpression__Group__0__Impl_in_rule__PrimaryExpression__Group__023827 = new BitSet(new long[]{0x8000000000000000L,0x0000000000000003L});
-    public static final BitSet FOLLOW_rule__PrimaryExpression__Group__1_in_rule__PrimaryExpression__Group__023830 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__PrimaryExpression__Alternatives_0_in_rule__PrimaryExpression__Group__0__Impl23857 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__PrimaryExpression__Group__1__Impl_in_rule__PrimaryExpression__Group__123887 = new BitSet(new long[]{0x8000000000000000L,0x0000000000000003L});
-    public static final BitSet FOLLOW_rule__PrimaryExpression__Group__2_in_rule__PrimaryExpression__Group__123890 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__PrimaryExpression__CallsAssignment_1_in_rule__PrimaryExpression__Group__1__Impl23917 = new BitSet(new long[]{0x8000000000000002L,0x0000000000000003L});
-    public static final BitSet FOLLOW_rule__PrimaryExpression__Group__2__Impl_in_rule__PrimaryExpression__Group__223948 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__PrimaryExpression__AccessAssignment_2_in_rule__PrimaryExpression__Group__2__Impl23975 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__PrimaryExpression__Group_0_1__0__Impl_in_rule__PrimaryExpression__Group_0_1__024012 = new BitSet(new long[]{0x2001080A400181F0L,0x0000000000008060L});
-    public static final BitSet FOLLOW_rule__PrimaryExpression__Group_0_1__1_in_rule__PrimaryExpression__Group_0_1__024015 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_43_in_rule__PrimaryExpression__Group_0_1__0__Impl24043 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__PrimaryExpression__Group_0_1__1__Impl_in_rule__PrimaryExpression__Group_0_1__124074 = new BitSet(new long[]{0x0000100000000000L});
-    public static final BitSet FOLLOW_rule__PrimaryExpression__Group_0_1__2_in_rule__PrimaryExpression__Group_0_1__124077 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__PrimaryExpression__ExAssignment_0_1_1_in_rule__PrimaryExpression__Group_0_1__1__Impl24104 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__PrimaryExpression__Group_0_1__2__Impl_in_rule__PrimaryExpression__Group_0_1__224134 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_44_in_rule__PrimaryExpression__Group_0_1__2__Impl24162 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__PrimaryExpression__Group_0_3__0__Impl_in_rule__PrimaryExpression__Group_0_3__024199 = new BitSet(new long[]{0x0000080000000000L});
-    public static final BitSet FOLLOW_rule__PrimaryExpression__Group_0_3__1_in_rule__PrimaryExpression__Group_0_3__024202 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_69_in_rule__PrimaryExpression__Group_0_3__0__Impl24230 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__PrimaryExpression__Group_0_3__1__Impl_in_rule__PrimaryExpression__Group_0_3__124261 = new BitSet(new long[]{0x0000000000000070L});
-    public static final BitSet FOLLOW_rule__PrimaryExpression__Group_0_3__2_in_rule__PrimaryExpression__Group_0_3__124264 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_43_in_rule__PrimaryExpression__Group_0_3__1__Impl24292 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__PrimaryExpression__Group_0_3__2__Impl_in_rule__PrimaryExpression__Group_0_3__224323 = new BitSet(new long[]{0x0000100000000000L});
-    public static final BitSet FOLLOW_rule__PrimaryExpression__Group_0_3__3_in_rule__PrimaryExpression__Group_0_3__224326 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__PrimaryExpression__RefNameAssignment_0_3_2_in_rule__PrimaryExpression__Group_0_3__2__Impl24353 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__PrimaryExpression__Group_0_3__3__Impl_in_rule__PrimaryExpression__Group_0_3__324383 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_44_in_rule__PrimaryExpression__Group_0_3__3__Impl24411 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__CollectionInitializer__Group__0__Impl_in_rule__CollectionInitializer__Group__024450 = new BitSet(new long[]{0x0000000800000070L});
-    public static final BitSet FOLLOW_rule__CollectionInitializer__Group__1_in_rule__CollectionInitializer__Group__024453 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__CollectionInitializer__Group__1__Impl_in_rule__CollectionInitializer__Group__124511 = new BitSet(new long[]{0x0000000800000070L});
-    public static final BitSet FOLLOW_rule__CollectionInitializer__Group__2_in_rule__CollectionInitializer__Group__124514 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__CollectionInitializer__TypeAssignment_1_in_rule__CollectionInitializer__Group__1__Impl24541 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__CollectionInitializer__Group__2__Impl_in_rule__CollectionInitializer__Group__224572 = new BitSet(new long[]{0x0000081A400181F0L,0x0000000000008060L});
-    public static final BitSet FOLLOW_rule__CollectionInitializer__Group__3_in_rule__CollectionInitializer__Group__224575 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_35_in_rule__CollectionInitializer__Group__2__Impl24603 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__CollectionInitializer__Group__3__Impl_in_rule__CollectionInitializer__Group__324634 = new BitSet(new long[]{0x0000081A400181F0L,0x0000000000008060L});
-    public static final BitSet FOLLOW_rule__CollectionInitializer__Group__4_in_rule__CollectionInitializer__Group__324637 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__CollectionInitializer__InitAssignment_3_in_rule__CollectionInitializer__Group__3__Impl24664 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__CollectionInitializer__Group__4__Impl_in_rule__CollectionInitializer__Group__424695 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_36_in_rule__CollectionInitializer__Group__4__Impl24723 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ExpressionListOrRange__Group__0__Impl_in_rule__ExpressionListOrRange__Group__024764 = new BitSet(new long[]{0x0000008000000000L});
-    public static final BitSet FOLLOW_rule__ExpressionListOrRange__Group__1_in_rule__ExpressionListOrRange__Group__024767 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ExpressionListOrRange__ListAssignment_0_in_rule__ExpressionListOrRange__Group__0__Impl24794 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ExpressionListOrRange__Group__1__Impl_in_rule__ExpressionListOrRange__Group__124824 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ExpressionListOrRange__Group_1__0_in_rule__ExpressionListOrRange__Group__1__Impl24851 = new BitSet(new long[]{0x0000008000000002L});
-    public static final BitSet FOLLOW_rule__ExpressionListOrRange__Group_1__0__Impl_in_rule__ExpressionListOrRange__Group_1__024886 = new BitSet(new long[]{0x0000080A400181F0L,0x0000000000008060L});
-    public static final BitSet FOLLOW_rule__ExpressionListOrRange__Group_1__1_in_rule__ExpressionListOrRange__Group_1__024889 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_39_in_rule__ExpressionListOrRange__Group_1__0__Impl24917 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ExpressionListOrRange__Group_1__1__Impl_in_rule__ExpressionListOrRange__Group_1__124948 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ExpressionListOrRange__ListAssignment_1_1_in_rule__ExpressionListOrRange__Group_1__1__Impl24975 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ExpressionListEntry__Group__0__Impl_in_rule__ExpressionListEntry__Group__025009 = new BitSet(new long[]{0x0000080A400181F0L,0x0000000000008060L});
-    public static final BitSet FOLLOW_rule__ExpressionListEntry__Group__1_in_rule__ExpressionListEntry__Group__025012 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ExpressionListEntry__Group_0__0_in_rule__ExpressionListEntry__Group__0__Impl25039 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ExpressionListEntry__Group__1__Impl_in_rule__ExpressionListEntry__Group__125070 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ExpressionListEntry__Alternatives_1_in_rule__ExpressionListEntry__Group__1__Impl25097 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ExpressionListEntry__Group_0__0__Impl_in_rule__ExpressionListEntry__Group_0__025131 = new BitSet(new long[]{0x8000000000004000L});
-    public static final BitSet FOLLOW_rule__ExpressionListEntry__Group_0__1_in_rule__ExpressionListEntry__Group_0__025134 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ExpressionListEntry__NameAssignment_0_0_in_rule__ExpressionListEntry__Group_0__0__Impl25161 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ExpressionListEntry__Group_0__1__Impl_in_rule__ExpressionListEntry__Group_0__125191 = new BitSet(new long[]{0x8000000000004000L});
-    public static final BitSet FOLLOW_rule__ExpressionListEntry__Group_0__2_in_rule__ExpressionListEntry__Group_0__125194 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ExpressionListEntry__Group_0_1__0_in_rule__ExpressionListEntry__Group_0__1__Impl25221 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ExpressionListEntry__Group_0__2__Impl_in_rule__ExpressionListEntry__Group_0__225252 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_14_in_rule__ExpressionListEntry__Group_0__2__Impl25280 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ExpressionListEntry__Group_0_1__0__Impl_in_rule__ExpressionListEntry__Group_0_1__025317 = new BitSet(new long[]{0x0000000000000070L});
-    public static final BitSet FOLLOW_rule__ExpressionListEntry__Group_0_1__1_in_rule__ExpressionListEntry__Group_0_1__025320 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_63_in_rule__ExpressionListEntry__Group_0_1__0__Impl25348 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ExpressionListEntry__Group_0_1__1__Impl_in_rule__ExpressionListEntry__Group_0_1__125379 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ExpressionListEntry__AttribAssignment_0_1_1_in_rule__ExpressionListEntry__Group_0_1__1__Impl25406 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__IfExpression__Group__0__Impl_in_rule__IfExpression__Group__025440 = new BitSet(new long[]{0x2001080A400181F0L,0x0000000000008060L});
-    public static final BitSet FOLLOW_rule__IfExpression__Group__1_in_rule__IfExpression__Group__025443 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_70_in_rule__IfExpression__Group__0__Impl25471 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__IfExpression__Group__1__Impl_in_rule__IfExpression__Group__125502 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000080L});
-    public static final BitSet FOLLOW_rule__IfExpression__Group__2_in_rule__IfExpression__Group__125505 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__IfExpression__IfExAssignment_1_in_rule__IfExpression__Group__1__Impl25532 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__IfExpression__Group__2__Impl_in_rule__IfExpression__Group__225562 = new BitSet(new long[]{0x2001080A400181F0L,0x0000000000008060L});
-    public static final BitSet FOLLOW_rule__IfExpression__Group__3_in_rule__IfExpression__Group__225565 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_71_in_rule__IfExpression__Group__2__Impl25593 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__IfExpression__Group__3__Impl_in_rule__IfExpression__Group__325624 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000100L});
-    public static final BitSet FOLLOW_rule__IfExpression__Group__4_in_rule__IfExpression__Group__325627 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__IfExpression__ThenExAssignment_3_in_rule__IfExpression__Group__3__Impl25654 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__IfExpression__Group__4__Impl_in_rule__IfExpression__Group__425684 = new BitSet(new long[]{0x2001080A400181F0L,0x0000000000008060L});
-    public static final BitSet FOLLOW_rule__IfExpression__Group__5_in_rule__IfExpression__Group__425687 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_72_in_rule__IfExpression__Group__4__Impl25715 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__IfExpression__Group__5__Impl_in_rule__IfExpression__Group__525746 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000200L});
-    public static final BitSet FOLLOW_rule__IfExpression__Group__6_in_rule__IfExpression__Group__525749 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__IfExpression__ElseExAssignment_5_in_rule__IfExpression__Group__5__Impl25776 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__IfExpression__Group__6__Impl_in_rule__IfExpression__Group__625806 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_73_in_rule__IfExpression__Group__6__Impl25834 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleProject_in_rule__VariabilityUnit__ProjectsAssignment_125884 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_rule__Project__NameAssignment_125915 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleVersionStmt_in_rule__Project__VersionAssignment_325946 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleImportStmt_in_rule__Project__ImportsAssignment_425977 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleConflictStmt_in_rule__Project__ConflictsAssignment_526008 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleInterfaceDeclaration_in_rule__Project__InterfacesAssignment_626039 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleProjectContents_in_rule__Project__ContentsAssignment_726070 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleTypedef_in_rule__ProjectContents__ElementsAssignment_1_026101 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleVariableDeclaration_in_rule__ProjectContents__ElementsAssignment_1_126132 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleFreeze_in_rule__ProjectContents__ElementsAssignment_1_226163 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleEval_in_rule__ProjectContents__ElementsAssignment_1_326194 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleExpressionStatement_in_rule__ProjectContents__ElementsAssignment_1_426225 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleAttributeTo_in_rule__ProjectContents__ElementsAssignment_1_526256 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleOpDefStatement_in_rule__ProjectContents__ElementsAssignment_1_626287 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleAttrAssignment_in_rule__ProjectContents__ElementsAssignment_1_726318 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleTypedefEnum_in_rule__Typedef__TEnumAssignment_026349 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleTypedefCompound_in_rule__Typedef__TCompoundAssignment_126380 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleTypedefMapping_in_rule__Typedef__TMappingAssignment_226411 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_rule__TypedefEnum__NameAssignment_126442 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleTypedefEnumLiteral_in_rule__TypedefEnum__LiteralsAssignment_326473 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleTypedefEnumLiteral_in_rule__TypedefEnum__LiteralsAssignment_4_126504 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleTypedefConstraint_in_rule__TypedefEnum__ConstraintAssignment_626535 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_rule__TypedefEnumLiteral__NameAssignment_026566 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleNumValue_in_rule__TypedefEnumLiteral__ValueAssignment_1_126597 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_rule__TypedefCompound__NameAssignment_126628 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_rule__TypedefCompound__SuperAssignment_2_126659 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleVariableDeclaration_in_rule__TypedefCompound__ElementsAssignment_4_026690 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleExpressionStatement_in_rule__TypedefCompound__ElementsAssignment_4_126721 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleAttrAssignment_in_rule__TypedefCompound__ElementsAssignment_4_226752 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleAttrAssignmentPart_in_rule__AttrAssignment__PartsAssignment_226783 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleAttrAssignmentPart_in_rule__AttrAssignment__PartsAssignment_3_126814 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleVariableDeclaration_in_rule__AttrAssignment__ElementsAssignment_7_026845 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleExpressionStatement_in_rule__AttrAssignment__ElementsAssignment_7_126876 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleAttrAssignment_in_rule__AttrAssignment__ElementsAssignment_7_226907 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_rule__AttrAssignmentPart__NameAssignment_026938 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleLogicalExpression_in_rule__AttrAssignmentPart__ValueAssignment_226969 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_rule__TypedefMapping__NewTypeAssignment_127000 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleType_in_rule__TypedefMapping__TypeAssignment_227031 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleTypedefConstraint_in_rule__TypedefMapping__ConstraintAssignment_327062 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleExpression_in_rule__TypedefConstraint__ExpressionsAssignment_227093 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleExpression_in_rule__TypedefConstraint__ExpressionsAssignment_3_127124 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleType_in_rule__VariableDeclaration__TypeAssignment_027155 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleVariableDeclarationPart_in_rule__VariableDeclaration__DeclsAssignment_127186 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleVariableDeclarationPart_in_rule__VariableDeclaration__DeclsAssignment_2_127217 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_rule__VariableDeclarationPart__NameAssignment_027248 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleExpression_in_rule__VariableDeclarationPart__DefaultAssignment_1_127279 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_74_in_rule__BasicType__TypeAssignment_027315 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_75_in_rule__BasicType__TypeAssignment_127359 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_76_in_rule__BasicType__TypeAssignment_227403 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_77_in_rule__BasicType__TypeAssignment_327447 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_78_in_rule__BasicType__TypeAssignment_427491 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleBasicType_in_rule__Type__TypeAssignment_027530 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleQualifiedName_in_rule__Type__IdAssignment_127561 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleDerivedType_in_rule__Type__DerivedAssignment_227592 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_NUMBER_in_rule__NumValue__ValAssignment27623 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_rule__QualifiedName__QNameAssignment_0_027654 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_56_in_rule__QualifiedName__QNameAssignment_0_127690 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_rule__QualifiedName__QNameAssignment_0_2_027729 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_56_in_rule__QualifiedName__QNameAssignment_0_2_127765 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_rule__QualifiedName__QNameAssignment_127804 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_63_in_rule__AccessName__ANameAssignment_027840 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_rule__AccessName__ANameAssignment_127879 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleNumValue_in_rule__Value__NValueAssignment_027910 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_STRING_in_rule__Value__SValueAssignment_127941 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleQualifiedName_in_rule__Value__QValueAssignment_227972 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Value__BValueAlternatives_3_0_in_rule__Value__BValueAssignment_328003 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_79_in_rule__Value__NullValueAssignment_428041 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_80_in_rule__DerivedType__OpAssignment_0_028085 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_81_in_rule__DerivedType__OpAssignment_0_128129 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_82_in_rule__DerivedType__OpAssignment_0_228173 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleType_in_rule__DerivedType__TypeAssignment_228212 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_STRING_in_rule__DslContext__StopAssignment_228243 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_STRING_in_rule__DslContext__EscapeAssignment_428274 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_STRING_in_rule__DslContext__CommandAssignment_628305 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_DSL_CONTENT_in_rule__DslContext__DslAssignment_828336 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleType_in_rule__AttributeTo__AttributeTypeAssignment_128367 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleVariableDeclarationPart_in_rule__AttributeTo__AttributeDeclAssignment_228398 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_rule__AttributeTo__NamesAssignment_428429 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_rule__AttributeTo__NamesAssignment_5_128460 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleFreezeStatement_in_rule__Freeze__NamesAssignment_228491 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleFreezeButList_in_rule__Freeze__ButAssignment_4_128522 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleQualifiedName_in_rule__FreezeStatement__NameAssignment_028553 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleAccessName_in_rule__FreezeStatement__AccessAssignment_128584 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleFreezeButExpression_in_rule__FreezeButList__ListAssignment_128615 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleFreezeButExpression_in_rule__FreezeButList__ListAssignment_2_128646 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleQualifiedName_in_rule__FreezeButExpression__NameAssignment_028677 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleAccessName_in_rule__FreezeButExpression__AccessAssignment_128708 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_31_in_rule__FreezeButExpression__WildcardAssignment_228744 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleEval_in_rule__Eval__NestedAssignment_228783 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleExpressionStatement_in_rule__Eval__StatementsAssignment_328814 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_rule__InterfaceDeclaration__NameAssignment_128845 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleExport_in_rule__InterfaceDeclaration__ExportsAssignment_328876 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_rule__Export__NamesAssignment_128907 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_rule__Export__NamesAssignment_2_128938 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_rule__ImportStmt__NameAssignment_128969 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_rule__ImportStmt__InterfaceAssignment_2_129000 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleVersionedId_in_rule__ImportStmt__VersionsAssignment_3_229031 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleVersionedId_in_rule__ImportStmt__VersionsAssignment_3_3_129062 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_rule__ConflictStmt__NameAssignment_129093 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleVersionedId_in_rule__ConflictStmt__ConflictsAssignment_2_229124 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleVersionedId_in_rule__ConflictStmt__ConflictsAssignment_2_3_129155 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_rule__VersionedId__NameAssignment_029186 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleVersionOperator_in_rule__VersionedId__OpAssignment_229217 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_VERSION_in_rule__VersionedId__VersionAssignment_329248 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_VERSION_in_rule__VersionStmt__VersionAssignment_129279 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleType_in_rule__OpDefStatement__ResultAssignment_129310 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_rule__OpDefStatement__IdAssignment_229341 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleOpDefParameterList_in_rule__OpDefStatement__ParamAssignment_429372 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleExpression_in_rule__OpDefStatement__ImplAssignment_729403 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleOpDefParameter_in_rule__OpDefParameterList__ListAssignment_1_029434 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleOpDefParameter_in_rule__OpDefParameterList__ListAssignment_1_1_129465 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleType_in_rule__OpDefParameter__TypeAssignment_029496 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_rule__OpDefParameter__IdAssignment_129527 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleExpression_in_rule__OpDefParameter__ValAssignment_2_129558 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleExpression_in_rule__ExpressionStatement__ExprAssignment_029589 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleLetExpression_in_rule__Expression__LetAssignment_029620 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleImplicationExpression_in_rule__Expression__ExprAssignment_129651 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleCollectionInitializer_in_rule__Expression__CollectionAssignment_229682 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleDslContext_in_rule__Expression__DslAssignment_329713 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleType_in_rule__LetExpression__TypeAssignment_129744 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_rule__LetExpression__NameAssignment_229775 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleExpression_in_rule__LetExpression__ValueExprAssignment_429806 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleExpression_in_rule__LetExpression__SubExprAssignment_629837 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleLogicalExpression_in_rule__AssignmentExpression__LeftAssignment_029868 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleAssignmentExpressionPart_in_rule__AssignmentExpression__RightAssignment_129899 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleAssignmentOperator_in_rule__AssignmentExpressionPart__OpAssignment_029930 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleLogicalExpression_in_rule__AssignmentExpressionPart__ExAssignment_1_029961 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleCollectionInitializer_in_rule__AssignmentExpressionPart__CollectionAssignment_1_129992 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleAssignmentExpression_in_rule__ImplicationExpression__LeftAssignment_030023 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleImplicationExpressionPart_in_rule__ImplicationExpression__RightAssignment_130054 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleImplicationOperator_in_rule__ImplicationExpressionPart__OpAssignment_030085 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleAssignmentExpression_in_rule__ImplicationExpressionPart__ExAssignment_130116 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleEqualityExpression_in_rule__LogicalExpression__LeftAssignment_030147 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleLogicalExpressionPart_in_rule__LogicalExpression__RightAssignment_130178 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleLogicalOperator_in_rule__LogicalExpressionPart__OpAssignment_030209 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleEqualityExpression_in_rule__LogicalExpressionPart__ExAssignment_130240 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleRelationalExpression_in_rule__EqualityExpression__LeftAssignment_030271 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleEqualityExpressionPart_in_rule__EqualityExpression__RightAssignment_130302 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleEqualityOperator_in_rule__EqualityExpressionPart__OpAssignment_030333 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleRelationalExpression_in_rule__EqualityExpressionPart__ExAssignment_1_030364 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleCollectionInitializer_in_rule__EqualityExpressionPart__CollectionAssignment_1_130395 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleAdditiveExpression_in_rule__RelationalExpression__LeftAssignment_030426 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleRelationalExpressionPart_in_rule__RelationalExpression__RightAssignment_130457 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleRelationalOperator_in_rule__RelationalExpressionPart__OpAssignment_030488 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleAdditiveExpression_in_rule__RelationalExpressionPart__ExAssignment_130519 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleMultiplicativeExpression_in_rule__AdditiveExpression__LeftAssignment_030550 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleAdditiveExpressionPart_in_rule__AdditiveExpression__RightAssignment_130581 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleAdditiveOperator_in_rule__AdditiveExpressionPart__OpAssignment_030612 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleMultiplicativeExpression_in_rule__AdditiveExpressionPart__ExAssignment_130643 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleUnaryExpression_in_rule__MultiplicativeExpression__LeftAssignment_030674 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleMultiplicativeExpressionPart_in_rule__MultiplicativeExpression__RightAssignment_130705 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleMultiplicativeOperator_in_rule__MultiplicativeExpressionPart__OpAssignment_030736 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleUnaryExpression_in_rule__MultiplicativeExpressionPart__ExprAssignment_130767 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleUnaryOperator_in_rule__UnaryExpression__OpAssignment_030798 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rulePostfixExpression_in_rule__UnaryExpression__ExprAssignment_130829 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleFeatureCall_in_rule__PostfixExpression__CallAssignment_0_030860 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleCall_in_rule__PostfixExpression__FCallsAssignment_0_130891 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleExpressionAccess_in_rule__PostfixExpression__AccessAssignment_0_230922 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rulePrimaryExpression_in_rule__PostfixExpression__LeftAssignment_130953 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleFeatureCall_in_rule__Call__CallAssignment_0_130984 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleSetOp_in_rule__Call__SetOpAssignment_1_131015 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleExpression_in_rule__Call__ArrayExAssignment_2_131046 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_rule__FeatureCall__NameAssignment_031077 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleActualParameterList_in_rule__FeatureCall__ParamAssignment_231108 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_rule__SetOp__NameAssignment_031139 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleDeclarator_in_rule__SetOp__DeclAssignment_231170 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleExpression_in_rule__SetOp__DeclExAssignment_331201 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleDeclaration_in_rule__Declarator__DeclAssignment_031232 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleDeclaration_in_rule__Declarator__DeclAssignment_1_131263 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_rule__Declaration__IdAssignment_031294 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_rule__Declaration__IdAssignment_1_131325 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleType_in_rule__Declaration__TypeAssignment_2_131356 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleExpression_in_rule__Declaration__InitAssignment_3_131387 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleExpression_in_rule__ActualParameterList__ParamAssignment_031418 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleExpression_in_rule__ActualParameterList__ParamAssignment_1_131449 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_rule__ExpressionAccess__NameAssignment_131480 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleCall_in_rule__ExpressionAccess__CallsAssignment_231511 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleExpressionAccess_in_rule__ExpressionAccess__AccessAssignment_331542 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleLiteral_in_rule__PrimaryExpression__LitAssignment_0_031573 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleExpression_in_rule__PrimaryExpression__ExAssignment_0_1_131604 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleIfExpression_in_rule__PrimaryExpression__IfExAssignment_0_231635 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_rule__PrimaryExpression__RefNameAssignment_0_3_231666 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleCall_in_rule__PrimaryExpression__CallsAssignment_131697 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleExpressionAccess_in_rule__PrimaryExpression__AccessAssignment_231728 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleQualifiedName_in_rule__CollectionInitializer__TypeAssignment_131759 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleExpressionListOrRange_in_rule__CollectionInitializer__InitAssignment_331790 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleExpressionListEntry_in_rule__ExpressionListOrRange__ListAssignment_031821 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleExpressionListEntry_in_rule__ExpressionListOrRange__ListAssignment_1_131852 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_rule__ExpressionListEntry__NameAssignment_0_031883 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_rule__ExpressionListEntry__AttribAssignment_0_1_131914 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleLogicalExpression_in_rule__ExpressionListEntry__ValueAssignment_1_031945 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleCollectionInitializer_in_rule__ExpressionListEntry__CollectionAssignment_1_131976 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleValue_in_rule__Literal__ValAssignment32007 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleExpression_in_rule__IfExpression__IfExAssignment_132038 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleExpression_in_rule__IfExpression__ThenExAssignment_332069 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleExpression_in_rule__IfExpression__ElseExAssignment_532100 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Declaration__Group_2__0__Impl_in_rule__Declaration__Group_2__022964 = new BitSet(new long[]{0x0000000000000070L});
+    public static final BitSet FOLLOW_rule__Declaration__Group_2__1_in_rule__Declaration__Group_2__022967 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_39_in_rule__Declaration__Group_2__0__Impl22995 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Declaration__Group_2__1__Impl_in_rule__Declaration__Group_2__123026 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Declaration__IdAssignment_2_1_in_rule__Declaration__Group_2__1__Impl23053 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Declaration__Group_3__0__Impl_in_rule__Declaration__Group_3__023087 = new BitSet(new long[]{0x2001080A400181F0L,0x0000000000004030L});
+    public static final BitSet FOLLOW_rule__Declaration__Group_3__1_in_rule__Declaration__Group_3__023090 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_14_in_rule__Declaration__Group_3__0__Impl23118 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Declaration__Group_3__1__Impl_in_rule__Declaration__Group_3__123149 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Declaration__InitAssignment_3_1_in_rule__Declaration__Group_3__1__Impl23176 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ActualParameterList__Group__0__Impl_in_rule__ActualParameterList__Group__023210 = new BitSet(new long[]{0x0000008000000000L});
+    public static final BitSet FOLLOW_rule__ActualParameterList__Group__1_in_rule__ActualParameterList__Group__023213 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ActualParameterList__ParamAssignment_0_in_rule__ActualParameterList__Group__0__Impl23240 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ActualParameterList__Group__1__Impl_in_rule__ActualParameterList__Group__123270 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ActualParameterList__Group_1__0_in_rule__ActualParameterList__Group__1__Impl23297 = new BitSet(new long[]{0x0000008000000002L});
+    public static final BitSet FOLLOW_rule__ActualParameterList__Group_1__0__Impl_in_rule__ActualParameterList__Group_1__023332 = new BitSet(new long[]{0x2001080A400181F0L,0x0000000000004030L});
+    public static final BitSet FOLLOW_rule__ActualParameterList__Group_1__1_in_rule__ActualParameterList__Group_1__023335 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_39_in_rule__ActualParameterList__Group_1__0__Impl23363 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ActualParameterList__Group_1__1__Impl_in_rule__ActualParameterList__Group_1__123394 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ActualParameterList__ParamAssignment_1_1_in_rule__ActualParameterList__Group_1__1__Impl23421 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ExpressionAccess__Group__0__Impl_in_rule__ExpressionAccess__Group__023455 = new BitSet(new long[]{0x0000000000000070L});
+    public static final BitSet FOLLOW_rule__ExpressionAccess__Group__1_in_rule__ExpressionAccess__Group__023458 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_63_in_rule__ExpressionAccess__Group__0__Impl23486 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ExpressionAccess__Group__1__Impl_in_rule__ExpressionAccess__Group__123517 = new BitSet(new long[]{0x8000000000000000L,0x0000000000000003L});
+    public static final BitSet FOLLOW_rule__ExpressionAccess__Group__2_in_rule__ExpressionAccess__Group__123520 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ExpressionAccess__NameAssignment_1_in_rule__ExpressionAccess__Group__1__Impl23547 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ExpressionAccess__Group__2__Impl_in_rule__ExpressionAccess__Group__223577 = new BitSet(new long[]{0x8000000000000000L,0x0000000000000003L});
+    public static final BitSet FOLLOW_rule__ExpressionAccess__Group__3_in_rule__ExpressionAccess__Group__223580 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ExpressionAccess__CallsAssignment_2_in_rule__ExpressionAccess__Group__2__Impl23607 = new BitSet(new long[]{0x8000000000000002L,0x0000000000000003L});
+    public static final BitSet FOLLOW_rule__ExpressionAccess__Group__3__Impl_in_rule__ExpressionAccess__Group__323638 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ExpressionAccess__AccessAssignment_3_in_rule__ExpressionAccess__Group__3__Impl23665 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__PrimaryExpression__Group__0__Impl_in_rule__PrimaryExpression__Group__023704 = new BitSet(new long[]{0x8000000000000000L,0x0000000000000003L});
+    public static final BitSet FOLLOW_rule__PrimaryExpression__Group__1_in_rule__PrimaryExpression__Group__023707 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__PrimaryExpression__Alternatives_0_in_rule__PrimaryExpression__Group__0__Impl23734 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__PrimaryExpression__Group__1__Impl_in_rule__PrimaryExpression__Group__123764 = new BitSet(new long[]{0x8000000000000000L,0x0000000000000003L});
+    public static final BitSet FOLLOW_rule__PrimaryExpression__Group__2_in_rule__PrimaryExpression__Group__123767 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__PrimaryExpression__CallsAssignment_1_in_rule__PrimaryExpression__Group__1__Impl23794 = new BitSet(new long[]{0x8000000000000002L,0x0000000000000003L});
+    public static final BitSet FOLLOW_rule__PrimaryExpression__Group__2__Impl_in_rule__PrimaryExpression__Group__223825 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__PrimaryExpression__AccessAssignment_2_in_rule__PrimaryExpression__Group__2__Impl23852 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__PrimaryExpression__Group_0_1__0__Impl_in_rule__PrimaryExpression__Group_0_1__023889 = new BitSet(new long[]{0x2001080A400181F0L,0x0000000000004030L});
+    public static final BitSet FOLLOW_rule__PrimaryExpression__Group_0_1__1_in_rule__PrimaryExpression__Group_0_1__023892 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_43_in_rule__PrimaryExpression__Group_0_1__0__Impl23920 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__PrimaryExpression__Group_0_1__1__Impl_in_rule__PrimaryExpression__Group_0_1__123951 = new BitSet(new long[]{0x0000100000000000L});
+    public static final BitSet FOLLOW_rule__PrimaryExpression__Group_0_1__2_in_rule__PrimaryExpression__Group_0_1__123954 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__PrimaryExpression__ExAssignment_0_1_1_in_rule__PrimaryExpression__Group_0_1__1__Impl23981 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__PrimaryExpression__Group_0_1__2__Impl_in_rule__PrimaryExpression__Group_0_1__224011 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_44_in_rule__PrimaryExpression__Group_0_1__2__Impl24039 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__PrimaryExpression__Group_0_3__0__Impl_in_rule__PrimaryExpression__Group_0_3__024076 = new BitSet(new long[]{0x0000080000000000L});
+    public static final BitSet FOLLOW_rule__PrimaryExpression__Group_0_3__1_in_rule__PrimaryExpression__Group_0_3__024079 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_68_in_rule__PrimaryExpression__Group_0_3__0__Impl24107 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__PrimaryExpression__Group_0_3__1__Impl_in_rule__PrimaryExpression__Group_0_3__124138 = new BitSet(new long[]{0x0000000000000070L});
+    public static final BitSet FOLLOW_rule__PrimaryExpression__Group_0_3__2_in_rule__PrimaryExpression__Group_0_3__124141 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_43_in_rule__PrimaryExpression__Group_0_3__1__Impl24169 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__PrimaryExpression__Group_0_3__2__Impl_in_rule__PrimaryExpression__Group_0_3__224200 = new BitSet(new long[]{0x0000100000000000L});
+    public static final BitSet FOLLOW_rule__PrimaryExpression__Group_0_3__3_in_rule__PrimaryExpression__Group_0_3__224203 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__PrimaryExpression__RefNameAssignment_0_3_2_in_rule__PrimaryExpression__Group_0_3__2__Impl24230 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__PrimaryExpression__Group_0_3__3__Impl_in_rule__PrimaryExpression__Group_0_3__324260 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_44_in_rule__PrimaryExpression__Group_0_3__3__Impl24288 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__CollectionInitializer__Group__0__Impl_in_rule__CollectionInitializer__Group__024327 = new BitSet(new long[]{0x0000000800000070L});
+    public static final BitSet FOLLOW_rule__CollectionInitializer__Group__1_in_rule__CollectionInitializer__Group__024330 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__CollectionInitializer__Group__1__Impl_in_rule__CollectionInitializer__Group__124388 = new BitSet(new long[]{0x0000000800000070L});
+    public static final BitSet FOLLOW_rule__CollectionInitializer__Group__2_in_rule__CollectionInitializer__Group__124391 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__CollectionInitializer__TypeAssignment_1_in_rule__CollectionInitializer__Group__1__Impl24418 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__CollectionInitializer__Group__2__Impl_in_rule__CollectionInitializer__Group__224449 = new BitSet(new long[]{0x0000081A400181F0L,0x0000000000004030L});
+    public static final BitSet FOLLOW_rule__CollectionInitializer__Group__3_in_rule__CollectionInitializer__Group__224452 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_35_in_rule__CollectionInitializer__Group__2__Impl24480 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__CollectionInitializer__Group__3__Impl_in_rule__CollectionInitializer__Group__324511 = new BitSet(new long[]{0x0000081A400181F0L,0x0000000000004030L});
+    public static final BitSet FOLLOW_rule__CollectionInitializer__Group__4_in_rule__CollectionInitializer__Group__324514 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__CollectionInitializer__InitAssignment_3_in_rule__CollectionInitializer__Group__3__Impl24541 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__CollectionInitializer__Group__4__Impl_in_rule__CollectionInitializer__Group__424572 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_36_in_rule__CollectionInitializer__Group__4__Impl24600 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ExpressionListOrRange__Group__0__Impl_in_rule__ExpressionListOrRange__Group__024641 = new BitSet(new long[]{0x0000008000000000L});
+    public static final BitSet FOLLOW_rule__ExpressionListOrRange__Group__1_in_rule__ExpressionListOrRange__Group__024644 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ExpressionListOrRange__ListAssignment_0_in_rule__ExpressionListOrRange__Group__0__Impl24671 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ExpressionListOrRange__Group__1__Impl_in_rule__ExpressionListOrRange__Group__124701 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ExpressionListOrRange__Group_1__0_in_rule__ExpressionListOrRange__Group__1__Impl24728 = new BitSet(new long[]{0x0000008000000002L});
+    public static final BitSet FOLLOW_rule__ExpressionListOrRange__Group_1__0__Impl_in_rule__ExpressionListOrRange__Group_1__024763 = new BitSet(new long[]{0x0000080A400181F0L,0x0000000000004030L});
+    public static final BitSet FOLLOW_rule__ExpressionListOrRange__Group_1__1_in_rule__ExpressionListOrRange__Group_1__024766 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_39_in_rule__ExpressionListOrRange__Group_1__0__Impl24794 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ExpressionListOrRange__Group_1__1__Impl_in_rule__ExpressionListOrRange__Group_1__124825 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ExpressionListOrRange__ListAssignment_1_1_in_rule__ExpressionListOrRange__Group_1__1__Impl24852 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ExpressionListEntry__Group__0__Impl_in_rule__ExpressionListEntry__Group__024886 = new BitSet(new long[]{0x0000080A400181F0L,0x0000000000004030L});
+    public static final BitSet FOLLOW_rule__ExpressionListEntry__Group__1_in_rule__ExpressionListEntry__Group__024889 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ExpressionListEntry__Group_0__0_in_rule__ExpressionListEntry__Group__0__Impl24916 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ExpressionListEntry__Group__1__Impl_in_rule__ExpressionListEntry__Group__124947 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ExpressionListEntry__Alternatives_1_in_rule__ExpressionListEntry__Group__1__Impl24974 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ExpressionListEntry__Group_0__0__Impl_in_rule__ExpressionListEntry__Group_0__025008 = new BitSet(new long[]{0x8000000000004000L});
+    public static final BitSet FOLLOW_rule__ExpressionListEntry__Group_0__1_in_rule__ExpressionListEntry__Group_0__025011 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ExpressionListEntry__NameAssignment_0_0_in_rule__ExpressionListEntry__Group_0__0__Impl25038 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ExpressionListEntry__Group_0__1__Impl_in_rule__ExpressionListEntry__Group_0__125068 = new BitSet(new long[]{0x8000000000004000L});
+    public static final BitSet FOLLOW_rule__ExpressionListEntry__Group_0__2_in_rule__ExpressionListEntry__Group_0__125071 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ExpressionListEntry__Group_0_1__0_in_rule__ExpressionListEntry__Group_0__1__Impl25098 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ExpressionListEntry__Group_0__2__Impl_in_rule__ExpressionListEntry__Group_0__225129 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_14_in_rule__ExpressionListEntry__Group_0__2__Impl25157 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ExpressionListEntry__Group_0_1__0__Impl_in_rule__ExpressionListEntry__Group_0_1__025194 = new BitSet(new long[]{0x0000000000000070L});
+    public static final BitSet FOLLOW_rule__ExpressionListEntry__Group_0_1__1_in_rule__ExpressionListEntry__Group_0_1__025197 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_63_in_rule__ExpressionListEntry__Group_0_1__0__Impl25225 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ExpressionListEntry__Group_0_1__1__Impl_in_rule__ExpressionListEntry__Group_0_1__125256 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ExpressionListEntry__AttribAssignment_0_1_1_in_rule__ExpressionListEntry__Group_0_1__1__Impl25283 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__IfExpression__Group__0__Impl_in_rule__IfExpression__Group__025317 = new BitSet(new long[]{0x2001080A400181F0L,0x0000000000004030L});
+    public static final BitSet FOLLOW_rule__IfExpression__Group__1_in_rule__IfExpression__Group__025320 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_69_in_rule__IfExpression__Group__0__Impl25348 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__IfExpression__Group__1__Impl_in_rule__IfExpression__Group__125379 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000040L});
+    public static final BitSet FOLLOW_rule__IfExpression__Group__2_in_rule__IfExpression__Group__125382 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__IfExpression__IfExAssignment_1_in_rule__IfExpression__Group__1__Impl25409 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__IfExpression__Group__2__Impl_in_rule__IfExpression__Group__225439 = new BitSet(new long[]{0x2001080A400181F0L,0x0000000000004030L});
+    public static final BitSet FOLLOW_rule__IfExpression__Group__3_in_rule__IfExpression__Group__225442 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_70_in_rule__IfExpression__Group__2__Impl25470 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__IfExpression__Group__3__Impl_in_rule__IfExpression__Group__325501 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000080L});
+    public static final BitSet FOLLOW_rule__IfExpression__Group__4_in_rule__IfExpression__Group__325504 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__IfExpression__ThenExAssignment_3_in_rule__IfExpression__Group__3__Impl25531 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__IfExpression__Group__4__Impl_in_rule__IfExpression__Group__425561 = new BitSet(new long[]{0x2001080A400181F0L,0x0000000000004030L});
+    public static final BitSet FOLLOW_rule__IfExpression__Group__5_in_rule__IfExpression__Group__425564 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_71_in_rule__IfExpression__Group__4__Impl25592 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__IfExpression__Group__5__Impl_in_rule__IfExpression__Group__525623 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000100L});
+    public static final BitSet FOLLOW_rule__IfExpression__Group__6_in_rule__IfExpression__Group__525626 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__IfExpression__ElseExAssignment_5_in_rule__IfExpression__Group__5__Impl25653 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__IfExpression__Group__6__Impl_in_rule__IfExpression__Group__625683 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_72_in_rule__IfExpression__Group__6__Impl25711 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleProject_in_rule__VariabilityUnit__ProjectsAssignment_125761 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleIdentifier_in_rule__Project__NameAssignment_125792 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleVersionStmt_in_rule__Project__VersionAssignment_325823 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleImportStmt_in_rule__Project__ImportsAssignment_425854 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleConflictStmt_in_rule__Project__ConflictsAssignment_525885 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleInterfaceDeclaration_in_rule__Project__InterfacesAssignment_625916 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleProjectContents_in_rule__Project__ContentsAssignment_725947 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleTypedef_in_rule__ProjectContents__ElementsAssignment_1_025978 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleVariableDeclaration_in_rule__ProjectContents__ElementsAssignment_1_126009 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleFreeze_in_rule__ProjectContents__ElementsAssignment_1_226040 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleEval_in_rule__ProjectContents__ElementsAssignment_1_326071 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleExpressionStatement_in_rule__ProjectContents__ElementsAssignment_1_426102 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleAttributeTo_in_rule__ProjectContents__ElementsAssignment_1_526133 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleOpDefStatement_in_rule__ProjectContents__ElementsAssignment_1_626164 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleAttrAssignment_in_rule__ProjectContents__ElementsAssignment_1_726195 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleTypedefEnum_in_rule__Typedef__TEnumAssignment_026226 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleTypedefCompound_in_rule__Typedef__TCompoundAssignment_126257 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleTypedefMapping_in_rule__Typedef__TMappingAssignment_226288 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleIdentifier_in_rule__TypedefEnum__NameAssignment_126319 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleTypedefEnumLiteral_in_rule__TypedefEnum__LiteralsAssignment_326350 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleTypedefEnumLiteral_in_rule__TypedefEnum__LiteralsAssignment_4_126381 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleTypedefConstraint_in_rule__TypedefEnum__ConstraintAssignment_626412 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleIdentifier_in_rule__TypedefEnumLiteral__NameAssignment_026443 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleNumValue_in_rule__TypedefEnumLiteral__ValueAssignment_1_126474 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleIdentifier_in_rule__TypedefCompound__NameAssignment_126505 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleIdentifier_in_rule__TypedefCompound__SuperAssignment_2_126536 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleVariableDeclaration_in_rule__TypedefCompound__ElementsAssignment_4_026567 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleExpressionStatement_in_rule__TypedefCompound__ElementsAssignment_4_126598 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleAttrAssignment_in_rule__TypedefCompound__ElementsAssignment_4_226629 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleAttrAssignmentPart_in_rule__AttrAssignment__PartsAssignment_226660 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleAttrAssignmentPart_in_rule__AttrAssignment__PartsAssignment_3_126691 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleVariableDeclaration_in_rule__AttrAssignment__ElementsAssignment_7_026722 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleExpressionStatement_in_rule__AttrAssignment__ElementsAssignment_7_126753 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleAttrAssignment_in_rule__AttrAssignment__ElementsAssignment_7_226784 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleIdentifier_in_rule__AttrAssignmentPart__NameAssignment_026815 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleLogicalExpression_in_rule__AttrAssignmentPart__ValueAssignment_226846 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleIdentifier_in_rule__TypedefMapping__NewTypeAssignment_126877 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleType_in_rule__TypedefMapping__TypeAssignment_226908 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleTypedefConstraint_in_rule__TypedefMapping__ConstraintAssignment_326939 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleExpression_in_rule__TypedefConstraint__ExpressionsAssignment_226970 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleExpression_in_rule__TypedefConstraint__ExpressionsAssignment_3_127001 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleType_in_rule__VariableDeclaration__TypeAssignment_027032 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleVariableDeclarationPart_in_rule__VariableDeclaration__DeclsAssignment_127063 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleVariableDeclarationPart_in_rule__VariableDeclaration__DeclsAssignment_2_127094 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleIdentifier_in_rule__VariableDeclarationPart__NameAssignment_027125 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleExpression_in_rule__VariableDeclarationPart__DefaultAssignment_1_127156 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_73_in_rule__BasicType__TypeAssignment_027192 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_74_in_rule__BasicType__TypeAssignment_127236 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_75_in_rule__BasicType__TypeAssignment_227280 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_76_in_rule__BasicType__TypeAssignment_327324 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_77_in_rule__BasicType__TypeAssignment_427368 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleBasicType_in_rule__Type__TypeAssignment_027407 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleQualifiedName_in_rule__Type__IdAssignment_127438 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleDerivedType_in_rule__Type__DerivedAssignment_227469 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_NUMBER_in_rule__NumValue__ValAssignment27500 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleIdentifier_in_rule__QualifiedName__QNameAssignment_0_027531 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_56_in_rule__QualifiedName__QNameAssignment_0_127567 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleIdentifier_in_rule__QualifiedName__QNameAssignment_0_2_027606 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_56_in_rule__QualifiedName__QNameAssignment_0_2_127642 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleIdentifier_in_rule__QualifiedName__QNameAssignment_127681 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_63_in_rule__AccessName__ANameAssignment_027717 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleIdentifier_in_rule__AccessName__ANameAssignment_127756 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleNumValue_in_rule__Value__NValueAssignment_027787 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_STRING_in_rule__Value__SValueAssignment_127818 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleQualifiedName_in_rule__Value__QValueAssignment_227849 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Value__BValueAlternatives_3_0_in_rule__Value__BValueAssignment_327880 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_78_in_rule__Value__NullValueAssignment_427918 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_79_in_rule__DerivedType__OpAssignment_0_027962 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_80_in_rule__DerivedType__OpAssignment_0_128006 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_81_in_rule__DerivedType__OpAssignment_0_228050 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleType_in_rule__DerivedType__TypeAssignment_228089 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_STRING_in_rule__DslContext__StopAssignment_228120 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_STRING_in_rule__DslContext__EscapeAssignment_428151 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_STRING_in_rule__DslContext__CommandAssignment_628182 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_DSL_CONTENT_in_rule__DslContext__DslAssignment_828213 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleType_in_rule__AttributeTo__AttributeTypeAssignment_128244 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleVariableDeclarationPart_in_rule__AttributeTo__AttributeDeclAssignment_228275 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleIdentifier_in_rule__AttributeTo__NamesAssignment_428306 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleIdentifier_in_rule__AttributeTo__NamesAssignment_5_128337 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleFreezeStatement_in_rule__Freeze__NamesAssignment_228368 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleFreezeButList_in_rule__Freeze__ButAssignment_4_128399 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleQualifiedName_in_rule__FreezeStatement__NameAssignment_028430 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleAccessName_in_rule__FreezeStatement__AccessAssignment_128461 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleFreezeButExpression_in_rule__FreezeButList__ListAssignment_128492 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleFreezeButExpression_in_rule__FreezeButList__ListAssignment_2_128523 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleQualifiedName_in_rule__FreezeButExpression__NameAssignment_028554 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleAccessName_in_rule__FreezeButExpression__AccessAssignment_128585 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_31_in_rule__FreezeButExpression__WildcardAssignment_228621 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleEval_in_rule__Eval__NestedAssignment_228660 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleExpressionStatement_in_rule__Eval__StatementsAssignment_328691 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleIdentifier_in_rule__InterfaceDeclaration__NameAssignment_128722 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleExport_in_rule__InterfaceDeclaration__ExportsAssignment_328753 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleQualifiedName_in_rule__Export__NamesAssignment_128784 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleQualifiedName_in_rule__Export__NamesAssignment_2_128815 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleIdentifier_in_rule__ImportStmt__NameAssignment_128846 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleIdentifier_in_rule__ImportStmt__InterfaceAssignment_2_128877 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleVersionedId_in_rule__ImportStmt__VersionsAssignment_3_228908 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleVersionedId_in_rule__ImportStmt__VersionsAssignment_3_3_128939 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleIdentifier_in_rule__ConflictStmt__NameAssignment_128970 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleVersionedId_in_rule__ConflictStmt__ConflictsAssignment_2_229001 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleVersionedId_in_rule__ConflictStmt__ConflictsAssignment_2_3_129032 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleIdentifier_in_rule__VersionedId__NameAssignment_029063 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleVersionOperator_in_rule__VersionedId__OpAssignment_229094 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_VERSION_in_rule__VersionedId__VersionAssignment_329125 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_VERSION_in_rule__VersionStmt__VersionAssignment_129156 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleType_in_rule__OpDefStatement__ResultAssignment_129187 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleIdentifier_in_rule__OpDefStatement__IdAssignment_229218 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleOpDefParameterList_in_rule__OpDefStatement__ParamAssignment_429249 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleExpression_in_rule__OpDefStatement__ImplAssignment_729280 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleOpDefParameter_in_rule__OpDefParameterList__ListAssignment_1_029311 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleOpDefParameter_in_rule__OpDefParameterList__ListAssignment_1_1_129342 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleType_in_rule__OpDefParameter__TypeAssignment_029373 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleIdentifier_in_rule__OpDefParameter__IdAssignment_129404 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleExpression_in_rule__OpDefParameter__ValAssignment_2_129435 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleExpression_in_rule__ExpressionStatement__ExprAssignment_029466 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleLetExpression_in_rule__Expression__LetAssignment_029497 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleImplicationExpression_in_rule__Expression__ExprAssignment_129528 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleCollectionInitializer_in_rule__Expression__CollectionAssignment_229559 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleDslContext_in_rule__Expression__DslAssignment_329590 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleType_in_rule__LetExpression__TypeAssignment_129621 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleIdentifier_in_rule__LetExpression__NameAssignment_229652 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleExpression_in_rule__LetExpression__ValueExprAssignment_429683 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleExpression_in_rule__LetExpression__SubExprAssignment_629714 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleLogicalExpression_in_rule__AssignmentExpression__LeftAssignment_029745 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleAssignmentExpressionPart_in_rule__AssignmentExpression__RightAssignment_129776 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleAssignmentOperator_in_rule__AssignmentExpressionPart__OpAssignment_029807 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleLogicalExpression_in_rule__AssignmentExpressionPart__ExAssignment_1_029838 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleCollectionInitializer_in_rule__AssignmentExpressionPart__CollectionAssignment_1_129869 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleAssignmentExpression_in_rule__ImplicationExpression__LeftAssignment_029900 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleImplicationExpressionPart_in_rule__ImplicationExpression__RightAssignment_129931 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleImplicationOperator_in_rule__ImplicationExpressionPart__OpAssignment_029962 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleAssignmentExpression_in_rule__ImplicationExpressionPart__ExAssignment_129993 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleEqualityExpression_in_rule__LogicalExpression__LeftAssignment_030024 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleLogicalExpressionPart_in_rule__LogicalExpression__RightAssignment_130055 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleLogicalOperator_in_rule__LogicalExpressionPart__OpAssignment_030086 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleEqualityExpression_in_rule__LogicalExpressionPart__ExAssignment_130117 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleRelationalExpression_in_rule__EqualityExpression__LeftAssignment_030148 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleEqualityExpressionPart_in_rule__EqualityExpression__RightAssignment_130179 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleEqualityOperator_in_rule__EqualityExpressionPart__OpAssignment_030210 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleRelationalExpression_in_rule__EqualityExpressionPart__ExAssignment_1_030241 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleCollectionInitializer_in_rule__EqualityExpressionPart__CollectionAssignment_1_130272 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleAdditiveExpression_in_rule__RelationalExpression__LeftAssignment_030303 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleRelationalExpressionPart_in_rule__RelationalExpression__RightAssignment_130334 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleRelationalOperator_in_rule__RelationalExpressionPart__OpAssignment_030365 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleAdditiveExpression_in_rule__RelationalExpressionPart__ExAssignment_130396 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleMultiplicativeExpression_in_rule__AdditiveExpression__LeftAssignment_030427 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleAdditiveExpressionPart_in_rule__AdditiveExpression__RightAssignment_130458 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleAdditiveOperator_in_rule__AdditiveExpressionPart__OpAssignment_030489 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleMultiplicativeExpression_in_rule__AdditiveExpressionPart__ExAssignment_130520 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleUnaryExpression_in_rule__MultiplicativeExpression__LeftAssignment_030551 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleMultiplicativeExpressionPart_in_rule__MultiplicativeExpression__RightAssignment_130582 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleMultiplicativeOperator_in_rule__MultiplicativeExpressionPart__OpAssignment_030613 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleUnaryExpression_in_rule__MultiplicativeExpressionPart__ExprAssignment_130644 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleUnaryOperator_in_rule__UnaryExpression__OpAssignment_030675 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rulePostfixExpression_in_rule__UnaryExpression__ExprAssignment_130706 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleFeatureCall_in_rule__PostfixExpression__CallAssignment_0_030737 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleCall_in_rule__PostfixExpression__FCallsAssignment_0_130768 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleExpressionAccess_in_rule__PostfixExpression__AccessAssignment_0_230799 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rulePrimaryExpression_in_rule__PostfixExpression__LeftAssignment_130830 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleFeatureCall_in_rule__Call__CallAssignment_0_130861 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleSetOp_in_rule__Call__SetOpAssignment_1_130892 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleExpression_in_rule__Call__ArrayExAssignment_2_130923 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleIdentifier_in_rule__FeatureCall__NameAssignment_030954 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleActualParameterList_in_rule__FeatureCall__ParamAssignment_230985 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleIdentifier_in_rule__SetOp__NameAssignment_031016 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleDeclarator_in_rule__SetOp__DeclAssignment_231047 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleExpression_in_rule__SetOp__DeclExAssignment_331078 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleDeclaration_in_rule__Declarator__DeclAssignment_031109 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleDeclaration_in_rule__Declarator__DeclAssignment_1_131140 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleType_in_rule__Declaration__TypeAssignment_031171 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleIdentifier_in_rule__Declaration__IdAssignment_131202 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleIdentifier_in_rule__Declaration__IdAssignment_2_131233 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleExpression_in_rule__Declaration__InitAssignment_3_131264 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleExpression_in_rule__ActualParameterList__ParamAssignment_031295 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleExpression_in_rule__ActualParameterList__ParamAssignment_1_131326 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleIdentifier_in_rule__ExpressionAccess__NameAssignment_131357 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleCall_in_rule__ExpressionAccess__CallsAssignment_231388 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleExpressionAccess_in_rule__ExpressionAccess__AccessAssignment_331419 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleLiteral_in_rule__PrimaryExpression__LitAssignment_0_031450 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleExpression_in_rule__PrimaryExpression__ExAssignment_0_1_131481 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleIfExpression_in_rule__PrimaryExpression__IfExAssignment_0_231512 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleIdentifier_in_rule__PrimaryExpression__RefNameAssignment_0_3_231543 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleCall_in_rule__PrimaryExpression__CallsAssignment_131574 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleExpressionAccess_in_rule__PrimaryExpression__AccessAssignment_231605 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleQualifiedName_in_rule__CollectionInitializer__TypeAssignment_131636 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleExpressionListOrRange_in_rule__CollectionInitializer__InitAssignment_331667 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleExpressionListEntry_in_rule__ExpressionListOrRange__ListAssignment_031698 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleExpressionListEntry_in_rule__ExpressionListOrRange__ListAssignment_1_131729 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleIdentifier_in_rule__ExpressionListEntry__NameAssignment_0_031760 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleIdentifier_in_rule__ExpressionListEntry__AttribAssignment_0_1_131791 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleLogicalExpression_in_rule__ExpressionListEntry__ValueAssignment_1_031822 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleCollectionInitializer_in_rule__ExpressionListEntry__CollectionAssignment_1_131853 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleValue_in_rule__Literal__ValAssignment31884 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleExpression_in_rule__IfExpression__IfExAssignment_131915 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleExpression_in_rule__IfExpression__ThenExAssignment_331946 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleExpression_in_rule__IfExpression__ElseExAssignment_531977 = new BitSet(new long[]{0x0000000000000002L});
 
 }

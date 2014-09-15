@@ -39,7 +39,7 @@ public class StrategyCallExpressionTest extends AbstractTest {
      */
     @Test
     public void testInstantiator() {
-        TypeRegistry registry = TypeRegistry.DEFAULT;
+        TypeRegistry registry = getRegistry();
         Class<?extends IVilType> cls = StaticInstantiator.class;
         try {
             registry.registerType(cls);
@@ -61,7 +61,7 @@ public class StrategyCallExpressionTest extends AbstractTest {
         Assert.assertTrue("wrong artifact type", artifact instanceof FileArtifact);
         try {
             StrategyCallExpression ex = new StrategyCallExpression(null, inst.value(), 
-                new ConstantExpression(artifactType, artifact, TypeRegistry.DEFAULT));
+                new ConstantExpression(artifactType, artifact, registry));
             TypeDescriptor<? extends IVilType> resultType = ex.inferType();
             Assert.assertTrue("result type does not match", 
                  registry.getType(Set.class).isAssignableFrom(resultType));
@@ -76,6 +76,7 @@ public class StrategyCallExpressionTest extends AbstractTest {
      */
     @Test
     public void testSystemExecution() {
+        TypeRegistry registry = getRegistry();
         TypeDescriptor<? extends IVilType> stringType = TypeRegistry.stringType();
         try {
             StrategyCallExpression ex;
@@ -84,14 +85,14 @@ public class StrategyCallExpressionTest extends AbstractTest {
             if (System.getProperty("os.name").toLowerCase().contains("windows")) {
                 varNameValue = "cmd";
                 ex = new StrategyCallExpression(varName, 
-                    new ConstantExpression(stringType, "/c", TypeRegistry.DEFAULT),
-                    new ConstantExpression(stringType, "dir", TypeRegistry.DEFAULT), 
-                    new ConstantExpression(stringType, ".", TypeRegistry.DEFAULT));
+                    new ConstantExpression(stringType, "/c", registry),
+                    new ConstantExpression(stringType, "dir", registry), 
+                    new ConstantExpression(stringType, ".", registry));
             } else {
                 varNameValue = "ls";
                 ex = new StrategyCallExpression(varName, 
-                    new ConstantExpression(stringType, "-l", TypeRegistry.DEFAULT),
-                    new ConstantExpression(stringType, ".", TypeRegistry.DEFAULT));
+                    new ConstantExpression(stringType, "-l", registry),
+                    new ConstantExpression(stringType, ".", registry));
             }
             TypeDescriptor<? extends IVilType> result = ex.inferType();
             Assert.assertTrue("result is not of correct type", result == TypeRegistry.voidType());

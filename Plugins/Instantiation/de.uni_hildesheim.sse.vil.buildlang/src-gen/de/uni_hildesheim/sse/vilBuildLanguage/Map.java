@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.Map#getVar <em>Var</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.Map#getSeparator <em>Separator</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.Map#getExpr <em>Expr</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.Map#getBlock <em>Block</em>}</li>
  * </ul>
@@ -29,20 +30,46 @@ import org.eclipse.emf.ecore.EObject;
 public interface Map extends EObject
 {
   /**
-   * Returns the value of the '<em><b>Var</b></em>' attribute list.
-   * The list contents are of type {@link java.lang.String}.
+   * Returns the value of the '<em><b>Var</b></em>' containment reference list.
+   * The list contents are of type {@link de.uni_hildesheim.sse.vilBuildLanguage.MapVariable}.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Var</em>' attribute list isn't clear,
+   * If the meaning of the '<em>Var</em>' containment reference list isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Var</em>' attribute list.
+   * @return the value of the '<em>Var</em>' containment reference list.
    * @see de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage#getMap_Var()
-   * @model unique="false"
+   * @model containment="true"
    * @generated
    */
-  EList<String> getVar();
+  EList<MapVariable> getVar();
+
+  /**
+   * Returns the value of the '<em><b>Separator</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Separator</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Separator</em>' attribute.
+   * @see #setSeparator(String)
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage#getMap_Separator()
+   * @model
+   * @generated
+   */
+  String getSeparator();
+
+  /**
+   * Sets the value of the '{@link de.uni_hildesheim.sse.vilBuildLanguage.Map#getSeparator <em>Separator</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Separator</em>' attribute.
+   * @see #getSeparator()
+   * @generated
+   */
+  void setSeparator(String value);
 
   /**
    * Returns the value of the '<em><b>Expr</b></em>' containment reference.

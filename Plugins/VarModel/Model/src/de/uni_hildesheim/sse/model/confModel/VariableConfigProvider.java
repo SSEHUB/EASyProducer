@@ -1,3 +1,18 @@
+/*
+ * Copyright 2009-2013 University of Hildesheim, Software Systems Engineering
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.uni_hildesheim.sse.model.confModel;
 
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
@@ -49,15 +64,23 @@ abstract class VariableConfigProvider {
     protected abstract IAssignmentState getState();
     
     /**
-     * Causes to freeze the current value (cannot be undone).
+     * Causes to freeze the current value.
      */
     protected final void freeze() {
-        if (null != getValue() && getValue().isConfigured() && isStateChangeAllowed()) {
-            try {
-                setState(AssignmentState.FROZEN);
-            } catch (ConfigurationException e) {
-                // Not needed: This exception only occurs if the variable is already frozen
-            }
+        // freeze shall also work on partially configured elements!
+        if (null != getValue() /*&& getValue().isConfigured()*/ && isStateChangeAllowed()) {
+            setState(AssignmentState.FROZEN);
+        }
+    }
+    
+    /**
+     * Unfreezes this variable to the given <code>state</code>.
+     * 
+     * @param state the target state (must not be {@link AssignmentState#FROZEN})
+     */
+    protected final void unfreeze(IAssignmentState state) {
+        if (null != getValue() && AssignmentState.FROZEN != state) {
+            setState(state);
         }
     }
     
@@ -72,10 +95,8 @@ abstract class VariableConfigProvider {
     /**
      * Setter for the {@link IAssignmentState}, needed by {@link CompoundVariable}s.
      * @param state The new {@link IAssignmentState}, which should be set.
-     * @throws ConfigurationException Occurs if this variable is already frozen
-     * and the new {@link IAssignmentState} is not equal.
      */
-    protected abstract void setState(IAssignmentState state) throws ConfigurationException;
+    protected abstract void setState(IAssignmentState state);
     
     /**
      * Returns the declaration of the related {@link IDecisionVariable}.

@@ -1,8 +1,0 @@
-project loop {
-
-Integer a = 5;
-a = 7;
-a = 2 + 9;
-//4 > 3 implies a = 35;
-a = 23;
-}

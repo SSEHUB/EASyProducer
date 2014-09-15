@@ -20,6 +20,16 @@ public class ExpressionException extends AbstractException {
     public static final int ID_RUNTIME = 50502;
 
     /**
+     * Defines an identifier if a type cannot be instantiated.
+     */
+    public static final int ID_CANNOT_INSTANTIATE = 50503;
+
+    /**
+     * Defines an identifier if a null value occurs at runtime.
+     */
+    public static final int ID_NULL_VALUE = 50504;
+    
+    /**
      * For serialization.
      */
     private static final long serialVersionUID = -4298546495453297920L;

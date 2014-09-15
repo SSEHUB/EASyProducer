@@ -1,3 +1,18 @@
+/*
+ * Copyright 2009-2014 University of Hildesheim, Software Systems Engineering
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.uni_hildesheim.sse.model.confModel;
 
 import org.junit.Assert;
@@ -131,9 +146,9 @@ public class CompoundVariableTest {
         Assert.assertNotNull(cmp1Variable.getValue());
         Assert.assertNotNull(cmp2Variable.getValue());
         Assert.assertNotNull(cmp3Variable.getValue());
-        Assert.assertEquals(AssignmentState.UNDEFINED, cmp1Variable.getState());
-        Assert.assertEquals(AssignmentState.UNDEFINED, cmp2Variable.getState());
-        Assert.assertEquals(AssignmentState.UNDEFINED, cmp3Variable.getState());
+        Assert.assertEquals(AssignmentState.ASSIGNED, cmp1Variable.getState());
+        Assert.assertEquals(AssignmentState.ASSIGNED, cmp2Variable.getState());
+        Assert.assertEquals(AssignmentState.ASSIGNED, cmp3Variable.getState());
         
         // Set value of top-layer and nested nested compound
         cmp3Value = ValueFactory.createValue(cmpType3, new Object[] {"c2", "1"});
@@ -145,8 +160,8 @@ public class CompoundVariableTest {
         Assert.assertNotNull(cmp1Variable.getValue());
         Assert.assertNotNull(cmp2Variable.getValue());
         Assert.assertNotNull(cmp3Variable.getValue());
-        Assert.assertEquals(AssignmentState.UNDEFINED, cmp1Variable.getState());
-        Assert.assertEquals(AssignmentState.UNDEFINED, cmp2Variable.getState());
+        Assert.assertEquals(AssignmentState.ASSIGNED, cmp1Variable.getState());
+        Assert.assertEquals(AssignmentState.ASSIGNED, cmp2Variable.getState());
         Assert.assertEquals(AssignmentState.ASSIGNED, cmp3Variable.getState());
         Assert.assertFalse(cmp1Variable.getValue().isConfigured());
         

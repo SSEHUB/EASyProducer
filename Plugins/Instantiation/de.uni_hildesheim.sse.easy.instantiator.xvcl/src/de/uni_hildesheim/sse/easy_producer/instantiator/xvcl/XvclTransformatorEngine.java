@@ -10,6 +10,8 @@ import org.osgi.service.component.ComponentContext;
 import de.uni_hildesheim.sse.easy_producer.instantiator.InstantiatorEngine;
 import de.uni_hildesheim.sse.easy_producer.instantiator.InstantiatorException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.Transformator;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FileArtifact;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
@@ -44,6 +46,7 @@ public class XvclTransformatorEngine extends InstantiatorEngine {
     protected void activate(ComponentContext context) {
         // this is not the official way of using DS but the official way is instable
         Transformator.addEngine(this);
+        TypeRegistry.DEFAULT.register(XVCLInstantiator.class);
     }
 
     /**
@@ -88,6 +91,37 @@ public class XvclTransformatorEngine extends InstantiatorEngine {
         } catch (XVCLException e) {
             throw new InstantiatorException(e.getLocalizedMessage());
         }
+    }
+    
+    /**
+     * Instantiates the given XVCL specification file via VIL.
+     * @param specification The stating point for instantiation with XVCL.
+     * @throws InstantiatorException If XVCL detects any errors.
+     */
+    void instantiate(FileArtifact specification) throws InstantiatorException {
+        xvcl = new XVCLProcessor();
+        String[] args = null;
+        if (null != specification && null != specification.getPath()) {
+            File specFile = specification.getPath().getAbsolutePath();
+            if (null != specFile && null != specFile.getAbsolutePath()) {
+                args = new String[]{specFile.getAbsolutePath()};
+            }
+        }
+        
+        // Critical: If xvcl detects any errors, it will call System.exit(1) and close the whole jVM.
+        if (null != args && args.length > 0) {
+            try {
+                xvcl.process(args, true, true, false);
+                xvcl.clearCache();
+                System.out.println(xvcl.getVersion());
+    
+            } catch (XVCLException e) {
+                throw new InstantiatorException(e.getLocalizedMessage());
+            }
+        }
+        
+        clearContext();
+        xvcl = null;
     }
     
     @Override

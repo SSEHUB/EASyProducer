@@ -1,3 +1,18 @@
+/*
+ * Copyright 2009-2014 University of Hildesheim, Software Systems Engineering
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionEvaluator;
@@ -25,7 +40,7 @@ public interface Set<T> extends Collection<T> {
      *   type for <code>type</code>)
      */
     @OperationMeta(returnGenerics = IVilType.class)
-    public Set<T> selectByType(Class<?> type);
+    public Set<T> selectByType(TypeDescriptor<? extends IVilType> type);
     
     /**
      * Exclude the elements in <code>set</code>.
@@ -34,6 +49,14 @@ public interface Set<T> extends Collection<T> {
      */
     @OperationMeta(returnGenerics = IVilType.class)
     public Set<T> excluding(Collection<T> set);
+
+    /**
+     * Include the elements in <code>set</code>. Duplicates will not be included.
+     * @param set the elements to be excluded
+     * @return this set without the elements in <code>set</code>
+     */
+    @OperationMeta(returnGenerics = IVilType.class)
+    public Set<T> including(Collection<T> set);
     
     /**
      * Selects elements in this set according to the given expression.

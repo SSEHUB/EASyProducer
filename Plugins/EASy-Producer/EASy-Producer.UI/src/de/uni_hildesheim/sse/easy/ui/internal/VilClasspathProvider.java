@@ -49,10 +49,12 @@ public class VilClasspathProvider extends VilArgumentProvider {
                     IClasspathEntry[] entries = jProject.getResolvedClasspath(true);
                     for (int e = 0; e < entries.length; e++) {
                         IClasspathEntry entry = entries[e];
-                        if (IClasspathEntry.CPE_LIBRARY == entry.getEntryKind()) {
+                        if (IClasspathEntry.CPE_LIBRARY == entry.getEntryKind() 
+                            || IClasspathEntry.CPE_SOURCE == entry.getEntryKind() 
+                            || IClasspathEntry.CPE_VARIABLE == entry.getEntryKind()) { // project -> recursive?
                             IPath path = PersistenceUtils.makeWsPathAbsolute(entry.getPath());
                             classpath.add(path.toString());
-                        }
+                        } 
                     }
                 } catch (JavaModelException e) {
                     EASyLoggerFactory.INSTANCE.getLogger(VilClasspathProvider.class, Activator.PLUGIN_ID).exception(e);
@@ -71,7 +73,7 @@ public class VilClasspathProvider extends VilArgumentProvider {
 
     @Override
     public String getParameterType() {
-        return "setOf(String)";
+        return "sequenceOf(String)";
     }
 
     @Override

@@ -28,8 +28,7 @@ public class BasicTests extends AbstractTest {
     /**
      * Creates a file object relative to {@link #DIR} (not a file).
      * 
-     * @param name
-     *            the name of the file (excluding ".ivml")
+     * @param name the name of the file (excluding ".ivml")
      * @return the file
      */
     private static final File createFile(String name) {
@@ -39,8 +38,7 @@ public class BasicTests extends AbstractTest {
     /**
      * Tests the basic datatypes with defaults.
      * 
-     * @throws IOException
-     *             should not occur
+     * @throws IOException should not occur
      */
     @Test
     public void testBasicDatatypesDefaults() throws IOException {
@@ -51,8 +49,7 @@ public class BasicTests extends AbstractTest {
     /**
      * Tests the basic datatypes without defaults.
      * 
-     * @throws IOException
-     *             should not occur
+     * @throws IOException should not occur
      */
     @Test
     public void testBasicDatatypesNoDefaults() throws IOException {
@@ -63,8 +60,7 @@ public class BasicTests extends AbstractTest {
     /**
      * Tests compounds.
      * 
-     * @throws IOException
-     *             should not occur
+     * @throws IOException should not occur
      */
     @Test
     public void testCompound() throws IOException {
@@ -72,10 +68,19 @@ public class BasicTests extends AbstractTest {
     }
 
     /**
+     * Tests compound accesses.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testCompoundAccess() throws IOException {
+        assertEqual(createFile("compoundAccess"), "testCompoundAccess", "0");
+    }
+    
+    /**
      * Tests constraints.
      * 
-     * @throws IOException
-     *             should not occur
+     * @throws IOException should not occur
      */
     @Test
     public void testConstraints() throws IOException {
@@ -85,8 +90,7 @@ public class BasicTests extends AbstractTest {
     /**
      * Tests containers.
      * 
-     * @throws IOException
-     *             should not occur
+     * @throws IOException should not occur
      */
     @Test
     public void testContainer() throws IOException {
@@ -96,8 +100,7 @@ public class BasicTests extends AbstractTest {
     /**
      * Tests container with associated constraints.
      * 
-     * @throws IOException
-     *             should not occur
+     * @throws IOException should not occur
      */
     @Test
     public void testContainerConstraints() throws IOException {
@@ -108,8 +111,7 @@ public class BasicTests extends AbstractTest {
     /**
      * Tests container with associated constraints.
      * 
-     * @throws IOException
-     *             should not occur
+     * @throws IOException should not occur
      */
     @Test
     public void testContainerConstraintsFail() throws IOException {
@@ -122,8 +124,7 @@ public class BasicTests extends AbstractTest {
     /**
      * Tests the empty project.
      * 
-     * @throws IOException
-     *             should not occur
+     * @throws IOException should not occur
      */
     @Test
     public void testEmptyProject() throws IOException {
@@ -133,8 +134,7 @@ public class BasicTests extends AbstractTest {
     /**
      * Tests enumerations.
      * 
-     * @throws IOException
-     *             should not occur
+     * @throws IOException should not occur
      */
     @Test
     public void testEnumerations() throws IOException {
@@ -142,10 +142,19 @@ public class BasicTests extends AbstractTest {
     }
 
     /**
+     * Tests the enumeration ordinal operation.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testEnumerationOrdinal() throws IOException {
+        assertEqual(createFile("enumerationOrdinal"), "testEnumerationOrdinal", "0");
+    }
+
+    /**
      * Tests failing enumerations.
      * 
-     * @throws IOException
-     *             should not occur
+     * @throws IOException should not occur
      */
     @Test
     public void testEnumerationsFail() throws IOException {
@@ -157,8 +166,7 @@ public class BasicTests extends AbstractTest {
     /**
      * Tests initializers at basic compounds.
      * 
-     * @throws IOException
-     *             should not occur
+     * @throws IOException should not occur
      */
     @Test
     public void testInitializersBasicCompounds() throws IOException {
@@ -169,8 +177,7 @@ public class BasicTests extends AbstractTest {
     /**
      * Tests initializers at basic containers.
      * 
-     * @throws IOException
-     *             should not occur
+     * @throws IOException should not occur
      */
     @Test
     public void testInitializersBasicContainers() throws IOException {
@@ -181,20 +188,17 @@ public class BasicTests extends AbstractTest {
     /**
      * Tests custom initializers.
      * 
-     * @throws IOException
-     *             should not occur
+     * @throws IOException should not occur
      */
     @Test
     public void testInitializersCustom() throws IOException {
-        assertEqual(createFile("initializersCustom"), "testInitializersCustom",
-                "0");
+        assertEqual(createFile("initializersCustom"), "testInitializersCustom", "0");
     }
 
     /**
      * Tests custom typedefs.
      * 
-     * @throws IOException
-     *             should not occur
+     * @throws IOException should not occur
      */
     @Test
     public void testTypedef() throws IOException {
@@ -204,8 +208,7 @@ public class BasicTests extends AbstractTest {
     /**
      * Tests custom typedefs on compounds (SAP case).
      * 
-     * @throws IOException
-     *             should not occur
+     * @throws IOException should not occur
      */
     @Test
     public void testTypedefCompounds() throws IOException {
@@ -215,8 +218,7 @@ public class BasicTests extends AbstractTest {
     /**
      * Tests custom typedefs.
      * 
-     * @throws IOException
-     *             should not occur
+     * @throws IOException should not occur
      */
     @Test
     public void testCompoundConstraintReferringToOutside() throws IOException {
@@ -227,8 +229,7 @@ public class BasicTests extends AbstractTest {
     /**
      * Tests static compound access (SAP case).
      * 
-     * @throws IOException
-     *             should not occur
+     * @throws IOException should not occur
      */
     @Test
     public void testStaticCompoundAccess() throws IOException {
@@ -246,13 +247,23 @@ public class BasicTests extends AbstractTest {
     }
     
     /**
-     * Tests the basic datatypes without defaults.
+     * Tests implication operations.
      * 
      * @throws IOException should not occur
      */
     @Test
     public void testImplies() throws IOException {
         assertEqual(createFile("implies"), "impliesM", "0");
+    }
+
+    /**
+     * Tests implication operations.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testImpliesFail() throws IOException {
+        assertEqual(createFile("impliesFail"), "impliesFail", "0", ErrorCodes.ASSIGNMENT);
     }
     
     /**

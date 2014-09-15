@@ -3,6 +3,7 @@
 package de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl;
 
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.QualifiedPrefix;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Type;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.TypeParameters;
 
@@ -35,24 +36,14 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 public class TypeImpl extends MinimalEObjectImpl.Container implements Type
 {
   /**
-   * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+   * The cached value of the '{@link #getName() <em>Name</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getName()
    * @generated
    * @ordered
    */
-  protected static final String NAME_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getName()
-   * @generated
-   * @ordered
-   */
-  protected String name = NAME_EDEFAULT;
+  protected QualifiedPrefix name;
 
   /**
    * The default value of the '{@link #getSet() <em>Set</em>}' attribute.
@@ -150,7 +141,7 @@ public class TypeImpl extends MinimalEObjectImpl.Container implements Type
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getName()
+  public QualifiedPrefix getName()
   {
     return name;
   }
@@ -160,12 +151,37 @@ public class TypeImpl extends MinimalEObjectImpl.Container implements Type
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setName(String newName)
+  public NotificationChain basicSetName(QualifiedPrefix newName, NotificationChain msgs)
   {
-    String oldName = name;
+    QualifiedPrefix oldName = name;
     name = newName;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, ExpressionDslPackage.TYPE__NAME, oldName, name));
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ExpressionDslPackage.TYPE__NAME, oldName, newName);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setName(QualifiedPrefix newName)
+  {
+    if (newName != name)
+    {
+      NotificationChain msgs = null;
+      if (name != null)
+        msgs = ((InternalEObject)name).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ExpressionDslPackage.TYPE__NAME, null, msgs);
+      if (newName != null)
+        msgs = ((InternalEObject)newName).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ExpressionDslPackage.TYPE__NAME, null, msgs);
+      msgs = basicSetName(newName, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, ExpressionDslPackage.TYPE__NAME, newName, newName));
   }
 
   /**
@@ -295,6 +311,8 @@ public class TypeImpl extends MinimalEObjectImpl.Container implements Type
   {
     switch (featureID)
     {
+      case ExpressionDslPackage.TYPE__NAME:
+        return basicSetName(null, msgs);
       case ExpressionDslPackage.TYPE__PARAM:
         return basicSetParam(null, msgs);
     }
@@ -336,7 +354,7 @@ public class TypeImpl extends MinimalEObjectImpl.Container implements Type
     switch (featureID)
     {
       case ExpressionDslPackage.TYPE__NAME:
-        setName((String)newValue);
+        setName((QualifiedPrefix)newValue);
         return;
       case ExpressionDslPackage.TYPE__SET:
         setSet((String)newValue);
@@ -365,7 +383,7 @@ public class TypeImpl extends MinimalEObjectImpl.Container implements Type
     switch (featureID)
     {
       case ExpressionDslPackage.TYPE__NAME:
-        setName(NAME_EDEFAULT);
+        setName((QualifiedPrefix)null);
         return;
       case ExpressionDslPackage.TYPE__SET:
         setSet(SET_EDEFAULT);
@@ -394,7 +412,7 @@ public class TypeImpl extends MinimalEObjectImpl.Container implements Type
     switch (featureID)
     {
       case ExpressionDslPackage.TYPE__NAME:
-        return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+        return name != null;
       case ExpressionDslPackage.TYPE__SET:
         return SET_EDEFAULT == null ? set != null : !SET_EDEFAULT.equals(set);
       case ExpressionDslPackage.TYPE__PARAM:
@@ -418,9 +436,7 @@ public class TypeImpl extends MinimalEObjectImpl.Container implements Type
     if (eIsProxy()) return super.toString();
 
     StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (name: ");
-    result.append(name);
-    result.append(", set: ");
+    result.append(" (set: ");
     result.append(set);
     result.append(", seq: ");
     result.append(seq);

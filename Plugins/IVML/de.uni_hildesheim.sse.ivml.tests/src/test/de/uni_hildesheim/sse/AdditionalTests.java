@@ -88,4 +88,24 @@ public class AdditionalTests extends AbstractTest {
         assertEqual(createFile("shortNames"), "shortNames", "0");
     }
 
+    /**
+     * Tests the short names bug contributed by Roman / QualiMaster.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testConstraintDispatchCall() throws IOException {
+        assertEqual(createFile("constraintDispatchCall"), "constraintDispatchCall", "0");
+    }
+
+    /**
+     * Tests the short names bug contributed by Roman / QualiMaster.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testBooleanAlgebraOp() throws IOException {
+        assertEqual(createFile("BooleanAlgebraOpTest"), null, null);
+    }   
+    
 }

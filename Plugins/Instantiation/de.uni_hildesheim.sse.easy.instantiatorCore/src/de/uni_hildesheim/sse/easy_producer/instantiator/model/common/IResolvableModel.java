@@ -2,7 +2,8 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.common;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IResolvable;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaType;
-import de.uni_hildesheim.sse.utils.modelManagement.IModel;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ITypedModel;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 
 /**
  * Defines the interface for a resolvable model which may provide its parts
@@ -12,15 +13,15 @@ import de.uni_hildesheim.sse.utils.modelManagement.IModel;
  * 
  * @author Holger Eichelberger
  */
-public interface IResolvableModel<V extends IResolvable> extends IParameterizable<V>, IModel, IMetaType {
+public interface IResolvableModel<V extends IResolvable> extends IParameterizable<V>, ITypedModel {
 
     /**
      * Returns whether the given <code>name</code> resolves to an IVML element.
      * 
      * @param name the name to be resolved
-     * @return <code>true</code> if <code>name</code> can be resolved, <code>false</code> else
+     * @return the IVML element (value, containable model element), <b>null</b> else
      */
-    public boolean isIvmlElement(String name);
+    public Object getIvmlElement(String name);
     
     /**
      * Get the parent project which this project extends.
@@ -71,4 +72,11 @@ public interface IResolvableModel<V extends IResolvable> extends IParameterizabl
      */
     public boolean isImplicit(V decl);
 
+    /**
+     * Returns the responsible type registry.
+     * 
+     * @return the type registry
+     */
+    public TypeRegistry getTypeRegistry();
+    
 }

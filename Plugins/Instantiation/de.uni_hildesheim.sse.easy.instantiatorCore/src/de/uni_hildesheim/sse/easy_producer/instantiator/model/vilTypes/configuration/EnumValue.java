@@ -1,6 +1,8 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Conversion;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
+import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 
 /**
  * Represents an IVML enum value.
@@ -16,7 +18,7 @@ public class EnumValue extends IvmlElement {
      * 
      * @param value the IVML enum literal
      */
-    EnumValue(de.uni_hildesheim.sse.model.varModel.values.EnumValue value) {
+    public EnumValue(de.uni_hildesheim.sse.model.varModel.values.EnumValue value) {
         this.value = value;
     }
     
@@ -36,6 +38,16 @@ public class EnumValue extends IvmlElement {
      */
     public String getQualifiedName() {
         return value.getValue().getQualifiedName();
+    }
+    
+    /**
+     * Returns the IVML data type.
+     * 
+     * @return the IVML data type
+     */
+    @Invisible
+    public IDatatype getDatatype() {
+        return value.getType();
     }
 
     @Override
@@ -85,22 +97,32 @@ public class EnumValue extends IvmlElement {
 
     @Override
     public Integer getIntegerValue() {
-        return null;
+        return value.getValue().getOrdinal();
+    }
+    
+    /**
+     * Returns the ordinal of the enum value.
+     * 
+     * @return the ordinal
+     */
+    public int getOrdinal() {
+        return value.getValue().getOrdinal();
     }
 
     @Override
     public Double getRealValue() {
-        return null;
+        return (double) value.getValue().getOrdinal();
     }
 
     @Override
+    @Invisible
     public Boolean getBooleanValue() {
         return null;
     }
 
     @Override
     public EnumValue getEnumValue() {
-        return null;
+        return this;
     }
 
     @Override

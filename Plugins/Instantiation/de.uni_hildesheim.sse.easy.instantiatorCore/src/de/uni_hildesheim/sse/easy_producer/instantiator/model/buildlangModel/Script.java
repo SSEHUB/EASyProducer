@@ -38,6 +38,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.VilException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypes;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 import de.uni_hildesheim.sse.utils.modelManagement.IndentationConfiguration;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
@@ -74,7 +75,6 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
 
     private String name;
     private Version version;
-    private Advice[] advices;
     private ModelImport<Script> parent;
     private VariableDeclaration[] parameters;
     private List<VariableDeclaration> declarations;
@@ -158,12 +158,11 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
      * @param registry the responsible type registry 
      */
     public Script(String name, ModelImport<Script> parent, ScriptDescriptor descriptor, TypeRegistry registry) {
-        super(null == descriptor ? null : descriptor.imports, registry);
+        super(null == descriptor ? null : descriptor.imports, registry, null == descriptor ? null : descriptor.advices);
         this.name = name;
         this.parent = parent;
         this.version = null;
         this.loadProperties = new ArrayList<LoadProperties>();
-        this.advices = null == descriptor ? null : descriptor.advices;
         this.declarations = new ArrayList<VariableDeclaration>();
         this.rules = new ArrayList<Rule>();        
         this.parameters = null == descriptor ? null : descriptor.parameters;
@@ -182,9 +181,9 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
      */
     public static VariableDeclaration[] createDefaultParameter() {
         VariableDeclaration[] param = new VariableDeclaration[3];
-        param[0] = new VariableDeclaration("source", TypeRegistry.projectType());
-        param[1] = new VariableDeclaration("config", TypeRegistry.configurationType());
-        param[2] = new VariableDeclaration("target", TypeRegistry.projectType());
+        param[0] = new VariableDeclaration("source", IvmlTypes.projectType());
+        param[1] = new VariableDeclaration("config", IvmlTypes.configurationType());
+        param[2] = new VariableDeclaration("target", IvmlTypes.projectType());
         return param;
     }
         
@@ -196,7 +195,7 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
     private void createImplicitVariables() {
         try {
             TypeDescriptor<? extends IVilType>[] tmp = TypeDescriptor.createArray(1);
-            tmp[0] = TypeRegistry.projectType();
+            tmp[0] = IvmlTypes.projectType();
             declarations.add(new VariableDeclaration(NAME_OTHERPROJECTS, TypeRegistry.getSetType(tmp)));
             declarations.add(new VariableDeclaration(NAME_SCRIPTDIR, TypeRegistry.stringType()));
         } catch (VilException e) {
@@ -230,29 +229,6 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
             throw new IndexOutOfBoundsException();
         }
         return parameters[index];
-    }
-
-    /**
-     * Get the number of advices of this script.
-     * 
-     * @return The number of advices of this script.
-     */
-    public int getAdviceCount() {
-        return null == advices ? 0 : advices.length;
-    }
-    
-    /**
-     * Get the advice of this rule at the specified index.
-     * 
-     * @param index The 0-based index of the advice to be returned.
-     * @return The advice parameter at the given index.
-     * @throws IndexOutOfBoundsException if <code>index &lt; 0 || index &gt;={@link #getAdviceCount()}</code>
-     */
-    public Advice getAdvice(int index) {
-        if (null == advices) {
-            throw new IndexOutOfBoundsException();
-        }
-        return advices[index];
     }
     
     /**
@@ -441,16 +417,6 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
     @Override
     public IMetaOperation findConversion(IMetaType sourceType, IMetaType targetType) {
         return null; // no conversions defined on a script
-    }
-   
-    @Override
-    public boolean isIvmlElement(String name) {
-        boolean result = false;
-        // TODO consider parent?
-        for (int a = 0; !result && a < getAdviceCount(); a++) {
-            result = getAdvice(a).isIvmlElement(name);
-        }
-        return result;
     }
 
     @Override
@@ -647,8 +613,7 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
                 VariableDeclaration sParam = getParameter(p);
                 param[p] = new VariableDeclaration(sParam.getName(), sParam.getType());
             }
-            RuleDescriptor desc = new RuleDescriptor(param);
-            main = new Rule(name, desc, false, this);
+            main = new Rule(name, false, param, new RuleDescriptor(), this);
             rules.add(main);
         }
         return main;
@@ -657,6 +622,11 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
     @Override
     public boolean isBasicType() {
         return false;
+    }
+    
+    @Override
+    public boolean enableDynamicDispatch() {
+        return true;
     }
     
     /**
@@ -682,6 +652,26 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
             throw new IndexOutOfBoundsException();
         }
         return imp.getVtlRestriction(index);
+    }
+
+    @Override
+    public boolean isPlaceholder() {
+        return false;
+    }
+    
+    @Override
+    public IMetaOperation addPlaceholderOperation(String name, int parameterCount, boolean acceptsNamedParameters) {
+        return null;
+    }
+
+    @Override
+    public boolean isActualTypeOf(IMetaType type) {
+        return false; // shall not be handled by IActualTypeProvider
+    }
+
+    @Override
+    protected void reload() {
+        BuildModel.INSTANCE.reload(this);
     }
 
 }

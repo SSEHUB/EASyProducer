@@ -40,8 +40,7 @@ public class Activator extends AbstractUIPlugin {
         super.start(context);
         plugin = this;
         VilArgumentProvider.add(new VilClasspathProvider("classpath"));
-        EASyPreferenceStore.loadDefaultConfiguration();
-        EASyPreferenceStore.loadVilArgumentProviderStates();
+        EASyPreferenceStore.loadOnStart();
     }
 
     /**

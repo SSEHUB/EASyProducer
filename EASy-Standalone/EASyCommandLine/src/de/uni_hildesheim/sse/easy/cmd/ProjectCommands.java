@@ -19,11 +19,11 @@ package de.uni_hildesheim.sse.easy.cmd;
 import java.io.File;
 import java.io.IOException;
 
-import de.uni_hildesheim.sse.easy_producer.persistence.Configuration;
-import de.uni_hildesheim.sse.easy_producer.persistence.PersistenceUtils;
-import de.uni_hildesheim.sse.easy_producer.persistence.Configuration.PathKind;
-import de.uni_hildesheim.sse.easy_producer.persistence.contributions.Contributions;
-import de.uni_hildesheim.sse.easy_producer.persistence.standard.NatureHelper;
+import de.uni_hildesheim.sse.easy_producer.core.contributions.Contributions;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.Configuration;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.Configuration.PathKind;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceUtils;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.standard.NatureHelper;
 import de.uni_hildesheim.sse.easy_producer.persistency.eclipse.EASyNature;
 
 /**

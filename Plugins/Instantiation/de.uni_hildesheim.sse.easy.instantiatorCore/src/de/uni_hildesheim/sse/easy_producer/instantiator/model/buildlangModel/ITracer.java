@@ -114,4 +114,9 @@ public interface ITracer extends de.uni_hildesheim.sse.easy_producer.instantiato
      */
     public void failedAt(IBuildlangElement element);
     
+    /**
+     * Resets this tracer for reuse.
+     */
+    public void reset();
+
 }

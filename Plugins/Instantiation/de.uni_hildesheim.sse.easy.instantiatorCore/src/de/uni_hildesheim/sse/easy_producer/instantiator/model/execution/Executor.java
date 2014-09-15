@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Set;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildlangExecution;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ITracer;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.RuleExecutionResult;
@@ -39,6 +40,9 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ListSet;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Project;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.FrozenVariablesFilter;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IVariableFilter;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.NoVariableFilter;
 import de.uni_hildesheim.sse.model.confModel.Configuration;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
@@ -50,7 +54,8 @@ import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
  * point of view of default EASy execution! Further, projects may be given in terms
  * of their base folder or as an {@link IProjectDescriptor}, whereby the project 
  * descriptor carries explicit information about the project and shall be preferred 
- * (except for explicit testing purposes).
+ * (except for explicit testing purposes). However, if multiple sources are given, as a convention 
+ * the first one shall the top-level project that needs to be executed.
  * 
  * @author Holger Eichelberger
  */
@@ -84,6 +89,7 @@ public class Executor {
     private Script script;
     private String startRuleName = DEFAULT_START_RULE_NAME;
     private File base;
+    private boolean frozenOnly = true;
     
     /**
      * Creates an executor with default arguments.
@@ -136,6 +142,20 @@ public class Executor {
         if (null != startRuleName && startRuleName.length() > 0) {
             this.startRuleName = startRuleName;
         }
+        return this;
+    }
+    
+    /**
+     * Switches on / off whether only frozen variables shall be able for instantiation. This enables
+     * runtime variability. Please note that this switch applies only to configurations created in
+     * this class, not configurations created outside and passed in.
+     * 
+     * @param frozenOnly if <code>true</code> only frozen variables will be considered in a configuration instance
+     *   created by this class, <code>false</code> else
+     * @return this executor instance
+     */
+    public Executor frozenOnly(boolean frozenOnly) {
+        this.frozenOnly = frozenOnly;
         return this;
     }
 
@@ -391,14 +411,12 @@ public class Executor {
         if (null == observer) {
             throw new IllegalArgumentException("observer must not be null");
         }
-        
         Map<String, Object> actArgs = new HashMap<String, Object>();
         actArgs.putAll(arguments);
         ITracer tracer = TracerFactory.createBuildLanguageTracer();
         File base = this.base;
         if (check) {
             checkArguments(actArgs, observer);
-
             // check target and use default if possible
             if (null == actArgs.get(PARAM_TARGET)) {
                 if (actArgs.get(PARAM_SOURCE) instanceof Project) {
@@ -421,7 +439,12 @@ public class Executor {
             throw new IllegalArgumentException(
                 "no base folder specified, neither via target project nor explicitly");
         }
-        
+        if (script.isDirty()) {
+            Script old = script;
+            script = BuildModel.INSTANCE.reload(script);
+            EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).info("Reloading model " + script.getName() 
+                + " " + System.identityHashCode(script) + " as it was marked dirty " + (old != script)); // for Cui
+        }
         BuildlangExecution executor = new BuildlangExecution(tracer, base, startRuleName, actArgs);
         try {
             Object result = script.accept(executor);
@@ -452,6 +475,7 @@ public class Executor {
             tracer.traceExecutionException(e);
             throw e;
         }
+        tracer.reset();
     }
     
     /**
@@ -477,7 +501,7 @@ public class Executor {
         }
         if (args.get(param) instanceof IProjectDescriptor) {
             try {
-                args.put(param, new Project((IProjectDescriptor) args.get(param), observer));
+                args.put(param, Project.getProjectFor((IProjectDescriptor) args.get(param)));
             } catch (ArtifactException e) {
                 throw new VilLanguageException(e.getMessage(), e.getId());
             }
@@ -487,7 +511,7 @@ public class Executor {
                 IProjectDescriptor[] tmp = (IProjectDescriptor[]) args.get(PARAM_SOURCE);
                 Project[] sources = new Project[tmp.length];
                 for (int f = 0; f < tmp.length; f++) {
-                    sources[f] = new Project(tmp[f], observer);
+                    sources[f] = Project.getProjectFor(tmp[f]);
                 }
                 args.put(PARAM_SOURCE, sources);
             } catch (ArtifactException e) {
@@ -522,7 +546,7 @@ public class Executor {
      * @throws VilLanguageException in case that artifact operations fail
      * @throws IllegalArgumentException in case that input is missing or wrong
      */
-    private static void checkArguments(Map<String, Object> args, ProgressObserver observer) 
+    private void checkArguments(Map<String, Object> args, ProgressObserver observer) 
         throws VilLanguageException {
         checkProjectArgument(args, PARAM_SOURCE, observer);
         checkProjectArgument(args, PARAM_TARGET, observer);
@@ -530,8 +554,14 @@ public class Executor {
             throw new IllegalArgumentException("no configuration given");
         }
         if (args.get(PARAM_CONFIG) instanceof Configuration) {
+            IVariableFilter filter;
+            if (frozenOnly) {
+                filter = FrozenVariablesFilter.INSTANCE;
+            } else {
+                filter = NoVariableFilter.INSTANCE;
+            }
             args.put(PARAM_CONFIG, new de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes
-                .configuration.Configuration((Configuration) args.get(PARAM_CONFIG))); 
+                .configuration.Configuration((Configuration) args.get(PARAM_CONFIG), filter)); 
         }
         if (!(args.get(PARAM_CONFIG) instanceof de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes
             .configuration.Configuration)) {

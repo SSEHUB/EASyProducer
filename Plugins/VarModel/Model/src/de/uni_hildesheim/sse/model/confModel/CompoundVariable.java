@@ -1,3 +1,18 @@
+/*
+ * Copyright 2009-2013 University of Hildesheim, Software Systems Engineering
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.uni_hildesheim.sse.model.confModel;
 
 import java.util.LinkedHashMap;
@@ -55,21 +70,28 @@ public class CompoundVariable extends StructuredVariable {
         IAssignmentState state = super.getState();
         
         // check whether the whole compound was frozen already
-        if (state != AssignmentState.FROZEN) {
-            if (ownStateAllowed()) {
+        if (state != AssignmentState.FROZEN && ownStateAllowed()) {
+            CompoundValue cmpValue = (CompoundValue) getValue();
+            if (cmpValue != null && null != cmpValue.getValue() && cmpValue != NullValue.INSTANCE) {
                 state = AssignmentState.ASSIGNED;
-                for (IDecisionVariable nestedVar : nestedElements.values()) {
-                    if (null == nestedVar.getValue() || AssignmentState.UNDEFINED == nestedVar.getState()) {
-                        state = AssignmentState.UNDEFINED;
-                        break;
-                    }
-                }
             } else {
-                CompoundValue cmpValue = (CompoundValue) getValue();
-                if (null == cmpValue || !cmpValue.isFullyConfigured()) {
-                    state = AssignmentState.UNDEFINED;
-                }
+                state = AssignmentState.UNDEFINED;
             }
+//            if (ownStateAllowed()) {
+//                // A (partial) assigned compound should be assigned       
+//                state = AssignmentState.UNDEFINED;
+//                for (IDecisionVariable nestedVar : nestedElements.values()) {
+//                    if (AssignmentState.ASSIGNED == nestedVar.getState()) {
+//                        state = AssignmentState.ASSIGNED;
+//                        break;
+//                    }
+//                }
+//            } else {
+//                CompoundValue cmpValue = (CompoundValue) getValue();
+//                if (null == cmpValue || !cmpValue.isFullyConfigured()) {
+//                    state = AssignmentState.UNDEFINED;
+//                }
+//            }
         }
         
         return state;
@@ -112,7 +134,7 @@ public class CompoundVariable extends StructuredVariable {
                 if (null != slotName && null != cmpValue.getNestedValue(slotName)) {
                     DecisionVariable nestedVar = (DecisionVariable) nestedElements.get(slotName);
                     if (null != nestedVar) {
-                        nestedVar.getConfigProvider().setState(state);
+                        nestedVar.setState(state);
                     }
                 }
             }

@@ -1,10 +1,29 @@
+/*
+ * Copyright 2009-2013 University of Hildesheim, Software Systems Engineering
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.uni_hildesheim.sse.model.varModel.values;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
+import de.uni_hildesheim.sse.model.varModel.IvmlDatatypeVisitor;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Container;
+import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
+import de.uni_hildesheim.sse.model.varModel.datatypes.Sequence;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Set;
 import de.uni_hildesheim.sse.persistency.StringProvider;
 
@@ -102,6 +121,19 @@ public class ContainerValue extends StructuredValue implements Cloneable {
     ContainerValue(Container container) {
         super(container);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public IDatatype getContainedType() {
+        IDatatype type = getType();
+        if (1 == type.getGenericTypeCount()) {
+            type = type.getGenericType(0);
+        } else {
+            type = null;
+        }
+        return type;
+    }
     
     /**
      * Getter for the value. Do not use! This value instance has substructures 
@@ -157,6 +189,8 @@ public class ContainerValue extends StructuredValue implements Cloneable {
         if (value instanceof ContainerValue) {
             // this realizes copy semantics among assignable types
             // as this assignment is not a reference!!!
+            
+            // TODO: Check - this is not setting but adding values!!!
             copyValuesFrom((ContainerValue) value);
         } else if (null == value) {
             nestedElements.clear();
@@ -247,6 +281,16 @@ public class ContainerValue extends StructuredValue implements Cloneable {
     }
 
     /**
+     * Returns the (first) index of the specified (nested) value.
+     *  
+     * @param value the value to search for
+     * @return the first index of <code>value</code> or <code>-1</code> if not found
+     */
+    public int indexOf(Value value) {
+        return nestedElements.indexOf(value);
+    }
+
+    /**
      * Checks whether this value belongs to a {@link Set} or an <tt>Sequence</tt>.
      * @return <tt>true</tt> if this value belongs to a {@link Set}, otherwise <tt>false</tt>.
      */
@@ -298,4 +342,86 @@ public class ContainerValue extends StructuredValue implements Cloneable {
             nestedElements.set(index, nestedValue);
         }
     }
+
+    @Override
+    public int hashCode() {
+        int result;
+        if (Sequence.TYPE.isAssignableFrom(getType())) {
+            // corresponds to AbstractList
+            result = nestedElements.hashCode();
+        } else {
+            result = 0;
+            // corresponds to AbstractSet
+            for (int i = 0; i < nestedElements.size(); i++) {
+                Value val = nestedElements.get(i);
+                if (null != val) {
+                    result += val.hashCode();
+                }
+            }
+        }
+        return result;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+        boolean equals = false;
+        if (other instanceof ContainerValue) {
+            ContainerValue oContainer = (ContainerValue) other;
+            if (getType().isAssignableFrom(oContainer.getType())) { 
+                int opSize = getElementSize();
+                if (opSize == oContainer.getElementSize()) {
+                    equals = true;
+                    if (Sequence.TYPE.isAssignableFrom(getType())) {
+                        // corresponds to AbstractList
+                        equals = nestedElements.equals(oContainer.nestedElements);
+                    } else {
+                        // corresponds to AbstractSet
+                        HashSet<Value> tmp = new HashSet<Value>();
+                        doAll(tmp, true);
+                        oContainer.doAll(tmp, false);
+                        equals = tmp.isEmpty();
+                    }
+                } 
+            }
+        } 
+        return equals;
+    }
+
+    /**
+     * Adds/removes all elements to/from <code>set</code>.
+     * 
+     * @param set the set to add/remove
+     * @param add add (<code>true</code>) or remove (<code>false</code>)
+     */
+    private void doAll(HashSet<Value> set, boolean add) {
+        int size = getElementSize();
+        for (int e = 0; e < size; e++) {
+            Value value = getElement(e);
+            if (null != value) {
+                if (add) {
+                    set.add(value);
+                } else {
+                    set.remove(value);
+                }
+            }
+        }
+    }
+    
+    /**
+     * Adds an element to this container. Shall only be called during dynamic execution.
+     * 
+     * @param value the value to be added
+     * @throws ValueDoesNotMatchTypeException in case that the type of <code>value</code>
+     *   does not match the container type of the containers
+     */
+    public void addElement(Value value) throws ValueDoesNotMatchTypeException {
+        if (!getContainedType().isAssignableFrom(value.getType())) {
+            throw new ValueDoesNotMatchTypeException("cannot assign value of type '" 
+                + IvmlDatatypeVisitor.getQualifiedType(value.getType()) + "' to '"
+                + IvmlDatatypeVisitor.getQualifiedType(getContainedType()) + "'", 
+                ValueDoesNotMatchTypeException.TYPE_MISMATCH);
+        }
+        nestedElements.add(value);
+    }
+    
 }

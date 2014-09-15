@@ -143,9 +143,12 @@ public class StrategyCallExpression extends CallExpression {
             for (int a = 0; a < getArgumentsCount(); a++) {
                 getArgument(a).inferType();
             }
-            if (null == ExecutableOperand.getExecutableType(getArgument(0).inferType())) {
-                throw new ExpressionException("cannot execute system call on " + getArgument(0).inferType().getName(), 
-                    ExpressionException.ID_CANNOT_RESOLVE);
+            if (getArgumentsCount() > 0) {
+                TypeDescriptor<? extends IVilType> arg0Type = getArgument(0).inferType();
+                if (null == ExecutableOperand.getExecutableType(arg0Type)) {
+                    throw new ExpressionException("cannot execute system call on " + arg0Type.getName(), 
+                        ExpressionException.ID_CANNOT_RESOLVE);
+                }
             }
             execResolved = true;
         }
@@ -171,6 +174,17 @@ public class StrategyCallExpression extends CallExpression {
             result = visitor.visitExpression(this);
         }
         return result;
+    }
+    
+    @Override
+    public boolean isPlaceholder() {
+        boolean isPlaceholder;
+        if (Type.EXECUTE == type) {
+            isPlaceholder = false;
+        } else {
+            isPlaceholder = super.isPlaceholder();
+        }
+        return isPlaceholder;
     }
 
 }

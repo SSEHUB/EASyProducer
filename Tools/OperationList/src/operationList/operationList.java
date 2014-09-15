@@ -6,25 +6,14 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 
-import de.uni_hildesheim.sse.model.varModel.datatypes.BooleanType;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
-import de.uni_hildesheim.sse.model.varModel.datatypes.ConstraintType;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Container;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Enum;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
-import de.uni_hildesheim.sse.model.varModel.datatypes.IntegerType;
-import de.uni_hildesheim.sse.model.varModel.datatypes.MetaType;
-import de.uni_hildesheim.sse.model.varModel.datatypes.OrderedEnum;
-import de.uni_hildesheim.sse.model.varModel.datatypes.RealType;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Sequence;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Set;
-import de.uni_hildesheim.sse.model.varModel.datatypes.StringType;
+import de.uni_hildesheim.sse.model.varModel.datatypes.Types;
 
 /**
  * Get all known IDatatype specific Operations.
  * @author tebbje
  */
-public class operationList {
+public class OperationList {
 	
 	/**
 	 * Just for using System.out after it has been redirected.
@@ -67,20 +56,7 @@ public class operationList {
 		/**
 		 * Known IDatatypes.
 		 */
-		IDatatype types[] = { 
-				IntegerType.TYPE, 
-				RealType.TYPE,
-				BooleanType.TYPE, 
-				StringType.TYPE,
-				Compound.TYPE,
-				Sequence.TYPE,
-				Container.TYPE,
-				Enum.TYPE,
-				OrderedEnum.TYPE,
-				Set.TYPE, 
-				ConstraintType.TYPE,
-				MetaType.TYPE
-				};
+		IDatatype types[] = Types.getTypes();
 		
 		if (printFile == 1) {
 			System.out.println("printFile = 1 -> OutputStream redirected to \"" + file + "\"");

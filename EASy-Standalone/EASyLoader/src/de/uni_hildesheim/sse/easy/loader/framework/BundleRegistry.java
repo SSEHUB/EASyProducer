@@ -172,7 +172,7 @@ public class BundleRegistry {
             //versionSpec needs to be supported here!
             result = null;
             for (int i = 0; i < sameName.size(); i++) {
-                if (sameName.get(i).getVersion()
+                if (null != sameName.get(i).getVersion() && sameName.get(i).getVersion()
                     .isInRange(versionSpec.getBundleVersionMin(), versionSpec.getBundleVersionMax())) {
                     if (null == result || result.getVersion()
                             .compareTo(sameName.get(i).getVersion()) == -1) {

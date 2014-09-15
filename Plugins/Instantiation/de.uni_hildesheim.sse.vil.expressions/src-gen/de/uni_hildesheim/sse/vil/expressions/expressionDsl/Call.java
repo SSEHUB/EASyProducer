@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.Call#getName <em>Name</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.Call#getDecl <em>Decl</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.Call#getParam <em>Param</em>}</li>
  * </ul>
  * </p>
@@ -48,6 +49,32 @@ public interface Call extends EObject
    * @generated
    */
   void setName(QualifiedPrefix value);
+
+  /**
+   * Returns the value of the '<em><b>Decl</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Decl</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Decl</em>' containment reference.
+   * @see #setDecl(Declarator)
+   * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage#getCall_Decl()
+   * @model containment="true"
+   * @generated
+   */
+  Declarator getDecl();
+
+  /**
+   * Sets the value of the '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.Call#getDecl <em>Decl</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Decl</em>' containment reference.
+   * @see #getDecl()
+   * @generated
+   */
+  void setDecl(Declarator value);
 
   /**
    * Returns the value of the '<em><b>Param</b></em>' containment reference.

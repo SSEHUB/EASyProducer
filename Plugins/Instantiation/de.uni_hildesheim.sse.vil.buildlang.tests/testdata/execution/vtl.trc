@@ -1,6 +1,9 @@
 -> main(Project, Project, Configuration) with (<project>, <project>, <config>)
     fa <- templates/test.vtl
+-> main(Configuration, FileArtifact) with (<config>, test.txt)
     -> vilTemplateProcessor(VtlFileArtifact, Configuration, Artifact) with (templates/test.vtl, <config>, test.txt, {}) = {test.txt}
     va <- templates/test.vtl
+-> main(Configuration, FileArtifact) with (<config>, test1.txt)
     -> vilTemplateProcessor(VtlFileArtifact, Configuration, Artifact) with (templates/test.vtl, <config>, test1.txt, {}) = {test1.txt}
+-> +(String, String) with (test::pString, myTable) = test::pStringmyTable
     -> vilTemplateProcessor(String, Configuration, Artifact) with (/init.sql, <config>, init1.sql, {}) = {init1.sql}

@@ -5,7 +5,7 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configur
  * 
  * @author Holger Eichelberger
  */
-public class ValueFilter implements IConfigurationFilter {
+class ValueFilter implements IConfigurationFilter {
 
     private Object value;
     private Class<? extends IvmlElement> type;

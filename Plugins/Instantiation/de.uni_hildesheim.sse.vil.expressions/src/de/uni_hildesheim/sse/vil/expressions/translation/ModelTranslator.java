@@ -20,6 +20,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VariableDec
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Resolver;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypeResolver;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.utils.messages.IMessage;
@@ -196,7 +197,7 @@ public abstract class ModelTranslator
                     VersionRestriction[] restrictions = ImportTranslator.processRestrictions(
                         name, adv.getVersionSpec());                
                     StringBuilder warning = new StringBuilder();
-                    result[a] = Advice.create(name, restrictions, warning);
+                    result[a] = Advice.create(name, modelURI, restrictions, warning);
                     buildLocalTypeRegistry(result[a]);
                     if (warning.length() > 0) {
                         warning(warning.toString(), adv, ExpressionDslPackage.Literals.ADVICE__NAME, ErrorCodes.IMPORT);
@@ -217,7 +218,8 @@ public abstract class ModelTranslator
     private void buildLocalTypeRegistry(Advice advice) {
         Project varModel = advice.getResolved();
         if (null != varModel) {
-            resolver.getTypeRegistry().addTypeResolver(new IvmlTypeResolver(varModel));
+            TypeRegistry registry = resolver.getTypeRegistry();
+            registry.addTypeResolver(new IvmlTypeResolver(varModel, registry, advice.getName()));
         }
     }
     

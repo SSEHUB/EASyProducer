@@ -1,3 +1,18 @@
+/*
+ * Copyright 2009-2014 University of Hildesheim, Software Systems Engineering
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionEvaluator;
@@ -44,7 +59,7 @@ public interface Sequence<T> extends Collection<T> {
      *   type for <code>type</code>)
      */
     @OperationMeta(returnGenerics = IVilType.class)
-    public Sequence<T> selectByType(Class<?> type);
+    public Sequence<T> selectByType(TypeDescriptor<? extends IVilType> type);
 
     /**
      * Exclude the elements in <code>sequence</code>.
@@ -54,6 +69,14 @@ public interface Sequence<T> extends Collection<T> {
     @OperationMeta(returnGenerics = IVilType.class)
     public Sequence<T> excluding(Collection<T> sequence);
 
+    /**
+     * Append the elements in <code>set</code>.
+     * @param set the elements to be excluded
+     * @return this set without the elements in <code>set</code>
+     */
+    @OperationMeta(returnGenerics = IVilType.class)
+    public Sequence<T> append(Collection<T> set);
+    
     /**
      * Selects elements in this set according to the given expression.
      * 
@@ -92,5 +115,13 @@ public interface Sequence<T> extends Collection<T> {
      * @return the last element
      */
     public T last();
+    
+    /**
+     * Returns the index of <code>element</code> in this sequence.
+     * 
+     * @param element the element to return the index for
+     * @return the 0-based index of <code>element</code> in this sequence, <code>-1</code> if not found
+     */
+    public int indexOf(T element);
     
 }

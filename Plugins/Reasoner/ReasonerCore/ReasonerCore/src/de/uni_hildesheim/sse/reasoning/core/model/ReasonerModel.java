@@ -23,6 +23,7 @@ import de.uni_hildesheim.sse.model.varModel.values.Value;
 import de.uni_hildesheim.sse.reasoning.core.model.datatypes.CompoundType;
 import de.uni_hildesheim.sse.reasoning.core.model.datatypes.ReasonerDatatype;
 import de.uni_hildesheim.sse.reasoning.core.model.datatypes.ReasonerTypeFactory;
+import de.uni_hildesheim.sse.reasoning.core.model.variables.ConstraintVariable;
 import de.uni_hildesheim.sse.reasoning.core.model.variables.ReasonerVariable;
 import de.uni_hildesheim.sse.reasoning.core.model.variables.ReasonerVariableFactory;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.AttributeValues;
@@ -55,6 +56,11 @@ public class ReasonerModel implements IConstraintContainer, Iterable<ReasonerVar
      * This set stores only variables which are used in constraints, other variables can be ignored by the reasoner.
      */
     private Set<ReasonerVariable> variablesInConstraints;    
+    
+    /**
+     * This set stores only constraint variables which are used in for named constraints.
+     */
+    private Set<ConstraintVariable> constraintVariables;    
     
     /**
      * Translated {@link ReasonerDatatype}s in form of (Datatype name, Datatype).
@@ -103,10 +109,11 @@ public class ReasonerModel implements IConstraintContainer, Iterable<ReasonerVar
      */
     public ReasonerModel(Configuration configuration, ReasonerConfiguration settings) {
         /*** Start time measurement ***/
-        this.reasoningID = Statistic.createNewReasoningID(configuration.getProject().getName());
-        Statistic.createTimePerformanceMeasurement(reasoningID);
-        Statistic.addTimestamp(reasoningID, System.currentTimeMillis());
-        /***    ***/        
+        this.reasoningID = PerformanceStatistics.createReasoningID(configuration.getProject().getName(), "Drools2");
+        PerformanceStatistics.createPerformanceMeasurement(reasoningID);
+        /*** Start RM creation ***/
+//        Statistic.addTimestamp(reasoningID, System.currentTimeMillis());
+        /***  To DroolsEngine  ***/        
         this.project = configuration.getProject();
         this.config = configuration;
         this.settings = settings;
@@ -116,6 +123,7 @@ public class ReasonerModel implements IConstraintContainer, Iterable<ReasonerVar
         }
         variables = new HashMap<String, ReasonerVariable>();
         variablesOfCurrentView = new HashSet<ReasonerVariable>();
+        constraintVariables = new HashSet<ConstraintVariable>();
         variablesInCompounds = new HashMap<String, Set<ReasonerVariable>>();
         propagatedVariables = new ArrayList<IDecisionVariable>();
         
@@ -555,5 +563,13 @@ public class ReasonerModel implements IConstraintContainer, Iterable<ReasonerVar
      */
     public String getReasoningID() {
         return reasoningID;
+    }
+    
+    /**
+     * Method for adding a {@link ConstraintVariable} to the list.
+     * @param cstVar {@link ConstraintVariable} to be added.
+     */
+    public void addConstraintVariable(ConstraintVariable cstVar) {
+        constraintVariables.add(cstVar);
     }
 }

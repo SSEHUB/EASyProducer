@@ -6,6 +6,7 @@ import java.io.IOException;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
+import de.uni_hildesheim.sse.translation.ErrorCodes;
 
 /**
  * A test class for blackbox testing parser and type resolution of 
@@ -71,6 +72,19 @@ public class ExternalTests extends AbstractTest {
     @Test
     public void testReferencesFail() throws IOException {
         assertEqual(createFile("referencesFail"), null, null, CSTSemanticException.TYPE_MISMATCH);
+    }
+
+    /**
+     * Self interface import from wrong model contributed by Sebastian Bender.
+     * The base model (v0) defines the interface, the second model (v1) imports 
+     * the (same) model by name without version and accidentally the v0 is taken
+     * instead of v2. 
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testInterfaceImportFail() throws IOException {
+        assertEqual(createFile("InterfaceImportFail_1"), "InterfaceImportFail", "1", ErrorCodes.IMPORT);
     }
 
 }

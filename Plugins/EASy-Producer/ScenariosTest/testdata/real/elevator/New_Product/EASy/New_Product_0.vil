@@ -1,6 +1,6 @@
 import PL_SimElevator with (version == v0);
 
-vilScript New_Product (Project source, Configuration conf, Project target) {
+vilScript New_Product (Project source, Configuration conf, Project target) extends PL_SimElevator {
 
     version v0;
 

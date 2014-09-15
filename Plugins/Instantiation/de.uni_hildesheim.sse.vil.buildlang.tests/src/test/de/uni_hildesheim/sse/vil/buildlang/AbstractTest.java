@@ -11,6 +11,7 @@ import org.apache.commons.io.FileUtils;
 import org.eclipse.emf.common.util.URI;
 import org.junit.Assert;
 
+import de.uni_hildesheim.sse.ModelUtility;
 import de.uni_hildesheim.sse.VilExpressionParser;
 import de.uni_hildesheim.sse.BuildLangModelUtility;
 import de.uni_hildesheim.sse.dslCore.TranslationResult;
@@ -19,15 +20,16 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.BuiltIn;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.PathUtils;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildlangExecution;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.StreamTracer;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.Executor;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.TracerFactory;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Project;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.velocity.VelocityInstantiator;
+import de.uni_hildesheim.sse.model.management.VarModel;
 import de.uni_hildesheim.sse.utils.messages.Status;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
 
@@ -49,14 +51,29 @@ public abstract class AbstractTest extends de.uni_hildesheim.sse.dslCore.test.Ab
         registerTypeAnyway(VelocityInstantiator.class);
         BuildlangExecution.setExpressionParser(new VilExpressionParser());
         try {
+            VarModel.INSTANCE.loaders().registerLoader(ModelUtility.INSTANCE, OBSERVER);
             BuildModel.INSTANCE.loaders().registerLoader(BuildLangModelUtility.INSTANCE, OBSERVER);
+        } catch (ModelManagementException e) {
+            e.printStackTrace(System.err);
+            Assert.assertTrue(false); // shall not happen
+        }
+        test.de.uni_hildesheim.sse.vil.templatelang.AbstractTest.initializeInfrastructure();
+        addTestDataLocations();
+        //cleanTemp();
+    }
+
+    /**
+     * Adds the test data locations. Override to avoid.
+     */
+    protected void addTestDataLocations() {
+        try {
+            VarModel.INSTANCE.locations().addLocation(getTestDataDir(), OBSERVER);
             BuildModel.INSTANCE.locations().addLocation(getTestDataDir(), OBSERVER);
         } catch (ModelManagementException e) {
             e.printStackTrace(System.err);
             Assert.assertTrue(false); // shall not happen
         }
-        test.de.uni_hildesheim.sse.vil.templatelang.AbstractTest.initializeInfrastructure(getTestDataDir());
-        //cleanTemp();
+        test.de.uni_hildesheim.sse.vil.templatelang.AbstractTest.initializeLocations(getTestDataDir());
     }
 
     /**
@@ -193,9 +210,12 @@ public abstract class AbstractTest extends de.uni_hildesheim.sse.dslCore.test.Ab
                     Assert.assertTrue(null != fileAsString);
 
                     Script script = result.getResult(0);
-                    BuildlangExecution exec = new BuildlangExecution(new StreamTracer(trace, getBaseFolders(data)), 
+                    TracerFactory oldFactory = TracerFactory.getInstance();
+                    TracerFactory.setInstance(new TestTracerFactory(trace, getBaseFolders(data)));
+                    BuildlangExecution exec = new BuildlangExecution(TracerFactory.createBuildLanguageTracer(), 
                         getTestDataDir(), data.getStartElement(), data.getParameter());
                     script.accept(exec);
+                    TracerFactory.setInstance(oldFactory);
                     //String traceAsString = writer.toString().trim();
                     //Assert.assertTrue(checkEqualsAndPrint(fileAsString, traceAsString));
                     String errorMsg = checkEqualsAndPrepareMessage(fileAsString, trace);
@@ -221,7 +241,7 @@ public abstract class AbstractTest extends de.uni_hildesheim.sse.dslCore.test.Ab
                     messages.add(new Message(e.getMessage(), Status.ERROR, null, null, e.getId()));
                 }
             }
-            String errorCodes = checkErrorCodes(messages, expectedErrorCodes);
+            String errorCodes = checkErrorCodes(messages, null, expectedErrorCodes);
             Assert.assertNull(errorCodes, errorCodes);
         } else {
             Assert.assertTrue("File '" + file + "' does not exist", false);

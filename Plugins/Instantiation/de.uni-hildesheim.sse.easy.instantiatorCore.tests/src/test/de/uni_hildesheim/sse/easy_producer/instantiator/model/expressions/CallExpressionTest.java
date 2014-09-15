@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import test.de.uni_hildesheim.sse.easy_producer.instantiator.model.AbstractTest;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactTypes;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.JavaPath;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.Path;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.RuntimeEnvironment;
@@ -44,7 +45,7 @@ public class CallExpressionTest extends AbstractTest {
         Assert.assertNotNull("int->double conversion operation must exist", op);
         try {
             int value = 1;
-            ConstantExpression arg = new ConstantExpression(iDesc, Integer.valueOf(value), TypeRegistry.DEFAULT);
+            ConstantExpression arg = new ConstantExpression(iDesc, Integer.valueOf(value), getRegistry());
             CallExpression ex = new CallExpression(op, new CallArgument(arg));
             Object result = ex.accept(new EvaluationVisitor(new RuntimeEnvironment(), NoTracer.INSTANCE));
             Assert.assertNotNull("result must not be null", result);
@@ -64,9 +65,9 @@ public class CallExpressionTest extends AbstractTest {
         Assert.assertNotNull("integer type descriptor must exist", iDesc);
         try {
             CallArgument param1 = new CallArgument(
-                new ConstantExpression(iDesc, Integer.valueOf(1), TypeRegistry.DEFAULT));
+                new ConstantExpression(iDesc, Integer.valueOf(1), getRegistry()));
             CallArgument param2 = new CallArgument(
-                new ConstantExpression(iDesc, Integer.valueOf(2), TypeRegistry.DEFAULT));
+                new ConstantExpression(iDesc, Integer.valueOf(2), getRegistry()));
             CallExpression ex = new CallExpression(null, "+", param1, param2);
             TypeDescriptor<? extends IVilType> eDesc = ex.inferType();
             Assert.assertNotNull("result type must not be null", eDesc);
@@ -85,7 +86,7 @@ public class CallExpressionTest extends AbstractTest {
      */
     @Test
     public void testNonStaticExpression() {
-        TypeDescriptor<? extends IVilType> pDesc = TypeRegistry.DEFAULT.getType(Path.class.getSimpleName());
+        TypeDescriptor<? extends IVilType> pDesc = ArtifactTypes.pathType();
         Assert.assertNotNull("path type descriptor must exist", pDesc);
         try {
             String filePath = "java/lang/test";
@@ -105,7 +106,7 @@ public class CallExpressionTest extends AbstractTest {
             Assert.assertNotNull("cannot find toJavaPath operation in Path. Renamed?", oDesc);
             Assert.assertTrue("toJavaPath operation in Path must not be static. Refactored?", !oDesc.isStatic());
             CallExpression ex = new CallExpression(null, opName, 
-                new CallArgument(new ConstantExpression(pDesc, path, TypeRegistry.DEFAULT)));
+                new CallArgument(new ConstantExpression(pDesc, path, getRegistry())));
             TypeDescriptor<? extends IVilType> eDesc = ex.inferType();
             Assert.assertNotNull("result type must not be null", eDesc);
             Assert.assertEquals("result must be of type JavaPath", oDesc.getReturnType().getName(), eDesc.getName());
@@ -131,9 +132,9 @@ public class CallExpressionTest extends AbstractTest {
         Assert.assertNotNull("double/real type descriptor must exist", rDesc);
         try {
             CallArgument param1 = new CallArgument(
-                 new ConstantExpression(rDesc, Double.valueOf(1.5), TypeRegistry.DEFAULT));
+                 new ConstantExpression(rDesc, Double.valueOf(1.5), getRegistry()));
             CallArgument param2 = new CallArgument(
-                 new ConstantExpression(iDesc, Integer.valueOf(2), TypeRegistry.DEFAULT));
+                 new ConstantExpression(iDesc, Integer.valueOf(2), getRegistry()));
             CallExpression ex = new CallExpression(null, "+", param1, param2);
             TypeDescriptor<? extends IVilType> eDesc = ex.inferType();
             Assert.assertNotNull("result type must not be null", eDesc);

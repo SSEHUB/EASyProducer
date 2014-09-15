@@ -1,15 +1,25 @@
 package de.uni_hildesheim.sse.dslCore.validation;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintWriter;
+import java.io.Writer;
+import java.net.URISyntaxException;
+
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.xtext.diagnostics.Severity;
+import org.eclipse.xtext.validation.Check;
 import org.eclipse.xtext.validation.CheckType;
 import org.eclipse.xtext.validation.FeatureBasedDiagnostic;
 
+import de.uni_hildesheim.sse.dslCore.BundleId;
+import de.uni_hildesheim.sse.dslCore.ModelUtility;
 import de.uni_hildesheim.sse.dslCore.TranslationResult;
 import de.uni_hildesheim.sse.dslCore.translation.Message;
+import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
+import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
 
 /**
  * Some validation helper methods.
@@ -104,5 +114,132 @@ public class ValidationUtils {
         }
         return diagnosticSeverity;
     }
+
+    /**
+     * Defines common xText error types.
+     * 
+     * @author Holger Eichelberger
+     */
+    public enum MessageType {
+        ERROR,
+        WARNING,
+        INFO;
+    }
+
+    /**
+     * Defines a validation callback to provide the information required for validation.
+     * @author Holger Eichelberger
+     *
+     * @param <R> the model root type
+     * @param <T> the transformation result type
+     */
+    public interface IModelValidationCallback<R, T> {
+        
+        /**
+         * Creates a model for validation.
+         * 
+         * @param root the model root 
+         * @param uri the model URI
+         * @return the model translation result
+         */
+        public TranslationResult<T> createModel(R root, java.net.URI uri);
+        
+        /**
+         * Handles a message.
+         * 
+         * @param type the message type
+         * @param message the message text
+         * @param source the message source
+         * @param feature the feature within <code>source</code>
+         * @param identifier an numerical identifier for the message / for testing
+         */
+        public void message(MessageType type, String message, EObject source, EStructuralFeature feature, 
+            int identifier);
+
+        /**
+         * Prints out the translation result.
+         * 
+         * @param result the translation result obtained from {@link #createModel(Object, java.net.URI)
+         * @param out the output writer
+         */
+        public void print(TranslationResult<T> result, Writer out);
+    }
+    
+    /**
+     * Returns the responsible logger.
+     * 
+     * @return the responsible logger
+     */
+    private static final EASyLogger getLogger() {
+        return EASyLoggerFactory.INSTANCE.getLogger(ValidationUtils.class, BundleId.ID);
+    }
+    
+    // checkstyle: stop exception type check
+
+    /**
+     * Checks the model on top-level element layer. 
+     * 
+     * @param <R> the model root type
+     * @param <T> the transformation result type
+     * @param unit the variability unit to start tests with
+     * @param callback the callback providing relevant model information
+     * @param debug shall debug information be emitted
+     */
+    @Check
+    public static <R extends EObject, T> void checkModel(R unit, IModelValidationCallback<R, T> callback, 
+        boolean debug) {
+        java.net.URI uri = null;
+        if (null != unit.eResource() && null != unit.eResource().getURI()) {
+            try {
+                uri = ModelUtility.toNetUri(unit.eResource().getURI());
+                if (!"file".equals(uri.getScheme())) {
+                    uri = null; // initializer may yet not be present, xText does not work with other URI schemes
+                }
+            } catch (URISyntaxException e) {
+                getLogger().error("error translating '" + unit.eResource().getURI() 
+                    + "' during validation" + e.getMessage());
+            }
+        }
+        if (null != uri) {
+            try {
+                TranslationResult<T> result = callback.createModel(unit, uri);
+                for (int m = 0; m < result.getMessageCount(); m++) {
+                    Message message = result.getMessage(m);
+                    switch (message.getStatus()) {
+                    case ERROR:
+                    case UNSUPPORTED:
+                        callback.message(MessageType.ERROR, message.getDescription(), message.getCause(),
+                            message.getCausingFeature(), message.getCode());
+                        break;
+                    case WARNING:
+                        callback.message(MessageType.WARNING, message.getDescription(), message.getCause(),
+                            message.getCausingFeature(), message.getCode());
+                        break;
+                    default:
+                        callback.message(MessageType.INFO, message.getDescription(), message.getCause(),
+                                message.getCausingFeature(), message.getCode());
+                        break;
+                    }
+                }
+                if (debug && 0 == result.getMessageCount()) {
+                    ByteArrayOutputStream out = new ByteArrayOutputStream();
+                    PrintWriter pOut = new PrintWriter(out);
+                    pOut.println(">TRANSLATED MODEL");
+                    callback.print(result, pOut);
+                    pOut.println("<TRANSLATED MODEL");
+                    getLogger().info(out.toString());
+                }
+            } catch (Exception e) {
+                String uriText = "";
+                if (null != unit.eResource() && null != unit.eResource().getURI()) {
+                    uriText = " " + unit.eResource().getURI().toString();
+                }
+                getLogger().error("while validating:" + e.getMessage() + uriText);
+                e.printStackTrace();
+            }
+        }
+    }
+    
+    // checkstyle: resume exception type check
     
 }

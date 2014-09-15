@@ -2,13 +2,18 @@
 <feature
       id="de.uni_hildesheim.sse.easy_producer.core_feature"
       label="EASy Producer Core"
-      version="0.10.0"
+      version="0.10.2"
       provider-name="University of Hildesheim - SSE"
-      plugin="de.uni_hildesheim.sse.EASy-Producer">
+      plugin="de.uni_hildesheim.sse.easy_producer.eclipse">
 
-   <description url="http://www.uni-hildesheim.de/index.php?id=8035">
-      This feature provides the core functionalities of the EASy Producer
-tool. This feature is mandatory.
+   <description url="http://www.sse.uni-hildesheim.de/easy-producer">
+      This feature provides the core functionalities of the EASy Producer tool for:
+* Integration of the different models and core capabilities
+* Reasoning infrastructure (not including a reasoner)
+* Instantiantion infrastructure (including standard VIL capabilities)
+* Eclipse editors
+This feature is deasinged for running inside of Eclipse only.
+This feature is mandatory.
    </description>
 
    <copyright>
@@ -33,53 +38,15 @@ limitations under the License.
       <update label="EASy Producer Update Site" url="http://projects.sse.uni-hildesheim.de/easy/"/>
    </url>
 
-   <plugin
-         id="ReasonerCore"
-         download-size="0"
-         install-size="0"
-         version="0.10.0"
-         unpack="false"/>
-
-   <plugin
-         id="de.uni-hildesheim.sse.easy.instantiatorCore"
-         download-size="0"
-         install-size="0"
-         version="0.10.0"
-         unpack="false"/>
-
-   <plugin
-         id="de.uni_hildesheim.sse.instantiator.copy.java"
-         download-size="0"
-         install-size="0"
-         version="0.4.1"
-         unpack="false"/>
-
-   <plugin
-         id="de.uni_hildesheim.sse.easy.instantiator.copy.core"
-         download-size="0"
-         install-size="0"
-         version="0.10.0"
-         unpack="false"/>
-
-   <plugin
-         id="de.uni_hildesheim.sse.easy_producer.core"
-         download-size="0"
-         install-size="0"
-         version="0.10.0"
-         unpack="false"/>
-
-   <plugin
-         id="de.uni_hildesheim.sse.easy_producer.eclipse"
-         download-size="0"
-         install-size="0"
-         version="0.10.0"
-         unpack="false"/>
+   <requires>
+      <import feature="de.uni_hildesheim.sse.easy_producer.core.no_eclipse_feature" version="0.10.2" match="perfect"/>
+   </requires>
 
    <plugin
          id="de.uni_hildesheim.sse.easy.ui"
          download-size="0"
          install-size="0"
-         version="0.10.0"
+         version="0.11.2"
          unpack="false"/>
 
 </feature>

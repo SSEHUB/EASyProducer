@@ -17,20 +17,24 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Res
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.StrategyCallExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.VariableDeclaration;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.AbstractCallExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallArgument;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ValueAssignmentExpression;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Constants;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypes;
 import de.uni_hildesheim.sse.utils.modelManagement.VersionRestriction;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Call;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
 import de.uni_hildesheim.sse.vil.expressions.translation.ImportTranslator;
 import de.uni_hildesheim.sse.vilBuildLanguage.Join;
 import de.uni_hildesheim.sse.vilBuildLanguage.JoinVariable;
+import de.uni_hildesheim.sse.vilBuildLanguage.MapVariable;
 import de.uni_hildesheim.sse.vilBuildLanguage.PrimaryExpression;
 import de.uni_hildesheim.sse.vilBuildLanguage.RuleElement;
 import de.uni_hildesheim.sse.vilBuildLanguage.RuleElementBlock;
@@ -98,13 +102,12 @@ public class ExpressionTranslator
         }
         CallArgument[] args = new CallArgument[arguments.size()];
         arguments.toArray(args);
-        
         VariableDeclaration var = null;
         if (null != inst.getProject()) {
             // check what can be checked... remainder happens at runtime
             var = resolver.resolve(inst.getProject(), false);
             if (null != var) {
-                if (!TypeRegistry.projectType().isAssignableFrom(var.getType())) {
+                if (!IvmlTypes.projectType().isAssignableFrom(var.getType())) {
                     throw new TranslatorException(inst.getProject() + " is not of type Project", inst, 
                          VilBuildLanguagePackage.Literals.INSTANTIATE__PROJECT, ErrorCodes.TYPE_CONSISTENCY);
                 }
@@ -154,17 +157,37 @@ public class ExpressionTranslator
             throw new TranslatorException(e, map, VilBuildLanguagePackage.Literals.MAP__EXPR);
         }
         if (!type.isCollection()) {
-            throw new TranslatorException("map must run over collection", map, 
-                VilBuildLanguagePackage.Literals.MAP__EXPR, ErrorCodes.TYPE_CONSISTENCY);
+            OperationDescriptor conversion = type.getConversionToSequence();
+            if (null == conversion) {
+                throw new TranslatorException("map must run over collection", map, 
+                    VilBuildLanguagePackage.Literals.MAP__EXPR, ErrorCodes.TYPE_CONSISTENCY);
+            } else {
+                type = conversion.getReturnType();
+            }
         }
-        EList<String> vars = map.getVar();
+        EList<MapVariable> vars = map.getVar();
         if (type.getParameterCount() != vars.size()) {
-            throw new TranslatorException("number of map variables does not match to expression", map, 
+            throw new TranslatorException("number of map variables does not comply with expression", map, 
                 VilBuildLanguagePackage.Literals.MAP__EXPR, ErrorCodes.TYPE_CONSISTENCY);
         }
-        VariableDeclaration[] mapVars = new VariableDeclaration[vars.size()];
+        int vSize = vars.size();
+        VariableDeclaration[] mapVars = new VariableDeclaration[vSize];
+        TypeDescriptor<? extends IVilType>[] givenTypes = TypeDescriptor.createArray(vSize);
         for (int i = 0; i < vars.size(); i++) {
-            mapVars[i] = new VariableDeclaration(vars.get(i), type.getParameterType(i));
+            MapVariable mv = vars.get(i);
+            TypeDescriptor<? extends IVilType> varType = type.getParameterType(i);
+            if (null != mv.getType()) {
+                givenTypes[i] = processType(mv.getType(), resolver);
+                if (!givenTypes[i].isAssignableFrom(varType)) {
+                    throw new TranslatorException("explicitly given type '" + givenTypes[i].getVilName() 
+                        + "'of map variable '" + mv.getVar() + "' does not match inferred type '" 
+                        + varType.getVilName() + "'", mv, 
+                        VilBuildLanguagePackage.Literals.MAP_VARIABLE__TYPE, ErrorCodes.TYPE_CONSISTENCY);
+                } else {
+                    varType = givenTypes[i];
+                }
+            }
+            mapVars[i] = new VariableDeclaration(mv.getVar(), varType);
         }
         resolver.pushLevel();
         resolver.add(mapVars);
@@ -177,7 +200,7 @@ public class ExpressionTranslator
             resolver.popLevel();
         }
         try {
-            return new MapExpression(mapVars, expr, block);
+            return new MapExpression(mapVars, expr, block, givenTypes, map.getSeparator().equals(Constants.COLON));
         } catch (VilLanguageException e) {
             throw new TranslatorException(e, map, VilBuildLanguagePackage.Literals.MAP__VAR);
         }
@@ -227,7 +250,7 @@ public class ExpressionTranslator
         if (null != expr.getVar()) {
             VariableDeclaration decl = resolver.resolve(expr.getVar(), false);
             if (null == decl) {
-                throw new TranslatorException("cannot resolve '" + expr.getVar() + "'", expr, 
+                throw new TranslatorException("cannot resolve variable '" + expr.getVar() + "'", expr, 
                     ExpressionDslPackage.Literals.EXPRESSION_STATEMENT__VAR, ErrorCodes.UNKNOWN_ELEMENT);
             }
             try {
@@ -304,31 +327,20 @@ public class ExpressionTranslator
     protected Expression processCall(Expression firstParam, Call call, CallType type,
         de.uni_hildesheim.sse.vil.expressions.expressionDsl.Expression arrayEx, Resolver resolver) 
         throws TranslatorException {
-        Expression result;
+        AbstractCallExpression result;
         List<CallArgument> arguments = new ArrayList<CallArgument>();
         if (null != firstParam) {
             arguments.add(new CallArgument(firstParam));
         }
-        String name = resolveCallArguments(call, arguments, arrayEx, resolver);
-        /*String name;
-        if (null != call) {
-            if (null != call.getParam()) {
-                for (de.uni_hildesheim.sse.vil.expressions.expressionDsl.NamedArgument param : call.getParam().getParam()) {
-                    arguments.add(new CallArgument(param.getName(), processExpression(param.getEx(), resolver)));
-                }
-            }
-            name = call.getName();
-        } else {
-            arguments.add(new CallArgument(processExpression(arrayEx, resolver)));
-            name = "[]";
-        }*/
+        List<VariableDeclaration> varDecls = resolveIteratorDeclarations(call, type, arguments, resolver);
+        String name = resolveCallArguments(call, varDecls, arguments, arrayEx, resolver);
         CallArgument[] arg = new CallArgument[arguments.size()];
         arguments.toArray(arg);
         if (CallType.SYSTEM == type) {
             try {
                 VariableDeclaration nameVar = resolver.resolve(name, false);
                 if (null == nameVar) {
-                    throw new TranslatorException("cannot resolve " + nameVar, call, 
+                    throw new TranslatorException("cannot resolve variable " + nameVar, call, 
                         ExpressionDslPackage.Literals.CALL__NAME, ErrorCodes.UNKNOWN_ELEMENT);
                 }
                 result = new StrategyCallExpression(nameVar, arg);
@@ -370,6 +382,11 @@ public class ExpressionTranslator
         if (null == result) {
             throw new TranslatorException("cannot resolve " + call.getName(), call, 
                 ExpressionDslPackage.Literals.CALL__NAME, ErrorCodes.UNKNOWN_ELEMENT);
+        }
+        if (result.isPlaceholder()) {
+            warning("The operation '" + result.getVilSignature() 
+                + "' is unknown, shall be a VIL type - may lead to a runtime error", call, 
+                ExpressionDslPackage.Literals.CALL__NAME, ErrorCodes.UNKNOWN_TYPE);
         }
         return result;
     }

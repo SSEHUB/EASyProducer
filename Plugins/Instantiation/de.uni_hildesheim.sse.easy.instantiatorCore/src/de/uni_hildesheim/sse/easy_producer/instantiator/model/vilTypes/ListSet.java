@@ -1,3 +1,18 @@
+/*
+ * Copyright 2009-2014 University of Hildesheim, Software Systems Engineering
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes;
 
 import java.util.List;
@@ -17,16 +32,6 @@ public class ListSet<T> extends AbstractListWrapper<T> implements Set<T> {
      * Creates a new array collection wrapper using the default type registry.
      * 
      * @param list the wrapped list
-     * @param param the only type parameter characterizing <T>
-     */
-    public ListSet(List<T> list, Class<? extends IVilType> param) {
-        super(removeDuplicates(list), TypeRegistry.DEFAULT.convert(param));
-    }
-
-    /**
-     * Creates a new array collection wrapper using the default type registry.
-     * 
-     * @param list the wrapped list
      * @param registry the registry to convert <code>param</code>
      * @param param the only type parameter characterizing <T>
      */
@@ -34,6 +39,16 @@ public class ListSet<T> extends AbstractListWrapper<T> implements Set<T> {
         super(removeDuplicates(list), registry, param);
     }
     
+    /**
+     * Creates a new array collection wrapper using the default type registry.
+     * 
+     * @param list the wrapped list
+     * @param param the only type parameter characterizing <T>
+     */
+    public ListSet(List<T> list, Class<? extends IVilType> param) {
+        super(removeDuplicates(list), TypeRegistry.DEFAULT.convert(param));
+    }
+
     /**
      * Creates a new array collection wrapper.
      * 
@@ -44,28 +59,22 @@ public class ListSet<T> extends AbstractListWrapper<T> implements Set<T> {
         super(removeDuplicates(list), params);
     }
 
-    /**
-     * Does type selection of artifacts.
-     * 
-     * @param type the target type
-     * @return the selected artifacts (the type will be adjusted to the actual
-     *   type for <code>type</code>)
-     */
     @Override
     @OperationMeta(returnGenerics = IVilType.class)
-    public Set<T> selectByType(Class<?> type) {
+    public Set<T> selectByType(TypeDescriptor<? extends IVilType> type) {
         return new ListSet<T>(selectByType(this, type), getParameter());
     }
     
-    /**
-     * Exclude the elements in <code>set</code>.
-     * @param set the elements to be excluded
-     * @return this set without the elements in <code>set</code>
-     */
     @Override
     @OperationMeta(returnGenerics = IVilType.class)
     public Set<T> excluding(Collection<T> set) {
         return new ListSet<T>(excluding(this, set), getParameter());
+    }
+    
+    @Override
+    @OperationMeta(returnGenerics = IVilType.class)
+    public Set<T> including(Collection<T> set) {
+        return new ListSet<T>(including(this, set), getParameter());
     }
 
     @Override

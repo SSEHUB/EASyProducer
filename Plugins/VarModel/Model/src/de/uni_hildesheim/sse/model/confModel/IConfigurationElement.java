@@ -1,3 +1,18 @@
+/*
+ * Copyright 2009-2013 University of Hildesheim, Software Systems Engineering
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.uni_hildesheim.sse.model.confModel;
 
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
@@ -54,12 +69,19 @@ public interface IConfigurationElement {
         throws ConfigurationException;
     
     /**
-     * Causes to freeze the current value (cannot be undone).
+     * Causes to freeze the current value.
      */
     public void freeze();
+
+    /**
+     * Causes to unfreeze the current value.
+     * 
+     * @param state the target state for unfreezing (must not be {@link AssignmentState#FROZEN})
+     */
+    public void unfreeze(IAssignmentState state);
     
     /**
-     * Causes to freeze a nested value (cannot be undone).
+     * Causes to freeze a nested value.
      * @param nestedElement The name of the nested Element, which should be frozen.
      */
     public void freeze(String nestedElement);

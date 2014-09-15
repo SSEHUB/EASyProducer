@@ -219,8 +219,12 @@ public class DroolsReasonerDescriptor extends ReasonerDescriptor {
     
     @Override
     public boolean isReadyForUse() {
-        
         return true;
     }
-    
+
+    @Override
+    public boolean providesAffectedVariables() {
+        return false; // TODO RS: Please check whether this can be supported easily
+    }
+
 }

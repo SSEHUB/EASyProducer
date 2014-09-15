@@ -50,8 +50,21 @@ public class SPLsManager implements IInstantiatorProjectManager {
      * @param plp The Product Line Project which should be added to the list.
      */
     public void addPLP(PLPInfo plp) {
-
-        if (!plProjects.containsKey(plp.getProjectID())) {
+        PLPInfo info = plProjects.get(plp.getProjectID());
+        boolean put = false;
+        if (null != info && info.isPreliminary() && !plp.isPreliminary()) {
+            // more specialized
+            for (PLPInfo p : plProjects.values()) {
+                if (p != info) {
+                    p.getMemberController().replacePLPInfo(plp);
+                }
+            }
+            // replace
+            put = true;
+        } else {
+            put = plProjects.get(plp.getProjectID()) == null;
+        }
+        if (put) {
             plProjects.put(plp.getProjectID(), plp);
             plp.refresh();
             LOGGER.info("PLP added. Current projects: " + plProjects.toString());

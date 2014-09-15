@@ -1,28 +1,65 @@
 package de.uni_hildesheim.sse.validation;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintWriter;
-import java.net.URISyntaxException;
+import java.io.Writer;
+import java.net.URI;
 
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.xtext.validation.Check;
 
 import de.uni_hildesheim.sse.Config;
-import de.uni_hildesheim.sse.IvmlBundleId;
 import de.uni_hildesheim.sse.ModelUtility;
 import de.uni_hildesheim.sse.dslCore.TranslationResult;
-import de.uni_hildesheim.sse.dslCore.translation.Message;
+import de.uni_hildesheim.sse.dslCore.validation.ValidationUtils;
+import de.uni_hildesheim.sse.dslCore.validation.ValidationUtils.IModelValidationCallback;
+import de.uni_hildesheim.sse.dslCore.validation.ValidationUtils.MessageType;
 import de.uni_hildesheim.sse.ivml.VariabilityUnit;
 import de.uni_hildesheim.sse.model.varModel.Project;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
 
 /**
  * The on-the-fly validator calling the model transformation mechanism.
  */
 public class IvmlJavaValidator extends AbstractIvmlJavaValidator {
 
-    // checkstyle: stop exception throw type check
+    private IModelValidationCallback<VariabilityUnit, Project> callback = new IModelValidationCallback<VariabilityUnit, 
+        Project>() {
 
+        /**
+         * {@inheritDoc}
+         */
+        public TranslationResult<Project> createModel(VariabilityUnit unit, URI uri) {
+            return ModelUtility.INSTANCE.createVarModel(unit, uri, false); // false = checkOnly!
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public void message(MessageType type, String message, EObject source, EStructuralFeature feature, 
+            int identifier) {
+            switch (type) {
+            case ERROR:
+                error(message, source, feature, identifier);
+                break;
+            case INFO:
+                info(message, source, feature, identifier);
+                break;
+            case WARNING:
+                warning(message, source, feature, identifier);
+                break;
+            default:
+                break;
+            }
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public void print(TranslationResult<Project> result, Writer out) {
+            ModelUtility.INSTANCE.print(result, out, true, false);
+        }
+        
+    };
+    
     /**
      * Checks the model on top-level element layer. This method
      * is called by dynamic dispatch.
@@ -31,8 +68,9 @@ public class IvmlJavaValidator extends AbstractIvmlJavaValidator {
      */
     @Check
     public void checkModel(VariabilityUnit unit) {
-        java.net.URI uri = null;
-        if (null != unit.eResource() && null != unit.eResource().getURI()) {
+        ValidationUtils.checkModel(unit, callback, Config.isDebuggingEnabled());
+/*        java.net.URI uri = null;
+        if (null != unit.eResource() && null != unit.eResource().getURI() && unit.eResource().getURI().isFile()) {
             try {
                 uri = ModelUtility.toNetUri(unit.eResource().getURI());
             } catch (URISyntaxException e) {
@@ -72,11 +110,14 @@ public class IvmlJavaValidator extends AbstractIvmlJavaValidator {
                 logger.info(out.toString());
             }
         } catch (Exception e) {
+e.printStackTrace();            
+            String uriText = "";
+            if (null != unit.eResource() && null != unit.eResource().getURI()) {
+                uriText = " " + unit.eResource().getURI().toString();
+            }
             EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(getClass(), IvmlBundleId.ID);
-            logger.error("while validating IVML:" + e.getMessage());
-        }
+            logger.error("while validating IVML:" + e.getMessage() + uriText);
+        }*/
     }
     
-    // checkstyle: resume throw exception type check
-
 }

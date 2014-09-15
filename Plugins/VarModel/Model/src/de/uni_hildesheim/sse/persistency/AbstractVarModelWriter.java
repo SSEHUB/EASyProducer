@@ -1,3 +1,18 @@
+/*
+ * Copyright 2009-2013 University of Hildesheim, Software Systems Engineering
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.uni_hildesheim.sse.persistency;
 
 import java.io.BufferedWriter;
@@ -19,6 +34,7 @@ import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
 import de.uni_hildesheim.sse.model.varModel.FreezeBlock;
 import de.uni_hildesheim.sse.model.varModel.IFreezable;
 import de.uni_hildesheim.sse.model.varModel.IModelElement;
+import de.uni_hildesheim.sse.model.varModel.IModelVisitor;
 import de.uni_hildesheim.sse.model.varModel.IPartialEvaluable;
 import de.uni_hildesheim.sse.model.varModel.ModelElement;
 import de.uni_hildesheim.sse.model.varModel.PartialEvaluationBlock;
@@ -35,11 +51,23 @@ import de.uni_hildesheim.sse.utils.modelManagement.Version;
 /**
  * Super class for translating the variability model to a <code>StringBuffer</code>, which can be used for saving.
  * @author El-Sharkawy
+ * 
  * @see de.uni_hildesheim.sse.model.varModel.values.IValueVisitor
  * @see Project
  */
 public abstract class AbstractVarModelWriter extends AbstractVisitor 
     implements IValueVisitor, IConstraintTreeVisitor {
+
+    /**
+     * Defines a dummy model element for additional formatting.
+     */
+    protected static final ModelElement DUMMY_PARENT = new ModelElement("dummy") {
+        
+        @Override
+        public void accept(IModelVisitor visitor) {
+            // do nothing
+        }
+    };
 
     /**
      * The number of whitespaces per indentation (if {@link #useWhitespace} is enabled), otherwise one tab is inserted.
@@ -103,12 +131,30 @@ public abstract class AbstractVarModelWriter extends AbstractVisitor
     }
     
     /**
+     * Return the indent-step for ivml.
+     * @return indent step.
+     */
+    public static String getIvmlIndentStep() {
+        return indentStep;
+    }
+    
+    /**
      * Defines whether whitespaces or tabs shall be used for indentation.
      * 
      * @param use if <code>true</code> whitespaces, tabs if <code>false</code>
      */
-    public static void setUseWhitespace(boolean use) {
+    public static void setUseIvmlWhitespace(boolean use) {
         useWhitespace = use;
+    }
+    
+    /**
+     * Defines whether whitespaces or tabs shall be used for indentation.
+     * 
+     * @return useWhitespace if <code>true</code> whitespaces, tabs if <code>false</code>
+     * 
+     */
+    public static boolean getUseIvmlWhitespace() {
+        return useWhitespace;
     }
     
     /**
@@ -189,17 +235,38 @@ public abstract class AbstractVarModelWriter extends AbstractVisitor
     }
     
     /**
-     * Returns the direct parent of the current visited object.
+     * Returns the direct parent of the current visited object. Ignors {@link #DUMMY_PARENT}.
      * @return The direct parent or <b>null</b> in case of an element from the top layer.
      */
     protected ModelElement getParent() {
         ModelElement parent = null;
         if (parents.size() > 0) {
             int lastPosition = parents.size() - 1;
+            while (lastPosition >= 0 && DUMMY_PARENT == parents.get(lastPosition)) {
+                lastPosition--;
+            }
             parent = parents.get(lastPosition);
         }
         
         return parent;
+    }
+    
+    /**
+     * Returns the latest parent with the given <code>type</code>.
+     * 
+     * @param <T> the actual type of the parent to be returned
+     * @param type the type to search for
+     * @return the latest parent with given <code>type</code> or {@link #getParent()} if <code>type==<b>null</b></code>
+     */
+    protected <T extends ModelElement> T getParent(Class<T> type) {
+        T result = null;
+        for (int p = parents.size() - 1; null == result && p >= 0; p--) {
+            ModelElement tmp = parents.get(p);
+            if (type.isInstance(tmp)) {
+                result = type.cast(tmp);
+            }
+        }
+        return result;
     }
     
     /**

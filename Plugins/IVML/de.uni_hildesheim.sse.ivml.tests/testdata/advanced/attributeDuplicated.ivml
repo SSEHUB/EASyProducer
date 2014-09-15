@@ -8,5 +8,4 @@ project attributeDuplicated {
     attribute Integer j to attributeDuplicated;
     i.j = 0;
     i.binding = bindingTimes.compile;
-    attributeDuplicated.j = 0;
 }

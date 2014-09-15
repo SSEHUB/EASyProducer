@@ -2,11 +2,18 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions;
 
 import java.io.Writer;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildlangWriter;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VariableDeclaration;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression.CallType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Constants;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.EnumValue;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 
 /**
@@ -45,6 +52,35 @@ public class ExpressionWriter extends AbstractWriter implements IExpressionVisit
         }
         print(call.getName());
     }
+    
+    /**
+     * Prints the given type.
+     * 
+     * @param type the type to be printed
+     */
+    protected void printType(TypeDescriptor<? extends IVilType> type) {
+        print(type.getVilName());
+    }
+    
+    /**
+     * Prints the iterator declarators if appropriate.
+     * 
+     * @param call the call expression to print the declarators for
+     */
+    private void printIteratorDeclarators(CallExpression call) {
+        if (call.isIteratorCall()) {
+            ExpressionEvaluator eval = (ExpressionEvaluator) call.getArgument(1).getExpression();
+            VariableDeclaration iter = eval.getIteratorVariable();
+            if (iter.hasExplicitType()) {
+                printType(iter.getType());
+                printWhitespace();
+            }
+            print(iter.getName());
+            printWhitespace();
+            print(Constants.DECLARATOR_SEPARATOR);
+            printWhitespace();
+        }        
+    }
 
     @Override
     public Object visitCallExpression(CallExpression call) throws ExpressionException {
@@ -74,9 +110,16 @@ public class ExpressionWriter extends AbstractWriter implements IExpressionVisit
                     printArgumentList(call, 0);
                 } else {
                     call.getArgument(0).accept(this);
-                    print(".");
+                    if (call.isIteratorCall()) {
+                        print(Constants.ITER_CALL);
+                    } else {
+                        print(".");
+                    }
                     printName(call);
-                    printArgumentList(call, 1);
+                    print("(");
+                    printIteratorDeclarators(call);
+                    printArguments(call, 1);
+                    print(")");
                 }
                 break;
             case POSTFIX:
@@ -147,12 +190,21 @@ public class ExpressionWriter extends AbstractWriter implements IExpressionVisit
     @Override
     public Object visitConstantExpression(ConstantExpression cst) throws ExpressionException {
         Object value = cst.getValue();
-        if (value instanceof String) {
+        if (value instanceof EnumValue) {
+            EnumValue eValue = (EnumValue) value;
+            print(eValue.getType());
+            print(".");
+            print(eValue.getName());
+        } else if (value instanceof String) {
             print("\"");
-            print(value);
+            print(StringEscapeUtils.escapeJava((String) value));
             print("\"");
         } else {
-            print(cst.getValue());
+            if (value == TypeRegistry.NULL) {
+                print("null");
+            } else {
+                print(value);
+            }
         }
         return null;
     }

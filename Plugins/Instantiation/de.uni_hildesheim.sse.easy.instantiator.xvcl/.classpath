@@ -7,6 +7,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="lib/xvcl.jar"/>
+	<classpathentry kind="lib" path="lib/xvcl.jar" sourcepath="C:/Users/El-Sharkawy/Downloads/edu.xvcl.core_3.5.0.v20071024_src"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

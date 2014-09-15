@@ -1,25 +1,55 @@
 package de.uni_hildesheim.sse.validation;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintWriter;
-import java.net.URISyntaxException;
+import java.io.Writer;
+import java.net.URI;
 
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.xtext.validation.Check;
 
 import de.uni_hildesheim.sse.BuildLangConfig;
 import de.uni_hildesheim.sse.BuildLangModelUtility;
-import de.uni_hildesheim.sse.VilBundleId;
 import de.uni_hildesheim.sse.dslCore.TranslationResult;
-import de.uni_hildesheim.sse.dslCore.translation.Message;
+import de.uni_hildesheim.sse.dslCore.validation.ValidationUtils;
+import de.uni_hildesheim.sse.dslCore.validation.ValidationUtils.IModelValidationCallback;
+import de.uni_hildesheim.sse.dslCore.validation.ValidationUtils.MessageType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
 import de.uni_hildesheim.sse.vilBuildLanguage.ImplementationUnit;
  
-
 public class VilBuildLanguageJavaValidator extends AbstractVilBuildLanguageJavaValidator {
 
-    // checkstyle: stop exception throw type check
+    private IModelValidationCallback<ImplementationUnit, Script> callback = new IModelValidationCallback<
+        ImplementationUnit, Script>() {
+
+        @Override
+        public TranslationResult<Script> createModel(ImplementationUnit unit, URI uri) {
+            return BuildLangModelUtility.INSTANCE.createBuildModel(unit, uri, false); // false = checkOnly!
+        }
+
+        @Override
+        public void message(MessageType type, String message, EObject source, EStructuralFeature feature, 
+            int identifier) {
+            switch (type) {
+            case ERROR:
+                error(message, source, feature, identifier);
+                break;
+            case INFO:
+                info(message, source, feature, identifier);
+                break;
+            case WARNING:
+                warning(message, source, feature, identifier);
+                break;
+            default:
+                break;
+            }
+        }
+
+        @Override
+        public void print(TranslationResult<Script> result, Writer out) {
+            BuildLangModelUtility.INSTANCE.print(result, out, true, false);
+        }
+        
+    };
 
     /**
      * Checks the model on top-level element layer. This method
@@ -29,7 +59,8 @@ public class VilBuildLanguageJavaValidator extends AbstractVilBuildLanguageJavaV
      */
     @Check
     public void checkModel(ImplementationUnit unit) {
-        java.net.URI uri = null;
+        ValidationUtils.checkModel(unit, callback, BuildLangConfig.isDebuggingEnabled());
+/*        java.net.URI uri = null;
         if (null != unit.eResource() && null != unit.eResource().getURI()) {
             try {
                 uri = BuildLangModelUtility.toNetUri(unit.eResource().getURI());
@@ -74,10 +105,7 @@ public class VilBuildLanguageJavaValidator extends AbstractVilBuildLanguageJavaV
                 EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(getClass(), VilBundleId.ID);
                 logger.error("while validating IVML:" + e.getMessage());
             } // pare error
-        }
+        }*/
     }
     
-    // checkstyle: resume throw exception type check
-
-
 }

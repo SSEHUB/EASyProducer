@@ -8,6 +8,7 @@ import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.ui.editor.model.IXtextDocument;
 import org.eclipse.xtext.util.concurrent.IUnitOfWork;
 
+import de.uni_hildesheim.sse.dslcore.ui.editors.CommonXtextEditor;
 import de.uni_hildesheim.sse.vil.expressions.ResourceRegistry;
 
 /**
@@ -18,10 +19,18 @@ import de.uni_hildesheim.sse.vil.expressions.ResourceRegistry;
  * when a in an editor is changed from outside and pushed back into 
  * the editor via the Eclipse refresh mechanism.
  * 
+ * Update: This class now extends the
+ * <code>de.uni_hildesheim.sse.dslcore.ui.editors.CommonXtextEditor</code>
+ * which in turn extends the official Xtext editor. This update hooks into
+ * the initialization- and dispose-mechanism in order to register an
+ * <code>de.uni_hildesheim.sse.dslcore.ui.editors.AbstractModelChangeListener</code>
+ * to this editor and receive notifications about changes in the underlying data model.
+ * 
  * @param <T> the type of the top-level language element
  * @author Holger Eichelberger
+ * @author kroeher
  */
-public abstract class AbstractXTextEditor <T extends EObject> extends org.eclipse.xtext.ui.editor.XtextEditor {
+public abstract class AbstractXTextEditor <T extends EObject> extends CommonXtextEditor {
 
     private URI resourceUri;
     

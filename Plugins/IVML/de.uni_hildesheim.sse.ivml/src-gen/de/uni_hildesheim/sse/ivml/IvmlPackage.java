@@ -1175,7 +1175,7 @@ public interface IvmlPackage extends EPackage
   int EXPORT = 28;
 
   /**
-   * The feature id for the '<em><b>Names</b></em>' attribute list.
+   * The feature id for the '<em><b>Names</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -2412,22 +2412,22 @@ public interface IvmlPackage extends EPackage
   int DECLARATION = 59;
 
   /**
-   * The feature id for the '<em><b>Id</b></em>' attribute list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int DECLARATION__ID = 0;
-
-  /**
    * The feature id for the '<em><b>Type</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int DECLARATION__TYPE = 1;
+  int DECLARATION__TYPE = 0;
+
+  /**
+   * The feature id for the '<em><b>Id</b></em>' attribute list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DECLARATION__ID = 1;
 
   /**
    * The feature id for the '<em><b>Init</b></em>' containment reference.
@@ -3784,15 +3784,15 @@ public interface IvmlPackage extends EPackage
   EClass getExport();
 
   /**
-   * Returns the meta object for the attribute list '{@link de.uni_hildesheim.sse.ivml.Export#getNames <em>Names</em>}'.
+   * Returns the meta object for the containment reference list '{@link de.uni_hildesheim.sse.ivml.Export#getNames <em>Names</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute list '<em>Names</em>'.
+   * @return the meta object for the containment reference list '<em>Names</em>'.
    * @see de.uni_hildesheim.sse.ivml.Export#getNames()
    * @see #getExport()
    * @generated
    */
-  EAttribute getExport_Names();
+  EReference getExport_Names();
 
   /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.ivml.ImportStmt <em>Import Stmt</em>}'.
@@ -4886,17 +4886,6 @@ public interface IvmlPackage extends EPackage
   EClass getDeclaration();
 
   /**
-   * Returns the meta object for the attribute list '{@link de.uni_hildesheim.sse.ivml.Declaration#getId <em>Id</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute list '<em>Id</em>'.
-   * @see de.uni_hildesheim.sse.ivml.Declaration#getId()
-   * @see #getDeclaration()
-   * @generated
-   */
-  EAttribute getDeclaration_Id();
-
-  /**
    * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.ivml.Declaration#getType <em>Type</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -4906,6 +4895,17 @@ public interface IvmlPackage extends EPackage
    * @generated
    */
   EReference getDeclaration_Type();
+
+  /**
+   * Returns the meta object for the attribute list '{@link de.uni_hildesheim.sse.ivml.Declaration#getId <em>Id</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute list '<em>Id</em>'.
+   * @see de.uni_hildesheim.sse.ivml.Declaration#getId()
+   * @see #getDeclaration()
+   * @generated
+   */
+  EAttribute getDeclaration_Id();
 
   /**
    * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.ivml.Declaration#getInit <em>Init</em>}'.
@@ -6055,12 +6055,12 @@ public interface IvmlPackage extends EPackage
     EClass EXPORT = eINSTANCE.getExport();
 
     /**
-     * The meta object literal for the '<em><b>Names</b></em>' attribute list feature.
+     * The meta object literal for the '<em><b>Names</b></em>' containment reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute EXPORT__NAMES = eINSTANCE.getExport_Names();
+    EReference EXPORT__NAMES = eINSTANCE.getExport_Names();
 
     /**
      * The meta object literal for the '{@link de.uni_hildesheim.sse.ivml.impl.ImportStmtImpl <em>Import Stmt</em>}' class.
@@ -6941,20 +6941,20 @@ public interface IvmlPackage extends EPackage
     EClass DECLARATION = eINSTANCE.getDeclaration();
 
     /**
-     * The meta object literal for the '<em><b>Id</b></em>' attribute list feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute DECLARATION__ID = eINSTANCE.getDeclaration_Id();
-
-    /**
      * The meta object literal for the '<em><b>Type</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
     EReference DECLARATION__TYPE = eINSTANCE.getDeclaration_Type();
+
+    /**
+     * The meta object literal for the '<em><b>Id</b></em>' attribute list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute DECLARATION__ID = eINSTANCE.getDeclaration_Id();
 
     /**
      * The meta object literal for the '<em><b>Init</b></em>' containment reference feature.

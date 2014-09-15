@@ -12,10 +12,14 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expres
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IResolvable;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IRuntimeEnvironment;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IActualValueProvider;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ITypedModel;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.Configuration;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlElement;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypes;
 import de.uni_hildesheim.sse.utils.modelManagement.IModel;
 import de.uni_hildesheim.sse.utils.modelManagement.IndentationConfiguration;
 
@@ -46,7 +50,7 @@ public class RuntimeEnvironment implements IRuntimeEnvironment {
      */
     private static class Context {
         private Stack<Level> levels = new Stack<Level>();
-        private IModel model;
+        private ITypedModel model;
         private int indentation;
         private IndentationConfiguration indentationConfiguration;
         private String[] paths;
@@ -56,7 +60,7 @@ public class RuntimeEnvironment implements IRuntimeEnvironment {
          * 
          * @param model the related model
          */
-        public Context(IModel model) {
+        public Context(ITypedModel model) {
             this.model = model;
             if (null != model.getIndentationConfiguration() 
                 && model.getIndentationConfiguration().isIndentationEnabled()) {
@@ -70,7 +74,7 @@ public class RuntimeEnvironment implements IRuntimeEnvironment {
          * 
          * @return the model
          */
-        public IModel getModel() {
+        public ITypedModel getModel() {
             return model;
         }
 
@@ -142,13 +146,14 @@ public class RuntimeEnvironment implements IRuntimeEnvironment {
                 throw new VilLanguageException("variable " + var.getName() + " is constant", 
                     VilLanguageException.ID_IS_CONSTANT);
             }
+            
             boolean found = false;
             for (int l = levels.size() - 1; !found && l >= 0; l--) {
                 Level level = levels.get(l);
                 if (level.values.containsKey(var)) {
                     level.values.put(var, object);
                     level.variables.put(var.getName(), var);
-                    if (var.getType() == TypeRegistry.configurationType() && object instanceof Configuration) {
+                    if (var.getType() == IvmlTypes.configurationType() && object instanceof Configuration) {
                         level.configurations.add((Configuration) object);
                     }
                     found = true;
@@ -198,7 +203,7 @@ public class RuntimeEnvironment implements IRuntimeEnvironment {
             Level level = levels.peek();
             level.values.put(var, object);
             level.variables.put(var.getName(), var);
-            if (var.getType() == TypeRegistry.configurationType() && object instanceof Configuration) {
+            if (var.getType() == IvmlTypes.configurationType() && object instanceof Configuration) {
                 level.configurations.add((Configuration) object);
             }
         }
@@ -292,12 +297,36 @@ public class RuntimeEnvironment implements IRuntimeEnvironment {
      * Switches the context.
      * 
      * @param model the model the context is assigned to
+     * @return the old context for switching back
      */
-    public void switchContext(IModel model) {
+    public ITypedModel switchContext(ITypedModel model) {
+        ITypedModel oldContext;
+        if (null != currentContext) {
+            oldContext = currentContext.getModel();
+        } else {
+            oldContext = null; // just at the very first call
+        }
+        TypeRegistry tmp = model.getTypeRegistry();
+        if (null != tmp) {
+            typeRegistry = tmp;
+        }
         currentContext = contexts.get(model);
         if (null == currentContext) {
             currentContext = new Context(model);
             contexts.put(model, currentContext);
+        }
+        return oldContext;
+    }
+    
+    /**
+     * Explicitly deletes a context if it is not the current context.
+     * 
+     * @param model the model to delete the context for
+     */
+    public void deleteContext(ITypedModel model) {
+        Context context = contexts.get(model);
+        if (context != currentContext) {
+            contexts.remove(model);
         }
     }
 
@@ -334,8 +363,8 @@ public class RuntimeEnvironment implements IRuntimeEnvironment {
      * @return the model (may be <b>null</b> if {@link #switchContext(IModel)} was 
      *   not called before)
      */
-    public IModel getContextModel() {
-        IModel model;
+    public ITypedModel getContextModel() {
+        ITypedModel model;
         if (null == currentContext) {
             model = null;
         } else {
@@ -403,6 +432,10 @@ public class RuntimeEnvironment implements IRuntimeEnvironment {
      * @throws VilLanguageException in case of an attempt of modifying a constant
      */
     public void setValue(VariableDeclaration var, Object object) throws VilLanguageException {
+        TypeDescriptor<? extends IVilType> type = var.getType();
+        if (type instanceof IActualValueProvider) {
+            object = ((IActualValueProvider) type).determineActualValue(object);
+        }
         checkType(var, object);
         currentContext.setValue(var, object);
     }

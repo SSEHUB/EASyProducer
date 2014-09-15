@@ -1,3 +1,18 @@
+/*
+ * Copyright 2009-2013 University of Hildesheim, Software Systems Engineering
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.uni_hildesheim.sse.model.varModel.search;
 
 import java.util.ArrayList;
@@ -23,6 +38,7 @@ import de.uni_hildesheim.sse.model.varModel.AbstractVisitor;
 import de.uni_hildesheim.sse.model.varModel.Attribute;
 import de.uni_hildesheim.sse.model.varModel.AttributeAssignment;
 import de.uni_hildesheim.sse.model.varModel.Comment;
+import de.uni_hildesheim.sse.model.varModel.CompoundAccessStatement;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.FreezeBlock;
@@ -130,7 +146,7 @@ public class PrefixSearchVisitor extends AbstractVisitor implements IConstraintT
         this.datatypeVisitor.setQualifiedNameMode(QualifiedNameMode.QUALIFIED);
         this.restrictions = restrictions;
         
-        if (context.includeOperations()) {
+        if (null != context && context.includeOperations()) {
             int oCount = Operation.getOperationsCount();
             for (int o = 0; o < oCount; o++) {
                 Operation op = Operation.getOperation(o);
@@ -526,6 +542,13 @@ public class PrefixSearchVisitor extends AbstractVisitor implements IConstraintT
         for (int a = 0; a < assignment.getAssignmentCount(); a++) {
             assignment.getAssignment(a).accept(this);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void visitCompoundAccessStatement(CompoundAccessStatement access) {
+        // does not contribute to result as parts are defined somewhere else in the model
     }
 
 

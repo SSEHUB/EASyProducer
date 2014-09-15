@@ -19,7 +19,7 @@ package de.uni_hildesheim.sse.easy.cmd;
 import java.io.File;
 import java.io.IOException;
 
-import de.uni_hildesheim.sse.easy_producer.persistence.PersistenceUtils;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceUtils;
 import de.uni_hildesheim.sse.model.confModel.Configuration;
 import de.uni_hildesheim.sse.model.management.VarModel;
 import de.uni_hildesheim.sse.model.varModel.Project;
@@ -51,7 +51,7 @@ public class ReasoningCommands {
      */
     public static boolean checkValidity(File project, File ivmlFile) 
         throws ModelManagementException {
-        de.uni_hildesheim.sse.easy_producer.persistence.Configuration config 
+        de.uni_hildesheim.sse.easy_producer.core.persistence.Configuration config 
             = PersistenceUtils.getConfiguration(project);
         PersistenceUtils.addLocation(config, ProgressObserver.NO_OBSERVER);    
         Project ivmlProject = PersistenceUtils.loadModel(VarModel.INSTANCE, ivmlFile);      

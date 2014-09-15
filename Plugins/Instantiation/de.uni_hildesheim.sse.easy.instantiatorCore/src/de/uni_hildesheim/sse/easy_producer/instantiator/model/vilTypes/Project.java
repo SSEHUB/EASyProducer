@@ -21,11 +21,10 @@ import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
  */
 public class Project implements IVilType, IStringValueProvider {
 
+    private static final java.util.Map<String, Project> CACHE = new HashMap<String, Project>();
     private ArtifactModel artifactModel;
     private File base;
     private IProjectDescriptor descriptor;
-    private Project successor;
-    private java.util.Map<String, Project> projectCache;
 
     /**
      * Creates an empty project without scanning. Just for testing.
@@ -55,25 +54,10 @@ public class Project implements IVilType, IStringValueProvider {
      * @param observer to notify the caller in case of long-running scans
      * @throws ArtifactException in case that the creation of artifacts fails
      */
-    public Project(IProjectDescriptor descriptor, ProgressObserver observer) throws ArtifactException {
-        this(null, descriptor, observer);
-    }
-
-    /**
-     * Creates a project based on a given <code>descriptor</code> and links it to the <code>successor</code>.
-     * The first <code>successor</code> is the project at which the initialization started. This root successor
-     * will then cache the related projects.
-     * 
-     * @param successor the successor project
-     * @param descriptor the descriptor to create the project for
-     * @param observer to notify the caller in case of long-running scans
-     * @throws ArtifactException in case that the creation of artifacts fails
-     */
-    private Project(Project successor, IProjectDescriptor descriptor, ProgressObserver observer) 
+    private Project(IProjectDescriptor descriptor, ProgressObserver observer) 
         throws ArtifactException {
         this(descriptor.getBase().getAbsoluteFile(), observer);
         this.descriptor = descriptor;
-        this.successor = successor;
     }
     
     /**
@@ -171,22 +155,6 @@ public class Project implements IVilType, IStringValueProvider {
     }
 
     /**
-     * Returns the project for the specific descriptor (looking up the cache in the root
-     * successor).
-     * 
-     * @param descriptor the descriptor to return the project for
-     * @return the related project
-     * @throws ArtifactException in case that creating / scanning the project base fails
-     */
-    private Project getProjectFor(IProjectDescriptor descriptor) throws ArtifactException {
-        Project root = this;
-        while (null != root.successor) {
-            root = root.successor;
-        }
-        return root.getCachedProject(descriptor);
-    }
-
-    /**
      * Returns a cached project or caches a new one for <code>descriptor</code>.
      * This method shall only be called on the root successor as caching will only work there!
      * 
@@ -194,20 +162,12 @@ public class Project implements IVilType, IStringValueProvider {
      * @return the related project
      * @throws ArtifactException in case that creating / scanning the project base fails
      */
-    private Project getCachedProject(IProjectDescriptor descriptor) throws ArtifactException {
-        Project result = null;
+    public static Project getProjectFor(IProjectDescriptor descriptor) throws ArtifactException {
         String key = descriptor.getBase().getAbsoluteFile().toString();
-        if (null != projectCache) {
-            result = projectCache.get(key);
-        }
+        Project result = CACHE.get(key);
         if (null == result) {
-            if (null == successor && null == projectCache) {
-                projectCache = new HashMap<String, Project>();
-            }
-            result = new Project(this, descriptor, descriptor.createObserver());            
-            if (null != projectCache) {
-                projectCache.put(key, result);
-            }
+            result = new Project(descriptor, descriptor.createObserver());            
+            CACHE.put(key, result);
         }
         return result;
     }

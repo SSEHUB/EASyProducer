@@ -15,13 +15,27 @@
  */
 package de.uni_hildesheim.sse.easy_producer.persistency.project_creation;
 
+import de.uni_hildesheim.sse.easy_producer.Activator;
 import de.uni_hildesheim.sse.easy_producer.EASyUtils;
 import de.uni_hildesheim.sse.easy_producer.core.mgmt.PLPInfo;
 import de.uni_hildesheim.sse.easy_producer.core.mgmt.SPLsManager;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ExpressionStatement;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.IRuleElement;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.InstantiateExpression;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.MapExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Rule;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.VariableDeclaration;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallArgument;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VariableExpression;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypes;
 import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
+import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
+import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
 
 /**
@@ -31,7 +45,11 @@ import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
  */
 class DerivedProjectCreator extends AbstractProjectCreator {
 
+    private static final EASyLogger LOGGER = EASyLoggerFactory.INSTANCE.getLogger(AbstractProjectCreator.class,
+        Activator.PLUGIN_ID);
+    
     private String predecessorID;
+    
     
     /**
      * Creates a new derived {@link ProductLineProject}.
@@ -67,9 +85,6 @@ class DerivedProjectCreator extends AbstractProjectCreator {
         // Save parent plp
         parentPLP.save();
 
-        // Sets persistence properties for the newly created project and refreshes the workspace/models
-        super.setPersistenceProperties();
-
         // Set Successor
         parentPLP.getMemberController().addSuccessor(getCreatedProject().getProjectID());
 
@@ -77,6 +92,9 @@ class DerivedProjectCreator extends AbstractProjectCreator {
         getCreatedProject().pullConfigFromPredecessors();
         createScriptImports();
         getCreatedProject().save();
+
+        // Sets persistence properties for the newly created project and refreshes the workspace/models
+        super.setPersistenceProperties();
    
         return getCreatedProject();
     }
@@ -101,17 +119,55 @@ class DerivedProjectCreator extends AbstractProjectCreator {
         }
         
         if (null != resolved) {
-            Rule parentMainRule = resolved.getMainRule(false);
             
-            // If empty, call super.mainRule()...
-            if (mainRule.getBodyElementCount() == 0 && null != parentMainRule) {
-                try {
-                    mainRule.appendCallTo(parentMainRule, true);
-                } catch (ExpressionException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
+            // If empty, call "instantiate p : source.predecessors()"
+            if (mainRule.getBodyElementCount() == 0) {
+                createDefaultRuleContent(mainRule);
             }
+            
         }
+    }
+    
+    /**
+     * Adds a default call to main rule in build script. <br/>
+     * In this case, this method tries to add a "instantiate all predecessors" call to the main rule.
+     * @param mainRule The main rule of the current (derived) project, where the changes should be added to.
+     */
+    protected void createDefaultRuleContent(Rule mainRule) {
+        try {
+            // Create variable for iteration
+            VariableDeclaration p = new VariableDeclaration("p", IvmlTypes.projectType());
+            
+            // Create: source.predecessors()
+            Expression sourceVar = new VariableExpression(mainRule.getParameter(0));
+            Expression predecessorAccess = new CallExpression(mainRule, "predecessors", sourceVar);
+            // Resolve expression
+            predecessorAccess.inferType();
+            
+            // Create body: instantiate call
+            CallArgument sourceProject = new CallArgument(new VariableExpression(p));
+            CallArgument config = new CallArgument(new VariableExpression(mainRule.getParameter(1)));
+            CallArgument targetProject = new CallArgument(new VariableExpression(mainRule.getParameter(2)));
+            Expression mapBody = new InstantiateExpression(p, null, null, sourceProject, config, targetProject);
+            // Resolve expression
+            mapBody.inferType();
+            
+            // Create map
+            ExpressionStatement bodyStatement = new ExpressionStatement(mapBody);
+            VariableDeclaration[] mapVariables = {p};
+            MapExpression map = new MapExpression(mapVariables, predecessorAccess, new IRuleElement[]{bodyStatement},
+                null, true);
+            ExpressionStatement mapStatement = new ExpressionStatement(map);
+            
+            // Set body of main rule
+            mainRule.setBody(new IRuleElement[] {mapStatement});
+            
+            // If changes where successful (no exception occurred, notify model that script was edited.
+            getCreatedProject().buildScriptWasEdited();
+        } catch (ExpressionException e) {
+            LOGGER.warn("Rule could not be modified. Reason: " + e.getMessage());
+        } catch (VilLanguageException e) {
+            LOGGER.warn("Rule could not be modified. Reason: " + e.getMessage());
+        }    
     }
 }

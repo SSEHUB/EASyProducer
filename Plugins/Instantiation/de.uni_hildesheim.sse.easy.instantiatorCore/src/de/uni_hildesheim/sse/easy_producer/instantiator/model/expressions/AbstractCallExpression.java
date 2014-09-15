@@ -5,12 +5,15 @@ import java.util.Arrays;
 import java.util.List;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Constants;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IActualTypeProvider;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaOperation;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeHelper;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.EnumValue;
+import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 import de.uni_hildesheim.sse.utils.modelManagement.IModel;
 
 /**
@@ -90,7 +93,7 @@ public abstract class AbstractCallExpression extends Expression {
      * @return <code>true</code> if <code>desc</code> is a candidate, <code>false</code> else
      */
     protected static boolean isCandidate(IMetaOperation op, String name, CallArgument[] arguments) {
-        return op.getName().equals(name) && op.getParameterCount() == arguments.length;
+        return null != arguments && op.getName().equals(name) && op.getParameterCount() == arguments.length;
     }
     
     /**
@@ -381,6 +384,10 @@ public abstract class AbstractCallExpression extends Expression {
             }
         }
         if (null == resolved) {
+            // try to go for a placeholder, works only on placeholder types
+            resolved = operand.addPlaceholderOperation(name, unnamed.length, arguments.length - unnamed.length > 0);
+        }
+        if (null == resolved) {
             throw new ExpressionException("cannot resolve " + getSignature(name, arguments), 
                 ExpressionException.ID_CANNOT_RESOLVE);
         } else {
@@ -424,6 +431,43 @@ public abstract class AbstractCallExpression extends Expression {
     }
     
     /**
+     * Determines the actual type of <code>object</code>. Considers {@link IMetaType#isActualTypeOf(IMetaType)}.
+     * 
+     * @param type the type of <code>object</code>
+     * @param object the object to determine the type for
+     * @param registry the responsible type registry
+     * @return <code>type</code> or the actual type of <code>object</code>
+     */
+    private static IMetaType determineActualType(IMetaType type, Object object, TypeRegistry registry) {
+        IMetaType result = type;
+        if (object instanceof IActualTypeProvider) {
+            IDatatype actualType = ((IActualTypeProvider) object).determineActualTypeName();
+            if (null != actualType) {
+                IMetaType tmpType = registry.getType(actualType);
+                if (null != tmpType && tmpType.isActualTypeOf(type)) {
+                    result = tmpType;
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Returns the VIL type for an enum value.
+     * 
+     * @param registry the type registry
+     * @param val the enum value
+     * @return the enum type or <b>null</b>
+     */
+    private static IMetaType getEnumType(TypeRegistry registry, EnumValue val) {
+        IMetaType tmp = registry.getType(val.getDatatype());
+        if (null == tmp) {
+            tmp = registry.getType(EnumValue.class);
+        }
+        return tmp;
+    }
+    
+    /**
      * Aims at re-resolving the given operation according to the dynamic types of <code>args</code>.
      * Argument-less operations are not dispatched dynamically.
      * 
@@ -440,15 +484,12 @@ public abstract class AbstractCallExpression extends Expression {
         TypeRegistry registry) {
         O result = operation;
         int offset = 0;
-        if (!operation.isStatic()) {
+        if (operation.isFirstParameterOperand()) {
             offset = 1;
         }
-        if (args.length > offset) { // do only try to dispatch if there is at least one parameter
-            IMetaType operand = null;
-            if (0 == offset) {
-                operand = operation.getDeclaringType();
-            }
-            if (null != operand) { // do not consider java extension methods
+        if (args.length >= offset) { // do only try to dispatch if there is at least one parameter
+            IMetaType operand = operation.getDeclaringType();
+            if (null != operand && operand.enableDynamicDispatch()) {
                 CallArgument[] types = new CallArgument[args.length - offset];
                 boolean allSame = true;
                 boolean failure = false;
@@ -459,7 +500,12 @@ public abstract class AbstractCallExpression extends Expression {
                         failure = true;
                     } else {
                         IMetaType tmp;
-                        tmp = registry.findType(args[a].getClass());
+                        if (args[a] instanceof EnumValue) {
+                            tmp = getEnumType(registry, (EnumValue) args[a]);
+                        } else {
+                            tmp = registry.findType(args[a].getClass());
+                        }
+                        tmp = determineActualType(tmp, args[a], registry);
                         if (null == tmp) {
                             tmp = operation.getParameterType(a);
                         } else {
@@ -477,6 +523,7 @@ public abstract class AbstractCallExpression extends Expression {
                         a++;
                     }
                 }
+                // fill named/optional
                 while (!failure && a < types.length) {
                     types[a] = new CallArgument("name", null);
                     a++;
@@ -490,13 +537,68 @@ public abstract class AbstractCallExpression extends Expression {
                             result = cls.cast(op);
                         }
                     } catch (ExpressionException e) {
-                        // this may happen but then the passed in operation is ok
+                        // this may happen but then the passed in operation is ok and no other was found
                     }
                 }
             }
         }
         return result;
     }
-
     
+    /**
+     * Returns whether the specified operation is a placeholder and cannot be executed,
+     * i.e., the operation itself is a placeholder or a placeholder type is used in its
+     * signature.
+     * 
+     * @param operation the operation to be tested
+     * @return <code>true</code> if <code>operation</code> is a placeholder, <code>false</code> else
+     */
+    protected static boolean isPlaceholder(IMetaOperation operation) {
+        boolean isPlaceholder;
+        if (null == operation) {
+            isPlaceholder = true;
+        } else {
+            isPlaceholder = operation.isPlaceholder();
+            if (!isPlaceholder) {
+                isPlaceholder = operation.getReturnType().isPlaceholder();
+                for (int p = 0; !isPlaceholder && p < operation.getParameterCount(); p++) {
+                    isPlaceholder = operation.getParameterType(p).isPlaceholder();
+                }
+            }
+        }
+        return isPlaceholder;
+    }
+    
+    /**
+     * Returns the VIL signature of the specified <code>operation</code>.
+     * 
+     * @param operation the operation to return the VIL signature for
+     * @return the VIL signature (for messages, warnings, errors, etc.)
+     */
+    protected String getVilSignature(IMetaOperation operation) {
+        String result;
+        if (null == operation) {
+            result = name + "(?)";
+        } else {
+            result = operation.getSignature();
+        }
+        return result;
+    }
+
+    /**
+     * Returns whether this operation is a placeholder, i.e., either the resolved operation is 
+     * a {@link IMetaOperation#isPlaceholder() placeholder}, its signature or its return 
+     * type does contain a {@link IMetaType#isPlaceholder() placeholder type}.
+     * 
+     * @return <code>true</code> if this operation is a placeholder and cannot be executed, <code>false</code> else
+     */
+    public abstract boolean isPlaceholder();
+    
+    /**
+     * Returns the VIL signature of the resolved operation.
+     * 
+     * @return the VIL signature 
+     */
+    public abstract String getVilSignature();
+
 }

@@ -2,7 +2,9 @@ package de.uni_hildesheim.sse.easy.ui.confModel;
 
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.TextCellEditor;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Text;
 
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
@@ -35,14 +37,27 @@ class BasisGUIVariable extends GUIVariable {
 
     @Override
     public CellEditor getCellEditor() {
-        return new TextCellEditor(parent);
+        CellEditor result;
+        if (GUIValueFactory.createUpdatableCellEditors()) {
+            result = new TextGUICellEditor(parent, this);
+        } else {
+            result = new TextCellEditor(parent);
+        }
+        return result;
+    }
+    
+    @Override
+    public GUIEditor getEditor() {
+        Text result = new Text(parent, SWT.SINGLE | SWT.BORDER);
+        result.setText(getValueText());
+        return new TextGUIEditor(result);
     }
 
     @Override
     public String getValueText() {
         String value = null;
         if (hasNullValue()) {
-            value = NULL_VALUE_LABEL;
+            value = getNullLabel();
         } else {
             ConfigEditorValueRetriever retriever = new ConfigEditorValueRetriever(getVariable());
             value = retriever.getValue().toString();
@@ -66,7 +81,7 @@ class BasisGUIVariable extends GUIVariable {
         String value = "";
         if (hasValue()) {
             if (hasNullValue()) {
-                value = NULL_VALUE_LABEL;
+                value = getNullLabel();
             } else {
                 value = getVariable().getValue().getValue().toString();
             }

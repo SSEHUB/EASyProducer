@@ -25,19 +25,19 @@ import org.eclipse.emf.ecore.EObject;
 public interface Export extends EObject
 {
   /**
-   * Returns the value of the '<em><b>Names</b></em>' attribute list.
-   * The list contents are of type {@link java.lang.String}.
+   * Returns the value of the '<em><b>Names</b></em>' containment reference list.
+   * The list contents are of type {@link de.uni_hildesheim.sse.ivml.QualifiedName}.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Names</em>' attribute list isn't clear,
+   * If the meaning of the '<em>Names</em>' containment reference list isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Names</em>' attribute list.
+   * @return the value of the '<em>Names</em>' containment reference list.
    * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getExport_Names()
-   * @model unique="false"
+   * @model containment="true"
    * @generated
    */
-  EList<String> getNames();
+  EList<QualifiedName> getNames();
 
 } // Export

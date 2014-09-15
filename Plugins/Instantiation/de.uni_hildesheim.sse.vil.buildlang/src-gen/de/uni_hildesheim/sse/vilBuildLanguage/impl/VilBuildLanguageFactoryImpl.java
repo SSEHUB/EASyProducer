@@ -77,6 +77,7 @@ public class VilBuildLanguageFactoryImpl extends EFactoryImpl implements VilBuil
       case VilBuildLanguagePackage.DEFER_DECLARATION: return createDeferDeclaration();
       case VilBuildLanguagePackage.PRIMARY_EXPRESSION: return createPrimaryExpression();
       case VilBuildLanguagePackage.INSTANTIATE: return createInstantiate();
+      case VilBuildLanguagePackage.MAP_VARIABLE: return createMapVariable();
       case VilBuildLanguagePackage.MAP: return createMap();
       case VilBuildLanguagePackage.JOIN: return createJoin();
       case VilBuildLanguagePackage.JOIN_VARIABLE: return createJoinVariable();
@@ -227,6 +228,17 @@ public class VilBuildLanguageFactoryImpl extends EFactoryImpl implements VilBuil
   {
     InstantiateImpl instantiate = new InstantiateImpl();
     return instantiate;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public MapVariable createMapVariable()
+  {
+    MapVariableImpl mapVariable = new MapVariableImpl();
+    return mapVariable;
   }
 
   /**

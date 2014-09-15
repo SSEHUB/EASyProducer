@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: de.uni_hildesheim.sse.vil.templatelang.ui
 Bundle-Vendor: SSE - University of Hildesheim
-Bundle-Version: 0.4.0
+Bundle-Version: 0.5.2
 Bundle-SymbolicName: de.uni_hildesheim.sse.vil.templatelang.ui; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: de.uni_hildesheim.sse.vil.templatelang;visibility:=reexport,
@@ -18,7 +18,8 @@ Require-Bundle: de.uni_hildesheim.sse.vil.templatelang;visibility:=reexport,
  org.eclipse.compare,
  de.uni_hildesheim.sse.vil.expressions.ui;bundle-version="0.0.1",
  de.uni_hildesheim.sse.varModel;bundle-version="0.5.5",
- de.uni-hildesheim.sse.easy.instantiatorCore;bundle-version="0.5.5"
+ de.uni-hildesheim.sse.easy.instantiatorCore;bundle-version="0.5.5",
+ de.uni_hildesheim.sse.dslCore.ui
 Import-Package: org.apache.log4j
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: de.uni_hildesheim.sse.vil.templatelang.ui.contentassist,

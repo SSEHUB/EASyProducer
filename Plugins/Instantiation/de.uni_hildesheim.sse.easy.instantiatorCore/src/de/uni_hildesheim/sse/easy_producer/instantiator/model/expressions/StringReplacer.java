@@ -84,8 +84,16 @@ public class StringReplacer {
         IExpressionVisitor expressionEvaluator) throws ExpressionException {
         String result;
         if (null != text) {
-            StringReplacer replacer = new StringReplacer(text, environment, expressionParser, expressionEvaluator);
-            result = replacer.substitute();
+            try {
+                StringReplacer replacer = new StringReplacer(text, environment, expressionParser, expressionEvaluator);
+                result = replacer.substitute();
+            } catch (ExpressionException e) {
+                if (ExpressionException.ID_NULL_VALUE == e.getId()) {
+                    result = null;
+                } else {
+                    throw e;
+                }
+            }
         } else {
             result = null;
         }
@@ -168,7 +176,12 @@ public class StringReplacer {
         String variableName = text.substring(curStart, pos);
         IResolvable var = environment.get(variableName);
         if (null != var) {
-            String value = StringValueHelper.getStringValueInReplacement(environment.getValue(var), null);
+            Object oValue = environment.getValue(var);
+            if (null == oValue) {
+                // stop replacement
+                throw new ExpressionException("", ExpressionException.ID_NULL_VALUE);
+            }
+            String value = StringValueHelper.getStringValueInReplacement(oValue, null);
             if (null != value) {
                 // curStart - 1 -> replace also the $!
                 pos = replace(text, curStart - 1, pos, value);
@@ -193,7 +206,15 @@ public class StringReplacer {
         } else {
             String expressionString = text.substring(curStart, pos);
             Expression expr = expressionParser.parse(expressionString, environment);
+            if (null == expr) {
+                throw new ExpressionException("illegal expression '" + expressionString + "'", 
+                    ExpressionException.ID_RUNTIME);
+            }
             Object oValue = expr.accept(expressionEvaluator);
+            if (null == oValue) {
+                // stop replacement
+                throw new ExpressionException("", ExpressionException.ID_NULL_VALUE);
+            }
             String value = StringValueHelper.getStringValueInReplacement(oValue, null);
             if (null != value) {
                 // curStart - 1 -> replace also the $!

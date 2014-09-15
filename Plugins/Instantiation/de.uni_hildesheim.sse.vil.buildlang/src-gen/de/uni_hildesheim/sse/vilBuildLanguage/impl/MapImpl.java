@@ -5,6 +5,7 @@ package de.uni_hildesheim.sse.vilBuildLanguage.impl;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Expression;
 
 import de.uni_hildesheim.sse.vilBuildLanguage.Map;
+import de.uni_hildesheim.sse.vilBuildLanguage.MapVariable;
 import de.uni_hildesheim.sse.vilBuildLanguage.RuleElementBlock;
 import de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage;
 
@@ -21,7 +22,8 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
-import org.eclipse.emf.ecore.util.EDataTypeEList;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -31,6 +33,7 @@ import org.eclipse.emf.ecore.util.EDataTypeEList;
  * The following features are implemented:
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.MapImpl#getVar <em>Var</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.MapImpl#getSeparator <em>Separator</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.MapImpl#getExpr <em>Expr</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.MapImpl#getBlock <em>Block</em>}</li>
  * </ul>
@@ -41,14 +44,34 @@ import org.eclipse.emf.ecore.util.EDataTypeEList;
 public class MapImpl extends MinimalEObjectImpl.Container implements Map
 {
   /**
-   * The cached value of the '{@link #getVar() <em>Var</em>}' attribute list.
+   * The cached value of the '{@link #getVar() <em>Var</em>}' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getVar()
    * @generated
    * @ordered
    */
-  protected EList<String> var;
+  protected EList<MapVariable> var;
+
+  /**
+   * The default value of the '{@link #getSeparator() <em>Separator</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getSeparator()
+   * @generated
+   * @ordered
+   */
+  protected static final String SEPARATOR_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getSeparator() <em>Separator</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getSeparator()
+   * @generated
+   * @ordered
+   */
+  protected String separator = SEPARATOR_EDEFAULT;
 
   /**
    * The cached value of the '{@link #getExpr() <em>Expr</em>}' containment reference.
@@ -96,13 +119,36 @@ public class MapImpl extends MinimalEObjectImpl.Container implements Map
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<String> getVar()
+  public EList<MapVariable> getVar()
   {
     if (var == null)
     {
-      var = new EDataTypeEList<String>(String.class, this, VilBuildLanguagePackage.MAP__VAR);
+      var = new EObjectContainmentEList<MapVariable>(MapVariable.class, this, VilBuildLanguagePackage.MAP__VAR);
     }
     return var;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String getSeparator()
+  {
+    return separator;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setSeparator(String newSeparator)
+  {
+    String oldSeparator = separator;
+    separator = newSeparator;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, VilBuildLanguagePackage.MAP__SEPARATOR, oldSeparator, separator));
   }
 
   /**
@@ -211,6 +257,8 @@ public class MapImpl extends MinimalEObjectImpl.Container implements Map
   {
     switch (featureID)
     {
+      case VilBuildLanguagePackage.MAP__VAR:
+        return ((InternalEList<?>)getVar()).basicRemove(otherEnd, msgs);
       case VilBuildLanguagePackage.MAP__EXPR:
         return basicSetExpr(null, msgs);
       case VilBuildLanguagePackage.MAP__BLOCK:
@@ -231,6 +279,8 @@ public class MapImpl extends MinimalEObjectImpl.Container implements Map
     {
       case VilBuildLanguagePackage.MAP__VAR:
         return getVar();
+      case VilBuildLanguagePackage.MAP__SEPARATOR:
+        return getSeparator();
       case VilBuildLanguagePackage.MAP__EXPR:
         return getExpr();
       case VilBuildLanguagePackage.MAP__BLOCK:
@@ -252,7 +302,10 @@ public class MapImpl extends MinimalEObjectImpl.Container implements Map
     {
       case VilBuildLanguagePackage.MAP__VAR:
         getVar().clear();
-        getVar().addAll((Collection<? extends String>)newValue);
+        getVar().addAll((Collection<? extends MapVariable>)newValue);
+        return;
+      case VilBuildLanguagePackage.MAP__SEPARATOR:
+        setSeparator((String)newValue);
         return;
       case VilBuildLanguagePackage.MAP__EXPR:
         setExpr((Expression)newValue);
@@ -277,6 +330,9 @@ public class MapImpl extends MinimalEObjectImpl.Container implements Map
       case VilBuildLanguagePackage.MAP__VAR:
         getVar().clear();
         return;
+      case VilBuildLanguagePackage.MAP__SEPARATOR:
+        setSeparator(SEPARATOR_EDEFAULT);
+        return;
       case VilBuildLanguagePackage.MAP__EXPR:
         setExpr((Expression)null);
         return;
@@ -299,6 +355,8 @@ public class MapImpl extends MinimalEObjectImpl.Container implements Map
     {
       case VilBuildLanguagePackage.MAP__VAR:
         return var != null && !var.isEmpty();
+      case VilBuildLanguagePackage.MAP__SEPARATOR:
+        return SEPARATOR_EDEFAULT == null ? separator != null : !SEPARATOR_EDEFAULT.equals(separator);
       case VilBuildLanguagePackage.MAP__EXPR:
         return expr != null;
       case VilBuildLanguagePackage.MAP__BLOCK:
@@ -318,8 +376,8 @@ public class MapImpl extends MinimalEObjectImpl.Container implements Map
     if (eIsProxy()) return super.toString();
 
     StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (var: ");
-    result.append(var);
+    result.append(" (separator: ");
+    result.append(separator);
     result.append(')');
     return result.toString();
   }

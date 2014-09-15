@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.Constant#getSValue <em>SValue</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.Constant#getQValue <em>QValue</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.Constant#getBValue <em>BValue</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.Constant#getNull <em>Null</em>}</li>
  * </ul>
  * </p>
  *
@@ -128,5 +129,31 @@ public interface Constant extends EObject
    * @generated
    */
   void setBValue(String value);
+
+  /**
+   * Returns the value of the '<em><b>Null</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Null</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Null</em>' attribute.
+   * @see #setNull(String)
+   * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage#getConstant_Null()
+   * @model
+   * @generated
+   */
+  String getNull();
+
+  /**
+   * Sets the value of the '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.Constant#getNull <em>Null</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Null</em>' attribute.
+   * @see #getNull()
+   * @generated
+   */
+  void setNull(String value);
 
 } // Constant

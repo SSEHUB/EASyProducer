@@ -4,9 +4,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.StringWriter;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -15,25 +12,20 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import javax.tools.JavaCompiler;
-import javax.tools.JavaFileObject;
-import javax.tools.StandardJavaFileManager;
-import javax.tools.ToolProvider;
-
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.easy_producer.core.AllTests;
-import de.uni_hildesheim.sse.easy_producer.core.persistence.AbstractEASyTest;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.Configuration.PathKind;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceException;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceUtils;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.IPersistencer;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.IProjectCreationResult;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.PathEnvironment;
-import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.PersistentProject;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.standard.Persistencer;
 import de.uni_hildesheim.sse.easy_producer.core.varMod.container.ProjectContainer;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
@@ -65,7 +57,7 @@ import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
  * @author El-Sharkawy
  *
  */
-public class PLPInfoTest extends AbstractEASyTest {
+public class PLPInfoTest extends AbstractPLPInfoTest {
     
     /**
      * Project for testing reasoning capabilities.
@@ -157,33 +149,12 @@ public class PLPInfoTest extends AbstractEASyTest {
     private static Set<PLPInfo> loadedInfos = new HashSet<PLPInfo>();
     
     /**
-     * Helping method for loading projects from the testdata folder.
-     * @param projectFolder The toplevel folder of a saved {@link PLPInfo} which should be used for testing.
-     * @return A {@link PLPInfo} which was loaded from the given location.
-     * @throws PersistenceException Must not occur, otherwise the config files inside the toplevel location are corrupt.
+     * Registers VIL and VTL expression parser. This should normally be done via the Descriptive Services (DS),
+     * but it seems that it is not the case when the tests are executed via ANT.
      */
-    private static PLPInfo loadPLPInfo(File projectFolder) throws PersistenceException {
-        // Create Persistencer for loading a PLP
-        PathEnvironment projectsWorkspace = new PathEnvironment(projectFolder.getParentFile());
-        File easyConfigFile = PersistenceUtils.getLocationFile(projectFolder, PathKind.IVML);
-        IPersistencer persistencer = new Persistencer(projectsWorkspace, projectFolder,
-            easyConfigFile.getAbsolutePath(), ProgressObserver.NO_OBSERVER);
-        Assert.assertNotNull("Error: Persistencer could not be created.", persistencer);
-        
-        // Load PLP
-        PersistentProject project  = persistencer.load();
-        Assert.assertNotNull("Error: Information could not be loaded.", project);
-        Assert.assertNotNull("Error: IVML could not be loaded.", project.getProject());
-        Assert.assertNotNull("Error: VIL could not be loaded.", project.getMainBuildScript());
-        
-        PLPInfo plp = new PLPInfoLoader(project);
-        Assert.assertNotNull("Error: PLP could not be created.", plp);
-        Assert.assertNotNull("Error: IVML could not be loaded.", plp.getProject());
-        Assert.assertNotNull("Error: VIL could not be loaded.", plp.getBuildScript());
-        
-        loadedInfos.add(plp);
-        
-        return plp;
+    @BeforeClass
+    public static void setUpBeforeClass() {
+        AbstractPLPInfoTest.setUpBeforeClass();
     }
     
     /**
@@ -198,6 +169,20 @@ public class PLPInfoTest extends AbstractEASyTest {
         }
         
         loadedInfos.clear();
+    }
+    
+    /**
+     * Helping method for loading projects from the testdata folder.
+     * @param projectFolder The toplevel folder of a saved {@link PLPInfo} which should be used for testing.
+     * @return A {@link PLPInfo} which was loaded from the given location.
+     * @throws PersistenceException Must not occur, otherwise the config files inside the toplevel location are corrupt.
+     */
+    protected static PLPInfo loadPLPInfo(File projectFolder) throws PersistenceException {
+        PLPInfo plp = AbstractPLPInfoTest.loadPLPInfo(projectFolder);
+        // For closing the plps after running all tests
+        loadedInfos.add(plp);
+        
+        return plp;
     }
  
     /**
@@ -408,7 +393,6 @@ public class PLPInfoTest extends AbstractEASyTest {
      * @throws PersistenceException If the project could not be loaded from the file system.
      * @throws VilLanguageException If instantiation is not possible
      */
-    //@Ignore
     @Test
     public void testInstantiate() throws PersistenceException, VilLanguageException {
         // Load project
@@ -425,60 +409,6 @@ public class PLPInfoTest extends AbstractEASyTest {
     }
     
     /**
-     * Runs the java compiler and checks whether the given folder is compilable.
-     * @param folder A java project folder containing a <tt>src</tt> and a <tt>bin</tt> folder.
-     * @param compilable Specification, whether the project should be compilable (<tt>true</tt>) or not(<tt>false</tt>).
-     */
-    private void compile(File folder, boolean compilable) {
-        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-        StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null,
-            Charset.forName("ISO-8859-1"));
-        List<File> files = new ArrayList<File>();
-        enumerateJavaFiles(new File(folder, "src"), files);
-        List<String> options = new ArrayList<String>();
-        options.add("-d");
-        File binFolder = new File(folder, "bin");
-        if (!binFolder.exists()) {
-            binFolder.mkdir();
-        }
-        options.add(new File(folder, "bin").getAbsolutePath());
-        Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromFiles(files);
-        StringWriter writer = new StringWriter();
-        boolean success = compiler.getTask(writer, fileManager, null, options, null, compilationUnits).call();
-        try {
-            fileManager.close(); 
-        } catch (IOException e) {
-            Assert.fail("unexpected exception: " + e.getMessage());
-        }
-        if (compilable) {
-            Assert.assertTrue("compile problems: " + writer.toString(), success);
-        } else {
-            Assert.assertFalse("Files should not be compileable, but they are.", success);
-        }
-    }
-    
-    /**
-     * Enumerate Java files in <code>location</code> and store results in <code>files</code>.
-     * 
-     * @param location the location to enumerate
-     * @param files the resulting java files (modified as a side effect)
-     */
-    private void enumerateJavaFiles(File location, List<File> files) {
-        if (location.isDirectory()) {
-            File[] dir = location.listFiles();
-            if (null != dir) {
-                for (File f : dir) {
-                    enumerateJavaFiles(f, files);
-                }
-            }
-        } else {
-            if (location.getName().endsWith(".java")) {
-                files.add(location);
-            }
-        }
-    }
-    
-    /**
      * Tests the possibility to run the reasoner to propagate values.
      * The loaded project has an IVML file as follows:
      * <pre>
@@ -490,6 +420,7 @@ public class PLPInfoTest extends AbstractEASyTest {
      * The reasoner should find a value for <tt>b</tt>.
      * @throws PersistenceException Must not occur, otherwise the config files inside the toplevel location are corrupt.
      */
+    @Ignore("Configuration is already propagating such values autmatically...")
     @Test
     public void testPropagation() throws PersistenceException {
         // Load project

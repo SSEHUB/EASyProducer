@@ -107,8 +107,13 @@ Instantiate:
     '(' param=ArgumentList? ')' (versionSpec=VersionSpec?)
 ;
 
+MapVariable:
+    type=Type?
+    var=Identifier
+;
+
 Map:
-    'map' '(' var+=Identifier (',' var+=Identifier)* '=' expr=Expression ')'
+    'map' '(' var+=MapVariable (',' var+=MapVariable)* separator=('=' | ':') expr=Expression ')'
     block=RuleElementBlock
 ;
 

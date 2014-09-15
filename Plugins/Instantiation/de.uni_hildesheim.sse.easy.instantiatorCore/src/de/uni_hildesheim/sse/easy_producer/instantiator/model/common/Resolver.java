@@ -30,7 +30,6 @@ public abstract class Resolver<M extends IResolvableModel<V>, O extends IResolva
     extends de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Resolver<V> {
 
     private Stack<M> models = new Stack<M>();
-    private M recursiveResolutionModel;
 
     /**
      * Creates a new resolver instance.
@@ -59,15 +58,6 @@ public abstract class Resolver<M extends IResolvableModel<V>, O extends IResolva
                 models.push((M) model);
             }
         }
-    }
-    
-    /**
-     * Defines the temporary model for resolving recursive calls.
-     * 
-     * @param model the temporary model
-     */
-    public void setRecursiveResolutionModel(M model) {
-        recursiveResolutionModel = model;
     }
         
     /**
@@ -195,12 +185,6 @@ public abstract class Resolver<M extends IResolvableModel<V>, O extends IResolva
             try {
                 E tmp = createCallExpression(model, isSuper, name, arguments);
                 tmp.inferType();
-                if (model == recursiveResolutionModel && !models.isEmpty()) {
-                    // the recursive resolution model is temporary - use the most current model instead
-                    // otherwise, this call will be executed in the wrong context
-                    tmp.setModel(models.peek());
-                }
-                // if this does not fail, we've found the rule ;)
                 result = tmp;
             } catch (ExpressionException e) {
                 lastException = e;
@@ -308,13 +292,21 @@ public abstract class Resolver<M extends IResolvableModel<V>, O extends IResolva
                 result = tester.createAndCheckCall(qModel, false); // qualified cannot be super
             }
             if (null == result) {
-                result = tester.createAndCheckCall(model, isSuper);
-                model = (M) models.peek();
-                while (null != model && null == result) {
+                if (!isSuper) { // in case of super, do not start with this but with parent model
                     result = tester.createAndCheckCall(model, isSuper);
-                    if (null == result) {
-                        model = (M) model.getParent();
+                } else {
+                    if (null == model.getParent()) { // if it is super and no parent -> error!
+                        throw new ExpressionException("model is not extended, no super possible", 
+                            ExpressionException.ID_CANNOT_RESOLVE);
                     }
+                }
+                if (null == result) {
+                    do { // check the parents
+                        model = (M) model.getParent();
+                        if (null != model) {
+                            result = tester.createAndCheckCall(model, isSuper);
+                        }
+                    } while (null != model && null == result);
                 }
             }
             for (int s = models.size() - 1; null == result && s >= 0; s--) {
@@ -326,9 +318,6 @@ public abstract class Resolver<M extends IResolvableModel<V>, O extends IResolva
                         result = tester.createAndCheckCall(imported, false);
                     }
                 }
-            }
-            if (null == result && null != recursiveResolutionModel) {
-                result = tester.createAndCheckCall(recursiveResolutionModel, false);
             }
             if (null == result) {
                 if (null == tester.getLastException()) {
@@ -380,12 +369,12 @@ public abstract class Resolver<M extends IResolvableModel<V>, O extends IResolva
     }
     
     @Override
-    public boolean isIvmlElement(String name) {
-        boolean resolvable = false;
-        for (int s = models.size() - 1; !resolvable && s >= 0; s--) {
-            resolvable = models.get(s).isIvmlElement(name);
+    public Object getIvmlElement(String name) {
+        Object result = null;
+        for (int s = models.size() - 1; null == result && s >= 0; s--) {
+            result = models.get(s).getIvmlElement(name);
         }  
-        return resolvable;
+        return result;
     }
 
 }

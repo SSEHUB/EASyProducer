@@ -5,7 +5,6 @@ import java.io.StringWriter;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
@@ -652,8 +651,7 @@ public class IVMLWriterTest {
         DerivedDatatype dd = new DerivedDatatype("MyType", IntegerType.TYPE, pro);
         
         //Building a constraint
-        DerivedDatatype bitrate = new DerivedDatatype("Bitrate", IntegerType.TYPE, pro);
-        Variable var = new Variable(bitrate.getTypeDeclaration());
+        Variable var = new Variable(dd.getTypeDeclaration());
         Value value = ValueFactory.createValue(IntegerType.TYPE, "128");
         ConstantValue consValue = new ConstantValue(value);
         OCLFeatureCall constraint = new OCLFeatureCall(var, IntegerType.GREATER_INTEGER_INTEGER.getName(), consValue);
@@ -665,7 +663,7 @@ public class IVMLWriterTest {
         pro.accept(writer);
         
         String expected = "project Name {\r\n\r\n";
-        expected += "    typedef MyType Integer with (Bitrate > 128);\r\n";
+        expected += "    typedef MyType Integer with (MyType > 128);\r\n";
         expected += "}\r\n";
         
         writer.flush();
@@ -685,14 +683,12 @@ public class IVMLWriterTest {
         DerivedDatatype dd = new DerivedDatatype("MyType", IntegerType.TYPE, pro);
         
         //Building first constraint
-        DerivedDatatype bitrate = new DerivedDatatype("Bitrate", IntegerType.TYPE, pro);
-        Variable var = new Variable(bitrate.getTypeDeclaration());
+        Variable var = new Variable(dd.getTypeDeclaration());
         Value value = ValueFactory.createValue(IntegerType.TYPE, "128");
         ConstantValue consValue = new ConstantValue(value);
         OCLFeatureCall constraint = new OCLFeatureCall(var, IntegerType.GREATER_INTEGER_INTEGER.getName(), consValue);
         
-        DerivedDatatype bitrate2 = new DerivedDatatype("Bitrate", IntegerType.TYPE, pro);
-        Variable var2 = new Variable(bitrate2.getTypeDeclaration());
+        Variable var2 = new Variable(dd.getTypeDeclaration());
         Value value2 = ValueFactory.createValue(IntegerType.TYPE, "1024");
         ConstantValue consValue2 = new ConstantValue(value2);
         OCLFeatureCall constraint2 = new OCLFeatureCall(var2, IntegerType.LESS_INTEGER_INTEGER.getName(), consValue2);
@@ -707,7 +703,7 @@ public class IVMLWriterTest {
         pro.accept(writer);
         
         String expected = "project Name {\r\n\r\n";
-        expected += "    typedef MyType Integer with (Bitrate > 128, Bitrate < 1024);\r\n";
+        expected += "    typedef MyType Integer with (MyType > 128, MyType < 1024);\r\n";
         expected += "}\r\n";
         
         writer.flush();
@@ -751,12 +747,11 @@ public class IVMLWriterTest {
     
     /**
      * Tests whether qualified names are used if they are needed.
-     * This test will create two projects whith one variable, having exactly the same name and import botch projects
+     * This test will create two projects with one variable, having exactly the same name and import botch projects
      * in {@link #pro}. Afterwards a constraint is created including both variables and {@link #pro} is saved usind the
      * {@link IVMLWriter}.
      */
     @Test
-    @Ignore
     public void testWriteQualifiedNames() {
         // Create imported projects and their declarations
         DecisionVariableDeclaration var1 = createIdenticalVariable("predecessor1");
@@ -780,7 +775,9 @@ public class IVMLWriterTest {
         // Save contents of main project into a String
         pro.accept(writer);
         String result = strWriter.toString();
-        String expectedConstraint = var1.getQualifiedName() + " " + OclKeyWords.EQUALS + " " + var2.getQualifiedName();
+        // original version assumed that imported variables always need to be qualified - this is not absolutely
+        // required, as the first matching import (if no local declaration is present) may also be unqualified
+        String expectedConstraint = var1.getName() + " " + OclKeyWords.EQUALS + " " + var2.getQualifiedName();
         int pos = result.indexOf(expectedConstraint);
         boolean found = pos >= 0;
         Assert.assertTrue("Error: Expected constraint not found, maybe because qualified names are not used.", found);

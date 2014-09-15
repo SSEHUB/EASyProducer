@@ -22,8 +22,8 @@ public interface IResolver<V extends IResolvable> {
      * Resolves an IVML element.
      * 
      * @param name the name to be resolved
-     * @return <code>true</code> whether <code>name</code> can be resolved, <code>false</code>
+     * @return the IVML element (value, containable model element), <b>null</b> else
      */
-    public boolean isIvmlElement(String name);
+    public Object getIvmlElement(String name);
     
 }

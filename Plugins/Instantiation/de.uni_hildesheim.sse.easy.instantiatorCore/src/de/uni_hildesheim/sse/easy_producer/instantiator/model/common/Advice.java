@@ -1,11 +1,13 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.common;
 
+import java.net.URI;
 import java.util.List;
 
 import de.uni_hildesheim.sse.model.management.VarModel;
 import de.uni_hildesheim.sse.model.varModel.IvmlException;
 import de.uni_hildesheim.sse.model.varModel.ModelQuery;
 import de.uni_hildesheim.sse.model.varModel.Project;
+import de.uni_hildesheim.sse.model.varModel.datatypes.IResolutionScope;
 import de.uni_hildesheim.sse.utils.modelManagement.IVersionRestrictable;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
@@ -94,22 +96,35 @@ public class Advice implements IVersionRestrictable {
      * Returns whether <code>name</code> can be resolved to an IVML element.
      * 
      * @param name the name to be resolved
-     * @return <code>true</code> if <code>name</code> denotes an IVML element, <code>false</code> else
+     * @return the IVML element (value, containable model element), <b>null</b> else
      */
-    public boolean isIvmlElement(String name) {
-        boolean found = false;
+    public Object getIvmlElement(String name) {
+        Object found = null;
         if (null != resolved && null != name) {
+            found = getIvmlElement(resolved, name);
+        }
+        return found;
+    }
+
+    /**
+     * Returns whether <code>name</code> can be resolved to an IVML element in <code>scope</code>.
+     * 
+     * @param scope the resolution scope
+     * @param name the name to be resolved
+     * @return the IVML element (value, containable model element), <b>null</b> else
+     */
+    public static Object getIvmlElement(IResolutionScope scope, String name) {
+        Object found = null;
+        try {
+            found = ModelQuery.findElementByName(scope, name, null);
+        } catch (IvmlException e) {
+            // means... not found
+        }
+        if (null == found) {
             try {
-                found = null != ModelQuery.findElementByName(resolved, name, null);
+                found = ModelQuery.enumLiteralAsValue(scope, name);
             } catch (IvmlException e) {
                 // means... not found
-            }
-            if (!found) {
-                try {
-                    found = null != ModelQuery.enumLiteralAsValue(resolved, name);
-                } catch (IvmlException e) {
-                    // means... not found
-                }
             }
         }
         return found;
@@ -119,11 +134,12 @@ public class Advice implements IVersionRestrictable {
      * Creates an advice by resolving <code>name</code> to a variability model.
      * 
      * @param name the name to be resolved
+     * @param modelURI the URI of the model
      * @param restrictions the version restrictions
-     * @param warning a string builder to append warnnings to
+     * @param warning a string builder to append warnings to
      * @return the created advice instance
      */
-    public static Advice create(String name, VersionRestriction[] restrictions, StringBuilder warning) {
+    public static Advice create(String name, URI modelURI, VersionRestriction[] restrictions, StringBuilder warning) {
         // TODO consider versions
         Project resolved = null;
         ModelInfo<Project> resolvingInfo = null;
@@ -131,7 +147,6 @@ public class Advice implements IVersionRestrictable {
         if (null == varModels || 0 == varModels.size()) {
             warning.append("cannot resolve '" + name + "' - IVML identifier may also not be (fully) resolved");
         }  else if (varModels.size() > 1) {
-            // TODO consider uri to reduce model set
             warning.append("model '" + name + "' cannot be resolved unambigously - IVML identifier may " 
                 + "not be (fully) resolved");
         } else {

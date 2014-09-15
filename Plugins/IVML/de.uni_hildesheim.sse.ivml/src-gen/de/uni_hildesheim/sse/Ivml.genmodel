@@ -4,7 +4,7 @@
     editorDirectory="/de.uni_hildesheim.sse.ivml.editor/src" modelPluginID="de.uni_hildesheim.sse.ivml"
     forceOverwrite="true" modelName="Ivml" updateClasspath="false" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
     complianceLevel="5.0" copyrightFields="false" editPluginID="de.uni_hildesheim.sse.ivml.edit"
-    editorPluginID="de.uni_hildesheim.sse.ivml.editor" runtimeVersion="2.9">
+    editorPluginID="de.uni_hildesheim.sse.ivml.editor" runtimeVersion="2.10">
   <genPackages prefix="Ivml" basePackage="de.uni_hildesheim.sse" disposableProviderFactory="true"
       ecorePackage="Ivml.ecore#/">
     <genClasses ecoreClass="Ivml.ecore#//VariabilityUnit">
@@ -128,7 +128,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//InterfaceDeclaration/exports"/>
     </genClasses>
     <genClasses ecoreClass="Ivml.ecore#//Export">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//Export/names"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Export/names"/>
     </genClasses>
     <genClasses ecoreClass="Ivml.ecore#//ImportStmt">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//ImportStmt/name"/>
@@ -262,8 +262,8 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Declarator/decl"/>
     </genClasses>
     <genClasses ecoreClass="Ivml.ecore#//Declaration">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//Declaration/id"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Declaration/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//Declaration/id"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Declaration/init"/>
     </genClasses>
     <genClasses ecoreClass="Ivml.ecore#//ActualParameterList">

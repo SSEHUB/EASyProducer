@@ -3,9 +3,210 @@
 */
 package de.uni_hildesheim.sse.vil.templatelang.ui.contentassist;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jface.text.contentassist.ICompletionProposal;
+import org.eclipse.jface.viewers.StyledString;
+import org.eclipse.xtext.Assignment;
+import org.eclipse.xtext.Keyword;
+import org.eclipse.xtext.RuleCall;
+import org.eclipse.xtext.ui.IImageHelper;
+import org.eclipse.xtext.ui.editor.contentassist.ContentAssistContext;
+import org.eclipse.xtext.ui.editor.contentassist.ICompletionProposalAcceptor;
+
+import com.google.inject.Inject;
+
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionStatementImpl;
+import de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.LanguageUnitImpl;
+import de.uni_hildesheim.sse.vil.templatelang.ui.resources.Images;
+
 /**
  * see http://www.eclipse.org/Xtext/documentation/latest/xtext.html#contentAssist on how to customize content assistant
  */
 public class TemplateLangProposalProvider extends AbstractTemplateLangProposalProvider {
-
+    
+    @Inject
+    private IImageHelper imageHelper; 
+    
+    @Override
+    public void completeKeyword(Keyword keyword, ContentAssistContext contentAssistContext,
+            ICompletionProposalAcceptor acceptor) {
+        System.out.println("Keyword" + contentAssistContext.getLastCompleteNode().getSemanticElement());
+        
+        // Currently, leave this method empty - used to remove default keyword proposals.
+    }
+    
+    @Override
+    public void completeLanguageUnit_Imports(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        String toEditor = "import ";
+        StyledString toDisplay = new StyledString("import");
+        ICompletionProposal proposal = createCompletionProposal(toEditor, toDisplay,
+                imageHelper.getImage(Images.NAME_IMPORT), 1000, context.getPrefix(), context);
+        acceptor.accept(proposal);
+    }
+    
+    @Override
+    public void completeLanguageUnit_JavaExts(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        String toEditor = "extension ";
+        StyledString toDisplay = new StyledString("extension");
+        ICompletionProposal proposal = createCompletionProposal(toEditor, toDisplay,
+                imageHelper.getImage(Images.NAME_JAVAEXT), 1000, context.getPrefix(), context);
+        acceptor.accept(proposal);
+    }
+    
+    @Override
+    public void completeLanguageUnit_Advices(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        String toEditor = "@advice(";
+        StyledString toDisplay = new StyledString("advice");
+        ICompletionProposal proposal = createCompletionProposal(toEditor, toDisplay,
+                imageHelper.getImage(Images.NAME_ADVICE), 1000, context.getPrefix(), context);
+        acceptor.accept(proposal);
+    }
+    
+    @Override
+    public void completeLanguageUnit_Indent(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        String toEditor = "@indent(";
+        StyledString toDisplay = new StyledString("indent");
+        ICompletionProposal proposal = createCompletionProposal(toEditor, toDisplay,
+                imageHelper.getImage(Images.NAME_INDENT), 1000, context.getPrefix(), context);
+        acceptor.accept(proposal);
+    }
+    
+    @Override
+    public void completeLanguageUnit_Version(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        String toEditor = "version v1.0";
+        StyledString toDisplay = new StyledString("version");
+        ICompletionProposal proposal = createCompletionProposal(toEditor, toDisplay,
+                imageHelper.getImage(Images.NAME_VERSION), 1000, context.getPrefix(), context);
+        acceptor.accept(proposal);
+    }
+    
+    @Override
+    public void completeLanguageUnit_Vars(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        // setOf
+        String toEditor = "setOf(";
+        StyledString toDisplay = new StyledString("setOf");
+        ICompletionProposal proposal = createCompletionProposal(toEditor, toDisplay,
+                imageHelper.getImage(Images.NAME_VARIABLEDECLARATION), 1000, context.getPrefix(), context);
+        acceptor.accept(proposal);
+        
+        //sequenceOf
+        toEditor = "sequenceOf(";
+        toDisplay = new StyledString("sequenceOf");
+        proposal = createCompletionProposal(toEditor, toDisplay,
+                imageHelper.getImage(Images.NAME_VARIABLEDECLARATION), 1000, context.getPrefix(), context);
+        acceptor.accept(proposal);
+        
+        //mapOf
+        toEditor = "mapOf(";
+        toDisplay = new StyledString("mapOf");
+        proposal = createCompletionProposal(toEditor, toDisplay,
+                imageHelper.getImage(Images.NAME_VARIABLEDECLARATION), 1000, context.getPrefix(), context);
+        acceptor.accept(proposal);
+    }
+    
+    @Override
+    public void completeLanguageUnit_Defs(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        String toEditor = "def <name> () {\n}";
+        StyledString toDisplay = new StyledString("def");
+        ICompletionProposal proposal = createCompletionProposal(toEditor, toDisplay,
+                imageHelper.getImage(Images.NAME_DEF), 1000, context.getPrefix(), context);
+        acceptor.accept(proposal);
+    }
+    
+    @Override
+    public void completeStmtBlock_Stmts(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        //propose scriptparameters
+        List<StyledString> proposalList = TemplateLangProposalProviderUtility.INSANCE.getAllParamsFromTemplate(context.getLastCompleteNode());
+        if (proposalList != null) {
+            for (StyledString toDisplay : proposalList) {
+                String toEditor = toDisplay.getString().substring(0, toDisplay.getString().indexOf(":") -1);
+                ICompletionProposal proposal = createCompletionProposal(toEditor, toDisplay,
+                        imageHelper.getImage(Images.NAME_VARIABLEDECLARATION), 1000, context.getPrefix(), context);
+                acceptor.accept(proposal);
+            }
+        }
+        
+        // propose all variables
+        proposalList = TemplateLangProposalProviderUtility.INSANCE.getAllVarsInStmt(context.getLastCompleteNode());
+        if (proposalList != null) {
+            for (StyledString toDisplay : proposalList) {
+                String toEditor = toDisplay.getString().substring(0, toDisplay.getString().indexOf(":") -1);
+                ICompletionProposal proposal = createCompletionProposal(toEditor, toDisplay,
+                        imageHelper.getImage(Images.NAME_VARIABLEDECLARATION), 1000, context.getPrefix(), context);
+                acceptor.accept(proposal);
+            }
+        }
+        // propose declared defs
+        proposalList = TemplateLangProposalProviderUtility.INSANCE.getAllDefs(context.getLastCompleteNode());
+        if (proposalList != null) {
+            for (StyledString toDisplay : proposalList) {
+                String toEditor = toDisplay.getString().substring(0, toDisplay.getString().indexOf(":") -1) + ";";
+                ICompletionProposal proposal = createCompletionProposal(toEditor, toDisplay,
+                        imageHelper.getImage(Images.NAME_VARIABLEDECLARATION), 1000, context.getPrefix(), context);
+                acceptor.accept(proposal);
+            }
+        }
+    }
+    
+    @Override
+    public void completeAlternative_Expr(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        System.out.println("IF: "+context.getLastCompleteNode().getSemanticElement());
+        List<String> typeList = new ArrayList<String>();
+        typeList.add("boolean");
+        List<StyledString> proposalList = TemplateLangProposalProviderUtility.INSANCE.getAllVarsInStmtWithType(context.getLastCompleteNode(), typeList);
+        if (proposalList != null) {
+            for (StyledString toDisplay : proposalList) {
+                String toEditor = toDisplay.getString().substring(0, toDisplay.getString().indexOf(":") -1);
+                ICompletionProposal proposal = createCompletionProposal(toEditor, toDisplay,
+                        imageHelper.getImage(Images.NAME_VARIABLEDECLARATION), 1000, context.getPrefix(), context);
+                acceptor.accept(proposal);
+            }
+        }
+    }
+    
+    @Override
+    public void completeArgumentList_Param(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        System.err.println("completeArgumentList_Param");
+        //proposeParamsWithSpecifiedTypes(model, assignment, context, acceptor);
+    }
+    
+    @Override
+    public void completeParameterList_Param(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        System.out.println("Hello Param");
+        // Methodenaufrufe werden als Expressions verarbeitet.
+        // Schwierig für Parametervorschlag
+    }
+    
+    @Override
+    public void completeCall_Param(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        System.out.println("Param Name");
+    }
+    
+    @Override
+    public void completeNamedArgument_Name(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        System.out.println("NamedArgu");
+    }
+    
+    @Override
+    public void completeCall_Decl(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        System.out.println("Call Decl");
+    }
+    
+    @Override
+    public void completeCall_Name(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        System.out.println("Call Name");
+    }
+    
+    @Override
+    public void complete_Call(EObject model, RuleCall ruleCall, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        System.out.println("Overriden call completion");
+    }
+    
+    @Override
+    public void complete_QualifiedPrefix(EObject model, RuleCall ruleCall, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        System.out.println("Overriden qualified prefix");
+    }
 }

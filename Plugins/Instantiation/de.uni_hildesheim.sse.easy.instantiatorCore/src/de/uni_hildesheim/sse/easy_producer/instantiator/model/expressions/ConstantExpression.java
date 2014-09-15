@@ -3,6 +3,7 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.EnumValue;
 
 /**
  * Represents a parenthesis expression.
@@ -31,10 +32,19 @@ public class ConstantExpression extends Expression {
         this.type = type;
         this.value = value;
         if (null != value) {
-            boolean ok = checkAndConvert(registry.getType(value.getClass().getName()));
-            ok |= checkAndConvert(registry.getType(value.getClass().getSimpleName())); // for artifacts
+            boolean ok;
+            if (TypeRegistry.NULL == value) {
+                ok = true;
+            } else {
+                if (value instanceof EnumValue) {
+                    ok = checkAndConvert(registry.getType(((EnumValue) value).getDatatype()));
+                } else {
+                    ok = checkAndConvert(registry.getType(value.getClass().getName()));
+                    ok |= checkAndConvert(registry.getType(value.getClass().getSimpleName())); // for artifacts
+                }
+            }
             if (!ok) {
-                throw new ExpressionException("type " + type.getName() + " is not compatible to value " + value, 
+                throw new ExpressionException("type '" + type.getName() + "' is not compatible to value " + value, 
                     ExpressionException.ID_SEMANTIC); 
             }
         }

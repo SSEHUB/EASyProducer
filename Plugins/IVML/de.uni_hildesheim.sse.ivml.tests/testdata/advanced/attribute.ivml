@@ -9,7 +9,6 @@ project attributes {
     attribute Integer j to attributes;
     i.k = 0;
     i.binding = bindingTimes.compile;
-    attributes.j = 0;
 // similar to a problem Romans had    
     i.j = 1;
     b.j = 4;

@@ -52,6 +52,7 @@ import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerConfiguration;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
 import de.uni_hildesheim.sse.utils.modelManagement.IModelListener;
+import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
 import de.uni_hildesheim.sse.utils.modelManagement.Version;
@@ -372,7 +373,7 @@ public class PLPInfo implements IInstantiatorProject, IModelListener<Script> {
      * @return The main build script for building the project (starting point of the instantiation).
      */
     public Script getBuildScript() {
-        return mainBuildScript.getModel();
+        return null != mainBuildScript ? mainBuildScript.getModel() : null;
     }
     
     /**
@@ -495,7 +496,6 @@ public class PLPInfo implements IInstantiatorProject, IModelListener<Script> {
         }
         VilArgumentProvider.provideArguments(this, executor);
         return executor;*/
-        
         ProjectDescriptor me = new ProjectDescriptor(this);
         Executor executor = new Executor(getBuildScript())
             .addTarget(me)
@@ -505,8 +505,9 @@ public class PLPInfo implements IInstantiatorProject, IModelListener<Script> {
             // no predecessors - assume self-instantiation
             executor.addSource(me);
         } else {
-            IProjectDescriptor[] pred = new IProjectDescriptor[predCount];
+            IProjectDescriptor[] pred = new IProjectDescriptor[predCount + 1];
             int i = 0;
+            pred[i++] = me;
             for (PLPInfo p : getMemberController().getPredecessors()) {
                 pred[i++] = new ProjectDescriptor(p);
             }
@@ -660,7 +661,7 @@ public class PLPInfo implements IInstantiatorProject, IModelListener<Script> {
      * which should not be saved.
      */
     public boolean isSaveable() {
-        return varModel.isSaveable() && mainBuildScript.isSaveable();
+        return varModel.isSaveable();
     }
     
     /**
@@ -732,5 +733,53 @@ public class PLPInfo implements IInstantiatorProject, IModelListener<Script> {
         PersistenceUtils.refreshModels(this);
         getConfiguration().refresh();
         configurationPulled();
+    }
+    
+    /**
+     * Adds a Script Import to the build script. This method should be used instead during this
+     * via {@link #getBuildScript()} and {@link Script#addImport(ModelImport)}.
+     * This will ensure that the included import will also be saved, when this plp is saved.
+     * @param scriptImport A import which shall be added to the main {@link Script} of this project.
+     */
+    public void addScriptImport(ModelImport<Script> scriptImport) {
+        mainBuildScript.getModel().addImport(scriptImport);
+        mainBuildScript.setEdited(true);
+    }
+    
+    /**
+     * Sets the flag for saving the build script. This should be called whenever the build script was modified via
+     * EASy and the changes should be saved when this plp is saved.
+     * If this flag was not set, all the (changed) build script will not be saved.
+     */
+    public void buildScriptWasEdited() {
+        mainBuildScript.setEdited(true);
+    }
+    
+    /**
+     * Returns the encapsulated {@link ProjectContainer} for the {@link #getProject()}.
+     * This method should only be needed by the Persistencers.
+     * @return The {@link ProjectContainer} for the variability model.
+     */
+    public ProjectContainer getProjectContainer() {
+        return varModel;
+    }
+    
+    /**
+     * Returns the encapsulated {@link ScriptContainer} for the {@link #getBuildScript()}.
+     * This method should only be needed by the Persistencers.
+     * @return The {@link ScriptContainer} for build script.
+     */
+    public ScriptContainer getScriptContainer() {
+        return mainBuildScript;
+    }
+    
+    /**
+     * Returns whether this is a preliminary information object or a specialized.
+     * 
+     * @return <code>true</code> if it is preliminary, i.e., directly from this class, <code>false</code> if it is 
+     * from a subclass
+     */
+    public boolean isPreliminary() {
+        return getClass() == PLPInfo.class;
     }
 }

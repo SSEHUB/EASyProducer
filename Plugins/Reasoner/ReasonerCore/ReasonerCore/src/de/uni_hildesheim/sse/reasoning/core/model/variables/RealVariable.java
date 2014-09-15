@@ -1,5 +1,6 @@
 package de.uni_hildesheim.sse.reasoning.core.model.variables;
 
+import de.uni_hildesheim.sse.model.confModel.AssignmentState;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.reasoning.core.model.ReasonerModel;
 
@@ -25,8 +26,12 @@ public class RealVariable extends ReasonerVariable {
     RealVariable(IDecisionVariable configVariable, String name, ReasonerModel model, ReasonerVariable parent) {
         super(configVariable, name, model, parent);
         value = null;
-        if (configVariable.getValue() != null) {
-            value = ((Number) configVariable.getValue().getValue()).doubleValue();
+        if (configVariable.getState() != AssignmentState.UNDEFINED) {
+            if (configVariable.getValue().getType().getName().equals("Real")
+                    || configVariable.getValue().getType().getName().equals("Integer")) {                
+                value = ((Number) configVariable.getValue().getValue()).doubleValue(); 
+            }
+            
         }
     }
 

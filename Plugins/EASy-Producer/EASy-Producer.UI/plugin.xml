@@ -13,7 +13,7 @@
             class="de.uni_hildesheim.sse.easy.ui.internal.NewEASyProjectWizard"
             icon="icons/logo_icon.gif"
             id="de.uni_hildesheim.sse.plugin.wizards.PLuginNewWizard"
-            name="New EASy-Producer Project"
+            name="EASy-Producer Product Line Project"
             project="true">
       </wizard>
    </extension>
@@ -143,6 +143,12 @@
             class="de.uni_hildesheim.sse.easy.ui.configuration.VtlArgumentProviderPreferencePage"
             id="de.uni_hildesheim.sse.EASy.paths"
             name="VTL Argument Provider">
+      </page>
+      <page
+            category="de.uni_hildesheim.sse.EASy/de.uni_hildesheim.sse.Ivml"
+            class="de.uni_hildesheim.sse.easy.ui.configuration.IvmlIndentationPreferencePage"
+            id="de.uni_hildesheim.sse.easy.ui.configuration.IvmlIndentationPreferencePage"
+            name="Indentation">
       </page>
    </extension>
    

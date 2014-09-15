@@ -1,5 +1,6 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ruleMatch;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactTypes;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FileArtifact;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IArtifact;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
@@ -9,7 +10,6 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArraySet;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Collection;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 
 /**
  * Implements an artifact match expression.
@@ -28,7 +28,7 @@ public class ArtifactMatchExpression extends AbstractRuleMatchExpression {
      * @throws ExpressionException in case that the expression does not evaluate to a collection
      */
     public ArtifactMatchExpression(Expression expression) throws ExpressionException {
-        if (!TypeRegistry.artifactType().isAssignableFrom(expression.inferType())) {
+        if (!ArtifactTypes.artifactType().isAssignableFrom(expression.inferType())) {
             throw new ExpressionException("expression does not evaluate to an artifact", 
                 ExpressionException.ID_SEMANTIC);
         }
@@ -46,7 +46,7 @@ public class ArtifactMatchExpression extends AbstractRuleMatchExpression {
     
     @Override
     public TypeDescriptor<? extends IVilType> getEntryType() {
-        return TypeRegistry.artifactType();
+        return ArtifactTypes.artifactType();
     }
 
     @Override

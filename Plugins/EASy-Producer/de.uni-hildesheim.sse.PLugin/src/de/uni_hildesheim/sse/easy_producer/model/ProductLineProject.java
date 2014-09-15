@@ -311,7 +311,7 @@ public class ProductLineProject extends PLPInfo {
         }
         
         //Refresh files 
-        ResourcesMgmt.INSTANCE.refreshProject(getProjectName());
+        refreshArtifacts();
     }
     
     @Override
@@ -319,4 +319,12 @@ public class ProductLineProject extends PLPInfo {
         super.refresh();
         EASyPersistencer.refreshModels(this); //TODO push up refresh of models (excluding the workspace).
     }
+
+    /**
+     * Refreshes all artifacts on file level.
+     */
+    public void refreshArtifacts() {
+        ResourcesMgmt.INSTANCE.refreshProject(getProjectName());
+    }
+    
 }

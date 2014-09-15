@@ -1,3 +1,4 @@
+
 package de.uni_hildesheim.sse.easy.ui.internal;
 
 import java.util.Iterator;
@@ -6,19 +7,20 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.osgi.service.prefs.BackingStoreException;
 
-import de.uni_hildesheim.sse.easy_producer.core.mgmt.PLPInfo;
 import de.uni_hildesheim.sse.easy_producer.core.mgmt.VilArgumentProvider;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.Configuration;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.Configuration.PathKind;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.Executor;
+import de.uni_hildesheim.sse.persistency.AbstractVarModelWriter;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 
 /**
  * Implements a frontend for EASy-specific Eclipse preference store values.
  * 
  * @author Holger Eichelberger
+ * @author Niko Nowatzki
  */
 public class EASyPreferenceStore {
+
 
     /**
      * Returns the actual preferences.
@@ -69,6 +71,15 @@ public class EASyPreferenceStore {
             EASyLoggerFactory.INSTANCE.getLogger(EASyPreferenceStore.class, Activator.PLUGIN_ID).exception(e);
         }
         
+    }
+    
+    /**
+     * Loads default information on startup. To be called by an activator.
+     */
+    public static void loadOnStart() {
+        loadDefaultConfiguration();
+        loadVilArgumentProviderStates();
+        loadIvmlPreferences();
     }
     
     /**
@@ -140,5 +151,63 @@ public class EASyPreferenceStore {
                 provider.setFreeArguments(args);
             }
         }        
+    }
+    
+    /**
+     * Loads the properties for indentation.
+     */
+    public static void loadIvmlPreferences() {
+        
+        try {
+        
+            AbstractVarModelWriter.setIndentStep(getIvmlIndentStep());
+            AbstractVarModelWriter.setUseIvmlWhitespace(getUseIvmlWhitespace());
+
+        } catch (NullPointerException e) {
+            AbstractVarModelWriter.setIndentStep(4);
+            AbstractVarModelWriter.setUseIvmlWhitespace(true);
+            
+            setIvmlPrefs(4, true);
+        }
+
+    }
+    
+    /**
+     * Save the indentation and the permission of whitespaces in preferences.
+     * 
+     * @param indentStep Amount of spaces for indentation.
+     * @param useWhitespaces true - whitespaces are allowed.
+     *                    false - whitespaces are not allowed.
+     */
+    public static void setIvmlPrefs(int indentStep, boolean useWhitespaces) {
+        
+        IEclipsePreferences prefs = getPreferences();
+        prefs.putInt("ivml.indent", indentStep);
+        prefs.putBoolean("ivml.useWhitespaces", useWhitespaces);
+        
+        flush(prefs);
+    }
+    
+    /**
+     * Get the indentation.
+     * @return indent the stored indentation.
+     */
+    public static int getIvmlIndentStep() {
+    
+        IEclipsePreferences prefs = getPreferences();
+        int indent = prefs.getInt("ivml.indent", 4);
+        return indent;
+    }
+    
+    /**
+     * Get to know whether tabs are allowed or not.
+     * @return useWhitespaces Returns true - whitespaces are allowed.
+     *                             false - whitespaces are not allowed.
+     */
+    public static boolean getUseIvmlWhitespace() {
+
+        IEclipsePreferences prefs = getPreferences();
+        boolean useWhitespaces = prefs.getBoolean("ivml.useWhitespaces", false);
+        return useWhitespaces;
     }
 }

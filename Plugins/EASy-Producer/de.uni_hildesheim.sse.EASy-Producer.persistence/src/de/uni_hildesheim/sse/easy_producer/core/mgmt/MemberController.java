@@ -34,6 +34,29 @@ public class MemberController extends Controller {
     }
 
     /**
+     * Replaces a PLP info stored with same ID in this controller.
+     * 
+     * @param newPLP the replacing PLP
+     */
+    public void replacePLPInfo(PLPInfo newPLP) {
+        replacePLPInfo(predecessors, newPLP);
+        replacePLPInfo(successors, newPLP);
+    }
+    
+    /**
+     * Replaces a PLP info stored with same ID.
+     * 
+     * @param map the map to be modified
+     * @param newPLP the replacing PLP
+     */
+    private static void replacePLPInfo(LinkedHashMap<String, PLPInfo> map, PLPInfo newPLP) {
+        PLPInfo info = map.get(newPLP.getProjectID());
+        if (null != info) {
+            map.put(newPLP.getProjectID(), newPLP);
+        }
+    }
+
+    /**
      * Check for Predecessors.
      * 
      * @return returns true if there is at least one predecessor

@@ -153,7 +153,16 @@ class ReflectionOperationDescriptor extends OperationDescriptor {
             }
             object = args[0];
             callArgs = new Object[args.length - 1];
-            System.arraycopy(args, 1, callArgs, 0, callArgs.length);
+            Class<?>[] paramTypes = method.getParameterTypes();
+            for (int i = 0; i < callArgs.length; i++) {
+                Object arg = args[i + 1];
+                // explicit conversion - convenience and legacy
+                if (arg instanceof TypeDescriptor && paramTypes[i] == Class.class) {
+                    callArgs[i] = ((TypeDescriptor<?>) arg).getTypeClass();
+                } else {
+                    callArgs[i] = args[i + 1];
+                }
+            }
             exec = null != object; // lazy execution
         }
         Object result = null;
@@ -255,6 +264,11 @@ class ReflectionOperationDescriptor extends OperationDescriptor {
     public boolean isStatic() {
         return Modifier.isStatic(method.getModifiers());
     }
+    
+    @Override
+    public boolean isFirstParameterOperand() {
+        return !isStatic();
+    }
 
     @Override
     public String getJavaSignature() {
@@ -344,6 +358,9 @@ class ReflectionOperationDescriptor extends OperationDescriptor {
         return result;
     }
 
-
+    @Override
+    public boolean isPlaceholder() {
+        return false;
+    }
 
 }

@@ -684,6 +684,43 @@ public interface VilBuildLanguagePackage extends EPackage
   int INSTANTIATE_FEATURE_COUNT = 5;
 
   /**
+   * The meta object id for the '{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.MapVariableImpl <em>Map Variable</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.MapVariableImpl
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getMapVariable()
+   * @generated
+   */
+  int MAP_VARIABLE = 13;
+
+  /**
+   * The feature id for the '<em><b>Type</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MAP_VARIABLE__TYPE = 0;
+
+  /**
+   * The feature id for the '<em><b>Var</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MAP_VARIABLE__VAR = 1;
+
+  /**
+   * The number of structural features of the '<em>Map Variable</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MAP_VARIABLE_FEATURE_COUNT = 2;
+
+  /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.MapImpl <em>Map</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -691,10 +728,10 @@ public interface VilBuildLanguagePackage extends EPackage
    * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getMap()
    * @generated
    */
-  int MAP = 13;
+  int MAP = 14;
 
   /**
-   * The feature id for the '<em><b>Var</b></em>' attribute list.
+   * The feature id for the '<em><b>Var</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -703,13 +740,22 @@ public interface VilBuildLanguagePackage extends EPackage
   int MAP__VAR = 0;
 
   /**
+   * The feature id for the '<em><b>Separator</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MAP__SEPARATOR = 1;
+
+  /**
    * The feature id for the '<em><b>Expr</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MAP__EXPR = 1;
+  int MAP__EXPR = 2;
 
   /**
    * The feature id for the '<em><b>Block</b></em>' containment reference.
@@ -718,7 +764,7 @@ public interface VilBuildLanguagePackage extends EPackage
    * @generated
    * @ordered
    */
-  int MAP__BLOCK = 2;
+  int MAP__BLOCK = 3;
 
   /**
    * The number of structural features of the '<em>Map</em>' class.
@@ -727,7 +773,7 @@ public interface VilBuildLanguagePackage extends EPackage
    * @generated
    * @ordered
    */
-  int MAP_FEATURE_COUNT = 3;
+  int MAP_FEATURE_COUNT = 4;
 
   /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.JoinImpl <em>Join</em>}' class.
@@ -737,7 +783,7 @@ public interface VilBuildLanguagePackage extends EPackage
    * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getJoin()
    * @generated
    */
-  int JOIN = 14;
+  int JOIN = 15;
 
   /**
    * The feature id for the '<em><b>Var1</b></em>' containment reference.
@@ -783,7 +829,7 @@ public interface VilBuildLanguagePackage extends EPackage
    * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getJoinVariable()
    * @generated
    */
-  int JOIN_VARIABLE = 15;
+  int JOIN_VARIABLE = 16;
 
   /**
    * The feature id for the '<em><b>Excl</b></em>' attribute.
@@ -829,7 +875,7 @@ public interface VilBuildLanguagePackage extends EPackage
    * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getSystemExecution()
    * @generated
    */
-  int SYSTEM_EXECUTION = 16;
+  int SYSTEM_EXECUTION = 17;
 
   /**
    * The feature id for the '<em><b>Call</b></em>' containment reference.
@@ -1364,6 +1410,38 @@ public interface VilBuildLanguagePackage extends EPackage
   EReference getInstantiate_VersionSpec();
 
   /**
+   * Returns the meta object for class '{@link de.uni_hildesheim.sse.vilBuildLanguage.MapVariable <em>Map Variable</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Map Variable</em>'.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.MapVariable
+   * @generated
+   */
+  EClass getMapVariable();
+
+  /**
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vilBuildLanguage.MapVariable#getType <em>Type</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Type</em>'.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.MapVariable#getType()
+   * @see #getMapVariable()
+   * @generated
+   */
+  EReference getMapVariable_Type();
+
+  /**
+   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.vilBuildLanguage.MapVariable#getVar <em>Var</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Var</em>'.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.MapVariable#getVar()
+   * @see #getMapVariable()
+   * @generated
+   */
+  EAttribute getMapVariable_Var();
+
+  /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.vilBuildLanguage.Map <em>Map</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1374,15 +1452,26 @@ public interface VilBuildLanguagePackage extends EPackage
   EClass getMap();
 
   /**
-   * Returns the meta object for the attribute list '{@link de.uni_hildesheim.sse.vilBuildLanguage.Map#getVar <em>Var</em>}'.
+   * Returns the meta object for the containment reference list '{@link de.uni_hildesheim.sse.vilBuildLanguage.Map#getVar <em>Var</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute list '<em>Var</em>'.
+   * @return the meta object for the containment reference list '<em>Var</em>'.
    * @see de.uni_hildesheim.sse.vilBuildLanguage.Map#getVar()
    * @see #getMap()
    * @generated
    */
-  EAttribute getMap_Var();
+  EReference getMap_Var();
+
+  /**
+   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.vilBuildLanguage.Map#getSeparator <em>Separator</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Separator</em>'.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.Map#getSeparator()
+   * @see #getMap()
+   * @generated
+   */
+  EAttribute getMap_Separator();
 
   /**
    * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vilBuildLanguage.Map#getExpr <em>Expr</em>}'.
@@ -1950,6 +2039,32 @@ public interface VilBuildLanguagePackage extends EPackage
     EReference INSTANTIATE__VERSION_SPEC = eINSTANCE.getInstantiate_VersionSpec();
 
     /**
+     * The meta object literal for the '{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.MapVariableImpl <em>Map Variable</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.MapVariableImpl
+     * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getMapVariable()
+     * @generated
+     */
+    EClass MAP_VARIABLE = eINSTANCE.getMapVariable();
+
+    /**
+     * The meta object literal for the '<em><b>Type</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference MAP_VARIABLE__TYPE = eINSTANCE.getMapVariable_Type();
+
+    /**
+     * The meta object literal for the '<em><b>Var</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute MAP_VARIABLE__VAR = eINSTANCE.getMapVariable_Var();
+
+    /**
      * The meta object literal for the '{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.MapImpl <em>Map</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1960,12 +2075,20 @@ public interface VilBuildLanguagePackage extends EPackage
     EClass MAP = eINSTANCE.getMap();
 
     /**
-     * The meta object literal for the '<em><b>Var</b></em>' attribute list feature.
+     * The meta object literal for the '<em><b>Var</b></em>' containment reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute MAP__VAR = eINSTANCE.getMap_Var();
+    EReference MAP__VAR = eINSTANCE.getMap_Var();
+
+    /**
+     * The meta object literal for the '<em><b>Separator</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute MAP__SEPARATOR = eINSTANCE.getMap_Separator();
 
     /**
      * The meta object literal for the '<em><b>Expr</b></em>' containment reference feature.

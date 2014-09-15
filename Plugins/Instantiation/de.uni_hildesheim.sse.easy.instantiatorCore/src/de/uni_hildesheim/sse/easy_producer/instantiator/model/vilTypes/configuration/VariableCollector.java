@@ -3,11 +3,11 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configur
 import java.util.ArrayList;
 import java.util.List;
 
-import de.uni_hildesheim.sse.model.confModel.AssignmentState;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.model.varModel.Attribute;
 import de.uni_hildesheim.sse.model.varModel.AttributeAssignment;
 import de.uni_hildesheim.sse.model.varModel.Comment;
+import de.uni_hildesheim.sse.model.varModel.CompoundAccessStatement;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.FreezeBlock;
@@ -35,14 +35,18 @@ class VariableCollector implements IModelVisitor {
     
     private List<DecisionVariable> variables = new ArrayList<DecisionVariable>();
     private de.uni_hildesheim.sse.model.confModel.Configuration configuration;
+    private IVariableFilter filter;
 
     /**
      * Creates a new variable collector.
      * 
      * @param configuration the configuration to determine the configured variables from
+     * @param filter the variable filter
      */
-    public VariableCollector(de.uni_hildesheim.sse.model.confModel.Configuration configuration) {
+    public VariableCollector(de.uni_hildesheim.sse.model.confModel.Configuration configuration, 
+        IVariableFilter filter) {
         this.configuration = configuration;
+        this.filter = filter;
     }
 
     /**
@@ -118,8 +122,8 @@ class VariableCollector implements IModelVisitor {
     public void visitDecisionVariableDeclaration(DecisionVariableDeclaration decl) {
         // retrieve and if ok wrap
         IDecisionVariable var = configuration.getDecision(decl);
-        if (null != var && AssignmentState.FROZEN == var.getState()) {
-            variables.add(new DecisionVariable(var));
+        if (null != var && filter.isEnabled(var)) {
+            variables.add(new DecisionVariable(var, filter));
         }
     }
 
@@ -166,6 +170,11 @@ class VariableCollector implements IModelVisitor {
         for (int e = 0; e < assignment.getModelElementCount(); e++) {
             assignment.getModelElement(e).accept(this);
         }
+    }
+
+    @Override
+    public void visitCompoundAccessStatement(CompoundAccessStatement access) {
+        // not relevant here
     }
 
 }

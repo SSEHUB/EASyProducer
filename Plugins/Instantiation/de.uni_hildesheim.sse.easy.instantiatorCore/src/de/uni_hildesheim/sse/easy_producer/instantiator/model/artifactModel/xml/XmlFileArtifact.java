@@ -27,6 +27,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactCreator;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactFactory;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactModel;
@@ -36,6 +37,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArraySet;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationMeta;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
+import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 
 /**
  * Represents a parsed XML file artifact. Due to Java internal intelligent processing, it 
@@ -173,14 +175,17 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
                 builder = factory.newDocumentBuilder();
                 doc = builder.parse(file);
             } catch (ParserConfigurationException exc) {
-                exc.printStackTrace();
-                throw new ArtifactException(exc.getMessage(), ArtifactException.ID_RUNTIME_RESOURCE);
+                EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).exception(exc);
+                throw new ArtifactException(file.getAbsolutePath() + ":" + exc.getMessage(), 
+                    ArtifactException.ID_RUNTIME_RESOURCE);
             } catch (SAXException exc) {
-                exc.printStackTrace();
-                throw new ArtifactException(exc.getMessage(), ArtifactException.ID_RUNTIME_RESOURCE);
+                EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).exception(exc);
+                throw new ArtifactException(file.getAbsolutePath() + ":" + exc.getMessage(), 
+                    ArtifactException.ID_RUNTIME_RESOURCE);
             } catch (IOException exc) {
-                exc.printStackTrace();
-                throw new ArtifactException(exc.getMessage(), ArtifactException.ID_RUNTIME_RESOURCE);
+                EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).exception(exc);
+                throw new ArtifactException(file.getAbsolutePath() + ":" + exc.getMessage(), 
+                    ArtifactException.ID_RUNTIME_RESOURCE);
             }
         
         }
@@ -229,9 +234,9 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
                 }
             }
         } catch (ArtifactException e1) {
-            e1.printStackTrace();
+            EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).exception(e1);
         } catch (DOMException e1) {
-            e1.printStackTrace();
+            EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).exception(e1);
         }
         
         Iterator<XmlAttribute> iter = null;
@@ -239,7 +244,7 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
         try {
             iter = element.attributes().iterator();
         } catch (ArtifactException e) {
-            e.printStackTrace();
+            EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).exception(e);
         }
         
         if (null != iter) {
@@ -377,7 +382,7 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
                 //transformer.setOutputProperty("{http://xml.apache.org/xalan}line-separator", "\r\n");
                 transformer.transform(source, result);
             } catch (TransformerException exc) {
-                exc.printStackTrace();
+                EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).exception(exc);
             }
             
             if (!lineEndedComments.isEmpty()) {
@@ -388,7 +393,7 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
                 try {
                     this.dtdParser.writeDtd(this.file, this.dtd);
                 } catch (FileNotFoundException e) {
-                    e.printStackTrace();
+                    EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).exception(e);
                 }
             }            
             

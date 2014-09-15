@@ -978,15 +978,12 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		////#< Compounds
 		// Value:
 		//	nValue=NumValue //#> Compounds
-		// //| ('refby' '(' rValue=Identifier ')')
-		// | sValue=STRING | qValue=QualifiedName |
-		//	bValue=("true" | "false") | nullValue="null";
+		// | sValue=STRING | qValue=QualifiedName | bValue=("true" | "false") |
+		//	nullValue="null";
 		public ParserRule getRule() { return rule; }
 
 		//nValue=NumValue //#> Compounds
-		// //| ('refby' '(' rValue=Identifier ')')
-		// | sValue=STRING | qValue=QualifiedName |
-		//bValue=("true" | "false") | nullValue="null"
+		// | sValue=STRING | qValue=QualifiedName | bValue=("true" | "false") | nullValue="null"
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//nValue=NumValue
@@ -1491,40 +1488,40 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Group cGroup = (Group)rule.eContents().get(1);
 		private final Keyword cExportKeyword_0 = (Keyword)cGroup.eContents().get(0);
 		private final Assignment cNamesAssignment_1 = (Assignment)cGroup.eContents().get(1);
-		private final RuleCall cNamesIdentifierParserRuleCall_1_0 = (RuleCall)cNamesAssignment_1.eContents().get(0);
+		private final RuleCall cNamesQualifiedNameParserRuleCall_1_0 = (RuleCall)cNamesAssignment_1.eContents().get(0);
 		private final Group cGroup_2 = (Group)cGroup.eContents().get(2);
 		private final Keyword cCommaKeyword_2_0 = (Keyword)cGroup_2.eContents().get(0);
 		private final Assignment cNamesAssignment_2_1 = (Assignment)cGroup_2.eContents().get(1);
-		private final RuleCall cNamesIdentifierParserRuleCall_2_1_0 = (RuleCall)cNamesAssignment_2_1.eContents().get(0);
+		private final RuleCall cNamesQualifiedNameParserRuleCall_2_1_0 = (RuleCall)cNamesAssignment_2_1.eContents().get(0);
 		private final Keyword cSemicolonKeyword_3 = (Keyword)cGroup.eContents().get(3);
 		
 		//Export:
-		//	"export" names+=Identifier ("," names+=Identifier)* ";";
+		//	"export" names+=QualifiedName ("," names+=QualifiedName)* ";";
 		public ParserRule getRule() { return rule; }
 
-		//"export" names+=Identifier ("," names+=Identifier)* ";"
+		//"export" names+=QualifiedName ("," names+=QualifiedName)* ";"
 		public Group getGroup() { return cGroup; }
 
 		//"export"
 		public Keyword getExportKeyword_0() { return cExportKeyword_0; }
 
-		//names+=Identifier
+		//names+=QualifiedName
 		public Assignment getNamesAssignment_1() { return cNamesAssignment_1; }
 
-		//Identifier
-		public RuleCall getNamesIdentifierParserRuleCall_1_0() { return cNamesIdentifierParserRuleCall_1_0; }
+		//QualifiedName
+		public RuleCall getNamesQualifiedNameParserRuleCall_1_0() { return cNamesQualifiedNameParserRuleCall_1_0; }
 
-		//("," names+=Identifier)*
+		//("," names+=QualifiedName)*
 		public Group getGroup_2() { return cGroup_2; }
 
 		//","
 		public Keyword getCommaKeyword_2_0() { return cCommaKeyword_2_0; }
 
-		//names+=Identifier
+		//names+=QualifiedName
 		public Assignment getNamesAssignment_2_1() { return cNamesAssignment_2_1; }
 
-		//Identifier
-		public RuleCall getNamesIdentifierParserRuleCall_2_1_0() { return cNamesIdentifierParserRuleCall_2_1_0; }
+		//QualifiedName
+		public RuleCall getNamesQualifiedNameParserRuleCall_2_1_0() { return cNamesQualifiedNameParserRuleCall_2_1_0; }
 
 		//";"
 		public Keyword getSemicolonKeyword_3() { return cSemicolonKeyword_3; }
@@ -2933,57 +2930,49 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 	public class DeclarationElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "Declaration");
 		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Assignment cIdAssignment_0 = (Assignment)cGroup.eContents().get(0);
-		private final RuleCall cIdIdentifierParserRuleCall_0_0 = (RuleCall)cIdAssignment_0.eContents().get(0);
-		private final Group cGroup_1 = (Group)cGroup.eContents().get(1);
-		private final Keyword cCommaKeyword_1_0 = (Keyword)cGroup_1.eContents().get(0);
-		private final Assignment cIdAssignment_1_1 = (Assignment)cGroup_1.eContents().get(1);
-		private final RuleCall cIdIdentifierParserRuleCall_1_1_0 = (RuleCall)cIdAssignment_1_1.eContents().get(0);
+		private final Assignment cTypeAssignment_0 = (Assignment)cGroup.eContents().get(0);
+		private final RuleCall cTypeTypeParserRuleCall_0_0 = (RuleCall)cTypeAssignment_0.eContents().get(0);
+		private final Assignment cIdAssignment_1 = (Assignment)cGroup.eContents().get(1);
+		private final RuleCall cIdIdentifierParserRuleCall_1_0 = (RuleCall)cIdAssignment_1.eContents().get(0);
 		private final Group cGroup_2 = (Group)cGroup.eContents().get(2);
-		private final Keyword cColonKeyword_2_0 = (Keyword)cGroup_2.eContents().get(0);
-		private final Assignment cTypeAssignment_2_1 = (Assignment)cGroup_2.eContents().get(1);
-		private final RuleCall cTypeTypeParserRuleCall_2_1_0 = (RuleCall)cTypeAssignment_2_1.eContents().get(0);
+		private final Keyword cCommaKeyword_2_0 = (Keyword)cGroup_2.eContents().get(0);
+		private final Assignment cIdAssignment_2_1 = (Assignment)cGroup_2.eContents().get(1);
+		private final RuleCall cIdIdentifierParserRuleCall_2_1_0 = (RuleCall)cIdAssignment_2_1.eContents().get(0);
 		private final Group cGroup_3 = (Group)cGroup.eContents().get(3);
 		private final Keyword cEqualsSignKeyword_3_0 = (Keyword)cGroup_3.eContents().get(0);
 		private final Assignment cInitAssignment_3_1 = (Assignment)cGroup_3.eContents().get(1);
 		private final RuleCall cInitExpressionParserRuleCall_3_1_0 = (RuleCall)cInitAssignment_3_1.eContents().get(0);
 		
 		//Declaration:
-		//	id+=Identifier ("," id+=Identifier)* (":" type=Type)? ("=" init=Expression)?;
+		//	type=Type? id+=Identifier ("," id+=Identifier)* ("=" init=Expression)?;
 		public ParserRule getRule() { return rule; }
 
-		//id+=Identifier ("," id+=Identifier)* (":" type=Type)? ("=" init=Expression)?
+		//type=Type? id+=Identifier ("," id+=Identifier)* ("=" init=Expression)?
 		public Group getGroup() { return cGroup; }
 
-		//id+=Identifier
-		public Assignment getIdAssignment_0() { return cIdAssignment_0; }
-
-		//Identifier
-		public RuleCall getIdIdentifierParserRuleCall_0_0() { return cIdIdentifierParserRuleCall_0_0; }
-
-		//("," id+=Identifier)*
-		public Group getGroup_1() { return cGroup_1; }
-
-		//","
-		public Keyword getCommaKeyword_1_0() { return cCommaKeyword_1_0; }
-
-		//id+=Identifier
-		public Assignment getIdAssignment_1_1() { return cIdAssignment_1_1; }
-
-		//Identifier
-		public RuleCall getIdIdentifierParserRuleCall_1_1_0() { return cIdIdentifierParserRuleCall_1_1_0; }
-
-		//(":" type=Type)?
-		public Group getGroup_2() { return cGroup_2; }
-
-		//":"
-		public Keyword getColonKeyword_2_0() { return cColonKeyword_2_0; }
-
-		//type=Type
-		public Assignment getTypeAssignment_2_1() { return cTypeAssignment_2_1; }
+		//type=Type?
+		public Assignment getTypeAssignment_0() { return cTypeAssignment_0; }
 
 		//Type
-		public RuleCall getTypeTypeParserRuleCall_2_1_0() { return cTypeTypeParserRuleCall_2_1_0; }
+		public RuleCall getTypeTypeParserRuleCall_0_0() { return cTypeTypeParserRuleCall_0_0; }
+
+		//id+=Identifier
+		public Assignment getIdAssignment_1() { return cIdAssignment_1; }
+
+		//Identifier
+		public RuleCall getIdIdentifierParserRuleCall_1_0() { return cIdIdentifierParserRuleCall_1_0; }
+
+		//("," id+=Identifier)*
+		public Group getGroup_2() { return cGroup_2; }
+
+		//","
+		public Keyword getCommaKeyword_2_0() { return cCommaKeyword_2_0; }
+
+		//id+=Identifier
+		public Assignment getIdAssignment_2_1() { return cIdAssignment_2_1; }
+
+		//Identifier
+		public RuleCall getIdIdentifierParserRuleCall_2_1_0() { return cIdIdentifierParserRuleCall_2_1_0; }
 
 		//("=" init=Expression)?
 		public Group getGroup_3() { return cGroup_3; }
@@ -3739,9 +3728,8 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 	////#< Compounds
 	// Value:
 	//	nValue=NumValue //#> Compounds
-	// //| ('refby' '(' rValue=Identifier ')')
-	// | sValue=STRING | qValue=QualifiedName |
-	//	bValue=("true" | "false") | nullValue="null";
+	// | sValue=STRING | qValue=QualifiedName | bValue=("true" | "false") |
+	//	nullValue="null";
 	public ValueElements getValueAccess() {
 		return (pValue != null) ? pValue : (pValue = new ValueElements());
 	}
@@ -3858,7 +3846,7 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//Export:
-	//	"export" names+=Identifier ("," names+=Identifier)* ";";
+	//	"export" names+=QualifiedName ("," names+=QualifiedName)* ";";
 	public ExportElements getExportAccess() {
 		return (pExport != null) ? pExport : (pExport = new ExportElements());
 	}
@@ -4271,7 +4259,7 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//Declaration:
-	//	id+=Identifier ("," id+=Identifier)* (":" type=Type)? ("=" init=Expression)?;
+	//	type=Type? id+=Identifier ("," id+=Identifier)* ("=" init=Expression)?;
 	public DeclarationElements getDeclarationAccess() {
 		return (pDeclaration != null) ? pDeclaration : (pDeclaration = new DeclarationElements());
 	}

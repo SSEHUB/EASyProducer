@@ -6,6 +6,7 @@ import java.util.List;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.QualifiedName;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 
@@ -29,8 +30,10 @@ public class JavaClass extends JavaParentFragmentArtifact {
     /**
      * Default Constructor.
      * 
-     * @param typeDeclaration the tyoe declaration representing the class
-     * @param parent the parent artifact
+     * @param typeDeclaration
+     *            the tyoe declaration representing the class
+     * @param parent
+     *            the parent artifact
      */
     public JavaClass(TypeDeclaration typeDeclaration, IJavaParent parent) {
         super(parent);
@@ -142,5 +145,21 @@ public class JavaClass extends JavaParentFragmentArtifact {
         });
         return new ArraySet<JavaAttribute>(list.toArray(new JavaAttribute[list.size()]), JavaAttribute.class);
     }
-    
+
+    /**
+     * Returns all qualified names of this class.
+     * 
+     * @return the qualified names
+     */
+    public Set<JavaQualifiedName> qualifiedNames() {
+        final List<JavaQualifiedName> list = new ArrayList<JavaQualifiedName>();
+        typeDeclaration.accept(new ASTVisitor() {
+            public boolean visit(QualifiedName node) {
+                list.add(new JavaQualifiedName(node, JavaClass.this));
+                return false;
+            }
+        });
+        return new ArraySet<JavaQualifiedName>(list.toArray(new JavaQualifiedName[list.size()]),
+                JavaQualifiedName.class);
+    }
 }

@@ -92,7 +92,8 @@ public class EASyPersistencer implements PersistenceConstants {
         String projectID = model.getEntity(0).getAttributes().get(PTN_UUID);
         String projectname = project.getName();
         plp = (PLPInfo) SPLsManager.INSTANCE.getPLP(projectID);
-        if (plp == null) {
+        
+        if (plp == null || plp.isPreliminary()) {
             File location = project.getLocation();
             ProjectContainer varModel = project.getProject();
             plp = new ProductLineProject(projectID, projectname, varModel, location, project.getMainBuildScript());
@@ -137,7 +138,6 @@ public class EASyPersistencer implements PersistenceConstants {
                 // failed resolving the configuration, bad luck
             }
         }
-        
         return plp;
     }
 
@@ -230,7 +230,14 @@ public class EASyPersistencer implements PersistenceConstants {
             } else {
                 location = null;
             }
-            relatives.add(new PLPInfo(id, memberName, version, location));
+            // before: just new PLPInfo - does not support predecessors across 1 hierarchy level
+            // TODO SE: check whether other attributes must be set anyway
+            PLPInfo info = SPLsManager.INSTANCE.getPLP(id);
+            if (null == info) {
+                info = new PLPInfo(id, memberName, version, location);
+                SPLsManager.INSTANCE.addPLP(info);
+            }
+            relatives.add(info);
         }
         
         return relatives;

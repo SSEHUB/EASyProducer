@@ -46,16 +46,43 @@ public class Rule extends RuleBlock implements IResolvableOperation<VariableDecl
     private VariableDeclaration[] rhsMatchVars;
 
     /**
+     * Create a new rule with the given name. As no descriptor is given,
+     * call {@link #setDescriptorInformation(RuleDescriptor)} somewhen before using this rule.
+     * 
+     * @param name The name of the rule.
+     * @param parent the parent rule
+     * @param isProtected if the visibility of the rule is actually restricted 
+     * @param parameters the parameters of this rule (may be <b>null</b>)
+     */
+    public Rule(String name, boolean isProtected, VariableDeclaration[] parameters, Script parent) {
+        super(name, null);
+        this.isProtected = isProtected;
+        this.parent = parent;
+        this.parameters = parameters;
+    }
+    
+    /**
      * Create a new rule with the given name.
      * 
      * @param name The name of the rule.
+     * @param isProtected if the visibility of the rule is actually restricted 
+     * @param parameters the parameters of this rule (may be <b>null</b>)
      * @param descriptor the descriptor
      * @param parent the parent rule
-     * @param isProtected if the visibility of the rule is actually restricted 
+     * @see #setDescriptorInformation(RuleDescriptor)
      */
-    public Rule(String name, RuleDescriptor descriptor, boolean isProtected, Script parent) {
-        super(name, descriptor.getBody());
-        this.parameters = descriptor.getParameters();
+    public Rule(String name, boolean isProtected, VariableDeclaration[] parameters, RuleDescriptor descriptor, 
+        Script parent) {
+        this(name, isProtected, parameters, parent);
+        setDescriptorInformation(descriptor);
+    }
+    
+    /**
+     * Sets the information from the given rule <code>descriptor</code>.
+     * 
+     * @param descriptor the descriptor to be used
+     */
+    public void setDescriptorInformation(RuleDescriptor descriptor) {
         this.lhsRuleMatches = descriptor.getRuleMatches(Side.LHS);
         this.lhsRuleCalls = descriptor.getRuleCalls(Side.LHS);
         this.rhsRuleMatches = descriptor.getRuleMatches(Side.RHS);
@@ -64,8 +91,6 @@ public class Rule extends RuleBlock implements IResolvableOperation<VariableDecl
         this.rhsVars = descriptor.getVariables(Side.RHS);
         //this.lhsMatchVars = descriptor.getMatchVariables(Side.LHS);
         this.rhsMatchVars = descriptor.getMatchVariables(Side.RHS);
-        this.isProtected = isProtected;
-        this.parent = parent;
     }
     
     /**
@@ -340,6 +365,11 @@ public class Rule extends RuleBlock implements IResolvableOperation<VariableDecl
     public boolean isStatic() {
         return false;
     }
+    
+    @Override
+    public boolean isFirstParameterOperand() {
+        return false;
+    }
 
     @Override
     public IMetaType getDeclaringType() {
@@ -368,6 +398,11 @@ public class Rule extends RuleBlock implements IResolvableOperation<VariableDecl
             call.inferType(); // resolve the call
             append(new ExpressionStatement(call));
         }
+    }
+
+    @Override
+    public boolean isPlaceholder() {
+        return false;
     }
 
 }

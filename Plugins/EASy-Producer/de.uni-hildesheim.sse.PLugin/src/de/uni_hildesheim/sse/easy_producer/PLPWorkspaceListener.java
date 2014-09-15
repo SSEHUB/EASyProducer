@@ -30,18 +30,37 @@ public class PLPWorkspaceListener implements IResourceChangeListener {
     private static final Set<IProject> DISABLED = new HashSet<IProject>();
     private static final EASyLogger LOGGER
         = EASyLoggerFactory.INSTANCE.getLogger(PLPWorkspaceListener.class, Activator.PLUGIN_ID);
+    private static PLPWorkspaceListener instance;
     
     /**
-     * Sole constructor for this class, registers itself to the workspace.<br>
-     * Instantiation should take part inside an activator.
+     * Sole constructor for this class.
      */
-    PLPWorkspaceListener() {
-        // Which event types should be observed
-        int eventMask = IResourceChangeEvent.POST_CHANGE
-            | IResourceChangeEvent.PRE_CLOSE
-            | IResourceChangeEvent.PRE_DELETE;
-        
-        ResourcesPlugin.getWorkspace().addResourceChangeListener(this, eventMask);
+    private PLPWorkspaceListener() {
+    }
+    
+    /**
+     * Registers the default instance. Shall be called from an activator.
+     */
+    public static void register() {
+        if (null == instance) {
+            instance = new PLPWorkspaceListener();
+            // Which event types should be observed
+            int eventMask = IResourceChangeEvent.POST_CHANGE
+                | IResourceChangeEvent.PRE_CLOSE
+                | IResourceChangeEvent.PRE_DELETE;
+            
+            ResourcesPlugin.getWorkspace().addResourceChangeListener(instance, eventMask);
+        }
+    }
+
+    /**
+     * Unregisters the default instance.
+     */
+    public static void unregister() {
+        if (null != instance) {
+            ResourcesPlugin.getWorkspace().removeResourceChangeListener(instance);
+            instance = null;
+        }
     }
 
     /**

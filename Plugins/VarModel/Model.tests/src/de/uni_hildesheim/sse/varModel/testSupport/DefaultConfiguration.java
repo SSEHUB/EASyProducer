@@ -123,6 +123,7 @@ public class DefaultConfiguration {
         project.add(pBooleanUF);
         enm = new de.uni_hildesheim.sse.model.varModel.datatypes.Enum("pEnumeration", impProject, 
             "val1", "val2", "val3");
+        impProject.add(enm);
         pEnum = new DecisionVariableDeclaration("pEnum", enm, project);
         project.add(pEnum);
         
@@ -131,6 +132,7 @@ public class DefaultConfiguration {
         comp.add(pcInt);
         pcString = new DecisionVariableDeclaration("pcString", StringType.TYPE, comp);
         comp.add(pcString);
+        project.add(comp);
         pComp = new DecisionVariableDeclaration("pComp", comp, project);
         project.add(pComp);
         seq = new Sequence("pCompoundSequence", comp, project);

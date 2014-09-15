@@ -37,7 +37,7 @@ public class Activator extends Plugin {
          * plug-in was loaded and started.
          */
         if (null != ResourcesMgmt.INSTANCE.getWorkspace()) {
-            new PLPWorkspaceListener();
+            PLPWorkspaceListener.register();
         }
     }
 

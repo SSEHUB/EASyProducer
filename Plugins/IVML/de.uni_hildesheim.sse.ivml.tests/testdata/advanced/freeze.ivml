@@ -7,11 +7,13 @@ project freezes {
 
     Integer i;
     String s;
+    c c0;
     freeze {
         i;
         s;
     }
     freeze {
-        c.j;
+        c0.j;
+        freezes;
     } but (c*)
 }

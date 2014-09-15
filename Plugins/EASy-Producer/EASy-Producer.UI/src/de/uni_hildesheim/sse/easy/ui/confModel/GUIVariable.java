@@ -2,6 +2,7 @@ package de.uni_hildesheim.sse.easy.ui.confModel;
 
 import org.eclipse.jface.viewers.CellEditor;
 
+import de.uni_hildesheim.sse.easy.ui.productline_editor.DisplayNameProvider;
 import de.uni_hildesheim.sse.easy.ui.productline_editor.EasyProducerDialog;
 import de.uni_hildesheim.sse.model.confModel.AssignmentState;
 import de.uni_hildesheim.sse.model.confModel.ConfigurationException;
@@ -9,6 +10,8 @@ import de.uni_hildesheim.sse.model.confModel.IAssignmentState;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
+import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
+import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 import de.uni_hildesheim.sse.model.varModel.values.NullValue;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
 import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
@@ -20,11 +23,6 @@ import de.uni_hildesheim.sse.persistency.StringProvider;
  *
  */
 public abstract class GUIVariable implements IGUIConfigurableElement, Comparable<GUIVariable> {
-    
-    /**
-     * Label, how {@link NullValue}s should be displayed in GUI.
-     */
-    public static final String NULL_VALUE_LABEL = "[NULL]";
     
     private GUIConfiguration parentConfig;
     private IDecisionVariable variable;
@@ -108,6 +106,14 @@ public abstract class GUIVariable implements IGUIConfigurableElement, Comparable
      * @return {@link CellEditor} to configure the enclosed {@link IDecisionVariable}
      */
     public abstract CellEditor getCellEditor();
+    
+    /**
+     * Returns the (non-cell) editor for this variable. The editor shall be ready to use,
+     * i.e., properly initialized.
+     * 
+     * @return the editor, may be <b>null</b> if the variable shall not be displayed / being edited
+     */
+    public abstract GUIEditor getEditor();
     
     /**
      * Returns the value of the given {@link IDecisionVariable} so that it can be used as return value for
@@ -296,6 +302,23 @@ public abstract class GUIVariable implements IGUIConfigurableElement, Comparable
     }
     
     /**
+     * Unfreezes the current variable.
+     * 
+     * @param state the state after unfreezing (do not use {@link AssignmentState#FROZEN})
+     */
+    public void unfreeze(IAssignmentState state) {
+        if (isFrozen()) {
+            // Add value to history if variable is toplevel
+            getTopLevelParent().history.assignValue(getTopLevelParent().getVariable());
+            getVariable().unfreeze(state);
+            // Inform listeners only if state has been changed.
+            if (!isFrozen()) {
+                getConfiguration().changed(this);
+            }
+        }
+    }
+    
+    /**
      * Returns a tooltip which can be displayed inside the GUI.
      * @return The datatype of the variable (must not be <tt>null</tt>).
      */
@@ -409,4 +432,24 @@ public abstract class GUIVariable implements IGUIConfigurableElement, Comparable
         }
         parentConfig.changed(this);
     }
+    
+    /**
+     * Returns the label for an IVML null value to be used in this GUI variable.
+     * 
+     * @return the label for an IVML null value
+     */
+    public String getNullLabel() {
+        return DisplayNameProvider.getInstance().getNullName(variable);
+    }
+    
+    /**
+     * Returns the type of the underlying IVML variable. In case of derived variables, it returns the innermost type.
+     * 
+     * @return the type
+     */
+    protected IDatatype getType() {
+        // as the editor shall internally rely on the basis type
+        return DerivedDatatype.resolveToBasis(variable.getDeclaration().getType());
+    }
+    
 }

@@ -90,10 +90,12 @@ public class PLP2ProjectConverter implements PersistenceConstants {
         } catch (ConfigurationException e) {
             configException = e;
         }
-        project.setProject(plp.getProject(), plp.getPathConfiguration());
+//        project.setProject(plp.getProject(), plp.getPathConfiguration());
+        project.setVarModel(plp.getProjectContainer());
         project.setID(plp.getProjectID());
         project.setName(plp.getProjectName());
-        project.setScript(plp.getBuildScript(), plp.getPathConfiguration());
+//        project.setScript(plp.getBuildScript(), plp.getPathConfiguration());
+        project.setScript(plp.getScriptContainer());
         
         if (null != configException) {
             throw new PersistenceException(configException.getLocalizedMessage());

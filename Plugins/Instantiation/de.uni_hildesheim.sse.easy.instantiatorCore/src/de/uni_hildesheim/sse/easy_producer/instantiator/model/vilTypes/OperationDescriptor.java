@@ -2,6 +2,8 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionEvaluator;
@@ -44,6 +46,12 @@ public abstract class OperationDescriptor implements IMetaOperation {
      * We do not rely on constructors, as constructor methods simplify reflection analysis.
      */
     public static final String CONSTRUCTOR_NAME = "create";
+    
+    /**
+     * Defines a constant unmodifiable list for empty parameters.
+     */
+    public static final List<TypeDescriptor<? extends IVilType>> EMPTY_PARAMETER 
+        = Collections.unmodifiableList(new ArrayList<TypeDescriptor<? extends IVilType>>(0));
 
     private String name; // only used if alias
     private boolean isConstructor = false;
@@ -65,7 +73,8 @@ public abstract class OperationDescriptor implements IMetaOperation {
      * @param name the alias name (may be <b>null</b> if the original name of <code>method</code> shall be used)
      * @param isConstructor whether the operation is a constructor
      */
-    OperationDescriptor(TypeDescriptor<? extends IVilType> declaringType, String name, boolean isConstructor) {
+    protected OperationDescriptor(TypeDescriptor<? extends IVilType> declaringType, String name, 
+        boolean isConstructor) {
         this.declaringType = declaringType;
         this.name = name;
         this.isConstructor = isConstructor;
@@ -224,15 +233,27 @@ public abstract class OperationDescriptor implements IMetaOperation {
      * 
      * @return the signature of the method
      */
-    public abstract String getSignature();
+    public String getSignature() {
+        StringBuilder tmp = new StringBuilder();
+        if (isConstructor()) {
+            tmp.append("new ");
+            tmp.append(getDeclaringTypeName());
+            tmp.append(" ");
+        } else {
+            tmp.append(getName());
+        }
+        tmp.append("(");
+        int pCount = getParameterCount();
+        for (int p = 0; p < pCount; p++) {
+            tmp.append(getParameterType(p).getVilName());
+            if (p < pCount - 1) {
+                tmp.append(",");
+            }
+        }
+        tmp.append(")");
+        return tmp.toString();
+    }
     
-    /**
-     * Returns whether this operation is static.
-     * 
-     * @return <code>true</code> if it is static, <code>false</code> else
-     */
-    public abstract boolean isStatic();
-
     /**
      * Returns the Java signature of the method (public for testing).
      * 

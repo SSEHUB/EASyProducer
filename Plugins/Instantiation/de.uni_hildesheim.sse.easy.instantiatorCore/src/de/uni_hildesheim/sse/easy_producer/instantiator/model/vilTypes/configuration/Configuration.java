@@ -1,10 +1,17 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactFactory;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FileArtifact;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.Path;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArraySequence;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
@@ -13,18 +20,24 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationMeta;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Sequence;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.NameRegExFilter.DataType;
-import de.uni_hildesheim.sse.model.confModel.AssignmentState;
+import de.uni_hildesheim.sse.model.confModel.ConfigurationException;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.IvmlException;
 import de.uni_hildesheim.sse.model.varModel.ModelQuery;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
+import de.uni_hildesheim.sse.persistency.IVMLWriter;
+import de.uni_hildesheim.sse.reasoning.core.frontend.ReasonerFrontend;
+import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerConfiguration;
+import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasoningResult;
+import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
 
 /**
  * Represents a variability model and its configuration in VIL. This class provides
  * specific methods to filter and select variables, attributes etc. Basically, the idea
- * of this configuration class is to contain only FROZEN and configured elements. It is currently
+ * of this configuration class is to contain a filtered set of configurable elements (see {@link IVariableFilter}, 
+ * typically one that enables only frozen variables). It is currently
  * unsure how much access we actually need to the variable and attribute declarations.
  * Shifted this into {@link Utils}.
  * 
@@ -33,18 +46,35 @@ import de.uni_hildesheim.sse.model.varModel.values.Value;
 public class Configuration extends IvmlElement implements IStringValueProvider {
 
     private Script rootScript;
+    private Project project; 
     private de.uni_hildesheim.sse.model.confModel.Configuration configuration;
     private DecisionVariable[] variables;
     private Attribute[] attributes;
     private Map<String, IvmlElement> nameMap = new HashMap<String, IvmlElement>();
+    private IVariableFilter filter;
+    private boolean isValid = true;
+
+    /**
+     * Creates a new configuration instance from an EASy configuration based
+     * on frozen variables.
+     * 
+     * @param configuration the IVML configuration instance to be wrapped
+     */
+    public Configuration(de.uni_hildesheim.sse.model.confModel.Configuration configuration) {
+        this(configuration, FrozenVariablesFilter.INSTANCE);
+    }
     
     /**
      * Creates a new configuration instance from an EASy configuration.
      * 
      * @param configuration the IVML configuration instance to be wrapped
+     * @param filter the external variable filter, e.g., for frozen variables
      */
-    public Configuration(de.uni_hildesheim.sse.model.confModel.Configuration configuration) {
+    public Configuration(de.uni_hildesheim.sse.model.confModel.Configuration configuration, 
+        IVariableFilter filter) {
         this.configuration = configuration;
+        this.project = configuration.getProject();
+        this.filter = filter;
     }
 
     /**
@@ -52,21 +82,46 @@ public class Configuration extends IvmlElement implements IStringValueProvider {
      * 
      * @param configuration the IVML configuration instance to be wrapped
      * @param variables the variables representing the actual contents of this configuration
+     * @param filter the external variable filter
      */
-    Configuration(de.uni_hildesheim.sse.model.confModel.Configuration configuration, DecisionVariable[] variables) {
+    Configuration(de.uni_hildesheim.sse.model.confModel.Configuration configuration, DecisionVariable[] variables, 
+        IVariableFilter filter) {
         this.configuration = configuration;
         this.variables = variables;
+        this.project = configuration.getProject();
+        this.filter = filter;
         index(variables);
     }
 
     /**
-     * Creates a projected configuration.
+     * Creates a projected configuration (without explicit project).
      * 
      * @param configuration the base configuration
      * @param variablesFilter the filter to apply to variables
+     * @param filter the external variable filter
      */
-    private Configuration(Configuration configuration, IConfigurationFilter variablesFilter) {
+    private Configuration(Configuration configuration, IConfigurationFilter variablesFilter, IVariableFilter filter) {
+        this(configuration, null, variablesFilter, filter);
+    }
+    
+    /**
+     * Creates a projected configuration.
+     * 
+     * @param configuration the base configuration
+     * @param project the top-level project used for the projection (may be <b>null</b>)
+     * @param variablesFilter the filter to apply to variables
+     * @param filter the external variable filter
+     */
+    private Configuration(Configuration configuration, Project project, IConfigurationFilter variablesFilter, 
+        IVariableFilter filter) {
+        this.isValid = configuration.isValid;
+        this.filter = filter;
         this.configuration = configuration.getConfiguration();
+        if (null == project) {
+            this.project = this.configuration.getProject();
+        } else {
+            this.project = project;
+        }
         configuration.initializeNested();
         if (null != variablesFilter && variablesFilter != NoFilter.INSTANCE) {
             List<DecisionVariable> tmp = new ArrayList<DecisionVariable>();
@@ -74,6 +129,9 @@ public class Configuration extends IvmlElement implements IStringValueProvider {
                 DecisionVariable var = configuration.variables[v];
                 if (variablesFilter.include(var)) {
                     tmp.add(var);
+                    if (project.getName().equals(var.getDecisionVariable().getDeclaration().getNameSpace())) {
+                        nameMap.put(var.getName(), var);
+                    }
                     nameMap.put(var.getQualifiedName(), var);
                 }
             }
@@ -116,7 +174,7 @@ public class Configuration extends IvmlElement implements IStringValueProvider {
         // (re) initializes self and leaves parent untouched where instances may be reused
         if (null == variables) {
             Project project = configuration.getProject();
-            VariableCollector collector = new VariableCollector(configuration);
+            VariableCollector collector = new VariableCollector(configuration, filter);
             project.accept(collector);
             variables = collector.getCollectedVariables();
             index(variables);
@@ -132,8 +190,8 @@ public class Configuration extends IvmlElement implements IStringValueProvider {
             List<Attribute> tmp = new ArrayList<Attribute>();
             for (int a = 0; a < project.getAttributesCount(); a++) {
                 IDecisionVariable var = configuration.getDecision(project.getAttribute(a));
-                if (null != var && AssignmentState.FROZEN == var.getState()) {
-                    Attribute attr = new Attribute(var);
+                if (null != var && filter.isEnabled(var)) {
+                    Attribute attr = new Attribute(var, filter);
                     tmp.add(attr);
                     nameMap.put(attr.getQualifiedName(), attr);
                 }
@@ -160,12 +218,12 @@ public class Configuration extends IvmlElement implements IStringValueProvider {
      * 
      * @param namePattern a regular name pattern (or just the full name) all variables
      *   in the resulting configuration must match
-     * @return the projected configuration (<b>this</b> at the moment)
+     * @return the projected configuration
      * @throws ArtifactException in case of an illformed name pattern
      */
     public Configuration selectByName(String namePattern) throws ArtifactException {
         initializeNested();
-        return new Configuration(this, new NameRegExFilter(namePattern, DataType.NAME));
+        return new Configuration(this, new NameRegExFilter(namePattern, DataType.NAME), filter);
     }
 
     /**
@@ -174,12 +232,12 @@ public class Configuration extends IvmlElement implements IStringValueProvider {
      * 
      * @param typePattern a regular pattern (or just the full name) all variables
      *   in the resulting configuration must match
-     * @return the projected configuration (<b>this</b> at the moment)
+     * @return the projected configuration
      * @throws ArtifactException in case of an illformed name pattern
      */
     public Configuration selectByType(String typePattern) throws ArtifactException {
         initializeNested();
-        return new Configuration(this, new NameRegExFilter(typePattern, DataType.TYPE));
+        return new Configuration(this, new NameRegExFilter(typePattern, DataType.TYPE), filter);
     }
 
     /**
@@ -188,32 +246,59 @@ public class Configuration extends IvmlElement implements IStringValueProvider {
      * 
      * @param namePattern a regular name pattern (or just the full name) all applied
      *   attributes of all variables in the resulting configuration must match
-     * @return the projected configuration (<b>this</b> at the moment)
+     * @return the projected configuration
      * @throws ArtifactException in case of an illformed name pattern
      */
     public Configuration selectByAttribute(String namePattern) throws ArtifactException {
         initializeAttributes();
-        return new Configuration(this, new NameRegExFilter(namePattern, DataType.ATTRIBUTE));
+        return new Configuration(this, new NameRegExFilter(namePattern, DataType.ATTRIBUTE), filter);
     }
 
+    /**
+     * Returns a projected version of this configuration according to variables defined for 
+     * the specified project.
+     * 
+     * @param name the name of the project
+     * @param considerImports whether imports of projects shall be considered
+     * @return the projected configuration
+     */
+    public Configuration selectByProject(String name, boolean considerImports) {
+        Project project = ModelQuery.findProject(configuration.getProject(), name);
+        if (null == project) {
+            project = new Project(name); // tolerance, but no contents
+        }
+        return new Configuration(this, project, new ProjectFilter(project, considerImports), filter);
+    }
+    
+    /**
+     * Returns a projected version of this configuration according to variables defined for 
+     * the specified project. Imports are considered by default.
+     * 
+     * @param name the name of the project
+     * @return the projected configuration
+     */
+    public Configuration selectByProject(String name) {
+        return selectByProject(name, true);
+    }
+    
     /**
      * Returns a projected version of this configuration according to the applied
      * attributes.
      * 
      * @param name the name of the attribute (may be <b>null</b>)
      * @param value the value as an IVML identifier (may be <b>null</b>)
-     * @return the projected configuration (<b>this</b> at the moment)
+     * @return the projected configuration
      * @throws ArtifactException in case of an illformed name pattern
      */
     public Configuration selectByAttribute(String name, Object value) throws ArtifactException {
         initializeAttributes();
         Configuration result;
         if (null == name) {
-            result = new Configuration(this, AllFilter.INSTANCE);
+            result = new Configuration(this, AllFilter.INSTANCE, filter);
         } else {
             result = new Configuration(this, 
                 new NameRegExFilter(name, DataType.ATTRIBUTE, 
-                    new ValueFilter(value, Attribute.class)));
+                    new ValueFilter(value, Attribute.class)), filter);
         }
         return result;
     }
@@ -235,22 +320,22 @@ public class Configuration extends IvmlElement implements IStringValueProvider {
 
     @Override
     public String getName() {
-        return configuration.getProject().getName();
+        return project.getName();
     }
 
     @Override
     public String getQualifiedName() {
-        return configuration.getProject().getQualifiedName();
+        return project.getQualifiedName();
     }
 
     @Override
     public String getType() {
-        return configuration.getProject().getType().getName();
+        return project.getType().getName();
     }
 
     @Override
     public String getQualifiedType() {
-        return configuration.getProject().getType().getQualifiedName();
+        return project.getType().getQualifiedName();
     }
 
     /**
@@ -404,6 +489,136 @@ public class Configuration extends IvmlElement implements IStringValueProvider {
     @Invisible
     public void setRootScript(Script rootScript) {
         this.rootScript = rootScript;
+    }
+
+    /**
+     * Stores the underlying (unprojected) configuration to <code>path</code>.
+     * 
+     * @param path the target path
+     * @return the created/modified file artifact
+     * @throws ArtifactException in case that storing the configuration fails
+     */
+    public FileArtifact store(Path path) throws ArtifactException {
+        return store(path, true);
+    }
+
+    /**
+     * Stores the underlying (unprojected) configuration to <code>path</code>.
+     * 
+     * @param path the target path
+     * @param userValuesOnly store only user defined values (<code>true</code>) or the full 
+     *     configuration (<code>false</code>)
+     * @return the created/modified file artifact
+     * @throws ArtifactException in case that storing the configuration fails
+     */
+    public FileArtifact store(Path path, boolean userValuesOnly) throws ArtifactException {
+        File target = path.getAbsolutePath();
+        FileWriter out = null;
+        try {
+            Project project = configuration.toProject(true, userValuesOnly);
+            out = new FileWriter(target);
+            IVMLWriter writer = new IVMLWriter(out);
+            project.accept(writer);
+            IVMLWriter.releaseInstance(writer);
+            out.close();
+        } catch (ConfigurationException e) {
+            throw new ArtifactException(e, ArtifactException.ID_RUNTIME_EXECUTION);
+        } catch (IOException e) {
+            if (null != out) {
+                try {
+                    out.close();
+                } catch (IOException e1) {
+                }
+            }
+            throw new ArtifactException(e, ArtifactException.ID_IO);
+        }
+        return ArtifactFactory.createArtifact(FileArtifact.class, target, null);
+    }
+
+    // --------------------------------- DSPL functions ------------------------------------------
+    
+    /**
+     * Re-reasons on the variable settings of this configuration. This operation is intended
+     * for runtime reasoning, in particular of changed variables only.
+     * 
+     * @return a projection of this configuration containing the variables changed by reasoning or 
+     *   <b>this</b> if the reasoner does not provide information on affected variables
+     */
+    public Configuration reason() {
+        Configuration result;
+        ReasoningResult tmp = ReasonerFrontend.getInstance().propagate(project, configuration, 
+            new ReasonerConfiguration(), ProgressObserver.NO_OBSERVER);
+        if (tmp.providesInformationOnAffectedVariables()) {
+            int aCount = tmp.getAffectedVariablesCount();
+            final HashSet<String> affected = new HashSet<String>();
+            for (int a = 0; a < aCount; a++) {
+                affected.add(tmp.getAffectedVariable(a).getDeclaration().getQualifiedName());
+            }
+            IConfigurationFilter reasoningFilter = new IConfigurationFilter() {
+                
+                @Override
+                public boolean include(IvmlElement element) {
+                    return affected.contains(element.getQualifiedName());
+                }
+            };
+            result = new Configuration(this, reasoningFilter, filter);
+            result.isValid = !tmp.hasConflict();
+        } else {
+            result = this;
+        }
+        return result;
+    }
+    
+    /**
+     * Projects this configuration to the frozen variables. This method is intended to support runtime
+     * variability, i.e., to explicitly separate between pre-runtime instantiation and runtime instantiation.
+     * Please note that a configuration projected to frozen variables (in particular in pre-runtime instantiation) will
+     * remain frozen.
+     * 
+     * @return a projection of this configuration containing frozen variables only
+     */
+    public Configuration selectFrozen() {
+        Configuration result;
+        if (filter == FrozenVariablesFilter.INSTANCE) {
+            result = this;
+        } else {
+            result = new Configuration(configuration, FrozenVariablesFilter.INSTANCE);
+            result.isValid = isValid;
+        }
+        return result;
+    }
+
+    /**
+     * Returns a projection of this configuration returning all variables, including non-frozen
+     * runtime variables. Please note that a configuration projected to frozen variables (in particular in 
+     * pre-runtime instantiation) will remain frozen.
+     * 
+     * @return the projected configuration
+     */
+    public Configuration selectAll() {
+        return this;
+    }
+    
+    /**
+     * Copies this configuration into a new configuration instance. This method is intended for instantiating runtime
+     * variabilities.
+     * 
+     * @return a copy of the configuration
+     */
+    public Configuration copy() {
+        Configuration result = new Configuration(
+            new de.uni_hildesheim.sse.model.confModel.Configuration(configuration), filter);
+        result.isValid = isValid;
+        return result;
+    }
+    
+    /**
+     * Returns whether this configuration is valid, in particular after {@link #reason()}.
+     * 
+     * @return <code>true</code> if this configuration is valid, <code>false</code> else
+     */
+    public boolean isValid() {
+        return isValid;
     }
 
 }

@@ -2,9 +2,10 @@ package de.uni_hildesheim.sse.buildLanguageTranslation;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
@@ -54,9 +55,6 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
     private ExpressionTranslator expressionTranslator;
     private Resolver resolver;
     
-    // a temporary model for resolving recursive calls - not nice but temporarily adding them to template fails
-    private Script recursiveResolutionModel;
-    
     /**
      * Creates a model translator.
      */
@@ -64,12 +62,6 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
         super(new ExpressionTranslator(), new Resolver(new TypeRegistry(TypeRegistry.DEFAULT)));
         expressionTranslator = getExpressionTranslator();
         resolver = getResolver();
-        //try {
-            recursiveResolutionModel = new Script("$$");
-            resolver.setRecursiveResolutionModel(recursiveResolutionModel);
-        //} catch (VilLanguageException e) {
-        //    e.printStackTrace();
-        //}
     }
     
     /**
@@ -152,8 +144,8 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
         boolean registerSuccessful, List<de.uni_hildesheim.sse.vilBuildLanguage.LanguageUnit> inProgress, 
         Imports imports) throws TranslatorException {
         int errorCount = getErrorCount();
-        VariableDeclaration[] param = resolveParameters(script.getParam());
         Advice[] advices = processAdvices(script.getAdvices(), uri);
+        VariableDeclaration[] param = resolveParameters(script.getParam());
         ModelImport<Script> parent = null;
         if (null != script.getParent()) {
             parent = getExtensionImport(script.getParent().getName(), imports, script.getParent(), 
@@ -229,46 +221,34 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
      * Processes all rules considering dependencies and terminates with
      * an error if not all can be resolved.
      * 
-     * @param script the ECore instance representing the script
-     * @param result the resulting instance being created
+     * @param langUnit the ECore instance representing the script / language unit
+     * @param script the resulting instance being created
      */
-    private void processRules(de.uni_hildesheim.sse.vilBuildLanguage.LanguageUnit script, Script result) {
-        List<de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration> decls = select(
-            script.getContents().getElements(), de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration.class);
-        int count;
-        do {
-            count = decls.size();
-            processRules(decls, result, false);
-            if (count == decls.size()) {
-                break;
-            }
-        } while (count > 0);
-        if (decls.size() > 0) {
-            processRules(decls, result, true);
-        }
-    }
-
-    /**
-     * Processes a set of rules.
-     * 
-     * @param decls the declarations to be processed (successfully processed declarations will be removed, may be 
-     *   modified as a side effect)
-     * @param script the result instance successfully created instances will be added to
-     * @param force if <code>true</code> a failing variable creation will be recorded as an error, 
-     *   <code>false</code> failing creations will be ignored
-     */
-    private void processRules(List<de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration> decls, 
-        Script script, boolean force) {
-        Iterator<de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration> iter = decls.iterator();
-        while (iter.hasNext()) {
-            de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration decl = iter.next();
+    private void processRules(de.uni_hildesheim.sse.vilBuildLanguage.LanguageUnit langUnit, Script script) {
+        List<RuleDeclaration> decls = select(langUnit.getContents().getElements(), RuleDeclaration.class);
+        Map<String, RuleInfo> signatures = new HashMap<String, RuleInfo>();
+        for (int d = 0; d < decls.size(); d++) {
             try {
-                script.addRule(processRule(decl, script));
-                iter.remove();
-            } catch (TranslatorException e) {
-                if (force) {
-                    error(e);
+                RuleDeclaration decl = decls.get(d);
+                RuleInfo info = processRule(decl, script);
+                Rule rule = info.getRule();
+                String fSig = rule.getSignature() + "[" + script.getName() + ']';
+                if (signatures.containsKey(fSig)) {
+                    error("duplicated rule definition", decl, VilBuildLanguagePackage.Literals.RULE_DECLARATION__NAME, 
+                        ErrorCodes.REDEFINITION);
+                } else {
+                    signatures.put(fSig, info);
+                    script.addRule(rule);
                 }
+            } catch (TranslatorException e) {
+                error(e);
+            }
+        }
+        for (RuleInfo info : signatures.values()) {
+            try {
+                processRuleBody(info);
+            } catch (TranslatorException e) {
+                error(e);
             }
         }
     }
@@ -300,54 +280,68 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
     /**
      * Processes a rule declaration.
      * 
-     * @param rule the ECore rule object
+     * @param ruleDecl the ECore rule object
      * @param parent the parent script
-     * @return the actual rule of the buildlanguage model
+     * @return the actual rule information object linking ECore and build language instances
      * @throws TranslatorException in case that the translation fails due to semantic reasons
+     * @see #processRuleBody(RuleInfo)
      */
-    private Rule processRule(RuleDeclaration rule, Script parent) throws TranslatorException {
-        Rule result;
+    private RuleInfo processRule(RuleDeclaration ruleDecl, Script parent) throws TranslatorException {
+        RuleInfo result;
         resolver.pushLevel();
         try {
             resolver.setContextType(Resolver.ContextType.RULE_HEADER);
             RuleDescriptor descriptor = new RuleDescriptor();
-            descriptor.setParameters(resolveParameters(rule.getParamList()));
-            resolver.add(descriptor.getParameters());
-            resolveRuleExpressions(descriptor, Side.RHS, rule.getPreconditions());
-            resolveRuleExpressions(descriptor, Side.LHS, rule.getPostcondition());
+            VariableDeclaration[] params = resolveParameters(ruleDecl.getParamList());
+            resolver.add(params);
+            resolveRuleExpressions(descriptor, Side.RHS, ruleDecl.getPreconditions());
+            resolveRuleExpressions(descriptor, Side.LHS, ruleDecl.getPostcondition());
             if (descriptor.getRuleMatchCount(Side.RHS) > 1) {
-                error("at maximum one match expression is supported on the right side", rule, 
+                error("at maximum one match expression is supported on the right side", ruleDecl, 
                     VilBuildLanguagePackage.Literals.RULE_DECLARATION__PRECONDITIONS, ErrorCodes.RULES);
             }
             if (descriptor.getRuleMatchCount(Side.LHS) > 1) {
-                warning("at maximum one match expression is supported on the left side", rule, 
+                warning("at maximum one match expression is supported on the left side", ruleDecl, 
                     VilBuildLanguagePackage.Literals.RULE_DECLARATION__POSTCONDITION, ErrorCodes.RULES);
             }
             if (descriptor.getRuleCallCount(Side.LHS) > 0) {
-                error("no rule calls are supported on the left side", rule, 
+                error("no rule calls are supported on the left side", ruleDecl, 
                     VilBuildLanguagePackage.Literals.RULE_DECLARATION__POSTCONDITION, 0);
             }
-            try {
-                descriptor.registerVariables(resolver);
-            } catch (ExpressionException e) {
-                // shall not occur as rules are resolved before
-                throw new TranslatorException(e, rule, VilBuildLanguagePackage.Literals.RULE_DECLARATION__NAME);
-            }
-            resolver.setContextType(Resolver.ContextType.RULE_BODY);
-            result = new Rule(rule.getName(), descriptor, isProtected(rule), parent);
-            recursiveResolutionModel.addRule(result);
-            try {
-                result.setBody(getExpressionTranslator().resolveBlock(rule.getBlock(), resolver));
-            } catch (TranslatorException e) {
-                error(e); // allow rule completion if only errors in body
-            }
-            recursiveResolutionModel.removeRule(result);
+            Rule rule = new Rule(ruleDecl.getName(), isProtected(ruleDecl), params, parent);
+            result = new RuleInfo(ruleDecl, rule, descriptor);
         } catch (TranslatorException e) {
             throw e;
         } finally {
             resolver.popLevel();
         }
         return result;
+    }
+    
+    /**
+     * Processes a rule body.
+     * 
+     * @param info the rule information object containing the link between the ECore and the model instance 
+     * @throws TranslatorException in case that the translation fails due to semantic reasons
+     */
+    private void processRuleBody(RuleInfo info) throws TranslatorException {
+        RuleDeclaration rDecl = info.getRuleDeclaration();
+        Rule rule = info.getRule();
+        resolver.pushLevel();
+        try {
+            resolver.setContextType(Resolver.ContextType.RULE_BODY);
+            try {
+                info.registerVariables(resolver);
+            } catch (ExpressionException e) {
+                // shall not occur as rules are resolved before
+                throw new TranslatorException(e, rDecl, VilBuildLanguagePackage.Literals.RULE_DECLARATION__NAME);
+            }
+            rule.setBody(getExpressionTranslator().resolveBlock(rDecl.getBlock(), resolver));
+        } catch (TranslatorException e) {
+            throw e;
+        } finally {
+            resolver.popLevel();
+        }
     }
     
     /**

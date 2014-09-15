@@ -11,6 +11,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.QualifiedName;
 
 import de.uni_hildesheim.sse.easy.instantiator.copy.core.IResourceMgmt;
+import de.uni_hildesheim.sse.easy_producer.PLPWorkspaceListener;
 import de.uni_hildesheim.sse.easy_producer.ProjectConstants;
 import de.uni_hildesheim.sse.easy_producer.core.mgmt.PLPInfo;
 import de.uni_hildesheim.sse.easy_producer.core.mgmt.SPLsManager;
@@ -25,6 +26,8 @@ import de.uni_hildesheim.sse.easy_producer.persistency.eclipse.EASyNature;
 public class ResourcesMgmt implements IResourceMgmt {
     
     public static final ResourcesMgmt INSTANCE = new ResourcesMgmt();
+    
+    private boolean enableBackgroundTasks = true;
     
     /**
      * Hides the default constructor for this singleton class.
@@ -56,6 +59,16 @@ public class ResourcesMgmt implements IResourceMgmt {
     @Override
     public String getConfigFolder() {
         return ProjectConstants.EASY_FILES;
+    }
+    
+    /**
+     * Enables or disables background tasks. This may be helpful in non-full EASy environments, such as the 
+     * QualiMaster configuration application. May require shutting down {@link PLPWorkspaceListener}.
+     * 
+     * @param enable <code>true</code> enables the background tasks, <code>false</code> else
+     */
+    public void enableBackgroundTasks(boolean enable) {
+        this.enableBackgroundTasks = enable;
     }
     
     /**
@@ -153,12 +166,12 @@ public class ResourcesMgmt implements IResourceMgmt {
 
     /**
      * Iterates through all EASy projects of the workspace, gets the config path and the uuid from all projects and
-     * adds them to the {@link SPLsManager}.
+     * adds them to the {@link SPLsManager}. Considers {@link #enableBackgroundTasks}.
      */
     public void findPLProjects() {
         ArrayList<IProject> plProjects = getAllPLProjects();
 
-        if (plProjects.size() > 0) {
+        if (enableBackgroundTasks && plProjects.size() > 0) {
             SPLsManager splsMngr = SPLsManager.INSTANCE;
             for (IProject plProject : plProjects) {
                 File projectPath = plProject.getLocation().toFile();
@@ -166,7 +179,7 @@ public class ResourcesMgmt implements IResourceMgmt {
                 String projectID = persitency.getProjectID();
                 PLPInfo plp = (PLPInfo) splsMngr.getPLP(projectID);
                 // Test whether the plp is already stored inside the SPLsManager
-                if (null == plp) {
+                if (null == plp || plp.isPreliminary()) {
                     /*
                      * PLP is not stored in SPLsManager: 1. read config file 2. store plp on SPLsManager
                      */

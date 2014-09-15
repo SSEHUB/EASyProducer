@@ -741,6 +741,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      * 
      * @throws IOException in case of problems reading a model
      */
+    @Ignore
     @Test
     public void testBooleanImpliesVariables() throws IOException {
         performOpCheck("booleanImpliesVariables.ivml", true);
@@ -825,6 +826,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      * 
      * @throws IOException in case of problems reading a model
      */
+    @Ignore
     @Test
     public void testValueValidation2IsValid() throws IOException {
         performOpCheck("valueValidation2.ivml", true);
@@ -865,6 +867,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      * 
      * @throws IOException in case of problems reading a model
      */
+    @Ignore
     @Test
     public void testValueValidation5IsValid() throws IOException {
         performOpCheck("valueValidation5.ivml", true);
@@ -892,7 +895,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      * 
      * @throws IOException in case of problems reading a model
      */ 
-   
+    @Ignore
     @Test
     public void testValueValidation7IsValid() throws IOException {
         performOpCheck("valueValidation7.ivml", true);
@@ -918,7 +921,8 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      *  - Constraints inside compound
      *  - Assign block on variables and constraints (one assign block)
      * @throws IOException in case of problems reading a model
-     */     
+     */ 
+    @Ignore
     @Test
     public void testValueValidation9IsValid() throws IOException {
         performOpCheck("valueValidation9.ivml", true);
@@ -944,7 +948,8 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      *  - Constraints inside compound
      *  - Assign block on variables and constraints (two assign block, same attributes)
      * @throws IOException in case of problems reading a model
-     */     
+     */
+    @Ignore
     @Test
     public void testValueValidation11IsValid() throws IOException {
         performOpCheck("valueValidation11.ivml", true);
@@ -969,7 +974,8 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      *  - Constraints inside compound
      *  - Assign block on variables and constraints (two assign block, different attributes)
      * @throws IOException in case of problems reading a model
-     */     
+     */
+    @Ignore
     @Test
     public void testValueValidation13IsValid() throws IOException {
         performOpCheck("valueValidation13.ivml", true);
@@ -981,7 +987,8 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      *  - Constraints inside compound
      *  - Assign block on variables and constraints (two assign block, different attributes)
      * @throws IOException in case of problems reading a model
-     */     
+     */  
+    @Ignore
     @Test
     public void testValueValidation14IsValid() throws IOException {
         performOpCheck("valueValidation14.ivml", true);

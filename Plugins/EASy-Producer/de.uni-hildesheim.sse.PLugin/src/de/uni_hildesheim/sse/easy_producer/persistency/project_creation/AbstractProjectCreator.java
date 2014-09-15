@@ -186,6 +186,7 @@ abstract class AbstractProjectCreator {
                 Configuration location = PersistenceUtils.getConfiguration(result.getProjectFolder());
                 ProjectContainer varModel = new ProjectContainer(result.getVarModel(), location);
                 ScriptContainer instantiationModel = new ScriptContainer(mainBuildScript, location);
+                instantiationModel.setEdited(true);
                 
                 newPLP = new ProductLineProject(projectID, projectName, varModel, result.getProjectFolder(),
                     instantiationModel);

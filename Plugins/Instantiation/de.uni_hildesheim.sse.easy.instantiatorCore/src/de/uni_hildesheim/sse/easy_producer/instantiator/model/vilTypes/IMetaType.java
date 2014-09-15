@@ -69,4 +69,41 @@ public interface IMetaType {
      * @return the type registry
      */
     public TypeRegistry getTypeRegistry();
+    
+    /**
+     * Returns whether this type enables dynamic dispatch of operations.
+     * 
+     * @return <code>true</code> if it enables dynamic dispatch, <code>false</code> else
+     */
+    public boolean enableDynamicDispatch();
+    
+    /**
+     * Returns whether this type is valid or whether it is a placeholder type in case that the original
+     * type cannot be resolved but the script shall remain executable.
+     * 
+     * @return <code>true</code> if this type is a placeholder, <code>false</code> else
+     */
+    public boolean isPlaceholder();
+
+    /**
+     * Adds a placeholder operation, i.e., in case that the original operation cannot be resolved
+     * but the script shall remain executable.
+     * 
+     * @param name the name of the operation
+     * @param parameterCount the number of parameters of the operation
+     * @param acceptsNamedParameters whether the operation shall accept named parameters
+     * @return the added operation, <b>null</b> if this type is not a {@link #isPlaceholder() placeholder}
+     */
+    public abstract IMetaOperation addPlaceholderOperation(String name, int parameterCount, 
+        boolean acceptsNamedParameters);
+    
+    /**
+     * Returns whether this type can act as an actual type of <code>type</code>.
+     * 
+     * @param type the type to be checked
+     * @return <code>true</code> if this type can act as an actual type of <code>type</code>, <code>false</code> else
+     * @see IActualTypeProvider
+     */
+    public boolean isActualTypeOf(IMetaType type);
+    
 }

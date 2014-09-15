@@ -24,7 +24,7 @@ import de.uni_hildesheim.sse.persistency.StringProvider;
 import de.uni_hildesheim.sse.reasoning.core.model.ReasonerModel;
 import de.uni_hildesheim.sse.reasoning.core.model.ReasoningOperation;
 import de.uni_hildesheim.sse.reasoning.core.model.ReasoningState;
-import de.uni_hildesheim.sse.reasoning.core.model.Statistic;
+import de.uni_hildesheim.sse.reasoning.core.model.PerformanceStatistics;
 import de.uni_hildesheim.sse.reasoning.core.model.variables.CompoundVariable;
 import de.uni_hildesheim.sse.reasoning.core.model.variables.ReasonerVariable;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.Message;
@@ -39,7 +39,7 @@ import de.uni_hildesheim.sse.utils.messages.Status;
 import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
 
 /**
- * Drools reasoning instance for performing one reasoning step.
+ * Drools reasoning instance for performing one reasoning step. Check for Stats.
  * @author El-Sharkawy
  * @author Sizonenko
  */
@@ -89,6 +89,10 @@ public class DroolsEngine {
         this.caughtExceptions = new StringBuffer();
         this.result = new ReasoningResult();        
         this.reasoningID = rModel.getReasoningID();
+        /*** From ReasonerModel ***/
+        /*** Finish RM creation ***/
+//        Statistic.addTimestamp(reasoningID, System.currentTimeMillis());
+        /*** Start constraint translation to rules ***/
         FailedRules.createNewList(reasoningID);
         //this.operation = operation;
         
@@ -119,11 +123,15 @@ public class DroolsEngine {
             }
             LOGGER.debug(translationWriter.toString());
         }
-//        System.out.println("Create KB: " + System.currentTimeMillis());
-        // Get the KnowledgeSession
+        /*** Finish constraint translation to rules ***/
+//        Statistic.addTimestamp(reasoningID, System.currentTimeMillis());
+        /*** Start KB creation ***/
         knowledgeBase = createKnowledgeBase(); 
+//        Statistic.addTimestamp(reasoningID, System.currentTimeMillis());
         session = knowledgeBase.newStatefulKnowledgeSession();
+//        Statistic.addTimestamp(reasoningID, System.currentTimeMillis());
         FactUpdater updater = new FactUpdater(session);
+//        Statistic.addTimestamp(reasoningID, System.currentTimeMillis());
         model.setModelListener(updater);
         // Get variables to reason on
         fillKnowledgeBase();  
@@ -135,7 +143,9 @@ public class DroolsEngine {
     private void fillKnowledgeBase() {
         Set<ReasonerVariable> variables = rModel.getVariablesUsedInConstraints();        
         Iterator<ReasonerVariable> iterator = variables.iterator();
-//        System.out.println("Insert FactSet: " + System.currentTimeMillis());
+        /*** Finish KB creation ***/
+//        Statistic.addTimestamp(reasoningID, System.currentTimeMillis());
+        /*** Start Fact update ***/
         while (iterator.hasNext()) {
             ReasonerVariable rVariable = iterator.next();
             session.insert(rVariable);
@@ -147,9 +157,13 @@ public class DroolsEngine {
      * @return KnowledgeBase that can be used in reasoning.
      */
     private KnowledgeBase createKnowledgeBase() {
+//        Statistic.addTimestamp(reasoningID, System.currentTimeMillis());
         knowledgeBuilder = KnowledgeBuilderFactory.newKnowledgeBuilder();
+//        Statistic.addTimestamp(reasoningID, System.currentTimeMillis());
         Resource res = ResourceFactory.newFileResource(tmpDRLFile);
+//        Statistic.addTimestamp(reasoningID, System.currentTimeMillis());
         knowledgeBuilder.add(res, ResourceType.DRL);
+//        Statistic.addTimestamp(reasoningID, System.currentTimeMillis());
         if ( knowledgeBuilder.hasErrors() ) {
             LOGGER.error(knowledgeBuilder.getErrors().toString());
             List<ModelElement> conflictingElements = new ArrayList<ModelElement>();
@@ -158,8 +172,11 @@ public class DroolsEngine {
                 conflictingElements, Status.ERROR);
             result.addMessage(errorMsg);
         }
+//        Statistic.addTimestamp(reasoningID, System.currentTimeMillis());
         KnowledgeBase knowledgeBase = KnowledgeBaseFactory.newKnowledgeBase();
-        knowledgeBase.addKnowledgePackages(knowledgeBuilder.getKnowledgePackages());  
+//        Statistic.addTimestamp(reasoningID, System.currentTimeMillis());
+        knowledgeBase.addKnowledgePackages(knowledgeBuilder.getKnowledgePackages());
+//        Statistic.addTimestamp(reasoningID, System.currentTimeMillis());
         return knowledgeBase;  
     }
 
@@ -172,10 +189,14 @@ public class DroolsEngine {
         
         if (null != translator && !result.hasConflict()) {
             if (translator.getExceptionCount() == 0) {
-//                System.out.println("Fire rules: " + System.currentTimeMillis());
+                /*** Finish Fact update ***/                
+//                Statistic.addTimestamp(reasoningID, System.currentTimeMillis());
+                /*** Start Drools reasoning ***/
                 session.fireAllRules();
                 session.dispose();
-//                System.out.println("Create result: " + System.currentTimeMillis());
+                /*** Finish Drools reasoning ***/
+//                Statistic.addTimestamp(reasoningID, System.currentTimeMillis());
+                /*** Start result creation ***/
                 FailedElements failedElements = FailedRules.getFailedRuleList(reasoningID);
                 failedModelElements = null;
                 if (failedElements.hasErrors()) {
@@ -195,9 +216,11 @@ public class DroolsEngine {
         } else {
             result.addMessage(new Message(caughtExceptions.toString(), new ArrayList<ModelElement>(), Status.ERROR));
         }
+        /*** Finish result creation ***/
+//        Statistic.addTimestamp(reasoningID, System.currentTimeMillis());
         /*** Finish measurement ***/
-        Statistic.addTimestamp(reasoningID, System.currentTimeMillis());
-        //Statistic.getStats(reasoningID);   
+        PerformanceStatistics.getStats(reasoningID);   
+        PerformanceStatistics.clearReasoningID(reasoningID);
         /*** ***/
         return result;
     }

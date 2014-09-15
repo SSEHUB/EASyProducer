@@ -7,6 +7,9 @@ import java.net.URISyntaxException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.ecore.util.Diagnostician;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.ui.editor.model.IXtextDocument;
 import org.eclipse.xtext.util.concurrent.IUnitOfWork;
@@ -15,6 +18,7 @@ import de.uni_hildesheim.sse.IvmlBundleId;
 import de.uni_hildesheim.sse.ModelUtility;
 import de.uni_hildesheim.sse.dslCore.TranslationResult;
 import de.uni_hildesheim.sse.dslCore.validation.ValidationUtils;
+import de.uni_hildesheim.sse.dslcore.ui.editors.CommonXtextEditor;
 import de.uni_hildesheim.sse.ivml.VariabilityUnit;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
@@ -27,10 +31,34 @@ import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
  * when a in an editor is changed from outside and pushed back into 
  * the editor via the Eclipse refresh mechanism.
  * 
+ * Update: This class now extends the
+ * <code>de.uni_hildesheim.sse.dslcore.ui.editors.CommonXtextEditor</code>
+ * which in turn extends the official Xtext editor. This update hooks into
+ * the initialization- and dispose-mechanism in order to register an
+ * <code>de.uni_hildesheim.sse.dslcore.ui.editors.AbstractModelChangeListener</code>
+ * to this editor and receive notifications about changes in the underlying data model.
+ * 
  * @author Holger Eichelberger
+ * @author kroeher
  */
-public class XtextEditor extends org.eclipse.xtext.ui.editor.XtextEditor {
-
+public class XtextEditor extends CommonXtextEditor {
+	
+    /**
+     * {@inheritDoc}
+     */
+	@Override
+	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
+		super.init(site, input);
+		/* 
+		 * Create a new model listener in order to receive notification about updates
+		 * in the underlying data model.
+		 */
+		if (modelListener == null) {			
+			modelListener = new VarModelListener();
+			modelListener.register(this);
+		}
+	}
+	
     /**
      * {@inheritDoc}
      */
@@ -89,11 +117,10 @@ public class XtextEditor extends org.eclipse.xtext.ui.editor.XtextEditor {
                     }
                 } catch (Exception e) {
                     logger.error("while saving IVML:" + e.getMessage());
+                    e.printStackTrace();
                 }
                 return root;
             }
         });
-
     }
-
 }

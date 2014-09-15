@@ -12,6 +12,7 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactFactory;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FileArtifact;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IArtifact;
@@ -45,6 +46,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configura
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.Configuration;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.DecisionVariable;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlElement;
+import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
@@ -276,6 +278,21 @@ public class VilTemplateProcessor implements IVilType {
         }
         return result;
     }
+
+    /**
+     * Returns the parent script passed in as implicit parameter {@link Constants#IMPLICIT_PARENT_PARAMETER_NAME}.
+     * 
+     * @param other the other (named) parameters
+     * @return the parent script, <b>null</b> if none was specified
+     */
+    private static Script getParent(Map<String, Object> other) {
+        Script result = null;
+        Object tmp = other.get(Constants.IMPLICIT_PARENT_PARAMETER_NAME);
+        if (tmp instanceof Script) {
+            result = (Script) tmp;
+        }
+        return result;
+    }
     
     /**
      * Instantiates <code>source</code> to <code>target</code>. Versions restrictions may implicitly
@@ -351,8 +368,12 @@ public class VilTemplateProcessor implements IVilType {
         }
         if (null == result) {
             List<IArtifact> tmp = new ArrayList<IArtifact>();
+            Script caller = config.getRootScript();
+            if (null == caller) {
+                caller = getParent(other);
+            }
             Template template = obtainTemplate(templateName, getVtlRestrictions(templateName, other), 
-                getVtlPaths(other), config.getRootScript());
+                getVtlPaths(other), caller);
             process(template, config, target, other, tmp);
             result = new ListSet<IArtifact>(tmp, IArtifact.class);
         }
@@ -419,7 +440,6 @@ public class VilTemplateProcessor implements IVilType {
                 info = TemplateModel.INSTANCE.availableModels().getModelInfo(templateName, ver);
                 pruneByPaths(info, vtlPaths);
             }
-
             if (null == info || info.isEmpty()) {
                 throw new ArtifactException(templateName + " cannot be found", 
                     ArtifactException.ID_IO);
@@ -437,6 +457,13 @@ public class VilTemplateProcessor implements IVilType {
             model = TemplateModel.INSTANCE.load(info.get(0));
         } catch (ModelManagementException e) {
             throw new ArtifactException(e.getMessage(), ArtifactException.ID_IO);
+        }
+        if (model.isDirty()) {
+            Template old = model;
+            model = TemplateModel.INSTANCE.reload(model);
+            EASyLoggerFactory.INSTANCE.getLogger(VilTemplateProcessor.class, Bundle.ID).info("Reloading model " 
+                + model.getName() + " " + System.identityHashCode(model) + " as it was marked dirty: " 
+                + (old != model)); // for Cui
         }
         return model;
     }

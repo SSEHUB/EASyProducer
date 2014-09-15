@@ -15,8 +15,15 @@
         <!-- Instantiation -->
         <pathelement path="${libs.instantiator.core}"/>
 		<pathelement path="${libs.instantiator.copy.core}"/>
+		<pathelement path="${libs.instantiator.velocityLib}"/>
+		<pathelement path="${libs.instantiator.velocity}"/>
+		<!-- BuildModel und TemplateModel -->
+        <pathelement path="${libs.vil.expressions.core}"/>
+        <pathelement path="${libs.vil.core}"/>
+        <pathelement path="${libs.template.core}"/>
 		<!-- Reasoning -->
 		<pathelement path="${libs.reasonerCore}"/>
+		<pathelement path="${libs.drools2}"/>
         <!-- EASy-Producer -->
         <pathelement path="${libs.easy.persistence}"/>
 		<!-- Eclipse-Plugins -->

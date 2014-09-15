@@ -32,6 +32,7 @@ import de.uni_hildesheim.sse.ivml.IvmlPackage;
 import de.uni_hildesheim.sse.ivml.OpDefParameter;
 import de.uni_hildesheim.sse.ivml.OpDefStatement;
 import de.uni_hildesheim.sse.ivml.ProjectContents;
+import de.uni_hildesheim.sse.ivml.QualifiedName;
 import de.uni_hildesheim.sse.ivml.Typedef;
 import de.uni_hildesheim.sse.ivml.TypedefCompound;
 import de.uni_hildesheim.sse.ivml.TypedefEnum;
@@ -44,7 +45,6 @@ import de.uni_hildesheim.sse.ivml.VersionStmt;
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
 import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
 import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
-import de.uni_hildesheim.sse.model.cst.Variable;
 import de.uni_hildesheim.sse.model.management.VarModel;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.Attribute;
@@ -61,6 +61,7 @@ import de.uni_hildesheim.sse.model.varModel.IPartialEvaluable;
 import de.uni_hildesheim.sse.model.varModel.IvmlDatatypeVisitor;
 import de.uni_hildesheim.sse.model.varModel.IvmlException;
 import de.uni_hildesheim.sse.model.varModel.IvmlKeyWords;
+import de.uni_hildesheim.sse.model.varModel.ModelQuery;
 import de.uni_hildesheim.sse.model.varModel.ModelQueryException;
 import de.uni_hildesheim.sse.model.varModel.OperationDefinition;
 import de.uni_hildesheim.sse.model.varModel.PartialEvaluationBlock;
@@ -91,11 +92,6 @@ import de.uni_hildesheim.sse.utils.modelManagement.VersionFormatException;
  * @author Holger Eichelberger
  */
 public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.ModelTranslator<ExpressionTranslator> {
-
-    /**
-     * Defines whether recursive operation definitions are allowed in IVML.
-     */
-    public static final boolean ENABLE_RECURSIVE_OPERATION_DEFINITIONS = true;
 
     private Map<TypedefCompound, Compound> compoundMapping = new HashMap<TypedefCompound, Compound>();
     private Map<AttrAssignment, AttributeAssignment> assignmentMapping 
@@ -487,7 +483,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
                                     IvmlPackage.Literals.ATTR_ASSIGNMENT_PART__NAME);
                             }
                             ConstraintSyntaxTree cst = new OCLFeatureCall(
-                                new Variable(attribute), data.getOperation(), data.getExpression());
+                                context.obtainVariable(attribute), data.getOperation(), data.getExpression());
                             Constraint constraint = new Constraint(assignment);
                             constraint.setConsSyntax(cst);
                             assignment.addConstraint(constraint, true);
@@ -856,10 +852,8 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
             IDatatype projectType = project.getType();
             CustomOperation operation = new CustomOperation(resultType, op.getId(), projectType, null, params);
             opDef.setOperation(operation);
-            if (ENABLE_RECURSIVE_OPERATION_DEFINITIONS) {
-                context.addToContext(opDef);
-                project.add(opDef);
-            }
+            context.addToContext(opDef);
+            project.add(opDef);
             ConstraintSyntaxTree impl = expressionTranslator.processExpression(op.getImpl(), context, opDef);
             try {
                 IDatatype implType = impl.inferDatatype();
@@ -873,9 +867,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
             } catch (IvmlException e) {
                 throw new TranslatorException(e, op, IvmlPackage.Literals.OP_DEF_STATEMENT__IMPL);
             }
-            if (ENABLE_RECURSIVE_OPERATION_DEFINITIONS) {
-                project.remove(opDef);
-            }
+            project.remove(opDef);
             //CustomOperation operation = new CustomOperation(resultType, op.getId(), projectType, impl, params);
             //opDef.setOperation(operation);
             if (findOperation(projectType, operation, false)) {
@@ -884,8 +876,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
                 throw new TranslatorException("operation '" + op.getId() + "' defined multiple times on project", op,
                     IvmlPackage.Literals.OP_DEF_PARAMETER__TYPE, ErrorCodes.REDEFINITION);
             } else if (operation.getParameterCount() > 0 && findOperation(operation.getParameter(0), operation, true)) {
-                // does operation match to an operation on the first type (vs
-                // implicit project parameter)
+                // does operation match to an operation on the first type (vs implicit project parameter)
                 throw new TranslatorException("operation '" + op.getId() + "' is ambigously defined on type '"
                     + IvmlDatatypeVisitor.getUnqualifiedType(operation.getParameter(0)) + '"', op,
                     IvmlPackage.Literals.OP_DEF_PARAMETER__TYPE, ErrorCodes.AMBIGUITY);
@@ -896,9 +887,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
                 context.addToProject(op, comment, opDef);
             }
         } catch (TranslatorException e) {
-            if (ENABLE_RECURSIVE_OPERATION_DEFINITIONS) {
-                project.remove(opDef);
-            }
+            project.remove(opDef);
             if (force) {
                 error(e);
             } else {
@@ -926,7 +915,8 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
             List<Export> eExports = eIface.getExports();
             for (Export export : eExports) {
                 comments.add(CommentUtils.toComment(export, null));
-                for (String name : export.getNames()) {
+                for (QualifiedName qn : export.getNames()) {
+                    String name = Utils.getQualifiedNameString(qn);
                     try {
                         DecisionVariableDeclaration variable = (DecisionVariableDeclaration) 
                             context.findVariable(name, DecisionVariableDeclaration.class);
@@ -1453,14 +1443,25 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
             comments.add(CommentUtils.toComment(stmt, null));
             String name = Utils.getQualifiedNameString(stmt.getName(), stmt.getAccess());
             try {
-                DecisionVariableDeclaration var = (DecisionVariableDeclaration) context
-                        .findVariable(name, DecisionVariableDeclaration.class);
-                if (null == var) {
-                    error("variable '" + name + "' is undefined", freeze,
-                            IvmlPackage.Literals.FREEZE__NAMES,
-                            ErrorCodes.UNKNOWN_ELEMENT);
+                IModelElement elt = context.findVariableUse(name);
+                if (null == elt) {
+                    elt = ModelQuery.findProject(context.getProject(), name);
+                }
+                if (null == elt) {
+                    error(name + "' is undefined", freeze, IvmlPackage.Literals.FREEZE__NAMES,
+                        ErrorCodes.UNKNOWN_ELEMENT);
                 } else {
-                    freezes.add(var);
+                    if (elt instanceof IFreezable) {
+                        freezes.add((IFreezable) elt);
+                    } else {
+                        if (elt instanceof IDatatype) {
+                            error("Cannot freeze type declaration '" + name + "'", freeze, 
+                                IvmlPackage.Literals.FREEZE__NAMES, ErrorCodes.FREEZE);
+                        } else {                        
+                            error("'" + name + "' cannot be frozen", freeze, IvmlPackage.Literals.FREEZE__NAMES,
+                                ErrorCodes.UNKNOWN_ELEMENT);
+                        }
+                    }
                 }
             } catch (IvmlException e) {
                 error(e, freeze, IvmlPackage.Literals.FREEZE__NAMES);
@@ -1546,13 +1547,12 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
     protected void processImport(ImportStmt importStmt, TypeContext context) {
         try {
             ProjectImport imp = ImportTranslator.processImport(importStmt);
-            assignProjectComment(context.getProject(), imp, CommentUtils.toComment(importStmt, context.getProject()));
+            Project project = context.getProject();
+            assignProjectComment(project, imp, CommentUtils.toComment(importStmt, project));
             if (!context.getProject().addImport(imp)) {
                 // does not apply to conflicts!
-                error("project '" + imp.getProjectName()
-                        + "' is already imported", importStmt,
-                        IvmlPackage.Literals.VERSION_STMT__VERSION,
-                        ErrorCodes.IMPORT);
+                error("project '" + imp.getProjectName() + "' is already imported", importStmt,
+                    IvmlPackage.Literals.VERSION_STMT__VERSION, ErrorCodes.IMPORT);
             }
         } catch (TranslatorException e) {
             error(e);

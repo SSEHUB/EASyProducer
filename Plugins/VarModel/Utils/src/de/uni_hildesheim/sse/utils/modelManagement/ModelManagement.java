@@ -71,6 +71,7 @@ public abstract class ModelManagement <M extends IModel> {
     private ModelEvents<M> events = new ModelEvents<M>();
     private ModelLocations<M> locations;
     private ModelLoaders<M> loaders;
+    private transient boolean inUpdate = false;
 
     /**
      * Singleton.
@@ -173,74 +174,92 @@ public abstract class ModelManagement <M extends IModel> {
      * @param loader The parser able to load model
      */
     public synchronized void updateModel(M model, URI uri, IModelLoader<M> loader) {
-        if (null != uri) {
-            uri = uri.normalize();
-        }
-        M oldModel = null;
-        List<VersionedModelInfos<M>> vList = availableModels.getAvailable(model.getName());
-        VersionedModelInfos<M> vInfos = VersionedModelInfos.find(vList, model.getVersion());
-        boolean done = false;
-        if (null != vInfos) {
-            ModelInfo<M> info = vInfos.find(uri);
-            if (null != info) {
+        if (!inUpdate) {
+            inUpdate = true;
+            if (null != uri) {
+                uri = uri.normalize();
+            }
+            M oldModel = null;
+            List<VersionedModelInfos<M>> vList = availableModels.getAvailable(model.getName());
+            VersionedModelInfos<M> vInfos = VersionedModelInfos.find(vList, model.getVersion());
+            boolean done = false;
+            if (null != vInfos) {
+                ModelInfo<M> info = vInfos.find(uri);
+                if (null != info) {
+                    oldModel = setResolved(info, model);
+                    if (null == info.getLocale()) {
+                        info.setLocale(locale.getActualLocale());
+                    }
+                    try {
+                        postLoadModel(info);
+                    } catch (IOException e) {
+                        EASyLoggerFactory.INSTANCE.getLogger(ModelManagement.class, Bundle.ID).exception(e);
+                    }
+                    done = true;
+                }
+            }
+            if (!done) {
+                // however, resolution and loading is disabled
+                ModelInfo<M> info = new ModelInfo<M>(model, uri, loader);
                 oldModel = setResolved(info, model);
-                if (null == info.getLocale()) {
-                    info.setLocale(locale.getActualLocale());
+                if (null == vList) {
+                    vList = new ArrayList<VersionedModelInfos<M>>();
+                    availableModels.putAvailable(model.getName(), vList);
                 }
-                try {
-                    postLoadModel(info);
-                } catch (IOException e) {
-                    EASyLoggerFactory.INSTANCE.getLogger(ModelManagement.class, Bundle.ID).exception(e);
+                if (null == vInfos) {
+                    vInfos = new VersionedModelInfos<M>(model.getVersion());
+                    vList.add(vInfos);
                 }
-                done = true;
+                vInfos.add(info);
             }
-        }
-        if (!done) {
-            // however, resolution and loading is disabled
-            ModelInfo<M> info = new ModelInfo<M>(model, uri, loader);
-            oldModel = setResolved(info, model);
-            if (null == vList) {
-                vList = new ArrayList<VersionedModelInfos<M>>();
-                availableModels.putAvailable(model.getName(), vList);
+            if (null != oldModel) {
+                // TODO turn this into an incremental updated structure -> performance
+                reload(ModelUpdateUtils.determineUpdateSeqence(oldModel, ModelUpdateUtils.collectImporting(models)));
             }
-            if (null == vInfos) {
-                vInfos = new VersionedModelInfos<M>(model.getVersion());
-                vList.add(vInfos);
-            }
-            vInfos.add(info);
-        }
-        if (null != oldModel) {
-            // TODO turn this into an incremental updated structure -> performance
-            reload(ModelUpdateUtils.determineUpdateSeqence(oldModel, ModelUpdateUtils.collectImporting(models)));
+            inUpdate = false;
         }
     }
 
     /**
      * Loads a set of models. Errors are logged.
      * 
-     * @param models the models to be loaded (entries may be <b>null</b>)
+     * @param models the models to be (re)loaded (entries may be <b>null</b>)
      */
     private void reload(List<M> models) {
         for (int m = 0; m < models.size(); m++) {
             M tmp = models.get(m);
             if (null != tmp) {
-                ModelInfo<M> info = availableModels.getModelInfo(tmp);
-                if (null != info) {
-                    try {
-                        M loaded = load(info, true);
-                        setResolved(info, loaded);
-                    } catch (ModelManagementException e) {
-                        LOGGER.warn("loading / updating model " + info.getName() + " " 
-                            + Version.toString(info.getVersion()) + " failed: " + e.getMessage());
-                    }
-                } else {
-                    LOGGER.warn("loading / updating model: no information object found for " + tmp.getName() + " " 
-                        + Version.toString(tmp.getVersion()));
-                }
+                reload(tmp);
             }
         }
     }
-    
+
+    /**
+     * Update the given model by trying to reload it. Errors are logged.
+     * 
+     * @param model the model to be reloaded
+     * @return the loaded model (may be <code>model</code> if no new model was loaded)
+     */
+    public M reload(M model) {
+        M result = model;
+        ModelInfo<M> info = availableModels.getModelInfo(model);
+        if (null != info) {
+            try {
+                result = load(info, true);
+                setResolved(info, result);
+            } catch (ModelManagementException e) {
+                LOGGER.warn("updating model " + info.getName() + " " 
+                    + Version.toString(info.getVersion()) + " failed: " + e.getMessage());
+            }
+        } else {
+            LOGGER.warn("updating model: no information object found for " + model.getName() + " " 
+                + Version.toString(model.getVersion()) + "(syntax/semantic error?)");
+        }
+        if (model == result) {
+            events.notifyModelReloadFailed(model);
+        }
+        return result;
+    }
     
     /**
      * Unloads <code>model</code> as well as unloadable imported models, but not the related 
@@ -318,6 +337,7 @@ public abstract class ModelManagement <M extends IModel> {
     
     /**
      * Defines the resolution for <code>info</code> and calls the listeners.
+     * Calls {@link IModel#dispose()} if needed.
      * 
      * @param info the information object to be updated
      * @param model the resolving model
@@ -329,6 +349,9 @@ public abstract class ModelManagement <M extends IModel> {
         int pos = null == current ? -1 : models.indexOf(current);
         if (pos >= 0) {
             models.set(pos, model);
+            if (model != current) { // might be used before but disturbs existing behavior
+                current.dispose();
+            }
         } else {
             models.add(model);    
         }
@@ -574,6 +597,7 @@ public abstract class ModelManagement <M extends IModel> {
                     if (null != resolved) {
                         models.remove(resolved);
                         events.removeAllListeners(resolved);
+                        resolved.dispose();
                     }
                 }
             }
@@ -676,6 +700,7 @@ public abstract class ModelManagement <M extends IModel> {
                 models.remove(resolved);
                 this.outdated.add(outdated.get(o));
                 //outdated.get(o).setResolved(null);
+                resolved.dispose();
             }
         }
         subtask = new ObservableTask("update outdated models", 

@@ -28,7 +28,7 @@ class CompoundGUIVariable extends AbstractExpandableGUIVariable {
     public String getValueText() {
         String result;
         if (hasValue() && hasNullValue()) {
-            result = GUIVariable.NULL_VALUE_LABEL;
+            result = getNullLabel();
         } else {
             //checkstyle: stop exception type check 
             try {
@@ -47,5 +47,18 @@ class CompoundGUIVariable extends AbstractExpandableGUIVariable {
         return null;
     }
     
+    
+    @Override
+    public void freeze() {
+        super.freeze();
+        if (!isFrozen()) {
+            // Partial assigned compound, try to freeze nested variables
+            for (int i = 0, nElements = getNestedElementsCount(); i < nElements; i++) {
+                GUIVariable nestedVar = getNestedElement(i);
+                nestedVar.freeze();
+            }
+        }
+    }
     // TODO listener to reflect changes in textual representation of container
+    
 }

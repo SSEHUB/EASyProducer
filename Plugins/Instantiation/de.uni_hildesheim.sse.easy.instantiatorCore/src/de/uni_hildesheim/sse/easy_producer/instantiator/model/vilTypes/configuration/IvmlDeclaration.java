@@ -6,8 +6,8 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
 
 /**
  * Represents an IVML declaration. This class is internal and shall not be registered in the
- * type factory. It is required as the {@link Configuration} returns only frozen elements with
- * value but not declarations if needed. It maps to the use of an IVML identifier.
+ * type factory. It is required as the {@link Configuration} may return only frozen elements (according to the actual 
+ * {@link IVariableFilter}) with value but not declarations if needed. It maps to the use of an IVML identifier.
  * 
  * @author Holger Eichelberger
  */

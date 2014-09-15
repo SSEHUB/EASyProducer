@@ -1,6 +1,19 @@
+/*
+ * Copyright 2009-2013 University of Hildesheim, Software Systems Engineering
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.uni_hildesheim.sse.model.varModel.datatypes;
-
-import java.util.List;
 
 /**
  * Provides some utility operations, also due to the split in the inheritance
@@ -29,8 +42,10 @@ public class TypeQueries {
             Operation tmp = operand.getOperation(o);
             if (tmp.getName().equals(name)) {
                 int tmpParamCount = tmp.getParameterCount();
-                if (null == parameter && 0 == tmpParamCount) {
-                    result = tmp;
+                if (null == parameter) {
+                    if (0 == tmpParamCount) {
+                        result = tmp;
+                    }
                 } else if (parameter.length == tmpParamCount) {
                     boolean eq = true;
                     for (int p = 0; eq && p < tmpParamCount; p++) {
@@ -49,24 +64,26 @@ public class TypeQueries {
     }
     
     /**
-     * Returns the operations defined on <code>operant</code> which
-     * comply to the given name <code>prefix</code> (may also be 
-     * the entire name) and the prefixed parameter set (at least
-     * the given parameter types must match in the specified 
-     * order, an empty list may match all operations).
-     * Please note that the first parameter of an operation
-     * is <code>operant</code>.
+     * Returns whether the two types given are the same.
      * 
-     * @param operant the type the operation shall be defined for
-     * @param prefix the name prefix of the operations to be returned
-     * @param parameter the list of parameters (excluding
-     *   this data type)
-     * @return the matching operations or <b>null</b> if none was found
+     * @param type1 the first type
+     * @param type2 the second type
+     * @return <code>true</code> if type1 and type2 are the same, <code>false</code> else
      */
-    public static List<Operation> getOperationByPrefix(IDatatype operant, String prefix, IDatatype... parameter) {
-        // TODO HE: realize this
-        return null;
+    public static boolean sameTypes(IDatatype type1, IDatatype type2) {
+        boolean same;
+        // any type are special as they are assignable to everything
+        if (AnyType.TYPE == type1) {
+            same = AnyType.TYPE == type2;
+        } else if (AnyType.TYPE == type2) {
+            same = AnyType.TYPE == type1;
+        } else if (type1 != null && type2 != null) { // may happen for missing generics
+            // and now the usual types
+            same = type1.isAssignableFrom(type2) && type2.isAssignableFrom(type1);
+        } else {
+            same = false;
+        }
+        return same;
     }
 
-    
 }

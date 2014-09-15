@@ -2,6 +2,7 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions;
 
 import java.util.EmptyStackException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
@@ -187,6 +188,19 @@ public abstract class Resolver<V extends IResolvable> implements IResolver<V> {
     }
     
     /**
+     * Adds all variable declarations in <code>decl</code> to the actual level.
+     * 
+     * @param decls the declarations to be added (may be <b>null</b>)
+     */
+    public void add(List<V> decls) {
+        if (null != decls) {
+            for (int v = 0; v < decls.size(); v++) {
+                add(decls.get(v));
+            }
+        }
+    }
+    
+    /**
      * Returns the default type.
      * 
      * @return the default type
@@ -232,8 +246,8 @@ public abstract class Resolver<V extends IResolvable> implements IResolver<V> {
     }
     
     @Override
-    public boolean isIvmlElement(String name) {
-        return false; // cannot resolve by default
+    public Object getIvmlElement(String name) {
+        return null; // cannot resolve by default
     }
 
     /**

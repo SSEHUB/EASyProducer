@@ -17,6 +17,8 @@
         <pathelement path="${libs.dslCore}"/>        
         <!-- Instantiation -->
         <pathelement path="${libs.instantiator.core}"/>
+        <!-- IVML Core -->
+        <pathelement path="${libs.ivml}"/>
         <!-- VIL -->
 		<pathelement path="${libs.template.core}"/>
 		<pathelement path="${libs.template.ui}"/>

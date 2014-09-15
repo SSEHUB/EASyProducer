@@ -213,6 +213,7 @@ public class DroolsEngineTests extends AbstractTest<Project> {
     /**
      * Tests compound internal constraints.
      */ 
+    @Ignore
     @Test    
     public void compoundInternalConstraintsTest() {
         reasoningTest("CompoundInternalConstraintsTest.ivml", ReasoningOperation.VALIDATION, 4);
@@ -236,7 +237,8 @@ public class DroolsEngineTests extends AbstractTest<Project> {
     
     /**
      * Tests implies.
-     */ 
+     */
+    @Ignore
     @Test    
     public void impliesTest() {
         reasoningTest("ImpliesTest.ivml", ReasoningOperation.VALIDATION, 1);

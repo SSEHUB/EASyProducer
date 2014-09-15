@@ -17,25 +17,6 @@ public class ExtraTests extends AbstractTest {
     private static ExtraTests tests;
     
     /**
-     * Starts up the test.
-     */
-    @BeforeClass
-    public static void startUp() {
-        tests = new ExtraTests();
-    }
-
-    /**
-     * Tears down the test.
-     */
-    @AfterClass
-    public static void shutDown() {
-        if (null != tests) {
-            tests.cleanTemp();
-            tests = null;
-        }
-    }
-
-    /**
      * Asserts equality of the models and the parsed/analyzed result, i.e. it
      * reads <code>file</code> as a model, analyzes it, compares the obtained
      * errors with <code>expectedErrorCodes</code>, compares the contents of
@@ -109,6 +90,25 @@ public class ExtraTests extends AbstractTest {
     @Override
     protected File getTestFolder() {
         return new File(getTestDataDir(), "extra");
+    }
+    
+    /**
+     * Starts up the test.
+     */
+    @BeforeClass
+    public static void startUp() {
+        tests = new ExtraTests();
+    }
+
+    /**
+     * Tears down the test.
+     */
+    @AfterClass
+    public static void shutDown() {
+        if (null != tests) {
+            tests.cleanTemp();
+            tests = null;
+        }
     }
     
     /**

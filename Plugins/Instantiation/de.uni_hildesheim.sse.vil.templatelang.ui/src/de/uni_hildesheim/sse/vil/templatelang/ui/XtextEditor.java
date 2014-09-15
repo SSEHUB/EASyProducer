@@ -6,6 +6,9 @@ import java.net.URISyntaxException;
 
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.ecore.util.Diagnostician;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.ui.editor.model.IXtextDocument;
 import org.eclipse.xtext.util.concurrent.IUnitOfWork;
@@ -23,10 +26,34 @@ import de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit;
 /**
  * A specific editory class for VTL.
  * 
+ * Update: Hooks also into the initialization- and dispose-mechanism in order to register an
+ * <code>de.uni_hildesheim.sse.dslcore.ui.editors.AbstractModelChangeListener</code>
+ * to this editor and receive notifications about changes in the underlying data model.
+ * 
  * @author Holger Eichelberger
+ * @author kroeher
  */
 public class XtextEditor extends AbstractXTextEditor<LanguageUnit> {
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void init(IEditorSite site, IEditorInput input) throws PartInitException {
+        super.init(site, input);
+        /* 
+         * Create a new model listener in order to receive notification about updates
+         * in the underlying data model.
+         */
+        if (modelListener == null) {            
+            modelListener = new TemplateModelListener();
+            modelListener.register(this);
+        }
+    }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void onSave() {
         IXtextDocument doc = getDocument();
@@ -60,7 +87,5 @@ public class XtextEditor extends AbstractXTextEditor<LanguageUnit> {
                 return root;
             }
         });
-
     }
-
 }

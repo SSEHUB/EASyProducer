@@ -273,7 +273,7 @@
     <extension
         point="org.eclipse.ui.newWizards">
       <wizard
-            name="VIL File"
+            name="Instantiation Build Specification (VIL)"
             icon="icons/vil_buildlang_file_icon.gif"
             category="de.uni_hildesheim.sse.EASy_Producer"
             class="de.uni_hildesheim.sse.ui.wizards.VILFiletypeWizard"
