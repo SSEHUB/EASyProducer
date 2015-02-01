@@ -163,112 +163,24 @@ public class ExpressionDslGrammarAccess extends AbstractGrammarElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "VersionSpec");
 		private final Group cGroup = (Group)rule.eContents().get(1);
 		private final Keyword cWithKeyword_0 = (Keyword)cGroup.eContents().get(0);
-		private final Keyword cLeftParenthesisKeyword_1 = (Keyword)cGroup.eContents().get(1);
-		private final Assignment cConflictsAssignment_2 = (Assignment)cGroup.eContents().get(2);
-		private final RuleCall cConflictsVersionedIdParserRuleCall_2_0 = (RuleCall)cConflictsAssignment_2.eContents().get(0);
-		private final Group cGroup_3 = (Group)cGroup.eContents().get(3);
-		private final Keyword cCommaKeyword_3_0 = (Keyword)cGroup_3.eContents().get(0);
-		private final Assignment cConflictsAssignment_3_1 = (Assignment)cGroup_3.eContents().get(1);
-		private final RuleCall cConflictsVersionedIdParserRuleCall_3_1_0 = (RuleCall)cConflictsAssignment_3_1.eContents().get(0);
-		private final Keyword cRightParenthesisKeyword_4 = (Keyword)cGroup.eContents().get(4);
+		private final Assignment cRestrictionAssignment_1 = (Assignment)cGroup.eContents().get(1);
+		private final RuleCall cRestrictionExpressionParserRuleCall_1_0 = (RuleCall)cRestrictionAssignment_1.eContents().get(0);
 		
 		//VersionSpec:
-		//	"with" "(" conflicts+=VersionedId ("," conflicts+=VersionedId)* ")";
+		//	"with" restriction=Expression;
 		public ParserRule getRule() { return rule; }
 
-		//"with" "(" conflicts+=VersionedId ("," conflicts+=VersionedId)* ")"
+		//"with" restriction=Expression
 		public Group getGroup() { return cGroup; }
 
 		//"with"
 		public Keyword getWithKeyword_0() { return cWithKeyword_0; }
 
-		//"("
-		public Keyword getLeftParenthesisKeyword_1() { return cLeftParenthesisKeyword_1; }
+		//restriction=Expression
+		public Assignment getRestrictionAssignment_1() { return cRestrictionAssignment_1; }
 
-		//conflicts+=VersionedId
-		public Assignment getConflictsAssignment_2() { return cConflictsAssignment_2; }
-
-		//VersionedId
-		public RuleCall getConflictsVersionedIdParserRuleCall_2_0() { return cConflictsVersionedIdParserRuleCall_2_0; }
-
-		//("," conflicts+=VersionedId)*
-		public Group getGroup_3() { return cGroup_3; }
-
-		//","
-		public Keyword getCommaKeyword_3_0() { return cCommaKeyword_3_0; }
-
-		//conflicts+=VersionedId
-		public Assignment getConflictsAssignment_3_1() { return cConflictsAssignment_3_1; }
-
-		//VersionedId
-		public RuleCall getConflictsVersionedIdParserRuleCall_3_1_0() { return cConflictsVersionedIdParserRuleCall_3_1_0; }
-
-		//")"
-		public Keyword getRightParenthesisKeyword_4() { return cRightParenthesisKeyword_4; }
-	}
-
-	public class VersionedIdElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "VersionedId");
-		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Keyword cVersionKeyword_0 = (Keyword)cGroup.eContents().get(0);
-		private final Assignment cOpAssignment_1 = (Assignment)cGroup.eContents().get(1);
-		private final RuleCall cOpVersionOperatorParserRuleCall_1_0 = (RuleCall)cOpAssignment_1.eContents().get(0);
-		private final Assignment cVersionAssignment_2 = (Assignment)cGroup.eContents().get(2);
-		private final RuleCall cVersionVERSIONTerminalRuleCall_2_0 = (RuleCall)cVersionAssignment_2.eContents().get(0);
-		
-		//VersionedId:
-		//	"version" op=VersionOperator version=VERSION;
-		public ParserRule getRule() { return rule; }
-
-		//"version" op=VersionOperator version=VERSION
-		public Group getGroup() { return cGroup; }
-
-		//"version"
-		public Keyword getVersionKeyword_0() { return cVersionKeyword_0; }
-
-		//op=VersionOperator
-		public Assignment getOpAssignment_1() { return cOpAssignment_1; }
-
-		//VersionOperator
-		public RuleCall getOpVersionOperatorParserRuleCall_1_0() { return cOpVersionOperatorParserRuleCall_1_0; }
-
-		//version=VERSION
-		public Assignment getVersionAssignment_2() { return cVersionAssignment_2; }
-
-		//VERSION
-		public RuleCall getVersionVERSIONTerminalRuleCall_2_0() { return cVersionVERSIONTerminalRuleCall_2_0; }
-	}
-
-	public class VersionOperatorElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "VersionOperator");
-		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
-		private final Keyword cEqualsSignEqualsSignKeyword_0 = (Keyword)cAlternatives.eContents().get(0);
-		private final Keyword cGreaterThanSignKeyword_1 = (Keyword)cAlternatives.eContents().get(1);
-		private final Keyword cLessThanSignKeyword_2 = (Keyword)cAlternatives.eContents().get(2);
-		private final Keyword cGreaterThanSignEqualsSignKeyword_3 = (Keyword)cAlternatives.eContents().get(3);
-		private final Keyword cLessThanSignEqualsSignKeyword_4 = (Keyword)cAlternatives.eContents().get(4);
-		
-		//VersionOperator:
-		//	"==" | ">" | "<" | ">=" | "<=";
-		public ParserRule getRule() { return rule; }
-
-		//"==" | ">" | "<" | ">=" | "<="
-		public Alternatives getAlternatives() { return cAlternatives; }
-
-		//"=="
-		public Keyword getEqualsSignEqualsSignKeyword_0() { return cEqualsSignEqualsSignKeyword_0; }
-
-		//">"
-		public Keyword getGreaterThanSignKeyword_1() { return cGreaterThanSignKeyword_1; }
-
-		//"<"
-		public Keyword getLessThanSignKeyword_2() { return cLessThanSignKeyword_2; }
-
-		//">="
-		public Keyword getGreaterThanSignEqualsSignKeyword_3() { return cGreaterThanSignEqualsSignKeyword_3; }
-
-		//"<="
-		public Keyword getLessThanSignEqualsSignKeyword_4() { return cLessThanSignEqualsSignKeyword_4; }
+		//Expression
+		public RuleCall getRestrictionExpressionParserRuleCall_1_0() { return cRestrictionExpressionParserRuleCall_1_0; }
 	}
 
 	public class ParameterListElements extends AbstractParserRuleElementFinder {
@@ -1507,12 +1419,15 @@ public class ExpressionDslGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cBValueFalseKeyword_3_0_1 = (Keyword)cBValueAlternatives_3_0.eContents().get(1);
 		private final Assignment cNullAssignment_4 = (Assignment)cAlternatives.eContents().get(4);
 		private final Keyword cNullNullKeyword_4_0 = (Keyword)cNullAssignment_4.eContents().get(0);
+		private final Assignment cVersionAssignment_5 = (Assignment)cAlternatives.eContents().get(5);
+		private final RuleCall cVersionVERSIONTerminalRuleCall_5_0 = (RuleCall)cVersionAssignment_5.eContents().get(0);
 		
 		//Constant:
-		//	nValue=NumValue | sValue=STRING | qValue=QualifiedName | bValue=("true" | "false") | null="null";
+		//	nValue=NumValue | sValue=STRING | qValue=QualifiedName | bValue=("true" | "false") | null="null" | =>
+		//	version=VERSION;
 		public ParserRule getRule() { return rule; }
 
-		//nValue=NumValue | sValue=STRING | qValue=QualifiedName | bValue=("true" | "false") | null="null"
+		//nValue=NumValue | sValue=STRING | qValue=QualifiedName | bValue=("true" | "false") | null="null" | => version=VERSION
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//nValue=NumValue
@@ -1550,6 +1465,12 @@ public class ExpressionDslGrammarAccess extends AbstractGrammarElementFinder {
 
 		//"null"
 		public Keyword getNullNullKeyword_4_0() { return cNullNullKeyword_4_0; }
+
+		//=> version=VERSION
+		public Assignment getVersionAssignment_5() { return cVersionAssignment_5; }
+
+		//VERSION
+		public RuleCall getVersionVERSIONTerminalRuleCall_5_0() { return cVersionVERSIONTerminalRuleCall_5_0; }
 	}
 
 	public class NumValueElements extends AbstractParserRuleElementFinder {
@@ -1574,12 +1495,13 @@ public class ExpressionDslGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cIDTerminalRuleCall_0 = (RuleCall)cAlternatives.eContents().get(0);
 		private final RuleCall cVERSIONTerminalRuleCall_1 = (RuleCall)cAlternatives.eContents().get(1);
 		private final RuleCall cEXPONENTTerminalRuleCall_2 = (RuleCall)cAlternatives.eContents().get(2);
+		private final Keyword cVersionKeyword_3 = (Keyword)cAlternatives.eContents().get(3);
 		
 		//Identifier:
-		//	ID | VERSION | EXPONENT;
+		//	ID | VERSION | EXPONENT | "version";
 		public ParserRule getRule() { return rule; }
 
-		//ID | VERSION | EXPONENT
+		//ID | VERSION | EXPONENT | "version"
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//ID
@@ -1590,6 +1512,9 @@ public class ExpressionDslGrammarAccess extends AbstractGrammarElementFinder {
 
 		//EXPONENT
 		public RuleCall getEXPONENTTerminalRuleCall_2() { return cEXPONENTTerminalRuleCall_2; }
+
+		//"version"
+		public Keyword getVersionKeyword_3() { return cVersionKeyword_3; }
 	}
 
 	public class TypeElements extends AbstractParserRuleElementFinder {
@@ -1683,41 +1608,41 @@ public class ExpressionDslGrammarAccess extends AbstractGrammarElementFinder {
 		private final Group cGroup = (Group)rule.eContents().get(1);
 		private final Keyword cLeftParenthesisKeyword_0 = (Keyword)cGroup.eContents().get(0);
 		private final Assignment cParamAssignment_1 = (Assignment)cGroup.eContents().get(1);
-		private final RuleCall cParamIdentifierParserRuleCall_1_0 = (RuleCall)cParamAssignment_1.eContents().get(0);
+		private final RuleCall cParamTypeParserRuleCall_1_0 = (RuleCall)cParamAssignment_1.eContents().get(0);
 		private final Group cGroup_2 = (Group)cGroup.eContents().get(2);
 		private final Keyword cCommaKeyword_2_0 = (Keyword)cGroup_2.eContents().get(0);
 		private final Assignment cParamAssignment_2_1 = (Assignment)cGroup_2.eContents().get(1);
-		private final RuleCall cParamIdentifierParserRuleCall_2_1_0 = (RuleCall)cParamAssignment_2_1.eContents().get(0);
+		private final RuleCall cParamTypeParserRuleCall_2_1_0 = (RuleCall)cParamAssignment_2_1.eContents().get(0);
 		private final Keyword cRightParenthesisKeyword_3 = (Keyword)cGroup.eContents().get(3);
 		
 		//// currently no nested types!
 		//TypeParameters:
-		//	"(" param+=Identifier ("," param+=Identifier)* ")";
+		//	"(" param+=Type ("," param+=Type)* ")";
 		public ParserRule getRule() { return rule; }
 
-		//"(" param+=Identifier ("," param+=Identifier)* ")"
+		//"(" param+=Type ("," param+=Type)* ")"
 		public Group getGroup() { return cGroup; }
 
 		//"("
 		public Keyword getLeftParenthesisKeyword_0() { return cLeftParenthesisKeyword_0; }
 
-		//param+=Identifier
+		//param+=Type
 		public Assignment getParamAssignment_1() { return cParamAssignment_1; }
 
-		//Identifier
-		public RuleCall getParamIdentifierParserRuleCall_1_0() { return cParamIdentifierParserRuleCall_1_0; }
+		//Type
+		public RuleCall getParamTypeParserRuleCall_1_0() { return cParamTypeParserRuleCall_1_0; }
 
-		//("," param+=Identifier)*
+		//("," param+=Type)*
 		public Group getGroup_2() { return cGroup_2; }
 
 		//","
 		public Keyword getCommaKeyword_2_0() { return cCommaKeyword_2_0; }
 
-		//param+=Identifier
+		//param+=Type
 		public Assignment getParamAssignment_2_1() { return cParamAssignment_2_1; }
 
-		//Identifier
-		public RuleCall getParamIdentifierParserRuleCall_2_1_0() { return cParamIdentifierParserRuleCall_2_1_0; }
+		//Type
+		public RuleCall getParamTypeParserRuleCall_2_1_0() { return cParamTypeParserRuleCall_2_1_0; }
 
 		//")"
 		public Keyword getRightParenthesisKeyword_3() { return cRightParenthesisKeyword_3; }
@@ -1808,8 +1733,6 @@ public class ExpressionDslGrammarAccess extends AbstractGrammarElementFinder {
 	private VariableDeclarationElements pVariableDeclaration;
 	private AdviceElements pAdvice;
 	private VersionSpecElements pVersionSpec;
-	private VersionedIdElements pVersionedId;
-	private VersionOperatorElements pVersionOperator;
 	private ParameterListElements pParameterList;
 	private ParameterElements pParameter;
 	private VersionStmtElements pVersionStmt;
@@ -1927,33 +1850,13 @@ public class ExpressionDslGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//VersionSpec:
-	//	"with" "(" conflicts+=VersionedId ("," conflicts+=VersionedId)* ")";
+	//	"with" restriction=Expression;
 	public VersionSpecElements getVersionSpecAccess() {
 		return (pVersionSpec != null) ? pVersionSpec : (pVersionSpec = new VersionSpecElements());
 	}
 	
 	public ParserRule getVersionSpecRule() {
 		return getVersionSpecAccess().getRule();
-	}
-
-	//VersionedId:
-	//	"version" op=VersionOperator version=VERSION;
-	public VersionedIdElements getVersionedIdAccess() {
-		return (pVersionedId != null) ? pVersionedId : (pVersionedId = new VersionedIdElements());
-	}
-	
-	public ParserRule getVersionedIdRule() {
-		return getVersionedIdAccess().getRule();
-	}
-
-	//VersionOperator:
-	//	"==" | ">" | "<" | ">=" | "<=";
-	public VersionOperatorElements getVersionOperatorAccess() {
-		return (pVersionOperator != null) ? pVersionOperator : (pVersionOperator = new VersionOperatorElements());
-	}
-	
-	public ParserRule getVersionOperatorRule() {
-		return getVersionOperatorAccess().getRule();
 	}
 
 	//ParameterList:
@@ -2332,7 +2235,8 @@ public class ExpressionDslGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//Constant:
-	//	nValue=NumValue | sValue=STRING | qValue=QualifiedName | bValue=("true" | "false") | null="null";
+	//	nValue=NumValue | sValue=STRING | qValue=QualifiedName | bValue=("true" | "false") | null="null" | =>
+	//	version=VERSION;
 	public ConstantElements getConstantAccess() {
 		return (pConstant != null) ? pConstant : (pConstant = new ConstantElements());
 	}
@@ -2352,7 +2256,7 @@ public class ExpressionDslGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//Identifier:
-	//	ID | VERSION | EXPONENT;
+	//	ID | VERSION | EXPONENT | "version";
 	public IdentifierElements getIdentifierAccess() {
 		return (pIdentifier != null) ? pIdentifier : (pIdentifier = new IdentifierElements());
 	}
@@ -2375,7 +2279,7 @@ public class ExpressionDslGrammarAccess extends AbstractGrammarElementFinder {
 
 	//// currently no nested types!
 	//TypeParameters:
-	//	"(" param+=Identifier ("," param+=Identifier)* ")";
+	//	"(" param+=Type ("," param+=Type)* ")";
 	public TypeParametersElements getTypeParametersAccess() {
 		return (pTypeParameters != null) ? pTypeParameters : (pTypeParameters = new TypeParametersElements());
 	}

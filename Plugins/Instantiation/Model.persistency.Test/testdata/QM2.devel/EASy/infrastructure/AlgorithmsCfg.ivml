@@ -1,0 +1,190 @@
+project AlgorithmsCfg {
+    
+    import ReconfigurableHardware;
+    import Algorithms;
+	
+    // algorithms from TSI
+ 
+    Algorithm aNormalize;
+    aNormalize = {  
+    	name = "normalize",
+    	artifact = "integration.algs.Normalize",
+		output={{fields={
+			Field{name="streamID", type=FieldType.STRING},
+			Field{name="timestamp", type=FieldType.STRING},
+			Field{name="quote", type=FieldType.REAL},
+			Field{name="volume", type=FieldType.INTEGER}
+		}}}, 
+		input={{fields={Field{name="springData", type=FieldType.STRING}}}}		
+    }; 
+    
+    Algorithm aAdd10; 
+    aAdd10 = {
+    	name = "add10",
+    	artifact = "integration.algs.Add10",
+		input={{fields={
+			Field{name="streamID", type=FieldType.STRING},
+			Field{name="timestamp", type=FieldType.STRING},
+			Field{name="quote", type=FieldType.REAL},
+			Field{name="volume", type=FieldType.INTEGER}
+		}}},
+		output={{fields={Field{name="valuePlus10", type=FieldType.REAL}}}}
+    };
+   
+    Algorithm aDouble;
+    aDouble = {
+    	name = "double",
+    	artifact = "integration.algs.DoubleMaxeler",
+    	input={{fields={Field{name="valuePlus10", type=FieldType.REAL}}}},
+		output={{fields={Field{name="batchDoubleValue", type=FieldType.REAL}}}},
+		hwNode = clusters[0]  
+    };  
+	
+    Algorithm aShow;
+    aShow = {
+    	name = "show",
+    	artifact = "integration.algs.ShowResult",
+    	input={{fields={Field{name="batchDoubleValue", type=FieldType.REAL}}}},	
+		output={{fields={Field{name="result", type=FieldType.REAL}}}}
+    };
+    
+    //Algorithms from L3S   
+    Algorithm aFilterTweet;
+	aFilterTweet = {
+		name = "fileterTweet",
+		artifact = "algs.FilterTweet",
+		input={{fields={Field{name="tweet", type=FieldType.STRING}}}},	
+    	output={{fields={
+    		Field{name="hashtag", type=FieldType.STRING},
+    		Field{name="tweet", type=FieldType.STRING}
+    	}}}
+	};
+	Algorithm aCountTweets;
+	aCountTweets = {
+		name = "countTweets",
+		artifact = "algs.CountTweets",
+		input={{fields={
+    		Field{name="hashtag", type=FieldType.STRING},
+    		Field{name="tweet", type=FieldType.STRING}
+    	}}},
+    	output={{fields={
+    		Field{name="timestamp", type=FieldType.STRING},
+    		Field{name="tweet", type=FieldType.STRING},
+    		Field{name="counts", type=FieldType.INTEGER}
+    	}}}
+	};
+	
+    Algorithm aBatchSVM;
+	aBatchSVM={
+		name="batchSVM",
+		artifact="algs.SentimentTwitter_batch_SVM"
+	};
+	
+	Algorithm aStreamSVM;
+	aStreamSVM={
+		name="streamSVM",
+		artifact="algs.SentimentTwitter_stream_SVM"
+	};
+	 
+	Algorithm aBatchDictionary;
+	aBatchDictionary={
+		name="batchDictionary",
+		artifact="algs.SentimentTwitter_batch_dictionary"
+	};
+	
+	Algorithm aStreamDictionary;
+	aStreamDictionary={
+		name="streamDictionary",
+		artifact="algs.SentimentTwitter_stream_dictionary"
+	};
+	
+	//Algorithms from the priority pipeline
+	Algorithm aFinancialStreamIngestion;
+    aFinancialStreamIngestion = {
+    	name = "financialStreamIngestion",
+    	artifact = "algs.FinancialStreamIngestion"
+    };
+    
+    Algorithm aTwitterStreamIngestion; 
+    aTwitterStreamIngestion = {
+    	name = "twitterStreamIngestion",
+    	artifact = "algs.TwitterStreamIngestion"
+    };
+    
+    Algorithm aFinancialDataFilter;
+    aFinancialDataFilter = {
+    	name = "financialDataFilter",
+    	artifact = "algs.FinancialDataFilter"   	
+    };
+    
+    Algorithm aTwitterStreamFilter;
+    aTwitterStreamFilter = {
+    	name = "twitterStreamFilter",
+    	artifact = "algs.TwitterStreamFilter"
+    };
+    
+    Algorithm aCorrelation;
+    aCorrelation = {
+    	name = "correlation",
+    	artifact = "algs.Correlation"
+    };
+    
+    Algorithm aSentimentAnalysis;
+    aSentimentAnalysis = {
+    	name = "sentimentAnalysis",
+    	artifact = "algs.SentimentAnalysis"
+    };
+    
+    Algorithm aResultCombination;
+    aResultCombination = {
+    	name = "resultCombination",
+    	artifact = "algs.ResultCombination"
+    };
+    
+    Algorithm aResultVisualization;
+    aResultVisualization = {
+    	name = "resultVisualization",
+    	artifact = "algs.ResultVisualization"
+    };
+    
+    
+    Algorithm aTest;
+    aTest = {
+    	name = "aTest",
+    	artifact = "algs.Test",
+    	algTopologyClass = "TSITopology"
+    };
+     
+     algorithms = {refBy(aNormalize), refBy(aAdd10), refBy(aDouble), refBy(aShow), refBy(aFilterTweet), refBy(aCountTweets), 
+     	refBy(aBatchSVM), refBy(aStreamSVM), refBy(aBatchDictionary), refBy(aStreamDictionary),
+     	refBy(aFinancialStreamIngestion), refBy(aTwitterStreamIngestion), refBy(aFinancialDataFilter), 
+     	refBy(aTwitterStreamFilter), refBy(aCorrelation), refBy(aSentimentAnalysis), refBy(aResultCombination), refBy(aResultVisualization),
+     	refBy(aTest)
+     };
+    
+	freeze{
+		aNormalize;
+		aAdd10;
+		aDouble;
+		aShow;
+		aFilterTweet;
+		aCountTweets;
+		aBatchSVM;
+		aStreamSVM;
+		aBatchDictionary;
+		aStreamDictionary;
+		aFinancialStreamIngestion;
+		aTwitterStreamIngestion;
+		aFinancialDataFilter;
+		aTwitterStreamFilter;
+		aCorrelation;
+		aSentimentAnalysis;
+		aResultCombination;
+		aResultVisualization;
+		aTest;
+		algorithms;
+	}  
+    
+    
+	
+}

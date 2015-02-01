@@ -1,9 +1,11 @@
 package de.uni_hildesheim.sse.easy.cmd;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -113,7 +115,8 @@ public class AllTests {
                 if(src.isDirectory() && !src.getName().equalsIgnoreCase("temp") && !src.getName().equalsIgnoreCase(".svn")) {
                     File dest = new File(TESTDATA_DIR, src.getName());
                     try {
-                        FileUtils.copyDirectory(src, dest);
+                        FileFilter filter = FileFilterUtils.notFileFilter(FileFilterUtils.nameFileFilter(".svn"));
+                        FileUtils.copyDirectory(src, dest, filter);
                     } catch (IOException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();

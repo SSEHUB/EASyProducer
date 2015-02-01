@@ -41,44 +41,32 @@ public abstract class BasisDatatype implements IDatatype {
         this.singleton = singleton;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public String getName() {
         return name;
     }
     
-    /** 
-     * {@inheritDoc}
-     */
+    @Override
     public String getNameSpace() {
         return "";
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public String getQualifiedName() {
         return name;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public String getUniqueName() {
         return name;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public final Operation getOperation(int index) {
         return singleton.getOperation(index);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public final int getOperationCount() {
         return singleton.getOperationCount();
     }
@@ -104,9 +92,7 @@ public abstract class BasisDatatype implements IDatatype {
         return isAssignable;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public Class<? extends IDatatype> getTypeClass() {
         return singleton.getTypeClass();
     }
@@ -120,42 +106,30 @@ public abstract class BasisDatatype implements IDatatype {
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public IDatatype getGenericType(int index) {
         throw new IndexOutOfBoundsException();
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public int getGenericTypeCount() {
         return 0;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public abstract void accept(IDatatypeVisitor visitor);
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public final InternalConstraint[] createConstraints(AbstractVariable declaration) {
         return null;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public boolean isPseudoType() {
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public boolean isPrimitive() {
         return true;
     }

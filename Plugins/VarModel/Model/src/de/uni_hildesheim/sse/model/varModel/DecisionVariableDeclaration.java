@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
+import de.uni_hildesheim.sse.utils.modelManagement.IVariable;
 
 /**
  * Implements a decision variable.
@@ -26,7 +27,8 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
  * @author Marcel Lueder
  * @author Holger Eichelberger
  */
-public class DecisionVariableDeclaration extends AbstractVariable implements IFreezable, IAttributableElement {
+public class DecisionVariableDeclaration extends AbstractVariable 
+    implements IFreezable, IAttributableElement, IVariable {
 
     // lazy initialization
     private List<Attribute> attributes;
@@ -41,11 +43,7 @@ public class DecisionVariableDeclaration extends AbstractVariable implements IFr
         super(name, type, null, parent);
     }
     
-    /** 
-     * Accept method for the visitor.
-     * 
-     * @param visitor The visitor, which should process this model element.
-     */
+    @Override
     public void accept(IModelVisitor visitor) {
         visitor.visitDecisionVariableDeclaration(this);
     }
@@ -128,9 +126,6 @@ public class DecisionVariableDeclaration extends AbstractVariable implements IFr
         return result;
     }
     
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean isTemporaryVariable() {
         return getParent() instanceof Constraint; // not nice :(
@@ -145,9 +140,6 @@ public class DecisionVariableDeclaration extends AbstractVariable implements IFr
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean propagateAttribute(Attribute attribute) {
         return addAttribute(new Attribute(attribute.getName(), attribute.getType(), getParent(), this));

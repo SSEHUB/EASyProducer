@@ -1,8 +1,12 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
@@ -10,20 +14,25 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.Arti
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.ExecutionVisitor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.IResolvableModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.ModelCallExpression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.RuntimeEnvironment;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.AbstractCallExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallArgument;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ConstantExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionParserRegistry;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IExpressionParser;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.StringReplacer;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionParserRegistry.ILanguage;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Collection;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.StringValueHelper;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.EnumValue;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlElement;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypes;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
+import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
 import de.uni_hildesheim.sse.utils.modelManagement.IndentationConfiguration;
 
 /**
@@ -34,6 +43,20 @@ import de.uni_hildesheim.sse.utils.modelManagement.IndentationConfiguration;
 public class TemplateLangExecution extends ExecutionVisitor<Template, Def, VariableDeclaration> 
     implements ITemplateLangVisitor {
 
+    public static final ILanguage LANGUAGE = new ILanguage() {
+
+        @Override
+        public String getName() {
+            return "VTL";
+        }
+        
+    };
+    
+    /**
+     * The name of the default main template (called {@value}).
+     */
+    public static final String DEFAULT_MAIN_TEMPLATE = "main";
+    
     /**
      * Denotes the default name of the configuration parameter (may be overwritten by user values).
      */
@@ -59,7 +82,8 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
      */
     public static final String PARAM_TARGET_SURE = INTERNAL_PARAM_PREFIX + PARAM_TARGET;
 
-    private static IExpressionParser expressionParser;
+    private static final List<JavaExtension> DEFAULT_EXTENSIONS = new ArrayList<JavaExtension>();
+    
     private RuntimeEnvironment environment;
     private PrintWriter out;
     private String mainName;
@@ -73,7 +97,7 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
      * @param parameter the top-level parameter for the script to be executed
      */
     public TemplateLangExecution(ITracer tracer, Writer out, Map<String, Object> parameter) {
-        this(tracer, out, "main", parameter);
+        this(tracer, out, DEFAULT_MAIN_TEMPLATE, parameter);
     }
     
     /**
@@ -86,35 +110,75 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
      */
     public TemplateLangExecution(ITracer tracer, Writer out, String mainName, Map<String, Object> parameter) {
         super(new RuntimeEnvironment(), tracer, parameter);
-        this.environment = getRuntimeEnvironment();
+        this.environment = (RuntimeEnvironment) getRuntimeEnvironment();
         this.out = new PrintWriter(out);
         this.mainName = mainName;
         this.tracer = tracer;
     }
     
     /**
-     * Defines the expression parser.
+     * Creates a new execution visitor for import expression evaluation.
      * 
-     * @param parser the parser
+     * @param environment the runtime environment to be used for expression evaluation
      */
-    public static void setExpressionParser(IExpressionParser parser) {
-        String info;
-        if (null != parser) {
-            info = "registered expression parser " + parser.getClass().getName();
-        } else {
-            info = "expression parser unregistered";
-        }
-        EASyLoggerFactory.INSTANCE.getLogger(TemplateLangExecution.class, Bundle.ID).info(info);
-        expressionParser = parser;
+    TemplateLangExecution(RuntimeEnvironment environment) {
+        super(environment, NoTracer.INSTANCE, new HashMap<String, Object>());
+        this.environment = environment;
+        this.out = new PrintWriter(new Writer() {
+
+            @Override
+            public void close() throws IOException {
+            }
+
+            @Override
+            public void flush() throws IOException {
+            }
+
+            @Override
+            public void write(char[] arg0, int arg1, int arg2) throws IOException {
+            }
+            
+        });
+        this.mainName = DEFAULT_MAIN_TEMPLATE;
+        this.tracer = NoTracer.INSTANCE;
     }
     
     /**
-     * Returns the current expression parser instance.
+     * Register a default Java extension.
      * 
-     * @return the current expression parser instance
+     * @param extension the extension to be registered
      */
-    public static IExpressionParser getExpressionParser() {
-        return expressionParser;
+    public static void registerDefaultExtension(Class<?> extension) {
+        if (null != extension) {
+            EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(TemplateLangExecution.class, Bundle.ID);
+            try {
+                DEFAULT_EXTENSIONS.add(new JavaExtension(extension, TypeRegistry.DEFAULT));
+                logger.info("registered default VTL extension " + extension.getName());
+            } catch (VilLanguageException e) {
+                logger.exception(e);
+            }
+        }
+    }
+    
+    /**
+     * Returns the number of default extensions.
+     * 
+     * @return the number of default extensions
+     */
+    public static int getDefaultExtensionCount() {
+        return DEFAULT_EXTENSIONS.size();
+    }
+    
+    /**
+     * Returns the specified default extension.
+     * 
+     * @param index the 0-based index of the default extension
+     * @return the default extension
+     * @throws IndexOutOfBoundsException in case that 
+     *   <code>index &lt; 0 || index &gt;={@link #getDefaultExtensionCount()}</code>
+     */
+    public static JavaExtension getDefaultExtension(int index) {
+        return DEFAULT_EXTENSIONS.get(index);
     }
     
     @Override
@@ -323,7 +387,8 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
             for (int a = 0; found < 0 && a < swtch.getAlternativeCount(); a++) {
                 SwitchStatement.Alternative alt = swtch.getAlternative(a);
                 Expression cond = alt.getCondition();
-                if (alt.isDefault() || checkConditionResult(cond.accept(this), cond, ConditionTest.DONT_CARE)) {
+                Object condValue = cond.accept(this);
+                if (alt.isDefault() || equals(condValue, select)) {
                     value = alt.getValue().accept(this);
                     found = a;
                 }
@@ -341,12 +406,41 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
         return value;
     }
 
+    /**
+     * Checks for equality among the given <code>condValue</code> (condition value) and the 
+     * given <code>exprValue</code>, whereby <code>exprValue</code> may be an {@link IvmlElement} and, thus,
+     * implicitly casted to the right value. This method is intended where common object values need to 
+     * be compared and no VIL/VTL casts may happen.
+     * 
+     * @param condValue the condition value
+     * @param exprValue the expression value
+     * @return <code>true</code> if the values are equal <code>false</code> else
+     */
+    private boolean equals(Object condValue, Object exprValue) {
+        boolean result = condValue.equals(exprValue);
+        if (!result && exprValue instanceof IvmlElement) {
+            IvmlElement iElt = (IvmlElement) exprValue;
+            if (condValue instanceof String) {
+                result = condValue.equals(iElt.getStringValue());
+            } else if (condValue instanceof Integer) {
+                result = condValue.equals(iElt.getIntegerValue());
+            } else if (condValue instanceof Boolean) {
+                result = condValue.equals(iElt.getBooleanValue());
+            } else if (condValue instanceof Double) {
+                result = condValue.equals(iElt.getRealValue());
+            } else if (condValue instanceof EnumValue) {
+                result = condValue.equals(iElt.getEnumValue());
+            }
+        }
+        return result;
+    }
+
     @Override
     public Object visitContentStatement(ContentStatement cnt) throws VilLanguageException {
         String content;
         try {
             // search for \r\n, \r, \n followed by indentation*step whitespaces or tabs +1
-            content = StringReplacer.substitute(cnt.getContent(), environment, expressionParser, this);
+            content = StringReplacer.substitute(cnt.getContent(), environment, getExpressionParser(), this);
             if (null != content) {
                 int indentation = environment.getIndentation();
                 if (indentation > 0) {
@@ -384,7 +478,7 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
         Object result = cst.getValue();
         // we have to care for $name and ${} but only in strings
         if (result instanceof String) {
-            result = StringReplacer.substitute(result.toString(), environment, expressionParser, this);
+            result = StringReplacer.substitute(result.toString(), environment, getExpressionParser(), this);
         }
         return result;
     }
@@ -436,5 +530,10 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
         varMap.remove(PARAM_CONFIG_SURE);
         varMap.remove(PARAM_TARGET_SURE);
     }
-    
+
+    @Override
+    protected IExpressionParser getExpressionParser() {
+        return ExpressionParserRegistry.getExpressionParser(LANGUAGE);
+    }
+
 }

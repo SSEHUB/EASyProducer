@@ -29,6 +29,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <p>
  * The following features are implemented:
  * <ul>
+ *   <li>{@link de.uni_hildesheim.sse.ivml.impl.TypedefCompoundImpl#getAbstract <em>Abstract</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.TypedefCompoundImpl#getName <em>Name</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.TypedefCompoundImpl#getSuper <em>Super</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.TypedefCompoundImpl#getElements <em>Elements</em>}</li>
@@ -39,6 +40,26 @@ import org.eclipse.emf.ecore.util.InternalEList;
  */
 public class TypedefCompoundImpl extends MinimalEObjectImpl.Container implements TypedefCompound
 {
+  /**
+   * The default value of the '{@link #getAbstract() <em>Abstract</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getAbstract()
+   * @generated
+   * @ordered
+   */
+  protected static final String ABSTRACT_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getAbstract() <em>Abstract</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getAbstract()
+   * @generated
+   * @ordered
+   */
+  protected String abstract_ = ABSTRACT_EDEFAULT;
+
   /**
    * The default value of the '{@link #getName() <em>Name</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -108,6 +129,29 @@ public class TypedefCompoundImpl extends MinimalEObjectImpl.Container implements
   protected EClass eStaticClass()
   {
     return IvmlPackage.Literals.TYPEDEF_COMPOUND;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String getAbstract()
+  {
+    return abstract_;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setAbstract(String newAbstract)
+  {
+    String oldAbstract = abstract_;
+    abstract_ = newAbstract;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, IvmlPackage.TYPEDEF_COMPOUND__ABSTRACT, oldAbstract, abstract_));
   }
 
   /**
@@ -196,6 +240,8 @@ public class TypedefCompoundImpl extends MinimalEObjectImpl.Container implements
   {
     switch (featureID)
     {
+      case IvmlPackage.TYPEDEF_COMPOUND__ABSTRACT:
+        return getAbstract();
       case IvmlPackage.TYPEDEF_COMPOUND__NAME:
         return getName();
       case IvmlPackage.TYPEDEF_COMPOUND__SUPER:
@@ -217,6 +263,9 @@ public class TypedefCompoundImpl extends MinimalEObjectImpl.Container implements
   {
     switch (featureID)
     {
+      case IvmlPackage.TYPEDEF_COMPOUND__ABSTRACT:
+        setAbstract((String)newValue);
+        return;
       case IvmlPackage.TYPEDEF_COMPOUND__NAME:
         setName((String)newValue);
         return;
@@ -241,6 +290,9 @@ public class TypedefCompoundImpl extends MinimalEObjectImpl.Container implements
   {
     switch (featureID)
     {
+      case IvmlPackage.TYPEDEF_COMPOUND__ABSTRACT:
+        setAbstract(ABSTRACT_EDEFAULT);
+        return;
       case IvmlPackage.TYPEDEF_COMPOUND__NAME:
         setName(NAME_EDEFAULT);
         return;
@@ -264,6 +316,8 @@ public class TypedefCompoundImpl extends MinimalEObjectImpl.Container implements
   {
     switch (featureID)
     {
+      case IvmlPackage.TYPEDEF_COMPOUND__ABSTRACT:
+        return ABSTRACT_EDEFAULT == null ? abstract_ != null : !ABSTRACT_EDEFAULT.equals(abstract_);
       case IvmlPackage.TYPEDEF_COMPOUND__NAME:
         return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
       case IvmlPackage.TYPEDEF_COMPOUND__SUPER:
@@ -285,7 +339,9 @@ public class TypedefCompoundImpl extends MinimalEObjectImpl.Container implements
     if (eIsProxy()) return super.toString();
 
     StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (name: ");
+    result.append(" (abstract: ");
+    result.append(abstract_);
+    result.append(", name: ");
     result.append(name);
     result.append(", super: ");
     result.append(super_);

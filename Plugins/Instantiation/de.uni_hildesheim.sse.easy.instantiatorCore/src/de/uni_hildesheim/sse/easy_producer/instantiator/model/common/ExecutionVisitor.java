@@ -13,6 +13,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallEx
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.EvaluationVisitor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IExpressionParser;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VariableExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Collection;
@@ -110,6 +111,10 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends
         if (null != var.getExpression()) {
             try {
                 value = var.getExpression().accept(this);
+                if (var.getType().isMap()) {
+                    value = de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Map.checkConvertEmpty(
+                        var.getType(), value);
+                }
                 environment.setValue(var, value);
                 tracer.valueDefined(var, value);
             } catch (ExpressionException e) {
@@ -462,6 +467,7 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends
         try {
             environment.decreaseIndentation();
             environment.popLevel();
+            environment.storeArtifacts(); // store artifacts in global variables
         } catch (ArtifactException e) {
             throw new VilLanguageException(e);
         }
@@ -525,5 +531,12 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends
         }
         return value;
     }
+    
+    /**
+     * Returns the actual expression parser.
+     * 
+     * @return the actual expression parser
+     */
+    protected abstract IExpressionParser getExpressionParser();
 
 }

@@ -1,0 +1,8 @@
+vilScript rename (Project source, Project target, Configuration config) {
+
+    main(Project source, Project target, Configuration config) = : {
+        FileArtifact targetFile = "$target/rename.txt";
+        targetFile.rename("$target/rename_0.txt");
+    }
+
+}

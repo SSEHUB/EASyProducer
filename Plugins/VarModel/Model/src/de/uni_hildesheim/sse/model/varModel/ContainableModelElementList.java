@@ -59,37 +59,27 @@ public class ContainableModelElementList extends ArrayList<ContainableModelEleme
         super(initialCapacity);
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public ContainableModelElement getElement(int index) {
         return get(index);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public int getElementCount() {
         return size();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public int getImportsCount() {
         return 0;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public ProjectImport getImport(int index) {
         throw new IndexOutOfBoundsException();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public IModelElement getParent() {
         return parent;
     }
@@ -111,16 +101,12 @@ public class ContainableModelElementList extends ArrayList<ContainableModelEleme
         return false; // this is just a list used internally
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public boolean isInterface() {
         return false; // this is just a list used internally
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public ContainableModelElement getElement(String name) {
         ContainableModelElement result = null;
         for (int i = 0; null == result && i < size(); i++) {

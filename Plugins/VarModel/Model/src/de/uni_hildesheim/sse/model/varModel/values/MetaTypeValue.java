@@ -63,11 +63,6 @@ public class MetaTypeValue extends Value {
         }
     }
     
-    /** 
-     * Accept method for the visitor. <br/>
-     * This method is used for saving this model element.
-     * @param visitor The visitor, which should save this model element.
-     */
     @Override
     public void accept(IValueVisitor visitor) {
         visitor.visitMetaTypeValue(this);
@@ -78,9 +73,7 @@ public class MetaTypeValue extends Value {
         return value != null;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public Value clone() {
         Value result;
         try {
@@ -101,6 +94,11 @@ public class MetaTypeValue extends Value {
      */
     public IDatatype getContainedType() {
         return value;
+    }
+
+    @Override
+    public boolean equalsPartially(Value value) {
+        return equals(value); // meta type value is symmetric
     }
 
 }

@@ -253,7 +253,7 @@ public abstract class ModelManagement <M extends IModel> {
             }
         } else {
             LOGGER.warn("updating model: no information object found for " + model.getName() + " " 
-                + Version.toString(model.getVersion()) + "(syntax/semantic error?)");
+                + Version.toString(model.getVersion()) + " (syntax/semantic error?)");
         }
         if (model == result) {
             events.notifyModelReloadFailed(model);
@@ -395,9 +395,26 @@ public abstract class ModelManagement <M extends IModel> {
      * @return messages which occur during resolution, <code>null</code> or empty if none
      */
     public synchronized List<IMessage> resolveImports(M model, URI uri, List<ModelInfo<M>> inProgress) {
-        return getTopLevelResolver().resolveImports(model, uri, inProgress, repository, paths());
+        return getTopLevelResolver().resolveImports(model, uri, inProgress, repository, 
+            model.getRestrictionEvaluationContext());
     }
-            
+
+    /**
+     * Resolves the denoted model considering the given <code>restrictions</code>.
+     * 
+     * @param modelName the name of the model
+     * @param restriction the restriction (may be <b>null</b> if there is none)
+     * @param baseURI the URI where to start the resolution at (may be an existing model)
+     * @param evaluationContext the context for evaluating import restrictions (variable definitions... 
+     *   interpreted locally)
+     * @return the resolved model
+     * @throws ModelManagementException in case of resolution failures
+     */
+    public synchronized M resolve(String modelName, IVersionRestriction restriction, URI baseURI, 
+        IRestrictionEvaluationContext evaluationContext) throws ModelManagementException {
+        return getTopLevelResolver().resolve(modelName, restriction, baseURI, repository, evaluationContext);
+    }
+    
     /**
      * Loads the model related to <code>info</code>.
      * 

@@ -21,6 +21,8 @@ import de.uni_hildesheim.sse.Bundle;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
+import de.uni_hildesheim.sse.utils.modelManagement.IVariable;
+import de.uni_hildesheim.sse.utils.modelManagement.IVersionRestriction.IVariableMapper;
 
 /**
  * Copies a constraint syntax tree possibly mapping the variables. May be 
@@ -32,12 +34,31 @@ public class CopyVisitor implements IConstraintTreeVisitor {
 
     private Map<AbstractVariable, AbstractVariable> mapping;
     private ConstraintSyntaxTree result;
+    private IVariableMapper mapper;
+    private IVariableReplacer replacer;
 
+    /**
+     * Defines a common variable replacer. (Shall replace <code>mapping</code> in the future).
+     * 
+     * @author Holger Eichelberger
+     */
+    public interface IVariableReplacer extends IVariableMapper {
+        
+        /**
+         * Maps a leaf variable.
+         * 
+         * @param variable the variable to be mapped
+         * @return the mapped variable or <b>null</b> if there is no mapping
+         */
+        public ConstraintSyntaxTree mapLeaf(Variable variable);
+        
+    }
+    
     /**
      * Creates a copy visitor without mapping.
      */
     public CopyVisitor() {
-        this(null);
+        this((Map<AbstractVariable, AbstractVariable>) null);
     }
     
     /**
@@ -49,6 +70,18 @@ public class CopyVisitor implements IConstraintTreeVisitor {
      */
     public CopyVisitor(Map<AbstractVariable, AbstractVariable> mapping) {
         this.mapping = mapping;
+    }
+
+    /**
+     * Creates a copy visitor with explicit mapping.
+     * 
+     * @param mapper the variable mapper (may be <b>null</b>)
+     */
+    public CopyVisitor(IVariableMapper mapper) {
+        this.mapper = mapper;
+        if (mapper instanceof IVariableReplacer) {
+            this.replacer = (IVariableReplacer) mapper;
+        }
     }
     
     /**
@@ -67,38 +100,35 @@ public class CopyVisitor implements IConstraintTreeVisitor {
         result = null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitConstantValue(ConstantValue value) {
         result = new ConstantValue(value.getConstantValue());
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitVariable(Variable variable) {
-        result = new Variable(mapVariable(variable.getVariable()));
+        ConstraintSyntaxTree var = null;
+        if (null != replacer) {
+            var = replacer.mapLeaf(variable);
+        }
+        if (null == var) {
+            var = new Variable(mapVariable(variable.getVariable()));
+        }
+        result = var;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitParenthesis(Parenthesis parenthesis) {
         result = new Parenthesis(result);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitComment(Comment comment) {
         comment.getExpr().accept(this);
         result = new Comment(result, comment.getComment());
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitOclFeatureCall(OCLFeatureCall call) {
         call.getOperand().accept(this);
         ConstraintSyntaxTree operand = result;
@@ -107,7 +137,7 @@ public class CopyVisitor implements IConstraintTreeVisitor {
             call.getParameter(p).accept(this);
             args[p] = result;
         }
-        result = new OCLFeatureCall(operand, call.getOperation(), args);
+        result = new OCLFeatureCall(operand, call.getOperation(), call.getAccessor(), args);
     }
 
     /**
@@ -120,9 +150,18 @@ public class CopyVisitor implements IConstraintTreeVisitor {
         DecisionVariableDeclaration result = null;
         if (null != mapping) {
             AbstractVariable tmp = mapping.get(var); 
-            if (null == tmp || !(tmp instanceof DecisionVariableDeclaration)) {
+            if (tmp instanceof DecisionVariableDeclaration) {
                 result = var;
             }
+        }
+        if (null == result && null != mapper) {
+            IVariable tmp = mapper.map(var);
+            if (tmp instanceof DecisionVariableDeclaration) {
+                result = var;
+            }
+        }
+        if (null == result) {
+            result = var;
         }
         return result;
     }
@@ -140,31 +179,29 @@ public class CopyVisitor implements IConstraintTreeVisitor {
             if (null == result) {
                 result = var;
             }
+        } else {
+            result = var;
         }
         return result;
     }
 
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitLet(Let let) {
         DecisionVariableDeclaration var = mapVariable(let.getVariable());
         let.getInExpression().accept(this);
         result = new Let(var, result);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitIfThen(IfThen ifThen) {
         ifThen.getIfExpr().accept(this);
         ConstraintSyntaxTree ifExpr = result;
-        ifThen.getThenExpr();
+        ifThen.getThenExpr().accept(this);
         ConstraintSyntaxTree thenExpr = result;
         ConstraintSyntaxTree elseExpr;
         if (null != ifThen.getElseExpr()) {
-            ifThen.getElseExpr();
+            ifThen.getElseExpr().accept(this);
             elseExpr = result;
         } else {
             elseExpr = null;
@@ -172,9 +209,7 @@ public class CopyVisitor implements IConstraintTreeVisitor {
         result = new IfThen(ifExpr, thenExpr, elseExpr);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitContainerOperationCall(ContainerOperationCall call) {
         call.getContainer().accept(this);
         ConstraintSyntaxTree container = result;
@@ -187,24 +222,13 @@ public class CopyVisitor implements IConstraintTreeVisitor {
         result = new ContainerOperationCall(container, call.getOperation(), expression, decls);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitCompoundAccess(CompoundAccess access) {
         access.getCompoundExpression().accept(this);
         result = new CompoundAccess(result, access.getSlotName());
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void visitDslFragment(DslFragment fragment) {
-        result = new DslFragment(fragment.getCommand(), fragment.getEscape(), fragment.getStop(), fragment.getDsl());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitUnresolvedExpression(UnresolvedExpression expression) {
         if (null != expression.getUnresolvedLeaf()) {
             result = new UnresolvedExpression(expression.getUnresolvedLeaf());
@@ -214,9 +238,7 @@ public class CopyVisitor implements IConstraintTreeVisitor {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitCompoundInitializer(CompoundInitializer initializer) {
         String[] slots = new String[initializer.getSlotCount()];
         for (int s = 0; s < slots.length; s++) {
@@ -238,9 +260,7 @@ public class CopyVisitor implements IConstraintTreeVisitor {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitContainerInitializer(ContainerInitializer initializer) {
         ConstraintSyntaxTree[] exprs = new ConstraintSyntaxTree[initializer.getExpressionCount()];
         for (int e = 0; e < exprs.length; e++) {
@@ -252,6 +272,11 @@ public class CopyVisitor implements IConstraintTreeVisitor {
         } catch (CSTSemanticException e) {
             EASyLoggerFactory.INSTANCE.getLogger(CopyVisitor.class, Bundle.ID).exception(e);
         }
+    }
+
+    @Override
+    public void visitSelf(Self self) {
+        result = self; // no replacement needed
     }
 
 }

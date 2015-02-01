@@ -129,51 +129,37 @@ class DelegatingType implements IDatatype {
         this.delegate = delegate;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public String getName() {
         return delegate.getName();
     }
 
-    /** 
-     * {@inheritDoc}
-     */
+    @Override
     public String getNameSpace() {
         return delegate.getNameSpace();
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public String getQualifiedName() {
         return delegate.getQualifiedName();
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public String getUniqueName() {
         return delegate.getUniqueName();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public Operation getOperation(int index) {
         return getAllOperation(index);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public int getOperationCount() {
         return getAllOperationCount();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public boolean isAssignableFrom(IDatatype type) {
         return delegate.isAssignableFrom(type);
     }
@@ -187,9 +173,7 @@ class DelegatingType implements IDatatype {
         operationList.add(operator);
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public Class<? extends IDatatype> getTypeClass() {
         return delegate.getClass();
     }
@@ -203,37 +187,27 @@ class DelegatingType implements IDatatype {
         return delegate.getType();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public IDatatype getGenericType(int index) {
         return delegate.getGenericType(index);
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public int getGenericTypeCount() {
         return delegate.getGenericTypeCount();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void accept(IDatatypeVisitor visitor) {
         delegate.accept(visitor);
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public final InternalConstraint[] createConstraints(AbstractVariable declaration) {
         return null;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public boolean isPseudoType() {
         return false; // represents a real type
     }
@@ -252,9 +226,7 @@ class DelegatingType implements IDatatype {
         return getName();
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public boolean isPrimitive() {
         return delegate.isPrimitive();
     }

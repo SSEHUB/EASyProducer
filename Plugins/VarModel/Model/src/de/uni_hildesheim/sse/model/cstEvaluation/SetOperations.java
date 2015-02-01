@@ -95,6 +95,7 @@ public class SetOperations {
         EvaluatorRegistry.registerEvaluator(INCLUDING, Set.INCLUDING);
         EvaluatorRegistry.registerEvaluator(GenericOperations.EQUALS, Set.EQUALS);
         EvaluatorRegistry.registerEvaluator(GenericOperations.ASSIGNMENT, Set.ASSIGNMENT);
+        EvaluatorRegistry.registerEvaluator(ContainerOperations.ADD, Set.ADD);
     }
     
     /**

@@ -1,0 +1,9 @@
+vilScript vtl (Project source, Project target, Configuration config) {
+
+    main(Project source, Project target, Configuration config) = : {
+        String pfad = "/antTestFiles/build.xml";
+        String buildTarget = "specialTarget";
+        ant(source.getPath(), pfad, buildTarget);
+    }
+
+}

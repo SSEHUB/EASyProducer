@@ -2,25 +2,18 @@
  */
 package de.uni_hildesheim.sse.ivml.impl;
 
+import de.uni_hildesheim.sse.ivml.Expression;
 import de.uni_hildesheim.sse.ivml.ImportStmt;
 import de.uni_hildesheim.sse.ivml.IvmlPackage;
-import de.uni_hildesheim.sse.ivml.VersionedId;
-
-import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
-import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -31,7 +24,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ImportStmtImpl#getName <em>Name</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ImportStmtImpl#getInterface <em>Interface</em>}</li>
- *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ImportStmtImpl#getVersions <em>Versions</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ImportStmtImpl#getRestriction <em>Restriction</em>}</li>
  * </ul>
  * </p>
  *
@@ -80,14 +73,14 @@ public class ImportStmtImpl extends MinimalEObjectImpl.Container implements Impo
   protected String interface_ = INTERFACE_EDEFAULT;
 
   /**
-   * The cached value of the '{@link #getVersions() <em>Versions</em>}' containment reference list.
+   * The cached value of the '{@link #getRestriction() <em>Restriction</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getVersions()
+   * @see #getRestriction()
    * @generated
    * @ordered
    */
-  protected EList<VersionedId> versions;
+  protected Expression restriction;
 
   /**
    * <!-- begin-user-doc -->
@@ -161,13 +154,47 @@ public class ImportStmtImpl extends MinimalEObjectImpl.Container implements Impo
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<VersionedId> getVersions()
+  public Expression getRestriction()
   {
-    if (versions == null)
+    return restriction;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetRestriction(Expression newRestriction, NotificationChain msgs)
+  {
+    Expression oldRestriction = restriction;
+    restriction = newRestriction;
+    if (eNotificationRequired())
     {
-      versions = new EObjectContainmentEList<VersionedId>(VersionedId.class, this, IvmlPackage.IMPORT_STMT__VERSIONS);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, IvmlPackage.IMPORT_STMT__RESTRICTION, oldRestriction, newRestriction);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
     }
-    return versions;
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setRestriction(Expression newRestriction)
+  {
+    if (newRestriction != restriction)
+    {
+      NotificationChain msgs = null;
+      if (restriction != null)
+        msgs = ((InternalEObject)restriction).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - IvmlPackage.IMPORT_STMT__RESTRICTION, null, msgs);
+      if (newRestriction != null)
+        msgs = ((InternalEObject)newRestriction).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - IvmlPackage.IMPORT_STMT__RESTRICTION, null, msgs);
+      msgs = basicSetRestriction(newRestriction, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, IvmlPackage.IMPORT_STMT__RESTRICTION, newRestriction, newRestriction));
   }
 
   /**
@@ -180,8 +207,8 @@ public class ImportStmtImpl extends MinimalEObjectImpl.Container implements Impo
   {
     switch (featureID)
     {
-      case IvmlPackage.IMPORT_STMT__VERSIONS:
-        return ((InternalEList<?>)getVersions()).basicRemove(otherEnd, msgs);
+      case IvmlPackage.IMPORT_STMT__RESTRICTION:
+        return basicSetRestriction(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -200,8 +227,8 @@ public class ImportStmtImpl extends MinimalEObjectImpl.Container implements Impo
         return getName();
       case IvmlPackage.IMPORT_STMT__INTERFACE:
         return getInterface();
-      case IvmlPackage.IMPORT_STMT__VERSIONS:
-        return getVersions();
+      case IvmlPackage.IMPORT_STMT__RESTRICTION:
+        return getRestriction();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -211,7 +238,6 @@ public class ImportStmtImpl extends MinimalEObjectImpl.Container implements Impo
    * <!-- end-user-doc -->
    * @generated
    */
-  @SuppressWarnings("unchecked")
   @Override
   public void eSet(int featureID, Object newValue)
   {
@@ -223,9 +249,8 @@ public class ImportStmtImpl extends MinimalEObjectImpl.Container implements Impo
       case IvmlPackage.IMPORT_STMT__INTERFACE:
         setInterface((String)newValue);
         return;
-      case IvmlPackage.IMPORT_STMT__VERSIONS:
-        getVersions().clear();
-        getVersions().addAll((Collection<? extends VersionedId>)newValue);
+      case IvmlPackage.IMPORT_STMT__RESTRICTION:
+        setRestriction((Expression)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -247,8 +272,8 @@ public class ImportStmtImpl extends MinimalEObjectImpl.Container implements Impo
       case IvmlPackage.IMPORT_STMT__INTERFACE:
         setInterface(INTERFACE_EDEFAULT);
         return;
-      case IvmlPackage.IMPORT_STMT__VERSIONS:
-        getVersions().clear();
+      case IvmlPackage.IMPORT_STMT__RESTRICTION:
+        setRestriction((Expression)null);
         return;
     }
     super.eUnset(featureID);
@@ -268,8 +293,8 @@ public class ImportStmtImpl extends MinimalEObjectImpl.Container implements Impo
         return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
       case IvmlPackage.IMPORT_STMT__INTERFACE:
         return INTERFACE_EDEFAULT == null ? interface_ != null : !INTERFACE_EDEFAULT.equals(interface_);
-      case IvmlPackage.IMPORT_STMT__VERSIONS:
-        return versions != null && !versions.isEmpty();
+      case IvmlPackage.IMPORT_STMT__RESTRICTION:
+        return restriction != null;
     }
     return super.eIsSet(featureID);
   }

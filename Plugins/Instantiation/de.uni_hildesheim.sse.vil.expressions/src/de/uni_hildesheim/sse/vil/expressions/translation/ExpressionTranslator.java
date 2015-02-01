@@ -19,6 +19,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Contai
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionEvaluator;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionVersionRestriction;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IResolvable;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ParenthesisExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Resolver;
@@ -34,6 +35,11 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.VilExcept
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlElement;
 import de.uni_hildesheim.sse.model.varModel.values.EnumValue;
 import de.uni_hildesheim.sse.utils.messages.AbstractException;
+import de.uni_hildesheim.sse.utils.modelManagement.DefaultImportResolver;
+import de.uni_hildesheim.sse.utils.modelManagement.IVersionRestriction;
+import de.uni_hildesheim.sse.utils.modelManagement.RestrictionEvaluationException;
+import de.uni_hildesheim.sse.utils.modelManagement.Version;
+import de.uni_hildesheim.sse.utils.modelManagement.VersionFormatException;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.AdditiveExpression;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.AdditiveExpressionPart;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ArgumentList;
@@ -63,7 +69,6 @@ import de.uni_hildesheim.sse.vil.expressions.expressionDsl.UnaryExpression;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.UnqualifiedExecution;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VersionSpec;
-import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VersionedId;
 
 /**
  * Implements the translation from the expression DSL to the expression model in the instantiator core.
@@ -576,6 +581,7 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                     CallArgument[] args = processArguments(cEx.getParam(), resolver);
                     result = new ConstructorCallExpression(processType(cEx.getType(), resolver), args);
                     result = processSubCalls(result, cEx.getCalls(), resolver);
+                    result.inferType();
                 } catch (ExpressionException e) {
                     throw new TranslatorException(e, cEx, ExpressionDslPackage.Literals.CONSTRUCTOR_EXECUTION__TYPE);
                 }
@@ -628,37 +634,55 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
             }
             result = createConstant(type, tmp, arg, 
                 ExpressionDslPackage.Literals.CONSTANT__NVALUE, resolver.getTypeRegistry());
-        }
-        if (null != arg.getSValue()) {
+        } else if (null != arg.getSValue()) {
             String s = convertString(arg.getSValue());
             result = createConstant(TypeRegistry.stringType(), s, arg, 
                 ExpressionDslPackage.Literals.CONSTANT__SVALUE, resolver.getTypeRegistry());
-        }
-        if (null != arg.getQValue()) {
-            result = processQualifiedValue(arg, resolver);
-        }
-        if (null != arg.getBValue()) {
+        } else if (null != arg.getQValue()) {
+            String name = Utils.getQualifiedNameString(arg.getQValue());
+            if (Version.isVersion(name)) { // parser mismatch fixed here
+                result = convertToVersion(name, arg, resolver);
+            } else {
+                result = processQualifiedValue(name, arg, resolver);
+            }
+        } else if (null != arg.getBValue()) {
             result = createConstant(TypeRegistry.booleanType(), arg.getBValue(), arg, 
                 ExpressionDslPackage.Literals.CONSTANT__BVALUE, resolver.getTypeRegistry());
-        }
-        if (null != arg.getNull()) {
+        } else if (null != arg.getNull()) {
             result = createConstant(TypeRegistry.anyType(), TypeRegistry.NULL, arg,
                 ExpressionDslPackage.Literals.CONSTANT__NULL, resolver.getTypeRegistry());
+        } else if (null != arg.getVersion()) {
+            result = convertToVersion(arg.getVersion(), arg, resolver);
+        }
+        return result;
+    }
+    
+    private Expression convertToVersion(String text, Constant arg, R resolver) throws TranslatorException {
+        Expression result;
+        if (text.startsWith("v")) {
+            text = text.substring(1);
+        }
+        try {
+            result = createConstant(TypeRegistry.versionType(), new Version(text), arg,
+                ExpressionDslPackage.Literals.CONSTANT__VERSION, resolver.getTypeRegistry());
+        } catch (VersionFormatException e) {
+            throw new TranslatorException(e.getMessage(), arg, 
+                ExpressionDslPackage.Literals.CONSTANT__VERSION, e.getId());
         }
         return result;
     }
 
     /**
      * Processes a qualified value and creates variable expressions.
+     * @param name the qualified name
      * @param arg the constant to be processed
      * @param resolver a resolver instance for resolving variables etc.
      * @return the resulting expression node
      * @throws TranslatorException in case that the translation fails for some reason, in particular if 
      *     ITER cannot be resolved
      */
-    protected Expression processQualifiedValue(Constant arg, R resolver) throws TranslatorException {
+    protected Expression processQualifiedValue(String name, Constant arg, R resolver) throws TranslatorException {
         Expression result = null;
-        String name = Utils.getQualifiedNameString(arg.getQValue());
         IResolvable res = resolver.resolve(name, false);
         if (null == res) {
             if ("ITER".equals(name)) {
@@ -783,7 +807,8 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
         throws TranslatorException {
         ContainerInitializerExpression result;
         if (null != initializer.getExprs()) {
-            List<TypeDescriptor<? extends IVilType>> dimensions = null;
+            //List<TypeDescriptor<? extends IVilType>> dimensions = null;
+            int dimensions = -1;
             List<TypeDescriptor<? extends IVilType>> partDims = new ArrayList<TypeDescriptor<? extends IVilType>>();
             List<Expression> inits = new ArrayList<Expression>();
             for (de.uni_hildesheim.sse.vil.expressions.expressionDsl.ContainerInitializerExpression initEx : initializer.getExprs()) {
@@ -808,13 +833,19 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                     throw new TranslatorException("unknown dimension of container initializer", initEx, 
                         ExpressionDslPackage.Literals.CONTAINER_INITIALIZER_EXPRESSION__CONTAINER, ErrorCodes.DIMENSION);
                 }
-                if (null == dimensions) {
+                if (dimensions < 0) {
+                    dimensions = partDims.size();
+                } else if (dimensions != partDims.size()) {
+                    throw new TranslatorException("unmatching dimension of container initializer part", initEx, 
+                        ExpressionDslPackage.Literals.CONTAINER_INITIALIZER_EXPRESSION__CONTAINER, ErrorCodes.DIMENSION);
+                }
+                /*if (null == dimensions) {
                     dimensions = new ArrayList<TypeDescriptor<? extends IVilType>>();
                     dimensions.addAll(partDims);
                 } else if (!checkDimensions(dimensions, partDims)) {
                     throw new TranslatorException("unmatching dimension of container initializer", initEx, 
                         ExpressionDslPackage.Literals.CONTAINER_INITIALIZER_EXPRESSION__CONTAINER, ErrorCodes.DIMENSION);
-                }
+                }*/
                 inits.add(part);
             }
             Expression[] exprs = new Expression[inits.size()];
@@ -833,14 +864,14 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
      * @param d2 the second list of dimension types to be checked
      * @return <code>true</code> if the dimension types are ok, <code>false</code> else
      */
-    private boolean checkDimensions(List<TypeDescriptor<? extends IVilType>> d1, 
+    /*private boolean checkDimensions(List<TypeDescriptor<? extends IVilType>> d1, 
         List<TypeDescriptor<? extends IVilType>> d2) {
         boolean ok = d1.size() == d2.size();
         for (int d = 0; ok && d < d1.size(); d++) {
             ok = d1.get(d).isAssignableFrom(d2.get(d));
         }
         return ok;
-    }
+    }*/
     
     /**
      * Processes the type parameter.
@@ -853,15 +884,16 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
      */
     protected TypeDescriptor<? extends IVilType>[] processTypeParameter(TypeParameters param, Type type, R resolver) 
         throws TranslatorException {
-        EList<String> typeNames = param.getParam();
-        TypeDescriptor<? extends IVilType>[] result = TypeDescriptor.createArray(typeNames.size());
-        for (int i = 0; i < typeNames.size(); i++) {
-            String typeName = typeNames.get(i);
-            result[i] = resolver.getTypeRegistry().getType(typeName);
-            if (null == result[i]) {
-                throw new TranslatorException("type '" + typeName + "' unknown", type, 
-                    ExpressionDslPackage.Literals.TYPE__PARAM, ErrorCodes.UNKNOWN_TYPE);
-            }
+        EList<Type> params = param.getParam();
+        TypeDescriptor<? extends IVilType>[] result = TypeDescriptor.createArray(params.size());
+        for (int i = 0; i < params.size(); i++) {
+            result[i] = processType(params.get(i), resolver);
+//            String typeName = typeNames.get(i);
+//            result[i] = resolver.getTypeRegistry().getType(typeName);
+//            if (null == result[i]) {
+//                throw new TranslatorException("type '" + typeName + "' unknown", type, 
+//                    ExpressionDslPackage.Literals.TYPE__PARAM, ErrorCodes.UNKNOWN_TYPE);
+//            }
         }
         return result;
     }
@@ -896,6 +928,27 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                     ContainerInitializerExpression cie = (ContainerInitializerExpression) init;
                     ok = 0 == cie.getInitExpressionsCount();
                 }
+                if (!ok && type.isSet() && exType.isSequence() && 0 == exType.getParameterCount() 
+                    && init instanceof ContainerInitializerExpression) {
+                    // left side is set and right side is empty container initializer - convert and ok
+                    ContainerInitializerExpression cie = (ContainerInitializerExpression) init;
+                    if (0 == cie.getInitExpressionsCount()) {
+                        init = cie.toSet();
+                        exType = cie.inferType();
+                        ok = true;
+                    }
+                }
+                if (!ok && type.isSet() && exType.isSequence() && init instanceof ContainerInitializerExpression) {
+                    // left side is set and right side is empty container initializer - convert and ok
+                    ContainerInitializerExpression cie = (ContainerInitializerExpression) init;
+                    ContainerInitializerExpression tmp = cie.toSet();
+                    TypeDescriptor<? extends IVilType> tmpType = tmp.inferType();
+                    if (type.isAssignableFrom(tmpType)) {
+                        init = tmp;
+                        exType = tmpType;
+                        ok = true;
+                    }
+                }
                 if (!ok) {
                     OperationDescriptor conversion = TypeDescriptor.findConversionOnBoth(exType, type);
                     if (null == conversion) {
@@ -908,6 +961,8 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                 }
             } catch (ExpressionException e) {
                 throw new TranslatorException(e, decl, ExpressionDslPackage.Literals.VARIABLE_DECLARATION__TYPE);
+            } catch (VilException e) {
+                throw new TranslatorException(e, decl, ExpressionDslPackage.Literals.VARIABLE_DECLARATION__NAME);
             }
         } 
         I result = createVariableDeclaration(name, type, isConstant, init);
@@ -982,15 +1037,52 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
      * @param spec the version specification (may be <b>null</b>)
      */
     public void warnVersionRestrictions(VersionSpec spec) {
-        if (null != spec) {
-            int size = spec.getConflicts().size();
-            for (int v = 0; v < size; v++) {
-                VersionedId vId = spec.getConflicts().get(v);
-    
-                warning("currently not (fully) supported", vId, 
-                    ExpressionDslPackage.Literals.VERSIONED_ID__VERSION, 0);
-            }        
+        if (!DefaultImportResolver.IMPORT_WITH_VERSION) {
+            if (null != spec) {
+                warning("currently not (fully) supported", spec, 
+                    ExpressionDslPackage.Literals.VERSION_SPEC__RESTRICTION, 0);
+            }
         }
     }
+
+    /**
+     * Processes an import restriction.
+     * 
+     * @param name the name of the import
+     * @param spec the version specification to be processed
+     * @return the created restriction
+     * @throws TranslatorException in case of any translation problem
+     */
+    public IVersionRestriction processRestriction(String name, VersionSpec spec, R resolver) 
+        throws TranslatorException {
+        IVersionRestriction result = null;
+        if (null != spec && null != spec.getRestriction()) {
+            resolver.pushLevel();
+            I versionVariable = createVariableDeclaration("version", TypeRegistry.versionType(), false, null);
+            resolver.add(versionVariable);
+            try {
+                result = createExpressionVersionRestriction(processExpression(spec.getRestriction(), resolver), 
+                    versionVariable, spec.getRestriction(), ExpressionDslPackage.Literals.VERSION_SPEC__RESTRICTION);
+                resolver.popLevel();
+            } catch (RestrictionEvaluationException e) {
+                throw new TranslatorException(e.getMessage(), spec, 
+                    ExpressionDslPackage.Literals.VERSION_SPEC__RESTRICTION, e.getId());
+            }
+        }
+        return result;
+    }
+    
+    /**
+     * Creates an expression version restriction matching this class.
+     * 
+     * @param expr the expression for the restriction
+     * @param decl the version variable
+     * @param cause the grammar cause for this call
+     * @param feature the causing feature
+     * @return the created instance
+     * @throws RestrictionEvaluationException in case of any type related problems
+     */
+    protected abstract ExpressionVersionRestriction createExpressionVersionRestriction(Expression expr, 
+        VariableDeclaration decl, EObject cause, EStructuralFeature feature) throws RestrictionEvaluationException;
 
 }

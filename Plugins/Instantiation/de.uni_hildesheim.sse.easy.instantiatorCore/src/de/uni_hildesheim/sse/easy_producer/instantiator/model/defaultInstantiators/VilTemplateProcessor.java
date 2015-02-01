@@ -24,6 +24,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguage
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.TracerFactory;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.EvaluationVisitor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionParserRegistry;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IExpressionParser;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IResolvable;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IRuntimeEnvironment;
@@ -47,12 +48,12 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configura
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.DecisionVariable;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlElement;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
+import de.uni_hildesheim.sse.utils.modelManagement.IRestrictionEvaluationContext;
+import de.uni_hildesheim.sse.utils.modelManagement.IVersionRestriction;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
 import de.uni_hildesheim.sse.utils.modelManagement.Version;
-import de.uni_hildesheim.sse.utils.modelManagement.VersionRestriction;
-import de.uni_hildesheim.sse.utils.modelManagement.VersionRestriction.Operator;
 
 /**
  * Implements the default VIL template processor. This instantiator handles
@@ -128,7 +129,8 @@ public class VilTemplateProcessor implements IVilType {
     private static void process(FileArtifact template, Configuration config, IArtifact target, 
         Map<String, Object> other, List<IArtifact> result) throws ArtifactException {
         // obtaining the expression parser for instantiation
-        IExpressionParser expressionParser = TemplateLangExecution.getExpressionParser();
+        IExpressionParser expressionParser = ExpressionParserRegistry.getExpressionParser(
+            TemplateLangExecution.LANGUAGE);
         if (null == expressionParser) {
             throw new ArtifactException("no expression parser registered", ArtifactException.ID_INTERNAL);
         }
@@ -378,7 +380,7 @@ public class VilTemplateProcessor implements IVilType {
             result = new ListSet<IArtifact>(tmp, IArtifact.class);
         }
         return result;
-    }   
+    }
     
     /**
      * Prunes <code>info</code> by removing all information objects that are not in one of the <code>vtlPaths</code>.
@@ -402,6 +404,8 @@ public class VilTemplateProcessor implements IVilType {
         }
         // getting rid of unrelated paths is just a first solution
     }
+
+    // checkstyle: stop exception type check
     
     /**
      * Obtains the template for <code>templateName</code> and <code>version</code>.
@@ -416,57 +420,59 @@ public class VilTemplateProcessor implements IVilType {
     private static Template obtainTemplate(String templateName, ModelImport<Template> restrictions, String[] vtlPaths, 
         Script caller) throws ArtifactException {
         Template model = null;
-        Version ver = null;
-        if (null != restrictions) {
-            // TODO resolve based on restrictions -> Patrick Jähne
-            if (1 == restrictions.getRestrictionsCount()) {
-                VersionRestriction res = restrictions.getRestriction(0);
-                if (Operator.EQUALS == res.getOperator()) {
-                    ver = res.getVersion();
-                }
-            }
-        }
         try {
-            List<ModelInfo<Template>> info = null;
-            if (null != caller) {
+            URI baseURI = null;
+            IRestrictionEvaluationContext context;
+            if (null != caller) { // shall always be the case from VIL
                 ModelInfo<Script> cInfo = BuildModel.INSTANCE.availableModels().getModelInfo(caller);
-                if (null != cInfo) {
-                    info = TemplateModel.INSTANCE.availableModels().getVisibleModelInfo(
-                        templateName, ver, cInfo.getLocation());
+                baseURI = cInfo.getLocation();
+                context = caller.getRestrictionEvaluationContext();
+            } else {
+                // fallback: case unclear - tests only?
+                List<ModelInfo<Template>> infos = TemplateModel.INSTANCE.availableModels().getModelInfo(templateName, 
+                    (Version) null);
+                pruneByPaths(infos, vtlPaths);
+                if (null == infos || infos.isEmpty()) {
+                    throw new ArtifactException(templateName + " cannot be found", 
+                        ArtifactException.ID_IO);
                 }
-            } 
-            if (null == info || info.isEmpty()) {
-                // no info via caller - try directly
-                info = TemplateModel.INSTANCE.availableModels().getModelInfo(templateName, ver);
-                pruneByPaths(info, vtlPaths);
-            }
-            if (null == info || info.isEmpty()) {
-                throw new ArtifactException(templateName + " cannot be found", 
-                    ArtifactException.ID_IO);
-            }
-            if (info.size() > 1) {
-                String versionText = "";
-                if (null != ver) {
-                    versionText = " with version " + Version.toString(ver);
+                if (infos.size() > 1) {
+                    throw new ArtifactException(templateName + " is ambigous (" + infos.size() 
+                        + " models found)", ArtifactException.ID_IO);
                 }
-                throw new ArtifactException(templateName + versionText + " is ambigous (" + info.size() 
-                    + " models found)", ArtifactException.ID_IO);
+                ModelInfo<Template> info = infos.get(0);
+                baseURI = info.getLocation();
+                Template tpl = info.getResolved();
+                if (null == tpl) {
+                    tpl = TemplateModel.INSTANCE.load(info);
+                }
+                context = tpl.getRestrictionEvaluationContext();
             }
-
-            // obtaining/loading the model
-            model = TemplateModel.INSTANCE.load(info.get(0));
+            IVersionRestriction restriction;
+            if (null != restrictions) {
+                restriction = restrictions.getVersionRestriction();
+            } else {
+                restriction = null;
+            }
+            model = TemplateModel.INSTANCE.resolve(templateName, restriction, baseURI, context);
+            if (model.isDirty()) {
+                Template old = model;
+                model = TemplateModel.INSTANCE.reload(model);
+                EASyLoggerFactory.INSTANCE.getLogger(VilTemplateProcessor.class, Bundle.ID).info("Reloading model " 
+                    + model.getName() + " " + System.identityHashCode(model) + " as it was marked dirty: " 
+                    + (old != model)); // for Cui
+            }
         } catch (ModelManagementException e) {
-            throw new ArtifactException(e.getMessage(), ArtifactException.ID_IO);
-        }
-        if (model.isDirty()) {
-            Template old = model;
-            model = TemplateModel.INSTANCE.reload(model);
-            EASyLoggerFactory.INSTANCE.getLogger(VilTemplateProcessor.class, Bundle.ID).info("Reloading model " 
-                + model.getName() + " " + System.identityHashCode(model) + " as it was marked dirty: " 
-                + (old != model)); // for Cui
+            throw new ArtifactException(e.getMessage(), e.getId());
+        } catch (RuntimeException e) {
+            // checkstyle: runtime errors in the implementation are otherwise not shown
+            EASyLoggerFactory.INSTANCE.getLogger(VilTemplateProcessor.class, Bundle.ID).exception(e);
+            throw new ArtifactException(e, ArtifactException.ID_RUNTIME_EXECUTION);
         }
         return model;
     }
+    
+    // checkstyle: resume exception type check
     
     /**
      * Instantiates <code>source</code> to <code>target</code>.
@@ -594,6 +600,10 @@ public class VilTemplateProcessor implements IVilType {
         @Override
         public TypeRegistry getTypeRegistry() {
             return TypeRegistry.DEFAULT; // TODO unsure whether local is needed
+        }
+
+        @Override
+        public void storeArtifacts() throws ArtifactException {
         }
         
     }

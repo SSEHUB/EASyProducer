@@ -42,4 +42,9 @@ public abstract class BasisDatatypeValue extends Value {
         return null;
     }
     
+    @Override
+    public boolean equalsPartially(Value value) {
+        return equals(value); // basis type values are symmetric as they have no nested elements
+    }
+
 }

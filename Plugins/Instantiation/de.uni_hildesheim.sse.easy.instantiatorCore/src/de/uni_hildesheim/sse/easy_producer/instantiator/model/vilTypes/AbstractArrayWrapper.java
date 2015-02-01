@@ -145,5 +145,45 @@ public abstract class AbstractArrayWrapper<T> extends AbstractCollectionWrapper<
     public boolean allowSequenceAdjustment() {
         return true;
     }
+    
+    /**
+     * Extends the capacity by <code>increment</code>.
+     * 
+     * @param increment the increment
+     */
+    protected void extendCapacity(int increment) {
+        if (increment > 0) {
+            @SuppressWarnings("unchecked")
+            T[] tmp = (T[]) new Object[array.length + increment];
+            System.arraycopy(array, 0, tmp, 0, array.length);
+            array = tmp;
+        }
+    }
+    
+    /**
+     * Decreases the capacity.
+     * 
+     * @param decrement the decrement for decreasing the capactiy
+     */
+    protected void decreaseCapacity(int decrement) {
+        if (decrement > 0 && array.length - decrement >= 0) {
+            @SuppressWarnings("unchecked")
+            T[] tmp = (T[]) new Object[array.length - decrement];
+            if (tmp.length > 0) {
+                System.arraycopy(array, 0, tmp, 0, tmp.length);
+            }
+            array = tmp;
+        }
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        return array.equals(object);
+    }
+    
+    @Override
+    public int hashCode() {
+        return array.hashCode();
+    }
 
 }

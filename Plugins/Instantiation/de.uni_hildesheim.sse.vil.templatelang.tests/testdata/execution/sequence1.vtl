@@ -1,0 +1,11 @@
+template sequence1(Configuration config, Artifact target) {
+
+    def main(Configuration config, Artifact target) {
+        sequenceOf(Integer) nums1 = createIntegerSequence(0, 10);
+        sequenceOf(Integer) nums2 = createIntegerSequence(1, 8);
+        mapOf(Integer, Integer) m = nums1.mapSequence(nums1);
+        m = nums1.mapSequence(nums2);
+        m = nums2.mapSequence(nums1);
+    }
+
+}

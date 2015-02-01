@@ -95,11 +95,6 @@ public class ExpressionDslAdapterFactory extends AdapterFactoryImpl
         return createVersionSpecAdapter();
       }
       @Override
-      public Adapter caseVersionedId(VersionedId object)
-      {
-        return createVersionedIdAdapter();
-      }
-      @Override
       public Adapter caseParameterList(ParameterList object)
       {
         return createParameterListAdapter();
@@ -362,21 +357,6 @@ public class ExpressionDslAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createVersionSpecAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.VersionedId <em>Versioned Id</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.VersionedId
-   * @generated
-   */
-  public Adapter createVersionedIdAdapter()
   {
     return null;
   }

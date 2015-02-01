@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: de.uni_hildesheim.sse.vil.expressions
 Bundle-Vendor: SSE - University of Hildesheim
-Bundle-Version: 0.5.2
+Bundle-Version: 0.5.3
 Bundle-SymbolicName: de.uni_hildesheim.sse.vil.expressions; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.xtext;bundle-version="2.5.0";visibility:=reexport,

@@ -56,17 +56,12 @@ public class AnyType extends BasisDatatype {
         super("AnyType", DTYPE);
     }
     
-    /**
-    * {@inheritDoc}
-    */
     @Override
     public boolean isAssignableFrom(IDatatype type) {
         return true; // any type is compliant to this
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void accept(IDatatypeVisitor visitor) {
         visitor.visitAnyType(this);
     }

@@ -1,0 +1,63 @@
+project RefinedCompoundTest {
+
+    version v0; 
+    
+    abstract compound PipelineElement {
+        String name;
+    } 
+    
+    abstract compound PipelineNode refines PipelineElement {
+        Integer inputTypes;        
+    }
+    
+    compound Source refines PipelineNode {
+        inputTypes = 1;
+        typeCheck(1, 2);
+    } 
+       
+    compound Sink refines PipelineNode {        
+        inputTypes = 2;
+    } 
+
+    compound ProcessingElement refines PipelineNode {
+        typeCheck(4, 3);
+    }
+       
+    compound FamilyElement refines ProcessingElement {        
+        inputTypes = 3;
+    } 
+    
+    compound DataManagementElement refines ProcessingElement {
+        inputTypes = 4;
+    }   
+    
+    compound Pipeline {
+        String name;
+        setOf(refTo(Source)) sources;
+    }
+    
+    Source src_L3S;                                                       
+    Sink snk_L3S;
+    FamilyElement sentimentAnalysis_L3S;    
+    
+    src_L3S = {
+        name = "src_L3S"
+    };
+    
+    sentimentAnalysis_L3S = {
+        name = "sentimentAnalysis"
+    };    
+    
+    snk_L3S = {
+        name = "snk_L3S"
+    };
+    
+    Pipeline pipL3S;
+    
+    pipL3S = Pipeline {
+        name = "pipL3S",
+        sources = {refBy(src_L3S)}
+    };
+    
+    def Boolean typeCheck(Integer intA, Integer intB) = intA > intB;
+}

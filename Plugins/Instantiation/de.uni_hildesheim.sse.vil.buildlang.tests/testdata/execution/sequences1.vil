@@ -1,0 +1,11 @@
+vilScript sequences1 (Project source, Project target, Configuration config) {
+
+    main() = : {
+        Integer sum = 0;
+        sequenceOf(Integer) nums = createIntegerSequence(0, 10);
+        map(Integer i:nums) {
+            sum = sum + i;
+        };
+    }
+
+}

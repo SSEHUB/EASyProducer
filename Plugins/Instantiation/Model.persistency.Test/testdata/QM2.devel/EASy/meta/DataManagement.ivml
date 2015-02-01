@@ -1,0 +1,40 @@
+project DataManagement {
+
+    import Basics;
+    import Observables;
+
+	attribute BindingTime bindingTime = BindingTime.compile to DataManagement;
+
+    enum DataManagementStrategy {None, LeastRecentlyUsed, Aging};
+	
+	compound DataElement {
+	    NonEmptyString name;
+		String storageLocation;
+		DataManagementStrategy strategy;
+		Integer timeLine;
+		// runtime observables
+	    assign(bindingTime = BindingTime.runtime) to {
+	    	// examples for now
+			Throughput tuplesPerSecond;
+			Bandwidth bytesPerSecond;
+		} 
+        setOf(Constraint) constraints;
+		strategy <> null; 
+		strategy == DataManagementStrategy.Aging implies timeLine > 0;
+	}
+	
+	compound DataSource refines DataElement {
+		NonEmptyString host;
+		Tuples input;
+		Parameters parameters;
+	}
+	
+	sequenceOf(refTo(DataSource)) dataSources;
+	
+	compound DataSink refines DataElement {
+		Tuples output;
+	}
+ 
+	sequenceOf(refTo(DataSink)) dataSinks;
+	
+}

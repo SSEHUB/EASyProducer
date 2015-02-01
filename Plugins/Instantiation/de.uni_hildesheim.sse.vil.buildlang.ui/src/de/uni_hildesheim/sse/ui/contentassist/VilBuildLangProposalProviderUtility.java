@@ -133,7 +133,8 @@ public class VilBuildLangProposalProviderUtility {
                            EList<Parameter> paramList = ruleDecl.getParamList().getParam();
                            String parameterString = "";
                            for (Parameter param : paramList) {
-                               parameterString = parameterString + param.getType().getName();
+                               parameterString = parameterString + Utils.getQualifiedNameString(
+                                       param.getType().getName());
                                parameterString = parameterString + " " + param.getName() + ", ";
                            }
                            parameterString = parameterString.substring(0, parameterString.length() -2);
@@ -396,7 +397,10 @@ public class VilBuildLangProposalProviderUtility {
             } 
             if (semanticElement instanceof RuleDeclarationImpl) {
                 // Second, search for parent rule and all defined parameter and variables for/in that rule
-                parentParamList.addAll(getRuleParameters(node));
+                List<StyledString> parameterList = getRuleParameters(node);
+                if (parameterList != null && !parameterList.isEmpty()) {
+                    parentParamList.addAll(getRuleParameters(node));
+                }
             } else {
                 // As long as there was no rule found, search recursively for more nested variables/parameters.
                 List<StyledString> parentParams = getParentParameters(node.getParent());
@@ -459,10 +463,20 @@ public class VilBuildLangProposalProviderUtility {
         if (node != null) {
             List<RuleDeclarationImpl> allRules = getAllRules(getActiveVilScript(node));
             for (RuleDeclarationImpl rule : allRules) {
-                if (rule.getName().equals(toSearch)) {
-                    parameterTypes = new ArrayList<String>();
-                    for (Parameter param : rule.getParamList().getParam()) {
-                        parameterTypes.add(Utils.getQualifiedNameString(param.getType().getName())); 
+                if (rule != null) {
+                    if (rule.getName() != null) {
+                        if (rule.getName().equals(toSearch)) {
+                            parameterTypes = new ArrayList<String>();
+                            if (rule.getParamList() != null) {
+                                if (rule.getParamList().getParam() != null) {
+                                    for (Parameter param : rule.getParamList().getParam()) {
+                                        String toAdd = Utils.getQualifiedNameString(param.getType().getName());
+//                                        System.out.println("SearchForTypes: " + toAdd);
+                                        parameterTypes.add(toAdd); 
+                                    }                           
+                                }
+                            }
+                        }    
                     }
                 }
             }
@@ -487,6 +501,21 @@ public class VilBuildLangProposalProviderUtility {
                 INode parentNode = node.getParent();
                 if (parentNode != null) {
                     result = getCallImpl(parentNode);
+                }
+            }
+        }
+        return result;
+    }
+    
+    public ExpressionOrQualifiedExecutionImpl getExprOrExecution(INode node) {
+        ExpressionOrQualifiedExecutionImpl result = null;
+        if (node != null) {
+            if (node.getSemanticElement() instanceof ExpressionOrQualifiedExecutionImpl) {
+                result = (ExpressionOrQualifiedExecutionImpl) node.getSemanticElement();
+            } else {
+                INode parentNode = node.getParent();
+                if (parentNode != null) {
+                    result = getExprOrExecution(parentNode);
                 }
             }
         }
@@ -608,6 +637,48 @@ public class VilBuildLangProposalProviderUtility {
             
         }
         
+        return result;
+    }
+    
+    public boolean isMainRuleDeclared(INode node) {
+        boolean result = false;
+        LanguageUnit activeScript = getActiveVilScript(node);
+        if (activeScript != null) {
+            ScriptContents scriptContents = activeScript.getContents();
+            if (scriptContents != null && hasElements(scriptContents.getElements())) {
+                List<EObject> scriptContentElements = scriptContents.getElements();
+                for (EObject element : scriptContentElements) {
+                    if (element != null && element instanceof RuleDeclarationImpl) {
+                        RuleDeclarationImpl potentialMainRule = (RuleDeclarationImpl) element;
+                        if (potentialMainRule.getName().equals("main")) {
+                            result = true;
+                        }
+                    }
+                }
+            }   
+        }
+        return result;
+    }
+    
+    public String getScriptParametersForMainRule(INode node) {
+        String result = null;
+        if (node != null) {
+            LanguageUnit activeScript = getActiveVilScript(node);
+            if (activeScript != null && activeScript.getParam() != null && hasElements(activeScript.getParam().getParam())) {
+                EList<Parameter> paramList = activeScript.getParam().getParam();
+                result = "";
+                for (Parameter param : paramList) {
+                    String varName = param.getName();
+                    String type = Utils.getQualifiedNameString(param.getType().getName());
+                    result += type + " " + varName + ", ";
+                }
+            }
+        }
+        if (!result.equals("")) {
+            result = result.substring(0, result.length() - 2);
+        } else {
+            result = null;
+        }
         return result;
     }
     
@@ -978,8 +1049,8 @@ public class VilBuildLangProposalProviderUtility {
         String typeName = "";
         if (ruleDecl != null && !name.isEmpty()) {
             // If the name of the element is LHS, it identifies the first precondition of the given rule
-            if (name.equals("LHS") && hasElements(ruleDecl.getPreconditions())) {
-                LogicalExpression ruleFirstPrecondition = ruleDecl.getPreconditions().get(0);
+            if (name.equals("LHS") && ruleDecl.getConditions() != null && hasElements(ruleDecl.getConditions().getPreconditions())) {
+                LogicalExpression ruleFirstPrecondition = ruleDecl.getConditions().getPreconditions().get(0);
                 // Can only be a path match, an artefact or an artefact collection (as defined in the language specification)
                 typeName = getType(ruleFirstPrecondition, name);
             } else {

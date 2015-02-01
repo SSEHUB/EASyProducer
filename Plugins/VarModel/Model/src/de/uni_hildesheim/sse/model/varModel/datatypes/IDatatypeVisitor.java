@@ -95,6 +95,12 @@ public interface IDatatypeVisitor {
      * @param type The <code>IDatatype</code> which should be visited.
      */
     public void visitIntegerType(IntegerType type);
+
+    /**
+     * Visiting method for visiting a <code>VersionType</code>.
+     * @param type The <code>IDatatype</code> which should be visited.
+     */
+    public void visitVersionType(VersionType type);
     
     /**
      * Visiting method for visiting a <code>RealType</code>.

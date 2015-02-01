@@ -1,0 +1,14 @@
+vilScript loadProperties () {
+
+    load properties "execution/loadProperties1.properties";
+
+    Integer var;
+    Boolean bool;
+    const String test;
+    Integer unchanged;
+    String specific;
+
+    main() = : {
+    }
+
+}

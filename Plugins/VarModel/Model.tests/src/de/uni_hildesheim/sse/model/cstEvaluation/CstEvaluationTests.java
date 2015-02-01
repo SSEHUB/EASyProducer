@@ -39,7 +39,8 @@ import org.junit.runners.Suite.SuiteClasses;
     StringOperationsTest.class,
     MetaOperationsTest.class,
     EnumOperationsTest.class,
-    ReasonerCaseTests.class
+    ReasonerCaseTests.class,
+    VersionOperationsTest.class
     })
 public class CstEvaluationTests {
 

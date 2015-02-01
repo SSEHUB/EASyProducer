@@ -1,0 +1,12 @@
+vilScript xml1 (Project source, Project target, Configuration config) {
+
+    main(Project source, Project target, Configuration config) = : {
+        FileArtifact targetFile = "$target/xml2File.xml";
+        XmlFileArtifact xmlFile = targetFile;
+        xmlFile.createRootElement("MyRoot");
+        XmlElement root = xmlFile.getRootElement();
+        XmlElement hello = new XmlElement(root, "Hello");
+        new XmlAttribute(hello, "attrib", "value");
+    }
+
+}

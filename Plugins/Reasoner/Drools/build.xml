@@ -144,25 +144,14 @@
 		</copy>
 	</target>		
 	
-	<!-- Creates Javadoc -->
-  <target name="javadoc">
-    <javadoc packagenames="de.*" 
-		private="true"
-		defaultexcludes="yes"
-		destdir="${doc.dir}"
-		author="true"
-		version="true"
-		use="true"
-		Encoding="${javadoc.encoding}"
-		windowtitle="${ant.project.name} API">
-		<fileset dir="${home.drools2.dir}/src">
-			<exclude name="**/*Activator.java"/>
-			<exclude name="**/*.drl"/>
-		</fileset>
-			<doctitle><![CDATA[<h1>${ant.project.name}</h1>]]></doctitle>
-		<bottom><![CDATA[<i>Copyright &#169; 2012 - 2013 SSE. All Rights Reserved.</i>]]></bottom>
-    </javadoc>
-  </target>
+	<target name="storeJars">
+		<copy todir="${easy.bundles.dir}" failonerror="true" overwrite="true" flatten="true">
+			<fileset dir=".">
+				<include name="**/build/jar/*.jar" />
+			</fileset>
+		</copy>
+	</target>
+  
 	
-	<target name="all" depends="init, compile, test, javadoc"/>
+	<target name="all" depends="init, compile, test, storeJars"/>
 </project>

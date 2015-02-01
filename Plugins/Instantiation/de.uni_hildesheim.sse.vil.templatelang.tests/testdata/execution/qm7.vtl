@@ -1,0 +1,46 @@
+@advice(qm7)
+template qm7(Configuration config, FileArtifact target) {
+
+    def main(Configuration config, FileArtifact target) {
+        Pipeline pip = config.byName("pipTSI");
+        mapOf(String, Tuple) name2Tuples = {};
+        mapOf(String, mapOf(Tuple, Tuple)) inputOutputMapping = {};
+        for (Source src : pip.sources()) {
+            process(src, name2Tuples, inputOutputMapping);
+        }
+        '${name2Tuples}'
+        '${inputOutputMapping}'
+    }
+
+    def process(DecisionVariable node, mapOf(String, Tuple) name2Tuples, mapOf(String, mapOf(Tuple, Tuple)) inputOutputMapping) {
+    }
+
+    def process(Source src, mapOf(String, Tuple) name2Tuples, mapOf(String, mapOf(Tuple, Tuple)) inputOutputMapping) {
+        for (Flow f : src.output()) {
+            process(f.destination(), name2Tuples, inputOutputMapping);
+        }
+    }
+
+    def process(FamilyElement elt, mapOf(String, Tuple) name2Tuples, mapOf(String, mapOf(Tuple, Tuple)) inputOutputMapping) {
+        Family family = elt.family();
+        Tuples inTuples = family.input();
+        Tuples outTuples = family.output();
+        String name = family.name();
+        processTuples(inTuples, name2Tuples, name + "input");
+        processTuples(outTuples, name2Tuples, name + "output");
+        inputOutputMapping.add(elt.family().name(), inTuples.mapSequence(outTuples));
+        for (Flow f : elt.output()) {
+            process(f.destination(), name2Tuples, inputOutputMapping);
+        }
+    }
+
+    def processTuples(Tuples tuples, mapOf(String, Tuple) name2Tuples, String prefix) {
+        Integer count = 0;
+        for (Tuple t : tuples) {
+            count = count + 1;
+            String name = prefix + count;
+            name2Tuples.add(name, t);
+        }
+    }
+
+}

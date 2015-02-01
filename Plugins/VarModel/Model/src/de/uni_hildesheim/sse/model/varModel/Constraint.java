@@ -17,7 +17,6 @@ package de.uni_hildesheim.sse.model.varModel;
 
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
 import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
-import de.uni_hildesheim.sse.model.cst.DslFragment;
 import de.uni_hildesheim.sse.model.cst.ValidationVisitor;
 import de.uni_hildesheim.sse.model.varModel.datatypes.BooleanType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.ConstraintType;
@@ -101,11 +100,9 @@ public class Constraint extends ContainableModelElement implements IPartialEvalu
      */
     public void setConsSyntax(ConstraintSyntaxTree consSyntax) throws CSTSemanticException {
         if (null != consSyntax) {
-            if (!(consSyntax instanceof DslFragment)) {
-                String error = check(consSyntax);
-                if (null != error) {
-                    throw new CSTSemanticException(error, CSTSemanticException.TYPE_MISMATCH);
-                }
+            String error = check(consSyntax);
+            if (null != error) {
+                throw new CSTSemanticException(error, CSTSemanticException.TYPE_MISMATCH);
             }
         }
         this.consSyntax = consSyntax;
@@ -146,9 +143,7 @@ public class Constraint extends ContainableModelElement implements IPartialEvalu
         return error;
     }
 
-    /** 
-     * {@inheritDoc}
-     */
+    @Override
     public void accept(IModelVisitor visitor) {
         visitor.visitConstraint(this);
     }

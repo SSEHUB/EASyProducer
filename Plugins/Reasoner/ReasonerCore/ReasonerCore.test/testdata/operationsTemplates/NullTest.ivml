@@ -1,0 +1,18 @@
+project NullTest {
+
+	version v0;
+	
+	Boolean a;
+	Boolean b;
+	Boolean c = null;
+	a = true;
+	a != b; // fail after reassignment
+	b != c; 
+	a == b; // b == a reassign
+	a == c; // fail
+	c == b; // fail
+	Integer n = 1;
+	Integer i;
+	n == i; // i == n reassign
+	
+}

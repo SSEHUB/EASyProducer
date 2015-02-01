@@ -1,0 +1,13 @@
+-> main(Configuration, FileArtifact) with (<config>, test.texts)
+    -> byName(Configuration, String) with (<config>, fNormalize) = qm1::fNormalize
+    fm <- qm1::fNormalize
+    -> parameters(Family) with (qm1::fNormalize) = {qm1::Family::parameters {0}}
+    -> name(DecisionVariable) with (qm1::Family::parameters {0}) = parameters
+    -> length(String) with (parameters) = 10
+    -> >(Integer, Integer) with (10, 0) = true
+    -> select(Set, ExpressionEvaluator) with ({qm1::Family::parameters {0}}, <evaluator>) = {qm1::Family::parameters {0}}
+    for p {
+        p <- qm1::Family::parameters {0}
+        tmp <- qm1::Family::parameters {0}
+        -> type(DecisionVariable) with (qm1::Family::parameters {0}) = IntegerParameter
+    }

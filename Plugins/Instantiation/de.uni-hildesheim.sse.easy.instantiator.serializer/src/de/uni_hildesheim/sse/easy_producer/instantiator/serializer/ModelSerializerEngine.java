@@ -47,30 +47,21 @@ public class ModelSerializerEngine extends InstantiatorEngine {
         Transformator.removeEngine(this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected void initEngine() {
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void instantiate() throws InstantiatorException {
-        try {
-            File easyDir = getPLP().getConfigLocation();
-            File modelFile = new File(easyDir, MODELNAME + FILETYPE);
-            XmlIo.write(getPLP().getConfiguration().getProject(), new FileOutputStream(modelFile));
-        } catch (IOException e) {
-            throw new InstantiatorException(e.getLocalizedMessage());
-        }
+//        try {
+//            File easyDir = getPLP().getConfigLocation();
+//            File modelFile = new File(easyDir, MODELNAME + FILETYPE);
+//            XmlIo.write(getPLP().getConfiguration().getProject(), new FileOutputStream(modelFile));
+//        } catch (IOException e) {
+//            throw new InstantiatorException(e.getLocalizedMessage());
+//        }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected void clearContext() {
     }

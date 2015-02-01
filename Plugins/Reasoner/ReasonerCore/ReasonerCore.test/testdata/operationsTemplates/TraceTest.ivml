@@ -1,0 +1,21 @@
+project TraceTest {
+
+    version v0;    
+    
+    compound A {
+        Integer number = 2;
+    }
+    
+    compound B {
+        A nestA;
+    }
+    
+    compound C {
+        B nestB;
+    }
+    
+    C cmp;
+    cmp.nestB.nestA.number = 1;
+    
+    
+}

@@ -46,18 +46,14 @@ public abstract class AbstractProjectVisitor implements IModelVisitor {
         this.filterType = filterType;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitProjectImport(ProjectImport pImport) {
         if (null != pImport.getResolved()) {
             pImport.getResolved().accept(this);
         }
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitProject(Project project) {
         boolean importedProject = originProject != project;
         

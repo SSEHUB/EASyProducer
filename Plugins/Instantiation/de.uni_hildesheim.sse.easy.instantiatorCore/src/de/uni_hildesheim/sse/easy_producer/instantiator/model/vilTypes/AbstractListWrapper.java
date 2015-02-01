@@ -127,4 +127,14 @@ public abstract class AbstractListWrapper<T> extends AbstractCollectionWrapper<T
         return true;
     }
     
+    @Override
+    public boolean equals(Object object) {
+        return list.equals(object);
+    }
+    
+    @Override
+    public int hashCode() {
+        return list.hashCode();
+    }
+
 }

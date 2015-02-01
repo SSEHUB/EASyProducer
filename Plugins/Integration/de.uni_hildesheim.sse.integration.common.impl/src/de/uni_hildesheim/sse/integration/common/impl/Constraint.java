@@ -34,16 +34,12 @@ public class Constraint implements IConstraint {
         }
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public String getName() {
         return constraint.getName();
     }
         
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public String toString() {
         return StringProvider.toIvmlString(constraint.getConsSyntax());
     }

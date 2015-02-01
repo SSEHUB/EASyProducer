@@ -8,7 +8,8 @@ Bundle-Vendor: SSE University of Hildesheim
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.xtext.ui,
- de.uni_hildesheim.sse.utils;bundle-version="0.4.1"
+ de.uni_hildesheim.sse.utils,
+ de.uni_hildesheim.sse.dslCore
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: de.uni_hildesheim.sse.dslcore.ui,

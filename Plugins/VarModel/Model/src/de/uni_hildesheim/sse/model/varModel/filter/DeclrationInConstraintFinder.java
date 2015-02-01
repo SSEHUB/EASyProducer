@@ -26,12 +26,12 @@ import de.uni_hildesheim.sse.model.cst.ConstantValue;
 import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
 import de.uni_hildesheim.sse.model.cst.ContainerInitializer;
 import de.uni_hildesheim.sse.model.cst.ContainerOperationCall;
-import de.uni_hildesheim.sse.model.cst.DslFragment;
 import de.uni_hildesheim.sse.model.cst.IConstraintTreeVisitor;
 import de.uni_hildesheim.sse.model.cst.IfThen;
 import de.uni_hildesheim.sse.model.cst.Let;
 import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
 import de.uni_hildesheim.sse.model.cst.Parenthesis;
+import de.uni_hildesheim.sse.model.cst.Self;
 import de.uni_hildesheim.sse.model.cst.UnresolvedExpression;
 import de.uni_hildesheim.sse.model.cst.Variable;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
@@ -62,64 +62,50 @@ public class DeclrationInConstraintFinder implements IConstraintTreeVisitor {
         return declarations;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitConstantValue(ConstantValue value) {
         // No function needed
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitVariable(Variable variable) {
         declarations.add(variable.getVariable());
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitParenthesis(Parenthesis parenthesis) {
         parenthesis.getExpr().accept(this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitComment(Comment comment) {
         comment.getExpr().accept(this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitOclFeatureCall(OCLFeatureCall call) {
-        call.getOperand().accept(this);
+        if (null != call.getOperand()) { // user defined function!
+            call.getOperand().accept(this);
+        }
         for (int i = 0; i < call.getParameterCount(); i++) {
             call.getParameter(i).accept(this);
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitLet(Let let) {
         declarations.add(let.getVariable());
         let.getInExpression().accept(this);  
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitIfThen(IfThen ifThen) {
         ifThen.getIfExpr().accept(this);
         ifThen.getThenExpr().accept(this);
         ifThen.getElseExpr().accept(this);        
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitContainerOperationCall(ContainerOperationCall call) {
         call.getContainer().accept(this);
         call.getExpression().accept(this);
@@ -128,9 +114,7 @@ public class DeclrationInConstraintFinder implements IConstraintTreeVisitor {
         } 
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitCompoundAccess(CompoundAccess access) {
         // access.inferDatatype() must be called before access.getResolvedSlot() can be called 
         try {
@@ -141,37 +125,26 @@ public class DeclrationInConstraintFinder implements IConstraintTreeVisitor {
         }
         declarations.add(access.getResolvedSlot());
         access.getCompoundExpression().accept(this);
-        
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void visitDslFragment(DslFragment fragment) {
-        //TODO SE: Unsure whether we need this
-    }
-
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitUnresolvedExpression(UnresolvedExpression expression) {
         // TODO Auto-generated method stub
-        
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitCompoundInitializer(CompoundInitializer initializer) {
         // TODO Auto-generated method stub
-        
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitContainerInitializer(ContainerInitializer initializer) {
         // TODO Auto-generated method stub
-        
     }
+
+    @Override
+    public void visitSelf(Self self) {
+        // no variable declaration
+    }
+    
 }

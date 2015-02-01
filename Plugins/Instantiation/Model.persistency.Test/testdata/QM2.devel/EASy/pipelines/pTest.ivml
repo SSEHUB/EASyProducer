@@ -1,0 +1,57 @@
+project pTest {
+
+	import Pipelines;
+	import FamiliesCfg;
+	import DataManagementCfg;
+	
+	Pipeline pTest;
+	Source pTest_Source0;
+	Flow pTest_Flow0;
+	FamilyElement pTest_FamilyElement0;
+	Flow pTest_Flow1;
+	Sink pTest_Sink0;
+	pTest_Sink0 = { 
+		sink = refBy(publicTsi), 
+		name = "TSISink"
+	};
+	
+	pTest_Flow1 = {
+		destination = refBy(pTest_Sink0), 
+		grouping = Grouping.shuffleGrouping, 
+		name = "na"
+	};
+	pTest_FamilyElement0 = {
+		family = refBy(fTest), 
+		output = {
+			refBy(pTest_Flow1)
+		}, 
+		name = "StreamIngestion"
+	};
+	pTest_Flow0 = {
+		destination = refBy(pTest_FamilyElement0), 
+		grouping = Grouping.shuffleGrouping, 
+		name = "sn"
+	};
+	pTest_Source0 = {
+		output = {
+			refBy(pTest_Flow0)
+		}, 
+		source = refBy(spring), 
+		name = "SpringSource"
+	};
+	pTest = {
+		name = "test", 
+		sources = {
+			refBy(pTest_Source0)
+		}, 
+		numworkers = 1
+	};
+	freeze {
+		pTest;
+		pTest_Source0;
+		pTest_Flow0;
+		pTest_FamilyElement0;
+		pTest_Flow1;
+		pTest_Sink0;
+	}
+}

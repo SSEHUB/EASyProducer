@@ -21,7 +21,8 @@
 		<mkdir dir="${coverage.results.dir}"/>
 		<mkdir dir="${doc.dir}"/>
 	</target>
-		
+	
+	<target name="compile">
         <echo>#########################################</echo>
         <echo>###  Compiling the Utility Functions  ###</echo>
         <echo>#########################################</echo>
@@ -31,11 +32,6 @@
         <echo>###  Compiling the Variability Model  ###</echo>
         <echo>#########################################</echo>
         <ant dir="Model" antfile="${build.script.name}" />
-        
-        <echo>#####################################</echo>
-        <echo>###  Compiling Model Persistency  ###</echo>
-        <echo>#####################################</echo>
-		<ant dir="Model.persistency" antfile="${build.script.name}" /> 
         
         <echo>###################################</echo>
         <echo>###  Compiling Model Test Suite ###</echo>
@@ -47,7 +43,6 @@
         <echo>############################</echo>
         <ant dir="${home.dslCore.dir}" antfile="${build.script.name}" />
 
-        <target name="compile">
         <echo>###############################</echo>
         <echo>###  Compiling DSL Core UI  ###</echo>
         <echo>###############################</echo> 
@@ -137,6 +132,14 @@
 		</copy>
 	</target>		
 	
-	<target name="all" depends="init, compile, test"/>
+	<target name="storeJars">
+		<copy todir="${easy.bundles.dir}" failonerror="true" overwrite="true" flatten="true">
+			<fileset dir=".">
+				<include name="**/build/jar/*.jar" />
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="all" depends="init, compile, test, storeJars"/>
 	<target name="only.compile" depends="init, compile"/>
 </project>

@@ -17,7 +17,7 @@ package de.uni_hildesheim.sse.model.confModel;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -29,7 +29,7 @@ import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.Attribute;
 import de.uni_hildesheim.sse.model.varModel.AttributeAssignment;
 import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
-import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
+import de.uni_hildesheim.sse.model.varModel.ICollectionElementVariable;
 import de.uni_hildesheim.sse.model.varModel.IFreezable;
 import de.uni_hildesheim.sse.model.varModel.IModelElement;
 import de.uni_hildesheim.sse.model.varModel.IProjectListener;
@@ -43,6 +43,7 @@ import de.uni_hildesheim.sse.model.varModel.filter.DeclarationFinder;
 import de.uni_hildesheim.sse.model.varModel.filter.DeclarationFinder.VisibilityType;
 import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
 import de.uni_hildesheim.sse.model.varModel.filter.FrozenElementsFinder;
+import de.uni_hildesheim.sse.model.varModel.values.NullValue;
 import de.uni_hildesheim.sse.model.varModel.values.ReferenceValue;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
 import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
@@ -71,7 +72,7 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
     
     private List<IConfigurationChangeListener> listeners;
     
-    private Map<IDatatype, java.util.Set<Value>> allInstances;
+    private Map<IDatatype, Map<IDecisionVariable, ReferenceValue>> allInstances;
     
     /**
      * Creates a new configuration for the given project.
@@ -335,11 +336,17 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
         return decisions.size();
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public IDecisionVariable getDecision(AbstractVariable declaration) {
-        return decisions.get(declaration);
+        IDecisionVariable result = decisions.get(declaration);
+        if (null == result && declaration instanceof ICollectionElementVariable) {
+            ICollectionElementVariable var = (ICollectionElementVariable) declaration;
+            result = decisions.get(var.getBaseVariable());
+            if (null != result) {
+                result = result.getNestedElement(var.getIndex());
+            }
+        }
+        return result;
     }
     
     /**
@@ -368,7 +375,22 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
     public boolean removeDecision(IDecisionVariable variable) {
         boolean containsKey = decisions.containsKey(variable.getDeclaration());
         decisions.remove(variable.getDeclaration());
+        if (null != allInstances) {
+            removeFromAllInstances(variable);
+        }
         return containsKey;
+    }
+    
+    /**
+     * Removes <code>variable</code> from all instances.
+     * 
+     * @param variable the variable to be removed
+     */
+    private void removeFromAllInstances(IDecisionVariable variable) {
+        Map<IDecisionVariable, ReferenceValue> inst = allInstances.get(variable.getDeclaration().getType());
+        if (null != inst) {
+            inst.remove(variable);
+        }
     }
     
     /**
@@ -380,16 +402,12 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
         return project.getName();
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void accept(IConfigurationVisitor visitor) {
         visitor.visitConfiguration(this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void notifyReplaced(Project oldProject, Project newProject) {
         this.project = newProject;
         refresh();
@@ -427,16 +445,12 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
         return saver.getSavedConfiguration();
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public final Configuration getConfiguration() {
         return this;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public IConfigurationElement getParent() {
         return null;
     }
@@ -453,14 +467,14 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
             listeners.get(i).itemChanged(this, var, oldValue);
         }
         if (null != allInstances) {
-            java.util.Set<Value> instances = allInstances.get(var.getDeclaration().getType());
-            if (null != instances) {
-                Value newValue = var.getValue();
-                if (oldValue != newValue) {
-                    if (null != oldValue) {
-                        instances.remove(oldValue);
-                    }
-                    instances.add(newValue);
+            IDatatype type = var.getDeclaration().getType();
+            Map<IDecisionVariable, ReferenceValue> instances = allInstances.get(type);
+            if (null != instances && !instances.containsKey(var)) {
+                Reference rType = new Reference("", type, project);
+                try {
+                    instances.put(var, (ReferenceValue) ValueFactory.createValue(rType, var));
+                } catch (ValueDoesNotMatchTypeException e) {
+                    EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).exception(e);
                 }
             }
         }
@@ -497,23 +511,17 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
         decisions.put(attribute, var);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public boolean isNested() {
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public IAssignmentState getState() {
         return null;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void setValue(Value value, IAssignmentState state, IConfigurationElement nested) 
         throws ConfigurationException {
         throw new ConfigurationException(getConfiguration(), "operation not supported", 
@@ -572,8 +580,9 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
             IDatatype type = var.getDeclaration().getType();
             while (type instanceof Reference) {
                 type = ((Reference) type).getType();
-                if (null != var.getValue()) {
-                    DecisionVariableDeclaration refDecl = ((ReferenceValue) var.getValue()).getValue();
+                Value value = var.getValue();
+                if (null != value && value != NullValue.INSTANCE) {
+                    AbstractVariable refDecl = ((ReferenceValue) var.getValue()).getValue();
                     var = var.getConfiguration().getDecision(refDecl);
                 } else {
                     break;
@@ -581,30 +590,6 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
             }
         }
         return var;
-    }
-
-    /**
-     * Adds all values of type <code>type</code> from <code>var</code> to <code>values</code>.
-     * 
-     * @param var the variable to be analyzed / followed
-     * @param type the type to search for
-     * @param values the collected values (to be modified as a side effect)
-     */
-    private void addValues(IDecisionVariable var, IDatatype type, java.util.Set<Value> values) {
-        for (int i = 0, n = var.getNestedElementsCount(); i < n; i++) {
-            IDecisionVariable tmp = var.getNestedElement(i);
-            IDatatype tmpType = tmp.getDeclaration().getType();
-            if (TypeQueries.sameTypes(type, tmpType)) {
-                Value val = var.getValue();
-                if (null != val) {
-                    values.add(val);
-                }
-            } else if (Reference.isReferenceTo(tmpType, type)) {
-                addValues(dereference(tmp), type, values);
-            } else {
-                addValues(tmp, type, values);
-            }
-        }
     }
 
     /**
@@ -616,27 +601,29 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
      */
     public Value getAllInstances(IDatatype type) {
         if (null == allInstances) {
-            allInstances = new LinkedHashMap<IDatatype, java.util.Set<Value>>();
+            allInstances = new LinkedHashMap<IDatatype, Map<IDecisionVariable, ReferenceValue>>();
         }
-        java.util.Set<Value> instances = allInstances.get(type);
+        // we need references to variables here in order to allow compound access and modification of variables 
+        // in self-constraints
+        Map<IDecisionVariable, ReferenceValue> instances = allInstances.get(type);
+        Reference rType = new Reference("", type, project);
         if (null == instances && Compound.TYPE.isAssignableFrom(type)) { // check type restriction
-            instances = new HashSet<Value>();
+            instances = new HashMap<IDecisionVariable, ReferenceValue>();
             allInstances.put(type, instances);
             for (IDecisionVariable var : decisions.values()) {
                 if (TypeQueries.sameTypes(type, var.getDeclaration().getType())) {
-                    Value val = var.getValue();
-                    if (null != val) {
-                        instances.add(val);
+                    try {
+                        instances.put(var, (ReferenceValue) ValueFactory.createValue(rType, var.getDeclaration()));
+                    } catch (ValueDoesNotMatchTypeException e) {
+                        e.printStackTrace();
                     }
-                } else {
-                    addValues(var, type, instances);
                 }
             }
         }
         Value result;
-        Set setType = new Set(type.getName() + "Instances", type, null);
+        Set setType = new Set(type.getName() + "Instances", rType, null);
         try {
-            result = ValueFactory.createValue(setType, null == instances ? null : instances.toArray());
+            result = ValueFactory.createValue(setType, null == instances ? null : instances.values().toArray());
         } catch (ValueDoesNotMatchTypeException e) {
             result = null;
         }

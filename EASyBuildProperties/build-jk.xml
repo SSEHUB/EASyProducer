@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="QMProperties" default="copy" basedir=".">
+	
+	<!-- Targets  -->
+	<target name="copy">
+	    <copy file = "./global-build.properties" todir="${user.home}"/>
+	</target>
+	
+</project>

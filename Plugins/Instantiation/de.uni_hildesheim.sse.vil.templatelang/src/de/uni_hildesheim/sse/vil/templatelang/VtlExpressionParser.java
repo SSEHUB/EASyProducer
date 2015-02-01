@@ -4,6 +4,7 @@ import org.osgi.service.component.ComponentContext;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionParserRegistry;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IExpressionParser;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IRuntimeEnvironment;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateLangExecution;
@@ -56,7 +57,7 @@ public class VtlExpressionParser implements IExpressionParser {
         } catch (ModelManagementException e) {
             EASyLoggerFactory.INSTANCE.getLogger(VtlExpressionParser.class, VtlBundleId.ID);
         }
-        TemplateLangExecution.setExpressionParser(this);
+        ExpressionParserRegistry.setExpressionParser(TemplateLangExecution.LANGUAGE, this);
     }
 
     /**
@@ -67,7 +68,7 @@ public class VtlExpressionParser implements IExpressionParser {
         TemplateModel.INSTANCE.loaders().unregisterLoader(TemplateLangModelUtility.INSTANCE, 
             ProgressObserver.NO_OBSERVER);
         // this is not the official way of using DS but the official way is instable
-        TemplateLangExecution.setExpressionParser(null);
+        ExpressionParserRegistry.setExpressionParser(TemplateLangExecution.LANGUAGE, null);
     }
 
     @Override

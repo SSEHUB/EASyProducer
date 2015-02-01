@@ -3,17 +3,24 @@ package de.uni_hildesheim.sse.vil.templatelang.templateLanguageTranslation;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
+
 import de.uni_hildesheim.sse.dslCore.translation.ErrorCodes;
+import de.uni_hildesheim.sse.dslCore.translation.MessageHandler;
 import de.uni_hildesheim.sse.dslCore.translation.TranslatorException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.AbstractCallExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallArgument;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionVersionRestriction;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionVersionRestrictionValidator;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Resolver;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.VariableDeclaration;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
+import de.uni_hildesheim.sse.utils.modelManagement.RestrictionEvaluationException;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Call;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
 
@@ -96,6 +103,22 @@ public class ExpressionTranslator
     protected VariableDeclaration createVariableDeclaration(String name, TypeDescriptor<? extends IVilType> type,
                     boolean isConstant, Expression expression) {
         return new VariableDeclaration(name, type, isConstant, expression);
+    }
+
+    @Override
+    protected ExpressionVersionRestriction createExpressionVersionRestriction(Expression expr,
+        de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VariableDeclaration decl, 
+        EObject cause, EStructuralFeature feature)
+        throws RestrictionEvaluationException {
+        try {
+            ExpressionVersionRestrictionValidator validator = new ExpressionVersionRestrictionValidator(
+                new MessageHandler(this, cause, feature));
+            expr.accept(validator);
+            return new de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.
+                ExpressionVersionRestriction(expr, decl);
+        } catch (ExpressionException e) {
+            throw new RestrictionEvaluationException(e.getMessage(), e.getId());
+        }
     }
 
 }

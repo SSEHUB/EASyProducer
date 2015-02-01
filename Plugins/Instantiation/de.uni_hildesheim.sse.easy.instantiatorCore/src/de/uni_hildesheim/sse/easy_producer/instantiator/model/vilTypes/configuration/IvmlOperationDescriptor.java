@@ -8,6 +8,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Operation
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.VilException;
+import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Sequence;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Set;
@@ -41,6 +42,7 @@ abstract class IvmlOperationDescriptor extends OperationDescriptor {
      */
     protected TypeDescriptor<? extends IVilType> determineReturnType(IDatatype type) throws VilException {
         TypeDescriptor<? extends IVilType> result;
+        type = DerivedDatatype.resolveToBasis(type);
         if (Set.TYPE.isAssignableFrom(type)) {
             TypeDescriptor<? extends IVilType>[] generics = TypeDescriptor.createArray(1);
             generics[0] = IvmlTypes.decisionVariableType();
@@ -52,7 +54,6 @@ abstract class IvmlOperationDescriptor extends OperationDescriptor {
         } else {
             result = IvmlTypes.decisionVariableType();
         }
-//result = IvmlTypes.decisionVariableType();        
         return result;
     }
     
@@ -150,6 +151,16 @@ abstract class IvmlOperationDescriptor extends OperationDescriptor {
 
     @Override
     public boolean isPlaceholder() {
+        return false;
+    }
+    
+    @Override
+    public int useParameterAsReturn() {
+        return -1;
+    }
+
+    @Override
+    public boolean storeArtifactsBeforeExecution() {
         return false;
     }
 

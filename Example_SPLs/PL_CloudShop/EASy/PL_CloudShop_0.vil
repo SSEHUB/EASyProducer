@@ -1,0 +1,85 @@
+@advice(PL_CloudShop)
+vilScript PL_CloudShop (Project source, Configuration config, Project target) {
+
+    version v0;
+    
+    Path libDir = "$target/lib";
+    String plName = target.getName();
+    String jarName = target.getName().toLowerCase() + "-store.jar";
+    String onScriptsPath = "$target" + "resources/onSkripte";
+
+    copySRC() = "$target/src/**/*.java" : "$source/src/**/*.java" {
+        RHS.copy(LHS);
+    }
+    
+    copyLIB() = "$target/lib/**/*" : "$source/lib/**/*" {
+        RHS.copy(LHS);
+    }
+
+    copyRES() = "$target/resources/**/*" : "$source/resources/**/*" {
+        RHS.copy(LHS);
+    }
+
+    instantiateSource(Project target, Configuration config) = : {
+    	// Use fully-qualified names for select-operations!
+        velocity("$target/src/**/*.java", config.selectByName("PL_CloudShop::shopConfig"));
+    }
+
+    instantiateDeployment(Project target, Configuration config) = "$target/resources/deployment.bat" : {
+    	// Create deployment script via template
+        vilTemplateProcessor(source.getEasyFolder() + "/DeploymentScriptTemplate.vtl", config, "$target/resources/deployment.bat",
+        	plName=plName, jarName=jarName, onScriptsPath=onScriptsPath
+        );
+    }
+    
+    instantiateBuild(Project target, Configuration config) = "$target/resources/build.xml" : {
+        // Resolve #if-statement in ant build script. Run Velocity first as otherwise XmlFileArtifact changes may not be saved!
+    	velocity("$target/resources/build.xml", config.selectByName("PL_CloudShop::shopConfig"));
+    	
+    	// Resolve shop configuration variables in ant build script
+    	Path antBuildFilePath = "$target/resources/build.xml";
+    	XmlFileArtifact buildFile = antBuildFilePath;
+    	//buildFile.create();
+    	DecisionVariable shopConfig = config.getByName("PL_CloudShop::shopConfig");
+    	// Define <property name="compositeFileName" value= "[shopConfig.compositeFileName]" />
+    	buildFile.selectByName("property").toSequence().get(0).getAttribute("value").setValue(shopConfig.getByName("compositeFileName").value());
+    	// Define <property name="pathToTuscanyLib" value="[libDir]"/>
+    	buildFile.selectByName("property").toSequence().get(1).getAttribute("value").setValue(libDir.toAbsoluteOSPath());
+    	
+    	// Resolve product line specific variables
+    	// Define <property name="jarName" value="[jarName]"/>
+    	buildFile.selectByName("property").toSequence().get(2).getAttribute("value").setValue(jarName);
+    }
+    
+    test(Boolean tes, String s) = : {
+
+    }
+    
+    buildServices(Project target) = "$target/*.jar" : {
+    	ant("$target/resources/", "build.xml", "pack");
+    }
+
+    main(Project source, Configuration config, Project target) = : {
+    	// Copy all src- and resource-files as well as libraries from source to target
+        copySRC();
+        copyRES();
+        copyLIB();
+        
+       	// Instantiate source-files using velocity
+        instantiateSource(target, config);
+        
+        // Instantiate (create) deployment.bat using VTL-template
+        instantiateDeployment(target, config);
+        
+        // Instantiate build.xml-script using XML-manipulations and velocity
+        instantiateBuild(target, config);
+        
+        // Build services by running build.xml-script using ant-instantiator
+        buildServices(target);
+        
+        // Finally, execute the deployment-script (run deployment.bat)
+        Path deploymentPath = "$target/resources/deployment.bat";
+        execute deploymentPath();
+    }
+
+}

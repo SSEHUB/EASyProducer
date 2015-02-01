@@ -1,6 +1,0 @@
-
-The file are not saved in Z3 file format for now. Open with Notepadd++. 
-
-The code can be complied on the Z3 website. 
-
-See, http://rise4fun.com/z3py/tutorial/guide

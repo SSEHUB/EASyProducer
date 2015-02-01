@@ -44,17 +44,12 @@ public class VoidType extends BasisDatatype {
         super("VoidType", DTYPE);
     }
     
-    /**
-    * {@inheritDoc}
-    */
     @Override
     public boolean isAssignableFrom(IDatatype type) {
         return false; // no type is compliant to this
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void accept(IDatatypeVisitor visitor) {
         //visitor.visitAnyType(this);
     }

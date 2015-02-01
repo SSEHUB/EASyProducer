@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
+
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -18,6 +19,8 @@ import org.junit.Test;
 import org.w3c.dom.DOMException;
 
 import test.de.uni_hildesheim.sse.easy_producer.instantiator.model.AbstractTest;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactFactory;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FragmentArtifact;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.xml.DefaultXmlFileArtifactCreator;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.xml.PathUtils;
@@ -64,6 +67,7 @@ public class XmlFileArtifactTest extends AbstractTest {
     private static XmlFileArtifact artifactMenubarCopy;
     
     private static DefaultXmlFileArtifactCreator creator;
+    private static ArtifactModel model;
     
     private static String invalidName = "1$/]!";
     private static String mapperDir = "";
@@ -87,12 +91,13 @@ public class XmlFileArtifactTest extends AbstractTest {
      */
     @BeforeClass
     public static final void setUpBeforeClass() {
-
         creator = new DefaultXmlFileArtifactCreator();
         try {
             
             //Set path to testfile
-            workingDir = determineTestDataDir().getAbsolutePath();
+            File testDataDir = determineTestDataDir();
+            workingDir = testDataDir.getAbsolutePath();
+            model = ArtifactFactory.createArtifactModel(testDataDir);
             mapperDir = workingDir + File.separator + "mapperfragment.xml";
             springDir = workingDir + File.separator + "sieSpringConfigGeneric.xml";
             xsdDir = workingDir + File.separator + "xsd.xml";
@@ -102,33 +107,33 @@ public class XmlFileArtifactTest extends AbstractTest {
             
             //Check whether rootelement is referenced for all testartifacts.
             artifact = (XmlFileArtifact) creator.createArtifactInstance(
-                new File(workingDir), null);
+                new File(workingDir), model);
             if (artifact.getRootElement() == null) {
                 Assert.fail();
             }
    
             artifactMapperFragment = (XmlFileArtifact) creator.createArtifactInstance(
-                new File(mapperDir), null);
+                new File(mapperDir), model);
             if (artifactMapperFragment.getRootElement() == null) {
-                Assert.fail("Rootelement of testartifact nnot found!");
+                Assert.fail("Rootelement of testartifact not found!");
             }
  
             artifactSpringFragment = (XmlFileArtifact) creator.createArtifactInstance(
-                new File(springDir), null);
+                new File(springDir), model);
             if (artifactSpringFragment.getRootElement() == null) {
-                Assert.fail("Rootelement of testartifact nnot found!");
+                Assert.fail("Rootelement of testartifact not found!");
             }
             
             artifactXsdFragment = (XmlFileArtifact) creator.createArtifactInstance(
-                new File(xsdDir), null);
+                new File(xsdDir), model);
             if (artifactXsdFragment.getRootElement() == null) {
-                Assert.fail("Rootelement of testartifact nnot found!");
+                Assert.fail("Rootelement of testartifact not found!");
             }
             
             artifactMenubar = (XmlFileArtifact) creator.createArtifactInstance(
-                new File(menubarDir), null);
+                new File(menubarDir), model);
             if (artifactMapperFragment.getRootElement() == null) {
-                Assert.fail("Rootelement of testartifact nnot found!");
+                Assert.fail("Rootelement of testartifact not found!");
             }
               
         } catch (ArtifactException e) {
@@ -270,15 +275,15 @@ public class XmlFileArtifactTest extends AbstractTest {
         
         try {
             artifactCopy = (XmlFileArtifact) creator.createArtifactInstance(
-                fileCopy, null);
+                fileCopy, model);
             artifactSpringFragmentCopy = (XmlFileArtifact) creator.createArtifactInstance(
-                springFileCopy, null);
+                springFileCopy, model);
             artifactMapperFragmentCopy = (XmlFileArtifact) creator.createArtifactInstance(
-                    mapperFileCopy, null);
+                mapperFileCopy, model);
             artifactCopyForIndentation = (XmlFileArtifact) creator.createArtifactInstance(
-                indentFileCopy, null);
+                indentFileCopy, model);
             artifactXsdFragmentCopy = (XmlFileArtifact) creator.createArtifactInstance(
-                xsdFileCopy, null);
+                xsdFileCopy, model);
         } catch (ArtifactException e) {
             Assert.fail(e.getMessage());
         }
@@ -294,7 +299,7 @@ public class XmlFileArtifactTest extends AbstractTest {
         copyMoreArtifacts(menuFileCopy);
         try {
             artifactMenubarCopy = (XmlFileArtifact) creator.createArtifactInstance(
-                menuFileCopy, null);
+                menuFileCopy, model);
         } catch (ArtifactException e) {
             Assert.fail(e.getMessage());
         }

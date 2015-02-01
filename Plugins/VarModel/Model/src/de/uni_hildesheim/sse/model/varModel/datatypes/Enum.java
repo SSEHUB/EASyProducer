@@ -219,6 +219,16 @@ public class Enum extends CustomDatatype {
     }
     
     /**
+     * Returns the index of the given literal.
+     * 
+     * @param literal the literal to search for
+     * @return the index of the literal, <code>-1</code> if not found
+     */
+    public int getLiteralIndex(EnumLiteral literal) {
+        return literals.indexOf(literal);
+    }
+    
+    /**
      * Returns whether this enum is ordered.
      * 
      * @return <code>true</code> if it is ordered, <code>false</code> else (default <code>false</code>)
@@ -227,9 +237,7 @@ public class Enum extends CustomDatatype {
         return false;
     }
     
-    /**
-     * {@inheritDoc}
-     */ 
+    @Override
     public void accept(IDatatypeVisitor visitor) {
         visitor.visitEnumType(this);
     }

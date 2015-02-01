@@ -3,6 +3,7 @@ package de.uni_hildesheim.sse.reasoning.drools2;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.model.confModel.AssignmentState;
@@ -100,6 +101,7 @@ public class ReasoningScenarioTests {
      * <li>Checks that after the second reasong the same amount of variables have a value after the first reasonign</li>
      * </ol>
      */
+    @Ignore
     @Test
     public void testPropagateAndReasonAgain() {
         // 1. Propagate Values

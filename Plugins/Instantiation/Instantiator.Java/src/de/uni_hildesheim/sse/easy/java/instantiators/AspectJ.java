@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.IOUtils;
 import org.aspectj.bridge.IMessage;
@@ -37,6 +38,34 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
 public class AspectJ extends AbstractFileInstantiator {
 
     private static final String CLASSPATH_ARG_NAME = "classpath"; 
+
+    /**
+     * A completion runner for AspectJ.
+     * 
+     * @author Holger Eichelberger
+     */
+    private static class CompletionRunner implements Runnable {
+
+        private boolean completed = false;
+        
+        /**
+         * Waits for the completion of the compilation.
+         */
+        void waitForCompletion() {
+            while (!completed) {
+                try {
+                    TimeUnit.MILLISECONDS.sleep(100);
+                } catch (InterruptedException e) {
+                }
+            }
+        }
+
+        @Override
+        public void run() {
+            completed = true;
+        }
+        
+    }
     
     /**
      * Compiles a source path to a target path.
@@ -73,7 +102,7 @@ public class AspectJ extends AbstractFileInstantiator {
         throws ArtifactException {
         return aspectJ(source, null, target, other);
     }
-
+    
     /**
      * Compiles a source path to a target path.
      * 
@@ -129,7 +158,14 @@ public class AspectJ extends AbstractFileInstantiator {
         MessageHandler m = new MessageHandler();
         String[] tmpArgs = new String[args.size()];
         args.toArray(tmpArgs);
-        compiler.run(tmpArgs, m);
+        compiler.setHolder(m);
+        CompletionRunner completion = new CompletionRunner();
+        compiler.setCompletionRunner(completion);
+        compiler.runMain(tmpArgs, false);
+        completion.waitForCompletion();
+        CompilationAndWeavingContext.reset();
+        Dump.reset();
+        
         if (m.getErrors().length > 0) {
             StringBuilder tmp = new StringBuilder();
             for (IMessage message : m.getMessages(null, true)) {
@@ -137,14 +173,6 @@ public class AspectJ extends AbstractFileInstantiator {
                 tmp.append("\r\n"); // TODO replace by constant
             }
             throw new ArtifactException(tmp.toString(), ArtifactException.ID_RUNTIME_EXECUTION);
-        }
-        compiler.quit();
-        CompilationAndWeavingContext.reset();
-        Dump.reset();
-        try {
-            // try to wait for file system sync - some class files are sometimes missing
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
         }
 
         List<FileArtifact> result = new ArrayList<FileArtifact>();
@@ -188,7 +216,7 @@ public class AspectJ extends AbstractFileInstantiator {
     private static String prepareAspectJClasspath(String classpath) throws ArtifactException {
 
         // the aspectjrt is required in execution classpath - prerequisite is availabe via classpath
-        InputStream aspectJRt = AspectJ.class.getClassLoader().getResourceAsStream("aspectjrt.jar");
+        InputStream aspectJRt = AspectJ.class.getClassLoader().getResourceAsStream("lib/aspectJ/runtime/aspectjrt.jar");
         if (null == aspectJRt) {
             throw new ArtifactException("aspectj.rt not found - cannot execute aspectj", 
                  ArtifactException.ID_RUNTIME_RESOURCE);

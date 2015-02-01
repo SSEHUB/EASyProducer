@@ -41,7 +41,7 @@
     </target>
 	
 	<target name="junit" depends="compile">
-		<junit printsummary="yes" fork="yes" haltonfailure="yes">
+		<junit printsummary="yes" fork="yes">
 			<classpath >                            
                 <pathelement location="${build.classes.dir}"/>              
                 <path refid="includes" />                

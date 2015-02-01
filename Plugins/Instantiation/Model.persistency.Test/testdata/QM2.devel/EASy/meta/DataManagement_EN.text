@@ -1,0 +1,10 @@
+DataManagement::DataElement::name = name
+DataManagement::DataElement::storageLocation = storage location
+DataManagement::DataElement::strategy = storage strategy
+DataManagement::DataElement::throughput = strategy time line
+DataManagement::DataElement::constraints = SLA constraints
+DataManagement::DataSource::host = physical data source
+DataManagement::DataSource::input = input fields
+DataManagement::dataSources = configured data sources
+DataManagement::DataSink::output = output fields
+DataManagement::dataSinks = configured data sinks

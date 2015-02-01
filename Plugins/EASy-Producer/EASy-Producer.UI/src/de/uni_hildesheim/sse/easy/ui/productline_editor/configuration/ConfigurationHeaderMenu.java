@@ -6,6 +6,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IWorkspaceDescription;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -18,7 +24,6 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 
-import de.uni_hildesheim.sse.easy.instantiator.copy.core.CopyMechansimRegistry;
 import de.uni_hildesheim.sse.easy.ui.confModel.GUIConfiguration;
 import de.uni_hildesheim.sse.easy.ui.confModel.GUIHistoryItem;
 import de.uni_hildesheim.sse.easy.ui.confModel.GUIVariable;
@@ -33,7 +38,6 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
 import de.uni_hildesheim.sse.easy_producer.instantiator.TranformatorNotificationDelegate;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
 import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
-import de.uni_hildesheim.sse.easy_producer.persistency.ResourcesMgmt;
 import de.uni_hildesheim.sse.model.confModel.ConfigurationException;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.reasoning.core.frontend.IReasonerListener;
@@ -187,9 +191,6 @@ public class ConfigurationHeaderMenu extends AbstractConfigMenu implements Tranf
 
         super(parent, plp);
         setBackground(parent.getBackground());
-        // TODO check (SE): please note that the following line shall ideally be executed only once
-        // I would expect that the copy core is part of the EASy core not of the UI, see also Startup class
-        CopyMechansimRegistry.INSTANCE.setResourceMgmt(ResourcesMgmt.INSTANCE);
         this.plp = plp;
         this.parentPage = parentPage;
         plp.register(this);
@@ -354,11 +355,10 @@ public class ConfigurationHeaderMenu extends AbstractConfigMenu implements Tranf
                  * then the new output of the new instantiation process will be written to the console
                  */
                 EclipseConsole.INSTANCE.clearConsole();
-                // run execution in thread in order to enable update of the console
-                new Thread(new Runnable() {
-
+                Job job = new Job("Running VIL") {
+                    
                     @Override
-                    public void run() {
+                    protected IStatus run(IProgressMonitor monitor) {
                         try {
                             ProductLineProject plp = getProductLineProject();
                             plp.instantiate(ConfigurationHeaderMenu.this);
@@ -373,9 +373,38 @@ public class ConfigurationHeaderMenu extends AbstractConfigMenu implements Tranf
                                 }
                             });
                         }
+                        return org.eclipse.core.runtime.Status.OK_STATUS;
+                    }
+                };
+                job.schedule();
+                // run execution in thread in order to enable update of the console
+                /*new Thread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        try {
+                            IWorkspace workspace = ResourcesPlugin.getWorkspace();
+                            IWorkspaceDescription description = workspace.getDescription();
+                            boolean autoBuilding = description.isAutoBuilding();
+                            description.setAutoBuilding(false);
+
+                            ProductLineProject plp = getProductLineProject();
+                            plp.instantiate(ConfigurationHeaderMenu.this);
+                            plp.refreshArtifacts(); // force Eclipse to show new files
+                            description.setAutoBuilding(autoBuilding);
+                        } catch (VilLanguageException e) {
+                            final VilLanguageException exc = e;
+                            Display.getDefault().asyncExec(new Runnable() {
+                                
+                                @Override
+                                public void run() {
+                                    EasyProducerDialog.showErrorDialog(null, exc.getMessage());
+                                }
+                            });
+                        }
                     }
                     
-                }).start();
+                }).start();*/
             }
         });
     }

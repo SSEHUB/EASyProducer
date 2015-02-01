@@ -53,9 +53,7 @@ public class OperationDefinition extends ContainableModelElement {
         return operation;
     }
 
-    /** 
-     * {@inheritDoc}
-     */
+    @Override
     public void accept(IModelVisitor visitor) {
         visitor.visitOperationDefinition(this);
     }

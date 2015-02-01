@@ -23,7 +23,6 @@ import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
-import de.uni_hildesheim.sse.utils.messages.Message;
 
 /**
  * Implements a test evaluation context.
@@ -55,7 +54,7 @@ public class TestEvaluationContext extends EvaluationContext {
         this.allowAssign = allowAssign;
         this.targetState = targetState;
     }
-    
+
     @Override
     public boolean allowAssignValues() {
         return allowAssign;
@@ -71,12 +70,12 @@ public class TestEvaluationContext extends EvaluationContext {
     }
 
     @Override
-    public void addMessage(Message message) {
+    public void addMessage(EvaluationVisitor.Message message) {
         System.out.println(message.getDescription());
     }
 
     @Override
-    public IAssignmentState getTargetState(IAssignmentState state) {
+    public IAssignmentState getTargetState(IDecisionVariable var) {
         return targetState;
     }
 

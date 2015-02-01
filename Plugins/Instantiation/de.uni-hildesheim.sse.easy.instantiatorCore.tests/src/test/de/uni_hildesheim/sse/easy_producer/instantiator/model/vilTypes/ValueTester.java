@@ -3,6 +3,7 @@ package test.de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes;
 import java.util.Iterator;
 
 import org.junit.Assert;
+
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Sequence;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.AbstractIvmlVariable;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.DecisionVariable;
@@ -19,6 +20,7 @@ import de.uni_hildesheim.sse.model.varModel.values.RealValue;
 import de.uni_hildesheim.sse.model.varModel.values.ReferenceValue;
 import de.uni_hildesheim.sse.model.varModel.values.StringValue;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
+import de.uni_hildesheim.sse.model.varModel.values.VersionValue;
 
 /**
  * Implements a value tester for an individual decision variable.
@@ -119,6 +121,11 @@ class ValueTester implements IValueVisitor {
     @Override
     public void visitNullValue(NullValue value) {
         // shall not occur
+    }
+
+    @Override
+    public void visitVersionValue(VersionValue value) {
+        // shall not occur as variables actually cannot not have this type
     }
     
 }

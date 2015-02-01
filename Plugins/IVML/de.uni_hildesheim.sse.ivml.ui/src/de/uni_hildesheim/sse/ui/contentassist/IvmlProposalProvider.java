@@ -23,7 +23,9 @@ import com.google.inject.Inject;
 
 import de.uni_hildesheim.sse.ModelUtility;
 import de.uni_hildesheim.sse.ivml.AttributeTo;
+import de.uni_hildesheim.sse.ivml.DerivedType;
 import de.uni_hildesheim.sse.ivml.Project;
+import de.uni_hildesheim.sse.ivml.Type;
 import de.uni_hildesheim.sse.ivml.Typedef;
 import de.uni_hildesheim.sse.ivml.TypedefCompound;
 import de.uni_hildesheim.sse.ivml.TypedefEnum;
@@ -32,7 +34,6 @@ import de.uni_hildesheim.sse.ivml.VariableDeclaration;
 import de.uni_hildesheim.sse.ivml.VariableDeclarationPart;
 import de.uni_hildesheim.sse.ivml.impl.TypedefCompoundImpl;
 import de.uni_hildesheim.sse.ivml.impl.VariableDeclarationImpl;
-import de.uni_hildesheim.sse.model.management.VarModel;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Operation;
 import de.uni_hildesheim.sse.model.varModel.datatypes.TypeMapper;
@@ -80,6 +81,7 @@ public class IvmlProposalProvider extends AbstractIvmlProposalProvider {
 
     /**
      * Auto-complete a version-number.
+     * method is commented, because they is no way to find out, if we wrote 'version' or not
      * 
      * @param model the current model
      * @param ruleCall the current rule call
@@ -89,14 +91,35 @@ public class IvmlProposalProvider extends AbstractIvmlProposalProvider {
     @Override
     public void complete_VERSION(EObject model, RuleCall ruleCall,
             ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-    	
-    	StyledString toDisplay = new StyledString("version number");
+    	if (!isVersionStatementDeclared(context.getLastCompleteNode())) {
+    		StyledString toDisplay = new StyledString("Default version-statement");
+    		ICompletionProposal proposal = createCompletionProposal(
+    				"version v1.0;", toDisplay, 
+    				imageHelper.getImage(Images.NAME_VERSION), 
+    				700, context.getPrefix(), context);
+    		
+    		acceptor.accept(proposal);
+    	}        
+    }
+    
+    /**
+     * Complete a version-Statement
+     * 
+     * @param model the current model
+     * @param ruleCall the current rule call
+     * @param context the current context
+     * @param acceptor the completion proposal acceptor
+     * */
+    @Override
+	public void completeVersionStmt_Version(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+    	StyledString toDisplay = new StyledString("Default version number");
     	ICompletionProposal proposal = createCompletionProposal(
-        		"v1.0", toDisplay, 
+        		"v1.0;", toDisplay, 
         		imageHelper.getImage(Images.NAME_VERSION), 
         		700, context.getPrefix(), context);
     	
         acceptor.accept(proposal);
+        isVersionStatementDeclared(context.getLastCompleteNode());
     }
     
     /**
@@ -151,7 +174,6 @@ public class IvmlProposalProvider extends AbstractIvmlProposalProvider {
         		800, context.getPrefix(), context);
         acceptor.accept(proposal);
     }
-
 
     /**
      * Complete name for a ConflictStatement.
@@ -256,15 +278,19 @@ public class IvmlProposalProvider extends AbstractIvmlProposalProvider {
 		 */
 
 		// suggest a Typdef (could be an Enum, Compound or a typedefinition)
-    	String enumString = "enum " + namedefinition + "  { };";
+    	String enumString = "enum " + namedefinition + " {<Literal>};";
     	String compoundString = "compound " + namedefinition + " { }";
-    	String typedefString = "typedef " + namedefinition + " ";
+    	String refiningCompound = "compound " + namedefinition + " refines <ParentCompound> { }";
+    	String typedefString = "typedef " + "<TypeName>" + " <Type> with (<Restrictions>); ";
     	
     	StyledString toDisplay = new StyledString("enumeration");
     	acceptor.accept(createCompletionProposal(enumString, toDisplay,
 				imageHelper.getImage(Images.NAME_ENUM), 500, context.getPrefix(), context));
     	toDisplay = new StyledString("compound");
     	acceptor.accept(createCompletionProposal(compoundString, toDisplay,
+				imageHelper.getImage(Images.NAME_COMPOUND), 490, context.getPrefix(), context));
+    	toDisplay = new StyledString("refining compound");
+    	acceptor.accept(createCompletionProposal(refiningCompound, toDisplay,
 				imageHelper.getImage(Images.NAME_COMPOUND), 490, context.getPrefix(), context));
     	toDisplay = new StyledString("typedefinition");
     	acceptor.accept(createCompletionProposal(typedefString,
@@ -292,17 +318,20 @@ public class IvmlProposalProvider extends AbstractIvmlProposalProvider {
     	toDisplay = new StyledString("Constraint");
     	acceptor.accept(createCompletionProposal("Constraint " + namedefinition
 				+ ";", toDisplay,
-				imageHelper.getImage(Images.NAME_VARIABLE), 480, context.getPrefix(), context));
+				imageHelper.getImage(Images.NAME_CONSTRAINT), 480, context.getPrefix(), context));
 
 		// var: DerivedType
     	toDisplay = new StyledString("SetOf");
-    	acceptor.accept(createCompletionProposal("setOf(", toDisplay,
+    	acceptor.accept(createCompletionProposal("setOf(<SetType>) <SetName>;", toDisplay,
 				imageHelper.getImage(Images.NAME_VARIABLE), 490, context.getPrefix(), context));
     	toDisplay = new StyledString("SequenceOf");
-    	acceptor.accept(createCompletionProposal("sequenceOf(", toDisplay,
+    	acceptor.accept(createCompletionProposal("sequenceOf(<SequenceType>) <SequenceName>;", toDisplay,
 				imageHelper.getImage(Images.NAME_VARIABLE), 490, context.getPrefix(), context));
-    	toDisplay = new StyledString("RefOf");
-    	acceptor.accept(createCompletionProposal("refOf(", toDisplay,
+    	toDisplay = new StyledString("RefTo");
+    	acceptor.accept(createCompletionProposal("refTo(<RefType>) <RefName>;", toDisplay,
+				imageHelper.getImage(Images.NAME_VARIABLE), 490, context.getPrefix(), context));
+    	toDisplay = new StyledString("RefBy");
+    	acceptor.accept(createCompletionProposal("refBy(<RefType>) <RefName>;", toDisplay,
 				imageHelper.getImage(Images.NAME_VARIABLE), 490, context.getPrefix(), context));
 
 		// suggest a Freeze
@@ -341,7 +370,7 @@ public class IvmlProposalProvider extends AbstractIvmlProposalProvider {
                     displayName.append(var.getTCompound().getName());
                     displayName.append(" : " + varType, StyledString.QUALIFIER_STYLER);
 
-                    acceptor.accept(createCompletionProposal(varName + " ",
+                    acceptor.accept(createCompletionProposal(varName + " " + namedefinition +" ;",
 							displayName,
 							imageHelper.getImage(Images.NAME_COMPOUND), context));
                     varName = "";
@@ -355,7 +384,7 @@ public class IvmlProposalProvider extends AbstractIvmlProposalProvider {
                     displayName.append(" : " + varType,
 							StyledString.QUALIFIER_STYLER);
 
-                    acceptor.accept(createCompletionProposal(varName + " ",
+                    acceptor.accept(createCompletionProposal(varName + " " + namedefinition +" ;",
 							displayName,
 							imageHelper.getImage(Images.NAME_ENUM), context));
                     varName = "";
@@ -369,13 +398,18 @@ public class IvmlProposalProvider extends AbstractIvmlProposalProvider {
                     displayName.append(" : " + varType,
 							StyledString.QUALIFIER_STYLER);
 
-                    acceptor.accept(createCompletionProposal(varName + " ",
+                    acceptor.accept(createCompletionProposal(varName + " " + namedefinition +" ;",
 							displayName,
 							imageHelper.getImage(Images.NAME_TYPEDEF), context));
                     varName = "";
             	}
             }
     	}
+    	
+    	
+    	// propose already declared decisionvars.
+    	List<VariableDeclaration> dvList = getDecisionVars(context);
+    	proposeVariableDeclarations(dvList, context, acceptor);
     }
 
 	/**
@@ -452,7 +486,7 @@ public class IvmlProposalProvider extends AbstractIvmlProposalProvider {
      */
     @Override
 	public void completeTypedefCompound_Super(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-		suggestDeclaredCompounds(acceptor, context);	
+		proposeAllDeclaredCompoundsForSuper(acceptor, context);	
 	}
     
     /**
@@ -465,6 +499,66 @@ public class IvmlProposalProvider extends AbstractIvmlProposalProvider {
      */
     @Override
 	public void completeTypedefCompound_Elements(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+    	// suggest a Variabledeclaration
+    			// var: BasicTypes
+    	    	StyledString toDisplay = new StyledString("Integer");
+    	    	acceptor.accept(createCompletionProposal("Integer " + namedefinition
+    					+ ";", toDisplay, imageHelper.getImage(Images.NAME_VARIABLE), 500, context.getPrefix(),
+    					context));
+    	    	toDisplay = new StyledString("Real");
+    	    	acceptor.accept(createCompletionProposal(
+    					"Real " + namedefinition + ";", toDisplay,
+    					imageHelper.getImage(Images.NAME_VARIABLE), 500, context.getPrefix(), context));
+    	    	toDisplay = new StyledString("Boolean");
+    	    	acceptor.accept(createCompletionProposal("Boolean " + namedefinition
+    					+ ";", toDisplay, imageHelper.getImage(Images.NAME_VARIABLE), 500, context.getPrefix(),
+    					context));
+    	    	toDisplay = new StyledString("String");
+    	    	acceptor.accept(createCompletionProposal("String " + namedefinition
+    					+ ";", toDisplay, imageHelper.getImage(Images.NAME_VARIABLE), 500, context.getPrefix(),
+    					context));
+    	    	toDisplay = new StyledString("Constraint");
+    	    	acceptor.accept(createCompletionProposal("Constraint " + namedefinition
+    					+ ";", toDisplay,
+    					imageHelper.getImage(Images.NAME_CONSTRAINT), 480, context.getPrefix(), context));
+
+    			// var: DerivedType
+    	    	toDisplay = new StyledString("SetOf");
+    	    	acceptor.accept(createCompletionProposal("setOf(<SetType>) <SetName>;", toDisplay,
+    					imageHelper.getImage(Images.NAME_VARIABLE), 490, context.getPrefix(), context));
+    	    	toDisplay = new StyledString("SequenceOf");
+    	    	acceptor.accept(createCompletionProposal("sequenceOf(<SequenceType>) <SequenceName>;", toDisplay,
+    					imageHelper.getImage(Images.NAME_VARIABLE), 490, context.getPrefix(), context));
+    	    	toDisplay = new StyledString("RefTo");
+    	    	acceptor.accept(createCompletionProposal("refTo(<RefType>) <RefName>;", toDisplay,
+    					imageHelper.getImage(Images.NAME_VARIABLE), 490, context.getPrefix(), context));
+    	    	toDisplay = new StyledString("RefBy");
+    	    	acceptor.accept(createCompletionProposal("refBy(<RefType>) <RefName>;", toDisplay,
+    					imageHelper.getImage(Images.NAME_VARIABLE), 490, context.getPrefix(), context));
+
+    			// suggest a Freeze
+    	    	toDisplay = new StyledString("Freeze");
+    	    	acceptor.accept(createCompletionProposal("freeze {", toDisplay,
+    					imageHelper.getImage(Images.NAME_FREEZE) , 490, context.getPrefix(), context));
+    			// suggest an Eval
+    	    	toDisplay = new StyledString("Eval");
+    	    	acceptor.accept(createCompletionProposal("eval {" + implExpr + ";};",
+    	    			toDisplay, imageHelper.getImage(Images.NAME_EVAL), 490, context.getPrefix(), context));
+    			// suggest an AttributeTo
+    	    	toDisplay = new StyledString("AttributeTo");
+    	    	acceptor.accept(createCompletionProposal("attribute ", toDisplay,
+    					imageHelper.getImage(Images.NAME_ATTRIBUTE), 490, context.getPrefix(), context));
+    			// suggest an OpDefStatement
+    	    	toDisplay = new StyledString("OpDefStatement");
+    	    	acceptor.accept(createCompletionProposal("def ", toDisplay,
+    					imageHelper.getImage(Images.NAME_OPERATIONDEFINITION), 490, context.getPrefix(), context));
+    			// suggest AttributeAssignment
+    	    	toDisplay = new StyledString("AttributeAssignment");
+    	    	acceptor.accept(createCompletionProposal("assign (",
+    	    			toDisplay,
+    					imageHelper.getImage(Images.NAME_ATTACHMENT), 490, context.getPrefix(), context));
+    	
+    	
     	TypedefCompoundImpl actualcomp = findTypedefCompound(context.getLastCompleteNode());  
 		List<Typedef> tdList = getTypeDefs(context);
     	// search for parentcompound and propose its vars.
@@ -473,7 +567,6 @@ public class IvmlProposalProvider extends AbstractIvmlProposalProvider {
 				// If Typedef is a Compound
             	if (var.getTCompound() != null) {
             		TypedefCompound listcomp = var.getTCompound();
-            		System.out.println("COMP name: " + actualcomp.getName());
             		if (actualcomp.getSuper() != null) {
             			if (actualcomp.getSuper().equals(listcomp.getName())) {
             				SplitResult splitRes = Utils.split(listcomp.getElements());
@@ -502,6 +595,54 @@ public class IvmlProposalProvider extends AbstractIvmlProposalProvider {
 				}
 			}
 		}
+		
+		// suggest Typedefs (Compound, Enum, Typedef)
+    	tdList = getTypeDefs(context);
+    	if (tdList != null) {
+            for (Typedef var : tdList) {
+				// If Typedef is a Compound
+            	if (var.getTCompound() != null) {
+                    StyledString displayName = new StyledString();
+                    String varType = "compound";
+                    String varName = var.getTCompound().getName();
+                    displayName.append(var.getTCompound().getName());
+                    displayName.append(" : " + varType, StyledString.QUALIFIER_STYLER);
+
+                    acceptor.accept(createCompletionProposal(varName + " " + namedefinition +" ;",
+							displayName,
+							imageHelper.getImage(Images.NAME_COMPOUND), context));
+                    varName = "";
+            	}
+				// If Typedef is an Enum
+            	if (var.getTEnum() != null) {
+                    StyledString displayName = new StyledString();
+                    String varType = "enum";
+                    String varName = var.getTEnum().getName();
+                    displayName.append(var.getTEnum().getName());
+                    displayName.append(" : " + varType,
+							StyledString.QUALIFIER_STYLER);
+
+                    acceptor.accept(createCompletionProposal(varName + " " + namedefinition +" ;",
+							displayName,
+							imageHelper.getImage(Images.NAME_ENUM), context));
+                    varName = "";
+            	}
+				// If Typedef is a Typedefinition
+            	if (var.getTMapping() != null) {
+                    StyledString displayName = new StyledString();
+                    String varType = "typedef";
+                    String varName = var.getTMapping().getNewType();
+                    displayName.append(var.getTMapping().getNewType());
+                    displayName.append(" : " + varType,
+							StyledString.QUALIFIER_STYLER);
+
+                    acceptor.accept(createCompletionProposal(varName + " " + namedefinition +" ;",
+							displayName,
+							imageHelper.getImage(Images.NAME_TYPEDEF), context));
+                    varName = "";
+            	}
+            }
+    	}
 	}
 
 	/**
@@ -707,135 +848,34 @@ public class IvmlProposalProvider extends AbstractIvmlProposalProvider {
     		ContentAssistContext context, 
     		ICompletionProposalAcceptor acceptor) {
     	acceptor.accept(createCompletionProposal("", "declare a name",
-				imageHelper.getImage(Images.NAME_VARIABLE), context));
-    	
-    	
+				imageHelper.getImage(Images.NAME_VARIABLE), context));	
     }
     
     /**
-     * proposes operations for the type of the new declared variable.
+     * proposes operations and values for assigning something to a variable
+     * @param model objectmodel
+     * @param assignment Assignment
+     * @param acceptor CompletionProposalAcceptor
+     * @param context ContentAssistContext
      */
+    @Override
 	public void completeVariableDeclarationPart_Default(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-		System.err.println("!!!DEFAULT!!!");
-		// proposes Operations and already declared variables for the type of the declaring variable.
-		VariableDeclaration declaration = getVarDeclAtDeclarationPart(context.getLastCompleteNode());
-		if (declaration != null && declaration.getType() != null && declaration.getType().getType() != null &&
-				declaration.getType().getType().getType() != null) {
-			String type = declaration.getType().getType().getType();
-			if (type != null && !type.isEmpty()) {
-				//proposing operations
-				List<StyledString> proposalList = getOperationsForReturnType(type);
-				if (!isEmpty(proposalList)) {
-					for (StyledString display : proposalList) {
-						String toEditor = display.getString().substring(0, display.getString().indexOf(":") - 1);
-						ICompletionProposal proposal = createCompletionProposal(toEditor, display, imageHelper.getImage(Images.NAME_OPERATION), context);
-						acceptor.accept(proposal);
-					}
-				}
-				//proposing variables
-				List<VariableDeclaration> varList = getDecisionVarsForType(type, context);
-				String actualType = declaration.getDecls().get(0).getName();
-				if (!isEmpty(varList)) {
-					VariableDeclaration toRemoveObject = null;
-					for (int k = 0; k < varList.size(); k++) {
-						VariableDeclaration var = varList.get(k);
-						for (int i = 0; i < var.getDecls().size(); i++) {
-							String varType = var.getDecls().get(i).getName();
-							if (varType.equals(actualType)) {
-								toRemoveObject = var;
-							}
-						}
-					}
-					if (toRemoveObject != null) {
-						varList.remove(toRemoveObject);
-					}
-					proposeVariableDeclarations(varList, context, acceptor);
-				}
-			}	
-		}
-		
+		// proposes Operations and already declared variables to assign for the type of the variable.
+		proposeDecisionVariablesToAssign(context, acceptor);
 		// for enum declarations
-		// proposes possible values of the enumeration.
-		VariableDeclarationImpl vardeclImpl = getVarDeclAtDeclarationPart(context.getLastCompleteNode());
-		if (vardeclImpl != null && vardeclImpl.getType() != null && vardeclImpl.getType().getId() != null) {
-			String type = Utils.getQualifiedNameString(vardeclImpl.getType().getId()); 
-			List<Typedef> tdList = getTypeDefs(context);
-	    	if (tdList != null && !isEmpty(tdList)) {
-	            for (Typedef var : tdList) {
-					// If Typedef is an enum
-	            	if (var.getTEnum() != null) {
-	            		TypedefEnum tEnum = var.getTEnum();
-	            		if (tEnum.getName().equals(type)) {
-	            			EList<TypedefEnumLiteral> literals = tEnum.getLiterals();
-	            			for (TypedefEnumLiteral literal: literals) {
-	            				StyledString toDisplay = new StyledString(literal.getName());
-	            				toDisplay.append(" : " + type, StyledString.QUALIFIER_STYLER);
-	            				String toEditor = type + "." + literal.getName() + ";";
-	            				ICompletionProposal proposal = createCompletionProposal(toEditor, toDisplay, imageHelper.getImage(Images.NAME_ENUM_LITERAL), context);
-	            				acceptor.accept(proposal);	
-	            			}
-	            		}
-	            	}
-	            }
-	    	}
-		}
-		
+		proposeEnumsToAssign(context, acceptor);		
 		// for compound declarations
-		//propose the variables 
-		vardeclImpl = getVarDeclAtDeclarationPart(context.getLastCompleteNode());
-		if (vardeclImpl != null && vardeclImpl.getType() != null && vardeclImpl.getType().getId() != null) {
-			List<Typedef> tdList = getTypeDefs(context);
-			List<VariableDeclarationImpl> varList = null;
-	    	if (tdList != null && !isEmpty(tdList)) {
-	    		varList = new ArrayList<VariableDeclarationImpl>();
-	            for (Typedef var : tdList) {
-					// If Typedef is a compound
-	            	if (var.getTCompound() != null) {
-	            		TypedefCompound tCompound = var.getTCompound();
-	            		String vardeclType = Utils.getQualifiedNameString(vardeclImpl.getType().getId());
-	            		String compoundType = tCompound.getName();
-	            		if (vardeclType.equals(compoundType)) {
-	            			// Check if compound has super or not
-	            			if (!tCompound.getSuper().equals("null")) {
-	            				TypedefCompound superCompound = getCompoundDeclarationByName(tCompound.getSuper(), context);
-	            				EList<EObject> compoundElements = superCompound.getElements();
-		            			if (!isEmpty(compoundElements)) {
-		            				for (EObject eObject : compoundElements) {
-		            					if (eObject instanceof VariableDeclarationImpl) {
-		            						VariableDeclarationImpl varDec = (VariableDeclarationImpl) eObject;
-		            						varList.add(varDec);	
-		            					}
-		            				}
-		            			}
-	            			}
-	            			
-	            			// add vars of the compound
-	            			EList<EObject> compoundElements = tCompound.getElements();
-	            			if (!isEmpty(compoundElements)) {
-	            				for (EObject eObject : compoundElements) {
-	            					if (eObject instanceof VariableDeclarationImpl) {
-	            						VariableDeclarationImpl varDec = (VariableDeclarationImpl) eObject;
-	            						varList.add(varDec);	
-	            					}
-	            				}	
-	            			}
-	            		}
-	            	}
-	            }
-	    	}
-	    	if (!isEmpty(varList)) {
-	    		System.out.println("proposing...");
-	    		
-//	    		proposeVariableDeclarationsImpl(varList, context, acceptor);	
-	    		proposeVarsForCompoundvardeclaration(varList, context, acceptor);
-	    	}
-		}
-		
-		System.out.println(context.getLastCompleteNode().getParent().getParent().getSemanticElement());
-	}
+	    autocompleteCompoundAssign(context, acceptor);
+		// DerivedTypes (such as setOf(Type))
+		proposeDerivedTypesToAssign(context, acceptor);
+    }
     
     /**
      * proposes operations for operationcalls of an element (like String s.).
+     * @param model objectmodel
+     * @param assignment Assignment
+     * @param acceptor CompletionProposalAcceptor
+     * @param context ContentAssistContext
      */
     public void completeCall_Call(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
     	List<StyledString> propList = proposeOperationsForType(context.getLastCompleteNode());
@@ -860,7 +900,7 @@ public class IvmlProposalProvider extends AbstractIvmlProposalProvider {
 	/**
 	 * Get the projectname.
 	 * @param context ContentAssistContext
-	 * @return name of the project
+	 * @return name of the project as <code>String</code>. Maybe <b>null</b>.
 	 */
     private String getProjectName(ContentAssistContext context) {
     	String result = null;
@@ -869,9 +909,9 @@ public class IvmlProposalProvider extends AbstractIvmlProposalProvider {
             result = project.getName();
     	}
     	
-    	for (int i = 0; i < VarModel.INSTANCE.getModelCount(); i++) {
-    	    System.out.println("Project: " + VarModel.INSTANCE.getModel(i).getName());
-    	}
+//    	for (int i = 0; i < VarModel.INSTANCE.getModelCount(); i++) {
+//    	    System.out.println("Project: " + VarModel.INSTANCE.getModel(i).getName());
+//    	}
     	
     	return result;
     }
@@ -880,7 +920,7 @@ public class IvmlProposalProvider extends AbstractIvmlProposalProvider {
 	 * Get all Typedefs. Includes Enums, Compounds, Typedefinition
 	 * 
 	 * @param context ContentAssistContext
-	 * @return List with all Typedefs
+	 * @return <code>List<Typedef></code> with all Typedef-declarations. Maybe </b>null</b>.
 	 */
     private List<Typedef> getTypeDefs(ContentAssistContext context) {
 
@@ -896,6 +936,12 @@ public class IvmlProposalProvider extends AbstractIvmlProposalProvider {
     	return result;
     }
     
+    /**
+     * searches for the TypedefCompound-object by its name.
+     * @param name the name of the compound as a String
+     * @param context ContentAssistContext
+     * @return <code>TypedefCompound</code> of the searched name, Maybe <b>null</b>.
+     */
     private TypedefCompound getCompoundDeclarationByName(String name, ContentAssistContext context) {
     	TypedefCompound result = null;
     	List<Typedef> allDefs = getTypeDefs(context);
@@ -916,7 +962,8 @@ public class IvmlProposalProvider extends AbstractIvmlProposalProvider {
 	 * Get all DecisionVariables.
 	 * 
 	 * @param context ContentAssistContext
-	 * @return List with all VariableDeclarations
+	 * @return <code>List<VariableDeclaration></code> with all <code>VariableDeclaration</code> inside of the project.
+	 * Maybe <b>null</b>.
 	 */
     private List<VariableDeclaration> getDecisionVars(
 			ContentAssistContext context) {
@@ -941,6 +988,13 @@ public class IvmlProposalProvider extends AbstractIvmlProposalProvider {
         return result;
     }
     
+    /**
+     * searches for VariableDeclarations by a specific type.
+     * @param type the type of the variable, as <code>String</code>
+     * @param context ContentAssistContext
+     * @return </code>List<VariableDeclaration></code> with every <code>VariableDeclaration</code>, which has the the specific type, given by the parameter.
+     * Maybe <b>null</b>.
+     */
     private List<VariableDeclaration> getDecisionVarsForType(String type, ContentAssistContext context) {
     	List<VariableDeclaration> result = null;
     	Project project = findProject(context.getCurrentNode());
@@ -955,28 +1009,92 @@ public class IvmlProposalProvider extends AbstractIvmlProposalProvider {
         			List<VariableDeclaration> allVars = splitRes.getVarDecls();
         			result = new ArrayList<VariableDeclaration>();
         			for (VariableDeclaration var : allVars) {
-        				if (var.getType() != null && var.getType().getType() != null &&
+        				if (var.getType() != null && var.getType() != null) {
+        					// VariableDeclaration-object != null
+        					if (var.getType().getType() != null &&
         						var.getType().getType().getType() != null) {
-        					String varType = var.getType().getType().getType();
-        					if (varType.equals(type)) {
-        						result.add(var);
-        					}	
+        						// variable has a basic-type
+        						String varTypeBasic = var.getType().getType().getType();
+        						if (varTypeBasic.equals(type)) {
+        							result.add(var);
+        						}		
+        					} else {
+        						// variable has an advanced-type
+        						if (var.getType().getId() != null) {
+        							String varTypeAdvanced = Utils.getQualifiedNameString(var.getType().getId());
+        							if (varTypeAdvanced.equals(type)) {
+        								result.add(var);
+        							}
+        						}
+        					}
         				}
         			}
         		}
         	}
         }
         if (isEmpty(result)) {
-        	return null;
-        } else {
-        	return result;
+        	result = null;
+        } 
+        return result;
+    }
+    
+    /**
+     * searches for the <code>VariableDeclaration</code> of derived-type variables, like a setOf(Type)
+     * @param derivedType the type of the variable (setOf(), sequenceOf(), or refTo()).
+     * @param type the type, which is used by the derivedType (exp: setOf(Integer), Integer would be the type.).
+     * @param context ContentAssistContext
+     * @return <code>List<VariableDeclaration></code> with all <code>VariableDeclaration</code>'s which have DerivedTypes.
+     * Maybe <b>null</b>.
+     */
+    private List<VariableDeclaration> getDerivedVarsForType(String derivedType, String type, ContentAssistContext context) {
+    	List<VariableDeclaration> result = null;
+    	Project project = findProject(context.getCurrentNode());
+        if (project != null && 
+        		project.getContents() != null && 
+        		project.getContents().getElements() != null &&
+        		!isEmpty(project.getContents().getElements())) {
+        	SplitResult splitRes = Utils.split(project.getContents().getElements());
+        	if (splitRes != null) {
+        		// check declared DecisionVars
+        		if (!isEmpty(splitRes.getVarDecls())) {
+        			List<VariableDeclaration> allVars = splitRes.getVarDecls();
+        			result = new ArrayList<VariableDeclaration>();
+        			for (VariableDeclaration var : allVars) {
+        				if (var.getType() != null && var.getType().getDerived() != null &&
+        						var.getType().getDerived().getOp() != null) {
+        					DerivedType derivedTypeObject = var.getType().getDerived();
+        					String tempDerivedType = derivedTypeObject.getOp();
+        					String innerTypeString = "";
+        					if (derivedTypeObject.getType() != null) {
+        						Type innerTypeOfDerivedType = derivedTypeObject.getType();
+        						if (innerTypeOfDerivedType.getId() != null) {
+        							innerTypeString = Utils.getQualifiedNameString(innerTypeOfDerivedType.getId());
+        						}
+        						if (innerTypeOfDerivedType.getType() != null) {
+        							innerTypeString = innerTypeOfDerivedType.getType().getType();
+        						}
+        					}
+        					// check collected information and add variable to the resultlist, if it matches 
+        					if (tempDerivedType.equals(derivedType) && 
+        							innerTypeString.equals(type)) {
+        								result.add(var);
+        					}
+        				}
+        			}
+        		}
+        	}
         }
+        if (isEmpty(result)) {
+        	result = null;
+        }
+    	return result;
     }
 
 	/**
 	 * Get all AttributeTo statements to extract the names for example.
 	 * @param context ContentAssistContext
-	 * @return List with all AttributeTo-Statements
+	 * @return <code>List<AttributeTo></code> with all <code>AttributeTo</code> Statements.
+	 * Maybe <b>null</b>.
 	 */
     private List<AttributeTo> getAttributes(ContentAssistContext context) {
     	
@@ -995,48 +1113,195 @@ public class IvmlProposalProvider extends AbstractIvmlProposalProvider {
     }
 
 	/**
-	 * Check whether a given List is <b>null</b> or empty.
-	 * 
-	 * @param list
-	 *            The list to be checked.
-	 * @return <b>True</b> if the list is <b>null</b> or has no elements.
-	 *         <b>False</b> otherwise.
+	 * Returns all operations for all registered types in the IVML_DATATYPES Array.
+	 * @return <code>List<Operation></code> with all operations.
+	 * Maybe <b>null</b>.
 	 */
-    private static boolean isEmpty(List<?> list) {
-    	return null == list || list.isEmpty();
-    }
-    
-    
-    /**
-     * Returns all operations for all registered types in the IVML_DATATYPES Array.
-     * @return <code>List<Operation></code> with all operations.
-     * Maybe <b>null</b>.
-     */
-    private List<Operation> getAllOperationsCleaned() {
-    	List<Operation> result = null;
-    	boolean listInit = false;
-    	for (String type : IVML_DATATYPES) {
-    		if (TypeMapper.getType(type) != null && 
-    				TypeMapper.getType(type).getOperationCount() > 0) {
-    			if (!listInit) {
-    				result = new ArrayList<Operation>();
-    				listInit = true;
-    			}
-    			for (int i = 0; i < TypeMapper.getType(type).getOperationCount(); i++) {
-    				Operation op = TypeMapper.getType(type).getOperation(i);
-    				if (op != null) {
-    					result.add(op);
-    				}
-    			}
-    		}
-    	}
-    	if (!isEmpty(result)) {
-    		removeBlacklistedOperations(result);
-    	}
-    	return result;
-    }
-    
-    /**
+	private List<Operation> getAllOperationsCleaned() {
+		List<Operation> result = null;
+		boolean listInit = false;
+		for (String type : IVML_DATATYPES) {
+			if (TypeMapper.getType(type) != null && 
+					TypeMapper.getType(type).getOperationCount() > 0) {
+				if (!listInit) {
+					result = new ArrayList<Operation>();
+					listInit = true;
+				}
+				for (int i = 0; i < TypeMapper.getType(type).getOperationCount(); i++) {
+					Operation op = TypeMapper.getType(type).getOperation(i);
+					if (op != null) {
+						result.add(op);
+					}
+				}
+			}
+		}
+		if (!isEmpty(result)) {
+			removeBlacklistedOperations(result);
+		}
+		return result;
+	}
+
+	/**
+	 * Returns all Operations with a specific return type
+	 * @param type the returntype, you want.
+	 * @return <code>List<StyledString></code> with all operations, ready to propose.
+	 * Maybe <b>null</b>.
+	 */
+	private List<StyledString> getOperationsForReturnType(String type) {
+		List<StyledString> result = null;
+		List<Operation> operationList = getAllOperationsCleaned();
+		if (!isEmpty(operationList)) {
+			result = new ArrayList<StyledString>();
+			for (Operation operation : operationList) {
+				if (operation.getReturns().getName().equals(type)) {
+					StyledString display = new StyledString();
+					String name = operation.getName();
+					boolean hasParameter = false;
+					display.append(name + "(");
+					//setup parameters
+					if (operation.getParameterCount() > 0) {
+						for (int i = 0; i < operation.getParameterCount(); i++) {
+							IDatatype parameter = operation.getParameter(i);
+							if (parameter != null && parameter.getName() != null
+									&& parameter.getType() != null
+									&& parameter.getType().getName() != null) {
+								String paramName = "parameter" + i;
+								String paramType = parameter.getType().getName();
+								display.append(paramType + " " + paramName + ", ");
+							}
+						}
+						hasParameter = true;
+					}
+					if (hasParameter) {
+						String tempdisplay = display.getString();
+						tempdisplay = tempdisplay.substring(0,
+								tempdisplay.length() - 2);
+						display = new StyledString();
+						display.append(tempdisplay);
+					}
+					display.append(")");
+					display.append(" : " + operation.getReturns());
+					result.add(display);	
+				}
+			}
+		}
+		
+		return result;
+	}
+
+	/**
+	 * Returns the type of the variable, which is used for a Call (dot-notation).
+	 * @param the last complete node.
+	 * @return <code>String</code> of the Type. Maybe <b>null</b>.
+	 */
+	private String getTypeOfCallContext(INode node) {
+		String result = null;
+		if (node != null) {
+			String varName = getContextVariableName(node);
+			if (varName != null && !varName.isEmpty()) {
+				// now while we have the name of the variable, we need the VariableDeclaration-object for that name
+				// so we can find out the type
+				Project project = findProject(node);
+				if (project != null) {
+					for (EObject eObject : project.getContents().getElements()) {
+						if (eObject instanceof VariableDeclaration) {
+							VariableDeclaration var = (VariableDeclaration) eObject;
+							if (var != null) {
+								for (VariableDeclarationPart varDeclPart : var.getDecls()) {
+									if (varName.equals(varDeclPart.getName())) {
+										if (var.getType() != null) {
+											
+											if (var.getType().getType() != null &&
+													var.getType().getType().getType() != null) {
+												// variable has a basic-type
+												result = var.getType().getType().getType();
+//												System.out.println(result);
+											} 
+											if (var.getType().getId() != null) {
+												// variable has an advanced-type
+												result = Utils.getQualifiedNameString(var.getType().getId());
+//												System.out.println(result);
+											}
+											if (var.getType().getDerived() != null) {
+												// variable has a derived type
+//												System.out.println(var.getType().getDerived().getOp());
+											}
+										
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Returns the name of the variable during a call (dot-notation).
+	 * @param node the last complete node
+	 * @return <code>String</code> of the name. Maybe <b> null </b>.
+	 */
+	private String getContextVariableName(INode node) {
+		String result = null;
+		if (node != null) {
+			result = node.getText();
+			result = result.trim();
+			if (result.equals(".")) {
+				result = getContextVariableName(node.getParent());
+			} 
+		}
+		if (result.contains(".")) {
+			result = result.substring(0, result.length() - 1);	
+		}
+	
+		return result;
+	}
+
+	/**
+	 * Returns all operations for a specific type.
+	 * @param type 
+	 * @return <code>List<Operation></code> with all operations for the specific type.
+	 * Maybe <b>null</b>.
+	 */
+	private List<Operation> getAllOperationsForType(String type) {
+		List<Operation> result = null;
+		if (TypeMapper.getType(type) != null && 
+				TypeMapper.getType(type).getOperationCount() > 0) {
+			result = new ArrayList<Operation>();
+			for (int i = 0; i < TypeMapper.getType(type).getOperationCount(); i++) {
+				Operation op = TypeMapper.getType(type).getOperation(i);
+				if (op != null) {
+					result.add(op);
+				}
+			}
+		}
+		if (!isEmpty(result)) {
+			removeBlacklistedOperations(result);
+		}
+		return result;
+	}
+
+	/**
+	 * Returns the <code>VariableDeclaration</code> of a variable while assigning something to it.
+	 * @param node the last complete node.
+	 * @return <code>VariableDeclarationImpl</code> of the variable. Maybe <b>null</b>.
+	 */
+	private VariableDeclarationImpl getVarDeclAtDeclarationPart(INode node) {
+		VariableDeclarationImpl result = null;
+		if (node != null) {
+			if (node.getSemanticElement() instanceof VariableDeclarationImpl) {
+				result = (VariableDeclarationImpl) node.getSemanticElement();
+			} else {
+				result = getVarDeclAtDeclarationPart(node.getParent());
+			}
+		}
+		return result;
+	}
+
+	/**
      * Returns all registered operations for a specific type. This method should only be used for 
      * proposing operations in a Call (dot-notation).
      * @param node the last complete node
@@ -1089,269 +1354,237 @@ public class IvmlProposalProvider extends AbstractIvmlProposalProvider {
     }
     
     /**
-     * Returns all Operations with a specific return type
-     * @param type the returntype, you want.
-     * @return <code>List<StyledString></code> with all operations, ready to propose.
-     * Maybe <b>null</b>.
-     */
-    private List<StyledString> getOperationsForReturnType(String type) {
-    	List<StyledString> result = null;
-    	List<Operation> operationList = getAllOperationsCleaned();
-    	if (!isEmpty(operationList)) {
-			result = new ArrayList<StyledString>();
-			for (Operation operation : operationList) {
-				if (operation.getReturns().getName().equals(type)) {
-					StyledString display = new StyledString();
-					String name = operation.getName();
-					boolean hasParameter = false;
-					display.append(name + "(");
-					//setup parameters
-					if (operation.getParameterCount() > 0) {
-						// System.out.println("COUNT: "+
-						// operation.getParameterCount());
-						for (int i = 0; i < operation.getParameterCount(); i++) {
-							IDatatype parameter = operation.getParameter(i);
-							if (parameter != null && parameter.getName() != null
-									&& parameter.getType() != null
-									&& parameter.getType().getName() != null) {
-								String paramName = "parameter" + i;
-								String paramType = parameter.getType().getName();
-								display.append(paramType + " " + paramName + ", ");
+	 * proposes DerivedType-variables (exp: setOf(Type)) to assign
+	 * @param context <code>ContentAssistContext</code>
+	 * @param acceptor <code>ICompletionProposalAcceptor</code>
+	 */
+	private void proposeDerivedTypesToAssign(ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+		VariableDeclarationImpl vardeclImpl = getVarDeclAtDeclarationPart(context.getLastCompleteNode());
+		if (vardeclImpl != null && vardeclImpl.getType() != null &&
+				vardeclImpl.getType().getDerived() != null) {
+			DerivedType derivedType = vardeclImpl.getType().getDerived();
+			String operationType = derivedType.getOp();
+			String type = "";
+			if (derivedType.getType() != null && derivedType.getType().getId() != null) {
+				type = Utils.getQualifiedNameString(derivedType.getType().getId());
+			}
+			if (derivedType.getType() != null && derivedType.getType().getType() != null) {
+				type = derivedType.getType().getType().getType();
+			}
+			List<VariableDeclaration> proposeList = getDerivedVarsForType(operationType, type, context);
+			if (proposeList != null) {
+				// filter itself
+				String varName = vardeclImpl.getDecls().get(0).getName();
+				int toRemove = -1;
+				for (int i = 0; i <= proposeList.size() -1; i++) {
+					VariableDeclaration var = proposeList.get(i);
+					for (VariableDeclarationPart varPart : var.getDecls()) {
+						if (varName.equals(varPart.getName())) {
+							toRemove = i;
+							break;
+						}
+					}
+				}
+				if (toRemove != -1) {
+					proposeList.remove(toRemove);
+				}
+				proposeVariableDeclarations(proposeList, context, acceptor);
+			}
+			proposeList = getDecisionVarsForType(type, context);
+			if (proposeList != null) {
+				// filter itself
+				String varName = vardeclImpl.getDecls().get(0).getName();
+				int toRemove = -1;
+				for (int i = 0; i <= proposeList.size() -1; i++) {
+					VariableDeclaration var = proposeList.get(i);
+					for (VariableDeclarationPart varPart : var.getDecls()) {
+						if (varName.equals(varPart.getName())) {
+							toRemove = i;
+							break;
+						}
+					}
+				}
+				if (toRemove != -1) {
+					proposeList.remove(toRemove);
+				}
+				proposeVariableDeclarations(proposeList, context, acceptor);
+				
+			}
+			
+		}
+	}
+
+	/**
+	 * proposes enum-variables to assign
+	 * @param context <code>ContentAssistContext</code>
+	 * @param acceptor <code>ICompletionProposalAcceptor</code>
+	 */
+	private void proposeEnumsToAssign(ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+		// proposes possible values of the enumeration.
+		VariableDeclarationImpl vardeclImpl = getVarDeclAtDeclarationPart(context.getLastCompleteNode());
+		if (vardeclImpl != null && vardeclImpl.getType() != null
+				&& vardeclImpl.getType().getId() != null) {
+			String type = Utils.getQualifiedNameString(vardeclImpl.getType().getId());
+			List<Typedef> tdList = getTypeDefs(context);
+			if (tdList != null && !isEmpty(tdList)) {
+				for (Typedef var : tdList) {
+					// If Typedef is an enum
+					if (var.getTEnum() != null) {
+						TypedefEnum tEnum = var.getTEnum();
+						if (tEnum.getName().equals(type)) {
+							EList<TypedefEnumLiteral> literals = tEnum
+									.getLiterals();
+							for (TypedefEnumLiteral literal : literals) {
+								StyledString toDisplay = new StyledString(
+										literal.getName());
+								toDisplay.append(" : " + type,
+										StyledString.QUALIFIER_STYLER);
+								String toEditor = type + "."
+										+ literal.getName() + ";";
+								ICompletionProposal proposal = createCompletionProposal(
+										toEditor,
+										toDisplay,
+										imageHelper.getImage(Images.NAME_ENUM_LITERAL),
+										context);
+								acceptor.accept(proposal);
 							}
 						}
-						hasParameter = true;
 					}
-					if (hasParameter) {
-						String tempdisplay = display.getString();
-						tempdisplay = tempdisplay.substring(0,
-								tempdisplay.length() - 2);
-						display = new StyledString();
-						display.append(tempdisplay);
-					}
-					display.append(")");
-					display.append(" : " + operation.getReturns());
-					result.add(display);	
 				}
 			}
 		}
-    	
-    	return result;
-    }
-    
-    /**
-     * propose all registered operations.
-     * @return <code>List<StyledString></code> with all operations, ready to show.
-     * Maybe <b>null</b>.
-     */
-    private List<StyledString> proposeAllOperations() {
-    	List<StyledString> result = null;
-    	List<Operation> operationList = getAllOperationsCleaned();
-    	if (!isEmpty(operationList)) {
-			result = new ArrayList<StyledString>();
-			for (Operation operation : operationList) {
-				StyledString display = new StyledString();
-				String name = operation.getName();
-				boolean hasParameter = false;
-				display.append(name + "(");
-				//setup parameters
-				if (operation.getParameterCount() > 0) {
-					for (int i = 0; i < operation.getParameterCount(); i++) {
-						IDatatype parameter = operation.getParameter(i);
-						if (parameter != null && parameter.getName() != null
-								&& parameter.getType() != null
-								&& parameter.getType().getName() != null) {
-							String paramName = "parameter" + i;
-							String paramType = parameter.getType().getName();
-							display.append(paramType + " " + paramName + ", ");
+	}
+
+	/**
+	 * Proposes already declared variables while assigning a value to a variable
+	 * @param context ContentAssistContext
+	 * @param acceptor ICompletionProposalAcceptor
+	 */
+	private void proposeDecisionVariablesToAssign(ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+		VariableDeclaration declaration = getVarDeclAtDeclarationPart(context.getLastCompleteNode());
+		if (declaration != null && declaration.getType() != null &&
+				declaration.getType().getId() != null) {
+			String type = Utils.getQualifiedNameString(declaration.getType().getId());
+			if (type != null && !type.isEmpty()) {
+				//proposing operations
+				List<StyledString> proposalList = getOperationsForReturnType(type);
+				if (!isEmpty(proposalList)) {
+					for (StyledString display : proposalList) {
+						String toEditor = display.getString().substring(0, display.getString().indexOf(":") - 1);
+						ICompletionProposal proposal = 
+								createCompletionProposal(
+										toEditor, display, imageHelper.getImage(Images.NAME_OPERATION), context);
+						acceptor.accept(proposal);
+					}
+				}
+				//proposing variables
+				List<VariableDeclaration> varList = getDecisionVarsForType(type, context);
+				String actualType = declaration.getDecls().get(0).getName();
+				if (!isEmpty(varList)) {
+					VariableDeclaration toRemoveObject = null;
+					for (int k = 0; k < varList.size(); k++) {
+						VariableDeclaration var = varList.get(k);
+						for (int i = 0; i < var.getDecls().size(); i++) {
+							String varType = var.getDecls().get(i).getName();
+							if (varType.equals(actualType)) {
+								toRemoveObject = var;
+							}
 						}
 					}
-					hasParameter = true;
+					if (toRemoveObject != null) {
+						varList.remove(toRemoveObject);
+					}
+					proposeVariableDeclarations(varList, context, acceptor);
 				}
-				if (hasParameter) {
-					String tempdisplay = display.getString();
-					tempdisplay = tempdisplay.substring(0,
-							tempdisplay.length() - 2);
-					display = new StyledString();
-					display.append(tempdisplay);
-				}
-				display.append(")");
-				display.append(" : " + operation.getReturns());
-				result.add(display);
-			}
+			}	
 		}
-    	return result;
-    }
-    
-    
-    
-    
-    /**
-     * Returns the type of the variable, which is used for a Call (dot-notation).
-     * @param the last complete node.
-     * @return The type of the variable. Maybe <b>null</b>.
-     */
-    private String getTypeOfCallContext(INode node) {
-    	String result = null;
-    	if (node != null) {
-    		String varName = getContextVariableName(node);
-    		if (varName != null && !varName.isEmpty()) {
-    			Project project = findProject(node);
-    			if (project != null) {
-    				for (EObject eObject : project.getContents().getElements()) {
-    					if (eObject instanceof VariableDeclaration) {
-    						VariableDeclaration var = (VariableDeclaration) eObject;
-    						if (var != null) {
-    							for (VariableDeclarationPart varDeclPart : var.getDecls()) {
-    								if (varName.equals(varDeclPart.getName())) {
-    									// basic types
-    									//System.out.println("basic: " + var.getType().getType().getType());
-//    									
-    									//derived
-//    									System.out.println("derived: " + var.getType().getDerived().getType().g);
-    									result = var.getType().getType().getType();
-    								}
-    							}
-    						}
-    					}
-    				}
-    			}
-    		}
-    	}
-    	return result;
-    }
-    
-    /**
-     * Returns the name of the variable during a call.
-     * @param node the last complete node
-     * @return the name of the variable. Maybe <b> null </b>.
-     */
-    private String getContextVariableName(INode node) {
-    	String result = null;
-    	if (node != null) {
-    		result = node.getText();
-    		result = result.trim();
-    		if (result.equals(".")) {
-    			result = getContextVariableName(node.getParent());
-    		} 
-    	}
-    	if (result.contains(".")) {
-    		result = result.substring(0, result.length() - 1);	
-    	}
- 
-    	return result;
-    }
-    
-    /**
-     * Returns all operations for a specific type.
-     * @param type 
-     * @return <code>List<Operation></code> with all operations for the specific type.
-     * Maybe <b>null</b>.
-     */
-    private List<Operation> getAllOperationsForType(String type) {
-    	List<Operation> result = null;
-    	if (TypeMapper.getType(type) != null && 
-				TypeMapper.getType(type).getOperationCount() > 0) {
-    		result = new ArrayList<Operation>();
-    		for (int i = 0; i < TypeMapper.getType(type).getOperationCount(); i++) {
-    			Operation op = TypeMapper.getType(type).getOperation(i);
-				if (op != null) {
-					result.add(op);
-				}
-    		}
-    	}
-    	if (!isEmpty(result)) {
-    		removeBlacklistedOperations(result);
-    	}
-    	return result;
-    }
-    
-    /**
-     * Removes unneeded operations from the operationList. The unneeded ones are registered
-     * in the <code>OPERATIONS_BLACKLIST</code> array.
-     * @param operationList
-     */
-    private void removeBlacklistedOperations(List<Operation> operationList) {
-        if (operationList != null) {
-            for (int i = 0; i < OPERATIONS_BLACKLIST.length; i++) {
-                for (int j = 0; j < operationList.size(); j++) {
-                    if (operationList.get(j).getName().equals(OPERATIONS_BLACKLIST[i])) {
-                        operationList.remove(j);
-                        // if another operation with the same name is in the list.
-                        j--;
-                    }
-                }
-            }
-        }
-    }
-    
-    
-    private VariableDeclarationImpl getVarDeclAtDeclarationPart(INode node) {
-    	VariableDeclarationImpl result = null;
-    	if (node != null) {
-    		if (node.getSemanticElement() instanceof VariableDeclarationImpl) {
-    			result = (VariableDeclarationImpl) node.getSemanticElement();
-    		} else {
-    			result = getVarDeclAtDeclarationPart(node.getParent());
-    		}
-    	}
-    	return result;
-    }
-    
-    private void suggestDeclaredTypeDefs(ContentAssistContext context, ICompletionProposalAcceptor acceptor ) {
-    	// suggest Typedefs (Compound, Enum, Typedef)
-    	List<Typedef> tdList = getTypeDefs(context);
-    	if (tdList != null) {
-            for (Typedef var : tdList) {
+	}
+
+	/**
+	 * proposes all <code>Typedef</code>-objects which are inside of the tdList.
+	 * @param tdList <code>List<Typedef></code>, with all <code>Typedef</code>-objects.
+	 * @param context <code>ContentAssistContext</code>
+	 * @param acceptor <code>ICompletionProposalAcceptor</code>
+	 */
+	private void proposeTypedefs(List<Typedef> tdList, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+		if (tdList != null) {
+	        for (Typedef var : tdList) {
 				// If Typedef is a Compound
-            	if (var.getTCompound() != null) {
-                    StyledString displayName = new StyledString();
-                    String varType = "compound";
-                    String varName = var.getTCompound().getName();
-                    displayName.append(var.getTCompound().getName());
-                    displayName.append(" : " + varType, StyledString.QUALIFIER_STYLER);
-
-                    acceptor.accept(createCompletionProposal(varName + " ",
+	        	if (var.getTCompound() != null) {
+	                StyledString displayName = new StyledString();
+	                String varType = "compound";
+	                String varName = var.getTCompound().getName();
+	                displayName.append(var.getTCompound().getName());
+	                displayName.append(" : " + varType, StyledString.QUALIFIER_STYLER);
+	
+	                acceptor.accept(createCompletionProposal(varName + " ",
 							displayName,
-							imageHelper.getImage(Images.NAME_COMPOUND), 600, context.getPrefix(), context));
-                    varName = "";
-            	}
+							imageHelper.getImage(Images.NAME_COMPOUND), context));
+	                varName = "";
+	        	}
 				// If Typedef is an Enum
-            	if (var.getTEnum() != null) {
-                    StyledString displayName = new StyledString();
-                    String varType = "enum";
-                    String varName = var.getTEnum().getName();
-                    displayName.append(var.getTEnum().getName());
-                    displayName.append(" : " + varType,
+	        	if (var.getTEnum() != null) {
+	                StyledString displayName = new StyledString();
+	                String varType = "enum";
+	                String varName = var.getTEnum().getName();
+	                displayName.append(var.getTEnum().getName());
+	                displayName.append(" : " + varType,
 							StyledString.QUALIFIER_STYLER);
-
-                    acceptor.accept(createCompletionProposal(varName + " ",
+	
+	                acceptor.accept(createCompletionProposal(varName + " ",
 							displayName,
-							imageHelper.getImage(Images.NAME_ENUM), 600, context.getPrefix(), context));
-                    varName = "";
-            	}
+							imageHelper.getImage(Images.NAME_ENUM), context));
+	                varName = "";
+	        	}
 				// If Typedef is a Typedefinition
-            	if (var.getTMapping() != null) {
-                    StyledString displayName = new StyledString();
-                    String varType = "typedef";
-                    String varName = var.getTMapping().getNewType();
-                    displayName.append(var.getTMapping().getNewType());
-                    displayName.append(" : " + varType,
+	        	if (var.getTMapping() != null) {
+	                StyledString displayName = new StyledString();
+	                String varType = "typedef";
+	                String varName = var.getTMapping().getNewType();
+	                displayName.append(var.getTMapping().getNewType());
+	                displayName.append(" : " + varType,
 							StyledString.QUALIFIER_STYLER);
-
-                    acceptor.accept(createCompletionProposal(varName + " ",
+	
+	                acceptor.accept(createCompletionProposal(varName + " ",
 							displayName,
-							imageHelper.getImage(Images.NAME_TYPEDEF), 600, context.getPrefix(), context));
-                    varName = "";
-            	}
-            }
-    	}
-    }
-    
-    
-    /**
-     * suggest declared Compounds
+							imageHelper.getImage(Images.NAME_TYPEDEF), context));
+	                varName = "";
+	        	}
+	        }
+		}
+	}
+
+	/**
+	 * proposes all <code>VariableDeclaration</code>, which are inside of the dvList.
+	 * @param dvList <code>List<VariableDeclaration></code> with all variables.
+	 * @param context <code>ContentAssistContext</code>
+	 * @param acceptor <code>ICompletionProposalAcceptor</code>
+	 */
+	private void proposeVariableDeclarations(List<VariableDeclaration> dvList, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+		if (dvList != null) {
+	        for (VariableDeclaration var : dvList) {
+	            for (int i = 0; i < var.getDecls().size(); i++) {
+	                StyledString displayName = new StyledString();
+	                String varType = ModelUtility.stringValue(var.getType());
+	                String varName = var.getDecls().get(i).getName();
+	                displayName.append(var.getDecls().get(i).getName());
+	                displayName.append(" : " + varType,
+							StyledString.QUALIFIER_STYLER);
+	
+	                acceptor.accept(createCompletionProposal(varName + ";",
+							displayName,
+							imageHelper.getImage(Images.NAME_VARIABLE), context));
+	            }
+	        }
+		}
+	}
+
+	/**
+     * proposes all declared compounds while refining one. Should never used except for that case. Could be end in an error, otherwise.
+     * @param acceptor <code>ICompletionProposalAcceptor</code> to propose.
+     * @param context <code>ContentAssistContext</code>
      */
-    private void suggestDeclaredCompounds(ICompletionProposalAcceptor acceptor, ContentAssistContext context) {
+    private void proposeAllDeclaredCompoundsForSuper(ICompletionProposalAcceptor acceptor, ContentAssistContext context) {
     	List<Typedef> tdList = getTypeDefs(context);
     	if (tdList != null) {
             for (Typedef var : tdList) {
@@ -1378,110 +1611,98 @@ public class IvmlProposalProvider extends AbstractIvmlProposalProvider {
             }
     	}	
     }
-    
-    private void proposeVarsForCompoundvardeclaration(List<VariableDeclarationImpl> varList, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-    	if (!isEmpty(varList)) {
-    		StyledString toDisplay = new StyledString("Autocomplete compounddeclaration");
-    		String toEditor = "{ \n";
-    		for (VariableDeclarationImpl var : varList) {
-    			for (VariableDeclarationPart varPart : var.getDecls()) {
-    				toEditor += "    " + varPart.getName() + " = \n";
-    			}
-    		}
-    		toEditor += "    }";
-    		ConfigurableCompletionProposal proposal = super.doCreateProposal
-    				(toEditor, toDisplay, imageHelper.getImage(Images.NAME_COMPOUND), 0, context);
-    		proposal.setAutoInsertable(true);
-    		acceptor.accept(proposal);
-    	}
-    }
-    
-    private void proposeTypedefs(List<Typedef> tdList, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-    	if (tdList != null) {
-            for (Typedef var : tdList) {
-				// If Typedef is a Compound
-            	if (var.getTCompound() != null) {
-                    StyledString displayName = new StyledString();
-                    String varType = "compound";
-                    String varName = var.getTCompound().getName();
-                    displayName.append(var.getTCompound().getName());
-                    displayName.append(" : " + varType, StyledString.QUALIFIER_STYLER);
+    /**
+	 * automatically completes a compound-assign with all specified variables in the declaration.
+	 * @param varList <code>List<VariableDeclarationImpl</code> with all variables, which should automatically inserted.
+	 * @param context ContentAssistContext
+	 * @param acceptor ICompletionProposalAcceptor
+	 */
+	private void autocompleteCompoundAssign(ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+		//propose the variables 
+				VariableDeclarationImpl vardeclImpl = getVarDeclAtDeclarationPart(context.getLastCompleteNode());
+				List<VariableDeclarationImpl> varList = null;
+				if (vardeclImpl != null && vardeclImpl.getType() != null && vardeclImpl.getType().getId() != null) {
+					List<Typedef> tdList = getTypeDefs(context);
+			    	if (tdList != null && !isEmpty(tdList)) {
+			    		varList = new ArrayList<VariableDeclarationImpl>();
+			            for (Typedef var : tdList) {
+							// If Typedef is a compound
+			            	if (var.getTCompound() != null) {
+			            		TypedefCompound tCompound = var.getTCompound();
+			            		String vardeclType = Utils.getQualifiedNameString(vardeclImpl.getType().getId());
+			            		String compoundType = tCompound.getName();
+			            		if (vardeclType.equals(compoundType)) {
+			            			// Check if compound has super or not
+			            			if (tCompound.getSuper() != null && !tCompound.getSuper().equals("null")) {
+			            				TypedefCompound superCompound = getCompoundDeclarationByName(tCompound.getSuper(), context);
+			            				EList<EObject> compoundElements = superCompound.getElements();
+				            			if (!isEmpty(compoundElements)) {
+				            				for (EObject eObject : compoundElements) {
+				            					if (eObject instanceof VariableDeclarationImpl) {
+				            						VariableDeclarationImpl varDec = (VariableDeclarationImpl) eObject;
+				            						varList.add(varDec);	
+				            					}
+				            				}
+				            			}
+			            			}
+			            			
+			            			// add vars of the compound
+			            			EList<EObject> compoundElements = tCompound.getElements();
+			            			if (!isEmpty(compoundElements)) {
+			            				for (EObject eObject : compoundElements) {
+			            					if (eObject instanceof VariableDeclarationImpl) {
+			            						VariableDeclarationImpl varDec = (VariableDeclarationImpl) eObject;
+			            						varList.add(varDec);	
+			            					}
+			            				}	
+			            			}
+			            		}
+			            	}
+			            }
+			    	}
+				}
+		
+		if (!isEmpty(varList)) {
+			StyledString toDisplay = new StyledString("Autocomplete compounddeclaration");
+			String toEditor = "{ \n";
+			for (VariableDeclarationImpl var : varList) {
+				for (VariableDeclarationPart varPart : var.getDecls()) {
+					toEditor += "    " + varPart.getName() + " = \n";
+				}
+			}
+			toEditor += "    }";
+			ConfigurableCompletionProposal proposal = super.doCreateProposal
+					(toEditor, toDisplay, imageHelper.getImage(Images.NAME_COMPOUND), 0, context);
+			proposal.setAutoInsertable(true);
+			acceptor.accept(proposal);
+			}
+			
+	}
 
-                    acceptor.accept(createCompletionProposal(varName + " ",
-							displayName,
-							imageHelper.getImage(Images.NAME_COMPOUND), context));
-                    varName = "";
-            	}
-				// If Typedef is an Enum
-            	if (var.getTEnum() != null) {
-                    StyledString displayName = new StyledString();
-                    String varType = "enum";
-                    String varName = var.getTEnum().getName();
-                    displayName.append(var.getTEnum().getName());
-                    displayName.append(" : " + varType,
-							StyledString.QUALIFIER_STYLER);
+	/**
+	 * Removes unneeded operations from the operationList. The unneeded ones are registered
+	 * in the <code>OPERATIONS_BLACKLIST</code> array.
+	 * @param operationList
+	 */
+	private void removeBlacklistedOperations(List<Operation> operationList) {
+	    if (operationList != null) {
+	        for (int i = 0; i < OPERATIONS_BLACKLIST.length; i++) {
+	            for (int j = 0; j < operationList.size(); j++) {
+	                if (operationList.get(j).getName().equals(OPERATIONS_BLACKLIST[i])) {
+	                    operationList.remove(j);
+	                    // if another operation with the same name is in the list.
+	                    j--;
+	                }
+	            }
+	        }
+	    }
+	}
 
-                    acceptor.accept(createCompletionProposal(varName + " ",
-							displayName,
-							imageHelper.getImage(Images.NAME_ENUM), context));
-                    varName = "";
-            	}
-				// If Typedef is a Typedefinition
-            	if (var.getTMapping() != null) {
-                    StyledString displayName = new StyledString();
-                    String varType = "typedef";
-                    String varName = var.getTMapping().getNewType();
-                    displayName.append(var.getTMapping().getNewType());
-                    displayName.append(" : " + varType,
-							StyledString.QUALIFIER_STYLER);
-
-                    acceptor.accept(createCompletionProposal(varName + " ",
-							displayName,
-							imageHelper.getImage(Images.NAME_TYPEDEF), context));
-                    varName = "";
-            	}
-            }
-    	}
-    }
-    
-    private void proposeVariableDeclarations(List<VariableDeclaration> dvList, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-    	if (dvList != null) {
-            for (VariableDeclaration var : dvList) {
-                for (int i = 0; i < var.getDecls().size(); i++) {
-                    StyledString displayName = new StyledString();
-                    String varType = ModelUtility.stringValue(var.getType());
-                    String varName = var.getDecls().get(i).getName();
-                    displayName.append(var.getDecls().get(i).getName());
-                    displayName.append(" : " + varType,
-							StyledString.QUALIFIER_STYLER);
-
-                    acceptor.accept(createCompletionProposal(varName + ";",
-							displayName,
-							imageHelper.getImage(Images.NAME_VARIABLE), context));
-                }
-            }
-    	}
-    }
-    
-    private void proposeVariableDeclarationsImpl(List<VariableDeclarationImpl> dvList, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-    	if (dvList != null) {
-            for (VariableDeclaration var : dvList) {
-                for (int i = 0; i < var.getDecls().size(); i++) {
-                    StyledString displayName = new StyledString();
-                    String varType = ModelUtility.stringValue(var.getType());
-                    String varName = var.getDecls().get(i).getName();
-                    displayName.append(var.getDecls().get(i).getName());
-                    displayName.append(" : " + varType,
-							StyledString.QUALIFIER_STYLER);
-
-                    acceptor.accept(createCompletionProposal(varName + ";",
-							displayName,
-							imageHelper.getImage(Images.NAME_VARIABLE), context));
-                }
-            }
-    	}
-    }
-    
+	/**
+     * returns the <code>TypedefCompoundImpl</code>-object inside the declaration of this compound.
+     * @param node the last complete node
+     * @return <code>TypedefCompoundImpl</code>, maybe <b>null</b>.
+     */
     private TypedefCompoundImpl findTypedefCompound(INode node) {
     	TypedefCompoundImpl result = null;
     	if (node.getSemanticElement() instanceof TypedefCompoundImpl) {
@@ -1492,4 +1713,161 @@ public class IvmlProposalProvider extends AbstractIvmlProposalProvider {
 		}
     	return result;
     }
+    
+    /**
+	 * Checks if a version-statment already declared.
+	 * @param node the last complete node
+	 * @return <b>true</b> if there is already a version-statement. <b>false</b> otherwise.
+	 */
+	private boolean isVersionStatementDeclared(INode node) {
+		boolean result = true;
+		if (node != null) {
+			if (node.getSemanticElement() instanceof Project) {
+				Project project = (Project) node.getSemanticElement();
+				if (project.getVersion() == null) {    				
+					result = false;
+				}
+			} else {
+				INode parentNode = node.getParent();
+				result = isVersionStatementDeclared(parentNode);
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Check whether a given List is <b>null</b> or empty.
+	 * 
+	 * @param list
+	 *            The list to be checked.
+	 * @return <b>True</b> if the list is <b>null</b> or has no elements.
+	 *         <b>False</b> otherwise.
+	 */
+	private static boolean isEmpty(List<?> list) {
+		return null == list || list.isEmpty();
+	}
+
+	// Maybe useful for some case.
+//	/**
+//	 * propose all registered operations.
+//	 * @return <code>List<StyledString></code> with all operations, ready to show.
+//	 * Maybe <b>null</b>.
+//	 */
+//	private List<StyledString> proposeAllOperations() {
+//		List<StyledString> result = null;
+//		List<Operation> operationList = getAllOperationsCleaned();
+//		if (!isEmpty(operationList)) {
+//			result = new ArrayList<StyledString>();
+//			for (Operation operation : operationList) {
+//				StyledString display = new StyledString();
+//				String name = operation.getName();
+//				boolean hasParameter = false;
+//				display.append(name + "(");
+//				//setup parameters
+//				if (operation.getParameterCount() > 0) {
+//					for (int i = 0; i < operation.getParameterCount(); i++) {
+//						IDatatype parameter = operation.getParameter(i);
+//						if (parameter != null && parameter.getName() != null
+//								&& parameter.getType() != null
+//								&& parameter.getType().getName() != null) {
+//							String paramName = "parameter" + i;
+//							String paramType = parameter.getType().getName();
+//							display.append(paramType + " " + paramName + ", ");
+//						}
+//					}
+//					hasParameter = true;
+//				}
+//				if (hasParameter) {
+//					String tempdisplay = display.getString();
+//					tempdisplay = tempdisplay.substring(0,
+//							tempdisplay.length() - 2);
+//					display = new StyledString();
+//					display.append(tempdisplay);
+//				}
+//				display.append(")");
+//				display.append(" : " + operation.getReturns());
+//				result.add(display);
+//			}
+//		}
+//		return result;
+//	}
+//
+//	/**
+//	 * proposes all <code>VariableDeclarationImpl</code>, which are inside of the dvList.
+//	 * @param dvList <code>List<VariableDeclarationImpl></code> with all variables.
+//	 * @param context <code>ContentAssistContext</code>
+//	 * @param acceptor <code>ICompletionProposalAcceptor</code>
+//	 */
+//	private void proposeVariableDeclarationsImpl(List<VariableDeclarationImpl> dvList, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+//		if (dvList != null) {
+//	        for (VariableDeclaration var : dvList) {
+//	            for (int i = 0; i < var.getDecls().size(); i++) {
+//	                StyledString displayName = new StyledString();
+//	                String varType = ModelUtility.stringValue(var.getType());
+//	                String varName = var.getDecls().get(i).getName();
+//	                displayName.append(var.getDecls().get(i).getName());
+//	                displayName.append(" : " + varType,
+//							StyledString.QUALIFIER_STYLER);
+//	
+//	                acceptor.accept(createCompletionProposal(varName + ";",
+//							displayName,
+//							imageHelper.getImage(Images.NAME_VARIABLE), context));
+//	            }
+//	        }
+//		}
+//	}
+//
+//	/**
+//	 * @param context
+//	 * @param acceptor
+//	 */
+//	private void suggestDeclaredTypeDefs(ContentAssistContext context, ICompletionProposalAcceptor acceptor ) {
+//		// suggest Typedefs (Compound, Enum, Typedef)
+//		List<Typedef> tdList = getTypeDefs(context);
+//		if (tdList != null) {
+//	        for (Typedef var : tdList) {
+//				// If Typedef is a Compound
+//	        	if (var.getTCompound() != null) {
+//	                StyledString displayName = new StyledString();
+//	                String varType = "compound";
+//	                String varName = var.getTCompound().getName();
+//	                displayName.append(var.getTCompound().getName());
+//	                displayName.append(" : " + varType, StyledString.QUALIFIER_STYLER);
+//	
+//	                acceptor.accept(createCompletionProposal(varName + " ",
+//							displayName,
+//							imageHelper.getImage(Images.NAME_COMPOUND), 600, context.getPrefix(), context));
+//	                varName = "";
+//	        	}
+//				// If Typedef is an Enum
+//	        	if (var.getTEnum() != null) {
+//	                StyledString displayName = new StyledString();
+//	                String varType = "enum";
+//	                String varName = var.getTEnum().getName();
+//	                displayName.append(var.getTEnum().getName());
+//	                displayName.append(" : " + varType,
+//							StyledString.QUALIFIER_STYLER);
+//	
+//	                acceptor.accept(createCompletionProposal(varName + " ",
+//							displayName,
+//							imageHelper.getImage(Images.NAME_ENUM), 600, context.getPrefix(), context));
+//	                varName = "";
+//	        	}
+//				// If Typedef is a Typedefinition
+//	        	if (var.getTMapping() != null) {
+//	                StyledString displayName = new StyledString();
+//	                String varType = "typedef";
+//	                String varName = var.getTMapping().getNewType();
+//	                displayName.append(var.getTMapping().getNewType());
+//	                displayName.append(" : " + varType,
+//							StyledString.QUALIFIER_STYLER);
+//	
+//	                acceptor.accept(createCompletionProposal(varName + " ",
+//							displayName,
+//							imageHelper.getImage(Images.NAME_TYPEDEF), 600, context.getPrefix(), context));
+//	                varName = "";
+//	        	}
+//	        }
+//		}
+//	}
 }

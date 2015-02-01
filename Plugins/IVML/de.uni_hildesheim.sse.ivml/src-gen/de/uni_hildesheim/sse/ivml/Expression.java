@@ -15,7 +15,6 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link de.uni_hildesheim.sse.ivml.Expression#getLet <em>Let</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.Expression#getExpr <em>Expr</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.Expression#getCollection <em>Collection</em>}</li>
- *   <li>{@link de.uni_hildesheim.sse.ivml.Expression#getDsl <em>Dsl</em>}</li>
  * </ul>
  * </p>
  *
@@ -102,31 +101,5 @@ public interface Expression extends EObject
    * @generated
    */
   void setCollection(CollectionInitializer value);
-
-  /**
-   * Returns the value of the '<em><b>Dsl</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Dsl</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Dsl</em>' containment reference.
-   * @see #setDsl(DslContext)
-   * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getExpression_Dsl()
-   * @model containment="true"
-   * @generated
-   */
-  DslContext getDsl();
-
-  /**
-   * Sets the value of the '{@link de.uni_hildesheim.sse.ivml.Expression#getDsl <em>Dsl</em>}' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Dsl</em>' containment reference.
-   * @see #getDsl()
-   * @generated
-   */
-  void setDsl(DslContext value);
 
 } // Expression

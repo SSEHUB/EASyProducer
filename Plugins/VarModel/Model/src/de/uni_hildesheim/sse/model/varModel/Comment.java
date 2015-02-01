@@ -42,14 +42,10 @@ public class Comment extends ContainableModelElement {
         super(comment, parent);
     }
     
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void accept(IModelVisitor visitor) {
         visitor.visitComment(this);
     }
-
     
     /**
      * Returns the comment assigned to the given model <code>element</code>.
@@ -72,18 +68,12 @@ public class Comment extends ContainableModelElement {
     public void assignComment(Object element, Comment comment) {
     }
     
-    /** 
-     * {@inheritDoc}
-     */
+    @Override
     public String getNameSpace() {
         return "";
     }
 
-    /**
-     * Returns the qualified name of this element.
-     * 
-     * @return the qualified name
-     */
+    @Override
     public String getQualifiedName() {
         return "";
     }

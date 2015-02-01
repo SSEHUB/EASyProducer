@@ -4,5 +4,5 @@ project testImportFail2 {
     version v0;
     import testInterface with (testInterface.version < v1.10);
     import testCompounds::inter;
-    conflicts testInterface with (test.version >= v1.10);
+    conflicts testInterface with (testInterface.version >= v1.10);
 }

@@ -39,8 +39,10 @@ public class ValueDoesNotMatchTypeException extends IvmlException {
      * This error code should be used if each values is valid, but not allowed in combination,
      * e.g. a <tt>SetValue</tt> with duplicates.
      */
-    public static final int NOT_ALLOWED_VALUE_STRUCTURE = 10206;
-    
+    public static final int NOT_ALLOWED_VALUE_STRUCTURE = 10207;
+
+    public static final int IS_ABSTRACT = 10208;
+
     /**
      * Creates a new mismatch exception.
      * 

@@ -335,6 +335,15 @@ public class DroolsEngineTests extends AbstractTest<Project> {
     }
     
     /**
+     * Tests correct interface usage.
+     */
+    @Ignore
+    @Test
+    public void interfaceUsageTest() {
+        reasoningTest("InterfaceUser.ivml", ReasoningOperation.PROPAGATION, 2);
+    }
+    
+    /**
      * Tests large scale model on linux example. Create boolean variables in RModel.
      * Boolean var - 62482
      */ 

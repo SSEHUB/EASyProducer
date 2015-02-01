@@ -16,7 +16,9 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link de.uni_hildesheim.sse.ivml.Value#getSValue <em>SValue</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.Value#getQValue <em>QValue</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.Value#getBValue <em>BValue</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.ivml.Value#getSelf <em>Self</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.Value#getNullValue <em>Null Value</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.ivml.Value#getVersion <em>Version</em>}</li>
  * </ul>
  * </p>
  *
@@ -131,6 +133,32 @@ public interface Value extends EObject
   void setBValue(String value);
 
   /**
+   * Returns the value of the '<em><b>Self</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Self</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Self</em>' attribute.
+   * @see #setSelf(String)
+   * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getValue_Self()
+   * @model
+   * @generated
+   */
+  String getSelf();
+
+  /**
+   * Sets the value of the '{@link de.uni_hildesheim.sse.ivml.Value#getSelf <em>Self</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Self</em>' attribute.
+   * @see #getSelf()
+   * @generated
+   */
+  void setSelf(String value);
+
+  /**
    * Returns the value of the '<em><b>Null Value</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <p>
@@ -155,5 +183,31 @@ public interface Value extends EObject
    * @generated
    */
   void setNullValue(String value);
+
+  /**
+   * Returns the value of the '<em><b>Version</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Version</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Version</em>' attribute.
+   * @see #setVersion(String)
+   * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getValue_Version()
+   * @model
+   * @generated
+   */
+  String getVersion();
+
+  /**
+   * Sets the value of the '{@link de.uni_hildesheim.sse.ivml.Value#getVersion <em>Version</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Version</em>' attribute.
+   * @see #getVersion()
+   * @generated
+   */
+  void setVersion(String value);
 
 } // Value

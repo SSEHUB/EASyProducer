@@ -1,0 +1,16 @@
+-> main(Configuration, Artifact) with (<config>, test.texts)
+    -> createIntegerSequence(Integer, Integer) with (0, 10) = {0, 1, 10, 2, 3, 4, 5, 6, 7, 8, 9}
+    nums <- {0, 1, 10, 2, 3, 4, 5, 6, 7, 8, 9}
+    for i {
+        i <- 0
+        i <- 1
+        i <- 2
+        i <- 3
+        i <- 4
+        i <- 5
+        i <- 6
+        i <- 7
+        i <- 8
+        i <- 9
+        i <- 10
+    }

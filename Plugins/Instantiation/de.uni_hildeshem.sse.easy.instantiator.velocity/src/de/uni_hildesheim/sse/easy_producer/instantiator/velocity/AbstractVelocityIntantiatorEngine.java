@@ -14,7 +14,6 @@ import org.apache.velocity.exception.ParseErrorException;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.InstantiatorEngine;
 import de.uni_hildesheim.sse.easy_producer.instantiator.InstantiatorException;
-import de.uni_hildesheim.sse.instantiator.velocitylib.Utils;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 
 /**

@@ -3,17 +3,22 @@
 package de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl;
 
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Type;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.TypeParameters;
 
 import java.util.Collection;
 
+import org.eclipse.emf.common.notify.NotificationChain;
+
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
-import org.eclipse.emf.ecore.util.EDataTypeEList;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -31,14 +36,14 @@ import org.eclipse.emf.ecore.util.EDataTypeEList;
 public class TypeParametersImpl extends MinimalEObjectImpl.Container implements TypeParameters
 {
   /**
-   * The cached value of the '{@link #getParam() <em>Param</em>}' attribute list.
+   * The cached value of the '{@link #getParam() <em>Param</em>}' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getParam()
    * @generated
    * @ordered
    */
-  protected EList<String> param;
+  protected EList<Type> param;
 
   /**
    * <!-- begin-user-doc -->
@@ -66,13 +71,29 @@ public class TypeParametersImpl extends MinimalEObjectImpl.Container implements 
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<String> getParam()
+  public EList<Type> getParam()
   {
     if (param == null)
     {
-      param = new EDataTypeEList<String>(String.class, this, ExpressionDslPackage.TYPE_PARAMETERS__PARAM);
+      param = new EObjectContainmentEList<Type>(Type.class, this, ExpressionDslPackage.TYPE_PARAMETERS__PARAM);
     }
     return param;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
+  {
+    switch (featureID)
+    {
+      case ExpressionDslPackage.TYPE_PARAMETERS__PARAM:
+        return ((InternalEList<?>)getParam()).basicRemove(otherEnd, msgs);
+    }
+    return super.eInverseRemove(otherEnd, featureID, msgs);
   }
 
   /**
@@ -104,7 +125,7 @@ public class TypeParametersImpl extends MinimalEObjectImpl.Container implements 
     {
       case ExpressionDslPackage.TYPE_PARAMETERS__PARAM:
         getParam().clear();
-        getParam().addAll((Collection<? extends String>)newValue);
+        getParam().addAll((Collection<? extends Type>)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -141,23 +162,6 @@ public class TypeParametersImpl extends MinimalEObjectImpl.Container implements 
         return param != null && !param.isEmpty();
     }
     return super.eIsSet(featureID);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public String toString()
-  {
-    if (eIsProxy()) return super.toString();
-
-    StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (param: ");
-    result.append(param);
-    result.append(')');
-    return result.toString();
   }
 
 } //TypeParametersImpl

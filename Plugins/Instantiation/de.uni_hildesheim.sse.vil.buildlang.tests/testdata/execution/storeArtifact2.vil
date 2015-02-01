@@ -1,0 +1,9 @@
+vilScript storeArtifact2 (Project source, Project target, Configuration config) {
+
+    FileArtifact targetFile = "$target/storeArtifact2.txt";
+
+    main(Project source, Project target, Configuration config) = : {
+        targetFile.text().append("Hello");
+    }
+
+}

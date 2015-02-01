@@ -68,7 +68,6 @@ public class ExpressionDslFactoryImpl extends EFactoryImpl implements Expression
       case ExpressionDslPackage.VARIABLE_DECLARATION: return createVariableDeclaration();
       case ExpressionDslPackage.ADVICE: return createAdvice();
       case ExpressionDslPackage.VERSION_SPEC: return createVersionSpec();
-      case ExpressionDslPackage.VERSIONED_ID: return createVersionedId();
       case ExpressionDslPackage.PARAMETER_LIST: return createParameterList();
       case ExpressionDslPackage.PARAMETER: return createParameter();
       case ExpressionDslPackage.VERSION_STMT: return createVersionStmt();
@@ -153,17 +152,6 @@ public class ExpressionDslFactoryImpl extends EFactoryImpl implements Expression
   {
     VersionSpecImpl versionSpec = new VersionSpecImpl();
     return versionSpec;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public VersionedId createVersionedId()
-  {
-    VersionedIdImpl versionedId = new VersionedIdImpl();
-    return versionedId;
   }
 
   /**

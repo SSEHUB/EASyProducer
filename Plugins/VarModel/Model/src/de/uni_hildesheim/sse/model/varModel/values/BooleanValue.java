@@ -80,11 +80,6 @@ public class BooleanValue extends BasisDatatypeValue {
         }
     }
     
-    /** 
-     * Accept method for the visitor. <br/>
-     * This method is used for saving this model element.
-     * @param visitor The visitor, which should save this model element.
-     */
     @Override
     public void accept(IValueVisitor visitor) {
         visitor.visitBooleanValue(this);
@@ -95,9 +90,7 @@ public class BooleanValue extends BasisDatatypeValue {
         return value != null;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public Value clone() {
         return new BooleanValue(value);
     }
@@ -167,6 +160,20 @@ public class BooleanValue extends BasisDatatypeValue {
         if (null == result) {
             throw new ValueDoesNotMatchTypeException(
                 value, "Boolean", ValueDoesNotMatchTypeException.NO_LITERAL);
+        }
+        return result;
+    }
+
+    @Override
+    public int hashCode() {
+        return null != value ? value.hashCode() : 0;
+    }
+    
+    @Override
+    public boolean equals(Object object) {
+        boolean result = false;
+        if (value != null && object instanceof BooleanValue) {
+            result = value.equals(((BooleanValue) object).getValue());
         }
         return result;
     }

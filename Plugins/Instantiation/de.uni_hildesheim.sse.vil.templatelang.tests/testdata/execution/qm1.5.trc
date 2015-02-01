@@ -1,0 +1,10 @@
+-> main(Configuration, FileArtifact) with (<config>, test.texts)
+    -> byName(Configuration, String) with (<config>, fNormalize) = qm1_5::fNormalize
+    fm <- qm1_5::fNormalize
+    -> output(Family) with (qm1_5::fNormalize) = {qm1_5::Family::output [0]}
+    -> input(Family) with (qm1_5::fNormalize) = {qm1_5::Family::input [0]}
+    -> filterTuples(Tuples, Tuples) with ({qm1_5::Family::output [0]}, {qm1_5::Family::input [0]})
+        -> mapSequence(Sequence, Sequence) with ({qm1_5::Family::output [0]}, {qm1_5::Family::input [0]}) = {{qm1_5::Family::input [0], qm1_5::Family::output [0]}}
+        m <- {{qm1_5::Family::input [0], qm1_5::Family::output [0]}}
+        -> size(Map) with ({{qm1_5::Family::input [0], qm1_5::Family::output [0]}}) = 1
+        -> >(Integer, Integer) with (1, 0) = true

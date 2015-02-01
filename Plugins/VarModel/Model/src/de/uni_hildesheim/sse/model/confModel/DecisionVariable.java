@@ -188,23 +188,17 @@ abstract class DecisionVariable implements IDecisionVariable {
         return attributes[index];
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public final boolean isNested() {
         return !(parent instanceof Configuration);
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public final IConfigurationElement getParent() {
         return parent;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public final Configuration getConfiguration() {
         Configuration config = null;
         if (isNested()) {
@@ -216,16 +210,12 @@ abstract class DecisionVariable implements IDecisionVariable {
         return config;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void accept(IConfigurationVisitor visitor) {
         visitor.visitDecisionVariable(this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public Value getValue() {
         Value returnValue = null;
         if (configProvider != null) {
@@ -234,30 +224,22 @@ abstract class DecisionVariable implements IDecisionVariable {
         return returnValue;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void setValue(Value value, IAssignmentState state) throws ConfigurationException {
         configProvider.setValue(value, state);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public IAssignmentState getState() {
         return configProvider.getState();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public AbstractVariable getDeclaration() {
         return declaration;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void freeze() {
         configProvider.freeze();
         for (int a = 0; a < getAttributesCount(); a++) {
@@ -265,9 +247,7 @@ abstract class DecisionVariable implements IDecisionVariable {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void unfreeze(IAssignmentState state) {
         configProvider.unfreeze(state);
         for (int a = 0; a < getAttributesCount(); a++) {
@@ -284,9 +264,7 @@ abstract class DecisionVariable implements IDecisionVariable {
         return result;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public final int getNestedDepth() {
         int depth = 0;
         
@@ -341,30 +319,22 @@ abstract class DecisionVariable implements IDecisionVariable {
         return ownStateallowed;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public boolean isVisible() {
         return isVisible;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void setHistoryValue(Value value, IAssignmentState state) throws ConfigurationException {
         configProvider.setHistoryValue(value, state);
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public boolean hasValue() {
         return null != getValue() && null != getValue().getValue();
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public boolean hasNullValue() {
         return getValue() instanceof NullValue;
     }

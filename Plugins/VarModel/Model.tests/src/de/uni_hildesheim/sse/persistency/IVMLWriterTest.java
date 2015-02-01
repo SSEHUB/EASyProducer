@@ -8,14 +8,18 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
+import de.uni_hildesheim.sse.model.cst.CompoundAccess;
 import de.uni_hildesheim.sse.model.cst.ConstantValue;
+import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
 import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
 import de.uni_hildesheim.sse.model.cst.Variable;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
+import de.uni_hildesheim.sse.model.varModel.ExpressionVersionRestriction;
 import de.uni_hildesheim.sse.model.varModel.FreezeBlock;
 import de.uni_hildesheim.sse.model.varModel.IFreezable;
 import de.uni_hildesheim.sse.model.varModel.IvmlException;
+import de.uni_hildesheim.sse.model.varModel.IvmlKeyWords;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.ProjectImport;
 import de.uni_hildesheim.sse.model.varModel.ProjectInterface;
@@ -31,15 +35,17 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Sequence;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Set;
 import de.uni_hildesheim.sse.model.varModel.datatypes.StringType;
+import de.uni_hildesheim.sse.model.varModel.datatypes.VersionType;
 import de.uni_hildesheim.sse.model.varModel.values.CompoundValue;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
 import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
 import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
+import de.uni_hildesheim.sse.utils.modelManagement.RestrictionEvaluationException;
 import de.uni_hildesheim.sse.utils.modelManagement.Version;
 import de.uni_hildesheim.sse.utils.modelManagement.VersionFormatException;
-import de.uni_hildesheim.sse.utils.modelManagement.VersionRestriction;
 import de.uni_hildesheim.sse.varModel.testSupport.ProjectTestUtilities;
+import de.uni_hildesheim.sse.varModel.versioning.ImportValidationTest;
 
 /**
  * Test cases for the IVMLWriter class.
@@ -171,10 +177,15 @@ public class IVMLWriterTest {
     
     /**
      * Tests whether writing an import with restriction succeeds.
-     * @throws IOException 
+     * 
+     * @throws IOException shall not occur
+     * @throws RestrictionEvaluationException shall not occur
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     * @throws CSTSemanticException shall not occur
      */
     @Test
-    public void writeImportWithRestriciton() throws IOException {
+    public void writeImportWithRestriciton() throws IOException, RestrictionEvaluationException, 
+        ValueDoesNotMatchTypeException, CSTSemanticException {
         //Creating a version
         try {
             version = new Version("1");
@@ -186,21 +197,14 @@ public class IVMLWriterTest {
         pro.setVersion(version);
         
         //Creating a version restriction
-        String importedProject = "Import1";
-        VersionRestriction res = new VersionRestriction(importedProject, VersionRestriction.Operator.EQUALS , version);
-        // TODO consider interfaces        
-        //Creating an import containing the restriction
-        ProjectImport imp = new ProjectImport("Name", "InterfaceName", false, false, res);
-        
-        //Adding the import to the project
-        pro.addImport(imp);
+        ImportValidationTest.createImport(pro, "Name::InterfaceName", false, IvmlKeyWords.EQUALS, version);
         
         //Calling the accept of the project
         pro.accept(writer);
         
         String expected = "project Name {\r\n\r\n";
         expected += "    version v1;\r\n";
-        expected += "    import Name::InterfaceName with (Import1.version == v1);\r\n";
+        expected += "    import Name::InterfaceName with Name.version == v1;\r\n";
         expected += "}\r\n";
         
         //Start testing
@@ -209,35 +213,30 @@ public class IVMLWriterTest {
     }
     
     /**
-     * Tests whether writing two imporst with restrictions succeeds.
-     * @throws IOException 
-     * @throws VersionFormatException 
-     * @throws ValueDoesNotMatchTypeException 
+     * Tests whether writing two imports with restrictions succeeds.
+     * @throws IOException shall not occur
+     * @throws VersionFormatException shall not occur
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     * @throws RestrictionEvaluationException shall not occur
+     * @throws CSTSemanticException shall not occur
      */
     @Test
     public void writeImportsWithRestricitons() throws IOException, VersionFormatException, 
-        ValueDoesNotMatchTypeException {
+        ValueDoesNotMatchTypeException, RestrictionEvaluationException, CSTSemanticException {
         //Creating a version
         try {
             version = new Version("1");
         } catch (VersionFormatException e) {
             Assert.fail("String format exc");
         }
-        
         //Defining the version of the project
         try {
             pro.setVersion(new Version("4"));
         } catch (VersionFormatException e) {
             Assert.fail("String format exc");
         }
-        
         //Creating a version restriction
         String importedProject = "Import1";
-        VersionRestriction res = new VersionRestriction(importedProject, VersionRestriction.Operator.GREATER , version);
-        VersionRestriction res2 = new VersionRestriction("Import2", 
-                VersionRestriction.Operator.GREATER_EQUALS , version);
-        VersionRestriction res3 = new VersionRestriction("Import3", VersionRestriction.Operator.LESS ,
-                new Version("20"));
 
         DecisionVariableDeclaration[] exports = new DecisionVariableDeclaration[2];
         exports[0] = new DecisionVariableDeclaration("name", StringType.TYPE, pro);
@@ -246,25 +245,35 @@ public class IVMLWriterTest {
         exports[1].setValue("20");
         ProjectInterface myInterface = new ProjectInterface("myInterface", exports, pro);
         
-        //Creating first import containing the res and res3 restriction
-        ProjectImport imp = new ProjectImport(importedProject, "myInterface", false, false, res, res3);
+        //Creating first import with two restrictions
+
+        DecisionVariableDeclaration[] rVars = ExpressionVersionRestriction.createRestrictionVars(importedProject);
+        ConstraintSyntaxTree expr = new OCLFeatureCall(new CompoundAccess(new Variable(rVars[1]), "version"), 
+            OclKeyWords.GREATER, new ConstantValue(ValueFactory.createValue(VersionType.TYPE, version)));
+        expr.inferDatatype();
+        ConstraintSyntaxTree expr2 = new OCLFeatureCall(new CompoundAccess(new Variable(rVars[1]), "version"), 
+            OclKeyWords.LESS, new ConstantValue(ValueFactory.createValue(VersionType.TYPE, new Version(20))));
+        expr2.inferDatatype(); 
+        expr = new OCLFeatureCall(expr, OclKeyWords.AND, expr2);
+        expr.inferDatatype();
+
+        pro.addImport(new ProjectImport(importedProject, "myInterface", false, false, 
+            new ExpressionVersionRestriction(expr, rVars[0], rVars[1])));
         
         //Creating second import containing the res2 restriction
-        ProjectImport imp2 = new ProjectImport("Import2", null, false, false, res2);
+        ImportValidationTest.createImport(pro, "Import2", false, IvmlKeyWords.GREATER_EQUALS, version);
         
         //Adding the imports + interface to the project
         pro.add(myInterface);
-        pro.addImport(imp);
-        pro.addImport(imp2);
         
         //Calling the accept of the project
         pro.accept(writer);
         
         String expected = "project Name {\r\n\r\n";
         expected += "    version v4;\r\n";
-        expected += "    import " + importedProject + "::myInterface with (" + importedProject;
-        expected += ".version > v1, Import3.version < v20);\r\n";
-        expected += "    import Import2 with (Import2.version >= v1);\r\n";
+        expected += "    import " + importedProject + "::myInterface with " + importedProject;
+        expected += ".version > v1 and Import1.version < v20;\r\n";
+        expected += "    import Import2 with Import2.version >= v1;\r\n";
         expected += "    interface myInterface {\r\n";
         expected += "        export name;\r\n";
         expected += "        export alter;\r\n";

@@ -16,7 +16,9 @@
 package de.uni_hildesheim.sse.model.varModel;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import de.uni_hildesheim.sse.model.varModel.datatypes.BooleanType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
@@ -358,6 +360,7 @@ public class ModelQuery {
         IncrementalNamespace ispace = new IncrementalNamespace(namespace);
         IResolutionScope curScope = scope;
         IResolutionScope imported = null;
+        Set<Project> done = new HashSet<Project>();
         do {
             ispace.shiftRight();
             
@@ -370,12 +373,22 @@ public class ModelQuery {
                     if (ispace.namespaceStart.equals(iter.getName())) {
                         tmp = iter;
                     } else {
+                        // check for direct name of searched namespace
                         for (int i = 0; null == tmp && i < iter.getImportsCount(); i++) {
                             ProjectImport imp = iter.getImport(i);
                             if (checkScopeForImport(ispace.namespaceStart, imp, namespace)) {
                                 // set resolved but not scope as this will happen in the next iteration
                                 imported = imp.getResolved();
                                 tmp = checkInterfaceImport(imp.getScope(), ispace, namespace, imported);
+                            }
+                        }
+                        // check for direct imports of searched namespace
+                        if (null == tmp) {
+                            Project nested = searchImportedProject(namespace, iter, done);
+                            done.clear();
+                            if (null != nested) {
+                                imported = nested;
+                                tmp = checkInterfaceImport(imported, ispace, namespace, imported);
                             }
                         }
                     }
@@ -401,6 +414,31 @@ public class ModelQuery {
                 }
             }
             result = curScope;
+        }
+        return result;
+    }
+    
+    /**
+     * Searches for an indirectly imported project in depth-first search.
+     * 
+     * @param namespace the namespace to search for
+     * @param scope the scope to search within
+     * @param done already visited projects (avoid cycles)
+     * @return the project matching the namespace or <b>null</b>
+     */
+    private static Project searchImportedProject(String namespace, IResolutionScope scope, Set<Project> done) {
+        Project result = null;
+        for (int i = 0; null == result && i < scope.getImportsCount(); i++) {
+            ProjectImport imp = scope.getImport(i);
+            Project resolved = imp.getResolved();
+            if (null != resolved && !done.contains(resolved)) { 
+                done.add(resolved);
+                if (imp.getName().equals(namespace)) {
+                    result = resolved;
+                } else {
+                    result = searchImportedProject(namespace, resolved, done);
+                }
+            }
         }
         return result;
     }

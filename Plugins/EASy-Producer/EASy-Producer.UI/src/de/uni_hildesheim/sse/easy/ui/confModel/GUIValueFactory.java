@@ -1,10 +1,12 @@
 package de.uni_hildesheim.sse.easy.ui.confModel;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import org.eclipse.swt.widgets.Composite;
 
-import de.uni_hildesheim.sse.easy.ui.productline_editor.DisplayNameProvider;
+import de.uni_hildesheim.sse.model.confModel.DisplayNameProvider;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.Project;
@@ -25,6 +27,7 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Sequence;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Set;
 import de.uni_hildesheim.sse.model.varModel.datatypes.StringType;
+import de.uni_hildesheim.sse.model.varModel.datatypes.VersionType;
 import de.uni_hildesheim.sse.model.varModel.filter.ReferenceValuesFinder;
 import de.uni_hildesheim.sse.model.varModel.values.NullValue;
 /**
@@ -165,6 +168,11 @@ public class GUIValueFactory {
         public void visitOrderedEnumType(OrderedEnum enumType) {
             visitEnumType(enumType);
         }
+
+        @Override
+        public void visitVersionType(VersionType type) {
+            // Actually not needed as this cannot occur as a type of a variable
+        }
         
     }
     
@@ -206,6 +214,31 @@ public class GUIValueFactory {
         }
         return result;
     }
+    
+    /**
+     * Returns a list of unique elements taken from <code>list</code>.
+     * 
+     * @param <T> the element type
+     * @param list the list to be processed
+     * @return the list of unique elements from <code>list</code> in sequence of <code>list</code>
+     */
+    private static <T> List<T> makeUnique(List<T> list) {
+        List<T> result;
+        if (null == list || list.size() < 2) {
+            result = list;
+        } else {
+            java.util.Set<T> known = new HashSet<T>();
+            result = new ArrayList<T>();
+            for (int i = 0; i < list.size(); i++) {
+                T element = list.get(i);
+                if (!known.contains(element)) {
+                    result.add(element);
+                    known.add(element);
+                }
+            }
+        }
+        return result;
+    }
 
     /**
      * Creates combo items for the given <code>variable</code> of type <code>reference</code>.
@@ -217,7 +250,8 @@ public class GUIValueFactory {
     public static ComboboxGUIVariable.ComboItem[] createComboItems(IDecisionVariable variable, 
         Reference reference) {
         Project project = variable.getConfiguration().getProject();
-        List<AbstractVariable> possibleDeclarations = ReferenceValuesFinder.findPossibleValues(project, reference);
+        List<AbstractVariable> possibleDeclarations = makeUnique(
+            ReferenceValuesFinder.findPossibleValues(project, reference));
         ComboboxGUIVariable.ComboItem[] items = null;
         
         if (possibleDeclarations.size() > 0) {

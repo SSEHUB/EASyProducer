@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="justATest" default="jar" basedir=".">
+    <target name="jar">
+        <echo message="default Target!"/>
+    </target>
+    <target name="specialTarget">
+        <echo message="special Target!"/>
+    </target>
+</project>

@@ -48,9 +48,7 @@ public class ConstantValue extends Leaf {
         return constant;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void accept(IConstraintTreeVisitor visitor) {
         visitor.visitConstantValue(this); // no further operations!
     }
@@ -69,9 +67,6 @@ public class ConstantValue extends Leaf {
         return constant.hashCode();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public IDatatype getContainedType() {
         IDatatype result = null;
@@ -82,4 +77,8 @@ public class ConstantValue extends Leaf {
         return result;
     }
     
+    @Override
+    public String toString() {
+        return null != constant ? constant.toString() : super.toString();
+    }
 }

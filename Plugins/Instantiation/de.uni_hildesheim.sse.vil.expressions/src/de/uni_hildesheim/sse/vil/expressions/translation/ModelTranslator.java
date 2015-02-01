@@ -26,12 +26,12 @@ import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.utils.messages.IMessage;
 import de.uni_hildesheim.sse.utils.modelManagement.AvailableModels;
 import de.uni_hildesheim.sse.utils.modelManagement.IModel;
+import de.uni_hildesheim.sse.utils.modelManagement.IVersionRestriction;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagement;
 import de.uni_hildesheim.sse.utils.modelManagement.Version;
 import de.uni_hildesheim.sse.utils.modelManagement.VersionFormatException;
-import de.uni_hildesheim.sse.utils.modelManagement.VersionRestriction;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Import;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.LanguageUnit;
@@ -90,8 +90,8 @@ public abstract class ModelTranslator
                 String name = imp.getName();
                 if (!known.contains(name) /*&& isImport and not conflict*/) {
                     warnVersionRestrictions(imp.getVersionSpec());
-                    tmp.add(new ModelImport<M>(name, false,
-                        ImportTranslator.processRestrictions(name, imp.getVersionSpec())));
+                    tmp.add(new ModelImport<M>(name, false, getExpressionTranslator().
+                        processRestriction(name, imp.getVersionSpec(), resolver)));
                     known.add(name);
                 } else {
                     throw new TranslatorException(name + " is imported multiple times", imp, 
@@ -194,8 +194,8 @@ public abstract class ModelTranslator
                 de.uni_hildesheim.sse.vil.expressions.expressionDsl.Advice adv = advices.get(a);
                 String name = Utils.getQualifiedNameString(adv.getName());
                 try {
-                    VersionRestriction[] restrictions = ImportTranslator.processRestrictions(
-                        name, adv.getVersionSpec());                
+                    IVersionRestriction restrictions = getExpressionTranslator().processRestriction(
+                        name, adv.getVersionSpec(), resolver);                
                     StringBuilder warning = new StringBuilder();
                     result[a] = Advice.create(name, modelURI, restrictions, warning);
                     buildLocalTypeRegistry(result[a]);

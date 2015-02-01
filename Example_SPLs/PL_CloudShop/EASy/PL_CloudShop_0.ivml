@@ -1,0 +1,47 @@
+project PL_CloudShop {
+
+	version v0;
+	enum Platform {AmazonWebService, OpenNebula};
+	compound OpenNebulaConfig {
+		String templateFile;
+		String templateFilePath;
+		String scriptPathDest;
+		String frontendIp;
+		String frontendUser;
+		String frontendPass;
+		String vmName;
+		String vmPass;
+		String vmUser;
+	}
+
+	compound AmazonWebServiceConfig {
+		String amiID;
+		Boolean createNewInstance;
+		String instanceID;
+		String accesskey;
+		String secretkey;
+		String pathToKeyFile;
+		createNewInstance == false implies size(instanceID) > 0;	
+	}
+
+	compound ShopConfig {
+		Boolean graphic;
+		String compositeFileName;
+	}
+
+	Platform platform;
+	OpenNebulaConfig openNebulaConfig;
+	AmazonWebServiceConfig amazonWebServiceConfig;
+	ShopConfig shopConfig;
+	platform == Platform.AmazonWebService implies isDefined(amazonWebServiceConfig);
+	platform == Platform.AmazonWebService implies not isDefined(openNebulaConfig);
+	isDefined(amazonWebServiceConfig) implies platform == Platform.AmazonWebService;
+	platform == Platform.OpenNebula implies isDefined(openNebulaConfig);
+	platform == Platform.OpenNebula implies not isDefined(amazonWebServiceConfig);
+	isDefined(openNebulaConfig) implies platform == Platform.OpenNebula;
+	Integer test;
+	platform = Platform.OpenNebula;
+	openNebulaConfig = {frontendUser = ""};
+	amazonWebServiceConfig = {};
+	shopConfig = {};
+}

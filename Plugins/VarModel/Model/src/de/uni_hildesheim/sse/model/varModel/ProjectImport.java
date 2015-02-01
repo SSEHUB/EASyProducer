@@ -16,9 +16,9 @@
 package de.uni_hildesheim.sse.model.varModel;
 
 import de.uni_hildesheim.sse.model.varModel.datatypes.IResolutionScope;
+import de.uni_hildesheim.sse.utils.modelManagement.IVersionRestriction;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
-import de.uni_hildesheim.sse.utils.modelManagement.VersionRestriction;
 
 /**
  * Defines an import and his restrictions.
@@ -40,7 +40,7 @@ public class ProjectImport extends ModelImport<Project> {
      *   without interfaces is being imported)
      */
     public ProjectImport(String projectName, String interfaceName) {
-        this(projectName, interfaceName, false, false, (VersionRestriction[]) null);
+        this(projectName, interfaceName, false, false, (IVersionRestriction) null);
     }
     
     /**
@@ -50,14 +50,14 @@ public class ProjectImport extends ModelImport<Project> {
      * @param interfaceName the name of the interface to be imported (may be <b>null</b>)
      * @param isConflict does this object represent a conflict or an import
      * @param isCopied true if the project should be copied / false if it should be referenced
-     * @param restrictions the version restrictions
+     * @param restriction the version restrictions (may be <b>null</b> if absent)
      */
     public ProjectImport(String projectName, String interfaceName, boolean isConflict, boolean isCopied, 
-        VersionRestriction... restrictions) {
-        super(projectName, isConflict, restrictions);
+        IVersionRestriction restriction) {
+        super(projectName, isConflict, restriction);
         this.interfaceName = interfaceName;
     }
-    
+
     /** 
      * Accept method for the visitor. <br/>
      * This method is used for saving this model element.

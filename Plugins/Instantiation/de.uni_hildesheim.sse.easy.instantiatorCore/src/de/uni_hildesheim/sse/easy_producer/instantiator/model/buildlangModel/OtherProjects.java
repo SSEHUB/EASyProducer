@@ -122,19 +122,21 @@ class OtherProjects implements Set<IArtifact> {
         result.addAll(data);
         return new ListSequence<IArtifact>(result, parameter);
     }
-    
-    /**
-     * Adds an artifact.
-     * 
-     * @param artifact the artifact to be added
-     */
-    void add(IArtifact artifact) {
+
+    @Override
+    public IArtifact add(IArtifact artifact) {
         data.add(artifact);
+        return artifact;
     }
 
     @Override
     public IArtifact projectSingle() {
         return 1 == data.size() ? data.iterator().next() : null;
+    }
+
+    @Override
+    public void remove(IArtifact element) {
+        data.remove(element);
     }
 
 }

@@ -22,11 +22,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.uni_hildesheim.sse.model.cstEvaluation.LocalConfiguration;
 import de.uni_hildesheim.sse.model.varModel.datatypes.CustomOperation;
 import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.ICustomOperationAccessor;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IResolutionScope;
+import de.uni_hildesheim.sse.utils.modelManagement.IRestrictionEvaluationContext;
 import de.uni_hildesheim.sse.utils.modelManagement.IModel;
 import de.uni_hildesheim.sse.utils.modelManagement.IndentationConfiguration;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
@@ -345,9 +347,7 @@ public class Project extends ModelElement implements IModel, IAttributableElemen
         return null != name && names.containsKey(name);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public ContainableModelElement getElement(String name) {
         return null == name ? null : names.get(name);
     }
@@ -484,44 +484,32 @@ public class Project extends ModelElement implements IModel, IAttributableElemen
         return interfaceCount > 0;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public boolean attribute(Attribute attribute) {
         return variable.attribute(attribute);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public int getAttributesCount() {
         return variable.getAttributesCount();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public Attribute getAttribute(String name) {
         return variable.getAttribute(name);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public Attribute getAttribute(int index) {
         return variable.getAttribute(index);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public boolean isInterface() {
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public String getNameSpace() {
         String namespace;
         if (null == parent) {
@@ -606,9 +594,6 @@ public class Project extends ModelElement implements IModel, IAttributableElemen
         assert modelElements.size() == size;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean propagateAttribute(Attribute attribute) {
         boolean successful = true;
@@ -638,10 +623,14 @@ public class Project extends ModelElement implements IModel, IAttributableElemen
         return null; // disabled
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void dispose() {
+    }
+
+    @Override
+    public IRestrictionEvaluationContext getRestrictionEvaluationContext() {
+        // put in here further "global" variables and their values needed for evaluating import / conflict restrictions
+        return new LocalConfiguration();
     }
 
 }

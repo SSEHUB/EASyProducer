@@ -26,16 +26,12 @@ public class ReasonerMessage implements IReasonerMessage {
         this.type = type;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public IReasoner getSource() {
         return source;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public IType getType() {
         return type;
     }

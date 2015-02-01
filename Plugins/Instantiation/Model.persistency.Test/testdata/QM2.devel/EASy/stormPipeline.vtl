@@ -1,0 +1,117 @@
+@advice(QM)
+template stormPipeline(Configuration config, FileArtifact target, Pipeline pipeline) { 
+
+    // check for endless recursions
+
+    def main(Configuration config, FileArtifact target, Pipeline pip) {
+    	
+    	DecisionVariable name = pip.name();
+    	DecisionVariable numworkers=pip.numworkers();
+    	
+    	//Integer numworkers=1;
+    	Integer timeout = pip.timeout();
+    	'package eu.qualiMaster.topologies.$name;'
+    	''
+    	'import backtype.storm.*;'
+    	'import backtype.storm.topology.*;'
+    	''
+    	'public class Topology {'
+    	'    static final String TOPOLOGY_NAME = "$name";'
+    	''
+    	'    public static void main(String[] args) throws Exception {'
+    	'        Config config = new Config();'
+    	'        config.setMessageTimeoutSecs($timeout);'
+    	'        TopologyBuilder b = new TopologyBuilder();'
+    	for (DecisionVariable r : pip.sources()) {
+    		processElement(r, Grouping.shuffleGrouping, "");
+    	}  
+    	'' 
+    	'        if (args != null && args.length > 0) {'  
+    	'            config.setNumWorkers($numworkers);'
+        '            StormSubmitter.submitTopology(args[0], config, b.createTopology());'
+    	'        }'
+    	'        else{'
+    	'           final LocalCluster cluster = new LocalCluster();'
+		'           cluster.submitTopology(TOPOLOGY_NAME, config, b.createTopology());'		
+		'        }'
+    	'    }'
+    	'}'
+    }
+     
+    def processElement(DecisionVariable elt, Grouping grouping, String lastName) {
+		'// unhandled type ${elt.type()}' | 8;
+    }
+
+	def processElement(DataManagementElement elt, Grouping grouping, String lastName) {
+        // currently the same as FamilyElement -> infer grouping to fieldsGrouping?
+	    produceStatement(elt, grouping, lastName, true);
+    	String name = elt.$varName();
+		for (Flow flow : elt.output()) {
+			processElement(flow.destination(), flow.grouping(), name);
+		}
+    }
+
+    def processElement(FamilyElement elt, Grouping grouping, String lastName) {
+        // currently the same as DataManagementElement -> infer grouping to shuffleGrouping?
+    	produceStatement(elt, grouping, lastName, true);
+    	String name = elt.$varName();
+    	String snkBolt = "lastBolt";
+		Family fm = elt.family();		
+    	for (Algorithm alg : fm.members()) {
+			if(!alg.algTopologyClass().isNull()) {
+			    String topologyCls = alg.algTopologyClass();
+			    '        //generate the Storm-based algorithm topology'
+			    '        String $snkBolt = new $topologyCls().createTopology("$name");'	
+			    name = snkBolt;	    
+		    } else {
+		     	
+		    }			
+		}		   	
+		for (Flow flow : elt.output()) {
+			processElement(flow.destination(), flow.grouping(), name);
+		}
+    }
+    
+    def processElement(Source elt, Grouping grouping, String lastName) {
+    	produceStatement(elt, grouping, lastName, false);
+    	String name = elt.$varName();
+		for (Flow flow : elt.output()) {
+			processElement(flow.destination(), flow.grouping(), name);
+		}
+    }
+    
+    def processElement(Sink elt, Grouping grouping, String lastName) {
+    	produceStatement(elt, grouping, lastName, true);
+    }
+    
+    def produceStatement(DecisionVariable elt, Grouping grouping, String lastName, Boolean bolt) {
+    	String name = elt.varName();
+    	String clsName = className(elt);
+    	//String boltName = elt.name();
+
+        if (bolt) {
+    	    String grouping = grouping(elt, grouping, lastName);
+    	    'b.setBolt("$name", new $clsName("$name"))$grouping;' | 8;
+        } else {
+		    'b.setSpout("$name", new $clsName());' | 8;
+        }
+    }
+    
+    def grouping(DecisionVariable elt, Grouping grouping, String lastName) {
+    	"";
+    	if (elt.varName().length() > 0) {
+    		if(lastName == "lastBolt") {
+    			'.$grouping($lastName)';
+    		}
+    		else {
+    			'.$grouping("$lastName")';
+    		}    		  	 
+    	}    	
+    }
+    
+    def className(DecisionVariable elt) {
+    	elt.varName().firstToUpperCase() + elt.type(); 
+    }
+    
+    
+}

@@ -2,27 +2,71 @@
 <!-- Project name must not contain whitespaces -->
 <project name="Standalone Tools" default="all" basedir=".">	
 	<property file="${user.home}/global-build.properties"/>
-	<path id="emma.lib" >    		
-		<pathelement location="${emma.path}/emma.jar" />	
-		<pathelement location="${emma.path}/emma_ant.jar" />	
-	</path>
-	<taskdef resource="emma_ant.properties" classpathref="emma.lib" />
-
+	<property name="easyPlugins" value="easyPlugins"/>
+	
+	<path id="easyTaskDef.lib" >
+		<fileset dir="antLibs">
+			<include name="**/*.jar" />
+		</fileset>
+    </path>
+	
 	<target name="init">
 		<!-- Delete generated folders -->
 		<delete dir="junitResults"/>
-		<delete dir="${coverage.base.dir}"/>
-		<delete dir="${doc.dir}"/>
+		<delete dir="${easyPlugins}"/>
+		<delete dir="build"/>
+		
+		<!-- Delete accidentally created files and folders -->
+		<delete dir="easyLoader"/>
+		<delete dir="emma"/>
+		<delete dir="newGenerator"/>
 		
 		<!-- Create folders -->
 		<mkdir dir="junitResults"/>
-		<mkdir dir="${coverage.base.dir}"/>
-		<mkdir dir="${coverage.instr.dir}"/>
-		<mkdir dir="${coverage.results.dir}"/>
-		<mkdir dir="${doc.dir}"/>
+		<mkdir dir="${easyPlugins}"/>
+		<mkdir dir="build"/>
+		<mkdir dir="build/generatedLibs"/>
 	</target>
 	
-	<target name="compile">
+	<target name="gather.easy.plugins">
+		<copy todir="${easyPlugins}" failonerror="true" overwrite="true" flatten="true">
+			<fileset dir="${home.base.dir}">
+				<include name="**/build/jar/*.jar" />
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="createLibs">
+		<!-- Lib generation with Patrik's ANT plugin for automated EASy-Bundle generation -->
+        <taskdef name="antgenerator" classname="de.uni_hildesheim.sse.easy.ant.AntGenerator" classpathref="easyTaskDef.lib"/>
+        <!-- pluginPath="${easy.bundles.dir}" -->
+        <!-- pluginPath="${easyPlugins}" -->
+        <antgenerator forced="yes" pluginPath="${easy.bundles.dir}" target="${basedir}/build/generatedLibs"
+            basedir="${basedir}" eclipsepath="${eclipse.plugins.dir}" classesPath="${home.easyLoader.dir}/build/classes"
+            libsPath="${home.easyLoader.dir}/libs">
+            
+            <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.easy_producer.core.no_eclipse_feature"/>
+            <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.ivml.core_feature"/>
+            <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.vil.core_feature"/>
+            <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.reasoning.drools2_feature"/>
+            <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.apache.commons.io.feature"/>
+            <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.easy.instantiator.java.feature"/>
+            <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.easy_producer.instantiation.velocity_feature"/>
+            <addfeature path="${projects.features.dir}"/>
+        </antgenerator>
+        
+        <!-- copy generated bundles to command line tool before compilation -->
+        <copy todir="EASyCommandLine/lib" failonerror="true" overwrite="true" flatten="true">
+			<fileset dir="${basedir}/build/generatedLibs/unbundled">
+				<include name="**/*.jar" />
+			</fileset>
+            <fileset dir="${home.easyLoader.dir}/libs/">
+				<include name="org.eclipse.osgi*.jar" />
+			</fileset>
+		</copy>
+    </target>
+	
+	<target name="compile">	
         <echo>##########################</echo>
         <echo>###  CommandLine Tool  ###</echo>
         <echo>##########################</echo>
@@ -34,5 +78,6 @@
         <ant dir="EASyCommandLineTest" antfile="${build.script.name}" />
     </target>
 	
-	<target name="all" depends="init, compile"/>
+	<!--target name="all" depends="init, gather.easy.plugins, createLibs, compile"/-->
+	<target name="all" depends="init, createLibs, compile"/>
 </project>

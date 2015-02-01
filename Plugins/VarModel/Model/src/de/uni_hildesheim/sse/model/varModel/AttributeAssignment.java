@@ -99,9 +99,6 @@ public class AttributeAssignment extends ContainableModelElement implements IDec
         super("attributeAssignment", parent);
     }
     
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void accept(IModelVisitor visitor) {
         visitor.visitAttributeAssignment(this);
@@ -142,9 +139,7 @@ public class AttributeAssignment extends ContainableModelElement implements IDec
         return data.get(index);
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public boolean add(DecisionVariableDeclaration elem) {
         boolean yetAdded = false;
         IModelElement parent = getEffectiveParent();
@@ -169,145 +164,104 @@ public class AttributeAssignment extends ContainableModelElement implements IDec
         data.add(assignment);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public boolean isTransparent() {
         return true;
     }
 
     // -------------------------------- delegation part ----------------------------------
 
-    /**
-     * {@inheritDoc} 
-     */
+    @Override
     public int getElementCount() {
         return container.getElementCount();
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public DecisionVariableDeclaration getElement(String name) {
         return container.getElement(name);
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public boolean contains(DecisionVariableDeclaration var) {
         return container.contains(var);
     }
     
-    /**
-     * {@inheritDoc} 
-     */
+    @Override
     public DecisionVariableDeclaration getElement(int index) {
         return container.getElement(index);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public int getConstraintsCount() {
         return container.getConstraintsCount();
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public Constraint getConstraint(int index) {
         return container.getConstraint(index);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public int getRealizingCount() {
         return container.getRealizingCount();
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public Constraint getRealizing(int index) {
         return container.getRealizing(index);
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void add(Comment comment) {
         container.add(comment);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void add(AttributeAssignment assignment) {
         container.add(assignment);
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void addConstraint(Constraint constraint, boolean internal) {
         container.addConstraint(constraint, internal);
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public int getAssignmentCount() {
         return container.getAssignmentCount();
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public AttributeAssignment getAssignment(int index) {
         return container.getAssignment(index);
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public ContainableModelElement getModelElement(int index) {
         return container.getModelElement(index);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public int getModelElementCount() {
         return container.getModelElementCount();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void sortContainedElements(Comparator<ContainableModelElement> comp) {
         container.sortContainedElements(comp);
     }
     
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean propagateAttribute(Attribute attribute) {
         return container.propagateAttribute(attribute);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public int getDeclarationCount() {
         return container.getDeclarationCount();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public DecisionVariableDeclaration getDeclaration(int index) {
         return container.getDeclaration(index);
     }

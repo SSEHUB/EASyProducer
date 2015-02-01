@@ -71,14 +71,17 @@ public class VilBuildLanguageFactoryImpl extends EFactoryImpl implements VilBuil
       case VilBuildLanguagePackage.LOAD_PROPERTIES: return createLoadProperties();
       case VilBuildLanguagePackage.SCRIPT_CONTENTS: return createScriptContents();
       case VilBuildLanguagePackage.RULE_DECLARATION: return createRuleDeclaration();
+      case VilBuildLanguagePackage.RULE_CONDITIONS: return createRuleConditions();
       case VilBuildLanguagePackage.RULE_ELEMENT_BLOCK: return createRuleElementBlock();
       case VilBuildLanguagePackage.RULE_ELEMENT: return createRuleElement();
       case VilBuildLanguagePackage.RULE_MODIFIER: return createRuleModifier();
-      case VilBuildLanguagePackage.DEFER_DECLARATION: return createDeferDeclaration();
+      case VilBuildLanguagePackage.EXPRESSION_STATEMENT: return createExpressionStatement();
       case VilBuildLanguagePackage.PRIMARY_EXPRESSION: return createPrimaryExpression();
       case VilBuildLanguagePackage.INSTANTIATE: return createInstantiate();
       case VilBuildLanguagePackage.MAP_VARIABLE: return createMapVariable();
       case VilBuildLanguagePackage.MAP: return createMap();
+      case VilBuildLanguagePackage.ALTERNATIVE: return createAlternative();
+      case VilBuildLanguagePackage.STATEMENT_OR_BLOCK: return createStatementOrBlock();
       case VilBuildLanguagePackage.JOIN: return createJoin();
       case VilBuildLanguagePackage.JOIN_VARIABLE: return createJoinVariable();
       case VilBuildLanguagePackage.SYSTEM_EXECUTION: return createSystemExecution();
@@ -169,6 +172,17 @@ public class VilBuildLanguageFactoryImpl extends EFactoryImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  public RuleConditions createRuleConditions()
+  {
+    RuleConditionsImpl ruleConditions = new RuleConditionsImpl();
+    return ruleConditions;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public RuleElementBlock createRuleElementBlock()
   {
     RuleElementBlockImpl ruleElementBlock = new RuleElementBlockImpl();
@@ -202,10 +216,10 @@ public class VilBuildLanguageFactoryImpl extends EFactoryImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
-  public DeferDeclaration createDeferDeclaration()
+  public ExpressionStatement createExpressionStatement()
   {
-    DeferDeclarationImpl deferDeclaration = new DeferDeclarationImpl();
-    return deferDeclaration;
+    ExpressionStatementImpl expressionStatement = new ExpressionStatementImpl();
+    return expressionStatement;
   }
 
   /**
@@ -250,6 +264,28 @@ public class VilBuildLanguageFactoryImpl extends EFactoryImpl implements VilBuil
   {
     MapImpl map = new MapImpl();
     return map;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Alternative createAlternative()
+  {
+    AlternativeImpl alternative = new AlternativeImpl();
+    return alternative;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public StatementOrBlock createStatementOrBlock()
+  {
+    StatementOrBlockImpl statementOrBlock = new StatementOrBlockImpl();
+    return statementOrBlock;
   }
 
   /**

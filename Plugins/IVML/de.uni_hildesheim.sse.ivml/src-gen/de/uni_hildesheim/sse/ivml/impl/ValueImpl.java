@@ -27,7 +27,9 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ValueImpl#getSValue <em>SValue</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ValueImpl#getQValue <em>QValue</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ValueImpl#getBValue <em>BValue</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ValueImpl#getSelf <em>Self</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ValueImpl#getNullValue <em>Null Value</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ValueImpl#getVersion <em>Version</em>}</li>
  * </ul>
  * </p>
  *
@@ -96,6 +98,26 @@ public class ValueImpl extends MinimalEObjectImpl.Container implements Value
   protected String bValue = BVALUE_EDEFAULT;
 
   /**
+   * The default value of the '{@link #getSelf() <em>Self</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getSelf()
+   * @generated
+   * @ordered
+   */
+  protected static final String SELF_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getSelf() <em>Self</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getSelf()
+   * @generated
+   * @ordered
+   */
+  protected String self = SELF_EDEFAULT;
+
+  /**
    * The default value of the '{@link #getNullValue() <em>Null Value</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -114,6 +136,26 @@ public class ValueImpl extends MinimalEObjectImpl.Container implements Value
    * @ordered
    */
   protected String nullValue = NULL_VALUE_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getVersion() <em>Version</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getVersion()
+   * @generated
+   * @ordered
+   */
+  protected static final String VERSION_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getVersion() <em>Version</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getVersion()
+   * @generated
+   * @ordered
+   */
+  protected String version = VERSION_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -283,6 +325,29 @@ public class ValueImpl extends MinimalEObjectImpl.Container implements Value
    * <!-- end-user-doc -->
    * @generated
    */
+  public String getSelf()
+  {
+    return self;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setSelf(String newSelf)
+  {
+    String oldSelf = self;
+    self = newSelf;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, IvmlPackage.VALUE__SELF, oldSelf, self));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public String getNullValue()
   {
     return nullValue;
@@ -299,6 +364,29 @@ public class ValueImpl extends MinimalEObjectImpl.Container implements Value
     nullValue = newNullValue;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, IvmlPackage.VALUE__NULL_VALUE, oldNullValue, nullValue));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String getVersion()
+  {
+    return version;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setVersion(String newVersion)
+  {
+    String oldVersion = version;
+    version = newVersion;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, IvmlPackage.VALUE__VERSION, oldVersion, version));
   }
 
   /**
@@ -337,8 +425,12 @@ public class ValueImpl extends MinimalEObjectImpl.Container implements Value
         return getQValue();
       case IvmlPackage.VALUE__BVALUE:
         return getBValue();
+      case IvmlPackage.VALUE__SELF:
+        return getSelf();
       case IvmlPackage.VALUE__NULL_VALUE:
         return getNullValue();
+      case IvmlPackage.VALUE__VERSION:
+        return getVersion();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -365,8 +457,14 @@ public class ValueImpl extends MinimalEObjectImpl.Container implements Value
       case IvmlPackage.VALUE__BVALUE:
         setBValue((String)newValue);
         return;
+      case IvmlPackage.VALUE__SELF:
+        setSelf((String)newValue);
+        return;
       case IvmlPackage.VALUE__NULL_VALUE:
         setNullValue((String)newValue);
+        return;
+      case IvmlPackage.VALUE__VERSION:
+        setVersion((String)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -394,8 +492,14 @@ public class ValueImpl extends MinimalEObjectImpl.Container implements Value
       case IvmlPackage.VALUE__BVALUE:
         setBValue(BVALUE_EDEFAULT);
         return;
+      case IvmlPackage.VALUE__SELF:
+        setSelf(SELF_EDEFAULT);
+        return;
       case IvmlPackage.VALUE__NULL_VALUE:
         setNullValue(NULL_VALUE_EDEFAULT);
+        return;
+      case IvmlPackage.VALUE__VERSION:
+        setVersion(VERSION_EDEFAULT);
         return;
     }
     super.eUnset(featureID);
@@ -419,8 +523,12 @@ public class ValueImpl extends MinimalEObjectImpl.Container implements Value
         return qValue != null;
       case IvmlPackage.VALUE__BVALUE:
         return BVALUE_EDEFAULT == null ? bValue != null : !BVALUE_EDEFAULT.equals(bValue);
+      case IvmlPackage.VALUE__SELF:
+        return SELF_EDEFAULT == null ? self != null : !SELF_EDEFAULT.equals(self);
       case IvmlPackage.VALUE__NULL_VALUE:
         return NULL_VALUE_EDEFAULT == null ? nullValue != null : !NULL_VALUE_EDEFAULT.equals(nullValue);
+      case IvmlPackage.VALUE__VERSION:
+        return VERSION_EDEFAULT == null ? version != null : !VERSION_EDEFAULT.equals(version);
     }
     return super.eIsSet(featureID);
   }
@@ -440,8 +548,12 @@ public class ValueImpl extends MinimalEObjectImpl.Container implements Value
     result.append(sValue);
     result.append(", bValue: ");
     result.append(bValue);
+    result.append(", self: ");
+    result.append(self);
     result.append(", nullValue: ");
     result.append(nullValue);
+    result.append(", version: ");
+    result.append(version);
     result.append(')');
     return result.toString();
   }

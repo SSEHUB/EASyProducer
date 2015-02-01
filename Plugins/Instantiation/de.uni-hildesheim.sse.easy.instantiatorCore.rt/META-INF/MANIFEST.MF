@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Runtime VIL model
+Bundle-SymbolicName: de.uni-hildesheim.sse.easy.instantiatorCore.rt
+Bundle-Version: 0.0.1
+Bundle-Vendor: University of Hildesheim - SSE
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Require-Bundle: de.uni-hildesheim.sse.easy.instantiatorCore;bundle-version="0.11.2";visibility:=reexport,
+ de.uni_hildesheim.sse.utils;bundle-version="0.4.2"
+Export-Package: de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil

@@ -200,7 +200,7 @@ public class VersionedModelInfos <M extends IModel> {
         }
         return result;
     }
-    
+
     /**
      * Returns the model information with the closest match 
      * to <code>uri</code>, i.e. in closest in the same hierarchy path.
@@ -212,6 +212,23 @@ public class VersionedModelInfos <M extends IModel> {
      * @return the matching model information (or <b>null</b> if none matches)
      */
     public ModelInfo<M> getByClosestUri(URI uri, List<String> modelPath) {
+        return getByClosestUri(infos, uri, modelPath);
+    }
+
+    /**
+     * Returns the model information from <code>infos</code> with the closest match 
+     * to <code>uri</code>, i.e. in closest in the same hierarchy path.
+     * 
+     * @param <M> the model type
+     * @param infos the information objects to be considered
+     * @param uri the URI to match with (may be <b>null</b> then the first 
+     *   information object is returned)
+     * @param modelPath additional URIs prefixes which shall be considered for importing,
+     *   similar to the Java classpath 
+     * @return the matching model information (or <b>null</b> if none matches)
+     */
+    public static <M extends IModel> ModelInfo<M> getByClosestUri(List<ModelInfo<M>> infos, URI uri, 
+        List<String> modelPath) {
         ModelInfo<M> result = null;
         int size = infos.size();
         if (size > 0) {
@@ -229,14 +246,14 @@ public class VersionedModelInfos <M extends IModel> {
                 String searchUriText = pathWithoutLastFragment(uri.normalize());
                 if (null == result) {
                     // search according to hierarchical IVML convention
-                    result = search(searchUriText, modelPath);
+                    result = search(infos, searchUriText, modelPath);
                     // this may fail, in particular for parent projects imported according to EASy convention
                     if (null == result) { 
-                        result = searchOnParentLevel(uri, modelPath);
+                        result = searchOnParentLevel(infos, uri, modelPath);
                     }
                     // search in folders on the same level
                     if (null == result) {
-                        result = searchOnSameFolderLevel(uri, modelPath);
+                        result = searchOnSameFolderLevel(infos, uri, modelPath);
                     }
                 }
                 // containment in model path
@@ -259,12 +276,15 @@ public class VersionedModelInfos <M extends IModel> {
      * Searches for the best match according to the IVML search conventions, first down along the given
      * URI, then up along the hierarchy.
      * 
+     * @param <M> the model type
+     * @param infos the information objects to be considered
      * @param searchUriText the search folder URI as text 
      * @param modelPath additional URIs prefixes which shall be considered for importing,
      *   similar to the Java classpath 
      * @return the matching model information (or <b>null</b> if none matches)
      */
-    private ModelInfo<M> search(String searchUriText, List<String> modelPath) {
+    private static <M extends IModel> ModelInfo<M> search(List<ModelInfo<M>> infos, String searchUriText, 
+        List<String> modelPath) {
         ModelInfo<M> result = null;
         int matchLength = 0;
         // 0 == b: down, 1 == b up in URI hierarchy
@@ -298,12 +318,15 @@ public class VersionedModelInfos <M extends IModel> {
      * Searches for the best match within the parent-parent folders of <code>uri</code> if that folder starts with 
      * ".". This enables cross-links among parent models according to the convention EASy places imported IVML files.
      * 
+     * @param <M> the model type
+     * @param infos the information objects to be considered
      * @param uri the URI to start searching 
      * @param modelPath additional URIs prefixes which shall be considered for importing,
      *   similar to the Java classpath 
      * @return the matching model information (or <b>null</b> if none matches)
      */
-    private ModelInfo<M> searchOnParentLevel(URI uri, List<String> modelPath) {
+    private static <M extends IModel> ModelInfo<M> searchOnParentLevel(List<ModelInfo<M>> infos, URI uri, 
+        List<String> modelPath) {
         ModelInfo<M> result = null;
         File uriFile = new File(uri);
         File uriParent = uriFile.getParentFile();
@@ -324,7 +347,7 @@ public class VersionedModelInfos <M extends IModel> {
                     File sibling = siblings[s];
                     if (sibling.isDirectory() && !sibling.equals(uriParent)) {
                         URI siblingUri = sibling.toURI().normalize();
-                        result = search(siblingUri.toString(), modelPath);
+                        result = search(infos, siblingUri.toString(), modelPath);
                     }
                 }
             }
@@ -335,12 +358,15 @@ public class VersionedModelInfos <M extends IModel> {
     /**
      * Search in folders on the level of the parent folder of <code>uri</code>.
      * 
+     * @param <M> the model type
+     * @param infos the information objects to be considered
      * @param uri the URI to start searching 
      * @param modelPath additional URIs prefixes which shall be considered for importing,
      *   similar to the Java classpath 
      * @return the matching model information but only if this is unique
      */
-    private ModelInfo<M> searchOnSameFolderLevel(URI uri, List<String> modelPath) {
+    private static <M extends IModel> ModelInfo<M> searchOnSameFolderLevel(List<ModelInfo<M>> infos, URI uri, 
+        List<String> modelPath) {
         List<ModelInfo<M>> tmp = new ArrayList<ModelInfo<M>>();
         File uriFile = new File(uri).getParentFile();
         File searchFolder = uriFile.getParentFile();
@@ -351,7 +377,7 @@ public class VersionedModelInfos <M extends IModel> {
                     File file = files[f];
                     if (file.isDirectory() && !file.equals(uriFile)) {
                         String searchUriText = file.toURI().normalize().toString();
-                        ModelInfo<M> searchResult = search(searchUriText, modelPath);
+                        ModelInfo<M> searchResult = search(infos, searchUriText, modelPath);
                         if (null != searchResult) {
                             tmp.add(searchResult);
                         }
@@ -367,7 +393,6 @@ public class VersionedModelInfos <M extends IModel> {
         }
         return result;
     }
-    
     
     /**
      * Checks whether the <code>searchUriText</code> (with precedence) ore one of the 

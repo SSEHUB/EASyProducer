@@ -38,6 +38,11 @@ public class EASyLoggerFactory {
 
     private static final String LOGGING_LEVEL_PROPERTY = "de.uni_hildesheim.sse.easy.logging.level";
     
+    /**
+     * Specification to log into a specified file instead of logging into the console.
+     */
+    private static final String LOG_FILE_PATH = "de.uni_hildesheim.sse.easy.logging.file";
+    
     private ILogger logger;
     
     private LoggingLevel level;
@@ -155,6 +160,13 @@ public class EASyLoggerFactory {
         } else {
             level = determineLevel(LoggingLevel.WARN);
             setLogger(new JavaLogger());
+        }
+        String logFile = System.getProperty(LOG_FILE_PATH);
+        if (null != logFile) {
+            ILogger fileLogger = FileLogger.getInstance(logFile, false);
+            if (null != fileLogger) {
+                setLogger(fileLogger);
+            }
         }
     }
     

@@ -1,0 +1,9 @@
+vilScript storeArtifact1 (Project source, Project target, Configuration config) {
+
+    main(Project source, Project target, Configuration config) = : {
+        FileArtifact targetFile = "$target/storeArtifact1.txt";
+        targetFile.text().append("Hello");
+        targetFile.rename("renStoreArtifact1.txt");
+    }
+
+}

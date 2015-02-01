@@ -10,6 +10,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationMeta;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Sequence;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.UnmodifiableSet;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 
@@ -51,7 +52,7 @@ public class DecisionVariable extends AbstractIvmlVariable implements IActualTyp
     @OperationMeta(returnGenerics = { Attribute.class } )
     public Set<Attribute> attributes() {
         initializeAttributes();
-        return new ArraySet<Attribute>(attributes, Attribute.class);
+        return new UnmodifiableSet<Attribute>(new ArraySet<Attribute>(attributes, Attribute.class));
     }
     
     /**

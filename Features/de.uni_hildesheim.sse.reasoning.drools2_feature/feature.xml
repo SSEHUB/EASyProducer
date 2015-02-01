@@ -2,7 +2,7 @@
 <feature
       id="de.uni_hildesheim.sse.reasoning.drools2_feature"
       label="Drools2"
-      version="0.1.5"
+      version="0.1.6"
       provider-name="University of Hildesheim, SSE">
 
    <description url="http://www.example.com/description">
@@ -21,7 +21,7 @@
          id="de.uni_hildesheim.sse.reasoning.drools2"
          download-size="0"
          install-size="0"
-         version="0.1.5"
+         version="0.1.6"
          unpack="false"/>
 
 </feature>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="de.uni_hildesheim.sse.adaptation.events" default="jar" basedir=".">
+	
+	<!-- Einstellungen fuer dieses Projekt -->
+    <property name="bin.dir" value="bin"/>
+	<property name="src.dir" value="src"/>
+	<property name="doc.dir" value="doc"/>
+	<property name="dist.dir" value="dist"/>
+	<property name="javacSource" value="1.6"/>
+	<property name="javacTarget" value="1.6"/>
+    <property name="javacEncoding" value="iso-8859-1"/>
+		
+	<target name="compile">
+	    <mkdir dir="${bin.dir}"/>
+		<javac srcdir="${src.dir}" debug="on" destdir="${bin.dir}" includeAntRuntime="no" failonerror="true" source="${javacSource}" target="${javacTarget}" encoding="${javac.encoding}">
+		</javac>
+    </target>
+
+	<target name="javadoc" depends="compile">
+	    <mkdir dir="${doc.dir}"/>
+	    <javadoc destdir="${doc.dir}" author="true" use="true" windowtitle="${ant.project.name}">
+          <packageset dir="src" defaultexcludes="yes">
+            <include name="de/uni_hildesheim/sse/easy/adaptation/events/**"/>
+          </packageset>
+        </javadoc>
+	</target>
+		
+	<!-- Creates a jar file -->
+	<target name="jar" depends="compile, javadoc">
+        <mkdir dir="${dist.dir}"/>
+	    <jar destfile="${dist.dir}/${ant.project.name}.jar" basedir="${bin.dir}" manifest="META-INF/MANIFEST.MF"/>
+	    <zip destfile="${dist.dir}/${ant.project.name}-doc.zip"	basedir="${doc.dir}"/>
+    </target>
+	
+</project>

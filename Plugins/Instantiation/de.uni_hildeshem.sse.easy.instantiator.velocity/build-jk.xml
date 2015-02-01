@@ -12,12 +12,12 @@
 		<!-- Model -->
 		<pathelement path="${libs.model}"/>
 		<pathelement path="${libs.utils}"/>
-		<!-- VelocityLib-->
-		<fileset dir="${home.instantiator.velocityLib.dir}/lib">
+		<!-- Lib -->
+		<fileset dir="lib">
 			<include name="**/*.jar" />
 		</fileset>
-        <pathelement path="${libs.instantiator.velocityLib}"/>      
-		<!-- Instantiation Copy Core -->
+        <!--pathelement path="${libs.instantiator.velocityLib}"/-->      
+		<!-- Instantiation Core -->
 		<pathelement path="${libs.instantiator.core}"/>
 		<!-- Eclipse-Plugins -->
 		<fileset dir="${eclipse.plugins.dir}">

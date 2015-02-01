@@ -1,0 +1,12 @@
+project NullImportTest {
+
+	version v0;
+	
+	import NullTest;
+	
+	Boolean d;
+	
+	a == d;
+	d != b;
+	
+}

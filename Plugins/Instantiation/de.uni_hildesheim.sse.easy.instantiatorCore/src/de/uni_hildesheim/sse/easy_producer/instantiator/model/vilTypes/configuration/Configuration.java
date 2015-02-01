@@ -129,7 +129,7 @@ public class Configuration extends IvmlElement implements IStringValueProvider {
                 DecisionVariable var = configuration.variables[v];
                 if (variablesFilter.include(var)) {
                     tmp.add(var);
-                    if (project.getName().equals(var.getDecisionVariable().getDeclaration().getNameSpace())) {
+                    if (this.project.getName().equals(var.getDecisionVariable().getDeclaration().getNameSpace())) {
                         nameMap.put(var.getName(), var);
                     }
                     nameMap.put(var.getQualifiedName(), var);
@@ -223,7 +223,9 @@ public class Configuration extends IvmlElement implements IStringValueProvider {
      */
     public Configuration selectByName(String namePattern) throws ArtifactException {
         initializeNested();
-        return new Configuration(this, new NameRegExFilter(namePattern, DataType.NAME), filter);
+        NameRegExFilter regexFilter = new NameRegExFilter(namePattern, DataType.NAME);
+        Configuration newConfig = new Configuration(this, regexFilter, filter);
+        return newConfig;
     }
 
     /**

@@ -15,6 +15,7 @@
  */
 package de.uni_hildesheim.sse.model.cstEvaluation;
 
+import de.uni_hildesheim.sse.model.confModel.AssignmentState;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
 
@@ -60,7 +61,14 @@ public abstract class EvaluationAccessor {
      * @return the value (may be <b>null</b> if undefined)
      */
     public abstract Value getValue();
-    
+
+    /**
+     * Returns the value of a reference to the accessed element.
+     * 
+     * @return the value (may be <b>null</b> if undefined)
+     */
+    public abstract Value getReferenceValue();
+
     /**
      * Defines a new value for the accessed element. In case of failures,
      * add appropriate messages to the context.
@@ -76,7 +84,7 @@ public abstract class EvaluationAccessor {
      * @param accessor the accessor to determine the nested value
      * @return the nested value
      */
-    public Value getValue(EvaluationAccessor accessor) {
+    public EvaluationAccessor getValue(EvaluationAccessor accessor) {
         getContext().addErrorMessage("left side of accessor must be a compound value");
         return null;
     }
@@ -89,6 +97,22 @@ public abstract class EvaluationAccessor {
      */
     public void setValue(EvaluationAccessor accessor, Value value) {
         getContext().addErrorMessage("left side of accessor must be a compound value");
+    }
+    
+    /**
+     * Returns whether the underlying value is assigned or still undefined.
+     * 
+     * @return <code>true</code> if a value is assigned, <code>false</code> else
+     */
+    public boolean isAssigned() {
+        boolean assigned;
+        IDecisionVariable var = getVariable();
+        if (null != var) {
+            assigned = AssignmentState.UNDEFINED != var.getState();
+        } else {
+            assigned = false;
+        }
+        return assigned;
     }
     
     /**
@@ -111,6 +135,24 @@ public abstract class EvaluationAccessor {
     public static void release(EvaluationAccessor accessor) {
         if (null != accessor) {
             accessor.release();
+        }
+    }
+    
+    /**
+     * Returns whether values can be assigned to this evaluator.
+     * 
+     * @return <code>true</code> if values can be assigned, <code>false</code> else
+     */
+    public abstract boolean isAssignable();
+
+    /**
+     * Validates the context and sets the contained context to <code>context</code> if not given.
+     * 
+     * @param context the context to validate with
+     */
+    public void validateContext(EvaluationContext context) {
+        if (null == this.context) {
+            this.context = context;
         }
     }
 

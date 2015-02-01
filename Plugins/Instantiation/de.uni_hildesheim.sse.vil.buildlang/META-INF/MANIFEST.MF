@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: de.uni_hildesheim.sse.vil.buildlang
 Bundle-Vendor: SSE - University of Hildesheim
-Bundle-Version: 0.5.2
+Bundle-Version: 0.5.3
 Bundle-SymbolicName: de.uni_hildesheim.sse.vil.buildlang; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.xtext;bundle-version="2.5.0";visibility:=reexport,
@@ -27,14 +27,15 @@ Import-Package: org.apache.log4j,
  org.eclipse.xtext.xbase.lib
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: de.uni_hildesheim.sse,
- de.uni_hildesheim.sse.services,
- de.uni_hildesheim.sse.vilBuildLanguage,
- de.uni_hildesheim.sse.vilBuildLanguage.impl,
- de.uni_hildesheim.sse.vilBuildLanguage.util,
+ de.uni_hildesheim.sse.buildLanguageTranslation,
+ de.uni_hildesheim.sse.formatting,
+ de.uni_hildesheim.sse.generator,
  de.uni_hildesheim.sse.parseTreeConstruction,
  de.uni_hildesheim.sse.parser.antlr,
  de.uni_hildesheim.sse.parser.antlr.internal,
- de.uni_hildesheim.sse.validation,
  de.uni_hildesheim.sse.scoping,
- de.uni_hildesheim.sse.generator,
- de.uni_hildesheim.sse.formatting
+ de.uni_hildesheim.sse.services,
+ de.uni_hildesheim.sse.validation,
+ de.uni_hildesheim.sse.vilBuildLanguage,
+ de.uni_hildesheim.sse.vilBuildLanguage.impl,
+ de.uni_hildesheim.sse.vilBuildLanguage.util

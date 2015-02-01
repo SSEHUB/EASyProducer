@@ -115,7 +115,7 @@ public abstract class AbstractCallExpression extends Expression {
             if (isCandidate(desc, name, arguments)) {
                 boolean allEqual = true;
                 for (int p = 0; allEqual && p < arguments.length; p++) {
-                    allEqual &= desc.getParameterType(p) == arguments[p].inferType();
+                    allEqual &= TypeRegistry.equals(desc.getParameterType(p), arguments[p].inferType());
                 }
                 if (allEqual) {
                     result.add(desc);
@@ -371,6 +371,10 @@ public abstract class AbstractCallExpression extends Expression {
         } else if (allowConversion) {
             // check for candidates by conversion
             List<ConvertibleOperation> convertible = convertibleCandidates(operand, name, unnamed);
+            if (0 == convertible.size() && null != operand.getBaseType()) {
+                // also operand operations must be considered
+                convertible = convertibleCandidates(operand.getBaseType(), name, unnamed);
+            }
             if (1 == convertible.size()) {
                 ConvertibleOperation found = convertible.get(0);
                 // replace parameter expression by transparent call expression to conversion call
@@ -600,5 +604,21 @@ public abstract class AbstractCallExpression extends Expression {
      * @return the VIL signature 
      */
     public abstract String getVilSignature();
+
+    /**
+     * Returns the number of arguments.
+     * 
+     * @return the number of arguments
+     */
+    public abstract int getArgumentsCount();    
+    /**
+     * Returns the specified argument.
+     * 
+     * @param index the 0-based index of the argument to return
+     * @return the argument
+     * @throws IndexOutOfBoundsException in case that 
+     *   <code>index &lt; 0 || index &gt;={@link #getArgumentsCount()}</code>
+     */
+    public abstract CallArgument getArgument(int index);
 
 }

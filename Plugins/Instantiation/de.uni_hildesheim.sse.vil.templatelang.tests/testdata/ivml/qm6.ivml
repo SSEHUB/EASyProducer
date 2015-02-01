@@ -1,0 +1,156 @@
+project qm6 {
+
+    typedef NonEmptyString String with (NonEmptyString.size() > 0);
+    typedef PositiveInteger Integer with (PositiveInteger > 0);
+    enum BindingTime {compile, startup, runtime};
+    enum FieldType {INTEGER, STRING, BOOLEAN, REAL};
+
+    attribute BindingTime bindingTime = BindingTime.compile to qm6;
+
+    // basics 
+    
+    typedef Tuples sequenceOf(Tuple);
+    typedef Parameters setOf(Parameter);
+    typedef Fields sequenceOf(Field);
+    typedef FieldTypes sequenceOf(FieldType);
+    typedef Throughput Integer;
+    typedef Bandwidth Integer;
+
+    // for the moment we assume that we will not have nested Tuples
+    compound Tuple { // this conception is based on how the Storm describes the stream
+        Fields fields; 
+    } 
+    
+    compound Field { // in order to fit the data structure in the Storm
+        NonEmptyString name;
+        FieldType type;
+    }
+    
+    // parameters are different than fields as they may have a configured default value for startup
+    
+    compound Parameter {
+        NonEmptyString name;
+    }
+    
+    compound IntegerParameter refines Parameter {
+        assign(bindingTime = BindingTime.runtime) to {
+            Integer value; // this may get a "default/startup" value from the configuration
+        }
+    }
+    
+    compound StringParameter refines Parameter {
+        assign(bindingTime = BindingTime.runtime) to {
+            String value; // this may get a "default/startup" value from the configuration
+        }
+    }
+
+    compound RealParameter refines Parameter {
+        assign(bindingTime = BindingTime.runtime) to {
+            Real value; // this may get a "default/startup" value from the configuration
+        }
+    }
+
+    compound BooleanParameter refines Parameter {
+        assign(bindingTime = BindingTime.runtime) to {
+            Boolean value; // this may get a "default/startup" value from the configuration
+        }
+    }
+
+    // data mgt
+    
+    enum DataManagementStrategy {None, LeastRecentlyUsed, Aging};
+    
+    compound DataElement {
+        NonEmptyString name;
+        String storageLocation;
+        DataManagementStrategy strategy;
+        Integer timeLine;
+        // runtime observables
+        assign(bindingTime = BindingTime.runtime) to {
+            // examples for now
+            Throughput tuplesPerSecond;
+            Bandwidth bytesPerSecond;
+        } 
+        setOf(Constraint) constraints;
+        strategy <> null; 
+        strategy == DataManagementStrategy.Aging implies timeLine > 0;
+    }
+    
+    compound DataSource refines DataElement {
+        NonEmptyString host;
+        Tuples input;
+        Parameters parameters;
+    }
+    
+    sequenceOf(refTo(DataSource)) dataSources;
+    
+    // pipelines
+
+    enum Grouping {shuffleGrouping, fieldsGrouping, globalGrouping, directGrouping, allGrouping, customGrouping, noneGrouping}; 
+
+    abstract compound PipelineElement {
+        NonEmptyString name;
+        setOf(Constraint) constraints = {}; // user constraints
+    } 
+
+    // a flow among pipeline nodes
+    compound Flow refines PipelineElement {
+        refTo(PipelineNode) destination;
+        Grouping grouping;
+    }
+
+    abstract compound PipelineNode refines PipelineElement{
+    }
+
+    compound Source refines PipelineNode {
+        setOf(refTo(Flow)) output;
+        refTo(DataSource) source;
+    } 
+
+    compound Pipeline {
+        NonEmptyString name;
+        Integer numworkers;
+        setOf(refTo(Source)) sources;
+    }
+
+    // config
+    
+    DataSource spring;
+    spring = {
+        name = "Spring Financial Data",
+        storageLocation = "input/spring",
+        strategy = DataManagementStrategy.LeastRecentlyUsed,
+        host = "147.172.177.22",
+        timeLine = 0
+    }; 
+    
+    dataSources = {refBy(spring)};
+    
+    Flow f1_TSI;
+    f1_TSI = {
+        name = "src-normalize",
+        destination = null,
+        grouping = Grouping.shuffleGrouping     
+    }; 
+    
+    Source src_TSI;
+    src_TSI.name = "src";
+    src_TSI.output = {refBy(f1_TSI)};
+    src_TSI.source = dataSources[0];
+    
+    Pipeline pipTSI;
+    pipTSI = Pipeline {
+        name = "pipTSI",
+        sources = {refBy(src_TSI)},
+        numworkers = 1
+    };
+    
+    freeze {
+        spring;
+        dataSources;
+        f1_TSI;
+        src_TSI;
+        pipTSI;
+    }
+    
+}

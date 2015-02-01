@@ -40,6 +40,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegis
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypes;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
+import de.uni_hildesheim.sse.utils.modelManagement.IRestrictionEvaluationContext;
 import de.uni_hildesheim.sse.utils.modelManagement.IndentationConfiguration;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
@@ -192,7 +193,7 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
      * 
      * @see #isImplicit(VariableDeclaration)
      */
-    private void createImplicitVariables() {
+    protected void createImplicitVariables() {
         try {
             TypeDescriptor<? extends IVilType>[] tmp = TypeDescriptor.createArray(1);
             tmp[0] = IvmlTypes.projectType();
@@ -672,6 +673,16 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
     @Override
     protected void reload() {
         BuildModel.INSTANCE.reload(this);
+    }
+
+    @Override
+    public IRestrictionEvaluationContext getRestrictionEvaluationContext() {
+        return new RuntimeEnvironment();
+    }
+
+    @Override
+    public IMetaType getBaseType() {
+        return null;
     }
 
 }

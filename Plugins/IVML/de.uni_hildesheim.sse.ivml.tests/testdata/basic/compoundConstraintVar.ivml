@@ -1,0 +1,10 @@
+project testCompoundConstraintVar {
+
+    version v0;
+    compound position {
+        Integer i;
+        Constraint test = self.i > 0;
+    }
+
+    position p;
+}

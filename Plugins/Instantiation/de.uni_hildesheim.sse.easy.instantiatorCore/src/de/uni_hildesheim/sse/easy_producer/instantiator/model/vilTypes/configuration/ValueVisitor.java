@@ -13,9 +13,11 @@ import de.uni_hildesheim.sse.model.varModel.values.NullValue;
 import de.uni_hildesheim.sse.model.varModel.values.RealValue;
 import de.uni_hildesheim.sse.model.varModel.values.ReferenceValue;
 import de.uni_hildesheim.sse.model.varModel.values.StringValue;
+import de.uni_hildesheim.sse.model.varModel.values.VersionValue;
+import de.uni_hildesheim.sse.utils.modelManagement.Version;
 
 /**
- * Turns IVML values into VIL compatible values. No value was determined if
+ * Turns IVML values into VIL compatible values. No value is determined if
  * at least {@link #getValue()} returns null.
  * 
  * @author Holger Eichelberger
@@ -151,6 +153,13 @@ class ValueVisitor implements IValueVisitor {
     @Override
     public void visitNullValue(NullValue value) {
         this.value = TypeRegistry.NULL;
+    }
+
+    @Override
+    public void visitVersionValue(VersionValue value) {
+        // actually an internal, variables cannot have this type...
+        stringValue = Version.toString(value.getValue());
+        this.value = stringValue;
     }
 
 }

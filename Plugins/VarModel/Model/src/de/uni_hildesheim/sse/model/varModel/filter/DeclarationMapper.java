@@ -62,23 +62,17 @@ public class DeclarationMapper extends AbstractDeclarationFinder {
     }
 
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitDecisionVariableDeclaration(DecisionVariableDeclaration decl) {
         declarations.put(decl.getName(), decl);
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitAttributeAssignment(AttributeAssignment assignment) {
         // Not needed method, since this class should only find DecisionVariableDeclaration
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitCompoundAccessStatement(CompoundAccessStatement access) {
         // Not needed method, since this class should only find DecisionVariableDeclaration
     }

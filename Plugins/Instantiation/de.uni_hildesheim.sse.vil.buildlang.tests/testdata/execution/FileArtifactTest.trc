@@ -1,0 +1,6 @@
+-> main(Project, Configuration, Project) with (<project>, <config>, <project>)
+    MappingPath <- Mapping.tmp
+    artifact <- Mapping.tmp
+    -> getText(FileArtifact) with (Mapping.tmp) = <text>
+    artifactText <- <text>
+    -> append(Text, String) with (<text>, <pipeline name="pipTSI">) = <text>

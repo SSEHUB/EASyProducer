@@ -17,25 +17,19 @@ import com.google.inject.Injector;
  */
 public class StandaloneInitializer implements IResourceInitializer {
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public boolean forEclipse() {
         return false;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public XtextResourceSet createResourceSet(Injector injector) {
         XtextResourceSet resourceSet = injector.getInstance(XtextResourceSet.class);
         resourceSet.addLoadOption(XtextResource.OPTION_RESOLVE_ALL, Boolean.TRUE);
         return resourceSet;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public java.net.URI toNetUri(URI uri) throws URISyntaxException {
         return new java.net.URI(uri.toString());
     }

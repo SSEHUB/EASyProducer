@@ -35,6 +35,7 @@ public class CSTSemanticException extends IvmlException {
     public static final int AMBIGUITY = 10105;
     public static final int ILLEGAL = 10106;
     public static final int DECLARATOR_SEMANTICS = 10107;
+    public static final int UNRESOLVED = 10108;
     
     /**
      * Creates a new exception instance.

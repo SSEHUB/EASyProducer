@@ -79,6 +79,11 @@ public class FakeTypeDescriptor extends TypeDescriptor<IvmlElement> {
     }
 
     @Override
+    public boolean isMap() {
+        return false;
+    }
+    
+    @Override
     public boolean isSet() {
         return false;
     }
@@ -104,6 +109,11 @@ public class FakeTypeDescriptor extends TypeDescriptor<IvmlElement> {
     @Override
     public boolean isActualTypeOf(IMetaType type) {
         return false; // shall not be handled by IActualTypeProvider
+    }
+
+    @Override
+    public IMetaType getBaseType() {
+        return null;
     }
 
 }

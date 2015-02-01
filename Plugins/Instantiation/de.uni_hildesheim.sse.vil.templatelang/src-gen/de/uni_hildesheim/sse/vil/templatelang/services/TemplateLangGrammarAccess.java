@@ -1202,33 +1202,13 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//VersionSpec:
-	//	"with" "(" conflicts+=VersionedId ("," conflicts+=VersionedId)* ")";
+	//	"with" restriction=Expression;
 	public ExpressionDslGrammarAccess.VersionSpecElements getVersionSpecAccess() {
 		return gaExpressionDsl.getVersionSpecAccess();
 	}
 	
 	public ParserRule getVersionSpecRule() {
 		return getVersionSpecAccess().getRule();
-	}
-
-	//VersionedId:
-	//	"version" op=VersionOperator version=VERSION;
-	public ExpressionDslGrammarAccess.VersionedIdElements getVersionedIdAccess() {
-		return gaExpressionDsl.getVersionedIdAccess();
-	}
-	
-	public ParserRule getVersionedIdRule() {
-		return getVersionedIdAccess().getRule();
-	}
-
-	//VersionOperator:
-	//	"==" | ">" | "<" | ">=" | "<=";
-	public ExpressionDslGrammarAccess.VersionOperatorElements getVersionOperatorAccess() {
-		return gaExpressionDsl.getVersionOperatorAccess();
-	}
-	
-	public ParserRule getVersionOperatorRule() {
-		return getVersionOperatorAccess().getRule();
 	}
 
 	//ParameterList:
@@ -1607,7 +1587,8 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//Constant:
-	//	nValue=NumValue | sValue=STRING | qValue=QualifiedName | bValue=("true" | "false") | null="null";
+	//	nValue=NumValue | sValue=STRING | qValue=QualifiedName | bValue=("true" | "false") | null="null" | =>
+	//	version=VERSION;
 	public ExpressionDslGrammarAccess.ConstantElements getConstantAccess() {
 		return gaExpressionDsl.getConstantAccess();
 	}
@@ -1627,7 +1608,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//Identifier:
-	//	ID | VERSION | EXPONENT;
+	//	ID | VERSION | EXPONENT | "version";
 	public ExpressionDslGrammarAccess.IdentifierElements getIdentifierAccess() {
 		return gaExpressionDsl.getIdentifierAccess();
 	}
@@ -1648,9 +1629,8 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 		return getTypeAccess().getRule();
 	}
 
-	//// currently no nested types!
 	//TypeParameters:
-	//	"(" param+=Identifier ("," param+=Identifier)* ")";
+	//	"(" param+=Type ("," param+=Type)* ")";
 	public ExpressionDslGrammarAccess.TypeParametersElements getTypeParametersAccess() {
 		return gaExpressionDsl.getTypeParametersAccess();
 	}

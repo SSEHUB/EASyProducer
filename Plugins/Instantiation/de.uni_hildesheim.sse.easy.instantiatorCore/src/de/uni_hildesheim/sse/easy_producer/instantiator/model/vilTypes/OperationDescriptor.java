@@ -509,7 +509,7 @@ public abstract class OperationDescriptor implements IMetaOperation {
         }
         return ok;
     }
-    
+
     /**
      * Return whether this operation returns the result of iterating over a collection. Such an 
      * operation may be a quantor, a collector or a selector. Therefore, the operation
@@ -543,5 +543,19 @@ public abstract class OperationDescriptor implements IMetaOperation {
     public boolean isConversion() {
         return isConversion;
     }
+    
+    /**
+     * Returns whether a parameter shall be used as return type.
+     * 
+     * @return the parameter to be used as index number, negative if none
+     */
+    public abstract int useParameterAsReturn();
+    
+    /**
+     * Returns whether artifacts shall be stored before execution of this operation.
+     * 
+     * @return <code>true</code> if artifacts shall be stored, <code>false</code> else
+     */
+    public abstract boolean storeArtifactsBeforeExecution();
 
 }

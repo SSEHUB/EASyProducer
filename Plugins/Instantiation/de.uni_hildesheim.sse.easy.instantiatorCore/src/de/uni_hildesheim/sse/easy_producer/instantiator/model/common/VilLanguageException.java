@@ -45,7 +45,7 @@ public class VilLanguageException extends AbstractException {
     public static final int ID_RUNTIME_CYCLE = 50006;
 
     /**
-     * Defines an identifier if rules faild at runtime.
+     * Defines an identifier if rules failed at runtime.
      */
     public static final int ID_RUNTIME_RULE_FAILED = 50007;
 

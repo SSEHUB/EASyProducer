@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 University of Hildesheim, Software Systems Engineering
+ * Copyright 2009-2014 University of Hildesheim, Software Systems Engineering
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,9 @@
  */
 package de.uni_hildesheim.sse.model.confModel;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Queue;
 import java.util.Set;
 
 import de.uni_hildesheim.sse.Bundle;
@@ -60,8 +57,8 @@ import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
  */
 public class AssignmentResolver {
     
-    private Configuration config;
-    private EvaluationVisitor evaluator;
+    protected Configuration config;
+    protected EvaluationVisitor evaluator;
     
     /**
      * Specification of max evaluation loops should be done per {@link Project}.
@@ -76,8 +73,17 @@ public class AssignmentResolver {
      */
     public AssignmentResolver(Configuration config) {
         this.config = config;
-        evaluator = new EvaluationVisitor();
+        evaluator = createEvaluationVisitor();
         iterationLoops = 5;
+    }
+    
+    /**
+     * Factory method for creating the evaluation visitor.
+     * 
+     * @return the evaluation visitor
+     */
+    protected EvaluationVisitor createEvaluationVisitor() {
+        return new EvaluationVisitor();
     }
     
     /**
@@ -89,20 +95,15 @@ public class AssignmentResolver {
      */
     public void resolve() {
         // Stack of importedProject (start with inner most imported project)
-        Set<Project> resolvedProjects = new HashSet<Project>();
-        Deque<Project> projects = new ArrayDeque<Project>();
+        List<Project> projects = new ArrayList<Project>();
         findImportedProjects(projects);
         
-        while (!projects.isEmpty()) {
-            Project project = projects.removeFirst();
-            // Same project may be imported more than once, avoid multiple resolution
-            if (!resolvedProjects.contains(project)) {
-                evaluator.setDispatchScope(project);
-                resolveDefaultValues(project);
-                resolveAssignments(project);
-                // TODO do incremental freezing in here -> required by interfaces with propagation constraints
-            }
-            resolvedProjects.add(project);
+        for (int p = 0; p < projects.size(); p++) {
+            Project project = projects.get(p);
+            evaluator.setDispatchScope(project);
+            resolveDefaultValues(project);
+            resolveAssignments(project);
+            // TODO do incremental freezing in here -> required by interfaces with propagation constraints
         }
     }
 
@@ -111,7 +112,7 @@ public class AssignmentResolver {
      * Resolves default values of variable declarations.
      * @param project Project The current project for which assignments shall be resolved.
      */
-    private void resolveDefaultValues(Project project) {
+    protected void resolveDefaultValues(Project project) {
         DeclarationFinder finder = new DeclarationFinder(project, FilterType.NO_IMPORTS, null);
         List<AbstractVariable> variables = finder.getVariableDeclarations(VisibilityType.ALL);
         for (AbstractVariable decl : variables) {
@@ -125,7 +126,7 @@ public class AssignmentResolver {
      * @param decl The {@link AbstractVariable} for which the default value should be resolved.
      * @param variable the instance of <tt>decl</tt>.
      */
-    private void resolveDefaultValueForDeclaration(AbstractVariable decl, IDecisionVariable variable) {
+    protected void resolveDefaultValueForDeclaration(AbstractVariable decl, IDecisionVariable variable) {
         IDatatype type = decl.getType();
         if (Compound.TYPE.isAssignableFrom(type)) {
             Compound cmpType = (Compound) type;
@@ -159,7 +160,7 @@ public class AssignmentResolver {
      * Resolves assignments.
      * @param project Project The current project for which assignments shall be resolved.
      */
-    private void resolveAssignments(Project project) {
+    protected void resolveAssignments(Project project) {
         List<Constraint> unresolvedConstraints = new ArrayList<Constraint>();
         ConstraintFinder finder = new ConstraintFinder(project, false);
         List<Constraint> constraints = finder.getConstraints();
@@ -176,7 +177,7 @@ public class AssignmentResolver {
                     unresolvedConstraints.add(constraint);
                 } else if (evaluator.constraintFailed()) {
                     // Check whether the constraint was violated
-                    conflictingConstraint(cst);
+                    conflictingConstraint(constraint);
                 }
                 
                 evaluator.clear();
@@ -197,10 +198,10 @@ public class AssignmentResolver {
     }
     
     /**
-     * Will be called after a failure was detected in a {@link ConstraintSyntaxTree}.
-     * @param cst The violated {@link ConstraintSyntaxTree}.
+     * Will be called after a failure was detected in a {@link Constraint}.
+     * @param constraint The violated {@link Constraint}.
      */
-    protected void conflictingConstraint(ConstraintSyntaxTree cst) {
+    protected void conflictingConstraint(Constraint constraint) {
         // Here is no action needed, but maybe in a sub class.
     }
     
@@ -216,11 +217,12 @@ public class AssignmentResolver {
     /**
      * Fills the stack of imported {@link Project}s.
      * The innermost import will be on top of the stack ({@link Deque}). The main {@link Project} of the
-     * {@link Configuration} will be on bottom.
+     * {@link Configuration} will be on bottom. No project will be listed multiple times.
      * @param projects The list of all included projects, which are used inside the configuration.
      */
-    private void findImportedProjects(Deque<Project> projects) {
-        Queue<Project> imports = new ArrayDeque<Project>();
+    private void findImportedProjects(List<Project> projects) {
+        findImportedProjects(config.getProject(), projects, new HashSet<Project>());
+        /*Queue<Project> imports = new ArrayDeque<Project>();
         Project mainProject = config.getProject();
         imports.add(mainProject);
         projects.addFirst(mainProject);
@@ -234,6 +236,35 @@ public class AssignmentResolver {
                     projects.addFirst(importedProject);
                 }
             }
+        }*/
+    }
+
+    /**
+     * Fills the stack of imported {@link Project}s recursively.
+     * @param project the project to be considered
+     * @param projects the list of all included projects (modified as a side effect)
+     * @param done already considered projects 
+     */
+    private void findImportedProjects(Project project, List<Project> projects, Set<Project> done) {
+        if (!done.contains(project)) {
+            done.add(project);
+
+            int minPos = -1;
+            for (int i = 0, n = project.getImportsCount(); i < n; i++) {
+                Project importedProject = project.getImport(i).getResolved();
+                if (null != importedProject) {
+                    findImportedProjects(importedProject, projects, done);
+                }
+            }
+            // TODO this is not nice, minPos in upper loop may change due to further insertions
+            for (int i = 0, n = project.getImportsCount(); i < n; i++) {
+                Project importedProject = project.getImport(i).getResolved();
+                if (null != importedProject) {
+                    minPos = Math.max(minPos, projects.indexOf(importedProject));
+                }
+            }
+            projects.add(minPos + 1, project);
         }
     }
+    
 }

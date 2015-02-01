@@ -59,6 +59,21 @@ public interface Set<T> extends Collection<T> {
     public Set<T> including(Collection<T> set);
     
     /**
+     * Adds an element to this set.
+     * 
+     * @param element the element to be added
+     * @return <code>element</code>
+     */
+    public T add(T element);
+    
+    /**
+     * Removes the given element from this set.
+     * 
+     * @param element the elemen to be removed
+     */
+    public void remove(T element);
+    
+    /**
      * Selects elements in this set according to the given expression.
      * 
      * @param evaluator the evaluator (results must evaluate to Boolean results)

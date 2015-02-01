@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
@@ -13,8 +14,14 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.VilExcept
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.IModelElement;
 import de.uni_hildesheim.sse.model.varModel.Project;
+import de.uni_hildesheim.sse.model.varModel.datatypes.BooleanType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
+import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
+import de.uni_hildesheim.sse.model.varModel.datatypes.IntegerType;
+import de.uni_hildesheim.sse.model.varModel.datatypes.RealType;
+import de.uni_hildesheim.sse.model.varModel.datatypes.Sequence;
+import de.uni_hildesheim.sse.model.varModel.datatypes.StringType;
 
 /**
  * Implements a dynamic type descriptor for IVM decision variables. Instances of this
@@ -24,7 +31,9 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
  * @author Holger Eichelberger
  */
 class IvmlTypeDescriptor extends AbstractIvmlTypeDescriptor {
-  
+
+    private TypeDescriptor<? extends IVilType> baseType;
+    
     /**
      * Creates a new type descriptor.
      * 
@@ -72,8 +81,26 @@ class IvmlTypeDescriptor extends AbstractIvmlTypeDescriptor {
         setOperations(operations.values());
         List<OperationDescriptor> conversions = new ArrayList<OperationDescriptor>();
         conversions.add(new IvmlConversionOperationDescriptor(this));
+        if (DerivedDatatype.TYPE.isAssignableFrom(ivmlType)) {
+            IDatatype baseType = DerivedDatatype.resolveToBasis(ivmlType);
+            TypeDescriptor<? extends IVilType> vilBaseType = resolver.getTypeRegistry().getType(baseType.getName());
+            if (de.uni_hildesheim.sse.model.varModel.datatypes.Set.TYPE.isAssignableFrom(baseType)) {
+                IvmlOperationDescriptor desc = new IvmlSetConversionOperationDescriptor(this, vilBaseType);
+                conversions.add(desc);
+                this.baseType = desc.getReturnType();
+            } else if (Sequence.TYPE.isAssignableFrom(baseType)) {
+                IvmlOperationDescriptor desc = new IvmlSequenceConversionOperationDescriptor(this, vilBaseType);
+                conversions.add(desc);
+                this.baseType = desc.getReturnType();
+            }
+        }
         addConversionOperations(conversions);
         setConversions(conversions);
+    }
+    
+    @Override
+    public IMetaType getBaseType() {
+        return baseType;
     }
     
     @Override
@@ -93,6 +120,9 @@ class IvmlTypeDescriptor extends AbstractIvmlTypeDescriptor {
                 }
             } while (!assignable && null != iter);
         }
+        if (!assignable && null != baseType) {
+            assignable = baseType.isAssignableFrom(desc);
+        }
         return assignable;
     }
 
@@ -108,10 +138,26 @@ class IvmlTypeDescriptor extends AbstractIvmlTypeDescriptor {
             objectType = att.getDecisionVariable().getDeclaration().getType();
         } else if (object instanceof EnumValue) {
             objectType = ((EnumValue) object).getDatatype();
+        } else if (object instanceof de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set) {
+            objectType = de.uni_hildesheim.sse.model.varModel.datatypes.Set.TYPE;
+        } else if (object instanceof de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Sequence) {
+            objectType = de.uni_hildesheim.sse.model.varModel.datatypes.Sequence.TYPE;
+        } else if (object instanceof Integer) {
+            objectType = IntegerType.TYPE;
+        } else if (object instanceof Double) {
+            objectType = RealType.TYPE;
+        } else if (object instanceof String) {
+            objectType = StringType.TYPE;
+        }  else if (object instanceof Boolean) {
+            objectType = BooleanType.TYPE;
         }
-        if (null != objectType) {
+        if (null != objectType) {            
             isInstance = getDatatype().isAssignableFrom(objectType);
-        }
+            if (!isInstance && null != baseType) {
+                IDatatype bType = DerivedDatatype.resolveToBasis(getDatatype());
+                isInstance = objectType.isAssignableFrom(bType); // objectType is raw
+            }
+        } 
         return isInstance;
     }
 

@@ -32,6 +32,7 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Sequence;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Set;
 import de.uni_hildesheim.sse.model.varModel.datatypes.StringType;
+import de.uni_hildesheim.sse.model.varModel.datatypes.VersionType;
 
 /**
  * Factory for converting {@link AbstractVariable} into {@link DecisionVariable}.
@@ -101,108 +102,83 @@ public class VariableCreator implements IDatatypeVisitor {
         return var;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitDatatype(IDatatype datatype) {
         // Not needed
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitAnyType(AnyType datatype) {
         // Not needed
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitMetaType(MetaType datatype) {
         // TODO Not needed
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitDerivedType(DerivedDatatype datatype) {
         datatype.getBasisType().accept(this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitSet(Set set) {
         variable = new SetVariable(varDecl, parent, isVisible);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitSequence(Sequence sequence) {
         variable = new SequenceVariable(varDecl, parent, isVisible);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitReference(Reference reference) {
         variable = new BasisVariable(parent, varDecl, isVisible);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitBooleanType(BooleanType type) {
         variable = new BasisVariable(parent, varDecl, isVisible);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitStringType(StringType type) {
         variable = new BasisVariable(parent, varDecl, isVisible);
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitConstraintType(ConstraintType type) {
         variable = new BasisVariable(parent, varDecl, isVisible);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitIntegerType(IntegerType type) {
         variable = new BasisVariable(parent, varDecl, isVisible);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitRealType(RealType type) {
         variable = new BasisVariable(parent, varDecl, isVisible);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitCompoundType(Compound compound) {
         variable = new CompoundVariable(parent, varDecl, isVisible);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitEnumType(Enum enumType) {
         variable = new BasisVariable(parent, varDecl, isVisible);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitOrderedEnumType(OrderedEnum enumType) {
         variable = new BasisVariable(parent, varDecl, isVisible);
+    }
+
+    @Override
+    public void visitVersionType(VersionType type) {
+        // this is an internal type, variables actually cannot hold values of this type
     }
 }

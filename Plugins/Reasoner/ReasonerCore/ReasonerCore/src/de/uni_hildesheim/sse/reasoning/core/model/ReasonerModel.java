@@ -20,6 +20,7 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.CustomDatatype;
 import de.uni_hildesheim.sse.model.varModel.filter.DatatypeFinder;
 import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
+import de.uni_hildesheim.sse.reasoning.core.Bundle;
 import de.uni_hildesheim.sse.reasoning.core.model.datatypes.CompoundType;
 import de.uni_hildesheim.sse.reasoning.core.model.datatypes.ReasonerDatatype;
 import de.uni_hildesheim.sse.reasoning.core.model.datatypes.ReasonerTypeFactory;
@@ -28,6 +29,8 @@ import de.uni_hildesheim.sse.reasoning.core.model.variables.ReasonerVariable;
 import de.uni_hildesheim.sse.reasoning.core.model.variables.ReasonerVariableFactory;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.AttributeValues;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerConfiguration;
+import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
+import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
 
 /**
  * A structured model containing relevant information about
@@ -37,6 +40,9 @@ import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerConfiguration;
  *
  */
 public class ReasonerModel implements IConstraintContainer, Iterable<ReasonerVariable>, IVariableContainer {
+    
+    private static final EASyLogger LOGGER
+        = EASyLoggerFactory.INSTANCE.getLogger(ReasonerModel.class, Bundle.ID);
     
     // Project information
     private Project project;
@@ -173,8 +179,8 @@ public class ReasonerModel implements IConstraintContainer, Iterable<ReasonerVar
                     }
                 }
             }
-        }
-        
+        }        
+        getImportStats();        
     }
 
     /**
@@ -188,7 +194,17 @@ public class ReasonerModel implements IConstraintContainer, Iterable<ReasonerVar
      */
     public ReasonerModel(Project project, ReasonerConfiguration settings) {
         // Create temporary Configuration and IDecisionVariables to unify the handling of reasoning model.
-        this(new Configuration(project), settings);
+        this(new Configuration(project), settings); 
+    }
+    
+    /** 
+     * Method for retrieved stats about imported porjects and overall number of registered constraints.
+     */
+    private void getImportStats() {
+        for (int i = 0; i < this.getProject().getImportsCount(); i++) {
+            LOGGER.debug("Imported project: " + this.getProject().getImport(i).getName());
+        }
+        LOGGER.debug("Overall number of constraints: " + this.getConstraintCount());
     }
 
     /**

@@ -179,6 +179,26 @@ public class ExecutionTests extends AbstractTest {
     public void testSimple() throws IOException {
         assertEqual("simple");
     }
+    
+    /**
+     * Tests enumerating sequences.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testSequence() throws IOException {
+        assertEqual("sequence");
+    }
+    
+    /**
+     * Tests the map operation for sequences.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testSequence1() throws IOException {
+        assertEqual("sequence1");
+    }
 
     /**
      * Tests simple defs. This is an exceptional case as "value" in 
@@ -289,6 +309,16 @@ public class ExecutionTests extends AbstractTest {
     @Test
     public void testLoop4() throws IOException {
         assertEqual("loop4");
+    }
+
+    /**
+     * Tests sub-string statements (contributed by C. Qin/QM).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testString1() throws IOException {
+        assertEqual("string1");
     }
     
     /**
@@ -609,6 +639,26 @@ public class ExecutionTests extends AbstractTest {
     }
 
     /**
+     * Tests a Java path.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testJavaPath() throws IOException {
+        assertEqual("javaPath");
+    }
+    
+    /**
+     * Tests some map operations.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testMaps() throws IOException {
+        assertEqual("maps");
+    }
+    
+    /**
      * Tests a default Java extension for Random numbers (inspired by K. Schmid).
      * 
      * @throws IOException should not occur
@@ -730,6 +780,127 @@ public class ExecutionTests extends AbstractTest {
     @Test
     public void testAdvice8() throws IOException {
         assertEqualWithIvml("advice8", "adviceTestVM8");
+    }
+
+    /**
+     * Tests an a strange null situation in VTL (contributed by C. Qin, QualiMaster).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testQm1() throws IOException {
+        assertEqualWithIvml("qm1", "qm1");
+    }
+    
+    /**
+     * Tests actual types in collections (contributed by C. Qin, QualiMaster).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testQm1o1() throws IOException {
+        assertEqualWithIvml("qm1.1", "qm1");
+    }
+
+    /**
+     * Tests selections on IVML types (contributed by C. Qin, QualiMaster).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testQm1o2() throws IOException {
+        assertEqualWithIvml("qm1.2", "qm1");
+    }
+    
+    /**
+     * Tests toSequence on IVML types (contributed by C. Qin, QualiMaster).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testQm1o3() throws IOException {
+        assertEqualWithIvml("qm1.3", "qm1");
+    }
+    
+    /**
+     * Tests typedefed operation on IVML types (contributed by C. Qin, QualiMaster). Negative case.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testQm1o4() throws IOException {
+        assertEqualWithIvml("qm1.4", "qm1");
+    }
+
+    /**
+     * Tests typedefed operation on IVML types (contributed by C. Qin, QualiMaster). Positive case.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testQm1o5() throws IOException {
+        assertEqualWithIvml("qm1.5", "qm1_5");
+    }
+    
+    /**
+     * Tests an a strange null situation in VTL (contributed by C. Qin, QualiMaster).
+     * The same as {@link #testQm1()} but with an explicit "null" value.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testQm2() throws IOException {
+        assertEqualWithIvml("qm2", "qm1");
+    }
+
+    /**
+     * Tests an a switch problem in VTL (contributed by C. Qin, QualiMaster).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testQm3() throws IOException {
+        assertEqualWithIvml("qm3", "qm1");
+    }
+
+    /**
+     * Tests an a switch problem in VTL (contributed by C. Qin, QualiMaster).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testQm4() throws IOException {
+        assertEqualWithIvml("qm4", "qm1");
+    }
+
+    /**
+     * Tests an a is-defined/is-null in VTL (contributed by C. Qin, QualiMaster).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testQm5() throws IOException {
+        assertEqualWithIvml("qm5", "qm5");
+    }
+    
+    /**
+     * Tests an access problem in VTL (contributed by C. Qin, QualiMaster).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testQm6() throws IOException {
+        assertEqualWithIvml("qm6", "qm6");
+    }
+
+    /**
+     * Tests an nested maps in VTL (contributed by C. Qin, QualiMaster).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testQm7() throws IOException {
+        assertEqualWithIvml("qm7", "qm7");
     }
 
 }

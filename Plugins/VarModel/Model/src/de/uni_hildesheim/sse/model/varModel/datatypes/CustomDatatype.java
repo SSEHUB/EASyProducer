@@ -42,24 +42,13 @@ public abstract class CustomDatatype extends ContainableModelElement implements 
         super(name, parent);
         this.singleton = singleton;
     }
-
-    /*
-     * Method to set the name of the Object.    
-     * @param name 
-     */
-    /*public void setName(String name) {
-    }*/
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public final Operation getOperation(int index) {
         return singleton.getOperation(index);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public final int getOperationCount() {
         return singleton.getOperationCount();
     }
@@ -97,37 +86,27 @@ public abstract class CustomDatatype extends ContainableModelElement implements 
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public IDatatype getGenericType(int index) {
         throw new IndexOutOfBoundsException();
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public int getGenericTypeCount() {
         return 0;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public InternalConstraint[] createConstraints(AbstractVariable declaration) throws CSTSemanticException {
         return null;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public boolean isPseudoType() {
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public boolean isPrimitive() {
         return false;
     }

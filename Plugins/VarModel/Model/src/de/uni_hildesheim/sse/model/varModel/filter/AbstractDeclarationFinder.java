@@ -49,109 +49,78 @@ abstract class AbstractDeclarationFinder extends AbstractProjectVisitor {
         super(project, filterType);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitEnum(Enum eenum) {
         // Not needed method, since this class should only find DecisionVariableDeclaration       
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitOrderedEnum(OrderedEnum eenum) {
         // Not needed method, since this class should only find DecisionVariableDeclaration       
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitCompound(Compound compound) {
         // Not needed method, since this class should only find top-level DecisionVariableDeclarations
         // in case that also compounds shall be visited, please visit the attributeAssignments in compound
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitDerivedDatatype(DerivedDatatype datatype) {
         // Not needed method, since this class should only find DecisionVariableDeclaration        
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitEnumLiteral(EnumLiteral literal) {
         // Not needed method, since this class should only find DecisionVariableDeclaration        
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitReference(Reference reference) {
         // Not needed method, since this class should only find DecisionVariableDeclaration        
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitSequence(Sequence sequence) {
         // Not needed method, since this class should only find DecisionVariableDeclaration       
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitSet(Set set) {
         // Not needed method, since this class should only find DecisionVariableDeclaration
-        
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitAttribute(Attribute attribute) {
         // Not needed method, since this class should only find DecisionVariableDeclaration
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitConstraint(Constraint constraint) {
         // Not needed method, since this class should only find DecisionVariableDeclaration
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitFreezeBlock(FreezeBlock freeze) {
         // Not needed method, since this class should only find DecisionVariableDeclaration
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitOperationDefinition(OperationDefinition opdef) {
         // Not needed method, since this class should only find DecisionVariableDeclaration
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitPartialEvaluationBlock(PartialEvaluationBlock block) {
         // Not needed method, since this class should only find DecisionVariableDeclaration
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitProjectInterface(ProjectInterface iface) {
         // Not needed method, since this class should only find DecisionVariableDeclaration
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitComment(Comment comment) {
         // Not needed method, since this class should only find DecisionVariableDeclaration
     }

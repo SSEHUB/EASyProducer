@@ -6,11 +6,14 @@ import java.io.File;
 import java.io.IOException;
 
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactFactory;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.defaultInstantiators.RandomDouble;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
 
 /**
  * Tests for the basic language.
@@ -49,6 +52,16 @@ public class ExecutionTests extends AbstractExecutionTest {
     public void testLoadProperties() throws IOException {
         assertEqual("loadProperties");
     }
+
+    /**
+     * Tests loading OS specific properties (contributed by S. Bender).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testLoadPropertiesOS() throws IOException {
+        assertEqual("loadPropertiesOs");
+    }
     
     /**
      * Tests the load properties element (failing test due to overriden constant).
@@ -80,6 +93,26 @@ public class ExecutionTests extends AbstractExecutionTest {
         assertEqual("boolean");
     }
 
+    /**
+     * Tests alternative expressions with blocks.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testAlternative() throws IOException {
+        assertEqual("alternative");
+    }
+
+    /**
+     * Tests alternative expressions without blocks.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testAlternative1() throws IOException {
+        assertEqual("alternative1");
+    }
+    
     /**
      * Tests the random "instantiators" (inspired by K. Schmid).
      * 
@@ -113,6 +146,16 @@ public class ExecutionTests extends AbstractExecutionTest {
     }
 
     /**
+     * Tests basic collection functions (contributed by C. Qin, QM).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testCollections2() throws IOException {
+        assertEqual("collections2");
+    }
+    
+    /**
      * Tests basic map functions.
      * 
      * @throws IOException should not occur
@@ -120,6 +163,16 @@ public class ExecutionTests extends AbstractExecutionTest {
     @Test
     public void testMap() throws IOException {
         assertEqual("mapTest");
+    }
+
+    /**
+     * Tests simplified map initialization (contributed by C. Qin, QM).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testMap1() throws IOException {
+        assertEqual("mapTest1");
     }
     
     /**
@@ -212,6 +265,16 @@ public class ExecutionTests extends AbstractExecutionTest {
     @Test
     public void testSequences() throws IOException {
         assertSelfInstantiate("sequences");
+    }
+    
+    /**
+     * Tests the functionality of enumerating sequences.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testSequences1() throws IOException {
+        assertSelfInstantiate("sequences1");
     }
 
     /**
@@ -308,7 +371,7 @@ public class ExecutionTests extends AbstractExecutionTest {
      */
     @Test
     public void testVtl() throws IOException {
-        assertSelfInstantiate("vtl", "main", new SelfInstantiationAsserter() {
+        assertSelfInstantiate("vtl", "main", new SelfInstantiationAsserterAdapter() {
 
             @Override
             public void assertIn(File base) {
@@ -326,13 +389,32 @@ public class ExecutionTests extends AbstractExecutionTest {
     }
     
     /**
+     * The execution of VTL templates.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testVtl1() throws IOException {
+        assertSelfInstantiate("vtl1", "main", new SelfInstantiationAsserterAdapter() {
+
+            @Override
+            public void assertIn(File base) {
+                File file = new File(base, "test2.txt");
+                File expected = new File(base, "templates/test2.vtl.expected");
+                assertFileEqualitySafe(file, expected);
+            }
+
+        });
+    }
+    
+    /**
      * The execution of a Velocity template.
      * 
      * @throws IOException should not occur
      */
     @Test
     public void testVelocity() throws IOException {
-        assertSelfInstantiate("velocity", "main", new SelfInstantiationAsserter() {
+        assertSelfInstantiate("velocity", "main", new SelfInstantiationAsserterAdapter() {
 
             @Override
             public void assertIn(File base) {
@@ -343,6 +425,26 @@ public class ExecutionTests extends AbstractExecutionTest {
             
         });
     }
+    
+    /**
+     * The execution of a Velocity template.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testFileArtifact() throws IOException {
+        assertSelfInstantiate("FileArtifactTest", "main", new SelfInstantiationAsserterAdapter() {
+
+            @Override
+            public void assertIn(File base) {
+                File file = new File(base, "Mapping.tmp");
+                File expected = new File(base, "Mapping.tmp.expected");
+                assertFileEqualitySafe(file, expected);
+            }
+            
+        });
+    }
+
     
     /**
      * The execution of conditional rules with explicit dependencies.
@@ -447,4 +549,174 @@ public class ExecutionTests extends AbstractExecutionTest {
     public void testPL3() throws IOException {
         assertSelfInstantiate("PL_3/EASy/PL_3");
     }
+    
+    /**
+     * Tests some XML cases.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testXML1() throws IOException {
+        assertSelfInstantiate("xml1"); // file not created
+    }
+
+    /**
+     * Tests some XML cases.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testXML2() throws IOException {
+        assertSelfInstantiate("xml2", "main", new SelfInstantiationAsserter() {
+
+            @Override
+            public void assertIn(File base) {
+                File file = new File(base, "xml2File.xml");
+                File expected = new File(base, "xml2File.xml.expected");
+                assertFileEqualitySafe(file, expected);
+            }
+            
+            @Override
+            public void deleteBetween(File base) {
+                File file = new File(base, "xml2File.xml");
+                try {
+                    ArtifactFactory.createArtifact(file).delete();
+                } catch (ArtifactException e) {
+                    e.printStackTrace();
+                }
+            }
+            
+        });
+    }
+
+    /**
+     * Tests the rename operation for file artifacts.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testRename() throws IOException {
+        assertSelfInstantiate("rename", "main", new SelfInstantiationAsserter() {
+
+            @Override
+            public void assertIn(File base) {
+                File file = new File(base, "rename.txt");
+                Assert.assertFalse(file.exists());
+                file = new File(base, "rename_0.txt");
+                Assert.assertTrue(file.exists());
+            }
+
+            @Override
+            public void deleteBetween(File base) {
+                // reset test situation
+                File fileAfter = new File(base, "rename_0.txt");
+                File fileBefore = new File(base, "rename.txt");
+                try {
+                    ArtifactFactory.createArtifact(fileAfter).rename(fileBefore.getPath());
+                } catch (ArtifactException e) {
+                    e.printStackTrace();
+                }
+            }
+            
+        });
+        
+    }
+
+    /**
+     * Tests the rename operation for file artifacts.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testRename1() throws IOException {
+        assertSelfInstantiate("rename1", "main", new SelfInstantiationAsserterAdapter() {
+
+            @Override
+            public void assertIn(File base) {
+                File file = new File(base, "rename1.txt");
+                Assert.assertFalse(file.exists());
+                file = new File(base, "rename_1.txt");
+                Assert.assertTrue(file.exists());
+            }
+
+            @Override
+            public void deleteBetween(File base) {
+                // reset test situation
+                File fileAfter = new File(base, "rename_1.txt");
+                File fileBefore = new File(base, "rename1.txt");
+                try {
+                    ArtifactFactory.createArtifact(fileAfter).rename(fileBefore.getPath());
+                } catch (ArtifactException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        });
+        
+    }
+
+    /**
+     * Tests auto-storing artifacts (rename after).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testStoreArtifact1() throws IOException {
+        assertSelfInstantiate("storeArtifact1", "main", new SelfInstantiationAsserterAdapter() {
+
+            @Override
+            public void assertIn(File base) {
+                File file = new File(base, "renStoreArtifact1.txt");
+                Assert.assertTrue(file.exists());
+                File expected = new File(base, "renStoreArtifact1.txt.expected");
+                assertFileEqualitySafe(file, expected);
+            }
+
+            @Override
+            public void deleteBetween(File base) {
+                // reset test situation
+                File file = new File(base, "renStoreArtifact1.txt");
+                try {
+                    ArtifactFactory.createArtifact(file).delete();
+                } catch (ArtifactException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        });
+        
+    }
+
+    /**
+     * Tests auto-storing artifacts (rename after).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testStoreArtifact2() throws IOException {
+        assertSelfInstantiate("storeArtifact2", "main", new SelfInstantiationAsserterAdapter() {
+
+            @Override
+            public void assertIn(File base) {
+                File file = new File(base, "storeArtifact2.txt");
+                Assert.assertTrue(file.exists());
+                File expected = new File(base, "storeArtifact2.txt.expected");
+                assertFileEqualitySafe(file, expected);
+            }
+
+            @Override
+            public void deleteBetween(File base) {
+                // reset test situation
+                File file = new File(base, "storeArtifact2.txt");
+                try {
+                    ArtifactFactory.createArtifact(file).delete();
+                } catch (ArtifactException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        });
+        
+    }
+
 }

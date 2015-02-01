@@ -52,16 +52,22 @@ ScriptContents:
 RuleDeclaration:
     {RuleDeclaration}
     (
+        (type = Type)?
         (modifier = RuleModifier)?
         name=Identifier
         '(' (paramList=ParameterList)? ')'
         '='
     )?
+    conditions = RuleConditions?
+    block=RuleElementBlock
+    ';'?
+;
+
+RuleConditions:
+    {RuleConditions}
     (postcondition+=LogicalExpression)?
     ':'
     (preconditions+=LogicalExpression (',' preconditions+=LogicalExpression)*)?
-    block=RuleElementBlock
-    ';'?
 ;
 
 RuleElementBlock:
@@ -74,21 +80,20 @@ RuleElementBlock:
 RuleElement:
     varDecl=VariableDeclaration
     | exprStmt=ExpressionStatement
-    | deferDecl=DeferDeclaration 
 ;
 
 RuleModifier:
     protected = 'protected'
 ;
 
-// unsure
-DeferDeclaration:
-    'defer' name=Identifier
-    ('requires' depends+=Identifier (',' depends+=Identifier)*)?
-    ';'
-;
-
 // ----------------------- overriding and extending parts of the expression grammar -------------------
+
+ExpressionStatement:
+    (
+      (var=Identifier '=')? 
+       expr=Expression ';') 
+    | alt=Alternative ';'?
+    ;
 
 PrimaryExpression:  
     otherEx=ExpressionOrQualifiedExecution 
@@ -115,6 +120,14 @@ MapVariable:
 Map:
     'map' '(' var+=MapVariable (',' var+=MapVariable)* separator=('=' | ':') expr=Expression ')'
     block=RuleElementBlock
+;
+
+Alternative:
+    'if' '(' expr=Expression ')' if=StatementOrBlock (=> 'else' else=StatementOrBlock)?
+;
+    
+StatementOrBlock:
+    exStmt = ExpressionStatement | block = RuleElementBlock
 ;
 
 Join: 

@@ -51,9 +51,7 @@ public class CompoundAccessStatement extends ContainableModelElement implements 
         visitor.visitCompoundAccessStatement(this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public IDatatype getType() {
         IDatatype result = AnyType.TYPE; // shall not happen
         AbstractVariable slotVar = getSlotDeclaration();

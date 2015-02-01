@@ -87,17 +87,11 @@ public class ContainerInitializer extends ConstraintSyntaxTree {
         return expressions[index];
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void accept(IConstraintTreeVisitor visitor) {
         visitor.visitContainerInitializer(this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public IDatatype inferDatatype() throws CSTSemanticException {
         return type;

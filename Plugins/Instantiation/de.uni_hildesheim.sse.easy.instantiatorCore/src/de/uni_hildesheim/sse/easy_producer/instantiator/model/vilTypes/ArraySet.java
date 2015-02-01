@@ -65,7 +65,7 @@ public class ArraySet<T> extends AbstractArrayWrapper<T> implements Set<T> {
      * @param <T> the element type
      */
     @Invisible
-    public static final <T> Set<T> empty(Class<? extends IVilType> param) {
+    public static final <T extends IVilType> Set<T> empty(Class<T> param) {
         return empty(param, TypeRegistry.DEFAULT);
     }
     
@@ -135,6 +135,19 @@ public class ArraySet<T> extends AbstractArrayWrapper<T> implements Set<T> {
     @Override
     public T projectSingle() {
         return 1 == size() ? getArray()[0] : null;
+    }
+
+    @Override
+    public T add(T element) {
+        extendCapacity(1);
+        T[] array = getArray();
+        array[array.length - 1] = element;
+        return element;
+    }
+
+    @Override
+    public void remove(T element) {
+        decreaseCapacity(1);
     }
 
 }

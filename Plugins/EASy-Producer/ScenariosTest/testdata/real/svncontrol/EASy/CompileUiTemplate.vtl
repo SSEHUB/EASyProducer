@@ -4,8 +4,8 @@ template CompileUiTemplate(Configuration config, FileArtifact target, FileArtifa
     // assuming a JavaFileArtifact, it would provide access to its JavaPath and its annotations...
 
     def main(Configuration config, FileArtifact target, FileArtifact injectionTarget, DecisionVariable var) {
-        JavaPath itPath = injectionTarget.path().toJavaPath();
-        JavaPath tPath = target.path().toJavaPath();
+        JavaPath itPath = injectionTarget.path().toJavaPath().getPathSegmentsPath();
+        JavaPath tPath = target.path().toJavaPath().getPathSegmentsPath();
         String package = tPath.package();
         String name = tPath.name();
         String itName = itPath.name();

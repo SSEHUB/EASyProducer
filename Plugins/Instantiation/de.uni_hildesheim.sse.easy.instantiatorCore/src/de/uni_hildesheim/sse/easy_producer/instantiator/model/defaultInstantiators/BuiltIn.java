@@ -1,5 +1,6 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.defaultInstantiators;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateLangExecution;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 
 /**
@@ -22,6 +23,9 @@ public class BuiltIn {
             TypeRegistry.DEFAULT.register(VilTemplateProcessor.class);
             TypeRegistry.DEFAULT.register(RandomDouble.class);
             TypeRegistry.DEFAULT.register(RandomInteger.class);
+            TypeRegistry.DEFAULT.register(IntegerSequenceConstructors.class);
+            
+            TemplateLangExecution.registerDefaultExtension(DefaultVtlJavaExtension.class);
         }
     }
 

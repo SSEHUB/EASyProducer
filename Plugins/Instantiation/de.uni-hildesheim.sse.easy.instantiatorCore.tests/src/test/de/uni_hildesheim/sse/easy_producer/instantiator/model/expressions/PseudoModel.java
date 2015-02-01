@@ -1,9 +1,12 @@
 package test.de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.RuntimeEnvironment;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IExpressionVisitor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaOperation;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ITypedModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
+import de.uni_hildesheim.sse.utils.modelManagement.IRestrictionEvaluationContext;
 import de.uni_hildesheim.sse.utils.modelManagement.IndentationConfiguration;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
 import de.uni_hildesheim.sse.utils.modelManagement.Version;
@@ -106,6 +109,27 @@ public class PseudoModel implements ITypedModel {
 
     @Override
     public void dispose() {
+    }
+
+    @Override
+    public IRestrictionEvaluationContext getRestrictionEvaluationContext() {
+        return new RuntimeEnvironment() {
+
+            @Override
+            protected IExpressionVisitor createEvaluationProcessor() {
+                return null; // only relevant for import/export/template resolution
+            }
+
+            @Override
+            protected void releaseEvaluationProcessor(IExpressionVisitor processor) {
+            }
+            
+        };
+    }
+
+    @Override
+    public IMetaType getBaseType() {
+        return null;
     }
 
 }

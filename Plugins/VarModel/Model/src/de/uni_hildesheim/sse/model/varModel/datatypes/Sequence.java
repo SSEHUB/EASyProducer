@@ -66,6 +66,10 @@ public class Sequence extends Container {
         OclKeyWords.INSERT_AT, TYPE, IntegerType.TYPE, AnyType.TYPE);
     public static final Operation INDEX_OF = new Operation(IntegerType.TYPE, OclKeyWords.INDEX_OF, TYPE, AnyType.TYPE);
     public static final Operation HAS_DUPLICATES = new Operation(BooleanType.TYPE, OclKeyWords.HAS_DUPLICATES, TYPE);
+    public static final Operation ADD = new Operation(AnyType.TYPE, ReturnTypeMode.GENERIC_PARAM_1, 
+            OclKeyWords.ADD, TYPE, AnyType.TYPE);
+    public static final Operation SUBSEQUENCE = new Operation(BooleanType.TYPE, OclKeyWords.SUBSEQUENCE, TYPE, TYPE);
+    public static final Operation OVERLAPS = new Operation(BooleanType.TYPE, OclKeyWords.OVERLAPS, TYPE, TYPE);
 
     // type specific 
     public static final Operation EQUALS = Operation.createInfixOperator(
@@ -91,6 +95,9 @@ public class Sequence extends Container {
         DTYPE.addOperation(INSERT_AT);
         DTYPE.addOperation(INDEX_OF);
         DTYPE.addOperation(HAS_DUPLICATES);
+        DTYPE.addOperation(ADD);
+        DTYPE.addOperation(SUBSEQUENCE);
+        DTYPE.addOperation(OVERLAPS);
     }
     
     /**
@@ -119,9 +126,7 @@ public class Sequence extends Container {
         visitor.visitSequence(this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void accept(IDatatypeVisitor visitor) {
         visitor.visitSequence(this);
     }

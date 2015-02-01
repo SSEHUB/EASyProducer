@@ -11,7 +11,8 @@
 	<path id ="includes">
         <!-- Model -->
         <pathelement path="${libs.utils}"/>
-	    <!-- Eclipse-Plugins -->
+        <pathelement path="${libs.dslCore}"/>       
+        <!-- Eclipse-Plugins -->
 		<fileset dir="${eclipse.plugins.dir}">
 			<include name="**/*.jar" />
 		</fileset>

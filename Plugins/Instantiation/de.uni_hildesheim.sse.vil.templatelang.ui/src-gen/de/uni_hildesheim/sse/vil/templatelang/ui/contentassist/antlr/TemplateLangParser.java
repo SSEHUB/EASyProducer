@@ -39,7 +39,6 @@ public class TemplateLangParser extends AbstractContentAssistParser {
 				{
 					put(grammarAccess.getStmtAccess().getAlternatives(), "rule__Stmt__Alternatives");
 					put(grammarAccess.getMultiselectAccess().getAlternatives(), "rule__Multiselect__Alternatives");
-					put(grammarAccess.getVersionOperatorAccess().getAlternatives(), "rule__VersionOperator__Alternatives");
 					put(grammarAccess.getExpressionAccess().getAlternatives(), "rule__Expression__Alternatives");
 					put(grammarAccess.getLogicalOperatorAccess().getAlternatives(), "rule__LogicalOperator__Alternatives");
 					put(grammarAccess.getEqualityOperatorAccess().getAlternatives(), "rule__EqualityOperator__Alternatives");
@@ -85,8 +84,6 @@ public class TemplateLangParser extends AbstractContentAssistParser {
 					put(grammarAccess.getVariableDeclarationAccess().getGroup_3(), "rule__VariableDeclaration__Group_3__0");
 					put(grammarAccess.getAdviceAccess().getGroup(), "rule__Advice__Group__0");
 					put(grammarAccess.getVersionSpecAccess().getGroup(), "rule__VersionSpec__Group__0");
-					put(grammarAccess.getVersionSpecAccess().getGroup_3(), "rule__VersionSpec__Group_3__0");
-					put(grammarAccess.getVersionedIdAccess().getGroup(), "rule__VersionedId__Group__0");
 					put(grammarAccess.getParameterListAccess().getGroup(), "rule__ParameterList__Group__0");
 					put(grammarAccess.getParameterListAccess().getGroup_1(), "rule__ParameterList__Group_1__0");
 					put(grammarAccess.getParameterAccess().getGroup(), "rule__Parameter__Group__0");
@@ -199,10 +196,7 @@ public class TemplateLangParser extends AbstractContentAssistParser {
 					put(grammarAccess.getVariableDeclarationAccess().getExpressionAssignment_3_1(), "rule__VariableDeclaration__ExpressionAssignment_3_1");
 					put(grammarAccess.getAdviceAccess().getNameAssignment_2(), "rule__Advice__NameAssignment_2");
 					put(grammarAccess.getAdviceAccess().getVersionSpecAssignment_4(), "rule__Advice__VersionSpecAssignment_4");
-					put(grammarAccess.getVersionSpecAccess().getConflictsAssignment_2(), "rule__VersionSpec__ConflictsAssignment_2");
-					put(grammarAccess.getVersionSpecAccess().getConflictsAssignment_3_1(), "rule__VersionSpec__ConflictsAssignment_3_1");
-					put(grammarAccess.getVersionedIdAccess().getOpAssignment_1(), "rule__VersionedId__OpAssignment_1");
-					put(grammarAccess.getVersionedIdAccess().getVersionAssignment_2(), "rule__VersionedId__VersionAssignment_2");
+					put(grammarAccess.getVersionSpecAccess().getRestrictionAssignment_1(), "rule__VersionSpec__RestrictionAssignment_1");
 					put(grammarAccess.getParameterListAccess().getParamAssignment_0(), "rule__ParameterList__ParamAssignment_0");
 					put(grammarAccess.getParameterListAccess().getParamAssignment_1_1(), "rule__ParameterList__ParamAssignment_1_1");
 					put(grammarAccess.getParameterAccess().getTypeAssignment_0(), "rule__Parameter__TypeAssignment_0");
@@ -277,6 +271,7 @@ public class TemplateLangParser extends AbstractContentAssistParser {
 					put(grammarAccess.getConstantAccess().getQValueAssignment_2(), "rule__Constant__QValueAssignment_2");
 					put(grammarAccess.getConstantAccess().getBValueAssignment_3(), "rule__Constant__BValueAssignment_3");
 					put(grammarAccess.getConstantAccess().getNullAssignment_4(), "rule__Constant__NullAssignment_4");
+					put(grammarAccess.getConstantAccess().getVersionAssignment_5(), "rule__Constant__VersionAssignment_5");
 					put(grammarAccess.getNumValueAccess().getValAssignment(), "rule__NumValue__ValAssignment");
 					put(grammarAccess.getTypeAccess().getNameAssignment_0(), "rule__Type__NameAssignment_0");
 					put(grammarAccess.getTypeAccess().getSetAssignment_1_0(), "rule__Type__SetAssignment_1_0");

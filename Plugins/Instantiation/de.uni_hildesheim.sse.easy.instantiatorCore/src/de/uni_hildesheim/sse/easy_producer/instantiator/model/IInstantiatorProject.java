@@ -3,7 +3,6 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model;
 import java.io.File;
 import java.util.List;
 
-import de.uni_hildesheim.sse.easy.instantiator.copy.core.CopyModel;
 import de.uni_hildesheim.sse.model.confModel.Configuration;
 
 /**
@@ -51,12 +50,6 @@ public interface IInstantiatorProject {
      */
     public File getConfigLocation();
     
-    /**
-     * Returns the actual copy model.
-     * 
-     * @return the copy model
-     */
-    public CopyModel getCopyModel();
     
     // ScaleLog: preliminary interface
     /**

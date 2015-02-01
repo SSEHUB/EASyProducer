@@ -10,12 +10,12 @@ import de.uni_hildesheim.sse.model.cst.CompoundInitializer;
 import de.uni_hildesheim.sse.model.cst.ConstantValue;
 import de.uni_hildesheim.sse.model.cst.ContainerInitializer;
 import de.uni_hildesheim.sse.model.cst.ContainerOperationCall;
-import de.uni_hildesheim.sse.model.cst.DslFragment;
 import de.uni_hildesheim.sse.model.cst.IConstraintTreeVisitor;
 import de.uni_hildesheim.sse.model.cst.IfThen;
 import de.uni_hildesheim.sse.model.cst.Let;
 import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
 import de.uni_hildesheim.sse.model.cst.Parenthesis;
+import de.uni_hildesheim.sse.model.cst.Self;
 import de.uni_hildesheim.sse.model.cst.UnresolvedExpression;
 import de.uni_hildesheim.sse.model.cst.Variable;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
@@ -41,6 +41,7 @@ import de.uni_hildesheim.sse.model.varModel.values.NullValue;
 import de.uni_hildesheim.sse.model.varModel.values.RealValue;
 import de.uni_hildesheim.sse.model.varModel.values.ReferenceValue;
 import de.uni_hildesheim.sse.model.varModel.values.StringValue;
+import de.uni_hildesheim.sse.model.varModel.values.VersionValue;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
 
@@ -72,8 +73,6 @@ public class AssignmentAttributeConstraints implements IConstraintTreeVisitor, I
     private String dListContainsString = "eval( ";
     private String curComp = "";
     private List<String> pattern = new ArrayList<String>();
-    
-    
     
     /**
      * Flag if to add the constraint/rule to the drl file. 
@@ -484,15 +483,14 @@ public class AssignmentAttributeConstraints implements IConstraintTreeVisitor, I
         }
 
         @Override
-        public void visitDslFragment(DslFragment fragment) {
+        public void visitUnresolvedExpression(UnresolvedExpression expression) {
             // TODO Auto-generated method stub
             
         }
 
         @Override
-        public void visitUnresolvedExpression(UnresolvedExpression expression) {
+        public void visitSelf(Self self) {
             // TODO Auto-generated method stub
-            
         }
         
     }
@@ -514,12 +512,6 @@ public class AssignmentAttributeConstraints implements IConstraintTreeVisitor, I
         if (!curComp.equals("")) {
             pattern.add("dList.contains(" + "\"" + curComp + "." + access.getSlotName() + "\"" + ")\n");
         }
-    }
-
-    @Override
-    public void visitDslFragment(DslFragment fragment) {
-        // TODO Auto-generated method stub
-        
     }
 
     @Override
@@ -595,6 +587,16 @@ public class AssignmentAttributeConstraints implements IConstraintTreeVisitor, I
     
     @Override
     public void visitNullValue(NullValue value) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void visitVersionValue(VersionValue value) {
+        // TODO Auto-generated method stub
+    }
+    
+    @Override
+    public void visitSelf(Self self) {
         // TODO Auto-generated method stub
     }
 

@@ -5,7 +5,7 @@
     modelPluginID="de.uni_hildesheim.sse.vil.templatelang" forceOverwrite="true" modelName="TemplateLang"
     updateClasspath="false" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
     complianceLevel="5.0" copyrightFields="false" editPluginID="de.uni_hildesheim.sse.vil.templatelang.edit"
-    editorPluginID="de.uni_hildesheim.sse.vil.templatelang.editor" runtimeVersion="2.9"
+    editorPluginID="de.uni_hildesheim.sse.vil.templatelang.editor" runtimeVersion="2.10"
     usedGenPackages="../../../../../../../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/ExpressionDsl.genmodel#//expressionDsl">
   <genPackages prefix="TemplateLang" basePackage="de.uni_hildesheim.sse.vil.templatelang"
       disposableProviderFactory="true" ecorePackage="TemplateLang.ecore#/">

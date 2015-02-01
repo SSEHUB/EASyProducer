@@ -1,0 +1,71 @@
+project pL3SCfg {
+
+	import Pipelines;
+	import FamiliesCfg;
+	import DataManagementCfg;
+	Pipeline pL3S;
+	Source pL3S_Source0;
+	Flow pL3S_Flow0;
+	FamilyElement pL3S_FamilyElement0;
+	Flow pL3S_Flow1;
+	FamilyElement pL3S_FamilyElement1;
+	Flow pL3S_Flow2;
+	Sink pL3S_Sink0;
+	pL3S_Sink0 = {
+		sink = refBy(publicL3s), 
+		name = "L3SSink"
+	};
+	pL3S_Flow2 = {
+		destination = refBy(pL3S_Sink0), 
+		grouping = Grouping.shuffleGrouping, 
+		name = "cl"
+	};
+	pL3S_FamilyElement1 = {
+		family = refBy(fCountTweets), 
+		output = {
+			refBy(pL3S_Flow2)
+		}, 
+		name = "CountTweets"
+	};
+	pL3S_Flow1 = {
+		destination = refBy(pL3S_FamilyElement1), 
+		grouping = Grouping.fieldsGrouping, 
+		name = "fc"
+	};
+	pL3S_FamilyElement0 = {
+		family = refBy(fFilterTweet), 
+		output = {
+			refBy(pL3S_Flow1)
+		}, 
+		name = "FilterTweet"
+	};
+	pL3S_Flow0 = {
+		destination = refBy(pL3S_FamilyElement0), 
+		grouping = Grouping.shuffleGrouping, 
+		name = "sf"
+	};
+	pL3S_Source0 = {
+		output = {
+			refBy(pL3S_Flow0)
+		}, 
+		source = refBy(tweet), 
+		name = "TwitterSource"
+	};
+	pL3S = {
+		name = "L3S", 
+		sources = {
+			refBy(pL3S_Source0)
+		}, 
+		numworkers = 1
+	};
+	freeze {
+		pL3S;
+		pL3S_Source0;
+		pL3S_Flow0;
+		pL3S_FamilyElement0;
+		pL3S_Flow1;
+		pL3S_FamilyElement1;
+		pL3S_Flow2;
+		pL3S_Sink0;
+	}
+}

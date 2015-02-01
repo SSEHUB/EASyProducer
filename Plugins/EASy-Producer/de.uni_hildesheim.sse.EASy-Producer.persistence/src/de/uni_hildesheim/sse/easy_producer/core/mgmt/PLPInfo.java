@@ -20,7 +20,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.uni_hildesheim.sse.easy.instantiator.copy.core.CopyModel;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.Configuration.PathKind;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceException;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceUtils;
@@ -87,7 +86,6 @@ public class PLPInfo implements IInstantiatorProject, IModelListener<Script> {
     
     // Further information needed for reasoning, instantiation, ...
     private MemberController memberController;
-    private CopyModel copyModel;
     private InstantiatorController instantiatorController;
     private List<IProductLineProjectListener> plpListeners;
     private ReasonerConfiguration reasonerConfig;
@@ -312,7 +310,6 @@ public class PLPInfo implements IInstantiatorProject, IModelListener<Script> {
     private void initModels() {
         memberController = new MemberController(getProjectID());
         instantiatorController = new InstantiatorController();
-        copyModel = new CopyModel();
         reasonerConfig = new ReasonerConfiguration();
     }
     
@@ -335,11 +332,6 @@ public class PLPInfo implements IInstantiatorProject, IModelListener<Script> {
      */
     public MemberController getMemberController() {
         return memberController;
-    }
-
-    @Override
-    public CopyModel getCopyModel() {
-        return copyModel;
     }
 
     // ScaleLog: preliminary interface
@@ -456,8 +448,7 @@ public class PLPInfo implements IInstantiatorProject, IModelListener<Script> {
      */
     public void instantiate(TranformatorNotificationDelegate instantiationMonitor) throws VilLanguageException {
         // Each instantiator will now produce its own messages and send it to the console
-        Transformator transformator = new Transformator(getProjectID(), instantiationMonitor, SPLsManager.INSTANCE,
-            getCopyModel().getCopyMechanism());
+        Transformator transformator = new Transformator(getProjectID(), instantiationMonitor, SPLsManager.INSTANCE);
        
         // >> VIL addition
         if (!transformator.execute()) {

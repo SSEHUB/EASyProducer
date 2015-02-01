@@ -198,9 +198,10 @@ public abstract class TypeDescriptor <T extends IVilType> implements IMetaType {
     public IMetaOperation findConversion(IMetaType sourceType, IMetaType targetType) {
         IMetaOperation result = null;
         for (int c = 0; null == result && c < conversions.length; c++) {
-            IMetaOperation desc = conversions[c];
+            IMetaOperation desc = conversions[c];   
             if (desc.getParameterType(0).isAssignableFrom(sourceType) 
-                && desc.getReturnType().isAssignableFrom(targetType)) {
+                && (desc.getReturnType().isAssignableFrom(targetType) 
+                    || targetType.isAssignableFrom(desc.getReturnType()))) { // needed for derived IVML types
                 result = TypeHelper.getMoreSpecificParam1(desc, result);
             }
         }
@@ -329,6 +330,13 @@ public abstract class TypeDescriptor <T extends IVilType> implements IMetaType {
         return getName();
     }
 
+    /**
+     * Returns whether this descriptor represents a VIL map.
+     * 
+     * @return <code>true</code> if this is a VIL map, <code>false</code> else
+     */
+    public abstract boolean isMap();
+    
     /**
      * Returns whether this descriptor represents a VIL collection, i.e., set, sequence or collection.
      * 

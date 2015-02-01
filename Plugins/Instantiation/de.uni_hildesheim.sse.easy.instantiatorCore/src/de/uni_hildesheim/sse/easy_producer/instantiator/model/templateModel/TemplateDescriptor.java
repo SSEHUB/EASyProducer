@@ -1,6 +1,7 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.Advice;
@@ -102,7 +103,7 @@ public class TemplateDescriptor {
         JavaExtension[] result;
         if (null != extensions && extensions.size() > 0) {
             result = new JavaExtension[extensions.size()];
-            extensions.toArray(result); 
+            extensions.toArray(result);
         } else {
             result = null;
         }

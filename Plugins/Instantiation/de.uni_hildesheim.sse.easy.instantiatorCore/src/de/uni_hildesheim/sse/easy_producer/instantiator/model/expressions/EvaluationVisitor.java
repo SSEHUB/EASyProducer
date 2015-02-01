@@ -6,9 +6,11 @@ import java.util.List;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VariableDeclaration;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Constants;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ListSequence;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ListSet;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.VilException;
@@ -85,10 +87,15 @@ public class EvaluationVisitor implements IExpressionVisitor {
             resolved = AbstractCallExpression.dynamicDispatch(resolved, args, OperationDescriptor.class, 
                 environment.getTypeRegistry());
             tracer.visitingCallExpression(resolved, call.getCallType(), args);
+            if (resolved.storeArtifactsBeforeExecution()) {
+                environment.storeArtifacts();
+            }
             Object result = resolved.invoke(args);
             tracer.visitedCallExpression(resolved, call.getCallType(), args, result);
             return result;
         } catch (VilException e) {
+            throw new ExpressionException(e);
+        } catch (ArtifactException e) {
             throw new ExpressionException(e);
         }
     }
@@ -149,6 +156,7 @@ public class EvaluationVisitor implements IExpressionVisitor {
 
     @Override
     public Object visitContainerInitializerExpression(ContainerInitializerExpression ex) throws ExpressionException {
+        Object result;
         List<Object> data = new ArrayList<Object>();
         TypeDescriptor<? extends IVilType> type = ex.inferType();
         for (int e = 0; e < ex.getInitExpressionsCount(); e++) {
@@ -164,7 +172,12 @@ public class EvaluationVisitor implements IExpressionVisitor {
             param = TypeDescriptor.createArray(1);
             param[0] = type;
         }
-        return new ListSequence<Object>(data, param);
+        if (type.isSet()) {
+            result = new ListSet<Object>(data, param);
+        } else {
+            result = new ListSequence<Object>(data, param);
+        }
+        return result;
     }
 
 }

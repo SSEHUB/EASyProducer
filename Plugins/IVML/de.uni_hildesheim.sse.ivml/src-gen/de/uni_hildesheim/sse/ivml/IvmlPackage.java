@@ -325,13 +325,22 @@ public interface IvmlPackage extends EPackage
   int TYPEDEF_COMPOUND = 6;
 
   /**
+   * The feature id for the '<em><b>Abstract</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TYPEDEF_COMPOUND__ABSTRACT = 0;
+
+  /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int TYPEDEF_COMPOUND__NAME = 0;
+  int TYPEDEF_COMPOUND__NAME = 1;
 
   /**
    * The feature id for the '<em><b>Super</b></em>' attribute.
@@ -340,7 +349,7 @@ public interface IvmlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int TYPEDEF_COMPOUND__SUPER = 1;
+  int TYPEDEF_COMPOUND__SUPER = 2;
 
   /**
    * The feature id for the '<em><b>Elements</b></em>' containment reference list.
@@ -349,7 +358,7 @@ public interface IvmlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int TYPEDEF_COMPOUND__ELEMENTS = 2;
+  int TYPEDEF_COMPOUND__ELEMENTS = 3;
 
   /**
    * The number of structural features of the '<em>Typedef Compound</em>' class.
@@ -358,7 +367,7 @@ public interface IvmlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int TYPEDEF_COMPOUND_FEATURE_COUNT = 3;
+  int TYPEDEF_COMPOUND_FEATURE_COUNT = 4;
 
   /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.ivml.impl.AttrAssignmentImpl <em>Attr Assignment</em>}' class.
@@ -787,13 +796,31 @@ public interface IvmlPackage extends EPackage
   int VALUE__BVALUE = 3;
 
   /**
+   * The feature id for the '<em><b>Self</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int VALUE__SELF = 4;
+
+  /**
    * The feature id for the '<em><b>Null Value</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int VALUE__NULL_VALUE = 4;
+  int VALUE__NULL_VALUE = 5;
+
+  /**
+   * The feature id for the '<em><b>Version</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int VALUE__VERSION = 6;
 
   /**
    * The number of structural features of the '<em>Value</em>' class.
@@ -802,7 +829,7 @@ public interface IvmlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int VALUE_FEATURE_COUNT = 5;
+  int VALUE_FEATURE_COUNT = 7;
 
   /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.ivml.impl.DerivedTypeImpl <em>Derived Type</em>}' class.
@@ -842,61 +869,6 @@ public interface IvmlPackage extends EPackage
   int DERIVED_TYPE_FEATURE_COUNT = 2;
 
   /**
-   * The meta object id for the '{@link de.uni_hildesheim.sse.ivml.impl.DslContextImpl <em>Dsl Context</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see de.uni_hildesheim.sse.ivml.impl.DslContextImpl
-   * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getDslContext()
-   * @generated
-   */
-  int DSL_CONTEXT = 20;
-
-  /**
-   * The feature id for the '<em><b>Stop</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int DSL_CONTEXT__STOP = 0;
-
-  /**
-   * The feature id for the '<em><b>Escape</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int DSL_CONTEXT__ESCAPE = 1;
-
-  /**
-   * The feature id for the '<em><b>Command</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int DSL_CONTEXT__COMMAND = 2;
-
-  /**
-   * The feature id for the '<em><b>Dsl</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int DSL_CONTEXT__DSL = 3;
-
-  /**
-   * The number of structural features of the '<em>Dsl Context</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int DSL_CONTEXT_FEATURE_COUNT = 4;
-
-  /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.ivml.impl.AttributeToImpl <em>Attribute To</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -904,7 +876,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getAttributeTo()
    * @generated
    */
-  int ATTRIBUTE_TO = 21;
+  int ATTRIBUTE_TO = 20;
 
   /**
    * The feature id for the '<em><b>Attribute Type</b></em>' containment reference.
@@ -950,7 +922,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getFreeze()
    * @generated
    */
-  int FREEZE = 22;
+  int FREEZE = 21;
 
   /**
    * The feature id for the '<em><b>Names</b></em>' containment reference list.
@@ -987,7 +959,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getFreezeStatement()
    * @generated
    */
-  int FREEZE_STATEMENT = 23;
+  int FREEZE_STATEMENT = 22;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' containment reference.
@@ -1024,7 +996,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getFreezeButList()
    * @generated
    */
-  int FREEZE_BUT_LIST = 24;
+  int FREEZE_BUT_LIST = 23;
 
   /**
    * The feature id for the '<em><b>List</b></em>' containment reference list.
@@ -1052,7 +1024,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getFreezeButExpression()
    * @generated
    */
-  int FREEZE_BUT_EXPRESSION = 25;
+  int FREEZE_BUT_EXPRESSION = 24;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' containment reference.
@@ -1098,7 +1070,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getEval()
    * @generated
    */
-  int EVAL = 26;
+  int EVAL = 25;
 
   /**
    * The feature id for the '<em><b>Nested</b></em>' containment reference list.
@@ -1135,7 +1107,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getInterfaceDeclaration()
    * @generated
    */
-  int INTERFACE_DECLARATION = 27;
+  int INTERFACE_DECLARATION = 26;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1172,7 +1144,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getExport()
    * @generated
    */
-  int EXPORT = 28;
+  int EXPORT = 27;
 
   /**
    * The feature id for the '<em><b>Names</b></em>' containment reference list.
@@ -1200,7 +1172,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getImportStmt()
    * @generated
    */
-  int IMPORT_STMT = 29;
+  int IMPORT_STMT = 28;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1221,13 +1193,13 @@ public interface IvmlPackage extends EPackage
   int IMPORT_STMT__INTERFACE = 1;
 
   /**
-   * The feature id for the '<em><b>Versions</b></em>' containment reference list.
+   * The feature id for the '<em><b>Restriction</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int IMPORT_STMT__VERSIONS = 2;
+  int IMPORT_STMT__RESTRICTION = 2;
 
   /**
    * The number of structural features of the '<em>Import Stmt</em>' class.
@@ -1246,7 +1218,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getConflictStmt()
    * @generated
    */
-  int CONFLICT_STMT = 30;
+  int CONFLICT_STMT = 29;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1258,13 +1230,13 @@ public interface IvmlPackage extends EPackage
   int CONFLICT_STMT__NAME = 0;
 
   /**
-   * The feature id for the '<em><b>Conflicts</b></em>' containment reference list.
+   * The feature id for the '<em><b>Restriction</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int CONFLICT_STMT__CONFLICTS = 1;
+  int CONFLICT_STMT__RESTRICTION = 1;
 
   /**
    * The number of structural features of the '<em>Conflict Stmt</em>' class.
@@ -1276,52 +1248,6 @@ public interface IvmlPackage extends EPackage
   int CONFLICT_STMT_FEATURE_COUNT = 2;
 
   /**
-   * The meta object id for the '{@link de.uni_hildesheim.sse.ivml.impl.VersionedIdImpl <em>Versioned Id</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see de.uni_hildesheim.sse.ivml.impl.VersionedIdImpl
-   * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getVersionedId()
-   * @generated
-   */
-  int VERSIONED_ID = 31;
-
-  /**
-   * The feature id for the '<em><b>Name</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int VERSIONED_ID__NAME = 0;
-
-  /**
-   * The feature id for the '<em><b>Op</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int VERSIONED_ID__OP = 1;
-
-  /**
-   * The feature id for the '<em><b>Version</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int VERSIONED_ID__VERSION = 2;
-
-  /**
-   * The number of structural features of the '<em>Versioned Id</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int VERSIONED_ID_FEATURE_COUNT = 3;
-
-  /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.ivml.impl.VersionStmtImpl <em>Version Stmt</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1329,7 +1255,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getVersionStmt()
    * @generated
    */
-  int VERSION_STMT = 32;
+  int VERSION_STMT = 30;
 
   /**
    * The feature id for the '<em><b>Version</b></em>' attribute.
@@ -1357,7 +1283,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getOpDefStatement()
    * @generated
    */
-  int OP_DEF_STATEMENT = 33;
+  int OP_DEF_STATEMENT = 31;
 
   /**
    * The feature id for the '<em><b>Result</b></em>' containment reference.
@@ -1412,7 +1338,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getOpDefParameterList()
    * @generated
    */
-  int OP_DEF_PARAMETER_LIST = 34;
+  int OP_DEF_PARAMETER_LIST = 32;
 
   /**
    * The feature id for the '<em><b>List</b></em>' containment reference list.
@@ -1440,7 +1366,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getOpDefParameter()
    * @generated
    */
-  int OP_DEF_PARAMETER = 35;
+  int OP_DEF_PARAMETER = 33;
 
   /**
    * The feature id for the '<em><b>Type</b></em>' containment reference.
@@ -1486,7 +1412,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getExpressionStatement()
    * @generated
    */
-  int EXPRESSION_STATEMENT = 36;
+  int EXPRESSION_STATEMENT = 34;
 
   /**
    * The feature id for the '<em><b>Expr</b></em>' containment reference.
@@ -1514,7 +1440,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getExpression()
    * @generated
    */
-  int EXPRESSION = 37;
+  int EXPRESSION = 35;
 
   /**
    * The feature id for the '<em><b>Let</b></em>' containment reference.
@@ -1544,22 +1470,13 @@ public interface IvmlPackage extends EPackage
   int EXPRESSION__COLLECTION = 2;
 
   /**
-   * The feature id for the '<em><b>Dsl</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EXPRESSION__DSL = 3;
-
-  /**
    * The number of structural features of the '<em>Expression</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int EXPRESSION_FEATURE_COUNT = 4;
+  int EXPRESSION_FEATURE_COUNT = 3;
 
   /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.ivml.impl.LetExpressionImpl <em>Let Expression</em>}' class.
@@ -1569,7 +1486,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getLetExpression()
    * @generated
    */
-  int LET_EXPRESSION = 38;
+  int LET_EXPRESSION = 36;
 
   /**
    * The feature id for the '<em><b>Type</b></em>' containment reference.
@@ -1624,7 +1541,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getAssignmentExpression()
    * @generated
    */
-  int ASSIGNMENT_EXPRESSION = 39;
+  int ASSIGNMENT_EXPRESSION = 37;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -1661,7 +1578,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getAssignmentExpressionPart()
    * @generated
    */
-  int ASSIGNMENT_EXPRESSION_PART = 40;
+  int ASSIGNMENT_EXPRESSION_PART = 38;
 
   /**
    * The feature id for the '<em><b>Op</b></em>' attribute.
@@ -1707,7 +1624,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getImplicationExpression()
    * @generated
    */
-  int IMPLICATION_EXPRESSION = 41;
+  int IMPLICATION_EXPRESSION = 39;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -1744,7 +1661,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getImplicationExpressionPart()
    * @generated
    */
-  int IMPLICATION_EXPRESSION_PART = 42;
+  int IMPLICATION_EXPRESSION_PART = 40;
 
   /**
    * The feature id for the '<em><b>Op</b></em>' attribute.
@@ -1781,7 +1698,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getLogicalExpression()
    * @generated
    */
-  int LOGICAL_EXPRESSION = 43;
+  int LOGICAL_EXPRESSION = 41;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -1818,7 +1735,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getLogicalExpressionPart()
    * @generated
    */
-  int LOGICAL_EXPRESSION_PART = 44;
+  int LOGICAL_EXPRESSION_PART = 42;
 
   /**
    * The feature id for the '<em><b>Op</b></em>' attribute.
@@ -1855,7 +1772,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getEqualityExpression()
    * @generated
    */
-  int EQUALITY_EXPRESSION = 45;
+  int EQUALITY_EXPRESSION = 43;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -1892,7 +1809,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getEqualityExpressionPart()
    * @generated
    */
-  int EQUALITY_EXPRESSION_PART = 46;
+  int EQUALITY_EXPRESSION_PART = 44;
 
   /**
    * The feature id for the '<em><b>Op</b></em>' attribute.
@@ -1938,7 +1855,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getRelationalExpression()
    * @generated
    */
-  int RELATIONAL_EXPRESSION = 47;
+  int RELATIONAL_EXPRESSION = 45;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -1975,7 +1892,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getRelationalExpressionPart()
    * @generated
    */
-  int RELATIONAL_EXPRESSION_PART = 48;
+  int RELATIONAL_EXPRESSION_PART = 46;
 
   /**
    * The feature id for the '<em><b>Op</b></em>' attribute.
@@ -2012,7 +1929,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getAdditiveExpression()
    * @generated
    */
-  int ADDITIVE_EXPRESSION = 49;
+  int ADDITIVE_EXPRESSION = 47;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -2049,7 +1966,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getAdditiveExpressionPart()
    * @generated
    */
-  int ADDITIVE_EXPRESSION_PART = 50;
+  int ADDITIVE_EXPRESSION_PART = 48;
 
   /**
    * The feature id for the '<em><b>Op</b></em>' attribute.
@@ -2086,7 +2003,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getMultiplicativeExpression()
    * @generated
    */
-  int MULTIPLICATIVE_EXPRESSION = 51;
+  int MULTIPLICATIVE_EXPRESSION = 49;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -2123,7 +2040,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getMultiplicativeExpressionPart()
    * @generated
    */
-  int MULTIPLICATIVE_EXPRESSION_PART = 52;
+  int MULTIPLICATIVE_EXPRESSION_PART = 50;
 
   /**
    * The feature id for the '<em><b>Op</b></em>' attribute.
@@ -2160,7 +2077,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getUnaryExpression()
    * @generated
    */
-  int UNARY_EXPRESSION = 53;
+  int UNARY_EXPRESSION = 51;
 
   /**
    * The feature id for the '<em><b>Op</b></em>' attribute.
@@ -2197,7 +2114,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getPostfixExpression()
    * @generated
    */
-  int POSTFIX_EXPRESSION = 54;
+  int POSTFIX_EXPRESSION = 52;
 
   /**
    * The feature id for the '<em><b>Call</b></em>' containment reference.
@@ -2252,7 +2169,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getCall()
    * @generated
    */
-  int CALL = 55;
+  int CALL = 53;
 
   /**
    * The feature id for the '<em><b>Call</b></em>' containment reference.
@@ -2298,7 +2215,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getFeatureCall()
    * @generated
    */
-  int FEATURE_CALL = 56;
+  int FEATURE_CALL = 54;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -2335,7 +2252,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getSetOp()
    * @generated
    */
-  int SET_OP = 57;
+  int SET_OP = 55;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -2381,7 +2298,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getDeclarator()
    * @generated
    */
-  int DECLARATOR = 58;
+  int DECLARATOR = 56;
 
   /**
    * The feature id for the '<em><b>Decl</b></em>' containment reference list.
@@ -2409,7 +2326,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getDeclaration()
    * @generated
    */
-  int DECLARATION = 59;
+  int DECLARATION = 57;
 
   /**
    * The feature id for the '<em><b>Type</b></em>' containment reference.
@@ -2455,7 +2372,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getActualParameterList()
    * @generated
    */
-  int ACTUAL_PARAMETER_LIST = 60;
+  int ACTUAL_PARAMETER_LIST = 58;
 
   /**
    * The feature id for the '<em><b>Param</b></em>' containment reference list.
@@ -2483,7 +2400,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getExpressionAccess()
    * @generated
    */
-  int EXPRESSION_ACCESS = 61;
+  int EXPRESSION_ACCESS = 59;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -2529,7 +2446,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getPrimaryExpression()
    * @generated
    */
-  int PRIMARY_EXPRESSION = 62;
+  int PRIMARY_EXPRESSION = 60;
 
   /**
    * The feature id for the '<em><b>Lit</b></em>' containment reference.
@@ -2602,7 +2519,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getCollectionInitializer()
    * @generated
    */
-  int COLLECTION_INITIALIZER = 63;
+  int COLLECTION_INITIALIZER = 61;
 
   /**
    * The feature id for the '<em><b>Type</b></em>' containment reference.
@@ -2639,7 +2556,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getExpressionListOrRange()
    * @generated
    */
-  int EXPRESSION_LIST_OR_RANGE = 64;
+  int EXPRESSION_LIST_OR_RANGE = 62;
 
   /**
    * The feature id for the '<em><b>List</b></em>' containment reference list.
@@ -2667,7 +2584,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getExpressionListEntry()
    * @generated
    */
-  int EXPRESSION_LIST_ENTRY = 65;
+  int EXPRESSION_LIST_ENTRY = 63;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -2722,7 +2639,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getLiteral()
    * @generated
    */
-  int LITERAL = 66;
+  int LITERAL = 64;
 
   /**
    * The feature id for the '<em><b>Val</b></em>' containment reference.
@@ -2750,7 +2667,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getIfExpression()
    * @generated
    */
-  int IF_EXPRESSION = 67;
+  int IF_EXPRESSION = 65;
 
   /**
    * The feature id for the '<em><b>If Ex</b></em>' containment reference.
@@ -3034,6 +2951,17 @@ public interface IvmlPackage extends EPackage
    * @generated
    */
   EClass getTypedefCompound();
+
+  /**
+   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.ivml.TypedefCompound#getAbstract <em>Abstract</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Abstract</em>'.
+   * @see de.uni_hildesheim.sse.ivml.TypedefCompound#getAbstract()
+   * @see #getTypedefCompound()
+   * @generated
+   */
+  EAttribute getTypedefCompound_Abstract();
 
   /**
    * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.ivml.TypedefCompound#getName <em>Name</em>}'.
@@ -3442,6 +3370,17 @@ public interface IvmlPackage extends EPackage
   EAttribute getValue_BValue();
 
   /**
+   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.ivml.Value#getSelf <em>Self</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Self</em>'.
+   * @see de.uni_hildesheim.sse.ivml.Value#getSelf()
+   * @see #getValue()
+   * @generated
+   */
+  EAttribute getValue_Self();
+
+  /**
    * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.ivml.Value#getNullValue <em>Null Value</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -3451,6 +3390,17 @@ public interface IvmlPackage extends EPackage
    * @generated
    */
   EAttribute getValue_NullValue();
+
+  /**
+   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.ivml.Value#getVersion <em>Version</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Version</em>'.
+   * @see de.uni_hildesheim.sse.ivml.Value#getVersion()
+   * @see #getValue()
+   * @generated
+   */
+  EAttribute getValue_Version();
 
   /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.ivml.DerivedType <em>Derived Type</em>}'.
@@ -3483,60 +3433,6 @@ public interface IvmlPackage extends EPackage
    * @generated
    */
   EReference getDerivedType_Type();
-
-  /**
-   * Returns the meta object for class '{@link de.uni_hildesheim.sse.ivml.DslContext <em>Dsl Context</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Dsl Context</em>'.
-   * @see de.uni_hildesheim.sse.ivml.DslContext
-   * @generated
-   */
-  EClass getDslContext();
-
-  /**
-   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.ivml.DslContext#getStop <em>Stop</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Stop</em>'.
-   * @see de.uni_hildesheim.sse.ivml.DslContext#getStop()
-   * @see #getDslContext()
-   * @generated
-   */
-  EAttribute getDslContext_Stop();
-
-  /**
-   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.ivml.DslContext#getEscape <em>Escape</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Escape</em>'.
-   * @see de.uni_hildesheim.sse.ivml.DslContext#getEscape()
-   * @see #getDslContext()
-   * @generated
-   */
-  EAttribute getDslContext_Escape();
-
-  /**
-   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.ivml.DslContext#getCommand <em>Command</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Command</em>'.
-   * @see de.uni_hildesheim.sse.ivml.DslContext#getCommand()
-   * @see #getDslContext()
-   * @generated
-   */
-  EAttribute getDslContext_Command();
-
-  /**
-   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.ivml.DslContext#getDsl <em>Dsl</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Dsl</em>'.
-   * @see de.uni_hildesheim.sse.ivml.DslContext#getDsl()
-   * @see #getDslContext()
-   * @generated
-   */
-  EAttribute getDslContext_Dsl();
 
   /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.ivml.AttributeTo <em>Attribute To</em>}'.
@@ -3827,15 +3723,15 @@ public interface IvmlPackage extends EPackage
   EAttribute getImportStmt_Interface();
 
   /**
-   * Returns the meta object for the containment reference list '{@link de.uni_hildesheim.sse.ivml.ImportStmt#getVersions <em>Versions</em>}'.
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.ivml.ImportStmt#getRestriction <em>Restriction</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Versions</em>'.
-   * @see de.uni_hildesheim.sse.ivml.ImportStmt#getVersions()
+   * @return the meta object for the containment reference '<em>Restriction</em>'.
+   * @see de.uni_hildesheim.sse.ivml.ImportStmt#getRestriction()
    * @see #getImportStmt()
    * @generated
    */
-  EReference getImportStmt_Versions();
+  EReference getImportStmt_Restriction();
 
   /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.ivml.ConflictStmt <em>Conflict Stmt</em>}'.
@@ -3859,58 +3755,15 @@ public interface IvmlPackage extends EPackage
   EAttribute getConflictStmt_Name();
 
   /**
-   * Returns the meta object for the containment reference list '{@link de.uni_hildesheim.sse.ivml.ConflictStmt#getConflicts <em>Conflicts</em>}'.
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.ivml.ConflictStmt#getRestriction <em>Restriction</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Conflicts</em>'.
-   * @see de.uni_hildesheim.sse.ivml.ConflictStmt#getConflicts()
+   * @return the meta object for the containment reference '<em>Restriction</em>'.
+   * @see de.uni_hildesheim.sse.ivml.ConflictStmt#getRestriction()
    * @see #getConflictStmt()
    * @generated
    */
-  EReference getConflictStmt_Conflicts();
-
-  /**
-   * Returns the meta object for class '{@link de.uni_hildesheim.sse.ivml.VersionedId <em>Versioned Id</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Versioned Id</em>'.
-   * @see de.uni_hildesheim.sse.ivml.VersionedId
-   * @generated
-   */
-  EClass getVersionedId();
-
-  /**
-   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.ivml.VersionedId#getName <em>Name</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Name</em>'.
-   * @see de.uni_hildesheim.sse.ivml.VersionedId#getName()
-   * @see #getVersionedId()
-   * @generated
-   */
-  EAttribute getVersionedId_Name();
-
-  /**
-   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.ivml.VersionedId#getOp <em>Op</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Op</em>'.
-   * @see de.uni_hildesheim.sse.ivml.VersionedId#getOp()
-   * @see #getVersionedId()
-   * @generated
-   */
-  EAttribute getVersionedId_Op();
-
-  /**
-   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.ivml.VersionedId#getVersion <em>Version</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Version</em>'.
-   * @see de.uni_hildesheim.sse.ivml.VersionedId#getVersion()
-   * @see #getVersionedId()
-   * @generated
-   */
-  EAttribute getVersionedId_Version();
+  EReference getConflictStmt_Restriction();
 
   /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.ivml.VersionStmt <em>Version Stmt</em>}'.
@@ -4114,17 +3967,6 @@ public interface IvmlPackage extends EPackage
    * @generated
    */
   EReference getExpression_Collection();
-
-  /**
-   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.ivml.Expression#getDsl <em>Dsl</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Dsl</em>'.
-   * @see de.uni_hildesheim.sse.ivml.Expression#getDsl()
-   * @see #getExpression()
-   * @generated
-   */
-  EReference getExpression_Dsl();
 
   /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.ivml.LetExpression <em>Let Expression</em>}'.
@@ -5451,6 +5293,14 @@ public interface IvmlPackage extends EPackage
     EClass TYPEDEF_COMPOUND = eINSTANCE.getTypedefCompound();
 
     /**
+     * The meta object literal for the '<em><b>Abstract</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute TYPEDEF_COMPOUND__ABSTRACT = eINSTANCE.getTypedefCompound_Abstract();
+
+    /**
      * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -5779,12 +5629,28 @@ public interface IvmlPackage extends EPackage
     EAttribute VALUE__BVALUE = eINSTANCE.getValue_BValue();
 
     /**
+     * The meta object literal for the '<em><b>Self</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute VALUE__SELF = eINSTANCE.getValue_Self();
+
+    /**
      * The meta object literal for the '<em><b>Null Value</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
     EAttribute VALUE__NULL_VALUE = eINSTANCE.getValue_NullValue();
+
+    /**
+     * The meta object literal for the '<em><b>Version</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute VALUE__VERSION = eINSTANCE.getValue_Version();
 
     /**
      * The meta object literal for the '{@link de.uni_hildesheim.sse.ivml.impl.DerivedTypeImpl <em>Derived Type</em>}' class.
@@ -5811,48 +5677,6 @@ public interface IvmlPackage extends EPackage
      * @generated
      */
     EReference DERIVED_TYPE__TYPE = eINSTANCE.getDerivedType_Type();
-
-    /**
-     * The meta object literal for the '{@link de.uni_hildesheim.sse.ivml.impl.DslContextImpl <em>Dsl Context</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see de.uni_hildesheim.sse.ivml.impl.DslContextImpl
-     * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getDslContext()
-     * @generated
-     */
-    EClass DSL_CONTEXT = eINSTANCE.getDslContext();
-
-    /**
-     * The meta object literal for the '<em><b>Stop</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute DSL_CONTEXT__STOP = eINSTANCE.getDslContext_Stop();
-
-    /**
-     * The meta object literal for the '<em><b>Escape</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute DSL_CONTEXT__ESCAPE = eINSTANCE.getDslContext_Escape();
-
-    /**
-     * The meta object literal for the '<em><b>Command</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute DSL_CONTEXT__COMMAND = eINSTANCE.getDslContext_Command();
-
-    /**
-     * The meta object literal for the '<em><b>Dsl</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute DSL_CONTEXT__DSL = eINSTANCE.getDslContext_Dsl();
 
     /**
      * The meta object literal for the '{@link de.uni_hildesheim.sse.ivml.impl.AttributeToImpl <em>Attribute To</em>}' class.
@@ -6089,12 +5913,12 @@ public interface IvmlPackage extends EPackage
     EAttribute IMPORT_STMT__INTERFACE = eINSTANCE.getImportStmt_Interface();
 
     /**
-     * The meta object literal for the '<em><b>Versions</b></em>' containment reference list feature.
+     * The meta object literal for the '<em><b>Restriction</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference IMPORT_STMT__VERSIONS = eINSTANCE.getImportStmt_Versions();
+    EReference IMPORT_STMT__RESTRICTION = eINSTANCE.getImportStmt_Restriction();
 
     /**
      * The meta object literal for the '{@link de.uni_hildesheim.sse.ivml.impl.ConflictStmtImpl <em>Conflict Stmt</em>}' class.
@@ -6115,46 +5939,12 @@ public interface IvmlPackage extends EPackage
     EAttribute CONFLICT_STMT__NAME = eINSTANCE.getConflictStmt_Name();
 
     /**
-     * The meta object literal for the '<em><b>Conflicts</b></em>' containment reference list feature.
+     * The meta object literal for the '<em><b>Restriction</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference CONFLICT_STMT__CONFLICTS = eINSTANCE.getConflictStmt_Conflicts();
-
-    /**
-     * The meta object literal for the '{@link de.uni_hildesheim.sse.ivml.impl.VersionedIdImpl <em>Versioned Id</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see de.uni_hildesheim.sse.ivml.impl.VersionedIdImpl
-     * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getVersionedId()
-     * @generated
-     */
-    EClass VERSIONED_ID = eINSTANCE.getVersionedId();
-
-    /**
-     * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute VERSIONED_ID__NAME = eINSTANCE.getVersionedId_Name();
-
-    /**
-     * The meta object literal for the '<em><b>Op</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute VERSIONED_ID__OP = eINSTANCE.getVersionedId_Op();
-
-    /**
-     * The meta object literal for the '<em><b>Version</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute VERSIONED_ID__VERSION = eINSTANCE.getVersionedId_Version();
+    EReference CONFLICT_STMT__RESTRICTION = eINSTANCE.getConflictStmt_Restriction();
 
     /**
      * The meta object literal for the '{@link de.uni_hildesheim.sse.ivml.impl.VersionStmtImpl <em>Version Stmt</em>}' class.
@@ -6319,14 +6109,6 @@ public interface IvmlPackage extends EPackage
      * @generated
      */
     EReference EXPRESSION__COLLECTION = eINSTANCE.getExpression_Collection();
-
-    /**
-     * The meta object literal for the '<em><b>Dsl</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference EXPRESSION__DSL = eINSTANCE.getExpression_Dsl();
 
     /**
      * The meta object literal for the '{@link de.uni_hildesheim.sse.ivml.impl.LetExpressionImpl <em>Let Expression</em>}' class.

@@ -61,7 +61,11 @@ public class CompoundValue extends StructuredValue implements Cloneable {
      *   to the respective types
      */
     CompoundValue(Compound compound, Object... value) throws ValueDoesNotMatchTypeException {
-        super(compound);        
+        super(compound);
+        if (compound.isAbstract()) {
+            throw new ValueDoesNotMatchTypeException("cannot assign value as '" + compound.getName() + "' is abstract",
+                ValueDoesNotMatchTypeException.IS_ABSTRACT);
+        }
         nestedElements = new HashMap<String, Value>();
         if (null != value && value.length % 2 != 0) {
             throw new ValueDoesNotMatchTypeException("amount of slot names and values does not match", 
@@ -331,9 +335,7 @@ public class CompoundValue extends StructuredValue implements Cloneable {
         return fullyConfigured;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public Value clone() {
         CompoundValue clonedValue = null;
         clonedValue = (CompoundValue) super.clone();
@@ -373,6 +375,18 @@ public class CompoundValue extends StructuredValue implements Cloneable {
     
     @Override
     public boolean equals(Object object) {
+        return equals(object, false);
+    }
+    
+    /**
+     * Checks for equality potentially ignoring undefined values in the given <code>object</code>.
+     * 
+     * @param object the object to check for
+     * @param ignoreUndefinedInObject whether undefined values in <code>object</code> shall be ignored 
+     *   (partial equality)
+     * @return <code>true</code> if <code>object</code> is considered equal to <b>this</b>, <code>false</code> else
+     */
+    private boolean equals(Object object, boolean ignoreUndefinedInObject) {
         boolean equals = false;
         Compound type = (Compound) getType(); // by construction
         if (object instanceof CompoundValue ) {
@@ -384,12 +398,14 @@ public class CompoundValue extends StructuredValue implements Cloneable {
                 while (equals && null != type) {
                     for (int s = 0; equals && s < type.getElementCount(); s++) {
                         String slotName = type.getElement(s).getName();
-                        Value myValue = getNestedValue(slotName);
                         Value oValue = otherValue.getNestedValue(slotName);
-                        if (null == myValue) {
-                            equals = (null == oValue);
-                        } else {
-                            equals = myValue.equals(oValue);
+                        if (!ignoreUndefinedInObject || (ignoreUndefinedInObject && null != oValue)) {
+                            Value myValue = getNestedValue(slotName);
+                            if (null == myValue) {
+                                equals = (null == oValue);
+                            } else {
+                                equals = myValue.equals(oValue);
+                            }
                         }
                     }
                     type = type.getRefines();
@@ -398,5 +414,11 @@ public class CompoundValue extends StructuredValue implements Cloneable {
         }
         return equals;
     }
+
     
+    @Override
+    public boolean equalsPartially(Value value) {
+        return equals(value, true);
+    }
+        
 }

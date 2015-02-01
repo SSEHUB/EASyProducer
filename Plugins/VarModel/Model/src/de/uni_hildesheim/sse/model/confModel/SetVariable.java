@@ -38,9 +38,7 @@ public class SetVariable extends ContainerVariable {
         super(parent, varDecl, isVisible);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     protected String getElementName(int index) {
         return getDeclaration().getName() + " {" + String.valueOf(index) + "}"; // initial, empty?
     }

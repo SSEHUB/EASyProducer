@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="rtVil" nsURI="http://www.uni_hildesheim.de/sse/vil/rt/RtVil"
+    nsPrefix="rtVil">
+  <eClassifiers xsi:type="ecore:EClass" name="ImplementationUnit" eSuperTypes="../../../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/VilBuildLanguage.ecore#//ImplementationUnit"/>
+  <eClassifiers xsi:type="ecore:EClass" name="LanguageUnit" eSuperTypes="../../../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/VilBuildLanguage.ecore#//LanguageUnit">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rtContents" eType="#//rtContents"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="rtContents"/>
+  <eClassifiers xsi:type="ecore:EClass" name="GlobalVariableDeclaration">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="persistent" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="varDecl" eType="ecore:EClass ../../../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/ExpressionDsl.ecore#//VariableDeclaration"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StrategyDeclaration">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="paramList" eType="ecore:EClass ../../../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/ExpressionDsl.ecore#//ParameterList"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="conditions" eType="ecore:EClass ../../../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/VilBuildLanguage.ecore#//RuleConditions"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="varDecls" upperBound="-1"
+        eType="ecore:EClass ../../../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/ExpressionDsl.ecore#//VariableDeclaration"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="objective" eType="ecore:EClass ../../../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/ExpressionDsl.ecore#//Expression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="breakdown" upperBound="-1"
+        eType="#//BreakdownElement" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="post" upperBound="-1" eType="ecore:EClass ../../../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/VilBuildLanguage.ecore#//RuleElement"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BreakdownElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="varDecl" eType="ecore:EClass ../../../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/ExpressionDsl.ecore#//VariableDeclaration"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="exprStmt" eType="ecore:EClass ../../../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/VilBuildLanguage.ecore#//ExpressionStatement"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="breakdownStmt" eType="#//BreakdownStatement"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BreakdownStatement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="guard" eType="ecore:EClass ../../../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/ExpressionDsl.ecore#//LogicalExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="name" eType="ecore:EClass ../../../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/ExpressionDsl.ecore#//QualifiedPrefix"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="param" eType="ecore:EClass ../../../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/ExpressionDsl.ecore#//ArgumentList"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="part" upperBound="-1" eType="#//BreakdownWithPart"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="time" eType="ecore:EClass ../../../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/ExpressionDsl.ecore#//Expression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BreakdownWithPart">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="ecore:EClass ../../../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/ExpressionDsl.ecore#//Expression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TacticDeclaration">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="paramList" eType="ecore:EClass ../../../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/ExpressionDsl.ecore#//ParameterList"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="conditions" eType="ecore:EClass ../../../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/VilBuildLanguage.ecore#//RuleConditions"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="block" eType="ecore:EClass ../../../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/VilBuildLanguage.ecore#//RuleElementBlock"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ScriptContents" eSuperTypes="#//rtContents">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject" containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

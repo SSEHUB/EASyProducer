@@ -52,25 +52,16 @@ public class EnumLiteral extends ModelElement {
         return ordinal;
     }
     
-    /** 
-     * Accept method for the visitor.
-     * 
-     * @param visitor The visitor, which should process this model element.
-     */
+    @Override
     public void accept(IModelVisitor visitor) {
         visitor.visitEnumLiteral(this);
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public IModelElement getParent() {
         return parent;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean equals(Object object) {
         boolean result;
@@ -83,9 +74,6 @@ public class EnumLiteral extends ModelElement {
         return result;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int hashCode() {
         return getName().hashCode() + ordinal + parent.hashCode();

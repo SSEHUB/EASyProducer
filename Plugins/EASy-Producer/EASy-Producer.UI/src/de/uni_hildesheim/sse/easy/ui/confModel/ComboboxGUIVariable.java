@@ -80,7 +80,6 @@ class ComboboxGUIVariable extends GUIVariable {
         
         super(variable, confParent.getConfiguration(),
             confParent.getConfiguration() == confParent ? null : (GUIVariable) confParent);
-        
         this.type = type;
         if (null != values) {
             this.values = values;

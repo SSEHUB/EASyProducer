@@ -70,12 +70,6 @@ public class PLP2ProjectConverter implements PersistenceConstants {
         // Reasoners
         model = project.getModel(ModelType.REASONERS);
         reasoner2Model(model, plp.getReasonerConfig());
-
-        // CopyMechanism
-        model = project.getModel(ModelType.COPY);
-        Entity entity = new Entity();
-        entity.createAttribute(COPY_ID, plp.getCopyModel().getID());
-        model.addEntity(entity);
         
         // Project settings
         model = project.getModel(ModelType.SETTINGS);

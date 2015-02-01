@@ -84,7 +84,6 @@ public class IvmlFactoryImpl extends EFactoryImpl implements IvmlFactory
       case IvmlPackage.ACCESS_NAME: return createAccessName();
       case IvmlPackage.VALUE: return createValue();
       case IvmlPackage.DERIVED_TYPE: return createDerivedType();
-      case IvmlPackage.DSL_CONTEXT: return createDslContext();
       case IvmlPackage.ATTRIBUTE_TO: return createAttributeTo();
       case IvmlPackage.FREEZE: return createFreeze();
       case IvmlPackage.FREEZE_STATEMENT: return createFreezeStatement();
@@ -95,7 +94,6 @@ public class IvmlFactoryImpl extends EFactoryImpl implements IvmlFactory
       case IvmlPackage.EXPORT: return createExport();
       case IvmlPackage.IMPORT_STMT: return createImportStmt();
       case IvmlPackage.CONFLICT_STMT: return createConflictStmt();
-      case IvmlPackage.VERSIONED_ID: return createVersionedId();
       case IvmlPackage.VERSION_STMT: return createVersionStmt();
       case IvmlPackage.OP_DEF_STATEMENT: return createOpDefStatement();
       case IvmlPackage.OP_DEF_PARAMETER_LIST: return createOpDefParameterList();
@@ -362,17 +360,6 @@ public class IvmlFactoryImpl extends EFactoryImpl implements IvmlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public DslContext createDslContext()
-  {
-    DslContextImpl dslContext = new DslContextImpl();
-    return dslContext;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public AttributeTo createAttributeTo()
   {
     AttributeToImpl attributeTo = new AttributeToImpl();
@@ -476,17 +463,6 @@ public class IvmlFactoryImpl extends EFactoryImpl implements IvmlFactory
   {
     ConflictStmtImpl conflictStmt = new ConflictStmtImpl();
     return conflictStmt;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public VersionedId createVersionedId()
-  {
-    VersionedIdImpl versionedId = new VersionedIdImpl();
-    return versionedId;
   }
 
   /**

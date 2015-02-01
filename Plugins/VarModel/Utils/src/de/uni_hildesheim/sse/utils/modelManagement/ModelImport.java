@@ -15,6 +15,7 @@
  */
 package de.uni_hildesheim.sse.utils.modelManagement;
 
+
 /**
  * Defines model imports and related restrictions.
  * 
@@ -22,11 +23,11 @@ package de.uni_hildesheim.sse.utils.modelManagement;
  * 
  * @author Holger Eichelberger
  */
-public class ModelImport <M extends IModel> implements IVersionRestrictable {
+public class ModelImport <M extends IModel> {
 
     private M resolved;
     private String name;
-    private VersionRestriction[] restrictions;
+    private IVersionRestriction restriction;
     private boolean isConflict;
 
     /**
@@ -35,7 +36,7 @@ public class ModelImport <M extends IModel> implements IVersionRestrictable {
      * @param name The name of the project to be imported.
      */
     public ModelImport(String name) {
-        this(name, false, (VersionRestriction[]) null);
+        this(name, false, null);
     }
     
     /**
@@ -43,11 +44,11 @@ public class ModelImport <M extends IModel> implements IVersionRestrictable {
      * 
      * @param name the name of the model to be import
      * @param isConflict does this object represent a conflict or an import
-     * @param restrictions the version restrictions
+     * @param restriction the version restriction (or <b>null</b> if absent)
      */
-    public ModelImport(String name, boolean isConflict, VersionRestriction... restrictions) {
+    public ModelImport(String name, boolean isConflict, IVersionRestriction restriction) {
         this.name = name;
-        this.restrictions = restrictions;
+        this.restriction = restriction;
         this.isConflict = isConflict;
     }
     
@@ -58,30 +59,6 @@ public class ModelImport <M extends IModel> implements IVersionRestrictable {
      */
     public String getName() {
         return name;
-    }
-    
-    /**
-     * Returns the restriction specified by <code>index</code>.
-     * 
-     * @param index a 0-based index specifying the restriction to be returned
-     * @return the restriction
-     * @throws IndexOutOfBoundsException if 
-     *   <code>index&lt;0 || index&gt;={@link #getRestrictionsCount}</code>
-     */
-    public VersionRestriction getRestriction(int index) {
-        if (null == restrictions) {
-            throw new IndexOutOfBoundsException();
-        }
-        return restrictions[index];
-    }
-
-    /**
-     * Returns the number of restrictions.
-     * 
-     * @return the number of restrictions
-     */
-    public int getRestrictionsCount() {
-        return null == restrictions ? 0 : restrictions.length;
     }
 
     /**
@@ -96,10 +73,11 @@ public class ModelImport <M extends IModel> implements IVersionRestrictable {
 
     /**
      * Setter for setting the version restrictions.
-     * @param restrictions Version restrictions related to this import or <code>null</code>.
+     * 
+     * @param restriction the version restriction to this import or <code>null</code> if absent.
      */
-    public void setRestrictions(VersionRestriction[] restrictions) {
-        this.restrictions = restrictions;
+    public void setRestrictions(IVersionRestriction restriction) {
+        this.restriction = restriction;
     }
 
     /**
@@ -129,6 +107,42 @@ public class ModelImport <M extends IModel> implements IVersionRestrictable {
     public void setResolved(M resolved) throws ModelManagementException {
         // set resolved
         this.resolved = resolved;
+    }
+    
+    /**
+     * Evaluates the restrictions against <code>version</code>.
+     * 
+     * @param context the output context (interpreted by the respective implementation, 
+     *   e.g., an output visitor in order to continue with the actual indentation, may 
+     *   be <b>null</b> but then <b>false</b> will always be the result)
+     * @param version the version to evaluate against
+     * @return <code>true</code> if the restrictions are fulfilled (also if none restrictions
+     *   were given), <code>false</code> if the restrictions were not fulfilled
+     * @throws RestrictionEvaluationException in case of evaluation problems
+     */
+    public boolean evaluateRestrictions(IRestrictionEvaluationContext context, Version version) 
+        throws RestrictionEvaluationException {
+        return null != restriction ? restriction.evaluate(context, version) : true;
+    }
+    
+    /**
+     * Returns the version restriction.
+     * 
+     * @return the version restriction (may be <b>null</b>)
+     */
+    public IVersionRestriction getVersionRestriction() {
+        return restriction;
+    }
+    
+    /**
+     * Copies the version restriction.
+     * 
+     * @param model the model to instantiate the copied version restriction for
+     * @return the copied version restriction or <b>null</b> if no restriction was specified before
+     * @throws RestrictionEvaluationException in case of type/structural problems
+     */
+    public IVersionRestriction copyVersionRestriction(M model) throws RestrictionEvaluationException {
+        return null != restriction ? restriction.copy(model) : null;
     }
  
 }

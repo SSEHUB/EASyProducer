@@ -1,0 +1,31 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: de.uni_hildesheim.sse.vil.rt.ui
+Bundle-Vendor: SSE - University of Hildesheim
+Bundle-Version: 0.0.1
+Bundle-SymbolicName: de.uni_hildesheim.sse.vil.rt.ui; singleton:=true
+Bundle-ActivationPolicy: lazy
+Require-Bundle: de.uni_hildesheim.sse.vil.rt;visibility:=reexport,
+ org.eclipse.xtext.ui,
+ org.eclipse.ui.editors;bundle-version="3.5.0",
+ org.eclipse.ui.ide;bundle-version="3.5.0",
+ de.uni_hildesheim.sse.dslCore.ui;bundle-version="0.0.1",
+ de.uni_hildesheim.sse.utils;bundle-version="0.4.2",
+ de.uni_hildesheim.sse.vil.expressions.ui;bundle-version="0.5.2",
+ de.uni_hildesheim.sse.vil.buildlang.ui;bundle-version="0.5.2",
+ org.eclipse.xtext.ui.shared,
+ org.eclipse.ui,
+ org.eclipse.xtext.builder,
+ org.antlr.runtime,
+ org.eclipse.xtext.common.types.ui,
+ org.eclipse.xtext.ui.codetemplates.ui,
+ org.eclipse.compare,
+ de.uni-hildesheim.sse.easy.instantiatorCore.rt;bundle-version="0.0.1"
+Import-Package: org.apache.log4j,
+ org.eclipse.xtext.xbase.lib
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: de.uni_hildesheim.sse.vil.rt.ui.quickfix,
+ de.uni_hildesheim.sse.vil.rt.ui.contentassist,
+ de.uni_hildesheim.sse.vil.rt.ui.contentassist.antlr,
+ de.uni_hildesheim.sse.vil.rt.ui.internal
+Bundle-Activator: de.uni_hildesheim.sse.vil.rt.ui.internal.RtVilActivator

@@ -122,9 +122,6 @@ public class CustomOperation extends Operation {
         return null == parameters ? 0 : parameters.length;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected boolean registerAsOperation() {
         return false;

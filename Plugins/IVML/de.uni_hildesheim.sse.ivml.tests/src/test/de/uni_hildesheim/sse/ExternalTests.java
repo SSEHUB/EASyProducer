@@ -87,4 +87,44 @@ public class ExternalTests extends AbstractTest {
         assertEqual(createFile("InterfaceImportFail_1"), "InterfaceImportFail", "1", ErrorCodes.IMPORT);
     }
 
+    /**
+     * Simple alarm system case (sets, using self).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testAlarm() throws IOException {
+        assertEqual(createFile("alarm"), null, null);
+    }
+
+    /**
+     * Simple alarm system case (sets, using self).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testAlarmSelf() throws IOException {
+        assertEqual(createFile("alarmSelf"), null, null);
+    }
+
+    /**
+     * Simple alarm system case (sequences).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testAlarmSeq() throws IOException {
+        assertEqual(createFile("alarmSeq"), null, null);
+    }
+
+    /**
+     * Simple alarm system case (sequences, using self).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testAlarmSeqSelf() throws IOException {
+        assertEqual(createFile("alarmSeqSelf"), null, null);
+    }
+
 }

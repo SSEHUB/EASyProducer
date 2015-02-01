@@ -45,7 +45,6 @@ import de.uni_hildesheim.sse.vil.expressions.expressionDsl.UnqualifiedExecution;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VersionSpec;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VersionStmt;
-import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VersionedId;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -89,13 +88,6 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * @generated
    */
   private EClass versionSpecEClass = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private EClass versionedIdEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -564,39 +556,9 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getVersionSpec_Conflicts()
+  public EReference getVersionSpec_Restriction()
   {
     return (EReference)versionSpecEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EClass getVersionedId()
-  {
-    return versionedIdEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EAttribute getVersionedId_Op()
-  {
-    return (EAttribute)versionedIdEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EAttribute getVersionedId_Version()
-  {
-    return (EAttribute)versionedIdEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1594,6 +1556,16 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getConstant_Version()
+  {
+    return (EAttribute)constantEClass.getEStructuralFeatures().get(5);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getNumValue()
   {
     return numValueEClass;
@@ -1684,9 +1656,9 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getTypeParameters_Param()
+  public EReference getTypeParameters_Param()
   {
-    return (EAttribute)typeParametersEClass.getEStructuralFeatures().get(0);
+    return (EReference)typeParametersEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1786,11 +1758,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
     createEReference(adviceEClass, ADVICE__VERSION_SPEC);
 
     versionSpecEClass = createEClass(VERSION_SPEC);
-    createEReference(versionSpecEClass, VERSION_SPEC__CONFLICTS);
-
-    versionedIdEClass = createEClass(VERSIONED_ID);
-    createEAttribute(versionedIdEClass, VERSIONED_ID__OP);
-    createEAttribute(versionedIdEClass, VERSIONED_ID__VERSION);
+    createEReference(versionSpecEClass, VERSION_SPEC__RESTRICTION);
 
     parameterListEClass = createEClass(PARAMETER_LIST);
     createEReference(parameterListEClass, PARAMETER_LIST__PARAM);
@@ -1922,6 +1890,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
     createEReference(constantEClass, CONSTANT__QVALUE);
     createEAttribute(constantEClass, CONSTANT__BVALUE);
     createEAttribute(constantEClass, CONSTANT__NULL);
+    createEAttribute(constantEClass, CONSTANT__VERSION);
 
     numValueEClass = createEClass(NUM_VALUE);
     createEAttribute(numValueEClass, NUM_VALUE__VAL);
@@ -1934,7 +1903,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
     createEAttribute(typeEClass, TYPE__MAP);
 
     typeParametersEClass = createEClass(TYPE_PARAMETERS);
-    createEAttribute(typeParametersEClass, TYPE_PARAMETERS__PARAM);
+    createEReference(typeParametersEClass, TYPE_PARAMETERS__PARAM);
 
     containerInitializerEClass = createEClass(CONTAINER_INITIALIZER);
     createEReference(containerInitializerEClass, CONTAINER_INITIALIZER__EXPRS);
@@ -1992,11 +1961,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
     initEReference(getAdvice_VersionSpec(), this.getVersionSpec(), null, "versionSpec", null, 0, 1, Advice.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(versionSpecEClass, VersionSpec.class, "VersionSpec", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getVersionSpec_Conflicts(), this.getVersionedId(), null, "conflicts", null, 0, -1, VersionSpec.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(versionedIdEClass, VersionedId.class, "VersionedId", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getVersionedId_Op(), ecorePackage.getEString(), "op", null, 0, 1, VersionedId.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getVersionedId_Version(), ecorePackage.getEString(), "version", null, 0, 1, VersionedId.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getVersionSpec_Restriction(), this.getExpression(), null, "restriction", null, 0, 1, VersionSpec.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(parameterListEClass, ParameterList.class, "ParameterList", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getParameterList_Param(), this.getParameter(), null, "param", null, 0, -1, ParameterList.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2128,6 +2093,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
     initEReference(getConstant_QValue(), this.getQualifiedName(), null, "qValue", null, 0, 1, Constant.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getConstant_BValue(), ecorePackage.getEString(), "bValue", null, 0, 1, Constant.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getConstant_Null(), ecorePackage.getEString(), "null", null, 0, 1, Constant.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getConstant_Version(), ecorePackage.getEString(), "version", null, 0, 1, Constant.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(numValueEClass, NumValue.class, "NumValue", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getNumValue_Val(), ecorePackage.getEString(), "val", null, 0, 1, NumValue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2140,7 +2106,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
     initEAttribute(getType_Map(), ecorePackage.getEString(), "map", null, 0, 1, Type.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(typeParametersEClass, TypeParameters.class, "TypeParameters", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getTypeParameters_Param(), ecorePackage.getEString(), "param", null, 0, -1, TypeParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getTypeParameters_Param(), this.getType(), null, "param", null, 0, -1, TypeParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(containerInitializerEClass, ContainerInitializer.class, "ContainerInitializer", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getContainerInitializer_Exprs(), this.getContainerInitializerExpression(), null, "exprs", null, 0, -1, ContainerInitializer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

@@ -1,0 +1,15 @@
+project CompoundEqualityTest {
+
+	version v0;
+	
+	compound C {
+	   String name;
+	   Integer value;
+	   Integer value2;
+	}
+	
+	C c1;
+	C c2 = {name = "Name", value = 1, value2 = 2};	
+	
+	c1 == c2;
+}

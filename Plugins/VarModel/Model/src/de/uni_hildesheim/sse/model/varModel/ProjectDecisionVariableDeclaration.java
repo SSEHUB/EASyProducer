@@ -34,9 +34,6 @@ class ProjectDecisionVariableDeclaration extends DecisionVariableDeclaration {
         super(name, type, parent);
     }
     
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean attribute(Attribute attribute) {
         return super.attribute(attribute) && getParent().propagateAttribute(attribute);

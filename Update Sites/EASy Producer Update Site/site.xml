@@ -3,44 +3,59 @@
    <feature url="features/de.uni_hildesheim.sse.easy_producer.instantiation.xvcl_feature.jar" id="de.uni_hildesheim.sse.easy_producer.instantiation.xvcl_feature" version="0.5.2">
       <category name="de.uni_hildesheim.sse.easy_producer.instantiation_category"/>
    </feature>
-   <feature url="features/de.uni_hildesheim.sse.easy_producer.instantiation.velocity_feature.jar" id="de.uni_hildesheim.sse.easy_producer.instantiation.velocity_feature" version="0.7.1">
+   <feature url="features/de.uni_hildesheim.sse.easy_producer.instantiation.velocity_feature.jar" id="de.uni_hildesheim.sse.easy_producer.instantiation.velocity_feature" version="0.7.2">
       <category name="de.uni_hildesheim.sse.easy_producer.instantiation_category"/>
    </feature>
-   <feature url="features/de.uni_hildesheim.sse.ivml.core_feature.jar" id="de.uni_hildesheim.sse.ivml.core_feature" version="0.11.2">
+   <feature url="features/de.uni_hildesheim.sse.ivml.core_feature.jar" id="de.uni_hildesheim.sse.ivml.core_feature" version="0.11.3">
       <category name="de.uni_hildesheim.sse.easy_producer.core_category"/>
    </feature>
-   <feature url="features/de.uni_hildesheim.sse.ivml.ui_feature.jar" id="de.uni_hildesheim.sse.ivml.ui_feature" version="0.10.2">
+   <feature url="features/de.uni_hildesheim.sse.ivml.ui_feature.jar" id="de.uni_hildesheim.sse.ivml.ui_feature" version="0.10.3">
       <category name="de.uni_hildesheim.sse.easy_producer.core_category"/>
    </feature>
-   <feature url="features/de.uni_hildesheim.sse.easy_producer.core_feature.jar" id="de.uni_hildesheim.sse.easy_producer.core_feature" version="0.10.2">
+   <feature url="features/de.uni_hildesheim.sse.easy_producer.core_feature.jar" id="de.uni_hildesheim.sse.easy_producer.core_feature" version="0.10.3">
       <category name="de.uni_hildesheim.sse.easy_producer.core_category"/>
    </feature>
-   <feature url="features/de.uni_hildesheim.sse.easy_producer.ui_feature.jar" id="de.uni_hildesheim.sse.easy_producer.ui_feature" version="0.11.2">
+   <feature url="features/de.uni_hildesheim.sse.easy_producer.ui_feature.jar" id="de.uni_hildesheim.sse.easy_producer.ui_feature" version="0.11.3">
       <category name="de.uni_hildesheim.sse.easy_producer.core_category"/>
    </feature>
-   <feature url="features/de.uni_hildesheim.sse.reasoning.drools_feature.jar" id="de.uni_hildesheim.sse.reasoning.drools_feature" version="0.6.4">
-      <category name="de.uni_hildesheim.sse.easy_producer.reasoning_category"/>
-   </feature>
-   <feature url="features/de.uni_hildesheim.sse.ivml_integration.integration_core_feature.jar" id="de.uni_hildesheim.sse.ivml_integration.integration_core_feature" version="0.10.1">
+   <feature url="features/de.uni_hildesheim.sse.ivml_integration.integration_core_feature.jar" id="de.uni_hildesheim.sse.ivml_integration.integration_core_feature" version="0.10.2">
       <category name="de.uni_hildesheim.sse.easy_producer.integration_category"/>
    </feature>
-   <feature url="features/de.uni_hildesheim.sse.vil.core_feature.jar" id="de.uni_hildesheim.sse.vil.core_feature" version="0.5.2">
+   <feature url="features/de.uni_hildesheim.sse.vil.core_feature.jar" id="de.uni_hildesheim.sse.vil.core_feature" version="0.5.3">
       <category name="de.uni_hildesheim.sse.easy_producer.core_category"/>
    </feature>
-   <feature url="features/de.uni_hildesheim.sse.vil.ui_feature.jar" id="de.uni_hildesheim.sse.vil.ui_feature" version="0.5.2">
+   <feature url="features/de.uni_hildesheim.sse.vil.ui_feature.jar" id="de.uni_hildesheim.sse.vil.ui_feature" version="0.5.3">
       <category name="de.uni_hildesheim.sse.easy_producer.core_category"/>
    </feature>
-   <feature url="features/de.uni_hildesheim.sse.easy_producer.quick_install_feature.jar" id="de.uni_hildesheim.sse.easy_producer.quick_install_feature" version="0.11.2">
+   <feature url="features/de.uni_hildesheim.sse.easy_producer.quick_install_feature.jar" id="de.uni_hildesheim.sse.easy_producer.quick_install_feature" version="0.11.3">
       <category name="de.uni_hildesheim.sse.easy_producer.quick_install_category"/>
    </feature>
-   <feature url="features/de.uni_hildesheim.sse.easy.instantiator.java.feature.jar" id="de.uni_hildesheim.sse.easy.instantiator.java.feature" version="0.2.2">
+   <feature url="features/de.uni_hildesheim.sse.easy.instantiator.java.feature.jar" id="de.uni_hildesheim.sse.easy.instantiator.java.feature" version="0.2.3">
       <category name="de.uni_hildesheim.sse.easy_producer.instantiation_category"/>
    </feature>
-   <feature url="features/de.uni_hildesheim.sse.reasoning.drools2_feature.jar" id="de.uni_hildesheim.sse.reasoning.drools2_feature" version="0.1.5">
+   <feature url="features/de.uni_hildesheim.sse.reasoning.drools2_feature.jar" id="de.uni_hildesheim.sse.reasoning.drools2_feature" version="0.1.6">
       <category name="de.uni_hildesheim.sse.easy_producer.reasoning_category"/>
    </feature>
-   <feature url="features/de.uni_hildesheim.sse.easy_producer.core.no_eclipse_feature.jar" id="de.uni_hildesheim.sse.easy_producer.core.no_eclipse_feature" version="0.10.2">
+   <feature url="features/de.uni_hildesheim.sse.easy_producer.core.no_eclipse_feature.jar" id="de.uni_hildesheim.sse.easy_producer.core.no_eclipse_feature" version="0.10.3">
       <category name="de.uni_hildesheim.sse.easy_producer.core_category"/>
+   </feature>
+   <feature url="features/de.uni_hildesheim.sse.easy.instantiator.maven.feature.jar" id="de.uni_hildesheim.sse.easy.instantiator.maven.feature" version="0.0.1">
+      <category name="de.uni_hildesheim.sse.easy_producer.instantiation_category"/>
+   </feature>
+   <feature url="features/de.uni_hildesheim.sse.vil.rt.core_feature.jar" id="de.uni_hildesheim.sse.vil.rt.core_feature" version="0.0.1">
+      <category name="de.uni_hildesheim.sse.easy_producer.core_category"/>
+   </feature>
+   <feature url="features/de.uni_hildesheim.sse.vil.rt.ui_feature.jar" id="de.uni_hildesheim.sse.vil.rt.ui_feature" version="0.0.1">
+      <category name="de.uni_hildesheim.sse.easy_producer.core_category"/>
+   </feature>
+   <feature url="features/de.uni_hildesheim.sse.reasoning.reasoner_feature.jar" id="de.uni_hildesheim.sse.reasoning.reasoner_feature" version="0.0.1">
+      <category name="de.uni_hildesheim.sse.easy_producer.reasoning_category"/>
+   </feature>
+   <feature url="features/de.uni_hildesheim.sse.runtime_feature.jar" id="de.uni_hildesheim.sse.runtime_feature" version="0.11.3">
+      <category name="de.uni_hildesheim.sse.easy_producer.quick_install_category"/>
+   </feature>
+   <feature url="features/de.uni_hildesheim.sse.experimental_feature.jar" id="de.uni_hildesheim.sse.experimental_feature" version="0.11.3">
+      <category name="de.uni_hildesheim.sse.easy_producer.quick_install_category"/>
    </feature>
    <category-def name="de.uni_hildesheim.sse.easy_producer.core_category" label="EASy Producer">
       <description>

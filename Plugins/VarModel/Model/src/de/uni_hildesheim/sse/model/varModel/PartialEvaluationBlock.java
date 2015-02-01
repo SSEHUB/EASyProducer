@@ -134,9 +134,7 @@ public class PartialEvaluationBlock extends EvaluationBlock {
         this.nested = nested;
     }
 
-    /** 
-     * {@inheritDoc}
-     */
+    @Override
     public void accept(IModelVisitor visitor) {
         visitor.visitPartialEvaluationBlock(this);
     }

@@ -29,11 +29,11 @@ import de.uni_hildesheim.sse.model.cst.CompoundInitializer;
 import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
 import de.uni_hildesheim.sse.model.cst.ContainerInitializer;
 import de.uni_hildesheim.sse.model.cst.ContainerOperationCall;
-import de.uni_hildesheim.sse.model.cst.DslFragment;
 import de.uni_hildesheim.sse.model.cst.IfThen;
 import de.uni_hildesheim.sse.model.cst.Let;
 import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
 import de.uni_hildesheim.sse.model.cst.Parenthesis;
+import de.uni_hildesheim.sse.model.cst.Self;
 import de.uni_hildesheim.sse.model.cst.Variable;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.Attribute;
@@ -78,8 +78,9 @@ import de.uni_hildesheim.sse.model.varModel.values.RealValue;
 import de.uni_hildesheim.sse.model.varModel.values.ReferenceValue;
 import de.uni_hildesheim.sse.model.varModel.values.StringValue;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
+import de.uni_hildesheim.sse.model.varModel.values.VersionValue;
+import de.uni_hildesheim.sse.utils.modelManagement.IVersionRestriction;
 import de.uni_hildesheim.sse.utils.modelManagement.Version;
-import de.uni_hildesheim.sse.utils.modelManagement.VersionRestriction;
 
 /**
  * Writer for writing the variability model to an IVML output file. Please note
@@ -114,6 +115,8 @@ public class IVMLWriter extends AbstractVarModelWriter {
     private boolean formatInitializer = false;
     
     private boolean forceCompoundTypes = false;
+    
+    private DecisionVariableDeclaration inDecl;
     
     /**
      * Class for writing <code>ivml</code> output appropriate for the EASy-Producer tool.
@@ -156,9 +159,7 @@ public class IVMLWriter extends AbstractVarModelWriter {
         this.forceCompoundTypes = forceCompoundTypes;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public boolean emitComments() {
         return emitComments;
     }
@@ -172,7 +173,7 @@ public class IVMLWriter extends AbstractVarModelWriter {
     public static final synchronized IVMLWriter getInstance(Writer writer) {
         IVMLWriter result;
         if (POOL.size() > 0) {
-            result = POOL.get(0);
+            result = POOL.remove(0);
         } else {
             result = new IVMLWriter(writer);
         }
@@ -193,9 +194,6 @@ public class IVMLWriter extends AbstractVarModelWriter {
         POOL.add(writer);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected void printDefaultSpace(DefaultSpace location) {
         switch (location) {
@@ -247,9 +245,7 @@ public class IVMLWriter extends AbstractVarModelWriter {
         variableUsage.clear();
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitProjectImport(ProjectImport pImport) {
         appendIndentation();
         if (pImport.isConflict()) {
@@ -263,28 +259,12 @@ public class IVMLWriter extends AbstractVarModelWriter {
             appendOutput(NAMESPACE_SEPARATOR);
             appendOutput(pImport.getInterfaceName());
         }
-        int rCount = pImport.getRestrictionsCount();
-        if (rCount > 0) {
+        IVersionRestriction restriction = pImport.getVersionRestriction();
+        if (null != restriction) {
             appendOutput(WHITESPACE);
             appendOutput(WITH);
             appendOutput(WHITESPACE);
-            appendOutput(BEGINNING_PARENTHESIS);
-            for (int r = 0; r < rCount; r++) {
-                if (r > 0) {
-                    appendOutput(COMMA);
-                    appendOutput(WHITESPACE);
-                }
-                VersionRestriction restriction = pImport.getRestriction(r);
-                appendOutput(restriction.getName());
-                appendOutput(ATTRIBUTE_ACCESS);
-                appendOutput(VERSION);
-                appendOutput(WHITESPACE);
-                appendOutput(toText(restriction.getOperator()));
-                appendOutput(WHITESPACE);
-                appendOutput(VERSION_START);
-                appendOutput(restriction.getVersion().getVersion());
-            }
-            appendOutput(ENDING_PARENTHESIS);
+            appendOutput(restriction.toSpecification());
         }
         appendOutput(SEMICOLON);
         appendOutput(LINEFEED);
@@ -292,6 +272,10 @@ public class IVMLWriter extends AbstractVarModelWriter {
 
     @Override
     protected void startWritingCompound(Compound compound) {
+        if (compound.isAbstract()) {
+            appendOutput(ABSTRACT);
+            appendOutput(WHITESPACE);
+        }
         appendOutput(COMPOUND);
         appendOutput(WHITESPACE);
         appendOutput(compound.getName());
@@ -345,18 +329,14 @@ public class IVMLWriter extends AbstractVarModelWriter {
         appendOutput(LINEFEED);
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitEnumValue(EnumValue value) {
         appendOutput(IvmlDatatypeVisitor.getUniqueType(value.getType()));
         appendOutput(ENUM_ACCESS);
         appendOutput(value.getValue().getName());
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitDecisionVariableDeclaration(DecisionVariableDeclaration decl) {
         appendIndentation();
         emitDecisionVariableDeclarationExpression(decl, null);
@@ -373,6 +353,7 @@ public class IVMLWriter extends AbstractVarModelWriter {
      */
     private void emitDecisionVariableDeclarationExpression(DecisionVariableDeclaration decl, 
         ConstraintSyntaxTree defaultValue) {
+        inDecl = decl;
         appendOutput(IvmlDatatypeVisitor.getUniqueType(decl.getType()));
         appendOutput(WHITESPACE);
         appendOutput(decl.getName());
@@ -388,11 +369,10 @@ public class IVMLWriter extends AbstractVarModelWriter {
             appendOutput(WHITESPACE);
             dflt.accept(this);
         } 
+        inDecl = null;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitStringValue(StringValue value) {
         String val = value.getValue();
         if (null != val) {
@@ -401,12 +381,46 @@ public class IVMLWriter extends AbstractVarModelWriter {
             appendOutput(QUOTES);
         }
     }
-
+    
     /**
-     * {@inheritDoc}
+     * Emits the type of an initializer if required. Considers {@link #forceCompoundTypes},
+     * {@link #nestedValues} and {@link #nestedExpressions}.
+     * 
+     * @param type the actual type of the element
+     * @param considerValues whether {@link #nestedValues} or {@link #nestedExpressions} shall be considered
      */
+    private void emitType(IDatatype type, boolean considerValues) {
+        IDatatype implicitType = null;
+        if (!forceCompoundTypes) {
+            if (considerValues) {
+                if (!nestedValues.isEmpty()) {
+                    Value top = nestedValues.peek();
+                    if (top instanceof ContainerValue) {
+                        Container container = (Container) ((ContainerValue) top).getType();
+                        implicitType = container.getContainedType();
+                    }
+                }
+            } else if (!nestedExpressions.isEmpty()) {
+                ConstraintSyntaxTree top = nestedExpressions.peek();
+                if (top instanceof ContainerInitializer) {
+                    Container container = ((ContainerInitializer) top).getType();
+                    implicitType = container.getContainedType();
+                }
+            }
+            if (null == implicitType && null != inDecl) {
+                implicitType = inDecl.getType();
+            }
+        }
+        if (forceCompoundTypes || (null != implicitType && !implicitType.equals(type))) {
+            appendOutput(IvmlDatatypeVisitor.getUniqueType(type));
+            appendOutput(WHITESPACE);
+        }
+    }
+
+    @Override
     public void visitCompoundValue(CompoundValue value) {
-        if (!nestedValues.isEmpty()) {
+        emitType(value.getType(), true);
+        /*if (!nestedValues.isEmpty()) {
             Value containing = nestedValues.peek();
             if (containing instanceof ContainerValue) {
                 Container container = (Container) ((ContainerValue) containing).getType();
@@ -417,7 +431,25 @@ public class IVMLWriter extends AbstractVarModelWriter {
                     appendOutput(WHITESPACE);
                 }
             }
+        }*/
+/*
+ 
+        if (!nestedExpressions.isEmpty()) {
+            ConstraintSyntaxTree containing = nestedExpressions.peek();
+            if (containing instanceof ContainerInitializer) {
+                Container container = ((ContainerInitializer) containing).getType();
+                IDatatype containedType = container.getContainedType();
+                IDatatype thisType = initializer.getType();
+                if (forceCompoundTypes || !containedType.equals(thisType)) { // equals is not really defined
+                    appendOutput(IvmlDatatypeVisitor.getUniqueType(thisType));
+                    appendOutput(WHITESPACE);
+                }
+            }
         }
+         
+         
+         
+ */
         nestedValues.push(value);
         appendOutput(BEGINNING_BLOCK);
         if (formatInitializer) {
@@ -440,6 +472,16 @@ public class IVMLWriter extends AbstractVarModelWriter {
     }
     
     /**
+     * Returns whether a certain value shall be written.
+     * 
+     * @param value the value to be checked
+     * @return <code>true</code> if the value shall be written, <code>false</code> else
+     */
+    protected boolean writeValue(Value value) {
+        return true;
+    }
+    
+    /**
      * Visits a compound decision variable container for output of configuration values.
      * 
      * @param cont the container
@@ -453,7 +495,7 @@ public class IVMLWriter extends AbstractVarModelWriter {
             // be careful with null values -> writing partial configurations
             String name = cont.getElement(e).getName();
             Value nestedValue = value.getNestedValue(name);
-            if (null != nestedValue) {
+            if (null != nestedValue && writeValue(nestedValue)) {
                 if (printed > 0) {
                     appendOutput(COMMA);
                     appendOutput(WHITESPACE);
@@ -478,9 +520,7 @@ public class IVMLWriter extends AbstractVarModelWriter {
         return printed;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitIntValue(IntValue value) {
         Integer val = value.getValue();
         if (null != val) {
@@ -488,9 +528,7 @@ public class IVMLWriter extends AbstractVarModelWriter {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitRealValue(RealValue value) {
         Double val = value.getValue();
         if (null != val) {
@@ -498,9 +536,7 @@ public class IVMLWriter extends AbstractVarModelWriter {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitBooleanValue(BooleanValue value) {
         Boolean val = value.getValue();
         if (null != val) {
@@ -508,9 +544,7 @@ public class IVMLWriter extends AbstractVarModelWriter {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitContainerValue(ContainerValue value) {
         nestedValues.push(value);
         appendOutput(BEGINNING_BLOCK);
@@ -541,7 +575,8 @@ public class IVMLWriter extends AbstractVarModelWriter {
      * @param initializer the compound initializer node
      */
     public void visitCompoundInitializer(CompoundInitializer initializer) {
-        if (!nestedExpressions.isEmpty()) {
+        emitType(initializer.getType(), false);
+        /*if (!nestedExpressions.isEmpty()) {
             ConstraintSyntaxTree containing = nestedExpressions.peek();
             if (containing instanceof ContainerInitializer) {
                 Container container = ((ContainerInitializer) containing).getType();
@@ -552,7 +587,7 @@ public class IVMLWriter extends AbstractVarModelWriter {
                     appendOutput(WHITESPACE);
                 }
             }
-        }
+        }*/
         nestedExpressions.push(initializer);
         appendOutput(BEGINNING_BLOCK);
         if (formatInitializer) {
@@ -617,9 +652,7 @@ public class IVMLWriter extends AbstractVarModelWriter {
     }
 
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitAttribute(Attribute attribute) {
         if (handled.contains(attribute)) {
             handled.remove(attribute);
@@ -653,9 +686,7 @@ public class IVMLWriter extends AbstractVarModelWriter {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitFreezeBlock(FreezeBlock freeze) {
         appendIndentation();
         appendOutput(FREEZE);
@@ -700,9 +731,7 @@ public class IVMLWriter extends AbstractVarModelWriter {
         appendOutput(LINEFEED);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitOperationDefinition(OperationDefinition opdef) {
         appendIndentation();
         CustomOperation op = opdef.getOperation();
@@ -729,9 +758,7 @@ public class IVMLWriter extends AbstractVarModelWriter {
         appendOutput(LINEFEED);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitPartialEvaluationBlock(PartialEvaluationBlock block) {
         appendIndentation();
         appendOutput(EVAL);
@@ -745,9 +772,7 @@ public class IVMLWriter extends AbstractVarModelWriter {
         appendOutput(LINEFEED);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitProjectInterface(ProjectInterface iface) {
         appendIndentation();
         appendOutput(INTERFACE);
@@ -778,9 +803,7 @@ public class IVMLWriter extends AbstractVarModelWriter {
         appendOutput(LINEFEED);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitDerivedDatatype(DerivedDatatype datatype) {
         appendIndentation();
         appendOutput(TYPEDEF);
@@ -810,23 +833,17 @@ public class IVMLWriter extends AbstractVarModelWriter {
         appendOutput(LINEFEED);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitEnumLiteral(EnumLiteral literal) {
         appendOutput(literal.getName());
         // no indentation, no semicolon - this is part of a CST!
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitReference(Reference reference) {
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitSequence(Sequence sequence) {
         appendIndentation();
         appendOutput(SEQUENCEOF);
@@ -839,9 +856,7 @@ public class IVMLWriter extends AbstractVarModelWriter {
         appendOutput(LINEFEED);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitSet(Set set) {
         appendIndentation();
         appendOutput(SETOF);
@@ -854,13 +869,11 @@ public class IVMLWriter extends AbstractVarModelWriter {
         appendOutput(LINEFEED);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitReferenceValue(ReferenceValue referenceValue) {
         appendOutput(REFBY);
         appendOutput(BEGINNING_PARENTHESIS);
-        DecisionVariableDeclaration referenced = referenceValue.getValue();
+        AbstractVariable referenced = referenceValue.getValue();
         if (null != referenced) {
             appendOutput(referenced.getName());
         }
@@ -895,9 +908,7 @@ public class IVMLWriter extends AbstractVarModelWriter {
         return found;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitVariable(Variable variable) {
         AbstractVariable var = variable.getVariable();
         /*if (var instanceof Attribute) {
@@ -919,18 +930,14 @@ public class IVMLWriter extends AbstractVarModelWriter {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitParenthesis(Parenthesis parenthesis) {
         appendOutput(BEGINNING_PARENTHESIS);
         parenthesis.getExpr().accept(this);
         appendOutput(ENDING_PARENTHESIS);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitOclFeatureCall(OCLFeatureCall call) {
         FormattingHint hint;
         Operation resolved = call.getResolvedOperation();
@@ -992,9 +999,7 @@ public class IVMLWriter extends AbstractVarModelWriter {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitConstraint(Constraint constraint) {
         appendIndentation();
         super.visitConstraint(constraint);
@@ -1002,9 +1007,7 @@ public class IVMLWriter extends AbstractVarModelWriter {
         appendOutput(LINEFEED);
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitLet(Let let) {
         // no indentation, no semicolon - this is part of a CST!
         appendOutput(LET);
@@ -1017,9 +1020,7 @@ public class IVMLWriter extends AbstractVarModelWriter {
         // no indentation, no semicolon - this is part of a CST!
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitIfThen(IfThen ifThen) {
         // no indentation, no semicolon - this is part of a CST!
         appendOutput(IF);
@@ -1038,9 +1039,7 @@ public class IVMLWriter extends AbstractVarModelWriter {
         // no indentation, no semicolon - this is part of a CST!
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitContainerOperationCall(ContainerOperationCall call) {
         call.getContainer().accept(this);
         appendOutput(CONTAINER_OP_ACCESS);
@@ -1086,53 +1085,24 @@ public class IVMLWriter extends AbstractVarModelWriter {
         appendOutput(ENDING_PARENTHESIS);
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitCompoundAccess(CompoundAccess access) {
         access.getCompoundExpression().accept(this);
         appendOutput(COMPOUND_ACCESS);
         appendOutput(access.getSlotName());
     }
-    
-    /**
-     * {@inheritDoc}
-     */
-    public void visitDslFragment(DslFragment fragment) {
-        appendOutput(DSL_CONTEXT_START);
-        appendOutput("\"");
-        appendOutput(fragment.getStop());
-        appendOutput("\", \"");
-        appendOutput(fragment.getEscape());    
-        appendOutput("\", \"");
-        appendOutput(fragment.getCommand());
-        appendOutput("\"");
-        appendOutput(DSL_CONTEXT_END);
-        appendOutput(WHITESPACE);
-        appendOutput(DSL_START);
-        appendOutput(WHITESPACE);
-        appendOutput(fragment.getDsl());
-        appendOutput(WHITESPACE);
-        appendOutput(DSL_END);        
-    }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitMetaTypeValue(MetaTypeValue value) {
         appendOutput(IvmlDatatypeVisitor.getUniqueType(value.getValue()));
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitNullValue(NullValue value) {
         appendOutput(NULL);
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitAttributeAssignment(AttributeAssignment assignment) {
         dupLastComment(); // actually not needed as no nested compounds may be defined -> example
         appendIndentation();
@@ -1164,9 +1134,7 @@ public class IVMLWriter extends AbstractVarModelWriter {
         popLastComment(); // actually not needed as no nested compounds may be defined -> example
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitComment(Comment comment) {
         if (emitComments) {
             String text = comment.getName(); // this is the comment text!
@@ -1177,9 +1145,7 @@ public class IVMLWriter extends AbstractVarModelWriter {
         }
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitComment(de.uni_hildesheim.sse.model.cst.Comment comment) {
         String text = comment.getComment();
         if (null != text) {
@@ -1188,9 +1154,7 @@ public class IVMLWriter extends AbstractVarModelWriter {
         comment.getExpr().accept(this);
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     protected void beforeNestedElement(Object element) {
         Comment lastComment = getLastComment();
         if (null != lastComment) {
@@ -1205,9 +1169,6 @@ public class IVMLWriter extends AbstractVarModelWriter {
         }
     }
     
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void visitCompound(Compound compound) {
         dupLastComment(); // actually not needed as no nested compounds may be defined -> example
@@ -1265,9 +1226,7 @@ public class IVMLWriter extends AbstractVarModelWriter {
         }        
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitCompoundAccessStatement(CompoundAccessStatement access) {
         AbstractVariable var = access.getCompoundVariable();
         if (needsQualification(var)) {
@@ -1277,6 +1236,21 @@ public class IVMLWriter extends AbstractVarModelWriter {
         }
         appendOutput(COMPOUND_ACCESS);
         appendOutput(access.getSlotName());
+    }
+
+    @Override
+    public void visitVersionValue(VersionValue value) {
+        String tmp = Version.toString(value.getValue());
+        if (tmp.length() > 0) {
+            // add the version marker
+            tmp = "v" + tmp;
+        }
+        appendOutput(tmp);
+    }
+
+    @Override
+    public void visitSelf(Self self) {
+        appendOutput(SELF);
     }
     
 }

@@ -1,10 +1,14 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArraySequence;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArraySet;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationMeta;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Sequence;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.UnmodifiableSequence;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.UnmodifiableSet;
+import de.uni_hildesheim.sse.model.confModel.AssignmentState;
 import de.uni_hildesheim.sse.model.confModel.ConfigurationException;
 import de.uni_hildesheim.sse.model.confModel.ContainerVariable;
 import de.uni_hildesheim.sse.model.confModel.IAssignmentState;
@@ -46,7 +50,7 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
         Value val = variable.getValue();
         if (val instanceof ReferenceValue) {
             // dereference
-            DecisionVariableDeclaration referenced = ((ReferenceValue) val).getValue();
+            AbstractVariable referenced = ((ReferenceValue) val).getValue();
             this.variable = variable.getConfiguration().getDecision(referenced);
         } else {
             this.variable = variable;
@@ -304,6 +308,16 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
         return origVariable.getDeclaration().getType().getQualifiedName();
     }
 
+    /**
+     * Returns whether the underlying decision variable is configured. Please note that
+     * this is different from {@link #isNull()} as a null value is considered as configured.
+     * 
+     * @return <code>true</code> if the variable is configured, <code>false</code> else
+     */
+    public boolean isConfigured() {
+        return AssignmentState.UNDEFINED != variable.getState();
+    }
+
     @Override
     public Object getValue() { 
         Object result = null;
@@ -393,12 +407,26 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
      * to implicitly handle IVML sequences. Primitive values may be obtained using the getter methods. Complex
      * values such as compounds or containers may be accessed via {@link #variables()}.
      * 
-     * @return the decision variables
+     * @return the decision variables (unmodifiable)
      */
     @OperationMeta(returnGenerics = { DecisionVariable.class } )
     public Sequence<DecisionVariable> variables() {
         initializeNested();
-        return new ArraySequence<DecisionVariable>(nested, DecisionVariable.class);
+        return new UnmodifiableSequence<DecisionVariable>(
+            new ArraySequence<DecisionVariable>(nested, DecisionVariable.class));
+    }
+
+    /**
+     * Returns the decision variables contained in this variable as a set.
+     * 
+     * @return the decision variables (unmodifiable)
+     */
+    @Invisible
+    @OperationMeta(returnGenerics = { DecisionVariable.class } )
+    public Set<DecisionVariable> variablesSet() {
+        initializeNested();
+        return new UnmodifiableSet<DecisionVariable>(
+            new ArraySet<DecisionVariable>(nested, DecisionVariable.class));
     }
     
     /**

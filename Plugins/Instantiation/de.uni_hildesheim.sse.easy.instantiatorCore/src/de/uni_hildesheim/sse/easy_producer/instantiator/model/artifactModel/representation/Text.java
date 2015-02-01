@@ -472,7 +472,6 @@ public class Text extends AbstractArtifactRepresentation implements IArtifactCha
      * 
      * @return the actual text
      */
-    @Invisible
     public String getText() {
         return text;
     }

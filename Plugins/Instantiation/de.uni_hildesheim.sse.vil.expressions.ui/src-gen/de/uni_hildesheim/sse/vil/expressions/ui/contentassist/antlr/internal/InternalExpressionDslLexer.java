@@ -82,10 +82,10 @@ public class InternalExpressionDslLexer extends Lexer {
         try {
             int _type = T__13;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:11:7: ( '==' )
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:11:9: '=='
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:11:7: ( 'and' )
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:11:9: 'and'
             {
-            match("=="); 
+            match("and"); 
 
 
             }
@@ -103,10 +103,11 @@ public class InternalExpressionDslLexer extends Lexer {
         try {
             int _type = T__14;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:12:7: ( '>' )
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:12:9: '>'
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:12:7: ( 'or' )
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:12:9: 'or'
             {
-            match('>'); 
+            match("or"); 
+
 
             }
 
@@ -123,10 +124,11 @@ public class InternalExpressionDslLexer extends Lexer {
         try {
             int _type = T__15;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:13:7: ( '<' )
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:13:9: '<'
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:13:7: ( 'xor' )
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:13:9: 'xor'
             {
-            match('<'); 
+            match("xor"); 
+
 
             }
 
@@ -143,10 +145,10 @@ public class InternalExpressionDslLexer extends Lexer {
         try {
             int _type = T__16;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:14:7: ( '>=' )
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:14:9: '>='
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:14:7: ( '==' )
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:14:9: '=='
             {
-            match(">="); 
+            match("=="); 
 
 
             }
@@ -164,10 +166,10 @@ public class InternalExpressionDslLexer extends Lexer {
         try {
             int _type = T__17;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:15:7: ( '<=' )
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:15:9: '<='
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:15:7: ( '<>' )
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:15:9: '<>'
             {
-            match("<="); 
+            match("<>"); 
 
 
             }
@@ -185,10 +187,10 @@ public class InternalExpressionDslLexer extends Lexer {
         try {
             int _type = T__18;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:16:7: ( 'and' )
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:16:9: 'and'
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:16:7: ( '!=' )
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:16:9: '!='
             {
-            match("and"); 
+            match("!="); 
 
 
             }
@@ -206,11 +208,10 @@ public class InternalExpressionDslLexer extends Lexer {
         try {
             int _type = T__19;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:17:7: ( 'or' )
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:17:9: 'or'
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:17:7: ( '>' )
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:17:9: '>'
             {
-            match("or"); 
-
+            match('>'); 
 
             }
 
@@ -227,11 +228,10 @@ public class InternalExpressionDslLexer extends Lexer {
         try {
             int _type = T__20;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:18:7: ( 'xor' )
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:18:9: 'xor'
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:18:7: ( '<' )
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:18:9: '<'
             {
-            match("xor"); 
-
+            match('<'); 
 
             }
 
@@ -248,10 +248,10 @@ public class InternalExpressionDslLexer extends Lexer {
         try {
             int _type = T__21;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:19:7: ( '<>' )
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:19:9: '<>'
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:19:7: ( '>=' )
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:19:9: '>='
             {
-            match("<>"); 
+            match(">="); 
 
 
             }
@@ -269,10 +269,10 @@ public class InternalExpressionDslLexer extends Lexer {
         try {
             int _type = T__22;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:20:7: ( '!=' )
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:20:9: '!='
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:20:7: ( '<=' )
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:20:9: '<='
             {
-            match("!="); 
+            match("<="); 
 
 
             }
@@ -494,10 +494,10 @@ public class InternalExpressionDslLexer extends Lexer {
         try {
             int _type = T__33;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:31:7: ( '@advice' )
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:31:9: '@advice'
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:31:7: ( 'version' )
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:31:9: 'version'
             {
-            match("@advice"); 
+            match("version"); 
 
 
             }
@@ -515,10 +515,11 @@ public class InternalExpressionDslLexer extends Lexer {
         try {
             int _type = T__34;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:32:7: ( '(' )
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:32:9: '('
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:32:7: ( '@advice' )
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:32:9: '@advice'
             {
-            match('('); 
+            match("@advice"); 
+
 
             }
 
@@ -535,10 +536,10 @@ public class InternalExpressionDslLexer extends Lexer {
         try {
             int _type = T__35;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:33:7: ( ')' )
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:33:9: ')'
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:33:7: ( '(' )
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:33:9: '('
             {
-            match(')'); 
+            match('('); 
 
             }
 
@@ -555,11 +556,10 @@ public class InternalExpressionDslLexer extends Lexer {
         try {
             int _type = T__36;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:34:7: ( 'with' )
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:34:9: 'with'
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:34:7: ( ')' )
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:34:9: ')'
             {
-            match("with"); 
-
+            match(')'); 
 
             }
 
@@ -576,10 +576,11 @@ public class InternalExpressionDslLexer extends Lexer {
         try {
             int _type = T__37;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:35:7: ( ',' )
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:35:9: ','
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:35:7: ( 'with' )
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:35:9: 'with'
             {
-            match(','); 
+            match("with"); 
+
 
             }
 
@@ -596,11 +597,10 @@ public class InternalExpressionDslLexer extends Lexer {
         try {
             int _type = T__38;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:36:7: ( 'version' )
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:36:9: 'version'
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:36:7: ( ';' )
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:36:9: ';'
             {
-            match("version"); 
-
+            match(';'); 
 
             }
 
@@ -617,10 +617,11 @@ public class InternalExpressionDslLexer extends Lexer {
         try {
             int _type = T__39;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:37:7: ( ';' )
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:37:9: ';'
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:37:7: ( 'import' )
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:37:9: 'import'
             {
-            match(';'); 
+            match("import"); 
+
 
             }
 
@@ -637,10 +638,10 @@ public class InternalExpressionDslLexer extends Lexer {
         try {
             int _type = T__40;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:38:7: ( 'import' )
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:38:9: 'import'
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:38:7: ( 'super' )
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:38:9: 'super'
             {
-            match("import"); 
+            match("super"); 
 
 
             }
@@ -658,10 +659,10 @@ public class InternalExpressionDslLexer extends Lexer {
         try {
             int _type = T__41;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:39:7: ( 'super' )
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:39:9: 'super'
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:39:7: ( 'new' )
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:39:9: 'new'
             {
-            match("super"); 
+            match("new"); 
 
 
             }
@@ -679,11 +680,10 @@ public class InternalExpressionDslLexer extends Lexer {
         try {
             int _type = T__42;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:40:7: ( 'new' )
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:40:9: 'new'
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:40:7: ( '[' )
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:40:9: '['
             {
-            match("new"); 
-
+            match('['); 
 
             }
 
@@ -700,10 +700,10 @@ public class InternalExpressionDslLexer extends Lexer {
         try {
             int _type = T__43;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:41:7: ( '[' )
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:41:9: '['
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:41:7: ( ']' )
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:41:9: ']'
             {
-            match('['); 
+            match(']'); 
 
             }
 
@@ -720,10 +720,10 @@ public class InternalExpressionDslLexer extends Lexer {
         try {
             int _type = T__44;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:42:7: ( ']' )
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:42:9: ']'
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:42:7: ( '|' )
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:42:9: '|'
             {
-            match(']'); 
+            match('|'); 
 
             }
 
@@ -740,10 +740,10 @@ public class InternalExpressionDslLexer extends Lexer {
         try {
             int _type = T__45;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:43:7: ( '|' )
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:43:9: '|'
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:43:7: ( ',' )
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:43:9: ','
             {
-            match('|'); 
+            match(','); 
 
             }
 
@@ -925,11 +925,11 @@ public class InternalExpressionDslLexer extends Lexer {
         try {
             int _type = RULE_VERSION;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7218:14: ( 'v' ( '0' .. '9' )+ ( '.' ( '0' .. '9' )+ )* )
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7218:16: 'v' ( '0' .. '9' )+ ( '.' ( '0' .. '9' )+ )*
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6843:14: ( 'v' ( '0' .. '9' )+ ( '.' ( '0' .. '9' )+ )* )
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6843:16: 'v' ( '0' .. '9' )+ ( '.' ( '0' .. '9' )+ )*
             {
             match('v'); 
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7218:20: ( '0' .. '9' )+
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6843:20: ( '0' .. '9' )+
             int cnt1=0;
             loop1:
             do {
@@ -943,7 +943,7 @@ public class InternalExpressionDslLexer extends Lexer {
 
                 switch (alt1) {
             	case 1 :
-            	    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7218:21: '0' .. '9'
+            	    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6843:21: '0' .. '9'
             	    {
             	    matchRange('0','9'); 
 
@@ -959,7 +959,7 @@ public class InternalExpressionDslLexer extends Lexer {
                 cnt1++;
             } while (true);
 
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7218:32: ( '.' ( '0' .. '9' )+ )*
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6843:32: ( '.' ( '0' .. '9' )+ )*
             loop3:
             do {
                 int alt3=2;
@@ -972,10 +972,10 @@ public class InternalExpressionDslLexer extends Lexer {
 
                 switch (alt3) {
             	case 1 :
-            	    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7218:33: '.' ( '0' .. '9' )+
+            	    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6843:33: '.' ( '0' .. '9' )+
             	    {
             	    match('.'); 
-            	    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7218:37: ( '0' .. '9' )+
+            	    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6843:37: ( '0' .. '9' )+
             	    int cnt2=0;
             	    loop2:
             	    do {
@@ -989,7 +989,7 @@ public class InternalExpressionDslLexer extends Lexer {
 
             	        switch (alt2) {
             	    	case 1 :
-            	    	    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7218:38: '0' .. '9'
+            	    	    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6843:38: '0' .. '9'
             	    	    {
             	    	    matchRange('0','9'); 
 
@@ -1030,8 +1030,8 @@ public class InternalExpressionDslLexer extends Lexer {
         try {
             int _type = RULE_ID;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7220:9: ( ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '$' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )* )
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7220:11: ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '$' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6845:9: ( ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '$' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )* )
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6845:11: ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '$' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
             {
             if ( input.LA(1)=='$'||(input.LA(1)>='A' && input.LA(1)<='Z')||input.LA(1)=='_'||(input.LA(1)>='a' && input.LA(1)<='z') ) {
                 input.consume();
@@ -1042,7 +1042,7 @@ public class InternalExpressionDslLexer extends Lexer {
                 recover(mse);
                 throw mse;}
 
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7220:39: ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6845:39: ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
             loop4:
             do {
                 int alt4=2;
@@ -1091,10 +1091,10 @@ public class InternalExpressionDslLexer extends Lexer {
         try {
             int _type = RULE_NUMBER;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7222:13: ( ( '-' )? ( ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT ) )
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7222:15: ( '-' )? ( ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT )
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6847:13: ( ( '-' )? ( ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT ) )
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6847:15: ( '-' )? ( ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT )
             {
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7222:15: ( '-' )?
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6847:15: ( '-' )?
             int alt5=2;
             int LA5_0 = input.LA(1);
 
@@ -1103,7 +1103,7 @@ public class InternalExpressionDslLexer extends Lexer {
             }
             switch (alt5) {
                 case 1 :
-                    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7222:15: '-'
+                    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6847:15: '-'
                     {
                     match('-'); 
 
@@ -1112,14 +1112,14 @@ public class InternalExpressionDslLexer extends Lexer {
 
             }
 
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7222:20: ( ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT )
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6847:20: ( ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT )
             int alt13=3;
             alt13 = dfa13.predict(input);
             switch (alt13) {
                 case 1 :
-                    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7222:21: ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )?
+                    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6847:21: ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )?
                     {
-                    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7222:21: ( '0' .. '9' )+
+                    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6847:21: ( '0' .. '9' )+
                     int cnt6=0;
                     loop6:
                     do {
@@ -1133,7 +1133,7 @@ public class InternalExpressionDslLexer extends Lexer {
 
                         switch (alt6) {
                     	case 1 :
-                    	    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7222:22: '0' .. '9'
+                    	    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6847:22: '0' .. '9'
                     	    {
                     	    matchRange('0','9'); 
 
@@ -1149,7 +1149,7 @@ public class InternalExpressionDslLexer extends Lexer {
                         cnt6++;
                     } while (true);
 
-                    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7222:33: ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )?
+                    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6847:33: ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )?
                     int alt9=2;
                     int LA9_0 = input.LA(1);
 
@@ -1158,10 +1158,10 @@ public class InternalExpressionDslLexer extends Lexer {
                     }
                     switch (alt9) {
                         case 1 :
-                            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7222:34: '.' ( '0' .. '9' )* ( RULE_EXPONENT )?
+                            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6847:34: '.' ( '0' .. '9' )* ( RULE_EXPONENT )?
                             {
                             match('.'); 
-                            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7222:38: ( '0' .. '9' )*
+                            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6847:38: ( '0' .. '9' )*
                             loop7:
                             do {
                                 int alt7=2;
@@ -1174,7 +1174,7 @@ public class InternalExpressionDslLexer extends Lexer {
 
                                 switch (alt7) {
                             	case 1 :
-                            	    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7222:39: '0' .. '9'
+                            	    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6847:39: '0' .. '9'
                             	    {
                             	    matchRange('0','9'); 
 
@@ -1186,7 +1186,7 @@ public class InternalExpressionDslLexer extends Lexer {
                                 }
                             } while (true);
 
-                            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7222:50: ( RULE_EXPONENT )?
+                            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6847:50: ( RULE_EXPONENT )?
                             int alt8=2;
                             int LA8_0 = input.LA(1);
 
@@ -1195,7 +1195,7 @@ public class InternalExpressionDslLexer extends Lexer {
                             }
                             switch (alt8) {
                                 case 1 :
-                                    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7222:50: RULE_EXPONENT
+                                    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6847:50: RULE_EXPONENT
                                     {
                                     mRULE_EXPONENT(); 
 
@@ -1214,10 +1214,10 @@ public class InternalExpressionDslLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7222:67: '.' ( '0' .. '9' )+ ( RULE_EXPONENT )?
+                    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6847:67: '.' ( '0' .. '9' )+ ( RULE_EXPONENT )?
                     {
                     match('.'); 
-                    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7222:71: ( '0' .. '9' )+
+                    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6847:71: ( '0' .. '9' )+
                     int cnt10=0;
                     loop10:
                     do {
@@ -1231,7 +1231,7 @@ public class InternalExpressionDslLexer extends Lexer {
 
                         switch (alt10) {
                     	case 1 :
-                    	    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7222:72: '0' .. '9'
+                    	    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6847:72: '0' .. '9'
                     	    {
                     	    matchRange('0','9'); 
 
@@ -1247,7 +1247,7 @@ public class InternalExpressionDslLexer extends Lexer {
                         cnt10++;
                     } while (true);
 
-                    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7222:83: ( RULE_EXPONENT )?
+                    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6847:83: ( RULE_EXPONENT )?
                     int alt11=2;
                     int LA11_0 = input.LA(1);
 
@@ -1256,7 +1256,7 @@ public class InternalExpressionDslLexer extends Lexer {
                     }
                     switch (alt11) {
                         case 1 :
-                            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7222:83: RULE_EXPONENT
+                            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6847:83: RULE_EXPONENT
                             {
                             mRULE_EXPONENT(); 
 
@@ -1269,9 +1269,9 @@ public class InternalExpressionDslLexer extends Lexer {
                     }
                     break;
                 case 3 :
-                    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7222:98: ( '0' .. '9' )+ RULE_EXPONENT
+                    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6847:98: ( '0' .. '9' )+ RULE_EXPONENT
                     {
-                    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7222:98: ( '0' .. '9' )+
+                    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6847:98: ( '0' .. '9' )+
                     int cnt12=0;
                     loop12:
                     do {
@@ -1285,7 +1285,7 @@ public class InternalExpressionDslLexer extends Lexer {
 
                         switch (alt12) {
                     	case 1 :
-                    	    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7222:99: '0' .. '9'
+                    	    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6847:99: '0' .. '9'
                     	    {
                     	    matchRange('0','9'); 
 
@@ -1324,8 +1324,8 @@ public class InternalExpressionDslLexer extends Lexer {
         try {
             int _type = RULE_EXPONENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7224:15: ( ( 'e' | 'E' ) ( '+' | '-' )? ( '0' .. '9' )+ )
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7224:17: ( 'e' | 'E' ) ( '+' | '-' )? ( '0' .. '9' )+
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6849:15: ( ( 'e' | 'E' ) ( '+' | '-' )? ( '0' .. '9' )+ )
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6849:17: ( 'e' | 'E' ) ( '+' | '-' )? ( '0' .. '9' )+
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -1336,7 +1336,7 @@ public class InternalExpressionDslLexer extends Lexer {
                 recover(mse);
                 throw mse;}
 
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7224:27: ( '+' | '-' )?
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6849:27: ( '+' | '-' )?
             int alt14=2;
             int LA14_0 = input.LA(1);
 
@@ -1362,7 +1362,7 @@ public class InternalExpressionDslLexer extends Lexer {
 
             }
 
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7224:38: ( '0' .. '9' )+
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6849:38: ( '0' .. '9' )+
             int cnt15=0;
             loop15:
             do {
@@ -1376,7 +1376,7 @@ public class InternalExpressionDslLexer extends Lexer {
 
                 switch (alt15) {
             	case 1 :
-            	    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7224:39: '0' .. '9'
+            	    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6849:39: '0' .. '9'
             	    {
             	    matchRange('0','9'); 
 
@@ -1408,10 +1408,10 @@ public class InternalExpressionDslLexer extends Lexer {
         try {
             int _type = RULE_STRING;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7226:13: ( ( '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"' | '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\'' ) )
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7226:15: ( '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"' | '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\'' )
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6851:13: ( ( '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"' | '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\'' ) )
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6851:15: ( '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"' | '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\'' )
             {
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7226:15: ( '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"' | '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\'' )
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6851:15: ( '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"' | '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\'' )
             int alt18=2;
             int LA18_0 = input.LA(1);
 
@@ -1429,10 +1429,10 @@ public class InternalExpressionDslLexer extends Lexer {
             }
             switch (alt18) {
                 case 1 :
-                    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7226:16: '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"'
+                    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6851:16: '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"'
                     {
                     match('\"'); 
-                    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7226:20: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )*
+                    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6851:20: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )*
                     loop16:
                     do {
                         int alt16=3;
@@ -1448,7 +1448,7 @@ public class InternalExpressionDslLexer extends Lexer {
 
                         switch (alt16) {
                     	case 1 :
-                    	    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7226:21: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' )
+                    	    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6851:21: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' )
                     	    {
                     	    match('\\'); 
                     	    if ( input.LA(1)=='\"'||input.LA(1)=='\''||input.LA(1)=='\\'||input.LA(1)=='b'||input.LA(1)=='f'||input.LA(1)=='n'||input.LA(1)=='r'||(input.LA(1)>='t' && input.LA(1)<='u') ) {
@@ -1464,7 +1464,7 @@ public class InternalExpressionDslLexer extends Lexer {
                     	    }
                     	    break;
                     	case 2 :
-                    	    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7226:66: ~ ( ( '\\\\' | '\"' ) )
+                    	    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6851:66: ~ ( ( '\\\\' | '\"' ) )
                     	    {
                     	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='!')||(input.LA(1)>='#' && input.LA(1)<='[')||(input.LA(1)>=']' && input.LA(1)<='\uFFFF') ) {
                     	        input.consume();
@@ -1489,10 +1489,10 @@ public class InternalExpressionDslLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7226:86: '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\''
+                    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6851:86: '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\''
                     {
                     match('\''); 
-                    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7226:91: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )*
+                    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6851:91: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )*
                     loop17:
                     do {
                         int alt17=3;
@@ -1508,7 +1508,7 @@ public class InternalExpressionDslLexer extends Lexer {
 
                         switch (alt17) {
                     	case 1 :
-                    	    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7226:92: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' )
+                    	    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6851:92: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' )
                     	    {
                     	    match('\\'); 
                     	    if ( input.LA(1)=='\"'||input.LA(1)=='\''||input.LA(1)=='\\'||input.LA(1)=='b'||input.LA(1)=='f'||input.LA(1)=='n'||input.LA(1)=='r'||(input.LA(1)>='t' && input.LA(1)<='u') ) {
@@ -1524,7 +1524,7 @@ public class InternalExpressionDslLexer extends Lexer {
                     	    }
                     	    break;
                     	case 2 :
-                    	    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7226:137: ~ ( ( '\\\\' | '\\'' ) )
+                    	    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6851:137: ~ ( ( '\\\\' | '\\'' ) )
                     	    {
                     	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='&')||(input.LA(1)>='(' && input.LA(1)<='[')||(input.LA(1)>=']' && input.LA(1)<='\uFFFF') ) {
                     	        input.consume();
@@ -1567,12 +1567,12 @@ public class InternalExpressionDslLexer extends Lexer {
         try {
             int _type = RULE_ML_COMMENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7228:17: ( '/*' ( options {greedy=false; } : . )* '*/' )
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7228:19: '/*' ( options {greedy=false; } : . )* '*/'
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6853:17: ( '/*' ( options {greedy=false; } : . )* '*/' )
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6853:19: '/*' ( options {greedy=false; } : . )* '*/'
             {
             match("/*"); 
 
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7228:24: ( options {greedy=false; } : . )*
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6853:24: ( options {greedy=false; } : . )*
             loop19:
             do {
                 int alt19=2;
@@ -1597,7 +1597,7 @@ public class InternalExpressionDslLexer extends Lexer {
 
                 switch (alt19) {
             	case 1 :
-            	    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7228:52: .
+            	    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6853:52: .
             	    {
             	    matchAny(); 
 
@@ -1627,12 +1627,12 @@ public class InternalExpressionDslLexer extends Lexer {
         try {
             int _type = RULE_SL_COMMENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7230:17: ( '//' (~ ( ( '\\n' | '\\r' ) ) )* ( ( '\\r' )? '\\n' )? )
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7230:19: '//' (~ ( ( '\\n' | '\\r' ) ) )* ( ( '\\r' )? '\\n' )?
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6855:17: ( '//' (~ ( ( '\\n' | '\\r' ) ) )* ( ( '\\r' )? '\\n' )? )
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6855:19: '//' (~ ( ( '\\n' | '\\r' ) ) )* ( ( '\\r' )? '\\n' )?
             {
             match("//"); 
 
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7230:24: (~ ( ( '\\n' | '\\r' ) ) )*
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6855:24: (~ ( ( '\\n' | '\\r' ) ) )*
             loop20:
             do {
                 int alt20=2;
@@ -1645,7 +1645,7 @@ public class InternalExpressionDslLexer extends Lexer {
 
                 switch (alt20) {
             	case 1 :
-            	    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7230:24: ~ ( ( '\\n' | '\\r' ) )
+            	    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6855:24: ~ ( ( '\\n' | '\\r' ) )
             	    {
             	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='\t')||(input.LA(1)>='\u000B' && input.LA(1)<='\f')||(input.LA(1)>='\u000E' && input.LA(1)<='\uFFFF') ) {
             	        input.consume();
@@ -1665,7 +1665,7 @@ public class InternalExpressionDslLexer extends Lexer {
                 }
             } while (true);
 
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7230:40: ( ( '\\r' )? '\\n' )?
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6855:40: ( ( '\\r' )? '\\n' )?
             int alt22=2;
             int LA22_0 = input.LA(1);
 
@@ -1674,9 +1674,9 @@ public class InternalExpressionDslLexer extends Lexer {
             }
             switch (alt22) {
                 case 1 :
-                    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7230:41: ( '\\r' )? '\\n'
+                    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6855:41: ( '\\r' )? '\\n'
                     {
-                    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7230:41: ( '\\r' )?
+                    // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6855:41: ( '\\r' )?
                     int alt21=2;
                     int LA21_0 = input.LA(1);
 
@@ -1685,7 +1685,7 @@ public class InternalExpressionDslLexer extends Lexer {
                     }
                     switch (alt21) {
                         case 1 :
-                            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7230:41: '\\r'
+                            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6855:41: '\\r'
                             {
                             match('\r'); 
 
@@ -1717,10 +1717,10 @@ public class InternalExpressionDslLexer extends Lexer {
         try {
             int _type = RULE_WS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7232:9: ( ( ' ' | '\\t' | '\\r' | '\\n' )+ )
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7232:11: ( ' ' | '\\t' | '\\r' | '\\n' )+
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6857:9: ( ( ' ' | '\\t' | '\\r' | '\\n' )+ )
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6857:11: ( ' ' | '\\t' | '\\r' | '\\n' )+
             {
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7232:11: ( ' ' | '\\t' | '\\r' | '\\n' )+
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6857:11: ( ' ' | '\\t' | '\\r' | '\\n' )+
             int cnt23=0;
             loop23:
             do {
@@ -1774,8 +1774,8 @@ public class InternalExpressionDslLexer extends Lexer {
         try {
             int _type = RULE_ANY_OTHER;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7234:16: ( . )
-            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:7234:18: .
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6859:16: ( . )
+            // ../de.uni_hildesheim.sse.vil.expressions.ui/src-gen/de/uni_hildesheim/sse/vil/expressions/ui/contentassist/antlr/internal/InternalExpressionDsl.g:6859:18: .
             {
             matchAny(); 
 
@@ -2202,67 +2202,66 @@ public class InternalExpressionDslLexer extends Lexer {
             this.transition = DFA13_transition;
         }
         public String getDescription() {
-            return "7222:20: ( ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT )";
+            return "6847:20: ( ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT )";
         }
     }
     static final String DFA24_eotS =
-        "\1\uffff\1\50\1\52\1\55\3\57\1\63\1\uffff\1\67\1\uffff\1\73\1\57"+
-        "\1\77\2\57\1\46\2\uffff\1\57\1\uffff\1\57\1\uffff\2\57\5\uffff\1"+
-        "\46\2\57\2\uffff\2\46\11\uffff\1\57\1\uffff\1\131\1\57\12\uffff"+
-        "\3\57\1\uffff\2\57\3\uffff\1\57\1\uffff\1\57\1\142\1\uffff\3\57"+
-        "\6\uffff\1\57\1\uffff\1\57\2\uffff\1\150\1\uffff\1\151\1\152\1\153"+
-        "\5\57\1\uffff\5\57\4\uffff\1\166\1\167\1\57\1\171\6\57\2\uffff\1"+
-        "\u0080\1\uffff\2\57\1\u0083\1\u0084\1\57\1\u0086\1\uffff\1\57\1"+
-        "\u0088\2\uffff\1\57\1\uffff\1\u008a\1\uffff\1\57\1\uffff\2\57\1"+
-        "\u008e\1\uffff";
+        "\1\uffff\3\50\1\54\1\57\1\61\1\63\1\uffff\1\67\1\uffff\1\73\1\50"+
+        "\1\77\3\50\1\46\2\uffff\1\50\1\uffff\2\50\6\uffff\1\46\2\50\2\uffff"+
+        "\2\46\2\uffff\1\50\1\uffff\1\131\1\50\21\uffff\3\50\1\uffff\3\50"+
+        "\1\141\3\uffff\1\50\1\uffff\3\50\7\uffff\1\50\1\uffff\1\50\2\uffff"+
+        "\1\150\1\uffff\1\151\1\152\1\153\4\50\1\uffff\6\50\4\uffff\1\166"+
+        "\1\167\2\50\1\172\5\50\2\uffff\1\u0080\1\50\1\uffff\1\50\1\u0083"+
+        "\1\u0084\1\50\1\u0086\1\uffff\1\50\1\u0088\2\uffff\1\50\1\uffff"+
+        "\1\u008a\1\uffff\1\50\1\uffff\2\50\1\u008e\1\uffff";
     static final String DFA24_eofS =
         "\u008f\uffff";
     static final String DFA24_minS =
-        "\1\0\3\75\1\156\1\162\1\157\1\75\1\uffff\1\56\1\uffff\1\52\1\145"+
-        "\1\60\1\162\2\141\2\uffff\1\151\1\uffff\1\60\1\uffff\1\155\1\145"+
-        "\5\uffff\1\72\1\141\1\53\2\uffff\2\0\11\uffff\1\144\1\uffff\1\60"+
-        "\1\162\12\uffff\1\164\1\167\1\154\1\uffff\1\165\1\154\3\uffff\1"+
-        "\164\1\uffff\1\162\1\60\1\uffff\2\160\1\161\6\uffff\1\160\1\uffff"+
-        "\1\60\2\uffff\1\60\1\uffff\3\60\1\154\1\145\1\163\1\150\1\163\1"+
-        "\uffff\1\157\1\145\1\117\1\165\1\117\4\uffff\2\60\1\145\1\60\1\151"+
-        "\2\162\1\146\1\145\1\146\2\uffff\1\60\1\uffff\1\157\1\164\2\60\1"+
-        "\156\1\60\1\uffff\1\156\1\60\2\uffff\1\143\1\uffff\1\60\1\uffff"+
-        "\1\145\1\uffff\1\117\1\146\1\60\1\uffff";
+        "\1\0\1\156\1\162\1\157\4\75\1\uffff\1\56\1\uffff\1\52\1\145\1\60"+
+        "\1\162\1\141\1\60\1\141\2\uffff\1\151\1\uffff\1\155\1\145\6\uffff"+
+        "\1\72\1\141\1\53\2\uffff\2\0\2\uffff\1\144\1\uffff\1\60\1\162\21"+
+        "\uffff\1\164\1\167\1\154\1\uffff\1\165\1\154\1\162\1\60\3\uffff"+
+        "\1\164\1\uffff\2\160\1\161\7\uffff\1\160\1\uffff\1\60\2\uffff\1"+
+        "\60\1\uffff\3\60\1\154\1\145\2\163\1\uffff\1\150\1\157\1\145\1\117"+
+        "\1\165\1\117\4\uffff\2\60\1\145\1\151\1\60\2\162\1\146\1\145\1\146"+
+        "\2\uffff\1\60\1\157\1\uffff\1\164\2\60\1\156\1\60\1\uffff\1\156"+
+        "\1\60\2\uffff\1\143\1\uffff\1\60\1\uffff\1\145\1\uffff\1\117\1\146"+
+        "\1\60\1\uffff";
     static final String DFA24_maxS =
-        "\1\uffff\2\75\1\76\1\156\1\162\1\157\1\75\1\uffff\1\76\1\uffff"+
-        "\1\57\1\165\1\71\1\162\2\141\2\uffff\1\151\1\uffff\1\145\1\uffff"+
-        "\1\155\1\165\5\uffff\1\72\1\141\1\71\2\uffff\2\uffff\11\uffff\1"+
-        "\144\1\uffff\1\172\1\162\12\uffff\1\164\1\167\1\154\1\uffff\1\165"+
-        "\1\154\3\uffff\1\164\1\uffff\1\162\1\172\1\uffff\2\160\1\164\6\uffff"+
-        "\1\160\1\uffff\1\71\2\uffff\1\172\1\uffff\3\172\1\154\1\145\1\163"+
-        "\1\150\1\163\1\uffff\1\157\1\145\1\117\1\165\1\117\4\uffff\2\172"+
-        "\1\145\1\172\1\151\2\162\1\146\1\145\1\146\2\uffff\1\172\1\uffff"+
-        "\1\157\1\164\2\172\1\156\1\172\1\uffff\1\156\1\172\2\uffff\1\143"+
-        "\1\uffff\1\172\1\uffff\1\145\1\uffff\1\117\1\146\1\172\1\uffff";
+        "\1\uffff\1\156\1\162\1\157\1\75\1\76\2\75\1\uffff\1\76\1\uffff"+
+        "\1\57\1\165\1\71\1\162\1\141\1\145\1\141\2\uffff\1\151\1\uffff\1"+
+        "\155\1\165\6\uffff\1\72\1\141\1\71\2\uffff\2\uffff\2\uffff\1\144"+
+        "\1\uffff\1\172\1\162\21\uffff\1\164\1\167\1\154\1\uffff\1\165\1"+
+        "\154\1\162\1\172\3\uffff\1\164\1\uffff\2\160\1\164\7\uffff\1\160"+
+        "\1\uffff\1\71\2\uffff\1\172\1\uffff\3\172\1\154\1\145\2\163\1\uffff"+
+        "\1\150\1\157\1\145\1\117\1\165\1\117\4\uffff\2\172\1\145\1\151\1"+
+        "\172\2\162\1\146\1\145\1\146\2\uffff\1\172\1\157\1\uffff\1\164\2"+
+        "\172\1\156\1\172\1\uffff\1\156\1\172\2\uffff\1\143\1\uffff\1\172"+
+        "\1\uffff\1\145\1\uffff\1\117\1\146\1\172\1\uffff";
     static final String DFA24_acceptS =
-        "\10\uffff\1\13\1\uffff\1\15\6\uffff\1\26\1\27\1\uffff\1\31\1\uffff"+
-        "\1\33\2\uffff\1\37\1\40\1\41\1\43\1\44\3\uffff\1\54\1\53\2\uffff"+
-        "\1\61\1\62\1\1\1\42\1\4\1\2\1\5\1\11\1\3\1\uffff\1\53\2\uffff\1"+
-        "\12\1\20\1\13\1\22\1\54\1\14\1\15\1\57\1\60\1\16\3\uffff\1\21\2"+
-        "\uffff\1\25\1\26\1\27\1\uffff\1\31\2\uffff\1\33\3\uffff\1\37\1\40"+
-        "\1\41\1\43\1\44\1\45\1\uffff\1\55\1\uffff\1\56\1\61\1\uffff\1\7"+
-        "\10\uffff\1\52\5\uffff\1\6\1\10\1\17\1\36\12\uffff\1\46\1\23\1\uffff"+
-        "\1\30\6\uffff\1\24\2\uffff\1\35\1\47\1\uffff\1\51\1\uffff\1\34\1"+
-        "\uffff\1\32\3\uffff\1\50";
+        "\10\uffff\1\13\1\uffff\1\15\7\uffff\1\27\1\30\1\uffff\1\32\2\uffff"+
+        "\1\36\1\37\1\40\1\41\1\43\1\44\3\uffff\1\54\1\53\2\uffff\1\61\1"+
+        "\62\1\uffff\1\53\2\uffff\1\4\1\42\1\5\1\12\1\10\1\6\1\20\1\11\1"+
+        "\7\1\13\1\22\1\54\1\14\1\15\1\57\1\60\1\16\3\uffff\1\21\4\uffff"+
+        "\1\26\1\27\1\30\1\uffff\1\32\3\uffff\1\36\1\37\1\40\1\41\1\43\1"+
+        "\44\1\45\1\uffff\1\55\1\uffff\1\56\1\61\1\uffff\1\2\7\uffff\1\52"+
+        "\6\uffff\1\1\1\3\1\17\1\35\12\uffff\1\46\1\23\2\uffff\1\31\5\uffff"+
+        "\1\24\2\uffff\1\34\1\47\1\uffff\1\51\1\uffff\1\33\1\uffff\1\25\3"+
+        "\uffff\1\50";
     static final String DFA24_specialS =
-        "\1\1\42\uffff\1\2\1\0\152\uffff}>";
+        "\1\0\42\uffff\1\2\1\1\152\uffff}>";
     static final String[] DFA24_transitionS = {
-            "\11\46\2\45\2\46\1\45\22\46\1\45\1\7\1\43\1\46\1\42\2\46\1"+
-            "\44\1\21\1\22\1\12\1\10\1\24\1\11\1\15\1\13\12\41\1\36\1\26"+
-            "\1\3\1\1\1\2\1\46\1\20\4\42\1\40\25\42\1\31\1\46\1\32\1\46\1"+
-            "\42\1\46\1\4\3\42\1\40\1\17\2\42\1\27\3\42\1\37\1\14\1\5\3\42"+
-            "\1\30\1\16\1\42\1\25\1\23\1\6\2\42\1\34\1\33\1\35\uff82\46",
+            "\11\46\2\45\2\46\1\45\22\46\1\45\1\6\1\43\1\46\1\42\2\46\1"+
+            "\44\1\22\1\23\1\12\1\10\1\33\1\11\1\15\1\13\12\41\1\36\1\25"+
+            "\1\5\1\4\1\7\1\46\1\21\4\42\1\40\25\42\1\30\1\46\1\31\1\46\1"+
+            "\42\1\46\1\1\3\42\1\40\1\17\2\42\1\26\3\42\1\37\1\14\1\2\3\42"+
+            "\1\27\1\16\1\42\1\20\1\24\1\3\2\42\1\34\1\32\1\35\uff82\46",
             "\1\47",
             "\1\51",
-            "\1\53\1\54",
-            "\1\56",
+            "\1\52",
+            "\1\53",
+            "\1\56\1\55",
             "\1\60",
-            "\1\61",
             "\1\62",
             "",
             "\1\66\1\uffff\12\66\4\uffff\1\65",
@@ -2272,15 +2271,15 @@ public class InternalExpressionDslLexer extends Lexer {
             "\12\66",
             "\1\100",
             "\1\101",
-            "\1\102",
+            "\12\103\53\uffff\1\102",
+            "\1\104",
             "",
             "",
-            "\1\105",
+            "\1\107",
             "",
-            "\12\110\53\uffff\1\107",
+            "\1\111",
+            "\1\113\17\uffff\1\112",
             "",
-            "\1\112",
-            "\1\114\17\uffff\1\113",
             "",
             "",
             "",
@@ -2295,17 +2294,17 @@ public class InternalExpressionDslLexer extends Lexer {
             "\0\126",
             "",
             "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
             "\1\130",
             "",
-            "\12\57\7\uffff\32\57\4\uffff\1\57\1\uffff\32\57",
+            "\12\50\7\uffff\32\50\4\uffff\1\50\1\uffff\32\50",
             "\1\132",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
             "",
             "",
             "",
@@ -2322,17 +2321,17 @@ public class InternalExpressionDslLexer extends Lexer {
             "",
             "\1\136",
             "\1\137",
-            "",
-            "",
-            "",
             "\1\140",
+            "\12\103\7\uffff\32\50\4\uffff\1\50\1\uffff\32\50",
             "",
-            "\1\141",
-            "\12\110\7\uffff\32\57\4\uffff\1\57\1\uffff\32\57",
+            "",
+            "",
+            "\1\142",
             "",
             "\1\143",
             "\1\144",
             "\1\146\2\uffff\1\145",
+            "",
             "",
             "",
             "",
@@ -2344,17 +2343,17 @@ public class InternalExpressionDslLexer extends Lexer {
             "\12\125",
             "",
             "",
-            "\12\57\7\uffff\32\57\4\uffff\1\57\1\uffff\32\57",
+            "\12\50\7\uffff\32\50\4\uffff\1\50\1\uffff\32\50",
             "",
-            "\12\57\7\uffff\32\57\4\uffff\1\57\1\uffff\32\57",
-            "\12\57\7\uffff\32\57\4\uffff\1\57\1\uffff\32\57",
-            "\12\57\7\uffff\32\57\4\uffff\1\57\1\uffff\32\57",
+            "\12\50\7\uffff\32\50\4\uffff\1\50\1\uffff\32\50",
+            "\12\50\7\uffff\32\50\4\uffff\1\50\1\uffff\32\50",
+            "\12\50\7\uffff\32\50\4\uffff\1\50\1\uffff\32\50",
             "\1\154",
             "\1\155",
             "\1\156",
             "\1\157",
-            "\1\160",
             "",
+            "\1\160",
             "\1\161",
             "\1\162",
             "\1\163",
@@ -2364,11 +2363,11 @@ public class InternalExpressionDslLexer extends Lexer {
             "",
             "",
             "",
-            "\12\57\7\uffff\32\57\4\uffff\1\57\1\uffff\32\57",
-            "\12\57\7\uffff\32\57\4\uffff\1\57\1\uffff\32\57",
+            "\12\50\7\uffff\32\50\4\uffff\1\50\1\uffff\32\50",
+            "\12\50\7\uffff\32\50\4\uffff\1\50\1\uffff\32\50",
             "\1\170",
-            "\12\57\7\uffff\32\57\4\uffff\1\57\1\uffff\32\57",
-            "\1\172",
+            "\1\171",
+            "\12\50\7\uffff\32\50\4\uffff\1\50\1\uffff\32\50",
             "\1\173",
             "\1\174",
             "\1\175",
@@ -2376,28 +2375,28 @@ public class InternalExpressionDslLexer extends Lexer {
             "\1\177",
             "",
             "",
-            "\12\57\7\uffff\32\57\4\uffff\1\57\1\uffff\32\57",
-            "",
+            "\12\50\7\uffff\32\50\4\uffff\1\50\1\uffff\32\50",
             "\1\u0081",
+            "",
             "\1\u0082",
-            "\12\57\7\uffff\32\57\4\uffff\1\57\1\uffff\32\57",
-            "\12\57\7\uffff\32\57\4\uffff\1\57\1\uffff\32\57",
+            "\12\50\7\uffff\32\50\4\uffff\1\50\1\uffff\32\50",
+            "\12\50\7\uffff\32\50\4\uffff\1\50\1\uffff\32\50",
             "\1\u0085",
-            "\12\57\7\uffff\32\57\4\uffff\1\57\1\uffff\32\57",
+            "\12\50\7\uffff\32\50\4\uffff\1\50\1\uffff\32\50",
             "",
             "\1\u0087",
-            "\12\57\7\uffff\32\57\4\uffff\1\57\1\uffff\32\57",
+            "\12\50\7\uffff\32\50\4\uffff\1\50\1\uffff\32\50",
             "",
             "",
             "\1\u0089",
             "",
-            "\12\57\7\uffff\32\57\4\uffff\1\57\1\uffff\32\57",
+            "\12\50\7\uffff\32\50\4\uffff\1\50\1\uffff\32\50",
             "",
             "\1\u008b",
             "",
             "\1\u008c",
             "\1\u008d",
-            "\12\57\7\uffff\32\57\4\uffff\1\57\1\uffff\32\57",
+            "\12\50\7\uffff\32\50\4\uffff\1\50\1\uffff\32\50",
             ""
     };
 
@@ -2438,32 +2437,22 @@ public class InternalExpressionDslLexer extends Lexer {
         	int _s = s;
             switch ( s ) {
                     case 0 : 
-                        int LA24_36 = input.LA(1);
-
-                        s = -1;
-                        if ( ((LA24_36>='\u0000' && LA24_36<='\uFFFF')) ) {s = 86;}
-
-                        else s = 38;
-
-                        if ( s>=0 ) return s;
-                        break;
-                    case 1 : 
                         int LA24_0 = input.LA(1);
 
                         s = -1;
-                        if ( (LA24_0=='=') ) {s = 1;}
+                        if ( (LA24_0=='a') ) {s = 1;}
 
-                        else if ( (LA24_0=='>') ) {s = 2;}
+                        else if ( (LA24_0=='o') ) {s = 2;}
 
-                        else if ( (LA24_0=='<') ) {s = 3;}
+                        else if ( (LA24_0=='x') ) {s = 3;}
 
-                        else if ( (LA24_0=='a') ) {s = 4;}
+                        else if ( (LA24_0=='=') ) {s = 4;}
 
-                        else if ( (LA24_0=='o') ) {s = 5;}
+                        else if ( (LA24_0=='<') ) {s = 5;}
 
-                        else if ( (LA24_0=='x') ) {s = 6;}
+                        else if ( (LA24_0=='!') ) {s = 6;}
 
-                        else if ( (LA24_0=='!') ) {s = 7;}
+                        else if ( (LA24_0=='>') ) {s = 7;}
 
                         else if ( (LA24_0=='+') ) {s = 8;}
 
@@ -2481,29 +2470,29 @@ public class InternalExpressionDslLexer extends Lexer {
 
                         else if ( (LA24_0=='f') ) {s = 15;}
 
-                        else if ( (LA24_0=='@') ) {s = 16;}
+                        else if ( (LA24_0=='v') ) {s = 16;}
 
-                        else if ( (LA24_0=='(') ) {s = 17;}
+                        else if ( (LA24_0=='@') ) {s = 17;}
 
-                        else if ( (LA24_0==')') ) {s = 18;}
+                        else if ( (LA24_0=='(') ) {s = 18;}
 
-                        else if ( (LA24_0=='w') ) {s = 19;}
+                        else if ( (LA24_0==')') ) {s = 19;}
 
-                        else if ( (LA24_0==',') ) {s = 20;}
+                        else if ( (LA24_0=='w') ) {s = 20;}
 
-                        else if ( (LA24_0=='v') ) {s = 21;}
+                        else if ( (LA24_0==';') ) {s = 21;}
 
-                        else if ( (LA24_0==';') ) {s = 22;}
+                        else if ( (LA24_0=='i') ) {s = 22;}
 
-                        else if ( (LA24_0=='i') ) {s = 23;}
+                        else if ( (LA24_0=='s') ) {s = 23;}
 
-                        else if ( (LA24_0=='s') ) {s = 24;}
+                        else if ( (LA24_0=='[') ) {s = 24;}
 
-                        else if ( (LA24_0=='[') ) {s = 25;}
+                        else if ( (LA24_0==']') ) {s = 25;}
 
-                        else if ( (LA24_0==']') ) {s = 26;}
+                        else if ( (LA24_0=='|') ) {s = 26;}
 
-                        else if ( (LA24_0=='|') ) {s = 27;}
+                        else if ( (LA24_0==',') ) {s = 27;}
 
                         else if ( (LA24_0=='{') ) {s = 28;}
 
@@ -2526,6 +2515,16 @@ public class InternalExpressionDslLexer extends Lexer {
                         else if ( ((LA24_0>='\t' && LA24_0<='\n')||LA24_0=='\r'||LA24_0==' ') ) {s = 37;}
 
                         else if ( ((LA24_0>='\u0000' && LA24_0<='\b')||(LA24_0>='\u000B' && LA24_0<='\f')||(LA24_0>='\u000E' && LA24_0<='\u001F')||LA24_0=='#'||(LA24_0>='%' && LA24_0<='&')||LA24_0=='?'||LA24_0=='\\'||LA24_0=='^'||LA24_0=='`'||(LA24_0>='~' && LA24_0<='\uFFFF')) ) {s = 38;}
+
+                        if ( s>=0 ) return s;
+                        break;
+                    case 1 : 
+                        int LA24_36 = input.LA(1);
+
+                        s = -1;
+                        if ( ((LA24_36>='\u0000' && LA24_36<='\uFFFF')) ) {s = 86;}
+
+                        else s = 38;
 
                         if ( s>=0 ) return s;
                         break;

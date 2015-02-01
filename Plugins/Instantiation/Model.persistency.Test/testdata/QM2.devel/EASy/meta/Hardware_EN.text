@@ -1,0 +1,10 @@
+Hardware::Machine::name = network name
+Hardware::Machine::memory = total amount of memory
+Hardware::Machine::processors = number of processors
+Hardware::Machine::frequency = maximum processor frequency
+Hardware::Machine::stormThreads = maximum number of storm threads
+Hardware::Machine::machineRole = If Machines role is set to manager, no ports should be used by the machine.
+Hardware::machines = available machines for software execution
+Hardware::managerReq = At least one manager should be assigned
+Hardware::workerReq = At least one worker should be assigned
+Hardware::duplicatePorts = At least one machine is using a port already used by another machine

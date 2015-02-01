@@ -16,7 +16,6 @@
 package de.uni_hildesheim.sse.model.varModel;
 
 import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
-import de.uni_hildesheim.sse.utils.modelManagement.VersionRestriction;
 
 /**
  * This class contains keywords and constants related to ivml files.
@@ -50,6 +49,11 @@ public class IvmlKeyWords extends OclKeyWords {
      */
     public static final String CONFLICTS = "conflicts";
 
+    /**
+     * <b>IVML Keyword:</b> Keyword for abstract (compounds).
+     */
+    public static final String ABSTRACT = "abstract";
+    
     /**
      * <b>IVML Keyword:</b> Keyword for the compound.
      */
@@ -314,74 +318,6 @@ public class IvmlKeyWords extends OclKeyWords {
      * Prevents this class from being initialized from outside.
      */
     private IvmlKeyWords() {
-    }
-
-    /**
-     * Translates a version restriction operator given as string to
-     * the respective enum value. This translation has indeed to be
-     * done here as the input depends on the IVML grammar. We cannot
-     * do this mapping in the
-     * {@link de.uni_hildesheim.sse.utils.modelManagement.VersionRestriction.Operator} as
-     * it is specific to Ivml.
-     * 
-     * @param operator the operator as string value
-     * @return the operator as enum value (may be <b>null</b> in case of no match)
-     */
-    public static VersionRestriction.Operator getOperator(String operator) {
-        VersionRestriction.Operator result;
-        if (IvmlKeyWords.EQUALS.equals(operator)) {
-            result = VersionRestriction.Operator.EQUALS;
-        } else if (IvmlKeyWords.GREATER.equals(operator)) {
-            result = VersionRestriction.Operator.GREATER;           
-        } else if (IvmlKeyWords.LESS.equals(operator)) {
-            result = VersionRestriction.Operator.LESS;          
-        } else if (IvmlKeyWords.GREATER_EQUALS.equals(operator)) {
-            result = VersionRestriction.Operator.GREATER_EQUALS;            
-        } else if (IvmlKeyWords.LESS_EQUALS.equals(operator)) {
-            result = VersionRestriction.Operator.LESS_EQUALS;           
-        } else if (IvmlKeyWords.UNEQUALS.equals(operator) || IvmlKeyWords.UNEQUALS_ALIAS.equals(operator)) {
-            result = VersionRestriction.Operator.UNEQUALS;      
-        } else {
-            result = null;
-        }
-        return result;
-    }
-
-    /**
-     * Converts a restriction operator to text. We cannot
-     * do this mapping in the
-     * {@link de.uni_hildesheim.sse.utils.modelManagement.VersionRestriction.Operator} as
-     * it is specific to Ivml.
-     * 
-     * @param op the operator to be converted
-     * @return the textual representation (empty string if operator does not match)
-     */
-    public static String toText(VersionRestriction.Operator op) {
-        String result;
-        switch (op) {
-        case EQUALS:
-            result = OclKeyWords.EQUALS;
-            break;
-        case GREATER:
-            result = OclKeyWords.GREATER;
-            break;
-        case GREATER_EQUALS:
-            result = OclKeyWords.GREATER_EQUALS;
-            break;
-        case LESS:
-            result = OclKeyWords.LESS;
-            break;
-        case LESS_EQUALS:
-            result = OclKeyWords.LESS_EQUALS;
-            break;
-        case UNEQUALS:
-            result = OclKeyWords.UNEQUALS;
-            break;
-        default:
-            result = "";
-            break;
-        }
-        return result;
     }
 
 }

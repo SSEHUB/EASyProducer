@@ -15,8 +15,10 @@
  */
 package de.uni_hildesheim.sse.model.confModel;
 
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
@@ -50,6 +52,8 @@ public class CompoundVariable extends StructuredVariable {
         if (null == nestedElements) {
             nestedElements = new LinkedHashMap<String, IDecisionVariable>();
         }
+        // this is only for the base type - in case of a more specific type, missing nestedElements will be
+        // created upon setting the value
         Compound cmpType = (Compound) varDeclaration.getType();
         for (int i = 0; i < cmpType.getInheritedElementCount(); i++) {
             AbstractVariable nestedItem = cmpType.getInheritedElement(i);
@@ -63,17 +67,15 @@ public class CompoundVariable extends StructuredVariable {
         }
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public IAssignmentState getState() {
         IAssignmentState state = super.getState();
         
         // check whether the whole compound was frozen already
         if (state != AssignmentState.FROZEN && ownStateAllowed()) {
             CompoundValue cmpValue = (CompoundValue) getValue();
-            if (cmpValue != null && null != cmpValue.getValue() && cmpValue != NullValue.INSTANCE) {
-                state = AssignmentState.ASSIGNED;
+            if (cmpValue != null && null != cmpValue.getValue() && cmpValue != NullValue.INSTANCE) {                
+                state = AssignmentState.ASSIGNED;    
             } else {
                 state = AssignmentState.UNDEFINED;
             }
@@ -97,23 +99,17 @@ public class CompoundVariable extends StructuredVariable {
         return state;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public int getNestedElementsCount() {
         return null == nestedElements ? 0 : nestedElements.size();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public IDecisionVariable getNestedElement(int index) {
         return (IDecisionVariable) nestedElements.values().toArray()[index];
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void setValue(Value value, IAssignmentState state, IConfigurationElement nested)
         throws ConfigurationException {
         IDecisionVariable nestedVar = getNestedVariable(nested.getDeclaration().getName());
@@ -124,11 +120,39 @@ public class CompoundVariable extends StructuredVariable {
      * {@inheritDoc}<br/>
      * Sets also the states for the nested elements.
      */
+    @Override
     public void setValue(Value value, IAssignmentState state) throws ConfigurationException {
         super.setValue(value, state); // TODO if state==FREEZE this leads to Exception in second part
         if (null != value && value != NullValue.INSTANCE) {
             CompoundValue cmpValue = (CompoundValue) value;
             Compound cmpType = (Compound) getDeclaration().getType();
+            
+            // polymorphic case - vType is more specific, then nested elements are missing
+            if (!value.getType().equals(cmpType)) {
+                // might be helpful to store the actual type... let's see
+                Set<String> itemNames = new HashSet<String>();
+                itemNames.addAll(nestedElements.keySet());
+                Compound vType = (Compound) value.getType();
+                for (int i = 0; i < vType.getInheritedElementCount(); i++) {
+                    AbstractVariable nestedItem = vType.getInheritedElement(i);
+                    String name = nestedItem.getName();
+                    if (!nestedElements.containsKey(name)) { // may already exist as assigned before
+                        VariableCreator creator = new VariableCreator(nestedItem, this, isVisible());
+                        try {
+                            nestedElements.put(name, creator.getVariable(false));
+                        } catch (ConfigurationException e) {
+                            // Should not occur
+                            e.printStackTrace();
+                        }
+                    }
+                    // cleanup in case of setting different types
+                    itemNames.remove(name);
+                }
+                for (String name : itemNames) {
+                    nestedElements.remove(name);
+                }
+            }
+            
             for (int i = 0; i < cmpType.getInheritedElementCount(); i++) {
                 String slotName = cmpType.getInheritedElement(i).getName();
                 if (null != slotName && null != cmpValue.getNestedValue(slotName)) {
@@ -150,9 +174,7 @@ public class CompoundVariable extends StructuredVariable {
         return nestedElements.get(slotName);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void freeze(String nestedElement) {
         IDecisionVariable nestedVar = nestedElements.get(nestedElement);
         nestedVar.freeze();

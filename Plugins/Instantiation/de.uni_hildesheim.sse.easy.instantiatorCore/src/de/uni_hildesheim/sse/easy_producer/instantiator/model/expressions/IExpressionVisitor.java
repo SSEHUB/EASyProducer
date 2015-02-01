@@ -1,7 +1,7 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions;
 
 /**
- * A visitor interface.
+ * A visitor interface for expressions.
  * 
  * @author Holger Eichelberger
  */

@@ -5,7 +5,7 @@
     modelPluginID="de.uni_hildesheim.sse.vil.expressions" forceOverwrite="true" modelName="ExpressionDsl"
     updateClasspath="false" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
     complianceLevel="5.0" copyrightFields="false" editPluginID="de.uni_hildesheim.sse.vil.expressions.edit"
-    editorPluginID="de.uni_hildesheim.sse.vil.expressions.editor" runtimeVersion="2.9">
+    editorPluginID="de.uni_hildesheim.sse.vil.expressions.editor" runtimeVersion="2.10">
   <genPackages prefix="ExpressionDsl" basePackage="de.uni_hildesheim.sse.vil.expressions"
       disposableProviderFactory="true" ecorePackage="ExpressionDsl.ecore#/">
     <genClasses ecoreClass="ExpressionDsl.ecore#//LanguageUnit">
@@ -25,11 +25,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ExpressionDsl.ecore#//Advice/versionSpec"/>
     </genClasses>
     <genClasses ecoreClass="ExpressionDsl.ecore#//VersionSpec">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ExpressionDsl.ecore#//VersionSpec/conflicts"/>
-    </genClasses>
-    <genClasses ecoreClass="ExpressionDsl.ecore#//VersionedId">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ExpressionDsl.ecore#//VersionedId/op"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ExpressionDsl.ecore#//VersionedId/version"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ExpressionDsl.ecore#//VersionSpec/restriction"/>
     </genClasses>
     <genClasses ecoreClass="ExpressionDsl.ecore#//ParameterList">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ExpressionDsl.ecore#//ParameterList/param"/>
@@ -161,6 +157,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ExpressionDsl.ecore#//Constant/qValue"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ExpressionDsl.ecore#//Constant/bValue"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ExpressionDsl.ecore#//Constant/null"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ExpressionDsl.ecore#//Constant/version"/>
     </genClasses>
     <genClasses ecoreClass="ExpressionDsl.ecore#//NumValue">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ExpressionDsl.ecore#//NumValue/val"/>
@@ -173,7 +170,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ExpressionDsl.ecore#//Type/map"/>
     </genClasses>
     <genClasses ecoreClass="ExpressionDsl.ecore#//TypeParameters">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ExpressionDsl.ecore#//TypeParameters/param"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ExpressionDsl.ecore#//TypeParameters/param"/>
     </genClasses>
     <genClasses ecoreClass="ExpressionDsl.ecore#//ContainerInitializer">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ExpressionDsl.ecore#//ContainerInitializer/exprs"/>

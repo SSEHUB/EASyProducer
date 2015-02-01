@@ -13,7 +13,10 @@ import de.uni_hildesheim.sse.easy_producer.core.persistence.Configuration;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.Configuration.PathKind;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceException;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceUtils;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.IProjectCreationResult;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.PathEnvironment;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.standard.PersistenceConstants;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.standard.Persistencer;
 import de.uni_hildesheim.sse.easy_producer.core.varMod.container.ProjectContainer;
 import de.uni_hildesheim.sse.easy_producer.core.varMod.container.ScriptContainer;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildModel;
@@ -287,29 +290,34 @@ public final class InstantiationCommands {
         } else if (!projectTarget.exists()) {
             VilArgumentProvider provider = createArgumentProvider(arguments);
             
-            // Unusual way: use IVML/VIL files form source and create new empty project for instantiation
-            // 1. Creates the targetFolder (and copies EASy files to target).
-            createTargetFolder(projectSource, projectTarget);
-            
-            // 2. Load Predecessor
+            // 1. Load Predecessor
             LowlevelCommands.loadProject(projectSource);
             String projectName =  projectSource.getName();
             PLPInfo plpPre = LowlevelCommands.getProject(projectName);
             
-            // 3. Extract variability information
-            Project ivmlProject = plpPre.getProject();
+            // 2. Create successor
             Configuration configTarget = PersistenceUtils.getConfiguration(projectTarget);
-            Script buildScript = plpPre.getBuildScript();
-            
-            // 4. Create successor with extracted information.
+            File parentFolder = projectTarget.getParentFile();
             String projectNameTrg = projectTarget.getName();
-            ProjectContainer pCont = new ProjectContainer(ivmlProject, configTarget);
-            ScriptContainer sCont = new ScriptContainer(buildScript, configTarget);
-            PLPInfo plpSuc = new ProductLineProject(UUID.randomUUID().toString(), projectNameTrg, pCont,
-                projectTarget, sCont);
+            PathEnvironment pathEnv = new PathEnvironment(parentFolder);
+            File easyConfigFile = PersistenceUtils.getLocationFile(projectTarget, PathKind.IVML);
+            Persistencer persistencer = new Persistencer(pathEnv, projectTarget, easyConfigFile.getAbsolutePath(),
+                ProgressObserver.NO_OBSERVER);
+            IProjectCreationResult result = persistencer.createProject(projectNameTrg, parentFolder,
+                UUID.randomUUID().toString(), false);
+            ScriptContainer sCont = new ScriptContainer(result.getBuildScript(), configTarget);
+            ProjectContainer pCont = new ProjectContainer(result.getVarModel(), configTarget);
+            PLPInfo plpSuc = new ProductLineProject(result.getProjectID(), projectNameTrg, pCont, projectTarget, sCont);
             plpSuc.getMemberController().addPredecessor(plpPre);
-            plpSuc.instantiate(null);
+            PersistenceUtils.addImport(plpSuc, plpPre, true);
+            plpSuc.pullConfigFromPredecessors();
+            PersistenceUtils.refreshModels(plpSuc);
+            PersistenceUtils.createInstantiatePredecessorScript(plpSuc, plpPre);
+            sCont.setEdited(true);
+            plpSuc.save();
             
+            // 3. Instantiate
+            plpSuc.instantiate(null);
             VilArgumentProvider.remove(provider); // works with null as argument
         }
     }

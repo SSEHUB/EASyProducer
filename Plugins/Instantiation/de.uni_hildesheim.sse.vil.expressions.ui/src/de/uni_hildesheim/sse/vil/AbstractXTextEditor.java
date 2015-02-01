@@ -1,6 +1,5 @@
 package de.uni_hildesheim.sse.vil;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.widgets.Composite;
@@ -30,41 +29,9 @@ import de.uni_hildesheim.sse.vil.expressions.ResourceRegistry;
  * @author Holger Eichelberger
  * @author kroeher
  */
-public abstract class AbstractXTextEditor <T extends EObject> extends CommonXtextEditor {
+public abstract class AbstractXTextEditor <T extends EObject, R> extends CommonXtextEditor<T, R> {
 
     private URI resourceUri;
-    
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void doSaveAs() {
-        super.doSaveAs();
-        onSave();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void doSave(IProgressMonitor progressMonitor) {
-        super.doSave(progressMonitor);
-        onSave();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void doRevertToSaved() {
-        super.doRevertToSaved();
-        onSave();
-    }
-
-    /**
-     * Is called on saving the model.
-     */
-    protected abstract void onSave();
     
     @Override
     public void createPartControl(Composite parent) {

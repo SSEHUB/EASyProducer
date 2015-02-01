@@ -2,8 +2,6 @@
  */
 package de.uni_hildesheim.sse.ivml;
 
-import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -15,7 +13,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.ivml.ConflictStmt#getName <em>Name</em>}</li>
- *   <li>{@link de.uni_hildesheim.sse.ivml.ConflictStmt#getConflicts <em>Conflicts</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.ivml.ConflictStmt#getRestriction <em>Restriction</em>}</li>
  * </ul>
  * </p>
  *
@@ -52,19 +50,29 @@ public interface ConflictStmt extends EObject
   void setName(String value);
 
   /**
-   * Returns the value of the '<em><b>Conflicts</b></em>' containment reference list.
-   * The list contents are of type {@link de.uni_hildesheim.sse.ivml.VersionedId}.
+   * Returns the value of the '<em><b>Restriction</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Conflicts</em>' containment reference list isn't clear,
+   * If the meaning of the '<em>Restriction</em>' containment reference isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Conflicts</em>' containment reference list.
-   * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getConflictStmt_Conflicts()
+   * @return the value of the '<em>Restriction</em>' containment reference.
+   * @see #setRestriction(Expression)
+   * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getConflictStmt_Restriction()
    * @model containment="true"
    * @generated
    */
-  EList<VersionedId> getConflicts();
+  Expression getRestriction();
+
+  /**
+   * Sets the value of the '{@link de.uni_hildesheim.sse.ivml.ConflictStmt#getRestriction <em>Restriction</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Restriction</em>' containment reference.
+   * @see #getRestriction()
+   * @generated
+   */
+  void setRestriction(Expression value);
 
 } // ConflictStmt

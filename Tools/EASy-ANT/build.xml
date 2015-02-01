@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Project name must not contain whitespaces -->
+<project name="EASy ANT-Tasks" default="compile" basedir=".">	
+	<property file="${user.home}/global-build.properties"/>
+
+	<target name="compile">
+        <echo>#########################################</echo>
+        <echo>###     EASy-Loader and ANT-Task      ###</echo>
+        <echo>#########################################</echo>
+        <ant dir="EASyLoader" antfile="${build.script.name}" />        
+    </target>
+</project>

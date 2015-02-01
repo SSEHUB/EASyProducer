@@ -141,7 +141,8 @@ class ModelLoader<Model extends IModel> {
                 if (e.getId() == ModelManagementException.INTERNAL) {
                     throw new PersistenceException(e);
                 } else {
-                    LOGGER.warn("Info could not be loaded: " + e.getLocalizedMessage());
+                    LOGGER.warn(info.getName() + " " + Version.toString(info.getVersion()) + " cannot be loaded: " 
+                        + e.getLocalizedMessage());
                     /*
                      * Load an empty Script, otherwise no PLP can be created
                      * and thus the user won't be able to edit the project. 
@@ -157,7 +158,8 @@ class ModelLoader<Model extends IModel> {
             modelManagement.updateModel(model, file.toURI());
             SemanticErrorDescription description = null;
             if (file.exists()) {
-                LOGGER.warn("File could not be parsed");
+                // this seems to happen if the IVML file is not named properly -> more helpful message possible?
+                LOGGER.warn("File cannot be parsed: " + file.getName());
                 description = new SemanticErrorDescription(file.getAbsolutePath(),
                     "File contains syntax errors");
             }

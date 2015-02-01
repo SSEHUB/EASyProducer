@@ -17,6 +17,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.repr
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Text;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArraySet;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IStringValueProvider;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ListSet;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationMeta;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
@@ -27,7 +28,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
  * @author Holger Eichelberger
  * @author Patrik Pastuschek
  */
-public class XmlElement extends CompositeFragmentArtifact implements IXmlContainer {
+public class XmlElement extends CompositeFragmentArtifact implements IXmlContainer, IStringValueProvider {
 
     private XmlElement[] elements;
     private XmlAttribute[] attributes; // lazy, elements may be null if deleted
@@ -729,6 +730,11 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
         
         this.elements = newElements;
         
+    }
+
+    @Override
+    public String getStringValue(StringComparator comparator) {
+        return "xmlElement \"" + name + "\"";
     }
 
 }

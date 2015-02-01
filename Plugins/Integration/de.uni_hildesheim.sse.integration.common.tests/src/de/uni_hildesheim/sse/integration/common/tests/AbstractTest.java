@@ -4,7 +4,6 @@ import org.junit.Assert;
 
 import de.uni_hildesheim.sse.ModelUtility;
 import de.uni_hildesheim.sse.dslCore.StandaloneInitializer;
-import de.uni_hildesheim.sse.reasoning.core.importResolver.ReasoningImportResolver;
 
 /**
  * Sets up testing environment and provides helpful utility methods.
@@ -20,7 +19,6 @@ public class AbstractTest {
      * Initializes {@link ModelUtility}.
      */
     static {
-        ReasoningImportResolver.registerAsTopResolver();
         ModelUtility.setResourceInitializer(new StandaloneInitializer());
     }
     

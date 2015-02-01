@@ -49,24 +49,47 @@ public class Pool <T> {
      * 
      * @return an instance
      */
-    public T getInstance() {
+    public synchronized T getInstance() {
         T result;
         if (pool.isEmpty()) {
             result = manager.create();
         } else {
             result = pool.remove(pool.size() - 1);
         }
+//Helper code to detect release bugs / anomalies        
+//Throwable t = new Throwable();
+//ALLOC.put(result, t);
         return result;
     }
     
+//private static boolean PRINT = true;    
+//private java.util.Map<Object, Throwable> ALLOC = new java.util.HashMap<Object, Throwable>();    
+//private java.util.Map<Object, Throwable> FREE = new java.util.HashMap<Object, Throwable>();    
+
     /**
      * Releases an <code>instance</code> obtained from {@link #get()}.<br/>
      * <b>Cave:</b> Do not release instances twice!
      * 
      * @param instance the instance to be released
      */
-    public void releaseInstance(T instance) {
+    public synchronized void releaseInstance(T instance) {
         if (null != instance) {
+/*if (PRINT) {            
+if (pool.contains(instance)) {
+    System.out.println("RET " + instance);
+    System.out.println("ALLOC:");
+    ALLOC.get(instance).printStackTrace(System.out);
+    System.out.println("FREE1:");
+    FREE.get(instance).printStackTrace(System.out);
+    System.out.println("FREE:");
+    Throwable t = new Throwable();
+    t.printStackTrace(System.out);
+    PRINT = false;
+} else {
+    Throwable t = new Throwable();
+    FREE.put(instance, t);
+}
+}*/
             assert !pool.contains(instance);
             manager.clear(instance);
             pool.add(instance);

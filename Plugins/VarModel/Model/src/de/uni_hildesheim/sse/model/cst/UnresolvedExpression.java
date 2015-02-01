@@ -104,17 +104,11 @@ public class UnresolvedExpression extends ConstraintSyntaxTree {
         return actualExpression;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void accept(IConstraintTreeVisitor visitor) {
         visitor.visitUnresolvedExpression(this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public IDatatype inferDatatype() throws CSTSemanticException {
         IDatatype result = null;

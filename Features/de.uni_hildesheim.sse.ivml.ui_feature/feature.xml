@@ -2,7 +2,7 @@
 <feature
       id="de.uni_hildesheim.sse.ivml.ui_feature"
       label="IVML UI"
-      version="0.10.2"
+      version="0.10.3"
       provider-name="University of Hildesheim - SSE">
 
    <description url="http://www.indenica.eu/fileadmin/INDENICA/user_upload/d21-varmod.pdf">
@@ -32,14 +32,14 @@ limitations under the License.
    </url>
 
    <requires>
-      <import plugin="de.uni_hildesheim.sse.ivml"/>
+      <import plugin="de.uni_hildesheim.sse.ivml" version="0.10.3" match="greaterOrEqual"/>
    </requires>
 
    <plugin
          id="de.uni_hildesheim.sse.ivml.ui"
          download-size="0"
          install-size="0"
-         version="0.10.2"
+         version="0.10.3"
          unpack="false"/>
 
    <plugin

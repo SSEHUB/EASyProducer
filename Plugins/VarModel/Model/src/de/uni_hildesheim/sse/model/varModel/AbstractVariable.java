@@ -182,10 +182,7 @@ public abstract class AbstractVariable extends ContainableModelElement implement
      */
     public abstract boolean isTemporaryVariable();
     
-    
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void constraintsChanged() {
         //TODO SE: Remove old constraints if necessary
         try {

@@ -14,6 +14,7 @@ import de.uni_hildesheim.sse.utils.messages.Status;
 public class Message extends de.uni_hildesheim.sse.utils.messages.Message {
 
     private List<ModelElement> conflictingElements;
+    private List<String> conflictingElementLabels;
 
     /**
      * Sole constructor for multiple conflicting elements.
@@ -29,7 +30,7 @@ public class Message extends de.uni_hildesheim.sse.utils.messages.Message {
         if (null != conflictingElements) {
             this.conflictingElements.addAll(conflictingElements);
         }
-    }
+    }  
     
     /**
      * Creates a list with on element. 
@@ -54,5 +55,24 @@ public class Message extends de.uni_hildesheim.sse.utils.messages.Message {
      */
     public List<ModelElement> getConflicts() {
         return conflictingElements;
+    }
+    
+    /**
+     * Method for adding conflicting element labels.
+     * @param conflictingElementLabels conflicting element labels.
+     */
+    public void addConflictingElementLabels(List<String> conflictingElementLabels) {
+        this.conflictingElementLabels = new ArrayList<String>();
+        if (null != conflictingElementLabels) {
+            this.conflictingElementLabels.addAll(conflictingElementLabels);
+        }
+    }
+    
+    /**
+     * Returns the list of conflicting item labels.
+     * @return The list of conflicting item labels
+     */
+    public List<String> getConflictLabels() {
+        return conflictingElementLabels;
     }
 }

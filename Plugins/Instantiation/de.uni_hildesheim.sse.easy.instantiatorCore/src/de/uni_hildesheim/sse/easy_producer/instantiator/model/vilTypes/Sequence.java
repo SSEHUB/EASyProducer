@@ -78,6 +78,21 @@ public interface Sequence<T> extends Collection<T> {
     public Sequence<T> append(Collection<T> set);
     
     /**
+     * Adds an element to the end of this sequence.
+     * 
+     * @param element the element to be added
+     * @return <code>element</code>
+     */
+    public T add(T element);
+    
+    /**
+     * Removes the given element from this sequence.
+     * 
+     * @param element the element to be removed
+     */
+    public void remove(T element);
+    
+    /**
      * Selects elements in this set according to the given expression.
      * 
      * @param evaluator the evaluator (results must evaluate to Boolean results)
@@ -123,5 +138,16 @@ public interface Sequence<T> extends Collection<T> {
      * @return the 0-based index of <code>element</code> in this sequence, <code>-1</code> if not found
      */
     public int indexOf(T element);
+    
+    /**
+     * Maps the elements of this sequence to the elements of <code>other</code>
+     * and returns the mapping pairs (based on the equals operation). Please note that
+     * both sequences must have exactly one type parameter. 
+     * 
+     * @param other the second sequence to map against
+     * @return the mapping (key is taken from this sequence, value from <code>other</code>)
+     */
+    @OperationMeta(returnGenerics = {IVilType.class, IVilType.class })
+    public Map<T, T> mapSequence(Sequence<T> other);
     
 }

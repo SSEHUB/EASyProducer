@@ -1,5 +1,7 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IExpressionVisitor;
+
 /**
  * A specific runtime environment containing the global OTHERPROJECTS variable.
  * 
@@ -23,5 +25,15 @@ public class RuntimeEnvironment extends
     OtherProjects getOtherProjects() {
         return otherProjects;
     }
+
+    @Override
+    protected IExpressionVisitor createEvaluationProcessor() {
+        return new BuildlangExecution(this);
+    }
     
+    @Override
+    protected void releaseEvaluationProcessor(IExpressionVisitor processor) {
+        // nothing to do
+    }
+
 }

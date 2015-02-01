@@ -1,0 +1,19 @@
+project ReconfigurableHardware {
+	
+	import Basics;
+	
+	attribute BindingTime bindingTime = BindingTime.compile to ReconfigurableHardware;
+	
+	compound HwNode {
+		NonEmptyString name;	 	
+	}
+	
+	compound MPCCNode refines HwNode{
+		NonEmptyString host; // possibly needed to direct network stream to
+		PositiveInteger numCPUs;
+		PositiveInteger numDFEs;
+	} 
+	
+	sequenceOf(HwNode) clusters;
+	
+} 

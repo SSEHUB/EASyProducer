@@ -34,31 +34,22 @@ public abstract class ModelElement implements IModelElement {
         isUnique = true;
     }
     
-    /** 
-     * {@inheritDoc}
-     */
+    @Override
     public final String getName() {
         return name;
     }
 
-    /** 
-     * {@inheritDoc}
-     */
     @Override
     public String toString() {
         return getName();
     }
     
-    /** 
-     * {@inheritDoc}
-     */
+    @Override
     public final String getComment() {
         return comment;
     }
     
-    /** 
-     * {@inheritDoc}
-     */
+    @Override
     public void setComment(String comment) {
         if (null == comment) {
             this.comment = "";
@@ -67,29 +58,17 @@ public abstract class ModelElement implements IModelElement {
         }
     }
     
-    /** 
-     * {@inheritDoc}
-     */
+    @Override
     public String getNameSpace() {
         return "";
     }
     
-    /** 
-     * {@inheritDoc}
-     */
-    public abstract void accept(IModelVisitor visitor);
-    // keep this for the moment so that @Overrides are correct in Java 1.5
-    
-    /** 
-     * {@inheritDoc}
-     */
+    @Override
     public String getQualifiedName() {
         return getName(); // we do not have a parent here
     }
     
-    /** 
-     * {@inheritDoc}
-     */
+    @Override
     public final String getUniqueName() {
         String uniqueName = getName();
         if (!isUnique) {
@@ -127,23 +106,17 @@ public abstract class ModelElement implements IModelElement {
         return result;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public boolean propagateAttribute(Attribute attribute) {
         return true;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public boolean isTransparent() {
         return false;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public IModelElement getParent() {
         return null;
     }

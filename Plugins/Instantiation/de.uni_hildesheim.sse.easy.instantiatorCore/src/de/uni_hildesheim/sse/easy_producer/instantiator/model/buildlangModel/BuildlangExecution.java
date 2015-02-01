@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -59,9 +60,11 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallEx
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ConstantExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionParserRegistry;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IExpressionParser;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IResolvable;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.StringReplacer;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionParserRegistry.ILanguage;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArraySequence;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArraySet;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
@@ -80,11 +83,9 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configura
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
 import de.uni_hildesheim.sse.utils.modelManagement.AvailableModels;
-import de.uni_hildesheim.sse.utils.modelManagement.IVersionRestrictable;
+import de.uni_hildesheim.sse.utils.modelManagement.IVersionRestriction;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
-import de.uni_hildesheim.sse.utils.modelManagement.Version;
-import de.uni_hildesheim.sse.utils.modelManagement.VersionRestriction;
-import de.uni_hildesheim.sse.utils.modelManagement.VersionRestriction.Operator;
+import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
 
 /**
  * Executes a build language project. Please note that for full
@@ -96,6 +97,15 @@ import de.uni_hildesheim.sse.utils.modelManagement.VersionRestriction.Operator;
 public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableDeclaration> 
     implements IBuildlangVisitor, RuleBodyExecutor {
 
+    public static final ILanguage LANGUAGE = new ILanguage() {
+
+        @Override
+        public String getName() {
+            return "VIL";
+        }
+        
+    };
+    
     /**
      * The default source project parameter (called {@value}).
      */
@@ -116,8 +126,6 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
      */
     public static final String DEFAULT_MAIN_RULE = "main";
     
-    private static IExpressionParser expressionParser;
-
     private RuntimeEnvironment environment;
     private ITracer tracer;
     private File base;
@@ -155,26 +163,36 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
         this.environment = (RuntimeEnvironment) getRuntimeEnvironment();
         this.base = base;
         this.startRuleName = startRuleName;
-        this.matchResolver = new MatchResolver(environment, expressionParser, this);
-        this.variableFinder = new VariableFinder();
-        this.executableRules = new ExecutableRules();
-        this.resolver = new Resolver(environment.getTypeRegistry());
+        initialize();
     }
 
     /**
-     * Defines the expression parser.
+     * Creates a new execution visitor for import expression evaluation.
      * 
-     * @param parser the parser
+     * @param environment the runtime environment to be used for expression evaluation
      */
-    public static void setExpressionParser(IExpressionParser parser) {
-        String info;
-        if (null != parser) {
-            info = "registered expression parser " + parser.getClass().getName();
-        } else {
-            info = "expression parser unregistered";
-        }
-        EASyLoggerFactory.INSTANCE.getLogger(BuildlangExecution.class, Bundle.ID).info(info);
-        expressionParser = parser;
+    BuildlangExecution(RuntimeEnvironment environment) {
+        super(environment, NoTracer.INSTANCE, new HashMap<String, Object>());
+        this.tracer = NoTracer.INSTANCE;
+        this.environment = environment;
+        this.base = new File("");
+        this.startRuleName = DEFAULT_MAIN_RULE;
+        initialize();
+    }
+    
+    @Override
+    protected IExpressionParser getExpressionParser() {
+        return ExpressionParserRegistry.getExpressionParser(LANGUAGE);
+    }
+    
+    /**
+     * Does common initializations based on already set values (requires {@link #environment) to be set properly).
+     */
+    private void initialize() {
+        this.matchResolver = new MatchResolver(environment, getExpressionParser(), this);
+        this.variableFinder = new VariableFinder();
+        this.executableRules = new ExecutableRules();
+        this.resolver = new Resolver(environment.getTypeRegistry());
     }
     
     /**
@@ -434,7 +452,7 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
             LoadProperties prop = script.getProperties(p);
             String path = prop.getPath();
             try {
-                path = StringReplacer.substitute(path, environment, expressionParser, this);
+                path = StringReplacer.substitute(path, environment, getExpressionParser(), this);
             } catch (ExpressionException e) {
                 throw new VilLanguageException(e);
             }
@@ -478,8 +496,8 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
         if (null != os) {
             String f = file.toString();
             int pos = f.lastIndexOf('.');
-            if (pos > 0) {
-                f = f.substring(0, pos) + os + "." + f.substring(pos + 1);
+            if (pos > 0 && pos < f.length()) {
+                f = f.substring(0, pos + 1) + os + "." + f.substring(pos + 1);
                 file = new File(f);
                 loadFile = file.exists();
             } else {
@@ -590,7 +608,7 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
                     exec = ((Path) nameVarVal).getAbsolutePath().getAbsolutePath();
                 } else {
                     exec = StringValueHelper.getStringValue(nameVarVal, null);
-                    exec = StringReplacer.substitute(exec, environment, expressionParser, this);
+                    exec = StringReplacer.substitute(exec, environment, getExpressionParser(), this);
                 }
             } catch (VilLanguageException e) {
                 throw new ExpressionException(e);
@@ -614,7 +632,7 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
                     }
                 }
                 args[a] = postprocessSystemCallArgument(
-                    StringReplacer.substitute(args[a], environment, expressionParser, this));
+                    StringReplacer.substitute(args[a], environment, getExpressionParser(), this));
             }
             
             EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(StrategyCallExpression.class, Bundle.ID);
@@ -1127,6 +1145,46 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
             throw new VilLanguageException(e);
         }
     }
+    
+    @Override
+    public Object visitAlternativeExpression(AlternativeExpression alt) throws ExpressionException {
+        Object result = null;
+        Object condition = alt.getCondition().accept(this);
+        if (condition instanceof Boolean) {
+            boolean execThenPart = ((Boolean) condition).booleanValue();
+            tracer.visitAlternative(execThenPart);
+            IRuleBlock execute;
+            if (execThenPart) {
+                execute = alt.getIfPart();
+            } else {
+                execute = alt.getElsePart();
+            }
+            if (null != execute) {
+                RuleExecutionContext context = ruleStack.peek();
+                boolean failed = false;
+                IRuleElement determinesResult = Utils.findLastExpressionStatement(execute);
+                try {
+                    environment.pushLevel();
+                    for (int e = 0; !failed && e < execute.getBodyElementCount(); e++) {
+                        IRuleElement elt = execute.getBodyElement(e);
+                        Object eltRes = elt.accept(this);
+                        context.add(eltRes);
+                        if (elt == determinesResult) {
+                            result = eltRes; // collect the last one
+                        } else if (mayFail(elt)) {
+                            failed = !checkConditionResult(eltRes, elt, ConditionTest.DONT_CARE);
+                        }
+                    }
+                    environment.popLevel();
+                } catch (VilLanguageException e) {
+                    throw new ExpressionException(e);
+                } catch (ArtifactException e) {
+                    throw new ExpressionException(e);
+                }
+            }
+        }
+        return result;
+    }
 
     @Override
     public Object visitMapExpression(MapExpression map) throws ExpressionException {
@@ -1222,7 +1280,7 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
         Object result = cst.getValue();
         // we have to care for $name and ${} but only in strings
         if (result instanceof String) {
-            result = StringReplacer.substitute(result.toString(), environment, expressionParser, this);
+            result = StringReplacer.substitute(result.toString(), environment, getExpressionParser(), this);
         }
         return result;
     }
@@ -1259,13 +1317,19 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
      * @return the resolved script
      * @throws ExpressionException in case that the version is not valid or that the script cannot be found
      */
-    private Script resolveScript(Project project, IVersionRestrictable restrictions) throws ExpressionException {
+    private Script resolveScript(Project project, IVersionRestriction restrictions) throws ExpressionException {
         Script script = null;
-        ModelInfo<Script> info = null;
+        //ModelInfo<Script> info = null;
         AvailableModels<Script> available = BuildModel.INSTANCE.availableModels();
         Script current = resolver.getCurrentModel();
         ModelInfo<Script> currentInfo = available.getModelInfo(current);
-        List<ModelInfo<Script>> infos = available.getVisibleModelInfo(project.getName(), currentInfo.getLocation());
+        try {
+            script = BuildModel.INSTANCE.resolve(project.getName(), restrictions, 
+                currentInfo.getLocation(), environment);
+        } catch (ModelManagementException e) {
+            throw new ExpressionException(e.getMessage(), e.getId());
+        }
+        /*List<ModelInfo<Script>> infos = available.getVisibleModelInfo(project.getName(), currentInfo.getLocation());
         if (null != infos) {
             if (1 == infos.size()) {
                 info = infos.get(0);
@@ -1286,33 +1350,13 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
         } else {
             script = info.getResolved();
         }
-        if (restrictions.getRestrictionsCount() > 0) {
-            info = BuildModel.INSTANCE.availableModels().getModelInfo(script);
-            if (null == info) {
-                throw new ExpressionException("cannot find location of " + script.getName(), 
-                    ExpressionException.ID_CANNOT_RESOLVE);
+        if (null != restrictions) {
+            try {
+                script = BuildModel.INSTANCE.resolve(script.getName(), restrictions);
+            } catch (ModelManagementException e) {
+                throw new ExpressionException(e.getMessage(), e.getId());
             }
-            // TODO resolve based on restrictions -> Patrick Jähne
-            VersionRestriction restr0 = restrictions.getRestriction(0);
-            if (1 == restrictions.getRestrictionsCount() && Operator.EQUALS == restr0.getOperator()) {
-                Version ver = restr0.getVersion();
-                infos = BuildModel.INSTANCE.availableModels().getVisibleModelInfo(
-                    project.getName(), ver, info.getLocation());
-                if (null == infos || infos.isEmpty()) {
-                    throw new ExpressionException("cannot resolve " + script.getName() + " " + ver, 
-                        ExpressionException.ID_CANNOT_RESOLVE);
-                }
-                if (infos.size() > 0) {
-                    throw new ExpressionException(script.getName() + " " + ver + " is ambiguous", 
-                        ExpressionException.ID_CANNOT_RESOLVE);
-                }
-                script = infos.get(0).getResolved();
-                if (null == script) {
-                    throw new ExpressionException("cannot resolve " + project.getName() + " " + ver, 
-                        ExpressionException.ID_CANNOT_RESOLVE);
-                }
-            }
-        }
+        }*/
         return script;
     }
     
@@ -1330,7 +1374,7 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
                 Object pr = environment.getValue(inst.getProject());
                 if (pr instanceof Project) {
                     Project project = (Project) pr;
-                    script = resolveScript(project, inst); // resolve it in the local context - linked PLs
+                    script = resolveScript(project, inst.getVersionRestriction()); // resolve it in the local context
                     if (null == script) { // fallback - ask the project
                         script = project.getMainVilScript();  
                     }
@@ -1375,5 +1419,5 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
         }
         return result;
     }
-    
+
 }

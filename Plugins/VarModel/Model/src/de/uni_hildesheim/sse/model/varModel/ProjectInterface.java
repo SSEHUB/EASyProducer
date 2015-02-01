@@ -72,9 +72,7 @@ public class ProjectInterface extends ContainableModelElement implements IResolu
         return exports[index];
     }
 
-    /** 
-     * {@inheritDoc}
-     */
+    @Override
     public void accept(IModelVisitor visitor) {
         visitor.visitProjectInterface(this);
     }
@@ -105,16 +103,12 @@ public class ProjectInterface extends ContainableModelElement implements IResolu
         return null == exports ? 0 : exports.length; 
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public int getImportsCount() {
         return 0;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public ProjectImport getImport(int index) {
         throw new IndexOutOfBoundsException();
     }
@@ -128,16 +122,12 @@ public class ProjectInterface extends ContainableModelElement implements IResolu
         return false; // so far no nested interfaces
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public boolean isInterface() {
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public ContainableModelElement getElement(String name) {
         return null;
     }

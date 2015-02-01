@@ -20,6 +20,7 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Sequence;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Set;
 import de.uni_hildesheim.sse.model.varModel.datatypes.StringType;
+import de.uni_hildesheim.sse.model.varModel.datatypes.VersionType;
 import de.uni_hildesheim.sse.model.varModel.values.CompoundValue;
 import de.uni_hildesheim.sse.model.varModel.values.ContainerValue;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
@@ -208,4 +209,10 @@ class ConfigEditorValueRetriever implements IDatatypeVisitor {
     public void visitOrderedEnumType(OrderedEnum enumType) {
         visitEnumType(enumType);
     }
+
+    @Override
+    public void visitVersionType(VersionType type) {
+        // not needed as decision variables actually cannot hold this type
+    }
+    
 }

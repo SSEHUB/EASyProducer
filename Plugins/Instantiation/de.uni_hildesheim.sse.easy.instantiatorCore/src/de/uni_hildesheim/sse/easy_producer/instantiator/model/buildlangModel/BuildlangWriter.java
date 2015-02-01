@@ -7,6 +7,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.rul
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ruleMatch.CollectionMatchExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ruleMatch.PathMatchExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ruleMatch.StringMatchExpression;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.ExpressionStatement;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.WriterVisitor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
@@ -31,6 +32,16 @@ public class BuildlangWriter extends WriterVisitor<VariableDeclaration> implemen
      */
     public BuildlangWriter(Writer out) {
         super(out);
+    }
+    
+    /**
+     * Returns whether the given statement ends with a semicolon.
+     * 
+     * @param statement the statement to check
+     * @return <code>true</code> if it ends with a semicolon, <code>false</code> else
+     */
+    protected boolean endsWithSemicolon(ExpressionStatement statement) {
+        return !(statement.getExpression() instanceof AlternativeExpression);
     }
     
     /**
@@ -146,7 +157,7 @@ public class BuildlangWriter extends WriterVisitor<VariableDeclaration> implemen
                 printIndentation();
                 print("import ");
                 print(imp.getName());
-                printVersionRestrictions(imp);
+                printVersionRestrictions(imp.getVersionRestriction());
                 println(";");
             }
             println();
@@ -166,7 +177,7 @@ public class BuildlangWriter extends WriterVisitor<VariableDeclaration> implemen
                 printIndentation();
                 print("requireVTL ");
                 printString(imp.getName());
-                printVersionRestrictions(imp);
+                printVersionRestrictions(imp.getVersionRestriction());
                 println(";");
             }
             println();
@@ -264,14 +275,27 @@ public class BuildlangWriter extends WriterVisitor<VariableDeclaration> implemen
      * @throws VilLanguageException in case of visiting problems
      */
     private void printBlock(IRuleBlock block) throws VilLanguageException {
-        println("{");
-        increaseIndentation();
+        boolean exprIndent = isPrintExpressionStatementIndentation();
+        boolean exprNewLine = isPrintExpressionStatementNewLine();
+        boolean emitBrackets = !block.isVirtual();
+        if (emitBrackets) {
+            println("{");
+            increaseIndentation();
+        } else {
+            setPrintExpressionStatementIndentation(false);
+            setPrintExpressionStatementNewLine(false);
+        }
         for (int b = 0; b < block.getBodyElementCount(); b++) {
             block.getBodyElement(b).accept(this);
         }
-        decreaseIndentation();
-        printIndentation();
-        print("}");
+        if (emitBrackets) {
+            decreaseIndentation();
+            printIndentation();
+            print("}");
+        } else {
+            setPrintExpressionStatementIndentation(exprIndent);
+            setPrintExpressionStatementNewLine(exprNewLine);
+        }
     }
 
     @Override
@@ -375,8 +399,22 @@ public class BuildlangWriter extends WriterVisitor<VariableDeclaration> implemen
         }
         print(" ");
         printArgumentList(inst, 0);
+        printVersionRestrictions(inst.getVersionRestriction());
+        return null;
+    }
+
+    @Override
+    public Object visitAlternativeExpression(AlternativeExpression alt) throws ExpressionException {
+        print("if (");
+        alt.getCondition().accept(this);
+        print(") ");
         try {
-            printVersionRestrictions(inst);
+            printBlock(alt.getIfPart());
+            if (null != alt.getElsePart()) {
+                print(" else ");
+                printBlock(alt.getElsePart());
+            } 
+            println();
         } catch (VilLanguageException e) {
             throw new ExpressionException(e);
         }

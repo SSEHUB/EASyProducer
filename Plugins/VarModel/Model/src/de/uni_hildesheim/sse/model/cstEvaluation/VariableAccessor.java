@@ -15,14 +15,17 @@
  */
 package de.uni_hildesheim.sse.model.cstEvaluation;
 
+import de.uni_hildesheim.sse.model.confModel.AssignmentState;
 import de.uni_hildesheim.sse.model.confModel.ConfigurationException;
 import de.uni_hildesheim.sse.model.confModel.IAssignmentState;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
+import de.uni_hildesheim.sse.model.cstEvaluation.EvaluationVisitor.Message;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Container;
 import de.uni_hildesheim.sse.model.varModel.values.ContainerValue;
 import de.uni_hildesheim.sse.model.varModel.values.IntValue;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
+import de.uni_hildesheim.sse.utils.messages.Status;
 import de.uni_hildesheim.sse.utils.pool.IPoolManager;
 import de.uni_hildesheim.sse.utils.pool.Pool;
 
@@ -63,7 +66,7 @@ class VariableAccessor extends AbstractDecisionVariableEvaluationAccessor {
     }
     
     /**
-     * Binds the accessor to the given variable and context.
+     * Binds the accessor to the given (non-local) variable and context.
      * 
      * @param variable the underlying variable 
      * @param context the evaluation context
@@ -75,8 +78,20 @@ class VariableAccessor extends AbstractDecisionVariableEvaluationAccessor {
     }
     
     /**
-     * {@inheritDoc}
+     * Binds the accessor to the given (local or non-local) variable and context.
+     * 
+     * @param variable the underlying variable 
+     * @param context the evaluation context
+     * @param isLocal whether the variable is local and does not need a 
+     *     {@link EvaluationContext#getTargetState(IDecisionVariable) target state check}
+     * @return <b>this</b> (builder pattern)
      */
+    public VariableAccessor bind(IDecisionVariable variable, EvaluationContext context, boolean isLocal) {
+        super.bind(variable, context);
+        return this;
+    }
+    
+    @Override
     public Value getValue() {
         Value result;
         IDecisionVariable var = getVariable();
@@ -88,9 +103,7 @@ class VariableAccessor extends AbstractDecisionVariableEvaluationAccessor {
         return result;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public boolean setValue(Value value) {
         boolean successful = false;
         EvaluationContext context = getContext();
@@ -99,21 +112,32 @@ class VariableAccessor extends AbstractDecisionVariableEvaluationAccessor {
                 context.addErrorMessage("assignable value is not defined");
             } else {
                 IDecisionVariable variable = getVariable();
-                IAssignmentState targetState = context.getTargetState(variable.getState());
-                if (null != targetState) {
-                    try {
-                        variable.setValue(value, targetState);
-                        successful = true;
-                        notifyVariableChange();
-                    } catch (ConfigurationException e) {
-                        context.addErrorMessage(e);
+                if (!Value.equalsPartially(variable.getValue(), value)) { // don't reassign / send message
+                    IAssignmentState targetState = isLocal() ? AssignmentState.ASSIGNED 
+                        : context.getTargetState(variable);
+                    if (null != targetState) {
+                        try {
+                            variable.setValue(value, targetState);
+                            successful = true;
+                            notifyVariableChange();
+                        } catch (ConfigurationException e) {
+                            context.addErrorMessage(e);
+                        }
+                    } else {
+                        context.addMessage(
+                                new Message("Assignment state conflict", Status.ERROR, variable.getDeclaration()));
                     }
                 } else {
-                    context.addErrorMessage("cannot assign due to assignment state conflict");
+                    successful = true;
                 }
             }
         }
         return successful;
+    }
+    
+    @Override
+    public boolean isAssignable() {
+        return true;
     }
     
     /**
@@ -122,15 +146,15 @@ class VariableAccessor extends AbstractDecisionVariableEvaluationAccessor {
      * @param accessor the accessor to determine the nested value
      * @return the nested value
      */
-    public Value getValue(EvaluationAccessor accessor) {
-        Value result = null;
+    public EvaluationAccessor getValue(EvaluationAccessor accessor) {
+        EvaluationAccessor result = null;
         IDecisionVariable variable = getVariable();
         if (Container.TYPE.isAssignableFrom(variable.getDeclaration().getType())) {
             ContainerValue value = (ContainerValue) variable.getValue();
             if (null != value) {
                 Integer index = getIndex(value, accessor);
                 if (null != index) {
-                    result = ((ContainerValue) variable.getValue()).getElement(index);
+                    result = IndexAccessor.POOL.getInstance().bind(variable, getContext(), index);
                 }
             }
         }
@@ -189,9 +213,7 @@ class VariableAccessor extends AbstractDecisionVariableEvaluationAccessor {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void release() {
         POOL.releaseInstance(this);
     }

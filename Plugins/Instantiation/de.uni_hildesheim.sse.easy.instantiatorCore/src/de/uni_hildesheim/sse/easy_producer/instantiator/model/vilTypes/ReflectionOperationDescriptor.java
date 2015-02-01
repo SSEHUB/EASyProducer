@@ -31,6 +31,8 @@ class ReflectionOperationDescriptor extends OperationDescriptor {
     private static final Map<Class<?>, Object> LAZY_DEFAULTS = new HashMap<Class<?>, Object>();
     
     private Method method;
+    private int returnParameterIndex = -1;
+    private boolean storeArtifactsBeforeExecution = false;
     
     /**
      * Creates a new operation descriptor.
@@ -66,6 +68,8 @@ class ReflectionOperationDescriptor extends OperationDescriptor {
             if (null != meta.name() && meta.name().length > 0) {
                 aliasType = AliasType.EXPLICIT;
             }
+            returnParameterIndex = meta.useGenericParameter();
+            storeArtifactsBeforeExecution = meta.storeArtifactsBefore();
         }
         boolean isConversion = null != method.getAnnotation(Conversion.class);
         setCharacteristics(opType, aliasType, isConversion, opName);
@@ -116,7 +120,7 @@ class ReflectionOperationDescriptor extends OperationDescriptor {
             if (i == params.length - 1 && Map.class.isAssignableFrom(params[i])) {
                 acceptsNamedParameters = true;
             } else {
-                parameter.add(resolveType(params[i]));
+                parameter.add(resolveType(params[i], false));
             }
         }
         if (acceptsNamedParameters) {
@@ -136,7 +140,7 @@ class ReflectionOperationDescriptor extends OperationDescriptor {
     
     @Override
     protected void initializeReturnType() {
-        setReturnType(resolveType(method.getReturnType()));
+        setReturnType(resolveType(method.getReturnType(), true));
     }
     
     @Override
@@ -314,23 +318,24 @@ class ReflectionOperationDescriptor extends OperationDescriptor {
      * Resolves the given type to a type descriptor.
      *  
      * @param cls the class to be resolved
+     * @param returnType whether a return type shall be resolved
      * @return the resolved type descriptor
      */
-    private TypeDescriptor<? extends IVilType> resolveType(Class<?> cls) {
+    private TypeDescriptor<? extends IVilType> resolveType(Class<?> cls, boolean returnType) {
         TypeDescriptor<? extends IVilType> result = null;
         if (Void.TYPE == cls) {
             result = ReflectionTypeDescriptor.VOID;
         } else {
-            OperationMeta opMeta = method.getAnnotation(OperationMeta.class);
-            TypeDescriptor<?>[] parameter;
-            if (null != opMeta) {
-                Class<?>[] param = opMeta.returnGenerics();
-                parameter = TypeDescriptor.createArray(param.length);
-                for (int i = 0; i < param.length; i++) {
-                    parameter[i] = TypeRegistry.DEFAULT.getType(ReflectionTypeDescriptor.getRegName(param[i]));
+            TypeDescriptor<?>[] parameter = null;
+            if (returnType) {
+                OperationMeta opMeta = method.getAnnotation(OperationMeta.class);
+                if (null != opMeta) {
+                    Class<?>[] param = opMeta.returnGenerics();
+                    parameter = TypeDescriptor.createArray(param.length);
+                    for (int i = 0; i < param.length; i++) {
+                        parameter[i] = TypeRegistry.DEFAULT.getType(ReflectionTypeDescriptor.getRegName(param[i]));
+                    }
                 }
-            } else {
-                parameter = null;
             }
             try {
                 if (ReflectionTypeDescriptor.isSet(cls)) {
@@ -361,6 +366,16 @@ class ReflectionOperationDescriptor extends OperationDescriptor {
     @Override
     public boolean isPlaceholder() {
         return false;
+    }
+
+    @Override
+    public int useParameterAsReturn() {
+        return returnParameterIndex;
+    }
+    
+    @Override
+    public boolean storeArtifactsBeforeExecution() {
+        return storeArtifactsBeforeExecution;
     }
 
 }

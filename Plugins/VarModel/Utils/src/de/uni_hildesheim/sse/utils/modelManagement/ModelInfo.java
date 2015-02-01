@@ -42,6 +42,13 @@ public class ModelInfo <M extends IModel> implements IModelData {
     private Locale locale;
 
     /**
+     * Internal constructor for marking pseudo instances.
+     */
+    ModelInfo() {
+        this(null, null, null, null, null);
+    }
+    
+    /**
      * Creates a model information object.
      * 
      * @param model the model to create this object for
@@ -242,7 +249,8 @@ public class ModelInfo <M extends IModel> implements IModelData {
      * resolution. The returned information is in sync with the resolved
      * model if there is a resolved model, otherwise information is
      * stored locally (and resolved information there may be incorrect or
-     * <b>null</b>).
+     * <b>null</b>). Depending on the parser, no import restrictions may be 
+     * attached (this may only be available in the full model).
      * 
      * @param index a 0-based index specifying the import to be returned
      * @return the model import
@@ -431,6 +439,55 @@ public class ModelInfo <M extends IModel> implements IModelData {
             this.loader = loader;
         }
     }
+    
+    /**
+     * Returns whether <code>i1</code> and <code>i2</code> are equal, i.e., point to the same model.
+     * 
+     * @param <M> the model type
+     * @param i1 the first model information to be compared
+     * @param i2 the second model information
+     * @return <code>true</code> if <code>i1</code> is equal to <code>i2</code>, <code>false</code> else
+     */
+    public static <M extends IModel> boolean equals(ModelInfo<M> i1, ModelInfo<M> i2) {
+        boolean equals;
+        if (null == i1) {
+            equals = null == i2;
+        } else {
+            if (null != i2) {
+                equals = equals(i1, i2.getName(), i2.getVersion(), i2.getLocation());
+            } else {
+                equals = false;
+            }
+        }
+        return equals;
+    }
+    
+    /**
+     * Returns whether <code>i1</code> and the explicit given information are equal, i.e., point to the same model.
+     * 
+     * @param <M> the model type
+     * @param info the model information to be compared
+     * @param name the name of the model to be compared
+     * @param version the version of the model to be compared
+     * @param location the location to be compared
+     * @return <code>true</code> if <code>i1</code> is equal to <code>i2</code>, <code>false</code> else
+     */
+    public static <M extends IModel> boolean equals(ModelInfo<M> info, String name, Version version, URI location) {
+        boolean equals;
+        if (null == info) {
+            return null == name && null == version && null == location;
+        } else {
+            if (null != location) {
+                equals = info.getName().equals(name) 
+                    && Version.equals(info.getVersion(), version) 
+                    && info.getLocation().normalize().equals(location.normalize());
+            } else {
+                equals = false;
+            }
+        }
+        return equals;
+    }
+
 
 }
 

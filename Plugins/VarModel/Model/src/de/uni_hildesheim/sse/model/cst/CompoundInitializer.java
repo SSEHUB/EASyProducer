@@ -129,17 +129,11 @@ public class CompoundInitializer extends ConstraintSyntaxTree {
         return slotDecls[index];
     }
     
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void accept(IConstraintTreeVisitor visitor) {
         visitor.visitCompoundInitializer(this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public IDatatype inferDatatype() throws CSTSemanticException {
         return type;

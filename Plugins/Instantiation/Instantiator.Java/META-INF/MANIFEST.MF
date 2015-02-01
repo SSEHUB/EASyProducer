@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Java Instantiation Support
 Bundle-SymbolicName: de.uni_hildesheim.sse.easy.instantiator.java;singleton:=true
-Bundle-Version: 0.2.2
+Bundle-Version: 0.2.3
 Bundle-Vendor: University of Hildesheim, SSE
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Service-Component: OSGI-INF/instantiator.xml
@@ -23,4 +23,6 @@ Export-Package: de.uni_hildesheim.sse.easy.java,
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: lib/aspectJ/aspectjtools.jar,
  .,
- lib/aspectJ/runtime/aspectjrt.jar
+ lib/aspectJ/runtime/aspectjrt.jar,
+ lib/ant/ant-launcher.jar,
+ lib/ant/ant.jar

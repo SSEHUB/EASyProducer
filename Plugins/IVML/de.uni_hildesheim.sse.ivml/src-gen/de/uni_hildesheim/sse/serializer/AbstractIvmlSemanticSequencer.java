@@ -18,7 +18,6 @@ import de.uni_hildesheim.sse.ivml.ConflictStmt;
 import de.uni_hildesheim.sse.ivml.Declaration;
 import de.uni_hildesheim.sse.ivml.Declarator;
 import de.uni_hildesheim.sse.ivml.DerivedType;
-import de.uni_hildesheim.sse.ivml.DslContext;
 import de.uni_hildesheim.sse.ivml.EqualityExpression;
 import de.uni_hildesheim.sse.ivml.EqualityExpressionPart;
 import de.uni_hildesheim.sse.ivml.Eval;
@@ -70,7 +69,6 @@ import de.uni_hildesheim.sse.ivml.VariabilityUnit;
 import de.uni_hildesheim.sse.ivml.VariableDeclaration;
 import de.uni_hildesheim.sse.ivml.VariableDeclarationPart;
 import de.uni_hildesheim.sse.ivml.VersionStmt;
-import de.uni_hildesheim.sse.ivml.VersionedId;
 import de.uni_hildesheim.sse.services.IvmlGrammarAccess;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.serializer.acceptor.ISemanticSequenceAcceptor;
@@ -185,12 +183,6 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 			case IvmlPackage.DERIVED_TYPE:
 				if(context == grammarAccess.getDerivedTypeRule()) {
 					sequence_DerivedType(context, (DerivedType) semanticObject); 
-					return; 
-				}
-				else break;
-			case IvmlPackage.DSL_CONTEXT:
-				if(context == grammarAccess.getDslContextRule()) {
-					sequence_DslContext(context, (DslContext) semanticObject); 
 					return; 
 				}
 				else break;
@@ -494,12 +486,6 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 					return; 
 				}
 				else break;
-			case IvmlPackage.VERSIONED_ID:
-				if(context == grammarAccess.getVersionedIdRule()) {
-					sequence_VersionedId(context, (VersionedId) semanticObject); 
-					return; 
-				}
-				else break;
 			}
 		if (errorAcceptor != null) errorAcceptor.accept(diagnosticProvider.createInvalidContextOrTypeDiagnostic(semanticObject, context));
 	}
@@ -638,7 +624,7 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	
 	/**
 	 * Constraint:
-	 *     (name=Identifier (conflicts+=VersionedId conflicts+=VersionedId*)?)
+	 *     (name=Identifier restriction=Expression?)
 	 */
 	protected void sequence_ConflictStmt(EObject context, ConflictStmt semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -669,31 +655,6 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	 */
 	protected void sequence_DerivedType(EObject context, DerivedType semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
-	}
-	
-	
-	/**
-	 * Constraint:
-	 *     (stop=STRING escape=STRING command=STRING dsl=DSL_CONTENT)
-	 */
-	protected void sequence_DslContext(EObject context, DslContext semanticObject) {
-		if(errorAcceptor != null) {
-			if(transientValues.isValueTransient(semanticObject, IvmlPackage.Literals.DSL_CONTEXT__STOP) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, IvmlPackage.Literals.DSL_CONTEXT__STOP));
-			if(transientValues.isValueTransient(semanticObject, IvmlPackage.Literals.DSL_CONTEXT__ESCAPE) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, IvmlPackage.Literals.DSL_CONTEXT__ESCAPE));
-			if(transientValues.isValueTransient(semanticObject, IvmlPackage.Literals.DSL_CONTEXT__COMMAND) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, IvmlPackage.Literals.DSL_CONTEXT__COMMAND));
-			if(transientValues.isValueTransient(semanticObject, IvmlPackage.Literals.DSL_CONTEXT__DSL) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, IvmlPackage.Literals.DSL_CONTEXT__DSL));
-		}
-		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
-		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getDslContextAccess().getStopSTRINGTerminalRuleCall_2_0(), semanticObject.getStop());
-		feeder.accept(grammarAccess.getDslContextAccess().getEscapeSTRINGTerminalRuleCall_4_0(), semanticObject.getEscape());
-		feeder.accept(grammarAccess.getDslContextAccess().getCommandSTRINGTerminalRuleCall_6_0(), semanticObject.getCommand());
-		feeder.accept(grammarAccess.getDslContextAccess().getDslDSL_CONTENTTerminalRuleCall_8_0(), semanticObject.getDsl());
-		feeder.finish();
 	}
 	
 	
@@ -778,7 +739,7 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	
 	/**
 	 * Constraint:
-	 *     (let=LetExpression | expr=ImplicationExpression | collection=CollectionInitializer | dsl=DslContext)
+	 *     (let=LetExpression | expr=ImplicationExpression | collection=CollectionInitializer)
 	 */
 	protected void sequence_Expression(EObject context, Expression semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -882,7 +843,7 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	
 	/**
 	 * Constraint:
-	 *     (name=Identifier interface=Identifier? (versions+=VersionedId versions+=VersionedId*)?)
+	 *     (name=Identifier interface=Identifier? restriction=Expression?)
 	 */
 	protected void sequence_ImportStmt(EObject context, ImportStmt semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -1165,7 +1126,12 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	
 	/**
 	 * Constraint:
-	 *     (name=Identifier super=Identifier? (elements+=VariableDeclaration | elements+=ExpressionStatement | elements+=AttrAssignment)*)
+	 *     (
+	 *         abstract='abstract'? 
+	 *         name=Identifier 
+	 *         super=Identifier? 
+	 *         (elements+=VariableDeclaration | elements+=ExpressionStatement | elements+=AttrAssignment)*
+	 *     )
 	 */
 	protected void sequence_TypedefCompound(EObject context, TypedefCompound semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -1234,7 +1200,9 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	 *         qValue=QualifiedName | 
 	 *         bValue='true' | 
 	 *         bValue='false' | 
-	 *         nullValue='null'
+	 *         self='self' | 
+	 *         nullValue='null' | 
+	 *         version=VERSION
 	 *     )
 	 */
 	protected void sequence_Value(EObject context, Value semanticObject) {
@@ -1281,28 +1249,6 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
 		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
 		feeder.accept(grammarAccess.getVersionStmtAccess().getVersionVERSIONTerminalRuleCall_1_0(), semanticObject.getVersion());
-		feeder.finish();
-	}
-	
-	
-	/**
-	 * Constraint:
-	 *     (name=Identifier op=VersionOperator version=VERSION)
-	 */
-	protected void sequence_VersionedId(EObject context, VersionedId semanticObject) {
-		if(errorAcceptor != null) {
-			if(transientValues.isValueTransient(semanticObject, IvmlPackage.Literals.VERSIONED_ID__NAME) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, IvmlPackage.Literals.VERSIONED_ID__NAME));
-			if(transientValues.isValueTransient(semanticObject, IvmlPackage.Literals.VERSIONED_ID__OP) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, IvmlPackage.Literals.VERSIONED_ID__OP));
-			if(transientValues.isValueTransient(semanticObject, IvmlPackage.Literals.VERSIONED_ID__VERSION) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, IvmlPackage.Literals.VERSIONED_ID__VERSION));
-		}
-		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
-		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getVersionedIdAccess().getNameIdentifierParserRuleCall_0_0(), semanticObject.getName());
-		feeder.accept(grammarAccess.getVersionedIdAccess().getOpVersionOperatorParserRuleCall_2_0(), semanticObject.getOp());
-		feeder.accept(grammarAccess.getVersionedIdAccess().getVersionVERSIONTerminalRuleCall_3_0(), semanticObject.getVersion());
 		feeder.finish();
 	}
 }

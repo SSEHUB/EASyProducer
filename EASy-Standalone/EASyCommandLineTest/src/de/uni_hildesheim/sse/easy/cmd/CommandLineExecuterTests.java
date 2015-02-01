@@ -36,7 +36,11 @@ import org.junit.Test;
 public class CommandLineExecuterTests {
     
     private static final String MAIN_CLASS = "de.uni_hildesheim.sse.easy.cmd.CommandLineExecuter";
-    private static final String DEFAULT_JDK_LOCATION = "C:\\Program Files (x86)\\Java\\jdk1.7.0_45";
+    
+    /**
+     * Fallback No. 2 ;-)
+     */
+    private static final String DEFAULT_JDK_LOCATION = "C:\\Program Files (x86)\\Java\\jdk1.7.0_51";
 
     /**
      * Checks whether the java.home variable is set to a JDK location.
@@ -44,10 +48,17 @@ public class CommandLineExecuterTests {
      */
     @BeforeClass
     public static void setUpBeforeClass() {
+        AllTests.setUpBeforeClass();
         String javaLocation = System.getProperty("java.home");
         String os = System.getProperty("os.name").toLowerCase();
         if (javaLocation.contains("jre") && os.indexOf("win") >=0 ) {
-            System.setProperty("java.home", DEFAULT_JDK_LOCATION);            
+            // Fallback No. 1
+            String jdkLocation = System.getenv("JAVA_HOME");
+            if (null != jdkLocation) {
+                System.setProperty("java.home", jdkLocation);
+            } else {
+                System.setProperty("java.home", DEFAULT_JDK_LOCATION);
+            }
         }
     }
     
@@ -79,7 +90,7 @@ public class CommandLineExecuterTests {
     
     /**
      * Tests the <tt>instantiate</tt> method with one EASy project (the elevator example).
-     * The first folder is an valid eASy project, which contains a variability model
+     * The first folder is an valid EASy project, which contains a variability model
      * and all files needed for instantiation.
      * @throws IOException If an I/O error occurs while passing the command to the shell/command line.
      */

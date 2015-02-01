@@ -15,12 +15,10 @@
  */
 package de.uni_hildesheim.sse.model.varModel.datatypes;
 
-
 /**
- * Creates the BasisDatatype String.
+ * Defines the basis datatype String.
  * 
  * @author beck
- *
  */
 public class StringType extends BasisDatatype {
     
@@ -80,9 +78,7 @@ public class StringType extends BasisDatatype {
         super("String", DTYPE);
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void accept(IDatatypeVisitor visitor) {
         visitor.visitStringType(this);
     }

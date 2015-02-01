@@ -18,6 +18,7 @@ package de.uni_hildesheim.sse.model.cstEvaluation;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.model.varModel.datatypes.AnyType;
@@ -97,6 +98,44 @@ public class SetOperationsTest {
         set1.release();
         empty.release();
         nullV.release();
+    }
+    
+    /**
+     * Tests the "add" operation for sequences.
+     * 
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     */
+    @Test
+    public void testAdd() throws ValueDoesNotMatchTypeException {
+        TestEvaluationContext context = new TestEvaluationContext();
+        IDatatype setType = new Set("intSet", IntegerType.TYPE, null);
+        Object[] set1Data = new Object[] {1, 2, 3, 4, 5};
+        EvaluationAccessor set1 = Utils.createValue(setType, context, set1Data);
+        EvaluationAccessor empty = Utils.createValue(setType, context);
+        EvaluationAccessor nullV = Utils.createNullValue(context);
+        EvaluationAccessor val6 = Utils.createValue(IntegerType.TYPE, context, 6);
+        
+        EvaluationAccessor result = Utils.evaluate(Sequence.ADD, set1, val6);
+        Utils.assertEquals(6, result.getValue());
+        Utils.assertContainer(new Object[]{1, 2, 3, 4, 5, 6}, set1.getValue());
+        result.release();
+        result = Utils.evaluate(Sequence.ADD, set1, val6);
+        Utils.assertEquals(6, result.getValue());
+        Utils.assertContainer(new Object[]{1, 2, 3, 4, 5, 6}, set1.getValue());
+        result.release();
+        
+        result = Utils.evaluate(Sequence.ADD, empty, val6);
+        Utils.assertEquals(6, result.getValue());
+        Utils.assertContainer(new Object[]{6}, empty.getValue());
+        result.release();
+
+        result = Utils.evaluate(Sequence.ADD, nullV, val6);
+        Assert.assertNull(result);
+
+        set1.release();
+        empty.release();
+        nullV.release();
+        val6.release();
     }
 
     /**

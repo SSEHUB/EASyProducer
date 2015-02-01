@@ -74,4 +74,11 @@ public interface IModelRepository <M extends IModel> {
      */
     public Location getLocationFor(URI uri);
     
+    /**
+     * Returns the model paths.
+     * 
+     * @return the model paths
+     */
+    public ModelPaths paths();
+    
 }

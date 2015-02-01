@@ -15,6 +15,7 @@
  */
 package de.uni_hildesheim.sse.utils.modelManagement;
 
+
 /**
  * Represents the type of models to be managed.
  * 
@@ -79,5 +80,14 @@ public interface IModel extends IModelData {
      * to clean up references such as listeners.
      */
     public void dispose();
+
+    /**
+     * Returns the context for evaluating import / conflict restrictions.
+     * This context shall only contain the information that is necessary
+     * to evaluate restriction information.
+     * 
+     * @return the evaluation context
+     */
+    public IRestrictionEvaluationContext getRestrictionEvaluationContext();
     
 }

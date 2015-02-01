@@ -2,8 +2,6 @@
  */
 package de.uni_hildesheim.sse.ivml;
 
-import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -16,7 +14,7 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.ivml.ImportStmt#getName <em>Name</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.ImportStmt#getInterface <em>Interface</em>}</li>
- *   <li>{@link de.uni_hildesheim.sse.ivml.ImportStmt#getVersions <em>Versions</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.ivml.ImportStmt#getRestriction <em>Restriction</em>}</li>
  * </ul>
  * </p>
  *
@@ -79,19 +77,29 @@ public interface ImportStmt extends EObject
   void setInterface(String value);
 
   /**
-   * Returns the value of the '<em><b>Versions</b></em>' containment reference list.
-   * The list contents are of type {@link de.uni_hildesheim.sse.ivml.VersionedId}.
+   * Returns the value of the '<em><b>Restriction</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Versions</em>' containment reference list isn't clear,
+   * If the meaning of the '<em>Restriction</em>' containment reference isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Versions</em>' containment reference list.
-   * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getImportStmt_Versions()
+   * @return the value of the '<em>Restriction</em>' containment reference.
+   * @see #setRestriction(Expression)
+   * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getImportStmt_Restriction()
    * @model containment="true"
    * @generated
    */
-  EList<VersionedId> getVersions();
+  Expression getRestriction();
+
+  /**
+   * Sets the value of the '{@link de.uni_hildesheim.sse.ivml.ImportStmt#getRestriction <em>Restriction</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Restriction</em>' containment reference.
+   * @see #getRestriction()
+   * @generated
+   */
+  void setRestriction(Expression value);
 
 } // ImportStmt

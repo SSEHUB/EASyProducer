@@ -10,7 +10,8 @@
 	<property name="javacTarget" value="1.5"/>
 	
 	<path id ="includes">
-		<!-- DSL core ui common classes -->
+        <pathelement path="${libs.dslCore}"/>       
+	    <!-- DSL core ui common classes -->
 		<pathelement path="${libs.dslCore.ui}"/> 
         <!-- Model -->
         <pathelement path="${libs.model}"/>

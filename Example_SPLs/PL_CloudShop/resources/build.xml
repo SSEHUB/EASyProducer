@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." default="pack">
+    <!-- "store.composite"-->
+    <property name="compositeFileName" value="$compositeFileName"/>
+    <!-- "D:/Dropbox/Tuscany Ordner/tuscany-sca-1.6.2/lib/"-->
+    <property name="pathToTuscanyLib" value="$pathToTuscanyLib"/>
+    <!-- "hallo.jar"-->
+    <property name="jarName" value="$jarName"/>
+	<!-- "launch.Launch"-->
+	<property name="launchFile" value="launch.Launch"/>
+    <!-- Ordner -->
+    <property name="base" value="../"/>
+    <property name="bin" value="${base}/bin"/>
+    <property name="src" value="${base}/src"/>
+    <!-- "D:\Dropbox\Amazon Web Services\sse-key\___AccessKeys___.bak\ssekeyStephan.ppk" -->
+    <!-- Pfad zu den Tuscany User-Bibliotheken-->
+    <path id="user.libs">
+		<fileset dir="${pathToTuscanyLib}">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+    <!-- Kompilieren / kopieren / packen des Services -->
+    <target name="pack">
+	
+		<!-- Erster Schritt: Falls von einem vorherigen Versuch noch ein Bin-Ordner vorhanden ist, dann wird dieses geloescht. -->
+		<delete dir="${bin}"/>
+		<echo>-----------------------------------------------</echo>
+		<echo message="${line.separator}"/>
+		<echo>[INFO]  Erstelle neuen Bin-Ordner...</echo>
+		<echo message="${line.separator}"/>
+		<mkdir dir="${bin}"/>
+		<echo message="${line.separator}"/>
+		<echo>[INFO]  Neuer Bin-Ordner erstellt !</echo>
+		<echo message="${line.separator}"/>
+		<echo>-----------------------------------------------</echo>
+		
+		<!-- Zweiter Schritt: Class-Dateien kompilieren und erstellte Class-Dateien zum Bin-Ordner hinzufügen -->
+		<echo>-----------------------------------------------</echo>
+		<echo message="${line.separator}"/>
+		<echo>[INFO]  Kompiliere die Java-Klassen...</echo>
+		<echo message="${line.separator}"/>
+		<javac destdir="${bin}" fork="true" includeantruntime="false" srcdir="${src}">			
+			<classpath refid="user.libs"/>	
+		</javac>
+		<echo message="${line.separator}"/>
+		<echo>[INFO]  Java-Klassen kompiliert !</echo>
+		<echo message="${line.separator}"/>
+		<echo>-----------------------------------------------</echo>
+		
+		<!-- Dritter Schritt: uiservices-Package (mit der store.html) zum Bin-Ordner kopieren / Falls grafische Version gewuenscht auch die Bilder mit kopieren -->
+		<echo>-----------------------------------------------</echo>
+		<echo message="${line.separator}"/>
+		<echo>[INFO]  Kopiere uiservices-Package...</echo>
+		<echo message="${line.separator}"/>
+		<copy file="./${compositeFileName}" toDir="${bin}"/>
+				<mkdir dir="${bin}/uiservices"/>
+				<copy toDir="${bin}/uiservices">
+					<fileset dir="./uiservices"/>
+					
+					#if($graphic=="true")
+						<fileset dir="./bilder"/>
+					#end
+		</copy>
+		<echo message="${line.separator}"/>
+		<echo>[INFO]  Uiservices-Package kopiert !</echo>
+		<echo message="${line.separator}"/>
+		<echo>-----------------------------------------------</echo>
+		
+		<!--Vierter Schritt: Evtl. vorhandene alte JAR-File loeschen und den Service in eine neue JAR-File packen. -->
+		<echo>-----------------------------------------------</echo>
+		<echo message="${line.separator}"/>
+		<echo>[INFO]  Loesche alte JAR-Datei und erstelle neue ...</echo>
+		<echo message="${line.separator}"/>
+		<delete failonerror="false" file="${jarName}"/>
+		<jar basedir="${bin}" destfile="${base}/${jarName}">
+			<manifest>
+				<attribute name="Main-Class" value="${launchFile}"/> 
+			</manifest>
+		</jar>
+		<echo message="${line.separator}"/>
+		<echo>[INFO]  Alte JAR-Datei gelöscht und neue erstellt !</echo>
+		<echo message="${line.separator}"/>
+		<echo>-----------------------------------------------</echo>
+		
+
+	</target>
+</project>

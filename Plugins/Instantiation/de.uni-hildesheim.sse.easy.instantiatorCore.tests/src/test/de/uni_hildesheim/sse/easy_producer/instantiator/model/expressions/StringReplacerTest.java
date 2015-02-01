@@ -10,6 +10,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Var
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.RuntimeEnvironment;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IExpressionVisitor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.StringReplacer;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 
@@ -32,7 +33,18 @@ public class StringReplacerTest extends AbstractTest {
     @BeforeClass
     public static void startUp() {
         try {
-            environment = new RuntimeEnvironment();
+            environment = new RuntimeEnvironment() {
+
+                @Override
+                protected IExpressionVisitor createEvaluationProcessor() {
+                    return null; // not relevant here, only for import/export/template resolution
+                }
+
+                @Override
+                protected void releaseEvaluationProcessor(IExpressionVisitor processor) {
+                }
+                
+            };
             environment.switchContext(new PseudoModel());
             VariableDeclaration test = new VariableDeclaration("b", TypeRegistry.booleanType());
             environment.addValue(test, BOOLEAN_VALUE);

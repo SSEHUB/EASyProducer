@@ -19,17 +19,11 @@ public class IntValueConverter extends AbstractLexerBasedConverter<Integer> {
         super();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected String toEscapedString(Integer value) {
         return value.toString();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected void assertValidValue(Integer value) {
         super.assertValidValue(value);

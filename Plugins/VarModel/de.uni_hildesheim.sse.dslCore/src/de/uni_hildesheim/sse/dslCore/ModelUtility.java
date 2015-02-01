@@ -364,11 +364,7 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
      */
     protected abstract boolean handles(File location);
 
-    /**
-     * {@inheritDoc}
-     */
-    // @Override
-    // CK: Override causes errors in build process (Java > 1.5 required!)
+    @Override
     public void scan(File location, IModelInfoHolder<R> holder) {
         if (handles(location)) {
             if (!holder.isKnown(location.toURI(), this)) {

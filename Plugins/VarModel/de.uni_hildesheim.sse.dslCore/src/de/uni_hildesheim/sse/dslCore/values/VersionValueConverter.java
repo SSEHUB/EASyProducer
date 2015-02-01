@@ -11,9 +11,6 @@ import org.eclipse.xtext.nodemodel.INode;
  */
 public class VersionValueConverter extends AbstractLexerBasedConverter<String> {
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected String toEscapedString(String value) {
         return value;

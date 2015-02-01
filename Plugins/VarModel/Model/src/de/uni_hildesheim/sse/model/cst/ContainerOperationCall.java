@@ -126,9 +126,7 @@ public class ContainerOperationCall extends ConstraintSyntaxTree {
         return declarators[index];
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public IDatatype inferDatatype() throws CSTSemanticException {
         if (null == result) {
             //check whether the OCLFeatureCall is semantically correct
@@ -181,9 +179,7 @@ public class ContainerOperationCall extends ConstraintSyntaxTree {
         return result;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void accept(IConstraintTreeVisitor visitor) {
         visitor.visitContainerOperationCall(this); // no further operations!
     }

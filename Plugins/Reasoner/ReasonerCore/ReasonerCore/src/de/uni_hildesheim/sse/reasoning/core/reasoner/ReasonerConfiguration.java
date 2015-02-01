@@ -13,6 +13,7 @@ public class ReasonerConfiguration {
     private AttributeValues attributeValues;
     private int timeout;
     private ReasonerDescriptor defaultReasoner;
+    private boolean customMessages;
     
     /**
      * Creates a new instance and initializes it with default values, i.e.
@@ -21,7 +22,19 @@ public class ReasonerConfiguration {
      * default reasoner (<b>null</b>).
      */
     public ReasonerConfiguration() {
+        this(false);
+    }
+    
+    /**
+     * Creates a new instance and initializes it with default values, i.e.
+     * the global timeout from {@link ReasonerFrontend#getTimeout()}, an
+     * unspecified attributes values set (<b>null</b>), custom messaging and an unspecified
+     * default reasoner (<b>null</b>).
+     * @param customMessages Enables custom messages (comments instead of constraints).
+     */
+    public ReasonerConfiguration(boolean customMessages) {
         this.timeout = ReasonerFrontend.getInstance().getTimeout();
+        this.customMessages = customMessages;
     }
     
     /**
@@ -112,4 +125,25 @@ public class ReasonerConfiguration {
         return defaultReasoner;
     }
     
+    /**
+     * Enables custom messages.
+     */
+    public void enableCustomMessages() {
+        this.customMessages = true;
+    }
+    
+    /**
+     * Disable custom messages.
+     */
+    public void disableCustomMessages() {
+        this.customMessages = false;
+    }
+    
+    /**
+     * Returns if custom messages are enabled.
+     * @return Returns true if custom messages are enabled.
+     */
+    public boolean getCustomMessages() {
+        return customMessages;
+    }
 }

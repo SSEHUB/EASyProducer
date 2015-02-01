@@ -1,0 +1,11 @@
+-> main()
+    i1 <- 0
+    b1 <- true
+    visit if-branch
+    -> +(Integer, Integer) with (0, 1) = 1
+    i1 <- 1
+    visit if-branch
+    -> +(Integer, Integer) with (1, 1) = 2
+    i1 <- 2
+    -> !(Boolean) with (true) = false
+    visit else-branch

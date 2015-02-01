@@ -10,12 +10,12 @@ import de.uni_hildesheim.sse.model.cst.ConstantValue;
 import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
 import de.uni_hildesheim.sse.model.cst.ContainerInitializer;
 import de.uni_hildesheim.sse.model.cst.ContainerOperationCall;
-import de.uni_hildesheim.sse.model.cst.DslFragment;
 import de.uni_hildesheim.sse.model.cst.IConstraintTreeVisitor;
 import de.uni_hildesheim.sse.model.cst.IfThen;
 import de.uni_hildesheim.sse.model.cst.Let;
 import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
 import de.uni_hildesheim.sse.model.cst.Parenthesis;
+import de.uni_hildesheim.sse.model.cst.Self;
 import de.uni_hildesheim.sse.model.cst.UnresolvedExpression;
 import de.uni_hildesheim.sse.model.cst.Variable;
 import de.uni_hildesheim.sse.model.varModel.datatypes.AnyType;
@@ -33,6 +33,7 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.RealType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Sequence;
 import de.uni_hildesheim.sse.model.varModel.datatypes.StringType;
+import de.uni_hildesheim.sse.model.varModel.datatypes.VersionType;
 import de.uni_hildesheim.sse.model.varModel.values.EnumValue;
 import de.uni_hildesheim.sse.model.varModel.values.MetaTypeValue;
 import de.uni_hildesheim.sse.model.varModel.values.ReferenceValue;
@@ -175,6 +176,11 @@ public class AbstractConstraintTranslator extends AbstractModelTranslator implem
         @Override
         public void visitConstraintType(ConstraintType type) {
             // TODO unclear whether we need this            
+        }
+
+        @Override
+        public void visitVersionType(VersionType type) {
+            // currently no attribute / variable can have this type
         }        
     }
     
@@ -264,11 +270,6 @@ public class AbstractConstraintTranslator extends AbstractModelTranslator implem
     }
 
     @Override
-    public void visitDslFragment(DslFragment fragment) {
-        // TODO Auto-generated method stub        
-    }
-
-    @Override
     public void visitUnresolvedExpression(UnresolvedExpression expression) {
         // TODO Auto-generated method stub        
     }
@@ -284,6 +285,11 @@ public class AbstractConstraintTranslator extends AbstractModelTranslator implem
         
         append("(");
         append(")");        
+    }
+
+    @Override
+    public void visitSelf(Self self) {
+        // TODO Auto-generated method stub
     }
 
     @Override
@@ -504,4 +510,5 @@ public class AbstractConstraintTranslator extends AbstractModelTranslator implem
     private boolean appendGet(boolean isAssignmentOperand, boolean isPropagationPosition) {
         return isAssignmentOperand && isPropagationPosition;
     }
+
 }

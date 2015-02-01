@@ -5,7 +5,7 @@ project testImport {
     version v0;
     import testInterface::iface1 with (testInterface.version < v1.10);
     import testCompounds;
-    conflicts testInterface with (test.version >= v1.10);
+    conflicts testInterface with (testInterface.version >= v1.10);
 // visible as at least one variable of this type is exported
     //* comp c1;
     testInterface::comp c1;

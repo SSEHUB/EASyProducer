@@ -1,5 +1,6 @@
 package de.uni_hildesheim.sse.easy_producer.core.varMod.tracing;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.IInstantiatorTracer;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.TracerFactory;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.ITracer;
 
@@ -40,6 +41,11 @@ public class ConsoleTracerFactory extends TracerFactory {
     @Override
     protected de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ITracer
     createBuildLanguageTracerImpl() {
+        return TRACER;
+    }
+
+    @Override
+    protected IInstantiatorTracer createInstantiatorTracerImpl() {
         return TRACER;
     }
     

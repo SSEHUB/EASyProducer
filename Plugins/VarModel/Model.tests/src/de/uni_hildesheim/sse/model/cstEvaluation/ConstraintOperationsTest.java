@@ -59,6 +59,8 @@ public class ConstraintOperationsTest {
         EvaluationAccessor val2 = Utils.createValue(ConstraintType.TYPE, context, cst2);
         EvaluationAccessor nullV = Utils.createNullValue(context);
         
+        // equals is useless and will be tested in the EvaluationVisitorTest
+        
         Utils.testEquals(true, ConstraintType.EQUALS, ConstraintType.UNEQUALS, val1, val1);
         Utils.testEquals(true, ConstraintType.EQUALS, ConstraintType.UNEQUALS, val2, val2);
         Utils.testEquals(false, ConstraintType.EQUALS, ConstraintType.UNEQUALS, val1, val2);

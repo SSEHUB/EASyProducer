@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: IVML integration commons
 Bundle-SymbolicName: de.uni_hildesheim.sse.integration.common;singleton:=true
-Bundle-Version: 0.7.0
+Bundle-Version: 0.7.1
 Bundle-Vendor: University of Hildesheim - SSE
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: de.uni_hildesheim.sse.integration.common

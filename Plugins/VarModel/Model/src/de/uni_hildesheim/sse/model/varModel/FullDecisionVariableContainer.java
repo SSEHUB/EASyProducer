@@ -27,9 +27,7 @@ public class FullDecisionVariableContainer extends BasicDecisionVariableContaine
 
     private List<Constraint> realizing = new ArrayList<Constraint>();
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void addConstraint(Constraint constraint, boolean internal) {
         assert null != constraint;
         if (internal) {
@@ -39,16 +37,12 @@ public class FullDecisionVariableContainer extends BasicDecisionVariableContaine
         }
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public int getRealizingCount() {
         return realizing.size();
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public Constraint getRealizing(int index) {
         return realizing.get(index);
     }

@@ -15,7 +15,6 @@
  */
 package de.uni_hildesheim.sse.model.confModel;
 
-
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -483,5 +482,71 @@ public class AssignmentResolverTest {
         Assert.assertNotNull(var2.getValue());
         Assert.assertEquals(5, var2.getValue().getValue());
         
+    }
+    
+    /**
+     * Tests whether implies constraints will be handled correctly by the {@link AssignmentResolver}.
+     * @throws ValueDoesNotMatchTypeException Must not occur otherwise there is a failure inside the
+     * {@link ValueFactory}.
+     * @throws CSTSemanticException  Must not occur otherwise there is a failure inside the constraint syntax trees.
+     */
+    @Test
+    public void testImplies() throws ValueDoesNotMatchTypeException, CSTSemanticException {
+        // Create project and variables
+        Project project = new Project("assignmentTestProject");
+        DecisionVariableDeclaration declA = new DecisionVariableDeclaration("intA", IntegerType.TYPE, project);
+        project.add(declA);
+        DecisionVariableDeclaration declB = new DecisionVariableDeclaration("intB", IntegerType.TYPE, project);
+        project.add(declB);
+        DecisionVariableDeclaration declC = new DecisionVariableDeclaration("intC", IntegerType.TYPE, project);
+        declC.setValue(33);
+        project.add(declC);
+        
+        // Create assignment
+        Value valA = ValueFactory.createValue(declA.getType(), 31);
+        Variable varA = new Variable(declA);
+        ConstantValue constValA = new ConstantValue(valA);
+        OCLFeatureCall assignmentA = new OCLFeatureCall(varA, OclKeyWords.ASSIGNMENT, constValA);
+        Constraint assignmentConstraint = new Constraint(project);
+        assignmentConstraint.setConsSyntax(assignmentA);
+        project.add(assignmentConstraint);       
+   
+        
+        // Create implies constraint
+        Value valB = ValueFactory.createValue(declB.getType(), 37);
+        ConstantValue constValB = new ConstantValue(valB);
+        Value valC = ValueFactory.createValue(declC.getType(), 40);
+        ConstantValue constValC = new ConstantValue(valC);
+        OCLFeatureCall equalsA = new OCLFeatureCall(varA, OclKeyWords.EQUALS, constValA);
+        OCLFeatureCall equalsB = new OCLFeatureCall(new Variable(declB), OclKeyWords.EQUALS, constValB);
+        OCLFeatureCall equalsC = new OCLFeatureCall(new Variable(declC), OclKeyWords.EQUALS, constValC);
+        OCLFeatureCall implies = new OCLFeatureCall(equalsA, OclKeyWords.IMPLIES, equalsB);
+        OCLFeatureCall impliesFail = new OCLFeatureCall(equalsA, OclKeyWords.IMPLIES, equalsC);
+        Constraint impliesConstaint = new Constraint(project);
+        impliesConstaint.setConsSyntax(implies);
+        project.add(impliesConstaint);
+        Constraint impliesConstaintFail = new Constraint(project);
+        impliesConstaintFail.setConsSyntax(impliesFail);
+        project.add(impliesConstaintFail);
+        
+        
+        // Create Configuration (will also start AssignmentResolver)
+        Configuration config = new Configuration(project);
+        IDecisionVariable iVarA = config.getDecision(declA);
+        IDecisionVariable iVarB = config.getDecision(declB);
+        IDecisionVariable iVarC = config.getDecision(declC);
+        
+        // Test correct assignments
+        Assert.assertNotNull(iVarA);
+        Assert.assertEquals(31, iVarA.getValue().getValue());
+        Assert.assertSame(AssignmentState.ASSIGNED, iVarA.getState());
+
+        Assert.assertNotNull(iVarB);
+        Assert.assertEquals(37, iVarB.getValue().getValue());
+        Assert.assertSame(AssignmentState.ASSIGNED, iVarB.getState());
+        
+        Assert.assertNotNull(iVarC);
+        Assert.assertEquals(33, iVarC.getValue().getValue());
+        Assert.assertSame(AssignmentState.DEFAULT, iVarC.getState());
     }
 }

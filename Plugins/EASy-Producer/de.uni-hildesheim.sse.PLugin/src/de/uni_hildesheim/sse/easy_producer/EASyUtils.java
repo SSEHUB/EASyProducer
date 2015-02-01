@@ -36,16 +36,11 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expres
 import de.uni_hildesheim.sse.easy_producer.persistency.EASyPersistencer;
 import de.uni_hildesheim.sse.easy_producer.persistency.ResourcesMgmt;
 import de.uni_hildesheim.sse.easy_producer.persistency.eclipse.PersistenceUtils;
-import de.uni_hildesheim.sse.model.varModel.ProjectImport;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
-import de.uni_hildesheim.sse.utils.modelManagement.Version;
-import de.uni_hildesheim.sse.utils.modelManagement.VersionFormatException;
-import de.uni_hildesheim.sse.utils.modelManagement.VersionRestriction;
-import de.uni_hildesheim.sse.utils.modelManagement.VersionRestriction.Operator;
 import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
 
 /**
@@ -158,45 +153,6 @@ public class EASyUtils {
      *     <tt>false</tt> otherwise
      */
     public static final void addImport(PLPInfo plp, PLPInfo predecessor, boolean considerVIL) {
-        String projectName = predecessor.getProjectName();
-        boolean hasProjectVersion = null != predecessor.getProject() && null != predecessor.getProject().getVersion();
-        boolean hasScriptVersion = null != predecessor.getBuildScript()
-            && null != predecessor.getBuildScript().getVersion();
-        
-        
-        // Variability Model
-        ProjectImport parentImport = new ProjectImport(projectName, null);
-        
-        if (hasProjectVersion) {
-            Version clonedVersion = null;
-            try {
-                clonedVersion = new Version(predecessor.getProject().getVersion().getVersion());
-            } catch (VersionFormatException e) {
-                // Can not happen, since a valid version was used
-                LOGGER.exception(e);
-            }
-            VersionRestriction[] vr = {new VersionRestriction(projectName, Operator.EQUALS, clonedVersion)};
-            parentImport.setRestrictions(vr);
-        }
-        plp.getProject().addImport(parentImport);
-        
-        // Build Script
-        if (considerVIL) {
-            ModelImport<Script> scriptImport = new ModelImport<Script>(projectName);
-            
-            if (hasScriptVersion) {
-                Version clonedVersion = null;
-                try {
-                    clonedVersion = new Version(predecessor.getBuildScript().getVersion().getVersion());
-                } catch (VersionFormatException e) {
-                    // Can not happen, since a valid version was used
-                    LOGGER.exception(e);
-                }
-                VersionRestriction[] vrScript = {new VersionRestriction(projectName, Operator.EQUALS, clonedVersion)};
-                scriptImport.setRestrictions(vrScript);
-            }
-            plp.addScriptImport(scriptImport);
-        }
+        de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceUtils.addImport(plp, predecessor, considerVIL);
     }
-    
 }

@@ -10,6 +10,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguage
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaOperation;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
+import de.uni_hildesheim.sse.utils.modelManagement.IRestrictionEvaluationContext;
 import de.uni_hildesheim.sse.utils.modelManagement.IndentationConfiguration;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
 import de.uni_hildesheim.sse.utils.modelManagement.Version;
@@ -290,5 +291,15 @@ public class Template extends AbstractResolvableModel<VariableDeclaration, Templ
     protected void reload() {
         TemplateModel.INSTANCE.reload(this);
     }
-    
+
+    @Override
+    public IRestrictionEvaluationContext getRestrictionEvaluationContext() {
+        return new RuntimeEnvironment();
+    }
+
+    @Override
+    public IMetaType getBaseType() {
+        return null;
+    }
+
 }

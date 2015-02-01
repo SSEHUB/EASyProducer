@@ -29,6 +29,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
  * Compiles java files using Javac.
  * 
  * @author Holger Eichelberger
+ * @author El-Sharkawy
  */
 @Instantiator("javac")
 public class Javac extends AbstractFileInstantiator {
@@ -61,7 +62,7 @@ public class Javac extends AbstractFileInstantiator {
     public static Set<FileArtifact> javac(Collection<FileArtifact> source, Path target, Map<String, Object> other) 
         throws ArtifactException {
         long timestamp = PathUtils.normalizedTime();
-        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        JavaCompiler compiler = getJavaCompiler();
         StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);
         if (source.isEmpty()) {
             throw new ArtifactException("no source files to compile", ArtifactException.ID_INSUFFICIENT_ARGUMENT);
@@ -103,6 +104,27 @@ public class Javac extends AbstractFileInstantiator {
             FileArtifact.class);
         scanResult.checkForException();
         return new ListSet<FileArtifact>(result, FileArtifact.class);
+    }
+
+    /**
+     * Gets the Java&trade; programming language compiler provided
+     * with this platform. <br/>
+     * If Java cannot find the compiler, this method will also try to use the <b><tt>JAVA_HOME</tt></b> variable
+     * to detect the compiler.
+     * @return The Java&trade; programming language compiler or <tt>null</tt> if the compiler could not be found.
+     */
+    private static synchronized JavaCompiler getJavaCompiler() {
+        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        if (null == compiler) {
+            String homeVariable = System.getenv("JAVA_HOME");
+            if (null != homeVariable) {
+                String homeProperty = System.getProperty("java.home");
+                System.setProperty("java.home", homeVariable);
+                compiler = ToolProvider.getSystemJavaCompiler();
+                System.setProperty("java.home", homeProperty);
+            }
+        }
+        return compiler;
     }
 
 }

@@ -20,7 +20,6 @@ import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
 import de.uni_hildesheim.sse.model.management.VarModel;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.Project;
-import de.uni_hildesheim.sse.reasoning.core.importResolver.ReasoningImportResolver;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.EvaluationResult;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.EvaluationResult.ConstraintEvaluationResult;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasoningResult;
@@ -63,7 +62,6 @@ public abstract class AbstractTest {
    @BeforeClass
    public static void startUp() {
        try {
-           ReasoningImportResolver.registerAsTopResolver();
            ModelUtility.setResourceInitializer(new StandaloneInitializer());
            VarModel.INSTANCE.locations().addLocation(TESTDATA_DIR, OBSERVER);
            VarModel.INSTANCE.loaders().registerLoader(ModelUtility.INSTANCE, OBSERVER);

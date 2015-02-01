@@ -6,12 +6,12 @@ import de.uni_hildesheim.sse.model.cst.CompoundInitializer;
 import de.uni_hildesheim.sse.model.cst.ConstantValue;
 import de.uni_hildesheim.sse.model.cst.ContainerInitializer;
 import de.uni_hildesheim.sse.model.cst.ContainerOperationCall;
-import de.uni_hildesheim.sse.model.cst.DslFragment;
 import de.uni_hildesheim.sse.model.cst.IConstraintTreeVisitor;
 import de.uni_hildesheim.sse.model.cst.IfThen;
 import de.uni_hildesheim.sse.model.cst.Let;
 import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
 import de.uni_hildesheim.sse.model.cst.Parenthesis;
+import de.uni_hildesheim.sse.model.cst.Self;
 import de.uni_hildesheim.sse.model.cst.UnresolvedExpression;
 import de.uni_hildesheim.sse.model.cst.Variable;
 import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
@@ -65,16 +65,12 @@ public class AssignmentDetector implements IConstraintTreeVisitor {
         level = 0;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitConstantValue(ConstantValue value) {
         // nothing to do
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitVariable(Variable variable) {
         // nothing to do
     }
@@ -90,9 +86,7 @@ public class AssignmentDetector implements IConstraintTreeVisitor {
         return !isAssignment && (maxLevel < 0 || level <= maxLevel);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitParenthesis(Parenthesis parenthesis) {
         if (continueTraversal()) {
             level++;
@@ -101,33 +95,29 @@ public class AssignmentDetector implements IConstraintTreeVisitor {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitComment(Comment comment) {
         // nothing to do
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitOclFeatureCall(OCLFeatureCall call) {
         if (OclKeyWords.ASSIGNMENT.equals(call.getOperation())) {
             isAssignment = true;
         }
         if (continueTraversal()) {
             level++;
-            call.getOperand().accept(this);
-            for (int p = 0; !isAssignment && p < call.getParameterCount(); p++) {
-                call.getParameter(p).accept(this);
+            if (null != call.getOperand()) { // incomplete xText
+                call.getOperand().accept(this);
+                for (int p = 0; !isAssignment && p < call.getParameterCount(); p++) {
+                    call.getParameter(p).accept(this);
+                }
             }
             level--;
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitLet(Let let) {
         if (continueTraversal()) {
             level++;
@@ -136,9 +126,7 @@ public class AssignmentDetector implements IConstraintTreeVisitor {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitIfThen(IfThen ifThen) {
         if (continueTraversal()) {
             level++;
@@ -153,9 +141,7 @@ public class AssignmentDetector implements IConstraintTreeVisitor {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitContainerOperationCall(ContainerOperationCall call) {
         if (continueTraversal()) {
             level++;
@@ -168,9 +154,7 @@ public class AssignmentDetector implements IConstraintTreeVisitor {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitCompoundAccess(CompoundAccess access) {
         if (continueTraversal()) {
             level++;
@@ -179,23 +163,12 @@ public class AssignmentDetector implements IConstraintTreeVisitor {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void visitDslFragment(DslFragment fragment) {
-        // nothing to do
-    }
-
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitUnresolvedExpression(UnresolvedExpression expression) {
         // nothing to do
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitCompoundInitializer(CompoundInitializer initializer) {
         if (continueTraversal()) {
             level++;
@@ -206,9 +179,7 @@ public class AssignmentDetector implements IConstraintTreeVisitor {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitContainerInitializer(ContainerInitializer initializer) {
         if (continueTraversal()) {
             level++;
@@ -217,6 +188,11 @@ public class AssignmentDetector implements IConstraintTreeVisitor {
             }
             level--;
         }
+    }
+
+    @Override
+    public void visitSelf(Self self) {
+        // not an assignment
     }
 
 }

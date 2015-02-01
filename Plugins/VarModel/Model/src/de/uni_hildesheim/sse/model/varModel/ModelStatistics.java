@@ -60,121 +60,85 @@ public class ModelStatistics {
      */
     private class StatisticsVisitor extends AbstractVisitor {
 
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public void visitEnum(Enum eenum) {
             declaredDataTypesCount++;
             super.visitEnum(eenum);
         }
 
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public void visitOrderedEnum(OrderedEnum eenum) {
             declaredDataTypesCount++;
             super.visitOrderedEnum(eenum);
         }
 
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public void visitDerivedDatatype(DerivedDatatype datatype) {
             declaredDataTypesCount++;
         }
 
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public void visitEnumLiteral(EnumLiteral literal) {
         }
 
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public void visitReference(Reference reference) {
             declaredDataTypesCount++;
         }
 
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public void visitSequence(Sequence sequence) {
             declaredDataTypesCount++;
         }
 
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public void visitSet(Set set) {
             declaredDataTypesCount++;
         }
 
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public void visitProjectImport(ProjectImport pImport) {
         }
 
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public void visitDecisionVariableDeclaration(DecisionVariableDeclaration decl) {
             variablesCount++;
         }
 
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public void visitAttribute(Attribute attribute) {
         }
 
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public void visitConstraint(Constraint constraint) {
             constraintsCount++;
         }
 
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public void visitFreezeBlock(FreezeBlock freeze) {
         }
 
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public void visitOperationDefinition(OperationDefinition opdef) {
         }
 
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public void visitPartialEvaluationBlock(PartialEvaluationBlock block) {
         }
 
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public void visitProjectInterface(ProjectInterface iface) {
         }
 
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public void visitComment(Comment comment) {
         }
         
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public void visitAttributeAssignment(AttributeAssignment assignment) {
         }
 
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public void visitCompoundAccessStatement(CompoundAccessStatement access) {
         }
 

@@ -1,0 +1,14 @@
+project Observables {
+	
+    import Basics;
+	
+	attribute BindingTime bindingTime = BindingTime.compile to Observables;
+
+    // don't move these alias definitions!
+    // define each category of observable / quality property as an own type
+    typedef Throughput Integer;
+    typedef Bandwidth Integer;
+
+	// unclear, could be a setOf(Constraint), function definitions
+	 
+} 

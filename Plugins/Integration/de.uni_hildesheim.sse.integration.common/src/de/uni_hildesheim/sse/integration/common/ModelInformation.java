@@ -27,25 +27,16 @@ public class ModelInformation implements IModelInfo {
         this.access = access;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String getName() {
         return info.getName();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String getVersion() {
         return Version.toString(info.getVersion());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public URI getLocation() {
         return info.getLocation();

@@ -68,7 +68,7 @@ TypedefEnumLiteral:
 	;	
 
 TypedefCompound: 
-    'compound' 
+    (abstract = 'abstract')? 'compound' 
     name=Identifier 
     //#> Compounds
     (
@@ -167,8 +167,10 @@ Value :
 	| sValue = STRING
 	| qValue = QualifiedName
 	| bValue = ('true' | 'false')
+	| self = 'self'
 	//#> Compounds
 	| nullValue = 'null'
+	| => version = VERSION
 	//#< Compounds
 	;
 	
@@ -184,20 +186,6 @@ DerivedType :
 	type=Type 
 	')' 
 	;
-
-//#> DSL
-// --------------------- Extension: DSL -----------------------------
-
-DslContext:
-	// currently most simple notation for DSL embedding, unclear if needed at all
-	'DSL' 
-	'(' stop=STRING ','
-		escape=STRING ','
-		command=STRING
-	')'
-	dsl=DSL_CONTENT
-	;	
-//#< DSL
 
 //#> Compounds
 // --------------------- Extension: Compounds ----------------------
@@ -268,10 +256,7 @@ ImportStmt:
 	'import' 
 	name=Identifier ('::' interface=Identifier)?
 	(
-	  'with' '('
-	  versions+=VersionedId
-	  (',' versions+=VersionedId)*
-	  ')'
+	  'with' restriction = Expression
 	)?
 	';'
 	;
@@ -280,27 +265,10 @@ ConflictStmt:
 	'conflicts' 
 	name=Identifier
 	(
-	  'with' '('
-	  conflicts+=VersionedId
-	  (',' conflicts+=VersionedId)*
-	  ')'
+	  'with' restriction = Expression
 	)?
 	';'
 	;
-	
-VersionedId:
-    name=Identifier '.version'
-    op = VersionOperator
-	version=VERSION
-	;
-	
-VersionOperator:
-    '=='
-    |'>'
-    |'<'
-    |'>='
-    |'<='
-    ;
 		
 VersionStmt: 
 	'version'
@@ -343,7 +311,6 @@ Expression:
 	let=LetExpression
 	|	expr=ImplicationExpression
 	|   collection=CollectionInitializer
-	|   dsl=DslContext
 	;
 
 LetExpression:	
@@ -571,7 +538,7 @@ IfExpression:
 // unify distinct terminals -> IdentifierValueConverter
 // never allow identifiers starting with $ -> Reasoner name prefixes
 Identifier:
-    ID | VERSION | EXPONENT
+    ID | VERSION | EXPONENT | 'version'
 ;
 
 // --------------------- Terminals ----------------------------------
@@ -602,10 +569,6 @@ terminal STRING	:
 	'"' ( '\\' ('b'|'t'|'n'|'f'|'r'|'u'|'"'|"'"|'\\') | !('\\'|'"') )* '"' |
 	"'" ( '\\' ('b'|'t'|'n'|'f'|'r'|'u'|'"'|"'"|'\\') | !('\\'|"'") )* "'"
 	; 
-
-terminal DSL_CONTENT: 
-	'%' -> 'DSL%'
-	;
 
 // do not change the name of this terminal!!! -> comment recognition
 terminal ML_COMMENT: 

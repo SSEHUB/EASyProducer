@@ -48,31 +48,23 @@ class BasisVariable extends DecisionVariable {
         super(parent, varDeclaration, isVisible);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public int getNestedElementsCount() {
         return 0;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public IDecisionVariable getNestedElement(int index) {
         return null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void setValue(Value value, IAssignmentState state, IConfigurationElement nested)
         throws ConfigurationException {
         // Not supported by this class.
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void freeze(String nestedElement) {
         // Not supported by this class.
     }

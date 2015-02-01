@@ -488,7 +488,8 @@ public class ReasonerFrontend {
 
     /**
      * Defines that the specified reasoner shall be used. Note that this method only defines a hint. In case of
-     * automated selection of reasoners, this class may ignore the specified information.
+     * automated selection of reasoners, this class may ignore the specified information. Please note that
+     * this method stores the selected reasoner just within the reasoner frontend and does not persist this selection.
      * 
      * @param descriptor
      *            the descriptor denoting the reasoner

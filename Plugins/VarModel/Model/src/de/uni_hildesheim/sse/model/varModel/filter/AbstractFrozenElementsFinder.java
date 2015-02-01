@@ -49,114 +49,82 @@ abstract class AbstractFrozenElementsFinder extends AbstractProjectVisitor {
        super(originProject, filterType);
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitEnum(Enum eenum) {
         // No action needed
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitOrderedEnum(OrderedEnum eenum) {
         // No action needed
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitCompound(Compound compound) {
         // No action needed
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitDerivedDatatype(DerivedDatatype datatype) {
         // No action needed
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitEnumLiteral(EnumLiteral literal) {
         // No action needed
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitReference(Reference reference) {
         // No action needed
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitSequence(Sequence sequence) {
         // No action needed
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitSet(Set set) {
         // No action needed
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitDecisionVariableDeclaration(DecisionVariableDeclaration decl) {
         // No action needed
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitAttribute(Attribute attribute) {
         // No action needed
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitConstraint(Constraint constraint) {
         // No action needed
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitOperationDefinition(OperationDefinition opdef) {
         // No action needed
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitPartialEvaluationBlock(PartialEvaluationBlock block) {
         // No action needed
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitProjectInterface(ProjectInterface iface) {
         // No action needed
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitComment(Comment comment) {
         // No action needed
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitAttributeAssignment(AttributeAssignment assignment) {
         // No action needed
     }

@@ -84,23 +84,17 @@ public class DebugConstraintTreeVisitor implements IConstraintTreeVisitor {
         out.println();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitConstantValue(ConstantValue value) {
         println(StringProvider.toIvmlString(value));
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitVariable(Variable variable) {
         println(StringProvider.toIvmlString(variable) + " type " + StringProvider.toIvmlString(variable.getVariable()));
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitParenthesis(Parenthesis parenthesis) {
         println("(");
         increaseIndentation();
@@ -109,9 +103,7 @@ public class DebugConstraintTreeVisitor implements IConstraintTreeVisitor {
         println(")");
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitComment(Comment comment) {
         println("COMMENT " + comment.getComment());
         increaseIndentation();
@@ -119,9 +111,7 @@ public class DebugConstraintTreeVisitor implements IConstraintTreeVisitor {
         decreaseIndentation();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitOclFeatureCall(OCLFeatureCall call) {
         println("CALL " + call.getOperation() + " with parameter");
         increaseIndentation();
@@ -132,9 +122,7 @@ public class DebugConstraintTreeVisitor implements IConstraintTreeVisitor {
         decreaseIndentation();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitLet(Let let) {
         println("let " + StringProvider.toIvmlString(let.getVariable()) + " in");
         increaseIndentation();
@@ -142,9 +130,7 @@ public class DebugConstraintTreeVisitor implements IConstraintTreeVisitor {
         decreaseIndentation();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitIfThen(IfThen ifThen) {
         println("if-then-else");
         increaseIndentation();
@@ -157,9 +143,7 @@ public class DebugConstraintTreeVisitor implements IConstraintTreeVisitor {
         decreaseIndentation();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitContainerOperationCall(ContainerOperationCall call) {
         println("ContainerCall " + call.getOperation());
         increaseIndentation();
@@ -170,9 +154,7 @@ public class DebugConstraintTreeVisitor implements IConstraintTreeVisitor {
         decreaseIndentation();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitCompoundAccess(CompoundAccess access) {
         String slot = "";
         if (null != access.getResolvedSlot()) {
@@ -184,23 +166,12 @@ public class DebugConstraintTreeVisitor implements IConstraintTreeVisitor {
         decreaseIndentation();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void visitDslFragment(DslFragment fragment) {
-        println("DSLFRAGMENT");
-    }
-
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitUnresolvedExpression(UnresolvedExpression expression) {
         println("UNRESOLVED");
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitCompoundInitializer(CompoundInitializer initializer) {
         println("COMPOUND INITIALIZER");
         increaseIndentation();
@@ -211,9 +182,7 @@ public class DebugConstraintTreeVisitor implements IConstraintTreeVisitor {
         decreaseIndentation();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitContainerInitializer(ContainerInitializer initializer) {
         println("CONTAINER INITIALIZER");
         increaseIndentation();
@@ -221,6 +190,11 @@ public class DebugConstraintTreeVisitor implements IConstraintTreeVisitor {
             initializer.getExpression(e).accept(this);
         }
         decreaseIndentation();
+    }
+
+    @Override
+    public void visitSelf(Self self) {
+        print("self");
     }
 
 }

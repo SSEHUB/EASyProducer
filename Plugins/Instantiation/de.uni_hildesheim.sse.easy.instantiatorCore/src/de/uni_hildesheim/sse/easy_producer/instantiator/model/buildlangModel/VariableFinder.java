@@ -159,6 +159,7 @@ class VariableFinder implements IBuildlangVisitor {
 
     @Override
     public Object visitMapExpression(MapExpression map) throws ExpressionException {
+        map.getExpression().accept(this);
         try {
             visitRuleBlock(map);
         } catch (VilLanguageException e) {
@@ -277,6 +278,20 @@ class VariableFinder implements IBuildlangVisitor {
 
     @Override
     public Object visitInstantiateExpression(InstantiateExpression inst) throws ExpressionException {
+        return null;
+    }
+
+    @Override
+    public Object visitAlternativeExpression(AlternativeExpression alt) throws ExpressionException {
+        alt.getCondition().accept(this);
+        try {
+            visitRuleBlock(alt.getIfPart());
+            if (null != alt.getElsePart()) {
+                visitRuleBlock(alt.getElsePart());
+            }
+        } catch (VilLanguageException e) {
+            throw new ExpressionException(e);
+        }
         return null;
     }
 

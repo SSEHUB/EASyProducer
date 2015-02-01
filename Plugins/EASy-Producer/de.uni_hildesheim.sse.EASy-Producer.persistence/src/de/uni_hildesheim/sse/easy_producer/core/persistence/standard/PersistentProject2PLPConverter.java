@@ -82,12 +82,6 @@ public class PersistentProject2PLPConverter implements PersistenceConstants {
                     plp.setSaveDebugInformation(Boolean.valueOf(debug));
                 }
                 break;
-            case COPY:
-                if (model.getEntityCount() > 0) {
-                    String copyID = model.getEntity(0).getAttributeValue(COPY_ID);
-                    plp.getCopyModel().setCopyMechanism(copyID);
-                }
-                break;
             default:
                 break;
             }

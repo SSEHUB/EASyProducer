@@ -11,7 +11,6 @@ import org.junit.Test;
 import de.uni_hildesheim.sse.ModelUtility;
 import de.uni_hildesheim.sse.model.management.VarModel;
 import de.uni_hildesheim.sse.model.varModel.Project;
-import de.uni_hildesheim.sse.reasoning.core.importResolver.ReasoningImportResolver;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelLocations;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelLocations.Location;
@@ -35,7 +34,6 @@ public class HierarchicalTests extends AbstractTest {
     @BeforeClass
     public static void startUp() {
         // "override" parent startUp
-        ReasoningImportResolver.registerAsTopResolver();
         resourceInitialization();
     }
 

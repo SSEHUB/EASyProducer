@@ -1,12 +1,20 @@
 package de.uni_hildesheim.sse.vil.templatelang.ui.contentassist;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.xtext.nodemodel.INode;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
+import de.uni_hildesheim.sse.vil.expressions.ResourceRegistry;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Parameter;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration;
 import de.uni_hildesheim.sse.vil.expressions.translation.Utils;
@@ -29,7 +37,7 @@ public class TemplateLangProposalProviderUtility {
     /**
      * The current instance of the utility class. Prevent parallel access to the parse tree.
      */
-    public static final TemplateLangProposalProviderUtility INSANCE = new TemplateLangProposalProviderUtility();
+    public static final TemplateLangProposalProviderUtility INSTANCE = new TemplateLangProposalProviderUtility();
     
     /**
      * prevents external creation.
@@ -180,7 +188,8 @@ public class TemplateLangProposalProviderUtility {
                         if (def.getType() == null) {
                             str.append(") : void");
                         } else {
-                            str.append(") : " + def.getType());
+                            String returntype = def.getType().getName().getQname().get(0);
+                            str.append(") : " + returntype);
                         }
                         result.add(str);
                     }
@@ -235,6 +244,54 @@ public class TemplateLangProposalProviderUtility {
             }
         }
         return result;
+    }
+    
+    /**
+     * Returns all VTL-types currently available in EASy-Producer.
+     * 
+     * @param node the <code>INode</code> object (last complete node) for which the content assist is called.
+     * @return a list of the names (<code>String</code>) of all types currently registered to EASy-Producer.
+     */
+    public List<String> getAllRegisteredTypes(INode node) {
+        List<String> result = null;
+        result = TemplateLangProposalProviderUtility.INSTANCE.getAllTypes(node);
+        Set<String> listSet = new LinkedHashSet<String>(result);
+        result = new LinkedList<String>();
+        result.addAll(0, listSet);
+        return result;
+    }
+    
+    /**
+     * Returns all VTL-types currently available in EASy-Producer, but may contain duplicate entries.
+     * 
+     * @param node the <code>INode</code> object (last complete node) for which the content assist is called.
+     * @return a list of the names (<code>String</code>) of all types currently registered to EASy-Producer.
+     */
+    private List<String> getAllTypes(INode node) {
+        List<String> allTypes = null;
+        TypeRegistry typeRegistry = ResourceRegistry.getTypeRegistry(node);
+        if (typeRegistry != null) {
+            Iterable<TypeDescriptor<? extends IVilType>> types = typeRegistry.allTypes();
+            if (types != null) {
+                Iterator<TypeDescriptor<? extends IVilType>> typeIterator = types.iterator();
+                if (typeIterator != null) {
+                    allTypes = new ArrayList<String>();
+                    while (typeIterator.hasNext()) {
+                        String typeName = typeIterator.next().getName();
+                        if (!typeName.isEmpty()) {
+                            if (typeName.equals("Set") || typeName.equals("Map")) {
+                                typeName = typeName + "(<ElementType> [ ,<ElementType>]*)";
+                            }
+                            if (typeName.equals("Sequence")) {
+                                typeName = typeName + "(<ElementType>)";
+                            }
+                            allTypes.add(typeName);
+                        }
+                    }
+                }
+            }            
+        }
+        return allTypes;
     }
     
     private List<VariableDeclaration> getVarsInStmtWithType(INode node, List<String> typeList) {

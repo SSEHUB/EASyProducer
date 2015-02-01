@@ -2,10 +2,10 @@ package de.uni_hildesheim.sse.easy.ui.confModel;
 
 import org.eclipse.jface.viewers.CellEditor;
 
-import de.uni_hildesheim.sse.easy.ui.productline_editor.DisplayNameProvider;
 import de.uni_hildesheim.sse.easy.ui.productline_editor.EasyProducerDialog;
 import de.uni_hildesheim.sse.model.confModel.AssignmentState;
 import de.uni_hildesheim.sse.model.confModel.ConfigurationException;
+import de.uni_hildesheim.sse.model.confModel.DisplayNameProvider;
 import de.uni_hildesheim.sse.model.confModel.IAssignmentState;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
@@ -450,6 +450,11 @@ public abstract class GUIVariable implements IGUIConfigurableElement, Comparable
     protected IDatatype getType() {
         // as the editor shall internally rely on the basis type
         return DerivedDatatype.resolveToBasis(variable.getDeclaration().getType());
+    }
+    
+    @Override
+    public String toString() {
+        return null != variable ? variable.getDeclaration().getName() : "null";
     }
     
 }

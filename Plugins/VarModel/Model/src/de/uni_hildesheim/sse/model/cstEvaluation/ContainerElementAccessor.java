@@ -18,7 +18,9 @@ package de.uni_hildesheim.sse.model.cstEvaluation;
 import de.uni_hildesheim.sse.model.confModel.ConfigurationException;
 import de.uni_hildesheim.sse.model.confModel.IAssignmentState;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
+import de.uni_hildesheim.sse.model.cstEvaluation.EvaluationVisitor.Message;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
+import de.uni_hildesheim.sse.utils.messages.Status;
 import de.uni_hildesheim.sse.utils.pool.IPoolManager;
 import de.uni_hildesheim.sse.utils.pool.Pool;
 
@@ -63,17 +65,13 @@ class ContainerElementAccessor extends AbstractDecisionVariableEvaluationAccesso
         return this;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void clear() {
         super.clear();
         elementVariable = null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public Value getValue() {
         Value result;
         if (null != elementVariable) {
@@ -84,9 +82,7 @@ class ContainerElementAccessor extends AbstractDecisionVariableEvaluationAccesso
         return result;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public boolean setValue(Value value) {
         boolean successful = false;
         EvaluationContext context = getContext();
@@ -94,28 +90,36 @@ class ContainerElementAccessor extends AbstractDecisionVariableEvaluationAccesso
             if (null == value) {
                 context.addErrorMessage("assignable value is not defined");
             } else {
-                IAssignmentState targetState = context.getTargetState(elementVariable.getState());
-                if (null != targetState) {
-                    try {
-                        elementVariable.setValue(value, targetState);
-                        successful = true;
-                        notifyVariableChange();
-                    } catch (ConfigurationException e) {
-                        context.addErrorMessage(e);
+                if (!Value.equalsPartially(elementVariable.getValue(), value)) { // don't reassign / send message
+                    IAssignmentState targetState = context.getTargetState(elementVariable);
+                    if (null != targetState) {
+                        try {
+                            elementVariable.setValue(value, targetState);
+                            successful = true;
+                            notifyVariableChange();
+                        } catch (ConfigurationException e) {
+                            context.addErrorMessage(e);
+                        }
+                    } else {
+                        context.addMessage(
+                              new Message("Assignment state conflict", Status.ERROR, elementVariable.getDeclaration()));
                     }
                 } else {
-                    context.addErrorMessage("cannot assign due to assignment state conflict");
+                    successful = true;
                 }
             }
         }
         return successful;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void release() {
         POOL.releaseInstance(this);
+    }
+
+    @Override
+    public boolean isAssignable() {
+        return true;
     }
 
 }

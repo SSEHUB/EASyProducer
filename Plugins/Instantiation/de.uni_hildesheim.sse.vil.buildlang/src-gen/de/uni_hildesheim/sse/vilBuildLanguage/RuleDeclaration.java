@@ -2,10 +2,8 @@
  */
 package de.uni_hildesheim.sse.vilBuildLanguage;
 
-import de.uni_hildesheim.sse.vil.expressions.expressionDsl.LogicalExpression;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ParameterList;
-
-import org.eclipse.emf.common.util.EList;
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Type;
 
 import org.eclipse.emf.ecore.EObject;
 
@@ -17,11 +15,11 @@ import org.eclipse.emf.ecore.EObject;
  * <p>
  * The following features are supported:
  * <ul>
+ *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration#getType <em>Type</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration#getModifier <em>Modifier</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration#getName <em>Name</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration#getParamList <em>Param List</em>}</li>
- *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration#getPostcondition <em>Postcondition</em>}</li>
- *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration#getPreconditions <em>Preconditions</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration#getConditions <em>Conditions</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration#getBlock <em>Block</em>}</li>
  * </ul>
  * </p>
@@ -32,6 +30,32 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface RuleDeclaration extends EObject
 {
+  /**
+   * Returns the value of the '<em><b>Type</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Type</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Type</em>' containment reference.
+   * @see #setType(Type)
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage#getRuleDeclaration_Type()
+   * @model containment="true"
+   * @generated
+   */
+  Type getType();
+
+  /**
+   * Sets the value of the '{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration#getType <em>Type</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Type</em>' containment reference.
+   * @see #getType()
+   * @generated
+   */
+  void setType(Type value);
+
   /**
    * Returns the value of the '<em><b>Modifier</b></em>' containment reference.
    * <!-- begin-user-doc -->
@@ -111,36 +135,30 @@ public interface RuleDeclaration extends EObject
   void setParamList(ParameterList value);
 
   /**
-   * Returns the value of the '<em><b>Postcondition</b></em>' containment reference list.
-   * The list contents are of type {@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.LogicalExpression}.
+   * Returns the value of the '<em><b>Conditions</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Postcondition</em>' containment reference list isn't clear,
+   * If the meaning of the '<em>Conditions</em>' containment reference isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Postcondition</em>' containment reference list.
-   * @see de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage#getRuleDeclaration_Postcondition()
+   * @return the value of the '<em>Conditions</em>' containment reference.
+   * @see #setConditions(RuleConditions)
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage#getRuleDeclaration_Conditions()
    * @model containment="true"
    * @generated
    */
-  EList<LogicalExpression> getPostcondition();
+  RuleConditions getConditions();
 
   /**
-   * Returns the value of the '<em><b>Preconditions</b></em>' containment reference list.
-   * The list contents are of type {@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.LogicalExpression}.
+   * Sets the value of the '{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration#getConditions <em>Conditions</em>}' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Preconditions</em>' containment reference list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Preconditions</em>' containment reference list.
-   * @see de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage#getRuleDeclaration_Preconditions()
-   * @model containment="true"
+   * @param value the new value of the '<em>Conditions</em>' containment reference.
+   * @see #getConditions()
    * @generated
    */
-  EList<LogicalExpression> getPreconditions();
+  void setConditions(RuleConditions value);
 
   /**
    * Returns the value of the '<em><b>Block</b></em>' containment reference.

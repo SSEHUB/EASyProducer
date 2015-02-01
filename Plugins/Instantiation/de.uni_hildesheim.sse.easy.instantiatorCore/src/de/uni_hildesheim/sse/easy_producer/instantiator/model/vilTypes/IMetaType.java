@@ -106,4 +106,11 @@ public interface IMetaType {
      */
     public boolean isActualTypeOf(IMetaType type);
     
+    /**
+     * Returns the base type (in case of IVML derived types).
+     * 
+     * @return the base type or <b>null</b>
+     */
+    public IMetaType getBaseType();
+    
 }

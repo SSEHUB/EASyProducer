@@ -76,144 +76,104 @@ public class DeclarationInContainerFinder implements IModelVisitor {
         return declarations;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitEnum(Enum eenum) {
         //No action needed
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitOrderedEnum(OrderedEnum eenum) {
         //No action needed
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitCompound(Compound compound) {
         //No action needed
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitDerivedDatatype(DerivedDatatype datatype) {
         //No action needed
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitEnumLiteral(EnumLiteral literal) {
         //No action needed
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitReference(Reference reference) {
         //No action needed
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitSequence(Sequence sequence) {
         //No action needed
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitSet(Set set) {
         //No action needed
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitProject(Project project) {
         //No action needed
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitProjectImport(ProjectImport pImport) {
         //No action needed
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitDecisionVariableDeclaration(DecisionVariableDeclaration decl) {
         declarations.add(decl);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitAttribute(Attribute attribute) {
         //No action needed
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitConstraint(Constraint constraint) {
         //No action needed
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitFreezeBlock(FreezeBlock freeze) {
         //No action needed
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitOperationDefinition(OperationDefinition opdef) {
         //No action needed
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitPartialEvaluationBlock(PartialEvaluationBlock block) {
         //No action needed
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitProjectInterface(ProjectInterface iface) {
         //No action needed
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitComment(Comment comment) {
         //No action needed
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitAttributeAssignment(AttributeAssignment assignment) {
         for (int i = 0; i < assignment.getModelElementCount(); i++) {
             assignment.getModelElement(i).accept(this);
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitCompoundAccessStatement(CompoundAccessStatement access) {
         // this is no declaration
     }

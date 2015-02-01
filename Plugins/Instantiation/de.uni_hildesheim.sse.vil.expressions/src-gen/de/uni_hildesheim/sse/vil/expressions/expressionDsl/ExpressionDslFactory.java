@@ -59,15 +59,6 @@ public interface ExpressionDslFactory extends EFactory
   VersionSpec createVersionSpec();
 
   /**
-   * Returns a new object of class '<em>Versioned Id</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Versioned Id</em>'.
-   * @generated
-   */
-  VersionedId createVersionedId();
-
-  /**
    * Returns a new object of class '<em>Parameter List</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

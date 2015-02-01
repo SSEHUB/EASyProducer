@@ -26,12 +26,12 @@ import de.uni_hildesheim.sse.model.cst.ConstantValue;
 import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
 import de.uni_hildesheim.sse.model.cst.ContainerInitializer;
 import de.uni_hildesheim.sse.model.cst.ContainerOperationCall;
-import de.uni_hildesheim.sse.model.cst.DslFragment;
 import de.uni_hildesheim.sse.model.cst.IConstraintTreeVisitor;
 import de.uni_hildesheim.sse.model.cst.IfThen;
 import de.uni_hildesheim.sse.model.cst.Let;
 import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
 import de.uni_hildesheim.sse.model.cst.Parenthesis;
+import de.uni_hildesheim.sse.model.cst.Self;
 import de.uni_hildesheim.sse.model.cst.UnresolvedExpression;
 import de.uni_hildesheim.sse.model.cst.Variable;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
@@ -75,12 +75,14 @@ import de.uni_hildesheim.sse.model.varModel.values.NullValue;
 import de.uni_hildesheim.sse.model.varModel.values.RealValue;
 import de.uni_hildesheim.sse.model.varModel.values.ReferenceValue;
 import de.uni_hildesheim.sse.model.varModel.values.StringValue;
+import de.uni_hildesheim.sse.model.varModel.values.VersionValue;
 import de.uni_hildesheim.sse.utils.messages.Status;
 
 /**
  * Checks a model for IVML compliance. This visitor is currently not complete!
  * 
  * @author Holger Eichelberger
+ * @author El-Sharkawy
  */
 public class IvmlValidationVisitor extends AbstractVisitor 
     implements IValueVisitor, IConstraintTreeVisitor {
@@ -274,9 +276,7 @@ public class IvmlValidationVisitor extends AbstractVisitor
             cause, ValidationMessage.ELEMENT_IS_NULL));
     }
         
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitProject(Project project) {
         checkNameIdentifier(project.getName(), project);
         location.push("project " + project.getName());
@@ -319,10 +319,7 @@ public class IvmlValidationVisitor extends AbstractVisitor
         location.pop();
     }
     
-    /**
-     * {@inheritDoc}
-     * <i>Sequence:</i> literals.
-     */
+    @Override
     public void visitEnum(Enum eenum) {
         checkNameIdentifier(eenum.getName(), eenum);
         location.push("enum " + eenum.getName());
@@ -339,10 +336,7 @@ public class IvmlValidationVisitor extends AbstractVisitor
         location.pop();
     }
 
-    /**
-     * {@inheritDoc}
-     * <i>Sequence:</i> literals.
-     */
+    @Override
     public void visitOrderedEnum(OrderedEnum eenum) {
         checkNameIdentifier(eenum.getName(), eenum);
         location.push("enum " + eenum.getName());
@@ -360,9 +354,7 @@ public class IvmlValidationVisitor extends AbstractVisitor
         location.pop();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitCompound(Compound compound) {
         checkNameIdentifier(compound.getName(), compound);
         location.push("compound " + compound.getName());
@@ -399,9 +391,7 @@ public class IvmlValidationVisitor extends AbstractVisitor
         location.pop();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitProjectImport(ProjectImport pImport) {
         if (null != pImport.getInterfaceName()) {
             checkIdentifier(pImport.getInterfaceName(), "interface", pImport);
@@ -409,27 +399,21 @@ public class IvmlValidationVisitor extends AbstractVisitor
         checkIdentifier(pImport.getProjectName(), "project", pImport);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitDecisionVariableDeclaration(DecisionVariableDeclaration decl) {
         checkNameIdentifier(decl.getName(), decl);
         // Check presence of custom data types
         checkDeclaration(decl);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitAttribute(Attribute attribute) {
         checkNameIdentifier(attribute.getName(), attribute);
         // Check presence of custom data types
         checkDeclaration(attribute);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitConstraint(Constraint constraint) {
         if (null != constraint.getConsSyntax()) {
             // null is allowed here
@@ -437,9 +421,7 @@ public class IvmlValidationVisitor extends AbstractVisitor
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitFreezeBlock(FreezeBlock freeze) {
         location.push("freeze block");
         for (int f = 0; f < freeze.getFreezableCount(); f++) {
@@ -457,17 +439,13 @@ public class IvmlValidationVisitor extends AbstractVisitor
         location.pop();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitOperationDefinition(OperationDefinition opdef) {
         checkNameIdentifier(opdef.getName(), opdef);
         // TODO visit datatypes?
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitPartialEvaluationBlock(PartialEvaluationBlock block) {
         location.push("in partial evaluation block");
         for (int e = 0; e < block.getEvaluableCount(); e++) {
@@ -482,9 +460,7 @@ public class IvmlValidationVisitor extends AbstractVisitor
         location.pop();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitProjectInterface(ProjectInterface iface) {
         checkNameIdentifier(iface.getName(), iface);
         location.push("interface " + iface.getName());
@@ -501,16 +477,12 @@ public class IvmlValidationVisitor extends AbstractVisitor
         location.pop();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitComment(Comment comment) {
         checkComment(comment.getComment(), true, comment);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitAttributeAssignment(AttributeAssignment assignment) {
         location.push("attribute assignment");
         // TODO check model elements
@@ -535,123 +507,85 @@ public class IvmlValidationVisitor extends AbstractVisitor
         location.pop();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitDerivedDatatype(DerivedDatatype datatype) {
         checkNameIdentifier(datatype.getName(), datatype);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitEnumLiteral(EnumLiteral literal) {
         checkNameIdentifier(literal.getName(), literal);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitReference(Reference reference) {
         checkType(reference.getType(), reference);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitSequence(Sequence sequence) {
         checkNameIdentifier(sequence.getName(), sequence);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitSet(Set set) {
         checkNameIdentifier(set.getName(), set);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitConstantValue(ConstantValue value) {
         // done by value factory
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitVariable(Variable variable) {
         if (null == variable.getVariable()) {
             addError("link to variable declaration must not be <null>", variable, ValidationMessage.IS_NULL);
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitParenthesis(Parenthesis parenthesis) {
         if (checkExpression(parenthesis.getExpr(), "parenthesis", parenthesis)) {
             parenthesis.getExpr().accept(this);
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitComment(de.uni_hildesheim.sse.model.cst.Comment comment) {
         checkComment(comment.getComment(), true, comment);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitOclFeatureCall(OCLFeatureCall call) {
         // TODO check
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitLet(Let let) {
         // TODO check
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitIfThen(IfThen ifThen) {
         // TODO check
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitContainerOperationCall(ContainerOperationCall call) {
         // TODO check
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitCompoundAccess(CompoundAccess access) {
         // TODO check
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void visitDslFragment(DslFragment fragment) {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitUnresolvedExpression(UnresolvedExpression expression) {
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitCompoundInitializer(CompoundInitializer initializer) {
         location.push("compound initializer");
         checkType(initializer.getType(), initializer);
@@ -675,9 +609,7 @@ public class IvmlValidationVisitor extends AbstractVisitor
         location.pop();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitContainerInitializer(ContainerInitializer initializer) {
         location.push("container initializer");
         checkType(initializer.getType(), initializer);
@@ -692,78 +624,64 @@ public class IvmlValidationVisitor extends AbstractVisitor
         location.pop();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitConstraintValue(ConstraintValue value) {
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitEnumValue(EnumValue value) {
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitStringValue(StringValue value) {
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitCompoundValue(CompoundValue value) {
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitContainerValue(ContainerValue value) {
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitIntValue(IntValue value) {
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitRealValue(RealValue value) {
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitBooleanValue(BooleanValue value) {
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitReferenceValue(ReferenceValue referenceValue) {
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitMetaTypeValue(MetaTypeValue value) {
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitNullValue(NullValue value) {
         // ok
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitCompoundAccessStatement(CompoundAccessStatement access) {
         // TODO check whether slot is in variable
+    }
+
+    @Override
+    public void visitVersionValue(VersionValue value) {
+        // TODO shall only occur in imports for now
+    }
+
+    @Override
+    public void visitSelf(Self self) {
+        // TODO type != null
     }
 
 }

@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.EObject;
  * <p>
  * The following features are supported:
  * <ul>
+ *   <li>{@link de.uni_hildesheim.sse.ivml.TypedefCompound#getAbstract <em>Abstract</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.TypedefCompound#getName <em>Name</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.TypedefCompound#getSuper <em>Super</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.TypedefCompound#getElements <em>Elements</em>}</li>
@@ -26,6 +27,32 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface TypedefCompound extends EObject
 {
+  /**
+   * Returns the value of the '<em><b>Abstract</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Abstract</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Abstract</em>' attribute.
+   * @see #setAbstract(String)
+   * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getTypedefCompound_Abstract()
+   * @model
+   * @generated
+   */
+  String getAbstract();
+
+  /**
+   * Sets the value of the '{@link de.uni_hildesheim.sse.ivml.TypedefCompound#getAbstract <em>Abstract</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Abstract</em>' attribute.
+   * @see #getAbstract()
+   * @generated
+   */
+  void setAbstract(String value);
+
   /**
    * Returns the value of the '<em><b>Name</b></em>' attribute.
    * <!-- begin-user-doc -->

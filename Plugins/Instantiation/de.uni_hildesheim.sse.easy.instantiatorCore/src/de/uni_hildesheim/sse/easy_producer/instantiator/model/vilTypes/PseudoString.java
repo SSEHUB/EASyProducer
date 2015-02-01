@@ -86,6 +86,30 @@ public class PseudoString implements IVilType {
     }
 
     /**
+     * Splits this string around matches of the given Java regular expression.
+ 
+     * @param string the string to be split
+     * @param regEx the delimiting regular expression
+     * @return the splitted string
+     */
+    @OperationMeta(returnGenerics = String.class)
+    public static Sequence<String> split(String string, String regEx) {
+        Sequence<String> result;
+        if (null == string || null == regEx) {
+            result = null;
+        } else {
+            String[] tmp = string.split(regEx);
+            if (null == tmp) {
+                tmp = new String[0];
+            } 
+            TypeDescriptor<? extends IVilType>[] param = TypeDescriptor.createArray(1);
+            param[0] = TypeRegistry.stringType();
+            result = new ArraySequence<String>(tmp, param);
+        }
+        return result;
+    }
+
+    /**
      * Replaces all occurrences of <code>regEx</code> in <code>string</code> by 
      * <code>replacement</code>.
      * 
@@ -155,7 +179,7 @@ public class PseudoString implements IVilType {
      */
     public static String substring(String in, int start, int end) {
         String result;
-        if (null != in && start >= 0 && start < end && end <= in.length() - 1) {
+        if (null != in && start >= 0 && start < end && end <= in.length()) {
             result = in.substring(start, end);
         } else {
             result = in;

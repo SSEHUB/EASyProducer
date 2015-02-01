@@ -2,7 +2,6 @@
  */
 package de.uni_hildesheim.sse.vilBuildLanguage;
 
-import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionStatement;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration;
 
 import org.eclipse.emf.ecore.EObject;
@@ -17,7 +16,6 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleElement#getVarDecl <em>Var Decl</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleElement#getExprStmt <em>Expr Stmt</em>}</li>
- *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleElement#getDeferDecl <em>Defer Decl</em>}</li>
  * </ul>
  * </p>
  *
@@ -78,31 +76,5 @@ public interface RuleElement extends EObject
    * @generated
    */
   void setExprStmt(ExpressionStatement value);
-
-  /**
-   * Returns the value of the '<em><b>Defer Decl</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Defer Decl</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Defer Decl</em>' containment reference.
-   * @see #setDeferDecl(DeferDeclaration)
-   * @see de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage#getRuleElement_DeferDecl()
-   * @model containment="true"
-   * @generated
-   */
-  DeferDeclaration getDeferDecl();
-
-  /**
-   * Sets the value of the '{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleElement#getDeferDecl <em>Defer Decl</em>}' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Defer Decl</em>' containment reference.
-   * @see #getDeferDecl()
-   * @generated
-   */
-  void setDeferDecl(DeferDeclaration value);
 
 } // RuleElement

@@ -43,9 +43,7 @@ public class Attribute extends AbstractVariable {
         this.element = element;
     }
     
-    /** 
-     * {@inheritDoc}
-     */
+    @Override
     public void accept(IModelVisitor visitor) {
         visitor.visitAttribute(this);
     }
@@ -90,9 +88,6 @@ public class Attribute extends AbstractVariable {
         return null;
     }
     
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean isTemporaryVariable() {
         return false; // attributes are never temporary
@@ -141,9 +136,6 @@ public class Attribute extends AbstractVariable {
         return series.get(index);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int hashCode() {
         //Following the overridden hashcode in AbstractVariable

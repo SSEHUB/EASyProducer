@@ -1,0 +1,39 @@
+-> main()
+    sum <- 0
+    -> createIntegerSequence(Integer, Integer) with (0, 10) = {0, 1, 10, 2, 3, 4, 5, 6, 7, 8, 9}
+    nums <- {0, 1, 10, 2, 3, 4, 5, 6, 7, 8, 9}
+    map {
+        map: i <- 0
+        -> +(Integer, Integer) with (0, 0) = 0
+        sum <- 0
+        map: i <- 1
+        -> +(Integer, Integer) with (0, 1) = 1
+        sum <- 1
+        map: i <- 10
+        -> +(Integer, Integer) with (1, 10) = 11
+        sum <- 11
+        map: i <- 2
+        -> +(Integer, Integer) with (11, 2) = 13
+        sum <- 13
+        map: i <- 3
+        -> +(Integer, Integer) with (13, 3) = 16
+        sum <- 16
+        map: i <- 4
+        -> +(Integer, Integer) with (16, 4) = 20
+        sum <- 20
+        map: i <- 5
+        -> +(Integer, Integer) with (20, 5) = 25
+        sum <- 25
+        map: i <- 6
+        -> +(Integer, Integer) with (25, 6) = 31
+        sum <- 31
+        map: i <- 7
+        -> +(Integer, Integer) with (31, 7) = 38
+        sum <- 38
+        map: i <- 8
+        -> +(Integer, Integer) with (38, 8) = 46
+        sum <- 46
+        map: i <- 9
+        -> +(Integer, Integer) with (46, 9) = 55
+        sum <- 55
+    }

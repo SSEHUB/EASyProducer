@@ -11,9 +11,8 @@ Require-Bundle: de.uni_hildesheim.sse.ivml,
  de.uni_hildesheim.sse.varModel;bundle-version="0.0.3",
  org.eclipse.xtext.junit4,
  org.eclipse.ui.workbench;resolution:=optional,
- ReasonerCore;bundle-version="0.4.0",
  de.uni_hildesheim.sse.dslCore;bundle-version="0.0.1"
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: org.junit.runner;version="4.5.0",
  org.junit.runner.manipulation;version="4.5.0",
  org.junit.runner.notification;version="4.5.0",

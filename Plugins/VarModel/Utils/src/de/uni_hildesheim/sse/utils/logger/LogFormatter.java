@@ -43,9 +43,23 @@ public final class LogFormatter extends Formatter {
         sb.append("[" + DATE_FORMAT.format(date)).append("]\t");
         // Add log level to log message
         sb.append("[" + record.getLevel() + "]\t")
-            .append(formatMessage(record))
-            .append(LINE_SEPARATOR);
-        
+            .append(formatMessage(record));
+        // Add line number
+        String className = record.getMessage().substring(1, record.getMessage().indexOf("]"));
+        final StackTraceElement callerFrame = getCallerStackFrame(className);
+        final String fileName = null != callerFrame ? callerFrame.getFileName() : null;
+        if (null != fileName) {
+            final int lineNumber = callerFrame.getLineNumber();
+            // This creates a link to the line when used in Eclipse
+            sb.append(" (");
+            sb.append(fileName);
+            if (-1 != lineNumber) {
+                sb.append(":");
+                sb.append(lineNumber);
+            }
+            sb.append(")");
+        }
+        sb.append(LINE_SEPARATOR);
         if (record.getThrown() != null) {
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
@@ -54,5 +68,25 @@ public final class LogFormatter extends Formatter {
             sb.append(sw.toString());
         }
         return sb.toString();
+    }
+    
+    /**
+     * Gets the CallerStackFrame for the Class throwing the exception.
+     * 
+     * @param callerName Name of the class
+     * @return  StackTraceElement of callerName
+     */
+    private StackTraceElement getCallerStackFrame(final String callerName) {
+        StackTraceElement callerFrame = null;
+        final StackTraceElement[] stack = new Throwable().getStackTrace();
+        // Search the stack trace to find the calling class
+        for (int i = 0; i < stack.length; i++) {
+            final StackTraceElement frame = stack[i];
+            if (frame.getClassName().endsWith(callerName)) {
+                callerFrame = frame;
+                break;
+            }
+        }
+        return callerFrame;
     }
 }

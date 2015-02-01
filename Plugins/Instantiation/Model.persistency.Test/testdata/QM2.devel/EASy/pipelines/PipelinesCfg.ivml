@@ -1,0 +1,14 @@
+project PipelinesCfg {
+
+	import pTSICfg;
+	import pL3SCfg;
+	import PipelineVar_2Cfg;
+	import pTest;
+	import PipelinesCfgTSI;
+	pipelines = {
+		refBy(pipTSI), refBy(pTest), refBy(pTSI), refBy(pL3S), refBy(PipelineVar_2) 
+	};
+	freeze {
+		pipelines;
+	}
+}

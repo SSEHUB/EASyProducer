@@ -27,6 +27,11 @@
 		<echo>###############################</echo>
 		<ant dir="${home.ivml.dir}" antfile="${build.script.name}"/>
 		
+        <echo>#################################</echo>
+		<echo>###  Compiling IVML Comments  ###</echo>
+		<echo>#################################</echo>
+		<ant dir="de.uni-hildesheim.sse.ivml.comments" antfile="${build.script.name}"/>
+        
 		<echo>###########################</echo>
 		<echo>###  Compiling IVML UI  ###</echo>
 		<echo>###########################</echo>
@@ -44,6 +49,7 @@
 				<filter includes="*de.uni_hildesheim.sse*"/>
 				<filter excludes="*Activator*"/>
 				<filter excludes="*AllTests*"/>
+				<filter excludes="de.uni_hildesheim.sse.parser.antlr.internal.*"/>
 				<instrpath>
 					<fileset dir="${home.ivml.dir}/${build.jar.dir}/" includes="**/*.jar"/>
 					<fileset dir="${home.ivml.tests.dir}/${build.jar.dir}/" includes="**/*.jar"/>
@@ -73,7 +79,6 @@
 			<fileset dir="${coverage.instr.dir}/lib"/>
 			<fileset dir="${home.utils.dir}/${build.jar.dir}" includes="**/*.jar"/>
 			<fileset dir="${home.model.dir}/${build.jar.dir}" includes="**/*.jar"/>
-			<fileset dir="${home.reasonerCore.dir}/${build.jar.dir}" includes="**/*.jar"/>
 			<fileset dir="${home.dslCore.dir}/${build.jar.dir}" includes="**/*.jar"/>
 		</copy>
 	</target>
@@ -120,6 +125,14 @@
 		</copy>
 	</target>		
 	
-	<target name="all" depends="init, compile, test"/>
+	<target name="storeJars">
+		<copy todir="${easy.bundles.dir}" failonerror="true" overwrite="true" flatten="true">
+			<fileset dir=".">
+				<include name="**/build/jar/*.jar" />
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="all" depends="init, compile, test, storeJars"/>
 	<target name="compile.only" depends="init, compile"/>
 </project>

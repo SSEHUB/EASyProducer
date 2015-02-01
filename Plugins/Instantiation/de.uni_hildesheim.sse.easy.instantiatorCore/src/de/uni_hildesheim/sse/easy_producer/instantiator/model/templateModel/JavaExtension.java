@@ -14,6 +14,7 @@ public class JavaExtension {
     
     private String name;
     private ClassWrapper resolved;
+    private boolean isDefault;
     
     /**
      * Creates a java extension instance.
@@ -37,6 +38,20 @@ public class JavaExtension {
             throw new VilLanguageException("extension class " + name + " not found (class loader registered?)", 
                 VilLanguageException.ID_CANNOT_RESOLVE_JAVA_EXTENSION);
         }
+    }
+
+    /**
+     * Creates a default Java extension instance.
+     * 
+     * @param extension the extension class
+     * @param registry the type registry being responsible for this extension
+     * @throws VilLanguageException in case that the related class denoted by 
+     *     <code>name</code> cannot be resolved
+     */
+    public JavaExtension(Class<?> extension, TypeRegistry registry) throws VilLanguageException {
+        this.name = extension.getName();
+        resolved = new ClassWrapper(extension, registry);
+        isDefault = true;
     }
     
     /**
@@ -66,6 +81,15 @@ public class JavaExtension {
      */
     public Object accept(IVisitor visitor) throws VilLanguageException {
         return visitor.visitJavaExtension(this);
+    }
+    
+    /**
+     * Returns whether this Java extension is a default extension. 
+     * 
+     * @return <code>true</code> if it is a default extension, <code>false</code> else
+     */
+    public boolean isDefault() {
+        return isDefault;
     }
     
 }

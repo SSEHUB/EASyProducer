@@ -30,4 +30,15 @@ public @interface OperationMeta {
      * of Java generics cannot be accessed. Empty by default.
      */
     Class<?>[] returnGenerics() default { };
+    
+    /**
+     * Whether a generic parameter (index) of the operand shall be used as return type. 
+     * Unused by default.
+     */
+    int useGenericParameter() default -1;
+    
+    /**
+     * Whether artifacts in the current context shall be stored before executing this operation.
+     */
+    boolean storeArtifactsBefore() default false;
 }

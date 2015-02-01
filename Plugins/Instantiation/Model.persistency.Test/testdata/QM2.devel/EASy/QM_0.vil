@@ -1,0 +1,114 @@
+@advice(QM)
+vilScript QM (Project source, Configuration config, Project target) {
+
+    version v0;
+
+    Path srcGen = "$target/src-gen";
+    Path ifGen = "$target/if-gen";
+    Path hwGen = "$target/hw-gen";
+    Path maxJ = "$hwGen/EngineCode/src/qm";
+    Path maxC = "$hwGen/CPUCode";
+    Path signal = "$srcGen/eu/qualiMaster/signal";
+    Path topology = "$srcGen/eu/qualiMaster/topologies";
+
+    cleanup(Project target) = : {
+        srcGen.delete();
+        hwGen.delete(); 
+    }
+    
+    // this needs to be done separately, please do not clear the interfaces in cleanup
+    cleanupInterfaces(Project target) = : {
+        ifGen.delete();
+    }      
+    
+    protected processElement(sequenceOf(DecisionVariable) output, DecisionVariable prevar, Configuration config, Boolean firstFm, String topoName) = : { 
+        map(Flow v=output) { 
+            DecisionVariable elt = v.destination();
+            String name = elt.varName().firstToUpperCase() + elt.type();
+            vilTemplateProcessor("storm" + elt.type(), config, "$topology/${toIdentifier(topoName)}/$name.java", preElt = prevar, elt=elt, firstFm=firstFm, topoName=topoName);
+            processElement(elt.byName("output").variables(), elt, config, false, topoName);
+        }; 
+    }
+    
+    // entry point for interface generation - do not change the name / signature
+    interfaces(Project source, Configuration config, Project target) = : cleanupInterfaces(target) {
+    	QM topLevel = config;
+    	//generate the algorithm topology interface
+        String prefixPath = "$ifGen/eu/qualiMaster/algorithms";
+        vilTemplateProcessor("algorithmTopologyInterface", config, "$prefixPath/ITopologyCreate.java");  
+        
+		map(DecisionVariable f=topLevel.families()) {
+			String ifName = "I" + f.varName().firstToUpperCase(); 
+			String fName = f.varName().firstToUpperCase();
+			String ifhName =  f.varName().firstToUpperCase(); 
+
+			//generate the family interfaces and implementations
+			createInterfacesFor(f, ifName, config, target);
+			createImpFor(f, fName, config, target);
+			//create the family hardware classes
+			Family fm = f;
+			map(Algorithm alg=fm.members()) {
+				if(alg.hwNode().isConfigured() and !alg.hwNode().isNull()){			
+				createFamilyHardware(f, ifhName, config, target);	// TODO select hardware-containing families only	
+				}		    
+			};
+		};
+	}
+			
+		
+
+    
+    protected createImpFor(Family family, String fName, Configuration config, Project target) = : {
+    	String prefixImpPath = "$ifGen/eu/qualiMaster/families/imp/${toIdentifier(fName)}";
+    	vilTemplateProcessor("familyImplementationJava", config, "$prefixImpPath.java", family=family, fName=fName);
+    }
+    
+    protected createInterfacesFor(Family family, String ifName, Configuration config, Project target) = : {
+        String prefixPath = "$ifGen/eu/qualiMaster/families/inf/${toIdentifier(ifName)}";
+    	vilTemplateProcessor("familyInterfaceJava", config, "$prefixPath.java", family=family, ifName=ifName);
+    	vilTemplateProcessor("familyInterfaceC", config, "$prefixPath.c", family=family, ifName=ifName);
+    	
+    }
+      	 
+    protected createFamilyHardware(Family family, String ifName, Configuration config, Project target) = :{
+    	Integer end = ifName.length();
+		String ifhName =  "Hw" + ifName.substring(1,end); 
+    	String prefixPath = "$ifGen/eu/qualiMaster/hardware/imp/${toIdentifier(ifhName)}";
+    	vilTemplateProcessor("hardwareConnection", config, "$prefixPath.java", family=family, ifName=ifName);
+    }
+    
+    main(Project source, Configuration config, Project target) = : cleanup(target) {
+    	//generate signal-related classes
+        vilTemplateProcessor("signalListener", config, "$signal/SignalListener.java");
+        vilTemplateProcessor("abstractSignalConnection", config, "$signal/AbstractSignalConnection.java",project=target);
+        vilTemplateProcessor("stormSignalConnection", config, "$signal/StormSignalConnection.java");
+        vilTemplateProcessor("baseSignalBolt", config, "$signal/BaseSignalBolt.java");
+        vilTemplateProcessor("signalHandler", config, "$signal/SignalHandler.java");
+        // signal client is part of CoordinationLayer/ExecutionLayer    
+        
+       
+        
+        interfaces(source, config, target);
+        //generate a basic HardwareStub interface
+        vilTemplateProcessor("hardwareStub", config, "$ifGen/eu/qualiMaster/hardware/inf/HardwareStub.java"); 
+        
+        vilTemplateProcessor("financialDataInterface", config, "$ifGen/eu/qualiMaster/data/inf/IFinancialData.java");
+
+        sequenceOf(DecisionVariable) activePipelines = config.byName("activePipelines").variables();
+        map(DecisionVariable vPip : activePipelines) {
+        	Pipeline pip = vPip;
+            String topoName = vPip.varName().firstToLowerCase();          
+            vilTemplateProcessor("stormPipeline", config, "$topology/${toIdentifier(topoName)}/Topology.java", pipeline=pip);
+            map(DecisionVariable v=pip.sources()) {
+                String name = v.varName().firstToUpperCase() + v.type();
+                vilTemplateProcessor("storm" + v.type(), config, "$topology/${toIdentifier(topoName)}/$name.java", elt=v, topoName=topoName);
+                processElement(v.byName("output").variables(), v, config, true, topoName);
+            };
+            vilTemplateProcessor("maxKernel", config, "$maxJ/Pipeline.maxj", pipeline=pip);
+            vilTemplateProcessor("maxManager", config, "$maxJ/PipelineManager.maxj", pipeline=pip);
+            vilTemplateProcessor("maxHost", config, "$maxC/PipelineCpuCode.c", pipeline=pip);
+        };
+        
+    }
+
+}

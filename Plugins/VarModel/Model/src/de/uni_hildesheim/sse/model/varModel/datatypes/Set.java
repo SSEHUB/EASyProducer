@@ -53,6 +53,8 @@ public class Set extends Container {
         OclKeyWords.EXCLUDING, TYPE, AnyType.TYPE);
     public static final Operation INCLUDING = new Operation(TYPE, ReturnTypeMode.IMMEDIATE_OPERAND,
         OclKeyWords.INCLUDING, TYPE, AnyType.TYPE);
+    public static final Operation ADD = new Operation(AnyType.TYPE, ReturnTypeMode.GENERIC_PARAM_1, 
+        OclKeyWords.ADD, TYPE, AnyType.TYPE);
     
     // type specific 
     public static final Operation EQUALS = Operation.createInfixOperator(BooleanType.TYPE, 
@@ -72,6 +74,7 @@ public class Set extends Container {
         DTYPE.addOperation(INTERSECTION);
         DTYPE.addOperation(EXCLUDING);
         DTYPE.addOperation(INCLUDING);
+        DTYPE.addOperation(ADD);
     }
     
     /**
@@ -118,9 +121,7 @@ public class Set extends Container {
         visitor.visitSet(this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void accept(IDatatypeVisitor visitor) {
         visitor.visitSet(this);
     }

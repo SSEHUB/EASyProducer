@@ -24,6 +24,7 @@ import org.apache.commons.io.IOUtils;
 import org.w3c.dom.CDATASection;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
@@ -33,6 +34,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.Arti
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FileArtifact;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FragmentArtifact;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Text;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArraySet;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationMeta;
@@ -139,6 +141,32 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
      */
     public XmlElement getRootElement() {
         return this.rootElement;
+    }
+    
+    /**
+     * Creates a root element if it does not exist.
+     * 
+     * @param name the name of the root element
+     * @return the actual root element
+     * @throws ArtifactException in case that creating the root element fails
+     */
+    public XmlElement createRootElement(String name) throws ArtifactException {
+        if (null == rootElement) {
+            if (null == doc) {
+                try {
+                    DocumentBuilder builder = factory.newDocumentBuilder();
+                    doc = builder.newDocument();
+                } catch (ParserConfigurationException exc) {
+                    EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).exception(exc);
+                    throw new ArtifactException(file.getAbsolutePath() + ":" + exc.getMessage(), 
+                        ArtifactException.ID_RUNTIME_RESOURCE);
+                }
+            }
+            Element elt = doc.createElement(name);
+            doc.appendChild(elt);
+            rootElement = new XmlElement(null, name, new XmlAttribute[0], elt);
+        }
+        return rootElement;
     }
     
     /**
@@ -351,25 +379,43 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
     
     /**
      * Writes the Dom tree back to the file.
+     * @exception ArtifactException If a new file (which no {@link #doc} should be created out of {@link #getText()}
+     *     and {@link #getText()} is not parseable.
      */
-    private void writeToFile() {
+    private void writeToFile() throws ArtifactException {
+        // No doc, but maybe there was a valid text added via getText(), e.g. a new file was created
+        Text text = null;
+        boolean initializationNeeded = false;
+        try {
+            text = getText();
+        } catch (ArtifactException exc) {
+            // Don't care, text can be null
+            EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).exception(exc);
+        }
+        if (null == doc && null != text && !text.getText().trim().isEmpty()) {
+            try {
+                DocumentBuilder builder = factory.newDocumentBuilder();
+                doc = builder.parse(IOUtils.toInputStream(text.getText()));
+                initializationNeeded = true;
+            } catch (ParserConfigurationException exc) {
+                EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).exception(exc);
+                throw new ArtifactException(file.getAbsolutePath() + ":" + exc.getMessage(), 
+                    ArtifactException.ID_RUNTIME_RESOURCE);
+            } catch (SAXException exc) {
+                EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).exception(exc);
+                throw new ArtifactException(file.getAbsolutePath() + ":" + exc.getMessage(), 
+                    ArtifactException.ID_RUNTIME_RESOURCE);
+            } catch (IOException exc) {
+                EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).exception(exc);
+                throw new ArtifactException(file.getAbsolutePath() + ":" + exc.getMessage(), 
+                    ArtifactException.ID_RUNTIME_RESOURCE);
+            }
+        }
         
         if (null != doc) {
-            
-            //Added for Testing: Add Element wiht number of elements in this Document (-1 this element)
-            /*int amount = 0;
-            for (int i = 0; i < doc.getChildNodes().getLength() - 1; i++) {
-                amount += countNodes(doc.getChildNodes().item(i)) + 1;
-            }
-            Node counter = doc.createElement("Amount");
-            counter.setTextContent("" + amount);
-            doc.getDocumentElement().appendChild(counter);*/
-            
-            List<String> lineEndedComments = getLineEndedComments();
-            
+            List<String> lineEndedComments = getLineEndedComments();          
             DOMSource source = new DOMSource(doc);
             StreamResult result = null;
-
             result = new StreamResult(this.file);
             
             try {
@@ -396,9 +442,11 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
                     EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).exception(e);
                 }
             }            
-            
         }
         
+        if (initializationNeeded) {
+            initialize();
+        }
     }
     
     /**

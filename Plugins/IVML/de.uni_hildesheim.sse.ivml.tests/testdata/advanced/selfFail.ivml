@@ -1,0 +1,10 @@
+project selfTestFail {
+
+    version v0;
+    
+    typedef MyInt Integer with (self > 0);
+
+    Integer i;
+    self <> null;
+    self.i <> null;
+}

@@ -22,6 +22,7 @@ public class Types {
         Sequence.TYPE,
         Set.TYPE, 
         StringType.TYPE,
+        VersionType.TYPE
     };
 
     /**

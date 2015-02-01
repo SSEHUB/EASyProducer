@@ -1,0 +1,16 @@
+@advice(qm1)
+template qm1(Configuration config, FileArtifact target) {
+
+    def main(Configuration config, FileArtifact target) {
+        Family fm = config.byName("fNormalize");
+        String name = "xxx";
+        for (Algorithm alg : fm.members()) {
+            if (alg.algTopologyClass() != null) {
+                String topologyCls = alg.algTopologyClass();
+                'System.out.print("$topologyCls");'
+                'String lastBoltName = $topologyCls.createTopology($name);'
+            }
+        }
+    }
+
+}

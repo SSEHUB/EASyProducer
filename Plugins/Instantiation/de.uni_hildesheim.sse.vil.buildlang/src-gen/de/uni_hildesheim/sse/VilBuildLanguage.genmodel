@@ -4,7 +4,7 @@
     editorDirectory="/de.uni_hildesheim.sse.vil.buildlang.editor/src" modelPluginID="de.uni_hildesheim.sse.vil.buildlang"
     forceOverwrite="true" modelName="VilBuildLanguage" updateClasspath="false" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
     complianceLevel="5.0" copyrightFields="false" editPluginID="de.uni_hildesheim.sse.vil.buildlang.edit"
-    editorPluginID="de.uni_hildesheim.sse.vil.buildlang.editor" runtimeVersion="2.9"
+    editorPluginID="de.uni_hildesheim.sse.vil.buildlang.editor" runtimeVersion="2.10"
     usedGenPackages="../../../../../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/ExpressionDsl.genmodel#//expressionDsl">
   <genPackages prefix="VilBuildLanguage" basePackage="de.uni_hildesheim.sse" disposableProviderFactory="true"
       ecorePackage="VilBuildLanguage.ecore#/">
@@ -33,12 +33,16 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//ScriptContents/elements"/>
     </genClasses>
     <genClasses ecoreClass="VilBuildLanguage.ecore#//RuleDeclaration">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//RuleDeclaration/type"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//RuleDeclaration/modifier"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute VilBuildLanguage.ecore#//RuleDeclaration/name"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//RuleDeclaration/paramList"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//RuleDeclaration/postcondition"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//RuleDeclaration/preconditions"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//RuleDeclaration/conditions"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//RuleDeclaration/block"/>
+    </genClasses>
+    <genClasses ecoreClass="VilBuildLanguage.ecore#//RuleConditions">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//RuleConditions/postcondition"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//RuleConditions/preconditions"/>
     </genClasses>
     <genClasses ecoreClass="VilBuildLanguage.ecore#//RuleElementBlock">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//RuleElementBlock/elements"/>
@@ -46,14 +50,12 @@
     <genClasses ecoreClass="VilBuildLanguage.ecore#//RuleElement">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//RuleElement/varDecl"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//RuleElement/exprStmt"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//RuleElement/deferDecl"/>
     </genClasses>
     <genClasses ecoreClass="VilBuildLanguage.ecore#//RuleModifier">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute VilBuildLanguage.ecore#//RuleModifier/protected"/>
     </genClasses>
-    <genClasses ecoreClass="VilBuildLanguage.ecore#//DeferDeclaration">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute VilBuildLanguage.ecore#//DeferDeclaration/name"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute VilBuildLanguage.ecore#//DeferDeclaration/depends"/>
+    <genClasses ecoreClass="VilBuildLanguage.ecore#//ExpressionStatement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//ExpressionStatement/alt"/>
     </genClasses>
     <genClasses ecoreClass="VilBuildLanguage.ecore#//PrimaryExpression">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//PrimaryExpression/sysEx"/>
@@ -77,6 +79,15 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute VilBuildLanguage.ecore#//Map/separator"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//Map/expr"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//Map/block"/>
+    </genClasses>
+    <genClasses ecoreClass="VilBuildLanguage.ecore#//Alternative">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//Alternative/expr"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//Alternative/if"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//Alternative/else"/>
+    </genClasses>
+    <genClasses ecoreClass="VilBuildLanguage.ecore#//StatementOrBlock">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//StatementOrBlock/exStmt"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//StatementOrBlock/block"/>
     </genClasses>
     <genClasses ecoreClass="VilBuildLanguage.ecore#//Join">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//Join/var1"/>

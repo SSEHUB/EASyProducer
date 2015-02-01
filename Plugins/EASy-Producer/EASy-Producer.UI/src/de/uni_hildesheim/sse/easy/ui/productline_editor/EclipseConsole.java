@@ -120,7 +120,7 @@ public class EclipseConsole {
      * Tries to show the console inside the GUI.
      * @return <tt>true</tt> if the console could be displayed inside the GUI.
      */
-    private boolean displayConsole() {
+    public boolean displayConsole() {
         boolean isDisplayed = false;
         IWorkbenchPage activeWorkbenchPage = getActiveWorkbenchPage();
         try {

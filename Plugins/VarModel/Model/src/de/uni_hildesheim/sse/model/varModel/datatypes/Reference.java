@@ -100,9 +100,7 @@ public class Reference extends CustomDatatype {
         visitor.visitReference(this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void accept(IDatatypeVisitor visitor) {
         visitor.visitReference(this);
     }

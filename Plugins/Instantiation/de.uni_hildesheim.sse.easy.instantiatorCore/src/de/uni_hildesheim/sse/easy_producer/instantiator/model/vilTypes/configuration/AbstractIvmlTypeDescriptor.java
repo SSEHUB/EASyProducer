@@ -190,6 +190,11 @@ abstract class AbstractIvmlTypeDescriptor extends TypeDescriptor<DecisionVariabl
     public boolean isSet() {
         return false;
     }
+    
+    @Override
+    public boolean isMap() {
+        return false;
+    }
 
     @Override
     public boolean isSequence() {

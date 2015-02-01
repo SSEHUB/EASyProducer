@@ -4,10 +4,8 @@ import java.io.Writer;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionWriter;
-import de.uni_hildesheim.sse.model.varModel.IvmlKeyWords;
-import de.uni_hildesheim.sse.utils.modelManagement.IVersionRestrictable;
+import de.uni_hildesheim.sse.utils.modelManagement.IVersionRestriction;
 import de.uni_hildesheim.sse.utils.modelManagement.Version;
-import de.uni_hildesheim.sse.utils.modelManagement.VersionRestriction;
 
 /**
  * A writer for VIL languages.
@@ -19,6 +17,7 @@ import de.uni_hildesheim.sse.utils.modelManagement.VersionRestriction;
 public class WriterVisitor<V extends VariableDeclaration> extends ExpressionWriter implements IVisitor {
 
     private boolean printExpressionStatementIndentation = true;
+    private boolean printExpressionStatementNewLine = true;
     
     /**
      * Creates a build language writer.
@@ -45,6 +44,26 @@ public class WriterVisitor<V extends VariableDeclaration> extends ExpressionWrit
      */
     protected void setPrintExpressionStatementIndentation(boolean printExpressionStatementIndentation) {
         this.printExpressionStatementIndentation = printExpressionStatementIndentation;
+    }
+
+    /**
+     * Returns whether a new line after expression statements shall be printed if 
+     * {@link #endsWithSemicolon(ExpressionStatement)} is <code>true</code>.
+     * 
+     * @return whether a new line after expression statements shall be printed
+     */
+    protected boolean isPrintExpressionStatementNewLine() {
+        return printExpressionStatementNewLine;
+    }
+
+    /**
+     * Changes whether a new line after an expression statement shall be printed if 
+     * {@link #endsWithSemicolon(ExpressionStatement)} is <code>true</code>.
+     *  
+     * @param printExpressionStatementNewLine if a new line shall be printed or not
+     */
+    protected void setPrintExpressionStatementNewLine(boolean printExpressionStatementNewLine) {
+        this.printExpressionStatementNewLine = printExpressionStatementNewLine;
     }
     
     @Override
@@ -75,31 +94,20 @@ public class WriterVisitor<V extends VariableDeclaration> extends ExpressionWrit
         printIndentation();
         print("@advice(");
         print(advice.getName());
-        printVersionRestrictions(advice);
+        printVersionRestrictions(advice.getVersionRestriction());
         println(")");
         return null;
     }
     
     /**
-     * Prints the version restrictions.
+     * Prints the version restriction.
      * 
-     * @param restrictable the restricted element
-     * @throws VilLanguageException in case that visiting fails
+     * @param restriction the version restriction (may be <b>null</b>)
      */
-    protected void printVersionRestrictions(IVersionRestrictable restrictable) throws VilLanguageException {
-        if (restrictable.getRestrictionsCount() > 0) {
-            print(" with (");
-            for (int r = 0; r < restrictable.getRestrictionsCount(); r++) {
-                VersionRestriction restriction = restrictable.getRestriction(r);
-                if (r > 0) {
-                    print(", ");
-                }
-                print("version ");
-                print(IvmlKeyWords.toText(restriction.getOperator()));
-                print(" v");
-                print(restriction.getVersion().toString());
-            }
-            print(")");
+    protected void printVersionRestrictions(IVersionRestriction restriction) {
+        if (null != restriction) {
+            print(" with ");
+            print(restriction.toSpecification());
         }
     }
     
@@ -135,8 +143,23 @@ public class WriterVisitor<V extends VariableDeclaration> extends ExpressionWrit
         } catch (ExpressionException e) {
             throw new VilLanguageException(e);
         }
-        println(";");
+        if (endsWithSemicolon(statement)) {
+            print(";");
+            if (printExpressionStatementNewLine) {
+                println();
+            }
+        }
         return null;
+    }
+    
+    /**
+     * Returns whether the given statement ends with a semicolon.
+     * 
+     * @param statement the statement to check
+     * @return <code>true</code> if it ends with a semicolon, <code>false</code> else
+     */
+    protected boolean endsWithSemicolon(ExpressionStatement statement) {
+        return true;
     }
 
     /**

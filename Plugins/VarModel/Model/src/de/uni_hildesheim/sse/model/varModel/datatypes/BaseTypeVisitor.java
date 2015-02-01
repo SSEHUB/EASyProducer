@@ -96,111 +96,86 @@ public class BaseTypeVisitor implements IDatatypeVisitor {
         return result;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitDatatype(IDatatype datatype) {
         type = datatype;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitAnyType(AnyType datatype) {
         type = datatype;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitMetaType(MetaType datatype) {
         type = datatype;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitDerivedType(DerivedDatatype datatype) {
         // defer changing this.type to other methods
         // shall terminate due to semantics of IVML
         datatype.getBasisType().accept(this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitSet(Set set) {
         this.type = set;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitSequence(Sequence sequence) {
         this.type = sequence;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitReference(Reference reference) {
         this.type = reference;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitBooleanType(BooleanType type) {
         this.type = type;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitStringType(StringType type) {
         this.type = type;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitConstraintType(ConstraintType type) {
         this.type = type;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitIntegerType(IntegerType type) {
         this.type = type;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitRealType(RealType type) {
         this.type = type;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitCompoundType(Compound compound) {
         type = compound;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitEnumType(Enum enumType) {
         type = enumType;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitOrderedEnumType(OrderedEnum enumType) {
         type = enumType;
+    }
+
+    @Override
+    public void visitVersionType(VersionType type) {
+        this.type = type;
     }
 
 }

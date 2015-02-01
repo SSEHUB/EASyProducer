@@ -25,25 +25,8 @@ Advice:
 ;
 
 VersionSpec:
-   'with' '('
-   conflicts+=VersionedId
-   (',' conflicts+=VersionedId)*
-   ')'
+   'with' restriction = Expression
 ;
-
-VersionedId:
-    'version'
-    op = VersionOperator
-    version=VERSION
-    ;
-    
-VersionOperator:
-    '=='
-    |'>'
-    |'<'
-    |'>='
-    |'<='
-    ;
 
 ParameterList:
     (param+=Parameter (',' param+=Parameter)*)
@@ -247,6 +230,7 @@ Constant:
     | qValue = QualifiedName
     | bValue = ('true' | 'false')
     | null = 'null'
+    | => version = VERSION
 ;
 
 NumValue :  
@@ -254,7 +238,7 @@ NumValue :
 ;
 
 Identifier:
-    ID | VERSION | EXPONENT
+    ID | VERSION | EXPONENT | "version"
 ;
 
 Type:
@@ -264,8 +248,8 @@ Type:
     | (map='mapOf' param=TypeParameters)
 ;
 
-TypeParameters: // currently no nested types!
-    '(' param+=Identifier (',' param+=Identifier)* ')'
+TypeParameters:
+    '(' param+=Type (',' param+=Type)* ')'
 ;
 
 ContainerInitializer:

@@ -1,0 +1,12 @@
+project abstractCompoundFail {
+
+    version v0;
+    abstract compound position {
+        Integer x = 1;
+        Integer y = 2;
+        String s = "a";
+        x > 1;
+    }
+
+    position p = position{x = 1, y = 2, s = "b"};
+}

@@ -58,39 +58,27 @@ public abstract class ModelTranslator <E extends ExpressionTranslator> extends M
         return expressionTranslator;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public int getMessageCount() {
         return expressionTranslator.getMessageCount();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public int getErrorCount() {
         return expressionTranslator.getErrorCount();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public Message getMessage(int index) {
         return expressionTranslator.getMessage(index);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void error(String message, EObject cause, EStructuralFeature causeFeature,
             int code) {
         expressionTranslator.error(message, cause, causeFeature, code);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void warning(String message, EObject cause,
             EStructuralFeature causeFeature, int code) {

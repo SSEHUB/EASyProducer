@@ -22,5 +22,13 @@ public interface IRuleBlock {
      * @throws IndexOutOfBoundsException if <code>index &lt; 0 || index &gt;={@link #getBodyElementCount()}</code>
      */
     public IRuleElement getBodyElement(int index);
+    
+    /**
+     * Returns whether this block is a real block or consists just of a block
+     * element without brackets.
+     * 
+     * @return <code>true</code> if this block is virtual, <code>false</code> else
+     */
+    public boolean isVirtual();
 
 }

@@ -122,6 +122,13 @@ public class VilBuildLanguageSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case VilBuildLanguagePackage.RULE_CONDITIONS:
+      {
+        RuleConditions ruleConditions = (RuleConditions)theEObject;
+        T result = caseRuleConditions(ruleConditions);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case VilBuildLanguagePackage.RULE_ELEMENT_BLOCK:
       {
         RuleElementBlock ruleElementBlock = (RuleElementBlock)theEObject;
@@ -143,10 +150,11 @@ public class VilBuildLanguageSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case VilBuildLanguagePackage.DEFER_DECLARATION:
+      case VilBuildLanguagePackage.EXPRESSION_STATEMENT:
       {
-        DeferDeclaration deferDeclaration = (DeferDeclaration)theEObject;
-        T result = caseDeferDeclaration(deferDeclaration);
+        ExpressionStatement expressionStatement = (ExpressionStatement)theEObject;
+        T result = caseExpressionStatement(expressionStatement);
+        if (result == null) result = caseExpressionDsl_ExpressionStatement(expressionStatement);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -176,6 +184,20 @@ public class VilBuildLanguageSwitch<T> extends Switch<T>
       {
         Map map = (Map)theEObject;
         T result = caseMap(map);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case VilBuildLanguagePackage.ALTERNATIVE:
+      {
+        Alternative alternative = (Alternative)theEObject;
+        T result = caseAlternative(alternative);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case VilBuildLanguagePackage.STATEMENT_OR_BLOCK:
+      {
+        StatementOrBlock statementOrBlock = (StatementOrBlock)theEObject;
+        T result = caseStatementOrBlock(statementOrBlock);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -317,6 +339,22 @@ public class VilBuildLanguageSwitch<T> extends Switch<T>
   }
 
   /**
+   * Returns the result of interpreting the object as an instance of '<em>Rule Conditions</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Rule Conditions</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseRuleConditions(RuleConditions object)
+  {
+    return null;
+  }
+
+  /**
    * Returns the result of interpreting the object as an instance of '<em>Rule Element Block</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
@@ -365,17 +403,17 @@ public class VilBuildLanguageSwitch<T> extends Switch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Defer Declaration</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Expression Statement</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Defer Declaration</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Expression Statement</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseDeferDeclaration(DeferDeclaration object)
+  public T caseExpressionStatement(ExpressionStatement object)
   {
     return null;
   }
@@ -445,6 +483,38 @@ public class VilBuildLanguageSwitch<T> extends Switch<T>
   }
 
   /**
+   * Returns the result of interpreting the object as an instance of '<em>Alternative</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Alternative</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseAlternative(Alternative object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Statement Or Block</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Statement Or Block</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseStatementOrBlock(StatementOrBlock object)
+  {
+    return null;
+  }
+
+  /**
    * Returns the result of interpreting the object as an instance of '<em>Join</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
@@ -504,6 +574,22 @@ public class VilBuildLanguageSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseExpressionDsl_LanguageUnit(de.uni_hildesheim.sse.vil.expressions.expressionDsl.LanguageUnit object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Expression Statement</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Expression Statement</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseExpressionDsl_ExpressionStatement(de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionStatement object)
   {
     return null;
   }

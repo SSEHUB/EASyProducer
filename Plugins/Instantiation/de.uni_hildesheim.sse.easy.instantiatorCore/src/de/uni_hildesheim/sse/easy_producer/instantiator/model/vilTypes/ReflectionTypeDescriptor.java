@@ -27,6 +27,7 @@ class ReflectionTypeDescriptor <T extends IVilType> extends TypeDescriptor <T> {
     public static final TypeDescriptor<PseudoVoid> VOID;
     public static final TypeDescriptor<PseudoType> TYPE;
     public static final TypeDescriptor<PseudoAny> ANY;
+    public static final TypeDescriptor<PseudoVersion> VERSION;
     private static final EASyLogger LOGGER = EASyLoggerFactory.INSTANCE.getLogger(ReflectionOperationDescriptor.class, 
         Bundle.ID);
     
@@ -34,6 +35,7 @@ class ReflectionTypeDescriptor <T extends IVilType> extends TypeDescriptor <T> {
         ReflectionTypeDescriptor<PseudoVoid> v = null; 
         ReflectionTypeDescriptor<PseudoType> t = null; 
         ReflectionTypeDescriptor<PseudoAny> a = null; 
+        ReflectionTypeDescriptor<PseudoVersion> r = null; 
         try {
             v = new ReflectionTypeDescriptor<PseudoVoid>(PseudoVoid.class) {
 
@@ -104,9 +106,26 @@ class ReflectionTypeDescriptor <T extends IVilType> extends TypeDescriptor <T> {
         } catch (VilException e) {
             LOGGER.exception(e);
         }
+        try {
+            r = new ReflectionTypeDescriptor<PseudoVersion>(PseudoVersion.class) {
+
+                @Override
+                public boolean canBeInstantiated() {
+                    return false;
+                }
+
+                {
+                    setName("Version");
+                }
+
+            };
+        } catch (VilException e) {
+            LOGGER.exception(e);
+        }
         VOID = v;
         TYPE = t;
         ANY = a;
+        VERSION = r;
 
         // build up a pseudo type and conversions for TypeDescriptor -> Select
         // we must use the own class for the conversions due to class initialization sequence
@@ -359,7 +378,7 @@ class ReflectionTypeDescriptor <T extends IVilType> extends TypeDescriptor <T> {
      */
     private static String getAlias(ClassMeta meta) {
         String name = null;
-        if (null != meta && null != meta.name()) {
+        if (null != meta && null != meta.name() && meta.name().length() > 0) {
             name = meta.name();
         }
         return name;
@@ -442,8 +461,8 @@ class ReflectionTypeDescriptor <T extends IVilType> extends TypeDescriptor <T> {
     @Override
     public boolean isAssignableFrom(IMetaType type) {
         boolean result = false;
-        if (getClass().isInstance(type)) {
-            result = isAssignableFrom(getClass().cast(type));
+        if (ReflectionTypeDescriptor.class.isInstance(type)) {
+            result = isAssignableFrom(ReflectionTypeDescriptor.class.cast(type));
         }
         return result;
     }
@@ -529,12 +548,27 @@ class ReflectionTypeDescriptor <T extends IVilType> extends TypeDescriptor <T> {
     static boolean isSequence(Class<?> cls) {
         return Sequence.class.isAssignableFrom(cls);
     }
+    
+    /**
+     * Returns whether the given class represents a VIL map.
+     * 
+     * @param cls the class to be checked
+     * @return <code>true</code> if it is a VIL map, <code>false</code> else
+     */
+    static boolean isMap(Class<?> cls) {
+        return Map.class.isAssignableFrom(cls);
+    }
 
     @Override
     public boolean isCollection() {
         return isSet() || isSequence() || isCollection(cls);
     }
 
+    @Override
+    public boolean isMap() {
+        return isMap(cls);
+    }
+    
     @Override
     public boolean isSet() {
         return isSet(cls);
@@ -584,6 +618,11 @@ class ReflectionTypeDescriptor <T extends IVilType> extends TypeDescriptor <T> {
     @Override
     public boolean isActualTypeOf(IMetaType type) {
         return false; // shall not be handled by IActualTypeProvider
+    }
+
+    @Override
+    public IMetaType getBaseType() {
+        return null;
     }
 
 }

@@ -11,9 +11,6 @@ import org.eclipse.xtext.nodemodel.INode;
  */
 public class IdentifierValueConverter extends AbstractLexerBasedConverter<String> {
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected String toEscapedString(String value) {
         return value;

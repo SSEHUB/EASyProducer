@@ -108,6 +108,13 @@ public interface ITracer extends de.uni_hildesheim.sse.easy_producer.instantiato
     public void visitedInstantiator(String name, Object result);
 
     /**
+     * An alternative was visited.
+     * 
+     * @param takeIf if <code>true</code> the if-branch is used, <code>false</code> else the else-branch
+     */
+    public void visitAlternative(boolean takeIf);
+    
+    /**
      * Is called when the execution of a build language element failed.
      * 
      * @param element the failed element

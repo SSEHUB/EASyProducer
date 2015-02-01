@@ -93,6 +93,7 @@ public class OclKeyWords {
     public static final String AS_SEQUENCE = "asSequence";
     public static final String UNION = "union";
     public static final String FOR_ALL = "forAll";
+    public static final String ADD = "add";
     
     // e.g. Set
     public static final String INTERSECTION = "intersection";
@@ -108,9 +109,14 @@ public class OclKeyWords {
     public static final String FIRST = "first";
     public static final String LAST = "last";
     public static final String HAS_DUPLICATES = "hasDuplicates";
+    public static final String SUBSEQUENCE = "isSubsequenceOf";
+    public static final String OVERLAPS = "overlaps";
 
     // Enum
     public static final String ORDINAL = "ordinal";
+    
+    // self
+    public static final String SELF = "self";
     
     // e.g. IVML
     public static final String TYPE_OF = "typeOf";

@@ -1,0 +1,4 @@
+targetFile <- storeArtifact2.txt
+-> main(Project, Project, Configuration) with (<project>, <project>, <config>)
+    -> text(FileArtifact) with (storeArtifact2.txt) = <text>
+    -> append(Text, String) with (<text>, Hello) = <text>

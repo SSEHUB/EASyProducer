@@ -8,15 +8,20 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildlangWriter;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ExpressionVersionRestriction;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Imports;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script.ScriptDescriptor;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.VariableDeclaration;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
+import de.uni_hildesheim.sse.model.varModel.IvmlKeyWords;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
+import de.uni_hildesheim.sse.utils.modelManagement.RestrictionEvaluationException;
 import de.uni_hildesheim.sse.utils.modelManagement.Version;
 import de.uni_hildesheim.sse.utils.modelManagement.VersionFormatException;
-import de.uni_hildesheim.sse.utils.modelManagement.VersionRestriction;
-import de.uni_hildesheim.sse.utils.modelManagement.VersionRestriction.Operator;
 
 /**
  * Some tests for build language scripts using the model API.
@@ -39,9 +44,18 @@ public class ScriptTests extends AbstractTest {
         } catch (VersionFormatException e) {
             Assert.fail("version shall be correct: " + e.getMessage());
         }
-        VersionRestriction[] vr = {new VersionRestriction(impName, Operator.EQUALS, version)};
         List<ModelImport<Script>> imps = new ArrayList<ModelImport<Script>>();
-        imps.add(new ModelImport<Script>(impName, false, vr));
+        try {
+            VariableDeclaration decl = new VariableDeclaration("version", TypeRegistry.versionType());
+            Expression expr = ExpressionVersionRestriction.createSingleRestriction(decl, 
+                IvmlKeyWords.EQUALS, version);
+            imps.add(new ModelImport<Script>(impName, false, new ExpressionVersionRestriction(expr, decl)));
+        } catch (RestrictionEvaluationException e) {
+            Assert.fail(e.getMessage());
+        } catch (ExpressionException e) {
+            Assert.fail(e.getMessage());
+        }
+        
         Imports imports = new Imports(imps, null);
         ScriptDescriptor desc = new ScriptDescriptor(null, null, imports);
         Script script = new Script(scriptName, null, desc, getRegistry());
@@ -58,7 +72,7 @@ public class ScriptTests extends AbstractTest {
         String model = sWriter.toString();
         model = model.replace("\n", ""); // skip newlines
         model = model.replace("\r", ""); // skip returns
-        String expected = "import script with (version == v1.0);vilScript script () {}";
+        String expected = "import script with version == v1.0;vilScript script () {}";
         Assert.assertEquals("model comparison fails:", model, expected);
     }
 

@@ -385,9 +385,6 @@ public abstract class AbstractVarModelWriter extends AbstractVisitor
         visitEnum(eenum);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void visitCompound(Compound compound) {
         //Write beginning
@@ -411,9 +408,7 @@ public abstract class AbstractVarModelWriter extends AbstractVisitor
         endWritingCompound(compound);
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitAttributeAssignment(AttributeAssignment assignment) {
         parents.add(assignment);
         for (int m = 0; m < assignment.getModelElementCount(); m++) {
@@ -447,9 +442,7 @@ public abstract class AbstractVarModelWriter extends AbstractVisitor
      */
     protected abstract void endWritingProject(Project project);
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitConstantValue(ConstantValue value) {
         Value val = value.getConstantValue();
         if (null != val) {
@@ -460,9 +453,7 @@ public abstract class AbstractVarModelWriter extends AbstractVisitor
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitConstraintValue(ConstraintValue value) {
         ConstraintSyntaxTree val = value.getValue();
         if (null != val) {
@@ -470,9 +461,7 @@ public abstract class AbstractVarModelWriter extends AbstractVisitor
         }
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitConstraint(Constraint constraint) {
         ConstraintSyntaxTree cst = constraint.getConsSyntax();
         if (null != cst) {
@@ -480,9 +469,7 @@ public abstract class AbstractVarModelWriter extends AbstractVisitor
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitPartialEvaluationBlock(PartialEvaluationBlock block) {
         parents.add(block);
         for (int e = 0; e < block.getModelElementCount(); e++) {
@@ -499,9 +486,7 @@ public abstract class AbstractVarModelWriter extends AbstractVisitor
         removeLastParent();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitFreezeBlock(FreezeBlock freeze) {
         parents.add(freeze);
         for (int f = 0; f < freeze.getFreezableCount(); f++) {
@@ -512,9 +497,7 @@ public abstract class AbstractVarModelWriter extends AbstractVisitor
         removeLastParent();
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitUnresolvedExpression(UnresolvedExpression expression) {
         if (expression.isLeaf()) {
             appendOutput(expression.getUnresolvedLeaf());

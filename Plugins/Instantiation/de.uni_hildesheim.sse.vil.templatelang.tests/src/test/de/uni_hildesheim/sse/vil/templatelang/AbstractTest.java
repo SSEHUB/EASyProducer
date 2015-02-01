@@ -4,6 +4,7 @@ import java.io.CharArrayWriter;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.File
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IFileSystemArtifact;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.PathUtils;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionParserRegistry;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.ExtensionClassLoaders;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.StreamTracer;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Template;
@@ -71,7 +73,7 @@ public abstract class AbstractTest extends de.uni_hildesheim.sse.dslCore.test.Ab
      * Initialize the model infrastructure.
      */
     public static final void initializeInfrastructure() {
-        TemplateLangExecution.setExpressionParser(new VtlExpressionParser());
+        ExpressionParserRegistry.setExpressionParser(TemplateLangExecution.LANGUAGE, new VtlExpressionParser());
         try {
             // for advices
             VarModel.INSTANCE.loaders().registerLoader(ModelUtility.INSTANCE, OBSERVER);
@@ -168,7 +170,8 @@ public abstract class AbstractTest extends de.uni_hildesheim.sse.dslCore.test.Ab
             
             File expectedTrace = data.getExpectedTrace();
             if (null != expectedTrace && 0 == result.getErrorCount()) {
-                java.io.CharArrayWriter trace = new CharArrayWriter();
+                // for debugging insert DelegatingSysoutWriter here
+                Writer trace = new CharArrayWriter();
                 try {
                     String fileAsString = file2String(expectedTrace);
                     Assert.assertTrue(null != fileAsString);

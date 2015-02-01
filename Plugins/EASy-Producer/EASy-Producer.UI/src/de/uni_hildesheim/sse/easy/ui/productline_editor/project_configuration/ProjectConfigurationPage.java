@@ -23,7 +23,6 @@ import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
 public class ProjectConfigurationPage extends AbstractEASyEditorPage {
 
     private ProductLineHeaderMenu plHeaderMenu;
-    private CopyCombobox copyComboMenu;
     private ReasonerSettings reasonerSettings;
     private ModelCombobox modelSelection;
    
@@ -53,7 +52,6 @@ public class ProjectConfigurationPage extends AbstractEASyEditorPage {
         
         modelSelection = new ModelCombobox(pnlModelSelection, this.getProductLineProject(), this);
         
-        copyComboMenu = new CopyCombobox(pnlAdvanced, plp.getCopyModel(), this);
         reasonerSettings = new ReasonerSettings(pnlAdvanced, plp.getReasonerConfig(), this);
         
         // Specification whether debug information should be saved
@@ -68,7 +66,6 @@ public class ProjectConfigurationPage extends AbstractEASyEditorPage {
     @Override
     public void refresh() {
         plHeaderMenu.revalidateButtons(); 
-        copyComboMenu.refresh();
         reasonerSettings.refresh();
         modelSelection.refresh();
     }

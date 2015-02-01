@@ -16,6 +16,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Bui
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.Executor;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.IInstantiatorTracer;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.TracerFactory;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
@@ -308,6 +309,11 @@ public abstract class AbstractScenarioTest extends AbstractTest {
         protected de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.ITracer 
         createTemplateLanguageTracerImpl() {
             return new de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.StreamTracer(writer, true);
+        }
+
+        @Override
+        protected IInstantiatorTracer createInstantiatorTracerImpl() {
+            return EMPTY_INSTANTIATOR_TRACER;
         }
         
     }

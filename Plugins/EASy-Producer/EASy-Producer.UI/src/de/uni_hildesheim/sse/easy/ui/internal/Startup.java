@@ -4,9 +4,7 @@ import org.eclipse.ui.IStartup;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 
-import de.uni_hildesheim.sse.easy.instantiator.copy.core.CopyMechansimRegistry;
 import de.uni_hildesheim.sse.easy.ui.core.instantiation.GuiTracerFactory;
-import de.uni_hildesheim.sse.easy_producer.contributions.Contributions;
 import de.uni_hildesheim.sse.easy_producer.instantiator.Transformator;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.TracerFactory;
 import de.uni_hildesheim.sse.easy_producer.persistency.ResourcesMgmt;
@@ -28,7 +26,6 @@ public class Startup implements IStartup {
         workbench.getDisplay().syncExec(new Runnable() {
             public void run() {
                 // I would expect the following line to be part of the startup of EASy core
-                CopyMechansimRegistry.INSTANCE.setDefaultID(Contributions.getDefaultCopyMechanismID());
                 EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(Startup.class,
                     "de.uni_hildesheim.sse.easy.ui");
                 logger.info("EASy-Producer 2.0 is up and running...");

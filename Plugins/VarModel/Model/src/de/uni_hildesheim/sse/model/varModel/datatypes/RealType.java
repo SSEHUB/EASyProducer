@@ -178,9 +178,7 @@ public class RealType extends BasisDatatype {
         super("Real", DTYPE);
     } 
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void accept(IDatatypeVisitor visitor) {
         visitor.visitRealType(this);
     }

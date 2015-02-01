@@ -44,7 +44,6 @@ import de.uni_hildesheim.sse.vil.expressions.expressionDsl.UnqualifiedExecution;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VersionSpec;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VersionStmt;
-import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VersionedId;
 import de.uni_hildesheim.sse.vil.expressions.services.ExpressionDslGrammarAccess;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.serializer.acceptor.ISemanticSequenceAcceptor;
@@ -312,12 +311,6 @@ public class ExpressionDslSemanticSequencer extends AbstractDelegatingSemanticSe
 					return; 
 				}
 				else break;
-			case ExpressionDslPackage.VERSIONED_ID:
-				if(context == grammarAccess.getVersionedIdRule()) {
-					sequence_VersionedId(context, (VersionedId) semanticObject); 
-					return; 
-				}
-				else break;
 			}
 		if (errorAcceptor != null) errorAcceptor.accept(diagnosticProvider.createInvalidContextOrTypeDiagnostic(semanticObject, context));
 	}
@@ -385,7 +378,8 @@ public class ExpressionDslSemanticSequencer extends AbstractDelegatingSemanticSe
 	 *         qValue=QualifiedName | 
 	 *         bValue='true' | 
 	 *         bValue='false' | 
-	 *         null='null'
+	 *         null='null' | 
+	 *         version=VERSION
 	 *     )
 	 */
 	protected void sequence_Constant(EObject context, Constant semanticObject) {
@@ -711,7 +705,7 @@ public class ExpressionDslSemanticSequencer extends AbstractDelegatingSemanticSe
 	
 	/**
 	 * Constraint:
-	 *     (param+=Identifier param+=Identifier*)
+	 *     (param+=Type param+=Type*)
 	 */
 	protected void sequence_TypeParameters(EObject context, TypeParameters semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -756,10 +750,17 @@ public class ExpressionDslSemanticSequencer extends AbstractDelegatingSemanticSe
 	
 	/**
 	 * Constraint:
-	 *     (conflicts+=VersionedId conflicts+=VersionedId*)
+	 *     restriction=Expression
 	 */
 	protected void sequence_VersionSpec(EObject context, VersionSpec semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
+		if(errorAcceptor != null) {
+			if(transientValues.isValueTransient(semanticObject, ExpressionDslPackage.Literals.VERSION_SPEC__RESTRICTION) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, ExpressionDslPackage.Literals.VERSION_SPEC__RESTRICTION));
+		}
+		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
+		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
+		feeder.accept(grammarAccess.getVersionSpecAccess().getRestrictionExpressionParserRuleCall_1_0(), semanticObject.getRestriction());
+		feeder.finish();
 	}
 	
 	
@@ -775,25 +776,6 @@ public class ExpressionDslSemanticSequencer extends AbstractDelegatingSemanticSe
 		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
 		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
 		feeder.accept(grammarAccess.getVersionStmtAccess().getVersionVERSIONTerminalRuleCall_1_0(), semanticObject.getVersion());
-		feeder.finish();
-	}
-	
-	
-	/**
-	 * Constraint:
-	 *     (op=VersionOperator version=VERSION)
-	 */
-	protected void sequence_VersionedId(EObject context, VersionedId semanticObject) {
-		if(errorAcceptor != null) {
-			if(transientValues.isValueTransient(semanticObject, ExpressionDslPackage.Literals.VERSIONED_ID__OP) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, ExpressionDslPackage.Literals.VERSIONED_ID__OP));
-			if(transientValues.isValueTransient(semanticObject, ExpressionDslPackage.Literals.VERSIONED_ID__VERSION) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, ExpressionDslPackage.Literals.VERSIONED_ID__VERSION));
-		}
-		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
-		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getVersionedIdAccess().getOpVersionOperatorParserRuleCall_1_0(), semanticObject.getOp());
-		feeder.accept(grammarAccess.getVersionedIdAccess().getVersionVERSIONTerminalRuleCall_2_0(), semanticObject.getVersion());
 		feeder.finish();
 	}
 }

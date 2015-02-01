@@ -47,9 +47,7 @@ public class ConfigurableIVMLWriter extends IVMLWriter {
         }
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitProjectImport(ProjectImport pImport) {
         super.visitProjectImport(pImport);
         Project resolved = pImport.getResolved();
@@ -60,9 +58,7 @@ public class ConfigurableIVMLWriter extends IVMLWriter {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitProject(Project project) {
         projectNestingLevel++;
         super.visitProject(project);

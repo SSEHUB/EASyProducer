@@ -74,6 +74,10 @@ public class NoTracer extends de.uni_hildesheim.sse.easy_producer.instantiator.m
     }
 
     @Override
+    public void visitAlternative(boolean takeIf) {
+    }
+    
+    @Override
     public void reset() {
     }
 

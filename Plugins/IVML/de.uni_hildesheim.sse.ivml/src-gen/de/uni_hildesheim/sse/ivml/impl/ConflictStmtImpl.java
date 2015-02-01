@@ -3,24 +3,17 @@
 package de.uni_hildesheim.sse.ivml.impl;
 
 import de.uni_hildesheim.sse.ivml.ConflictStmt;
+import de.uni_hildesheim.sse.ivml.Expression;
 import de.uni_hildesheim.sse.ivml.IvmlPackage;
-import de.uni_hildesheim.sse.ivml.VersionedId;
-
-import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
-import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -30,7 +23,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ConflictStmtImpl#getName <em>Name</em>}</li>
- *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ConflictStmtImpl#getConflicts <em>Conflicts</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ConflictStmtImpl#getRestriction <em>Restriction</em>}</li>
  * </ul>
  * </p>
  *
@@ -59,14 +52,14 @@ public class ConflictStmtImpl extends MinimalEObjectImpl.Container implements Co
   protected String name = NAME_EDEFAULT;
 
   /**
-   * The cached value of the '{@link #getConflicts() <em>Conflicts</em>}' containment reference list.
+   * The cached value of the '{@link #getRestriction() <em>Restriction</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getConflicts()
+   * @see #getRestriction()
    * @generated
    * @ordered
    */
-  protected EList<VersionedId> conflicts;
+  protected Expression restriction;
 
   /**
    * <!-- begin-user-doc -->
@@ -117,13 +110,47 @@ public class ConflictStmtImpl extends MinimalEObjectImpl.Container implements Co
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<VersionedId> getConflicts()
+  public Expression getRestriction()
   {
-    if (conflicts == null)
+    return restriction;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetRestriction(Expression newRestriction, NotificationChain msgs)
+  {
+    Expression oldRestriction = restriction;
+    restriction = newRestriction;
+    if (eNotificationRequired())
     {
-      conflicts = new EObjectContainmentEList<VersionedId>(VersionedId.class, this, IvmlPackage.CONFLICT_STMT__CONFLICTS);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, IvmlPackage.CONFLICT_STMT__RESTRICTION, oldRestriction, newRestriction);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
     }
-    return conflicts;
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setRestriction(Expression newRestriction)
+  {
+    if (newRestriction != restriction)
+    {
+      NotificationChain msgs = null;
+      if (restriction != null)
+        msgs = ((InternalEObject)restriction).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - IvmlPackage.CONFLICT_STMT__RESTRICTION, null, msgs);
+      if (newRestriction != null)
+        msgs = ((InternalEObject)newRestriction).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - IvmlPackage.CONFLICT_STMT__RESTRICTION, null, msgs);
+      msgs = basicSetRestriction(newRestriction, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, IvmlPackage.CONFLICT_STMT__RESTRICTION, newRestriction, newRestriction));
   }
 
   /**
@@ -136,8 +163,8 @@ public class ConflictStmtImpl extends MinimalEObjectImpl.Container implements Co
   {
     switch (featureID)
     {
-      case IvmlPackage.CONFLICT_STMT__CONFLICTS:
-        return ((InternalEList<?>)getConflicts()).basicRemove(otherEnd, msgs);
+      case IvmlPackage.CONFLICT_STMT__RESTRICTION:
+        return basicSetRestriction(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -154,8 +181,8 @@ public class ConflictStmtImpl extends MinimalEObjectImpl.Container implements Co
     {
       case IvmlPackage.CONFLICT_STMT__NAME:
         return getName();
-      case IvmlPackage.CONFLICT_STMT__CONFLICTS:
-        return getConflicts();
+      case IvmlPackage.CONFLICT_STMT__RESTRICTION:
+        return getRestriction();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -165,7 +192,6 @@ public class ConflictStmtImpl extends MinimalEObjectImpl.Container implements Co
    * <!-- end-user-doc -->
    * @generated
    */
-  @SuppressWarnings("unchecked")
   @Override
   public void eSet(int featureID, Object newValue)
   {
@@ -174,9 +200,8 @@ public class ConflictStmtImpl extends MinimalEObjectImpl.Container implements Co
       case IvmlPackage.CONFLICT_STMT__NAME:
         setName((String)newValue);
         return;
-      case IvmlPackage.CONFLICT_STMT__CONFLICTS:
-        getConflicts().clear();
-        getConflicts().addAll((Collection<? extends VersionedId>)newValue);
+      case IvmlPackage.CONFLICT_STMT__RESTRICTION:
+        setRestriction((Expression)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -195,8 +220,8 @@ public class ConflictStmtImpl extends MinimalEObjectImpl.Container implements Co
       case IvmlPackage.CONFLICT_STMT__NAME:
         setName(NAME_EDEFAULT);
         return;
-      case IvmlPackage.CONFLICT_STMT__CONFLICTS:
-        getConflicts().clear();
+      case IvmlPackage.CONFLICT_STMT__RESTRICTION:
+        setRestriction((Expression)null);
         return;
     }
     super.eUnset(featureID);
@@ -214,8 +239,8 @@ public class ConflictStmtImpl extends MinimalEObjectImpl.Container implements Co
     {
       case IvmlPackage.CONFLICT_STMT__NAME:
         return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-      case IvmlPackage.CONFLICT_STMT__CONFLICTS:
-        return conflicts != null && !conflicts.isEmpty();
+      case IvmlPackage.CONFLICT_STMT__RESTRICTION:
+        return restriction != null;
     }
     return super.eIsSet(featureID);
   }

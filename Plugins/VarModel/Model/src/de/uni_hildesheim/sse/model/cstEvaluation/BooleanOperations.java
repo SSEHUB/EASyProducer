@@ -31,9 +31,7 @@ public class BooleanOperations {
      */
     static final IOperationEvaluator NOT = new IOperationEvaluator() {
 
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
             EvaluationAccessor result = null;
             if (null != operand) {
@@ -83,9 +81,7 @@ public class BooleanOperations {
             this.op = op;
         }
 
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
             EvaluationAccessor result = null;
             if (null != operand && null != arguments && 1 == arguments.length) {
@@ -103,7 +99,6 @@ public class BooleanOperations {
             return result;
         }
     };
-
     
     /**
      * Prevents external creation.

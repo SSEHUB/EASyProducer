@@ -17,8 +17,11 @@ package de.uni_hildesheim.sse.model.cst;
 
 import java.util.Arrays;
 
+import de.uni_hildesheim.sse.Bundle;
+import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.IvmlKeyWords;
 import de.uni_hildesheim.sse.model.varModel.datatypes.BaseTypeVisitor;
+import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Container;
 import de.uni_hildesheim.sse.model.varModel.datatypes.ICustomOperationAccessor;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
@@ -29,6 +32,7 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.Operation.ReturnTypeMode;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Sequence;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Set;
 import de.uni_hildesheim.sse.model.varModel.datatypes.TypeQueries;
+import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 
 /**
  * Class for OCLFeatureCall. This class may resolve custom operations if
@@ -165,6 +169,13 @@ public class OCLFeatureCall extends ConstraintSyntaxTree {
             operandType = Reference.dereference(operandType);
             Reference.dereference(paramTypes);
             op = TypeQueries.getOperation(operandType, operation, paramTypes);
+            if (null == op && null != paramTypes) {
+                IDatatype[] paramTypesBase = new IDatatype[paramTypes.length];
+                for (int p = 0; p < paramTypes.length; p++) {
+                    paramTypesBase[p] = BaseTypeVisitor.getBaseType(paramTypes[p]);
+                }
+                op = TypeQueries.getOperation(operandType, operation, paramTypesBase);
+            }
             if (null == op) {
                 op = customInferDatatype();
                 if (null == op) {
@@ -176,9 +187,35 @@ public class OCLFeatureCall extends ConstraintSyntaxTree {
         }
         if (null != op) {
             // done on individual types by customInferDatatype
+            replaceEmptyInitializer(op);
             checkRequiredAssignableParameter(op, operandType, paramTypes);
             result = getActualReturnType(op, operandType, paramTypes);
             resolvedOperation = op;
+        }
+    }
+    
+    /**
+     * Replaces (temporary) empty initializers.
+     * 
+     * @param op the operation to be considered
+     */
+    private void replaceEmptyInitializer(Operation op) {
+        if (null != parameters) {
+            for (int p = 0; p < parameters.length; p++) {
+                if (EmptyInitializer.INSTANCE == parameters[p]) {
+                    IDatatype pType = op.getParameter(p);
+                    try {
+                        if (Compound.TYPE.isAssignableFrom(pType)) {
+                            parameters[p] = new CompoundInitializer((Compound) pType, new String[] {}, 
+                                new AbstractVariable[] {}, new ConstraintSyntaxTree[] {});
+                        } else if (Container.TYPE.isAssignableFrom(pType)) {
+                            parameters[p] = new ContainerInitializer((Container) pType, new ConstraintSyntaxTree[] {});
+                        }
+                    } catch (CSTSemanticException e) {
+                        EASyLoggerFactory.INSTANCE.getLogger(OCLFeatureCall.class, Bundle.ID).exception(e);
+                    }
+                }
+            }
         }
     }
     
@@ -272,12 +309,13 @@ public class OCLFeatureCall extends ConstraintSyntaxTree {
             }
             op = getCustomOperation(operandType, paramTypes);
             if (null != op) {
+                replaceEmptyInitializer(op);
                 checkRequiredAssignableParameter(op, operandType, paramTypes);
                 result = getActualReturnType(op, operandType, paramTypes);
                 resolvedOperation = op;
             } // not found exception is thrown in dflt
         } else {
-            throw new CSTSemanticException("no custom operator accessor given", 
+            throw new CSTSemanticException("no custom operator accessor given for " + getOperation(), 
                 CSTSemanticException.INTERNAL);
         }
         return op;
@@ -323,9 +361,7 @@ public class OCLFeatureCall extends ConstraintSyntaxTree {
         return op;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void accept(IConstraintTreeVisitor visitor) {
         visitor.visitOclFeatureCall(this); // no further operations!
     }
@@ -384,6 +420,15 @@ public class OCLFeatureCall extends ConstraintSyntaxTree {
         return resolvedOperation;
     }
     
+    /**
+     * Returns the custom operation accessor.
+     * 
+     * @return the accessor (may be <b>null</b>)
+     */
+    public ICustomOperationAccessor getAccessor() {
+        return opAccessor;
+    }
+    
     @Override
     public boolean equals(Object obj) {
         boolean equals = false;
@@ -414,10 +459,16 @@ public class OCLFeatureCall extends ConstraintSyntaxTree {
 
     @Override
     public String toString() {
-        StringBuffer result = new StringBuffer(operand.toString() + " " + operation.toString());
-        for (int i = 0, n = parameters.length; i < n; i++) {
-            result.append(" ");
-            result.append(parameters[i].toString());
+        StringBuffer result = new StringBuffer();
+        if (null != operand) {
+            result.append(operand.toString() + " ");
+        }
+        result.append(operation.toString());
+        if (null != parameters) {
+            for (int i = 0, n = parameters.length; i < n; i++) {
+                result.append(" ");
+                result.append(parameters[i].toString());
+            }
         }
         return result.toString();
     }

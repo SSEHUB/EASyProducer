@@ -1,0 +1,7 @@
+Algorithms::Algorithm::name = name
+Algorithms::Algorithm::artifact = implementing artifact
+Algorithms::Algorithm::input = input fields
+Algorithms::Algorithm::output = output fields
+Algorithms::Algorithm::parameters = adaptable parameters
+Algorithms::Algorithm::hwType = realizing hardware
+Algorithms::algorithms = configured algorithms

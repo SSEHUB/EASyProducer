@@ -89,9 +89,7 @@ public class EnumOperations {
             this.op = op;
         }
 
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
             EvaluationAccessor result = null;
             if (1 == arguments.length) {

@@ -1,0 +1,10 @@
+project selfTest {
+
+    version v0;
+    compound c {
+        Integer i;
+        self <> null;
+        self.i > 0;
+    }
+
+}

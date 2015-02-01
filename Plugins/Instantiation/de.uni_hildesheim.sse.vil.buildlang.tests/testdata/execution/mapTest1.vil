@@ -1,0 +1,8 @@
+vilScript mapTest1 () {
+
+    mapOf(String, String) m = {};
+
+    main() = : {
+    }
+
+}

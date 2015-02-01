@@ -434,4 +434,14 @@ public class BasicTests extends AbstractTest {
         assertEqual("vtl");
     }
 
+    /**
+     * Tests nested types.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testNestedTypes() throws IOException {
+        assertEqual("nestedTypes");
+    }
+
 }

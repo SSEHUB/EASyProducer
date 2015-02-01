@@ -1,0 +1,8 @@
+project FreezeImportTest {
+
+	version v0;
+	import FreezeTest;
+	a = false;
+	c = true;
+	
+}

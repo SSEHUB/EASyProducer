@@ -86,6 +86,15 @@ public interface VilBuildLanguageFactory extends EFactory
   RuleDeclaration createRuleDeclaration();
 
   /**
+   * Returns a new object of class '<em>Rule Conditions</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Rule Conditions</em>'.
+   * @generated
+   */
+  RuleConditions createRuleConditions();
+
+  /**
    * Returns a new object of class '<em>Rule Element Block</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -113,13 +122,13 @@ public interface VilBuildLanguageFactory extends EFactory
   RuleModifier createRuleModifier();
 
   /**
-   * Returns a new object of class '<em>Defer Declaration</em>'.
+   * Returns a new object of class '<em>Expression Statement</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>Defer Declaration</em>'.
+   * @return a new object of class '<em>Expression Statement</em>'.
    * @generated
    */
-  DeferDeclaration createDeferDeclaration();
+  ExpressionStatement createExpressionStatement();
 
   /**
    * Returns a new object of class '<em>Primary Expression</em>'.
@@ -156,6 +165,24 @@ public interface VilBuildLanguageFactory extends EFactory
    * @generated
    */
   Map createMap();
+
+  /**
+   * Returns a new object of class '<em>Alternative</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Alternative</em>'.
+   * @generated
+   */
+  Alternative createAlternative();
+
+  /**
+   * Returns a new object of class '<em>Statement Or Block</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Statement Or Block</em>'.
+   * @generated
+   */
+  StatementOrBlock createStatementOrBlock();
 
   /**
    * Returns a new object of class '<em>Join</em>'.

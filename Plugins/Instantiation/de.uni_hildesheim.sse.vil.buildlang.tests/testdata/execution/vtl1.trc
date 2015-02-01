@@ -1,0 +1,6 @@
+-> main(Project, Project, Configuration) with (<project>, <project>, <config>)
+    fa <- templates/test2.vtl
+    d <- {}
+    -> add(Map, Any, Any) with ({{dd, 11}}, dd, 11) = null
+-> main(Configuration, FileArtifact, mapOf(String, Integer)) with (<config>, test2.txt, {{dd, 11}})
+    -> vilTemplateProcessor(VtlFileArtifact, Configuration, Artifact) with (templates/test2.vtl, <config>, test2.txt, {{data, {{dd, 11}}}}) = {test2.txt}

@@ -3,7 +3,6 @@
 package de.uni_hildesheim.sse.ivml.impl;
 
 import de.uni_hildesheim.sse.ivml.CollectionInitializer;
-import de.uni_hildesheim.sse.ivml.DslContext;
 import de.uni_hildesheim.sse.ivml.Expression;
 import de.uni_hildesheim.sse.ivml.ImplicationExpression;
 import de.uni_hildesheim.sse.ivml.IvmlPackage;
@@ -28,7 +27,6 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ExpressionImpl#getLet <em>Let</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ExpressionImpl#getExpr <em>Expr</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ExpressionImpl#getCollection <em>Collection</em>}</li>
- *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ExpressionImpl#getDsl <em>Dsl</em>}</li>
  * </ul>
  * </p>
  *
@@ -65,16 +63,6 @@ public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expr
    * @ordered
    */
   protected CollectionInitializer collection;
-
-  /**
-   * The cached value of the '{@link #getDsl() <em>Dsl</em>}' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getDsl()
-   * @generated
-   * @ordered
-   */
-  protected DslContext dsl;
 
   /**
    * <!-- begin-user-doc -->
@@ -246,54 +234,6 @@ public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expr
    * <!-- end-user-doc -->
    * @generated
    */
-  public DslContext getDsl()
-  {
-    return dsl;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public NotificationChain basicSetDsl(DslContext newDsl, NotificationChain msgs)
-  {
-    DslContext oldDsl = dsl;
-    dsl = newDsl;
-    if (eNotificationRequired())
-    {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, IvmlPackage.EXPRESSION__DSL, oldDsl, newDsl);
-      if (msgs == null) msgs = notification; else msgs.add(notification);
-    }
-    return msgs;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setDsl(DslContext newDsl)
-  {
-    if (newDsl != dsl)
-    {
-      NotificationChain msgs = null;
-      if (dsl != null)
-        msgs = ((InternalEObject)dsl).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - IvmlPackage.EXPRESSION__DSL, null, msgs);
-      if (newDsl != null)
-        msgs = ((InternalEObject)newDsl).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - IvmlPackage.EXPRESSION__DSL, null, msgs);
-      msgs = basicSetDsl(newDsl, msgs);
-      if (msgs != null) msgs.dispatch();
-    }
-    else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, IvmlPackage.EXPRESSION__DSL, newDsl, newDsl));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
@@ -305,8 +245,6 @@ public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expr
         return basicSetExpr(null, msgs);
       case IvmlPackage.EXPRESSION__COLLECTION:
         return basicSetCollection(null, msgs);
-      case IvmlPackage.EXPRESSION__DSL:
-        return basicSetDsl(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -327,8 +265,6 @@ public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expr
         return getExpr();
       case IvmlPackage.EXPRESSION__COLLECTION:
         return getCollection();
-      case IvmlPackage.EXPRESSION__DSL:
-        return getDsl();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -351,9 +287,6 @@ public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expr
         return;
       case IvmlPackage.EXPRESSION__COLLECTION:
         setCollection((CollectionInitializer)newValue);
-        return;
-      case IvmlPackage.EXPRESSION__DSL:
-        setDsl((DslContext)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -378,9 +311,6 @@ public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expr
       case IvmlPackage.EXPRESSION__COLLECTION:
         setCollection((CollectionInitializer)null);
         return;
-      case IvmlPackage.EXPRESSION__DSL:
-        setDsl((DslContext)null);
-        return;
     }
     super.eUnset(featureID);
   }
@@ -401,8 +331,6 @@ public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expr
         return expr != null;
       case IvmlPackage.EXPRESSION__COLLECTION:
         return collection != null;
-      case IvmlPackage.EXPRESSION__DSL:
-        return dsl != null;
     }
     return super.eIsSet(featureID);
   }

@@ -7,34 +7,32 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IExpre
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
-import de.uni_hildesheim.sse.utils.modelManagement.IVersionRestrictable;
-import de.uni_hildesheim.sse.utils.modelManagement.VersionRestriction;
+import de.uni_hildesheim.sse.utils.modelManagement.IVersionRestriction;
 
 /**
  * Represents an instantiate expression. However, an instantiate expression can only be resolved at runtime.
  * 
  * @author Holger Eichelberger
  */
-public class InstantiateExpression extends ModelCallExpression<VariableDeclaration, Script, Rule> 
-    implements IVersionRestrictable {
+public class InstantiateExpression extends ModelCallExpression<VariableDeclaration, Script, Rule> {
     
-    private VersionRestriction[] versionRestrictions;
+    private IVersionRestriction restriction;
     private VariableDeclaration project;
 
     /**
      * Creates an instantiate expression.
      * 
      * @param project the project variable
-     * @param versionRestrictions optional version restrictions (may be <b>null</b>)
+     * @param restriction optional version restrictions (may be <b>null</b>)
      * @param name the optional name of the rule to be executed (may be <b>null</b> and points then to the main rule)
      * @param arguments the rule call arguments
      * @throws ExpressionException in case that the expression cannot be resolved
      */
-    public InstantiateExpression(VariableDeclaration project, VersionRestriction[] versionRestrictions, String name, 
+    public InstantiateExpression(VariableDeclaration project, IVersionRestriction restriction, String name, 
         CallArgument... arguments) throws ExpressionException {
         super(null, false, name, arguments);
         this.project = project;
-        this.versionRestrictions = versionRestrictions;
+        this.restriction = restriction;
     }
 
     /**
@@ -58,17 +56,13 @@ public class InstantiateExpression extends ModelCallExpression<VariableDeclarati
         return project;
     }
 
-    @Override
-    public int getRestrictionsCount() {
-        return null == versionRestrictions ? 0 : versionRestrictions.length;
-    }
-    
-    @Override
-    public VersionRestriction getRestriction(int index) {
-        if (null == versionRestrictions) {
-            throw new IndexOutOfBoundsException();
-        }
-        return versionRestrictions[index];
+    /**
+     * Returns the version restriction.
+     * 
+     * @return the version restriction (may be <b>null</b> if absent)
+     */
+    public IVersionRestriction getVersionRestriction() {
+        return restriction;
     }
 
     @Override

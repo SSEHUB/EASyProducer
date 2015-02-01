@@ -165,4 +165,15 @@ public class StreamTracer extends de.uni_hildesheim.sse.easy_producer.instantiat
     public void reset() {
     }
 
+    @Override
+    public void visitAlternative(boolean takeIf) {
+        printIndentation();
+        print("visit ");
+        if (takeIf) {
+            println("if-branch");
+        } else {
+            println("else-branch");
+        }
+    }
+
 }

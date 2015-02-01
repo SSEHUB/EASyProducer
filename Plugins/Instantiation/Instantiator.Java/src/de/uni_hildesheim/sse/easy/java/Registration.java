@@ -8,10 +8,12 @@ import de.uni_hildesheim.sse.easy.java.artifacts.JavaAttribute;
 import de.uni_hildesheim.sse.easy.java.artifacts.JavaClass;
 import de.uni_hildesheim.sse.easy.java.artifacts.JavaFileArtifact;
 import de.uni_hildesheim.sse.easy.java.artifacts.JavaMethod;
+import de.uni_hildesheim.sse.easy.java.instantiators.Ant;
 import de.uni_hildesheim.sse.easy.java.instantiators.AspectJ;
 import de.uni_hildesheim.sse.easy.java.instantiators.CocktailInstantiator;
 import de.uni_hildesheim.sse.easy.java.instantiators.Jar;
 import de.uni_hildesheim.sse.easy.java.instantiators.Javac;
+import de.uni_hildesheim.sse.easy.java.instantiators.Make;
 import de.uni_hildesheim.sse.easy.java.instantiators.Unjar;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IRegistration;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
@@ -35,6 +37,8 @@ public class Registration implements IRegistration {
             TypeRegistry.DEFAULT.register(Jar.class);
             TypeRegistry.DEFAULT.register(Unjar.class);
             TypeRegistry.DEFAULT.register(AspectJ.class);
+            TypeRegistry.DEFAULT.register(Ant.class);
+            TypeRegistry.DEFAULT.register(Make.class);
 
             TypeRegistry.DEFAULT.register(CocktailInstantiator.class);
 

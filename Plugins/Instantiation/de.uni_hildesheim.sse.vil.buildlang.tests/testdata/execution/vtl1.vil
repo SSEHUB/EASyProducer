@@ -1,0 +1,10 @@
+vilScript vtl (Project source, Project target, Configuration config) {
+
+    main(Project source, Project target, Configuration config) = : {
+        FileArtifact fa = "$source/templates/test2.vtl";
+        mapOf(String, Integer) d = {};
+        d.add("dd", 11);
+        vilTemplateProcessor(fa, config, "$target/test2.txt", data=d);
+    }
+
+}

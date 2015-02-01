@@ -38,9 +38,7 @@ public abstract class ContainableModelElement extends ModelElement implements ID
         this.parent = parent;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public final IModelElement getParent() {
         return parent;
     }
@@ -70,9 +68,7 @@ public abstract class ContainableModelElement extends ModelElement implements ID
         return top;
     }
     
-    /** 
-     * {@inheritDoc}
-     */
+    @Override
     public String getNameSpace() {
         String namespace;
         if (null == parent) {
@@ -96,11 +92,7 @@ public abstract class ContainableModelElement extends ModelElement implements ID
         return namespace;
     }
     
-    /**
-     * Returns the qualified name of this element.
-     * 
-     * @return the qualified name
-     */
+    @Override
     public String getQualifiedName() {
         String result = getNameSpace();
         if (result.length() > 0) {
@@ -123,9 +115,7 @@ public abstract class ContainableModelElement extends ModelElement implements ID
         this.parent = parent;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void accept(IDatatypeVisitor visitor) {
         //do nothing
     }

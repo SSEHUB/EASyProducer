@@ -42,44 +42,32 @@ class ProjectType implements IDatatype {
         this.project = project;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public String getName() {
         return this.project.getName();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public String getNameSpace() {
         return this.project.getNameSpace();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public String getQualifiedName() {
         return this.project.getQualifiedName();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public String getUniqueName() {
         return this.project.getUniqueName();
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public CustomOperation getOperation(int index) {
         return operationList.get(index);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public int getOperationCount() {
         return operationList.size();
     }
@@ -103,65 +91,47 @@ class ProjectType implements IDatatype {
         return operationList.remove(operation);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public boolean isAssignableFrom(IDatatype type) {
         return null != type && getClass().isAssignableFrom(type.getClass());
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public Class<? extends IDatatype> getTypeClass() {
         return ProjectType.class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public IDatatype getGenericType(int index) {
         throw new IndexOutOfBoundsException();
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public int getGenericTypeCount() {
         return 0;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void accept(IDatatypeVisitor visitor) {
         visitor.visitDatatype(this);
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public final InternalConstraint[] createConstraints(AbstractVariable declaration) {
         return null;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public boolean isPseudoType() {
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public IDatatype getType() {
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public boolean isPrimitive() {
         return false;
     }

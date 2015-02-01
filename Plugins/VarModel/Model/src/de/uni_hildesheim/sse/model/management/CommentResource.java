@@ -137,9 +137,7 @@ public class CommentResource {
         return mapping.containsKey(key);
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public String toString() {
         return mapping.toString();
     }

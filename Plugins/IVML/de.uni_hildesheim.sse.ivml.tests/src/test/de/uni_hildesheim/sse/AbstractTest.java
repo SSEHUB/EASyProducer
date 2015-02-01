@@ -21,7 +21,6 @@ import de.uni_hildesheim.sse.model.validation.IvmlValidationVisitor;
 import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
-import de.uni_hildesheim.sse.reasoning.core.importResolver.ReasoningImportResolver;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
 import de.uni_hildesheim.sse.utils.modelManagement.Version;
@@ -46,7 +45,6 @@ public abstract class AbstractTest extends de.uni_hildesheim.sse.dslCore.test.Ab
     @BeforeClass
     public static void startUp() {
         try {
-            ReasoningImportResolver.registerAsTopResolver();
             resourceInitialization();
             VarModel.INSTANCE.locations().addLocation(TESTDATA_DIR, OBSERVER);
             VarModel.INSTANCE.loaders().registerLoader(ModelUtility.INSTANCE, OBSERVER);

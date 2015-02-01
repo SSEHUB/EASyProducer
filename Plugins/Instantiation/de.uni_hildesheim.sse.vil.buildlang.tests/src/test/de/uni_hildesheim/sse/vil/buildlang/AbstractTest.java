@@ -3,6 +3,7 @@ package test.de.uni_hildesheim.sse.vil.buildlang;
 import java.io.CharArrayWriter;
 import java.io.File;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Scr
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.Executor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.TracerFactory;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionParserRegistry;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Project;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
@@ -49,7 +51,7 @@ public abstract class AbstractTest extends de.uni_hildesheim.sse.dslCore.test.Ab
         furtherInitialization();
         registerTypeAnyway(TouchInstantiator.class);
         registerTypeAnyway(VelocityInstantiator.class);
-        BuildlangExecution.setExpressionParser(new VilExpressionParser());
+        ExpressionParserRegistry.setExpressionParser(BuildlangExecution.LANGUAGE, new VilExpressionParser());
         try {
             VarModel.INSTANCE.loaders().registerLoader(ModelUtility.INSTANCE, OBSERVER);
             BuildModel.INSTANCE.loaders().registerLoader(BuildLangModelUtility.INSTANCE, OBSERVER);
@@ -164,6 +166,19 @@ public abstract class AbstractTest extends de.uni_hildesheim.sse.dslCore.test.Ab
     }
 
     /**
+     * Called to clean up artifacts between two subsequent executions.
+     * 
+     * @author Holger Eichelberger
+     */
+    protected interface Cleaner {
+
+        /**
+         * Now clean up.
+         */
+        public void deleteBetween();
+    }
+
+    /**
      * Asserts equality of the models and the parsed/analyzed result, i.e. it
      * reads <code>file</code> as a model, analyzes it, compares the obtained
      * errors with <code>expectedErrorCodes</code>, compares the contents of
@@ -176,16 +191,32 @@ public abstract class AbstractTest extends de.uni_hildesheim.sse.dslCore.test.Ab
      *   multiple times need to be listed multiple times here)
      * @throws IOException problems finding or reading the model file
      */
-    protected void assertEqual(EqualitySetup data, int... expectedErrorCodes)
+    protected void assertEqual(EqualitySetup data, int... expectedErrorCodes) throws IOException {
+        assertEqual(data, null, expectedErrorCodes);
+    }
+
+    /**
+     * Asserts equality of the models and the parsed/analyzed result, i.e. it
+     * reads <code>file</code> as a model, analyzes it, compares the obtained
+     * errors with <code>expectedErrorCodes</code>, compares the contents of
+     * <code>file</code> with the printed (analyzed) model and checks the
+     * project information directly obtained from file or cached in the model
+     * management.
+     * 
+     * @param data the data describing the setup
+     * @param cleaner an optional cleaner instance
+     * @param expectedErrorCodes the expected and allowed error codes (errors occurring
+     *   multiple times need to be listed multiple times here)
+     * @throws IOException problems finding or reading the model file
+     */
+    protected void assertEqual(EqualitySetup data, Cleaner cleaner, int... expectedErrorCodes)
         throws IOException {
         File file = data.getFile();
         if (file.exists()) {
             URI uri = URI.createFileURI(file.getAbsolutePath());
-
             // parse the model
             TranslationResult<Script> result = BuildLangModelUtility.INSTANCE.parse(uri);
             List<Message> messages = result.getMessageListSpecific();
-            
             Assert.assertTrue("no result produced: " + toString(messages), result.getResultCount() > 0);
             if (0 == result.getErrorCount()) {
                 // read model file into memory
@@ -200,11 +231,10 @@ public abstract class AbstractTest extends de.uni_hildesheim.sse.dslCore.test.Ab
                 assertNamingAndVersion(data, result);
             }
             Assert.assertTrue("currently multiple scripts are not handled", 1 == result.getResultCount());
-            
             File expectedTrace = data.getExpectedTrace();
             if (null != expectedTrace && 0 == result.getErrorCount()) {
-                java.io.CharArrayWriter trace = new CharArrayWriter();
-                // TODO handle multiple
+                Writer trace = new CharArrayWriter();
+                // for debugging insert DelegatingSysoutWriter here
                 try {
                     String fileAsString = file2String(expectedTrace);
                     Assert.assertTrue(null != fileAsString);
@@ -231,6 +261,9 @@ public abstract class AbstractTest extends de.uni_hildesheim.sse.dslCore.test.Ab
                     }
                     Assert.assertNull(errorMsg, errorMsg);
                     
+                    if (null != cleaner) {
+                        cleaner.deleteBetween();
+                    }
                     // do the same via the executor
                     testExecutor(result.getResult(0), data);
                 } catch (VilLanguageException e) {

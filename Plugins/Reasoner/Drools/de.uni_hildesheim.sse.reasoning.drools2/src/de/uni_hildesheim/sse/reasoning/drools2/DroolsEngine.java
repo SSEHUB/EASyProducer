@@ -19,12 +19,12 @@ import org.drools.io.Resource;
 import org.drools.io.ResourceFactory;
 import org.drools.runtime.StatefulKnowledgeSession;
 
+import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.model.varModel.ModelElement;
 import de.uni_hildesheim.sse.persistency.StringProvider;
 import de.uni_hildesheim.sse.reasoning.core.model.ReasonerModel;
 import de.uni_hildesheim.sse.reasoning.core.model.ReasoningOperation;
 import de.uni_hildesheim.sse.reasoning.core.model.ReasoningState;
-import de.uni_hildesheim.sse.reasoning.core.model.PerformanceStatistics;
 import de.uni_hildesheim.sse.reasoning.core.model.variables.CompoundVariable;
 import de.uni_hildesheim.sse.reasoning.core.model.variables.ReasonerVariable;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.Message;
@@ -219,9 +219,17 @@ public class DroolsEngine {
         /*** Finish result creation ***/
 //        Statistic.addTimestamp(reasoningID, System.currentTimeMillis());
         /*** Finish measurement ***/
-        PerformanceStatistics.getStats(reasoningID);   
-        PerformanceStatistics.clearReasoningID(reasoningID);
+//        PerformanceStatistics.getStats(reasoningID);   
+//        PerformanceStatistics.clearReasoningID(reasoningID);
         /*** ***/
+        for (IDecisionVariable variable : rModel.getConfiguration()) {
+            System.out.println(variable.getDeclaration() 
+                    + " : "
+                    + variable.getState().toString()
+                    + " : " 
+                    + variable.getValue());
+        }        
+    
         return result;
     }
 

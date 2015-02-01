@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <description url="http://projects.sse.uni-hildesheim.de/easy">
+      Nightly Build of EASy-Producer 2.0
+   </description>
+   <feature url="features/EASyNightly.jar" id="EASy.Nightly.Feature" version="0.0.0">
+      <category name="EASy.Nightly"/>
+   </feature>
+   <category-def name="EASy.Nightly" label="EASy Nightly"/>
+</site>

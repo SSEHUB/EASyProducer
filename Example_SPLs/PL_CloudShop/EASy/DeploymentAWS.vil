@@ -1,0 +1,94 @@
+@advice(PL_CloudShop)
+vilScript DeploymentAWS(Project source, Configuration config, Project target) {
+	version v0;
+	
+	//getStringValue liefert null!?
+	String amiID = config.getByName("amiID").getValue();
+	String plName = target.getName();
+	String jarName = target.getName().toLowerCase() + "-store.jar";
+	Boolean createNewInstance = config.getByName("createNewInstance").getValue();
+	String instanceID = config.getByName("instanceID").getValue();
+	String accessKey = config.getByName("accesskey").getValue();
+	String secretKey = config.getByName("secretkey").getValue();
+	Path pathToKeyFile = config.getByName("pathToKeyFile").getValue();
+	//Launchfile hart codieren? 
+	
+	//ssenewkey als Variable? > ursprüngliches Problem
+	String create = "call ec2run "+amiID+" -n 1 -t t1.micro -availability-zone us-east-1b -aws-access-key "+accessKey+
+		" -aws-secret-key "+secretKey+" -k %ssenewkey% -g quick-start-1 > newInstance.file";
+	String readIP = "call ec2-describe-instances -aws-access-key "+accessKey+" -aws-secret-key "+secretKey+" > tmp.file";
+	//Zugriff auf IP möglich? // Auslagern in skript?
+	String update = "plink -ssh -i "+pathToKeyFile+" ubuntu@!ip! sudo apt-get update";
+	String ip = "!ip! > ip.file";
+	
+	
+	newInstanceCheck() = : {
+		if(createNewInstance == true){
+			
+		}else if(createNewInstance == false) {
+			createInstance();
+		}else {
+			
+		}
+		
+	}
+	
+	createInstance() = : newInstanceCheck() {
+		execute create();		
+	}
+	
+	readingInstanceID() = : {
+			String find = "findstr \"INSTANCE\" newInstance.file > newInstance2.file";
+			execute find();
+			/* :readingInstanceID
+			@echo off
+			
+			findstr "INSTANCE" newInstance.file > newInstance2.file
+			
+			::Zunächst ist es notwendig die Instanz-ID der neuen Instanz auszulesen
+			set /p file=<newInstance2.file
+			SETLOCAL ENABLEDELAYEDEXPANSION 
+			for %%a in (%file%) do (
+			
+				set instanceID=%%a
+				set var2=!instanceID:~0,2!
+			
+				@echo off
+				if "!var2!"=="i-" (
+					echo %instanceID% > instanceID.file
+					goto readingIP
+				)
+			)*/
+	}
+	readingIP() = :readingInstanceID() {
+		execute readIP();
+		/*findstr "INSTANCE.*!instanceID!" tmp.file > tmp2.file
+		set /p file=<tmp2.file
+		
+		SETLOCAL ENABLEDELAYEDEXPANSION 
+		for %%a in (%file%) do (
+		
+			set ip=%%a
+			set var2=!ip:~0,3!
+		
+			if "!var2!"=="ec2" (
+				echo [INFO] IP gefunden !
+				echo Warten bis Instanz hoch gefahren wird....
+				@ping -n 40 localhost> nul
+				goto installation
+			)
+			
+			if "!var2!"=="def" (
+				echo [INFO] Noch keine IP vorhanden. Warten bis IP vollständig zugewiesen wurde...
+				@ping -n 5 localhost> nul
+				goto readingIP
+			)
+		) */
+	
+	}
+	
+	installation() = : {
+		execute ip();
+		execute update();
+	}
+}

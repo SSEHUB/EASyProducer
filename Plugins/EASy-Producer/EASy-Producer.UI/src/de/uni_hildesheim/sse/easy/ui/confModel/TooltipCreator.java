@@ -19,6 +19,7 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Sequence;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Set;
 import de.uni_hildesheim.sse.model.varModel.datatypes.StringType;
+import de.uni_hildesheim.sse.model.varModel.datatypes.VersionType;
 import de.uni_hildesheim.sse.persistency.StringProvider;
 
 /**
@@ -154,6 +155,11 @@ class TooltipCreator implements IDatatypeVisitor {
             tooltip.append(" = ");
             tooltip.append(literal.getOrdinal());
         }
+    }
+
+    @Override
+    public void visitVersionType(VersionType type) {
+        // Not needed as variables actually cannot have this type
     }
 
 }

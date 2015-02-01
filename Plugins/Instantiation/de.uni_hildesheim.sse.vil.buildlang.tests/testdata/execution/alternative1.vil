@@ -1,0 +1,12 @@
+vilScript alternatives1 () {
+
+    main() = : {
+        Integer i1 = 0;
+        Boolean b1 = true;
+        if (b1) i1 = i1 + 1;
+        if (b1) i1 = i1 + 1; else i1 = i1 - 1;
+        if (!b1) i1 = i1 + 1;
+        if (!b1) i1 = i1 + 1; else i1 = i1 - 1;
+    }
+
+}

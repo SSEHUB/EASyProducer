@@ -62,11 +62,39 @@ public class ContainerOperations {
                     result = null;
                 }
             } else {
-                operand.getContext().addErrorMessage("operand is no Container");
+                if (null != opValue) { // undefined is ok
+                    operand.getContext().addErrorMessage("operand is no Container");
+                }
                 result = null;
             }
             return result;
         }
+    };
+    
+    /**
+     * Implements the "add" operation.
+     */
+    static final IOperationEvaluator ADD = new IOperationEvaluator() {
+
+        @Override
+        public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
+            EvaluationAccessor result = null;
+            if (1 == arguments.length) {
+                Value oValue = operand.getValue();
+                Value aValue = arguments[0].getValue();
+                if (oValue instanceof ContainerValue && null != aValue) {
+                    ContainerValue cont = (ContainerValue) oValue;
+                    try {
+                        cont.addElement(aValue);
+                        result = ConstantAccessor.POOL.getInstance().bind(aValue, operand.getContext());
+                    } catch (ValueDoesNotMatchTypeException e) {
+                        // result -> null
+                    }
+                }
+            }
+            return result;
+        }
+
     };
 
     /**
@@ -131,9 +159,7 @@ public class ContainerOperations {
             this.reject = reject;
         }
         
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
             EvaluationAccessor result = null;
             if (1 == arguments.length) {
@@ -184,9 +210,7 @@ public class ContainerOperations {
             this.mult = mult;
         }
         
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
             EvaluationAccessor result = null;
             Value opValue = operand.getValue();
@@ -240,6 +264,7 @@ public class ContainerOperations {
      */
     static final IOperationEvaluator AS_SET = new IOperationEvaluator() {
         
+        @Override
         public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
             return convert(operand, Set.TYPE);
         }
@@ -251,6 +276,7 @@ public class ContainerOperations {
      */
     static final IOperationEvaluator AS_SEQUENCE = new IOperationEvaluator() {
         
+        @Override
         public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
             return convert(operand, Sequence.TYPE);
         }
@@ -258,6 +284,7 @@ public class ContainerOperations {
     
     static final IOperationEvaluator MIN = new IOperationEvaluator() {
         
+        @Override
         public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
             return min(operand, arguments);
         }
@@ -265,6 +292,7 @@ public class ContainerOperations {
     
     static final IOperationEvaluator MAX = new IOperationEvaluator() {
         
+        @Override
         public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
             return max(operand, arguments);
         }
@@ -320,9 +348,7 @@ public class ContainerOperations {
             this.op = op;
         }
         
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
             EvaluationAccessor result = null;
             if (1 == arguments.length) {
@@ -359,9 +385,7 @@ public class ContainerOperations {
             this.op = op;
         }
 
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
             EvaluationAccessor result = null;
             if (1 == arguments.length) {
@@ -418,9 +442,7 @@ public class ContainerOperations {
             this.negate = negate;
         }
         
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
             EvaluationAccessor result = null;
             if (1 == arguments.length) {
@@ -488,9 +510,7 @@ public class ContainerOperations {
             this.negate = negate;
         }
         
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
             EvaluationAccessor result = null;
             Value oValue = operand.getValue();

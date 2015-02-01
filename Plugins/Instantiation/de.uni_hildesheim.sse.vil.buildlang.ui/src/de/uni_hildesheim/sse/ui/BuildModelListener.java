@@ -1,30 +1,14 @@
 package de.uni_hildesheim.sse.ui;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintWriter;
 import java.net.URI;
-import java.net.URISyntaxException;
 
-import org.eclipse.emf.common.util.BasicDiagnostic;
-import org.eclipse.emf.ecore.util.Diagnostician;
-import org.eclipse.xtext.resource.XtextResource;
-import org.eclipse.xtext.ui.editor.model.IXtextDocument;
-import org.eclipse.xtext.util.concurrent.IUnitOfWork;
-
-import de.uni_hildesheim.sse.BuildLangModelUtility;
-import de.uni_hildesheim.sse.VilBundleId;
-import de.uni_hildesheim.sse.dslCore.TranslationResult;
-import de.uni_hildesheim.sse.dslCore.validation.ValidationUtils;
 import de.uni_hildesheim.sse.dslcore.ui.editors.AbstractModelChangeListener;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
 import de.uni_hildesheim.sse.utils.modelManagement.IModel;
 import de.uni_hildesheim.sse.utils.modelManagement.IModelListener;
 import de.uni_hildesheim.sse.utils.modelManagement.IModelReloadListener;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
-import de.uni_hildesheim.sse.vilBuildLanguage.ImplementationUnit;
 
 /**
  * A <code>de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script</code>
@@ -50,27 +34,18 @@ public class BuildModelListener extends AbstractModelChangeListener implements I
         isListening = false;
     }
     
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void notifyReplaced(Script oldModel, Script newModel) {
         //System.out.println("[BuildModelListener] Notify replaced: " + this);
         updateRegisteredEditor();
     }
     
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void notifyReloadFailed(Script model) {
         //System.out.println("[BuildModelListener] Notify reload failed: " + this);
         updateRegisteredEditor();
     }
     
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void unregister() {
         if (xtextEditor != null && underlyingModel != null) {
@@ -82,9 +57,6 @@ public class BuildModelListener extends AbstractModelChangeListener implements I
         }
     }
     
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected boolean registerToUnderlyingModel(IModel underlyingModel) {
         boolean registerSuccessful = false;
@@ -98,9 +70,6 @@ public class BuildModelListener extends AbstractModelChangeListener implements I
         return registerSuccessful;
     }
     
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected IModel getUnderlyingModel(URI modelFileUri, boolean forceBuild) {
         IModel vilScript = null;
@@ -122,52 +91,4 @@ public class BuildModelListener extends AbstractModelChangeListener implements I
         return vilScript;
     }
     
-    /**
-     * Parses the <code>de.uni_hildesheim.sse.vilBuildLanguage.ImplementationUnit</code> which is defined in
-     * the <code>org.eclipse.xtext.ui.editor.model.IXtextDocument</code> of the registered
-     * <code>de.uni_hildesheim.sse.ui.XtextEditor</code> instance.
-     * 
-     * <b>Important:</b> Use this method if and only if the desired
-     * <code>de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script</code> instance is
-     * not available via <code>BuildModel.INSTANCE.availableModels()</code>.
-     * 
-     * <b>Note:</b> The code of this method is copied from <code>de.uni_hildesheim.sse.ui.XtextEditor.onSave()</code>.
-     * 
-     * @param doc the <code>org.eclipse.xtext.ui.editor.model.IXtextDocument</code> of the registered
-     * <code>de.uni_hildesheim.sse.ui.XtextEditor</code> instance
-     */
-    private void buildModel(IXtextDocument doc) {
-        if (doc != null) {
-            doc.readOnly(new IUnitOfWork<ImplementationUnit, XtextResource>() {
-                public ImplementationUnit exec(XtextResource resource) {
-                    ImplementationUnit root = (ImplementationUnit) resource.getContents().get(0);
-                    EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(getClass(), VilBundleId.ID);
-                    try {
-                        BasicDiagnostic diagnostic = Diagnostician.INSTANCE.createDefaultDiagnostic(root);
-                        java.net.URI uri = null;
-                        if (null != resource.getURI()) {
-                            try {
-                                uri = BuildLangModelUtility.toNetUri(resource.getURI());
-                            } catch (URISyntaxException e) {
-                                logger.error("error translating '" + resource.getURI() + "' while saving:" 
-                                    + e.getMessage());
-                            }
-                        }
-                        TranslationResult<Script> result = BuildLangModelUtility.INSTANCE.createBuildModel(root, uri, true);
-                        if (0 == result.getMessageCount()) {
-                            ByteArrayOutputStream out = new ByteArrayOutputStream();
-                            PrintWriter pOut = new PrintWriter(out);
-                            BuildLangModelUtility.INSTANCE.print(result, pOut, true, false);
-                            logger.info(out.toString());
-                        } else {
-                            ValidationUtils.processMessages(result, diagnostic);
-                        }
-                    } catch (Exception e) {
-                        logger.exception(e);
-                    }
-                    return root;
-                }
-            });        
-        }
-    }
 }

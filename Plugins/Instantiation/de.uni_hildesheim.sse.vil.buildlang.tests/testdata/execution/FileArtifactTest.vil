@@ -1,0 +1,10 @@
+vilScript FileArtifactTest (Project source, Configuration config, Project target) {
+
+    main(Project source, Configuration config, Project target) = : {
+        Path MappingPath = "$target/Mapping.tmp";
+        FileArtifact artifact = MappingPath;
+        Text artifactText = artifact.getText();
+        artifactText.append("<pipeline name=\"pipTSI\">");
+    }
+
+}

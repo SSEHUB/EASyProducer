@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Model.persistency.Test
+Bundle-SymbolicName: Model.persistency.Test
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: University of Hildesheim - SSE
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Require-Bundle: de.uni-hildesheim.sse.easy.instantiatorCore,
+ de.uni_hildesheim.sse.varModel.persistency,
+ de.uni_hildesheim.sse.utils,
+ de.uni_hildesheim.sse.varModel,
+ de.uni_hildesheim.sse.vil.buildlang,
+ de.uni_hildesheim.sse.ivml;bundle-version="0.10.2",
+ org.junit,
+ de.uni_hildesheim.sse.vil.templatelang,
+ de.uni_hildesheim.sse.easy_producer.core,
+ org.apache.commons.io,
+ de.uni_hildesheim.sse.easy.instantiator.java;bundle-version="0.2.2"

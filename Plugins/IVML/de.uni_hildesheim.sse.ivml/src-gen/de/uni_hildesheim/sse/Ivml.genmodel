@@ -36,6 +36,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//TypedefEnumLiteral/value"/>
     </genClasses>
     <genClasses ecoreClass="Ivml.ecore#//TypedefCompound">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//TypedefCompound/abstract"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//TypedefCompound/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//TypedefCompound/super"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//TypedefCompound/elements"/>
@@ -86,17 +87,13 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//Value/sValue"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Value/qValue"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//Value/bValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//Value/self"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//Value/nullValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//Value/version"/>
     </genClasses>
     <genClasses ecoreClass="Ivml.ecore#//DerivedType">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//DerivedType/op"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//DerivedType/type"/>
-    </genClasses>
-    <genClasses ecoreClass="Ivml.ecore#//DslContext">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//DslContext/stop"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//DslContext/escape"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//DslContext/command"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//DslContext/dsl"/>
     </genClasses>
     <genClasses ecoreClass="Ivml.ecore#//AttributeTo">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//AttributeTo/attributeType"/>
@@ -133,16 +130,11 @@
     <genClasses ecoreClass="Ivml.ecore#//ImportStmt">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//ImportStmt/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//ImportStmt/interface"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//ImportStmt/versions"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//ImportStmt/restriction"/>
     </genClasses>
     <genClasses ecoreClass="Ivml.ecore#//ConflictStmt">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//ConflictStmt/name"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//ConflictStmt/conflicts"/>
-    </genClasses>
-    <genClasses ecoreClass="Ivml.ecore#//VersionedId">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//VersionedId/name"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//VersionedId/op"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//VersionedId/version"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//ConflictStmt/restriction"/>
     </genClasses>
     <genClasses ecoreClass="Ivml.ecore#//VersionStmt">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//VersionStmt/version"/>
@@ -168,7 +160,6 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Expression/let"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Expression/expr"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Expression/collection"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Expression/dsl"/>
     </genClasses>
     <genClasses ecoreClass="Ivml.ecore#//LetExpression">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//LetExpression/type"/>

@@ -69,16 +69,12 @@ public class BooleanType extends BasisDatatype {
         super("Boolean", AnyType.BOOLEAN_TYPE);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void accept(IDatatypeVisitor visitor) {
         visitor.visitBooleanType(this);
     }
     
-    /**
-    * {@inheritDoc}
-    */
+    @Override
     public boolean isAssignableFrom(IDatatype type) {
         // enable boolean assignments as constraints are handled as Boolean expressions
         return super.isAssignableFrom(type) || ConstraintType.TYPE.isAssignableFrom(type);

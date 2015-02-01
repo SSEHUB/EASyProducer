@@ -122,9 +122,7 @@ public class ContainerValue extends StructuredValue implements Cloneable {
         super(container);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public IDatatype getContainedType() {
         IDatatype type = getType();
         if (1 == type.getGenericTypeCount()) {
@@ -164,11 +162,11 @@ public class ContainerValue extends StructuredValue implements Cloneable {
         StringBuffer str = new StringBuffer();
         str.append("{");
         for (int i = 0; i < nestedElements.size() - 1; i++) {
-            str.append(getElement(i).getValue());
+            str.append(getElement(i));
             str.append(", ");
         }
         if (!nestedElements.isEmpty()) {
-            str.append(getElement(nestedElements.size() - 1).getValue());
+            str.append(getElement(nestedElements.size() - 1));
         }
         str.append("}");
         return str.toString();
@@ -246,9 +244,7 @@ public class ContainerValue extends StructuredValue implements Cloneable {
         
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public Value clone() {
         ContainerValue clonedValue = (ContainerValue) super.clone();
         clonedValue.nestedElements = new ArrayList<Value>();
@@ -406,6 +402,40 @@ public class ContainerValue extends StructuredValue implements Cloneable {
             }
         }
     }
+
+    /**
+     * Adds a <code>value</code> at the position <code>pos</code>.
+     * 
+     * @param pos the position after which <code>value</code> shall be added
+     * @param value the value to be added
+     * @throws ValueDoesNotMatchTypeException in case that the type of <code>value</code>
+     *   does not match the container type of the containers or that index shall be applied to a set
+     * @throws IndexOutOfBoundsException in case that pos is invalid
+     */
+    public void addElement(int pos, Value value) throws ValueDoesNotMatchTypeException {
+        if (isSetValue()) {
+            throw new ValueDoesNotMatchTypeException("no index access for sets", 
+                ValueDoesNotMatchTypeException.NOT_ALLOWED_VALUE_STRUCTURE);
+        }
+        checkContainedType(value);
+        nestedElements.add(pos, value);
+    }
+
+    /**
+     * Checks whether <code>value</code> is type compliant with the {@link #getContainedType()}.
+     * 
+     * @param value the value to check for
+     * @throws ValueDoesNotMatchTypeException in case that the type of <code>value</code>
+     *   does not match the container type of the containers
+     */
+    private void checkContainedType(Value value) throws ValueDoesNotMatchTypeException {
+        if (!getContainedType().isAssignableFrom(value.getType())) {
+            throw new ValueDoesNotMatchTypeException("cannot assign value of type '" 
+                + IvmlDatatypeVisitor.getQualifiedType(value.getType()) + "' to '"
+                + IvmlDatatypeVisitor.getQualifiedType(getContainedType()) + "'", 
+                ValueDoesNotMatchTypeException.TYPE_MISMATCH);
+        }
+    }
     
     /**
      * Adds an element to this container. Shall only be called during dynamic execution.
@@ -415,13 +445,46 @@ public class ContainerValue extends StructuredValue implements Cloneable {
      *   does not match the container type of the containers
      */
     public void addElement(Value value) throws ValueDoesNotMatchTypeException {
-        if (!getContainedType().isAssignableFrom(value.getType())) {
-            throw new ValueDoesNotMatchTypeException("cannot assign value of type '" 
-                + IvmlDatatypeVisitor.getQualifiedType(value.getType()) + "' to '"
-                + IvmlDatatypeVisitor.getQualifiedType(getContainedType()) + "'", 
-                ValueDoesNotMatchTypeException.TYPE_MISMATCH);
+        checkContainedType(value);
+        boolean add = true;
+        if (isSetValue()) {
+            // a set would be faster!
+            add = !nestedElements.contains(value);
         }
-        nestedElements.add(value);
+        if (add) {
+            nestedElements.add(value);
+        }
     }
     
+    /**
+     * Removes a value from this container.
+     * 
+     * @param value the value to be removed
+     */
+    public void removeElement(Value value) {
+        nestedElements.remove(value);
+    }
+
+    /**
+     * Removes a value from this container.
+     * 
+     * @param index the index position of the value to be removed
+     * @throws IndexOutOfBoundsException in case that the index is illegal
+     */
+    public void removeElement(int index) {
+        nestedElements.remove(index);
+    }
+
+    @Override
+    public boolean equalsPartially(Value value) {
+        return equals(value); // meta type value is symmetric as a new value must provide all values
+    }
+    
+    /**
+     * Clears all elements.
+     */
+    public void clear() {
+        nestedElements.clear(); 
+    }
+
 }

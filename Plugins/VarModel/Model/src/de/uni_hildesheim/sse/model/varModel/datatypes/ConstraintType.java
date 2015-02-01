@@ -59,16 +59,12 @@ public class ConstraintType extends BasisDatatype {
         super("Constraint", AnyType.CONSTRAINT_TYPE);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void accept(IDatatypeVisitor visitor) {
         visitor.visitConstraintType(this); 
     }
     
-    /**
-    * {@inheritDoc}
-    */
+    @Override
     public boolean isAssignableFrom(IDatatype type) {
         // enable boolean assignments as constraints are handled as Boolean expressions
         return super.isAssignableFrom(type) || BooleanType.TYPE.equals(type);

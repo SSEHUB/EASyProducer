@@ -16,6 +16,10 @@
 package de.uni_hildesheim.sse.model.cstEvaluation;
 
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
+import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
+import de.uni_hildesheim.sse.model.varModel.values.Value;
+import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
+import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
 
 /**
  * An accessor based on a decision variable.
@@ -39,16 +43,12 @@ abstract class AbstractDecisionVariableEvaluationAccessor extends EvaluationAcce
         return this;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void clear() {
         variable = null;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public IDecisionVariable getVariable() {
         return variable;
     }
@@ -58,6 +58,33 @@ abstract class AbstractDecisionVariableEvaluationAccessor extends EvaluationAcce
      */
     protected void notifyVariableChange() {
         getContext().notifyChangeListener(getVariable());
+    }
+
+    @Override
+    public Value getReferenceValue() {
+        Value result;
+        try {
+            result = ValueFactory.createValue(Reference.TYPE, variable);
+        } catch (ValueDoesNotMatchTypeException e) {
+            result = null;
+        }
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return null == variable ? "null" : variable.getDeclaration().getName();
+    }
+    
+    /**
+     * Returns whether this accessor denotes a local variable.
+     * 
+     * @return <code>true</code> if it is a local variable, <code>false</code> else
+     */
+    public boolean isLocal() {
+        // storing this as a separate attribute would require state takeover among accessors
+        // sub-variables of LocalDecisionVariables are also LocalDecisionVariables
+        return variable instanceof LocalDecisionVariable; 
     }
 
 }

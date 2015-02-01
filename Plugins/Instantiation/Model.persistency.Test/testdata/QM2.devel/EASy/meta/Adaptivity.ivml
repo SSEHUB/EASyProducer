@@ -1,0 +1,11 @@
+project Adaptivity {
+
+    import Basics;
+	 
+	attribute BindingTime bindingTime = BindingTime.compile to Adaptivity;
+
+	assign(bindingTime = BindingTime.runtime) to {
+		Integer updateFrequency = 1000; // in milliseconds
+	}
+	
+}           

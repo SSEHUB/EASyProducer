@@ -1,0 +1,14 @@
+project Infrastructure {
+	
+    import Basics;
+	import Hardware;
+	import ReconfigurableHardware;
+	import Families;
+	import Observables;
+	import Adaptivity;
+	import Pipelines; 
+
+	attribute BindingTime bindingTime = BindingTime.compile to Infrastructure;
+	
+	setOf(refTo(Pipeline)) activePipelines;
+}  

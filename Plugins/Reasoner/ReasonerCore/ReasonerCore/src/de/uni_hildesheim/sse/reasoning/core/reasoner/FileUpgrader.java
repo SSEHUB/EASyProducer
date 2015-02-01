@@ -30,9 +30,7 @@ public class FileUpgrader extends IUpgrader {
         super(source, dest, files, marker, observer);
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public ReasoningResult upgrade() {
         ReasoningResult result = new ReasoningResult();
         if (!doUpgrade(result)) {

@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import de.uni_hildesheim.sse.Bundle;
 import de.uni_hildesheim.sse.model.cst.AttributeVariable;
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
 import de.uni_hildesheim.sse.model.cst.CompoundAccess;
@@ -30,8 +31,11 @@ import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.Attribute;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
+import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
+import de.uni_hildesheim.sse.model.varModel.ExpressionVersionRestriction;
 import de.uni_hildesheim.sse.model.varModel.FreezeBlock;
 import de.uni_hildesheim.sse.model.varModel.IFreezable;
+import de.uni_hildesheim.sse.model.varModel.IvmlKeyWords;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.ProjectImport;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
@@ -46,8 +50,11 @@ import de.uni_hildesheim.sse.model.varModel.values.StringValue;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
 import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
 import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
+import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
+import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
+import de.uni_hildesheim.sse.utils.modelManagement.IVersionRestriction;
+import de.uni_hildesheim.sse.utils.modelManagement.RestrictionEvaluationException;
 import de.uni_hildesheim.sse.utils.modelManagement.Version;
-import de.uni_hildesheim.sse.utils.modelManagement.VersionRestriction;
 
 /**
  * This method is part of the configuration and responsible for saving the values of the configuration
@@ -58,7 +65,9 @@ import de.uni_hildesheim.sse.utils.modelManagement.VersionRestriction;
  * @author Holger Eichelberger
  */
 public class ConfigurationSaver {
-    
+
+    private static final EASyLogger LOGGER = EASyLoggerFactory.INSTANCE.getLogger(ConfigurationSaver.class, Bundle.ID);
+
     /**
      * this configuration, which should be saved.
      */
@@ -120,14 +129,8 @@ public class ConfigurationSaver {
         if (ownProject) {
             destProject = createProject(srcConfiguration);
             Version ver = srcConfiguration.getProject().getVersion();
-            VersionRestriction[] restrictions;
             if (null != ver) {
                 destProject.setVersion(ver);
-                restrictions = new VersionRestriction[1];
-                restrictions[0] = new VersionRestriction(srcConfiguration.getProject().getName(), 
-                    VersionRestriction.Operator.EQUALS, ver);
-            } else {
-                restrictions = null;
             }
             addVersion(destProject, srcConfiguration);
             addImports(destProject, srcConfiguration);
@@ -214,14 +217,22 @@ public class ConfigurationSaver {
      */
     protected void addImports(Project destProject, Configuration srcConfiguration) {
         Version ver = srcConfiguration.getProject().getVersion();
-        VersionRestriction[] restrictions;
+        IVersionRestriction restrictions = null;
         if (null != ver) {
-            restrictions = new VersionRestriction[1];
-            restrictions[0] = new VersionRestriction(srcConfiguration.getProject().getName(), 
-                VersionRestriction.Operator.EQUALS, ver);
-        } else {
-            restrictions = null;
-        }
+            try {
+                DecisionVariableDeclaration[] vars = ExpressionVersionRestriction.createRestrictionVars(
+                    srcConfiguration.getProject().getName());
+                ConstraintSyntaxTree expr = ExpressionVersionRestriction.createSingleRestriction(vars[1], 
+                    IvmlKeyWords.EQUALS, ver);
+                restrictions = new ExpressionVersionRestriction(expr, vars[0], vars[1]);
+            } catch (RestrictionEvaluationException e) {
+                LOGGER.exception(e);
+            } catch (CSTSemanticException e) {
+                LOGGER.exception(e);
+            } catch (ValueDoesNotMatchTypeException e) {
+                LOGGER.exception(e);
+            }   
+        } 
         destProject.addImport(
             new ProjectImport(srcConfiguration.getProject().getName(), null, false, false, restrictions));
     }

@@ -1,0 +1,606 @@
+@advice(PL_CloudShop)
+template DeploymentScriptTemplate(Configuration config, FileArtifact target, String plName, String jarName, String onScriptsPath) {
+	def test () {
+		String test;
+		
+    }
+	def main(Configuration config, FileArtifact deploymentBat, String plName, String jarName, String onScriptsPath) {
+		if (config.getByName("PL_CloudShop::platform").getValue() == "AmazonWebService") {
+			createAmazonWebServiceScript(config.getByName("PL_CloudShop::amazonWebServiceConfig"), plName, jarName);
+		} else {
+			createOpenNebulaScript(config.getByName("PL_CloudShop::openNebulaConfig"), plName, jarName, onScriptsPath);
+		}
+	}
+	
+	def createAmazonWebServiceScript(DecisionVariable awsConfig, String plName, String jarName) {
+		'
+		::Skript für das automatische Deployment einer SCA-basierten Anwendung in die Cloud
+		
+		
+		@echo off
+		:: AWS Variablen
+		
+		::AMI-ID der zu erstellenden Cloud. e.g. "ami-82fa58eb"
+		set amiID="${awsConfig.getByName("amiID").value()}"
+		
+		::Erstellen einer neuen Instanz? Falls false -> instanceID muss gesetzt sein. e.g. true | false
+		set createNewInstance="${awsConfig.getByName("createNewInstance").value()}"
+
+		::ID der Instanz in der Cloud. e.g "i-0449677c"
+		'
+
+		if (awsConfig.getByName("createNewInstance").getValue()) {
+			'
+		    set instanceID=""
+            '
+		} else {
+            '
+		    set instanceID="${awsConfig.getByName("instanceID").value()}"
+            '
+		}
+		
+		'
+		::AWS-Access-Key
+		set accessKey="${awsConfig.getByName("accesskey").value()}"
+		
+		::AWS-Secret-Key
+		set secretKey="${awsConfig.getByName("secretkey").value()}"
+		
+		::Pfad zum privaten Schlüssel. e.g. "G:\\Amazon Web Services\\sse-key\\___AccessKeys___\\ssekey.ppk"
+		set pathToKeyFile="${awsConfig.getByName("pathToKeyFile").value()}"
+		
+		::JAR-Name.e.g. hallo.jar
+		set jarName="${jarName}"
+		
+		::Path to Launch-File in Service. e.g. launch.Launch
+		set launchFile=launch.Launch
+		
+		::PL-Name
+		set plName="${plName}"
+		
+		
+		::Abfrage, ob eine neue Instanz erstellt werden soll
+		@echo -------------------------------------------------
+		@echo.
+		@echo [INFO] Soll eine neue Instanz erstellt werden...?
+		@echo.
+		@echo -------------------------------------------------
+		::Abfrage ob eine neue Instanz erstellt werden soll
+		@echo off
+		if %createNewInstance%=="true" (
+			@echo off
+			goto createNewInstance
+		) else (
+			echo -------------------------------------------------
+			@echo.
+			echo [INFO] Es soll eine vorhandene Instanz benutzt werden.
+			@echo off
+			echo %instanceID% > instanceID.file
+			@echo.
+			echo -------------------------------------------------
+			goto startedTest
+		)
+		
+		
+		:createNewInstance
+		echo -------------------------------------------------
+		echo.
+		echo [INFO] Es wird eine neue Instanz erstellt !
+		echo.
+		echo -------------------------------------------------
+		@echo off
+		
+		::Neue Instanz erzeugen und Informationen über die Instanz in Datei schreiben
+		call ec2run %amiID% -n 1 -t t1.micro -availability-zone us-east-1b -aws-access-key %accessKey% -aws-secret-key %secretKey% -k %ssenewkey% -g quick-start-1 > newInstance.file
+		
+		goto readingInstanceID
+		
+		::ID der neuen Instanz auslesen
+		:readingInstanceID
+		@echo off
+		
+		findstr "INSTANCE" newInstance.file > newInstance2.file
+		
+		::Zunächst ist es notwendig die Instanz-ID der neuen Instanz auszulesen
+		set /p file=<newInstance2.file
+		SETLOCAL ENABLEDELAYEDEXPANSION 
+		for %%a in (%file%) do (
+		
+			set instanceID=%%a
+			set var2=!instanceID:~0,2!
+		
+			@echo off
+			if "!var2!"=="i-" (
+				echo %instanceID% > instanceID.file
+				goto readingIP
+			)
+		)
+		
+		::IP auslesen von der Instanz
+		:readingIP
+		@echo off
+		
+		call ec2-describe-instances -aws-access-key %accessKey% -aws-secret-key %secretKey% > tmp.file
+		
+		findstr "INSTANCE.*!instanceID!" tmp.file > tmp2.file
+		set /p file=<tmp2.file
+		
+		SETLOCAL ENABLEDELAYEDEXPANSION 
+		for %%a in (%file%) do (
+		
+			set ip=%%a
+			set var2=!ip:~0,3!
+		
+			if "!var2!"=="ec2" (
+				echo [INFO] IP gefunden !
+				echo Warten bis Instanz hoch gefahren wird....
+				@ping -n 40 localhost> nul
+				goto installation
+			)
+			
+			if "!var2!"=="def" (
+				echo [INFO] Noch keine IP vorhanden. Warten bis IP vollständig zugewiesen wurde...
+				@ping -n 5 localhost> nul
+				goto readingIP
+			)
+		)
+		
+		:: Installation von Java (online) und Apache Tuscany (copy)
+		:installation
+		echo -------------------------------------------------
+		echo.
+		echo [INFO] Installation der Programme startet...
+		echo.
+		echo.
+		echo.
+		echo [INFO] Installiere Java...
+		echo.
+		echo !ip! > ip.file
+		echo yes | plink -ssh -i %pathToKeyFile% ubuntu@!ip! sudo apt-get update
+		plink -ssh -i %pathToKeyFile% ubuntu@!ip! sudo apt-get -y install openjdk-7-jdk
+		echo.
+		echo [INFO] Installation von Java erfolgreich !
+		echo -------------------------------------------------
+		echo [INFO] Installiere Apache Tuscany...
+		echo.
+		echo.
+		plink -ssh -i %pathToKeyFile% ubuntu@!ip! sudo wget https://archive.apache.org/dist/tuscany/java/sca/1.6.2/apache-tuscany-sca-1.6.2.tar.gz
+		plink -ssh -i %pathToKeyFile% ubuntu@!ip! sudo tar -xf \'apache-tuscany-sca-1.6.2.tar.gz\'
+		echo. 
+		echo [INFO] Installation von Apache Tuscany erfolgreich !
+		echo -------------------------------------------------
+		echo Deploye Service in die Cloud...
+		echo.
+		pscp -i %pathToKeyFile% "..\\%jarName%" ubuntu@!ip!:./
+		echo. 
+		echo [INFO] Deployment des Services erfolgreich !
+		echo -------------------------------------------------
+		
+		goto started
+		
+		
+		:: Testen, ob die Instanz schon hochgefahren wurde
+		:startedTest
+		echo -------------------------------------------------
+		echo.
+		echo [INFO] Teste, ob die Instanz schon laeuft...
+		echo.
+		echo -------------------------------------------------
+		@echo off
+		
+		:: Schreiben der Instanz-Attribute in eine Temp-Datei
+		call ec2-describe-instances >tmp.file
+		
+		::Raussuchen der Zeilen mit den Strings "INSTANCE" und Instanz-ID und in einer zweiten Temp-Datei speichern
+		findstr "INSTANCE.*%instanceID%" tmp.file > tmp2.file
+		set /p file=<tmp2.file
+		
+		SETLOCAL ENABLEDELAYEDEXPANSION 
+		for %%a in (%file%) do (
+		
+			set ip=%%a
+			set var2=!ip:~0,3!
+		
+			if "!var2!"=="ec2" (
+				echo !ip! > ip.file
+				echo yes | plink -ssh -i %pathToKeyFile% ubuntu@!ip! exit
+				pscp -i %pathToKeyFile% "..\\%jarName%" ubuntu@!ip!:./
+				goto started
+			)
+			if "!var2!"=="def" (
+				goto notStarted
+			)
+		)
+		
+		
+		:: Falls Instanz nicht gestarted, wird die Instanz-ID hier ausgelesen und die Instanz gestartet.
+		:notStarted
+		echo -------------------------------------------------
+		echo.
+		echo [INFO] Instanz ist nicht gestartet ! Starte Instanz und warte bis es hochgefahren wurde...
+		echo.
+		echo -------------------------------------------------
+		@echo off
+		call ec2start %instanceID%
+		@ping -n 40 localhost> nul
+		oto startedTest
+		)
+		
+		:: Starten des Services in der Instanz
+		:started
+		echo -------------------------------------------------
+		echo.
+		echo [INFO] Instanz gestartet! Starte den Dienst...
+		echo.
+		echo -------------------------------------------------
+		
+		if %createNewInstance%=="false" (
+			echo yes | plink -ssh -i %pathToKeyFile% ubuntu@!ip! exit
+			plink -ssh -i %pathToKeyFile% ubuntu@!ip! sudo java -cp tuscany-sca-1.6.2/lib/tuscany-sca-manifest.jar:%jarName% %launchFile%
+		) else (
+			plink -ssh -i %pathToKeyFile% ubuntu@!ip! sudo java -cp tuscany-sca-1.6.2/lib/tuscany-sca-manifest.jar:%jarName% %launchFile%
+		)
+		echo -------------------------------------------------
+		echo.
+		echo [INFO] Instanz und Dienst sind bereit !
+		echo.
+		echo -------------------------------------------------
+		'
+	}
+	
+	def createOpenNebulaScript(DecisionVariable onConfig, String plName, String jarName, String onScriptsPath) {
+		'
+        ::Haupt-Skript für das Deployment. Verwendet drei Hilfs-Skripte.
+
+        @echo off
+
+        ::Deklarierung der Dateien. Markierung mit dem Dollar-Zeichen, damit diese vom EasyProducer ersetzt werden.
+
+        set jarName=${jarName}
+
+
+        ::Path to Launch-File in Service. e.g. launch.Launch
+
+        set launchFile=launch.Launch
+
+
+        ::PL-Name
+
+        set plName=${plName}
+
+        :: -------------- Konfigurations-PC ---------------
+        ::Pfad zu dem Ordner mit den Skripten auf dem Konfigurations-PC. 
+        ::e.g. C:\\Yilmaz\\runtime-EclipseApplication(1)\\PL_Store\\FrontendSkripte\\
+        set sourcePath=${onScriptsPath}/
+
+
+        :: -------------- Frontend ---------------
+
+        ::Template-File-Name.e.g. testubuntu.one
+
+        set templateFile=${onConfig.getByName("templateFile").value()}
+
+
+        ::Pfad zur Template-File. e.g. /var/lib/one/
+
+        set templateFilePath=${onConfig.getByName("templateFilePath").value()}
+
+    
+        ::Name des running-Skriptes. e.g. vmRunning.sh
+
+        set runningScript=vmRunning.sh
+
+
+        ::Name des started-Skriptes. e.g. vmStarted.sh
+
+        set startedScript=vmStarted.sh
+
+
+        ::Name des create-Skriptes. e.g. createVM.sh
+
+        set createScript=createVM.sh
+
+
+        :: Zielpfad zu dem die Hilfs-Skripte kopiert werden sollen. e.g. /var/lib/one/
+
+        set scriptPathDest=${onConfig.getByName("scriptPathDest").value()}
+
+
+        ::IP des Frontends
+
+        set frontendIp=${onConfig.getByName("frontendIp").value()}
+
+
+        ::Frontend-Nutzer. e.g. oneadmin
+
+        set frontendUser=${onConfig.getByName("frontendUser").value()}
+
+
+        ::Passwort für den Frontend-Nutzer. e.g. oneadmin
+
+        set frontendPass=${onConfig.getByName("frontendPass").value()}
+
+        
+    
+        :: -------------- VM ---------------
+        
+        :: VM-Name
+
+        set vmName=${onConfig.getByName("vmName").value()}
+
+        ::VM-Root
+
+        set vmUser=${onConfig.getByName("vmUser").value()}
+
+        ::Vm Passwort
+
+        set vmPass=${onConfig.getByName("vmPass").value()}
+
+        
+        ::Kopieren des runningScripts zum Frontend
+
+        echo off
+
+        pscp -pw %frontendPass% %sourcePath%%runningScript% %frontendUser%@%frontendIp%:%scriptPathDest%
+
+        echo -----------------------------------------------------
+
+        echo.
+
+        echo [INFO] Skript erfolgreich zum Frontend kopiert.
+
+        echo.
+        
+        ::Bevor die VM erzeugt wird, wird geschaut, ob die VM schon erzeugt wurde. 
+        ::vmRunning.sh schreibt Found oder NotFound in die Datei run-ning.file, 
+        ::welche zum Konfigurations-PC kopiert und der eingetragene String in eine Variable ausgelesen wird
+
+
+
+        ::Ausführen der vmRunning.sh
+
+        @echo off
+
+        plink -ssh -pw %frontendPass% %frontendUser%@%frontendIp% sh %scriptPathDest%%runningScript% %vmName%
+
+        echo -----------------------------------------------------
+
+        echo.
+
+        echo [INFO] vmRunning.sh wurde ausgeführt.
+
+        echo.
+
+        ::Kopieren der Datei running.file zum Konfigurations-PC
+
+        @echo on
+
+        pscp -pw %frontendPass% %frontendUser%@%frontendIp%:%scriptPathDest%running.file %sourcePath%
+
+        echo -----------------------------------------------------
+
+        echo.
+
+        echo [INFO] Die Running-Datei konnte erfolgreich zum Konfigurations-PC kopiert werden.
+
+        echo.
+
+        ::Auslesen des Wertes: Found ? NotFound?
+
+        @echo on
+
+        SET /P found=<%sourcePath%\\running.file
+
+        echo -----------------------------------------------------
+
+        echo.
+
+        echo [INFO] Wert aus der lokalen Running-Datei konnte erfolgreich aus-gelesen werden.
+
+        echo [INFO] Found:%found%"
+
+        echo.
+
+
+
+        if "%found%" == "Found" (
+
+          goto :VmAlreadyRunning
+
+        ) else (
+
+        goto :VmMustCreated
+    
+        )
+
+        :VmMustCreated
+
+        echo VM MUST BE CREATED !
+
+        ::Kopieren des createScripts zum Frontend-PC
+
+        @echo off
+
+        pscp -pw %frontendPass% %sourcePath%%createScript% %frontendUser%@%frontendIp%:%scriptPathDest%
+
+        echo -----------------------------------------------------
+
+        echo. 
+
+        echo [INFO] CreateSkript erfolgreich zum Frontend kopiert.
+
+        echo.
+
+        ::Ausführen des createSkriptes auf dem Frontend. Übergabe der Parame-ter in der Form: sh skript.sh vmName templateFile
+
+        @echo off
+
+        plink -ssh -pw %frontendPass% %frontendUser%@%frontendIp% sh %scriptPathDest%%createScript% %vmName% %templateFile%
+
+        echo -----------------------------------------------------
+
+        echo.
+
+        echo [INFO] CreateSkript auf dem Frontend ausgeführt.
+
+        echo [INFO] Deployment der VM in die Cloud hat begonnen.
+
+        echo.
+
+        goto :VmAlreadyRunning
+
+
+    
+        :VmAlreadyRunning
+
+        echo VM IS NOW RUNNING
+
+        ::Kopieren des startedScripts zum Frontend-PC. Dieser Skript wird so lange ausgeführt, bis die VM vollständig hochgefahren ist
+
+        echo off
+
+        pscp -pw %frontendPass% %sourcePath%%startedScript% %frontendUser%@%frontendIp%:%scriptPathDest%
+
+        echo -----------------------------------------------------
+
+        echo.
+
+        echo [INFO] StartedSkript erfolgreich zum Frontend kopiert.
+
+        echo.
+
+        
+        ::Falls eine alte lokale Log-Datei existiert, wird diese vorsorglich gelöscht
+
+        @echo off
+
+        del %sourcePath%\\log.file
+
+        echo -----------------------------------------------------
+
+        echo.
+
+        echo [INFO] Log-File deleted.
+
+        echo.
+
+        
+        ::Kopieren der Log-Datei vom Frontend zum Konfigurations-PC zum Ausle-sen der IP der gerade erstellten VM
+
+        ::username:password@remoteHost:PathFile
+
+        @echo off
+
+        pscp -pw %frontendPass% %frontendUser%@%frontendIp%:%scriptPathDest%log.file %sourcePath%
+
+        echo -----------------------------------------------------
+
+        echo.
+
+        echo [INFO] Die Log-Datei konnte erfolgreich vom Frontend zum Konfigu-rations-PC kopiert werden.
+
+        echo.
+
+        ::Auslesen der IP aus der lokalen Log-Datei und nutzen des der IP, um eine Verbindung zur VM aufzubauen
+
+        @echo off
+
+        SET /P ip= < %sourcePath%\\log.file
+
+        echo -----------------------------------------------------
+
+        echo.
+
+        echo [INFO] IP aus der lokalen Log-Datei konnte erfolgreich ausgelesen werden.
+
+        echo [INFO] IP:%ip%"
+
+        echo.
+
+        
+
+        ::Warten bis die VM vollständig hochgefahren ist mit started.sh auf dem Frontend
+
+        echo [INFO] Warten bis die VM vollständig deployed wurde.....
+
+        @echo on
+
+        plink -ssh -pw %frontendPass% %frontendUser%@%frontendIp% sh %scriptPathDest%%startedScript% %vmName%
+
+        plink -ssh -pw %frontendPass% %frontendUser%@%frontendIp% sh %scriptPathDest%%startedScript% %vmName%
+
+        echo -----------------------------------------------------
+
+        echo.
+
+        echo [INFO] VM ist gestartet.
+
+        echo [INFO] Continuing.......
+
+        echo.
+
+
+
+        echo yes | plink -ssh -i %sourcePath%id_rsa_ubuntu_putty.ppk  %vmUser%@%ip% sudo apt-get update
+
+        plink -ssh -i %sourcePath%id_rsa_ubuntu_putty.ppk %vmUser%@%ip% sudo apt-get -y install openjdk-7-jdk
+
+        echo.
+
+        echo [INFO] Installation von Java erfolgreich !
+
+        echo -------------------------------------------------
+
+        echo [INFO] Installiere Apache Tuscany...
+
+        echo.
+
+        echo.
+
+        plink -ssh -i %sourcePath%id_rsa_ubuntu_putty.ppk  %vmUser%@%ip% sudo wget https://archive.apache.org/dist/tuscany/java/sca/1.6.2/apache-tuscany-sca-1.6.2.tar.gz
+
+        plink -ssh -i %sourcePath%id_rsa_ubuntu_putty.ppk  %vmUser%@%ip% sudo tar -xf \'apache-tuscany-sca-1.6.2.tar.gz\'
+
+        echo. 
+
+        echo [INFO] Installation von Apache Tuscany erfolgreich !
+
+        echo -------------------------------------------------
+
+        echo Deploye Service in die Cloud...
+
+        echo.
+
+        pscp -i %sourcePath%id_rsa_ubuntu_putty.ppk "..\\%jarName%" %vmUser%@%ip%:./
+
+        echo. 
+
+        echo [INFO] Deployment des Services erfolgreich !
+
+        echo -------------------------------------------------
+
+        echo -------------------------------------------------
+
+        echo.
+
+        echo [INFO] Instanz gestartet! Starte den Dienst...
+
+        echo.
+
+        echo -------------------------------------------------
+
+        plink -ssh -i %sourcePath%id_rsa_ubuntu_putty.ppk %vmUser%@%ip% sudo java -cp tuscany-sca-1.6.2/lib/tuscany-sca-manifest.jar:%jarName% %launchFile%
+
+        echo -------------------------------------------------
+
+        echo.
+
+        echo [INFO] Instanz und Dienst sind bereit !
+
+        echo.
+
+        echo -------------------------------------------------
+        
+		'
+	}
+}

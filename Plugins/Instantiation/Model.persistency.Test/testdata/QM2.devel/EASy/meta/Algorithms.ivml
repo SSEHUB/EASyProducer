@@ -1,0 +1,23 @@
+project Algorithms {
+
+    import Basics;
+	import ReconfigurableHardware;
+	
+	attribute BindingTime bindingTime = BindingTime.compile to Algorithms;
+	 
+	// the algorithm using the types defined above
+	 
+	compound Algorithm {
+		NonEmptyString name; 
+		String artifact; // unclear, Jar, visualization
+		// missing: quality attributes
+		Tuples input;    
+		Tuples output;
+		Parameters parameters;
+		refTo(HwNode) hwNode;
+		String algTopologyClass = null;
+	} 
+	
+	setOf(refTo(Algorithm)) algorithms;
+	
+}

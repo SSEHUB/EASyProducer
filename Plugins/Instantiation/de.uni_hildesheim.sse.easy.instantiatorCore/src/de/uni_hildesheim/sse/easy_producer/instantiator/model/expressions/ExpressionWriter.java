@@ -15,6 +15,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescr
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.EnumValue;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
+import de.uni_hildesheim.sse.utils.modelManagement.Version;
 
 /**
  * Implements a writer for expressions using the default VIL expression syntax.
@@ -199,6 +200,9 @@ public class ExpressionWriter extends AbstractWriter implements IExpressionVisit
             print("\"");
             print(StringEscapeUtils.escapeJava((String) value));
             print("\"");
+        } else if (value instanceof Version) {
+            print("v");
+            print(value);
         } else {
             if (value == TypeRegistry.NULL) {
                 print("null");

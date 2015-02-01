@@ -47,9 +47,7 @@ public abstract class IvmlException extends Exception implements IIdentifiable {
         return code;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public int getId() {
         return code;
     }

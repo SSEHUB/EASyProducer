@@ -6,6 +6,7 @@ import java.io.IOException;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
+import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
 import de.uni_hildesheim.sse.translation.ErrorCodes;
 
 /**
@@ -68,6 +69,27 @@ public class BasicTests extends AbstractTest {
     }
 
     /**
+     * Tests an abstract compound.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testAbstractCompound() throws IOException {
+        assertEqual(createFile("abstractCompound"), "abstractCompound", "0");
+    }
+
+    /**
+     * Tests a failing abstract compound (instantiation).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testAbstractCompoundFail() throws IOException {
+        assertEqual(createFile("abstractCompoundFail"), "abstractCompoundFail", "0", 
+            ValueDoesNotMatchTypeException.IS_ABSTRACT);
+    }
+    
+    /**
      * Tests compound accesses.
      * 
      * @throws IOException should not occur
@@ -75,6 +97,16 @@ public class BasicTests extends AbstractTest {
     @Test
     public void testCompoundAccess() throws IOException {
         assertEqual(createFile("compoundAccess"), "testCompoundAccess", "0");
+    }
+
+    /**
+     * Tests compound constraint variables.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testCompoundConstraintVar() throws IOException {
+        assertEqual(createFile("compoundConstraintVar"), "testCompoundConstraintVar", "0");
     }
     
     /**
@@ -275,7 +307,9 @@ public class BasicTests extends AbstractTest {
      */
     @Test
     public void testContainerDuplicates() throws IOException {
-        assertEqual(createFile("containerDuplicates"), "testContainerDuplicates", "0", 10206, 10206);
+        assertEqual(createFile("containerDuplicates"), "testContainerDuplicates", "0", 
+            ValueDoesNotMatchTypeException.NOT_ALLOWED_VALUE_STRUCTURE, 
+            ValueDoesNotMatchTypeException.NOT_ALLOWED_VALUE_STRUCTURE);
     }
 
     /**

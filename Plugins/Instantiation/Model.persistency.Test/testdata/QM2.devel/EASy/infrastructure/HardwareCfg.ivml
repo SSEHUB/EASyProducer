@@ -1,0 +1,44 @@
+project HardwareCfg {
+
+    import Hardware;
+ 
+	machines = {
+    	Machine{
+    		name="worker1", 
+    		memory=1000000, 
+    		processors=4, 
+    		frequency=10,
+    		ports={6700,6701,6702,6703},
+			role = MachineRole.Worker
+    	},
+    	Machine{
+    		name="worker2", 
+    		memory=1000000, 
+    		processors=4, 
+    		frequency=10,
+    		ports={6700,6701,6702,6703},
+			role = MachineRole.Worker
+    	},
+		Machine{
+    		name="worker5", 
+    		memory=1000000, 
+    		processors=4, 
+    		frequency=10,
+    		ports={6700,6701,6702,6703},
+			role = MachineRole.Worker
+    	},
+		Machine{ 
+    		name="nexus", 
+    		memory=1000000, 
+    		processors=4, 
+    		frequency=10,
+    		ports={},
+			role = MachineRole.Manager
+    	}
+    }; 
+ 
+	freeze {
+        machines;   
+    }
+
+}

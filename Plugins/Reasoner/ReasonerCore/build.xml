@@ -117,7 +117,15 @@
 			</fileset>
 		</copy>
 	</target>
+
+	<target name="storeJars">
+		<copy todir="${easy.bundles.dir}" failonerror="true" overwrite="true" flatten="true">
+			<fileset dir=".">
+				<include name="**/build/jar/*.jar" />
+			</fileset>
+		</copy>
+	</target>
 	
-  <target name="all" depends="init, compile, test"/>
+  <target name="all" depends="init, compile, test, storeJars"/>
   <target name="only.compile" depends="init, compile"/>
 </project>

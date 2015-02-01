@@ -218,7 +218,7 @@ public class VtlArgumentProviderPreferencePage extends PreferencePage implements
                 TableItem item = (TableItem) exc.item;
 
                 //Column should only be editable if arguments are allowed for the provider.
-                if (item.getText(3).toString().equals("false") | item == null) {
+                if (item.getText(3).toString().equals("false") || item == null) {
                     return;
                 }
 

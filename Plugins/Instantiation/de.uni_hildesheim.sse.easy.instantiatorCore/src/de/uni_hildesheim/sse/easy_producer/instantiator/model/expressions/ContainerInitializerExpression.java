@@ -38,6 +38,18 @@ public class ContainerInitializerExpression extends Expression {
     }
     
     /**
+     * Internal constructor for set initialization.
+     * 
+     * @param initExpressions the initializer expressions, either logical expressions
+     *   or container initializer expression
+     * @param type the type of the expression
+     */
+    private ContainerInitializerExpression(Expression[] initExpressions, TypeDescriptor<? extends IVilType> type) {
+        this.initExpressions = initExpressions;
+        this.type = type;
+    } 
+    
+    /**
      * Returns the specified initializer expression.
      * 
      * @param index the index of the specified expression
@@ -57,20 +69,56 @@ public class ContainerInitializerExpression extends Expression {
         return null == initExpressions ? 0 : initExpressions.length;
     }
     
+    /**
+     * Returns the more common type.
+     * 
+     * @param t1 the first type
+     * @param t2 the second type
+     * @return the more common type or "Any"
+     */
+    private static  TypeDescriptor<? extends IVilType> moreCommon(TypeDescriptor<? extends IVilType> t1, 
+        TypeDescriptor<? extends IVilType> t2) {
+        TypeDescriptor<? extends IVilType> result;
+        if (t1.isAssignableFrom(t2)) {
+            result = t1;
+        } else if (t2.isAssignableFrom(t1)) {
+            result = t2;
+        } else {
+            result = TypeRegistry.anyType();
+        }
+        return result;
+    }
+    
     @Override
     public TypeDescriptor<? extends IVilType> inferType() throws ExpressionException {
         if (null == type) {
             TypeDescriptor<? extends IVilType>[] parameter;
             if (getInitExpressionsCount() > 0) {
                 List<TypeDescriptor<? extends IVilType>> params = new ArrayList<TypeDescriptor<? extends IVilType>>();
-                Expression first = getInitExpression(0);
-                if (first instanceof ContainerInitializerExpression) {
-                    ContainerInitializerExpression initEx = (ContainerInitializerExpression) first;
-                    for (int e = 0; e < initEx.getInitExpressionsCount(); e++) {
-                        params.add(initEx.getInitExpression(e).inferType());
+                List<TypeDescriptor<? extends IVilType>> local = new ArrayList<TypeDescriptor<? extends IVilType>>();
+                for (int e = 0; e < getInitExpressionsCount(); e++) {
+                    Expression ex = getInitExpression(e);
+                    local.clear();
+                    if (ex instanceof ContainerInitializerExpression) {
+                        ContainerInitializerExpression initEx = (ContainerInitializerExpression) ex;
+                        for (int i = 0; i < initEx.getInitExpressionsCount(); i++) {
+                            local.add(initEx.getInitExpression(i).inferType());
+                        }
+                    } else {
+                        local.add(ex.inferType());
                     }
-                } else {
-                    params.add(first.inferType());
+                    if (0 == e) {
+                        params.addAll(local);
+                    } else {
+                        if (params.size() != local.size()) {
+                            throw new ExpressionException("parameter size does not match", 
+                                ExpressionException.ID_SEMANTIC);
+                        } else {
+                            for (int p = 0; p < params.size(); p++) {
+                                params.set(p, moreCommon(params.get(p), local.get(p)));
+                            }
+                        }
+                    }
                 }
                 parameter = TypeDescriptor.createArray(params.size());
                 params.toArray(parameter);
@@ -89,6 +137,21 @@ public class ContainerInitializerExpression extends Expression {
     @Override
     public Object accept(IExpressionVisitor visitor) throws ExpressionException {
         return visitor.visitContainerInitializerExpression(this);
+    }
+    
+    /**
+     * Converts this container initializer to a set.
+     * 
+     * @return the corresponding set initializer
+     * @throws VilException in case that conversion fails
+     */
+    public ContainerInitializerExpression toSet() throws VilException {
+        TypeDescriptor<? extends IVilType>[] parameter;
+        parameter = TypeDescriptor.createArray(type.getParameterCount());
+        for (int p = 0; p < parameter.length; p++) {
+            parameter[p] = type.getParameterType(p);
+        }
+        return new ContainerInitializerExpression(initExpressions, TypeRegistry.getSetType(parameter));
     }
 
 }

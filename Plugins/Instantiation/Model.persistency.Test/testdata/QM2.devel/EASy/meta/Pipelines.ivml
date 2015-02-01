@@ -1,0 +1,70 @@
+project Pipelines {
+   
+	import Basics;
+	import Families;
+	import DataManagement;
+	import Hardware;
+	   
+	attribute BindingTime bindingTime = BindingTime.compile to Pipelines;
+
+    // TODO this is Storm stuff - find more abstract/adequate representation
+	enum Grouping {shuffleGrouping, fieldsGrouping, globalGrouping, directGrouping, allGrouping, customGrouping, noneGrouping}; // this is very storm specific - can we infer this from the element type?
+	
+    // all elements in a pipeline
+    abstract compound PipelineElement {
+		NonEmptyString name;
+		setOf(Constraint) constraints = {}; // user constraints
+	} 
+   
+    // a flow among pipeline nodes
+	compound Flow refines PipelineElement {
+		refTo(PipelineNode) destination;
+	    Grouping grouping;
+	}
+	
+	// all nodes in a pipeline
+    abstract compound PipelineNode refines PipelineElement{
+	}
+	
+	abstract compound StreamOperationElement refines ProcessingElement {		
+	}
+
+	compound Source refines PipelineNode {
+		setOf(refTo(Flow)) output;
+		refTo(DataSource) source;
+	} 
+	   
+	compound Sink refines PipelineNode {
+	    refTo(DataSink) sink;
+	} 
+
+	// inner node that processes something
+	compound ProcessingElement refines PipelineNode {
+		setOf(refTo(Flow)) output;
+	}
+	   
+	compound FamilyElement refines ProcessingElement {
+		refTo(Family) family;
+	} 
+	
+	compound DataManagementElement refines ProcessingElement {
+	    refTo(DataElement) dataManagement;
+	    // input/output characteristics are unclear
+	}
+	
+	compound Pipeline {
+		NonEmptyString name;
+		setOf(refTo(Source)) sources;
+		PositiveInteger numworkers;
+		PositiveInteger timeout = 100;
+		// TODO runtime observables
+		setOf(Constraint) constraints = {}; // user constraints
+	}
+	
+	// TODO constraints for HW-subpipeline (Apostolos: avoid/warn in/out/in/...)
+	sequenceOf(refTo(Pipeline)) pipelines;
+	
+	// Constraint for checking if all pipeline number of workers is less then reserved ports for machines	
+	Constraint workerportCheck = pipelines->apply(refTo(Pipeline) pipeline; Integer totalNumWorkers = 0 | totalNumWorkers = totalNumWorkers + pipeline.numworkers) <= machines->apply(Machine machine; sequenceOf(Integer) usedPorts = {} | usedPorts.union(machine.ports.asSequence())).size();	
+	
+}

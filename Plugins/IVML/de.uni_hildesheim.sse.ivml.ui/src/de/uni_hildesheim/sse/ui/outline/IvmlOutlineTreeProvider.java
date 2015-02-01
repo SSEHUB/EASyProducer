@@ -264,17 +264,6 @@ public class IvmlOutlineTreeProvider extends DefaultOutlineTreeProvider {
     private void createExpressionNodes(List<ExpressionStatement> exprList, IOutlineNode parentNode) {
         for (ExpressionStatement exprStmt : exprList) {
             if (exprStmt != null) {
-                // DSL
-                if (exprStmt.getExpr().getDsl() != null && exprStmt.getExpr().getDsl().getStop() != null) {
-                    StyledString dslString = new StyledString();
-                    String dslName = exprStmt.getExpr().getDsl().getStop();
-                    dslString.append(dslName);
-                    dslString.append(" : DSL", StyledString.QUALIFIER_STYLER);
-                    createEStructuralFeatureNode(parentNode, exprStmt.getExpr().getDsl(),
-                            IvmlPackage.Literals.DSL_CONTEXT__DSL, imageHelper.getImage(Images.NAME_DSL), dslString,
-                            true);
-                }
-
                 // LET-EXPRESSIONS
                 if (exprStmt.getExpr().getLet() != null && exprStmt.getExpr().getLet().getName() != null) {
                     StyledString lExprString = new StyledString();

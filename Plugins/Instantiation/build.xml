@@ -32,30 +32,35 @@
 	</target>
 	
 	<target name="compile">
-		<echo>#############################</echo>
+		<!--echo>#############################</echo>
         <echo>###  Compiling Copy Core  ###</echo>
         <echo>#############################</echo>
-        <ant dir="de.uni_hildesheim.sse.easy.instantiator.copy.core" antfile="${build.script.name}" />
-		
+        <ant dir="de.uni_hildesheim.sse.easy.instantiator.copy.core" antfile="${build.script.name}" /-->
+
         <echo>#####################################</echo>
         <echo>###  Compiling Instantiator Core  ###</echo>
         <echo>#####################################</echo>
         <ant dir="de.uni_hildesheim.sse.easy.instantiatorCore" antfile="${build.script.name}" />
+
+        <echo>#######################################</echo>
+        <echo>###  Compiling rt-Instantiator Core ###</echo>
+        <echo>#######################################</echo>
+        <ant dir="de.uni-hildesheim.sse.easy.instantiatorCore.rt" antfile="${build.script.name}" />
         
-        <echo>#############################</echo>
+        <!--echo>#############################</echo>
         <echo>###  Compiling Copy Java  ###</echo>
         <echo>#############################</echo>
-        <ant dir="de.uni_hildesheim.sse.instantiator.copy.java" antfile="${build.script.name}" /> 
+        <ant dir="de.uni_hildesheim.sse.instantiator.copy.java" antfile="${build.script.name}" /--> 
         
         <echo>#######################################</echo>
         <echo>###   Compiling Java Instantiator   ###</echo>
         <echo>#######################################</echo>
         <ant dir="${home.instantiator.java.dir}" antfile="${build.script.name}" />
 		
-        <echo>###############################</echo>
+        <!--echo>###############################</echo>
         <echo>###  Compiling VelocityLib  ###</echo>
         <echo>###############################</echo>
-        <ant dir="${home.instantiator.velocityLib.dir}" antfile="${build.script.name}" />
+        <ant dir="${home.instantiator.velocityLib.dir}" antfile="${build.script.name}" /-->
 		
         <echo>#############################</echo>
         <echo>###  Compiling Velocity   ###</echo>
@@ -81,12 +86,22 @@
         <echo>###  Compiling VIL Core  ###</echo>
         <echo>############################</echo>
         <ant dir="${home.vil.core.dir}" antfile="${build.script.name}" />
-       
+
+        <echo>###############################</echo>
+        <echo>###  Compiling rt-VIL Core  ###</echo>
+        <echo>###############################</echo>
+        <ant dir="${home.vil.rt.core.dir}" antfile="${build.script.name}" />
+        
         <echo>############################</echo>
         <echo>###   Compiling VIL UI   ###</echo>
         <echo>############################</echo>
         <ant dir="${home.vil.ui.dir}" antfile="${build.script.name}" />
-       
+        
+        <echo>###############################</echo>
+        <echo>###   Compiling rt-VIL UI   ###</echo>
+        <echo>###############################</echo>
+        <ant dir="${home.vil.rt.ui.dir}" antfile="${build.script.name}" />
+        
         <echo>#################################</echo>
         <echo>###  Compiling Template Core  ###</echo>
         <echo>#################################</echo>
@@ -111,11 +126,21 @@
         <echo>###  Compiling VIL Tests  ###</echo>
         <echo>#############################</echo>
         <ant dir="${home.vil.tests.dir}" antfile="${build.script.name}" />
+
+        <echo>################################</echo>
+        <echo>###  Compiling rt-VIL Tests  ###</echo>
+        <echo>################################</echo>
+        <ant dir="${home.vil.rt.tests.dir}" antfile="${build.script.name}" />
         
         <echo>#############################################</echo>
         <echo>###   Compiling Java Instantiator Tests   ###</echo>
         <echo>#############################################</echo>
         <ant dir="${home.instantiator.java.test.dir}" antfile="${build.script.name}" />
+    
+        <echo>#####################################</echo>
+        <echo>###  Compiling Model Persistency  ###</echo>
+        <echo>#####################################</echo>
+        <ant dir="Model.persistency" antfile="${build.script.name}" /> 
         
 	</target>
 	
@@ -129,12 +154,13 @@
 				<filter excludes="de.uni_hildesheim.sse.vil.templatelang.parser.antlr.internal.*"/>
 				<instrpath>
 				    <!-- disabled UI and legacy -->
-					<fileset dir="${home.instantiator.copy.core.dir}/${build.jar.dir}/" includes="**/*.jar" />
+					<!--fileset dir="${home.instantiator.copy.core.dir}/${build.jar.dir}/" includes="**/*.jar" /-->
 					<fileset dir="${home.instantiatorCore.dir}/${build.jar.dir}/" includes="**/*.jar" />
+                    <fileset dir="${home.instantiatorCore.rt.dir}/${build.jar.dir}/" includes="**/*.jar" />
 					<fileset dir="${home.instantiatorCore.tests.dir}/${build.jar.dir}/" includes="**/*.jar" />
 					<fileset dir="${home.instantiator.java.dir}/${build.jar.dir}/" includes="**/*.jar" />
 					<fileset dir="${home.instantiator.java.test.dir}/${build.jar.dir}/" includes="**/*.jar" />
-					<fileset dir="${home.instantiator.velocityLib.dir}/${build.jar.dir}/" includes="**/*.jar" />
+					<!--fileset dir="${home.instantiator.velocityLib.dir}/${build.jar.dir}/" includes="**/*.jar" /-->
 					<fileset dir="${home.instantiator.velocity.dir}/${build.jar.dir}/" includes="**/*.jar" />
                     <fileset dir="${home.vil.expressions.core.dir}/${build.jar.dir}/" includes="**/*.jar" />
 					<fileset dir="${home.vil.core.dir}/${build.jar.dir}/" includes="**/*.jar" />
@@ -236,10 +262,11 @@
 			<report>
 				<property name="report.html.out.encoding" value="UTF-8"/>
 				<sourcepath>
-                    <pathelement path="${home.instantiator.copy.core.dir}/src/"/>
+                    <!--pathelement path="${home.instantiator.copy.core.dir}/src/"/-->
 					<pathelement path="${home.instantiatorCore.dir}/src/"/>
 					<pathelement path="${home.instantiatorCore.tests.dir}/src/"/>
-					<pathelement path="${home.instantiator.copy.java.dir}/src/"/>
+					<pathelement path="${home.instantiatorCore.rt.dir}/src/"/>
+					<!--pathelement path="${home.instantiator.copy.java.dir}/src/"/-->
 					<pathelement path="${home.instantiator.java.dir}/src/"/>
 					<pathelement path="${home.instantiator.java.test.dir}/src/"/>
                     <pathelement path="${home.instantiator.velocity.dir}/src/"/>
@@ -270,8 +297,16 @@
 				<include name="**/*.xml" />
 			</fileset>
 		</copy>
-	</target>		
+	</target>	
+
+	<target name="storeJars">
+		<copy todir="${easy.bundles.dir}" failonerror="true" overwrite="true" flatten="true">
+			<fileset dir=".">
+				<include name="**/build/jar/*.jar" />
+			</fileset>
+		</copy>
+	</target>	
 		
-	<target name="all" depends="init, compile, test"/>
+	<target name="all" depends="init, compile, test, storeJars"/>
 	<target name="only.compile" depends="init, compile"/>
 </project>

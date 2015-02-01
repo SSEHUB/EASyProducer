@@ -102,16 +102,11 @@ public class ConstraintValue extends BasisDatatypeValue {
         return value != null;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public Value clone() {
         return new ConstraintValue(value);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean equals(Object object) {
         boolean result = false;
@@ -128,9 +123,6 @@ public class ConstraintValue extends BasisDatatypeValue {
         return result;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int hashCode() {
         return value.hashCode();

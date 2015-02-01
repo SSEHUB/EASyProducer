@@ -6,6 +6,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Bui
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildlangExecution;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionParserRegistry;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IExpressionParser;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IRuntimeEnvironment;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
@@ -56,7 +57,7 @@ public class VilExpressionParser implements IExpressionParser {
         } catch (ModelManagementException e) {
             EASyLoggerFactory.INSTANCE.getLogger(VilExpressionParser.class, VilBundleId.ID);
         }
-        BuildlangExecution.setExpressionParser(this);
+        ExpressionParserRegistry.setExpressionParser(BuildlangExecution.LANGUAGE, this);
     }
 
     /**
@@ -67,7 +68,7 @@ public class VilExpressionParser implements IExpressionParser {
         BuildModel.INSTANCE.loaders().unregisterLoader(BuildLangModelUtility.INSTANCE, 
             ProgressObserver.NO_OBSERVER);
         // this is not the official way of using DS but the official way is instable
-        BuildlangExecution.setExpressionParser(null);
+        ExpressionParserRegistry.setExpressionParser(BuildlangExecution.LANGUAGE, null);
     }
 
     @Override

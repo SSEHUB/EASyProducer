@@ -15,10 +15,7 @@
  */
 package de.uni_hildesheim.sse.utils.logger;
 
-import java.io.IOException;
-import java.util.logging.FileHandler;
 import java.util.logging.Filter;
-import java.util.logging.Handler;
 import java.util.logging.Logger;
 
 /**
@@ -29,14 +26,7 @@ import java.util.logging.Logger;
  */
 public class JavaLogger extends AbstractJavaLogger {
     
-    /**
-     * Defines whether the log file should be appended or not.
-     */
-    private static final boolean APPEND = true;
-
-    private static String defaultLogDirectory = System.getProperty("user.home") + "/EASy.log";
     private static ConsoleHandler consoleHandler;
-    private static Handler fileHandler;
     private Logger logger = createLogger(JavaLogger.class, null);
     
     /**
@@ -52,62 +42,32 @@ public class JavaLogger extends AbstractJavaLogger {
      */
     public JavaLogger() {
         consoleHandler = new ConsoleHandler();
-        try {
-            fileHandler = new FileHandler(defaultLogDirectory, APPEND);
-            fileHandler.setFormatter(LOG_FORMATTER);
-        } catch (SecurityException e) {
-            logger.severe(e.getMessage());
-        } catch (IOException e) {
-            logger.severe(e.getMessage());
-        }
         logger.addHandler(consoleHandler);
-        logger.addHandler(fileHandler);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void info(String msg, Class<?> clazz, String bundleName) {
         logger.info("[" + clazz.getSimpleName() + "] " + msg);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void error(String msg, Class<?> clazz, String bundleName) {
         logger.severe("[" + clazz.getSimpleName() + "] " + msg);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void warn(String msg, Class<?> clazz, String bundleName) {
         logger.warning("[" + clazz.getSimpleName() + "] " + msg);
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void debug(String msg, Class<?> clazz, String bundleName) {
         logger.log(DEBUG_LEVEL, "[" + clazz.getSimpleName() + "] " + msg);
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void exception(String msg, Class<?> clazz, String bundleName) {
         logger.log(EXCEPTION_LEVEL, "[" + clazz.getSimpleName() + "] " + msg);
-    }
-    
-    /**
-     * Sets the directory for the log file. Default directory is the user 
-     * home directory (<code>System.getProperty("user.home")</code>).
-     * The file name will be added automatically.
-     * 
-     * @param directory Directory where the log should be stored.
-     */
-    public void setLogDirectory(String directory) {
-        defaultLogDirectory = directory + "/EASy.log";
     }
     
     /**

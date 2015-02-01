@@ -4,6 +4,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expres
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IResolvable;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
+import de.uni_hildesheim.sse.utils.modelManagement.IVariable;
 
 /**
  * Represents a variable declaration.
@@ -11,7 +12,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescr
  * @author Christian Kröher
  * @author Holger Eichelberger
  */
-public abstract class VariableDeclaration implements IResolvable {
+public abstract class VariableDeclaration implements IResolvable, IVariable {
 
     private String name;
     private TypeDescriptor<? extends IVilType> type;

@@ -5,8 +5,13 @@ import static de.uni_hildesheim.sse.varModel.testSupport.TextTestUtils.assertFil
 import java.io.File;
 import java.io.IOException;
 
+import javax.tools.JavaCompiler;
+import javax.tools.ToolProvider;
+
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import test.de.uni_hildesheim.sse.vil.buildlang.AbstractExecutionTest;
@@ -59,6 +64,27 @@ public class ExecutionTests extends AbstractExecutionTest {
     public void testJavac() throws IOException {
         assertSelfInstantiate("javac");
     }
+    
+    /**
+     * The execution of the Ant builder.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testAnt() throws IOException {
+        assertSelfInstantiate("ant");
+    }
+    
+    /**
+     * The execution of the Ant builder.
+     * 
+     * @throws IOException should not occur
+     */
+    @Ignore("does not work on Windows")
+    @Test
+    public void testMake() throws IOException {
+        assertSelfInstantiate("make");
+    }
 
     /**
      * Tests the implicit LHSMATCH variable.
@@ -68,6 +94,23 @@ public class ExecutionTests extends AbstractExecutionTest {
     @Test
     public void testJavac2() throws IOException {
         assertSelfInstantiate("javac2");
+    }
+    
+    /**
+     * Will test whether EASy is able to retrieve the Java&trade; compiler even if the
+     * <tt>java.home</tt> property is pointing to a wrong location.
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testGetJavaCompiler() throws IOException {
+        String homeProperty = System.getProperty("java.home");
+        System.setProperty("java.home", "");
+        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        Assert.assertNull(compiler);
+        
+        assertSelfInstantiate("javac2");
+        
+        System.setProperty("java.home", homeProperty);
     }
     
     /**
@@ -118,6 +161,10 @@ public class ExecutionTests extends AbstractExecutionTest {
                 // Check that not the default Manifest file was used.
                 assertFileEqualitySafe(expected, generated);
             }
+
+            @Override
+            public void deleteBetween(File base) {
+            }
             
         });
     }
@@ -141,6 +188,11 @@ public class ExecutionTests extends AbstractExecutionTest {
                 tempFile = new File(base, "javaCopy/dest/instantiated/test/Bla.java");
                 assertFileEqualitySafe(tempFile, copyBla);
             }
+
+            @Override
+            public void deleteBetween(File base) {
+            }
+            
         });
     }
 

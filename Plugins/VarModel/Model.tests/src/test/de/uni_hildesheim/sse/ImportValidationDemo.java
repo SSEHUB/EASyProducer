@@ -3,12 +3,15 @@ package test.de.uni_hildesheim.sse;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
 import de.uni_hildesheim.sse.model.management.VarModel;
+import de.uni_hildesheim.sse.model.varModel.IvmlKeyWords;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.ProjectImport;
+import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
+import de.uni_hildesheim.sse.utils.modelManagement.RestrictionEvaluationException;
 import de.uni_hildesheim.sse.utils.modelManagement.Version;
-import de.uni_hildesheim.sse.utils.modelManagement.VersionRestriction;
-import de.uni_hildesheim.sse.utils.modelManagement.VersionRestriction.Operator;
+import de.uni_hildesheim.sse.varModel.versioning.ImportValidationTest;
 
 /**
  * A demonstration of the import validation. Refactored from original implementation.
@@ -20,13 +23,14 @@ public class ImportValidationDemo {
     /**
      * Short demonstration of the import validation.
      * 
-     * @param args
-     *            unused.
-     * @throws URISyntaxException .
+     * @param args unused.
+     * @throws URISyntaxException shall not occur
+     * @throws RestrictionEvaluationException shall not occur
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     * @throws CSTSemanticException shall not occur
      */
-    public static void main(String[] args) throws URISyntaxException {
-        System.out.println("Please ensure that Patrick's version of the importer is enabled");
-        
+    public static void main(String[] args) throws URISyntaxException, RestrictionEvaluationException, 
+        ValueDoesNotMatchTypeException, CSTSemanticException  {
         String tempURIanfang = "bla/"; // testOnly
         VarModel model = VarModel.INSTANCE;
 
@@ -37,19 +41,13 @@ public class ImportValidationDemo {
 
         Project a = new Project("a");
         a.setVersion(new Version(1));
-        VersionRestriction[] cVersRestr = new VersionRestriction[1];
-        cVersRestr[0] = new VersionRestriction("c", Operator.GREATER_EQUALS, new Version(3, 1));
-        ProjectImport cImport1 = new ProjectImport("c", null, false, false, cVersRestr); // import
-        a.addImport(cImport1); // A importiert c mit version > 1
+        ImportValidationTest.createImport(a, "c", false, IvmlKeyWords.GREATER_EQUALS, new Version(3, 1));
+        // A importiert c mit version > 1
 
         Project b = new Project("b");
         b.setVersion(new Version(1));
-        VersionRestriction[] cVr2 = new VersionRestriction[1];
-        cVr2[0] = new VersionRestriction("c", Operator.LESS_EQUALS, new Version(3, 1));
-        ProjectImport cImport2 = new ProjectImport("c", null, true, false, cVr2); // conflict
-        b.addImport(cImport2); // A importiert c mit version > 1
-        b.addImport(new ProjectImport("d", null, false, false, new VersionRestriction("d", Operator.GREATER_EQUALS,
-                new Version(3, 1))));
+        ImportValidationTest.createImport(b, "c", true, IvmlKeyWords.LESS_EQUALS, new Version(3, 1));
+        ImportValidationTest.createImport(b, "d", false, IvmlKeyWords.GREATER_EQUALS, new Version(3, 1));
 
         Project projC1 = new Project("c");
         projC1.setVersion(new Version(3));

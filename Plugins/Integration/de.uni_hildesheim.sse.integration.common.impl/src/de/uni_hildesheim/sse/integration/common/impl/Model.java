@@ -100,30 +100,22 @@ public abstract class Model implements IModel {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public String getName() {
         return project.getName();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public String getVersion() {
         return Version.toString(project.getVersion());
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public int getVariablesCount() {
         return variables.size();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public IDecisionVariable getVariable(int index) {
         return variables.get(index);
     }
@@ -153,16 +145,12 @@ public abstract class Model implements IModel {
         return result;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public int getTypesCount() {
         return types.size();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public String getType(int index) {
         return IvmlDatatypeVisitor.getUniqueType(types.get(index));
     }
@@ -211,9 +199,7 @@ public abstract class Model implements IModel {
         return StringProvider.toIvmlString((ModelElement) project);
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public IConstraint createConstraint(String constraint) throws ModelException {
         return new Constraint(constraint, project);
     }

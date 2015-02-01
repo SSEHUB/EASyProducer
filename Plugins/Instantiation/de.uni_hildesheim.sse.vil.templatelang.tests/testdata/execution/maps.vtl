@@ -1,0 +1,12 @@
+template maps(Configuration config, FileArtifact target) {
+
+    def main(Configuration config, FileArtifact target) {
+        mapOf(String, mapOf(String, Integer)) m = {};
+        m.add("test", {});
+        mapOf(String, Integer) test = m.get("test");
+        test.add("test1", 1);
+        '${test.get("test1")}'
+        '${m.get("test")}'
+    }
+
+}

@@ -351,17 +351,17 @@ public abstract class Resolver<M extends IResolvableModel<V>, O extends IResolva
             M model = models.peek();
             for (int t = 0; null == result && t < model.getExtensionTypesCount(); t++) {
                 IMetaType type = model.getExtensionType(t);
-                IMetaOperation op = AbstractCallExpression.resolveOperation(type, name, arguments);
-                if (null != op) {
-                    try {
+                try {
+                    IMetaOperation op = AbstractCallExpression.resolveOperation(type, name, arguments);
+                    if (null != op) {
                         result = new CallExpression(op, arguments);
                         result.inferType();
-                    } catch (ExpressionException e) {
-                        lastException = e;
                     }
+                } catch (ExpressionException e) {
+                    lastException = e;
                 }
             }
-            if (null != lastException) {
+            if (null == result && null != lastException) {
                 throw lastException;
             }
         }

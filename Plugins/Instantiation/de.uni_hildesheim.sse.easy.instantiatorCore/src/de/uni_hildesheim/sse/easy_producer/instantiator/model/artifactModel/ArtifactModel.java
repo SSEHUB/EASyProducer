@@ -95,7 +95,7 @@ public class ArtifactModel {
      * @param location the location to be scanned
      * @param count the number of files counted so far (call initially with <code>0</code>)
      * @param observer the progress observer (do not create artifacts if this is <b>null</b>)
-     * @param task the progress task
+     * @param task the progress task (ignored if <b>null</b>)
      * @param errors exceptions caught during scanning (do not create artifacts if this is <b>null</b>)
      * @return the number of files processed
      * 
@@ -118,7 +118,9 @@ public class ArtifactModel {
                     } catch (ArtifactException e) {
                         errors.add(e);
                     }
-                    observer.notifyProgress(task, count);
+                    if (null != task) {
+                        observer.notifyProgress(task, count);
+                    }
                 }
                 count++;
             }
@@ -389,6 +391,27 @@ public class ArtifactModel {
         fileArtifacts.remove(makeRelativeFile(path));
     }
     
+    /**
+     * Called before renaming an artifact to cleanup.
+     * 
+     * @param artifact the artifact being renamed
+     * @throws ArtifactException in case of problems obtaining the path
+     */
+    synchronized void beforeRename(IFileSystemArtifact artifact) throws ArtifactException {
+        delete(artifact.getPath());
+    }
+
+    /**
+     * Called after rename in order to create the changed artifacts.
+     * 
+     * @param artifact the renamed artifact
+     * @throws ArtifactException in case of problems obtaining the path
+     */
+    synchronized void afterRename(IFileSystemArtifact artifact) throws ArtifactException {
+        List<ArtifactException> errors = new ArrayList<ArtifactException>();
+        scanAll(artifact.getPath().getAbsolutePath(), 0, ProgressObserver.NO_OBSERVER, null, errors);
+    }
+
     /**
      * Deletes a path and possible related artifacts. This method is called from {@link Path}.
      * 

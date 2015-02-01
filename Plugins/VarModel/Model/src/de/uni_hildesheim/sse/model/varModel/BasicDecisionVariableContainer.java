@@ -53,9 +53,7 @@ public class BasicDecisionVariableContainer extends ModelElement implements IDec
         super(null);
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void sortContainedElements(Comparator<ContainableModelElement> comp) {
         assert null != comp;
         int size = modelElements.size();
@@ -63,9 +61,7 @@ public class BasicDecisionVariableContainer extends ModelElement implements IDec
         assert modelElements.size() == size;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void add(AttributeAssignment assignment) {
         assert null != assignment;
         if (null == assignments) {
@@ -75,16 +71,12 @@ public class BasicDecisionVariableContainer extends ModelElement implements IDec
         modelElements.add(assignment);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public int getAssignmentCount() {
         return null == assignments ? 0 : assignments.size();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public AttributeAssignment getAssignment(int index) {
         if (null == assignments) {
             throw new IndexOutOfBoundsException();
@@ -92,9 +84,7 @@ public class BasicDecisionVariableContainer extends ModelElement implements IDec
         return assignments.get(index);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public ContainableModelElement getModelElement(int index) {
         return modelElements.get(index);
     }
@@ -110,14 +100,13 @@ public class BasicDecisionVariableContainer extends ModelElement implements IDec
         return modelElements.size();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public DecisionVariableDeclaration getElement(String name) {
         DecisionVariableDeclaration result = null;
         for (int e = 0; null == result && e < elements.size(); e++) {
             DecisionVariableDeclaration element = elements.get(e);
-            if (element.getName().equals(name) || element.getQualifiedName().equals(name)) {
+            if (null != element && (element.getName().equals(name) || element.getQualifiedName().equals(name))) {
+                // null due to incremental validation in xText
                 result = element;
             }
         }
@@ -129,9 +118,7 @@ public class BasicDecisionVariableContainer extends ModelElement implements IDec
         return result;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public boolean contains(DecisionVariableDeclaration var) {
         boolean found = false;
         for (int e = 0; !found && e < elements.size(); e++) {
@@ -143,32 +130,24 @@ public class BasicDecisionVariableContainer extends ModelElement implements IDec
         return found;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void add(Comment comment) {
         if (null != comment) {
             modelElements.add(comment);
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public int getElementCount() {
         return elements.size();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public DecisionVariableDeclaration getElement(int index) {
         return elements.get(index);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public boolean add(DecisionVariableDeclaration elem) {
         assert null != elem;
         boolean found = contains(elem);
@@ -179,16 +158,12 @@ public class BasicDecisionVariableContainer extends ModelElement implements IDec
         return !found; // use exception?
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public int getConstraintsCount() {
         return null == constraints ? 0 : constraints.size();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public Constraint getConstraint(int index) {
         if (null == constraints) {
             throw new IndexOutOfBoundsException();
@@ -196,9 +171,7 @@ public class BasicDecisionVariableContainer extends ModelElement implements IDec
         return constraints.get(index);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void addConstraint(Constraint constraint, boolean internal) {
         assert null != constraint;
         if (null == constraints) {
@@ -208,23 +181,16 @@ public class BasicDecisionVariableContainer extends ModelElement implements IDec
         modelElements.add(constraint);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public int getRealizingCount() {
         return 0;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public Constraint getRealizing(int index) {
         throw new IndexOutOfBoundsException("no elements");
     }
     
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean propagateAttribute(Attribute attribute) {
         boolean successful = true;
@@ -239,17 +205,12 @@ public class BasicDecisionVariableContainer extends ModelElement implements IDec
         return successful;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void accept(IModelVisitor visitor) {
         // unused as done by delegating class
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public int getDeclarationCount() {
         allDeclarations.clear();
         
@@ -261,9 +222,7 @@ public class BasicDecisionVariableContainer extends ModelElement implements IDec
         return allDeclarations.size();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public DecisionVariableDeclaration getDeclaration(int index) {
         return allDeclarations.get(index);
     }

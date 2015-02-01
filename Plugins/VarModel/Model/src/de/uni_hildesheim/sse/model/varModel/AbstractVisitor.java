@@ -31,10 +31,7 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.OrderedEnum;
  */
 public abstract class AbstractVisitor implements IModelVisitor {
 
-    /**
-     * {@inheritDoc}
-     * <i>Sequence:</i> imports, contained elements.
-     */
+    @Override
     public void visitProject(Project project) {
         int count;
         //Projects imports
@@ -49,10 +46,7 @@ public abstract class AbstractVisitor implements IModelVisitor {
         }
     }
     
-    /**
-     * {@inheritDoc}
-     * <i>Sequence:</i> literals.
-     */
+    @Override
     public void visitEnum(Enum eenum) {
         int count = eenum.getLiteralCount();
         for (int e = 0; e < count; e++) {
@@ -60,10 +54,7 @@ public abstract class AbstractVisitor implements IModelVisitor {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     * <i>Sequence:</i> literals.
-     */
+    @Override
     public void visitOrderedEnum(OrderedEnum eenum) {
         int count = eenum.getLiteralCount();
         for (int e = 0; e < count; e++) {
@@ -71,10 +62,7 @@ public abstract class AbstractVisitor implements IModelVisitor {
         }
     }
     
-    /**
-     * {@inheritDoc}
-     * <i>Sequence:</i> elements.
-     */
+    @Override
     public void visitCompound(Compound compound) {
         int count = compound.getElementCount();
         for (int e = 0; e < count; e++) {

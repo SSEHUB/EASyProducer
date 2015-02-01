@@ -186,5 +186,23 @@ public class ArraySequence<T> extends AbstractArrayWrapper<T> implements Sequenc
         }
         return result;
     }
-    
+
+    @Override
+    public T add(T element) {
+        extendCapacity(1);
+        T[] array = getArray();
+        array[array.length - 1] = element;
+        return element;
+    }
+
+    @Override
+    public void remove(T element) {
+        decreaseCapacity(1);
+    }
+
+    @Override
+    public Map<T, T> mapSequence(Sequence<T> other) {
+        return SequenceOperations.mapSequence(this, other);
+    }
+
 }

@@ -192,13 +192,22 @@ public class Path implements IVilType, IStringValueProvider {
      * @throws ArtifactException in case of I/O problems
      */
     public void deleteAll() throws ArtifactException {
-        try {
-            File file = getAbsolutePath();
-            if (!file.isFile()) {
-                org.apache.commons.io.FileUtils.cleanDirectory(file);
+        if (isPattern()) {
+            Set<FileArtifact> all = selectAll();
+            if (null != all) {
+                for (FileArtifact f : all) {
+                    f.delete();
+                }
             }
-        } catch (IOException e) {
-            throw new ArtifactException(e, ArtifactException.ID_IO);
+        } else {
+            try {
+                File file = getAbsolutePath();
+                if (!file.isFile()) {
+                    org.apache.commons.io.FileUtils.cleanDirectory(file);
+                }
+            } catch (IOException e) {
+                throw new ArtifactException(e, ArtifactException.ID_IO);
+            }
         }
     }
     
@@ -385,7 +394,16 @@ public class Path implements IVilType, IStringValueProvider {
      */
     public void delete() throws ArtifactException {
         model.delete(this);
-        FileUtils.delete(getAbsolutePath());
+        if (isPattern()) {
+            Set<FileArtifact> all = selectAll();
+            if (null != all) {
+                for (FileArtifact f : all) {
+                    f.delete();
+                }
+            }
+        } else {
+            FileUtils.delete(getAbsolutePath());
+        }
     }
     
     /**
@@ -432,9 +450,15 @@ public class Path implements IVilType, IStringValueProvider {
         Path result = this;
         File file = new File(name);
         if (!file.isAbsolute()) {
-            file = new File(model.getBase(), name);
+            //file = new File(model.getBase(), name);
+            file = getAbsolutePath().getParentFile();
+            if (null == file) {
+                file = new File(model.getBase(), name);
+            } else {
+                file = new File(file, name);
+            }
         }
-        FileUtils.rename(getAbsolutePath(), name);
+        FileUtils.rename(getAbsolutePath(), file);
         ArtifactModel model = ArtifactFactory.findModel(file);
         if (null != model) {
             result = new Path(getPath(), model);

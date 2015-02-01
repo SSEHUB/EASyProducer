@@ -32,7 +32,6 @@ import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 import de.uni_hildesheim.sse.utils.modelManagement.Version;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Import;
-import de.uni_hildesheim.sse.vil.expressions.translation.ImportTranslator;
 import de.uni_hildesheim.sse.vilBuildLanguage.ImplementationUnit;
 
 /**
@@ -199,12 +198,7 @@ public class BuildLangModelUtility extends de.uni_hildesheim.sse.dslCore.ModelUt
                 ArrayList<ModelImport<Script>> imports = new ArrayList<ModelImport<Script>>();
                 for (Import imp : script.getImports()) {
                     String name = imp.getName();
-                    try {
-                        imports.add(new ModelImport<Script>(name, false, 
-                            ImportTranslator.processRestrictions(name, imp.getVersionSpec())));
-                    } catch (TranslatorException e) {
-                        throw new IOException(e);
-                    }
+                    imports.add(new ModelImport<Script>(name, false, null));
                 }
                 try {
                     result.add(new ModelInfo<Script>(script.getName(), version, this, toNetUri(uri), imports));

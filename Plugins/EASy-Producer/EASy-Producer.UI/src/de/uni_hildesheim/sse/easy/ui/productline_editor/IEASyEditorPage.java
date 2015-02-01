@@ -25,7 +25,7 @@ public interface IEASyEditorPage  {
      * Returns the <code>Display</code> that is associated with
      * the receiver.
      *
-     * @return the receiver's display
+     * @return the receiver's display (may be <b>null</b> if disposed)
      */
     public Display getDisplay();
     

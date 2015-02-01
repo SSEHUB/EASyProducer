@@ -1,0 +1,10 @@
+vilScript collections2 () {
+
+    setOf(String) s0 = {};
+    setOf(String) s1 = {"a"};
+    setOf(String) s2 = {"a", "a"};
+
+    main() = : {
+    }
+
+}

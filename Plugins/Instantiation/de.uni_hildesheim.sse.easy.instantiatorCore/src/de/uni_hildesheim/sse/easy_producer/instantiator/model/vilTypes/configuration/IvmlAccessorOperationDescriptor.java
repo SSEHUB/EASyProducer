@@ -9,6 +9,9 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.StringVal
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.VilException;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
+import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
+import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
+import de.uni_hildesheim.sse.model.varModel.datatypes.Set;
 
 /**
  * Defines an operation descriptor which enables comfortable access to an individual decision variables
@@ -70,7 +73,13 @@ class IvmlAccessorOperationDescriptor extends IvmlOperationDescriptor {
             }
             DecisionVariable tmp = ((DecisionVariable) args[0]).getByName(varName);
             if (getReturnType().isCollection()) {
-                result = tmp.variables();
+                IDatatype type = tmp.getDecisionVariable().getDeclaration().getType();
+                type = DerivedDatatype.resolveToBasis(type);
+                if (Set.TYPE.isAssignableFrom(type)) {
+                    result = tmp.variablesSet();
+                } else {
+                    result = tmp.variables();
+                }
             } else {
                 result = tmp;
             }

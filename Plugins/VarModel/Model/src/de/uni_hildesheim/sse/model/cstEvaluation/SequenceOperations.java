@@ -27,16 +27,11 @@ public class SequenceOperations {
      */
     static final IOperationEvaluator INDEX_ACCESS = new IOperationEvaluator() {
 
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
             EvaluationAccessor result = null;
             if (1 == arguments.length) {
-                Value res = operand.getValue(arguments[0]);
-                if (null != res) {
-                    result = ConstantAccessor.POOL.getInstance().bind(res, operand.getContext());
-                }
+                result = operand.getValue(arguments[0]);
             }
             return result;
         }
@@ -48,9 +43,7 @@ public class SequenceOperations {
      */
     static final IOperationEvaluator FIRST = new IOperationEvaluator() {
 
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
             EvaluationAccessor result = null;
             Value value = operand.getValue();
@@ -70,9 +63,7 @@ public class SequenceOperations {
      */
     static final IOperationEvaluator LAST = new IOperationEvaluator() {
 
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
             EvaluationAccessor result = null;
             Value value = operand.getValue();
@@ -93,9 +84,7 @@ public class SequenceOperations {
      */
     static final IOperationEvaluator HAS_DUPLICATES = new IOperationEvaluator() {
 
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
             EvaluationAccessor result = null;
             Value value = operand.getValue();
@@ -122,9 +111,7 @@ public class SequenceOperations {
      */
     static final IOperationEvaluator INSERT_AT = new IOperationEvaluator() {
 
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
             EvaluationAccessor result = null;
             if (2 == arguments.length) {
@@ -157,9 +144,7 @@ public class SequenceOperations {
      */
     static final IOperationEvaluator INDEX_OF = new IOperationEvaluator() {
 
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
             EvaluationAccessor result = null;
             if (1 == arguments.length) {
@@ -180,6 +165,78 @@ public class SequenceOperations {
 
     };
 
+    /**
+     * Implements the "isSubsequenceOf" operation.
+     */
+    static final IOperationEvaluator SUBSEQUENCE = new IOperationEvaluator() {
+
+        @Override
+        public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
+            EvaluationAccessor result = null;
+            if (1 == arguments.length) {
+                Value oValue = operand.getValue();
+                Value aValue = arguments[0].getValue();
+                if (oValue instanceof ContainerValue && aValue instanceof ContainerValue) {
+                    ContainerValue cont1 = (ContainerValue) oValue;
+                    ContainerValue cont2 = (ContainerValue) aValue;
+                    int i1 = 0;
+                    int i2 = 0;
+                    int size1 = cont1.getElementSize();
+                    int size2 = cont2.getElementSize();
+                    while (i1 < size1 && i2 < size2) {
+                        Value val1 = cont1.getElement(i1);
+                        Value val2 = cont1.getElement(i2);
+                        if (val1.equals(val2)) {
+                            i1++;
+                            i2++;
+                        } else {
+                            i2++; // operand: {1, 2, 5}, argument {1, 2, 3, 5}
+                        }
+                    }
+                    
+                    Value resVal = BooleanValue.toBooleanValue(i1 == size1);
+                    result = ConstantAccessor.POOL.getInstance().bind(resVal, operand.getContext());
+                }
+            }
+            return result;
+        }
+
+    };
+
+    /**
+     * Implements the "overlaps" operation.
+     */
+    static final IOperationEvaluator OVERLAPS = new IOperationEvaluator() {
+
+        @Override
+        public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
+            EvaluationAccessor result = null;
+            if (1 == arguments.length) {
+                Value oValue = operand.getValue();
+                Value aValue = arguments[0].getValue();
+                if (oValue instanceof ContainerValue && aValue instanceof ContainerValue) {
+                    ContainerValue cont1 = (ContainerValue) oValue;
+                    ContainerValue cont2 = (ContainerValue) aValue;
+                    Set<Object> tmp = new HashSet<Object>();
+                    boolean found = false;
+                    int size1 = cont1.getElementSize();
+                    int size2 = cont2.getElementSize();
+                    if (size1 > 0 && size2 > 0) {
+                        for (int i1 = 0; i1 < size1; i1++) {
+                            tmp.add(cont1.getElement(i1));
+                        }
+                        for (int i2 = 0; !found && i2 < size2; i2++) {
+                            found = tmp.contains(cont2.getElement(i2));
+                        }
+                    }
+                    Value resVal = BooleanValue.toBooleanValue(found);
+                    result = ConstantAccessor.POOL.getInstance().bind(resVal, operand.getContext());
+                }
+            }
+            return result;
+        }
+
+    };
 
     /**
      * Implements the union operation.
@@ -237,6 +294,9 @@ public class SequenceOperations {
         EvaluatorRegistry.registerEvaluator(INDEX_OF, Sequence.INDEX_OF);
         EvaluatorRegistry.registerEvaluator(GenericOperations.EQUALS, Sequence.EQUALS);
         EvaluatorRegistry.registerEvaluator(GenericOperations.ASSIGNMENT, Sequence.ASSIGNMENT);
+        EvaluatorRegistry.registerEvaluator(ContainerOperations.ADD, Sequence.ADD);
+        EvaluatorRegistry.registerEvaluator(SUBSEQUENCE, Sequence.SUBSEQUENCE);
+        EvaluatorRegistry.registerEvaluator(OVERLAPS, Sequence.OVERLAPS);
     }
 
 }

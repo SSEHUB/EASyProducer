@@ -14,9 +14,6 @@ import org.eclipse.xtext.formatting.impl.FormattingConfig;
  */
 public class IvmlFormatter extends AbstractDeclarativeFormatter {
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected void configureFormatting(FormattingConfig conf) {
         // It's usually a good idea to activate the following three statements.

@@ -1,0 +1,1131 @@
+<list>
+  <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Template>
+    <dirty>false</dirty>
+    <imports>
+      <imports/>
+    </imports>
+    <registry>
+      <registry>de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry@31916e</registry>
+    </registry>
+    <advices>
+      <de.uni__hildesheim.sse.easy__producer.instantiator.model.common.Advice>
+        <advice>QM</advice>
+      </de.uni__hildesheim.sse.easy__producer.instantiator.model.common.Advice>
+    </advices>
+    <name>maxHost</name>
+    <javaExtensions>
+      <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.JavaExtension>
+        <name>de.uni_hildesheim.sse.easy_producer.instantiator.model.defaultInstantiators.DefaultVtlJavaExtension</name>
+        <resolved>
+          <cls>de.uni_hildesheim.sse.easy_producer.instantiator.model.defaultInstantiators.DefaultVtlJavaExtension</cls>
+          <operations>
+            <de.uni__hildesheim.sse.easy__producer.instantiator.model.vilTypes.ReflectionOperationDescriptor>
+              <isConstructor>false</isConstructor>
+              <opType>NORMAL</opType>
+              <aliasType>NONE</aliasType>
+              <acceptsNamedParameters>false</acceptsNamedParameters>
+              <acceptsImplicitParameters>false</acceptsImplicitParameters>
+              <isConversion>false</isConversion>
+              <method>
+                <class>de.uni_hildesheim.sse.easy_producer.instantiator.model.defaultInstantiators.DefaultVtlJavaExtension</class>
+                <name>createIntegerSequence</name>
+                <parameter-types>
+                  <class>int</class>
+                  <class>int</class>
+                </parameter-types>
+              </method>
+            </de.uni__hildesheim.sse.easy__producer.instantiator.model.vilTypes.ReflectionOperationDescriptor>
+            <de.uni__hildesheim.sse.easy__producer.instantiator.model.vilTypes.ReflectionOperationDescriptor>
+              <isConstructor>false</isConstructor>
+              <opType>NORMAL</opType>
+              <aliasType>NONE</aliasType>
+              <acceptsNamedParameters>false</acceptsNamedParameters>
+              <acceptsImplicitParameters>false</acceptsImplicitParameters>
+              <isConversion>false</isConversion>
+              <method>
+                <class>de.uni_hildesheim.sse.easy_producer.instantiator.model.defaultInstantiators.DefaultVtlJavaExtension</class>
+                <name>randomInteger</name>
+                <parameter-types>
+                  <class>int</class>
+                </parameter-types>
+              </method>
+            </de.uni__hildesheim.sse.easy__producer.instantiator.model.vilTypes.ReflectionOperationDescriptor>
+            <de.uni__hildesheim.sse.easy__producer.instantiator.model.vilTypes.ReflectionOperationDescriptor>
+              <isConstructor>false</isConstructor>
+              <opType>NORMAL</opType>
+              <aliasType>NONE</aliasType>
+              <acceptsNamedParameters>false</acceptsNamedParameters>
+              <acceptsImplicitParameters>false</acceptsImplicitParameters>
+              <isConversion>false</isConversion>
+              <method>
+                <class>de.uni_hildesheim.sse.easy_producer.instantiator.model.defaultInstantiators.DefaultVtlJavaExtension</class>
+                <name>randomInteger</name>
+                <parameter-types/>
+              </method>
+            </de.uni__hildesheim.sse.easy__producer.instantiator.model.vilTypes.ReflectionOperationDescriptor>
+            <de.uni__hildesheim.sse.easy__producer.instantiator.model.vilTypes.ReflectionOperationDescriptor>
+              <isConstructor>false</isConstructor>
+              <opType>NORMAL</opType>
+              <aliasType>NONE</aliasType>
+              <acceptsNamedParameters>false</acceptsNamedParameters>
+              <acceptsImplicitParameters>false</acceptsImplicitParameters>
+              <isConversion>false</isConversion>
+              <method>
+                <class>de.uni_hildesheim.sse.easy_producer.instantiator.model.defaultInstantiators.DefaultVtlJavaExtension</class>
+                <name>random</name>
+                <parameter-types/>
+              </method>
+            </de.uni__hildesheim.sse.easy__producer.instantiator.model.vilTypes.ReflectionOperationDescriptor>
+          </operations>
+          <registry>
+            <registry>de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry@190e33f</registry>
+          </registry>
+        </resolved>
+        <isDefault>true</isDefault>
+      </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.JavaExtension>
+    </javaExtensions>
+    <param>
+      <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration>
+        <name>config</name>
+        <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor">
+          <declaringType name="Configuration"/>
+        </type>
+        <isConstant>false</isConstant>
+        <hasExplicitType>true</hasExplicitType>
+      </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration>
+      <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration>
+        <name>target</name>
+        <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor">
+          <declaringType name="FileArtifact"/>
+        </type>
+        <isConstant>false</isConstant>
+        <hasExplicitType>true</hasExplicitType>
+      </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration>
+      <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration>
+        <name>pipeline</name>
+        <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypeDescriptor">
+          <declaringType name="Pipeline"/>
+        </type>
+        <isConstant>false</isConstant>
+        <hasExplicitType>true</hasExplicitType>
+      </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration>
+    </param>
+    <defs>
+      <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def>
+        <body>
+          <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ContentStatement>
+            <content>#include &quot;Maxfiles.h&quot;</content>
+            <terminal>&apos;</terminal>
+            <printLineEnd>true</printLineEnd>
+          </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ContentStatement>
+          <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ContentStatement>
+            <content>#include &lt;MaxSLiCInterface.h&gt;</content>
+            <terminal>&apos;</terminal>
+            <printLineEnd>true</printLineEnd>
+          </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ContentStatement>
+          <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ContentStatement>
+            <content></content>
+            <terminal>&apos;</terminal>
+            <printLineEnd>true</printLineEnd>
+          </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ContentStatement>
+          <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ContentStatement>
+            <content>int main(void)</content>
+            <terminal>&apos;</terminal>
+            <printLineEnd>true</printLineEnd>
+          </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ContentStatement>
+          <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ContentStatement>
+            <content>{</content>
+            <terminal>&apos;</terminal>
+            <printLineEnd>true</printLineEnd>
+          </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ContentStatement>
+          <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ContentStatement>
+            <content>    while(true) {</content>
+            <terminal>&apos;</terminal>
+            <printLineEnd>true</printLineEnd>
+          </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ContentStatement>
+          <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ContentStatement>
+            <content>        int32_ *inData;</content>
+            <terminal>&apos;</terminal>
+            <printLineEnd>true</printLineEnd>
+          </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ContentStatement>
+          <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ContentStatement>
+            <content>        int count = readDataFromNetwork(inData); // simplification, we need a loop or so</content>
+            <terminal>&apos;</terminal>
+            <printLineEnd>true</printLineEnd>
+          </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ContentStatement>
+          <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ContentStatement>
+            <content>        int32_ *outData;</content>
+            <terminal>&apos;</terminal>
+            <printLineEnd>true</printLineEnd>
+          </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ContentStatement>
+          <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ContentStatement>
+            <content>        outData = malloc(count); // just for now</content>
+            <terminal>&apos;</terminal>
+            <printLineEnd>true</printLineEnd>
+          </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ContentStatement>
+          <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration>
+            <name>param</name>
+            <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor">
+              <declaringType name="String"/>
+            </type>
+            <isConstant>false</isConstant>
+            <expression class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ConstantExpression">
+              <value class="string"></value>
+              <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../type"/>
+            </expression>
+            <hasExplicitType>true</hasExplicitType>
+          </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration>
+          <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.LoopStatement>
+            <iteratorVar>
+              <name>r</name>
+              <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor">
+                <declaringType name="DecisionVariable"/>
+              </type>
+              <isConstant>false</isConstant>
+              <hasExplicitType>true</hasExplicitType>
+            </iteratorVar>
+            <containerExpression class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression">
+              <name>sources</name>
+              <arguments>
+                <de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                  <expr class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VariableExpression">
+                    <variable class="de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.VariableDeclaration">
+                      <name>pip</name>
+                      <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypeDescriptor" reference="../../../../../../../../../../param/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration[3]/type"/>
+                      <isConstant>false</isConstant>
+                      <hasExplicitType>true</hasExplicitType>
+                    </variable>
+                    <qualifiedName>pip</qualifiedName>
+                  </expr>
+                  <fixed>false</fixed>
+                </de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+              </arguments>
+              <resolved class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlAccessorOperationDescriptor">
+                <name>sources</name>
+                <isConstructor>false</isConstructor>
+                <opType>NORMAL</opType>
+                <declaringType class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypeDescriptor" reference="../../../../../../../param/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration[3]/type"/>
+                <returnType class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor">
+                  <declaringType name="Set" parameter0="DecisionVariable"/>
+                </returnType>
+                <aliasType>NONE</aliasType>
+                <parameter>
+                  <de.uni__hildesheim.sse.easy__producer.instantiator.model.vilTypes.configuration.IvmlTypeDescriptor reference="../../../../../../../../param/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration[3]/type"/>
+                </parameter>
+                <acceptsNamedParameters>false</acceptsNamedParameters>
+                <acceptsImplicitParameters>false</acceptsImplicitParameters>
+                <isConversion>false</isConversion>
+                <varName>sources</varName>
+              </resolved>
+              <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../resolved/returnType"/>
+              <callType>NORMAL</callType>
+              <dotRight>false</dotRight>
+            </containerExpression>
+            <statement class="de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateBlock">
+              <body>
+                <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ExpressionStatement>
+                  <expression class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ValueAssignmentExpression">
+                    <varDecl class="de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.VariableDeclaration" reference="../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration"/>
+                    <valueExpression class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression">
+                      <name>+</name>
+                      <arguments>
+                        <de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                          <expr class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VariableExpression">
+                            <variable class="de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.VariableDeclaration" reference="../../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration"/>
+                            <qualifiedName>param</qualifiedName>
+                          </expr>
+                          <fixed>false</fixed>
+                        </de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                        <de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                          <expr class="de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateCallExpression">
+                            <name>processElement</name>
+                            <resolved class="de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Def">
+                              <body>
+                                <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ExpressionStatement>
+                                  <expression class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VariableExpression">
+                                    <variable class="de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.VariableDeclaration">
+                                      <name>param</name>
+                                      <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../../../../../../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration/type"/>
+                                      <isConstant>false</isConstant>
+                                      <hasExplicitType>true</hasExplicitType>
+                                    </variable>
+                                    <qualifiedName>param</qualifiedName>
+                                  </expression>
+                                </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ExpressionStatement>
+                              </body>
+                              <parent reference="../../../../../../../../../../../../../.."/>
+                              <name>processElement</name>
+                              <param>
+                                <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration>
+                                  <name>elt</name>
+                                  <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../../../../../../../../../../../iteratorVar/type"/>
+                                  <isConstant>false</isConstant>
+                                  <hasExplicitType>true</hasExplicitType>
+                                </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration>
+                                <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration reference="../../body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ExpressionStatement/expression/variable"/>
+                              </param>
+                              <specifiedType class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration/type"/>
+                            </resolved>
+                            <model class="de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Template" reference="../../../../../../../../../../../../.."/>
+                            <arguments>
+                              <de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                                <expr class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VariableExpression">
+                                  <variable class="de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.VariableDeclaration" reference="../../../../../../../../../../../../iteratorVar"/>
+                                  <qualifiedName>r</qualifiedName>
+                                </expr>
+                                <fixed>false</fixed>
+                              </de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                              <de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                                <expr class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ConstantExpression">
+                                  <value class="string"></value>
+                                  <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../../../../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration/type"/>
+                                </expr>
+                                <fixed>false</fixed>
+                              </de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                            </arguments>
+                            <isSuper>false</isSuper>
+                          </expr>
+                          <fixed>false</fixed>
+                        </de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                      </arguments>
+                      <resolved class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionOperationDescriptor">
+                        <name>+</name>
+                        <isConstructor>false</isConstructor>
+                        <opType>INFIX</opType>
+                        <declaringType class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration/type"/>
+                        <returnType class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration/type"/>
+                        <aliasType>EXPLICIT</aliasType>
+                        <parameter>
+                          <de.uni__hildesheim.sse.easy__producer.instantiator.model.vilTypes.ReflectionTypeDescriptor reference="../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration/type"/>
+                          <de.uni__hildesheim.sse.easy__producer.instantiator.model.vilTypes.ReflectionTypeDescriptor reference="../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration/type"/>
+                        </parameter>
+                        <acceptsNamedParameters>false</acceptsNamedParameters>
+                        <acceptsImplicitParameters>false</acceptsImplicitParameters>
+                        <isConversion>false</isConversion>
+                        <method>
+                          <class>de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.PseudoString</class>
+                          <name>concat</name>
+                          <parameter-types>
+                            <class>java.lang.String</class>
+                            <class>java.lang.String</class>
+                          </parameter-types>
+                        </method>
+                      </resolved>
+                      <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration/type"/>
+                      <callType>NORMAL</callType>
+                      <dotRight>false</dotRight>
+                    </valueExpression>
+                  </expression>
+                </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ExpressionStatement>
+              </body>
+            </statement>
+          </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.LoopStatement>
+          <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.AlternativeStatement>
+            <condition class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression">
+              <name>&gt;</name>
+              <arguments>
+                <de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                  <expr class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression">
+                    <name>length</name>
+                    <arguments>
+                      <de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                        <expr class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VariableExpression">
+                          <variable class="de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.VariableDeclaration" reference="../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration"/>
+                          <qualifiedName>param</qualifiedName>
+                        </expr>
+                        <fixed>false</fixed>
+                      </de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                    </arguments>
+                    <resolved class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionOperationDescriptor">
+                      <isConstructor>false</isConstructor>
+                      <opType>NORMAL</opType>
+                      <declaringType class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration/type"/>
+                      <returnType class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor">
+                        <declaringType name="Integer"/>
+                      </returnType>
+                      <aliasType>NONE</aliasType>
+                      <parameter>
+                        <de.uni__hildesheim.sse.easy__producer.instantiator.model.vilTypes.ReflectionTypeDescriptor reference="../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration/type"/>
+                      </parameter>
+                      <acceptsNamedParameters>false</acceptsNamedParameters>
+                      <acceptsImplicitParameters>false</acceptsImplicitParameters>
+                      <isConversion>false</isConversion>
+                      <method>
+                        <class>de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.PseudoString</class>
+                        <name>length</name>
+                        <parameter-types>
+                          <class>java.lang.String</class>
+                        </parameter-types>
+                      </method>
+                    </resolved>
+                    <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../resolved/returnType"/>
+                    <callType>NORMAL</callType>
+                    <dotRight>false</dotRight>
+                  </expr>
+                  <fixed>false</fixed>
+                </de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                <de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                  <expr class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ConstantExpression">
+                    <value class="int">0</value>
+                    <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument/expr/resolved/returnType"/>
+                  </expr>
+                  <fixed>false</fixed>
+                </de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+              </arguments>
+              <resolved class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionOperationDescriptor">
+                <name>&gt;</name>
+                <isConstructor>false</isConstructor>
+                <opType>INFIX</opType>
+                <declaringType class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../arguments/de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument/expr/resolved/returnType"/>
+                <returnType class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor">
+                  <declaringType name="Boolean"/>
+                </returnType>
+                <aliasType>EXPLICIT</aliasType>
+                <parameter>
+                  <de.uni__hildesheim.sse.easy__producer.instantiator.model.vilTypes.ReflectionTypeDescriptor reference="../../../arguments/de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument/expr/resolved/returnType"/>
+                  <de.uni__hildesheim.sse.easy__producer.instantiator.model.vilTypes.ReflectionTypeDescriptor reference="../../../arguments/de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument/expr/resolved/returnType"/>
+                </parameter>
+                <acceptsNamedParameters>false</acceptsNamedParameters>
+                <acceptsImplicitParameters>false</acceptsImplicitParameters>
+                <isConversion>false</isConversion>
+                <method>
+                  <class>de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.PseudoInteger</class>
+                  <name>greaterThan</name>
+                  <parameter-types>
+                    <class>int</class>
+                    <class>int</class>
+                  </parameter-types>
+                </method>
+              </resolved>
+              <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../resolved/returnType"/>
+              <callType>NORMAL</callType>
+              <dotRight>false</dotRight>
+            </condition>
+            <ifStatement class="de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateBlock">
+              <body>
+                <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ExpressionStatement>
+                  <expression class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ValueAssignmentExpression">
+                    <varDecl class="de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.VariableDeclaration" reference="../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration"/>
+                    <valueExpression class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression">
+                      <name>+</name>
+                      <arguments>
+                        <de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                          <expr class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VariableExpression">
+                            <variable class="de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.VariableDeclaration" reference="../../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration"/>
+                            <qualifiedName>param</qualifiedName>
+                          </expr>
+                          <fixed>false</fixed>
+                        </de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                        <de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                          <expr class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ConstantExpression">
+                            <value class="string">,</value>
+                            <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration/type"/>
+                          </expr>
+                          <fixed>false</fixed>
+                        </de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                      </arguments>
+                      <resolved class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionOperationDescriptor" reference="../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.LoopStatement/statement/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ExpressionStatement/expression/valueExpression/resolved"/>
+                      <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration/type"/>
+                      <callType>NORMAL</callType>
+                      <dotRight>false</dotRight>
+                    </valueExpression>
+                  </expression>
+                </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ExpressionStatement>
+              </body>
+            </ifStatement>
+          </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.AlternativeStatement>
+          <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ContentStatement>
+            <content></content>
+            <terminal>&apos;</terminal>
+            <printLineEnd>true</printLineEnd>
+          </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ContentStatement>
+          <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ContentStatement>
+            <content>        Pipeline($param inData, outData);</content>
+            <terminal>&apos;</terminal>
+            <printLineEnd>true</printLineEnd>
+          </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ContentStatement>
+          <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ContentStatement>
+            <content>        writeToNetwork(outData);</content>
+            <terminal>&apos;</terminal>
+            <printLineEnd>true</printLineEnd>
+          </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ContentStatement>
+          <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ContentStatement>
+            <content>    }</content>
+            <terminal>&apos;</terminal>
+            <printLineEnd>true</printLineEnd>
+          </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ContentStatement>
+          <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ContentStatement>
+            <content>}</content>
+            <terminal>&apos;</terminal>
+            <printLineEnd>true</printLineEnd>
+          </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ContentStatement>
+        </body>
+        <parent reference="../../.."/>
+        <name>main</name>
+        <param>
+          <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration>
+            <name>config</name>
+            <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../../../../param/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration/type"/>
+            <isConstant>false</isConstant>
+            <hasExplicitType>true</hasExplicitType>
+          </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration>
+          <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration>
+            <name>target</name>
+            <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../../../../param/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration[2]/type"/>
+            <isConstant>false</isConstant>
+            <hasExplicitType>true</hasExplicitType>
+          </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration>
+          <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration reference="../../body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.LoopStatement/containerExpression/arguments/de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument/expr/variable"/>
+        </param>
+      </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def>
+      <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def reference="../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.LoopStatement/statement/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ExpressionStatement/expression/valueExpression/arguments/de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument[2]/expr/resolved"/>
+      <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def>
+        <body>
+          <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration>
+            <name>family</name>
+            <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypeDescriptor">
+              <declaringType name="Family"/>
+            </type>
+            <isConstant>false</isConstant>
+            <expression class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression">
+              <name>family</name>
+              <arguments>
+                <de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                  <expr class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VariableExpression">
+                    <variable class="de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.VariableDeclaration">
+                      <name>elt</name>
+                      <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypeDescriptor">
+                        <declaringType name="FamilyElement"/>
+                      </type>
+                      <isConstant>false</isConstant>
+                      <hasExplicitType>true</hasExplicitType>
+                    </variable>
+                    <qualifiedName>elt</qualifiedName>
+                  </expr>
+                  <fixed>false</fixed>
+                </de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+              </arguments>
+              <resolved class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlAccessorOperationDescriptor">
+                <name>family</name>
+                <isConstructor>false</isConstructor>
+                <opType>NORMAL</opType>
+                <declaringType class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypeDescriptor" reference="../../arguments/de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument/expr/variable/type"/>
+                <returnType class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.LoopStatement/iteratorVar/type"/>
+                <aliasType>NONE</aliasType>
+                <parameter>
+                  <de.uni__hildesheim.sse.easy__producer.instantiator.model.vilTypes.configuration.IvmlTypeDescriptor reference="../../../arguments/de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument/expr/variable/type"/>
+                </parameter>
+                <acceptsNamedParameters>false</acceptsNamedParameters>
+                <acceptsImplicitParameters>false</acceptsImplicitParameters>
+                <isConversion>false</isConversion>
+                <varName>family</varName>
+              </resolved>
+              <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.LoopStatement/iteratorVar/type"/>
+              <callType>NORMAL</callType>
+              <dotRight>false</dotRight>
+            </expression>
+            <hasExplicitType>true</hasExplicitType>
+          </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration>
+          <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.LoopStatement>
+            <iteratorVar>
+              <name>alg</name>
+              <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypeDescriptor">
+                <declaringType name="Algorithm"/>
+              </type>
+              <isConstant>false</isConstant>
+              <hasExplicitType>true</hasExplicitType>
+            </iteratorVar>
+            <containerExpression class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression">
+              <name>members</name>
+              <arguments>
+                <de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                  <expr class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VariableExpression">
+                    <variable class="de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.VariableDeclaration" reference="../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration"/>
+                    <qualifiedName>family</qualifiedName>
+                  </expr>
+                  <fixed>false</fixed>
+                </de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+              </arguments>
+              <resolved class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlAccessorOperationDescriptor">
+                <name>members</name>
+                <isConstructor>false</isConstructor>
+                <opType>NORMAL</opType>
+                <declaringType class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypeDescriptor" reference="../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration/type"/>
+                <returnType class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor">
+                  <declaringType name="Set" parameter0="DecisionVariable"/>
+                </returnType>
+                <aliasType>NONE</aliasType>
+                <parameter>
+                  <de.uni__hildesheim.sse.easy__producer.instantiator.model.vilTypes.configuration.IvmlTypeDescriptor reference="../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration/type"/>
+                </parameter>
+                <acceptsNamedParameters>false</acceptsNamedParameters>
+                <acceptsImplicitParameters>false</acceptsImplicitParameters>
+                <isConversion>false</isConversion>
+                <varName>members</varName>
+              </resolved>
+              <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../resolved/returnType"/>
+              <callType>NORMAL</callType>
+              <dotRight>false</dotRight>
+            </containerExpression>
+            <statement class="de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateBlock">
+              <body>
+                <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.AlternativeStatement>
+                  <condition class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression">
+                    <name>==</name>
+                    <arguments>
+                      <de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                        <expr class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression">
+                          <name>type</name>
+                          <arguments>
+                            <de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                              <expr class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression">
+                                <name>hwNode</name>
+                                <arguments>
+                                  <de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                                    <expr class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VariableExpression">
+                                      <variable class="de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.VariableDeclaration" reference="../../../../../../../../../../../../../../iteratorVar"/>
+                                      <qualifiedName>alg</qualifiedName>
+                                    </expr>
+                                    <fixed>false</fixed>
+                                  </de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                                </arguments>
+                                <resolved class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlAccessorOperationDescriptor">
+                                  <name>hwNode</name>
+                                  <isConstructor>false</isConstructor>
+                                  <opType>NORMAL</opType>
+                                  <declaringType class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypeDescriptor" reference="../../../../../../../../../../../../iteratorVar/type"/>
+                                  <returnType class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../../../../../../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.LoopStatement/iteratorVar/type"/>
+                                  <aliasType>NONE</aliasType>
+                                  <parameter>
+                                    <de.uni__hildesheim.sse.easy__producer.instantiator.model.vilTypes.configuration.IvmlTypeDescriptor reference="../../../../../../../../../../../../../iteratorVar/type"/>
+                                  </parameter>
+                                  <acceptsNamedParameters>false</acceptsNamedParameters>
+                                  <acceptsImplicitParameters>false</acceptsImplicitParameters>
+                                  <isConversion>false</isConversion>
+                                  <varName>hwNode</varName>
+                                </resolved>
+                                <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../../../../../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.LoopStatement/iteratorVar/type"/>
+                                <callType>NORMAL</callType>
+                                <dotRight>false</dotRight>
+                              </expr>
+                              <fixed>false</fixed>
+                            </de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                          </arguments>
+                          <resolved class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionOperationDescriptor">
+                            <name>type</name>
+                            <isConstructor>false</isConstructor>
+                            <opType>NORMAL</opType>
+                            <declaringType class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../../../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.LoopStatement/iteratorVar/type"/>
+                            <returnType class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../../../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration/type"/>
+                            <aliasType>IMPLICIT</aliasType>
+                            <parameter>
+                              <de.uni__hildesheim.sse.easy__producer.instantiator.model.vilTypes.ReflectionTypeDescriptor reference="../../../../../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.LoopStatement/iteratorVar/type"/>
+                            </parameter>
+                            <acceptsNamedParameters>false</acceptsNamedParameters>
+                            <acceptsImplicitParameters>false</acceptsImplicitParameters>
+                            <isConversion>false</isConversion>
+                            <method>
+                              <class>de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.AbstractIvmlVariable</class>
+                              <name>getType</name>
+                              <parameter-types/>
+                            </method>
+                          </resolved>
+                          <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration/type"/>
+                          <callType>NORMAL</callType>
+                          <dotRight>false</dotRight>
+                        </expr>
+                        <fixed>false</fixed>
+                      </de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                      <de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                        <expr class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression">
+                          <name>convertAny</name>
+                          <arguments>
+                            <de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                              <expr class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VilTypeExpression">
+                                <identifier>ReconfigurableHardware::MPCCNode</identifier>
+                                <resolved class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypeDescriptor">
+                                  <declaringType name="MPCCNode"/>
+                                </resolved>
+                              </expr>
+                              <fixed>false</fixed>
+                            </de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                          </arguments>
+                          <resolved class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionOperationDescriptor">
+                            <isConstructor>false</isConstructor>
+                            <opType>NORMAL</opType>
+                            <declaringType class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../../../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration/type"/>
+                            <returnType class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../../../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration/type"/>
+                            <aliasType>NONE</aliasType>
+                            <parameter>
+                              <de.uni__hildesheim.sse.easy__producer.instantiator.model.vilTypes.ReflectionTypeDescriptor_-3>
+                                <declaringType name="Any"/>
+                              </de.uni__hildesheim.sse.easy__producer.instantiator.model.vilTypes.ReflectionTypeDescriptor_-3>
+                            </parameter>
+                            <acceptsNamedParameters>false</acceptsNamedParameters>
+                            <acceptsImplicitParameters>false</acceptsImplicitParameters>
+                            <isConversion>true</isConversion>
+                            <method>
+                              <class>de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.PseudoString</class>
+                              <name>convertAny</name>
+                              <parameter-types>
+                                <class>java.lang.Object</class>
+                              </parameter-types>
+                            </method>
+                          </resolved>
+                          <callType>TRANSPARENT</callType>
+                          <dotRight>false</dotRight>
+                        </expr>
+                        <fixed>false</fixed>
+                      </de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                    </arguments>
+                    <resolved class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionOperationDescriptor">
+                      <name>==</name>
+                      <isConstructor>false</isConstructor>
+                      <opType>INFIX</opType>
+                      <declaringType class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration/type"/>
+                      <returnType class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.AlternativeStatement/condition/resolved/returnType"/>
+                      <aliasType>EXPLICIT</aliasType>
+                      <parameter>
+                        <de.uni__hildesheim.sse.easy__producer.instantiator.model.vilTypes.ReflectionTypeDescriptor reference="../../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration/type"/>
+                        <de.uni__hildesheim.sse.easy__producer.instantiator.model.vilTypes.ReflectionTypeDescriptor reference="../../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration/type"/>
+                      </parameter>
+                      <acceptsNamedParameters>false</acceptsNamedParameters>
+                      <acceptsImplicitParameters>false</acceptsImplicitParameters>
+                      <isConversion>false</isConversion>
+                      <method>
+                        <class>de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.PseudoString</class>
+                        <name>equals</name>
+                        <parameter-types>
+                          <class>java.lang.String</class>
+                          <class>java.lang.String</class>
+                        </parameter-types>
+                      </method>
+                    </resolved>
+                    <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.AlternativeStatement/condition/resolved/returnType"/>
+                    <callType>NORMAL</callType>
+                    <dotRight>false</dotRight>
+                  </condition>
+                  <ifStatement class="de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateBlock">
+                    <body>
+                      <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration>
+                        <name>familyName</name>
+                        <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration/type"/>
+                        <isConstant>false</isConstant>
+                        <expression class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression">
+                          <name>$varName</name>
+                          <arguments>
+                            <de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                              <expr class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VariableExpression">
+                                <variable class="de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.VariableDeclaration" reference="../../../../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration/expression/arguments/de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument/expr/variable"/>
+                                <qualifiedName>elt</qualifiedName>
+                              </expr>
+                              <fixed>false</fixed>
+                            </de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                          </arguments>
+                          <resolved class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlMetaVarNameOperationDescriptor">
+                            <name>$varName</name>
+                            <isConstructor>false</isConstructor>
+                            <opType>NORMAL</opType>
+                            <declaringType class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypeDescriptor" reference="../../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration/expression/arguments/de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument/expr/variable/type"/>
+                            <returnType class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../../../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration/type"/>
+                            <aliasType>NONE</aliasType>
+                            <parameter>
+                              <de.uni__hildesheim.sse.easy__producer.instantiator.model.vilTypes.configuration.IvmlTypeDescriptor reference="../../../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration/expression/arguments/de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument/expr/variable/type"/>
+                            </parameter>
+                            <acceptsNamedParameters>false</acceptsNamedParameters>
+                            <acceptsImplicitParameters>false</acceptsImplicitParameters>
+                            <isConversion>false</isConversion>
+                          </resolved>
+                          <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration/type"/>
+                          <callType>NORMAL</callType>
+                          <dotRight>false</dotRight>
+                        </expression>
+                        <hasExplicitType>true</hasExplicitType>
+                      </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration>
+                      <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration>
+                        <name>enabledSwitch</name>
+                        <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration/type"/>
+                        <isConstant>false</isConstant>
+                        <expression class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ConstantExpression">
+                          <value class="string">${familyName}Enabled</value>
+                          <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration/type"/>
+                        </expression>
+                        <hasExplicitType>true</hasExplicitType>
+                      </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration>
+                      <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ContentStatement>
+                        <content>int $enabledSwitch = readIntFromNetwork(); // just for now</content>
+                        <terminal>&apos;</terminal>
+                        <indentExpression class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ConstantExpression">
+                          <value class="int">8</value>
+                          <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.AlternativeStatement/condition/arguments/de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument/expr/resolved/returnType"/>
+                        </indentExpression>
+                        <printLineEnd>true</printLineEnd>
+                      </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ContentStatement>
+                      <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.AlternativeStatement>
+                        <condition class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression">
+                          <name>&gt;</name>
+                          <arguments>
+                            <de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                              <expr class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression">
+                                <name>length</name>
+                                <arguments>
+                                  <de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                                    <expr class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VariableExpression">
+                                      <variable class="de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.VariableDeclaration">
+                                        <name>param</name>
+                                        <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../../../../../../../../../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration/type"/>
+                                        <isConstant>false</isConstant>
+                                        <hasExplicitType>true</hasExplicitType>
+                                      </variable>
+                                      <qualifiedName>param</qualifiedName>
+                                    </expr>
+                                    <fixed>false</fixed>
+                                  </de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                                </arguments>
+                                <resolved class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionOperationDescriptor" reference="../../../../../../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.AlternativeStatement/condition/arguments/de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument/expr/resolved"/>
+                                <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../../../../../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.AlternativeStatement/condition/arguments/de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument/expr/resolved/returnType"/>
+                                <callType>NORMAL</callType>
+                                <dotRight>false</dotRight>
+                              </expr>
+                              <fixed>false</fixed>
+                            </de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                            <de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                              <expr class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ConstantExpression">
+                                <value class="int">0</value>
+                                <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../../../../../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.AlternativeStatement/condition/arguments/de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument/expr/resolved/returnType"/>
+                              </expr>
+                              <fixed>false</fixed>
+                            </de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                          </arguments>
+                          <resolved class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionOperationDescriptor" reference="../../../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.AlternativeStatement/condition/resolved"/>
+                          <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.AlternativeStatement/condition/resolved/returnType"/>
+                          <callType>NORMAL</callType>
+                          <dotRight>false</dotRight>
+                        </condition>
+                        <ifStatement class="de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateBlock">
+                          <body>
+                            <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ExpressionStatement>
+                              <expression class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ValueAssignmentExpression">
+                                <varDecl class="de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.VariableDeclaration" reference="../../../../../condition/arguments/de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument/expr/arguments/de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument/expr/variable"/>
+                                <valueExpression class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression">
+                                  <name>+</name>
+                                  <arguments>
+                                    <de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                                      <expr class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VariableExpression">
+                                        <variable class="de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.VariableDeclaration" reference="../../../../../../../../../condition/arguments/de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument/expr/arguments/de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument/expr/variable"/>
+                                        <qualifiedName>param</qualifiedName>
+                                      </expr>
+                                      <fixed>false</fixed>
+                                    </de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                                    <de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                                      <expr class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ConstantExpression">
+                                        <value class="string">, </value>
+                                        <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../../../../../../../../../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration/type"/>
+                                      </expr>
+                                      <fixed>false</fixed>
+                                    </de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                                  </arguments>
+                                  <resolved class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionOperationDescriptor" reference="../../../../../../../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.LoopStatement/statement/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ExpressionStatement/expression/valueExpression/resolved"/>
+                                  <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../../../../../../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration/type"/>
+                                  <callType>NORMAL</callType>
+                                  <dotRight>false</dotRight>
+                                </valueExpression>
+                              </expression>
+                            </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ExpressionStatement>
+                          </body>
+                        </ifStatement>
+                      </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.AlternativeStatement>
+                      <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ExpressionStatement>
+                        <expression class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ValueAssignmentExpression">
+                          <varDecl class="de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.VariableDeclaration" reference="../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.AlternativeStatement/condition/arguments/de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument/expr/arguments/de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument/expr/variable"/>
+                          <valueExpression class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression">
+                            <name>+</name>
+                            <arguments>
+                              <de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                                <expr class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VariableExpression">
+                                  <variable class="de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.VariableDeclaration" reference="../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.AlternativeStatement/condition/arguments/de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument/expr/arguments/de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument/expr/variable"/>
+                                  <qualifiedName>param</qualifiedName>
+                                </expr>
+                                <fixed>false</fixed>
+                              </de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                              <de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                                <expr class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VariableExpression">
+                                  <variable class="de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.VariableDeclaration" reference="../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration[2]"/>
+                                  <qualifiedName>enabledSwitch</qualifiedName>
+                                </expr>
+                                <fixed>false</fixed>
+                              </de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                            </arguments>
+                            <resolved class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionOperationDescriptor" reference="../../../../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.LoopStatement/statement/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ExpressionStatement/expression/valueExpression/resolved"/>
+                            <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../../../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration/type"/>
+                            <callType>NORMAL</callType>
+                            <dotRight>false</dotRight>
+                          </valueExpression>
+                        </expression>
+                      </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ExpressionStatement>
+                    </body>
+                  </ifStatement>
+                </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.AlternativeStatement>
+              </body>
+            </statement>
+          </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.LoopStatement>
+          <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.LoopStatement>
+            <iteratorVar>
+              <name>flow</name>
+              <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypeDescriptor">
+                <declaringType name="Flow"/>
+              </type>
+              <isConstant>false</isConstant>
+              <hasExplicitType>true</hasExplicitType>
+            </iteratorVar>
+            <containerExpression class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression">
+              <name>output</name>
+              <arguments>
+                <de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                  <expr class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VariableExpression">
+                    <variable class="de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.VariableDeclaration" reference="../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration/expression/arguments/de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument/expr/variable"/>
+                    <qualifiedName>elt</qualifiedName>
+                  </expr>
+                  <fixed>false</fixed>
+                </de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+              </arguments>
+              <resolved class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlAccessorOperationDescriptor">
+                <name>output</name>
+                <isConstructor>false</isConstructor>
+                <opType>NORMAL</opType>
+                <declaringType class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypeDescriptor">
+                  <declaringType name="ProcessingElement"/>
+                </declaringType>
+                <returnType class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor">
+                  <declaringType name="Set" parameter0="DecisionVariable"/>
+                </returnType>
+                <aliasType>NONE</aliasType>
+                <parameter>
+                  <de.uni__hildesheim.sse.easy__producer.instantiator.model.vilTypes.configuration.IvmlTypeDescriptor reference="../../declaringType"/>
+                </parameter>
+                <acceptsNamedParameters>false</acceptsNamedParameters>
+                <acceptsImplicitParameters>false</acceptsImplicitParameters>
+                <isConversion>false</isConversion>
+                <varName>output</varName>
+              </resolved>
+              <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../resolved/returnType"/>
+              <callType>NORMAL</callType>
+              <dotRight>false</dotRight>
+            </containerExpression>
+            <statement class="de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateBlock">
+              <body>
+                <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ExpressionStatement>
+                  <expression class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ValueAssignmentExpression">
+                    <varDecl class="de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.VariableDeclaration" reference="../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.LoopStatement/statement/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.AlternativeStatement/ifStatement/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.AlternativeStatement/condition/arguments/de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument/expr/arguments/de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument/expr/variable"/>
+                    <valueExpression class="de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateCallExpression">
+                      <name>processElement</name>
+                      <resolved class="de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Def" reference="../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.LoopStatement/statement/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ExpressionStatement/expression/valueExpression/arguments/de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument[2]/expr/resolved"/>
+                      <model class="de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Template" reference="../../../../../../../../../.."/>
+                      <arguments>
+                        <de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                          <expr class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression">
+                            <name>destination</name>
+                            <arguments>
+                              <de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                                <expr class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VariableExpression">
+                                  <variable class="de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.VariableDeclaration" reference="../../../../../../../../../../../../iteratorVar"/>
+                                  <qualifiedName>flow</qualifiedName>
+                                </expr>
+                                <fixed>false</fixed>
+                              </de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                            </arguments>
+                            <resolved class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlAccessorOperationDescriptor">
+                              <name>destination</name>
+                              <isConstructor>false</isConstructor>
+                              <opType>NORMAL</opType>
+                              <declaringType class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypeDescriptor" reference="../../../../../../../../../../iteratorVar/type"/>
+                              <returnType class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../../../../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.LoopStatement/iteratorVar/type"/>
+                              <aliasType>NONE</aliasType>
+                              <parameter>
+                                <de.uni__hildesheim.sse.easy__producer.instantiator.model.vilTypes.configuration.IvmlTypeDescriptor reference="../../../../../../../../../../../iteratorVar/type"/>
+                              </parameter>
+                              <acceptsNamedParameters>false</acceptsNamedParameters>
+                              <acceptsImplicitParameters>false</acceptsImplicitParameters>
+                              <isConversion>false</isConversion>
+                              <varName>destination</varName>
+                            </resolved>
+                            <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../../../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.LoopStatement/iteratorVar/type"/>
+                            <callType>NORMAL</callType>
+                            <dotRight>false</dotRight>
+                          </expr>
+                          <fixed>false</fixed>
+                        </de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                        <de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                          <expr class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VariableExpression">
+                            <variable class="de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.VariableDeclaration" reference="../../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.LoopStatement/statement/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.AlternativeStatement/ifStatement/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.AlternativeStatement/condition/arguments/de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument/expr/arguments/de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument/expr/variable"/>
+                            <qualifiedName>param</qualifiedName>
+                          </expr>
+                          <fixed>false</fixed>
+                        </de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                      </arguments>
+                      <isSuper>false</isSuper>
+                    </valueExpression>
+                  </expression>
+                </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ExpressionStatement>
+              </body>
+            </statement>
+          </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.LoopStatement>
+          <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ExpressionStatement>
+            <expression class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VariableExpression">
+              <variable class="de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.VariableDeclaration" reference="../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.LoopStatement/statement/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.AlternativeStatement/ifStatement/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.AlternativeStatement/condition/arguments/de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument/expr/arguments/de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument/expr/variable"/>
+              <qualifiedName>param</qualifiedName>
+            </expression>
+          </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ExpressionStatement>
+        </body>
+        <parent reference="../../.."/>
+        <name>processElement</name>
+        <param>
+          <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration reference="../../body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration/expression/arguments/de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument/expr/variable"/>
+          <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration reference="../../body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.LoopStatement/statement/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.AlternativeStatement/ifStatement/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.AlternativeStatement/condition/arguments/de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument/expr/arguments/de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument/expr/variable"/>
+        </param>
+        <specifiedType class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration/type"/>
+      </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def>
+      <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def>
+        <body>
+          <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.LoopStatement>
+            <iteratorVar>
+              <name>flow</name>
+              <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypeDescriptor" reference="../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def[3]/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.LoopStatement[2]/iteratorVar/type"/>
+              <isConstant>false</isConstant>
+              <hasExplicitType>true</hasExplicitType>
+            </iteratorVar>
+            <containerExpression class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression">
+              <name>output</name>
+              <arguments>
+                <de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                  <expr class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VariableExpression">
+                    <variable class="de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.VariableDeclaration">
+                      <name>elt</name>
+                      <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypeDescriptor">
+                        <declaringType name="Source"/>
+                      </type>
+                      <isConstant>false</isConstant>
+                      <hasExplicitType>true</hasExplicitType>
+                    </variable>
+                    <qualifiedName>elt</qualifiedName>
+                  </expr>
+                  <fixed>false</fixed>
+                </de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+              </arguments>
+              <resolved class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlAccessorOperationDescriptor">
+                <name>output</name>
+                <isConstructor>false</isConstructor>
+                <opType>NORMAL</opType>
+                <declaringType class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypeDescriptor" reference="../../arguments/de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument/expr/variable/type"/>
+                <returnType class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor">
+                  <declaringType name="Set" parameter0="DecisionVariable"/>
+                </returnType>
+                <aliasType>NONE</aliasType>
+                <parameter>
+                  <de.uni__hildesheim.sse.easy__producer.instantiator.model.vilTypes.configuration.IvmlTypeDescriptor reference="../../../arguments/de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument/expr/variable/type"/>
+                </parameter>
+                <acceptsNamedParameters>false</acceptsNamedParameters>
+                <acceptsImplicitParameters>false</acceptsImplicitParameters>
+                <isConversion>false</isConversion>
+                <varName>output</varName>
+              </resolved>
+              <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../resolved/returnType"/>
+              <callType>NORMAL</callType>
+              <dotRight>false</dotRight>
+            </containerExpression>
+            <statement class="de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateBlock">
+              <body>
+                <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ExpressionStatement>
+                  <expression class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ValueAssignmentExpression">
+                    <varDecl class="de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.VariableDeclaration">
+                      <name>param</name>
+                      <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration/type"/>
+                      <isConstant>false</isConstant>
+                      <hasExplicitType>true</hasExplicitType>
+                    </varDecl>
+                    <valueExpression class="de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateCallExpression">
+                      <name>processElement</name>
+                      <resolved class="de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Def" reference="../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.LoopStatement/statement/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ExpressionStatement/expression/valueExpression/arguments/de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument[2]/expr/resolved"/>
+                      <model class="de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Template" reference="../../../../../../../../../.."/>
+                      <arguments>
+                        <de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                          <expr class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression">
+                            <name>destination</name>
+                            <arguments>
+                              <de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                                <expr class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VariableExpression">
+                                  <variable class="de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.VariableDeclaration" reference="../../../../../../../../../../../../iteratorVar"/>
+                                  <qualifiedName>flow</qualifiedName>
+                                </expr>
+                                <fixed>false</fixed>
+                              </de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                            </arguments>
+                            <resolved class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlAccessorOperationDescriptor" reference="../../../../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def[3]/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.LoopStatement[2]/statement/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ExpressionStatement/expression/valueExpression/arguments/de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument/expr/resolved"/>
+                            <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../../../../../../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.LoopStatement/iteratorVar/type"/>
+                            <callType>NORMAL</callType>
+                            <dotRight>false</dotRight>
+                          </expr>
+                          <fixed>false</fixed>
+                        </de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                        <de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                          <expr class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VariableExpression">
+                            <variable class="de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.VariableDeclaration" reference="../../../../../varDecl"/>
+                            <qualifiedName>param</qualifiedName>
+                          </expr>
+                          <fixed>false</fixed>
+                        </de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument>
+                      </arguments>
+                      <isSuper>false</isSuper>
+                    </valueExpression>
+                  </expression>
+                </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ExpressionStatement>
+              </body>
+            </statement>
+          </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.LoopStatement>
+          <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ExpressionStatement>
+            <expression class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VariableExpression">
+              <variable class="de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.VariableDeclaration" reference="../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.LoopStatement/statement/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ExpressionStatement/expression/varDecl"/>
+              <qualifiedName>param</qualifiedName>
+            </expression>
+          </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ExpressionStatement>
+        </body>
+        <parent reference="../../.."/>
+        <name>processElement</name>
+        <param>
+          <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration reference="../../body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.LoopStatement/containerExpression/arguments/de.uni__hildesheim.sse.easy__producer.instantiator.model.expressions.CallArgument/expr/variable"/>
+          <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration reference="../../body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.LoopStatement/statement/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ExpressionStatement/expression/varDecl"/>
+        </param>
+        <specifiedType class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration/type"/>
+      </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def>
+      <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def>
+        <body>
+          <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ExpressionStatement>
+            <expression class="de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VariableExpression">
+              <variable class="de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.VariableDeclaration">
+                <name>param</name>
+                <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../../../../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration/type"/>
+                <isConstant>false</isConstant>
+                <hasExplicitType>true</hasExplicitType>
+              </variable>
+              <qualifiedName>param</qualifiedName>
+            </expression>
+          </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ExpressionStatement>
+        </body>
+        <parent reference="../../.."/>
+        <name>processElement</name>
+        <param>
+          <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration>
+            <name>elt</name>
+            <type class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypeDescriptor">
+              <declaringType name="Sink"/>
+            </type>
+            <isConstant>false</isConstant>
+            <hasExplicitType>true</hasExplicitType>
+          </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration>
+          <de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration reference="../../body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.ExpressionStatement/expression/variable"/>
+        </param>
+        <specifiedType class="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor" reference="../../de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def/body/de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.VariableDeclaration/type"/>
+      </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Def>
+    </defs>
+  </de.uni__hildesheim.sse.easy__producer.instantiator.model.templateModel.Template>
+</list>

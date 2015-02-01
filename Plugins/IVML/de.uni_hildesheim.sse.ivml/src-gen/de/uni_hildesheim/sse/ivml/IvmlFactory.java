@@ -203,15 +203,6 @@ public interface IvmlFactory extends EFactory
   DerivedType createDerivedType();
 
   /**
-   * Returns a new object of class '<em>Dsl Context</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Dsl Context</em>'.
-   * @generated
-   */
-  DslContext createDslContext();
-
-  /**
    * Returns a new object of class '<em>Attribute To</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -300,15 +291,6 @@ public interface IvmlFactory extends EFactory
    * @generated
    */
   ConflictStmt createConflictStmt();
-
-  /**
-   * Returns a new object of class '<em>Versioned Id</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Versioned Id</em>'.
-   * @generated
-   */
-  VersionedId createVersionedId();
 
   /**
    * Returns a new object of class '<em>Version Stmt</em>'.

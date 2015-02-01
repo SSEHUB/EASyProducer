@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-import de.uni_hildesheim.sse.easy.instantiator.copy.core.ICopyMechanism;
 import de.uni_hildesheim.sse.easy_producer.instantiator.internal.NoInstantiatorStateObserver;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.FileInstantiator;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.IInstantiatorProject;
@@ -45,8 +44,6 @@ public class Transformator implements Runnable {
     
     private IInstantiatorProjectManager projectManager;
     
-    private ICopyMechanism resourceMgmt;
-
     /**
      * The handle back to the gui to update progress and show necessary warnings.
      */
@@ -60,13 +57,11 @@ public class Transformator implements Runnable {
      * @param currentUUID the current project
      * @param delegate the handle for user notifications
      * @param projectManager A class capable of retrieving information about (other) projects.
-     * @param resourceMgmt A abstraction layer for consistent file system operations.
      */
     public Transformator(String currentUUID, TranformatorNotificationDelegate delegate,
-        IInstantiatorProjectManager projectManager, ICopyMechanism resourceMgmt) {
+        IInstantiatorProjectManager projectManager) {
         this.projectManager = projectManager;
         this.delegate = delegate;
-        this.resourceMgmt = resourceMgmt;
         this.currentPLP = projectManager.getPLP(currentUUID);
         // start the instantiation process
     }
@@ -153,10 +148,11 @@ public class Transformator implements Runnable {
             String predecessor = engine.getPredecessor();
             // Doublecheck: is the project a valid predecessor and hasn't it yet
             // been copied?
-            if (resourceMgmt.isPLPInWorkspace(predecessor) && !copied.contains(predecessor)) {
-                resourceMgmt.copy(predecessor, currentPLP.getProjectName());
-                copied.add(predecessor);
-            }
+            // FIXME SE: Removed Copy mechanism
+//            if (resourceMgmt.isPLPInWorkspace(predecessor) && !copied.contains(predecessor)) {
+//                resourceMgmt.copy(predecessor, currentPLP.getProjectName());
+//                copied.add(predecessor);
+//            }
             // 4. Begin instantiation process
             if (copied.contains(predecessor)) {
                 try {
@@ -180,8 +176,8 @@ public class Transformator implements Runnable {
             delegate.showInfoDialog("At least one instantiation was skipped due to missing predecessor project.\n"
                     + "Failed engines for missing project:\n" + failures.toString());
         }
-        //Refresh file system in eclipse (package explorer)
-        resourceMgmt.refreshProject(currentPLP.getProjectName());
+//        //Refresh file system in eclipse (package explorer)
+//        resourceMgmt.refreshProject(currentPLP.getProjectName());
     }
     
     /**

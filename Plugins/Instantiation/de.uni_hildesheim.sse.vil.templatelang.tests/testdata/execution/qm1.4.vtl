@@ -1,0 +1,14 @@
+@advice(qm1)
+template qm1_4(Configuration config, FileArtifact target) {
+
+    def main(Configuration config, FileArtifact target) {
+        Family fm = config.byName("fNormalize");
+        filterTuples(fm.output(), fm.input());
+    }
+
+    def filterTuples(Tuples outputTuples, Tuples inputTuples) {
+        mapOf(Tuple, Tuple) m = outputTuples.mapSequence(inputTuples);
+        m.size() > 0;
+    }
+
+}

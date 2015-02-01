@@ -1,0 +1,13 @@
+project InterfaceProvider {
+
+	version v0;
+	interface test {
+		export t;
+	}
+	Boolean t = false;
+	Boolean x;
+	Boolean y;
+	t == true implies x == true;
+	x == true implies t == false;
+	y == false;
+}

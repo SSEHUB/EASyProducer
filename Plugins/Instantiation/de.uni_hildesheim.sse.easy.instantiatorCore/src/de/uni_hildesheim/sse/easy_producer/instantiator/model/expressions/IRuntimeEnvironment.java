@@ -1,6 +1,7 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 
 /**
@@ -59,5 +60,12 @@ public interface IRuntimeEnvironment {
      * @return the (qualified) search paths (may be <b>null</b>)
      */
     public String[] getContextPaths();
+
+    /**
+     * Stores the artifacts in the current context.
+     * 
+     * @throws ArtifactException in case that storing artifacts fails
+     */
+    public void storeArtifacts() throws ArtifactException;
 
 }

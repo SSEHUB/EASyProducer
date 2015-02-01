@@ -71,9 +71,7 @@ public class IfThen extends ConstraintSyntaxTree {
         return elseExpr;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public IDatatype inferDatatype() throws CSTSemanticException {
         if (null == result) {
             IDatatype ifType = ifExpr.inferDatatype();
@@ -93,9 +91,7 @@ public class IfThen extends ConstraintSyntaxTree {
         return result;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void accept(IConstraintTreeVisitor visitor) {
         visitor.visitIfThen(this); // no further operations!
     }

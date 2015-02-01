@@ -8,7 +8,6 @@ import org.eclipse.xtext.conversion.impl.AbstractIDValueConverter;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
-import de.uni_hildesheim.sse.dslCore.values.IdentifierValueConverter;
 import de.uni_hildesheim.sse.dslCore.values.StringValueConverter;
 import de.uni_hildesheim.sse.dslCore.values.VersionValueConverter;
 
@@ -32,8 +31,7 @@ public class VilValueConverters extends
     @Inject
     private VersionValueConverter versionValueConverter;
     
-    @Inject
-    private IdentifierValueConverter identifierValueConverter;
+    // identifier removed due to overlap with version in restriction expressions
 
     // checkstyle: stop method name check
     
@@ -69,16 +67,8 @@ public class VilValueConverters extends
     public IValueConverter<String> VERSION() {
         return versionValueConverter;
     }
-
-    /**
-     * Returns the value converter for identifiers.
-     * 
-     * @return the value converter for identifiers.
-     */
-    @ValueConverter(rule = "Identifier")
-    public IValueConverter<String> Identifier() {
-        return identifierValueConverter;
-    }
+    
+    // identifier removed due to overlap with version in restriction expressions
 
     // checkstyle: resume method name check
 }

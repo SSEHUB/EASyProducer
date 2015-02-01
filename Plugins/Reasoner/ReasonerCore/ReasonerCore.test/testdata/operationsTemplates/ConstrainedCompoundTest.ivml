@@ -1,0 +1,25 @@
+project ConstrainedCompoundTest {    
+     
+    compound M {
+        Integer intM = 10;
+        intM = 10;
+        intM > 20;
+    }
+    
+    compound N {
+        Integer intN = 5;
+        intN = 5;
+        M nestM;
+        intN > 10;
+    }
+            
+    compound C {
+        Integer intA = 2;
+        Integer intB;
+        N nestN;
+        intB = 3;
+        intA > intB;
+    }
+    
+    C cmp; 
+}

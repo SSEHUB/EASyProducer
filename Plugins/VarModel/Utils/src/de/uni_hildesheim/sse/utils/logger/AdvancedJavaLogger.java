@@ -46,37 +46,27 @@ public class AdvancedJavaLogger extends AbstractJavaLogger {
          */       
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void info(String msg, Class<?> clazz, String bundleName) {
         infoLoger.info("[" + clazz.getSimpleName() + "] " + msg);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void error(String msg, Class<?> clazz, String bundleName) {
         errorLoger.severe("[" + clazz.getSimpleName() + "] " + msg);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void warn(String msg, Class<?> clazz, String bundleName) {
         errorLoger.warning("[" + clazz.getSimpleName() + "] " + msg);
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void debug(String msg, Class<?> clazz, String bundleName) {
         infoLoger.log(DEBUG_LEVEL, "[" + clazz.getSimpleName() + "] " + msg);
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void exception(String msg, Class<?> clazz, String bundleName) {
         errorLoger.log(EXCEPTION_LEVEL, "[" + clazz.getSimpleName() + "] " + msg);
     }

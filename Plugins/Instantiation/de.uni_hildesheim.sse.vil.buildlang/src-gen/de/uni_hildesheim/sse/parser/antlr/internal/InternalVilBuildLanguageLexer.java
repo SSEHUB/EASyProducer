@@ -384,10 +384,10 @@ public class InternalVilBuildLanguageLexer extends Lexer {
         try {
             int _type = T__27;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:25:7: ( 'defer' )
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:25:9: 'defer'
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:25:7: ( 'instantiate' )
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:25:9: 'instantiate'
             {
-            match("defer"); 
+            match("instantiate"); 
 
 
             }
@@ -405,10 +405,10 @@ public class InternalVilBuildLanguageLexer extends Lexer {
         try {
             int _type = T__28;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:26:7: ( 'requires' )
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:26:9: 'requires'
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:26:7: ( 'rule' )
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:26:9: 'rule'
             {
-            match("requires"); 
+            match("rule"); 
 
 
             }
@@ -426,10 +426,10 @@ public class InternalVilBuildLanguageLexer extends Lexer {
         try {
             int _type = T__29;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:27:7: ( 'instantiate' )
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:27:9: 'instantiate'
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:27:7: ( 'map' )
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:27:9: 'map'
             {
-            match("instantiate"); 
+            match("map"); 
 
 
             }
@@ -447,10 +447,10 @@ public class InternalVilBuildLanguageLexer extends Lexer {
         try {
             int _type = T__30;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:28:7: ( 'rule' )
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:28:9: 'rule'
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:28:7: ( 'if' )
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:28:9: 'if'
             {
-            match("rule"); 
+            match("if"); 
 
 
             }
@@ -468,10 +468,10 @@ public class InternalVilBuildLanguageLexer extends Lexer {
         try {
             int _type = T__31;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:29:7: ( 'map' )
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:29:9: 'map'
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:29:7: ( 'else' )
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:29:9: 'else'
             {
-            match("map"); 
+            match("else"); 
 
 
             }
@@ -636,10 +636,10 @@ public class InternalVilBuildLanguageLexer extends Lexer {
         try {
             int _type = T__39;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:37:7: ( '==' )
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:37:9: '=='
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:37:7: ( 'import' )
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:37:9: 'import'
             {
-            match("=="); 
+            match("import"); 
 
 
             }
@@ -657,10 +657,11 @@ public class InternalVilBuildLanguageLexer extends Lexer {
         try {
             int _type = T__40;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:38:7: ( '>' )
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:38:9: '>'
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:38:7: ( 'and' )
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:38:9: 'and'
             {
-            match('>'); 
+            match("and"); 
+
 
             }
 
@@ -677,10 +678,11 @@ public class InternalVilBuildLanguageLexer extends Lexer {
         try {
             int _type = T__41;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:39:7: ( '<' )
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:39:9: '<'
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:39:7: ( 'or' )
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:39:9: 'or'
             {
-            match('<'); 
+            match("or"); 
+
 
             }
 
@@ -697,10 +699,10 @@ public class InternalVilBuildLanguageLexer extends Lexer {
         try {
             int _type = T__42;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:40:7: ( '>=' )
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:40:9: '>='
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:40:7: ( 'xor' )
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:40:9: 'xor'
             {
-            match(">="); 
+            match("xor"); 
 
 
             }
@@ -718,10 +720,10 @@ public class InternalVilBuildLanguageLexer extends Lexer {
         try {
             int _type = T__43;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:41:7: ( '<=' )
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:41:9: '<='
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:41:7: ( '==' )
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:41:9: '=='
             {
-            match("<="); 
+            match("=="); 
 
 
             }
@@ -739,10 +741,10 @@ public class InternalVilBuildLanguageLexer extends Lexer {
         try {
             int _type = T__44;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:42:7: ( 'import' )
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:42:9: 'import'
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:42:7: ( '<>' )
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:42:9: '<>'
             {
-            match("import"); 
+            match("<>"); 
 
 
             }
@@ -760,10 +762,10 @@ public class InternalVilBuildLanguageLexer extends Lexer {
         try {
             int _type = T__45;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:43:7: ( 'and' )
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:43:9: 'and'
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:43:7: ( '!=' )
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:43:9: '!='
             {
-            match("and"); 
+            match("!="); 
 
 
             }
@@ -781,11 +783,10 @@ public class InternalVilBuildLanguageLexer extends Lexer {
         try {
             int _type = T__46;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:44:7: ( 'or' )
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:44:9: 'or'
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:44:7: ( '>' )
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:44:9: '>'
             {
-            match("or"); 
-
+            match('>'); 
 
             }
 
@@ -802,11 +803,10 @@ public class InternalVilBuildLanguageLexer extends Lexer {
         try {
             int _type = T__47;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:45:7: ( 'xor' )
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:45:9: 'xor'
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:45:7: ( '<' )
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:45:9: '<'
             {
-            match("xor"); 
-
+            match('<'); 
 
             }
 
@@ -823,10 +823,10 @@ public class InternalVilBuildLanguageLexer extends Lexer {
         try {
             int _type = T__48;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:46:7: ( '<>' )
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:46:9: '<>'
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:46:7: ( '>=' )
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:46:9: '>='
             {
-            match("<>"); 
+            match(">="); 
 
 
             }
@@ -844,10 +844,10 @@ public class InternalVilBuildLanguageLexer extends Lexer {
         try {
             int _type = T__49;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:47:7: ( '!=' )
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:47:9: '!='
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:47:7: ( '<=' )
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:47:9: '<='
             {
-            match("!="); 
+            match("<="); 
 
 
             }
@@ -1276,11 +1276,11 @@ public class InternalVilBuildLanguageLexer extends Lexer {
         try {
             int _type = RULE_VERSION;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4778:14: ( 'v' ( '0' .. '9' )+ ( '.' ( '0' .. '9' )+ )* )
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4778:16: 'v' ( '0' .. '9' )+ ( '.' ( '0' .. '9' )+ )*
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4792:14: ( 'v' ( '0' .. '9' )+ ( '.' ( '0' .. '9' )+ )* )
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4792:16: 'v' ( '0' .. '9' )+ ( '.' ( '0' .. '9' )+ )*
             {
             match('v'); 
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4778:20: ( '0' .. '9' )+
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4792:20: ( '0' .. '9' )+
             int cnt1=0;
             loop1:
             do {
@@ -1294,7 +1294,7 @@ public class InternalVilBuildLanguageLexer extends Lexer {
 
                 switch (alt1) {
             	case 1 :
-            	    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4778:21: '0' .. '9'
+            	    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4792:21: '0' .. '9'
             	    {
             	    matchRange('0','9'); 
 
@@ -1310,7 +1310,7 @@ public class InternalVilBuildLanguageLexer extends Lexer {
                 cnt1++;
             } while (true);
 
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4778:32: ( '.' ( '0' .. '9' )+ )*
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4792:32: ( '.' ( '0' .. '9' )+ )*
             loop3:
             do {
                 int alt3=2;
@@ -1323,10 +1323,10 @@ public class InternalVilBuildLanguageLexer extends Lexer {
 
                 switch (alt3) {
             	case 1 :
-            	    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4778:33: '.' ( '0' .. '9' )+
+            	    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4792:33: '.' ( '0' .. '9' )+
             	    {
             	    match('.'); 
-            	    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4778:37: ( '0' .. '9' )+
+            	    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4792:37: ( '0' .. '9' )+
             	    int cnt2=0;
             	    loop2:
             	    do {
@@ -1340,7 +1340,7 @@ public class InternalVilBuildLanguageLexer extends Lexer {
 
             	        switch (alt2) {
             	    	case 1 :
-            	    	    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4778:38: '0' .. '9'
+            	    	    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4792:38: '0' .. '9'
             	    	    {
             	    	    matchRange('0','9'); 
 
@@ -1381,8 +1381,8 @@ public class InternalVilBuildLanguageLexer extends Lexer {
         try {
             int _type = RULE_ID;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4780:9: ( ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '$' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )* )
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4780:11: ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '$' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4794:9: ( ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '$' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )* )
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4794:11: ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '$' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
             {
             if ( input.LA(1)=='$'||(input.LA(1)>='A' && input.LA(1)<='Z')||input.LA(1)=='_'||(input.LA(1)>='a' && input.LA(1)<='z') ) {
                 input.consume();
@@ -1393,7 +1393,7 @@ public class InternalVilBuildLanguageLexer extends Lexer {
                 recover(mse);
                 throw mse;}
 
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4780:39: ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4794:39: ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
             loop4:
             do {
                 int alt4=2;
@@ -1442,10 +1442,10 @@ public class InternalVilBuildLanguageLexer extends Lexer {
         try {
             int _type = RULE_NUMBER;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4782:13: ( ( '-' )? ( ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT ) )
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4782:15: ( '-' )? ( ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT )
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4796:13: ( ( '-' )? ( ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT ) )
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4796:15: ( '-' )? ( ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT )
             {
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4782:15: ( '-' )?
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4796:15: ( '-' )?
             int alt5=2;
             int LA5_0 = input.LA(1);
 
@@ -1454,7 +1454,7 @@ public class InternalVilBuildLanguageLexer extends Lexer {
             }
             switch (alt5) {
                 case 1 :
-                    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4782:15: '-'
+                    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4796:15: '-'
                     {
                     match('-'); 
 
@@ -1463,14 +1463,14 @@ public class InternalVilBuildLanguageLexer extends Lexer {
 
             }
 
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4782:20: ( ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT )
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4796:20: ( ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT )
             int alt13=3;
             alt13 = dfa13.predict(input);
             switch (alt13) {
                 case 1 :
-                    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4782:21: ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )?
+                    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4796:21: ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )?
                     {
-                    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4782:21: ( '0' .. '9' )+
+                    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4796:21: ( '0' .. '9' )+
                     int cnt6=0;
                     loop6:
                     do {
@@ -1484,7 +1484,7 @@ public class InternalVilBuildLanguageLexer extends Lexer {
 
                         switch (alt6) {
                     	case 1 :
-                    	    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4782:22: '0' .. '9'
+                    	    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4796:22: '0' .. '9'
                     	    {
                     	    matchRange('0','9'); 
 
@@ -1500,7 +1500,7 @@ public class InternalVilBuildLanguageLexer extends Lexer {
                         cnt6++;
                     } while (true);
 
-                    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4782:33: ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )?
+                    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4796:33: ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )?
                     int alt9=2;
                     int LA9_0 = input.LA(1);
 
@@ -1509,10 +1509,10 @@ public class InternalVilBuildLanguageLexer extends Lexer {
                     }
                     switch (alt9) {
                         case 1 :
-                            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4782:34: '.' ( '0' .. '9' )* ( RULE_EXPONENT )?
+                            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4796:34: '.' ( '0' .. '9' )* ( RULE_EXPONENT )?
                             {
                             match('.'); 
-                            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4782:38: ( '0' .. '9' )*
+                            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4796:38: ( '0' .. '9' )*
                             loop7:
                             do {
                                 int alt7=2;
@@ -1525,7 +1525,7 @@ public class InternalVilBuildLanguageLexer extends Lexer {
 
                                 switch (alt7) {
                             	case 1 :
-                            	    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4782:39: '0' .. '9'
+                            	    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4796:39: '0' .. '9'
                             	    {
                             	    matchRange('0','9'); 
 
@@ -1537,7 +1537,7 @@ public class InternalVilBuildLanguageLexer extends Lexer {
                                 }
                             } while (true);
 
-                            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4782:50: ( RULE_EXPONENT )?
+                            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4796:50: ( RULE_EXPONENT )?
                             int alt8=2;
                             int LA8_0 = input.LA(1);
 
@@ -1546,7 +1546,7 @@ public class InternalVilBuildLanguageLexer extends Lexer {
                             }
                             switch (alt8) {
                                 case 1 :
-                                    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4782:50: RULE_EXPONENT
+                                    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4796:50: RULE_EXPONENT
                                     {
                                     mRULE_EXPONENT(); 
 
@@ -1565,10 +1565,10 @@ public class InternalVilBuildLanguageLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4782:67: '.' ( '0' .. '9' )+ ( RULE_EXPONENT )?
+                    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4796:67: '.' ( '0' .. '9' )+ ( RULE_EXPONENT )?
                     {
                     match('.'); 
-                    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4782:71: ( '0' .. '9' )+
+                    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4796:71: ( '0' .. '9' )+
                     int cnt10=0;
                     loop10:
                     do {
@@ -1582,7 +1582,7 @@ public class InternalVilBuildLanguageLexer extends Lexer {
 
                         switch (alt10) {
                     	case 1 :
-                    	    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4782:72: '0' .. '9'
+                    	    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4796:72: '0' .. '9'
                     	    {
                     	    matchRange('0','9'); 
 
@@ -1598,7 +1598,7 @@ public class InternalVilBuildLanguageLexer extends Lexer {
                         cnt10++;
                     } while (true);
 
-                    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4782:83: ( RULE_EXPONENT )?
+                    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4796:83: ( RULE_EXPONENT )?
                     int alt11=2;
                     int LA11_0 = input.LA(1);
 
@@ -1607,7 +1607,7 @@ public class InternalVilBuildLanguageLexer extends Lexer {
                     }
                     switch (alt11) {
                         case 1 :
-                            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4782:83: RULE_EXPONENT
+                            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4796:83: RULE_EXPONENT
                             {
                             mRULE_EXPONENT(); 
 
@@ -1620,9 +1620,9 @@ public class InternalVilBuildLanguageLexer extends Lexer {
                     }
                     break;
                 case 3 :
-                    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4782:98: ( '0' .. '9' )+ RULE_EXPONENT
+                    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4796:98: ( '0' .. '9' )+ RULE_EXPONENT
                     {
-                    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4782:98: ( '0' .. '9' )+
+                    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4796:98: ( '0' .. '9' )+
                     int cnt12=0;
                     loop12:
                     do {
@@ -1636,7 +1636,7 @@ public class InternalVilBuildLanguageLexer extends Lexer {
 
                         switch (alt12) {
                     	case 1 :
-                    	    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4782:99: '0' .. '9'
+                    	    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4796:99: '0' .. '9'
                     	    {
                     	    matchRange('0','9'); 
 
@@ -1675,8 +1675,8 @@ public class InternalVilBuildLanguageLexer extends Lexer {
         try {
             int _type = RULE_EXPONENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4784:15: ( ( 'e' | 'E' ) ( '+' | '-' )? ( '0' .. '9' )+ )
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4784:17: ( 'e' | 'E' ) ( '+' | '-' )? ( '0' .. '9' )+
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4798:15: ( ( 'e' | 'E' ) ( '+' | '-' )? ( '0' .. '9' )+ )
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4798:17: ( 'e' | 'E' ) ( '+' | '-' )? ( '0' .. '9' )+
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -1687,7 +1687,7 @@ public class InternalVilBuildLanguageLexer extends Lexer {
                 recover(mse);
                 throw mse;}
 
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4784:27: ( '+' | '-' )?
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4798:27: ( '+' | '-' )?
             int alt14=2;
             int LA14_0 = input.LA(1);
 
@@ -1713,7 +1713,7 @@ public class InternalVilBuildLanguageLexer extends Lexer {
 
             }
 
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4784:38: ( '0' .. '9' )+
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4798:38: ( '0' .. '9' )+
             int cnt15=0;
             loop15:
             do {
@@ -1727,7 +1727,7 @@ public class InternalVilBuildLanguageLexer extends Lexer {
 
                 switch (alt15) {
             	case 1 :
-            	    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4784:39: '0' .. '9'
+            	    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4798:39: '0' .. '9'
             	    {
             	    matchRange('0','9'); 
 
@@ -1759,10 +1759,10 @@ public class InternalVilBuildLanguageLexer extends Lexer {
         try {
             int _type = RULE_STRING;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4786:13: ( ( '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"' | '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\'' ) )
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4786:15: ( '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"' | '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\'' )
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4800:13: ( ( '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"' | '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\'' ) )
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4800:15: ( '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"' | '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\'' )
             {
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4786:15: ( '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"' | '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\'' )
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4800:15: ( '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"' | '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\'' )
             int alt18=2;
             int LA18_0 = input.LA(1);
 
@@ -1780,10 +1780,10 @@ public class InternalVilBuildLanguageLexer extends Lexer {
             }
             switch (alt18) {
                 case 1 :
-                    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4786:16: '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"'
+                    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4800:16: '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"'
                     {
                     match('\"'); 
-                    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4786:20: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )*
+                    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4800:20: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )*
                     loop16:
                     do {
                         int alt16=3;
@@ -1799,7 +1799,7 @@ public class InternalVilBuildLanguageLexer extends Lexer {
 
                         switch (alt16) {
                     	case 1 :
-                    	    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4786:21: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' )
+                    	    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4800:21: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' )
                     	    {
                     	    match('\\'); 
                     	    if ( input.LA(1)=='\"'||input.LA(1)=='\''||input.LA(1)=='\\'||input.LA(1)=='b'||input.LA(1)=='f'||input.LA(1)=='n'||input.LA(1)=='r'||(input.LA(1)>='t' && input.LA(1)<='u') ) {
@@ -1815,7 +1815,7 @@ public class InternalVilBuildLanguageLexer extends Lexer {
                     	    }
                     	    break;
                     	case 2 :
-                    	    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4786:66: ~ ( ( '\\\\' | '\"' ) )
+                    	    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4800:66: ~ ( ( '\\\\' | '\"' ) )
                     	    {
                     	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='!')||(input.LA(1)>='#' && input.LA(1)<='[')||(input.LA(1)>=']' && input.LA(1)<='\uFFFF') ) {
                     	        input.consume();
@@ -1840,10 +1840,10 @@ public class InternalVilBuildLanguageLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4786:86: '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\''
+                    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4800:86: '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\''
                     {
                     match('\''); 
-                    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4786:91: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )*
+                    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4800:91: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )*
                     loop17:
                     do {
                         int alt17=3;
@@ -1859,7 +1859,7 @@ public class InternalVilBuildLanguageLexer extends Lexer {
 
                         switch (alt17) {
                     	case 1 :
-                    	    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4786:92: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' )
+                    	    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4800:92: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' )
                     	    {
                     	    match('\\'); 
                     	    if ( input.LA(1)=='\"'||input.LA(1)=='\''||input.LA(1)=='\\'||input.LA(1)=='b'||input.LA(1)=='f'||input.LA(1)=='n'||input.LA(1)=='r'||(input.LA(1)>='t' && input.LA(1)<='u') ) {
@@ -1875,7 +1875,7 @@ public class InternalVilBuildLanguageLexer extends Lexer {
                     	    }
                     	    break;
                     	case 2 :
-                    	    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4786:137: ~ ( ( '\\\\' | '\\'' ) )
+                    	    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4800:137: ~ ( ( '\\\\' | '\\'' ) )
                     	    {
                     	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='&')||(input.LA(1)>='(' && input.LA(1)<='[')||(input.LA(1)>=']' && input.LA(1)<='\uFFFF') ) {
                     	        input.consume();
@@ -1918,12 +1918,12 @@ public class InternalVilBuildLanguageLexer extends Lexer {
         try {
             int _type = RULE_ML_COMMENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4788:17: ( '/*' ( options {greedy=false; } : . )* '*/' )
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4788:19: '/*' ( options {greedy=false; } : . )* '*/'
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4802:17: ( '/*' ( options {greedy=false; } : . )* '*/' )
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4802:19: '/*' ( options {greedy=false; } : . )* '*/'
             {
             match("/*"); 
 
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4788:24: ( options {greedy=false; } : . )*
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4802:24: ( options {greedy=false; } : . )*
             loop19:
             do {
                 int alt19=2;
@@ -1948,7 +1948,7 @@ public class InternalVilBuildLanguageLexer extends Lexer {
 
                 switch (alt19) {
             	case 1 :
-            	    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4788:52: .
+            	    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4802:52: .
             	    {
             	    matchAny(); 
 
@@ -1978,12 +1978,12 @@ public class InternalVilBuildLanguageLexer extends Lexer {
         try {
             int _type = RULE_SL_COMMENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4790:17: ( '//' (~ ( ( '\\n' | '\\r' ) ) )* ( ( '\\r' )? '\\n' )? )
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4790:19: '//' (~ ( ( '\\n' | '\\r' ) ) )* ( ( '\\r' )? '\\n' )?
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4804:17: ( '//' (~ ( ( '\\n' | '\\r' ) ) )* ( ( '\\r' )? '\\n' )? )
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4804:19: '//' (~ ( ( '\\n' | '\\r' ) ) )* ( ( '\\r' )? '\\n' )?
             {
             match("//"); 
 
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4790:24: (~ ( ( '\\n' | '\\r' ) ) )*
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4804:24: (~ ( ( '\\n' | '\\r' ) ) )*
             loop20:
             do {
                 int alt20=2;
@@ -1996,7 +1996,7 @@ public class InternalVilBuildLanguageLexer extends Lexer {
 
                 switch (alt20) {
             	case 1 :
-            	    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4790:24: ~ ( ( '\\n' | '\\r' ) )
+            	    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4804:24: ~ ( ( '\\n' | '\\r' ) )
             	    {
             	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='\t')||(input.LA(1)>='\u000B' && input.LA(1)<='\f')||(input.LA(1)>='\u000E' && input.LA(1)<='\uFFFF') ) {
             	        input.consume();
@@ -2016,7 +2016,7 @@ public class InternalVilBuildLanguageLexer extends Lexer {
                 }
             } while (true);
 
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4790:40: ( ( '\\r' )? '\\n' )?
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4804:40: ( ( '\\r' )? '\\n' )?
             int alt22=2;
             int LA22_0 = input.LA(1);
 
@@ -2025,9 +2025,9 @@ public class InternalVilBuildLanguageLexer extends Lexer {
             }
             switch (alt22) {
                 case 1 :
-                    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4790:41: ( '\\r' )? '\\n'
+                    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4804:41: ( '\\r' )? '\\n'
                     {
-                    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4790:41: ( '\\r' )?
+                    // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4804:41: ( '\\r' )?
                     int alt21=2;
                     int LA21_0 = input.LA(1);
 
@@ -2036,7 +2036,7 @@ public class InternalVilBuildLanguageLexer extends Lexer {
                     }
                     switch (alt21) {
                         case 1 :
-                            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4790:41: '\\r'
+                            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4804:41: '\\r'
                             {
                             match('\r'); 
 
@@ -2068,10 +2068,10 @@ public class InternalVilBuildLanguageLexer extends Lexer {
         try {
             int _type = RULE_WS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4792:9: ( ( ' ' | '\\t' | '\\r' | '\\n' )+ )
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4792:11: ( ' ' | '\\t' | '\\r' | '\\n' )+
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4806:9: ( ( ' ' | '\\t' | '\\r' | '\\n' )+ )
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4806:11: ( ' ' | '\\t' | '\\r' | '\\n' )+
             {
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4792:11: ( ' ' | '\\t' | '\\r' | '\\n' )+
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4806:11: ( ' ' | '\\t' | '\\r' | '\\n' )+
             int cnt23=0;
             loop23:
             do {
@@ -2125,8 +2125,8 @@ public class InternalVilBuildLanguageLexer extends Lexer {
         try {
             int _type = RULE_ANY_OTHER;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4794:16: ( . )
-            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4794:18: .
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4808:16: ( . )
+            // ../de.uni_hildesheim.sse.vil.buildlang/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalVilBuildLanguage.g:4808:18: .
             {
             matchAny(); 
 
@@ -2616,7 +2616,7 @@ public class InternalVilBuildLanguageLexer extends Lexer {
     protected DFA13 dfa13 = new DFA13(this);
     protected DFA24 dfa24 = new DFA24(this);
     static final String DFA13_eotS =
-        "\1\uffff\1\4\3\uffff";
+        "\1\uffff\1\3\3\uffff";
     static final String DFA13_eofS =
         "\5\uffff";
     static final String DFA13_minS =
@@ -2624,12 +2624,12 @@ public class InternalVilBuildLanguageLexer extends Lexer {
     static final String DFA13_maxS =
         "\1\71\1\145\3\uffff";
     static final String DFA13_acceptS =
-        "\2\uffff\1\2\1\3\1\1";
+        "\2\uffff\1\2\1\1\1\3";
     static final String DFA13_specialS =
         "\5\uffff}>";
     static final String[] DFA13_transitionS = {
             "\1\2\1\uffff\12\1",
-            "\12\1\13\uffff\1\3\37\uffff\1\3",
+            "\12\1\13\uffff\1\4\37\uffff\1\4",
             "",
             "",
             ""
@@ -2665,109 +2665,108 @@ public class InternalVilBuildLanguageLexer extends Lexer {
             this.transition = DFA13_transition;
         }
         public String getDescription() {
-            return "4782:20: ( ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT )";
+            return "4796:20: ( ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT )";
         }
     }
     static final String DFA24_eotS =
-        "\1\uffff\1\60\1\uffff\1\60\4\uffff\3\60\1\77\1\101\1\uffff\6\60"+
-        "\1\55\1\114\1\117\3\60\1\124\1\uffff\1\127\1\uffff\1\134\2\60\1"+
-        "\142\3\uffff\3\60\2\uffff\2\55\2\uffff\2\60\2\uffff\2\60\1\156\4"+
-        "\uffff\2\60\1\uffff\2\60\5\uffff\7\60\6\uffff\1\60\1\174\1\60\12"+
-        "\uffff\5\60\4\uffff\2\60\2\uffff\4\60\1\uffff\10\60\1\u0094\3\60"+
-        "\1\u0098\1\uffff\1\u0099\1\u009a\1\u009b\7\60\1\u00a3\5\60\1\u00a9"+
-        "\6\60\1\uffff\1\u00b0\1\u00b1\1\60\4\uffff\1\u00b3\3\60\1\u00b7"+
-        "\2\60\1\uffff\5\60\1\uffff\2\60\1\u00c1\2\60\1\u00c4\2\uffff\1\u00c5"+
-        "\1\uffff\1\u00c6\1\u00c7\1\60\1\uffff\1\u00c9\10\60\1\uffff\1\60"+
-        "\1\u00d3\4\uffff\1\60\1\uffff\2\60\1\u00d8\1\u00d9\1\u00da\1\u00db"+
-        "\3\60\1\uffff\2\60\1\u00e1\1\60\4\uffff\5\60\1\uffff\1\u00e8\1\60"+
-        "\1\u00ea\2\60\1\u00ed\1\uffff\1\u00ee\1\uffff\1\60\1\u00f0\2\uffff"+
-        "\1\u00f1\2\uffff";
+        "\1\uffff\1\57\1\uffff\1\57\4\uffff\3\57\1\77\1\101\1\uffff\5\57"+
+        "\1\54\3\57\1\120\1\122\1\124\1\uffff\1\127\1\uffff\1\134\2\57\1"+
+        "\142\3\uffff\3\57\2\uffff\2\54\2\uffff\2\57\2\uffff\2\57\1\156\4"+
+        "\uffff\2\57\1\uffff\3\57\5\uffff\1\57\1\166\5\57\1\uffff\1\57\1"+
+        "\175\1\57\17\uffff\5\57\4\uffff\2\57\2\uffff\4\57\1\uffff\7\57\1"+
+        "\uffff\1\57\1\u0095\3\57\1\u0099\1\uffff\1\u009a\1\u009b\1\u009c"+
+        "\7\57\1\u00a4\5\57\1\u00aa\1\u00ab\5\57\1\uffff\1\u00b1\1\u00b2"+
+        "\1\57\4\uffff\1\u00b4\3\57\1\u00b8\2\57\1\uffff\5\57\2\uffff\4\57"+
+        "\1\u00c4\2\uffff\1\u00c5\1\uffff\1\u00c6\1\u00c7\1\57\1\uffff\1"+
+        "\u00c9\11\57\1\u00d3\4\uffff\1\57\1\uffff\2\57\1\u00d7\1\u00d8\1"+
+        "\u00d9\1\u00da\3\57\1\uffff\3\57\4\uffff\5\57\1\u00e6\1\57\1\u00e8"+
+        "\2\57\1\u00eb\1\uffff\1\u00ec\1\uffff\1\57\1\u00ee\2\uffff\1\u00ef"+
+        "\2\uffff";
     static final String DFA24_eofS =
-        "\u00f2\uffff";
+        "\u00f0\uffff";
     static final String DFA24_minS =
         "\1\0\1\145\1\uffff\1\60\4\uffff\1\53\1\157\1\162\1\75\1\72\1\uffff"+
-        "\1\145\1\155\1\141\1\157\1\151\1\157\1\141\2\75\1\156\1\162\1\157"+
-        "\1\75\1\uffff\1\56\1\uffff\1\52\2\145\1\60\3\uffff\1\162\1\141\1"+
-        "\53\2\uffff\2\0\2\uffff\1\161\1\154\2\uffff\1\154\1\162\1\60\4\uffff"+
-        "\1\143\1\60\1\uffff\1\141\1\157\5\uffff\1\146\1\163\2\160\1\151"+
-        "\1\164\1\156\6\uffff\1\144\1\60\1\162\12\uffff\1\164\1\167\1\154"+
-        "\1\160\1\161\4\uffff\1\165\1\154\2\uffff\1\165\1\145\1\123\1\163"+
-        "\1\uffff\1\145\1\154\1\143\1\144\1\160\1\145\1\164\1\157\1\60\1"+
+        "\1\146\1\141\1\157\1\151\1\157\1\141\1\156\1\162\1\157\3\75\1\uffff"+
+        "\1\56\1\uffff\1\52\2\145\1\60\3\uffff\1\162\1\141\1\53\2\uffff\2"+
+        "\0\2\uffff\1\161\1\154\2\uffff\1\154\1\162\1\60\4\uffff\1\143\1"+
+        "\163\1\uffff\1\60\1\141\1\157\5\uffff\1\163\1\60\2\160\1\151\1\164"+
+        "\1\156\1\uffff\1\144\1\60\1\162\17\uffff\1\164\1\167\1\154\1\160"+
+        "\1\161\4\uffff\1\165\1\154\2\uffff\1\165\1\145\1\123\1\163\1\uffff"+
+        "\1\145\1\154\1\143\1\145\1\144\1\160\1\164\1\uffff\1\157\1\60\1"+
         "\156\1\150\1\163\1\60\1\uffff\3\60\1\154\1\145\1\117\1\165\1\145"+
-        "\1\163\1\151\1\60\1\143\1\151\1\156\2\165\1\60\2\145\1\162\1\141"+
-        "\1\162\1\146\1\uffff\2\60\1\164\4\uffff\1\60\1\162\1\146\1\145\1"+
-        "\60\1\145\1\162\1\uffff\1\162\1\157\2\144\1\164\1\uffff\1\162\1"+
-        "\143\1\60\1\156\1\164\1\60\2\uffff\1\60\1\uffff\2\60\1\156\1\uffff"+
-        "\1\60\1\145\1\151\1\156\1\163\2\145\2\164\1\uffff\1\164\1\60\4\uffff"+
-        "\1\143\1\uffff\1\126\1\160\4\60\1\151\1\145\1\151\1\uffff\1\145"+
-        "\1\124\1\60\1\164\4\uffff\1\145\1\144\1\141\1\117\1\114\1\uffff"+
-        "\1\60\1\163\1\60\1\164\1\146\1\60\1\uffff\1\60\1\uffff\1\145\1\60"+
-        "\2\uffff\1\60\2\uffff";
+        "\1\163\1\151\1\60\1\143\1\151\1\156\2\165\2\60\2\145\1\141\1\162"+
+        "\1\146\1\uffff\2\60\1\164\4\uffff\1\60\1\162\1\146\1\145\1\60\1"+
+        "\145\1\162\1\uffff\1\162\1\157\2\144\1\164\2\uffff\1\162\1\143\1"+
+        "\156\1\164\1\60\2\uffff\1\60\1\uffff\2\60\1\156\1\uffff\1\60\1\145"+
+        "\1\151\1\156\1\163\2\145\3\164\1\60\4\uffff\1\143\1\uffff\1\126"+
+        "\1\160\4\60\1\151\1\145\1\151\1\uffff\1\145\1\124\1\164\4\uffff"+
+        "\1\145\1\144\1\141\1\117\1\114\1\60\1\163\1\60\1\164\1\146\1\60"+
+        "\1\uffff\1\60\1\uffff\1\145\1\60\2\uffff\1\60\2\uffff";
     static final String DFA24_maxS =
         "\1\uffff\1\165\1\uffff\1\151\4\uffff\1\170\1\157\1\162\1\75\1\72"+
-        "\1\uffff\1\145\1\156\1\141\1\157\1\151\1\157\1\141\1\75\1\76\1\156"+
-        "\1\162\1\157\1\75\1\uffff\1\76\1\uffff\1\57\2\165\1\71\3\uffff\1"+
-        "\162\1\141\1\71\2\uffff\2\uffff\2\uffff\1\161\1\154\2\uffff\1\154"+
-        "\1\162\1\172\4\uffff\1\164\1\71\1\uffff\1\141\1\157\5\uffff\1\146"+
-        "\1\163\2\160\1\151\1\164\1\156\6\uffff\1\144\1\172\1\162\12\uffff"+
+        "\1\uffff\1\156\1\141\1\157\1\151\1\157\1\141\1\156\1\162\1\157\1"+
+        "\76\2\75\1\uffff\1\76\1\uffff\1\57\2\165\1\71\3\uffff\1\162\1\141"+
+        "\1\71\2\uffff\2\uffff\2\uffff\1\161\1\154\2\uffff\1\154\1\162\1"+
+        "\172\4\uffff\1\164\1\163\1\uffff\1\71\1\141\1\157\5\uffff\1\163"+
+        "\1\172\2\160\1\151\1\164\1\156\1\uffff\1\144\1\172\1\162\17\uffff"+
         "\1\164\1\167\1\154\1\160\1\164\4\uffff\1\165\1\154\2\uffff\1\165"+
-        "\1\145\1\123\1\163\1\uffff\1\145\1\154\1\143\1\144\1\164\1\145\1"+
-        "\164\1\157\1\172\1\156\1\150\1\163\1\172\1\uffff\3\172\1\154\1\145"+
-        "\1\117\1\165\1\145\1\163\1\151\1\172\1\143\1\151\1\156\2\165\1\172"+
-        "\2\145\1\162\1\141\1\162\1\146\1\uffff\2\172\1\164\4\uffff\1\172"+
+        "\1\145\1\123\1\163\1\uffff\1\145\1\154\1\143\1\145\1\144\2\164\1"+
+        "\uffff\1\157\1\172\1\156\1\150\1\163\1\172\1\uffff\3\172\1\154\1"+
+        "\145\1\117\1\165\1\145\1\163\1\151\1\172\1\143\1\151\1\156\2\165"+
+        "\2\172\2\145\1\141\1\162\1\146\1\uffff\2\172\1\164\4\uffff\1\172"+
         "\1\162\1\146\1\145\1\172\1\145\1\162\1\uffff\1\162\1\157\2\144\1"+
-        "\164\1\uffff\1\162\1\143\1\172\1\156\1\164\1\172\2\uffff\1\172\1"+
-        "\uffff\2\172\1\156\1\uffff\1\172\1\145\1\151\1\156\1\163\2\145\2"+
-        "\164\1\uffff\1\164\1\172\4\uffff\1\143\1\uffff\1\163\1\160\4\172"+
-        "\1\151\1\145\1\151\1\uffff\1\145\1\124\1\172\1\164\4\uffff\1\145"+
-        "\1\144\1\141\1\117\1\114\1\uffff\1\172\1\163\1\172\1\164\1\146\1"+
-        "\172\1\uffff\1\172\1\uffff\1\145\1\172\2\uffff\1\172\2\uffff";
+        "\164\2\uffff\1\162\1\143\1\156\1\164\1\172\2\uffff\1\172\1\uffff"+
+        "\2\172\1\156\1\uffff\1\172\1\145\1\151\1\156\1\163\2\145\3\164\1"+
+        "\172\4\uffff\1\143\1\uffff\1\126\1\160\4\172\1\151\1\145\1\151\1"+
+        "\uffff\1\145\1\124\1\164\4\uffff\1\145\1\144\1\141\1\117\1\114\1"+
+        "\172\1\163\1\172\1\164\1\146\1\172\1\uffff\1\172\1\uffff\1\145\1"+
+        "\172\2\uffff\1\172\2\uffff";
     static final String DFA24_acceptS =
-        "\2\uffff\1\2\1\uffff\1\4\1\5\1\6\1\7\5\uffff\1\15\15\uffff\1\46"+
+        "\2\uffff\1\2\1\uffff\1\4\1\5\1\6\1\7\5\uffff\1\15\14\uffff\1\46"+
         "\1\uffff\1\50\4\uffff\1\60\1\61\1\62\3\uffff\1\74\1\73\2\uffff\1"+
         "\101\1\102\2\uffff\1\73\1\2\3\uffff\1\4\1\5\1\6\1\7\2\uffff\1\75"+
-        "\2\uffff\1\33\1\13\1\63\1\14\1\15\7\uffff\1\31\1\36\1\34\1\37\1"+
-        "\44\1\35\3\uffff\1\45\1\53\1\46\1\57\1\47\1\74\1\50\1\77\1\100\1"+
+        "\3\uffff\1\37\1\13\1\63\1\14\1\15\7\uffff\1\31\3\uffff\1\40\1\45"+
+        "\1\43\1\41\1\53\1\44\1\42\1\46\1\57\1\47\1\74\1\50\1\77\1\100\1"+
         "\51\5\uffff\1\55\1\60\1\61\1\62\2\uffff\1\76\1\101\4\uffff\1\72"+
-        "\15\uffff\1\42\27\uffff\1\23\3\uffff\1\41\1\43\1\52\1\56\7\uffff"+
-        "\1\22\5\uffff\1\11\6\uffff\1\24\1\25\1\uffff\1\66\3\uffff\1\64\11"+
-        "\uffff\1\17\2\uffff\1\71\1\30\1\54\1\67\1\uffff\1\65\11\uffff\1"+
-        "\40\4\uffff\1\32\1\10\1\26\1\27\5\uffff\1\20\6\uffff\1\3\1\uffff"+
-        "\1\16\2\uffff\1\1\1\12\1\uffff\1\70\1\21";
+        "\7\uffff\1\22\6\uffff\1\35\27\uffff\1\21\3\uffff\1\34\1\36\1\52"+
+        "\1\56\7\uffff\1\20\5\uffff\1\23\1\11\5\uffff\1\24\1\25\1\uffff\1"+
+        "\66\3\uffff\1\64\13\uffff\1\71\1\30\1\54\1\67\1\uffff\1\65\11\uffff"+
+        "\1\33\3\uffff\1\32\1\10\1\26\1\27\13\uffff\1\3\1\uffff\1\16\2\uffff"+
+        "\1\1\1\12\1\uffff\1\70\1\17";
     static final String DFA24_specialS =
-        "\1\0\51\uffff\1\2\1\1\u00c6\uffff}>";
+        "\1\1\50\uffff\1\2\1\0\u00c5\uffff}>";
     static final String[] DFA24_transitionS = {
-            "\11\55\2\54\2\55\1\54\22\55\1\54\1\32\1\52\1\55\1\51\2\55\1"+
-            "\53\1\4\1\5\1\35\1\33\1\15\1\34\1\41\1\36\12\50\1\14\1\2\1\26"+
-            "\1\13\1\25\1\55\1\24\4\51\1\47\25\51\1\42\1\55\1\43\1\55\1\51"+
-            "\1\55\1\27\1\51\1\23\1\16\1\10\1\46\2\51\1\17\1\21\1\51\1\11"+
-            "\1\20\1\37\1\30\1\12\1\51\1\1\1\40\1\45\1\51\1\3\1\22\1\31\2"+
-            "\51\1\6\1\44\1\7\uff82\55",
-            "\1\56\17\uffff\1\57",
+            "\11\54\2\53\2\54\1\53\22\54\1\53\1\30\1\51\1\54\1\50\2\54\1"+
+            "\52\1\4\1\5\1\34\1\32\1\15\1\33\1\40\1\35\12\47\1\14\1\2\1\27"+
+            "\1\13\1\31\1\54\1\23\4\50\1\46\25\50\1\41\1\54\1\42\1\54\1\50"+
+            "\1\54\1\24\1\50\1\22\1\50\1\10\1\45\2\50\1\16\1\20\1\50\1\11"+
+            "\1\17\1\36\1\25\1\12\1\50\1\1\1\37\1\44\1\50\1\3\1\21\1\26\2"+
+            "\50\1\6\1\43\1\7\uff82\54",
+            "\1\55\17\uffff\1\56",
             "",
-            "\12\64\53\uffff\1\63\3\uffff\1\62",
-            "",
-            "",
+            "\12\63\53\uffff\1\62\3\uffff\1\61",
             "",
             "",
-            "\1\73\1\uffff\1\73\2\uffff\12\72\76\uffff\1\71",
+            "",
+            "",
+            "\1\72\1\uffff\1\72\2\uffff\12\73\62\uffff\1\71\13\uffff\1"+
+            "\70",
             "\1\74",
             "\1\75",
             "\1\76",
             "\1\100",
             "",
-            "\1\103",
-            "\1\105\1\104",
+            "\1\104\6\uffff\1\105\1\103",
             "\1\106",
             "\1\107",
             "\1\110",
             "\1\111",
             "\1\112",
             "\1\113",
-            "\1\115\1\116",
-            "\1\120",
+            "\1\114",
+            "\1\115",
+            "\1\117\1\116",
             "\1\121",
-            "\1\122",
             "\1\123",
             "",
             "\1\130\1\uffff\12\130\4\uffff\1\126",
@@ -2781,7 +2780,7 @@ public class InternalVilBuildLanguageLexer extends Lexer {
             "",
             "\1\146",
             "\1\147",
-            "\1\73\1\uffff\1\73\2\uffff\12\72",
+            "\1\72\1\uffff\1\72\2\uffff\12\73",
             "",
             "",
             "\0\150",
@@ -2794,140 +2793,142 @@ public class InternalVilBuildLanguageLexer extends Lexer {
             "",
             "\1\154",
             "\1\155",
-            "\12\64\7\uffff\32\60\4\uffff\1\60\1\uffff\32\60",
+            "\12\63\7\uffff\32\57\4\uffff\1\57\1\uffff\32\57",
             "",
             "",
             "",
             "",
             "\1\160\1\uffff\1\161\16\uffff\1\157",
-            "\12\72",
-            "",
             "\1\162",
+            "",
+            "\12\73",
             "\1\163",
-            "",
-            "",
-            "",
-            "",
-            "",
             "\1\164",
+            "",
+            "",
+            "",
+            "",
+            "",
             "\1\165",
-            "\1\166",
+            "\12\57\7\uffff\32\57\4\uffff\1\57\1\uffff\32\57",
             "\1\167",
             "\1\170",
             "\1\171",
             "\1\172",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
             "\1\173",
-            "\12\60\7\uffff\32\60\4\uffff\1\60\1\uffff\32\60",
-            "\1\175",
             "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
+            "\1\174",
+            "\12\57\7\uffff\32\57\4\uffff\1\57\1\uffff\32\57",
             "\1\176",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
             "\1\177",
             "\1\u0080",
             "\1\u0081",
-            "\1\u0083\2\uffff\1\u0082",
+            "\1\u0082",
+            "\1\u0084\2\uffff\1\u0083",
             "",
             "",
             "",
             "",
-            "\1\u0084",
             "\1\u0085",
-            "",
-            "",
             "\1\u0086",
+            "",
+            "",
             "\1\u0087",
             "\1\u0088",
             "\1\u0089",
-            "",
             "\1\u008a",
+            "",
             "\1\u008b",
             "\1\u008c",
             "\1\u008d",
-            "\1\u008e\3\uffff\1\u008f",
-            "\1\u0090",
-            "\1\u0091",
+            "\1\u008e",
+            "\1\u008f",
+            "\1\u0090\3\uffff\1\u0091",
             "\1\u0092",
-            "\12\60\7\uffff\16\60\1\u0093\13\60\4\uffff\1\60\1\uffff\32"+
-            "\60",
-            "\1\u0095",
+            "",
+            "\1\u0093",
+            "\12\57\7\uffff\16\57\1\u0094\13\57\4\uffff\1\57\1\uffff\32"+
+            "\57",
             "\1\u0096",
             "\1\u0097",
-            "\12\60\7\uffff\32\60\4\uffff\1\60\1\uffff\32\60",
+            "\1\u0098",
+            "\12\57\7\uffff\32\57\4\uffff\1\57\1\uffff\32\57",
             "",
-            "\12\60\7\uffff\32\60\4\uffff\1\60\1\uffff\32\60",
-            "\12\60\7\uffff\32\60\4\uffff\1\60\1\uffff\32\60",
-            "\12\60\7\uffff\32\60\4\uffff\1\60\1\uffff\32\60",
-            "\1\u009c",
+            "\12\57\7\uffff\32\57\4\uffff\1\57\1\uffff\32\57",
+            "\12\57\7\uffff\32\57\4\uffff\1\57\1\uffff\32\57",
+            "\12\57\7\uffff\32\57\4\uffff\1\57\1\uffff\32\57",
             "\1\u009d",
             "\1\u009e",
             "\1\u009f",
             "\1\u00a0",
             "\1\u00a1",
             "\1\u00a2",
-            "\12\60\7\uffff\32\60\4\uffff\1\60\1\uffff\32\60",
-            "\1\u00a4",
+            "\1\u00a3",
+            "\12\57\7\uffff\32\57\4\uffff\1\57\1\uffff\32\57",
             "\1\u00a5",
             "\1\u00a6",
             "\1\u00a7",
             "\1\u00a8",
-            "\12\60\7\uffff\32\60\4\uffff\1\60\1\uffff\32\60",
-            "\1\u00aa",
-            "\1\u00ab",
+            "\1\u00a9",
+            "\12\57\7\uffff\32\57\4\uffff\1\57\1\uffff\32\57",
+            "\12\57\7\uffff\32\57\4\uffff\1\57\1\uffff\32\57",
             "\1\u00ac",
             "\1\u00ad",
             "\1\u00ae",
             "\1\u00af",
+            "\1\u00b0",
             "",
-            "\12\60\7\uffff\32\60\4\uffff\1\60\1\uffff\32\60",
-            "\12\60\7\uffff\32\60\4\uffff\1\60\1\uffff\32\60",
-            "\1\u00b2",
+            "\12\57\7\uffff\32\57\4\uffff\1\57\1\uffff\32\57",
+            "\12\57\7\uffff\32\57\4\uffff\1\57\1\uffff\32\57",
+            "\1\u00b3",
             "",
             "",
             "",
             "",
-            "\12\60\7\uffff\32\60\4\uffff\1\60\1\uffff\32\60",
-            "\1\u00b4",
+            "\12\57\7\uffff\32\57\4\uffff\1\57\1\uffff\32\57",
             "\1\u00b5",
             "\1\u00b6",
-            "\12\60\7\uffff\32\60\4\uffff\1\60\1\uffff\32\60",
-            "\1\u00b8",
+            "\1\u00b7",
+            "\12\57\7\uffff\32\57\4\uffff\1\57\1\uffff\32\57",
             "\1\u00b9",
-            "",
             "\1\u00ba",
+            "",
             "\1\u00bb",
             "\1\u00bc",
             "\1\u00bd",
             "\1\u00be",
-            "",
             "\1\u00bf",
+            "",
+            "",
             "\1\u00c0",
-            "\12\60\7\uffff\32\60\4\uffff\1\60\1\uffff\32\60",
+            "\1\u00c1",
             "\1\u00c2",
             "\1\u00c3",
-            "\12\60\7\uffff\32\60\4\uffff\1\60\1\uffff\32\60",
+            "\12\57\7\uffff\32\57\4\uffff\1\57\1\uffff\32\57",
             "",
             "",
-            "\12\60\7\uffff\32\60\4\uffff\1\60\1\uffff\32\60",
+            "\12\57\7\uffff\32\57\4\uffff\1\57\1\uffff\32\57",
             "",
-            "\12\60\7\uffff\32\60\4\uffff\1\60\1\uffff\32\60",
-            "\12\60\7\uffff\32\60\4\uffff\1\60\1\uffff\32\60",
+            "\12\57\7\uffff\32\57\4\uffff\1\57\1\uffff\32\57",
+            "\12\57\7\uffff\32\57\4\uffff\1\57\1\uffff\32\57",
             "\1\u00c8",
             "",
-            "\12\60\7\uffff\32\60\4\uffff\1\60\1\uffff\32\60",
+            "\12\57\7\uffff\32\57\4\uffff\1\57\1\uffff\32\57",
             "\1\u00ca",
             "\1\u00cb",
             "\1\u00cc",
@@ -2936,53 +2937,50 @@ public class InternalVilBuildLanguageLexer extends Lexer {
             "\1\u00cf",
             "\1\u00d0",
             "\1\u00d1",
-            "",
             "\1\u00d2",
-            "\12\60\7\uffff\32\60\4\uffff\1\60\1\uffff\32\60",
+            "\12\57\7\uffff\32\57\4\uffff\1\57\1\uffff\32\57",
             "",
             "",
             "",
             "",
             "\1\u00d4",
             "",
-            "\1\u00d5\34\uffff\1\u00d6",
-            "\1\u00d7",
-            "\12\60\7\uffff\32\60\4\uffff\1\60\1\uffff\32\60",
-            "\12\60\7\uffff\32\60\4\uffff\1\60\1\uffff\32\60",
-            "\12\60\7\uffff\32\60\4\uffff\1\60\1\uffff\32\60",
-            "\12\60\7\uffff\32\60\4\uffff\1\60\1\uffff\32\60",
+            "\1\u00d5",
+            "\1\u00d6",
+            "\12\57\7\uffff\32\57\4\uffff\1\57\1\uffff\32\57",
+            "\12\57\7\uffff\32\57\4\uffff\1\57\1\uffff\32\57",
+            "\12\57\7\uffff\32\57\4\uffff\1\57\1\uffff\32\57",
+            "\12\57\7\uffff\32\57\4\uffff\1\57\1\uffff\32\57",
+            "\1\u00db",
             "\1\u00dc",
             "\1\u00dd",
-            "\1\u00de",
             "",
+            "\1\u00de",
             "\1\u00df",
             "\1\u00e0",
-            "\12\60\7\uffff\32\60\4\uffff\1\60\1\uffff\32\60",
+            "",
+            "",
+            "",
+            "",
+            "\1\u00e1",
             "\1\u00e2",
-            "",
-            "",
-            "",
-            "",
             "\1\u00e3",
             "\1\u00e4",
             "\1\u00e5",
-            "\1\u00e6",
+            "\12\57\7\uffff\32\57\4\uffff\1\57\1\uffff\32\57",
             "\1\u00e7",
-            "",
-            "\12\60\7\uffff\32\60\4\uffff\1\60\1\uffff\32\60",
+            "\12\57\7\uffff\32\57\4\uffff\1\57\1\uffff\32\57",
             "\1\u00e9",
-            "\12\60\7\uffff\32\60\4\uffff\1\60\1\uffff\32\60",
-            "\1\u00eb",
-            "\1\u00ec",
-            "\12\60\7\uffff\32\60\4\uffff\1\60\1\uffff\32\60",
+            "\1\u00ea",
+            "\12\57\7\uffff\32\57\4\uffff\1\57\1\uffff\32\57",
             "",
-            "\12\60\7\uffff\32\60\4\uffff\1\60\1\uffff\32\60",
+            "\12\57\7\uffff\32\57\4\uffff\1\57\1\uffff\32\57",
             "",
-            "\1\u00ef",
-            "\12\60\7\uffff\32\60\4\uffff\1\60\1\uffff\32\60",
+            "\1\u00ed",
+            "\12\57\7\uffff\32\57\4\uffff\1\57\1\uffff\32\57",
             "",
             "",
-            "\12\60\7\uffff\32\60\4\uffff\1\60\1\uffff\32\60",
+            "\12\57\7\uffff\32\57\4\uffff\1\57\1\uffff\32\57",
             "",
             ""
     };
@@ -3024,6 +3022,16 @@ public class InternalVilBuildLanguageLexer extends Lexer {
         	int _s = s;
             switch ( s ) {
                     case 0 : 
+                        int LA24_42 = input.LA(1);
+
+                        s = -1;
+                        if ( ((LA24_42>='\u0000' && LA24_42<='\uFFFF')) ) {s = 104;}
+
+                        else s = 44;
+
+                        if ( s>=0 ) return s;
+                        break;
+                    case 1 : 
                         int LA24_0 = input.LA(1);
 
                         s = -1;
@@ -3053,89 +3061,77 @@ public class InternalVilBuildLanguageLexer extends Lexer {
 
                         else if ( (LA24_0==',') ) {s = 13;}
 
-                        else if ( (LA24_0=='d') ) {s = 14;}
+                        else if ( (LA24_0=='i') ) {s = 14;}
 
-                        else if ( (LA24_0=='i') ) {s = 15;}
+                        else if ( (LA24_0=='m') ) {s = 15;}
 
-                        else if ( (LA24_0=='m') ) {s = 16;}
+                        else if ( (LA24_0=='j') ) {s = 16;}
 
-                        else if ( (LA24_0=='j') ) {s = 17;}
+                        else if ( (LA24_0=='w') ) {s = 17;}
 
-                        else if ( (LA24_0=='w') ) {s = 18;}
+                        else if ( (LA24_0=='c') ) {s = 18;}
 
-                        else if ( (LA24_0=='c') ) {s = 19;}
+                        else if ( (LA24_0=='@') ) {s = 19;}
 
-                        else if ( (LA24_0=='@') ) {s = 20;}
+                        else if ( (LA24_0=='a') ) {s = 20;}
 
-                        else if ( (LA24_0=='>') ) {s = 21;}
+                        else if ( (LA24_0=='o') ) {s = 21;}
 
-                        else if ( (LA24_0=='<') ) {s = 22;}
+                        else if ( (LA24_0=='x') ) {s = 22;}
 
-                        else if ( (LA24_0=='a') ) {s = 23;}
+                        else if ( (LA24_0=='<') ) {s = 23;}
 
-                        else if ( (LA24_0=='o') ) {s = 24;}
+                        else if ( (LA24_0=='!') ) {s = 24;}
 
-                        else if ( (LA24_0=='x') ) {s = 25;}
+                        else if ( (LA24_0=='>') ) {s = 25;}
 
-                        else if ( (LA24_0=='!') ) {s = 26;}
+                        else if ( (LA24_0=='+') ) {s = 26;}
 
-                        else if ( (LA24_0=='+') ) {s = 27;}
+                        else if ( (LA24_0=='-') ) {s = 27;}
 
-                        else if ( (LA24_0=='-') ) {s = 28;}
+                        else if ( (LA24_0=='*') ) {s = 28;}
 
-                        else if ( (LA24_0=='*') ) {s = 29;}
+                        else if ( (LA24_0=='/') ) {s = 29;}
 
-                        else if ( (LA24_0=='/') ) {s = 30;}
+                        else if ( (LA24_0=='n') ) {s = 30;}
 
-                        else if ( (LA24_0=='n') ) {s = 31;}
+                        else if ( (LA24_0=='s') ) {s = 31;}
 
-                        else if ( (LA24_0=='s') ) {s = 32;}
+                        else if ( (LA24_0=='.') ) {s = 32;}
 
-                        else if ( (LA24_0=='.') ) {s = 33;}
+                        else if ( (LA24_0=='[') ) {s = 33;}
 
-                        else if ( (LA24_0=='[') ) {s = 34;}
+                        else if ( (LA24_0==']') ) {s = 34;}
 
-                        else if ( (LA24_0==']') ) {s = 35;}
+                        else if ( (LA24_0=='|') ) {s = 35;}
 
-                        else if ( (LA24_0=='|') ) {s = 36;}
+                        else if ( (LA24_0=='t') ) {s = 36;}
 
-                        else if ( (LA24_0=='t') ) {s = 37;}
+                        else if ( (LA24_0=='f') ) {s = 37;}
 
-                        else if ( (LA24_0=='f') ) {s = 38;}
+                        else if ( (LA24_0=='E') ) {s = 38;}
 
-                        else if ( (LA24_0=='E') ) {s = 39;}
+                        else if ( ((LA24_0>='0' && LA24_0<='9')) ) {s = 39;}
 
-                        else if ( ((LA24_0>='0' && LA24_0<='9')) ) {s = 40;}
+                        else if ( (LA24_0=='$'||(LA24_0>='A' && LA24_0<='D')||(LA24_0>='F' && LA24_0<='Z')||LA24_0=='_'||LA24_0=='b'||LA24_0=='d'||(LA24_0>='g' && LA24_0<='h')||LA24_0=='k'||LA24_0=='q'||LA24_0=='u'||(LA24_0>='y' && LA24_0<='z')) ) {s = 40;}
 
-                        else if ( (LA24_0=='$'||(LA24_0>='A' && LA24_0<='D')||(LA24_0>='F' && LA24_0<='Z')||LA24_0=='_'||LA24_0=='b'||(LA24_0>='g' && LA24_0<='h')||LA24_0=='k'||LA24_0=='q'||LA24_0=='u'||(LA24_0>='y' && LA24_0<='z')) ) {s = 41;}
+                        else if ( (LA24_0=='\"') ) {s = 41;}
 
-                        else if ( (LA24_0=='\"') ) {s = 42;}
+                        else if ( (LA24_0=='\'') ) {s = 42;}
 
-                        else if ( (LA24_0=='\'') ) {s = 43;}
+                        else if ( ((LA24_0>='\t' && LA24_0<='\n')||LA24_0=='\r'||LA24_0==' ') ) {s = 43;}
 
-                        else if ( ((LA24_0>='\t' && LA24_0<='\n')||LA24_0=='\r'||LA24_0==' ') ) {s = 44;}
-
-                        else if ( ((LA24_0>='\u0000' && LA24_0<='\b')||(LA24_0>='\u000B' && LA24_0<='\f')||(LA24_0>='\u000E' && LA24_0<='\u001F')||LA24_0=='#'||(LA24_0>='%' && LA24_0<='&')||LA24_0=='?'||LA24_0=='\\'||LA24_0=='^'||LA24_0=='`'||(LA24_0>='~' && LA24_0<='\uFFFF')) ) {s = 45;}
-
-                        if ( s>=0 ) return s;
-                        break;
-                    case 1 : 
-                        int LA24_43 = input.LA(1);
-
-                        s = -1;
-                        if ( ((LA24_43>='\u0000' && LA24_43<='\uFFFF')) ) {s = 104;}
-
-                        else s = 45;
+                        else if ( ((LA24_0>='\u0000' && LA24_0<='\b')||(LA24_0>='\u000B' && LA24_0<='\f')||(LA24_0>='\u000E' && LA24_0<='\u001F')||LA24_0=='#'||(LA24_0>='%' && LA24_0<='&')||LA24_0=='?'||LA24_0=='\\'||LA24_0=='^'||LA24_0=='`'||(LA24_0>='~' && LA24_0<='\uFFFF')) ) {s = 44;}
 
                         if ( s>=0 ) return s;
                         break;
                     case 2 : 
-                        int LA24_42 = input.LA(1);
+                        int LA24_41 = input.LA(1);
 
                         s = -1;
-                        if ( ((LA24_42>='\u0000' && LA24_42<='\uFFFF')) ) {s = 104;}
+                        if ( ((LA24_41>='\u0000' && LA24_41<='\uFFFF')) ) {s = 104;}
 
-                        else s = 45;
+                        else s = 44;
 
                         if ( s>=0 ) return s;
                         break;

@@ -21,11 +21,7 @@ public enum ModelType {
     /**
      * Stores the chosen instantiators related to file types.
      */
-    INSTANTIATORS("instantiators"),
-    /**
-     * Stores the chosen copy mechanism for this project.
-     */
-    COPY("copy");
+    INSTANTIATORS("instantiators");
 
     private String denotation;
 

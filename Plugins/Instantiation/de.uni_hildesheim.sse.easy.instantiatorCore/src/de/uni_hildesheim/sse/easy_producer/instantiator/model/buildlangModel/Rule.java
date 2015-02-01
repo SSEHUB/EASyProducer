@@ -405,4 +405,9 @@ public class Rule extends RuleBlock implements IResolvableOperation<VariableDecl
         return false;
     }
 
+    @Override
+    public boolean isVirtual() {
+        return false;
+    }
+
 }

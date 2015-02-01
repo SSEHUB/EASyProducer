@@ -35,6 +35,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Swit
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Template;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateBlock;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateDescriptor;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateLangExecution;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.VariableDeclaration;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaType;
@@ -195,19 +196,31 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
      * 
      * @param tpl the template to be processed
      * @param desc the template descriptor to put the information into
-     * @throws TranslatorException in case that resolving the Java extensions fails
+     * @throws TranslatorException in case that resolving/processing/adding the Java extensions fails
      */
     private void processJavaExtensions(de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit tpl, 
         TemplateDescriptor desc) throws TranslatorException {
-        if (null != tpl.getJavaExts()) {
+        int extCount = TemplateLangExecution.getDefaultExtensionCount();
+        List<Extension> exts = tpl.getJavaExts();
+        if (extCount > 0 || null != exts) {
             Set<String> knownTypes = new HashSet<String>();
             Set<String> knownSignatures = new HashSet<String>();
             Iterator<TypeDescriptor<? extends IVilType>> iter = resolver.getTypeRegistry().allTypes().iterator();
             while (iter.hasNext()) {
                 knownTypes.add(iter.next().getName());
             }
-            for (Extension ext : tpl.getJavaExts()) {
-                desc.addJavaExtension(processJavaExtension(ext, knownTypes, knownSignatures));
+
+            // process default extensions
+            for (int e = 0; e < extCount; e++) {
+                desc.addJavaExtension(processJavaExtension(TemplateLangExecution.getDefaultExtension(e), knownTypes, 
+                    knownSignatures, tpl, TemplateLangPackage.Literals.LANGUAGE_UNIT__JAVA_EXTS));
+            }
+            
+            // process defined extensions
+            if (null != exts) {
+                for (Extension ext : exts) {
+                    desc.addJavaExtension(processJavaExtension(ext, knownTypes, knownSignatures));
+                }
             }
         }
     }
@@ -219,32 +232,51 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
      * @param knownTypes known type names (may be modified as a side effect)
      * @param knownSignatures known signatures due to Java extensions (may be modified as a side effect)
      * @return the Java extension
-     * @throws TranslatorException in case that resolving the Java extension fails
+     * @throws TranslatorException in case that resolving/processing/adding the Java extension fails
      */
     private JavaExtension processJavaExtension(Extension ext, Set<String> knownTypes, Set<String> knownSignatures) 
         throws TranslatorException {
         JavaExtension javaExt;
         try {
             javaExt = new JavaExtension(getJavaQualifiedNameString(ext.getName()), resolver.getTypeRegistry());
-            IMetaType resolved = javaExt.getResolved();
-            if (null != resolved) {
-                String typeName = resolved.getName();
-                if (!knownTypes.contains(typeName)) {
-                    knownTypes.add(typeName);
-                    for (int o = 0; o < resolved.getOperationsCount(); o++) {
-                        String sig = resolved.getOperation(o).getJavaSignature();
-                        if (knownSignatures.contains(sig)) {
-                            throw new TranslatorException("signature " + sig + " in type " + typeName + 
-                                " is already known", ext, TemplateLangPackage.Literals.EXTENSION__NAME, ErrorCodes.REDEFINITION);
-                        }
-                    }
-                } else {
-                    throw new TranslatorException("type " + typeName + " is already known", ext, 
-                        TemplateLangPackage.Literals.EXTENSION__NAME, ErrorCodes.REDEFINITION);
-                }
-            }
+            processJavaExtension(javaExt, knownTypes, knownSignatures, ext, 
+                TemplateLangPackage.Literals.EXTENSION__NAME);
         } catch (VilLanguageException e) {
             throw new TranslatorException(e, ext, TemplateLangPackage.Literals.EXTENSION__NAME);
+        }
+        return javaExt;
+    }
+
+    /**
+     * Processes a Java extension.
+     * 
+     * @param ext the extension to be processed
+     * @param knownTypes known type names (may be modified as a side effect)
+     * @param knownSignatures known signatures due to Java extensions (may be modified as a side effect)
+     * @param cause the causing EObject
+     * @param causingFeature the causing language feature 
+     * @return the Java extension
+     * @throws TranslatorException in case that resolving/processing/adding the Java extension fails
+     */
+    private JavaExtension processJavaExtension(JavaExtension javaExt, Set<String> knownTypes, Set<String> knownSignatures, 
+        EObject cause, EStructuralFeature causingFeature) throws TranslatorException{
+        IMetaType resolved = javaExt.getResolved();
+        if (null != resolved) {
+            String typeName = resolved.getName();
+            if (!knownTypes.contains(typeName)) {
+                knownTypes.add(typeName);
+                for (int o = 0; o < resolved.getOperationsCount(); o++) {
+                    String sig = resolved.getOperation(o).getJavaSignature();
+                    if (knownSignatures.contains(sig)) {
+                        throw new TranslatorException("signature " + sig + " in type " + typeName + 
+                            " is already known", cause, causingFeature, ErrorCodes.REDEFINITION);
+                    }
+                    knownSignatures.add(sig);
+                }
+            } else {
+                throw new TranslatorException("type " + typeName + " is already known", cause, causingFeature, 
+                    ErrorCodes.REDEFINITION);
+            }
         }
         return javaExt;
     }

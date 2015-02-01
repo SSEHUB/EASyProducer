@@ -24,16 +24,12 @@ public class IvmlJavaValidator extends AbstractIvmlJavaValidator {
     private IModelValidationCallback<VariabilityUnit, Project> callback = new IModelValidationCallback<VariabilityUnit, 
         Project>() {
 
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public TranslationResult<Project> createModel(VariabilityUnit unit, URI uri) {
             return ModelUtility.INSTANCE.createVarModel(unit, uri, false); // false = checkOnly!
         }
 
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public void message(MessageType type, String message, EObject source, EStructuralFeature feature, 
             int identifier) {
             switch (type) {
@@ -51,9 +47,7 @@ public class IvmlJavaValidator extends AbstractIvmlJavaValidator {
             }
         }
 
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public void print(TranslationResult<Project> result, Writer out) {
             ModelUtility.INSTANCE.print(result, out, true, false);
         }

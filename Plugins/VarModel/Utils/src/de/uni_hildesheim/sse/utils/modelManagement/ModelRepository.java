@@ -45,30 +45,22 @@ class ModelRepository <M extends IModel> implements IModelManagementRepository<M
         this.modelMgmt = modelMgmt;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public List<VersionedModelInfos<M>> getAvailable(String name) {
         return modelMgmt.getAvailable(name);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public boolean isOutdated(ModelInfo<M> info) {
         return modelMgmt.isOutdated(info);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public M load(ModelInfo<M> info, List<IMessage> messages) {
         return modelMgmt.load(info, messages);
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public ModelInfo<M> getModelInfo(String name, Version version, URI uri) {
         return modelMgmt.availableModels().getModelInfo(name, version, uri);
     }

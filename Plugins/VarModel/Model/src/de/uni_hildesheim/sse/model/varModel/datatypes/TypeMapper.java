@@ -71,6 +71,7 @@ public class TypeMapper {
         put("Enum", Enum.TYPE);
         put("OrderedEnum", OrderedEnum.TYPE);
         put("Reference", Reference.TYPE);
+        put("Constraint", ConstraintType.TYPE);
     }
     
     /**

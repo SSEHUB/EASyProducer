@@ -170,7 +170,7 @@ public abstract class AbstractResolvableModel<V extends IResolvable, M extends I
         }
         // Use both as long as editor updates will not work every time
         dirty = true;
-        reload();
+        //reload(); // this causes loops
     }
     
     @Override

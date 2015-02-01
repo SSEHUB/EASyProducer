@@ -1,0 +1,9 @@
+project ImportChild {
+
+	version v0;
+	
+	import ImportChild;
+	
+	a = 3;
+	
+}

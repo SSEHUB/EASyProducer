@@ -1,0 +1,103 @@
+project pTSICfg {
+
+	import Pipelines;
+	import FamiliesCfg;
+	import DataManagementCfg;
+	Pipeline pTSI;
+	Source pTSI_Source0;
+	Flow pTSI_Flow0;
+	FamilyElement pTSI_FamilyElement0;
+	Flow pTSI_Flow1;
+	FamilyElement pTSI_FamilyElement1;
+	Flow pTSI_Flow2;
+	FamilyElement pTSI_FamilyElement2;
+	Flow pTSI_Flow3;
+	FamilyElement pTSI_FamilyElement3;
+	Flow pTSI_Flow4;
+	Sink pTSI_Sink0;
+	pTSI_Sink0 = {
+		sink = refBy(publicTsi), 
+		name = "TSISink"
+	};
+	pTSI_Flow4 = {
+		destination = refBy(pTSI_Sink0), 
+		grouping = Grouping.shuffleGrouping, 
+		name = "ss"
+	};
+	pTSI_FamilyElement3 = {
+		family = refBy(fShow), 
+		output = {
+			refBy(pTSI_Flow4)
+		}, 
+		name = "ShowResult"
+	};
+	pTSI_Flow3 = {
+		destination = refBy(pTSI_FamilyElement3), 
+		grouping = Grouping.shuffleGrouping, 
+		name = "ds"
+	};
+	pTSI_FamilyElement2 = {
+		family = refBy(fDouble), 
+		output = {
+			refBy(pTSI_Flow3)
+		}, 
+		name = "Double"
+	};
+	pTSI_Flow2 = {
+		destination = refBy(pTSI_FamilyElement2), 
+		grouping = Grouping.shuffleGrouping, 
+		name = "ad"
+	};
+	pTSI_FamilyElement1 = {
+		family = refBy(fAdd10), 
+		output = {
+			refBy(pTSI_Flow2)
+		}, 
+		name = "Add10"
+	};
+	pTSI_Flow1 = {
+		destination = refBy(pTSI_FamilyElement1), 
+		grouping = Grouping.shuffleGrouping, 
+		name = "na"
+	};
+	pTSI_FamilyElement0 = {
+		family = refBy(fNormalize), 
+		output = {
+			refBy(pTSI_Flow1)
+		}, 
+		name = "Normalize"
+	};
+	pTSI_Flow0 = {
+		destination = refBy(pTSI_FamilyElement0), 
+		grouping = Grouping.shuffleGrouping, 
+		name = "sn"
+	};
+	pTSI_Source0 = {
+		output = {
+			refBy(pTSI_Flow0)
+		}, 
+		source = refBy(spring), 
+		name = "SpringSource"
+	};
+	pTSI = {
+		name = "TSI", 
+		sources = {
+			refBy(pTSI_Source0)
+		}, 
+		numworkers = 1
+	};
+	freeze {
+		pTSI;
+		pTSI_Source0;
+		pTSI_Flow0;
+		pTSI_FamilyElement0;
+		pTSI_Flow1;
+		pTSI_FamilyElement1;
+		pTSI_Flow2;
+		pTSI_FamilyElement2;
+		pTSI_Flow3;
+		pTSI_FamilyElement3;
+		pTSI_Flow4;
+		pTSI_Sink0;
+	}
+}

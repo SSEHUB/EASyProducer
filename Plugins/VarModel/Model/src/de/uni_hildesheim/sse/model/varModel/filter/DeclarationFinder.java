@@ -137,18 +137,14 @@ public class DeclarationFinder extends AbstractDeclarationFinder {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitDecisionVariableDeclaration(DecisionVariableDeclaration decl) {
         if (type == null || type.isAssignableFrom(decl.getType())) {
             addDeclaration(decl);    
         }
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitAttributeAssignment(AttributeAssignment assignment) {
         for (int v = 0; v < assignment.getElementCount(); v++) {
             assignment.getElement(v).accept(this);
@@ -192,9 +188,7 @@ public class DeclarationFinder extends AbstractDeclarationFinder {
         allDeclarations.add(decl);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitCompoundAccessStatement(CompoundAccessStatement access) {
         // this is no declaration
     }

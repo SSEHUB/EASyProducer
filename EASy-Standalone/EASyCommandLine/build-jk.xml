@@ -24,6 +24,7 @@
         <mkdir dir="${build.base.dir}"/>
 		<mkdir dir="${build.classes.dir}"/>
 		<mkdir dir="${build.jar.dir}"/>
+        <mkdir dir="${build.base.dir}/bundle"/>
 	</target>
 	
 	<!-- Compile all files without test classes -->
@@ -37,8 +38,30 @@
 	<target name="jar" depends="compile">
 		<jar destfile="${build.jar.dir}/${ant.project.name}.jar" basedir="${build.classes.dir}"/>
     </target>
+    
+    <target name="create.bundle">
+        <mkdir dir="${build.base.dir}/bundle/lib"/>
+        <copy todir="${build.base.dir}/bundle/lib" failonerror="true" overwrite="true" flatten="false">
+			<fileset dir="lib">
+				<include name="**/*.jar" />
+			</fileset>
+        </copy>
+        <copy todir="${build.base.dir}/bundle/" failonerror="true" overwrite="true" flatten="false">
+            <fileset dir="res">
+				<include name="*" />
+			</fileset>
+		</copy>
+        <jar destfile="${build.base.dir}/bundle/${ant.project.name}.jar" basedir="${build.classes.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="de.uni_hildesheim.sse.easy.cmd.CommandLineExecuter"/>
+                <attribute name="Class-Path" value="lib/org.eclipse.osgi_3.9.1.v20140110-1610.jar lib/org.eclipse.osgi.services_3.3.100.v20130513-1956.jar lib/eclipse-part.jar lib/easy-headless.jar lib/drools-compiler-5.5.0.Final.jar"/>
+            </manifest>
+        </jar>
+        <zip destfile="${build.base.dir}/EASyCommandLine.zip" basedir="${build.base.dir}/bundle" />
+    </target>
 	
 	<target name="all">
 		<antcall target="jar" />
+		<antcall target="create.bundle" />
 	</target>
 </project>

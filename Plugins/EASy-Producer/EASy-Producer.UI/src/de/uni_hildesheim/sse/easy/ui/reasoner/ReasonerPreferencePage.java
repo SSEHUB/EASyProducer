@@ -28,6 +28,7 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.PlatformUI;
 
+import de.uni_hildesheim.sse.easy.ui.internal.EASyPreferenceStore;
 import de.uni_hildesheim.sse.reasoning.core.frontend.ReasonerFrontend;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerDescriptor;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasoningResult;
@@ -53,6 +54,7 @@ public class ReasonerPreferencePage extends PreferencePage implements
     private Button file;
     private Button dir;
     private Button upgrade;
+    private Button setDefault;
     private ReasonerFrontend frontend;
     
     /**
@@ -152,8 +154,16 @@ public class ReasonerPreferencePage extends PreferencePage implements
         version = new Text(pageComponent, SWT.LEFT | SWT.BORDER);
         version.setEditable(false);
         GridData data = new GridData(GridData.FILL_HORIZONTAL);
-        data.horizontalSpan = 2;
+        data.horizontalSpan = 1;
         version.setLayoutData(data);
+        
+        setDefault = new Button(pageComponent, SWT.CENTER);
+        setDefault.setText("Set as active reasoner");
+        setDefault.setEnabled(reasoners.getItemCount() > 1);
+        setDefault.addListener(SWT.Selection, this);
+        data = new GridData(SWT.END, SWT.CENTER, false, false);
+        data.horizontalSpan = 1;
+        setDefault.setLayoutData(data);
         
         label = new Label(pageComponent, SWT.LEFT);
         label.setText("License");
@@ -257,6 +267,7 @@ public class ReasonerPreferencePage extends PreferencePage implements
      * Initializes the list of reasoners.
      */
     private void initializeReasonersList() {
+        reasoners.clearAll();
         ReasonerDescriptor defaultHint = frontend.getReasonerHint();
         int count = getReasonersCount();
         for (int r = 0; r < count; r++) {
@@ -318,6 +329,12 @@ public class ReasonerPreferencePage extends PreferencePage implements
             displayDirDialog();
         } else if (event.widget == upgrade) {
             upgrade();
+        } else if (event.widget == setDefault) {
+            ReasonerDescriptor desc = getSelected();
+            if (null != desc) {
+                EASyPreferenceStore.setDefaultReasoner(desc); // propagates to reasoner frontend
+                initializeReasonersList();
+            }
         }
     }
     

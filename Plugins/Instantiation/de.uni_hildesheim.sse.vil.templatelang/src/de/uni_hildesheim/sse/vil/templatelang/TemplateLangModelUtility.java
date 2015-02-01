@@ -30,7 +30,6 @@ import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 import de.uni_hildesheim.sse.utils.modelManagement.Version;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Import;
-import de.uni_hildesheim.sse.vil.expressions.translation.ImportTranslator;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit;
 import de.uni_hildesheim.sse.vil.templatelang.templateLanguageTranslation.ExpressionTranslator;
 import de.uni_hildesheim.sse.vil.templatelang.templateLanguageTranslation.ModelTranslator;
@@ -205,12 +204,7 @@ public class TemplateLangModelUtility extends de.uni_hildesheim.sse.dslCore.Mode
             ArrayList<ModelImport<Template>> imports = new ArrayList<ModelImport<Template>>();
             for (Import imp : template.getImports()) {
                 String name = imp.getName();
-                try {
-                    imports.add(new ModelImport<Template>(name, false,
-                        ImportTranslator.processRestrictions(name, imp.getVersionSpec())));
-                } catch (TranslatorException e) {
-                    throw new IOException(e);
-                }
+                imports.add(new ModelImport<Template>(name, false, null));
             }
             try {
                 result.add(new ModelInfo<Template>(template.getName(), version, this, toNetUri(uri), imports));

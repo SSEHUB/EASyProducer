@@ -72,145 +72,93 @@ public class NamespaceFinder extends AbstractProjectVisitor {
         super.visitProject(project);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitDecisionVariableDeclaration(DecisionVariableDeclaration decl) {
         // TODO Auto-generated method stub
-        
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitAttribute(Attribute attribute) {
         // TODO Auto-generated method stub
-        
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitConstraint(Constraint constraint) {
         // TODO Auto-generated method stub
-        
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitFreezeBlock(FreezeBlock freeze) {
         // TODO Auto-generated method stub
-        
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitOperationDefinition(OperationDefinition opdef) {
         // TODO Auto-generated method stub
-        
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitPartialEvaluationBlock(PartialEvaluationBlock block) {
         // TODO Auto-generated method stub
-        
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitProjectInterface(ProjectInterface iface) {
         // TODO Auto-generated method stub
-        
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitComment(Comment comment) {
         // TODO Auto-generated method stub
-        
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitAttributeAssignment(AttributeAssignment assignment) {
         // TODO Auto-generated method stub
-        
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitEnum(Enum eenum) {
         // TODO Auto-generated method stub
-        
     }
     
-    /**
-     * {@inheritDoc}
-     */
-
+    @Override
     public void visitOrderedEnum(OrderedEnum eenum) {
         // TODO Auto-generated method stub
-        
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitCompound(Compound compound) {
         // TODO Auto-generated method stub
-        
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitDerivedDatatype(DerivedDatatype datatype) {
         // TODO Auto-generated method stub
         
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitEnumLiteral(EnumLiteral literal) {
         // TODO Auto-generated method stub
-        
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitReference(Reference reference) {
         // TODO Auto-generated method stub
-        
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitSequence(Sequence sequence) {
         // TODO Auto-generated method stub
-        
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitSet(Set set) {
         // TODO Auto-generated method stub
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitCompoundAccessStatement(CompoundAccessStatement access) {
         // this is not a namespace
     }

@@ -120,18 +120,12 @@ public class MapExpression extends Expression implements IRuleBlock {
         }
         return result;
     }
-
+    
     @Override
     public TypeDescriptor<? extends IVilType> inferType() throws ExpressionException {
         if (null == type) {
-            Expression expr = null;
-            for (int e = getBodyElementCount() - 1; null == expr && e >= 0; e--) {
-                IRuleElement elt = getBodyElement(e);
-                if (elt instanceof ExpressionStatement) {
-                    // don't care for variable assignments, this happens in a variable assignment expression
-                    expr = ((ExpressionStatement) elt).getExpression();
-                }
-            }
+            // don't care for variable assignments, this happens in a variable assignment expression
+            Expression expr = Utils.findLastExpression(this);
             if (null == expr) {
                 type = TypeRegistry.voidType();
             } else {
@@ -153,14 +147,7 @@ public class MapExpression extends Expression implements IRuleBlock {
      * @return the rule element determining the result
      */
     public IRuleElement determinesResult() {
-        IRuleElement result = null;
-        for (int e = getBodyElementCount() - 1; null == result && e >= 0; e--) {
-            IRuleElement elt = getBodyElement(e);
-            if (elt instanceof ExpressionStatement) {
-                result = elt;
-            }
-        }
-        return result;
+        return Utils.findLastExpressionStatement(this);
     }
     
     /**
@@ -170,6 +157,11 @@ public class MapExpression extends Expression implements IRuleBlock {
      */
     public boolean isColonSeparator() {
         return colon;
+    }
+
+    @Override
+    public boolean isVirtual() {
+        return false;
     }
 
 }

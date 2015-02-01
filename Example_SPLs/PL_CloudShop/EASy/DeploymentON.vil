@@ -1,0 +1,78 @@
+@advice(PL_CloudShop)
+vilScript Deployment(Project source, Configuration config, Project target) {
+	version v0;
+	
+	//Variablen aus der Configuration
+	String jarName = target.getName().toLowerCase() + "-store.jar";
+	String plName = target.getName();
+	Path onScriptPath = "$target" + "resources/onSkripte";
+	String templateFile = config.getByName("templateFile").getStringValue();
+	Path templateFilePath = config.getByName("templateFilePath").getStringValue();
+	Path scriptPathDest = config.getByName("scriptPathDest").getStringValue();
+	String frontendIp = config.getByName("frontendIp").getStringValue();
+	String frontendUser = config.getByName("frontendUser").getStringValue();
+	String frontendPass = config.getByName("frontendPass").getStringValue();
+	String vmName = config.getByName("vmName").getStringValue();
+	String vmUser = config.getByName("vmUser").getStringValue();
+	String vmPass = config.getByName("vmPass").getStringValue();
+	
+	//Statische Variablen (Evtl. unnötig - da Skripte auflösbar)
+	String runningScript = "vmRunning.sh";
+	String startedScript = "vmStarted.sh";
+	String createScript = "createScript.sh";
+	
+	//Batch Kommandos
+	String run = "plink -ssh -pw "+frontendPass+" "+frontendUser+"@"+frontendIp+" sh "+scriptPathDest+runningScript+" "+vmName;
+	String create = "plink -ssh -pw "+frontendPass+" "+frontendUser+"@"+frontendIp+" sh "+scriptPathDest+createScript+" "+vmName+" "+templateFile;
+    String started = "pscp -pw "+frontendPass+" "+onScriptPath+startedScript+" "+frontendUser+"@"+frontendIp+":"+scriptPathDest;
+    //sourcePatch = onScriptPath
+    String java = "plink -ssh -i "+onScriptPath+"id_rsa_ubuntu_putty.ppk "+vmUser+"@"+frontendIp+" sudo apt-get -y install openjdk-7-jdk";
+    String update = "plink -ssh -i "+onScriptPath+"id_rsa_ubuntu_putty.ppk "+vmUser+"@"+frontendIp+" sudo apt-get update";
+    String download = "plink -ssh -i "+onScriptPath+"id_rsa_ubuntu_putty.ppk "+vmUser+"@"+frontendIp+
+    " sudo wget https://archive.apache.org/dist/tuscany/java/sca/1.6.2/apache-tuscany-sca-1.6.2.tar.gz";
+    String tuscany = "plink -ssh -i "+onScriptPath+"id_rsa_ubuntu_putty.ppk "+vmUser+"@"+frontendIp+" sudo tar -xf \'apache-tuscany-sca-1.6.2.tar.gz\'";
+ 
+	copyRS() = : {
+		//runningScript kopieren oder gleich alle?
+		execute run();
+		//Runningfile zum Konfigurationsrechner kopieren 
+	}
+	
+	running() = : "$scriptPathDest/running.file"{
+		//runningFile auslesen
+		//Unterscheidung VM läuft schon oder muss erstellt werden
+		if(running == false){
+			createVM();
+		}else if (running == true){
+			
+		}else {
+			
+		}
+		
+	}
+	
+	createVM() = : {
+		//(Kopieren des createScripts)
+		execute create();
+	}
+      
+    alreadyRunning() = : createVM() {
+    	//(Kopieren des startedScriptes)
+    	execute started();
+    	//evtl. altes logfile löschen
+    	//logfile kopieren zum Konfigurationsrechner
+    }
+
+	configVM() = : alreadyRunning(){
+		//Auslesen der IP aus dem logfile
+		//Warten bis VM vollständig deployed
+		//Installiere JAVA, Tuscany  Abestzen der Kommandos zeitversetzt? Wird gewartet?
+		execute update();
+		execute java();
+		execute download();
+		execute tuscany();
+		//Deploye Service in die Cloud
+	}
+	       
+
+}

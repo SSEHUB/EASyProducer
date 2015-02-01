@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProductLineProject id="99197ae2-7f24-40d5-b950-15c5f234ec4f" name="PL_CloudShop" version="0" location="PL_CloudShop">
+	<predecessors>
+	</predecessors>
+	<successors>
+		<entity id="a3bb4cc4-c9b6-4da9-a12d-fb92ff1bf13a" name="ONShop" location="ONShop" />
+		<entity id="1b3f4640-410d-4eb3-8896-5e1cb526dd98" name="AWSShop" location="AWSShop" />
+		<entity id="dbcf88c8-c992-48cb-a516-d857a1da41c3" name="TEST1" location="TEST1" />
+		<entity id="fa593196-da46-4e54-9782-d75c767f96a2" name="ON_Shop_Demo" version="0" location="ON_Shop_Demo" />
+		<entity id="15e62959-080a-4720-b592-500584378a41" name="jkzuzuiz" location="jkzuzuiz" />
+		<entity id="b08beeb0-1044-47a6-8047-40868614bc96" name="serzrtrtz" version="0" location="serzrtrtz" />
+	</successors>
+	<settings>
+		<entity debug="false" />
+	</settings>
+	<reasoners>
+		<entity timeout="0" />
+	</reasoners>
+	<instantiators>
+	</instantiators>
+</ProductLineProject>

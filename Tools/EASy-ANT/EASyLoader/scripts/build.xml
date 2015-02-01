@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="MyTask" basedir="." default="use">
+
+    <property name="src.dir" value="."/>
+    <property name="classes.dir" value="classes"/>
+	<property name="task.dir" value="task"/>
+	<property name="feat.dir" value="C:\SSE-Eclipse\workspace\Features"/>
+
+    <target name="clean" description="Delete all generated files">
+        <delete dir="${classes.dir}" failonerror="false"/>
+        <delete dir="${task.dir}"/>
+    </target>
+
+    <target name="compile" description="Compiles the Task" depends="clean">
+        <mkdir dir="${classes.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${classes.dir}"/>
+    </target>
+
+    <target name="jar" description="JARs the Task" depends="compile">
+        <jar destfile="${task.dir}/task.jar" basedir="${classes.dir}"/>
+    </target>
+	
+	<target name="use" description="Use the Task" depends="jar">
+        <taskdef name="antgenerator" classname="de.uni_hildesheim.sse.easy.ant.AntGenerator" classpath="${task.dir}/task.jar"/>
+        <antgenerator forced="yes" pluginPath="${easy.bundles.dir}" basedir="." target="out" libsPath="libs"
+            eclipsepath="${eclipse.plugins.dir}" classesPath="${home.easyLoader.dir}/build/classes">
+			
+            <basefeature path="${feat.dir}/de.uni_hildesheim.sse.easy_producer.core.no_eclipse_feature"/>
+			<basefeature path="${feat.dir}/de.uni_hildesheim.sse.ivml.core_feature"/>
+			<basefeature path="${feat.dir}/de.uni_hildesheim.sse.vil.core_feature"/>
+			<basefeature path="${feat.dir}/de.uni_hildesheim.sse.reasoning.drools2_feature"/>
+			<basefeature path="${feat.dir}/de.uni_hildesheim.sse.apache.commons.io.feature"/>
+			<basefeature path="${feat.dir}/de.uni_hildesheim.sse.easy.instantiator.java.feature"/>
+			<basefeature path="${feat.dir}/de.uni_hildesheim.sse.easy_producer.instantiation.velocity_feature"/>
+			<addfeature path="${feat.dir}"/>
+		</antgenerator>
+    </target>
+
+</project>

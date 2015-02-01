@@ -78,65 +78,47 @@ public class DatatypeFinder extends AbstractProjectVisitor {
         return foundDatatypes;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitDecisionVariableDeclaration(DecisionVariableDeclaration decl) {
         // No action needed
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitAttribute(Attribute attribute) {
         // No action needed
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitConstraint(Constraint constraint) {
         // No action needed
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitFreezeBlock(FreezeBlock freeze) {
         // No action needed
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitOperationDefinition(OperationDefinition opdef) {
         // No action needed
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitPartialEvaluationBlock(PartialEvaluationBlock block) {
         // No action needed
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitProjectInterface(ProjectInterface iface) {
         // No action needed
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitComment(Comment comment) {
         // No action needed
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitAttributeAssignment(AttributeAssignment assignment) {
         // Continue visiting, because a datatype could be defined inside an attribute assignment
         for (int i = 0; i < assignment.getElementCount(); i++) {
@@ -144,60 +126,44 @@ public class DatatypeFinder extends AbstractProjectVisitor {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitEnum(Enum eenum) {
         visitIDatatype(eenum);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitOrderedEnum(OrderedEnum eenum) {
         visitIDatatype(eenum);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitCompound(Compound compound) {
         visitIDatatype(compound);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitDerivedDatatype(DerivedDatatype datatype) {
         if (null == type || type == DerivedDatatype.TYPE) {
             foundDatatypes.add(datatype);
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitEnumLiteral(EnumLiteral literal) {
         // No action needed
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitReference(Reference reference) {
         visitIDatatype(reference);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitSequence(Sequence sequence) {
         visitIDatatype(sequence);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitSet(Set set) {
         visitIDatatype(set);
     }
@@ -219,10 +185,9 @@ public class DatatypeFinder extends AbstractProjectVisitor {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitCompoundAccessStatement(CompoundAccessStatement access) {
         // No action needed
     }
+
 }

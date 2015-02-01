@@ -1,0 +1,25 @@
+@advice(qm1)
+template qm1(Configuration config, FileArtifact target) {
+
+    def String fieldTypeName(DecisionVariable var) {
+        switch(var.byName("type")) {
+            "INTEGER" : "int",
+            "BOOLEAN" : "boolean",
+            "REAL" : "double",
+            "STRING" : "String"
+        }
+    }
+
+    def main(Configuration config, FileArtifact target) {
+        Family fm = config.byName("fNormalize");
+        for (Tuple t : fm.output()) {
+            for (Field f : t.fields()) {
+                String name = f.name();
+                String type = f.type();
+                String fType = fieldTypeName(f);
+                '$name $type $fType'
+            }
+        }
+    }
+
+}

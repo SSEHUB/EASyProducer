@@ -74,6 +74,7 @@ public class Compound extends StructuredDatatype implements IResolutionScope, ID
         DTYPE.addOperation(IS_DEFINED);
     }
 
+    private boolean isAbstract;
     private Compound refines;
     // stores the contained elements in sequence for proper output
 
@@ -88,8 +89,9 @@ public class Compound extends StructuredDatatype implements IResolutionScope, ID
     }
     
     /**
-     * Constructor for the compound.
-     * @param name Name of the compound
+     * Constructor for a non-abstract compound.
+     * 
+     * @param name name of the compound
      * @param parent the object, in which this specific one is embedded
      */
     public Compound(String name, ModelElement parent) {
@@ -97,40 +99,47 @@ public class Compound extends StructuredDatatype implements IResolutionScope, ID
     }
     
     /**
-     * Constructor for the compound, which initializes the attribute refins.
+     * Constructor for a non-abstract (potentially refined) compound.
+     * 
      * @param name name of the compound
      * @param parent the object, in which this specific one is embedded
-     * @param refines the super Compound.
+     * @param refines the super compound (may be <b>null</b> if there is no refinement).
      */
     public Compound(String name, ModelElement parent, Compound refines) {
         super(name, DTYPE, parent);
         this.refines = refines;
     }
-
+    
     /**
-     * {@inheritDoc}
+     * Constructor for a (potentially abstract, refined) compound.
+     * 
+     * @param name name of the compound
+     * @param isAbstract whether this compound is abstract
+     * @param parent the object, in which this specific one is embedded
+     * @param refines the super compound (may be <b>null</b> if there is no refinement)
      */
+    public Compound(String name, ModelElement parent, boolean isAbstract, Compound refines) {
+        super(name, DTYPE, parent);
+        this.isAbstract = isAbstract;
+        this.refines = refines;
+    }
+
+    @Override
     public int getImportsCount() {
         return 0;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public ProjectImport getImport(int index) {
         throw new IndexOutOfBoundsException();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public boolean hasInterfaces() {
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public boolean isInterface() {
         return false;
     }
@@ -212,23 +221,17 @@ public class Compound extends StructuredDatatype implements IResolutionScope, ID
     
     // --------------------------------- delegation part --------------------------------------
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public boolean add(DecisionVariableDeclaration elem) {
         return container.add(elem);
     }
     
-    /**
-     * {@inheritDoc} 
-     */
+    @Override
     public int getElementCount() {
         return container.getElementCount();
     }
     
-    /**
-     * {@inheritDoc} 
-     */
+    @Override
     public DecisionVariableDeclaration getElement(int index) {
         return container.getElement(index);
     }
@@ -278,16 +281,12 @@ public class Compound extends StructuredDatatype implements IResolutionScope, ID
         return element;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public boolean contains(DecisionVariableDeclaration var) {
         return container.contains(var);
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public DecisionVariableDeclaration getElement(String name) {
         DecisionVariableDeclaration decl = container.getElement(name);
         if (null == decl && null != refines) {
@@ -296,110 +295,88 @@ public class Compound extends StructuredDatatype implements IResolutionScope, ID
         return decl;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void addConstraint(Constraint constraint, boolean internal) {
         container.addConstraint(constraint, internal);
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public int getConstraintsCount() {
         return container.getConstraintsCount();
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public Constraint getConstraint(int index) {
         return container.getConstraint(index);
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void sortContainedElements(Comparator<ContainableModelElement> comp) {
         container.sortContainedElements(comp);
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public ContainableModelElement getModelElement(int index) {
         return container.getModelElement(index);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public int getModelElementCount() {
         return container.getModelElementCount();
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void add(Comment comment) {
         container.add(comment);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void add(AttributeAssignment assignment) {
         container.add(assignment);
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public int getAssignmentCount() {
         return container.getAssignmentCount();
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public AttributeAssignment getAssignment(int index) {
         return container.getAssignment(index);
     }
     
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean propagateAttribute(Attribute attribute) {
         return container.propagateAttribute(attribute);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public int getRealizingCount() {
         return container.getRealizingCount();
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public Constraint getRealizing(int index) {
         return container.getRealizing(index);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public int getDeclarationCount() {
         return container.getDeclarationCount();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public DecisionVariableDeclaration getDeclaration(int index) {
         return container.getDeclaration(index);
+    }
+    
+    /**
+     * Returns whether this compound is abstract, i.e., whether it can be instantiated.
+     * 
+     * @return <code>true</code> if this compound is abstract, <code>false</code> else
+     */
+    public boolean isAbstract() {
+        return isAbstract;
     }
 
 }

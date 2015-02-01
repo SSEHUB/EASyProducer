@@ -116,7 +116,37 @@ public abstract class Value {
     public String toString() {
         return getValue() + " : " + getType().toString();
     }
+    
+    /**
+     * Returns whether the provided <code>value</code> is partially equal to this value, i.e., whether the nested 
+     * elements of <code>value</code> (if they exist) have the same contents as in this value. Other values of this 
+     * value are not considered. The check is transitive on nested elements. Please consider that this method
+     * is not symmetric as opposed to <code>equals</code>. This method is important to cope with default values.
+     * 
+     * @param value the value to be checked for partial equality.
+     * @return <code>true</code> if <code>value</code> is partially equal to <b>this</b>, <code>false</code> else
+     */
+    public abstract boolean equalsPartially(Value value);
 
+    /**
+     * Returns whether <code>v1</code> and <code>v2</code> are {@link #equalsPartially(Value)} 
+     * partially equal considering the case that <code>v1</code> may be <b>null</b>. 
+     * 
+     * @param v1 the first value (may be <b>null</b>)
+     * @param v2 the second value (may be <b>null</b>)
+     * @return <code>true</code> if <code>v1</code> and <code>v2</code> are considered to be partially equal, 
+     *   <code>false</code> else, i.e., whether <code>v2</code> is a partial value of <code>v1</code>
+     */
+    public static boolean equalsPartially(Value v1, Value v2) {
+        boolean equals;
+        if (null == v1) {
+            equals = false;
+        } else {
+            equals = v1.equalsPartially(v2);
+        }
+        return equals;
+    }
+    
     // TODO check and remove!!!
     
     @Override

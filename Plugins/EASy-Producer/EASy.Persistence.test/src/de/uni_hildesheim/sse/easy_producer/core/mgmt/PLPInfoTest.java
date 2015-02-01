@@ -149,11 +149,31 @@ public class PLPInfoTest extends AbstractPLPInfoTest {
     private static Set<PLPInfo> loadedInfos = new HashSet<PLPInfo>();
     
     /**
+     * Fallback No. 2 ;-)
+     */
+    private static final String DEFAULT_JDK_LOCATION = "C:\\Program Files (x86)\\Java\\jdk1.7.0_51";
+    
+    /**
      * Registers VIL and VTL expression parser. This should normally be done via the Descriptive Services (DS),
      * but it seems that it is not the case when the tests are executed via ANT.
+     * Checks whether the java.home variable is set to a JDK location.
+     * If it is not set, the {@link #DEFAULT_JDK_LOCATION} will be set.
      */
     @BeforeClass
     public static void setUpBeforeClass() {
+        // Ensure that the java compiler can be found.
+        String javaLocation = System.getProperty("java.home");
+        String os = System.getProperty("os.name").toLowerCase();
+        if (javaLocation.contains("jre") && os.indexOf("win") >= 0) {
+            // Fallback No. 1
+            String jdkLocation = System.getenv("JAVA_HOME");
+            if (null != jdkLocation) {
+                System.setProperty("java.home", jdkLocation);
+            } else {
+                System.setProperty("java.home", DEFAULT_JDK_LOCATION);
+            }
+        }
+        
         AbstractPLPInfoTest.setUpBeforeClass();
     }
     
@@ -617,8 +637,9 @@ public class PLPInfoTest extends AbstractPLPInfoTest {
         // Test postcondition: Debug file must be created with all value assignments.
         Assert.assertTrue("Error: Debug file was not saved.", debugIVMLFile.exists());
         String savedContent = FileUtils.readFileToString(debugIVMLFile).replaceAll("\r", "");
+        // SavingDebugInformation.version == v0 can be in parenthesis or not. Currently, its tested without
         String expected = "project SavingDebugInformation_conf {\n\n    version v0;\n"
-            + "    import SavingDebugInformation with (SavingDebugInformation.version == v0);\n"
+            + "    import SavingDebugInformation with SavingDebugInformation.version == v0;\n"
             + "    userInput = 1;\n    reasonerInput = 2;\n    frozenInput = 3;\n    freeze {\n"
             + "        frozenInput;\n    }\n}\n";
         Assert.assertEquals("Error: Wrong debug information has been saved.", expected, savedContent);

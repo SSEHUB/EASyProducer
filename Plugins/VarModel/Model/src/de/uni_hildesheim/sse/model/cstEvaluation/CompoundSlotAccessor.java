@@ -19,8 +19,10 @@ import de.uni_hildesheim.sse.model.confModel.CompoundVariable;
 import de.uni_hildesheim.sse.model.confModel.ConfigurationException;
 import de.uni_hildesheim.sse.model.confModel.IAssignmentState;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
+import de.uni_hildesheim.sse.model.cstEvaluation.EvaluationVisitor.Message;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
+import de.uni_hildesheim.sse.utils.messages.Status;
 import de.uni_hildesheim.sse.utils.pool.IPoolManager;
 import de.uni_hildesheim.sse.utils.pool.Pool;
 
@@ -67,18 +69,29 @@ class CompoundSlotAccessor extends AbstractDecisionVariableEvaluationAccessor {
         slotVariable = ((CompoundVariable) variable).getNestedVariable(slotName);
         return this;
     }
-    
+
     /**
-     * {@inheritDoc}
+     * Binds the accessor to the given variable and context.
+     * 
+     * @param variable the underlying variable
+     * @param slotName the name of the slot within <code>value</code>
+     * @param context the evaluation context
+     * @return <b>this</b> (builder pattern)
      */
+    public CompoundSlotAccessor bind(LocalDecisionVariable variable, String slotName, 
+        EvaluationContext context) {
+        super.bind(variable, context);
+        slotVariable = variable.getNestedVariable(slotName);
+        return this;
+    }
+    
+    @Override
     public void clear() {
         super.clear();
         slotVariable = null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public Value getValue() {
         Value result;
         if (null != slotVariable) {
@@ -89,45 +102,47 @@ class CompoundSlotAccessor extends AbstractDecisionVariableEvaluationAccessor {
         return result;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public boolean setValue(Value value) {
         boolean successful = false;
         EvaluationContext context = getContext();
         if (context.allowAssignValues() && null != slotVariable) {
-            if (null == value) {
-                context.addErrorMessage("assignable value is not defined");
-            } else {
-                IAssignmentState targetState = context.getTargetState(slotVariable.getState());
-                if (null != targetState) {
-                    try {
-                        slotVariable.setValue(value, targetState);
-                        successful = true;
-                        notifyVariableChange();
-                    } catch (ConfigurationException e) {
-                        context.addErrorMessage(e);
+            if (null != value) {
+                if (!Value.equalsPartially(slotVariable.getValue(), value)) { // don't reassign / send message
+                    IAssignmentState targetState = context.getTargetState(slotVariable);
+                    if (null != targetState) {
+                        try {
+                            slotVariable.setValue(value, targetState);
+                            successful = true;
+                            notifyVariableChange();
+                        } catch (ConfigurationException e) {
+                            context.addErrorMessage(e);
+                        }
+                    } else {
+                        context.addMessage(
+                                new Message("Assignment state conflict", Status.ERROR, slotVariable.getDeclaration()));
                     }
                 } else {
-                    context.addErrorMessage("cannot assign due to assignment state conflict");
+                    successful = true;
                 }
             }
         }
         return successful;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public IDecisionVariable getVariable() {
         return slotVariable;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void release() {
         POOL.releaseInstance(this);
+    }
+    
+    @Override
+    public boolean isAssignable() {
+        return true;
     }
 
 }

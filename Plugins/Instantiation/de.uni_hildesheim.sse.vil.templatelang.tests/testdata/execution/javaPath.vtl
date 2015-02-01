@@ -1,0 +1,13 @@
+template javaPath() {
+
+    def main() {
+        JavaPath algPath = "eu.qualimaster.algorithms.imp.Normalize";
+        '${algPath.getName()}'
+        '${algPath.getPackage()}'
+        '${algPath.getPath()}'
+        '${algPath.getPathSegments()}'
+        JavaPath p = algPath.getPathSegmentsPath();
+        '${p}'
+    }
+
+}

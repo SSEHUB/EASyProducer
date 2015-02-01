@@ -31,13 +31,15 @@ import de.uni_hildesheim.sse.utils.modelManagement.ModelLocations.Location;
  */
 class ResolutionContext <M extends IModel> {
     
+    private String modelName;
     private IModelRepository<M> repository;
-    private ModelPaths paths;
     private M model;
     private ModelImport<M> toResolve;
     private URI modelUri;
     private List<ModelInfo<M>> inProgress;
-
+    private IRestrictionEvaluationContext evaluationContext;
+    private List<ModelImport<M>> conflicts;
+    
     /**
      * Creates a resolution context.
      * 
@@ -46,7 +48,7 @@ class ResolutionContext <M extends IModel> {
      * @param context the parent contexts
      */
     public ResolutionContext(M model, URI modelUri, ResolutionContext<M> context) {
-        this(model, modelUri, context.inProgress, context.repository, context.paths);
+        this(model, modelUri, context.inProgress, context.repository, context.evaluationContext);
     }
     
     /**
@@ -54,17 +56,36 @@ class ResolutionContext <M extends IModel> {
      * 
      * @param model the model for which the import resolution happens
      * @param modelUri the URI to <code>model</code> (may be <b>null</b>)
-     * @param inProgress the models being processed at once with <code>model</code>
-     * @param repository the repository
-     * @param paths the model paths
+     * @param inProgress the models being processed at once with <code>model</code> (may be <b>null</b>)
+     * @param repository the model repository
+     * @param evaluationContext the context for evaluating import restrictions (variable definitions... 
+     *   interpreted locally)
      */
     public ResolutionContext(M model, URI modelUri, List<ModelInfo<M>> inProgress, 
-        IModelRepository<M> repository, ModelPaths paths) {
+        IModelRepository<M> repository, IRestrictionEvaluationContext evaluationContext) {
         this.model = model;
         this.modelUri = modelUri;
         this.inProgress = inProgress;
         this.repository = repository;
-        this.paths = paths;
+        this.evaluationContext = evaluationContext;
+    }
+    
+    /**
+     * Creates a resolution context for resolving a model by name.
+     * 
+     * @param modelName the name of the model to resolve
+     * @param baseUri the URI where to start the resolution from (may be a model URI)
+     * @param repository the model repository
+     * @param evaluationContext the context for evaluating import restrictions (variable definitions... 
+     *   interpreted locally)
+     */
+    public ResolutionContext(String modelName, URI baseUri, IModelRepository<M> repository, 
+        IRestrictionEvaluationContext evaluationContext) {
+        this.modelName = modelName;
+        this.modelUri = baseUri;
+        this.inProgress = null;
+        this.repository = repository;
+        this.evaluationContext = evaluationContext;
     }
     
     /**
@@ -104,6 +125,15 @@ class ResolutionContext <M extends IModel> {
     }
     
     /**
+     * Returns the name of the model to resolve.
+     * 
+     * @return the name of the model
+     */
+    public String getModelName() {
+        return null != modelName ? modelName : model.getName();
+    }
+    
+    /**
      * Returns the model repository.
      * 
      * @return the model repository
@@ -128,7 +158,7 @@ class ResolutionContext <M extends IModel> {
                 enumerateDependent(location, result, done);
             }
         }
-        List<String> tmp = paths.getModelPath(getModelURI());
+        List<String> tmp = repository.paths().getModelPath(getModelURI());
         if (null != tmp) {
             if (result == null) {
                 result = tmp;
@@ -177,4 +207,155 @@ class ResolutionContext <M extends IModel> {
         return isLoop;
     }
     
+    /**
+     * Returns the evaluation context for version restrictions.
+     * 
+     * @return the evaluation context
+     */
+    public IRestrictionEvaluationContext getEvaluationContext() {
+        return evaluationContext;
+    }
+
+    /**
+     * Initializes the conflicts set if required.
+     */
+    private void lazyInitConflicts() {
+        if (null == conflicts) {
+            conflicts = new ArrayList<ModelImport<M>>();
+        }
+    }
+
+    /**
+     * Adds all conflicts of the given <code>context</code>.
+     * 
+     * @param context the context to consider
+     */
+    public void addConflicts(ResolutionContext<M> context) {
+        if (null != context.conflicts) {
+            lazyInitConflicts();
+            addConflicts(conflicts, context.conflicts);
+        }
+    }
+    
+    /**
+     * Adds the given <code>toAdd</code> conflicts to <code>conflicts</code>. <code>conflicts</code> may be
+     * <b>null</b> and is created then lazily.
+     * 
+     * @param <M> the type of models
+     * @param conflicts the conflicts set to add the <code>toAdd</code> conflicts to
+     * @param toAdd the conflicts to be added
+     * @return <code>conflicts</code> if not <b>null</b>, a new list otherwise
+     */
+    public static <M extends IModel> List<ModelImport<M>> addConflicts(List<ModelImport<M>> conflicts, 
+        List<ModelImport<M>> toAdd) {
+        if (null != toAdd) {
+            if (null == conflicts) {
+                conflicts = new ArrayList<ModelImport<M>>();
+            }
+            if (conflicts.isEmpty()) {
+                conflicts.addAll(toAdd);
+            } else {
+                Set<ModelImport<M>> present = new HashSet<ModelImport<M>>();
+                for (int c = 0, n = conflicts.size(); c < n; c++) {
+                    present.add(conflicts.get(c));
+                }
+                for (int c = 0, n = toAdd.size(); c < n; c++) {
+                    ModelImport<M> imp = toAdd.get(c);
+                    if (!present.contains(imp)) {
+                        conflicts.add(imp);
+                    }
+                }
+                
+            }
+        }
+        return conflicts;
+    }
+
+
+    /**
+     * Adds a single conflict to the conflict set of this resolution context.
+     * 
+     * @param conflict the conflict
+     */
+    public void addConflict(ModelImport<M> conflict) {
+        if (conflict.isConflict()) {
+            lazyInitConflicts();
+            conflicts.add(conflict);
+        }
+    }
+
+    /**
+     * Returns the first conflict <code>model</code> and its (recursive) imports have with the conflict import 
+     * statements collected in this context.
+     * 
+     * @param model the model information to search for
+     * @return the first conflict or <b>null</b> if there is none
+     * @throws RestrictionEvaluationException in case of evaluation problems
+     */
+    public ModelImport<M> getConflict(M model) throws RestrictionEvaluationException {
+        return getConflict(model, new HashSet<M>());
+    }
+
+    /**
+     * Returns the first conflict <code>model</code> and its (recursive) imports have with the conflict import 
+     * statements collected in this context.
+     * 
+     * @param model the model information to search for (may be <b>null</b>
+     * @param done the models visited so far (cycle check)
+     * @return the first conflict or <b>null</b> if there is none
+     * @throws RestrictionEvaluationException in case of evaluation problems
+     */
+    private ModelImport<M> getConflict(M model, Set<M> done) throws RestrictionEvaluationException {
+        ModelImport<M> result = null;
+        if (null != model) {
+            if (!done.contains(model)) {
+                done.add(model);
+                result = getConflict(model.getName(), model.getVersion());
+                for (int i = 0; null == result && i < model.getImportsCount(); i++) {
+                    @SuppressWarnings("unchecked")
+                    ModelImport<M> imp = (ModelImport<M>) model.getImport(i);
+                    if (!imp.isConflict() && null != imp.getResolved()) {
+                        result = getConflict(imp.getResolved(), done);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+
+    /**
+     * Returns the first conflict the described model has with the conflict import statements collected in this context.
+     * 
+     * @param modelName the name of the model
+     * @param version the version of the model (may be <b>null</b>)
+     * @return the first conflict or <b>null</b> if there is none
+     * @throws RestrictionEvaluationException in case of evaluation problems
+     */
+    private ModelImport<M> getConflict(String modelName, Version version) throws RestrictionEvaluationException {
+        ModelImport<M> result = null;
+        if (null != conflicts) {
+            for (int c = 0, n = conflicts.size(); null == result && c < n; c++) {
+                ModelImport<M> tmp = conflicts.get(c);
+                if (modelName.equals(tmp.getName())) {
+                    if (tmp.evaluateRestrictions(evaluationContext, version)) {
+                        result = tmp;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+   
+    /**
+     * Returns whether <code>info</code> has a conflict with the conflict import statements collected in this context.
+     * 
+     * @param info the model information to search for
+     * @return if <code>context</code> implies conflicts on <code>model</code>
+     * @throws RestrictionEvaluationException in case of evaluation problems
+     */
+    public boolean isConflict(ModelInfo<M> info) throws RestrictionEvaluationException {
+        return null != getConflict(info.getName(), info.getVersion());
+    }
+
 }

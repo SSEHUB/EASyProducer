@@ -18,6 +18,7 @@ package de.uni_hildesheim.sse.model.cstEvaluation;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.model.varModel.values.ContainerValue;
 import de.uni_hildesheim.sse.model.varModel.values.IntValue;
+import de.uni_hildesheim.sse.model.varModel.values.ReferenceValue;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
 import de.uni_hildesheim.sse.utils.pool.IPoolManager;
 import de.uni_hildesheim.sse.utils.pool.Pool;
@@ -61,24 +62,23 @@ public class ConstantAccessor extends EvaluationAccessor {
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public Value getValue() {
         return value;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public boolean setValue(Value value) {
         getContext().addErrorMessage("cannot assign a value to a constant - variable needed");
         return false;
     }
+    
+    @Override
+    public boolean isAssignable() {
+        return false;
+    }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void release() {
         POOL.releaseInstance(this);
     }
@@ -94,15 +94,15 @@ public class ConstantAccessor extends EvaluationAccessor {
      * @param accessor the accessor to determine the nested value
      * @return the nested value
      */
-    public Value getValue(EvaluationAccessor accessor) {
-        Value result = null;
+    public EvaluationAccessor getValue(EvaluationAccessor accessor) {
+        EvaluationAccessor result = null;
         if (value instanceof ContainerValue) {
             Value aValue = accessor.getValue();
             if (aValue instanceof IntValue) {
                 ContainerValue cVal = (ContainerValue) value;
                 int index = ((IntValue) aValue).getValue();
                 if (0 <= index && index < cVal.getElementSize()) {
-                    result = cVal.getElement(index);
+                    result = ConstantAccessor.POOL.getInstance().bind(cVal.getElement(index), getContext());
                 } else {
                     getContext().addErrorMessage("invalid index value");
                 }
@@ -113,6 +113,22 @@ public class ConstantAccessor extends EvaluationAccessor {
             getContext().addErrorMessage("left side of accessor must be a compound value");
         }
         return result;
+    }
+
+    @Override
+    public Value getReferenceValue() {
+        Value result;
+        if (value instanceof ReferenceValue) {
+            result = value;
+        } else {
+            result = null; // no reference possible
+        }
+        return result; 
+    }
+    
+    @Override
+    public String toString() {
+        return null == value ? "null" : value.toString();
     }
 
 }

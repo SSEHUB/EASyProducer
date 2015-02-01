@@ -18,34 +18,42 @@ package de.uni_hildesheim.sse.model.cstEvaluation;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.uni_hildesheim.sse.model.confModel.AssignmentState;
+import de.uni_hildesheim.sse.model.confModel.ConfigurationException;
 import de.uni_hildesheim.sse.model.confModel.IConfiguration;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
+import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
+import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
+import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Set;
 import de.uni_hildesheim.sse.model.varModel.datatypes.TypeQueries;
+import de.uni_hildesheim.sse.model.varModel.values.ReferenceValue;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
 import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
 import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
+import de.uni_hildesheim.sse.utils.modelManagement.IRestrictionEvaluationContext;
+import de.uni_hildesheim.sse.utils.modelManagement.IVariable;
+import de.uni_hildesheim.sse.utils.modelManagement.RestrictionEvaluationException;
+import de.uni_hildesheim.sse.utils.modelManagement.Version;
 
 /**
  * Creates a local configuration instance.
  * 
  * @author Holger Eichelberger
  */
-class LocalConfiguration implements IConfiguration {
+public class LocalConfiguration implements IConfiguration, IRestrictionEvaluationContext {
 
     private Map<AbstractVariable, IDecisionVariable> map = new HashMap<AbstractVariable, IDecisionVariable>();
     
     /**
      * Creates a local configuration instance.
      */
-    LocalConfiguration() {
+    public LocalConfiguration() {
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public IDecisionVariable getDecision(AbstractVariable declaration) {
         return map.get(declaration);
     }
@@ -54,14 +62,14 @@ class LocalConfiguration implements IConfiguration {
      * Adds a (local) decision to this configuration.
      * 
      * @param decision the related decision
+     * @return <code>decision</code> (builder pattern style)
      */
-    void addDecision(LocalDecisionVariable decision) {
+    public IDecisionVariable addDecision(IDecisionVariable decision) {
         map.put(decision.getDeclaration(), decision);
+        return decision;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public Value getAllInstances(IDatatype type) {
         Value result;
         try {
@@ -79,17 +87,88 @@ class LocalConfiguration implements IConfiguration {
      * (rewritten expression), and only one, i.e., the first one can be bound.
      * 
      * @param type the type to bind to
+     * @param context the evaluation context
      * @return the bound value (may be <b>null</b> if there is none)
      */
-    Value bind(IDatatype type) {
+    Value bind(IDatatype type, EvaluationContext context) {
         Value result = null;
+        // is this unique??
         for (IDecisionVariable var : map.values()) {
-            if (TypeQueries.sameTypes(type, var.getDeclaration().getType())) {
-                result = var.getValue();
-                break;
+            AbstractVariable decl = var.getDeclaration();
+            if (!LocalDecisionVariable.ITERATOR_RESULT_VARNAME.equals(decl.getName())) {
+                IDatatype varType = decl.getType();
+                if (TypeQueries.sameTypes(type, varType)) {
+                    result = var.getValue();
+                    break;
+                } else {
+                    if (varType instanceof Reference) { // explicitly only 1 step dereference due to allInstances
+                        varType = ((Reference) varType).getType();
+                        if (TypeQueries.sameTypes(type, varType)) {
+                            ReferenceValue ref = (ReferenceValue) var.getValue();
+                            if (null != ref) {
+                                result = context.getDecision(ref.getValue()).getValue();
+                                break;
+                            }
+                        } 
+                    }
+                }
             }
         }
         return result;
+    }
+
+    // restriction evaluation
+    
+    @Override
+    public void setValue(IVariable variable, Version version) throws RestrictionEvaluationException {
+        if (variable instanceof DecisionVariableDeclaration) {
+            DecisionVariableDeclaration decl = (DecisionVariableDeclaration) variable;
+            IDecisionVariable var = getDecision(decl);
+            if (null == var) {
+                var = addDecision(new LocalDecisionVariable(decl, this, null));
+            }
+            try {
+                Value val;
+                if (Compound.TYPE.isAssignableFrom(decl.getType())) {
+                    // special case for legacy IVML notation project.variable
+                    if (null == version) { // otherwise version itself is set to null in compound
+                        version = Version.NULL_VALUE;
+                    }
+                    val = ValueFactory.createValue(decl.getType(), new Object[]{"version", version});
+                } else {
+                    val = ValueFactory.createValue(decl.getType(), version);                    
+                }
+                var.setValue(val, AssignmentState.ASSIGNED);
+            } catch (ValueDoesNotMatchTypeException e) {
+                throw new RestrictionEvaluationException(e.getMessage(), e.getId());
+            } catch (ConfigurationException e) {
+                throw new RestrictionEvaluationException(e.getMessage(), e.getId());
+            }
+        } else {
+            throw new RestrictionEvaluationException("unsupported type", RestrictionEvaluationException.ID_INTERNAL);
+        }
+    }
+
+    @Override
+    public void unsetValue(IVariable variable) throws RestrictionEvaluationException {
+        if (variable instanceof DecisionVariableDeclaration) {
+            map.remove((DecisionVariableDeclaration) variable);
+        } else {
+            throw new RestrictionEvaluationException("unsupported type", RestrictionEvaluationException.ID_INTERNAL);
+        }
+    }
+
+    @Override
+    public Object startEvaluation() throws RestrictionEvaluationException {
+        // not relevant here as no contexts are considered and in the evaluation context this class
+        // is supposed to be used as a single instance rather than a stack
+        return null; // unused
+    }
+
+    @Override
+    public void endEvaluation(Object processor) throws RestrictionEvaluationException {
+        // not relevant here as no contexts are considered and in the evaluation context this class
+        // is supposed to be used as a single instance rather than a stack
     }
     
 }

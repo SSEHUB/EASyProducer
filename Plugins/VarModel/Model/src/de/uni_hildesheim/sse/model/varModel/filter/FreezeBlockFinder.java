@@ -50,17 +50,13 @@ public class FreezeBlockFinder extends AbstractFrozenElementsFinder {
         return freezeBlocks;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitFreezeBlock(FreezeBlock freeze) {
         // Store freeze block
         freezeBlocks.add(freeze);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitCompoundAccessStatement(CompoundAccessStatement access) {
         // this is not a freeze block (may be within)
     }

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.SystemUtils;
 import org.junit.Assert;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactFactory;
@@ -47,7 +48,36 @@ public abstract class AbstractExecutionTest extends AbstractTest {
      * @return the file
      */
     private File createTraceFile(String name) {
-        return new File(getTestFolder(), name + ".trc");
+        File file = new File(getTestFolder(), name + ".trc");
+        if (SystemUtils.IS_OS_MAC) {
+            file = insertAndCheckInfix(file, "macos");
+        } else if (SystemUtils.IS_OS_UNIX) {
+            file = insertAndCheckInfix(file, "unix");
+        } else if (SystemUtils.IS_OS_WINDOWS) {
+            file = insertAndCheckInfix(file, "win");
+        }
+        return file;
+    }
+
+    /**
+     * Inserts an OS infix and before the extension of <code>file</code>
+     * and returns the modified file object if it exists.
+     * 
+     * @param file the file to be taken as template
+     * @param infix the infix to be inserted
+     * @return <code>file</code> the the composed file name does not exist, the composed file name else
+     */
+    private File insertAndCheckInfix(File file, String infix) {
+        String f = file.toString();
+        int pos = f.lastIndexOf('.');
+        if (pos > 0) {
+            f = f.substring(0, pos + 1) + infix + "." + f.substring(pos + 1);
+            File tmp = new File(f);
+            if (tmp.exists()) {
+                file = tmp;
+            }
+        }
+        return file;
     }
     
     /**
@@ -133,6 +163,30 @@ public abstract class AbstractExecutionTest extends AbstractTest {
          */
         public void assertIn(File base);
         
+        /**
+         * Delete between multiple test runs.
+         * 
+         * @param base the base directory
+         */
+        public void deleteBetween(File base);
+        
+    }
+
+    /**
+     * Just an empty implementation as adapter.
+     * 
+     * @author Holger Eichelberger
+     */
+    public static class SelfInstantiationAsserterAdapter implements SelfInstantiationAsserter {
+
+        @Override
+        public void assertIn(File base) {
+        }
+
+        @Override
+        public void deleteBetween(File base) {
+        }
+        
     }
     
     /**
@@ -167,7 +221,7 @@ public abstract class AbstractExecutionTest extends AbstractTest {
             }
             EqualitySetup setup = new EqualitySetup(createFile(name), pName, null, createTraceFile(name), param);
             setup.setStartElement(startRuleName);
-            assertEqual(setup, expectedExceptions);
+            assertEqual(setup, createCleaner(asserter, temp), expectedExceptions);
             if (null != asserter) {
                 asserter.assertIn(temp);
             }
@@ -183,6 +237,27 @@ public abstract class AbstractExecutionTest extends AbstractTest {
             }
             FileUtils.deleteQuietly(temp);
         }
+    }
+    
+    /**
+     * Creates a cleaner from an asserter.
+     * 
+     * @param asserter the asserter (may be <b>null</b>)
+     * @param base the base directory
+     * @return the cleaner or <b>null</b>
+     */
+    private static Cleaner createCleaner(final SelfInstantiationAsserter asserter, final File base) {
+        Cleaner result = null;
+        if (null != asserter) {
+            result = new Cleaner() {
+                
+                @Override
+                public void deleteBetween() {
+                    asserter.deleteBetween(base);
+                }
+            };
+        }
+        return result;
     }
     
     /**

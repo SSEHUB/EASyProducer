@@ -1,0 +1,4 @@
+streamID STRING String
+timestamp STRING String
+quote REAL double
+volume INTEGER int

@@ -1,0 +1,84 @@
+grammar de.uni_hildesheim.sse.vil.rt.RtVil with de.uni_hildesheim.sse.VilBuildLanguage
+
+generate rtVil "http://www.uni_hildesheim.de/sse/vil/rt/RtVil"
+
+import "http://www.eclipse.org/emf/2002/Ecore" as ecore
+
+ImplementationUnit:
+    {ImplementationUnit}
+    scripts+=LanguageUnit*
+;
+
+LanguageUnit: // do not rename - required for reuse
+    (advices+=Advice)*
+    'rtVilScript' name=Identifier 
+    '(' param=ParameterList? ')'
+    (parent=ScriptParentDecl)?
+    '{'
+       version=VersionStmt?
+       rtContents=rtContents
+    '}' ';'?
+;
+
+rtContents:
+    {ScriptContents} // ensure object creation
+    (
+        elements += GlobalVariableDeclaration
+        | elements += RuleDeclaration
+        | elements += StrategyDeclaration
+        | elements += TacticDeclaration
+    )*
+;
+
+GlobalVariableDeclaration:
+    persistent = 'persistent'?
+    varDecl = VariableDeclaration
+;
+
+StrategyDeclaration:
+    {StrategyDeclaration}
+    'strategy' name=Identifier
+    '(' (paramList=ParameterList)? ')'
+    '=' conditions = RuleConditions?
+    '{'
+    varDecls += VariableDeclaration*
+    ('objective' objective=Expression)
+    ('breakdown' '{' breakdown += BreakdownElement* '}')
+    post += RuleElement*
+    '}'
+    ';'?
+;
+
+BreakdownElement:
+    varDecl=VariableDeclaration
+    | exprStmt=ExpressionStatement
+    | breakdownStmt=BreakdownStatement
+;
+
+BreakdownStatement:
+    type = ('strategy' | 'tactic')
+    guard = LogicalExpression?
+    name = QualifiedPrefix
+    '(' param=ArgumentList? ')'
+    (
+      'with' '('
+      part += BreakdownWithPart (',' part+= BreakdownWithPart)
+      ')'  
+    )?
+    ('@' time = Expression)?
+;
+
+BreakdownWithPart:
+    name = Identifier
+    '='
+    value = Expression
+;
+
+TacticDeclaration:
+    {TacticDeclaration}
+    'tactic' name = Identifier
+    '(' (paramList = ParameterList)? ')'
+    '=' conditions = RuleConditions?
+    block = RuleElementBlock
+    ';'?
+;

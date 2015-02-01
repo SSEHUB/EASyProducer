@@ -1,0 +1,71 @@
+project DataManagementCfg {
+ 
+    import DataManagement;
+  
+    DataSource spring;
+    spring = {
+	    name = "Spring Financial Data",
+		storageLocation = "input/spring",
+		strategy = DataManagementStrategy.LeastRecentlyUsed,
+		host = "147.172.177.22",
+		timeLine = 0
+	}; 
+	 
+	DataSource tweet;
+	tweet = {
+		name = "Tweet Stream data",
+		storageLocation = "input/tweet",
+		strategy = DataManagementStrategy.None,
+		host ="",
+		timeLine = 0
+	};
+	
+	DataSource QMSource;
+	QMSource = {
+		name = "QM Source data",
+		storageLocation = "input/QMSource",
+		strategy = DataManagementStrategy.None,
+		host ="",
+		timeLine = 0
+	};
+	
+	dataSources = {refBy(spring), refBy(tweet), refBy(QMSource)};
+	
+	DataSink publicTsi;
+	publicTsi = {
+	    name = "TSI Public Financial Sink",
+		storageLocation = "output/tsi",
+		strategy = DataManagementStrategy.None,
+		timeLine = 0
+	};
+	 
+	DataSink publicL3s;
+	publicL3s = {
+		name = "L3S Public Sink",
+		storageLocation = "output/l3s",
+		strategy = DataManagementStrategy.None,
+		timeLine = 0
+	};
+	
+	DataSink QMSink;
+	QMSink = {
+		name = "QM Public Sink",
+		storageLocation = "input/QM",
+		strategy = DataManagementStrategy.None,
+		timeLine = 0
+	};
+
+	dataSinks = {refBy(publicTsi), refBy(publicL3s), refBy(QMSink)};
+	
+	freeze {
+		spring;
+		tweet;
+		QMSource;
+		dataSources;
+		publicTsi;
+		publicL3s;
+		QMSink;
+		dataSinks;
+	}
+	
+}

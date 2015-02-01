@@ -16,11 +16,8 @@
 package de.uni_hildesheim.sse.model.cstEvaluation;
 
 import de.uni_hildesheim.sse.model.confModel.IAssignmentState;
+import de.uni_hildesheim.sse.model.confModel.IConfiguration;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
-import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
-import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
-import de.uni_hildesheim.sse.model.varModel.values.Value;
-import de.uni_hildesheim.sse.utils.messages.Message;
 import de.uni_hildesheim.sse.utils.messages.Status;
 
 /**
@@ -28,7 +25,7 @@ import de.uni_hildesheim.sse.utils.messages.Status;
  *   
  * @author Holger Eichelberger
  */
-public abstract class EvaluationContext {
+public abstract class EvaluationContext implements IConfiguration {
     
     /**
      * Returns whether values shall be assigned, i.e., the configuration may be changed.
@@ -45,28 +42,20 @@ public abstract class EvaluationContext {
     public abstract void notifyChangeListener(IDecisionVariable variable);
 
     /**
-     * Returns the decision for the given <code>variable</code>.
-     * 
-     * @param variable the variable to return the decision for
-     * @return the configured decision or <b>null</b> if the decision does not exist
-     */
-    public abstract IDecisionVariable getDecision(AbstractVariable variable);
-    
-    /**
      * Adds an evaluation message.
      * 
      * @param message the message to be added
      */
-    public abstract void addMessage(Message message);
+    public abstract void addMessage(EvaluationVisitor.Message message);
 
     /**
-     * Returns the target state of the evaluation.
+     * Returns the target state of the evaluation for <code>variable</code>.
      * 
-     * @param state the state of the variable before assignment
+     * @param variable the variable to return the target state for (do not modify!!!)
      * @return the target state (may be <b>null</b> if the actual value cannot be 
      *   assigned do to a state conflict)
      */
-    public abstract IAssignmentState getTargetState(IAssignmentState state);
+    public abstract IAssignmentState getTargetState(IDecisionVariable variable);
     
     /**
      * Adds an evaluation error message.
@@ -74,7 +63,7 @@ public abstract class EvaluationContext {
      * @param message the message to be added
      */
     public void addErrorMessage(String message) {
-        addMessage(new Message(message, Status.ERROR));
+        addMessage(new EvaluationVisitor.Message(message, Status.ERROR, null));
     }
 
     /**
@@ -85,13 +74,5 @@ public abstract class EvaluationContext {
     public void addErrorMessage(Throwable throwable) {
         addErrorMessage(throwable.getMessage());
     }
-    
-    /**
-     * Returns all instances of <code>type</code>.
-     *  
-     * @param type the type to return the instances for
-     * @return all instances of type (may be <b>null</b> if this is not possible, e.g., in case of Integer)
-     */
-    public abstract Value getAllInstances(IDatatype type);
-
+   
 }

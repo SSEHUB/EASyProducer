@@ -43,7 +43,6 @@ import de.uni_hildesheim.sse.vil.expressions.expressionDsl.UnqualifiedExecution;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VersionSpec;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VersionStmt;
-import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VersionedId;
 import de.uni_hildesheim.sse.vil.expressions.serializer.ExpressionDslSemanticSequencer;
 import de.uni_hildesheim.sse.vil.templatelang.services.TemplateLangGrammarAccess;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.Alternative;
@@ -320,12 +319,6 @@ public class TemplateLangSemanticSequencer extends ExpressionDslSemanticSequence
 			case ExpressionDslPackage.VERSION_STMT:
 				if(context == grammarAccess.getVersionStmtRule()) {
 					sequence_VersionStmt(context, (VersionStmt) semanticObject); 
-					return; 
-				}
-				else break;
-			case ExpressionDslPackage.VERSIONED_ID:
-				if(context == grammarAccess.getVersionedIdRule()) {
-					sequence_VersionedId(context, (VersionedId) semanticObject); 
 					return; 
 				}
 				else break;

@@ -51,9 +51,7 @@ public class FrozenElementsFinder extends AbstractFrozenElementsFinder {
         return frozenElements;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitFreezeBlock(FreezeBlock freeze) {
         // Save frozen elements.
         for (int i = 0; i < freeze.getFreezableCount(); i++) {
@@ -61,9 +59,7 @@ public class FrozenElementsFinder extends AbstractFrozenElementsFinder {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitCompoundAccessStatement(CompoundAccessStatement access) {
         // if used within a freeze block, this will be handled by visitFreezeBlock
     }

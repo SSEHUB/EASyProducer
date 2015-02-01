@@ -212,13 +212,6 @@ public class IvmlSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case IvmlPackage.DSL_CONTEXT:
-      {
-        DslContext dslContext = (DslContext)theEObject;
-        T result = caseDslContext(dslContext);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
       case IvmlPackage.ATTRIBUTE_TO:
       {
         AttributeTo attributeTo = (AttributeTo)theEObject;
@@ -286,13 +279,6 @@ public class IvmlSwitch<T> extends Switch<T>
       {
         ConflictStmt conflictStmt = (ConflictStmt)theEObject;
         T result = caseConflictStmt(conflictStmt);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case IvmlPackage.VERSIONED_ID:
-      {
-        VersionedId versionedId = (VersionedId)theEObject;
-        T result = caseVersionedId(versionedId);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -873,22 +859,6 @@ public class IvmlSwitch<T> extends Switch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Dsl Context</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Dsl Context</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseDslContext(DslContext object)
-  {
-    return null;
-  }
-
-  /**
    * Returns the result of interpreting the object as an instance of '<em>Attribute To</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
@@ -1044,22 +1014,6 @@ public class IvmlSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseConflictStmt(ConflictStmt object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>Versioned Id</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Versioned Id</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseVersionedId(VersionedId object)
   {
     return null;
   }

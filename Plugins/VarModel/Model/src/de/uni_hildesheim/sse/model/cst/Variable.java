@@ -45,9 +45,6 @@ public class Variable extends Leaf {
         return nestedVariable;
     }
     
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public IDatatype inferDatatype() {
         IDatatype result = nestedVariable.getType();
@@ -62,9 +59,7 @@ public class Variable extends Leaf {
         return result;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void accept(IConstraintTreeVisitor visitor) {
         visitor.visitVariable(this); // no further operations!
     }
@@ -85,17 +80,11 @@ public class Variable extends Leaf {
         return nestedVariable.hashCode();
     }
     
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int getAttributesCount() {
         return nestedVariable.getAttributesCount();
     }
     
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Attribute getAttribute(int index) {
         return nestedVariable.getAttribute(index);

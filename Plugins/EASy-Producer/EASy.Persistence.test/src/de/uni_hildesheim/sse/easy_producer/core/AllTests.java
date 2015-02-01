@@ -22,8 +22,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-import de.uni_hildesheim.sse.easy.instantiator.copy.core.AbstractCopyMechanism;
-import de.uni_hildesheim.sse.easy.instantiator.copy.core.CopyMechansimRegistry;
 import de.uni_hildesheim.sse.easy_producer.core.mgmt.PLPInfoSenariosTest;
 import de.uni_hildesheim.sse.easy_producer.core.mgmt.PLPInfoTest;
 import de.uni_hildesheim.sse.easy_producer.core.mgmt.SPLsManagerTest;
@@ -100,28 +98,6 @@ public class AllTests {
         // Facilitates plain java testing, registers bundles manually if not executed as a plug-in test
         if (!Environment.runsInEclipse() && !initialized) {
             initialized = true;
-            CopyMechansimRegistry.INSTANCE.register(new AbstractCopyMechanism() {
-                
-                @Override
-                public boolean useNameSpace() {
-                    return false;
-                }
-                
-                @Override
-                public String getName() {
-                    return "Test";
-                }
-                
-                @Override
-                public String getID() {
-                    return "de.uni_hildesheim.sse.easy.instantiator.copy.core.normal";
-                }
-                
-                @Override
-                public void copy(String sourceProjectName, String targetProjectName) {
-                    // Nothing to do
-                }
-            });
             EASyInitializer.setInitializer();
             ReasonerFrontend.getInstance().getRegistry().register(new DroolsReasoner());
             BuiltIn.initialize();

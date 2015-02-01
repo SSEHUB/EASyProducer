@@ -23,27 +23,19 @@ public class EclipseResourceInitializer implements IResourceInitializer {
     public EclipseResourceInitializer() {
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public boolean forEclipse() {
         return true;
     }
     
-    /**
-     * {@inheritDoc}
-     */
-    // @Override requires Java > 1.5! (for interfaces)
+    @Override
     public XtextResourceSet createResourceSet(Injector injector) {
         XtextResourceSet resourceSet = injector.getInstance(XtextResourceSet.class);
         //resourceSet.addLoadOption(XtextResource.OPTION_RESOLVE_ALL, Boolean.TRUE);
         return resourceSet;
     }
     
-    /**
-     * {@inheritDoc}
-     */
-    // @Override requires Java > 1.5! (for interfaces)
+    @Override
     public java.net.URI toNetUri(URI uri) throws URISyntaxException {
         URI resolvedFile = CommonPlugin.resolve(uri);
         java.net.URI result = null;

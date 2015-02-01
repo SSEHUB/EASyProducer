@@ -27,7 +27,6 @@ import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeExceptio
 import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
 import de.uni_hildesheim.sse.persistency.StringProvider;
 import de.uni_hildesheim.sse.reasoning.core.frontend.TestConfiguration.Capabilities;
-import de.uni_hildesheim.sse.reasoning.core.importResolver.ReasoningImportResolver;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.IReasoner;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.Message;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasoningResult;
@@ -122,7 +121,6 @@ public abstract class AbstractReasonerFrontendTest {
                 FRONTEND.getRegistry().register(reasoner);
             }
             FRONTEND.setReasonerHint(reasoner.getDescriptor());
-            ReasoningImportResolver.registerAsTopResolver();
             ModelUtility.setResourceInitializer(new StandaloneInitializer());
         }
     }

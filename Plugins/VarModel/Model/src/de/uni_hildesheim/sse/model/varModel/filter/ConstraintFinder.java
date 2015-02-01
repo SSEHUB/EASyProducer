@@ -77,31 +77,23 @@ public class ConstraintFinder implements IModelVisitor {
         return constraints;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitEnum(Enum eenum) {
         // Not needed method, since this class should only find Constraints
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitOrderedEnum(OrderedEnum eenum) {
         // Not needed method, since this class should only find Constraints 
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitCompound(Compound compound) {
         // Not needed method, since this class should only find Constraints
         // TODO check... whether compounds and also attribute assignments shall be visited!
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitAttributeAssignment(AttributeAssignment assignment) {
         for (int v = 0; v < assignment.getConstraintsCount(); v++) {
             assignment.getConstraint(v).accept(this);
@@ -113,44 +105,32 @@ public class ConstraintFinder implements IModelVisitor {
         }
     }
    
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitDerivedDatatype(DerivedDatatype datatype) {
         // Not needed method, since this class should only find Constraints
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitEnumLiteral(EnumLiteral literal) {
         // Not needed method, since this class should only find Constraints
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitReference(Reference reference) {
         // Not needed method, since this class should only find Constraints   
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitSequence(Sequence sequence) {
         // Not needed method, since this class should only find Constraints  
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitSet(Set set) {
         // Not needed method, since this class should only find Constraints   
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitProject(Project project) {
         if (considerImports) {
             for (int i = 0; i < project.getImportsCount(); i++) {
@@ -162,76 +142,56 @@ public class ConstraintFinder implements IModelVisitor {
         }     
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitProjectImport(ProjectImport pImport) {
         if (pImport.isResolved()) {
             pImport.getResolved().accept(this);
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitDecisionVariableDeclaration(DecisionVariableDeclaration decl) {
         // Not needed method, since this class should only find Constraints       
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitAttribute(Attribute attribute) {
         // Not needed method, since this class should only find Constraints   
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitConstraint(Constraint constraint) {
         constraints.add(constraint);       
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitFreezeBlock(FreezeBlock freeze) {
         // TODO SE: Not sure whether we need this       
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitOperationDefinition(OperationDefinition opdef) {
         // Not needed method, since this class should only find Constraints  
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitPartialEvaluationBlock(PartialEvaluationBlock block) {
         for (int i = 0; i < block.getEvaluableCount(); i++) {
             block.getEvaluable(i).accept(this);
         }       
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitProjectInterface(ProjectInterface iface) {
         // Not needed method, since this class should only find Constraints  
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitComment(Comment comment) {
         // Not needed method, since this class should only find Constraints  
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitCompoundAccessStatement(CompoundAccessStatement access) {
         // Not needed method, since this class should only find Constraints       
     }

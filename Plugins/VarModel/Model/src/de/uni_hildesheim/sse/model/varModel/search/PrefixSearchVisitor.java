@@ -26,12 +26,12 @@ import de.uni_hildesheim.sse.model.cst.ConstantValue;
 import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
 import de.uni_hildesheim.sse.model.cst.ContainerInitializer;
 import de.uni_hildesheim.sse.model.cst.ContainerOperationCall;
-import de.uni_hildesheim.sse.model.cst.DslFragment;
 import de.uni_hildesheim.sse.model.cst.IConstraintTreeVisitor;
 import de.uni_hildesheim.sse.model.cst.IfThen;
 import de.uni_hildesheim.sse.model.cst.Let;
 import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
 import de.uni_hildesheim.sse.model.cst.Parenthesis;
+import de.uni_hildesheim.sse.model.cst.Self;
 import de.uni_hildesheim.sse.model.cst.UnresolvedExpression;
 import de.uni_hildesheim.sse.model.cst.Variable;
 import de.uni_hildesheim.sse.model.varModel.AbstractVisitor;
@@ -235,9 +235,7 @@ public class PrefixSearchVisitor extends AbstractVisitor implements IConstraintT
         return inResult.contains(object);
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitProjectImport(ProjectImport pImport) {
         checkName(pImport.getProjectName(), pImport);
         if (null != pImport.getResolved()) {
@@ -245,9 +243,7 @@ public class PrefixSearchVisitor extends AbstractVisitor implements IConstraintT
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitDecisionVariableDeclaration(DecisionVariableDeclaration decl) {
         boolean consider = context.includeUnqualifiedNames();
         if (inInterface) {
@@ -265,33 +261,25 @@ public class PrefixSearchVisitor extends AbstractVisitor implements IConstraintT
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitAttribute(Attribute attribute) {
         checkName(attribute);
         checkType(attribute.getType(), attribute);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitConstraint(Constraint constraint) {
         if (context.includeConstraints()) {
             constraint.getConsSyntax().accept(this);
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitFreezeBlock(FreezeBlock freeze) {
         // no declaration, nothing special
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitOperationDefinition(OperationDefinition opdef) {
         checkName(opdef);
         if (context.includeOperationDefinitions()) {
@@ -303,9 +291,7 @@ public class PrefixSearchVisitor extends AbstractVisitor implements IConstraintT
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitPartialEvaluationBlock(PartialEvaluationBlock block) {
         if (context.includeEvals()) {
             int eCount = block.getEvaluableCount();
@@ -315,9 +301,7 @@ public class PrefixSearchVisitor extends AbstractVisitor implements IConstraintT
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitProject(Project project) {
         nesting.push(project);
         project.getVariable().accept(this); // self, attributes
@@ -325,25 +309,19 @@ public class PrefixSearchVisitor extends AbstractVisitor implements IConstraintT
         nesting.pop();
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitEnum(Enum eenum) {
         checkName(eenum);
         super.visitEnum(eenum);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitCompound(Compound compound) {
         checkName(compound);
         super.visitCompound(compound);  
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitProjectInterface(ProjectInterface iface) {
         if (nesting.size() > 1) {
             inInterface = true;
@@ -356,31 +334,23 @@ public class PrefixSearchVisitor extends AbstractVisitor implements IConstraintT
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitOrderedEnum(OrderedEnum eenum) {
         visitEnum(eenum);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitDerivedDatatype(DerivedDatatype datatype) {
         checkName(datatype);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitEnumLiteral(EnumLiteral literal) {
         // getName() cannot be referenced as individual name
         checkName(literal.getQualifiedName(), literal);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitReference(Reference reference) {
         String name = checkType(reference, reference); // check name with refTo()
         if (name.startsWith(IvmlKeyWords.REFTO)) { // should be the case always
@@ -388,70 +358,52 @@ public class PrefixSearchVisitor extends AbstractVisitor implements IConstraintT
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitSequence(Sequence sequence) {
         checkName(sequence);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitSet(Set set) {
         checkName(set);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitConstantValue(ConstantValue value) {
         // no name
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitVariable(Variable variable) {
         // collected above in tree or model
         //variable.getVariable().accept(this); // varDecl avoids adding duplicates
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitParenthesis(Parenthesis parenthesis) {
         parenthesis.getExpr().accept(this);
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitContainerInitializer(ContainerInitializer init) {
         for (int e = 0; e < init.getExpressionCount(); e++) {
             init.getExpression(e).accept(this);
         }
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitCompoundInitializer(CompoundInitializer init) {
         for (int e = 0; e < init.getExpressionCount(); e++) {
             init.getExpression(e).accept(this);
         }
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitComment(de.uni_hildesheim.sse.model.cst.Comment comment) {
         comment.getExpr().accept(this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitOclFeatureCall(OCLFeatureCall call) {
         // operations are considered in project
         call.getOperand().accept(this);
@@ -461,9 +413,7 @@ public class PrefixSearchVisitor extends AbstractVisitor implements IConstraintT
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitLet(Let let) {
         if (context.includeLets()) {
             let.getVariable().accept(this);
@@ -471,18 +421,14 @@ public class PrefixSearchVisitor extends AbstractVisitor implements IConstraintT
         let.getInExpression().accept(this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitIfThen(IfThen ifThen) {
         ifThen.getIfExpr().accept(this);
         ifThen.getThenExpr().accept(this);
         ifThen.getElseExpr().accept(this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitContainerOperationCall(ContainerOperationCall call) {
         // operations are considered in project
         call.getContainer().accept(this);
@@ -493,23 +439,12 @@ public class PrefixSearchVisitor extends AbstractVisitor implements IConstraintT
         call.getExpression().accept(this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitCompoundAccess(CompoundAccess access) {
         access.getCompoundExpression().accept(this);
     }
     
-    /**
-     * {@inheritDoc}
-     */
-    public void visitDslFragment(DslFragment fragment) {
-        // currently ignored
-    }
-    
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitUnresolvedExpression(UnresolvedExpression expression) {
         if (expression.isLeaf()) {
             checkName(expression.getUnresolvedLeaf(), expression);
@@ -521,16 +456,12 @@ public class PrefixSearchVisitor extends AbstractVisitor implements IConstraintT
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitComment(Comment comment) {
         // do not consider comments at the moment
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitAttributeAssignment(AttributeAssignment assignment) {
         for (int v = 0; v < assignment.getElementCount(); v++) {
             assignment.getElement(v).accept(this);
@@ -544,12 +475,14 @@ public class PrefixSearchVisitor extends AbstractVisitor implements IConstraintT
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitCompoundAccessStatement(CompoundAccessStatement access) {
         // does not contribute to result as parts are defined somewhere else in the model
     }
 
+    @Override
+    public void visitSelf(Self self) {
+        // does not contribute to result
+    }
 
 }

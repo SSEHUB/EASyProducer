@@ -2,29 +2,23 @@
  */
 package de.uni_hildesheim.sse.vilBuildLanguage.impl;
 
-import de.uni_hildesheim.sse.vil.expressions.expressionDsl.LogicalExpression;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ParameterList;
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Type;
 
+import de.uni_hildesheim.sse.vilBuildLanguage.RuleConditions;
 import de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration;
 import de.uni_hildesheim.sse.vilBuildLanguage.RuleElementBlock;
 import de.uni_hildesheim.sse.vilBuildLanguage.RuleModifier;
 import de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage;
 
-import java.util.Collection;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
-import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -33,11 +27,11 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <p>
  * The following features are implemented:
  * <ul>
+ *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.RuleDeclarationImpl#getType <em>Type</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.RuleDeclarationImpl#getModifier <em>Modifier</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.RuleDeclarationImpl#getName <em>Name</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.RuleDeclarationImpl#getParamList <em>Param List</em>}</li>
- *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.RuleDeclarationImpl#getPostcondition <em>Postcondition</em>}</li>
- *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.RuleDeclarationImpl#getPreconditions <em>Preconditions</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.RuleDeclarationImpl#getConditions <em>Conditions</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.RuleDeclarationImpl#getBlock <em>Block</em>}</li>
  * </ul>
  * </p>
@@ -46,6 +40,16 @@ import org.eclipse.emf.ecore.util.InternalEList;
  */
 public class RuleDeclarationImpl extends MinimalEObjectImpl.Container implements RuleDeclaration
 {
+  /**
+   * The cached value of the '{@link #getType() <em>Type</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getType()
+   * @generated
+   * @ordered
+   */
+  protected Type type;
+
   /**
    * The cached value of the '{@link #getModifier() <em>Modifier</em>}' containment reference.
    * <!-- begin-user-doc -->
@@ -87,24 +91,14 @@ public class RuleDeclarationImpl extends MinimalEObjectImpl.Container implements
   protected ParameterList paramList;
 
   /**
-   * The cached value of the '{@link #getPostcondition() <em>Postcondition</em>}' containment reference list.
+   * The cached value of the '{@link #getConditions() <em>Conditions</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getPostcondition()
+   * @see #getConditions()
    * @generated
    * @ordered
    */
-  protected EList<LogicalExpression> postcondition;
-
-  /**
-   * The cached value of the '{@link #getPreconditions() <em>Preconditions</em>}' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getPreconditions()
-   * @generated
-   * @ordered
-   */
-  protected EList<LogicalExpression> preconditions;
+  protected RuleConditions conditions;
 
   /**
    * The cached value of the '{@link #getBlock() <em>Block</em>}' containment reference.
@@ -135,6 +129,54 @@ public class RuleDeclarationImpl extends MinimalEObjectImpl.Container implements
   protected EClass eStaticClass()
   {
     return VilBuildLanguagePackage.Literals.RULE_DECLARATION;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Type getType()
+  {
+    return type;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetType(Type newType, NotificationChain msgs)
+  {
+    Type oldType = type;
+    type = newType;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, VilBuildLanguagePackage.RULE_DECLARATION__TYPE, oldType, newType);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setType(Type newType)
+  {
+    if (newType != type)
+    {
+      NotificationChain msgs = null;
+      if (type != null)
+        msgs = ((InternalEObject)type).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - VilBuildLanguagePackage.RULE_DECLARATION__TYPE, null, msgs);
+      if (newType != null)
+        msgs = ((InternalEObject)newType).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - VilBuildLanguagePackage.RULE_DECLARATION__TYPE, null, msgs);
+      msgs = basicSetType(newType, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, VilBuildLanguagePackage.RULE_DECLARATION__TYPE, newType, newType));
   }
 
   /**
@@ -261,13 +303,9 @@ public class RuleDeclarationImpl extends MinimalEObjectImpl.Container implements
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<LogicalExpression> getPostcondition()
+  public RuleConditions getConditions()
   {
-    if (postcondition == null)
-    {
-      postcondition = new EObjectContainmentEList<LogicalExpression>(LogicalExpression.class, this, VilBuildLanguagePackage.RULE_DECLARATION__POSTCONDITION);
-    }
-    return postcondition;
+    return conditions;
   }
 
   /**
@@ -275,13 +313,37 @@ public class RuleDeclarationImpl extends MinimalEObjectImpl.Container implements
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<LogicalExpression> getPreconditions()
+  public NotificationChain basicSetConditions(RuleConditions newConditions, NotificationChain msgs)
   {
-    if (preconditions == null)
+    RuleConditions oldConditions = conditions;
+    conditions = newConditions;
+    if (eNotificationRequired())
     {
-      preconditions = new EObjectContainmentEList<LogicalExpression>(LogicalExpression.class, this, VilBuildLanguagePackage.RULE_DECLARATION__PRECONDITIONS);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, VilBuildLanguagePackage.RULE_DECLARATION__CONDITIONS, oldConditions, newConditions);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
     }
-    return preconditions;
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setConditions(RuleConditions newConditions)
+  {
+    if (newConditions != conditions)
+    {
+      NotificationChain msgs = null;
+      if (conditions != null)
+        msgs = ((InternalEObject)conditions).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - VilBuildLanguagePackage.RULE_DECLARATION__CONDITIONS, null, msgs);
+      if (newConditions != null)
+        msgs = ((InternalEObject)newConditions).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - VilBuildLanguagePackage.RULE_DECLARATION__CONDITIONS, null, msgs);
+      msgs = basicSetConditions(newConditions, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, VilBuildLanguagePackage.RULE_DECLARATION__CONDITIONS, newConditions, newConditions));
   }
 
   /**
@@ -342,14 +404,14 @@ public class RuleDeclarationImpl extends MinimalEObjectImpl.Container implements
   {
     switch (featureID)
     {
+      case VilBuildLanguagePackage.RULE_DECLARATION__TYPE:
+        return basicSetType(null, msgs);
       case VilBuildLanguagePackage.RULE_DECLARATION__MODIFIER:
         return basicSetModifier(null, msgs);
       case VilBuildLanguagePackage.RULE_DECLARATION__PARAM_LIST:
         return basicSetParamList(null, msgs);
-      case VilBuildLanguagePackage.RULE_DECLARATION__POSTCONDITION:
-        return ((InternalEList<?>)getPostcondition()).basicRemove(otherEnd, msgs);
-      case VilBuildLanguagePackage.RULE_DECLARATION__PRECONDITIONS:
-        return ((InternalEList<?>)getPreconditions()).basicRemove(otherEnd, msgs);
+      case VilBuildLanguagePackage.RULE_DECLARATION__CONDITIONS:
+        return basicSetConditions(null, msgs);
       case VilBuildLanguagePackage.RULE_DECLARATION__BLOCK:
         return basicSetBlock(null, msgs);
     }
@@ -366,16 +428,16 @@ public class RuleDeclarationImpl extends MinimalEObjectImpl.Container implements
   {
     switch (featureID)
     {
+      case VilBuildLanguagePackage.RULE_DECLARATION__TYPE:
+        return getType();
       case VilBuildLanguagePackage.RULE_DECLARATION__MODIFIER:
         return getModifier();
       case VilBuildLanguagePackage.RULE_DECLARATION__NAME:
         return getName();
       case VilBuildLanguagePackage.RULE_DECLARATION__PARAM_LIST:
         return getParamList();
-      case VilBuildLanguagePackage.RULE_DECLARATION__POSTCONDITION:
-        return getPostcondition();
-      case VilBuildLanguagePackage.RULE_DECLARATION__PRECONDITIONS:
-        return getPreconditions();
+      case VilBuildLanguagePackage.RULE_DECLARATION__CONDITIONS:
+        return getConditions();
       case VilBuildLanguagePackage.RULE_DECLARATION__BLOCK:
         return getBlock();
     }
@@ -387,12 +449,14 @@ public class RuleDeclarationImpl extends MinimalEObjectImpl.Container implements
    * <!-- end-user-doc -->
    * @generated
    */
-  @SuppressWarnings("unchecked")
   @Override
   public void eSet(int featureID, Object newValue)
   {
     switch (featureID)
     {
+      case VilBuildLanguagePackage.RULE_DECLARATION__TYPE:
+        setType((Type)newValue);
+        return;
       case VilBuildLanguagePackage.RULE_DECLARATION__MODIFIER:
         setModifier((RuleModifier)newValue);
         return;
@@ -402,13 +466,8 @@ public class RuleDeclarationImpl extends MinimalEObjectImpl.Container implements
       case VilBuildLanguagePackage.RULE_DECLARATION__PARAM_LIST:
         setParamList((ParameterList)newValue);
         return;
-      case VilBuildLanguagePackage.RULE_DECLARATION__POSTCONDITION:
-        getPostcondition().clear();
-        getPostcondition().addAll((Collection<? extends LogicalExpression>)newValue);
-        return;
-      case VilBuildLanguagePackage.RULE_DECLARATION__PRECONDITIONS:
-        getPreconditions().clear();
-        getPreconditions().addAll((Collection<? extends LogicalExpression>)newValue);
+      case VilBuildLanguagePackage.RULE_DECLARATION__CONDITIONS:
+        setConditions((RuleConditions)newValue);
         return;
       case VilBuildLanguagePackage.RULE_DECLARATION__BLOCK:
         setBlock((RuleElementBlock)newValue);
@@ -427,6 +486,9 @@ public class RuleDeclarationImpl extends MinimalEObjectImpl.Container implements
   {
     switch (featureID)
     {
+      case VilBuildLanguagePackage.RULE_DECLARATION__TYPE:
+        setType((Type)null);
+        return;
       case VilBuildLanguagePackage.RULE_DECLARATION__MODIFIER:
         setModifier((RuleModifier)null);
         return;
@@ -436,11 +498,8 @@ public class RuleDeclarationImpl extends MinimalEObjectImpl.Container implements
       case VilBuildLanguagePackage.RULE_DECLARATION__PARAM_LIST:
         setParamList((ParameterList)null);
         return;
-      case VilBuildLanguagePackage.RULE_DECLARATION__POSTCONDITION:
-        getPostcondition().clear();
-        return;
-      case VilBuildLanguagePackage.RULE_DECLARATION__PRECONDITIONS:
-        getPreconditions().clear();
+      case VilBuildLanguagePackage.RULE_DECLARATION__CONDITIONS:
+        setConditions((RuleConditions)null);
         return;
       case VilBuildLanguagePackage.RULE_DECLARATION__BLOCK:
         setBlock((RuleElementBlock)null);
@@ -459,16 +518,16 @@ public class RuleDeclarationImpl extends MinimalEObjectImpl.Container implements
   {
     switch (featureID)
     {
+      case VilBuildLanguagePackage.RULE_DECLARATION__TYPE:
+        return type != null;
       case VilBuildLanguagePackage.RULE_DECLARATION__MODIFIER:
         return modifier != null;
       case VilBuildLanguagePackage.RULE_DECLARATION__NAME:
         return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
       case VilBuildLanguagePackage.RULE_DECLARATION__PARAM_LIST:
         return paramList != null;
-      case VilBuildLanguagePackage.RULE_DECLARATION__POSTCONDITION:
-        return postcondition != null && !postcondition.isEmpty();
-      case VilBuildLanguagePackage.RULE_DECLARATION__PRECONDITIONS:
-        return preconditions != null && !preconditions.isEmpty();
+      case VilBuildLanguagePackage.RULE_DECLARATION__CONDITIONS:
+        return conditions != null;
       case VilBuildLanguagePackage.RULE_DECLARATION__BLOCK:
         return block != null;
     }

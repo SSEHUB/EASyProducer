@@ -351,17 +351,6 @@ public class AdvancedTests extends AbstractTest {
     }
 
     /**
-     * Tests a DSL fragment.
-     * 
-     * @throws IOException
-     *             should not occur
-     */
-    @Test
-    public void testDslFragment() throws IOException {
-        assertEqual(createFile("dsl"), "testDsl", "0");
-    }
-
-    /**
      * Tests type constraints (SAP case).
      * 
      * @throws IOException
@@ -552,4 +541,24 @@ public class AdvancedTests extends AbstractTest {
     public void testExportedEnumType() throws IOException {
         assertEqual(createFile("ExportedEnumType"), null, null);
     }
+
+    /**
+     * Test whether self can be used within a compound.
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testSelf() throws IOException {
+        assertEqual(createFile("self"), null, null);
+    }
+
+    /**
+     * Test whether self can be used within a compound.
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testSelfFail() throws IOException {
+        assertEqual(createFile("selfFail"), null, null, 
+            ErrorCodes.UNKNOWN_ELEMENT, ErrorCodes.UNKNOWN_ELEMENT, ErrorCodes.UNKNOWN_ELEMENT);
+    }
+
 }

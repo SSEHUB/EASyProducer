@@ -8,6 +8,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MenuEvent;
 import org.eclipse.swt.events.MenuListener;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Tree;
@@ -190,12 +191,12 @@ public class ConfigurationTableEditor extends TreeViewer implements IGUIConfigCh
     
     @Override
     public void refresh() {
-        parentPage.getDisplay().syncExec(new Runnable() {
+        execOnParent(new Runnable() {
             @Override
             public void run() {
                 ConfigurationTableEditor.super.refresh();
             }
-        });
+        }, false);
     }
 
     @Override
@@ -207,11 +208,28 @@ public class ConfigurationTableEditor extends TreeViewer implements IGUIConfigCh
     public void itemChanged(Configuration config, IDecisionVariable changedVariable, Value oldValue) {
         // TODO SE: Check whether we need this
     }
+    
+    /**
+     * Executes a runnable on the parent display.
+     * 
+     * @param runnable the runnable to be executed
+     * @param async whether execution shall happen asynchronously or synchronously
+     */
+    private void execOnParent(Runnable runnable, boolean async) {
+        Display parentDisplay = parentPage.getDisplay();
+        if (null != parentDisplay) {
+            if (async) {
+                parentDisplay.asyncExec(runnable);
+            } else {
+                parentDisplay.syncExec(runnable);
+            }
+        }
+    }
 
     @Override
     public void configurationRefreshed(final Configuration config) {   
         
-        parentPage.getDisplay().asyncExec(new Runnable() {
+        execOnParent(new Runnable() {
             @Override
             public void run() {
                 if (null != ConfigurationTableEditor.this.guiConfig) {
@@ -222,7 +240,7 @@ public class ConfigurationTableEditor extends TreeViewer implements IGUIConfigCh
                     }
                 }
             }
-        });
+        }, true);
     }
     
     /**
@@ -261,11 +279,11 @@ public class ConfigurationTableEditor extends TreeViewer implements IGUIConfigCh
     public void stateChanged(Configuration config, IDecisionVariable changedVariable) {
         // Dirty, please do not commit this
         
-        parentPage.getDisplay().asyncExec(new Runnable() {
+        execOnParent(new Runnable() {
             @Override
             public void run() {
                 refresh();
             }
-        });
+        }, true);
     }
 }

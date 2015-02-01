@@ -10,8 +10,6 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.QualifiedName;
 
-import de.uni_hildesheim.sse.easy.instantiator.copy.core.IResourceMgmt;
-import de.uni_hildesheim.sse.easy_producer.PLPWorkspaceListener;
 import de.uni_hildesheim.sse.easy_producer.ProjectConstants;
 import de.uni_hildesheim.sse.easy_producer.core.mgmt.PLPInfo;
 import de.uni_hildesheim.sse.easy_producer.core.mgmt.SPLsManager;
@@ -23,7 +21,7 @@ import de.uni_hildesheim.sse.easy_producer.persistency.eclipse.EASyNature;
  * @author El-Sharkawy
  *
  */
-public class ResourcesMgmt implements IResourceMgmt {
+public class ResourcesMgmt {
     
     public static final ResourcesMgmt INSTANCE = new ResourcesMgmt();
     
@@ -45,25 +43,26 @@ public class ResourcesMgmt implements IResourceMgmt {
     }
     **/
      
-     
-    @Override
-    public String getMainSourceFolder() {
-        return ProjectConstants.FOLDER_SOURCE;
-    }
-
-    @Override
-    public String getResourcesFolder() {
-        return ProjectConstants.FOLDER_RES;
-    }
-    
-    @Override
-    public String getConfigFolder() {
-        return ProjectConstants.EASY_FILES;
-    }
+     // FIXME SE: Removed CopyMechanism
+//    @Override
+//    public String getMainSourceFolder() {
+//        return ProjectConstants.FOLDER_SOURCE;
+//    }
+//
+//    @Override
+//    public String getResourcesFolder() {
+//        return ProjectConstants.FOLDER_RES;
+//    }
+//    
+//    @Override
+//    public String getConfigFolder() {
+//        return ProjectConstants.EASY_FILES;
+//    }
     
     /**
      * Enables or disables background tasks. This may be helpful in non-full EASy environments, such as the 
-     * QualiMaster configuration application. May require shutting down {@link PLPWorkspaceListener}.
+     * QualiMaster configuration application. May require shutting down
+     * {@link de.uni_hildesheim.sse.easy_producer.PLPWorkspaceListener}.
      * 
      * @param enable <code>true</code> enables the background tasks, <code>false</code> else
      */
@@ -96,7 +95,6 @@ public class ResourcesMgmt implements IResourceMgmt {
      * @param projectname The name of the IProject which shall be retrieved.
      * @return A representation of the selected project
      */
-    @Override
     public IProject getProject(String projectname) {
         return getWorkspace().getRoot().getProject(projectname);
     }
@@ -108,7 +106,6 @@ public class ResourcesMgmt implements IResourceMgmt {
      * (this may happen if the responsible Eclipse plug-in was not loaded and started, e.g. when EASy runs as
      * a command line tool).
      */
-    @Override
     public IWorkspace getWorkspace() {
         IWorkspace ws = null;
         try {

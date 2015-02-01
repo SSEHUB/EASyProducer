@@ -11,12 +11,12 @@ import de.uni_hildesheim.sse.model.cst.ConstantValue;
 import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
 import de.uni_hildesheim.sse.model.cst.ContainerInitializer;
 import de.uni_hildesheim.sse.model.cst.ContainerOperationCall;
-import de.uni_hildesheim.sse.model.cst.DslFragment;
 import de.uni_hildesheim.sse.model.cst.IConstraintTreeVisitor;
 import de.uni_hildesheim.sse.model.cst.IfThen;
 import de.uni_hildesheim.sse.model.cst.Let;
 import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
 import de.uni_hildesheim.sse.model.cst.Parenthesis;
+import de.uni_hildesheim.sse.model.cst.Self;
 import de.uni_hildesheim.sse.model.cst.UnresolvedExpression;
 import de.uni_hildesheim.sse.model.cst.Variable;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
@@ -114,11 +114,6 @@ class VariablesInConstraintsFinder implements IConstraintTreeVisitor {
     }
 
     @Override
-    public void visitDslFragment(DslFragment fragment) {
-        // Not needed
-    }
-
-    @Override
     public void visitUnresolvedExpression(UnresolvedExpression expression) {
         ConstraintSyntaxTree nestedConstraint = expression.getActualExpression();
         if (null != nestedConstraint) {
@@ -140,5 +135,9 @@ class VariablesInConstraintsFinder implements IConstraintTreeVisitor {
         }
     }
 
-   
+    @Override
+    public void visitSelf(Self self) {
+        // TODO Auto-generated method stub
+    }
+
 }

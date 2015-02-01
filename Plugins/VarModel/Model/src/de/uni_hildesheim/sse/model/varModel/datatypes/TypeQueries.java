@@ -38,24 +38,28 @@ public class TypeQueries {
     public static Operation getOperation(IDatatype operand, String name, IDatatype... parameter) {
         // rather preliminary, shall be part of an abstract superclass!
         Operation result = null;
-        for (int o = 0; null == result && o < operand.getOperationCount(); o++) {
-            Operation tmp = operand.getOperation(o);
-            if (tmp.getName().equals(name)) {
-                int tmpParamCount = tmp.getParameterCount();
-                if (null == parameter) {
-                    if (0 == tmpParamCount) {
-                        result = tmp;
-                    }
-                } else if (parameter.length == tmpParamCount) {
-                    boolean eq = true;
-                    for (int p = 0; eq && p < tmpParamCount; p++) {
-                        IDatatype specifiedType = tmp.getParameter(p);
-                        IDatatype givenType = parameter[p];
-                        eq = (specifiedType.isAssignableFrom(givenType)
-                            || givenType.getTypeClass() == specifiedType.getTypeClass());
-                    }
-                    if (eq) {
-                        result = tmp;
+        if (null != operand) { // xtext
+            for (int o = 0; null == result && o < operand.getOperationCount(); o++) {
+                Operation tmp = operand.getOperation(o);
+                if (tmp.getName().equals(name)) {
+                    int tmpParamCount = tmp.getParameterCount();
+                    if (null == parameter) {
+                        if (0 == tmpParamCount) {
+                            result = tmp;
+                        }
+                    } else if (parameter.length == tmpParamCount) {
+                        boolean eq = true;
+                        for (int p = 0; eq && p < tmpParamCount; p++) {
+                            IDatatype specifiedType = tmp.getParameter(p);
+                            IDatatype givenType = parameter[p];
+                            if (null != specifiedType && null != givenType) { // xtext
+                                eq = (specifiedType.isAssignableFrom(givenType)
+                                    || givenType.getTypeClass() == specifiedType.getTypeClass());
+                            }
+                        }
+                        if (eq) {
+                            result = tmp;
+                        }
                     }
                 }
             }

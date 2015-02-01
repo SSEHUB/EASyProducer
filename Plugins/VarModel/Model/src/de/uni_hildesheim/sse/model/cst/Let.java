@@ -66,16 +66,12 @@ public class Let extends ConstraintSyntaxTree {
         return inExpr;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public IDatatype inferDatatype() throws CSTSemanticException {
         return inExpr.inferDatatype();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void accept(IConstraintTreeVisitor visitor) {
         visitor.visitLet(this); // no further operations!
     }

@@ -1,0 +1,10 @@
+template sequence(Configuration config, Artifact target) {
+
+    def main(Configuration config, Artifact target) {
+        sequenceOf(Integer) nums = createIntegerSequence(0, 10);
+        for (Integer i : nums) {
+            '$i'
+        }
+    }
+
+}

@@ -1,0 +1,146 @@
+@advice(QM)
+template stormFamilyElement(Configuration config, FileArtifact target, DecisionVariable preElt, DecisionVariable elt, Boolean firstFm, String topoName) {
+
+    def main(Configuration config, FileArtifact target, DecisionVariable preElt, DecisionVariable elt, Boolean firstFm, String topoName) {
+        String name = elt.varName().firstToUpperCase() + elt.type();
+        String familyName = elt.byName("family").varName();
+        String ifName = "I" + familyName.firstToUpperCase();
+        String ifInputName = "I" + ifName + "Input";
+      	String ifOutputName = "I" + ifName + "Output";
+      	String fhName = familyName.firstToUpperCase() + "HardwareConnection";
+      	Integer end = familyName.length();
+		String aName = "A" + familyName.substring(1,end);
+		String hName = "Hw" + familyName.substring(1,end);
+		String fImpName = familyName.firstToUpperCase();
+		String fImpInputName = ifName + "Input";
+		String fImpOutputName = ifName + "Output";
+		'package eu.qualiMaster.topologies.$topoName;'
+    	''
+    	if(firstFm) {
+    	'import eu.qualiMaster.data.inf.IFinancialData;'
+    	}
+    	'import java.util.*;'
+    	'import org.apache.log4j.Logger;'
+    	'import backtype.storm.tuple.*;'
+    	'import backtype.storm.task.*;'
+    	'import backtype.storm.topology.*;'
+    	'import eu.qualiMaster.families.inf.*;'
+    	'import eu.qualiMaster.hardware.inf.HardwareStub;'
+
+    	if(!firstFm) {
+    	     String preIfName = "I" + preElt.byName("family").varName().firstToUpperCase();
+		     String preOutputName= "I" + preIfName + "Output";
+    	    'import eu.qualiMaster.families.inf.$preIfName.$preOutputName;'  	    
+    	}
+    	'import eu.qualiMaster.families.inf.$ifName.*;'
+    	'import eu.qualiMaster.families.imp.*;'
+    	'import eu.qualiMaster.hardware.imp.*;'
+    	'import eu.qualiMaster.signal.*;'
+    	'import algorithms.*;' 
+    	''
+    	'@SuppressWarnings({ "rawtypes", "serial" })'
+    	'public class $name extends BaseSignalBolt {'
+    	''
+    	'    final static Logger logger = Logger.getLogger($name.class);'
+    	'    OutputCollector _collector;'
+    	'    private static $ifOutputName result = new $fImpName.$fImpOutputName();'
+    	'    private transient $ifName alg = null; // just take the first one, better would be a factory call'
+    	''
+    	'    public $name(String name) {'
+    	'        super(name);'
+    	'    }'
+    	''   	      
+		'    public void prepare(Map map, TopologyContext topologyContext, OutputCollector collector) {'
+		'        alg = new ${aName}1();'
+		'        _collector = collector;'
+		'    }'
+	    ''
+		'    public void execute(Tuple tuple) {'
+		'        // delegate to family "$familyName"'
+		if(firstFm) {
+		'        IFinancialData iTuple = (IFinancialData)tuple.getValue(0);'	
+		} else {
+		'        $preOutputName iTuple = ($preOutputName) tuple.getValue(0); //here the tuple indicates the input object'
+		}
+		'        $ifInputName input = new $fImpName.$fImpInputName();'
+		Family fm = elt.byName("family");
+		DecisionVariable tuples = fm.input();
+		Integer tuplesSize = tuples.variables().size();
+		for(Tuple t : tuples) {
+			String tupleId = "";
+    		if (tuplesSize > 1) {
+    			tupleId = "Tuple${tupleCount}";
+    		}
+			for(Field f : t.fields()) {
+				String fname = toIdentifier("${tupleId}${f.name()}");
+    			String mname = firstToUpperCase(fname);
+    	'        input.set${mname}(iTuple.get${mname}());'
+			} 
+			
+		}
+		''
+		'        alg.calculate(input, result);'
+		'        logger.info("Emitting data: "+ result);'
+		'		 _collector.emit(tuple, new Values(result));'
+		'		 _collector.ack(tuple);'
+		'    }'
+	    ''
+	    '    protected void checkDisconnect($ifName alg) {'
+	    '        if (alg instanceof HardwareStub) {'
+		'            ((HardwareStub) alg).disconnect();'
+		'            }'
+	    '    }'
+	    ''
+        '	public void onSignal(byte[] data) {'
+        '        String signal=new String(data);'
+        '        logger.info("Received signal: " + signal);'
+        '        //handle the received signal and make related changes, e.g., switch algorithm from software to hardware'
+		'        String[] parts = signal.split(":");'
+		'        if (parts.length >= 2) {'
+		'            if ("param".equals(parts[0]) && 3 == parts.length) {'
+		'       	     /*switch (parts[1]) { // just for illustration, may need parameter conversion'
+		' 	             case "param1" : '
+		'		         alg.setParamParam1(parts[3]); '
+		' 	             break;'
+		'	          }*/'
+		' 	         } else if ("alg".equals(parts[0])) {'
+		'	             switch (parts[1]) {'
+		String algCount = 1;
+		for(Algorithm alg : fm.members()){
+		    String n = alg.name();
+		    Boolean isHw = (alg.hwNode()!= null);
+			String nf = n.firstToUpperCase();
+		    String algName =  "A" + nf;
+		'	             case "$algName$algCount":'
+		'		             if (!(alg instanceof $algName$algCount)) {'
+		'		             alg = new $algName$algCount(); '
+		'			         }'
+		'		             break;'
+		    if(alg.hwNode().isConfigured() and !alg.hwNode().isNull()){
+		    	String hName = "Hw" + nf;
+		'	            case "$hName":'
+		'		             if (!(alg instanceof $hName)) {'
+		'			             $hName tmp = new $hName();'
+		'				         tmp.connect(parts[3]);'
+		'				         alg = tmp;'
+		'			             } else {'
+		'			                 checkDisconnect(alg);'
+		'			            }'		    	
+		    }
+
+			algCount=algCount+1;			
+		}
+		'	             }'
+		'	         }'
+		'        }'        
+        '        SignalHandler.handle(signal);'	
+        '	}'
+        ''	
+		'    public void declareOutputFields(OutputFieldsDeclarer declarer) {'				
+		'        declarer.declare(new Fields("$ifOutputName"));'
+		'    }'
+    	''
+    	'}'
+    }
+        
+}

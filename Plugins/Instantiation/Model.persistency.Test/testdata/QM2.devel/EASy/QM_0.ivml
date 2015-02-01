@@ -1,0 +1,12 @@
+project QM {
+version v0;
+	import InfrastructureCfg;
+	import ReconfigurableHardwareCfg;
+	import PipelinesCfg;
+	import ObservablesCfg;
+	import AdaptivityCfg;
+	import HardwareCfg;
+	import AlgorithmsCfg;
+	import FamiliesCfg; 
+}
+ 

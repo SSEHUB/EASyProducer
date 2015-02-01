@@ -4,6 +4,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.EnumValue;
+import de.uni_hildesheim.sse.utils.modelManagement.Version;
 
 /**
  * Represents a parenthesis expression.
@@ -38,6 +39,8 @@ public class ConstantExpression extends Expression {
             } else {
                 if (value instanceof EnumValue) {
                     ok = checkAndConvert(registry.getType(((EnumValue) value).getDatatype()));
+                } else if (value instanceof Version) {
+                    ok = checkAndConvert(TypeRegistry.versionType());
                 } else {
                     ok = checkAndConvert(registry.getType(value.getClass().getName()));
                     ok |= checkAndConvert(registry.getType(value.getClass().getSimpleName())); // for artifacts

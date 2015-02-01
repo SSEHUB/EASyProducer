@@ -244,8 +244,26 @@ public class CallExpression extends AbstractCallExpression implements IArgumentP
             }
             if (resolved.isGenericCollectionOperation()) {
                 // implicit parameter 1 determines type
-                returnGenerics = TypeDescriptor.createArray(1);
-                returnGenerics[0] = arguments[0].getExpression().inferType().getParameterType(0);
+                TypeDescriptor<? extends IVilType> arg0Type = arguments[0].getExpression().inferType();
+                if (arg0Type.getParameterCount() > 0) {
+                    returnGenerics = TypeDescriptor.createArray(1);
+                    returnGenerics[0] = arg0Type.getParameterType(0);
+                }
+            }
+            if (resolved.getReturnType().isMap() && 2 == resolved.getParameterCount() 
+                && resolved.getParameterType(0).isCollection() && resolved.getParameterType(1).isCollection()) {
+                TypeDescriptor<? extends IVilType> arg0Type = arguments[0].getExpression().inferType();
+                TypeDescriptor<? extends IVilType> arg1Type = arguments[1].getExpression().inferType();
+                if (arg0Type.getParameterCount() > 0 && arg1Type.getParameterCount() > 0) {
+                    returnGenerics = TypeDescriptor.createArray(2);
+                    returnGenerics[0] = arg0Type.getParameterType(0);
+                    returnGenerics[1] = arg1Type.getParameterType(0);
+                }
+            }
+            int useParam = resolved.useParameterAsReturn();
+            if (useParam >= 0 && null != resolved.getDeclaringType()
+                && useParam < arguments[0].inferType().getParameterCount()) {
+                result = arguments[0].inferType().getParameterType(useParam);
             }
             if (!resolved.isStatic() && TypeRegistry.anyType() == result) {
                 // the operation has a generic return value -> implicit parameter determines actual type
@@ -259,8 +277,10 @@ public class CallExpression extends AbstractCallExpression implements IArgumentP
                 try {
                     if (result.isSet()) {
                         result = TypeRegistry.getSetType(returnGenerics);
-                    } else {
+                    } else if (result.isSequence()) {
                         result = TypeRegistry.getSequenceType(returnGenerics);
+                    } else {
+                        result = TypeRegistry.getMapType(returnGenerics);
                     }
                 } catch (VilException e) {
                     EASyLoggerFactory.INSTANCE.getLogger(CallExpression.class, Bundle.ID).exception(e);

@@ -9,6 +9,7 @@ import java.util.Stack;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IArtifact;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IExpressionVisitor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IResolvable;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IRuntimeEnvironment;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
@@ -21,7 +22,11 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configura
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlElement;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypes;
 import de.uni_hildesheim.sse.utils.modelManagement.IModel;
+import de.uni_hildesheim.sse.utils.modelManagement.IRestrictionEvaluationContext;
+import de.uni_hildesheim.sse.utils.modelManagement.IVariable;
 import de.uni_hildesheim.sse.utils.modelManagement.IndentationConfiguration;
+import de.uni_hildesheim.sse.utils.modelManagement.RestrictionEvaluationException;
+import de.uni_hildesheim.sse.utils.modelManagement.Version;
 
 /**
  * Provides the runtime environment for executing a VIL models. After
@@ -30,7 +35,7 @@ import de.uni_hildesheim.sse.utils.modelManagement.IndentationConfiguration;
  * 
  * @author Holger Eichelberger
  */
-public class RuntimeEnvironment implements IRuntimeEnvironment {
+public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestrictionEvaluationContext {
 
     /**
      * Defines a nested level of value assignments.
@@ -178,8 +183,22 @@ public class RuntimeEnvironment implements IRuntimeEnvironment {
          * @throws ArtifactException in case that storing artifacts fails, the level will be popped anyway
          */
         public void popLevel() throws ArtifactException {
+            storeArtifacts();
             if (levels.size() > 1) {
-                Level top = levels.pop();
+                levels.pop();
+            } else {
+                throw new IllegalArgumentException("lowest level element cannot be removed");
+            }
+        }
+        
+        /**
+         * Stores the recent artifacts.
+         * 
+         * @throws ArtifactException in case that storing artifacts fails
+         */
+        public void storeArtifacts() throws ArtifactException {
+            if (levels.size() > 0) {
+                Level top = levels.peek();
                 // rather simple, does not look for other levels!
                 for (Object o : top.values.values()) {
                     if (o instanceof IArtifact) {
@@ -187,8 +206,6 @@ public class RuntimeEnvironment implements IRuntimeEnvironment {
                         artifact.store();
                     }
                 }
-            } else {
-                throw new IllegalArgumentException("lowest level element cannot be removed");
             }
         }
 
@@ -205,6 +222,21 @@ public class RuntimeEnvironment implements IRuntimeEnvironment {
             level.variables.put(var.getName(), var);
             if (var.getType() == IvmlTypes.configurationType() && object instanceof Configuration) {
                 level.configurations.add((Configuration) object);
+            }
+        }
+        
+        /**
+         * Removes the binding for <code>var</code> from the top level.
+         * 
+         * @param var the variable to be removed
+         */
+        public void removeValue(VariableDeclaration var) {
+            Level level = levels.peek();
+            Object object = level.values.get(var);
+            level.values.remove(var);
+            level.variables.remove(var.getName());
+            if (var.getType() == IvmlTypes.configurationType() && object instanceof Configuration) {
+                level.configurations.remove((Configuration) object);
             }
         }
 
@@ -392,6 +424,11 @@ public class RuntimeEnvironment implements IRuntimeEnvironment {
             throw new VilLanguageException(e);
         }
     }
+
+    @Override
+    public void storeArtifacts() throws ArtifactException {
+        currentContext.storeArtifacts();
+    }
     
     /**
      * Returns the variable of name <code>name</code> if defined.
@@ -467,6 +504,15 @@ public class RuntimeEnvironment implements IRuntimeEnvironment {
         checkType(var, object);
         currentContext.addValue(var, object);
     }
+    
+    /**
+     * Removes the variable binding for <code>var</code> if it exists.
+     * 
+     * @param var the variable to be removed
+     */
+    public void removeValue(VariableDeclaration var) {
+        currentContext.removeValue(var);
+    }
 
     /**
      * Checks whether <code>object</code> can be assigned to <code>var</code>.
@@ -526,5 +572,64 @@ public class RuntimeEnvironment implements IRuntimeEnvironment {
     public Object getIvmlValue(String name) throws ExpressionException {
         return currentContext.getIvmlValue(name);
     }
+    
+    // restriction evaluation
 
+    @Override
+    public void setValue(IVariable variable, Version version) throws RestrictionEvaluationException {
+        if (variable instanceof VariableDeclaration) {
+            try {
+                addValue((VariableDeclaration) variable, version);
+            } catch (VilLanguageException e) {
+                throw new RestrictionEvaluationException(e.getMessage(), e.getId());
+            }
+        } else {
+            throw new RestrictionEvaluationException("unsupported type", RestrictionEvaluationException.ID_INTERNAL);
+        }
+    }
+
+    @Override
+    public void unsetValue(IVariable variable) throws RestrictionEvaluationException {
+        if (variable instanceof VariableDeclaration) {
+            removeValue((VariableDeclaration) variable);
+        } else {
+            throw new RestrictionEvaluationException("unsupported type", RestrictionEvaluationException.ID_INTERNAL);
+        }
+    }
+    
+    /**
+     * Creates the expression visitor for this environment.
+     * 
+     * @return the expression visitor
+     */
+    protected abstract IExpressionVisitor createEvaluationProcessor();
+    
+    /**
+     * Releases the expression visitor for this environment.
+     * 
+     * @param processor the expression visitor
+     */
+    protected abstract void releaseEvaluationProcessor(IExpressionVisitor processor);
+
+    @Override
+    public Object startEvaluation() throws RestrictionEvaluationException {
+        if (null == currentContext) {
+            switchContext(DummyModel.INSTANCE);
+        }
+        pushLevel();
+        return createEvaluationProcessor();
+    }
+
+    @Override
+    public void endEvaluation(Object processor) throws RestrictionEvaluationException {
+        if (processor instanceof IExpressionVisitor) {
+            releaseEvaluationProcessor((IExpressionVisitor) processor);
+        }
+        try {
+            popLevel();
+        } catch (ArtifactException e) {
+            throw new RestrictionEvaluationException(e.getMessage(), e.getId());
+        }
+    }
+    
 }

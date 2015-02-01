@@ -84,13 +84,6 @@ public interface IConstraintTreeVisitor {
      * @param access the compound access node
      */
     public void visitCompoundAccess(CompoundAccess access);
-
-    /**
-     * Visits a DSL fragment.
-     * 
-     * @param fragment the fragment
-     */
-    public void visitDslFragment(DslFragment fragment);
     
     /**
      * Visits an unresolved expression. Please note that an unresolved
@@ -115,5 +108,11 @@ public interface IConstraintTreeVisitor {
      * @param initializer the container initializer node
      */
     public void visitContainerInitializer(ContainerInitializer initializer);
-    
+
+    /**
+     * Visits self.
+     * 
+     * @param self the self object to visit
+     */
+    public void visitSelf(Self self);
 }

@@ -81,9 +81,7 @@ public class CompoundAccess extends ConstraintSyntaxTree {
         return result;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public IDatatype inferDatatype() throws CSTSemanticException {
         IDatatype result = null;
         if (null == slot) {
@@ -152,9 +150,7 @@ public class CompoundAccess extends ConstraintSyntaxTree {
         return slot;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void accept(IConstraintTreeVisitor visitor) {
         visitor.visitCompoundAccess(this); // no further operations!
     }

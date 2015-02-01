@@ -2,7 +2,7 @@
 <feature
       id="de.uni_hildesheim.sse.apache.commons.io.feature"
       label="Apache Commons IO"
-      version="2.4.0"
+      version="2.4.1"
       provider-name="University of Hildesheim - SSE">
 
    <description url="http://www.example.com/description">
@@ -21,7 +21,7 @@
          id="org.apache.commons.io"
          download-size="0"
          install-size="0"
-         version="2.4.0"
+         version="2.0.1.v201105210651"
          unpack="false"/>
 
 </feature>

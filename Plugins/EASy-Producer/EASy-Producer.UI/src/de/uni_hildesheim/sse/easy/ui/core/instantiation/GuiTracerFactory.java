@@ -1,5 +1,6 @@
 package de.uni_hildesheim.sse.easy.ui.core.instantiation;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.IInstantiatorTracer;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.TracerFactory;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.ITracer;
 
@@ -37,6 +38,11 @@ public class GuiTracerFactory extends TracerFactory {
     @Override
     protected de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ITracer
     createBuildLanguageTracerImpl() {
+        return VilTracer.INSTANCE;
+    }
+
+    @Override
+    protected IInstantiatorTracer createInstantiatorTracerImpl() {
         return VilTracer.INSTANCE;
     }
 }

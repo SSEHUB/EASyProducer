@@ -7,8 +7,6 @@ import java.util.Map;
 import java.util.Stack;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
-import de.uni_hildesheim.sse.model.varModel.IvmlKeyWords;
-import de.uni_hildesheim.sse.utils.modelManagement.VersionRestriction;
 
 /**
  * A basic implementation for a hierarchical resolver.
@@ -248,16 +246,6 @@ public abstract class Resolver<V extends IResolvable> implements IResolver<V> {
     @Override
     public Object getIvmlElement(String name) {
         return null; // cannot resolve by default
-    }
-
-    /**
-     * Resolves a string to a version restriction operator.
-     * 
-     * @param opString the string to be resolved
-     * @return the resolved operator or <b>null</b>
-     */
-    public static VersionRestriction.Operator resolveOperator(String opString) {
-        return IvmlKeyWords.getOperator(opString);
     }
 
 }

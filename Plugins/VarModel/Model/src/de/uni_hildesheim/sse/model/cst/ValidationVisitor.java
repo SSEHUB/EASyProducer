@@ -112,52 +112,38 @@ public class ValidationVisitor implements IConstraintTreeVisitor {
         assignmentCount = 0;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitConstantValue(ConstantValue value) {
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitVariable(Variable variable) {
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitParenthesis(Parenthesis parenthesis) {
         parenthesis.getExpr().accept(this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitCompoundInitializer(CompoundInitializer initializer) {
         for (int e = 0; e < initializer.getExpressionCount(); e++) {
             initializer.getExpression(e).accept(this);
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitContainerInitializer(ContainerInitializer initializer) {
         for (int e = 0; e < initializer.getExpressionCount(); e++) {
             initializer.getExpression(e).accept(this);
         }
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitComment(Comment comment) {
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitOclFeatureCall(OCLFeatureCall call) {
         if (null != call.getOperand()) {
             call.getOperand().accept(this);
@@ -173,25 +159,19 @@ public class ValidationVisitor implements IConstraintTreeVisitor {
         }*/
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitLet(Let let) {
         let.getInExpression().accept(this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitIfThen(IfThen ifThen) {
         ifThen.getIfExpr().accept(this);
         ifThen.getElseExpr().accept(this);
         ifThen.getThenExpr().accept(this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitContainerOperationCall(ContainerOperationCall call) {
         call.getContainer().accept(this);
         call.getExpression().accept(this);
@@ -202,23 +182,17 @@ public class ValidationVisitor implements IConstraintTreeVisitor {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitCompoundAccess(CompoundAccess access) {
         access.getCompoundExpression().accept(this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void visitDslFragment(DslFragment fragment) {
+    @Override
+    public void visitUnresolvedExpression(UnresolvedExpression expression) {
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void visitUnresolvedExpression(UnresolvedExpression expression) {
+    @Override
+    public void visitSelf(Self self) {
     }
 
 }

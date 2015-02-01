@@ -8,14 +8,15 @@ import de.uni_hildesheim.sse.model.cst.Comment;
 import de.uni_hildesheim.sse.model.cst.CompoundAccess;
 import de.uni_hildesheim.sse.model.cst.CompoundInitializer;
 import de.uni_hildesheim.sse.model.cst.ConstantValue;
+import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
 import de.uni_hildesheim.sse.model.cst.ContainerInitializer;
 import de.uni_hildesheim.sse.model.cst.ContainerOperationCall;
-import de.uni_hildesheim.sse.model.cst.DslFragment;
 import de.uni_hildesheim.sse.model.cst.IConstraintTreeVisitor;
 import de.uni_hildesheim.sse.model.cst.IfThen;
 import de.uni_hildesheim.sse.model.cst.Let;
 import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
 import de.uni_hildesheim.sse.model.cst.Parenthesis;
+import de.uni_hildesheim.sse.model.cst.Self;
 import de.uni_hildesheim.sse.model.cst.UnresolvedExpression;
 import de.uni_hildesheim.sse.model.cst.Variable;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
@@ -33,6 +34,7 @@ import de.uni_hildesheim.sse.model.varModel.values.Value;
  */
 public class StaticAccessFinder implements IConstraintTreeVisitor {
 
+    private Self self = null;
     private Set<DecisionVariableDeclaration> result = new HashSet<DecisionVariableDeclaration>();
     private Set<DecisionVariableDeclaration> defined = new HashSet<DecisionVariableDeclaration>();
 
@@ -46,21 +48,27 @@ public class StaticAccessFinder implements IConstraintTreeVisitor {
     }
     
     /**
+     * Returns the "self" instance if used.
+     * 
+     * @return the self instance of <b>null</b>
+     */
+    public Self getSelf() {
+        return self;
+    }
+    
+    /**
      * Clears this visitor for reuse.
      */
     public void clear() {
         result.clear();
+        self = null;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitConstantValue(ConstantValue value) {
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitVariable(Variable variable) {
         AbstractVariable var = variable.getVariable();
         if (!defined.contains(var) && null == variable.getQualifier()) {
@@ -77,41 +85,33 @@ public class StaticAccessFinder implements IConstraintTreeVisitor {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitParenthesis(Parenthesis parenthesis) {
         parenthesis.getExpr().accept(this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitComment(Comment comment) {
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitOclFeatureCall(OCLFeatureCall call) {
-        call.getOperand().accept(this);
+        if (null != call.getOperand()) {
+            call.getOperand().accept(this);
+        }
         for (int p = 0, n = call.getParameterCount(); p < n; p++) {
             call.getParameter(p).accept(this);
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitLet(Let let) {
         defined.add(let.getVariable());
         let.getInExpression().accept(this);
         defined.remove(let.getVariable());
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitIfThen(IfThen ifThen) {
         ifThen.getIfExpr().accept(this);
         ifThen.getThenExpr().accept(this);
@@ -120,9 +120,7 @@ public class StaticAccessFinder implements IConstraintTreeVisitor {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitContainerOperationCall(ContainerOperationCall call) {
         for (int d = 0; d < call.getDeclaratorsCount(); d++) {
             defined.add(call.getDeclarator(d));
@@ -134,15 +132,14 @@ public class StaticAccessFinder implements IConstraintTreeVisitor {
         }   
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitCompoundAccess(CompoundAccess access) {
         DecisionVariableDeclaration decl = access.getResolvedSlot();
         if (!defined.contains(decl)) {
-            if (access.getCompoundExpression() instanceof ConstantValue) {
+            ConstraintSyntaxTree cEx = access.getCompoundExpression();
+            if (cEx instanceof ConstantValue) {
                 // qualified compound access
-                ConstantValue cValue = (ConstantValue) access.getCompoundExpression();
+                ConstantValue cValue = (ConstantValue) cEx;
                 Value value = cValue.getConstantValue();
                 if (value instanceof MetaTypeValue) {
                     result.add(decl);
@@ -151,34 +148,27 @@ public class StaticAccessFinder implements IConstraintTreeVisitor {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void visitDslFragment(DslFragment fragment) {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitUnresolvedExpression(UnresolvedExpression expression) {
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitCompoundInitializer(CompoundInitializer initializer) {
         for (int i = 0, n = initializer.getExpressionCount(); i < n; i++) {
             initializer.getExpression(i).accept(this);
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitContainerInitializer(ContainerInitializer initializer) {
         for (int i = 0, n = initializer.getExpressionCount(); i < n; i++) {
             initializer.getExpression(i).accept(this);
         }
+    }
+
+    @Override
+    public void visitSelf(Self self) {
+        this.self = self;
     }
 
 }

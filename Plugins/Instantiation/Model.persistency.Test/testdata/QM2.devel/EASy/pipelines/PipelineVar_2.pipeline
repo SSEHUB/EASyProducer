@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pipeline:Pipeline xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pipeline="pipeline" name="PriorityPipeline">
+  <nodes xsi:type="pipeline:Source" name="Source" source="2"/>
+  <nodes xsi:type="pipeline:FamilyElement" name="FinancialStreamIngestion" family="8"/>
+  <nodes xsi:type="pipeline:FamilyElement" name="TwitterStreamIngestion" family="9"/>
+  <nodes xsi:type="pipeline:FamilyElement" name="FinancialDataFilter" family="10"/>
+  <nodes xsi:type="pipeline:FamilyElement" name="TwitterStreamFilter" family="11"/>
+  <nodes xsi:type="pipeline:FamilyElement" name="CorrelationComputation" family="12"/>
+  <nodes xsi:type="pipeline:FamilyElement" name="SentimentAnalysis" family="13"/>
+  <nodes xsi:type="pipeline:Sink" name="Sink" sink="2"/>
+  <nodes xsi:type="pipeline:FamilyElement" name="ResultCombination" family="14"/>
+  <nodes xsi:type="pipeline:FamilyElement" name="ResultVisualization" family="15"/>
+  <flows name="sf" source="//@nodes.0" destination="//@nodes.1" grouping="0"/>
+  <flows name="st" source="//@nodes.0" destination="//@nodes.2" grouping="0"/>
+  <flows name="ff" source="//@nodes.1" destination="//@nodes.3" grouping="0"/>
+  <flows name="tt" source="//@nodes.2" destination="//@nodes.4" grouping="1"/>
+  <flows name="fc" source="//@nodes.3" destination="//@nodes.5" grouping="0"/>
+  <flows name="ts" source="//@nodes.4" destination="//@nodes.6" grouping="0"/>
+  <flows name="cr" source="//@nodes.5" destination="//@nodes.8" grouping="0"/>
+  <flows name="sr" source="//@nodes.6" destination="//@nodes.8" grouping="0"/>
+  <flows name="rr" source="//@nodes.8" destination="//@nodes.9" grouping="0"/>
+  <flows name="rs" source="//@nodes.9" destination="//@nodes.7" grouping="0"/>
+</pipeline:Pipeline>

@@ -29,6 +29,22 @@ public class TemplateLangWriter extends WriterVisitor<VariableDeclaration> imple
     public TemplateLangWriter(Writer out) {
         super(out);
     }
+    
+    /**
+     * Returns the number of non-default Java extensions in <code>template</code>.
+     * 
+     * @param template the template to consider
+     * @return the number of non-default Java extensions
+     */
+    private int getNonDefaultJavaExtensionCount(Template template) {
+        int count = 0;
+        for (int e = 0, n = template.getJavaExtensionCount(); e < n; e++) {
+            if (!template.getJavaExtension(e).isDefault()) {
+                count++;
+            }
+        }
+        return count;
+    }
 
     @Override
     public Object visitTemplate(Template template) throws VilLanguageException {
@@ -45,7 +61,7 @@ public class TemplateLangWriter extends WriterVisitor<VariableDeclaration> imple
         for (int e = 0; e < template.getJavaExtensionCount(); e++) {
             template.getJavaExtension(e).accept(this);
         }
-        if (template.getJavaExtensionCount() > 0) {
+        if (getNonDefaultJavaExtensionCount(template) > 0) {
             println();
         }
         for (int a = 0; a < template.getAdviceCount(); a++) {
@@ -126,10 +142,12 @@ public class TemplateLangWriter extends WriterVisitor<VariableDeclaration> imple
     
     @Override
     public Object visitJavaExtension(JavaExtension ext) throws VilLanguageException {
-        printIndentation();
-        print("extension ");
-        print(ext.getName());
-        println(";");
+        if (!ext.isDefault()) {
+            printIndentation();
+            print("extension ");
+            print(ext.getName());
+            println(";");
+        }
         return null;
     }
 

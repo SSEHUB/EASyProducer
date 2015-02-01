@@ -34,39 +34,27 @@ public abstract class ExpressionTranslator extends MessageReceiver {
     public ExpressionTranslator() {
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public int getMessageCount() {
         return messages.size();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public int getErrorCount() {
         return errorCount;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public Message getMessage(int index) {
         return messages.get(index);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void error(String message, EObject cause, EStructuralFeature causeFeature, int code) {
         messages.add(new Message(message, Status.ERROR, cause, causeFeature, code));
         errorCount++;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void warning(String message, EObject cause, EStructuralFeature causeFeature, int code) {
         messages.add(new Message(message, Status.WARNING, cause, causeFeature, code));

@@ -19,17 +19,11 @@ public class FloatValueConverter extends AbstractLexerBasedConverter<Double> {
         super();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected String toEscapedString(Double value) {
         return value.toString();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected void assertValidValue(Double value) {
         super.assertValidValue(value);

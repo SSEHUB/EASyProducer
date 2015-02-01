@@ -15,11 +15,14 @@
  */
 package de.uni_hildesheim.sse.model.cstEvaluation;
 
+import de.uni_hildesheim.sse.model.confModel.AssignmentState;
+import de.uni_hildesheim.sse.model.confModel.CompoundVariable;
 import de.uni_hildesheim.sse.model.varModel.datatypes.AnyType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.MetaType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.TypeQueries;
 import de.uni_hildesheim.sse.model.varModel.values.BooleanValue;
+import de.uni_hildesheim.sse.model.varModel.values.CompoundValue;
 import de.uni_hildesheim.sse.model.varModel.values.MetaTypeValue;
 import de.uni_hildesheim.sse.model.varModel.values.NullValue;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
@@ -41,7 +44,7 @@ public class GenericOperations {
 
         public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
             EvaluationAccessor result = null;
-            if (arguments.length == 1) {
+            if (arguments.length == 1 && null != operand) {
                 if (operand.setValue(arguments[0].getValue())) {
                     result = ConstantAccessor.POOL.getInstance().bind(BooleanValue.TRUE, operand.getContext());
                 }
@@ -78,9 +81,18 @@ public class GenericOperations {
         
         public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
             // get state does not work as there may not be a directly underlying variable
-            Value val = operand.getValue();
-            BooleanValue result = BooleanValue.toBooleanValue(!(null == val || NullValue.INSTANCE == val));
-            return ConstantAccessor.POOL.getInstance().bind(result, operand.getContext());
+            boolean eval;
+            EvaluationContext context;
+            if (null == operand) {
+                eval = false;
+                context = null; // replaced by caller
+            } else {
+                Value val = operand.getValue();
+                eval = !(null == val || NullValue.INSTANCE == val);
+                context = operand.getContext();
+            }
+            BooleanValue result = BooleanValue.toBooleanValue(eval);
+            return ConstantAccessor.POOL.getInstance().bind(result, context);
         }
     };
 
@@ -169,18 +181,37 @@ public class GenericOperations {
         if (null != operand && null != arguments && arguments.length == 1) {
             Value oValue = operand.getValue();
             Value aValue = arguments[0].getValue();
-            boolean equals;
-            if (null == oValue || null == aValue) {
-                // one part is undefined
-                equals = false;
+            boolean equals;            
+         
+            if (!negate) {
+                // special if not assigned, but assignable (not constant), we can do this now
+                if (((null == oValue || !operand.isAssigned()) && operand.isAssignable()) 
+                        || isAssignableCompound(operand)) {
+                    ASSIGNMENT.evaluate(operand, arguments);
+                    oValue = operand.getValue();
+                } else if ((null == aValue) && arguments[0].isAssignable()) {
+                    // considers the reverse case 1 == x, x undefined
+                    EvaluationAccessor[] temp = new EvaluationAccessor[1];
+                    temp[0] = operand;
+                    ASSIGNMENT.evaluate(arguments[0], temp);
+                    aValue = operand.getValue();
+                }
+            }
+            if (null == oValue && null == aValue) {
+                result = null;
             } else {
-                equals = oValue.equals(aValue);
+                if (null == oValue || null == aValue) {
+                    // one part is undefined
+                    equals = false;
+                } else {
+                    equals = oValue.equals(aValue);
+                }
+                if (negate) {
+                    equals = !equals;
+                }
+                BooleanValue resValue = BooleanValue.toBooleanValue(equals);
+                result = ConstantAccessor.POOL.getInstance().bind(resValue, operand.getContext());                
             }
-            if (negate) {
-                equals = !equals;
-            }
-            BooleanValue resValue = BooleanValue.toBooleanValue(equals);
-            result = ConstantAccessor.POOL.getInstance().bind(resValue, operand.getContext());
         } else {
             result = null;
         }
@@ -238,6 +269,30 @@ public class GenericOperations {
             result = null;
         }
         return result;
+    }    
+    
+    /**
+     * Returns true if {@link EvaluationAccessor} is a compound and 
+     *  all compounds nested elements are undefined.
+     * @param operand {@link EvaluationAccessor} to be checked.
+     * @return true if all nested elements are undefined.
+     */
+    private static boolean isAssignableCompound(EvaluationAccessor operand) {       
+        boolean result = false;
+        if (operand.getValue() instanceof CompoundValue) {  
+            result = true;
+            CompoundVariable oCmp = (CompoundVariable) operand.getVariable();
+            if (oCmp != null) {
+                for (int i = 0; i < oCmp.getNestedElementsCount(); i++) {
+                    if (oCmp.getNestedElement(i).getState() != AssignmentState.UNDEFINED) {
+                        result = false;
+                    }
+                }                
+            } else {
+                result = false;
+            }
+        } 
+        return result;        
     }
     
 }

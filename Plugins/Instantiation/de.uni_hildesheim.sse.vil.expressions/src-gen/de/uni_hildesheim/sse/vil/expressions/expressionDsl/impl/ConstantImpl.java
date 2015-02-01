@@ -28,6 +28,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ConstantImpl#getQValue <em>QValue</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ConstantImpl#getBValue <em>BValue</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ConstantImpl#getNull <em>Null</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ConstantImpl#getVersion <em>Version</em>}</li>
  * </ul>
  * </p>
  *
@@ -114,6 +115,26 @@ public class ConstantImpl extends MinimalEObjectImpl.Container implements Consta
    * @ordered
    */
   protected String null_ = NULL_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getVersion() <em>Version</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getVersion()
+   * @generated
+   * @ordered
+   */
+  protected static final String VERSION_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getVersion() <em>Version</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getVersion()
+   * @generated
+   * @ordered
+   */
+  protected String version = VERSION_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -306,6 +327,29 @@ public class ConstantImpl extends MinimalEObjectImpl.Container implements Consta
    * <!-- end-user-doc -->
    * @generated
    */
+  public String getVersion()
+  {
+    return version;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setVersion(String newVersion)
+  {
+    String oldVersion = version;
+    version = newVersion;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, ExpressionDslPackage.CONSTANT__VERSION, oldVersion, version));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
@@ -339,6 +383,8 @@ public class ConstantImpl extends MinimalEObjectImpl.Container implements Consta
         return getBValue();
       case ExpressionDslPackage.CONSTANT__NULL:
         return getNull();
+      case ExpressionDslPackage.CONSTANT__VERSION:
+        return getVersion();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -367,6 +413,9 @@ public class ConstantImpl extends MinimalEObjectImpl.Container implements Consta
         return;
       case ExpressionDslPackage.CONSTANT__NULL:
         setNull((String)newValue);
+        return;
+      case ExpressionDslPackage.CONSTANT__VERSION:
+        setVersion((String)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -397,6 +446,9 @@ public class ConstantImpl extends MinimalEObjectImpl.Container implements Consta
       case ExpressionDslPackage.CONSTANT__NULL:
         setNull(NULL_EDEFAULT);
         return;
+      case ExpressionDslPackage.CONSTANT__VERSION:
+        setVersion(VERSION_EDEFAULT);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -421,6 +473,8 @@ public class ConstantImpl extends MinimalEObjectImpl.Container implements Consta
         return BVALUE_EDEFAULT == null ? bValue != null : !BVALUE_EDEFAULT.equals(bValue);
       case ExpressionDslPackage.CONSTANT__NULL:
         return NULL_EDEFAULT == null ? null_ != null : !NULL_EDEFAULT.equals(null_);
+      case ExpressionDslPackage.CONSTANT__VERSION:
+        return VERSION_EDEFAULT == null ? version != null : !VERSION_EDEFAULT.equals(version);
     }
     return super.eIsSet(featureID);
   }
@@ -442,6 +496,8 @@ public class ConstantImpl extends MinimalEObjectImpl.Container implements Consta
     result.append(bValue);
     result.append(", null: ");
     result.append(null_);
+    result.append(", version: ");
+    result.append(version);
     result.append(')');
     return result.toString();
   }

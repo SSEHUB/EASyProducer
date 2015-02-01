@@ -15,10 +15,17 @@
  */
 package de.uni_hildesheim.sse.model.cstEvaluation;
 
+import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
 import de.uni_hildesheim.sse.model.varModel.datatypes.ConstraintType;
+import de.uni_hildesheim.sse.model.varModel.datatypes.Operation;
+import de.uni_hildesheim.sse.model.varModel.values.BooleanValue;
+import de.uni_hildesheim.sse.model.varModel.values.ConstraintValue;
+import de.uni_hildesheim.sse.model.varModel.values.Value;
+import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
+import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
 
 /**
- * Implements constraint operations.
+ * Implements constraint operations. Actually, constraint euqlas and 
  * 
  * @author Holger Eichelberger
  */
@@ -28,6 +35,58 @@ public class ConstraintOperations {
      * Prevents external creation.
      */
     private ConstraintOperations() {
+    }
+
+    /**
+     * Handles a constraint assignment, i.e., assigns the <code>cst</code>.
+     * 
+     * @param operand the operand to assign the constraint to
+     * @param cst the value as constraint syntax tree
+     * @return the expression return result
+     */
+    static EvaluationAccessor handleConstraintAssignment(EvaluationAccessor operand, ConstraintSyntaxTree cst) {
+        EvaluationAccessor result;
+        try {
+            operand.setValue(ValueFactory.createValue(ConstraintType.TYPE, cst));
+            result = ConstantAccessor.POOL.getInstance().bind(BooleanValue.TRUE, operand.getContext());
+        } catch (ValueDoesNotMatchTypeException e) {
+            operand.getContext().addErrorMessage(e);
+            result = null;
+        }
+        return result;
+    }
+
+    /**
+     * Handles a constraint equality with propagation, i.e., assigns the <code>cst</code>.
+     * 
+     * @param operand the operand to assign the constraint to
+     * @param cst the value as constraint syntax tree
+     * @param op the actual operation (in order to know whether the result shall be negated - equals or not-equals)
+     * @return the expression return result
+     */
+    static EvaluationAccessor handleConstraintEquals(EvaluationAccessor operand, ConstraintSyntaxTree cst, 
+        Operation op) {
+        boolean negate = op == ConstraintType.UNEQUALS;
+        EvaluationAccessor result;
+        if (!operand.isAssigned() && operand.isAssignable()) {
+            if (!negate) {
+                result = handleConstraintAssignment(operand, cst);
+            } else {
+                result = null;
+            }
+        } 
+        Value oValue = operand.getValue();
+        if (oValue instanceof ConstraintValue) {
+            boolean equals = ((ConstraintValue) oValue).getValue().equals(cst);
+            if (negate) {
+                equals = !equals;
+            }
+            result = ConstantAccessor.POOL.getInstance().bind(BooleanValue.toBooleanValue(equals), 
+                operand.getContext());
+        } else {
+            result = null;
+        }
+        return result;
     }
     
     /**

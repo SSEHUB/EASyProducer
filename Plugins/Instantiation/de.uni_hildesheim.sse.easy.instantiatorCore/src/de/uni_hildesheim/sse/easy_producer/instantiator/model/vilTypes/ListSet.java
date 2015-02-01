@@ -28,6 +28,8 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expres
  */
 public class ListSet<T> extends AbstractListWrapper<T> implements Set<T> {
 
+    // TODO turn this into a set wrapper!!
+    
     /**
      * Creates a new array collection wrapper using the default type registry.
      * 
@@ -112,6 +114,19 @@ public class ListSet<T> extends AbstractListWrapper<T> implements Set<T> {
         TypeDescriptor<? extends IVilType>[] params = TypeDescriptor.createArray(1);
         params[0] = param;
         return new ListSet<T>(null, params);
+    }
+
+    @Override
+    public T add(T element) {
+        if (!getList().contains(element)) {
+            getList().add(element);
+        }
+        return element;
+    }
+
+    @Override
+    public void remove(T element) {
+        getList().remove(element);
     }
 
 }

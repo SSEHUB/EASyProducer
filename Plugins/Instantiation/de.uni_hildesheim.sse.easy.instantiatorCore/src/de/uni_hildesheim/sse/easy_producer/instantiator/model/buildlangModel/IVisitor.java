@@ -70,17 +70,10 @@ public interface IVisitor extends de.uni_hildesheim.sse.easy_producer.instantiat
      * Visits an alternative.
      * 
      * @param alt the alternative
-     * @throws BuildlangException in case that visiting fails (e.g., execution)
+     * @return the result of visiting the given statement (may be <b>null</b>)
+     * @throws ExpressionException in case that visiting fails (e.g., execution)
      */
-    //public void visitAlternative(Alternative alt) throws BuildlangException;
-
-    /**
-     * Visits a defer element.
-     * 
-     * @param defer the defer element
-     * @throws BuildlangException in case that visiting fails (e.g., execution)
-     */
-    //public void visitDefer(Defer defer) throws BuildlangException;
+    public Object visitAlternativeExpression(AlternativeExpression alt) throws ExpressionException;
 
     /**
      * Visits a rule.
@@ -91,15 +84,6 @@ public interface IVisitor extends de.uni_hildesheim.sse.easy_producer.instantiat
      */
     public Object visitRule(Rule rule) throws VilLanguageException;
 
-    /**
-     * Visits a loop.
-     * 
-     * @param loop the loop
-     * @return the result of visiting the given statement (may be <b>null</b>)
-     * @throws BuildlangException in case that visiting fails (e.g., execution)
-     */
-    //public void visitLoop(Loop loop) throws BuildlangException;
-    
     /**
      * Visits a map expression.
      * 

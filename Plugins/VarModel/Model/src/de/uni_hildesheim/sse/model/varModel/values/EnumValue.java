@@ -103,11 +103,28 @@ public class EnumValue extends Value {
         return literal != null;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public Value clone() {
         return new EnumValue((Enum) getType(), literal);
+    }
+
+    @Override
+    public int hashCode() {
+        return null != literal ? literal.hashCode() : 0;
+    }
+    
+    @Override
+    public boolean equals(Object object) {
+        boolean result = false;
+        if (literal != null && object instanceof EnumValue) {
+            result = literal.equals(((EnumValue) object).getValue());
+        }
+        return result;
+    }
+
+    @Override
+    public boolean equalsPartially(Value value) {
+        return equals(value); // enums are symmetric
     }
 
 }

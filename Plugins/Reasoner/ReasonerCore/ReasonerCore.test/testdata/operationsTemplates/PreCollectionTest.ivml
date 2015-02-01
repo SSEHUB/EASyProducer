@@ -1,0 +1,31 @@
+project PreCollectionTest {
+
+    version v0;    
+    
+    enum MachineRole {Manager, Worker}; 
+    
+    compound Machine {       
+        String name;        
+        setOf(Integer) ports;
+        MachineRole role;
+        // Manager should not have any used ports
+        role == MachineRole.Manager implies ports.isEmpty() == true;
+    }
+    
+    Machine machineA;
+    Machine machineB;
+    
+    
+    machineA = {
+            name="worker1",            
+            ports={6700,6701,6702,6703},
+            role = MachineRole.Worker
+        };
+    machineB = { 
+            name="nexus",
+            ports={6700,6701},
+            role = MachineRole.Manager
+        };
+     
+    
+}

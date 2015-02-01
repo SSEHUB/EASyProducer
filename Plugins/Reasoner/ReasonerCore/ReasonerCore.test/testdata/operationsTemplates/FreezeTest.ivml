@@ -1,0 +1,15 @@
+project FreezeTest {
+
+	version v0;
+	
+	Boolean a = true;
+	Boolean b;
+	Boolean c;
+	a == true implies b == false;
+	
+	freeze {
+        a;
+        b;
+    }
+	
+}

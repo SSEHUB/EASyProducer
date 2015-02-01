@@ -52,16 +52,12 @@ class ModelInfoHolder <M extends IModel> implements IModelInfoHolder<M> {
         } 
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void addResult(ModelInfo<M> toAdd) {
         result.add(toAdd);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public boolean isKnown(URI uri, IModelLoader<M> loader) {
         ModelInfo<M> info = knownURI.get(uri);
         if (null != info) {
@@ -91,9 +87,7 @@ class ModelInfoHolder <M extends IModel> implements IModelInfoHolder<M> {
         return result.get(index);
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void error(String message) {
         // currently unimplemented
     }

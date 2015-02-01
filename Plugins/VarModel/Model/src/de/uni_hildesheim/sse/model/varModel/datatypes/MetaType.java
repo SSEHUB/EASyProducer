@@ -49,9 +49,7 @@ public class MetaType extends BasisDatatype {
         super("MetaType", AnyType.META_TYPE);
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void accept(IDatatypeVisitor visitor) {
         visitor.visitMetaType(this);
     }

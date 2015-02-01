@@ -9,9 +9,9 @@ import java.util.StringTokenizer;
 import de.uni_hildesheim.sse.easy_producer.core.mgmt.PLPInfo;
 import de.uni_hildesheim.sse.easy_producer.core.mgmt.SPLsManager;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.Configuration;
+import de.uni_hildesheim.sse.easy_producer.core.persistence.Configuration.PathKind;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceException;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceUtils;
-import de.uni_hildesheim.sse.easy_producer.core.persistence.Configuration.PathKind;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.Entity;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.IPersistencer;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.Model;
@@ -118,12 +118,6 @@ public class EASyPersistencer implements PersistenceConstants {
                 if (model.getEntityCount() > 0) {
                     String debug = model.getEntity(0).getAttributeValue(SETTINGS_DEBUG);
                     plp.setSaveDebugInformation(Boolean.valueOf(debug));
-                }
-                break;
-            case COPY:
-                if (model.getEntityCount() > 0) {
-                    String copyID = model.getEntity(0).getAttributeValue(COPY_ID);
-                    plp.getCopyModel().setCopyMechanism(copyID);
                 }
                 break;
             default:

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="de.uni_hildesheim.sse.vil.rt.ui_feature"
+      label="VIL-rt UI"
+      version="0.0.1"
+      provider-name="University of Hildesheim">
+
+   <description url="http://www.example.com/description">
+      [Enter Feature Description here.]
+   </description>
+
+   <copyright url="http://www.example.com/copyright">
+      [Enter Copyright Description here.]
+   </copyright>
+
+   <license url="http://www.example.com/license">
+      [Enter License Description here.]
+   </license>
+
+   <requires>
+      <import feature="de.uni_hildesheim.sse.vil.ui_feature" version="0.5.3" match="greaterOrEqual"/>
+   </requires>
+
+   <plugin
+         id="de.uni_hildesheim.sse.vil.rt.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.1"
+         unpack="false"/>
+
+</feature>

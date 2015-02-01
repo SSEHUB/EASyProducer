@@ -20,7 +20,6 @@ import de.uni_hildesheim.sse.ivml.AssignmentExpressionPart;
 import de.uni_hildesheim.sse.ivml.Call;
 import de.uni_hildesheim.sse.ivml.CollectionInitializer;
 import de.uni_hildesheim.sse.ivml.Declaration;
-import de.uni_hildesheim.sse.ivml.DslContext;
 import de.uni_hildesheim.sse.ivml.EqualityExpression;
 import de.uni_hildesheim.sse.ivml.EqualityExpressionPart;
 import de.uni_hildesheim.sse.ivml.Expression;
@@ -51,7 +50,7 @@ import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
 import de.uni_hildesheim.sse.model.cst.ContainerInitializer;
 import de.uni_hildesheim.sse.model.cst.ContainerOperationCall;
 import de.uni_hildesheim.sse.model.cst.DebugConstraintTreeVisitor;
-import de.uni_hildesheim.sse.model.cst.DslFragment;
+import de.uni_hildesheim.sse.model.cst.EmptyInitializer;
 import de.uni_hildesheim.sse.model.cst.IfThen;
 import de.uni_hildesheim.sse.model.cst.Let;
 import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
@@ -201,8 +200,7 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
                 } catch (TranslatorException e) {
                     throw e;
                 } catch (IvmlException e) {
-                    error(e, expr,
-                            IvmlPackage.Literals.LET_EXPRESSION__VALUE_EXPR);
+                    error(e, expr.getLet(), IvmlPackage.Literals.LET_EXPRESSION__VALUE_EXPR);
                 } finally {
                     context.popLayer();
                 }
@@ -213,26 +211,9 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
                 try {
                     result = processCollectionInitializer(lhsType, expr, expr.getCollection(), context, parent);
                 } catch (IvmlException e) {
-                    throw new TranslatorException(e, expr,
-                            IvmlPackage.Literals.EXPRESSION__COLLECTION);
+                    throw new TranslatorException(e, expr, IvmlPackage.Literals.EXPRESSION__COLLECTION);
                 }
-            } else if (null != expr.getDsl()) {
-                DslContext dslContext = expr.getDsl();
-                String dsl = dslContext.getDsl();
-                if (null != dsl) {
-                    dsl = dsl.trim();
-                    if (dsl.startsWith(IvmlKeyWords.DSL_START)) {
-                        dsl = dsl.substring(IvmlKeyWords.DSL_START.length());
-                    }
-                    if (dsl.endsWith(IvmlKeyWords.DSL_END)) {
-                        dsl = dsl.substring(0, dsl.length()
-                                - IvmlKeyWords.DSL_END.length());
-                    }
-                    dsl = dsl.trim();
-                }
-                result = new DslFragment(dslContext.getCommand(),
-                        dslContext.getEscape(), dslContext.getStop(), dsl);
-            }
+            } 
         }
         if (Constants.DEBUG) {
             if (null != result) {
@@ -577,8 +558,7 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
                         }
                     }
                 } catch (CSTSemanticException e) {
-                    throw new TranslatorException(e, call,
-                            IvmlPackage.Literals.POSTFIX_EXPRESSION__LEFT);
+                    throw new TranslatorException(e, call, IvmlPackage.Literals.FEATURE_CALL__PARAM);
                 }
             }
         } else {
@@ -587,13 +567,11 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
                 param = null;
             } else {
                 if (null == lhs) {
-                    lhs = processExpression(pList.getParam().get(0), context,
-                            parent);
+                    lhs = processExpression(pList.getParam().get(0), context, parent);
                     if (pListSize - 1 > 0) {
                         param = new ConstraintSyntaxTree[pListSize - 1];
                         for (int p = 1; p < pListSize; p++) {
-                            param[p - 1] = processExpression(pList.getParam()
-                                    .get(p), context, parent);
+                            param[p - 1] = processExpression(pList.getParam().get(p), context, parent);
                         }
                     } else {
                         param = null;
@@ -601,8 +579,7 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
                 } else {
                     param = new ConstraintSyntaxTree[pListSize];
                     for (int p = 0; p < pListSize; p++) {
-                        param[p] = processExpression(pList.getParam().get(p),
-                                context, parent);
+                        param[p] = processExpression(pList.getParam().get(p), context, parent);
                     }
                 }
             }
@@ -671,17 +648,19 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
             valueEx = null;
         }
         // process the default values
-        EList<String> ids = declaration.getId();
-        for (int i = 0; i < ids.size(); i++) {
-            DecisionVariableDeclaration declarator = new DecisionVariableDeclaration(ids.get(i), type, parent);
-            if (null != valueEx) {
-                try {
-                    declarator.setValue(valueEx);
-                } catch (IvmlException e) {
-                    error(e, op, IvmlPackage.Literals.SET_OP__DECL_EX);
+        if (null != type) {
+            EList<String> ids = declaration.getId();
+            for (int i = 0; i < ids.size(); i++) {
+                DecisionVariableDeclaration declarator = new DecisionVariableDeclaration(ids.get(i), type, parent);
+                if (null != valueEx) {
+                    try {
+                        declarator.setValue(valueEx);
+                    } catch (IvmlException e) {
+                        error(e, op, IvmlPackage.Literals.SET_OP__DECL_EX);
+                    }
                 }
+                declarators.add(declarator);
             }
-            declarators.add(declarator);
         }
     }
 
@@ -729,8 +708,9 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
             context.addToContext(decls[ds]);
         }
         try {
-            lhs = new ContainerOperationCall(lhs, op.getName(),
-                    processExpression(op.getDeclEx(), context, parent), decls); 
+            ConstraintSyntaxTree ex = processExpression(op.getDeclEx(), context, parent);
+            ex.inferDatatype();
+            lhs = new ContainerOperationCall(lhs, op.getName(), ex, decls); 
             lhs.inferDatatype();
         } catch (TranslatorException e) {
             throw e;
@@ -761,16 +741,18 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
         throws TranslatorException {
         ConstraintSyntaxTree result;
         if (null == expr) {
-            throw new TranslatorException("<consume>", expr,
-                    IvmlPackage.Literals.POSTFIX_EXPRESSION__LEFT,
-                    TranslatorException.CONSUME);
+            throw new TranslatorException("<consume>", expr, IvmlPackage.Literals.POSTFIX_EXPRESSION__LEFT,
+                TranslatorException.CONSUME);
         }
         if (null != expr.getCall()) {
             result = processFeatureCall(null, expr.getCall(), context, parent);
             result = processCallsAndAccess(result, expr.getFCalls(),
                     expr.getAccess(), context, parent);
-        } else {
+        } else if (null != expr.getLeft()) {
             result = processPrimaryExpression(expr.getLeft(), context, parent);
+        } else {
+            throw new TranslatorException("<consume>", expr, IvmlPackage.Literals.POSTFIX_EXPRESSION__LEFT,
+                TranslatorException.CONSUME);
         }
         return result;
     }
@@ -836,7 +818,7 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
             if (null != value.getBValue()) {
                 causingFeature = IvmlPackage.Literals.PRIMARY_EXPRESSION__LIT;
             }
-            result = context.resolveValue(value, expr, causingFeature);
+            result = context.resolveValue(value, parent, expr, causingFeature);
             result = handleBasicComment(expr.getLit(), result);
         }
         result = processCallsAndAccess(result, expr.getCalls(), expr.getAccess(), context, parent);
@@ -1113,23 +1095,23 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
         if (!allWithId && !allWithoutId) {
             throw new TranslatorException(
                 "value entries must either all have names or none", init, 
-                IvmlPackage.Literals.EXPRESSION_LIST_ENTRY__VALUE, ErrorCodes.INITIALIZER_CONSISTENCY);
+                IvmlPackage.Literals.EXPRESSION_LIST_OR_RANGE__LIST, ErrorCodes.INITIALIZER_CONSISTENCY);
         }
         if (lhsType instanceof Container) {
             if (allWithId && entryCount > 0) {
                 throw new TranslatorException(
                     "container initialization must not have name-value assignments", init,
-                    IvmlPackage.Literals.EXPRESSION_LIST_ENTRY__VALUE, ErrorCodes.INITIALIZER_CONSISTENCY);
+                    IvmlPackage.Literals.EXPRESSION_LIST_OR_RANGE__LIST, ErrorCodes.INITIALIZER_CONSISTENCY);
             } 
             result = processContainerInitializer(lhsType, context, parent, entryList);
         } else if (lhsType instanceof Compound) {
             if (allWithoutId && entryCount > 0) {
                 throw new TranslatorException("compound initialization requires name-value assignments", init,
-                    IvmlPackage.Literals.EXPRESSION_LIST_ENTRY__VALUE, ErrorCodes.INITIALIZER_CONSISTENCY);
+                    IvmlPackage.Literals.EXPRESSION_LIST_OR_RANGE__LIST, ErrorCodes.INITIALIZER_CONSISTENCY);
             }
             result = processCompoundInitializer(lhsType, context, parent, specificType, entryList);
         } else {
-            throwNonContainerException(lhsType);
+            result = EmptyInitializer.INSTANCE; // to be replaced as soon as possible, assignable to any type!
         }
         return result;
     }
@@ -1184,10 +1166,11 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
             }
             if (null != entry.getValue()) {
                 exprs[e] = processLogicalExpression(entry.getValue(), context, parent);
+                exprs[e].inferDatatype();
             }
             if (null != entry.getCollection()) {
                 exprs[e] = processLiteralCollection(slotDecls[e].getType(), entry.getCollection(), context, parent);
-            }
+            }            
         }
         if (allConstant(exprs)) {
             int pos = 0;
@@ -1233,6 +1216,7 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
             ExpressionListEntry entry = entryList.get(e);
             if (null != entry.getValue()) {
                 exprs[e] = processLogicalExpression(entry.getValue(), context, parent);
+                exprs[e].inferDatatype();
             }
             if (null != entry.getCollection()) {
                 exprs[e] = processLiteralCollection(contained, entry.getCollection(), context, parent);
@@ -1264,17 +1248,17 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
     }
     
     /**
-     * Throws a non-container exception.
+     * Checks for and warns about discouraged names.
      * 
-     * @param lhsType the left hand side
-     * @throws CSTSemanticException the exception
+     * @param name the name to be checked
+     * @param cause the causing language element
+     * @param causingFeature the causing language feature
      */
-    private void throwNonContainerException(IDatatype lhsType) throws CSTSemanticException {
-        if (null == lhsType) {
-            throw new CSTSemanticException("internal null", ErrorCodes.TYPE_CONSISTENCY);
+    public void warnDiscouragedNames(String name, EObject cause, EStructuralFeature causingFeature) {
+        if ("Version".equals(name)) { // -> internal version type
+            warning("'Version' is discouraged due to possible future language extensions", cause, 
+                causingFeature, ErrorCodes.DISCOURAGED);
         }
-        throw new CSTSemanticException("type '" + IvmlDatatypeVisitor.getUniqueType(lhsType)
-            + "' cannot be applied here", ErrorCodes.TYPE_CONSISTENCY);        
     }
-
+    
 }

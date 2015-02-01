@@ -1,0 +1,6 @@
+var <- 32
+bool <- false
+test <- Win string
+unchanged <- 7
+specific <- Win
+-> main()

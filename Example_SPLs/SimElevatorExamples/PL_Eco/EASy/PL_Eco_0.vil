@@ -1,0 +1,16 @@
+import PL_SimElevator;
+
+vilScript PL_Eco (Project source, Configuration config, Project target) {
+
+    version v0;
+
+    main(Project source, Configuration config, Project target) = : {
+        map(p:source.predecessors()) {
+            instantiate p (p, config, target);
+        };
+    	FileArtifact srcResource = "$target/resources-local/flame.gif";
+    	FileArtifact targetResource = "$target/resources/flame.gif";
+    	srcResource.copy(targetResource);
+    }
+
+}

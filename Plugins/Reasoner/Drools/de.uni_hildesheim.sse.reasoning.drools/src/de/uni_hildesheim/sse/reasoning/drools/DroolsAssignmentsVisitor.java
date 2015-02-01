@@ -11,12 +11,12 @@ import de.uni_hildesheim.sse.model.cst.ConstantValue;
 import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
 import de.uni_hildesheim.sse.model.cst.ContainerInitializer;
 import de.uni_hildesheim.sse.model.cst.ContainerOperationCall;
-import de.uni_hildesheim.sse.model.cst.DslFragment;
 import de.uni_hildesheim.sse.model.cst.IConstraintTreeVisitor;
 import de.uni_hildesheim.sse.model.cst.IfThen;
 import de.uni_hildesheim.sse.model.cst.Let;
 import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
 import de.uni_hildesheim.sse.model.cst.Parenthesis;
+import de.uni_hildesheim.sse.model.cst.Self;
 import de.uni_hildesheim.sse.model.cst.UnresolvedExpression;
 import de.uni_hildesheim.sse.model.cst.Variable;
 import de.uni_hildesheim.sse.model.varModel.Attribute;
@@ -45,6 +45,7 @@ import de.uni_hildesheim.sse.model.varModel.values.NullValue;
 import de.uni_hildesheim.sse.model.varModel.values.RealValue;
 import de.uni_hildesheim.sse.model.varModel.values.ReferenceValue;
 import de.uni_hildesheim.sse.model.varModel.values.StringValue;
+import de.uni_hildesheim.sse.model.varModel.values.VersionValue;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
 
@@ -984,6 +985,11 @@ public class DroolsAssignmentsVisitor implements IConstraintTreeVisitor, IValueV
         }
 
         @Override
+        public void visitSelf(Self self) {
+            // TODO Auto-generated method stub
+        }
+        
+        @Override
         public void visitContainerOperationCall(ContainerOperationCall call) {
             logger.info("inner call ");
         }
@@ -999,14 +1005,6 @@ public class DroolsAssignmentsVisitor implements IConstraintTreeVisitor, IValueV
             }
             this.slot = slot;
             access.getCompoundExpression().accept(this);
-        }
-
-        
-        
-        @Override
-        public void visitDslFragment(DslFragment fragment) {
-            // TODO Auto-generated method stub
-            
         }
 
         @Override
@@ -1052,12 +1050,6 @@ public class DroolsAssignmentsVisitor implements IConstraintTreeVisitor, IValueV
         } else {
             rule += "." + slot;
         }
-    }
-
-    @Override
-    public void visitDslFragment(DslFragment fragment) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
@@ -1183,6 +1175,11 @@ public class DroolsAssignmentsVisitor implements IConstraintTreeVisitor, IValueV
     
         @Override
         public void visitNullValue(NullValue value) {
+            // TODO Auto-generated method stub
+        }
+
+        @Override
+        public void visitVersionValue(VersionValue value) {
             // TODO Auto-generated method stub
         }
 
@@ -1314,6 +1311,16 @@ public class DroolsAssignmentsVisitor implements IConstraintTreeVisitor, IValueV
 
     @Override
     public void visitNullValue(NullValue value) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void visitVersionValue(VersionValue value) {
+        // TODO Auto-generated method stub
+    }
+    
+    @Override
+    public void visitSelf(Self self) {
         // TODO Auto-generated method stub
     }
     

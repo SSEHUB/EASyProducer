@@ -1,0 +1,26 @@
+vilScript PL_SimElevator (Project source, Configuration conf, Project target) {
+
+    version v0;
+    
+    cleanup() = : {
+    	Path p = "$target/src";
+    	p.deleteAll();
+    	p = "$target/resources";
+    	p.deleteAll();
+    }
+
+    copySRCFiles() = "$target/src/**/*.java" : "$source/src/**/*.java" {
+        RHS.copy(LHS);
+    }
+
+    copyRESFiles() = "$target/resources/**/*" : "$source/resources/**/*" {
+        RHS.copy(LHS);
+    }
+
+    main(Project source, Configuration conf, Project target) = : cleanup() {
+        copySRCFiles();
+        copyRESFiles();
+        velocity("$target/**/*.java", conf.selectByProject("PL_SimElevator"));
+    }
+
+}

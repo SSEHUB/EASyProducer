@@ -1,0 +1,50 @@
+project NestedHardwareTest {
+
+    version v0;    
+    
+    enum MachineRole {Manager, Worker}; 
+    
+    compound Machine {       
+        String name;        
+        setOf(Integer) ports;
+        MachineRole role;
+        // Manager should not have any used ports
+        role == MachineRole.Manager implies ports.isEmpty() == true;
+    }
+    
+    compound Cluster {
+        setOf(Machine) machines;
+    }
+    
+    compound DataCenter {
+        Cluster cluster;
+    }    
+      
+    DataCenter dc;
+    
+    dc.cluster.machines = {
+        Machine{
+            name="worker1",            
+            ports={6700,6701,6702,6703},
+            role = MachineRole.Worker
+        },
+        Machine{
+            name="worker2",
+            ports={6700,6701,6702,6703},
+            role = MachineRole.Worker
+        },
+        Machine{
+            name="worker5",
+            ports={6700,6701,6702,6703},
+            role = MachineRole.Worker
+        },
+        Machine{ 
+            name="nexus",
+            ports={6700,6701},
+            role = MachineRole.Manager
+        }
+    }; 
+    
+    //cluster.machines->forAll(Machine m | m.role == MachineRole.Manager implies m.ports.isEmpty() == true);
+    
+}

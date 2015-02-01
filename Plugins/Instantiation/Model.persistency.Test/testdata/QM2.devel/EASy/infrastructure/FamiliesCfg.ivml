@@ -1,0 +1,188 @@
+project FamiliesCfg {
+ 
+    import ReconfigurableHardware;
+	import Families;
+	import AlgorithmsCfg;
+	
+    // families	from TSI
+
+	Family fNormalize;
+    fNormalize = {  
+		name = "normalize",
+		members = {refBy(aNormalize)},
+		actual = refBy(aNormalize),
+		output={{fields={
+			Field{name="streamID", type=FieldType.STRING},
+			Field{name="timestamp", type=FieldType.STRING},
+			Field{name="quote", type=FieldType.REAL},
+			Field{name="volume", type=FieldType.INTEGER}
+		}}}, 
+		input={{fields={Field{name="springData", type=FieldType.STRING}}}},
+		parameters={IntegerParameter{name="test"}}
+	};              
+
+    Family fAdd10;
+    fAdd10 = {
+		name = "add10",
+		members = {refBy(aAdd10)},
+		input={{fields={
+			Field{name="streamID", type=FieldType.STRING},
+			Field{name="timestamp", type=FieldType.STRING},
+			Field{name="quote", type=FieldType.REAL},
+			Field{name="volume", type=FieldType.INTEGER}
+		}}},
+		output={{fields={Field{name="valuePlus10", type=FieldType.REAL}}}},				
+		actual = refBy(aAdd10)
+    };
+    
+    Family fDouble;
+    fDouble = {
+		name = "double",
+		members = {refBy(aDouble)},
+		input={{fields={Field{name="valuePlus10", type=FieldType.REAL}}}},
+		output={{fields={Field{name="batchDoubleValue", type=FieldType.REAL}}}},		
+		actual = refBy(aDouble) 
+    };
+    
+    Family fShow;
+    fShow = {
+		name = "showResult",
+		members = {refBy(aShow)},
+		input={{fields={Field{name="batchDoubleValue", type=FieldType.REAL}}}},	
+		output={{fields={Field{name="result", type=FieldType.REAL}}}},	
+		actual = refBy(aShow) 
+    };  
+ 
+    //Families from L3S
+    Family fFilterTweet;
+    fFilterTweet = {
+    	name = "filterTweet",
+    	members = {refBy(aFilterTweet)}, 
+    	input={{fields={Field{name="tweet", type=FieldType.STRING}}}},	
+    	output={{fields={
+    		Field{name="hashtag", type=FieldType.STRING},
+    		Field{name="tweet", type=FieldType.STRING}
+    	}}},	
+    	actual = refBy(aFilterTweet)	
+    };
+    
+    Family fCountTweets;
+    fCountTweets = {
+    	name = "countTweets",
+    	members = {refBy(aCountTweets)}, 
+    	input={{fields={
+    		Field{name="hashtag", type=FieldType.STRING},
+    		Field{name="tweet", type=FieldType.STRING}
+    	}}},
+    	output={{fields={
+    		Field{name="timestamp", type=FieldType.STRING},
+    		Field{name="tweet", type=FieldType.STRING},
+    		Field{name="counts", type=FieldType.INTEGER}
+    	}}},   	
+    	actual = refBy(aCountTweets)
+    };
+    
+	Family fSentimentTwitterBatch;
+	fSentimentTwitterBatch={
+		name="sentiment_twitter_batch",
+		members={refBy(aBatchSVM),refBy(aBatchDictionary)},
+		actual = refBy(aBatchSVM)
+	};
+	
+	Family fSentimentTwitterStream;
+	fSentimentTwitterStream={
+		name="sentiment_twitter_stream",
+		members={refBy(aStreamSVM),refBy(aStreamDictionary)},
+		actual = refBy(aStreamSVM)
+	};  
+	
+	//Families from the priority pipeline
+	Family fFinancialStreamIngestion;
+    fFinancialStreamIngestion = {
+    	name = "financialStreamIngestion",
+    	members = {refBy(aFinancialStreamIngestion)},  
+    	actual = refBy(aFinancialStreamIngestion)    	
+    };
+    
+    Family fTwitterStreamIngestion;
+    fTwitterStreamIngestion = {
+    	name = "twitterStreamIngestion",
+		members = {refBy(aTwitterStreamIngestion)},
+		actual = refBy(aTwitterStreamIngestion)
+    };
+    
+    Family fFinancialDataFilter;
+    fFinancialDataFilter = {
+    	name = "financialDataFilter",
+    	members = {refBy(aFinancialDataFilter)},
+    	actual = refBy(aFinancialDataFilter)
+    };
+    
+    Family fTwitterStreamFilter;
+    fTwitterStreamFilter = {
+    	name = "twitterStreamFilter",
+    	members = {refBy(aTwitterStreamFilter)},
+    	actual = refBy(aTwitterStreamFilter)
+    };
+    
+    Family fCorrelation;
+    fCorrelation = {
+    	name = "correlation",
+    	members = {refBy(aCorrelation)},
+    	actual = refBy(aCorrelation)
+    };
+    
+    Family fSentimentAnalysis;
+    fSentimentAnalysis = {
+    	name = "sentimentAnalysis",
+    	members = {refBy(aSentimentAnalysis)},
+    	actual = refBy(aSentimentAnalysis)
+    };
+    
+    Family fResultCombination;
+    fResultCombination = {
+    	name = "resultCombination",
+    	members = {refBy(aResultCombination)},
+    	actual = refBy(aResultCombination)
+    };
+    
+    Family fResultVisualization;
+    fResultVisualization = {
+    	name = "resultVisualization",
+    	members = {refBy(aResultVisualization)},
+    	actual = refBy(aResultVisualization)
+    };
+    
+    Family fTest;
+    fTest = {
+    	name = "fTest",
+    	members = {refBy(aTest)}
+    };
+
+	families = {refBy(fNormalize), refBy(fAdd10), refBy(fDouble), refBy(fShow), refBy(fFilterTweet), refBy(fCountTweets), refBy(fSentimentTwitterStream),refBy(fSentimentTwitterBatch),
+		refBy(fFinancialStreamIngestion), refBy(fTwitterStreamIngestion), refBy(fFinancialDataFilter), refBy(fTwitterStreamFilter), refBy(fCorrelation), refBy(fSentimentAnalysis),
+		refBy(fResultCombination), refBy(fResultVisualization), refBy(fTest)
+	}; 
+	 	
+	freeze {
+		fNormalize;
+		fAdd10;
+		fDouble;
+		fShow;	
+		fFilterTweet;
+		fCountTweets;	
+		fSentimentTwitterBatch;
+		fSentimentTwitterStream;
+		fFinancialStreamIngestion;
+		fTwitterStreamIngestion;
+		fFinancialDataFilter;
+		fTwitterStreamFilter;
+		fCorrelation;
+		fSentimentAnalysis;
+		fResultCombination;
+		fResultVisualization;
+		fTest;
+		families;
+    }
+     
+} 

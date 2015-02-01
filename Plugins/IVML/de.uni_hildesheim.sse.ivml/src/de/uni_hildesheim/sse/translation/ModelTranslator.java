@@ -768,6 +768,8 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
                 if (null == container) { // handled outside as nested ;)
                     comment = handleBasicComment(decl, context);
                 }
+                expressionTranslator.warnDiscouragedNames(part.getName(), part, 
+                    IvmlPackage.Literals.VARIABLE_DECLARATION_PART__NAME);
                 DecisionVariableDeclaration decVar = new DecisionVariableDeclaration(
                     part.getName(), type, parent);
                 if (null != part.getDefault()) {
@@ -855,36 +857,40 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
             context.addToContext(opDef);
             project.add(opDef);
             ConstraintSyntaxTree impl = expressionTranslator.processExpression(op.getImpl(), context, opDef);
-            try {
-                IDatatype implType = impl.inferDatatype();
-                if (!resultType.isAssignableFrom(implType)) {
-                    throw new TranslatorException("implementation type '"
-                        + IvmlDatatypeVisitor.getUnqualifiedType(implType) + "' does not match operation result type '"
-                        + IvmlDatatypeVisitor.getUnqualifiedType(resultType) + "'", op,
-                        IvmlPackage.Literals.OP_DEF_STATEMENT__IMPL, ErrorCodes.TYPE_CONSISTENCY);
+            if (null != impl) {
+                try {
+                    IDatatype implType = impl.inferDatatype();
+                    if (!resultType.isAssignableFrom(implType)) {
+                        throw new TranslatorException("implementation type '"
+                            + IvmlDatatypeVisitor.getUnqualifiedType(implType) 
+                            + "' does not match operation result type '"
+                            + IvmlDatatypeVisitor.getUnqualifiedType(resultType) + "'", op,
+                            IvmlPackage.Literals.OP_DEF_STATEMENT__IMPL, ErrorCodes.TYPE_CONSISTENCY);
+                    }
+                    operation.setFunction(impl);
+                } catch (IvmlException e) {
+                    throw new TranslatorException(e, op, IvmlPackage.Literals.OP_DEF_STATEMENT__IMPL);
                 }
-                operation.setFunction(impl);
-            } catch (IvmlException e) {
-                throw new TranslatorException(e, op, IvmlPackage.Literals.OP_DEF_STATEMENT__IMPL);
-            }
-            project.remove(opDef);
-            //CustomOperation operation = new CustomOperation(resultType, op.getId(), projectType, impl, params);
-            //opDef.setOperation(operation);
-            if (findOperation(projectType, operation, false)) {
-                // does project define two similar operations?
-                // TODO check on imported projects
-                throw new TranslatorException("operation '" + op.getId() + "' defined multiple times on project", op,
-                    IvmlPackage.Literals.OP_DEF_PARAMETER__TYPE, ErrorCodes.REDEFINITION);
-            } else if (operation.getParameterCount() > 0 && findOperation(operation.getParameter(0), operation, true)) {
-                // does operation match to an operation on the first type (vs implicit project parameter)
-                throw new TranslatorException("operation '" + op.getId() + "' is ambigously defined on type '"
-                    + IvmlDatatypeVisitor.getUnqualifiedType(operation.getParameter(0)) + '"', op,
-                    IvmlPackage.Literals.OP_DEF_PARAMETER__TYPE, ErrorCodes.AMBIGUITY);
-            } else {
-                // in case of no error - add, first resovable then as model
-                // element
-                project.add(opDef);
-                context.addToProject(op, comment, opDef);
+                project.remove(opDef);
+                //CustomOperation operation = new CustomOperation(resultType, op.getId(), projectType, impl, params);
+                //opDef.setOperation(operation);
+                if (findOperation(projectType, operation, false)) {
+                    // does project define two similar operations?
+                    // TODO check on imported projects
+                    throw new TranslatorException("operation '" + op.getId() + "' defined multiple times on project", 
+                        op, IvmlPackage.Literals.OP_DEF_PARAMETER__TYPE, ErrorCodes.REDEFINITION);
+                } else if (operation.getParameterCount() > 0 
+                    && findOperation(operation.getParameter(0), operation, true)) {
+                    // does operation match to an operation on the first type (vs implicit project parameter)
+                    throw new TranslatorException("operation '" + op.getId() + "' is ambigously defined on type '"
+                        + IvmlDatatypeVisitor.getUnqualifiedType(operation.getParameter(0)) + '"', op,
+                        IvmlPackage.Literals.OP_DEF_PARAMETER__TYPE, ErrorCodes.AMBIGUITY);
+                } else {
+                    // in case of no error - add, first resovable then as model
+                    // element
+                    project.add(opDef);
+                    context.addToProject(op, comment, opDef);
+                }
             }
         } catch (TranslatorException e) {
             project.remove(opDef);
@@ -1005,6 +1011,8 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
                         + elt.getName() + "'", attribute, IvmlPackage.Literals.ATTRIBUTE_TO__NAMES,
                         ErrorCodes.ATTRIBUTION);
                 }
+                expressionTranslator.warnDiscouragedNames(vDecl.getName(), vDecl, 
+                    IvmlPackage.Literals.VARIABLE_DECLARATION_PART__NAME);
                 attr = new Attribute(vDecl.getName(), type, context.getProject(), elt);
                 if (null != vDecl.getDefault()) {
                     try {
@@ -1156,8 +1164,9 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
             superCompound = null;
         }
         Compound stored = compoundMapping.get(tcomp);
-        Compound compound = (null != stored ? stored 
-            : new Compound(tcomp.getName(), context.getProject(), superCompound));
+        expressionTranslator.warnDiscouragedNames(tcomp.getName(), tcomp, IvmlPackage.Literals.TYPEDEF_COMPOUND__NAME);
+        Compound compound = (null != stored ? stored : new Compound(tcomp.getName(), context.getProject(), 
+            tcomp.getAbstract() != null, superCompound));
         SplitResult split = Utils.split(tcomp.getElements());
         if (!force) {
             resolvable &= variableDeclarationsResolvable(split.getVarDecls(), context, compound, force);
@@ -1345,6 +1354,8 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
             }
         }
         if (resolvable) {
+            expressionTranslator.warnDiscouragedNames(tmapping.getNewType(), tmapping, 
+                IvmlPackage.Literals.TYPEDEF_MAPPING__NEW_TYPE);
             DerivedDatatype result = new DerivedDatatype(tmapping.getNewType(),
                     baseType, context.getProject());
             Comment comment = handleBasicComment(tmapping, context);
@@ -1539,20 +1550,19 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
      * Processes an import statement including import restrictions. In case of
      * errors the respective element is not added to the resulting project.
      * 
-     * @param importStmt
-     *            the import statement
-     * @param context
-     *            the type context to be considered
+     * @param importStmt the import statement
+     * @param context the type context to be considered
      */
     protected void processImport(ImportStmt importStmt, TypeContext context) {
         try {
-            ProjectImport imp = ImportTranslator.processImport(importStmt);
+            // context may contain further "global" variables
+            ProjectImport imp = ImportTranslator.processImport(importStmt, expressionTranslator, context);
             Project project = context.getProject();
             assignProjectComment(project, imp, CommentUtils.toComment(importStmt, project));
             if (!context.getProject().addImport(imp)) {
                 // does not apply to conflicts!
                 error("project '" + imp.getProjectName() + "' is already imported", importStmt,
-                    IvmlPackage.Literals.VERSION_STMT__VERSION, ErrorCodes.IMPORT);
+                    IvmlPackage.Literals.IMPORT_STMT__NAME, ErrorCodes.IMPORT);
             }
         } catch (TranslatorException e) {
             error(e);
@@ -1568,8 +1578,9 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
      */
     protected void processConflict(ConflictStmt conflictStmt, TypeContext context) {
         try {
-            context.getProject().addImport(
-                    ImportTranslator.processConflict(conflictStmt));
+            // context may contain further "global" variables
+            context.getProject().addImport(ImportTranslator.processConflict(conflictStmt, expressionTranslator, 
+                context));
         } catch (TranslatorException e) {
             error(e);
         }
@@ -1579,11 +1590,9 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
      * Turns an IVML exception into a xText error.
      * 
      * @param exception the exception to used
-     * @param cause
-     *            the cause (as instance of the EMF grammar model)
-     * @param causeFeature
-     *            the cause of the feature as an appropriate constant from
-     *            {@link de.uni_hildesheim.sse.ivml.IvmlPackage.Literals}
+     * @param cause the cause (as instance of the EMF grammar model)
+     * @param causeFeature the cause of the feature as an appropriate constant from
+     *     {@link de.uni_hildesheim.sse.ivml.IvmlPackage.Literals}
      */
     void error(IIdentifiable exception, EObject cause,
             EStructuralFeature causeFeature) {
@@ -1594,11 +1603,9 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
      * Turns an IVML exception into a xText warning.
      * 
      * @param exception the exception to used
-     * @param cause
-     *            the cause (as instance of the EMF grammar model)
-     * @param causeFeature
-     *            the cause of the feature as an appropriate constant from
-     *            {@link de.uni_hildesheim.sse.ivml.IvmlPackage.Literals}
+     * @param cause the cause (as instance of the EMF grammar model)
+     * @param causeFeature the cause of the feature as an appropriate constant from
+     *     {@link de.uni_hildesheim.sse.ivml.IvmlPackage.Literals}
      */
     void warning(IvmlException exception, EObject cause,
             EStructuralFeature causeFeature) {

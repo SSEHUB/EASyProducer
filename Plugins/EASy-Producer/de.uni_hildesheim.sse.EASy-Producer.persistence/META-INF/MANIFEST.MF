@@ -2,11 +2,10 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Persistence
 Bundle-SymbolicName: de.uni_hildesheim.sse.easy_producer.core;singleton:=true
-Bundle-Version: 0.11.2
+Bundle-Version: 0.11.3
 Bundle-Activator: de.uni_hildesheim.sse.easy_producer.core.persistence.internal.Activator
 Bundle-Vendor: University of Hildesheim - SSE
 Require-Bundle: de.uni_hildesheim.sse.varModel;bundle-version="0.5.4",
- de.uni_hildesheim.sse.easy.instantiator.copy.core;bundle-version="0.0.1";visibility:=reexport,
  de.uni-hildesheim.sse.easy.instantiatorCore;bundle-version="0.5.4",
  ReasonerCore;bundle-version="0.5.5",
  de.uni_hildesheim.sse.dslCore;bundle-version="0.6.0",

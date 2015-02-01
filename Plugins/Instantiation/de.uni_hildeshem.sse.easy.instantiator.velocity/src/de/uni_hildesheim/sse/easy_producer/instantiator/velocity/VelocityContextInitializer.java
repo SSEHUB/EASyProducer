@@ -20,6 +20,7 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Sequence;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Set;
 import de.uni_hildesheim.sse.model.varModel.datatypes.StringType;
+import de.uni_hildesheim.sse.model.varModel.datatypes.VersionType;
 import de.uni_hildesheim.sse.model.varModel.values.BooleanValue;
 import de.uni_hildesheim.sse.model.varModel.values.CompoundValue;
 import de.uni_hildesheim.sse.model.varModel.values.EnumValue;
@@ -27,6 +28,8 @@ import de.uni_hildesheim.sse.model.varModel.values.IntValue;
 import de.uni_hildesheim.sse.model.varModel.values.RealValue;
 import de.uni_hildesheim.sse.model.varModel.values.StringValue;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
+import de.uni_hildesheim.sse.model.varModel.values.VersionValue;
+import de.uni_hildesheim.sse.utils.modelManagement.Version;
 
 class VelocityContextInitializer implements IDatatypeVisitor {
     private static final char SLOT_ACCESS = '-';
@@ -164,6 +167,15 @@ class VelocityContextInitializer implements IDatatypeVisitor {
     @Override
     public void visitOrderedEnumType(OrderedEnum enumType) {
         visitEnumType(enumType);
+    }
+
+    @Override
+    public void visitVersionType(VersionType type) {
+        variableName.append(variable.getDeclaration().getName());
+        VersionValue versionValue = (VersionValue) variable.getValue();
+        if (null != versionValue) {
+            values.add(new VelocityContextItem(variableName.toString(), Version.toString(versionValue.getValue())));
+        }
     }
 
 }

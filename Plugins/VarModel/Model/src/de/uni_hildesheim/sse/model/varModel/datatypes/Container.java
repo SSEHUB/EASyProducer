@@ -187,9 +187,6 @@ public class Container extends StructuredDatatype {
         return type;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public IDatatype getGenericType(int index) {
         if (0 == index) {
@@ -199,9 +196,6 @@ public class Container extends StructuredDatatype {
         }
     }
     
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int getGenericTypeCount() {
         return 1;

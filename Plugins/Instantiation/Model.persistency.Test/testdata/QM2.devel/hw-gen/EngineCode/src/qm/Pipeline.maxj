@@ -1,0 +1,14 @@
+package qm;
+
+import com.maxeler.maxcompiler.v2.kernelcompiler.Kernel;
+import com.maxeler.maxcompiler.v2.kernelcompiler.KernelParameters;
+import com.maxeler.maxcompiler.v2.kernelcompiler.stdlib.memory.Memory;
+import com.maxeler.maxcompiler.v2.kernelcompiler.types.base.DFEVar;
+
+class PipelineKernel extends Kernel {
+    PipelineKernel(KernelParameters parameters) {
+        super(parameters);
+        DFEVar inData = io.input("inData", dfeInt(32));
+        io.output("outData", inData, dfeInt(32));
+    }
+}

@@ -1,0 +1,11 @@
+project PL_Eco {
+
+	version v0;
+	import PL_SimEco::Elevator with (PL_SimEco.version == v0);
+	numElevators = 2;
+	numFloors = 3;
+	freeze {
+		numElevators;
+		numFloors;
+	}
+}

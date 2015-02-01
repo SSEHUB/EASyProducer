@@ -1,8 +1,8 @@
 package test.de.uni_hildesheim.sse.vil.buildlang;
 
-import java.io.CharArrayWriter;
 import java.io.Writer;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.IInstantiatorTracer;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.TracerFactory;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Template;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateModel;
@@ -64,7 +64,7 @@ class TestTracerFactory extends TracerFactory {
      * @param trace the writer receiving the trace
      * @param baseFolders the base folders
      */
-    public TestTracerFactory(CharArrayWriter trace, String[] baseFolders) {
+    public TestTracerFactory(Writer trace, String[] baseFolders) {
         buildTracer = new de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.StreamTracer(
             trace, baseFolders);
         if (DEBUG) {
@@ -85,6 +85,11 @@ class TestTracerFactory extends TracerFactory {
     protected de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ITracer 
     createBuildLanguageTracerImpl() {
         return buildTracer;
+    }
+
+    @Override
+    protected IInstantiatorTracer createInstantiatorTracerImpl() {
+        return EMPTY_INSTANTIATOR_TRACER;
     }
 
 }

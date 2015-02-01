@@ -8,6 +8,8 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.BuiltIn;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.ExtensionClassLoaders;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 
+// IMPORTANT: If transformators are removed, this class must remain, might be renamed as it initializes the VIL types
+
 /**
  * The dummy transformator engine implementation. This engine can be used to archieve multiple instantiation of the same
  * project with a simple workflow:

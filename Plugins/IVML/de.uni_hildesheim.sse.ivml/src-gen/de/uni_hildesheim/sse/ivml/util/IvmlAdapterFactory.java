@@ -175,11 +175,6 @@ public class IvmlAdapterFactory extends AdapterFactoryImpl
         return createDerivedTypeAdapter();
       }
       @Override
-      public Adapter caseDslContext(DslContext object)
-      {
-        return createDslContextAdapter();
-      }
-      @Override
       public Adapter caseAttributeTo(AttributeTo object)
       {
         return createAttributeToAdapter();
@@ -228,11 +223,6 @@ public class IvmlAdapterFactory extends AdapterFactoryImpl
       public Adapter caseConflictStmt(ConflictStmt object)
       {
         return createConflictStmtAdapter();
-      }
-      @Override
-      public Adapter caseVersionedId(VersionedId object)
-      {
-        return createVersionedIdAdapter();
       }
       @Override
       public Adapter caseVersionStmt(VersionStmt object)
@@ -737,21 +727,6 @@ public class IvmlAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.ivml.DslContext <em>Dsl Context</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see de.uni_hildesheim.sse.ivml.DslContext
-   * @generated
-   */
-  public Adapter createDslContextAdapter()
-  {
-    return null;
-  }
-
-  /**
    * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.ivml.AttributeTo <em>Attribute To</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
@@ -897,21 +872,6 @@ public class IvmlAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createConflictStmtAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.ivml.VersionedId <em>Versioned Id</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see de.uni_hildesheim.sse.ivml.VersionedId
-   * @generated
-   */
-  public Adapter createVersionedIdAdapter()
   {
     return null;
   }

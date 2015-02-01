@@ -1,0 +1,5 @@
+ReconfigurableHardware::HwNode::name = node name
+ReconfigurableHardware::MPCCNode::host = host node address
+ReconfigurableHardware::MPCCNode::numCPUs = number of CPUs
+ReconfigurableHardware::MPCCNode::numDFEs = number of DFEs
+ReconfigurableHardware::clusters = available hardware machines for hardware execution

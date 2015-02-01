@@ -39,7 +39,6 @@ import de.uni_hildesheim.sse.model.varModel.values.ContainerValue;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
 import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
 import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
-import de.uni_hildesheim.sse.reasoning.core.importResolver.ReasoningImportResolver;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasoningResult;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
 import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
@@ -62,8 +61,6 @@ public class DroolsEngineTest {
      */
     @BeforeClass
     public static void setUpBeforeClass() {
-        
-        ReasoningImportResolver.registerAsTopResolver();
         ModelUtility.setResourceInitializer(new StandaloneInitializer());
     }
     

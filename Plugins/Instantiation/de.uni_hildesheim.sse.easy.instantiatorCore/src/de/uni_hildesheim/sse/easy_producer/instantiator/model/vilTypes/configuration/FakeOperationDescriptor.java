@@ -97,5 +97,15 @@ public class FakeOperationDescriptor extends OperationDescriptor {
     public Object invoke(Object... args) throws VilException {
         return null;
     }
+    
+    @Override
+    public int useParameterAsReturn() {
+        return -1;
+    }
+
+    @Override
+    public boolean storeArtifactsBeforeExecution() {
+        return false;
+    }
 
 }

@@ -32,7 +32,9 @@ import de.uni_hildesheim.sse.utils.messages.Status;
  * @author Holger Eichelberger
  */
 public abstract class ImportResolver<M extends IModel> {
-    
+
+    private static final String END_OF_CHAIN_MSG 
+        = "imports are not resolved as no appropriate import resolver registered";
     private ImportResolver<M> subResolver = null;
     
     /**
@@ -109,17 +111,44 @@ public abstract class ImportResolver<M extends IModel> {
      * @param inProgress the model information objects of the models currently being 
      *   processed at once (may be <b>null</b>)  
      * @param repository the model repository
-     * @param paths the model paths (for classpath-like model resolution)
+     * @param evaluationContext the context for evaluating import restrictions (variable definitions... 
+     *   interpreted locally)
      * @return messages which occur during resolution
      */
     public final List<IMessage> resolveImports(M model, URI uri, List<ModelInfo<M>> inProgress, 
-        IModelRepository<M> repository, ModelPaths paths) {
-        List<IMessage> result = resolveImportsImpl(model, uri, inProgress, repository, paths);
+        IModelRepository<M> repository, IRestrictionEvaluationContext evaluationContext) {
+        List<IMessage> result = resolveImportsImpl(model, uri, inProgress, repository, evaluationContext);
         if (null == result) {
             if (null == subResolver) {
                 result = createEndOfChainMessage();
             } else {
-                result = subResolver.resolveImports(model, uri, inProgress, repository, paths);
+                result = subResolver.resolveImports(model, uri, inProgress, repository, evaluationContext);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Resolves the denoted model considering the given <code>restrictions</code>.
+     * 
+     * @param modelName the name of the model
+     * @param restriction the version restriction (may be <b>null</b> if there is none)
+     * @param baseUri the URI to start resolving from (may be the URI of a model)
+     * @param repository the model repository
+     * @param evaluationContext the context for evaluating import restrictions (variable definitions... 
+     *   interpreted locally)
+     * @return the resolved model
+     * @throws ModelManagementException in case of resolution failures
+     */
+    public final M resolve(String modelName, IVersionRestriction restriction, URI baseUri, 
+        IModelRepository<M> repository, IRestrictionEvaluationContext evaluationContext) 
+        throws ModelManagementException {
+        M result = resolveImpl(modelName, restriction, baseUri, repository, evaluationContext);
+        if (null == result) {
+            if (null == subResolver) {
+                throw new ModelManagementException(END_OF_CHAIN_MSG, ModelManagementException.INTERNAL);
+            } else {
+                result = subResolver.resolve(modelName, restriction, baseUri, repository, evaluationContext);
             }
         }
         return result;
@@ -138,23 +167,38 @@ public abstract class ImportResolver<M extends IModel> {
      * @param inProgress the model information objects of the models currently being 
      *   processed at once (may be <b>null</b>)  
      * @param repository the model repository
-     * @param paths the model paths (for classpath-like model resolution)
+     * @param evaluationContext the context for evaluating import restrictions (variable definitions... 
+     *   interpreted locally)
      * @return messages which occur during resolution, <code>null</code> if this resolver is not 
      *   able to resolve the imports for some reason
      */
     protected abstract List<IMessage> resolveImportsImpl(M model, URI uri, List<ModelInfo<M>> inProgress, 
-        IModelRepository<M> repository, ModelPaths paths);
+        IModelRepository<M> repository, IRestrictionEvaluationContext evaluationContext);
 
+    /**
+     * Resolves the denoted model considering the given <code>restrictions</code>.
+     * 
+     * @param modelName the name of the model
+     * @param restrictions the restrictions (may be <b>null</b>
+     * @param baseUri the URI to start resolving from (may be the URI of a model)
+     * @param repository the model repository
+     * @return the resolved model
+     * @param evaluationContext the context for evaluating import restrictions (variable definitions... 
+     *   interpreted locally)
+     * @throws ModelManagementException in case of resolution failures
+     */
+    protected abstract M resolveImpl(String modelName, IVersionRestriction restrictions, URI baseUri,
+        IModelRepository<M> repository, IRestrictionEvaluationContext evaluationContext) 
+        throws ModelManagementException;
 
     /**
      * Creates a message with an end-of-chain error.
      * 
-     * @return the mesage
+     * @return the message
      */
     List<IMessage> createEndOfChainMessage() {
         List<IMessage> result = new ArrayList<IMessage>();
-        result.add(new Message("imports are not resolved as no appropriate import resolver registered", 
-            Status.ERROR));
+        result.add(new Message(END_OF_CHAIN_MSG, Status.ERROR));
         return result;
     }
     

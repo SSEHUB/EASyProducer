@@ -28,9 +28,7 @@ class IterLet extends Let {
         this.init = init;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public ConstraintSyntaxTree getInitExpression() {
         return null != init ? init : getVariable().getDefaultValue();
     }

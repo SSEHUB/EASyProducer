@@ -151,9 +151,7 @@ public class IntegerType extends BasisDatatype {
         super("Integer", RealType.INTEGER_TYPE);
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void accept(IDatatypeVisitor visitor) {
         visitor.visitIntegerType(this);
     }

@@ -22,9 +22,7 @@ class ContainerIterators {
      */
     static final IIteratorEvaluator APPLY = new IIteratorEvaluator() {
 
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public boolean aggregate(EvaluationAccessor result, Value iter, EvaluationAccessor value, 
             Map<Object, Object> data) throws ValueDoesNotMatchTypeException {
             // actual aggregation is defined by the apply expression, do not do here anything :o
@@ -32,9 +30,7 @@ class ContainerIterators {
             return false;
         }
 
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public Value getStartResult(IDatatype type) throws ValueDoesNotMatchTypeException {
             return null; // explicit defined, shall never be called
         }
@@ -46,9 +42,7 @@ class ContainerIterators {
      */
     static final IIteratorEvaluator FOR_ALL = new IIteratorEvaluator() {
 
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public boolean aggregate(EvaluationAccessor result, Value iter, EvaluationAccessor value, 
             Map<Object, Object> data) throws ValueDoesNotMatchTypeException {
             if (!(BooleanValue.TRUE.equals(result.getValue()) 
@@ -70,9 +64,7 @@ class ContainerIterators {
      */
     static final IIteratorEvaluator EXISTS = new IIteratorEvaluator() {
         
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public boolean aggregate(EvaluationAccessor result, Value iter, EvaluationAccessor value, 
             Map<Object, Object> data) throws ValueDoesNotMatchTypeException {
             boolean stop;
@@ -86,9 +78,7 @@ class ContainerIterators {
             return stop;
         }
 
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public Value getStartResult(IDatatype type) throws ValueDoesNotMatchTypeException {
             return BooleanValue.FALSE;
         }
@@ -100,9 +90,7 @@ class ContainerIterators {
      */
     static final IIteratorEvaluator IS_UNIQUE = new IIteratorEvaluator() {
         
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public boolean aggregate(EvaluationAccessor result, Value iter, EvaluationAccessor value, 
             Map<Object, Object> data) throws ValueDoesNotMatchTypeException {
             boolean stop;
@@ -117,9 +105,7 @@ class ContainerIterators {
             return stop;
         }
 
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public Value getStartResult(IDatatype type) throws ValueDoesNotMatchTypeException {
             return BooleanValue.TRUE;
         }
@@ -131,9 +117,7 @@ class ContainerIterators {
      */
     static final IIteratorEvaluator ANY = new IIteratorEvaluator() {
         
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public boolean aggregate(EvaluationAccessor result, Value iter, EvaluationAccessor value, 
             Map<Object, Object> data) {
             boolean stop;
@@ -146,9 +130,7 @@ class ContainerIterators {
             return stop;
         }
 
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public Value getStartResult(IDatatype type) throws ValueDoesNotMatchTypeException {
             return NullValue.INSTANCE;
         }
@@ -160,9 +142,7 @@ class ContainerIterators {
      */
     static final IIteratorEvaluator ONE = new IIteratorEvaluator() {
         
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public boolean aggregate(EvaluationAccessor result, Value iter, EvaluationAccessor value, 
             Map<Object, Object> data) throws ValueDoesNotMatchTypeException {
             boolean stop;
@@ -175,9 +155,7 @@ class ContainerIterators {
             return stop;
         }
 
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public Value getStartResult(IDatatype type) throws ValueDoesNotMatchTypeException {
             return NullValue.INSTANCE;
         }
@@ -191,9 +169,7 @@ class ContainerIterators {
      */
     abstract static class CollectingIteratorEvaluator implements IIteratorEvaluator {
 
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public Value getStartResult(IDatatype type) throws ValueDoesNotMatchTypeException {
             return ValueFactory.createValue(type, (Object[]) null);
         }
@@ -205,9 +181,7 @@ class ContainerIterators {
      */
     static final IIteratorEvaluator COLLECT = new CollectingIteratorEvaluator() {
         
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public boolean aggregate(EvaluationAccessor result, Value iter, EvaluationAccessor value, 
             Map<Object, Object> data) throws ValueDoesNotMatchTypeException {
             ((ContainerValue) result.getValue()).addElement(value.getValue());
@@ -233,9 +207,7 @@ class ContainerIterators {
             this.condition = condition;
         }
         
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public boolean aggregate(EvaluationAccessor result, Value iter, EvaluationAccessor value, 
             Map<Object, Object> data) throws ValueDoesNotMatchTypeException {
             if (condition.equals(value.getValue())) {

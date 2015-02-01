@@ -45,7 +45,7 @@ public abstract class AbstractEASyEditorPage extends Composite implements IPageC
         this.plp = plp;
         setLayout(new FillLayout());
         pageListeners = new ArrayList<IEASyPageListener>();
-        toolkit = new FormToolkit(getDisplay());
+        toolkit = new FormToolkit(getDisplay()); // display is assumed to be valid!
         contentPane = toolkit.createScrolledForm(this);
         GridLayout layout = new GridLayout();
         contentPane.getBody().setLayout(layout);

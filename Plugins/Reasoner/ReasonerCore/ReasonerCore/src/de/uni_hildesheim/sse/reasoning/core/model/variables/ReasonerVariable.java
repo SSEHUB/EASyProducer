@@ -58,13 +58,19 @@ public abstract class ReasonerVariable {
         this.model = model;
         this.parent = parent;
         this.valueAssignedByReasoner = false;
-        String aState = configVariable.getState().toString();
-        if (aState.equalsIgnoreCase(AssignmentState.DERIVED.toString())) {
+//        AssignmentState aState = (AssignmentState) configVariable.getState();
+        if (configVariable.getState() == AssignmentState.DERIVED) {
             propagateNull();
         }
+        String declarationProject = configVariable.getDeclaration().getTopLevelParent().getName();
+        String mainProject = configVariable.getConfiguration().getProject().getName();
+        LOGGER.debug(configVariable.getDeclaration().getTopLevelParent().getName());
         // was null == configVariable.getValue()
         if (configVariable.getState() == AssignmentState.UNDEFINED) {
             state = ReasoningState.UNASSIGNED;
+        } else if (configVariable.getState() == AssignmentState.DEFAULT
+                && !declarationProject.equalsIgnoreCase(mainProject)) {
+            state = ReasoningState.DEFAULT_DIFFERENT;
         } else {
             state = ReasoningState.DEFAULT_SAME;
         } 

@@ -17,17 +17,11 @@ public class StringValueConverter extends AbstractLexerBasedConverter<String> {
         super();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected String toEscapedString(String value) {
         return value;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected void assertValidValue(String value) {
         super.assertValidValue(value);

@@ -19,11 +19,13 @@ import de.uni_hildesheim.sse.ivml.Typedef;
 import de.uni_hildesheim.sse.ivml.Value;
 import de.uni_hildesheim.sse.model.cst.ConstantValue;
 import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
+import de.uni_hildesheim.sse.model.cst.Self;
 import de.uni_hildesheim.sse.model.cst.Variable;
 import de.uni_hildesheim.sse.model.cst.VariablePool;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.AttributeAssignment;
 import de.uni_hildesheim.sse.model.varModel.Comment;
+import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
 import de.uni_hildesheim.sse.model.varModel.ContainableModelElementList;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
@@ -51,8 +53,10 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Sequence;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Set;
 import de.uni_hildesheim.sse.model.varModel.datatypes.StringType;
+import de.uni_hildesheim.sse.model.varModel.datatypes.VersionType;
 import de.uni_hildesheim.sse.model.varModel.values.NullValue;
 import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
+import de.uni_hildesheim.sse.utils.modelManagement.Version;
 
 /**
  * Defines a type context which consists of all variables defined in a project
@@ -79,10 +83,13 @@ import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
  */
 public class TypeContext implements IResolutionScope {
 
+    private static final boolean EMIT_NULL_WARNING = false;
+
     private ContainableModelElementList implicitDefinitions = new ContainableModelElementList(null);
     private Project project;
     private MessageReceiver messageReceiver;
     private VariablePool variablePool;
+    private Map<Compound, Self> selfPool = new HashMap<Compound, Self>();
 
     // may support shadowed variables
     private Stack<ContainableModelElementList> directContext = new Stack<ContainableModelElementList>();
@@ -415,17 +422,15 @@ public class TypeContext implements IResolutionScope {
     /**
      * Resolves a value and returns the corresponding syntax tree (one node).
      * 
-     * @param value
-     *            the value to be converted
-     * @param object
-     *            the grammar object this method is called for
-     * @param feature
-     *            the grammar feature this method is called for
+     * @param value the value to be converted
+     * @param parent the model parent
+     * @param object the grammar object this method is called for
+     * @param feature the grammar feature this method is called for
      * @return the corresponding syntax tree
      * @throws TranslatorException in case of any translation problem
      */
-    public ConstraintSyntaxTree resolveValue(Value value, EObject object,
-            EStructuralFeature feature) throws TranslatorException {
+    public ConstraintSyntaxTree resolveValue(Value value, IModelElement parent, EObject object,
+        EStructuralFeature feature) throws TranslatorException {
         ConstraintSyntaxTree result = null;
         if (null != value.getNValue()) {
             // in case that the value is a numeric value
@@ -446,45 +451,113 @@ public class TypeContext implements IResolutionScope {
         } else if (null != value.getQValue()) {
             // in case that the value is a qualified value
             String sValue = Utils.getQualifiedNameString(value.getQValue());
-            try {
-                AbstractVariable var = findVariable(sValue, null);
-                if (null == var) {
-                    try {
-                        de.uni_hildesheim.sse.model.varModel.values.Value litValue = ModelQuery
-                                .enumLiteralAsValue(project, sValue);
-                        if (null != litValue) {
-                            result = new ConstantValue(litValue);
-                        } else {
-                            IDatatype type = findType(sValue, null);
-                            if (null == type && sValue.equals(project.getName())) {
-                                type = project.getType();
-                            }
-                            if (null != type) {
-                                result = new ConstantValue(ValueFactory.createValue(MetaType.TYPE, type));
-                            } else {
-                                throw new TranslatorException("'" + sValue + "' is unknown", object, feature,
-                                    ErrorCodes.UNKNOWN_ELEMENT);
-                            }
-                        }
-                    } catch (IvmlException e) {
-                        throw new TranslatorException(e, object, feature);
-                    }
-                } else {
-                    result = obtainVariable(var);
-                }
-            } catch (IvmlException e) {
-                throw new TranslatorException(e, object, feature);
+            if (Version.isVersion(sValue)) { // mapped to qualifiedName by parser :o
+                result = createValueTree(sValue, VersionType.TYPE, object, feature);
+            } else {
+                result = processQValue(sValue, object, feature);
             }
         } else if (null != value.getSValue()) { // string value
             result = createValueTree(value.getSValue(), StringType.TYPE, object, feature);
         } else if (null != value.getBValue()) { // boolean value
             result = createValueTree(value.getBValue(), BooleanType.TYPE, object, feature);
+        } else if (null != value.getSelf()) {
+            result = resolveSelf(parent, object, feature);
         } else if (null != value.getNullValue()) {
             result = new ConstantValue(NullValue.INSTANCE);
-            messageReceiver.warning("'null' values are currently not fully supported by the reasoner", object, feature, 
-                Message.CODE_IGNORE);
+            if (EMIT_NULL_WARNING) {
+                messageReceiver.warning("'null' values are currently not fully supported by the reasoner", object, 
+                    feature, Message.CODE_IGNORE);
+            }
+        } else if (null != value.getVersion()) {
+            result = createValueTree(value.getVersion(), VersionType.TYPE, object, feature);
         } else {
             throw new TranslatorException("<no type alternative>", object, feature, ErrorCodes.INTERNAL);
+        }
+        return result;
+    }
+
+    /**
+     * Resolves "self" and returns the corresponding syntax tree (one node).
+     * 
+     * @param parent the model parent
+     * @param object the grammar object this method is called for
+     * @param feature the grammar feature this method is called for
+     * @return the corresponding syntax tree
+     * @throws TranslatorException in case of any translation problem
+     */
+    private ConstraintSyntaxTree resolveSelf(IModelElement parent, EObject object, EStructuralFeature feature) 
+        throws TranslatorException {
+        ConstraintSyntaxTree result = null;
+        if (parent instanceof Constraint) { // typically we are in a constraint
+            parent = parent.getParent();
+            if (parent instanceof Compound) {
+                result = getSelf((Compound) parent);
+            } 
+        } else if (parent instanceof Compound) {
+            result = getSelf((Compound) parent);
+        }
+        if (null == result) {
+            throw new TranslatorException("self is only defined in compounds", object, feature, 
+                ErrorCodes.UNKNOWN_ELEMENT);
+        }
+        return result;
+    }
+    
+    /**
+     * Returns a self instance from the self pool.
+     * 
+     * @param comp the compond to return the self instance for
+     * @return the self instance
+     */
+    private Self getSelf(Compound comp) {
+        Self self = selfPool.get(comp);
+        if (null == self) {
+            self = new Self(comp);
+            selfPool.put(comp, self);
+        }
+        return self;
+    }
+    
+    /**
+     * Processes a qualified name as value.
+     * 
+     * @param sValue the qualified name as string
+     * @param object the grammar object this method is called for
+     * @param feature the grammar feature this method is called for
+     * @return the corresponding syntax tree
+     * @throws TranslatorException in case of any translation problem
+     */
+    private ConstraintSyntaxTree processQValue(String sValue, EObject object,
+        EStructuralFeature feature) throws TranslatorException {
+        ConstraintSyntaxTree result = null;
+        try {
+            AbstractVariable var = findVariable(sValue, null);
+            if (null == var) {
+                try {
+                    de.uni_hildesheim.sse.model.varModel.values.Value litValue = ModelQuery
+                            .enumLiteralAsValue(project, sValue);
+                    if (null != litValue) {
+                        result = new ConstantValue(litValue);
+                    } else {
+                        IDatatype type = findType(sValue, null);
+                        if (null == type && sValue.equals(project.getName())) {
+                            type = project.getType();
+                        }
+                        if (null != type) {
+                            result = new ConstantValue(ValueFactory.createValue(MetaType.TYPE, type));
+                        } else {
+                            throw new TranslatorException("'" + sValue + "' is unknown", object, feature,
+                                ErrorCodes.UNKNOWN_ELEMENT);
+                        }
+                    }
+                } catch (IvmlException e) {
+                    throw new TranslatorException(e, object, feature);
+                }
+            } else {
+                result = obtainVariable(var);
+            }
+        } catch (IvmlException e) {
+            throw new TranslatorException(e, object, feature);
         }
         return result;
     }
@@ -509,46 +582,32 @@ public class TypeContext implements IResolutionScope {
         return result;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public int getImportsCount() {
         return 0;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public ProjectImport getImport(int index) {
         throw new IndexOutOfBoundsException();
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public IModelElement getParent() {
         return null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public String getName() {
         return "";
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public boolean hasInterfaces() {
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    // @Override
-    // CK: Override causes errors in build process (Java > 1.5 required!)
+    @Override
     public boolean isInterface() {
         return false;
     }
@@ -660,9 +719,7 @@ public class TypeContext implements IResolutionScope {
         elementSortMaps.clear();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public ContainableModelElement getElement(String name) {
         return project.getElement(name);
     }

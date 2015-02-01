@@ -23,7 +23,8 @@ public interface IConfiguration {
      * Returns all instances of <code>type</code>.
      *  
      * @param type the type to return the instances for
-     * @return all instances of type (may be <b>null</b> if this is not possible, e.g., in case of Integer)
+     * @return all instances of type in terms of a container value consisting of references (may be <b>null</b> if 
+     * this is not possible, e.g., in case of Integer)
      */
     public Value getAllInstances(IDatatype type);
 

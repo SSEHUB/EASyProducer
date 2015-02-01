@@ -19,6 +19,7 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Sequence;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Set;
 import de.uni_hildesheim.sse.model.varModel.datatypes.StringType;
+import de.uni_hildesheim.sse.model.varModel.datatypes.VersionType;
 import de.uni_hildesheim.sse.reasoning.core.model.variables.BooleanVariable;
 import de.uni_hildesheim.sse.reasoning.core.model.variables.CompoundVariable;
 import de.uni_hildesheim.sse.reasoning.core.model.variables.EnumVariable;
@@ -134,4 +135,10 @@ class DatatypeTester implements IDatatypeVisitor {
     public void visitAnyType(AnyType datatype) {
         Assert.fail("Not supported Datatype");
     }
+
+    @Override
+    public void visitVersionType(VersionType type) {
+        Assert.fail("Not supported Datatype");
+    }
+    
 }

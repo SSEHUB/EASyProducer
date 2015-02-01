@@ -1,0 +1,50 @@
+-> main(Configuration, FileArtifact) with (<config>, test.texts)
+    -> byName(Configuration, String) with (<config>, fNormalize) = qm1::fNormalize
+    fm <- qm1::fNormalize
+    -> output(Family) with (qm1::fNormalize) = {qm1::Family::output [0]}
+    for t {
+        t <- qm1::Family::output [0]
+        -> fields(Tuple) with (qm1::Family::output [0]) = {qm1::Tuple::, qm1::Tuple::, qm1::Tuple::, qm1::Tuple::}
+        for f {
+            f <- qm1::Tuple::
+            -> name(Field) with (qm1::Tuple::) = qm1::Field::name
+            name <- streamID
+            -> type(Field) with (qm1::Tuple::) = qm1::Field::type
+            type <- STRING
+            -> fieldTypeName(DecisionVariable) with (qm1::Tuple::)
+                -> byName(DecisionVariable, String) with (qm1::Tuple::, type) = qm1::Field::type
+                switch(qm1::Field::type)
+                    3 : String
+            fType <- String
+            f <- qm1::Tuple::
+            -> name(Field) with (qm1::Tuple::) = qm1::Field::name
+            name <- timestamp
+            -> type(Field) with (qm1::Tuple::) = qm1::Field::type
+            type <- STRING
+            -> fieldTypeName(DecisionVariable) with (qm1::Tuple::)
+                -> byName(DecisionVariable, String) with (qm1::Tuple::, type) = qm1::Field::type
+                switch(qm1::Field::type)
+                    3 : String
+            fType <- String
+            f <- qm1::Tuple::
+            -> name(Field) with (qm1::Tuple::) = qm1::Field::name
+            name <- quote
+            -> type(Field) with (qm1::Tuple::) = qm1::Field::type
+            type <- REAL
+            -> fieldTypeName(DecisionVariable) with (qm1::Tuple::)
+                -> byName(DecisionVariable, String) with (qm1::Tuple::, type) = qm1::Field::type
+                switch(qm1::Field::type)
+                    2 : double
+            fType <- double
+            f <- qm1::Tuple::
+            -> name(Field) with (qm1::Tuple::) = qm1::Field::name
+            name <- volume
+            -> type(Field) with (qm1::Tuple::) = qm1::Field::type
+            type <- INTEGER
+            -> fieldTypeName(DecisionVariable) with (qm1::Tuple::)
+                -> byName(DecisionVariable, String) with (qm1::Tuple::, type) = qm1::Field::type
+                switch(qm1::Field::type)
+                    0 : int
+            fType <- int
+        }
+    }

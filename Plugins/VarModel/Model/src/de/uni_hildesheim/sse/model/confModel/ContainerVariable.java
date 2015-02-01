@@ -68,17 +68,13 @@ public abstract class ContainerVariable extends StructuredVariable {
         nestedElements.clear();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public int getNestedElementsCount() {
         // During initialization, nestedElements can be null
         return null == nestedElements ? 0 : nestedElements.size();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public IDecisionVariable getNestedElement(int index) {
         return nestedElements.get(index);
     }
@@ -93,9 +89,7 @@ public abstract class ContainerVariable extends StructuredVariable {
         return nestedElements.indexOf(var);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void setValue(Value value, IAssignmentState state, IConfigurationElement nested)
         throws ConfigurationException {
 
@@ -127,7 +121,8 @@ public abstract class ContainerVariable extends StructuredVariable {
             if (conValue != null) {
                 for (int i = 0; i < conValue.getElementSize(); i++) {
                     String name = getElementName(i);
-                    DecisionVariableDeclaration decl = new DecisionVariableDeclaration(name, type, getDeclaration());
+                    IDatatype eltType = conValue.getElement(i).getType(); // eanble heterogenous polymorphic coll.
+                    DecisionVariableDeclaration decl = new DecisionVariableDeclaration(name, eltType, getDeclaration());
                     VariableCreator creator = new VariableCreator(decl, this, isVisible());
                     try {
                         IDecisionVariable var = creator.getVariable();
@@ -153,9 +148,7 @@ public abstract class ContainerVariable extends StructuredVariable {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void freeze(String nestedElement) {
         // Not supported by this class
     }

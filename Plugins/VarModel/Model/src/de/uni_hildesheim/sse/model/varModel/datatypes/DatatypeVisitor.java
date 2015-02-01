@@ -112,9 +112,7 @@ public abstract class DatatypeVisitor implements IDatatypeVisitor {
         //builder.delete(0, builder.length());
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitDatatype(IDatatype datatype) {
         switch (getQualifiedNameMode()) {
         case QUALIFIED:
@@ -131,23 +129,17 @@ public abstract class DatatypeVisitor implements IDatatypeVisitor {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitSet(Set set) {
         constructSurrounded(setPrefix, set.getContainedType());
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitSequence(Sequence sequence) {
         constructSurrounded(sequencePrefix, sequence.getContainedType());
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitReference(Reference ref) {
         constructReferenceName(ref.getType());
     }
@@ -177,51 +169,37 @@ public abstract class DatatypeVisitor implements IDatatypeVisitor {
         append(close);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitBooleanType(BooleanType type) {
         visitDatatype(type);        
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitConstraintType(ConstraintType type) {
         visitDatatype(type);
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitAnyType(AnyType type) {
         visitDatatype(type);        
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitMetaType(MetaType type) {
         visitDatatype(type);        
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitStringType(StringType type) {
         visitDatatype(type);        
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitIntegerType(IntegerType type) {
         visitDatatype(type);        
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitRealType(RealType type) {
         visitDatatype(type);        
     }
@@ -236,32 +214,29 @@ public abstract class DatatypeVisitor implements IDatatypeVisitor {
         return getResult();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitCompoundType(Compound compound) {
         visitDatatype(compound);        
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitEnumType(Enum enumType) {
         visitDatatype(enumType);        
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitOrderedEnumType(OrderedEnum enumType) {
         visitDatatype(enumType);        
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitDerivedType(DerivedDatatype datatype) {
         visitDatatype(datatype);
+    }
+    
+    @Override
+    public void visitVersionType(VersionType type) {
+        visitDatatype(type);        
     }
 
 }

@@ -8,6 +8,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Operation
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Sequence;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.UnmodifiableSet;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 
 /**
@@ -61,7 +62,7 @@ public class Attribute extends AbstractIvmlVariable {
     @Invisible
     @Override
     public Set<Attribute> attributes() {
-        return ArraySet.empty(DecisionVariable.class);
+        return new UnmodifiableSet<Attribute>(ArraySet.empty(Attribute.class));
     }
 
     // ---------------------------- conversions -----------------------------

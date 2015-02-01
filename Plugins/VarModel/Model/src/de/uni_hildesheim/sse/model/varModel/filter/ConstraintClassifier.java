@@ -22,12 +22,12 @@ import de.uni_hildesheim.sse.model.cst.ConstantValue;
 import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
 import de.uni_hildesheim.sse.model.cst.ContainerInitializer;
 import de.uni_hildesheim.sse.model.cst.ContainerOperationCall;
-import de.uni_hildesheim.sse.model.cst.DslFragment;
 import de.uni_hildesheim.sse.model.cst.IConstraintTreeVisitor;
 import de.uni_hildesheim.sse.model.cst.IfThen;
 import de.uni_hildesheim.sse.model.cst.Let;
 import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
 import de.uni_hildesheim.sse.model.cst.Parenthesis;
+import de.uni_hildesheim.sse.model.cst.Self;
 import de.uni_hildesheim.sse.model.cst.UnresolvedExpression;
 import de.uni_hildesheim.sse.model.cst.Variable;
 import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
@@ -93,9 +93,7 @@ class ConstraintClassifier implements IConstraintTreeVisitor {
         return isAssingmentConstraint;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitConstantValue(ConstantValue value) {
         if (nextType != ExpectedType.CONSTANT_VALUE) {
             //stop here
@@ -103,9 +101,7 @@ class ConstraintClassifier implements IConstraintTreeVisitor {
         } 
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitVariable(Variable variable) {
         if ((nextType == ExpectedType.VARIABLE && variable.getVariable().getType() == Reference.TYPE)) {
             nextType = ExpectedType.REFERENCE_VALUE;            
@@ -115,43 +111,33 @@ class ConstraintClassifier implements IConstraintTreeVisitor {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitParenthesis(Parenthesis parenthesis) {
         //stop here
         isAssingmentConstraint = false;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitContainerInitializer(ContainerInitializer init) {
         // TODO check
         //stop here
         isAssingmentConstraint = false;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitCompoundInitializer(CompoundInitializer init) {
         // TODO check
         //stop here
         isAssingmentConstraint = false;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitComment(Comment parenthesis) {
         //stop here
         isAssingmentConstraint = false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitOclFeatureCall(OCLFeatureCall call) {
         //TODO SE: check whether an AssingmentConstraint can have more than one parameter
         if (nextType == ExpectedType.OCL_FEATURE_CALL && call.getOperation().equals(OclKeyWords.ASSIGNMENT)
@@ -171,50 +157,33 @@ class ConstraintClassifier implements IConstraintTreeVisitor {
         } 
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitLet(Let let) {
         //stop here
         isAssingmentConstraint = false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitIfThen(IfThen ifThen) {
         //stop here
         isAssingmentConstraint = false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitContainerOperationCall(ContainerOperationCall call) {
         //stop here
         isAssingmentConstraint = false; 
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitCompoundAccess(CompoundAccess access) {
         if (nextType != ExpectedType.VARIABLE) {
             //stop here
             isAssingmentConstraint = false;
         } 
     }
-    /**
-     * {@inheritDoc}
-     */
-    public void visitDslFragment(DslFragment fragment) {
-        //stop here
-        isAssingmentConstraint = false; 
-    }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void visitUnresolvedExpression(UnresolvedExpression expression) {
         ConstraintSyntaxTree actual = expression.getActualExpression();
         if (null != actual) {
@@ -222,4 +191,12 @@ class ConstraintClassifier implements IConstraintTreeVisitor {
         }
     }
     
+    @Override
+    public void visitSelf(Self self) {
+        if (nextType != ExpectedType.VARIABLE) {
+            //stop here, treat as variable
+            isAssingmentConstraint = false;
+        }
+    }
+
 }

@@ -1,6 +1,7 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Conversion;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
 
 /**
@@ -37,7 +38,7 @@ public class JavaPath extends Path {
         if (null != prefixRegEx) {
             tmp = tmp.replaceAll(prefixRegEx, "");
         }
-        if (FileUtils.isFile(tmp)) {
+        if (FileUtils.isFile(tmp) && (tmp.endsWith(".java") || tmp.endsWith(".class"))) {
             int pos = tmp.lastIndexOf('.');
             if (pos > 0) {
                 tmp = tmp.substring(0, pos);
@@ -140,6 +141,15 @@ public class JavaPath extends Path {
     public String getPathSegments() {
         return getPackage();
     }
+    
+    /**
+     * Returns the path segments as Java path.
+     * 
+     * @return the path segments
+     */
+    public JavaPath getPathSegmentsPath() {
+        return convert(getPackage());
+    }
 
     /**
      * Returns the package part of this path.
@@ -160,6 +170,24 @@ public class JavaPath extends Path {
     @Override
     public String getStringValue(StringComparator comparator) {
         return path;
+    }
+    
+    /**
+     * Conversion operation.
+     * 
+     * @param val the value to be converted
+     * @return the converted value
+     */
+    @Invisible
+    @Conversion
+    public static JavaPath convert(String val) {
+        JavaPath result;
+        try {
+            result = new JavaPath(Path.convert(val));
+        } catch (ArtifactException e) {
+            result = null;
+        }
+        return result;
     }
     
 }

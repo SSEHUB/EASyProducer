@@ -10,6 +10,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Scr
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.RuntimeEnvironment;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VariableDeclaration;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.IInstantiatorTracer;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression.CallType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Def;
@@ -29,7 +30,7 @@ import de.uni_hildesheim.sse.utils.modelManagement.Version;
  */
 public abstract class AbstractVilTracer 
     implements de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ITracer, 
-    de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.ITracer {
+    de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.ITracer, IInstantiatorTracer {
 
     private static final String INDENTATION_STEP = "  ";
     private String indentation = "";
@@ -305,6 +306,24 @@ public abstract class AbstractVilTracer
     @Override
     public void reset() {
         indentation = "";
+    }
+
+    /**
+     * Trace a message (usually going to System.out in an instantiator).
+     * 
+     * @param message the message to be traced
+     */
+    public void traceMessage(String message) {
+        write(message);
+    }
+
+    /**
+     * Trace an error (usually going to System.err in an instantiator).
+     * 
+     * @param message the message to be traced
+     */
+    public void traceError(String message) {
+        write(message);
     }
 
 }

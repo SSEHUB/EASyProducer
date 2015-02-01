@@ -19,7 +19,7 @@ import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
  * resolvers ({@link ITypeResolver}) allow deferred type resolution on other models, 
  * e.g., variability models. Type retrieval calls using a class are intended to be used
  * by the implementation (and may prevent creating dynamic types) while the others
- * based on string are inteded for resolution of names used in the VIL/VTL.
+ * based on string are intended for resolution of names used in the VIL/VTL.
  * 
  * @author Holger Eichelberger
  */
@@ -219,8 +219,8 @@ public class TypeRegistry {
         TypeDescriptor<T> desc;
         if (type.equals(PseudoType.class)) {
             desc = (TypeDescriptor<T>) ReflectionTypeDescriptor.TYPE;
-        } else {    
-            desc = new ReflectionTypeDescriptor<T>(type);
+        } else {
+            desc = createTypeDescriptor(type);
         }
         if (null == inst) {
             register(key, desc);
@@ -233,6 +233,31 @@ public class TypeRegistry {
         } else {
             testInstantiatorType(desc, inst);
             instantiators.put(inst.value(), desc);
+        }
+        return desc;
+    }
+
+    /**
+     * Creates a type descriptor considering {@link IActualValueProvider}.
+     * 
+     * @param <T> the VIL type
+     * @param type the type the descriptor shall be created for
+     * @return the descriptor
+     * @throws VilException in case that creating the descriptor fails
+     */
+    private static <T extends IVilType> TypeDescriptor<T> createTypeDescriptor(Class<T> type) throws VilException {
+        TypeDescriptor<T> desc = null;
+        if (IActualValueProvider.class.isAssignableFrom(type)) {
+            try {
+                desc = new ActualValueReflectionTypeDescriptor<T>(type.getDeclaredConstructor());
+            } catch (NoSuchMethodException e) {
+                // use default descriptor instead
+            } catch (SecurityException e) {
+                // use default descriptor instead
+            }
+        }
+        if (null == desc) {
+            desc = new ReflectionTypeDescriptor<T>(type);
         }
         return desc;
     }
@@ -627,6 +652,15 @@ public class TypeRegistry {
     public static final TypeDescriptor<? extends IVilType> booleanType() {
         return DEFAULT.getType(Constants.TYPE_BOOLEAN);
     }
+
+    /**
+     * Returns the type descriptor for the built-in type 'Version'.
+     * 
+     * @return the type descriptor
+     */
+    public static final TypeDescriptor<? extends IVilType> versionType() {
+        return ReflectionTypeDescriptor.VERSION;
+    }
     
     /**
      * Returns the type descriptor for the built-in type 'any'.
@@ -749,6 +783,46 @@ public class TypeRegistry {
                     result[p] = ReflectionTypeDescriptor.VOID;
                 }
             }
+        }
+        return result;
+    }
+    
+    /**
+     * Returns whether two types are equal.
+     * 
+     * @param t1 the first type to be compared
+     * @param t2 the second type to be compared
+     * @return <code>true</code> if <code>t1</code> and <code>t2</code> are equal, <code>false</code> else
+     */
+    public static final boolean equals(IMetaType t1, IMetaType t2) {
+        boolean equals = false;
+        if (null != t1 && null != t2) {
+            equals = t1.getName().equals(t2.getName());
+            if (t1 instanceof TypeDescriptor && t2 instanceof TypeDescriptor) {
+                TypeDescriptor<?> td1 = (TypeDescriptor<?>) t1;
+                TypeDescriptor<?> td2 = (TypeDescriptor<?>) t2;
+                if (td1.getParameterCount() == td2.getParameterCount()) {
+                    for (int p = 0; equals && p < td1.getParameterCount(); p++) {
+                        equals = equals(td1.getParameterType(p), td2.getParameterType(p));
+                    }
+                }
+            }
+        }
+        return equals;
+    }
+
+    /**
+     * Returns the VIL name of <code>type</code>.
+     * 
+     * @param type the type to return the name for
+     * @return the VIL name (if possible), the name else
+     */
+    public static String toName(IMetaType type) {
+        String result;
+        if (type instanceof TypeDescriptor) {
+            result = ((TypeDescriptor<?>) type).getVilName();
+        } else {
+            result = type.getName();
         }
         return result;
     }

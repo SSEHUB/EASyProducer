@@ -15,6 +15,8 @@
  */
 package de.uni_hildesheim.sse.utils.modelManagement;
 
+import java.util.regex.Pattern;
+
 /**
  * Represents the version of an import.
  * @author Marcel Lueder
@@ -22,9 +24,19 @@ package de.uni_hildesheim.sse.utils.modelManagement;
  * @author Pastusch
  */
 public class Version implements Comparable<Version> {
+    
+    public static final Version NULL_VALUE = new Version();
+    private static final Pattern PATTERN = Pattern.compile("v\\d+(\\.\\d+)*");
     private static final String SEPARATOR = ".";
     private int[] segments;
 
+    /**
+     * Represents the null-Version (not given).
+     */
+    private Version() {
+        segments = new int[0];
+    }
+    
     /**
      * Creates a new version by parsing a string.
      * @param version the version string in form i(.i)* with i integer numbers 
@@ -58,6 +70,22 @@ public class Version implements Comparable<Version> {
             segments = new int[1];
             segments[0] = 0;
         }
+    }
+
+    /**
+     * Returns whether the given <code>string</code> denotes a version.
+     * 
+     * @param string the string to be tested
+     * @return <code>true</code>if <code>string</code> is a version, <code>false</code> else
+     */
+    public static final boolean isVersion(String string) {
+        boolean isVersion;
+        if (null == string) {
+            isVersion = false;
+        } else {
+            isVersion = PATTERN.matcher(string).matches();
+        }
+        return isVersion;
     }
     
     /**
@@ -167,6 +195,12 @@ public class Version implements Comparable<Version> {
      */
     public static boolean equals(Version version1, Version version2) {
         boolean equals = false;
+        if (NULL_VALUE == version1) {
+            version1 = null;
+        }
+        if (NULL_VALUE == version2) {
+            version2 = null;
+        }
         if (null == version1) {
             equals = (null == version2);
         } else {
@@ -175,6 +209,37 @@ public class Version implements Comparable<Version> {
             }
         }
         return equals;
+    }
+
+    /**
+     * Compares two versions considering <b>null</b> for both parameters and results in:
+     * -1 : this is smaller <=> given version and this is bigger.
+     *  0 : given version and this are equal.
+     * +1 : this is bigger <=> given version is smaller.
+     * @param version1 the first version to compare.
+     * @param version2 the second version to compare.
+     * @return result in {-1, 0, 1}.
+     */
+    public static int compare(Version version1, Version version2) {
+        int result;
+        if (NULL_VALUE == version1) {
+            version1 = null;
+        }
+        if (NULL_VALUE == version2) {
+            version2 = null;
+        }
+        if (null == version1) {
+            if (null == version2) {
+                result = 0;
+            } else {
+                result = -1;
+            }
+        } else if (null == version2) {
+            result = 1;
+        } else {
+            result = version1.compareTo(version2);
+        }
+        return result;
     }
     
     /**

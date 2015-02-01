@@ -31,6 +31,7 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Sequence;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Set;
 import de.uni_hildesheim.sse.model.varModel.datatypes.StringType;
+import de.uni_hildesheim.sse.model.varModel.datatypes.VersionType;
 
 /**
  * The ValueFactory provides easy access to the Values.
@@ -55,6 +56,8 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.StringType;
  * @author El-Sharkawy
  */
 public class ValueFactory {
+    
+    public static final Object[] EMPTY = {};
     
     /**
      * This map values associated to the origin datatype.
@@ -100,6 +103,7 @@ public class ValueFactory {
         
         // Assign pseudo types
         assignMetaTypeValue();
+        assignVersionTypeValue();
     }
     
     /**
@@ -178,7 +182,7 @@ public class ValueFactory {
     }
 
     /**
-     * This method assigns the constructor for <code>BooleanValues</code> to the IDatatype <code>BooleanType</code>.
+     * This method assigns the constructor for <code>MetaTypeValue</code> to the IDatatype <code>MetaType</code>.
      */
     private static void assignMetaTypeValue() {
         map.put(MetaType.class, new IValueCreator() {
@@ -194,7 +198,25 @@ public class ValueFactory {
             }
         });
     }
-    
+
+    /**
+     * This method assigns the constructor for <code>VersionValue</code> to the IDatatype <code>VersionType</code>.
+     */
+    private static void assignVersionTypeValue() {
+        map.put(VersionType.class, new IValueCreator() {
+            public VersionValue createValue(IDatatype type, Object... value) throws ValueDoesNotMatchTypeException {
+                VersionValue ret;
+                if (null == value) {
+                    throw new ValueDoesNotMatchTypeException("no value given", 
+                        ValueDoesNotMatchTypeException.NO_DATATYPE);
+                } else {
+                    ret = new VersionValue(value[0]);
+                }
+                return ret;
+            }
+        });
+    }
+
     /**
      * This method assigns the constructor for <code>BooleanValues</code> to the IDatatype <code>BooleanType</code>.
      */
@@ -326,7 +348,6 @@ public class ValueFactory {
         } else {
             returnValue = map.get(type.getTypeClass()).createValue(type.getType(), value);
         }
-        
         return returnValue;
     }
 

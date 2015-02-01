@@ -1,0 +1,11 @@
+-> main()
+    familyName <- fAdd10
+    -> length(String) with (fAdd10) = 6
+    -> -(Integer, Integer) with (6, 1) = 5
+    end <- 5
+    -> substring(String, Integer, Integer) with (fAdd10, 1, 5) = Add1
+    aName <- Add1
+    -> length(String) with (fAdd10) = 6
+    end <- 6
+    -> substring(String, Integer, Integer) with (fAdd10, 1, 6) = Add10
+    aName <- Add10

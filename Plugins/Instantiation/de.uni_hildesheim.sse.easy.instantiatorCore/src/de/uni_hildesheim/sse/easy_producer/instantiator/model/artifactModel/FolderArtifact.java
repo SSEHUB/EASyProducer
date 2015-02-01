@@ -7,6 +7,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.repr
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Text;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Conversion;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IActualValueProvider;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ListSet;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationMeta;
@@ -18,11 +19,18 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
  * @author Holger Eichelberger
  */
 @ArtifactCreator(DefaultFolderArtifactCreator.class)
-public class FolderArtifact extends SimpleArtifact implements IFileSystemArtifact, IArtifactChangedListener {
+public class FolderArtifact extends SimpleArtifact implements IFileSystemArtifact, IArtifactChangedListener, 
+    IActualValueProvider {
 
     // TODO use listener to reload after changes
     
     private Path path;
+
+    /**
+     * Default constructor for {@link IActualValueProvider actual value provider template}.
+     */
+    FolderArtifact() {
+    }
 
     /**
      * Creates a path artifact from the given <code>path</code>. A path may be 
@@ -63,6 +71,7 @@ public class FolderArtifact extends SimpleArtifact implements IFileSystemArtifac
     }
 
     @Override
+    @OperationMeta(storeArtifactsBefore = true)
     public void delete() throws ArtifactException {
         path.delete();
     }
@@ -73,8 +82,11 @@ public class FolderArtifact extends SimpleArtifact implements IFileSystemArtifac
     }
 
     @Override
+    @OperationMeta(storeArtifactsBefore = true)
     public void rename(String name) throws ArtifactException {
+        path.getArtifactModel().beforeRename(this);
         path = path.rename(name);
+        path.getArtifactModel().afterRename(this);
     }
 
     @Override
@@ -98,13 +110,13 @@ public class FolderArtifact extends SimpleArtifact implements IFileSystemArtifac
     }
 
     @Override
-    @OperationMeta(returnGenerics = IFileSystemArtifact.class)
+    @OperationMeta(returnGenerics = IFileSystemArtifact.class, storeArtifactsBefore = true )
     public Set<IFileSystemArtifact> move(IFileSystemArtifact target) throws ArtifactException {
         return new ListSet<IFileSystemArtifact>(FileUtils.move(this, target), IFileSystemArtifact.class);
     }
 
     @Override
-    @OperationMeta(returnGenerics = IFileSystemArtifact.class)
+    @OperationMeta(returnGenerics = IFileSystemArtifact.class, storeArtifactsBefore = true )
     public Set<IFileSystemArtifact> copy(IFileSystemArtifact target) throws ArtifactException {
         return new ListSet<IFileSystemArtifact>(FileUtils.copy(this, target), IFileSystemArtifact.class);
     }
@@ -199,6 +211,20 @@ public class FolderArtifact extends SimpleArtifact implements IFileSystemArtifac
     @Override
     public void update() throws ArtifactException {
         // TODO check whether functionality is actually needed
+    }
+
+    @Override
+    public Object determineActualValue(Object object) {
+        // by default, for non-existing paths a folder is created
+        Object result = object;
+        if (object instanceof FileArtifact) {
+            FileArtifact file = (FileArtifact) object;
+            if (!file.exists()) {
+                Path path = file.getPath();
+                result = new FolderArtifact(path);
+            }
+        }
+        return result;
     }
     
 }

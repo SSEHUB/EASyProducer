@@ -101,4 +101,11 @@ public interface IValueVisitor {
      */
     void visitNullValue(NullValue value);
 
+    /**
+     * This method is used for visiting a version value.<br/>
+     * 
+     * @param value a value which should be visited.
+     */
+    void visitVersionValue(VersionValue value);
+
 }

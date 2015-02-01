@@ -2,10 +2,9 @@
  */
 package de.uni_hildesheim.sse.vilBuildLanguage.impl;
 
-import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionStatement;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration;
 
-import de.uni_hildesheim.sse.vilBuildLanguage.DeferDeclaration;
+import de.uni_hildesheim.sse.vilBuildLanguage.ExpressionStatement;
 import de.uni_hildesheim.sse.vilBuildLanguage.RuleElement;
 import de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage;
 
@@ -27,7 +26,6 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.RuleElementImpl#getVarDecl <em>Var Decl</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.RuleElementImpl#getExprStmt <em>Expr Stmt</em>}</li>
- *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.RuleElementImpl#getDeferDecl <em>Defer Decl</em>}</li>
  * </ul>
  * </p>
  *
@@ -54,16 +52,6 @@ public class RuleElementImpl extends MinimalEObjectImpl.Container implements Rul
    * @ordered
    */
   protected ExpressionStatement exprStmt;
-
-  /**
-   * The cached value of the '{@link #getDeferDecl() <em>Defer Decl</em>}' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getDeferDecl()
-   * @generated
-   * @ordered
-   */
-  protected DeferDeclaration deferDecl;
 
   /**
    * <!-- begin-user-doc -->
@@ -187,54 +175,6 @@ public class RuleElementImpl extends MinimalEObjectImpl.Container implements Rul
    * <!-- end-user-doc -->
    * @generated
    */
-  public DeferDeclaration getDeferDecl()
-  {
-    return deferDecl;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public NotificationChain basicSetDeferDecl(DeferDeclaration newDeferDecl, NotificationChain msgs)
-  {
-    DeferDeclaration oldDeferDecl = deferDecl;
-    deferDecl = newDeferDecl;
-    if (eNotificationRequired())
-    {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, VilBuildLanguagePackage.RULE_ELEMENT__DEFER_DECL, oldDeferDecl, newDeferDecl);
-      if (msgs == null) msgs = notification; else msgs.add(notification);
-    }
-    return msgs;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setDeferDecl(DeferDeclaration newDeferDecl)
-  {
-    if (newDeferDecl != deferDecl)
-    {
-      NotificationChain msgs = null;
-      if (deferDecl != null)
-        msgs = ((InternalEObject)deferDecl).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - VilBuildLanguagePackage.RULE_ELEMENT__DEFER_DECL, null, msgs);
-      if (newDeferDecl != null)
-        msgs = ((InternalEObject)newDeferDecl).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - VilBuildLanguagePackage.RULE_ELEMENT__DEFER_DECL, null, msgs);
-      msgs = basicSetDeferDecl(newDeferDecl, msgs);
-      if (msgs != null) msgs.dispatch();
-    }
-    else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, VilBuildLanguagePackage.RULE_ELEMENT__DEFER_DECL, newDeferDecl, newDeferDecl));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
@@ -244,8 +184,6 @@ public class RuleElementImpl extends MinimalEObjectImpl.Container implements Rul
         return basicSetVarDecl(null, msgs);
       case VilBuildLanguagePackage.RULE_ELEMENT__EXPR_STMT:
         return basicSetExprStmt(null, msgs);
-      case VilBuildLanguagePackage.RULE_ELEMENT__DEFER_DECL:
-        return basicSetDeferDecl(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -264,8 +202,6 @@ public class RuleElementImpl extends MinimalEObjectImpl.Container implements Rul
         return getVarDecl();
       case VilBuildLanguagePackage.RULE_ELEMENT__EXPR_STMT:
         return getExprStmt();
-      case VilBuildLanguagePackage.RULE_ELEMENT__DEFER_DECL:
-        return getDeferDecl();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -285,9 +221,6 @@ public class RuleElementImpl extends MinimalEObjectImpl.Container implements Rul
         return;
       case VilBuildLanguagePackage.RULE_ELEMENT__EXPR_STMT:
         setExprStmt((ExpressionStatement)newValue);
-        return;
-      case VilBuildLanguagePackage.RULE_ELEMENT__DEFER_DECL:
-        setDeferDecl((DeferDeclaration)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -309,9 +242,6 @@ public class RuleElementImpl extends MinimalEObjectImpl.Container implements Rul
       case VilBuildLanguagePackage.RULE_ELEMENT__EXPR_STMT:
         setExprStmt((ExpressionStatement)null);
         return;
-      case VilBuildLanguagePackage.RULE_ELEMENT__DEFER_DECL:
-        setDeferDecl((DeferDeclaration)null);
-        return;
     }
     super.eUnset(featureID);
   }
@@ -330,8 +260,6 @@ public class RuleElementImpl extends MinimalEObjectImpl.Container implements Rul
         return varDecl != null;
       case VilBuildLanguagePackage.RULE_ELEMENT__EXPR_STMT:
         return exprStmt != null;
-      case VilBuildLanguagePackage.RULE_ELEMENT__DEFER_DECL:
-        return deferDecl != null;
     }
     return super.eIsSet(featureID);
   }

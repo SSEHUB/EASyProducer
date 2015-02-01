@@ -1,0 +1,33 @@
+project Hardware {
+
+    import Basics;
+	
+	attribute BindingTime bindingTime = BindingTime.compile to Hardware;
+	
+	enum MachineRole {Manager, Worker};
+	
+	compound Machine {
+		NonEmptyString name;
+		PositiveInteger memory;       // open
+		PositiveInteger processors;   // open
+		PositiveInteger frequency;    // open
+		setOf(PortInteger) ports;
+		MachineRole role;
+		
+		// Manager should not have any used ports
+		Constraint machineRole = role == MachineRole.Manager implies ports.isEmpty() == true;
+	}
+	 
+	  
+	setOf(Machine) machines;
+
+	// Checks if there are no duplicate ports, in other words if no machine is using a port already used by another machine.
+	Constraint duplicatePorts = machines->apply(Machine machine; sequenceOf(Integer) usedPorts = {} | usedPorts.union(machine.ports.asSequence())).hasDuplicates() == false;
+	
+	// At least one manager should be assigned
+	Constraint managerReq = machines->exists(Machine machine | machine.role == MachineRole.Manager);
+	
+	// At least one worker should be assigned
+	Constraint workerReq = machines->exists(Machine machine | machine.role == MachineRole.Worker);	
+ 
+}

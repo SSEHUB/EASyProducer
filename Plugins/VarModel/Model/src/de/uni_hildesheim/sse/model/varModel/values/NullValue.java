@@ -78,4 +78,14 @@ public final class NullValue extends Value {
         return INSTANCE == other; // singleton
     }
     
+    @Override
+    public String toString() {
+        return "NullValue";
+    }
+
+    @Override
+    public boolean equalsPartially(Value value) {
+        return equals(value); // meta type value is symmetric
+    }
+
 }

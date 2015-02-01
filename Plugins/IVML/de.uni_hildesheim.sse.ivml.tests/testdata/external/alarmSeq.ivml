@@ -1,0 +1,27 @@
+project alarmSeq {
+
+    abstract compound Node {
+        refTo(Node) prmNext;
+        refTo(Node) sndNext;
+        prmNext <> prmNext.prmNext;
+        sndNext <> sndNext.sndNext;
+    }
+
+    abstract compound LoopUnit refines Node {
+    }
+
+    abstract compound LoopOutput refines Node {
+    }
+
+    abstract compound IO_Module {
+    }
+
+    compound LoopDriver refines IO_Module {
+        refTo(Node) prm;
+        refTo(Node) snd;
+        list(prm.prmNext, {}, true) <> list(snd.sndNext, {}, false);
+    }
+
+    def setOf(Node) list(LoopOutput o, setOf(Node) s, Boolean prm) = including(s, o);
+    def setOf(Node) list(Node n, setOf(Node) s, Boolean prm) = let refTo(Node) next = if prm then n.prmNext else n.sndNext endif in including(list(next, s, prm), n);
+}

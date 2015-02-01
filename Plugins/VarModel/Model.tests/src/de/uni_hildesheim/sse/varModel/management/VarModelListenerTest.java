@@ -80,9 +80,7 @@ public class VarModelListenerTest implements IProjectListener {
         this.project = project;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void notifyReplaced(Project oldProject, Project newProject) {
         setProject(newProject);
     }

@@ -1,0 +1,18 @@
+project ConstraintVariableTest {
+
+	version v0;
+	
+	compound C {
+	   Integer cA = 1;
+	   Integer cB;
+	   Constraint cC = cA > cB;
+	   cB = cA + 1;
+	}
+	
+	C cmp;
+	
+	Integer a = 1;
+	Integer b;
+	Constraint c1 = a > b;
+	b = a + 1;
+}

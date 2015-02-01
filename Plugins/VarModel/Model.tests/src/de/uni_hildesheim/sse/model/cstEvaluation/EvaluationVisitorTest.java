@@ -20,6 +20,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.model.confModel.AssignmentState;
+import de.uni_hildesheim.sse.model.confModel.CompoundVariable;
 import de.uni_hildesheim.sse.model.confModel.Configuration;
 import de.uni_hildesheim.sse.model.confModel.ConfigurationException;
 import de.uni_hildesheim.sse.model.confModel.IAssignmentState;
@@ -28,16 +29,20 @@ import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
 import de.uni_hildesheim.sse.model.cst.CompoundAccess;
 import de.uni_hildesheim.sse.model.cst.ConstantValue;
 import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
+import de.uni_hildesheim.sse.model.cst.ContainerInitializer;
 import de.uni_hildesheim.sse.model.cst.IfThen;
 import de.uni_hildesheim.sse.model.cst.Let;
 import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
+import de.uni_hildesheim.sse.model.cst.Self;
 import de.uni_hildesheim.sse.model.cst.Variable;
+import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.OperationDefinition;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.datatypes.AnyType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.BooleanType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
+import de.uni_hildesheim.sse.model.varModel.datatypes.ConstraintType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.CustomOperation;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IntegerType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.MetaType;
@@ -48,6 +53,7 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.Sequence;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Set;
 import de.uni_hildesheim.sse.model.varModel.datatypes.StringType;
 import de.uni_hildesheim.sse.model.varModel.values.BooleanValue;
+import de.uni_hildesheim.sse.model.varModel.values.ConstraintValue;
 import de.uni_hildesheim.sse.model.varModel.values.ContainerValue;
 import de.uni_hildesheim.sse.model.varModel.values.IntValue;
 import de.uni_hildesheim.sse.model.varModel.values.NullValue;
@@ -1018,6 +1024,40 @@ public class EvaluationVisitorTest {
         Assert.assertEquals(1, ((IntValue) visitor.getResult()).getValue().intValue());
         visitor.clear();
     }
+    
+    /**
+     * Tests an expression with "self".
+     * 
+     * @throws CSTSemanticException in case of constraint failures (shall not occur)
+     * @throws ValueDoesNotMatchTypeException if a value does not match the expected type (shall not occur)
+     * @throws ConfigurationException if a value cannot be configured (shall not occur)
+     */
+    @Test
+    public void testSelf()  throws CSTSemanticException, ValueDoesNotMatchTypeException, 
+        ConfigurationException {
+        Project project = new Project("Test");
+        Compound compC = new Compound("C", project);
+        ConstraintSyntaxTree cst = Utils.createCall(new Self(compC), Compound.NOTEQUALS, 
+            new ConstantValue(NullValue.INSTANCE));
+        cst.inferDatatype();
+        Constraint constr = new Constraint(cst, compC);
+        compC.addConstraint(constr, false);
+        project.add(compC);
+
+        DecisionVariableDeclaration testVar = new DecisionVariableDeclaration("test", compC, project);
+        project.add(testVar);
+
+        Configuration config = new Configuration(project);
+        EvaluationVisitor visitor = new EvaluationVisitor();
+        visitor.init(config, AssignmentState.DEFAULT, false, null);
+        
+        visitor.visit(cst);
+        Assert.assertTrue(visitor.getResult() instanceof BooleanValue);
+        Assert.assertEquals(true, ((BooleanValue) visitor.getResult()).getValue().booleanValue());
+        visitor.clearResult();
+        
+        visitor.clear();
+    }
 
     /**
      * Tests a statically qualified constraint within a compound.
@@ -1060,8 +1100,7 @@ public class EvaluationVisitorTest {
 
         // implicit all quantor evaluates for empty set (undefined) to true
         visitor.visit(cst);
-        Assert.assertTrue(visitor.getResult() instanceof BooleanValue);
-        Assert.assertEquals(true, ((BooleanValue) visitor.getResult()).getValue().booleanValue());
+        Assert.assertNull(visitor.getResult());
         visitor.clearResult();
         
         // implicit all quantor evaluates for given set with unmatching slots to false
@@ -1107,8 +1146,7 @@ public class EvaluationVisitorTest {
 
         // implicit all quantor evaluates for empty set (undefined) to true
         visitor.visit(consEx);
-        Assert.assertTrue(visitor.getResult() instanceof BooleanValue);
-        Assert.assertEquals(true, ((BooleanValue) visitor.getResult()).getValue().booleanValue());
+        Assert.assertNull(visitor.getResult());
         visitor.clearResult();
 
         // implicit all quantor evaluates for given value with unmatching slot to false
@@ -1303,6 +1341,184 @@ public class EvaluationVisitorTest {
         } catch (CSTSemanticException e) {
             Assert.fail(e.getMessage());
         }
+    }
+    
+    /**
+     * Tests assignment and equality of constaints.
+     * 
+     * @throws CSTSemanticException in case of constraint failures (shall not occur)
+     * @throws ValueDoesNotMatchTypeException if a value does not match the expected type (shall not occur)
+     * @throws ConfigurationException if a value cannot be configured (shall not occur)
+     */
+    @Test
+    public void testSpecialConstraintOperations() throws CSTSemanticException, ValueDoesNotMatchTypeException, 
+        ConfigurationException {
+        Project project = new Project("Test");
+
+        DecisionVariableDeclaration cDecl = new DecisionVariableDeclaration("c", ConstraintType.TYPE, project);
+        project.add(cDecl);
+        DecisionVariableDeclaration decl = new DecisionVariableDeclaration("x", IntegerType.TYPE, project);
+        project.add(decl);
+
+        ConstantValue c0 = new ConstantValue(ValueFactory.createValue(IntegerType.TYPE, 0));
+
+        ConstraintSyntaxTree cst1 = new OCLFeatureCall(
+            new Variable(decl), IntegerType.LESS_EQUALS_INTEGER_INTEGER.getName(), c0);
+        cst1.inferDatatype();
+        ConstraintSyntaxTree cst2 = new OCLFeatureCall(
+            new Variable(decl), IntegerType.GREATER_EQUALS_INTEGER_INTEGER.getName(), c0);
+        cst2.inferDatatype();
+        
+        Configuration config = new Configuration(project);
+        EvaluationVisitor visitor = new EvaluationVisitor();
+        visitor.init(config, AssignmentState.DEFAULT, false, null);
+        
+        ConstraintSyntaxTree equals = new OCLFeatureCall(new Variable(cDecl), 
+            ConstraintType.EQUALS.getName(), cst1);
+        equals.inferDatatype();
+        
+        visitor.visit(equals);
+        Assert.assertTrue(visitor.getResult() instanceof BooleanValue);
+        Assert.assertEquals(true, ((BooleanValue) visitor.getResult()).getValue().booleanValue());
+        IDecisionVariable var = config.getDecision(cDecl);
+        Assert.assertNotNull(var);
+        Value val = var.getValue();
+        Assert.assertTrue(val instanceof ConstraintValue);
+        Assert.assertEquals(cst1, ((ConstraintValue) val).getValue());
+        visitor.clearResult();
+
+        ConstraintSyntaxTree nEquals = new OCLFeatureCall(new Variable(cDecl), 
+            ConstraintType.UNEQUALS.getName(), cst2);
+        nEquals.inferDatatype();
+        visitor.visit(nEquals);
+        Assert.assertTrue(visitor.getResult() instanceof BooleanValue);
+        Assert.assertEquals(true, ((BooleanValue) visitor.getResult()).getValue().booleanValue());
+        visitor.clearResult();
+
+        ConstraintSyntaxTree assign = new OCLFeatureCall(new Variable(cDecl), 
+            ConstraintType.ASSIGNMENT.getName(), cst2);
+        assign.inferDatatype();
+        visitor.visit(assign);
+        val = var.getValue();
+        Assert.assertTrue(val instanceof ConstraintValue);
+        Assert.assertEquals(cst2, ((ConstraintValue) val).getValue());
+        visitor.clearResult();
+    }
+
+    /**
+     * Tests references among collections (from QualiMaster).
+     * <pre>
+     *   Compound Pipeline {};
+     *   Pipeline pipeline = {];
+     *   sequenceOf(refTo(Pipeline)) pipelines = {refBy(pipeline)};
+     *   sequenceOf(refTo(Pipeline)) activePipelines;
+     *   activePipelines = {pipelines[0]};
+     * </pre>
+     * 
+     * @throws CSTSemanticException in case of constraint failures (shall not occur)
+     * @throws ValueDoesNotMatchTypeException if a value does not match the expected type (shall not occur)
+     * @throws ConfigurationException if a value cannot be configured (shall not occur)
+     */
+    @Test
+    public void testReferencesAmongCollections() throws CSTSemanticException, ValueDoesNotMatchTypeException, 
+        ConfigurationException {
+        Project project = new Project("Test");
+
+        Compound cPipeline = new Compound("Pipeline", project);
+        project.add(cPipeline);
+        Reference rPipeline = new Reference("cPipeline", cPipeline, project);
+        project.add(rPipeline);
+        Sequence srPipeline = new Sequence("srPipeline", rPipeline, project);
+        project.add(srPipeline);
+        DecisionVariableDeclaration pipeline = new DecisionVariableDeclaration("pipeline", cPipeline, project);
+        project.add(pipeline);
+        DecisionVariableDeclaration pipelines = new DecisionVariableDeclaration("pipelines", srPipeline, project);
+        project.add(pipelines);
+        DecisionVariableDeclaration activePipelines = new DecisionVariableDeclaration("activePipelines", srPipeline, 
+            project);
+        project.add(activePipelines);
+        
+        Configuration config = new Configuration(project);
+        Value pipelineValue = ValueFactory.createValue(cPipeline);
+        config.getDecision(pipeline).setValue(pipelineValue, AssignmentState.ASSIGNED);
+        Value pipelineRefValue = ValueFactory.createValue(rPipeline, pipeline);
+        Value pipelinesValue = ValueFactory.createValue(srPipeline, pipelineRefValue);
+        config.getDecision(pipelines).setValue(pipelinesValue, AssignmentState.ASSIGNED);
+
+        ConstantValue const0 = new ConstantValue(ValueFactory.createValue(IntegerType.TYPE, 0));
+        
+        ConstraintSyntaxTree ex = new OCLFeatureCall(new Variable(pipelines), Sequence.INDEX_ACCESS.getName(), const0);
+        ex.inferDatatype();
+        ex = new ContainerInitializer(srPipeline, new ConstraintSyntaxTree[] {ex});
+        ex.inferDatatype();
+        ex = new OCLFeatureCall(new Variable(activePipelines), Sequence.ASSIGNMENT.getName(), ex);
+        ex.inferDatatype();
+
+        EvaluationVisitor visitor = new EvaluationVisitor();
+        visitor.init(config, AssignmentState.DEFAULT, false, null);
+        visitor.visit(ex);
+
+        Assert.assertTrue(visitor.getResult() instanceof BooleanValue);
+        Assert.assertEquals(true, ((BooleanValue) visitor.getResult()).getValue().booleanValue());
+        IDecisionVariable var = config.getDecision(activePipelines);
+        Assert.assertNotNull(var);
+        Assert.assertEquals(AssignmentState.DEFAULT, var.getState());
+        Assert.assertEquals(pipelinesValue, var.getValue());
+    }
+    
+    /**
+     * Tests modification access to local variables in an user defined operation.
+     * 
+     * @throws CSTSemanticException in case of constraint failures (shall not occur)
+     * @throws ValueDoesNotMatchTypeException if a value does not match the expected type (shall not occur)
+     * @throws ConfigurationException if a value cannot be configured (shall not occur)
+     */
+    @Test
+    public void testCompoundAccessLocalVar() throws CSTSemanticException, ConfigurationException, 
+        ValueDoesNotMatchTypeException {
+        Project project = new Project("Test");
+        Compound cmpType = new Compound("cmp", project);
+        project.add(cmpType);
+        DecisionVariableDeclaration cmpTypeDecl = new DecisionVariableDeclaration("var", IntegerType.TYPE, cmpType);
+        cmpType.add(cmpTypeDecl);
+        
+        DecisionVariableDeclaration[] params = new DecisionVariableDeclaration[2];
+        params[0] = new DecisionVariableDeclaration("p1", cmpType, null);
+        params[1] = new DecisionVariableDeclaration("p2", IntegerType.TYPE, null);
+        ConstraintSyntaxTree custOpEx = new OCLFeatureCall(new CompoundAccess(new Variable(params[0]), "var"), 
+            IntegerType.ASSIGNMENT_INTEGER_INTEGER.getName(), new Variable(params[1]));
+        custOpEx.inferDatatype();
+        CustomOperation cOp = new CustomOperation(BooleanType.TYPE, "test", project.getType(), custOpEx, params);
+        OperationDefinition opDef = new OperationDefinition(project);
+        opDef.setOperation(cOp);
+        project.add(opDef);
+
+        DecisionVariableDeclaration cmpVar = new DecisionVariableDeclaration("c", cmpType, project);
+        project.add(cmpVar);
+
+        ConstraintSyntaxTree cEx = new OCLFeatureCall(new Variable(cmpVar), "test", project, 
+            new ConstantValue(ValueFactory.createValue(IntegerType.TYPE, 10)));
+        cEx.inferDatatype();
+        
+        Configuration config = new Configuration(project);
+        config.getDecision(cmpVar).setValue(ValueFactory.createValue(cmpType, (Object[]) null), 
+            AssignmentState.ASSIGNED);
+        
+        EvaluationVisitor visitor = new EvaluationVisitor();
+        visitor.init(config, AssignmentState.DEFAULT, false, null);
+        visitor.visit(cEx);
+        
+        Assert.assertTrue(visitor.getResult() instanceof BooleanValue);
+        Assert.assertEquals(true, ((BooleanValue) visitor.getResult()).getValue().booleanValue());
+
+        IDecisionVariable var = config.getDecision(cmpVar);
+        Assert.assertNotNull(var);
+        Assert.assertTrue(var instanceof CompoundVariable);
+        Assert.assertEquals(AssignmentState.ASSIGNED, var.getState());
+        IDecisionVariable nVar = ((CompoundVariable) var).getNestedVariable("var");
+        Value val = nVar.getValue();
+        Assert.assertTrue(val instanceof IntValue);
+        Assert.assertEquals(10, ((IntValue) val).getValue().intValue());
     }
     
 }

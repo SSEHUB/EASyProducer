@@ -8,10 +8,9 @@ import de.uni_hildesheim.sse.model.varModel.IvmlException;
 import de.uni_hildesheim.sse.model.varModel.ModelQuery;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IResolutionScope;
-import de.uni_hildesheim.sse.utils.modelManagement.IVersionRestrictable;
+import de.uni_hildesheim.sse.utils.modelManagement.IVersionRestriction;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
-import de.uni_hildesheim.sse.utils.modelManagement.VersionRestriction;
 
 /**
  * Establishes a link to a variability model for resolving names in tools.
@@ -20,10 +19,10 @@ import de.uni_hildesheim.sse.utils.modelManagement.VersionRestriction;
  * 
  * @author Holger Eichelberger
  */
-public class Advice implements IVersionRestrictable {
+public class Advice {
 
     private String name;
-    private VersionRestriction[] restrictions;
+    private IVersionRestriction restrictions;
     private Project resolved;
 
     /**
@@ -33,7 +32,7 @@ public class Advice implements IVersionRestrictable {
      * @param restrictions the optional version restrictions that apply
      * @param resolved the resolved project, may be <b>null</b> if no resolution is possible
      */
-    public Advice(String name, VersionRestriction[] restrictions, Project resolved) {
+    public Advice(String name, IVersionRestriction restrictions, Project resolved) {
         this.name = name;
         this.restrictions = restrictions;
         this.resolved = resolved;
@@ -47,30 +46,16 @@ public class Advice implements IVersionRestrictable {
     public String getName() {
         return name;
     }
-
+    
     /**
-     * Returns the restriction specified by <code>index</code>.
+     * Returns the version restrictions.
      * 
-     * @param index a 0-based index specifying the restriction to be returned
-     * @return the restriction
-     * @throws IndexOutOfBoundsException if 
-     *   <code>index&lt;0 || index&gt;={@link #getRestrictionsCount}</code>
+     * @return the version restrictions (may be <b>null</b> if absent)
      */
-    public VersionRestriction getRestriction(int index) {
-        if (null == restrictions) {
-            throw new IndexOutOfBoundsException();
-        }
-        return restrictions[index];
+    public IVersionRestriction getVersionRestriction() {
+        return restrictions;
     }
 
-    /**
-     * Returns the number of restrictions.
-     * 
-     * @return the number of restrictions
-     */
-    public int getRestrictionsCount() {
-        return null == restrictions ? 0 : restrictions.length;
-    }
     
     /**
      * Returns the resolved project.
@@ -139,7 +124,7 @@ public class Advice implements IVersionRestrictable {
      * @param warning a string builder to append warnings to
      * @return the created advice instance
      */
-    public static Advice create(String name, URI modelURI, VersionRestriction[] restrictions, StringBuilder warning) {
+    public static Advice create(String name, URI modelURI, IVersionRestriction restrictions, StringBuilder warning) {
         // TODO consider versions
         Project resolved = null;
         ModelInfo<Project> resolvingInfo = null;

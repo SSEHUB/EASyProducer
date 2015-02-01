@@ -1,0 +1,156 @@
+project qm5 {
+
+    typedef NonEmptyString String with (NonEmptyString.size() > 0);
+    typedef PositiveInteger Integer with (PositiveInteger > 0);
+    enum BindingTime {compile, startup, runtime};
+    enum FieldType {INTEGER, STRING, BOOLEAN, REAL};
+
+    attribute BindingTime bindingTime = BindingTime.compile to qm5;
+    
+    typedef Tuples sequenceOf(Tuple);
+    typedef Parameters setOf(Parameter);
+    typedef Fields sequenceOf(Field);
+    typedef FieldTypes sequenceOf(FieldType);
+    
+    compound HwNode {
+        NonEmptyString name;        
+    }
+    
+    compound MPCCNode refines HwNode{
+        NonEmptyString host;
+        PositiveInteger numCPUs;
+        PositiveInteger numDFEs;
+    } 
+    
+    sequenceOf(HwNode) clusters;
+    
+    compound Tuple {
+        Fields fields; 
+    } 
+    compound Field {
+        NonEmptyString name;
+        FieldType type;
+    }
+    compound Parameter {
+        NonEmptyString name;
+    }
+    compound IntegerParameter refines Parameter {
+        assign(bindingTime = BindingTime.runtime) to {
+            Integer value;
+        }
+    }
+    compound StringParameter refines Parameter {
+        assign(bindingTime = BindingTime.runtime) to {
+            String value;
+        }
+    }
+    compound RealParameter refines Parameter {
+        assign(bindingTime = BindingTime.runtime) to {
+            Real value;
+        }
+    }
+    compound BooleanParameter refines Parameter {
+        assign(bindingTime = BindingTime.runtime) to {
+            Boolean value;
+        }
+    }
+
+    compound Algorithm {
+        NonEmptyString name; 
+        String artifact;
+        Tuples input;
+        Tuples output;
+        Parameters parameters;
+        refTo(HwNode) hwNode;
+        String algTopologyClass;
+    }
+
+    compound Family {
+        NonEmptyString name;
+        Tuples input;
+        Tuples output;
+        Parameters parameters;
+        setOf(refTo(Algorithm)) members; 
+        assign(bindingTime = BindingTime.runtime) to {
+            refTo(Algorithm) actual;
+        }
+    }
+    
+    clusters = { 
+        MPCCNode{
+            name = "MPCCCluster",
+            host = "147.172.177.22",
+            numCPUs = 12,
+            numDFEs = 4
+        }
+    }; 
+         
+    freeze {
+        clusters; 
+    }
+    
+    Algorithm aNormalize;
+    aNormalize = {  
+        name = "normalize",
+        artifact = "integration.algs.Normalize",
+        output={{fields={
+            Field{name="streamID", type=FieldType.STRING},
+            Field{name="timestamp", type=FieldType.STRING},
+            Field{name="quote", type=FieldType.REAL},
+            Field{name="volume", type=FieldType.INTEGER}
+        }}}, 
+        input={{fields={Field{name="springData", type=FieldType.STRING}}}},        
+        hwNode = clusters[0],
+        algTopologyClass = "TSITopology"
+    };
+
+    Algorithm bNormalize;
+    bNormalize = {  
+        name = "normalizeB",
+        artifact = "integration.algs.NormalizeB",
+        output={{fields={
+            Field{name="streamID", type=FieldType.STRING},
+            Field{name="timestamp", type=FieldType.STRING},
+            Field{name="quote", type=FieldType.REAL},
+            Field{name="volume", type=FieldType.INTEGER}
+        }}}, 
+        input={{fields={Field{name="springData", type=FieldType.STRING}}}},        
+        algTopologyClass = "TSITopology"
+    };
+
+    Algorithm cNormalize;
+    cNormalize = {  
+        name = "normalizeC",
+        artifact = "integration.algs.NormalizeC",
+        output={{fields={
+            Field{name="streamID", type=FieldType.STRING},
+            Field{name="timestamp", type=FieldType.STRING},
+            Field{name="quote", type=FieldType.REAL},
+            Field{name="volume", type=FieldType.INTEGER}
+        }}}, 
+        input={{fields={Field{name="springData", type=FieldType.STRING}}}},        
+        hwNode = null,
+        algTopologyClass = "TSITopology"
+    };
+    
+    Family fNormalize;
+    fNormalize = {  
+        name = "normalize",
+        output={{fields={
+            Field{name="streamID", type=FieldType.STRING},
+            Field{name="timestamp", type=FieldType.STRING},
+            Field{name="quote", type=FieldType.REAL},
+            Field{name="volume", type=FieldType.INTEGER}
+        }}}, 
+        input={{fields={Field{name="springData", type=FieldType.STRING}}}},
+        parameters={IntegerParameter{name="test"}},
+        members = {refBy(aNormalize),refBy(bNormalize),refBy(cNormalize)}
+    };  
+    
+    freeze {
+        aNormalize;
+        bNormalize;
+        fNormalize;
+    }
+    
+}

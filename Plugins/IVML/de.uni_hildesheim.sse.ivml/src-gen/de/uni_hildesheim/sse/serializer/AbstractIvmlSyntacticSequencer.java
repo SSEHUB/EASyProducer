@@ -22,7 +22,7 @@ public abstract class AbstractIvmlSyntacticSequencer extends AbstractSyntacticSe
 	protected AbstractElementAlias match_Freeze_SemicolonKeyword_5_q;
 	protected AbstractElementAlias match_InterfaceDeclaration_SemicolonKeyword_5_q;
 	protected AbstractElementAlias match_Project_SemicolonKeyword_9_q;
-	protected AbstractElementAlias match_TypedefCompound_SemicolonKeyword_6_q;
+	protected AbstractElementAlias match_TypedefCompound_SemicolonKeyword_7_q;
 	
 	@Inject
 	protected void init(IGrammarAccess access) {
@@ -32,7 +32,7 @@ public abstract class AbstractIvmlSyntacticSequencer extends AbstractSyntacticSe
 		match_Freeze_SemicolonKeyword_5_q = new TokenAlias(false, true, grammarAccess.getFreezeAccess().getSemicolonKeyword_5());
 		match_InterfaceDeclaration_SemicolonKeyword_5_q = new TokenAlias(false, true, grammarAccess.getInterfaceDeclarationAccess().getSemicolonKeyword_5());
 		match_Project_SemicolonKeyword_9_q = new TokenAlias(false, true, grammarAccess.getProjectAccess().getSemicolonKeyword_9());
-		match_TypedefCompound_SemicolonKeyword_6_q = new TokenAlias(false, true, grammarAccess.getTypedefCompoundAccess().getSemicolonKeyword_6());
+		match_TypedefCompound_SemicolonKeyword_7_q = new TokenAlias(false, true, grammarAccess.getTypedefCompoundAccess().getSemicolonKeyword_7());
 	}
 	
 	@Override
@@ -57,8 +57,8 @@ public abstract class AbstractIvmlSyntacticSequencer extends AbstractSyntacticSe
 				emit_InterfaceDeclaration_SemicolonKeyword_5_q(semanticObject, getLastNavigableState(), syntaxNodes);
 			else if(match_Project_SemicolonKeyword_9_q.equals(syntax))
 				emit_Project_SemicolonKeyword_9_q(semanticObject, getLastNavigableState(), syntaxNodes);
-			else if(match_TypedefCompound_SemicolonKeyword_6_q.equals(syntax))
-				emit_TypedefCompound_SemicolonKeyword_6_q(semanticObject, getLastNavigableState(), syntaxNodes);
+			else if(match_TypedefCompound_SemicolonKeyword_7_q.equals(syntax))
+				emit_TypedefCompound_SemicolonKeyword_7_q(semanticObject, getLastNavigableState(), syntaxNodes);
 			else acceptNodes(getLastNavigableState(), syntaxNodes);
 		}
 	}
@@ -107,7 +107,7 @@ public abstract class AbstractIvmlSyntacticSequencer extends AbstractSyntacticSe
 	 * Syntax:
 	 *     ';'?
 	 */
-	protected void emit_TypedefCompound_SemicolonKeyword_6_q(EObject semanticObject, ISynNavigable transition, List<INode> nodes) {
+	protected void emit_TypedefCompound_SemicolonKeyword_7_q(EObject semanticObject, ISynNavigable transition, List<INode> nodes) {
 		acceptNodes(transition, nodes);
 	}
 	

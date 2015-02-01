@@ -101,9 +101,6 @@ public class AttributesCheckVisitor implements IConfigurationVisitor {
         return isValid;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void visitConfiguration(Configuration configuration) {
         Iterator<IDecisionVariable> iter = configuration.iterator();
@@ -112,9 +109,6 @@ public class AttributesCheckVisitor implements IConfigurationVisitor {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void visitDecisionVariable(IDecisionVariable variable) {
         for (int n = 0; n < variable.getNestedElementsCount(); n++) {

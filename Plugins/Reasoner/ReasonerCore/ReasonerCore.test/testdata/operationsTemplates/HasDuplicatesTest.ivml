@@ -1,0 +1,13 @@
+project HasDuplicatesTest {
+
+    version v0;   
+    
+    
+    
+    sequenceOf(Integer) machines;
+    
+    machines.hasDuplicates();
+   
+    machines = {1, 3, 2}; 
+    
+}

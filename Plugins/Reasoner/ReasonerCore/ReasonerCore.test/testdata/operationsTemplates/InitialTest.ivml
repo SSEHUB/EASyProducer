@@ -1,0 +1,13 @@
+project InitialTest {
+
+	version v0;
+	
+	Boolean a = true;
+	Boolean b = false;
+	Integer intA = 2;
+	Integer intB;
+	intB = 3;
+	intA > intB;	
+	intA = 3;
+	a == true implies b == true;
+}

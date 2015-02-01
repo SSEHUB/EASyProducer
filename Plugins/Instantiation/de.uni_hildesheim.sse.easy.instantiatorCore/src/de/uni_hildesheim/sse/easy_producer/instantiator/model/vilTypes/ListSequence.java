@@ -167,4 +167,20 @@ public class ListSequence<T> extends AbstractListWrapper<T> implements Sequence<
         return getList().indexOf(element);
     }
 
+    @Override
+    public T add(T element) {
+        getList().add(element);
+        return element;
+    }
+
+    @Override
+    public void remove(T element) {
+        getList().remove(element);
+    }
+
+    @Override
+    public Map<T, T> mapSequence(Sequence<T> other) {
+        return SequenceOperations.mapSequence(this, other);
+    }
+
 }

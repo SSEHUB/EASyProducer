@@ -102,4 +102,9 @@ public class ClassWrapper implements IMetaType {
         return false; // class wrapper shall not be handled by IActualTypeProvider
     }
 
+    @Override
+    public IMetaType getBaseType() {
+        return null;
+    }
+
 }

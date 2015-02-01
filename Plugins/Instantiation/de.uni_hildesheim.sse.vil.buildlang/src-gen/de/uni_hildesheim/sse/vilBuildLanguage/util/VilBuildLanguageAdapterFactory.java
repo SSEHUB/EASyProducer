@@ -110,6 +110,11 @@ public class VilBuildLanguageAdapterFactory extends AdapterFactoryImpl
         return createRuleDeclarationAdapter();
       }
       @Override
+      public Adapter caseRuleConditions(RuleConditions object)
+      {
+        return createRuleConditionsAdapter();
+      }
+      @Override
       public Adapter caseRuleElementBlock(RuleElementBlock object)
       {
         return createRuleElementBlockAdapter();
@@ -125,9 +130,9 @@ public class VilBuildLanguageAdapterFactory extends AdapterFactoryImpl
         return createRuleModifierAdapter();
       }
       @Override
-      public Adapter caseDeferDeclaration(DeferDeclaration object)
+      public Adapter caseExpressionStatement(ExpressionStatement object)
       {
-        return createDeferDeclarationAdapter();
+        return createExpressionStatementAdapter();
       }
       @Override
       public Adapter casePrimaryExpression(PrimaryExpression object)
@@ -150,6 +155,16 @@ public class VilBuildLanguageAdapterFactory extends AdapterFactoryImpl
         return createMapAdapter();
       }
       @Override
+      public Adapter caseAlternative(Alternative object)
+      {
+        return createAlternativeAdapter();
+      }
+      @Override
+      public Adapter caseStatementOrBlock(StatementOrBlock object)
+      {
+        return createStatementOrBlockAdapter();
+      }
+      @Override
       public Adapter caseJoin(Join object)
       {
         return createJoinAdapter();
@@ -168,6 +183,11 @@ public class VilBuildLanguageAdapterFactory extends AdapterFactoryImpl
       public Adapter caseExpressionDsl_LanguageUnit(de.uni_hildesheim.sse.vil.expressions.expressionDsl.LanguageUnit object)
       {
         return createExpressionDsl_LanguageUnitAdapter();
+      }
+      @Override
+      public Adapter caseExpressionDsl_ExpressionStatement(de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionStatement object)
+      {
+        return createExpressionDsl_ExpressionStatementAdapter();
       }
       @Override
       public Adapter caseExpressionDsl_PrimaryExpression(de.uni_hildesheim.sse.vil.expressions.expressionDsl.PrimaryExpression object)
@@ -302,6 +322,21 @@ public class VilBuildLanguageAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
+   * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleConditions <em>Rule Conditions</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.RuleConditions
+   * @generated
+   */
+  public Adapter createRuleConditionsAdapter()
+  {
+    return null;
+  }
+
+  /**
    * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleElementBlock <em>Rule Element Block</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
@@ -347,16 +382,16 @@ public class VilBuildLanguageAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.vilBuildLanguage.DeferDeclaration <em>Defer Declaration</em>}'.
+   * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.vilBuildLanguage.ExpressionStatement <em>Expression Statement</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see de.uni_hildesheim.sse.vilBuildLanguage.DeferDeclaration
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.ExpressionStatement
    * @generated
    */
-  public Adapter createDeferDeclarationAdapter()
+  public Adapter createExpressionStatementAdapter()
   {
     return null;
   }
@@ -422,6 +457,36 @@ public class VilBuildLanguageAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
+   * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.vilBuildLanguage.Alternative <em>Alternative</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.Alternative
+   * @generated
+   */
+  public Adapter createAlternativeAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.vilBuildLanguage.StatementOrBlock <em>Statement Or Block</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.StatementOrBlock
+   * @generated
+   */
+  public Adapter createStatementOrBlockAdapter()
+  {
+    return null;
+  }
+
+  /**
    * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.vilBuildLanguage.Join <em>Join</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
@@ -477,6 +542,21 @@ public class VilBuildLanguageAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createExpressionDsl_LanguageUnitAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionStatement <em>Expression Statement</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionStatement
+   * @generated
+   */
+  public Adapter createExpressionDsl_ExpressionStatementAdapter()
   {
     return null;
   }

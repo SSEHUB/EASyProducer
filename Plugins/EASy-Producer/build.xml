@@ -126,9 +126,10 @@
             <fileset dir="${home.drools2.dir}/${build.jar.dir}" includes="**/*.jar" />
             <!-- Instantiation -->
             <fileset dir="${home.instantiatorCore.dir}/${build.jar.dir}" includes="**/*.jar" />
-            <fileset dir="${home.instantiator.copy.core.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <!-- fileset dir="${home.adaptation.events.dir}/${build.jar.dir}" includes="**/*.jar" /-->
+            <!--fileset dir="${home.instantiator.copy.core.dir}/${build.jar.dir}" includes="**/*.jar" /-->
             <fileset dir="${home.instantiator.velocity.dir}/${build.jar.dir}" includes="**/*.jar" />
-            <fileset dir="${home.instantiator.velocityLib.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <!--fileset dir="${home.instantiator.velocityLib.dir}/${build.jar.dir}" includes="**/*.jar" /-->
             <!-- Instantiation Tests (needed for the scenarios) -->
             <fileset dir="${home.vil.tests.dir}/${build.jar.dir}" includes="**/*.jar" />
             <fileset dir="${home.template.tests.dir}/${build.jar.dir}" includes="**/*.jar" />
@@ -160,9 +161,10 @@
             <fileset dir="${home.reasonerCore.dir}/${build.jar.dir}" includes="**/*.jar" />
             <!-- Instantiation -->
             <fileset dir="${home.instantiatorCore.dir}/${build.jar.dir}" includes="**/*.jar" />
-            <fileset dir="${home.instantiator.copy.core.dir}/${build.jar.dir}" includes="**/*.jar" />
             <fileset dir="${home.instantiator.velocity.dir}/${build.jar.dir}" includes="**/*.jar" />
-            <fileset dir="${home.instantiator.velocityLib.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <fileset dir="${home.adaptation.events.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <!--fileset dir="${home.instantiator.copy.core.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <fileset dir="${home.instantiator.velocityLib.dir}/${build.jar.dir}" includes="**/*.jar" /-->
             <!-- Instantiation -->
             <fileset dir="${home.vil.core.dir}/${build.jar.dir}" includes="**/*.jar" />
             <fileset dir="${home.template.core.dir}/${build.jar.dir}" includes="**/*.jar" />
@@ -279,9 +281,16 @@
 		<antcall target="prepareTestEclipseGUI"/>
 		<antcall target="stopautagent"/>
 	</target>
-    
+	
+	<target name="storeJars">
+		<copy todir="${easy.bundles.dir}" failonerror="true" overwrite="true" flatten="true">
+			<fileset dir=".">
+				<include name="**/build/jar/*.jar" />
+			</fileset>
+		</copy>
+	</target>	
 	
 	<target name="only.compile" depends="init, compile"/>
-	<target name="test.without.gui" depends="only.compile, test"/>
+	<target name="test.without.gui" depends="only.compile, test, storeJars"/>
 	<target name="all" depends="test.without.gui, test.gui"/>
 </project>

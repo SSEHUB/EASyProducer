@@ -11,6 +11,8 @@ import de.uni_hildesheim.sse.easy_producer.core.mgmt.VilArgumentProvider;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.Configuration;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.Configuration.PathKind;
 import de.uni_hildesheim.sse.persistency.AbstractVarModelWriter;
+import de.uni_hildesheim.sse.reasoning.core.frontend.ReasonerFrontend;
+import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerDescriptor;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 
 /**
@@ -80,6 +82,10 @@ public class EASyPreferenceStore {
         loadDefaultConfiguration();
         loadVilArgumentProviderStates();
         loadIvmlPreferences();
+        ReasonerDescriptor desc = getDefaultReasoner();
+        if (null != desc) {
+            ReasonerFrontend.getInstance().setReasonerHint(desc);
+        }
     }
     
     /**
@@ -205,9 +211,45 @@ public class EASyPreferenceStore {
      *                             false - whitespaces are not allowed.
      */
     public static boolean getUseIvmlWhitespace() {
-
         IEclipsePreferences prefs = getPreferences();
         boolean useWhitespaces = prefs.getBoolean("ivml.useWhitespaces", false);
         return useWhitespaces;
+    }
+    
+    /**
+     * Sets the default reasoner. Propagates the default reasoner into the reasoner frontend.
+     * 
+     * @param desc the new default reasoner (may be <b>null</b> to clear the default reasoner) 
+     */
+    public static void setDefaultReasoner(ReasonerDescriptor desc) {
+        IEclipsePreferences prefs = getPreferences();
+        if (null == desc) {
+            prefs.remove("easy.reasoner");
+        } else {
+            prefs.put("easy.reasoner", desc.getClass().getName());
+            ReasonerFrontend.getInstance().setReasonerHint(desc);
+        }
+        flush(prefs);        
+    }
+    
+    /**
+     * Returns the default reasoner via the preferences store.
+     * 
+     * @return the default reasoner (may be <b>null</b> if no default reasoner is selected)
+     */
+    public static ReasonerDescriptor getDefaultReasoner() {
+        ReasonerDescriptor result = null;
+        IEclipsePreferences prefs = getPreferences();
+        String defltReasonerClass = prefs.get("easy.reasoner", null);
+        if (null != defltReasonerClass) {
+            ReasonerFrontend frontend = ReasonerFrontend.getInstance();
+            for (int r = 0; r < frontend.getReasonersCount(); r++) {
+                ReasonerDescriptor desc = frontend.getReasonerDescriptor(r);
+                if (desc.getClass().getName().equals(defltReasonerClass)) {
+                    result = desc;
+                }
+            }
+        }
+        return result;
     }
 }

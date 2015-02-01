@@ -1,0 +1,8 @@
+-> main()
+    algPath <- eu.qualimaster.algorithms.imp.Normalize
+    -> getName(JavaPath) with (eu.qualimaster.algorithms.imp.Normalize) = Normalize
+    -> getPackage(JavaPath) with (eu.qualimaster.algorithms.imp.Normalize) = eu.qualimaster.algorithms.imp
+    -> getPath(JavaPath) with (eu.qualimaster.algorithms.imp.Normalize) = eu.qualimaster.algorithms.imp.Normalize
+    -> getPathSegments(JavaPath) with (eu.qualimaster.algorithms.imp.Normalize) = eu.qualimaster.algorithms.imp
+    -> getPathSegmentsPath(JavaPath) with (eu.qualimaster.algorithms.imp.Normalize) = eu.qualimaster.algorithms.imp
+    p <- eu.qualimaster.algorithms.imp

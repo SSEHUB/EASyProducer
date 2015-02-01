@@ -15,7 +15,7 @@
  */
 package de.uni_hildesheim.sse.model.varModel.values;
 
-import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
+import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 
 /**
@@ -25,7 +25,7 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
  */
 public class ReferenceValue extends Value {
     
-    private DecisionVariableDeclaration value; // the declaration the reference goes to
+    private AbstractVariable value; // the declaration the reference goes to
 
     /**
      * Constructor for a new ReferenceValue.
@@ -44,7 +44,7 @@ public class ReferenceValue extends Value {
     }
 
     @Override
-    public DecisionVariableDeclaration getValue() {
+    public AbstractVariable getValue() {
         return value;
     }
 
@@ -55,8 +55,8 @@ public class ReferenceValue extends Value {
     
     @Override
     public void setValue(Object value) throws ValueDoesNotMatchTypeException {
-        if (value instanceof DecisionVariableDeclaration) {
-            DecisionVariableDeclaration decl = (DecisionVariableDeclaration) value;
+        if (value instanceof AbstractVariable) {
+            AbstractVariable decl = (AbstractVariable) value;
             this.value = decl;
         } else if (NullValue.INSTANCE == value) {
             this.value = null;
@@ -84,6 +84,25 @@ public class ReferenceValue extends Value {
             result = NullValue.INSTANCE;
         }
         return result;
+    }
+
+    @Override
+    public int hashCode() {
+        return null != value ? value.hashCode() : 0;
+    }
+    
+    @Override
+    public boolean equals(Object object) {
+        boolean result = false;
+        if (value != null && object instanceof ReferenceValue) {
+            result = value.equals(((ReferenceValue) object).getValue());
+        }
+        return result;
+    }
+
+    @Override
+    public boolean equalsPartially(Value value) {
+        return equals(value); // usure
     }
 
 }

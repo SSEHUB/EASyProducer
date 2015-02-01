@@ -22,8 +22,7 @@ public class Map<K, V> implements IVilType, IStringValueProvider {
      * 
      * @param types the parameter types of this map
      */
-    @SuppressWarnings("unused")
-    private Map(TypeDescriptor<? extends IVilType>[] types) {
+    Map(TypeDescriptor<? extends IVilType>[] types) {
         this(types, 0);
     }
 
@@ -33,7 +32,7 @@ public class Map<K, V> implements IVilType, IStringValueProvider {
      * @param types the parameter types of this map
      * @param size the initial size of this map
      */
-    private Map(TypeDescriptor<? extends IVilType>[] types, int size) {
+    Map(TypeDescriptor<? extends IVilType>[] types, int size) {
         assert null != types && 2 == types.length;
         this.types = types;
         map = new HashMap<Object, Object>(size <= 0 ? 10 : size);
@@ -68,6 +67,20 @@ public class Map<K, V> implements IVilType, IStringValueProvider {
         }
         return result;
     }
+    
+    /**
+     * Returns whether this map contains a mapping for the given <code>key</code>.
+     * 
+     * @param key the key to search for
+     * @return <code>true</code> if key is included, <code>false</code> else
+     */
+    public boolean containsKey(Object key) {
+        boolean result = false;
+        if (null != key) {
+            result = map.containsKey(key);
+        }
+        return result;
+    }
 
     /**
      * Returns the value assigned to <code>key</code>.
@@ -75,8 +88,44 @@ public class Map<K, V> implements IVilType, IStringValueProvider {
      * @param key the key to search the value for
      * @return the value for key (may be <b>null</b>)
      */
+    @OperationMeta(useGenericParameter = 1 )
     public V get(Object key) {
         return at(key);
+    }
+    
+    /**
+     * Adds a key-value pair to this map and overrides existing mappings.
+     * 
+     * @param key the key for the mapping (<b>null</b> is ignored)
+     * @param value the value of the mapping
+     */
+    public void add(Object key, V value) {
+        Object val = value;
+        if (null != key) {
+            if (2 == types.length) {
+                if (types[1].isMap() && value instanceof Collection<?>) {
+                    Collection<?> coll = (Collection<?>) value;
+                    if (0 == coll.size()) {
+                        TypeDescriptor<? extends IVilType>[] params = TypeDescriptor.createArray(2);
+                        params[0] = types[0];
+                        params[1] = types[1];
+                        val = new Map<Object, Object>(params);
+                    }
+                }
+            }
+            map.put(key, val);
+        }
+    }
+    
+    /**
+     * Removes the given <code>key</code> from the map.
+     * 
+     * @param key the key to be removed
+     */
+    public void remove(Object key) {
+        if (null != key) {
+            map.remove(key);
+        }
     }
 
     /**
@@ -87,6 +136,15 @@ public class Map<K, V> implements IVilType, IStringValueProvider {
     @Invisible(inherit = true)
     public int getDimensionCount() {
         return types.length;
+    }
+    
+    /**
+     * Returns the size of the map.
+     * 
+     * @return the size of the map
+     */
+    public int getSize() {
+        return map.size();
     }
     
     /**
@@ -110,14 +168,19 @@ public class Map<K, V> implements IVilType, IStringValueProvider {
      */
     @Conversion
     public static Map<?, ?> convert(Sequence<?> sequence) throws ArtifactException {
-        if (sequence.getDimensionCount() != 2) {
-            throw new ArtifactException("sequence of dimension " + sequence.getDimensionCount() 
-                + "cannot be conerted into a map of dimension 2", ArtifactException.ID_INVALID_TYPE);
-        }
         int seqSize = sequence.size();
+        if (seqSize > 0 && sequence.getDimensionCount() != 2) {
+            throw new ArtifactException("sequence of dimension " + sequence.getDimensionCount() 
+                + " cannot be converted into a map of dimension 2", ArtifactException.ID_INVALID_TYPE);
+        }
         TypeDescriptor<? extends IVilType>[] types = TypeDescriptor.createArray(2);
-        types[0] = sequence.getDimensionType(0);
-        types[1] = sequence.getDimensionType(1);
+        if (seqSize > 0) {
+            types[0] = sequence.getDimensionType(0);
+            types[1] = sequence.getDimensionType(1);
+        } else {
+            types[0] = TypeRegistry.anyType();
+            types[1] = types[0];
+        }
         Map<?, ?> result = new Map<Object, Object>(types, seqSize);
         for (int e = 0; e < seqSize; e++) {
             Object elt = sequence.get(e);
@@ -186,6 +249,41 @@ public class Map<K, V> implements IVilType, IStringValueProvider {
         }
         tmp.append("}");
         return tmp.toString();
+    }
+    
+    /**
+     * Converts <code>value</code> to an empty map with parameter types from <code>type</code>, if
+     * <code>type</code> is a map and <code>value</code> is an empty map instance. This is needed
+     * for initialization.
+     * 
+     * @param type the (target) type to be checked
+     * @param value the value to be checked
+     * @return <code>value</code> or an empty map of the given types
+     */
+    @Invisible
+    public static Object checkConvertEmpty(TypeDescriptor<? extends IVilType> type, Object value) {
+        if (type.isMap() && value instanceof Map<?, ?> && 2 == type.getParameterCount()) {
+            Map<?, ?> map = (Map<?, ?>) value;
+            final TypeDescriptor<? extends IVilType> any = TypeRegistry.anyType();
+            if (0 == map.getSize() && 2 == map.getDimensionCount() 
+                && any == map.getDimensionType(0) && any == map.getDimensionType(1)) {
+                TypeDescriptor<? extends IVilType>[] params = TypeDescriptor.createArray(2);
+                params[0] = type.getParameterType(0);
+                params[1] = type.getParameterType(1);
+                value = new Map<Object, Object>(params);
+            }
+        }
+        return value;
+    }
+    
+    @Override
+    public boolean equals(Object object) {
+        return map.equals(object);
+    }
+    
+    @Override
+    public int hashCode() {
+        return map.hashCode();
     }
 
 }

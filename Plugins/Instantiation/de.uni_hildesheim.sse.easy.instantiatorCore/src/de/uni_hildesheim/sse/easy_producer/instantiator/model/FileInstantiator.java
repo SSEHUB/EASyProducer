@@ -4,9 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.StringTokenizer;
 
-import de.uni_hildesheim.sse.easy.instantiator.copy.core.ICopyMechanism;
 import de.uni_hildesheim.sse.easy_producer.instantiator.InstantiatorConstants;
 
 /**
@@ -278,32 +276,32 @@ public class FileInstantiator implements Cloneable {
                     result.add(adaptedFile);
                     // the file is not at the expected path, so it might be a non-source file
                     // change the path to the non source namespace container
-                } else {
-                    System.out.println("DEBUG: Adapted path invalid. Using non source folder path");
-                    String[] currentPathSplit = currentFilePath.split(inheritanceChain.get(0));
-
-                    StringTokenizer nizer = new StringTokenizer(currentPathSplit[1], "\\ /");
-                    String token = nizer.nextToken();
-                    currentPathSplit[1] = currentPathSplit[1].substring(token.length() + 1);
-                    IInstantiatorProject productPLP = projectManager.getPLP(productID);
-                    ICopyMechanism currentCopyMechanism = productPLP.getCopyModel().getCopyMechanism();
-                    String tmp1 = relativePath.split(InstantiatorConstants.FOLDER_SOURCE)[1];
-                    String tmp2 = currentPathSplit[1];
-                    
-                    if (currentCopyMechanism.useNameSpace()) {
-                        adaptedPath = currentPath + File.separatorChar + token + tmp1 + tmp2.substring(1);  
-                    } else {
-                        adaptedPath = currentPath + File.separatorChar + token + tmp2;    
-                    }
-                    
-                    System.out.println("DEBUG: adapted path: " + adaptedPath);
-                    adaptedFile = new File(adaptedPath);
-                    if (adaptedFile.exists() && adaptedFile.isFile()) {
-                        result.add(adaptedFile);
-                    } else {
-                        System.out.println("DEBUG: file does not exist, discarding...");
-                        System.out.println("DEBUG: missing original file: " + currentFilePath);
-                    }
+//                } else {
+//                    System.out.println("DEBUG: Adapted path invalid. Using non source folder path");
+//                    String[] currentPathSplit = currentFilePath.split(inheritanceChain.get(0));
+//
+//                    StringTokenizer nizer = new StringTokenizer(currentPathSplit[1], "\\ /");
+//                    String token = nizer.nextToken();
+//                    currentPathSplit[1] = currentPathSplit[1].substring(token.length() + 1);
+//                    IInstantiatorProject productPLP = projectManager.getPLP(productID);
+//                    // FIXME SE: Removed CopyMechanism 
+////                    ICopyMechanism currentCopyMechanism = productPLP.getCopyModel().getCopyMechanism();
+//                    String tmp1 = relativePath.split(InstantiatorConstants.FOLDER_SOURCE)[1];
+//                    String tmp2 = currentPathSplit[1];
+////                    if (currentCopyMechanism.useNameSpace()) {
+////                        adaptedPath = currentPath + File.separatorChar + token + tmp1 + tmp2.substring(1);  
+////                    } else {
+////                        adaptedPath = currentPath + File.separatorChar + token + tmp2;    
+////                    }
+//                    
+//                    System.out.println("DEBUG: adapted path: " + adaptedPath);
+//                    adaptedFile = new File(adaptedPath);
+//                    if (adaptedFile.exists() && adaptedFile.isFile()) {
+//                        result.add(adaptedFile);
+//                    } else {
+//                        System.out.println("DEBUG: file does not exist, discarding...");
+//                        System.out.println("DEBUG: missing original file: " + currentFilePath);
+//                    }
                 }
                 System.out.println("DEBUG: adapted Filepath: " + adaptedPath);
             }

@@ -51,16 +51,12 @@ public class Comment extends ConstraintSyntaxTree {
         return expr;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public IDatatype inferDatatype() throws CSTSemanticException {
         return expr.inferDatatype();
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void accept(IConstraintTreeVisitor visitor) {
         visitor.visitComment(this); // no further operations!
     }
@@ -74,9 +70,6 @@ public class Comment extends ConstraintSyntaxTree {
         return comment;
     }
     
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean equals(Object obj) {
         boolean equals = false;

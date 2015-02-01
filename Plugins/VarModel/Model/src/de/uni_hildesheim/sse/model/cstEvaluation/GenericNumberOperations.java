@@ -149,7 +149,7 @@ class GenericNumberOperations {
         EvaluationAccessor[] arguments, INumberComparator strategy) {
         
         EvaluationAccessor result = null;
-        if (operand.getValue() != null && arguments.length == 1 && null != arguments[0].getValue()) {
+        if (null != operand && operand.getValue() != null && arguments.length == 1 && null != arguments[0].getValue()) {
             Object oValue = operand.getValue().getValue();
             Object aValue = arguments[0].getValue().getValue();
             

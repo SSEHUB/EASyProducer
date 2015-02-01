@@ -81,9 +81,7 @@ public class FreezeBlock extends EvaluationBlock {
         }
     }
 
-    /** 
-     * {@inheritDoc}
-     */
+    @Override
     public void accept(IModelVisitor visitor) {
         visitor.visitFreezeBlock(this);
     }

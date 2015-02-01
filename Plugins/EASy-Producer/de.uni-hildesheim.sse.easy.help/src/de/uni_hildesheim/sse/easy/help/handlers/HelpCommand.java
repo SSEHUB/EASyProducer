@@ -15,9 +15,7 @@ import org.eclipse.ui.PlatformUI;
  */
 public class HelpCommand  extends AbstractHandler {
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public Object execute(ExecutionEvent event) throws ExecutionException {
         if (PlatformUI.getWorkbench().getHelpSystem().hasHelpUI()) {
             PlatformUI.getWorkbench().getHelpSystem()

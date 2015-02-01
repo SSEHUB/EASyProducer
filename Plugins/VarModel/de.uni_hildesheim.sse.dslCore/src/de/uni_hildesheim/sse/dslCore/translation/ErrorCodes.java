@@ -73,6 +73,11 @@ public class ErrorCodes {
     public static final int SYNTAX = 20213;
 
     /**
+     * Discouraged use (usually a warning).
+     */
+    public static final int DISCOURAGED = 20214;
+    
+    /**
      * Prevents creating instances of this class.
      */
     protected ErrorCodes() {

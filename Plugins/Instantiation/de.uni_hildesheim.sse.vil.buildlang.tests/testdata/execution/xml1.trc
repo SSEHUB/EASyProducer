@@ -1,0 +1,2 @@
+-> main(Project, Project, Configuration) with (<project>, <project>, <config>)
+    targetFile <- xml1File.xml

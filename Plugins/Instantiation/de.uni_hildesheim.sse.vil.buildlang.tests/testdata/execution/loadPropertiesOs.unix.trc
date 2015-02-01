@@ -1,0 +1,6 @@
+var <- 86
+bool <- true
+test <- Unix string
+unchanged <- 7
+specific <- Linux
+-> main()

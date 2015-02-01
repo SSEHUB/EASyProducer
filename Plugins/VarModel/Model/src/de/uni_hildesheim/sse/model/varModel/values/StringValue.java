@@ -59,11 +59,7 @@ public class StringValue extends BasisDatatypeValue {
         return value;
     }
     
-    /** 
-     * Accept method for the visitor. <br/>
-     * This method is used for saving this model element.
-     * @param visitor The visitor, which should save this model element.
-     */
+    @Override
     public void accept(IValueVisitor visitor) {
         visitor.visitStringValue(this);
     }
@@ -73,11 +69,23 @@ public class StringValue extends BasisDatatypeValue {
         return value != null;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public Value clone() {
         return new StringValue(value);
+    }
+    
+    @Override
+    public int hashCode() {
+        return null != value ? value.hashCode() : 0;
+    }
+    
+    @Override
+    public boolean equals(Object object) {
+        boolean result = false;
+        if (value != null && object instanceof StringValue) {
+            result = value.equals(((StringValue) object).getValue());
+        }
+        return result;
     }
 
 }

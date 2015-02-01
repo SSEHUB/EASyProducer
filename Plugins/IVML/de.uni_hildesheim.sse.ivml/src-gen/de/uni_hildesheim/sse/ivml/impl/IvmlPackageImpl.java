@@ -18,7 +18,6 @@ import de.uni_hildesheim.sse.ivml.ConflictStmt;
 import de.uni_hildesheim.sse.ivml.Declaration;
 import de.uni_hildesheim.sse.ivml.Declarator;
 import de.uni_hildesheim.sse.ivml.DerivedType;
-import de.uni_hildesheim.sse.ivml.DslContext;
 import de.uni_hildesheim.sse.ivml.EqualityExpression;
 import de.uni_hildesheim.sse.ivml.EqualityExpressionPart;
 import de.uni_hildesheim.sse.ivml.Eval;
@@ -71,7 +70,6 @@ import de.uni_hildesheim.sse.ivml.VariabilityUnit;
 import de.uni_hildesheim.sse.ivml.VariableDeclaration;
 import de.uni_hildesheim.sse.ivml.VariableDeclarationPart;
 import de.uni_hildesheim.sse.ivml.VersionStmt;
-import de.uni_hildesheim.sse.ivml.VersionedId;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -233,13 +231,6 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass dslContextEClass = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   private EClass attributeToEClass = null;
 
   /**
@@ -304,13 +295,6 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * @generated
    */
   private EClass conflictStmtEClass = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private EClass versionedIdEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -862,7 +846,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getTypedefCompound_Name()
+  public EAttribute getTypedefCompound_Abstract()
   {
     return (EAttribute)typedefCompoundEClass.getEStructuralFeatures().get(0);
   }
@@ -872,7 +856,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getTypedefCompound_Super()
+  public EAttribute getTypedefCompound_Name()
   {
     return (EAttribute)typedefCompoundEClass.getEStructuralFeatures().get(1);
   }
@@ -882,9 +866,19 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getTypedefCompound_Super()
+  {
+    return (EAttribute)typedefCompoundEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EReference getTypedefCompound_Elements()
   {
-    return (EReference)typedefCompoundEClass.getEStructuralFeatures().get(2);
+    return (EReference)typedefCompoundEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -1242,9 +1236,29 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getValue_NullValue()
+  public EAttribute getValue_Self()
   {
     return (EAttribute)valueEClass.getEStructuralFeatures().get(4);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getValue_NullValue()
+  {
+    return (EAttribute)valueEClass.getEStructuralFeatures().get(5);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getValue_Version()
+  {
+    return (EAttribute)valueEClass.getEStructuralFeatures().get(6);
   }
 
   /**
@@ -1275,56 +1289,6 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
   public EReference getDerivedType_Type()
   {
     return (EReference)derivedTypeEClass.getEStructuralFeatures().get(1);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EClass getDslContext()
-  {
-    return dslContextEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EAttribute getDslContext_Stop()
-  {
-    return (EAttribute)dslContextEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EAttribute getDslContext_Escape()
-  {
-    return (EAttribute)dslContextEClass.getEStructuralFeatures().get(1);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EAttribute getDslContext_Command()
-  {
-    return (EAttribute)dslContextEClass.getEStructuralFeatures().get(2);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EAttribute getDslContext_Dsl()
-  {
-    return (EAttribute)dslContextEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -1602,7 +1566,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getImportStmt_Versions()
+  public EReference getImportStmt_Restriction()
   {
     return (EReference)importStmtEClass.getEStructuralFeatures().get(2);
   }
@@ -1632,49 +1596,9 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getConflictStmt_Conflicts()
+  public EReference getConflictStmt_Restriction()
   {
     return (EReference)conflictStmtEClass.getEStructuralFeatures().get(1);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EClass getVersionedId()
-  {
-    return versionedIdEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EAttribute getVersionedId_Name()
-  {
-    return (EAttribute)versionedIdEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EAttribute getVersionedId_Op()
-  {
-    return (EAttribute)versionedIdEClass.getEStructuralFeatures().get(1);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EAttribute getVersionedId_Version()
-  {
-    return (EAttribute)versionedIdEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -1865,16 +1789,6 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
   public EReference getExpression_Collection()
   {
     return (EReference)expressionEClass.getEStructuralFeatures().get(2);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EReference getExpression_Dsl()
-  {
-    return (EReference)expressionEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -2966,6 +2880,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     createEReference(typedefEnumLiteralEClass, TYPEDEF_ENUM_LITERAL__VALUE);
 
     typedefCompoundEClass = createEClass(TYPEDEF_COMPOUND);
+    createEAttribute(typedefCompoundEClass, TYPEDEF_COMPOUND__ABSTRACT);
     createEAttribute(typedefCompoundEClass, TYPEDEF_COMPOUND__NAME);
     createEAttribute(typedefCompoundEClass, TYPEDEF_COMPOUND__SUPER);
     createEReference(typedefCompoundEClass, TYPEDEF_COMPOUND__ELEMENTS);
@@ -3016,17 +2931,13 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     createEAttribute(valueEClass, VALUE__SVALUE);
     createEReference(valueEClass, VALUE__QVALUE);
     createEAttribute(valueEClass, VALUE__BVALUE);
+    createEAttribute(valueEClass, VALUE__SELF);
     createEAttribute(valueEClass, VALUE__NULL_VALUE);
+    createEAttribute(valueEClass, VALUE__VERSION);
 
     derivedTypeEClass = createEClass(DERIVED_TYPE);
     createEAttribute(derivedTypeEClass, DERIVED_TYPE__OP);
     createEReference(derivedTypeEClass, DERIVED_TYPE__TYPE);
-
-    dslContextEClass = createEClass(DSL_CONTEXT);
-    createEAttribute(dslContextEClass, DSL_CONTEXT__STOP);
-    createEAttribute(dslContextEClass, DSL_CONTEXT__ESCAPE);
-    createEAttribute(dslContextEClass, DSL_CONTEXT__COMMAND);
-    createEAttribute(dslContextEClass, DSL_CONTEXT__DSL);
 
     attributeToEClass = createEClass(ATTRIBUTE_TO);
     createEReference(attributeToEClass, ATTRIBUTE_TO__ATTRIBUTE_TYPE);
@@ -3063,16 +2974,11 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     importStmtEClass = createEClass(IMPORT_STMT);
     createEAttribute(importStmtEClass, IMPORT_STMT__NAME);
     createEAttribute(importStmtEClass, IMPORT_STMT__INTERFACE);
-    createEReference(importStmtEClass, IMPORT_STMT__VERSIONS);
+    createEReference(importStmtEClass, IMPORT_STMT__RESTRICTION);
 
     conflictStmtEClass = createEClass(CONFLICT_STMT);
     createEAttribute(conflictStmtEClass, CONFLICT_STMT__NAME);
-    createEReference(conflictStmtEClass, CONFLICT_STMT__CONFLICTS);
-
-    versionedIdEClass = createEClass(VERSIONED_ID);
-    createEAttribute(versionedIdEClass, VERSIONED_ID__NAME);
-    createEAttribute(versionedIdEClass, VERSIONED_ID__OP);
-    createEAttribute(versionedIdEClass, VERSIONED_ID__VERSION);
+    createEReference(conflictStmtEClass, CONFLICT_STMT__RESTRICTION);
 
     versionStmtEClass = createEClass(VERSION_STMT);
     createEAttribute(versionStmtEClass, VERSION_STMT__VERSION);
@@ -3098,7 +3004,6 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     createEReference(expressionEClass, EXPRESSION__LET);
     createEReference(expressionEClass, EXPRESSION__EXPR);
     createEReference(expressionEClass, EXPRESSION__COLLECTION);
-    createEReference(expressionEClass, EXPRESSION__DSL);
 
     letExpressionEClass = createEClass(LET_EXPRESSION);
     createEReference(letExpressionEClass, LET_EXPRESSION__TYPE);
@@ -3294,6 +3199,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     initEReference(getTypedefEnumLiteral_Value(), this.getNumValue(), null, "value", null, 0, 1, TypedefEnumLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(typedefCompoundEClass, TypedefCompound.class, "TypedefCompound", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getTypedefCompound_Abstract(), ecorePackage.getEString(), "abstract", null, 0, 1, TypedefCompound.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getTypedefCompound_Name(), ecorePackage.getEString(), "name", null, 0, 1, TypedefCompound.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getTypedefCompound_Super(), ecorePackage.getEString(), "super", null, 0, 1, TypedefCompound.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getTypedefCompound_Elements(), ecorePackage.getEObject(), null, "elements", null, 0, -1, TypedefCompound.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -3344,17 +3250,13 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     initEAttribute(getValue_SValue(), ecorePackage.getEString(), "sValue", null, 0, 1, Value.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getValue_QValue(), this.getQualifiedName(), null, "qValue", null, 0, 1, Value.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getValue_BValue(), ecorePackage.getEString(), "bValue", null, 0, 1, Value.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getValue_Self(), ecorePackage.getEString(), "self", null, 0, 1, Value.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getValue_NullValue(), ecorePackage.getEString(), "nullValue", null, 0, 1, Value.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getValue_Version(), ecorePackage.getEString(), "version", null, 0, 1, Value.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(derivedTypeEClass, DerivedType.class, "DerivedType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getDerivedType_Op(), ecorePackage.getEString(), "op", null, 0, 1, DerivedType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getDerivedType_Type(), this.getType(), null, "type", null, 0, 1, DerivedType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(dslContextEClass, DslContext.class, "DslContext", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getDslContext_Stop(), ecorePackage.getEString(), "stop", null, 0, 1, DslContext.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getDslContext_Escape(), ecorePackage.getEString(), "escape", null, 0, 1, DslContext.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getDslContext_Command(), ecorePackage.getEString(), "command", null, 0, 1, DslContext.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getDslContext_Dsl(), ecorePackage.getEString(), "dsl", null, 0, 1, DslContext.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(attributeToEClass, AttributeTo.class, "AttributeTo", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getAttributeTo_AttributeType(), this.getType(), null, "attributeType", null, 0, 1, AttributeTo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -3391,16 +3293,11 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     initEClass(importStmtEClass, ImportStmt.class, "ImportStmt", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getImportStmt_Name(), ecorePackage.getEString(), "name", null, 0, 1, ImportStmt.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getImportStmt_Interface(), ecorePackage.getEString(), "interface", null, 0, 1, ImportStmt.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getImportStmt_Versions(), this.getVersionedId(), null, "versions", null, 0, -1, ImportStmt.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getImportStmt_Restriction(), this.getExpression(), null, "restriction", null, 0, 1, ImportStmt.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(conflictStmtEClass, ConflictStmt.class, "ConflictStmt", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getConflictStmt_Name(), ecorePackage.getEString(), "name", null, 0, 1, ConflictStmt.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getConflictStmt_Conflicts(), this.getVersionedId(), null, "conflicts", null, 0, -1, ConflictStmt.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(versionedIdEClass, VersionedId.class, "VersionedId", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getVersionedId_Name(), ecorePackage.getEString(), "name", null, 0, 1, VersionedId.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getVersionedId_Op(), ecorePackage.getEString(), "op", null, 0, 1, VersionedId.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getVersionedId_Version(), ecorePackage.getEString(), "version", null, 0, 1, VersionedId.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getConflictStmt_Restriction(), this.getExpression(), null, "restriction", null, 0, 1, ConflictStmt.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(versionStmtEClass, VersionStmt.class, "VersionStmt", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getVersionStmt_Version(), ecorePackage.getEString(), "version", null, 0, 1, VersionStmt.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -3426,7 +3323,6 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     initEReference(getExpression_Let(), this.getLetExpression(), null, "let", null, 0, 1, Expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getExpression_Expr(), this.getImplicationExpression(), null, "expr", null, 0, 1, Expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getExpression_Collection(), this.getCollectionInitializer(), null, "collection", null, 0, 1, Expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getExpression_Dsl(), this.getDslContext(), null, "dsl", null, 0, 1, Expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(letExpressionEClass, LetExpression.class, "LetExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getLetExpression_Type(), this.getType(), null, "type", null, 0, 1, LetExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

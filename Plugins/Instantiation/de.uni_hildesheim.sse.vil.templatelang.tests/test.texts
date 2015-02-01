@@ -1,7 +1,7 @@
 project test_conf {
 
     version v1.0;
-    import test with (test.version == v1.0);
+    import test with test.version == v1.0;
     iInt = -1;
     pInt = 0;
     pString = "Hello";

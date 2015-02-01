@@ -5,6 +5,8 @@ import java.io.IOException;
 
 import org.junit.Test;
 
+import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
+
 /**
  * A test class for blackbox testing parser and type resolution of additional
  * files.
@@ -45,7 +47,7 @@ public class AdditionalTests extends AbstractTest {
      */
     @Test
     public void testSets() throws IOException {
-        assertEqual(createFile("sets"), "PL_Sets", "0", 10206);
+        assertEqual(createFile("sets"), "PL_Sets", "0", ValueDoesNotMatchTypeException.NOT_ALLOWED_VALUE_STRUCTURE);
     }
     
     /**

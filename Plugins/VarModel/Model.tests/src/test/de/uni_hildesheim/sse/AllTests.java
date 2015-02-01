@@ -54,6 +54,7 @@ import de.uni_hildesheim.sse.varModel.values.SequenceValueTest;
 import de.uni_hildesheim.sse.varModel.values.SetValueTest;
 import de.uni_hildesheim.sse.varModel.values.StringValueTest;
 import de.uni_hildesheim.sse.varModel.values.ValueFactoryTest;
+import de.uni_hildesheim.sse.varModel.versioning.ImportValidationTest;
 
 /**
  * Test Suite for running all test cases. <br/>
@@ -110,6 +111,7 @@ import de.uni_hildesheim.sse.varModel.values.ValueFactoryTest;
     ConfigurationTest.class,
     CommentTest.class,
     SetVariableTest.class,
+    ImportValidationTest.class,
 //    IVMLValidationVisitorTest.class,
     EASyLoggerFactoryTest.class,
     JavaLoggerTest.class,

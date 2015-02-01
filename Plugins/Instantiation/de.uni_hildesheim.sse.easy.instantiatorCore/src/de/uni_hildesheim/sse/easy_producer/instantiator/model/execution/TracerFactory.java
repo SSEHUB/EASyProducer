@@ -11,8 +11,22 @@ public abstract class TracerFactory {
      * Defines the default tracer.
      */
     public static final TracerFactory DEFAULT = new DefaultTracerFactory();
+
+    public static final IInstantiatorTracer EMPTY_INSTANTIATOR_TRACER = new IInstantiatorTracer() {
+
+        @Override
+        public void traceMessage(String message) {
+            // do nothing
+        }
+
+        @Override
+        public void traceError(String message) {
+            // do nothing
+        }
+    };
+
     private static TracerFactory instance = DEFAULT;
-    
+
     /**
      * The default tracer factory returning tracer instances which do not trace
      * anything (NoTracer). New factories may be derived from this class.
@@ -31,6 +45,11 @@ public abstract class TracerFactory {
         protected de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ITracer 
         createBuildLanguageTracerImpl() {
             return de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.NoTracer.INSTANCE;
+        }
+
+        @Override
+        protected IInstantiatorTracer createInstantiatorTracerImpl() {
+            return EMPTY_INSTANTIATOR_TRACER;
         }
         
     };
@@ -72,6 +91,13 @@ public abstract class TracerFactory {
      */
     protected abstract de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ITracer 
     createBuildLanguageTracerImpl();
+    
+    /**
+     * Creates a tracer for instantiators, i.e., to send messages to the VIL output.
+     * 
+     * @return the instantiator tracer
+     */
+    protected abstract IInstantiatorTracer createInstantiatorTracerImpl();
 
     /**
      * Creates a tracer for the VIL template language.
@@ -102,5 +128,19 @@ public abstract class TracerFactory {
         }
         return result;
     }
-    
+
+    /**
+     * Creates a tracer for instantiators.
+     * 
+     * @return a tracer for instantiators
+     */
+    public static IInstantiatorTracer createInstantitorTracer() {
+        IInstantiatorTracer result;
+        result = getInstance().createInstantiatorTracerImpl();
+        if (null == result) {
+            result = DEFAULT.createInstantiatorTracerImpl();
+        }
+        return result;
+    }
+
 }

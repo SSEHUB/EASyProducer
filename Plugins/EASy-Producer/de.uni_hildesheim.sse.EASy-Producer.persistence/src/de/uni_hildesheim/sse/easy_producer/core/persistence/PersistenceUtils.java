@@ -37,20 +37,43 @@ import de.uni_hildesheim.sse.easy_producer.core.persistence.internal.StorageType
 import de.uni_hildesheim.sse.easy_producer.core.persistence.standard.PersistenceConstants;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildlangWriter;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ExpressionStatement;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.IRuleElement;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.InstantiateExpression;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.MapExpression;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Rule;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Utils;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.VariableDeclaration;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallArgument;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VariableExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateModel;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypes;
+import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
+import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
 import de.uni_hildesheim.sse.model.management.VarModel;
+import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
+import de.uni_hildesheim.sse.model.varModel.ExpressionVersionRestriction;
 import de.uni_hildesheim.sse.model.varModel.IvmlKeyWords;
 import de.uni_hildesheim.sse.model.varModel.Project;
+import de.uni_hildesheim.sse.model.varModel.ProjectImport;
+import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
+import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
 import de.uni_hildesheim.sse.persistency.IVMLWriter;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
 import de.uni_hildesheim.sse.utils.modelManagement.IModel;
+import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagement;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
+import de.uni_hildesheim.sse.utils.modelManagement.RestrictionEvaluationException;
 import de.uni_hildesheim.sse.utils.modelManagement.Version;
+import de.uni_hildesheim.sse.utils.modelManagement.VersionFormatException;
 import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
 
 /**
@@ -526,5 +549,159 @@ public class PersistenceUtils {
         } catch (NullPointerException e) {
             LOGGER.exception(e);
         }
+    }
+    
+    /**
+     * Creates a (new) build script inside <tt>plp</tt>. This build script will only call build script from all
+     * predecessor projects and will instantiate their stuff into <tt>plp</tt>.<br/>
+     * In this case, this method tries to add a "instantiate all predecessors" call to the main rule.
+     * @param plp The newly created Project where a new main build script shall be created.
+     * @param parentPLPs Predecessor projects which shall be instantiated into the newly created project.
+     */
+    public static void createInstantiatePredecessorScript(PLPInfo plp, PLPInfo... parentPLPs) {
+        Script mainScript = plp.getBuildScript();
+        Rule mainRule = mainScript.getMainRule(true);
+        
+        if (null != parentPLPs) {
+            for (int j = 0, n = parentPLPs.length; j < n; j++) {
+                Script parentScript = parentPLPs[j].getBuildScript();
+                Script resolved = null;
+                for (int i = 0; i < mainScript.getImportsCount() && resolved == null; i++) {
+                    ModelImport<?> scriptImport = mainScript.getImport(i);
+                    if (scriptImport.getName().equals(parentScript.getName())) {
+                        resolved = (Script) scriptImport.getResolved();
+                    }
+                }
+                if (null == resolved) {
+                    addScriptImportToPLP(plp, parentPLPs[j]);
+                    BuildModel.INSTANCE.resolveImports(mainScript, null, null);
+                    for (int i = 0; i < mainScript.getImportsCount() && resolved == null; i++) {
+                        ModelImport<?> scriptImport = mainScript.getImport(i);
+                        if (scriptImport.getName().equals(parentScript.getName())) {
+                            resolved = (Script) scriptImport.getResolved();
+                        }
+                    }
+                }
+                
+                if (null != resolved) {
+                    
+                    // If empty, call "instantiate p : source.predecessors()"
+                    if (mainRule.getBodyElementCount() == 0) {
+                        try {
+                            // Create variable for iteration
+                            VariableDeclaration p = new VariableDeclaration("p", IvmlTypes.projectType());
+                            
+                            // Create: source.predecessors()
+                            Expression sourceVar = new VariableExpression(mainRule.getParameter(0));
+                            Expression predecessorAccess = new CallExpression(mainRule, "predecessors", sourceVar);
+                            // Resolve expression
+                            predecessorAccess.inferType();
+                            
+                            // Create body: instantiate call
+                            CallArgument sourceProject = new CallArgument(new VariableExpression(p));
+                            CallArgument config = new CallArgument(new VariableExpression(mainRule.getParameter(1)));
+                            CallArgument targetProject
+                                = new CallArgument(new VariableExpression(mainRule.getParameter(2)));
+                            Expression mapBody = new InstantiateExpression(p, null, null, sourceProject, config,
+                                targetProject);
+                            // Resolve expression
+                            mapBody.inferType();
+                            
+                            // Create map
+                            ExpressionStatement bodyStatement = new ExpressionStatement(mapBody);
+                            VariableDeclaration[] mapVariables = {p};
+                            MapExpression map = new MapExpression(mapVariables, predecessorAccess,
+                                new IRuleElement[]{bodyStatement}, null, true);
+                            ExpressionStatement mapStatement = new ExpressionStatement(map);
+                            
+                            // Set body of main rule
+                            mainRule.setBody(new IRuleElement[] {mapStatement});
+                            // If changes where successful (no exception occurred, notify model that script was edited.
+                            plp.buildScriptWasEdited();
+                        } catch (ExpressionException e) {
+                            LOGGER.warn("Rule could not be modified. Reason: " + e.getMessage());
+                        } catch (VilLanguageException e) {
+                            LOGGER.warn("Rule could not be modified. Reason: " + e.getMessage());
+                        } 
+                    }
+                }
+            }
+        }
+    }
+    
+    /**
+     * Adds an import to the {@link de.uni_hildesheim.sse.model.varModel.Project} and to the {@link Script} of a given
+     * {@link PLPInfo} to the {@link de.uni_hildesheim.sse.model.varModel.Project} and {@link Script} of a predecessor
+     * project.
+     * 
+     * @param plp the product line project to add the import to
+     * @param predecessor A predecessor project of plp, where the {@link de.uni_hildesheim.sse.model.varModel.Project}
+     *     <b>and</b> the {@link Script} should be included.
+     * @param considerVIL <tt>true</tt> if the parent project has also a build script which should be considered,
+     *     <tt>false</tt> otherwise
+     */
+    public static final void addImport(PLPInfo plp, PLPInfo predecessor, boolean considerVIL) {
+        String projectName = predecessor.getProjectName();
+        boolean hasProjectVersion = null != predecessor.getProject() && null != predecessor.getProject().getVersion();
+
+        // Variability Model
+        ProjectImport parentImport = new ProjectImport(projectName, null);
+        
+        if (hasProjectVersion) {
+            Version clonedVersion = null;
+            try {
+                clonedVersion = new Version(predecessor.getProject().getVersion().getVersion());
+            } catch (VersionFormatException e) {
+                // Can not happen, since a valid version was used
+                LOGGER.exception(e);
+            }
+            try {
+                DecisionVariableDeclaration[] vars = ExpressionVersionRestriction.createRestrictionVars(projectName);
+                ConstraintSyntaxTree expr = ExpressionVersionRestriction.createSingleRestriction(vars[1], 
+                    IvmlKeyWords.EQUALS, clonedVersion);
+                parentImport.setRestrictions(new ExpressionVersionRestriction(expr, vars[0], vars[1]));
+            } catch (RestrictionEvaluationException e) {
+                LOGGER.exception(e);
+            } catch (CSTSemanticException e) {
+                LOGGER.exception(e);
+            } catch (ValueDoesNotMatchTypeException e) {
+                LOGGER.exception(e);
+            }
+        }
+        plp.getProject().addImport(parentImport);
+        
+        // Build Script
+        if (considerVIL) {
+            addScriptImportToPLP(plp, predecessor);
+        }
+    }
+    
+    /**
+     * Adds a new import to the main build script of a {@link PLPInfo}.
+     * @param plp The plp where the import shall be added to the main build script.
+     * @param predecessor The predecessor project which shall be imported.
+     */
+    private static void addScriptImportToPLP(PLPInfo plp, PLPInfo predecessor) {
+        ModelImport<Script> scriptImport = new ModelImport<Script>(predecessor.getProjectName());
+        
+        boolean hasScriptVersion = null != predecessor.getBuildScript()
+            && null != predecessor.getBuildScript().getVersion();
+        
+        if (hasScriptVersion) {
+            Version clonedVersion = null;
+            try {
+                clonedVersion = new Version(predecessor.getBuildScript().getVersion().getVersion());
+            } catch (VersionFormatException e) {
+                // Can not happen, since a valid version was used
+                LOGGER.exception(e);
+            }
+            try {
+                scriptImport.setRestrictions(Utils.createSingleRestriction(plp.getBuildScript(), 
+                    OclKeyWords.EQUALS, clonedVersion));
+            } catch (RestrictionEvaluationException e) {
+                LOGGER.exception(e);
+            } 
+        }
+        plp.addScriptImport(scriptImport);
     }
 }

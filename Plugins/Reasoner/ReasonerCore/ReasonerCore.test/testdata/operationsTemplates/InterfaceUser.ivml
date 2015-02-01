@@ -1,0 +1,6 @@
+project InterfaceUser {
+
+	version v0;
+	import InterfaceProvider::test;
+	t = true;
+}

@@ -103,9 +103,7 @@ public class VarModelTest implements IProjectListener {
     // moved testUpdateProjectInformation to ivml.tests as the IVML loader is required!
     // cannot be tested here as most of the management functions in VarModel
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void notifyReplaced(Project oldProject, Project newProject) {
         lastNotifiedOld = oldProject;
         lastNotifiedNew = newProject;

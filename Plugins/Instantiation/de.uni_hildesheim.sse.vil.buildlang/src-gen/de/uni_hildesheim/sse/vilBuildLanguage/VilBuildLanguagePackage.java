@@ -327,13 +327,22 @@ public interface VilBuildLanguagePackage extends EPackage
   int RULE_DECLARATION = 6;
 
   /**
+   * The feature id for the '<em><b>Type</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int RULE_DECLARATION__TYPE = 0;
+
+  /**
    * The feature id for the '<em><b>Modifier</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int RULE_DECLARATION__MODIFIER = 0;
+  int RULE_DECLARATION__MODIFIER = 1;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -342,7 +351,7 @@ public interface VilBuildLanguagePackage extends EPackage
    * @generated
    * @ordered
    */
-  int RULE_DECLARATION__NAME = 1;
+  int RULE_DECLARATION__NAME = 2;
 
   /**
    * The feature id for the '<em><b>Param List</b></em>' containment reference.
@@ -351,25 +360,16 @@ public interface VilBuildLanguagePackage extends EPackage
    * @generated
    * @ordered
    */
-  int RULE_DECLARATION__PARAM_LIST = 2;
+  int RULE_DECLARATION__PARAM_LIST = 3;
 
   /**
-   * The feature id for the '<em><b>Postcondition</b></em>' containment reference list.
+   * The feature id for the '<em><b>Conditions</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int RULE_DECLARATION__POSTCONDITION = 3;
-
-  /**
-   * The feature id for the '<em><b>Preconditions</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int RULE_DECLARATION__PRECONDITIONS = 4;
+  int RULE_DECLARATION__CONDITIONS = 4;
 
   /**
    * The feature id for the '<em><b>Block</b></em>' containment reference.
@@ -390,6 +390,43 @@ public interface VilBuildLanguagePackage extends EPackage
   int RULE_DECLARATION_FEATURE_COUNT = 6;
 
   /**
+   * The meta object id for the '{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.RuleConditionsImpl <em>Rule Conditions</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.RuleConditionsImpl
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getRuleConditions()
+   * @generated
+   */
+  int RULE_CONDITIONS = 7;
+
+  /**
+   * The feature id for the '<em><b>Postcondition</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int RULE_CONDITIONS__POSTCONDITION = 0;
+
+  /**
+   * The feature id for the '<em><b>Preconditions</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int RULE_CONDITIONS__PRECONDITIONS = 1;
+
+  /**
+   * The number of structural features of the '<em>Rule Conditions</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int RULE_CONDITIONS_FEATURE_COUNT = 2;
+
+  /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.RuleElementBlockImpl <em>Rule Element Block</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -397,7 +434,7 @@ public interface VilBuildLanguagePackage extends EPackage
    * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getRuleElementBlock()
    * @generated
    */
-  int RULE_ELEMENT_BLOCK = 7;
+  int RULE_ELEMENT_BLOCK = 8;
 
   /**
    * The feature id for the '<em><b>Elements</b></em>' containment reference list.
@@ -425,7 +462,7 @@ public interface VilBuildLanguagePackage extends EPackage
    * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getRuleElement()
    * @generated
    */
-  int RULE_ELEMENT = 8;
+  int RULE_ELEMENT = 9;
 
   /**
    * The feature id for the '<em><b>Var Decl</b></em>' containment reference.
@@ -446,22 +483,13 @@ public interface VilBuildLanguagePackage extends EPackage
   int RULE_ELEMENT__EXPR_STMT = 1;
 
   /**
-   * The feature id for the '<em><b>Defer Decl</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int RULE_ELEMENT__DEFER_DECL = 2;
-
-  /**
    * The number of structural features of the '<em>Rule Element</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int RULE_ELEMENT_FEATURE_COUNT = 3;
+  int RULE_ELEMENT_FEATURE_COUNT = 2;
 
   /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.RuleModifierImpl <em>Rule Modifier</em>}' class.
@@ -471,7 +499,7 @@ public interface VilBuildLanguagePackage extends EPackage
    * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getRuleModifier()
    * @generated
    */
-  int RULE_MODIFIER = 9;
+  int RULE_MODIFIER = 10;
 
   /**
    * The feature id for the '<em><b>Protected</b></em>' attribute.
@@ -492,41 +520,50 @@ public interface VilBuildLanguagePackage extends EPackage
   int RULE_MODIFIER_FEATURE_COUNT = 1;
 
   /**
-   * The meta object id for the '{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.DeferDeclarationImpl <em>Defer Declaration</em>}' class.
+   * The meta object id for the '{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.ExpressionStatementImpl <em>Expression Statement</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.DeferDeclarationImpl
-   * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getDeferDeclaration()
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.ExpressionStatementImpl
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getExpressionStatement()
    * @generated
    */
-  int DEFER_DECLARATION = 10;
+  int EXPRESSION_STATEMENT = 11;
 
   /**
-   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * The feature id for the '<em><b>Var</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int DEFER_DECLARATION__NAME = 0;
+  int EXPRESSION_STATEMENT__VAR = ExpressionDslPackage.EXPRESSION_STATEMENT__VAR;
 
   /**
-   * The feature id for the '<em><b>Depends</b></em>' attribute list.
+   * The feature id for the '<em><b>Expr</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int DEFER_DECLARATION__DEPENDS = 1;
+  int EXPRESSION_STATEMENT__EXPR = ExpressionDslPackage.EXPRESSION_STATEMENT__EXPR;
 
   /**
-   * The number of structural features of the '<em>Defer Declaration</em>' class.
+   * The feature id for the '<em><b>Alt</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int DEFER_DECLARATION_FEATURE_COUNT = 2;
+  int EXPRESSION_STATEMENT__ALT = ExpressionDslPackage.EXPRESSION_STATEMENT_FEATURE_COUNT + 0;
+
+  /**
+   * The number of structural features of the '<em>Expression Statement</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int EXPRESSION_STATEMENT_FEATURE_COUNT = ExpressionDslPackage.EXPRESSION_STATEMENT_FEATURE_COUNT + 1;
 
   /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.PrimaryExpressionImpl <em>Primary Expression</em>}' class.
@@ -536,7 +573,7 @@ public interface VilBuildLanguagePackage extends EPackage
    * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getPrimaryExpression()
    * @generated
    */
-  int PRIMARY_EXPRESSION = 11;
+  int PRIMARY_EXPRESSION = 12;
 
   /**
    * The feature id for the '<em><b>Other Ex</b></em>' containment reference.
@@ -627,7 +664,7 @@ public interface VilBuildLanguagePackage extends EPackage
    * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getInstantiate()
    * @generated
    */
-  int INSTANTIATE = 12;
+  int INSTANTIATE = 13;
 
   /**
    * The feature id for the '<em><b>Project</b></em>' attribute.
@@ -691,7 +728,7 @@ public interface VilBuildLanguagePackage extends EPackage
    * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getMapVariable()
    * @generated
    */
-  int MAP_VARIABLE = 13;
+  int MAP_VARIABLE = 14;
 
   /**
    * The feature id for the '<em><b>Type</b></em>' containment reference.
@@ -728,7 +765,7 @@ public interface VilBuildLanguagePackage extends EPackage
    * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getMap()
    * @generated
    */
-  int MAP = 14;
+  int MAP = 15;
 
   /**
    * The feature id for the '<em><b>Var</b></em>' containment reference list.
@@ -776,6 +813,89 @@ public interface VilBuildLanguagePackage extends EPackage
   int MAP_FEATURE_COUNT = 4;
 
   /**
+   * The meta object id for the '{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.AlternativeImpl <em>Alternative</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.AlternativeImpl
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getAlternative()
+   * @generated
+   */
+  int ALTERNATIVE = 16;
+
+  /**
+   * The feature id for the '<em><b>Expr</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ALTERNATIVE__EXPR = 0;
+
+  /**
+   * The feature id for the '<em><b>If</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ALTERNATIVE__IF = 1;
+
+  /**
+   * The feature id for the '<em><b>Else</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ALTERNATIVE__ELSE = 2;
+
+  /**
+   * The number of structural features of the '<em>Alternative</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ALTERNATIVE_FEATURE_COUNT = 3;
+
+  /**
+   * The meta object id for the '{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.StatementOrBlockImpl <em>Statement Or Block</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.StatementOrBlockImpl
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getStatementOrBlock()
+   * @generated
+   */
+  int STATEMENT_OR_BLOCK = 17;
+
+  /**
+   * The feature id for the '<em><b>Ex Stmt</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int STATEMENT_OR_BLOCK__EX_STMT = 0;
+
+  /**
+   * The feature id for the '<em><b>Block</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int STATEMENT_OR_BLOCK__BLOCK = 1;
+
+  /**
+   * The number of structural features of the '<em>Statement Or Block</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int STATEMENT_OR_BLOCK_FEATURE_COUNT = 2;
+
+  /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.JoinImpl <em>Join</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -783,7 +903,7 @@ public interface VilBuildLanguagePackage extends EPackage
    * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getJoin()
    * @generated
    */
-  int JOIN = 15;
+  int JOIN = 18;
 
   /**
    * The feature id for the '<em><b>Var1</b></em>' containment reference.
@@ -829,7 +949,7 @@ public interface VilBuildLanguagePackage extends EPackage
    * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getJoinVariable()
    * @generated
    */
-  int JOIN_VARIABLE = 16;
+  int JOIN_VARIABLE = 19;
 
   /**
    * The feature id for the '<em><b>Excl</b></em>' attribute.
@@ -875,7 +995,7 @@ public interface VilBuildLanguagePackage extends EPackage
    * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getSystemExecution()
    * @generated
    */
-  int SYSTEM_EXECUTION = 17;
+  int SYSTEM_EXECUTION = 20;
 
   /**
    * The feature id for the '<em><b>Call</b></em>' containment reference.
@@ -1108,6 +1228,17 @@ public interface VilBuildLanguagePackage extends EPackage
   EClass getRuleDeclaration();
 
   /**
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration#getType <em>Type</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Type</em>'.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration#getType()
+   * @see #getRuleDeclaration()
+   * @generated
+   */
+  EReference getRuleDeclaration_Type();
+
+  /**
    * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration#getModifier <em>Modifier</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1141,26 +1272,15 @@ public interface VilBuildLanguagePackage extends EPackage
   EReference getRuleDeclaration_ParamList();
 
   /**
-   * Returns the meta object for the containment reference list '{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration#getPostcondition <em>Postcondition</em>}'.
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration#getConditions <em>Conditions</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Postcondition</em>'.
-   * @see de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration#getPostcondition()
+   * @return the meta object for the containment reference '<em>Conditions</em>'.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration#getConditions()
    * @see #getRuleDeclaration()
    * @generated
    */
-  EReference getRuleDeclaration_Postcondition();
-
-  /**
-   * Returns the meta object for the containment reference list '{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration#getPreconditions <em>Preconditions</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Preconditions</em>'.
-   * @see de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration#getPreconditions()
-   * @see #getRuleDeclaration()
-   * @generated
-   */
-  EReference getRuleDeclaration_Preconditions();
+  EReference getRuleDeclaration_Conditions();
 
   /**
    * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration#getBlock <em>Block</em>}'.
@@ -1172,6 +1292,38 @@ public interface VilBuildLanguagePackage extends EPackage
    * @generated
    */
   EReference getRuleDeclaration_Block();
+
+  /**
+   * Returns the meta object for class '{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleConditions <em>Rule Conditions</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Rule Conditions</em>'.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.RuleConditions
+   * @generated
+   */
+  EClass getRuleConditions();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleConditions#getPostcondition <em>Postcondition</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Postcondition</em>'.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.RuleConditions#getPostcondition()
+   * @see #getRuleConditions()
+   * @generated
+   */
+  EReference getRuleConditions_Postcondition();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleConditions#getPreconditions <em>Preconditions</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Preconditions</em>'.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.RuleConditions#getPreconditions()
+   * @see #getRuleConditions()
+   * @generated
+   */
+  EReference getRuleConditions_Preconditions();
 
   /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleElementBlock <em>Rule Element Block</em>}'.
@@ -1227,17 +1379,6 @@ public interface VilBuildLanguagePackage extends EPackage
   EReference getRuleElement_ExprStmt();
 
   /**
-   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleElement#getDeferDecl <em>Defer Decl</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Defer Decl</em>'.
-   * @see de.uni_hildesheim.sse.vilBuildLanguage.RuleElement#getDeferDecl()
-   * @see #getRuleElement()
-   * @generated
-   */
-  EReference getRuleElement_DeferDecl();
-
-  /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleModifier <em>Rule Modifier</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1259,36 +1400,25 @@ public interface VilBuildLanguagePackage extends EPackage
   EAttribute getRuleModifier_Protected();
 
   /**
-   * Returns the meta object for class '{@link de.uni_hildesheim.sse.vilBuildLanguage.DeferDeclaration <em>Defer Declaration</em>}'.
+   * Returns the meta object for class '{@link de.uni_hildesheim.sse.vilBuildLanguage.ExpressionStatement <em>Expression Statement</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Defer Declaration</em>'.
-   * @see de.uni_hildesheim.sse.vilBuildLanguage.DeferDeclaration
+   * @return the meta object for class '<em>Expression Statement</em>'.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.ExpressionStatement
    * @generated
    */
-  EClass getDeferDeclaration();
+  EClass getExpressionStatement();
 
   /**
-   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.vilBuildLanguage.DeferDeclaration#getName <em>Name</em>}'.
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vilBuildLanguage.ExpressionStatement#getAlt <em>Alt</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Name</em>'.
-   * @see de.uni_hildesheim.sse.vilBuildLanguage.DeferDeclaration#getName()
-   * @see #getDeferDeclaration()
+   * @return the meta object for the containment reference '<em>Alt</em>'.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.ExpressionStatement#getAlt()
+   * @see #getExpressionStatement()
    * @generated
    */
-  EAttribute getDeferDeclaration_Name();
-
-  /**
-   * Returns the meta object for the attribute list '{@link de.uni_hildesheim.sse.vilBuildLanguage.DeferDeclaration#getDepends <em>Depends</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute list '<em>Depends</em>'.
-   * @see de.uni_hildesheim.sse.vilBuildLanguage.DeferDeclaration#getDepends()
-   * @see #getDeferDeclaration()
-   * @generated
-   */
-  EAttribute getDeferDeclaration_Depends();
+  EReference getExpressionStatement_Alt();
 
   /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.vilBuildLanguage.PrimaryExpression <em>Primary Expression</em>}'.
@@ -1494,6 +1624,81 @@ public interface VilBuildLanguagePackage extends EPackage
    * @generated
    */
   EReference getMap_Block();
+
+  /**
+   * Returns the meta object for class '{@link de.uni_hildesheim.sse.vilBuildLanguage.Alternative <em>Alternative</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Alternative</em>'.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.Alternative
+   * @generated
+   */
+  EClass getAlternative();
+
+  /**
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vilBuildLanguage.Alternative#getExpr <em>Expr</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Expr</em>'.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.Alternative#getExpr()
+   * @see #getAlternative()
+   * @generated
+   */
+  EReference getAlternative_Expr();
+
+  /**
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vilBuildLanguage.Alternative#getIf <em>If</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>If</em>'.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.Alternative#getIf()
+   * @see #getAlternative()
+   * @generated
+   */
+  EReference getAlternative_If();
+
+  /**
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vilBuildLanguage.Alternative#getElse <em>Else</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Else</em>'.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.Alternative#getElse()
+   * @see #getAlternative()
+   * @generated
+   */
+  EReference getAlternative_Else();
+
+  /**
+   * Returns the meta object for class '{@link de.uni_hildesheim.sse.vilBuildLanguage.StatementOrBlock <em>Statement Or Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Statement Or Block</em>'.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.StatementOrBlock
+   * @generated
+   */
+  EClass getStatementOrBlock();
+
+  /**
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vilBuildLanguage.StatementOrBlock#getExStmt <em>Ex Stmt</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Ex Stmt</em>'.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.StatementOrBlock#getExStmt()
+   * @see #getStatementOrBlock()
+   * @generated
+   */
+  EReference getStatementOrBlock_ExStmt();
+
+  /**
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vilBuildLanguage.StatementOrBlock#getBlock <em>Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Block</em>'.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.StatementOrBlock#getBlock()
+   * @see #getStatementOrBlock()
+   * @generated
+   */
+  EReference getStatementOrBlock_Block();
 
   /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.vilBuildLanguage.Join <em>Join</em>}'.
@@ -1803,6 +2008,14 @@ public interface VilBuildLanguagePackage extends EPackage
     EClass RULE_DECLARATION = eINSTANCE.getRuleDeclaration();
 
     /**
+     * The meta object literal for the '<em><b>Type</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference RULE_DECLARATION__TYPE = eINSTANCE.getRuleDeclaration_Type();
+
+    /**
      * The meta object literal for the '<em><b>Modifier</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1827,20 +2040,12 @@ public interface VilBuildLanguagePackage extends EPackage
     EReference RULE_DECLARATION__PARAM_LIST = eINSTANCE.getRuleDeclaration_ParamList();
 
     /**
-     * The meta object literal for the '<em><b>Postcondition</b></em>' containment reference list feature.
+     * The meta object literal for the '<em><b>Conditions</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference RULE_DECLARATION__POSTCONDITION = eINSTANCE.getRuleDeclaration_Postcondition();
-
-    /**
-     * The meta object literal for the '<em><b>Preconditions</b></em>' containment reference list feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference RULE_DECLARATION__PRECONDITIONS = eINSTANCE.getRuleDeclaration_Preconditions();
+    EReference RULE_DECLARATION__CONDITIONS = eINSTANCE.getRuleDeclaration_Conditions();
 
     /**
      * The meta object literal for the '<em><b>Block</b></em>' containment reference feature.
@@ -1849,6 +2054,32 @@ public interface VilBuildLanguagePackage extends EPackage
      * @generated
      */
     EReference RULE_DECLARATION__BLOCK = eINSTANCE.getRuleDeclaration_Block();
+
+    /**
+     * The meta object literal for the '{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.RuleConditionsImpl <em>Rule Conditions</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.RuleConditionsImpl
+     * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getRuleConditions()
+     * @generated
+     */
+    EClass RULE_CONDITIONS = eINSTANCE.getRuleConditions();
+
+    /**
+     * The meta object literal for the '<em><b>Postcondition</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference RULE_CONDITIONS__POSTCONDITION = eINSTANCE.getRuleConditions_Postcondition();
+
+    /**
+     * The meta object literal for the '<em><b>Preconditions</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference RULE_CONDITIONS__PRECONDITIONS = eINSTANCE.getRuleConditions_Preconditions();
 
     /**
      * The meta object literal for the '{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.RuleElementBlockImpl <em>Rule Element Block</em>}' class.
@@ -1895,14 +2126,6 @@ public interface VilBuildLanguagePackage extends EPackage
     EReference RULE_ELEMENT__EXPR_STMT = eINSTANCE.getRuleElement_ExprStmt();
 
     /**
-     * The meta object literal for the '<em><b>Defer Decl</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference RULE_ELEMENT__DEFER_DECL = eINSTANCE.getRuleElement_DeferDecl();
-
-    /**
      * The meta object literal for the '{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.RuleModifierImpl <em>Rule Modifier</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1921,30 +2144,22 @@ public interface VilBuildLanguagePackage extends EPackage
     EAttribute RULE_MODIFIER__PROTECTED = eINSTANCE.getRuleModifier_Protected();
 
     /**
-     * The meta object literal for the '{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.DeferDeclarationImpl <em>Defer Declaration</em>}' class.
+     * The meta object literal for the '{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.ExpressionStatementImpl <em>Expression Statement</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.DeferDeclarationImpl
-     * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getDeferDeclaration()
+     * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.ExpressionStatementImpl
+     * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getExpressionStatement()
      * @generated
      */
-    EClass DEFER_DECLARATION = eINSTANCE.getDeferDeclaration();
+    EClass EXPRESSION_STATEMENT = eINSTANCE.getExpressionStatement();
 
     /**
-     * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>Alt</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute DEFER_DECLARATION__NAME = eINSTANCE.getDeferDeclaration_Name();
-
-    /**
-     * The meta object literal for the '<em><b>Depends</b></em>' attribute list feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute DEFER_DECLARATION__DEPENDS = eINSTANCE.getDeferDeclaration_Depends();
+    EReference EXPRESSION_STATEMENT__ALT = eINSTANCE.getExpressionStatement_Alt();
 
     /**
      * The meta object literal for the '{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.PrimaryExpressionImpl <em>Primary Expression</em>}' class.
@@ -2105,6 +2320,66 @@ public interface VilBuildLanguagePackage extends EPackage
      * @generated
      */
     EReference MAP__BLOCK = eINSTANCE.getMap_Block();
+
+    /**
+     * The meta object literal for the '{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.AlternativeImpl <em>Alternative</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.AlternativeImpl
+     * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getAlternative()
+     * @generated
+     */
+    EClass ALTERNATIVE = eINSTANCE.getAlternative();
+
+    /**
+     * The meta object literal for the '<em><b>Expr</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference ALTERNATIVE__EXPR = eINSTANCE.getAlternative_Expr();
+
+    /**
+     * The meta object literal for the '<em><b>If</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference ALTERNATIVE__IF = eINSTANCE.getAlternative_If();
+
+    /**
+     * The meta object literal for the '<em><b>Else</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference ALTERNATIVE__ELSE = eINSTANCE.getAlternative_Else();
+
+    /**
+     * The meta object literal for the '{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.StatementOrBlockImpl <em>Statement Or Block</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.StatementOrBlockImpl
+     * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getStatementOrBlock()
+     * @generated
+     */
+    EClass STATEMENT_OR_BLOCK = eINSTANCE.getStatementOrBlock();
+
+    /**
+     * The meta object literal for the '<em><b>Ex Stmt</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference STATEMENT_OR_BLOCK__EX_STMT = eINSTANCE.getStatementOrBlock_ExStmt();
+
+    /**
+     * The meta object literal for the '<em><b>Block</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference STATEMENT_OR_BLOCK__BLOCK = eINSTANCE.getStatementOrBlock_Block();
 
     /**
      * The meta object literal for the '{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.JoinImpl <em>Join</em>}' class.

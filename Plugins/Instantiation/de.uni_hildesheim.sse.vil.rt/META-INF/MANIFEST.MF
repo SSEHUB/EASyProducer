@@ -1,0 +1,41 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: de.uni_hildesheim.sse.vil.rt
+Bundle-Vendor: SSE - University of Hildesheim
+Bundle-Version: 0.0.1
+Bundle-SymbolicName: de.uni_hildesheim.sse.vil.rt; singleton:=true
+Bundle-ActivationPolicy: lazy
+Require-Bundle: org.eclipse.xtext;visibility:=reexport,
+ org.eclipse.xtext.xbase;resolution:=optional;visibility:=reexport,
+ org.eclipse.xtext.generator;resolution:=optional,
+ org.apache.commons.logging;bundle-version="1.0.4";resolution:=optional,
+ org.eclipse.emf.codegen.ecore;resolution:=optional,
+ org.eclipse.emf.mwe.utils;resolution:=optional,
+ org.eclipse.emf.mwe2.launch;resolution:=optional,
+ de.uni_hildesheim.sse.dslCore;bundle-version="0.8.2",
+ org.eclipse.osgi.services;bundle-version="3.3.100",
+ de.uni_hildesheim.sse.vil.buildlang;bundle-version="0.5.2",
+ de.uni_hildesheim.sse.vil.expressions;bundle-version="0.5.2",
+ org.eclipse.xtext.util,
+ org.eclipse.emf.ecore,
+ org.eclipse.emf.common,
+ org.antlr.runtime,
+ org.eclipse.xtext.common.types,
+ de.uni-hildesheim.sse.easy.instantiatorCore.rt;bundle-version="0.0.1"
+Import-Package: org.apache.log4j,
+ org.eclipse.xtext.xbase.lib
+Service-Component: OSGI-INF/rtVilParser.xml
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: de.uni_hildesheim.sse.vil.rt,
+ de.uni_hildesheim.sse.vil.rt.services,
+ de.uni_hildesheim.sse.vil.rt.rtVil,
+ de.uni_hildesheim.sse.vil.rt.rtVil.impl,
+ de.uni_hildesheim.sse.vil.rt.rtVil.util,
+ de.uni_hildesheim.sse.vil.rt.parser.antlr,
+ de.uni_hildesheim.sse.vil.rt.parser.antlr.internal,
+ de.uni_hildesheim.sse.vil.rt.validation,
+ de.uni_hildesheim.sse.vil.rt.scoping,
+ de.uni_hildesheim.sse.vil.rt.generator,
+ de.uni_hildesheim.sse.vil.rt.formatting,
+ de.uni_hildesheim.sse.vil.rt.parseTreeConstruction
+

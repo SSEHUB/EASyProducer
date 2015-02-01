@@ -8,13 +8,14 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IArt
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Binary;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Text;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IStringValueProvider;
 
 /**
  * Represents a parsed XML attribute.
  * 
  * @author Holger Eichelberger
  */
-public class XmlAttribute extends FragmentArtifact {
+public class XmlAttribute extends FragmentArtifact implements IStringValueProvider {
 
     private XmlElement parent;
     private String name;
@@ -180,6 +181,11 @@ public class XmlAttribute extends FragmentArtifact {
     @Override
     public void update() throws ArtifactException {
         // TODO Auto-generated method stub
+    }
+
+    @Override
+    public String getStringValue(StringComparator comparator) {
+        return "xmlAttribute: \"" + name + "\"";
     }
     
 }

@@ -50,9 +50,12 @@ public class UnknownOperationException extends CSTSemanticException {
         StringBuilder builder = new StringBuilder("unknown operation of signature ");
         builder.append(name);
         builder.append("(");
-        boolean operandPseudo = operand.isPseudoType();
-        if (!operandPseudo) {
-            builder.append(IvmlDatatypeVisitor.getUnqualifiedType(operand));
+        boolean operandPseudo = false;
+        if (null != operand) {
+            operandPseudo = operand.isPseudoType();
+            if (!operandPseudo) {
+                builder.append(IvmlDatatypeVisitor.getUnqualifiedType(operand));
+            }
         }
         if (null != parameter) {
             for (int p = 0; p < parameter.length; p++) {

@@ -101,6 +101,8 @@ public class EvaluatorRegistry {
         ContainerOperations.register();
         SetOperations.register();
         SequenceOperations.register();
+        
+        VersionOperations.register();
     }
 
 }
