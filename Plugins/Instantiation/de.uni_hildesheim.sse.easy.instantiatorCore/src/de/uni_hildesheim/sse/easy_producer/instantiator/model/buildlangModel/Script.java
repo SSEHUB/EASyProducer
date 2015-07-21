@@ -30,14 +30,13 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.AbstractRes
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.Advice;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.IResolvableModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.IVariableDeclarationReceiver;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Template;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaField;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaOperation;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaType;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypes;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 import de.uni_hildesheim.sse.utils.modelManagement.IRestrictionEvaluationContext;
@@ -87,11 +86,11 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
      * 
      * @author Holger Eichelberger
      */
-    public static class ScriptDescriptor {
+    public static class ScriptDescriptor<S extends Script> {
 
         private VariableDeclaration[] parameters;
         private Advice[] advices;
-        private Imports imports;
+        private Imports<S> imports;
 
         /**
          * Creates a script descriptor.
@@ -100,10 +99,37 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
          * @param advices the advices (may be <b>null</b>)
          * @param imports the imports (may be <b>null</b>)
          */
-        public ScriptDescriptor(VariableDeclaration[] parameters, Advice[] advices, Imports imports) {
+        public ScriptDescriptor(VariableDeclaration[] parameters, Advice[] advices, Imports<S> imports) {
             this.parameters = parameters;
             this.advices = advices;
             this.imports = imports;
+        }
+
+        /**
+         * Returns the parameters.
+         * 
+         * @return the parameters
+         */
+        public VariableDeclaration[] getParameters() {
+            return parameters;
+        }
+        
+        /**
+         * Returns the advices.
+         * 
+         * @return the avices
+         */
+        public Advice[] getAdvices() {
+            return advices;
+        }
+        
+        /**
+         * Returns the imports.
+         * 
+         * @return the imports
+         */
+        public Imports<S> getImports() {
+            return imports;
         }
         
     }
@@ -146,7 +172,7 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
      * @param registry the responsible registry
      */
     public Script(String name, VariableDeclaration[] parameters, TypeRegistry registry) {
-        this(name, null, new ScriptDescriptor(parameters, null, null), registry);
+        this(name, null, new ScriptDescriptor<Script>(parameters, null, null), registry);
     }
     
     /**
@@ -158,7 +184,7 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
      * @param descriptor the descriptor carrying parameters, advices and imports (may be <b>null</b>)
      * @param registry the responsible type registry 
      */
-    public Script(String name, ModelImport<Script> parent, ScriptDescriptor descriptor, TypeRegistry registry) {
+    public Script(String name, ModelImport<Script> parent, ScriptDescriptor<Script> descriptor, TypeRegistry registry) {
         super(null == descriptor ? null : descriptor.imports, registry, null == descriptor ? null : descriptor.advices);
         this.name = name;
         this.parent = parent;
@@ -172,7 +198,7 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
     
     @Override
     protected de.uni_hildesheim.sse.easy_producer.instantiator.model.common.Imports<Script> createImports() {
-        return new Imports((Imports) null, null);
+        return new Imports<Script>((Imports<Script>) null, null);
     }
 
     /**
@@ -195,7 +221,7 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
      */
     protected void createImplicitVariables() {
         try {
-            TypeDescriptor<? extends IVilType>[] tmp = TypeDescriptor.createArray(1);
+            TypeDescriptor<?>[] tmp = TypeDescriptor.createArray(1);
             tmp[0] = IvmlTypes.projectType();
             declarations.add(new VariableDeclaration(NAME_OTHERPROJECTS, TypeRegistry.getSetType(tmp)));
             declarations.add(new VariableDeclaration(NAME_SCRIPTDIR, TypeRegistry.stringType()));
@@ -334,7 +360,7 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
      * Returns the index of the specified <code>rule</code>.
      * 
      * @param rule the rule to search for
-     * @return <code>-1</code> if <code>rule</code> was not found, <code>false</code> else
+     * @return <code>-1</code> if <code>rule</code> was not found, , the index of <code>rule</code> else
      */
     public int indexOf(Rule rule) {
         return rules.indexOf(rule);
@@ -396,7 +422,7 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
     }    
     
     @Override
-    public Object accept(IVisitor visitor) throws VilLanguageException {
+    public Object accept(IVisitor visitor) throws VilException {
         return visitor.visitScript(this);
     }
 
@@ -445,15 +471,15 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
      * 
      * @param startRuleName the start rule name (typically "main")
      * @return the start rule
-     * @throws VilLanguageException in case that the start rule cannot be determined (uniquely)
+     * @throws VilException in case that the start rule cannot be determined (uniquely)
      */
-    public Rule determineStartRule(String startRuleName) throws VilLanguageException {
+    public Rule determineStartRule(String startRuleName) throws VilException {
         Rule startRule = null;
         List<Rule> roots = new ArrayList<Rule>();
         collectRoots(new HashSet<Script>(), new HashSet<String>(), roots);
         if (roots.isEmpty()) {
-            throw new VilLanguageException("no rule (without dependencies) to be executed", 
-                VilLanguageException.ID_RUNTIME_STARTRULE); 
+            throw new VilException("no rule (without dependencies) to be executed", 
+                VilException.ID_RUNTIME_STARTRULE); 
         }
         if (1 == roots.size() && null == startRuleName) {
             startRule = roots.get(0);
@@ -466,8 +492,8 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
                     }
                     tmp.append(roots.get(r).getJavaSignature());
                 }
-                throw new VilLanguageException("multiple possible start rules (" + tmp 
-                     + ") but no start rule name specified", VilLanguageException.ID_RUNTIME_STARTRULE); 
+                throw new VilException("multiple possible start rules (" + tmp 
+                     + ") but no start rule name specified", VilException.ID_RUNTIME_STARTRULE); 
             }
             int count = 0;
             for (int r = 0; r < roots.size(); r++) {
@@ -478,12 +504,12 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
                 }
             }
             if (0 == count) {
-                throw new VilLanguageException("no matching start rule found (check parameter, protected)", 
-                    VilLanguageException.ID_RUNTIME_STARTRULE); 
+                throw new VilException("no matching start rule found (check parameter, protected)", 
+                    VilException.ID_RUNTIME_STARTRULE); 
             }
             if (count > 1) { // shall not happen
-                throw new VilLanguageException("ambiguous matching start rules", 
-                    VilLanguageException.ID_RUNTIME_STARTRULE); 
+                throw new VilException("ambiguous matching start rules", 
+                    VilException.ID_RUNTIME_STARTRULE); 
             }
         }
         return startRule;
@@ -631,12 +657,22 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
     }
     
     /**
+     * Returns the imports instance.
+     * 
+     * @return the imports instance
+     */
+    @Override
+    protected Imports<Script> getImports() {
+        return (Imports<Script>) super.getImports();
+    }
+    
+    /**
      * Returns the number of VTL restrictions.
      * 
      * @return the number of VTL restrictions
      */
     public int getVtlRestrictionsCount() {
-        Imports imp = (Imports) getImports();
+        Imports<Script> imp = getImports();
         return null == imp ? 0 : imp.getVtlRestrictionsCount();
     }
 
@@ -648,7 +684,7 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
      * @throws IndexOutOfBoundsException if <code>index &lt; 0 || index &gt;={@link #getVtlRestrictionsCount()}</code>
      */
     public ModelImport<Template> getVtlRestriction(int index) {
-        Imports imp = (Imports) getImports();
+        Imports<Script> imp = getImports();
         if (null == imp) {
             throw new IndexOutOfBoundsException();
         }
@@ -683,6 +719,36 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
     @Override
     public IMetaType getBaseType() {
         return null;
+    }
+
+    @Override
+    public int getFieldCount() {
+        return 0;
+    }
+
+    @Override
+    public IMetaField getField(int index) {
+        throw new IndexOutOfBoundsException();
+    }
+
+    @Override
+    public boolean isInternal() {
+        return false;
+    }
+
+    @Override
+    public IMetaType getSuperType() {
+        return null;
+    }
+    
+    @Override
+    public int getGenericParameterCount() {
+        return 0;
+    }
+
+    @Override
+    public TypeDescriptor<?> getGenericParameterType(int index) {
+        throw new IllegalArgumentException();
     }
 
 }

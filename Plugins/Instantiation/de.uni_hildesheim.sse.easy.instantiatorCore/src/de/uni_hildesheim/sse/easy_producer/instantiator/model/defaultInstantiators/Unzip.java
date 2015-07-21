@@ -7,7 +7,7 @@ import java.util.List;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FileArtifact;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.Path;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Instantiator;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
@@ -29,10 +29,10 @@ public class Unzip implements IVilType {
      * @param zip the ZIP file to be unpacked
      * @param target the target path to unpack to
      * @return the created artifacts
-     * @throws ArtifactException in case of unpacking problems
+     * @throws VilException in case of unpacking problems
      */
     @OperationMeta(returnGenerics = FileArtifact.class)
-    public static Set<FileArtifact> unzip(Path zip, Path target) throws ArtifactException {
+    public static Set<FileArtifact> unzip(Path zip, Path target) throws VilException {
         return unpack(zip, target, new ZipHandler());
     }
 
@@ -43,15 +43,15 @@ public class Unzip implements IVilType {
      * @param target the target path to unpack to
      * @param handler the ZIP/JAR handler
      * @return the created artifacts
-     * @throws ArtifactException in case of unpacking problems
+     * @throws VilException in case of unpacking problems
      */
     @Invisible
-    public static Set<FileArtifact> unpack(Path zip, Path target, ZipHandler handler) throws ArtifactException {
+    public static Set<FileArtifact> unpack(Path zip, Path target, ZipHandler handler) throws VilException {
         List<File> files = new ArrayList<File>();
         try {
             handler.unpack(zip.getAbsolutePath(), target.getAbsolutePath(), null, files);
         } catch (IOException e) {
-            throw new ArtifactException(e, ArtifactException.ID_IO);
+            throw new VilException(e, VilException.ID_IO);
         }
         return Zip.toFileArtifactSet(files, target.getArtifactModel());
     }
@@ -66,16 +66,16 @@ public class Unzip implements IVilType {
      *   May be <code>null</code> if no filter is required.
      * @param handler the ZIP/JAR handler
      * @return the created artifacts
-     * @throws ArtifactException in case of unpacking problems
+     * @throws VilException in case of unpacking problems
      */
     @Invisible
     public static Set<FileArtifact> unpack(Path zip, Path target, String pattern, ZipHandler handler)
-        throws ArtifactException {
+        throws VilException {
         List<File> files = new ArrayList<File>();
         try {
             handler.unpack(zip.getAbsolutePath(), target.getAbsolutePath(), pattern, files);
         } catch (IOException e) {
-            throw new ArtifactException(e, ArtifactException.ID_IO);
+            throw new VilException(e, VilException.ID_IO);
         }
         return Zip.toFileArtifactSet(files, target.getArtifactModel());
     }

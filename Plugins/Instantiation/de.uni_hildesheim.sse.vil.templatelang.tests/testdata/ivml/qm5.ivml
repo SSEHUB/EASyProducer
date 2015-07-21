@@ -5,7 +5,7 @@ project qm5 {
     enum BindingTime {compile, startup, runtime};
     enum FieldType {INTEGER, STRING, BOOLEAN, REAL};
 
-    attribute BindingTime bindingTime = BindingTime.compile to qm5;
+    annotate BindingTime bindingTime = BindingTime.compile to qm5;
     
     typedef Tuples sequenceOf(Tuple);
     typedef Parameters setOf(Parameter);
@@ -150,6 +150,7 @@ project qm5 {
     freeze {
         aNormalize;
         bNormalize;
+        cNormalize;
         fNormalize;
     }
     

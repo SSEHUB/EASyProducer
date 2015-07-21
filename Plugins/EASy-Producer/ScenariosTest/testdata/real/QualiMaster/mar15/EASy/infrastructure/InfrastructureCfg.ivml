@@ -1,0 +1,14 @@
+project InfrastructureCfg {
+	
+	import Infrastructure;
+	import PipelinesCfg; 
+	 
+	// alternative: activePipelines = {pipelines[0]};
+	activePipelines = {refBy(PriorityPip)};       
+	interfaceArtifact = "eu.qualimaster:PriorityPipelineInterfaces:0.0.5-SNAPSHOT";
+	freeze {
+	    activePipelines;
+        interfaceArtifact;                
+	}          
+      
+}                          

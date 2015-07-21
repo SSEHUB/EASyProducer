@@ -175,9 +175,9 @@ public class IvmlAdapterFactory extends AdapterFactoryImpl
         return createDerivedTypeAdapter();
       }
       @Override
-      public Adapter caseAttributeTo(AttributeTo object)
+      public Adapter caseAnnotateTo(AnnotateTo object)
       {
-        return createAttributeToAdapter();
+        return createAnnotateToAdapter();
       }
       @Override
       public Adapter caseFreeze(Freeze object)
@@ -188,16 +188,6 @@ public class IvmlAdapterFactory extends AdapterFactoryImpl
       public Adapter caseFreezeStatement(FreezeStatement object)
       {
         return createFreezeStatementAdapter();
-      }
-      @Override
-      public Adapter caseFreezeButList(FreezeButList object)
-      {
-        return createFreezeButListAdapter();
-      }
-      @Override
-      public Adapter caseFreezeButExpression(FreezeButExpression object)
-      {
-        return createFreezeButExpressionAdapter();
       }
       @Override
       public Adapter caseEval(Eval object)
@@ -727,16 +717,16 @@ public class IvmlAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.ivml.AttributeTo <em>Attribute To</em>}'.
+   * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.ivml.AnnotateTo <em>Annotate To</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see de.uni_hildesheim.sse.ivml.AttributeTo
+   * @see de.uni_hildesheim.sse.ivml.AnnotateTo
    * @generated
    */
-  public Adapter createAttributeToAdapter()
+  public Adapter createAnnotateToAdapter()
   {
     return null;
   }
@@ -767,36 +757,6 @@ public class IvmlAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createFreezeStatementAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.ivml.FreezeButList <em>Freeze But List</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see de.uni_hildesheim.sse.ivml.FreezeButList
-   * @generated
-   */
-  public Adapter createFreezeButListAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.ivml.FreezeButExpression <em>Freeze But Expression</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see de.uni_hildesheim.sse.ivml.FreezeButExpression
-   * @generated
-   */
-  public Adapter createFreezeButExpressionAdapter()
   {
     return null;
   }

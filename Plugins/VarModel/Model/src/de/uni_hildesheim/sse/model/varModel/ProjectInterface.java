@@ -15,6 +15,8 @@
  */
 package de.uni_hildesheim.sse.model.varModel;
 
+import java.util.Arrays;
+
 import de.uni_hildesheim.sse.model.varModel.datatypes.IResolutionScope;
 
 /**
@@ -130,6 +132,42 @@ public class ProjectInterface extends ContainableModelElement implements IResolu
     @Override
     public ContainableModelElement getElement(String name) {
         return null;
+    }
+    
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + Arrays.hashCode(exports);
+        result += prime * result + getTopLevelParent().hashCode();
+        result += prime * result + getName().hashCode();
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        boolean equal = this == obj;
+        if (!equal && obj instanceof ProjectInterface) {
+            ProjectInterface other = (ProjectInterface) obj;
+            // ProjectInterfaces belong to the same project
+            IModelElement thisParent = getTopLevelParent();
+            IModelElement otherParent = other.getTopLevelParent();
+            if (null == thisParent) {
+                equal = null == otherParent;
+            } else {
+                equal = thisParent.getName().equals(otherParent.getName());
+                if (thisParent instanceof Project && otherParent instanceof Project && equal) {
+                    equal = ((Project) thisParent).getVersion().equals(((Project) otherParent).getVersion());
+                }
+            }
+            // ProjectInterfaces have the same name
+            equal &= this.getName().equals(other.getName());
+            // ProjectInterfaces exports the same declarations
+            if (equal) {
+                equal = Arrays.equals(exports, other.exports);
+            }
+        }
+        return equal;
     }
 
 }

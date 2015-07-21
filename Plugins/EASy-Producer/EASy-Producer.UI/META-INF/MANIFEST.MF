@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: EASy-Producer.UI
 Bundle-SymbolicName: de.uni_hildesheim.sse.easy.ui;singleton:=true
-Bundle-Version: 0.11.3
+Bundle-Version: 1.0.0
 Bundle-Activator: de.uni_hildesheim.sse.easy.ui.internal.Activator
 Bundle-Vendor: University of Hildesheim - SSE
 Require-Bundle: 
@@ -20,7 +20,11 @@ Require-Bundle:
  de.uni_hildesheim.sse.easy_producer.eclipse;bundle-version="0.7.2",
  ReasonerCore;bundle-version="0.0.8",
  org.eclipse.ui.console;bundle-version="3.5.100",
- de.uni_hildesheim.sse.varModel;bundle-version="0.5.5"
+ de.uni_hildesheim.sse.varModel;bundle-version="0.5.5",
+ de.uni_hildesheim.sse.dslCore.ui;bundle-version="0.0.1",
+ de.uni_hildesheim.sse.vil.buildlang.ui;bundle-version="0.5.3",
+ de.uni_hildesheim.sse.dslCore;bundle-version="0.8.3",
+ de.uni_hildesheim.sse.vil.buildlang;bundle-version="0.5.3"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .

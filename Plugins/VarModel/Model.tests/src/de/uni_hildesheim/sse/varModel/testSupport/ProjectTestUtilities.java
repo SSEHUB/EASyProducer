@@ -53,8 +53,20 @@ public class ProjectTestUtilities {
      * @param project A project which shall be used inside a test case.
      */
     public static void validateProject(Project project) {
+        validateProject(project, DEBUG);
+    }
+    
+    /**
+     * Tests whether a project can be used for testing and aborts the whole test execution
+     * if the project is not convinced for testing.
+     * This method should be applied to projects, which are used inside a test method.
+     * This method should be run before the test starts.
+     * @param project A project which shall be used inside a test case.
+     * @param debug If <tt>true</tt> The IVML code of the project will be printed to the console for debugging.
+     */
+    public static void validateProject(Project project, boolean debug) {
         // Test whether project is sufficient for testing
-        if (DEBUG) {
+        if (debug) {
             StringWriter sWriter = new StringWriter();
             IVMLWriter iWriter = new IVMLWriter(sWriter);
             project.accept(iWriter);

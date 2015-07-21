@@ -7,7 +7,7 @@ import de.uni_hildesheim.sse.easy.cmd.InstantiationCommands;
 import de.uni_hildesheim.sse.easy.cmd.LowlevelCommands;
 import de.uni_hildesheim.sse.easy_producer.core.mgmt.PLPInfo;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.model.confModel.Configuration;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
@@ -73,7 +73,7 @@ public final class EASyExec {
             }
         } catch (ModelManagementException e) {
             LOGGER.exception(e);
-        } catch (VilLanguageException e) {
+        } catch (VilException e) {
             LOGGER.exception(e);
         } catch (PersistenceException e) {
             LOGGER.exception(e);
@@ -96,7 +96,7 @@ public final class EASyExec {
                 LOGGER.warn("Unspecified combination of arguments passed. # Arguments = " + args.length);
                 break;
             }
-        } catch (VilLanguageException e) {
+        } catch (VilException e) {
             LOGGER.exception(e);
         } catch (PersistenceException e) {
             LOGGER.exception(e);

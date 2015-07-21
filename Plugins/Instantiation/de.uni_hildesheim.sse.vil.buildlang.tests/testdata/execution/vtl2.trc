@@ -1,0 +1,6 @@
+-> main(Project, Project, Configuration) with (<project>, <project>, <config>)
+    prj <- <config>
+    tc <- adviceTestVIL1::c1
+    fa <- templates/test3.vtl
+-> main(Configuration, FileArtifact, TestCompound) with (<config>, test3.txt, adviceTestVIL1::c1)
+    -> vilTemplateProcessor(VtlFileArtifact, Configuration, Artifact) with (templates/test3.vtl, <config>, test3.txt, {{comp, adviceTestVIL1::c1}}) = {test3.txt}

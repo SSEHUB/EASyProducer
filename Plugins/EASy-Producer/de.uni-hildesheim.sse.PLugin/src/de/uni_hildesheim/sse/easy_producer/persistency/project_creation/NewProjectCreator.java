@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 University of Hildesheim, Software Systems Engineering
+ * Copyright 2009-2015 University of Hildesheim, Software Systems Engineering
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 package de.uni_hildesheim.sse.easy_producer.persistency.project_creation;
+
+import org.eclipse.core.resources.IProject;
 
 import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
 
@@ -44,6 +46,11 @@ class NewProjectCreator extends AbstractProjectCreator {
         super.createProject();
         super.setPersistenceProperties();
         return super.getCreatedProject();
+    }
+    
+    @Override
+    protected void configureProject(IProject project, IEASyProjectConfigurator configurator) {
+        configurator.configure(project);
     }
 
 }

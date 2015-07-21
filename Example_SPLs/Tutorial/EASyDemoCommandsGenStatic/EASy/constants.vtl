@@ -1,0 +1,26 @@
+@advice(EASyDemoCommandsGenStatic)
+template constants(Configuration config, FileArtifact target) {
+
+    def main(Configuration config, FileArtifact target) {
+    	EASyDemoCommandsGenStatic cfg = config;
+        'package io.ssehub.easy.demo.command.genStatic;'
+        ''
+        'import javax.annotation.Generated;'
+        ''
+        '/**'
+        ' * Represents the program configuration as Java constants.'
+        ' *' 
+        ' * @author SSE@SUH'
+        ' */'
+        '@Generated(value = { "EASy-Producer" })'
+        'public class Constants {'
+        ''   
+        'static final String APP_NAME = "${cfg.appName}";' | 4;
+        'static final boolean hasAddCommand = ${cfg.hasAddCommand};' | 4;
+        'static final boolean hasSubCommand = ${cfg.hasSubCommand};' | 4;
+        'static final boolean hasPrintCommand = ${cfg.hasPrintCommand};' | 4;
+        ''
+        '}'
+    }
+
+}

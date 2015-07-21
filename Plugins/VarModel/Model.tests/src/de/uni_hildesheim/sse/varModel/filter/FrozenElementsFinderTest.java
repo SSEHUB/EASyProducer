@@ -29,7 +29,7 @@ public class FrozenElementsFinderTest extends AbstractFrozenElementsFinderTest {
         finder = new FrozenElementsFinder(ORIGIN_PROJECT, FilterType.NO_IMPORTS);
         List<IFreezable> frozenElements = finder.getFrozenElements();
         List<IFreezable> expectedElements = new ArrayList<IFreezable>();
-        for (int i = 0; i < FREEZEBLOCKS[0].getFrozenCount(); i++) {
+        for (int i = 0; i < FREEZEBLOCKS[0].getFreezableCount(); i++) {
             expectedElements.add(FREEZEBLOCKS[0].getFreezable(i));
         }
         
@@ -47,7 +47,7 @@ public class FrozenElementsFinderTest extends AbstractFrozenElementsFinderTest {
         List<IFreezable> frozenElements = finder.getFrozenElements();
         List<IFreezable> expectedElements = new ArrayList<IFreezable>();
         for (int i = 0; i < FREEZEBLOCKS.length; i++) {
-            for (int j = 0; j < FREEZEBLOCKS[i].getFrozenCount(); j++) {
+            for (int j = 0; j < FREEZEBLOCKS[i].getFreezableCount(); j++) {
                 expectedElements.add(FREEZEBLOCKS[i].getFreezable(j));
             }            
         }
@@ -66,7 +66,7 @@ public class FrozenElementsFinderTest extends AbstractFrozenElementsFinderTest {
         List<IFreezable> frozenElements = finder.getFrozenElements();
         List<IFreezable> expectedElements = new ArrayList<IFreezable>();
         for (int i = 1; i < FREEZEBLOCKS.length; i++) {
-            for (int j = 0; j < FREEZEBLOCKS[i].getFrozenCount(); j++) {
+            for (int j = 0; j < FREEZEBLOCKS[i].getFreezableCount(); j++) {
                 expectedElements.add(FREEZEBLOCKS[i].getFreezable(j));
             }            
         }

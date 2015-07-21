@@ -2,7 +2,7 @@ project shortNames {
 
     version v0;
     enum View {_a, _b, _c};
-    attribute View biew to shortNames;
+    annotate View biew to shortNames;
     compound C {
         assign (biew = View._a) to {
             Integer a;

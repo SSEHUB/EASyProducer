@@ -1,6 +1,6 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 
 /**
  * The (abstract) top-level fragment artifact.
@@ -21,7 +21,7 @@ public abstract class FragmentArtifact implements IArtifact {
     }
     
     @Override
-    public void store() throws ArtifactException {
+    public void store() throws VilException {
         // default implementation, fragments are stored with containing artifact
     }
     

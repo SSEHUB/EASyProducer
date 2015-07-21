@@ -1,7 +1,6 @@
 -> main(Configuration, FileArtifact) with (<config>, test.texts)
     -> byName(Configuration, String) with (<config>, fNormalize) = qm1::fNormalize
     fm <- qm1::fNormalize
-    -> parameters(Family) with (qm1::fNormalize) = {qm1::Family::parameters {0}}
     for p {
         p <- qm1::Family::parameters {0}
         tmp <- qm1::Family::parameters {0}

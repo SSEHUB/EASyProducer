@@ -4,7 +4,7 @@ template attribute(Configuration config, FileArtifact target, IvmlElement bindin
         Boolean hasEnabledElements = false;
         for (DecisionVariable v : config.variables(), ",\n\n") {
             Boolean isEnabled = (v.element("bindingTime").value() == bindingTime);
-            print '${v.name()}("", ${valueRange(v)}, ${value(v)}, ${v.element("bindingTime").value() == bindingTime})' | 4;
+            print '${v.name()}("", ${v.value()}, ${v.element("bindingTime").value() == bindingTime})' | 4;
         }
     }
 

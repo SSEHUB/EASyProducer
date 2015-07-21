@@ -15,7 +15,7 @@ class ArrayIterable <T> extends AbstractArrayWrapper<T> {
      * @param array the array to iterate over
      */
     public ArrayIterable(T[] array) {
-        super(array, (TypeDescriptor<? extends IVilType>[]) null);
+        super(array, false, (TypeDescriptor<?>[]) null);
     }
 
     @Override

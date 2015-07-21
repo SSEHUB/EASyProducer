@@ -39,16 +39,22 @@ import org.slf4j.ILoggerFactory;
  */
 public class SimpleLoggerFactory implements ILoggerFactory {
 
-    final static SimpleLoggerFactory INSTANCE = new SimpleLoggerFactory();
+    static final SimpleLoggerFactory INSTANCE = new SimpleLoggerFactory();
 
-    Map<String, Logger> loggerMap;
+    private Map<String, Logger> loggerMap;
 
+    /**
+     * Creates the factory.
+     */
     public SimpleLoggerFactory() {
         loggerMap = new HashMap<>();
     }
 
     /**
      * Return an appropriate {@link SimpleLogger} instance by name.
+     * 
+     * @param name the logger name
+     * @return the logger instance
      */
     public Logger getLogger(String name) {
         Logger slogger = null;
@@ -63,6 +69,9 @@ public class SimpleLoggerFactory implements ILoggerFactory {
         return slogger;
     }
 
+    /**
+     * Resets this instance.
+     */
     public void reset() {
     }
 

@@ -38,6 +38,7 @@ public class AvailableModels<M extends IModel> {
     private IModelManagementRepository<M> repository;
     private Map<String, List<VersionedModelInfos<M>>> availableModels 
         = new HashMap<String, List<VersionedModelInfos<M>>>();
+    private Map<URI, ModelInfo<M>> tmpInfo = null;
 
     /**
      * Creates an instance of this class.
@@ -128,6 +129,9 @@ public class AvailableModels<M extends IModel> {
             if (visible.get(v).getLocation().equals(uri)) {
                 found = visible.get(v);
             }
+        }
+        if (null == found && null != tmpInfo) {
+            found = tmpInfo.get(uri);
         }
         return found;
     }
@@ -476,6 +480,60 @@ public class AvailableModels<M extends IModel> {
      */
     void putAvailable(String name, List<VersionedModelInfos<M>> infos) {
         availableModels.put(name, infos);
+    }
+    
+    /**
+     * Removes a model information object for a given model name.
+     * 
+     * @param name the name of the model
+     */
+    void removeAvailable(String name) {
+        availableModels.remove(name);
+    }
+    
+    /**
+     * Creates a temporary resolved model information without model loader. <b>Do not use
+     * the result for regular models!</b> Call {@link #releaseTempInfo(ModelInfo)} if the model
+     * is not used anymore. Affects only {@link #getInfo(URI)}.
+     * 
+     * @param model the model
+     * @param location the location
+     * @return the model information
+     */
+    public ModelInfo<M> createTempInfo(M model, URI location) {
+        ModelInfo<M> result = new ModelInfo<M>(model, location);
+        result.setResolved(model);
+        if (null == tmpInfo) {
+            tmpInfo = new HashMap<URI, ModelInfo<M>>();
+        }
+        tmpInfo.put(location, result);
+        return result;
+    }
+
+    /**
+     * Releases a temporary model information object.
+     * 
+     * @param info the information object to release (may be <b>null</b>, ignored)
+     */
+    public void releaseTempInfo(ModelInfo<M> info) {
+        if (null != info && null != tmpInfo && null != info.getLocation()) {
+            tmpInfo.remove(info.getLocation());
+        }
+    }
+
+    /**
+     * Returns whether <code>info</code> is a temporary model.
+     * 
+     * @param info the information object to check (may be <b>null</b>)
+     * @return <code>true</code> if info points to a temporary model, <code>false</code> else (also if 
+     *     <code>info</code> is <b>null</b>)
+     */
+    public boolean isTempInfo(ModelInfo<M> info) {
+        boolean result = false;
+        if (null != info && null != tmpInfo && null != info.getLocation()) { 
+            result = tmpInfo.containsKey(info.getLocation());
+        }
+        return result;
     }
 
 }

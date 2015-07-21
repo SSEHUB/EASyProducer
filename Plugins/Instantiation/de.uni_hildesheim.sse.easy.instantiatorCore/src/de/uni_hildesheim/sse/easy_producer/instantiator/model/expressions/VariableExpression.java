@@ -1,7 +1,7 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VariableDeclaration;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 
 /**
@@ -54,12 +54,12 @@ public class VariableExpression extends Expression {
     }
     
     @Override
-    public TypeDescriptor<? extends IVilType> inferType() throws ExpressionException {
+    public TypeDescriptor<?> inferType() throws VilException {
         return variable.getType();
     }
 
     @Override
-    public Object accept(IExpressionVisitor visitor) throws ExpressionException {
+    public Object accept(IExpressionVisitor visitor) throws VilException {
         return visitor.visitVariableExpression(this);
     }
     

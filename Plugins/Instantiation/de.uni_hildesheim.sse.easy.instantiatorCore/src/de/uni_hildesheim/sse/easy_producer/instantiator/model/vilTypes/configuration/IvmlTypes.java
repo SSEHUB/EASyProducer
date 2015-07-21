@@ -1,6 +1,5 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Project;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
@@ -17,7 +16,7 @@ public class IvmlTypes {
      * 
      * @return the type descriptor
      */
-    public static final TypeDescriptor<? extends IVilType> configurationType() {
+    public static final TypeDescriptor<?> configurationType() {
         return TypeRegistry.DEFAULT.getType(Configuration.class);
     }
 
@@ -26,7 +25,7 @@ public class IvmlTypes {
      * 
      * @return the type descriptor
      */
-    public static final TypeDescriptor<? extends IVilType> decisionVariableType() {
+    public static final TypeDescriptor<?> decisionVariableType() {
         return TypeRegistry.DEFAULT.getType(DecisionVariable.class);
     }
     
@@ -35,7 +34,7 @@ public class IvmlTypes {
      * 
      * @return the type descriptor
      */
-    public static final TypeDescriptor<? extends IVilType> declarationType() {
+    public static final TypeDescriptor<?> declarationType() {
         return TypeRegistry.DEFAULT.getType(IvmlDeclaration.class);
     }
 
@@ -44,7 +43,7 @@ public class IvmlTypes {
      * 
      * @return the type descriptor
      */
-    public static final TypeDescriptor<? extends IVilType> projectType() {
+    public static final TypeDescriptor<?> projectType() {
         return TypeRegistry.DEFAULT.getType(Project.class);
     }
 
@@ -53,8 +52,17 @@ public class IvmlTypes {
      * 
      * @return the type descriptor
      */
-    public static final TypeDescriptor<? extends IVilType> attributeType() {
+    public static final TypeDescriptor<?> attributeType() {
         return TypeRegistry.DEFAULT.getType(Attribute.class);
+    }
+
+    /**
+     * Returns the type descriptor for the built-in (fallback) type 'IvmlElement'.
+     * 
+     * @return the type descriptor
+     */
+    public static final TypeDescriptor<?> ivmlElement() {
+        return TypeRegistry.DEFAULT.getType(IvmlElement.class);
     }
 
 }

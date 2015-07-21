@@ -13,9 +13,8 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Imp
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script.ScriptDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.VariableDeclaration;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.model.varModel.IvmlKeyWords;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
@@ -52,12 +51,12 @@ public class ScriptTests extends AbstractTest {
             imps.add(new ModelImport<Script>(impName, false, new ExpressionVersionRestriction(expr, decl)));
         } catch (RestrictionEvaluationException e) {
             Assert.fail(e.getMessage());
-        } catch (ExpressionException e) {
+        } catch (VilException e) {
             Assert.fail(e.getMessage());
         }
         
-        Imports imports = new Imports(imps, null);
-        ScriptDescriptor desc = new ScriptDescriptor(null, null, imports);
+        Imports<Script> imports = new Imports<Script>(imps, null);
+        ScriptDescriptor<Script> desc = new ScriptDescriptor<Script>(null, null, imports);
         Script script = new Script(scriptName, null, desc, getRegistry());
         Assert.assertNotNull("script shall be there", script);
         StringWriter sWriter = new StringWriter();
@@ -65,7 +64,7 @@ public class ScriptTests extends AbstractTest {
         writer.setIndentation(""); // simplifies comparison later
         try {
             script.accept(writer);
-        } catch (VilLanguageException e) {
+        } catch (VilException e) {
             Assert.fail("unexpected exception: " + e.getMessage());
         }
         // IVML test style

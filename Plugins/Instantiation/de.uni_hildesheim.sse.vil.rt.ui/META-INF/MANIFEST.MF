@@ -19,13 +19,18 @@ Require-Bundle: de.uni_hildesheim.sse.vil.rt;visibility:=reexport,
  org.antlr.runtime,
  org.eclipse.xtext.common.types.ui,
  org.eclipse.xtext.ui.codetemplates.ui,
+ org.eclipse.equinox.ds,
+ org.eclipse.osgi.services,
  org.eclipse.compare,
- de.uni-hildesheim.sse.easy.instantiatorCore.rt;bundle-version="0.0.1"
+ de.uni-hildesheim.sse.easy.instantiatorCore.rt;bundle-version="0.0.1",
+ de.uni_hildesheim.sse.varModel;bundle-version="0.11.3"
 Import-Package: org.apache.log4j,
  org.eclipse.xtext.xbase.lib
+Service-Component: OSGI-INF/rtvilFactory.xml
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Export-Package: de.uni_hildesheim.sse.vil.rt.ui.quickfix,
- de.uni_hildesheim.sse.vil.rt.ui.contentassist,
+Export-Package: de.uni_hildesheim.sse.vil.rt.ui.contentassist,
  de.uni_hildesheim.sse.vil.rt.ui.contentassist.antlr,
- de.uni_hildesheim.sse.vil.rt.ui.internal
+ de.uni_hildesheim.sse.vil.rt.ui.embed,
+ de.uni_hildesheim.sse.vil.rt.ui.internal,
+ de.uni_hildesheim.sse.vil.rt.ui.quickfix
 Bundle-Activator: de.uni_hildesheim.sse.vil.rt.ui.internal.RtVilActivator

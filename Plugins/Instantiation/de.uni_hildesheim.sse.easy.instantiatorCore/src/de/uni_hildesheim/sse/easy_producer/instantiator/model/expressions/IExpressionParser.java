@@ -1,5 +1,7 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
+
 
 /**
  * Allows parsing a string to an expression.
@@ -14,8 +16,8 @@ public interface IExpressionParser {
      * @param text the text to be parsed
      * @param environment the runtime environment used to resolve variables
      * @return the parsed expression
-     * @throws ExpressionException in case of parse problems
+     * @throws VilException in case of parse problems
      */
-    public abstract Expression parse(String text, IRuntimeEnvironment environment) throws ExpressionException;
+    public abstract Expression parse(String text, IRuntimeEnvironment environment) throws VilException;
 
 }

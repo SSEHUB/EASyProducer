@@ -3,7 +3,7 @@ project SetOfCompoundsTest {
    version v0;
    
    enum View {BA, DE, Impl};
-   attribute View modelView to SetOfCompoundsTest;
+   annotate View modelView to SetOfCompoundsTest;
    
    setOf(Workflow) GoodsInWorkflows; 
    

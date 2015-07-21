@@ -44,10 +44,19 @@ public abstract class DefaultImportResolver<M extends IModel> extends ImportReso
     private final ModelInfo<M> conflictMarker = new ModelInfo<M>();
 
     /**
-     * Creates the resolver instance.
+     * Creates an resolver instance.
      */
     protected DefaultImportResolver() {
         super();
+    }
+
+    /**
+     * Creates an resolver instance with a parent resolver to delegate to in failure cases.
+     * 
+     * @param parent the parent resolver
+     */
+    protected DefaultImportResolver(ImportResolver<M> parent) {
+        super(parent);
     }
     
     @Override

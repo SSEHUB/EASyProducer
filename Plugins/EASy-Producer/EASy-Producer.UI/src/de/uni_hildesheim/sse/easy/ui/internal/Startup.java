@@ -5,7 +5,6 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 
 import de.uni_hildesheim.sse.easy.ui.core.instantiation.GuiTracerFactory;
-import de.uni_hildesheim.sse.easy_producer.instantiator.Transformator;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.TracerFactory;
 import de.uni_hildesheim.sse.easy_producer.persistency.ResourcesMgmt;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
@@ -33,7 +32,6 @@ public class Startup implements IStartup {
             }
         });
         // Register the observer for sending messages to the console of the running Eclipse-instance.
-        Transformator.setInstantiatorStateObserver(new ConsoleInstantiatorObserver());
         TracerFactory.setInstance(GuiTracerFactory.INSTANCE);
     }
 }

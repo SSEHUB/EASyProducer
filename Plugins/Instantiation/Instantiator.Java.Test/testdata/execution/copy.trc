@@ -2,11 +2,11 @@ folder <- javaCopy
 -> main(Project, Configuration, Project) with (<project>, <config>, <project>)
     name <- instantiated
     destination <- javaCopy/dest
-    -> delete(Path) with (javaCopy/dest) = null
+    -> delete(Path) with (javaCopy/dest)
     -> doCopy(String, Path) with (instantiated, javaCopy/dest)
         -> copy(FileSystemArtifact, FileSystemArtifact) with (javaCopy/test/Bla.java, javaCopy/dest/instantiated/test/Bla.java) = {javaCopy/dest/instantiated/test/Bla.java}
         -> postCopy(JavaFileArtifact, String) with (javaCopy/dest/instantiated/test/Bla.java, instantiated)
-            -> modifyNamespace(JavaFileArtifact, String, String) with (javaCopy/dest/instantiated/test/Bla.java, test, instantiated.test) = null
+            -> modifyNamespace(JavaFileArtifact, String, String) with (javaCopy/dest/instantiated/test/Bla.java, test, instantiated.test)
         -> copy(FileSystemArtifact, FileSystemArtifact) with (javaCopy/test/Bla2.java, javaCopy/dest/instantiated/test/Bla2.java) = {javaCopy/dest/instantiated/test/Bla2.java}
         -> postCopy(JavaFileArtifact, String) with (javaCopy/dest/instantiated/test/Bla2.java, instantiated)
-            -> modifyNamespace(JavaFileArtifact, String, String) with (javaCopy/dest/instantiated/test/Bla2.java, test, instantiated.test) = null
+            -> modifyNamespace(JavaFileArtifact, String, String) with (javaCopy/dest/instantiated/test/Bla2.java, test, instantiated.test)

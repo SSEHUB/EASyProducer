@@ -9,6 +9,7 @@ import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration;
 import de.uni_hildesheim.sse.vil.rt.rtVil.BreakdownElement;
 import de.uni_hildesheim.sse.vil.rt.rtVil.RtVilPackage;
 import de.uni_hildesheim.sse.vil.rt.rtVil.StrategyDeclaration;
+import de.uni_hildesheim.sse.vil.rt.rtVil.WeightingStatement;
 
 import de.uni_hildesheim.sse.vilBuildLanguage.RuleConditions;
 import de.uni_hildesheim.sse.vilBuildLanguage.RuleElement;
@@ -41,6 +42,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link de.uni_hildesheim.sse.vil.rt.rtVil.impl.StrategyDeclarationImpl#getConditions <em>Conditions</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.rt.rtVil.impl.StrategyDeclarationImpl#getVarDecls <em>Var Decls</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.rt.rtVil.impl.StrategyDeclarationImpl#getObjective <em>Objective</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vil.rt.rtVil.impl.StrategyDeclarationImpl#getWeighting <em>Weighting</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.rt.rtVil.impl.StrategyDeclarationImpl#getBreakdown <em>Breakdown</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.rt.rtVil.impl.StrategyDeclarationImpl#getPost <em>Post</em>}</li>
  * </ul>
@@ -109,6 +111,16 @@ public class StrategyDeclarationImpl extends MinimalEObjectImpl.Container implem
    * @ordered
    */
   protected Expression objective;
+
+  /**
+   * The cached value of the '{@link #getWeighting() <em>Weighting</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getWeighting()
+   * @generated
+   * @ordered
+   */
+  protected WeightingStatement weighting;
 
   /**
    * The cached value of the '{@link #getBreakdown() <em>Breakdown</em>}' containment reference list.
@@ -337,6 +349,54 @@ public class StrategyDeclarationImpl extends MinimalEObjectImpl.Container implem
    * <!-- end-user-doc -->
    * @generated
    */
+  public WeightingStatement getWeighting()
+  {
+    return weighting;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetWeighting(WeightingStatement newWeighting, NotificationChain msgs)
+  {
+    WeightingStatement oldWeighting = weighting;
+    weighting = newWeighting;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, RtVilPackage.STRATEGY_DECLARATION__WEIGHTING, oldWeighting, newWeighting);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setWeighting(WeightingStatement newWeighting)
+  {
+    if (newWeighting != weighting)
+    {
+      NotificationChain msgs = null;
+      if (weighting != null)
+        msgs = ((InternalEObject)weighting).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - RtVilPackage.STRATEGY_DECLARATION__WEIGHTING, null, msgs);
+      if (newWeighting != null)
+        msgs = ((InternalEObject)newWeighting).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - RtVilPackage.STRATEGY_DECLARATION__WEIGHTING, null, msgs);
+      msgs = basicSetWeighting(newWeighting, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, RtVilPackage.STRATEGY_DECLARATION__WEIGHTING, newWeighting, newWeighting));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EList<BreakdownElement> getBreakdown()
   {
     if (breakdown == null)
@@ -378,6 +438,8 @@ public class StrategyDeclarationImpl extends MinimalEObjectImpl.Container implem
         return ((InternalEList<?>)getVarDecls()).basicRemove(otherEnd, msgs);
       case RtVilPackage.STRATEGY_DECLARATION__OBJECTIVE:
         return basicSetObjective(null, msgs);
+      case RtVilPackage.STRATEGY_DECLARATION__WEIGHTING:
+        return basicSetWeighting(null, msgs);
       case RtVilPackage.STRATEGY_DECLARATION__BREAKDOWN:
         return ((InternalEList<?>)getBreakdown()).basicRemove(otherEnd, msgs);
       case RtVilPackage.STRATEGY_DECLARATION__POST:
@@ -406,6 +468,8 @@ public class StrategyDeclarationImpl extends MinimalEObjectImpl.Container implem
         return getVarDecls();
       case RtVilPackage.STRATEGY_DECLARATION__OBJECTIVE:
         return getObjective();
+      case RtVilPackage.STRATEGY_DECLARATION__WEIGHTING:
+        return getWeighting();
       case RtVilPackage.STRATEGY_DECLARATION__BREAKDOWN:
         return getBreakdown();
       case RtVilPackage.STRATEGY_DECLARATION__POST:
@@ -440,6 +504,9 @@ public class StrategyDeclarationImpl extends MinimalEObjectImpl.Container implem
         return;
       case RtVilPackage.STRATEGY_DECLARATION__OBJECTIVE:
         setObjective((Expression)newValue);
+        return;
+      case RtVilPackage.STRATEGY_DECLARATION__WEIGHTING:
+        setWeighting((WeightingStatement)newValue);
         return;
       case RtVilPackage.STRATEGY_DECLARATION__BREAKDOWN:
         getBreakdown().clear();
@@ -478,6 +545,9 @@ public class StrategyDeclarationImpl extends MinimalEObjectImpl.Container implem
       case RtVilPackage.STRATEGY_DECLARATION__OBJECTIVE:
         setObjective((Expression)null);
         return;
+      case RtVilPackage.STRATEGY_DECLARATION__WEIGHTING:
+        setWeighting((WeightingStatement)null);
+        return;
       case RtVilPackage.STRATEGY_DECLARATION__BREAKDOWN:
         getBreakdown().clear();
         return;
@@ -508,6 +578,8 @@ public class StrategyDeclarationImpl extends MinimalEObjectImpl.Container implem
         return varDecls != null && !varDecls.isEmpty();
       case RtVilPackage.STRATEGY_DECLARATION__OBJECTIVE:
         return objective != null;
+      case RtVilPackage.STRATEGY_DECLARATION__WEIGHTING:
+        return weighting != null;
       case RtVilPackage.STRATEGY_DECLARATION__BREAKDOWN:
         return breakdown != null && !breakdown.isEmpty();
       case RtVilPackage.STRATEGY_DECLARATION__POST:

@@ -71,9 +71,9 @@ public class Advice {
      * 
      * @param visitor the visitor to be used
      * @return the result of visiting this instance (may be <b>null</b>)
-     * @throws VilLanguageException in case that visiting fails (e.g., execution)
+     * @throws VilException in case that visiting fails (e.g., execution)
      */
-    public Object accept(IVisitor visitor) throws VilLanguageException {
+    public Object accept(IVisitor visitor) throws VilException {
         return visitor.visitAdvice(this);
     }
     
@@ -129,6 +129,9 @@ public class Advice {
         Project resolved = null;
         ModelInfo<Project> resolvingInfo = null;
         List<ModelInfo<Project>> varModels = VarModel.INSTANCE.availableModels().getModelInfo(name);
+        if (null != varModels && varModels.size() > 1) { // disambiguate, leave the first call - legacy
+            varModels = VarModel.INSTANCE.availableModels().getVisibleModelInfo(name, modelURI);
+        }
         if (null == varModels || 0 == varModels.size()) {
             warning.append("cannot resolve '" + name + "' - IVML identifier may also not be (fully) resolved");
         }  else if (varModels.size() > 1) {

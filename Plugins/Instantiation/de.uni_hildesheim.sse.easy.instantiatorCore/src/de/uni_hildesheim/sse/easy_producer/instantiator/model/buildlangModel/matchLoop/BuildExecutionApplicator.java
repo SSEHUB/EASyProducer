@@ -4,7 +4,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Rul
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.RuleExecutionContext;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.RuleExecutionResult.Status;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.RuntimeEnvironment;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 
 /**
  * An applicator which actually executes a rule body if build is required for a LHS/RHS match.
@@ -34,10 +34,10 @@ public class BuildExecutionApplicator extends Applicator {
     }
     
     @Override
-    public void apply(Object expectedLhsValue, Object rhsValue, int index) throws VilLanguageException {
+    public void apply(Object expectedLhsValue, Object rhsValue, int index) throws VilException {
         environment.addValue(rule.getVariable(Side.RHS, index), rhsValue);
         environment.addValue(rule.getVariable(Side.LHS, index), expectedLhsValue);
-        status = executor.executeRuleBody(rule, context);
+        status = Status.toStatus(executor.executeRuleBody(rule, context));
     }
     
     /**

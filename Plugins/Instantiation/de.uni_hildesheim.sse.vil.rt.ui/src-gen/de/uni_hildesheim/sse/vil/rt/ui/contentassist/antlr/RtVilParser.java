@@ -69,7 +69,9 @@ public class RtVilParser extends AbstractContentAssistParser {
 					put(grammarAccess.getStrategyDeclarationAccess().getGroup(), "rule__StrategyDeclaration__Group__0");
 					put(grammarAccess.getStrategyDeclarationAccess().getGroup_10(), "rule__StrategyDeclaration__Group_10__0");
 					put(grammarAccess.getStrategyDeclarationAccess().getGroup_11(), "rule__StrategyDeclaration__Group_11__0");
+					put(grammarAccess.getWeightingStatementAccess().getGroup(), "rule__WeightingStatement__Group__0");
 					put(grammarAccess.getBreakdownStatementAccess().getGroup(), "rule__BreakdownStatement__Group__0");
+					put(grammarAccess.getBreakdownStatementAccess().getGroup_1(), "rule__BreakdownStatement__Group_1__0");
 					put(grammarAccess.getBreakdownStatementAccess().getGroup_6(), "rule__BreakdownStatement__Group_6__0");
 					put(grammarAccess.getBreakdownStatementAccess().getGroup_6_3(), "rule__BreakdownStatement__Group_6_3__0");
 					put(grammarAccess.getBreakdownStatementAccess().getGroup_7(), "rule__BreakdownStatement__Group_7__0");
@@ -87,6 +89,7 @@ public class RtVilParser extends AbstractContentAssistParser {
 					put(grammarAccess.getRuleElementBlockAccess().getGroup(), "rule__RuleElementBlock__Group__0");
 					put(grammarAccess.getExpressionStatementAccess().getGroup_0(), "rule__ExpressionStatement__Group_0__0");
 					put(grammarAccess.getExpressionStatementAccess().getGroup_0_0(), "rule__ExpressionStatement__Group_0_0__0");
+					put(grammarAccess.getExpressionStatementAccess().getGroup_0_0_1(), "rule__ExpressionStatement__Group_0_0_1__0");
 					put(grammarAccess.getExpressionStatementAccess().getGroup_1(), "rule__ExpressionStatement__Group_1__0");
 					put(grammarAccess.getInstantiateAccess().getGroup(), "rule__Instantiate__Group__0");
 					put(grammarAccess.getInstantiateAccess().getGroup_1_0(), "rule__Instantiate__Group_1_0__0");
@@ -102,6 +105,7 @@ public class RtVilParser extends AbstractContentAssistParser {
 					put(grammarAccess.getSystemExecutionAccess().getGroup(), "rule__SystemExecution__Group__0");
 					put(grammarAccess.getVariableDeclarationAccess().getGroup(), "rule__VariableDeclaration__Group__0");
 					put(grammarAccess.getVariableDeclarationAccess().getGroup_3(), "rule__VariableDeclaration__Group_3__0");
+					put(grammarAccess.getTypeDefAccess().getGroup(), "rule__TypeDef__Group__0");
 					put(grammarAccess.getAdviceAccess().getGroup(), "rule__Advice__Group__0");
 					put(grammarAccess.getVersionSpecAccess().getGroup(), "rule__VersionSpec__Group__0");
 					put(grammarAccess.getParameterListAccess().getGroup(), "rule__ParameterList__Group__0");
@@ -143,12 +147,15 @@ public class RtVilParser extends AbstractContentAssistParser {
 					put(grammarAccess.getTypeAccess().getGroup_1(), "rule__Type__Group_1__0");
 					put(grammarAccess.getTypeAccess().getGroup_2(), "rule__Type__Group_2__0");
 					put(grammarAccess.getTypeAccess().getGroup_3(), "rule__Type__Group_3__0");
+					put(grammarAccess.getTypeAccess().getGroup_4(), "rule__Type__Group_4__0");
 					put(grammarAccess.getTypeParametersAccess().getGroup(), "rule__TypeParameters__Group__0");
 					put(grammarAccess.getTypeParametersAccess().getGroup_2(), "rule__TypeParameters__Group_2__0");
 					put(grammarAccess.getContainerInitializerAccess().getGroup(), "rule__ContainerInitializer__Group__0");
 					put(grammarAccess.getContainerInitializerAccess().getGroup_2(), "rule__ContainerInitializer__Group_2__0");
 					put(grammarAccess.getContainerInitializerAccess().getGroup_2_1(), "rule__ContainerInitializer__Group_2_1__0");
-					put(grammarAccess.getImplementationUnitAccess().getScriptsAssignment_1(), "rule__ImplementationUnit__ScriptsAssignment_1");
+					put(grammarAccess.getImplementationUnitAccess().getImportsAssignment_1(), "rule__ImplementationUnit__ImportsAssignment_1");
+					put(grammarAccess.getImplementationUnitAccess().getRequiresAssignment_2(), "rule__ImplementationUnit__RequiresAssignment_2");
+					put(grammarAccess.getImplementationUnitAccess().getScriptsAssignment_3(), "rule__ImplementationUnit__ScriptsAssignment_3");
 					put(grammarAccess.getLanguageUnitAccess().getAdvicesAssignment_0(), "rule__LanguageUnit__AdvicesAssignment_0");
 					put(grammarAccess.getLanguageUnitAccess().getNameAssignment_2(), "rule__LanguageUnit__NameAssignment_2");
 					put(grammarAccess.getLanguageUnitAccess().getParamAssignment_4(), "rule__LanguageUnit__ParamAssignment_4");
@@ -166,13 +173,16 @@ public class RtVilParser extends AbstractContentAssistParser {
 					put(grammarAccess.getStrategyDeclarationAccess().getConditionsAssignment_7(), "rule__StrategyDeclaration__ConditionsAssignment_7");
 					put(grammarAccess.getStrategyDeclarationAccess().getVarDeclsAssignment_9(), "rule__StrategyDeclaration__VarDeclsAssignment_9");
 					put(grammarAccess.getStrategyDeclarationAccess().getObjectiveAssignment_10_1(), "rule__StrategyDeclaration__ObjectiveAssignment_10_1");
-					put(grammarAccess.getStrategyDeclarationAccess().getBreakdownAssignment_11_2(), "rule__StrategyDeclaration__BreakdownAssignment_11_2");
+					put(grammarAccess.getStrategyDeclarationAccess().getWeightingAssignment_11_2(), "rule__StrategyDeclaration__WeightingAssignment_11_2");
+					put(grammarAccess.getStrategyDeclarationAccess().getBreakdownAssignment_11_3(), "rule__StrategyDeclaration__BreakdownAssignment_11_3");
 					put(grammarAccess.getStrategyDeclarationAccess().getPostAssignment_12(), "rule__StrategyDeclaration__PostAssignment_12");
 					put(grammarAccess.getBreakdownElementAccess().getVarDeclAssignment_0(), "rule__BreakdownElement__VarDeclAssignment_0");
 					put(grammarAccess.getBreakdownElementAccess().getExprStmtAssignment_1(), "rule__BreakdownElement__ExprStmtAssignment_1");
 					put(grammarAccess.getBreakdownElementAccess().getBreakdownStmtAssignment_2(), "rule__BreakdownElement__BreakdownStmtAssignment_2");
+					put(grammarAccess.getWeightingStatementAccess().getNameAssignment_2(), "rule__WeightingStatement__NameAssignment_2");
+					put(grammarAccess.getWeightingStatementAccess().getExprAssignment_4(), "rule__WeightingStatement__ExprAssignment_4");
 					put(grammarAccess.getBreakdownStatementAccess().getTypeAssignment_0(), "rule__BreakdownStatement__TypeAssignment_0");
-					put(grammarAccess.getBreakdownStatementAccess().getGuardAssignment_1(), "rule__BreakdownStatement__GuardAssignment_1");
+					put(grammarAccess.getBreakdownStatementAccess().getGuardAssignment_1_1(), "rule__BreakdownStatement__GuardAssignment_1_1");
 					put(grammarAccess.getBreakdownStatementAccess().getNameAssignment_2(), "rule__BreakdownStatement__NameAssignment_2");
 					put(grammarAccess.getBreakdownStatementAccess().getParamAssignment_4(), "rule__BreakdownStatement__ParamAssignment_4");
 					put(grammarAccess.getBreakdownStatementAccess().getPartAssignment_6_2(), "rule__BreakdownStatement__PartAssignment_6_2");
@@ -190,6 +200,7 @@ public class RtVilParser extends AbstractContentAssistParser {
 					put(grammarAccess.getLoadPropertiesAccess().getPathAssignment_2(), "rule__LoadProperties__PathAssignment_2");
 					put(grammarAccess.getScriptContentsAccess().getElementsAssignment_1_0(), "rule__ScriptContents__ElementsAssignment_1_0");
 					put(grammarAccess.getScriptContentsAccess().getElementsAssignment_1_1(), "rule__ScriptContents__ElementsAssignment_1_1");
+					put(grammarAccess.getScriptContentsAccess().getElementsAssignment_1_2(), "rule__ScriptContents__ElementsAssignment_1_2");
 					put(grammarAccess.getRuleDeclarationAccess().getTypeAssignment_1_0(), "rule__RuleDeclaration__TypeAssignment_1_0");
 					put(grammarAccess.getRuleDeclarationAccess().getModifierAssignment_1_1(), "rule__RuleDeclaration__ModifierAssignment_1_1");
 					put(grammarAccess.getRuleDeclarationAccess().getNameAssignment_1_2(), "rule__RuleDeclaration__NameAssignment_1_2");
@@ -204,6 +215,7 @@ public class RtVilParser extends AbstractContentAssistParser {
 					put(grammarAccess.getRuleElementAccess().getExprStmtAssignment_1(), "rule__RuleElement__ExprStmtAssignment_1");
 					put(grammarAccess.getRuleModifierAccess().getProtectedAssignment(), "rule__RuleModifier__ProtectedAssignment");
 					put(grammarAccess.getExpressionStatementAccess().getVarAssignment_0_0_0(), "rule__ExpressionStatement__VarAssignment_0_0_0");
+					put(grammarAccess.getExpressionStatementAccess().getFieldAssignment_0_0_1_1(), "rule__ExpressionStatement__FieldAssignment_0_0_1_1");
 					put(grammarAccess.getExpressionStatementAccess().getExprAssignment_0_1(), "rule__ExpressionStatement__ExprAssignment_0_1");
 					put(grammarAccess.getExpressionStatementAccess().getAltAssignment_1_0(), "rule__ExpressionStatement__AltAssignment_1_0");
 					put(grammarAccess.getPrimaryExpressionAccess().getOtherExAssignment_0(), "rule__PrimaryExpression__OtherExAssignment_0");
@@ -243,6 +255,8 @@ public class RtVilParser extends AbstractContentAssistParser {
 					put(grammarAccess.getVariableDeclarationAccess().getTypeAssignment_1(), "rule__VariableDeclaration__TypeAssignment_1");
 					put(grammarAccess.getVariableDeclarationAccess().getNameAssignment_2(), "rule__VariableDeclaration__NameAssignment_2");
 					put(grammarAccess.getVariableDeclarationAccess().getExpressionAssignment_3_1(), "rule__VariableDeclaration__ExpressionAssignment_3_1");
+					put(grammarAccess.getTypeDefAccess().getNameAssignment_1(), "rule__TypeDef__NameAssignment_1");
+					put(grammarAccess.getTypeDefAccess().getTypeAssignment_2(), "rule__TypeDef__TypeAssignment_2");
 					put(grammarAccess.getAdviceAccess().getNameAssignment_2(), "rule__Advice__NameAssignment_2");
 					put(grammarAccess.getAdviceAccess().getVersionSpecAssignment_4(), "rule__Advice__VersionSpecAssignment_4");
 					put(grammarAccess.getVersionSpecAccess().getRestrictionAssignment_1(), "rule__VersionSpec__RestrictionAssignment_1");
@@ -323,6 +337,9 @@ public class RtVilParser extends AbstractContentAssistParser {
 					put(grammarAccess.getTypeAccess().getParamAssignment_2_1(), "rule__Type__ParamAssignment_2_1");
 					put(grammarAccess.getTypeAccess().getMapAssignment_3_0(), "rule__Type__MapAssignment_3_0");
 					put(grammarAccess.getTypeAccess().getParamAssignment_3_1(), "rule__Type__ParamAssignment_3_1");
+					put(grammarAccess.getTypeAccess().getCallAssignment_4_0(), "rule__Type__CallAssignment_4_0");
+					put(grammarAccess.getTypeAccess().getReturnAssignment_4_1(), "rule__Type__ReturnAssignment_4_1");
+					put(grammarAccess.getTypeAccess().getParamAssignment_4_2(), "rule__Type__ParamAssignment_4_2");
 					put(grammarAccess.getTypeParametersAccess().getParamAssignment_1(), "rule__TypeParameters__ParamAssignment_1");
 					put(grammarAccess.getTypeParametersAccess().getParamAssignment_2_1(), "rule__TypeParameters__ParamAssignment_2_1");
 					put(grammarAccess.getContainerInitializerAccess().getExprsAssignment_2_0(), "rule__ContainerInitializer__ExprsAssignment_2_0");

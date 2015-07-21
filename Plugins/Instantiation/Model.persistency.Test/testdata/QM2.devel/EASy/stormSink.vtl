@@ -1,49 +1,271 @@
-template stormSink(Configuration config, FileArtifact target, DecisionVariable preElt, DecisionVariable elt, String topoName) {
+@advice(QM)
+template stormSink(Configuration config, FileArtifact target, DecisionVariable preElt, DecisionVariable elt, String topoName, mapOf(Tuple,String) nameToOutputMap, mapOf(String, mapOf(Tuple, Tuple)) globalMap,mapOf(String, setOf(DecisionVariable)) lastElementMap) {
 
-    def main(Configuration config, FileArtifact target, DecisionVariable preElt, DecisionVariable elt, String topoName) {
+	def produceInputVariable(sequenceOf(Tuple) tuples, Boolean variable, String fName) {
+		String ifInputName = "I" + fName;
+		String tupleName;
+
+		for(Tuple t : tuples) {
+			//get the tuple name
+			tupleName = t.name;
+			//change the first letter to upper letter
+			tupleName = firstToUpperCase(tupleName);
+			String inputInfName = ifInputName + "${tupleName}Input";
+			String fImpInputName = 	ifInputName + "${tupleName}Input";
+			if(variable) {
+				'    transient ${toIdentifier(inputInfName)} input${tupleName} = null;'
+			} else {
+				'        input${tupleName} = new $fName.$fImpInputName();'
+			}
+			
+		}
+	}
+
+	/*
+	 * Produces the variables of the output tuples.
+	 */	
+	def produceOutputVariable(sequenceOf(Tuple) tuples, mapOf(Tuple, Tuple) inputToOutputMapping, mapOf(Tuple,String) nameToOutputMap, String fName) {
+		String outputInfName; //output interface name
+		
+		String tupleName;	
+		for(Tuple t : tuples) {
+			//get the tuple name
+			tupleName = t.name;
+			//change the first letter to upper letter
+			tupleName = firstToUpperCase(tupleName);
+			//get output interface name	
+			if(inputToOutputMapping.containsKey(t))	{
+			  Tuple output = inputToOutputMapping.get(t);
+			  outputInfName = nameToOutputMap.get(output);				
+			} 
+			'    transient $outputInfName iTuple${tupleName} = null;'					
+	    }
+	
+	}
+
+	/*
+	 * Produces the casting statement from tuple value to right tuple type.
+	 */	
+    def produceInputForTuples(mapOf(Tuple, Tuple) inputToOutputMapping, mapOf(Tuple,String) nameToOutputMap, DecisionVariable elt) {
+		String familyName = elt.byName("sink").varName().firstToUpperCase();	
+		String outputInfName; //output interface name	
+		String inputInfName; //input interface name		
+        Sink snk = elt;
+        DataSink dataSnk = snk.sink;
+		String snkName =dataSnk.name;
+		String inputName = snkName.firstToUpperCase();
+		String ifInputName = "I" + inputName; 
+		String inputImpName;       
+
+		String qualifiedClsName = dataSnk.sinkCls;
+		JavaPath javaPath = qualifiedClsName;
+		String impClassName = javaPath.getName(); //the class name of the sink implementation
+        
+        String tupleName;		
+		Boolean multiStream = false;
+		Integer indent = 4;
+		sequenceOf(Tuple) tuples = dataSnk.output;
+		Integer tuplesSize = tuples.size();
+		for(Tuple t : tuples) {
+			if(tuplesSize > 1){
+				multiStream = true;
+				indent = 8;
+			}
+			//get the tuple name
+			tupleName = t.name;
+			//change the first letter to upper letter
+			tupleName = firstToUpperCase(tupleName);
+			//get input interface name
+			inputInfName = ifInputName + "${tupleName}Input";
+			
+			inputImpName = inputName +"${tupleName}Input";
+					
+			//get output interface name	
+			if(inputToOutputMapping.containsKey(t))	{
+			  Tuple output = inputToOutputMapping.get(t);
+			  outputInfName = nameToOutputMap.get(output);				
+			} 									
+			if(multiStream){
+				'if(tuple.getValue(0) instanceof $outputInfName) {' | indent;
+			}
+			'iTuple${tupleName} = ($outputInfName)tuple.getValue(0);' | indent+4;
+			'input${tupleName} = new ${toIdentifier(inputName)}.${toIdentifier(inputImpName)}();' | indent+4;
+			 for(Field f : t.fields) {
+				 String fname = toIdentifier("${f.name}");
+    			 String mname = firstToUpperCase(fname);
+    	         'input${tupleName}.set${mname}(iTuple${tupleName}.get${mname}());' | indent+4;
+			 }
+			 'sinkHandler.postData${tupleName}(input${tupleName});' | indent+4;
+			 if(multiStream){
+			 	'}' | indent;
+			 }	
+			 ''	
+//			 tupleCount = tupleCount + 1;	
+		}					
+		
+	}
+
+	def produceImportsFromLastElements(setOf(DecisionVariable) lastElt) {
+	    for(DecisionVariable v : lastElt) {
+    		if(v.type() == "Source"){
+    		  Source src = v;
+    	      DataSource dataSrc = src.source;
+    	      String srcName = dataSrc.name;
+		      String srcInfName = "I" + srcName.firstToUpperCase();
+    	     'import eu.qualimaster.data.inf.${toIdentifier(srcInfName)}.*;'	
+    		} else if(v.type() == "FamilyElement") {
+    			//the name is the varName!!
+    			String familyName = v.byName("family").varName();
+                String ifName = "I" + familyName.firstToUpperCase();
+    			'import eu.qualimaster.families.inf.${toIdentifier(ifName)}.*;'
+    		} else if(v.type() == "DataManagementElement") {
+    			String dmVarName = v.varName().firstToUpperCase();
+    			setOf(DecisionVariable) lastElt = lastElementMap.get(dmVarName);
+    			produceImportsFromLastElements(lastElt);
+    		}
+    	}
+	}	
+
+	def transferParameterValueType(DecisionVariable varParameter, String value) {
+		String paraType = varParameter.type();
+		Integer len = paraType.length();
+		String type;
+	    if(len>9){
+			type = paraType.substring(0, len - 9);
+		}	
+       	switch(type) {
+    		"Integer" : "Integer.parseInt($value)",
+    		"Boolean" : "Boolean.parseBoolean($value)",
+    		"Real" : "Double.parseDouble($value)",
+    		"String" : "$value"   	
+    	}					
+	}
+		
+    def main(Configuration config, FileArtifact target, DecisionVariable preElt, DecisionVariable elt, String topoName, mapOf(Tuple,String) nameToOutputMap, mapOf(String, mapOf(Tuple, Tuple)) globalMap,mapOf(String, setOf(DecisionVariable)) lastElementMap) {
         String name = elt.varName().firstToUpperCase() + elt.type();
         String preIfName = "I" + preElt.byName("family").varName().firstToUpperCase();
-		String preOutputName= "I" + preIfName + "Output";
-        'package eu.qualiMaster.topologies.$topoName;'
+		String streamId = elt.varName() + "Stream";
+		Sink snk = elt;
+		DataSink dataSnk = snk.sink;
+		String qualifiedClsName = dataSnk.sinkCls;
+		JavaPath javaPath = qualifiedClsName;
+		String impClassName = javaPath.getName(); //the class name of the sink implementation	
+			
+		String fmVarName = elt.varName().firstToUpperCase();
+		setOf(DecisionVariable) lastElt = lastElementMap.get(fmVarName); //last elements linked to the current element	
+		
+		String snkName =dataSnk.name;
+		String inputName = snkName.firstToUpperCase();	
+		
+		String eltName = elt.varName().firstToUpperCase();
+		mapOf(Tuple, Tuple) inputToOutputMapping = {};
+		if(globalMap.containsKey(eltName)){
+			inputToOutputMapping = globalMap.get(eltName);
+		}
+		
+        'package eu.qualimaster.$topoName.topology;'
     	''
     	'import java.util.*;'
     	'import org.apache.log4j.Logger;'
     	'import backtype.storm.tuple.*;'
     	'import backtype.storm.task.*;'
     	'import backtype.storm.topology.*;'
-    	'import eu.qualiMaster.signal.*;'
-    	'import eu.qualiMaster.families.inf.$preIfName.$preOutputName;'
+    	'import eu.qualimaster.common.signal.*;'
+    	'import eu.qualimaster.data.inf.I${toIdentifier(snkName)};'
+    	'import eu.qualimaster.data.inf.I${toIdentifier(snkName)}.*;'
+    	'import eu.qualimaster.data.imp.${toIdentifier(snkName)};'
+    	//'import eu.qualimaster.data.imp.${toIdentifier(snkName)}.*;'
+    	'import $qualifiedClsName;'
+    	produceImportsFromLastElements(lastElt);
     	''
+    	'/**'
+    	'* Defines the Sink class(GEN).'
+    	'**/'
     	'@SuppressWarnings({ "rawtypes", "serial" })'
     	'public class $name extends BaseSignalBolt {'
     	''
     	'    final static Logger logger = Logger.getLogger($name.class);'
-    	'    OutputCollector _collector;'
+    	'    transient OutputCollector _collector;'
+    	'    transient I${toIdentifier(snkName)} sinkHandler;'
+    	produceOutputVariable(dataSnk.output, inputToOutputMapping, nameToOutputMap, inputName);
+    	produceInputVariable(dataSnk.output, true, inputName);
     	''
-    	'	public $name(String name) {'
-    	'        super(name);'
-    	'   }'
+    	'	public $name(String name, String namespace) {'
+    	'        super(name, namespace);'
+    	'    }'
+    	''
 		'    @Override'
 		'    public void execute(Tuple tuple) {'
 		'        //for now, sink just emits the tuple that get from last familyelement'
-		'        $preOutputName iTuple = ($preOutputName) tuple.getValue(0); '
-		'        logger.info("Emitting data from Sink:" + iTuple);'
-		'        _collector.emit(tuple, new Values(iTuple));'
+		
+		 //produce input -- output casting statement
+		produceInputForTuples(inputToOutputMapping, nameToOutputMap, elt);		
+		//'        logger.info("Emitting data from Sink:" + iTuple);'
+		//'        _collector.emit(tuple, new Values(iTuple));'
 		'        _collector.ack(tuple);'
 		'    }'
 	    ''
 		'    @Override'
 		'    public void prepare(Map map, TopologyContext topologyContext, OutputCollector collector) {'
+		'		super.prepare(map, topologyContext, collector);'
 		'        _collector = collector;'
+		'        try {'
+		'            Class cls = Class.forName("$qualifiedClsName");'
+		'            sinkHandler = (I${toIdentifier(snkName)}) cls.newInstance();'
+		'        } catch (ClassNotFoundException e) {'
+		'	         // TODO Auto-generated catch block'
+		'            e.printStackTrace();'
+		'        } catch (InstantiationException e) {'
+		'        	// TODO Auto-generated catch block'
+		'            e.printStackTrace();'
+		'        } catch (IllegalAccessException e) {'
+		'           // TODO Auto-generated catch block'
+		'            e.printStackTrace();'
+		'        }'
+//		'        sinkHandler = new $impClassName();'
 		'    }'
 	    ''
+	    '    @Override'
+        '    public void cleanup() {'
+        '        super.cleanup();'
+        '    }'
+        ''
 		'    @Override'
 		'    public void declareOutputFields(OutputFieldsDeclarer declarer) {'
-		'        declarer.declare(new Fields("sinkData"));'
+		'        declarer.declareStream("$streamId", new Fields("sinkData"));'
 		'    }'
     	''
+        '/**' | 4;
+	    '* Receives the signal data for Sink adaptation.'| 4;
+	    '* @param data the signal data' | 4;
+	    '**/' | 4;    	
     	'    @Override'
-	    '    public void onSignal(byte[] data) {'		
+	    '    public void onSignal(byte[] data) {'
+        'String signal=new String(data);' | 8;
+        'logger.info("Received signal: " + signal);' | 8;
+        '//handle the received signal and make related changes, e.g., give a parameter to Source' | 8;
+		'String[] parts = signal.split(":");' | 8;
+		'if (parts.length >= 2) {' | 8;
+		'if ("param".equals(parts[0]) && 3 == parts.length) {' | 12;
+
+		setOf(Parameter) parameters = dataSnk.parameters;
+		for(Parameter p : parameters) {
+		    String paraName = p.name;
+		    String paraValue = transferParameterValueType(p, "parts[2]");
+		'switch (parts[1]) { // just for illustration, may need parameter conversion' | 16;
+		'case "$paraName" : ' | 16;
+		'alg.setParameter${paraName.firstToUpperCase()}($paraValue); ' | 16;
+		'break;' | 16;
+		'}'	| 16;		
+		}		    
+		'       	     /*switch (parts[1]) { // just for illustration, may need parameter conversion'
+		' 	             case "param1" : '
+		'		         alg.setParameterParam1(parts[2]); '
+		' 	             break;'
+		'	          }*/'
+				    
+		'}' | 12;
+		'}' | 8;	    		
 	    '    }'
     	'}'
     }

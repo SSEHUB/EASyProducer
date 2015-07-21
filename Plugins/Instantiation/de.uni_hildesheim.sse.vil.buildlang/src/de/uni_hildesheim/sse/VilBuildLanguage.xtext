@@ -43,6 +43,7 @@ ScriptContents:
     {ScriptContents} // ensure object creation
     (
         elements+=VariableDeclaration
+        | elements+=TypeDef
         | elements+=RuleDeclaration
     )*
 ;
@@ -90,7 +91,7 @@ RuleModifier:
 
 ExpressionStatement:
     (
-      (var=Identifier '=')? 
+      (var=Identifier ('.' field=Identifier)? '=')? 
        expr=Expression ';') 
     | alt=Alternative ';'?
     ;

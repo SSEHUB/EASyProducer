@@ -6,9 +6,11 @@ import java.util.List;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.AbstractResolvableModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.IResolvableModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.IVariableDeclarationReceiver;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaField;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaOperation;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaType;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.utils.modelManagement.IRestrictionEvaluationContext;
 import de.uni_hildesheim.sse.utils.modelManagement.IndentationConfiguration;
@@ -40,13 +42,13 @@ public class Template extends AbstractResolvableModel<VariableDeclaration, Templ
      * @param extension the extended template (may be <b>null</b>)
      * @param descriptor information to create the template from
      * @param registry the registry responsible for this template
-     * @throws VilLanguageException in case of erroneous input
+     * @throws VilException in case of erroneous input
      */
     public Template(String name, ModelImport<Template> extension, TemplateDescriptor descriptor, TypeRegistry registry) 
-        throws VilLanguageException {
+        throws VilException {
         super(descriptor.getImports(), registry, descriptor.getAdvices());
         if (null == name || name.length() == 0) {
-            throw new VilLanguageException("no name given", VilLanguageException.ID_SEMANTIC);
+            throw new VilException("no name given", VilException.ID_SEMANTIC);
         }
         this.name = name;
         this.extension = extension;
@@ -197,7 +199,7 @@ public class Template extends AbstractResolvableModel<VariableDeclaration, Templ
     }
 
     @Override
-    public Object accept(IVisitor visitor) throws VilLanguageException {
+    public Object accept(IVisitor visitor) throws VilException {
         return visitor.visitTemplate(this);
     }
 
@@ -300,6 +302,36 @@ public class Template extends AbstractResolvableModel<VariableDeclaration, Templ
     @Override
     public IMetaType getBaseType() {
         return null;
+    }
+
+    @Override
+    public int getFieldCount() {
+        return 0;
+    }
+
+    @Override
+    public IMetaField getField(int index) {
+        throw new IndexOutOfBoundsException();
+    }
+
+    @Override
+    public boolean isInternal() {
+        return false;
+    }
+
+    @Override
+    public IMetaType getSuperType() {
+        return null;
+    }
+
+    @Override
+    public int getGenericParameterCount() {
+        return 0;
+    }
+
+    @Override
+    public TypeDescriptor<?> getGenericParameterType(int index) {
+        throw new IllegalArgumentException();
     }
 
 }

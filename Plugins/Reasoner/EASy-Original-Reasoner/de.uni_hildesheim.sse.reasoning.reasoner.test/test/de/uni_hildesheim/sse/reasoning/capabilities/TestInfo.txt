@@ -1,0 +1,14 @@
+1) DefaultAssign
+Assign attribute with a default value to the project.
+
+2) BlockAssign
+Assign attribute to the project, use assign block for assigning attribute value.
+
+3) IndividualAssign
+Assign attribute to the project, use individual attribute assignments. 
+
+4) BlockAssignNested
+Assign attribute to the project, use assign block for assigning attribute value to a compound nested element.
+
+5) IndividualAssignNested
+Assign attribute to the project, use individual attribute assignments to a compound nested element.

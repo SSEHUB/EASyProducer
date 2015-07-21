@@ -24,7 +24,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Bui
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Rule;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Rule.Side;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.Executor;
 
 /**
@@ -94,7 +94,7 @@ public class ScriptContainer extends ModelContainer<Script> {
                 Rule startRule = buildScript.determineStartRule(Executor.DEFAULT_START_RULE_NAME);
                 transformable = startRule.getBodyElementCount() > 0  || startRule.hasCondition(Side.RHS) 
                     || startRule.hasCondition(Side.LHS); 
-            } catch (VilLanguageException e) {
+            } catch (VilException e) {
                 // ignore - no start rule found, cannot be transformed
             }
         }

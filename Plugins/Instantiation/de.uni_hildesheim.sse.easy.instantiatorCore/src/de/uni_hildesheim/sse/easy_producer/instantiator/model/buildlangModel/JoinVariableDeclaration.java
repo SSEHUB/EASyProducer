@@ -1,9 +1,7 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 
 /**
@@ -21,9 +19,9 @@ public class JoinVariableDeclaration extends VariableDeclaration {
      * @param name the name of the variable
      * @param expr the initializing expression (must be given)
      * @param exclude if this join variable shall be excluded from the join result
-     * @throws ExpressionException in case of structural or semantic errors
+     * @throws VilException in case of structural or semantic errors
      */
-    public JoinVariableDeclaration(String name, Expression expr, boolean exclude) throws ExpressionException {
+    public JoinVariableDeclaration(String name, Expression expr, boolean exclude) throws VilException {
         super(name, getJoinVariableType(expr), false, expr);
         this.exclude = exclude;
     }
@@ -33,16 +31,16 @@ public class JoinVariableDeclaration extends VariableDeclaration {
      * 
      * @param expr the expression used for the initialization
      * @return the actual type of the join variable
-     * @throws ExpressionException in case that <code>expr</code> is not a collection or does not have exactly 
+     * @throws VilException in case that <code>expr</code> is not a collection or does not have exactly 
      *   one parameter
      */
-    private static TypeDescriptor<? extends IVilType> getJoinVariableType(Expression expr) throws ExpressionException {
-        TypeDescriptor<? extends IVilType> exprType = expr.inferType();
-        if (exprType.isCollection() && 1 != exprType.getParameterCount()) {
-            throw new ExpressionException("parameter must be set or sequence with one generic type", 
-                ExpressionException.ID_SEMANTIC);
+    private static TypeDescriptor<?> getJoinVariableType(Expression expr) throws VilException {
+        TypeDescriptor<?> exprType = expr.inferType();
+        if (exprType.isCollection() && 1 != exprType.getGenericParameterCount()) {
+            throw new VilException("parameter must be set or sequence with one generic type", 
+                VilException.ID_SEMANTIC);
         }
-        return exprType.getParameterType(0);
+        return exprType.getGenericParameterType(0);
     }
     
     /**
@@ -55,7 +53,7 @@ public class JoinVariableDeclaration extends VariableDeclaration {
     }
     
     @Override
-    public Object accept(IVisitor visitor) throws VilLanguageException {
+    public Object accept(IVisitor visitor) throws VilException {
         return visitor.visitJoinVariableDeclaration(this);
     }
 

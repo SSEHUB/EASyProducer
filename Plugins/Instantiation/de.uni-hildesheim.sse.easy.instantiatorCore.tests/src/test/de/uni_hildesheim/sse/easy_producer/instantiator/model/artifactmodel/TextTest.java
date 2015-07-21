@@ -14,7 +14,7 @@ import org.junit.Test;
 
 import test.de.uni_hildesheim.sse.easy_producer.instantiator.model.AbstractTest;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Text;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 
 /**
  * Tests for the textual representation of an artifact.
@@ -54,7 +54,7 @@ public class TextTest extends AbstractTest {
             } else {
                 newText = new Text(textString, modifiable);
             }
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             e.printStackTrace();
         }
         return newText;
@@ -76,7 +76,7 @@ public class TextTest extends AbstractTest {
                 newText = new Text(testFile, modifiable);
             }
             
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             e.printStackTrace();
         }
         return newText;
@@ -148,7 +148,7 @@ public class TextTest extends AbstractTest {
         try {
             Text resultText = testObject.substitute(search, replacement);
             success = !containsRegex(resultText, search) && resultText.getText().contains(replacement);
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             e.printStackTrace();
         }
         return success;
@@ -210,7 +210,7 @@ public class TextTest extends AbstractTest {
                     createFileText(true, false).matches(regexForFile));
             Assert.assertTrue("no match in not modifiable text based on file",
                     createFileText(false, false).matches(regexForFile));            
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             e.printStackTrace();
         }
     }
@@ -229,7 +229,7 @@ public class TextTest extends AbstractTest {
             Assert.assertNotNull("text must exist", artifactText);
             artifactText.removeAll(regex);
             Assert.assertFalse(artifactText.getText().contains(removedString));
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             e.printStackTrace();
         }
     }

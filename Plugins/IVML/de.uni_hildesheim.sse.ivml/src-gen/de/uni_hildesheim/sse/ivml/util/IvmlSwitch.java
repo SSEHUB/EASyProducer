@@ -212,10 +212,10 @@ public class IvmlSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case IvmlPackage.ATTRIBUTE_TO:
+      case IvmlPackage.ANNOTATE_TO:
       {
-        AttributeTo attributeTo = (AttributeTo)theEObject;
-        T result = caseAttributeTo(attributeTo);
+        AnnotateTo annotateTo = (AnnotateTo)theEObject;
+        T result = caseAnnotateTo(annotateTo);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -230,20 +230,6 @@ public class IvmlSwitch<T> extends Switch<T>
       {
         FreezeStatement freezeStatement = (FreezeStatement)theEObject;
         T result = caseFreezeStatement(freezeStatement);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case IvmlPackage.FREEZE_BUT_LIST:
-      {
-        FreezeButList freezeButList = (FreezeButList)theEObject;
-        T result = caseFreezeButList(freezeButList);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case IvmlPackage.FREEZE_BUT_EXPRESSION:
-      {
-        FreezeButExpression freezeButExpression = (FreezeButExpression)theEObject;
-        T result = caseFreezeButExpression(freezeButExpression);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -859,17 +845,17 @@ public class IvmlSwitch<T> extends Switch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Attribute To</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Annotate To</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Attribute To</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Annotate To</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseAttributeTo(AttributeTo object)
+  public T caseAnnotateTo(AnnotateTo object)
   {
     return null;
   }
@@ -902,38 +888,6 @@ public class IvmlSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseFreezeStatement(FreezeStatement object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>Freeze But List</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Freeze But List</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseFreezeButList(FreezeButList object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>Freeze But Expression</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Freeze But Expression</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseFreezeButExpression(FreezeButExpression object)
   {
     return null;
   }

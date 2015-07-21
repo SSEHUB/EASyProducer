@@ -1,0 +1,10 @@
+-> main(Project, Configuration, Project) with (<project>, <config>, <project>)
+    -> t1()
+    -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)
+        -> create(String, String, String) with (a, b, c) = <AlgorithmChangeCommand>
+        cmd <- <AlgorithmChangeCommand>
+        m <- {}
+        -> add(Map, Integer, String) with ({{1, aa}}, 1, aa)
+        -> setMap(AlgorithmChangeCommand, Map) with (<AlgorithmChangeCommand>, {{1, aa}})
+        -> getMap(AlgorithmChangeCommand) with (<AlgorithmChangeCommand>) = {{1, aa}}
+        map2 <- {{1, aa}}

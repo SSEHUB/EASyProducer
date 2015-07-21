@@ -1,6 +1,6 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
 
 /**
@@ -21,7 +21,7 @@ public class ExpressionStatement
     }
     
     @Override
-    public Object accept(IVisitor visitor) throws VilLanguageException {
+    public Object accept(IVisitor visitor) throws VilException {
         return accept((de.uni_hildesheim.sse.easy_producer.instantiator.model.common.IVisitor) visitor);
     }
 

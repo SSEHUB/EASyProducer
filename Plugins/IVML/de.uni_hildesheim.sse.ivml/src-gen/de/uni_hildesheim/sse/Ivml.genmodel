@@ -95,26 +95,20 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//DerivedType/op"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//DerivedType/type"/>
     </genClasses>
-    <genClasses ecoreClass="Ivml.ecore#//AttributeTo">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//AttributeTo/attributeType"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//AttributeTo/attributeDecl"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//AttributeTo/names"/>
+    <genClasses ecoreClass="Ivml.ecore#//AnnotateTo">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//AnnotateTo/sname"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//AnnotateTo/annotationType"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//AnnotateTo/annotationDecl"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//AnnotateTo/names"/>
     </genClasses>
     <genClasses ecoreClass="Ivml.ecore#//Freeze">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Freeze/names"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Freeze/but"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//Freeze/id"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Freeze/ex"/>
     </genClasses>
     <genClasses ecoreClass="Ivml.ecore#//FreezeStatement">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//FreezeStatement/name"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//FreezeStatement/access"/>
-    </genClasses>
-    <genClasses ecoreClass="Ivml.ecore#//FreezeButList">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//FreezeButList/list"/>
-    </genClasses>
-    <genClasses ecoreClass="Ivml.ecore#//FreezeButExpression">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//FreezeButExpression/name"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//FreezeButExpression/access"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//FreezeButExpression/wildcard"/>
     </genClasses>
     <genClasses ecoreClass="Ivml.ecore#//Eval">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Eval/nested"/>

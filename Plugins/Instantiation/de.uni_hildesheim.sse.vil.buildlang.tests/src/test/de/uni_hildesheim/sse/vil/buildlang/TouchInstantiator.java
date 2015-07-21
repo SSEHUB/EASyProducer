@@ -7,8 +7,8 @@ import org.apache.commons.io.FileUtils;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IArtifact;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IFileSystemArtifact;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArraySet;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Instantiator;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationMeta;
@@ -27,15 +27,15 @@ public class TouchInstantiator implements IVilType {
      * 
      * @param artifact the artifact to be touched 
      * @return the touched artifact(s)
-     * @throws ArtifactException in case that the execution fails
+     * @throws VilException in case that the execution fails
      */
     @OperationMeta(returnGenerics = IFileSystemArtifact.class)
-    public static Set<IArtifact> touch(IFileSystemArtifact artifact) throws ArtifactException {
+    public static Set<IArtifact> touch(IFileSystemArtifact artifact) throws VilException {
         File file = artifact.getPath().getAbsolutePath();
         try {
             FileUtils.touch(file);
         } catch (IOException e) {
-            throw new ArtifactException(e.getMessage(), ArtifactException.ID_IO);
+            throw new VilException(e.getMessage(), VilException.ID_IO);
         }
         IArtifact[] result = new IArtifact[1];
         result[0] = artifact;

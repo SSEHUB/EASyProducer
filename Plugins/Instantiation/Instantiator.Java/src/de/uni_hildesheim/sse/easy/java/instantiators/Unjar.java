@@ -2,8 +2,8 @@ package de.uni_hildesheim.sse.easy.java.instantiators;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FileArtifact;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.Path;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.defaultInstantiators.Unzip;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Instantiator;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationMeta;
@@ -24,10 +24,10 @@ public class Unjar implements IVilType {
      * @param jar the JAR file to be unpacked
      * @param target the target path to unpack to
      * @return the created artifacts
-     * @throws ArtifactException in case of unpacking problems
+     * @throws VilException in case of unpacking problems
      */
     @OperationMeta(returnGenerics = FileArtifact.class)
-    public static Set<FileArtifact> unjar(Path jar, Path target) throws ArtifactException {
+    public static Set<FileArtifact> unjar(Path jar, Path target) throws VilException {
         return unjar(jar, target, false);
     }
     
@@ -38,10 +38,10 @@ public class Unjar implements IVilType {
      * @param target the target path to unpack to
      * @param includeManifest whether the manifest shall also be unpacked
      * @return the created artifacts
-     * @throws ArtifactException in case of unpacking problems
+     * @throws VilException in case of unpacking problems
      */
     @OperationMeta(returnGenerics = FileArtifact.class)
-    public static Set<FileArtifact> unjar(Path jar, Path target, boolean includeManifest) throws ArtifactException {
+    public static Set<FileArtifact> unjar(Path jar, Path target, boolean includeManifest) throws VilException {
         return Unzip.unpack(jar, target, new JarHandler(includeManifest));
     }
     
@@ -54,10 +54,10 @@ public class Unjar implements IVilType {
      * @param pattern an optional ANT pattern used as a filter expression, typically a specific folder or package. 
      *   May be <code>null</code> if no filter is required.
      * @return the created artifacts
-     * @throws ArtifactException in case of unpacking problems
+     * @throws VilException in case of unpacking problems
      */
     @OperationMeta(returnGenerics = FileArtifact.class)
-    public static Set<FileArtifact> unjar(Path jar, Path target, String pattern) throws ArtifactException {
+    public static Set<FileArtifact> unjar(Path jar, Path target, String pattern) throws VilException {
         return Unzip.unpack(jar, target, pattern, new JarHandler(false));
     }
 
@@ -71,11 +71,11 @@ public class Unjar implements IVilType {
      *   May be <code>null</code> if no filter is required.
      * @param includeManifest whether the manifest shall also be unpacked
      * @return the created artifacts
-     * @throws ArtifactException in case of unpacking problems
+     * @throws VilException in case of unpacking problems
      */
     @OperationMeta(returnGenerics = FileArtifact.class)
     public static Set<FileArtifact> unjar(Path jar, Path target, String pattern, boolean includeManifest) 
-        throws ArtifactException {
+        throws VilException {
         return Unzip.unpack(jar, target, pattern, new JarHandler(includeManifest));
     }
 

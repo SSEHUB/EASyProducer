@@ -1,0 +1,9 @@
+project EASyDemoCommandsPlatform {
+
+	version v0;
+	String appName;
+	Boolean hasAddCommand;
+	Boolean hasSubCommand;
+	Boolean hasPrintCommand;
+	hasSubCommand implies hasAddCommand;
+}

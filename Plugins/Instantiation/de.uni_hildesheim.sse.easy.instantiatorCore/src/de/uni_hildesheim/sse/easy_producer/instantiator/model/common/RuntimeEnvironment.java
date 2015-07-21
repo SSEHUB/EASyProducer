@@ -8,19 +8,20 @@ import java.util.Map;
 import java.util.Stack;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IArtifact;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IExpressionVisitor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IResolvable;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IRuntimeEnvironment;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Collection;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IActualValueProvider;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ITypedModel;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ListSequence;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ListSet;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.Configuration;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlElement;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypes;
+import de.uni_hildesheim.sse.model.varModel.values.NullValue;
 import de.uni_hildesheim.sse.utils.modelManagement.IModel;
 import de.uni_hildesheim.sse.utils.modelManagement.IRestrictionEvaluationContext;
 import de.uni_hildesheim.sse.utils.modelManagement.IVariable;
@@ -88,9 +89,9 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
          * 
          * @param resolvable the variable to return the value for
          * @return the value of <code>resolvable</code>
-         * @throws ExpressionException in case that <code>resolvable</code> was not defined
+         * @throws VilException in case that <code>resolvable</code> was not defined
          */
-        public Object getValue(IResolvable resolvable) throws ExpressionException {
+        public Object getValue(IResolvable resolvable) throws VilException {
             boolean found = false;
             Object value = null;  
             for (int l = levels.size() - 1; !found && l >= 0; l--) {
@@ -101,8 +102,8 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
                 }
             }
             if (!found) {
-                throw new ExpressionException("variable " + resolvable.getName() + " is not defined", 
-                    VilLanguageException.ID_NOT_FOUND);
+                throw new VilException("variable " + resolvable.getName() + " is not defined", 
+                    VilException.ID_NOT_FOUND);
             }
             return value;
         }
@@ -144,12 +145,12 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
          * 
          * @param var the variable to be modified
          * @param object the value of <code>var</code>
-         * @throws VilLanguageException in case of an attempt of modifying a constant
+         * @throws VilException in case of an attempt of modifying a constant
          */
-        public void setValue(VariableDeclaration var, Object object) throws VilLanguageException {
+        public void setValue(VariableDeclaration var, Object object) throws VilException {
             if (var.isConstant() && isDefined(var)) {
-                throw new VilLanguageException("variable " + var.getName() + " is constant", 
-                    VilLanguageException.ID_IS_CONSTANT);
+                throw new VilException("variable " + var.getName() + " is constant", 
+                    VilException.ID_IS_CONSTANT);
             }
             
             boolean found = false;
@@ -180,9 +181,9 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
         /**
          * Removes the topmost level.
          * 
-         * @throws ArtifactException in case that storing artifacts fails, the level will be popped anyway
+         * @throws VilException in case that storing artifacts fails, the level will be popped anyway
          */
-        public void popLevel() throws ArtifactException {
+        public void popLevel() throws VilException {
             storeArtifacts();
             if (levels.size() > 1) {
                 levels.pop();
@@ -194,9 +195,9 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
         /**
          * Stores the recent artifacts.
          * 
-         * @throws ArtifactException in case that storing artifacts fails
+         * @throws VilException in case that storing artifacts fails
          */
-        public void storeArtifacts() throws ArtifactException {
+        public void storeArtifacts() throws VilException {
             if (levels.size() > 0) {
                 Level top = levels.peek();
                 // rather simple, does not look for other levels!
@@ -214,9 +215,9 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
          * 
          * @param var the variable to be modified
          * @param object the value of <code>var</code>
-         * @throws VilLanguageException in case of an attempt of modifying a constant
+         * @throws VilException in case of an attempt of modifying a constant
          */
-        public void addValue(VariableDeclaration var, Object object) throws VilLanguageException {
+        public void addValue(VariableDeclaration var, Object object) throws VilException {
             Level level = levels.peek();
             level.values.put(var, object);
             level.variables.put(var.getName(), var);
@@ -285,9 +286,9 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
          * 
          * @param name the name
          * @return the value
-         * @throws ExpressionException in case that <code>name</code> was not defined
+         * @throws VilException in case that <code>name</code> was not defined
          */
-        public Object getIvmlValue(String name) throws ExpressionException {
+        public Object getIvmlValue(String name) throws VilException {
             boolean found = false;
             Object value = null;  
             for (int l = levels.size() - 1; !found && l >= 0; l--) {
@@ -301,8 +302,8 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
                 }
             }
             if (!found) {
-                throw new ExpressionException("IVML element " + name + " is not defined", 
-                    VilLanguageException.ID_NOT_FOUND);
+                throw new VilException("IVML element " + name + " is not defined", 
+                    VilException.ID_NOT_FOUND);
             }
             return value;
         }
@@ -314,12 +315,21 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
     private TypeRegistry typeRegistry;
     
     /**
-     * Creates a new runtime environment.
+     * Creates a new runtime environment using the default type registry.
      */
     public RuntimeEnvironment() {
-        typeRegistry = TypeRegistry.DEFAULT; // TODO preliminary
+        typeRegistry = TypeRegistry.DEFAULT;
     }
 
+    /**
+     * Creates a new runtime environment with a given type registry instance.
+     * 
+     * @param typeRegistry the type registry to use
+     */
+    public RuntimeEnvironment(TypeRegistry typeRegistry) {
+        this.typeRegistry = typeRegistry;
+    }
+    
     @Override
     public TypeRegistry getTypeRegistry() {
         return typeRegistry;
@@ -406,7 +416,7 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
     }
 
     @Override
-    public Object getValue(IResolvable resolvable) throws ExpressionException {
+    public Object getValue(IResolvable resolvable) throws VilException {
         return currentContext.getValue(resolvable);
     }
     
@@ -415,18 +425,14 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
      * 
      * @param var the variable to return the value for
      * @return the value of <code>var</code>
-     * @throws VilLanguageException in case that <code>var</code> was not defined
+     * @throws VilException in case that <code>var</code> was not defined
      */
-    public Object getValue(VariableDeclaration var) throws VilLanguageException {
-        try {
-            return getValue((IResolvable) var);
-        } catch (ExpressionException e) {
-            throw new VilLanguageException(e);
-        }
+    public Object getValue(VariableDeclaration var) throws VilException {
+        return getValue((IResolvable) var);
     }
 
     @Override
-    public void storeArtifacts() throws ArtifactException {
+    public void storeArtifacts() throws VilException {
         currentContext.storeArtifacts();
     }
     
@@ -455,9 +461,9 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
      * 
      * @param var the variable to be modified
      * @param object the value of <code>var</code>
-     * @throws VilLanguageException in case of an attempt of modifying a constant
+     * @throws VilException in case of an attempt of modifying a constant
      */
-    public void setValue(IResolvable var, Object object) throws VilLanguageException {
+    public void setValue(IResolvable var, Object object) throws VilException {
         setValue((VariableDeclaration) var, object);
     }
     
@@ -466,15 +472,39 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
      * 
      * @param var the variable to be modified
      * @param object the value of <code>var</code>
-     * @throws VilLanguageException in case of an attempt of modifying a constant
+     * @throws VilException in case of an attempt of modifying a constant
      */
-    public void setValue(VariableDeclaration var, Object object) throws VilLanguageException {
-        TypeDescriptor<? extends IVilType> type = var.getType();
+    public void setValue(VariableDeclaration var, Object object) throws VilException {
+        TypeDescriptor<?> type = var.getType();
         if (type instanceof IActualValueProvider) {
             object = ((IActualValueProvider) type).determineActualValue(object);
+        } else {
+            object = checkInitialCollectionValue(type, object);
         }
-        checkType(var, object);
+        object = checkType(var, object);
         currentContext.setValue(var, object);
+    }
+    
+    /**
+     * Checks initial collection values for type compliance. Actually, the parser is not 
+     * able to create the right type for all "{}", so we correct this here.
+     * 
+     * @param type the type
+     * @param object the object value
+     * @return <code>object</code> or a more specific / better matching type
+     */
+    private static Object checkInitialCollectionValue(TypeDescriptor<?> type, Object object) {
+        if ((type.isSet() || type.isSequence()) && object instanceof Collection) {
+            Collection<?> coll = (Collection<?>) object;
+            if (coll.isEmpty() && type.getGenericParameterCount() > 0 && !type.isSame(coll.getType())) {
+                if (type.isSet()) {
+                    object = new ListSet<Object>(new ArrayList<Object>(), type.getGenericParameter());
+                } else {
+                    object = new ListSequence<Object>(new ArrayList<Object>(), type.getGenericParameter());
+                }
+            }
+        }
+        return object;
     }
     
     /**
@@ -487,9 +517,9 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
     /**
      * Removes the topmost level.
      * 
-     * @throws ArtifactException in case that storing artifacts fails, the level will be popped anyway
+     * @throws VilException in case that storing artifacts fails, the level will be popped anyway
      */
-    public void popLevel() throws ArtifactException {
+    public void popLevel() throws VilException {
         currentContext.popLevel();
     }
 
@@ -498,10 +528,10 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
      * 
      * @param var the variable to be modified
      * @param object the value of <code>var</code>
-     * @throws VilLanguageException in case of an attempt of modifying a constant
+     * @throws VilException in case of an attempt of modifying a constant
      */
-    public void addValue(VariableDeclaration var, Object object) throws VilLanguageException {
-        checkType(var, object);
+    public void addValue(VariableDeclaration var, Object object) throws VilException {
+        object = checkType(var, object);
         currentContext.addValue(var, object);
     }
     
@@ -519,9 +549,13 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
      * 
      * @param var the variable to assign <code>object</code> to
      * @param object the object to be assigned (may be <b>null</b>)
-     * @throws VilLanguageException in case of type incompatibilities
+     * @return <code>object</code> or <b>null</b> if object is {@link NullValue}.
+     * @throws VilException in case of type incompatibilities
      */
-    private void checkType(VariableDeclaration var, Object object) throws VilLanguageException {
+    private Object checkType(VariableDeclaration var, Object object) throws VilException {
+        if (NullValue.INSTANCE == object || NullValue.VALUE == object) {
+            object = null;
+        }
         if (null != object && !var.getType().isInstance(object)) {
             String oTypeName;
             TypeDescriptor<?> oType = typeRegistry.findType(object.getClass());
@@ -530,10 +564,11 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
             } else {
                 oTypeName = oType.getVilName();
             }
-            throw new VilLanguageException("cannot assign value of type " + oTypeName 
+            throw new VilException("cannot assign value of type " + oTypeName 
                 + " to " + var.getName() + " of type " + var.getType().getVilName(), 
-                VilLanguageException.ID_RUNTIME_TYPE);
+                VilException.ID_RUNTIME_TYPE);
         }
+        return object;
     }
 
     /**
@@ -569,7 +604,7 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
     }
 
     @Override
-    public Object getIvmlValue(String name) throws ExpressionException {
+    public Object getIvmlValue(String name) throws VilException {
         return currentContext.getIvmlValue(name);
     }
     
@@ -580,7 +615,7 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
         if (variable instanceof VariableDeclaration) {
             try {
                 addValue((VariableDeclaration) variable, version);
-            } catch (VilLanguageException e) {
+            } catch (VilException e) {
                 throw new RestrictionEvaluationException(e.getMessage(), e.getId());
             }
         } else {
@@ -627,7 +662,7 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
         }
         try {
             popLevel();
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             throw new RestrictionEvaluationException(e.getMessage(), e.getId());
         }
     }

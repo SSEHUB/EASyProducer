@@ -9,7 +9,7 @@ project GoodsIn {
 
     /*Different views for business analysts (BA) and domain engineers (DE)*/
 	enum View {BA, DE, Impl};
-	attribute View modelView to GoodsIn;
+	annotate View modelView to GoodsIn;
     enum LocationType {singleTu, multipleTu};
 	
 /*----------------- workflow independent decision variables ----------------*/

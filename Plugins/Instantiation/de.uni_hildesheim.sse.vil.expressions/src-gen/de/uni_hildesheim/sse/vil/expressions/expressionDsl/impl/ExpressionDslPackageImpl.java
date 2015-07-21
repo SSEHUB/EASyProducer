@@ -39,6 +39,7 @@ import de.uni_hildesheim.sse.vil.expressions.expressionDsl.RelationalExpressionP
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.SubCall;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.SuperExecution;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Type;
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.TypeDef;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.TypeParameters;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.UnaryExpression;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.UnqualifiedExecution;
@@ -74,6 +75,13 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * @generated
    */
   private EClass variableDeclarationEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass typeDefEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -516,6 +524,36 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  public EClass getTypeDef()
+  {
+    return typeDefEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getTypeDef_Name()
+  {
+    return (EAttribute)typeDefEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getTypeDef_Type()
+  {
+    return (EReference)typeDefEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getAdvice()
   {
     return adviceEClass;
@@ -686,9 +724,19 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getExpressionStatement_Field()
+  {
+    return (EAttribute)expressionStatementEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EReference getExpressionStatement_Expr()
   {
-    return (EReference)expressionStatementEClass.getEStructuralFeatures().get(1);
+    return (EReference)expressionStatementEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -1646,6 +1694,26 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getType_Call()
+  {
+    return (EAttribute)typeEClass.getEStructuralFeatures().get(5);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getType_Return()
+  {
+    return (EReference)typeEClass.getEStructuralFeatures().get(6);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getTypeParameters()
   {
     return typeParametersEClass;
@@ -1753,6 +1821,10 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
     createEAttribute(variableDeclarationEClass, VARIABLE_DECLARATION__NAME);
     createEReference(variableDeclarationEClass, VARIABLE_DECLARATION__EXPRESSION);
 
+    typeDefEClass = createEClass(TYPE_DEF);
+    createEAttribute(typeDefEClass, TYPE_DEF__NAME);
+    createEReference(typeDefEClass, TYPE_DEF__TYPE);
+
     adviceEClass = createEClass(ADVICE);
     createEReference(adviceEClass, ADVICE__NAME);
     createEReference(adviceEClass, ADVICE__VERSION_SPEC);
@@ -1776,6 +1848,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
 
     expressionStatementEClass = createEClass(EXPRESSION_STATEMENT);
     createEAttribute(expressionStatementEClass, EXPRESSION_STATEMENT__VAR);
+    createEAttribute(expressionStatementEClass, EXPRESSION_STATEMENT__FIELD);
     createEReference(expressionStatementEClass, EXPRESSION_STATEMENT__EXPR);
 
     expressionEClass = createEClass(EXPRESSION);
@@ -1901,6 +1974,8 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
     createEReference(typeEClass, TYPE__PARAM);
     createEAttribute(typeEClass, TYPE__SEQ);
     createEAttribute(typeEClass, TYPE__MAP);
+    createEAttribute(typeEClass, TYPE__CALL);
+    createEReference(typeEClass, TYPE__RETURN);
 
     typeParametersEClass = createEClass(TYPE_PARAMETERS);
     createEReference(typeParametersEClass, TYPE_PARAMETERS__PARAM);
@@ -1956,6 +2031,10 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
     initEAttribute(getVariableDeclaration_Name(), ecorePackage.getEString(), "name", null, 0, 1, VariableDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getVariableDeclaration_Expression(), this.getExpression(), null, "expression", null, 0, 1, VariableDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+    initEClass(typeDefEClass, TypeDef.class, "TypeDef", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getTypeDef_Name(), ecorePackage.getEString(), "name", null, 0, 1, TypeDef.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getTypeDef_Type(), this.getType(), null, "type", null, 0, 1, TypeDef.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
     initEClass(adviceEClass, Advice.class, "Advice", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getAdvice_Name(), this.getQualifiedName(), null, "name", null, 0, 1, Advice.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getAdvice_VersionSpec(), this.getVersionSpec(), null, "versionSpec", null, 0, 1, Advice.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1979,6 +2058,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
 
     initEClass(expressionStatementEClass, ExpressionStatement.class, "ExpressionStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getExpressionStatement_Var(), ecorePackage.getEString(), "var", null, 0, 1, ExpressionStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getExpressionStatement_Field(), ecorePackage.getEString(), "field", null, 0, 1, ExpressionStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getExpressionStatement_Expr(), this.getExpression(), null, "expr", null, 0, 1, ExpressionStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(expressionEClass, Expression.class, "Expression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -2104,6 +2184,8 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
     initEReference(getType_Param(), this.getTypeParameters(), null, "param", null, 0, 1, Type.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getType_Seq(), ecorePackage.getEString(), "seq", null, 0, 1, Type.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getType_Map(), ecorePackage.getEString(), "map", null, 0, 1, Type.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getType_Call(), ecorePackage.getEString(), "call", null, 0, 1, Type.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getType_Return(), this.getType(), null, "return", null, 0, 1, Type.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(typeParametersEClass, TypeParameters.class, "TypeParameters", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getTypeParameters_Param(), this.getType(), null, "param", null, 0, -1, TypeParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

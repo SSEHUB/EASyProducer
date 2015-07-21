@@ -102,7 +102,7 @@ public class PseudoString implements IVilType {
             if (null == tmp) {
                 tmp = new String[0];
             } 
-            TypeDescriptor<? extends IVilType>[] param = TypeDescriptor.createArray(1);
+            TypeDescriptor<?>[] param = TypeDescriptor.createArray(1);
             param[0] = TypeRegistry.stringType();
             result = new ArraySequence<String>(tmp, param);
         }

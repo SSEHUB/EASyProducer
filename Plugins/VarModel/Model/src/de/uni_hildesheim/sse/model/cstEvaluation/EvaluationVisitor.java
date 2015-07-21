@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2014 University of Hildesheim, Software Systems Engineering
+ * Copyright 2009-2015 University of Hildesheim, Software Systems Engineering
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,10 +59,12 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
 import de.uni_hildesheim.sse.model.varModel.datatypes.ConstraintType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Container;
 import de.uni_hildesheim.sse.model.varModel.datatypes.CustomOperation;
+import de.uni_hildesheim.sse.model.varModel.datatypes.FreezeVariableType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Operation;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
+import de.uni_hildesheim.sse.model.varModel.datatypes.TypeQueries;
 import de.uni_hildesheim.sse.model.varModel.values.BooleanValue;
 import de.uni_hildesheim.sse.model.varModel.values.CompoundValue;
 import de.uni_hildesheim.sse.model.varModel.values.ContainerValue;
@@ -76,7 +78,7 @@ import de.uni_hildesheim.sse.utils.messages.Status;
 import de.uni_hildesheim.sse.utils.modelManagement.IVariable;
 
 /**
- * Rudimentary evaluation visitor for constant expressions. Usage:
+ * Evaluation visitor for IVML expressions. Usage:
  * <ol>
  *   <li>Single use: Call {@link #EvaluationVisitor(IConfiguration, IAssignmentState, boolean, EvaluationContext)}, 
  *     {@link #visit(ConstraintSyntaxTree)}, call {@link #getResult()} and finally {@link #clear()}.</li>
@@ -97,18 +99,22 @@ import de.uni_hildesheim.sse.utils.modelManagement.IVariable;
  * @author Holger Eichelberger
  */
 public class EvaluationVisitor implements IConstraintTreeVisitor {
-
+    
     protected IAssignmentState assignmentState;
     private EvaluationAccessor result;
     private int opNesting = 0;
     private boolean assignmentsOnly;
     private IValueChangeListener listener;
+    private IResolutionListener resolutionListener;
     private List<Message> messages = new ArrayList<Message>();
     private EvaluationContextImpl context;
     private Project dispatchScope;
     private StaticAccessFinder finder = new StaticAccessFinder();
     private Set<DecisionVariableDeclaration> selfVars = new HashSet<DecisionVariableDeclaration>();
     private Value selfValue;
+    private boolean issueWarning;
+    private ConstraintSyntaxTree innermostFailed;
+    private Map<AbstractVariable, IDecisionVariable> varMapping = new HashMap<AbstractVariable, IDecisionVariable>();
 
     /**
      * Implements the evaluation context. The context may contain nested local 
@@ -121,6 +127,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
     private class EvaluationContextImpl extends EvaluationContext implements IConfiguration {
 
         private Stack<IConfiguration> configStack = new Stack<IConfiguration>();
+        private boolean allowPropagation = true;
 
         /**
          * Creates the context.
@@ -173,9 +180,12 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
 
         @Override
         public IDecisionVariable getDecision(AbstractVariable variable) {
-            IDecisionVariable result = null;
+            IDecisionVariable result = varMapping.get(variable); // may be null
             for (int l = configStack.size() - 1; null == result && l >= 0; l--) {
                 result = configStack.get(l).getDecision(variable);
+            }
+            if (null != resolutionListener && null != result) {
+                resolutionListener.notifyResolved(variable, result);
             }
             return result;
         }
@@ -202,6 +212,32 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
             }
             return result;
         }
+        
+        @Override
+        public void issueWarning() {
+            issueWarning = true;
+        }
+
+        @Override
+        public boolean allowPropagation() {
+            return allowPropagation;
+        }
+        
+        /**
+         * Changes the propagation state of this context.
+         * 
+         * @param inPropagation whether we are currently in a propagation
+         * @param op a filter for allowing propagation, basically implies
+         *   is allow to change or <b>null</b> (no operation as filter)
+         * @return the propagation state before
+         */
+        boolean setAllowPropagation(Operation op, boolean inPropagation) {
+            boolean oldState = this.allowPropagation;
+            if (op == BooleanType.IMPLIES || null == op) {
+                this.allowPropagation = inPropagation;
+            }
+            return oldState;
+        }
 
     }
     
@@ -212,24 +248,36 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
      */
     public static class Message extends de.uni_hildesheim.sse.utils.messages.Message {
 
-        private AbstractVariable  var;
+        private IDecisionVariable  var;
         
         /**
          * Main contractor.
          * @param description Description of why variable is saved.
          * @param status {@link Status} of the message.
-         * @param var {@link AbstractVariable} to be saved.
+         * @param var causing {@link IDecisionVariable} to be saved.
          */
-        public Message(String description, Status status, AbstractVariable var) {
+        public Message(String description, Status status, IDecisionVariable var) {
             super(description, status);
             this.var = var;
         }
         
         /**
-         * Getter for the variable.
-         * @return {@link AbstractVariable} stored in the {@link Message}.
+         * Getter for the variable declaration.
+         * 
+         * @return the variable declaration or <tt>null</tt> if no {@link IDecisionVariable}
+         * was passed to the constructor.
          */
         public AbstractVariable getVariable() {
+            return null != var ? var.getDeclaration() : null;
+        }
+        
+        /**
+         * Returns the causing decision variable.
+         * 
+         * @return the causing decision variable or <tt>null</tt> if no {@link IDecisionVariable}
+         * was passed to the constructor.
+         */
+        public IDecisionVariable getDecision() {
             return var;
         }
         
@@ -274,6 +322,36 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
     }
     
     /**
+     * Defines the current (optional) resolution listener.
+     *  
+     * @param listener the listener (may be <b>null</b> to indicate that no listener is required)
+     */
+    public void setResolutionListener(IResolutionListener listener) {
+        this.resolutionListener = listener;
+    }
+    
+    /**
+     * Adds an explicit mapping of a declaration to a decision variable taking precedence over the configuration.
+     * This is in particular required for evaluating freeze-but. 
+     * 
+     * @param decl the declaration
+     * @param var the variable
+     */
+    void addMapping(AbstractVariable decl, IDecisionVariable var) {
+        varMapping.put(decl, var);
+    }
+
+    /**
+     * Removes an explicit mapping of a declaration to a decision variable as counterpart for 
+     * {@link #addMessage(Message)}. This is in particular required for evaluating freeze-but. 
+     * 
+     * @param decl the declaration
+     */
+    void removeMapping(AbstractVariable decl) {
+        varMapping.remove(decl);
+    }
+    
+    /**
      * Defines the top-level search scope for dynamic dispatch of custom operations.
      * 
      * @param scope the scope (may be <b>null</b> to disable dynamic dispatch)
@@ -306,6 +384,8 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
         messages.clear();
         selfVars.clear();
         selfValue = null;
+        issueWarning = false;
+        innermostFailed = null;
     }
     
     /**
@@ -402,6 +482,33 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
     public boolean constraintUndefined() {
         return constraintUndefined(result != null ? result.getValue() : null);
     }
+    
+    /**
+     * Returns whether the constraint was internally evaluated to false but finally
+     * leads to a successful execution and shall lead to a warning to the user.
+     * 
+     * @return <code>true</code> if the constraint shall be issued as a warning, <code>false</code> else.
+     */
+    public boolean constraintIsAWarning() {
+        return issueWarning;
+    }
+    
+    /**
+     * Returns the innermost failed expression(s).
+     *  
+     * @return <b>null</b> if there were no failed expressions, the (innermost) failed expressions else 
+     *   (currently at maximum one)
+     */
+    public ConstraintSyntaxTree[] getFailedExpression() {
+        ConstraintSyntaxTree[] result;
+        if (null != innermostFailed) {
+            result = new ConstraintSyntaxTree[1];
+            result[0] = innermostFailed;
+        } else {
+            result = null;
+        }
+        return result;
+    }
 
     // --------------------------- error handling ---------------------------
 
@@ -470,7 +577,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
      * @param decl the variable declaration to return the compound parent for
      * @return the compound parent or <b>null</b> if there is none
      */
-    private static Compound getDeclaringCompound(DecisionVariableDeclaration decl) {
+    private static Compound getDeclaringCompound(AbstractVariable decl) {
         IModelElement parent = decl.getParent();
         while (!(parent instanceof Project || parent instanceof Compound)) {
             parent = parent.getParent();
@@ -490,10 +597,10 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
      * @return the rewritten constraint if needed, <code>cst</code> else
      */
     public ConstraintSyntaxTree visit(ConstraintSyntaxTree cst) {
-        ConstraintSyntaxTree tmp = cst;        
+        ConstraintSyntaxTree tmp = cst;
         tmp.accept(finder);
 
-        Iterator<DecisionVariableDeclaration> staticIter = finder.getResults();
+        Iterator<AbstractVariable> staticIter = finder.getResults();
         if (staticIter.hasNext()) {
             // group the iterators in order to avoid unnecessary quantors
             // bind the free variables by quantors, consider self
@@ -518,7 +625,6 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
                 error("Cannot determine all instances for " + IvmlDatatypeVisitor.getQualifiedType(type));
             }
         }
-        
         finder.clear();
         if (null != tmp) {
             cst = tmp;
@@ -534,17 +640,16 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
      * @param staticIter the iterator providing access to the statically accessed variables
      * @return a mapping of compound types to used variables forming the quantor groups
      */
-    private static Map<IDatatype, List<DecisionVariableDeclaration>> groupQuantors(
-        Iterator<DecisionVariableDeclaration> staticIter) {
-        Map<IDatatype, List<DecisionVariableDeclaration>> iterGroups 
-            = new HashMap <IDatatype, List<DecisionVariableDeclaration>>();
+    private static Map<IDatatype, List<AbstractVariable>> groupQuantors(Iterator<AbstractVariable> staticIter) {
+        Map<IDatatype, List<AbstractVariable>> iterGroups 
+            = new HashMap <IDatatype, List<AbstractVariable>>();
         while (staticIter.hasNext()) {
-            DecisionVariableDeclaration var = staticIter.next();
+            AbstractVariable var = staticIter.next();
             Compound declaring = getDeclaringCompound(var);
             if (null != declaring) {
-                List<DecisionVariableDeclaration> group = iterGroups.get(declaring);
+                List<AbstractVariable> group = iterGroups.get(declaring);
                 if (null == group) {
-                    group = new ArrayList<DecisionVariableDeclaration>();
+                    group = new ArrayList<AbstractVariable>();
                     iterGroups.put(declaring, group);
                 }
                 group.add(var);
@@ -561,7 +666,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
     private static class VariableReplacer implements IVariableReplacer {
 
         private Variable iter;
-        private List<DecisionVariableDeclaration> decls;
+        private List<AbstractVariable> decls;
 
         /**
          * Creates a variable replacer.
@@ -569,7 +674,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
          * @param iter the iter declaration to be replaced
          * @param decls the replacing declarations
          */
-        private VariableReplacer(DecisionVariableDeclaration iter, List<DecisionVariableDeclaration> decls) {
+        private VariableReplacer(DecisionVariableDeclaration iter, List<AbstractVariable> decls) {
             this.iter = new Variable(iter);
             this.iter.inferDatatype();
             this.decls = decls;
@@ -602,11 +707,11 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
      * @return the resulting rewritten constraint (may be <b>null</b> if errors occcurred)
      */
     private ConstraintSyntaxTree bindFreeVarsByQuantors(ConstraintSyntaxTree cst, 
-        Map<IDatatype, List<DecisionVariableDeclaration>> quantorGroups) {
-        Iterator<Map.Entry<IDatatype, List<DecisionVariableDeclaration>>> groupIter 
+        Map<IDatatype, List<AbstractVariable>> quantorGroups) {
+        Iterator<Map.Entry<IDatatype, List<AbstractVariable>>> groupIter 
             = quantorGroups.entrySet().iterator();
         while (null != cst && groupIter.hasNext()) {
-            Map.Entry<IDatatype, List<DecisionVariableDeclaration>> entry = groupIter.next();
+            Map.Entry<IDatatype, List<AbstractVariable>> entry = groupIter.next();
             IDatatype eType = entry.getKey();
             Value allInstances = context.getAllInstances(eType);
             IDatatype type;
@@ -615,7 +720,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
             } else {
                 type = new Reference("", eType, null);
             }
-            List<DecisionVariableDeclaration> group = entry.getValue();
+            List<AbstractVariable> group = entry.getValue();
             DecisionVariableDeclaration iter = null;
             iter = new DecisionVariableDeclaration("iter", type, null);
             selfVars.add(iter);
@@ -652,7 +757,11 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
             if (null != result) {
                 IDecisionVariable var = result.getVariable();
                 if (null != var) {
-                    attribute = findAttribute(var, variable.getVariable());
+                    boolean byName = isFreezeVariable(qualifier);
+                    attribute = findAttribute(var, variable.getVariable(), byName);
+                    if (null == attribute && !byName) { // give rise to direct match, but try for project/nested attribs
+                        attribute = findAttribute(var, variable.getVariable(), true);
+                    }
                 } // the project does only define the name rather than the attributes
             }
             clearResult();
@@ -668,14 +777,17 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
      * 
      * @param var the variable to search the decision variable for
      * @param decl the attribute declaration
+     * @param byName compare by name or by declaration
      * @return the attribute decision variable or <b>null</b> if not found
      */
-    private static IDecisionVariable findAttribute(IDecisionVariable var, AbstractVariable decl) {
+    private static IDecisionVariable findAttribute(IDecisionVariable var, AbstractVariable decl, boolean byName) {
         IDecisionVariable result = null;
         if (null != var) {
             for (int a = 0, n = var.getAttributesCount(); null == result && a < n; a++) {
                 IDecisionVariable attribute = var.getAttribute(a);
-                if (attribute.getDeclaration().equals(decl)) {
+                if (byName && attribute.getDeclaration().getName().equals(decl.getName())) {
+                    result = attribute;
+                } else if (!byName && attribute.getDeclaration().equals(decl)) {
                     result = attribute;
                 }
             }
@@ -787,21 +899,48 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
         return res;
     }
     
+    /**
+     * Returns whether an OCL feature call shall be evaluated.
+     * 
+     * @param call the specific call to consider
+     * @return <code>true</code> if the call shall be evaluated, <code>false</code> else
+     */
+    private boolean evaluateOclFeatureCall(OCLFeatureCall call) {
+        return !assignmentsOnly 
+            || assignmentsOnly && (opNesting > 0 || OclKeyWords.ASSIGNMENT.equals(call.getOperation()));
+    }
+    
+    /**
+     * Encpsulates a null context (some of the model test cases.
+     * 
+     * @param op the operation to consider
+     * @param allow the new state of the allow flag
+     * @return the old state of the allow flag
+     */
+    private boolean setAllowPropagation(Operation op, boolean allow) {
+        boolean result = true; // recent default
+        if (null != context) {
+            result = context.setAllowPropagation(op, allow);
+        }
+        return result;
+    }
+    
     @Override
     public void visitOclFeatureCall(OCLFeatureCall call) {
-        if (!assignmentsOnly 
-            || assignmentsOnly && (opNesting > 0 || OclKeyWords.ASSIGNMENT.equals(call.getOperation()))) {
+        if (evaluateOclFeatureCall(call)) {
             opNesting++;
             EvaluationAccessor operand;
-            if (null != call.getOperand()) {
+            Operation op = call.getResolvedOperation();
+            if (null != call.getOperand()) {               
+                boolean oldState = setAllowPropagation(op, false);
                 call.getOperand().accept(this);
                 operand = result;
                 result = null; // clear result - kept in operand and released below
+                setAllowPropagation(op, oldState); 
             } else {
                 operand = null; // custom operation
             }
             EvaluationAccessor[] args = new EvaluationAccessor[call.getParameterCount()];
-            Operation op = call.getResolvedOperation();
             boolean allOk = true;
             if (op == BooleanType.AND) { // Handle "short cuts", e.g., undef or true -> true
                 allOk = !handleAND(operand, call.getParameter(0));
@@ -813,16 +952,15 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
             } else if (op == ConstraintType.EQUALS || op == ConstraintType.UNEQUALS) {
                 result = ConstraintOperations.handleConstraintEquals(operand, call.getParameter(0), op);
                 allOk = false; // constraints need the constraint assigned rather than its evaluation (propagate)
-            }
+            }         
             for (int a = 0; allOk && a < args.length; a++) {
-                // Overwrite "implies" operation
-                if (op == BooleanType.IMPLIES && null != operand && BooleanValue.FALSE.equals(operand.getValue())) {
-                    result = ConstantAccessor.POOL.getInstance().bind(BooleanValue.TRUE, context);
+                if (op == BooleanType.IMPLIES && (null == operand || BooleanValue.FALSE.equals(operand.getValue())) ) {
+                    result = null == operand ? null 
+                        : ConstantAccessor.POOL.getInstance().bind(BooleanValue.TRUE, context);
                     allOk = false; // Everything is ok, but no further processing shall be taken place ;-)
                 } else {
                     call.getParameter(a).accept(this);
-                    if (null == result && op.acceptsNull()) {
-                        // evaluators must assure to work with that -> isDefined
+                    if (null == result && op.acceptsNull()) { // evaluators must assure to work with that -> isDefined
                         result = ConstantAccessor.POOL.getInstance().bind(null, context); 
                     }
                     args[a] = result;
@@ -855,6 +993,25 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
             }
             release(args);
             opNesting--;
+            recordIfFailed(call);
+        }
+    }
+    
+    /**
+     * Records a constraint syntax tree if it failed.
+     * 
+     * @param cst the syntax tree to record
+     */
+    private void recordIfFailed(ConstraintSyntaxTree cst) {
+        if (null != result) {
+            Value value = result.getValue();
+            if (value instanceof BooleanValue) {
+                if (Boolean.FALSE == ((BooleanValue) value).getValue()) {
+                    if (null == innermostFailed) {
+                        innermostFailed = cst;
+                    }
+                }
+            }
         }
     }
 
@@ -900,7 +1057,13 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
             returnType = operation.getReturns();
             argTypes = new IDatatype[args.length];
             for (int a = 0, n = args.length; a < n; a++) {
-                argTypes[a] = args[a].getVariable().getDeclaration().getType();
+                if (args[a].getVariable() != null) {
+                    // Use declaration to get type if it's a variable
+                    argTypes[a] = args[a].getVariable().getDeclaration().getType();
+                } else {
+                    // Use value to get type if it's a constant
+                    argTypes[a] = args[a].getValue().getType();
+                }
             }
 
             bestMatch = operation;
@@ -1009,9 +1172,50 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
         int result = -1;
         if (opType.isAssignableFrom(paramType)) {
             if (paramType.isAssignableFrom(opType)) {
-                result = 0;
+                result = 0; // both are equal
             } else {
-                result = 1;
+                result = 1; // actually, there is a distance
+                if (Compound.TYPE.isAssignableFrom(opType)) {
+                    // in case of compounds, also consider the distance to the refined types so that not only
+                    // direct matches but also intermediary refined types can be specified
+                    Compound iter = (Compound) opType;
+                    while (null != iter && !TypeQueries.sameTypes(iter, paramType)) {
+                        result++;
+                        iter = iter.getRefines();
+                    }
+                }
+                if (Container.TYPE.isAssignableFrom(opType) && Container.TYPE.isAssignableFrom(paramType)) {
+                    // in case of container, also take the generic types into account 
+                    result = diffContainer((Container) opType, (Container) paramType);
+                }
+            }
+        }
+        return result;
+    }
+    
+    /**
+     * Returns the difference of container types in terms of assignable types.
+     * 
+     * @param opCont the container from the operation signature
+     * @param paramCont the parameter / argument container type allowed to iterate to compare refined types
+     * @return the difference, <code>-1</code> in case of a type mismatch
+     */
+    private static int diffContainer(Container opCont, Container paramCont) {
+        int result = 0;
+        // the container difference is not relevant as container is not a visible type in IVML 
+        int opContGen = opCont.getGenericTypeCount();
+        int paramContGen = paramCont.getGenericTypeCount();
+        if (opContGen != paramContGen) {
+            result = -1;
+        } else {
+            for (int i = 0; i < opContGen; i++) {
+                int tmp = diff(opCont.getGenericType(i), paramCont.getGenericType(i));
+                if (tmp < 0) {
+                    result = -1;
+                    break;
+                } else {
+                    result += tmp;
+                }
             }
         }
         return result;
@@ -1067,7 +1271,9 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
     @Override
     public void visitIfThen(IfThen ifThen) {
         EvaluationAccessor resultBefore = result;
+        boolean oldState = setAllowPropagation(null, false);
         ifThen.getIfExpr().accept(this);
+        setAllowPropagation(null, oldState);
         if (null != result) {
             boolean isFulfilled = constraintFulfilled();
             clearResult();
@@ -1146,6 +1352,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
                 result = null;
             }
             opNesting--;
+            recordIfFailed(call);
         }
     }
     
@@ -1270,6 +1477,23 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
         exception(throwable);
         return false;
     }
+    
+    /**
+     * Returns whether <code>cst</code> is a freeze variable.
+     * 
+     * @param cst the cst to check
+     * @return <code>true</code> if <code>cst</code> contains a freeze variable, <code>false</code> else
+     */
+    private boolean isFreezeVariable(ConstraintSyntaxTree cst) {
+        boolean result = false;
+        if (null != cst) {
+            try {
+                result = FreezeVariableType.TYPE.isAssignableFrom(cst.inferDatatype());
+            } catch (CSTSemanticException e) {
+            }
+        }
+        return result;
+    }
 
     @Override
     public void visitCompoundAccess(CompoundAccess access) {
@@ -1309,6 +1533,13 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
             } else {
                 error("cannot evaluate compound");
             }
+            if (null != resolutionListener && null != result) {
+                IDecisionVariable resVar = result.getVariable();
+                if (null != resVar) {
+                    resolutionListener.notifyResolved(variable, slotName, resVar);
+                }
+            }
+            recordIfFailed(access);
         }
     }
 
@@ -1328,19 +1559,29 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
         for (int s = 0; ok && s < initializer.getSlotCount(); s++) {
             String slotName = initializer.getSlot(s);
             values[pos++] = slotName;
-            initializer.getExpression(s).accept(this);
             DecisionVariableDeclaration decl = type.getElement(slotName);
-            if (null == result) {
-                error("cannot evaluate compound slot '" + slotName + "'");
-                ok = false;
-            } else {
-                if (Reference.TYPE.isAssignableFrom(decl.getType())) {
-                    values[pos++] = result.getReferenceValue();
-                } else {
-                    values[pos++] = result.getValue();
+            if (ConstraintType.TYPE.isAssignableFrom(decl.getType())) {
+                try {
+                    // do not evaluate a constraint value here - this is just a value as it is / deferred
+                    // see StaticAccessFinder
+                    values[pos++] = ValueFactory.createValue(ConstraintType.TYPE, initializer.getExpression(s));
+                } catch (ValueDoesNotMatchTypeException e) {
+                    error(e.getMessage());
                 }
+            } else {
+                initializer.getExpression(s).accept(this);
+                if (null == result) {
+                    error("cannot evaluate compound slot '" + slotName + "' in type '" + type.getName() + "'");
+                    ok = false;
+                } else {
+                    if (Reference.TYPE.isAssignableFrom(decl.getType())) {
+                        values[pos++] = result.getReferenceValue();
+                    } else {
+                        values[pos++] = result.getValue();
+                    }
+                }
+                clearResult();
             }
-            clearResult();
         }
         if (ok) {
             try {
@@ -1350,26 +1591,38 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
                 exception(e);
             }
         }
+        recordIfFailed(initializer);
     }
 
     @Override
     public void visitContainerInitializer(ContainerInitializer initializer) {
         Object[] values = new Object[initializer.getExpressionCount()];
+        boolean isConstraintCollection = Container.isContainer(initializer.getType(), ConstraintType.TYPE);
         boolean ok = true;
         boolean references = Reference.TYPE.isAssignableFrom(initializer.getType().getContainedType());
         for (int s = 0; ok && s < values.length; s++) {
-            initializer.getExpression(s).accept(this);
-            if (null == result) {
-                error("cannot evaluate container initializer expression '" + s + "'");
-                ok = false;
-            } else {
-                if (references) {
-                    values[s] = result.getReferenceValue();
-                } else {
-                    values[s] = result.getValue();
+            if (isConstraintCollection) {
+                try {
+                    // do not evaluate a constraint value here - this is just a value as it is / deferred
+                    // See static access finder
+                    values[s] = ValueFactory.createValue(ConstraintType.TYPE, initializer.getExpression(s));
+                } catch (ValueDoesNotMatchTypeException e) {
+                    error(e.getMessage());
                 }
+            } else {
+                initializer.getExpression(s).accept(this);
+                if (null == result) {
+                    error("cannot evaluate container initializer expression '" + s + "'");
+                    ok = false;
+                } else {
+                    if (references) {
+                        values[s] = result.getReferenceValue();
+                    } else {
+                        values[s] = result.getValue();
+                    }
+                }
+                clearResult();
             }
-            clearResult();
         }
         if (ok) {
             try {
@@ -1379,6 +1632,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
                 exception(e);
             }
         }
+        recordIfFailed(initializer);
     }
     
     @Override

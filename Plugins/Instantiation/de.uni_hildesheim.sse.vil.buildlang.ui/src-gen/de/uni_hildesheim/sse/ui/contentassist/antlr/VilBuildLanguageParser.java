@@ -73,6 +73,7 @@ public class VilBuildLanguageParser extends AbstractContentAssistParser {
 					put(grammarAccess.getRuleElementBlockAccess().getGroup(), "rule__RuleElementBlock__Group__0");
 					put(grammarAccess.getExpressionStatementAccess().getGroup_0(), "rule__ExpressionStatement__Group_0__0");
 					put(grammarAccess.getExpressionStatementAccess().getGroup_0_0(), "rule__ExpressionStatement__Group_0_0__0");
+					put(grammarAccess.getExpressionStatementAccess().getGroup_0_0_1(), "rule__ExpressionStatement__Group_0_0_1__0");
 					put(grammarAccess.getExpressionStatementAccess().getGroup_1(), "rule__ExpressionStatement__Group_1__0");
 					put(grammarAccess.getInstantiateAccess().getGroup(), "rule__Instantiate__Group__0");
 					put(grammarAccess.getInstantiateAccess().getGroup_1_0(), "rule__Instantiate__Group_1_0__0");
@@ -88,6 +89,7 @@ public class VilBuildLanguageParser extends AbstractContentAssistParser {
 					put(grammarAccess.getSystemExecutionAccess().getGroup(), "rule__SystemExecution__Group__0");
 					put(grammarAccess.getVariableDeclarationAccess().getGroup(), "rule__VariableDeclaration__Group__0");
 					put(grammarAccess.getVariableDeclarationAccess().getGroup_3(), "rule__VariableDeclaration__Group_3__0");
+					put(grammarAccess.getTypeDefAccess().getGroup(), "rule__TypeDef__Group__0");
 					put(grammarAccess.getAdviceAccess().getGroup(), "rule__Advice__Group__0");
 					put(grammarAccess.getVersionSpecAccess().getGroup(), "rule__VersionSpec__Group__0");
 					put(grammarAccess.getParameterListAccess().getGroup(), "rule__ParameterList__Group__0");
@@ -129,6 +131,7 @@ public class VilBuildLanguageParser extends AbstractContentAssistParser {
 					put(grammarAccess.getTypeAccess().getGroup_1(), "rule__Type__Group_1__0");
 					put(grammarAccess.getTypeAccess().getGroup_2(), "rule__Type__Group_2__0");
 					put(grammarAccess.getTypeAccess().getGroup_3(), "rule__Type__Group_3__0");
+					put(grammarAccess.getTypeAccess().getGroup_4(), "rule__Type__Group_4__0");
 					put(grammarAccess.getTypeParametersAccess().getGroup(), "rule__TypeParameters__Group__0");
 					put(grammarAccess.getTypeParametersAccess().getGroup_2(), "rule__TypeParameters__Group_2__0");
 					put(grammarAccess.getContainerInitializerAccess().getGroup(), "rule__ContainerInitializer__Group__0");
@@ -150,6 +153,7 @@ public class VilBuildLanguageParser extends AbstractContentAssistParser {
 					put(grammarAccess.getLoadPropertiesAccess().getPathAssignment_2(), "rule__LoadProperties__PathAssignment_2");
 					put(grammarAccess.getScriptContentsAccess().getElementsAssignment_1_0(), "rule__ScriptContents__ElementsAssignment_1_0");
 					put(grammarAccess.getScriptContentsAccess().getElementsAssignment_1_1(), "rule__ScriptContents__ElementsAssignment_1_1");
+					put(grammarAccess.getScriptContentsAccess().getElementsAssignment_1_2(), "rule__ScriptContents__ElementsAssignment_1_2");
 					put(grammarAccess.getRuleDeclarationAccess().getTypeAssignment_1_0(), "rule__RuleDeclaration__TypeAssignment_1_0");
 					put(grammarAccess.getRuleDeclarationAccess().getModifierAssignment_1_1(), "rule__RuleDeclaration__ModifierAssignment_1_1");
 					put(grammarAccess.getRuleDeclarationAccess().getNameAssignment_1_2(), "rule__RuleDeclaration__NameAssignment_1_2");
@@ -164,6 +168,7 @@ public class VilBuildLanguageParser extends AbstractContentAssistParser {
 					put(grammarAccess.getRuleElementAccess().getExprStmtAssignment_1(), "rule__RuleElement__ExprStmtAssignment_1");
 					put(grammarAccess.getRuleModifierAccess().getProtectedAssignment(), "rule__RuleModifier__ProtectedAssignment");
 					put(grammarAccess.getExpressionStatementAccess().getVarAssignment_0_0_0(), "rule__ExpressionStatement__VarAssignment_0_0_0");
+					put(grammarAccess.getExpressionStatementAccess().getFieldAssignment_0_0_1_1(), "rule__ExpressionStatement__FieldAssignment_0_0_1_1");
 					put(grammarAccess.getExpressionStatementAccess().getExprAssignment_0_1(), "rule__ExpressionStatement__ExprAssignment_0_1");
 					put(grammarAccess.getExpressionStatementAccess().getAltAssignment_1_0(), "rule__ExpressionStatement__AltAssignment_1_0");
 					put(grammarAccess.getPrimaryExpressionAccess().getOtherExAssignment_0(), "rule__PrimaryExpression__OtherExAssignment_0");
@@ -203,6 +208,8 @@ public class VilBuildLanguageParser extends AbstractContentAssistParser {
 					put(grammarAccess.getVariableDeclarationAccess().getTypeAssignment_1(), "rule__VariableDeclaration__TypeAssignment_1");
 					put(grammarAccess.getVariableDeclarationAccess().getNameAssignment_2(), "rule__VariableDeclaration__NameAssignment_2");
 					put(grammarAccess.getVariableDeclarationAccess().getExpressionAssignment_3_1(), "rule__VariableDeclaration__ExpressionAssignment_3_1");
+					put(grammarAccess.getTypeDefAccess().getNameAssignment_1(), "rule__TypeDef__NameAssignment_1");
+					put(grammarAccess.getTypeDefAccess().getTypeAssignment_2(), "rule__TypeDef__TypeAssignment_2");
 					put(grammarAccess.getAdviceAccess().getNameAssignment_2(), "rule__Advice__NameAssignment_2");
 					put(grammarAccess.getAdviceAccess().getVersionSpecAssignment_4(), "rule__Advice__VersionSpecAssignment_4");
 					put(grammarAccess.getVersionSpecAccess().getRestrictionAssignment_1(), "rule__VersionSpec__RestrictionAssignment_1");
@@ -283,6 +290,9 @@ public class VilBuildLanguageParser extends AbstractContentAssistParser {
 					put(grammarAccess.getTypeAccess().getParamAssignment_2_1(), "rule__Type__ParamAssignment_2_1");
 					put(grammarAccess.getTypeAccess().getMapAssignment_3_0(), "rule__Type__MapAssignment_3_0");
 					put(grammarAccess.getTypeAccess().getParamAssignment_3_1(), "rule__Type__ParamAssignment_3_1");
+					put(grammarAccess.getTypeAccess().getCallAssignment_4_0(), "rule__Type__CallAssignment_4_0");
+					put(grammarAccess.getTypeAccess().getReturnAssignment_4_1(), "rule__Type__ReturnAssignment_4_1");
+					put(grammarAccess.getTypeAccess().getParamAssignment_4_2(), "rule__Type__ParamAssignment_4_2");
 					put(grammarAccess.getTypeParametersAccess().getParamAssignment_1(), "rule__TypeParameters__ParamAssignment_1");
 					put(grammarAccess.getTypeParametersAccess().getParamAssignment_2_1(), "rule__TypeParameters__ParamAssignment_2_1");
 					put(grammarAccess.getContainerInitializerAccess().getExprsAssignment_2_0(), "rule__ContainerInitializer__ExprsAssignment_2_0");

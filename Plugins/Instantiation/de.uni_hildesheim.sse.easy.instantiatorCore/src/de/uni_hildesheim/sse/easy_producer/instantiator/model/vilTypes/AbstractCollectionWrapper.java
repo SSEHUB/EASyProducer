@@ -2,13 +2,15 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes;
 
 import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeMap;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionEvaluator;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 
 /**
  * Abstract basic wrapper implementation.
@@ -18,6 +20,15 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expres
  * @param <T> the element type
  */
 public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
+
+    public static final Comparator<Number> NUMBER_COMPARATOR = new Comparator<Number>() {
+
+        @Override
+        public int compare(Number o1, Number o2) {
+            return Double.compare(o1.doubleValue(), o2.doubleValue());
+        }
+        
+    };
     
     /**
      * Returns whether two collection contains the same elements in the same sequence than <code>elements</code>.
@@ -145,7 +156,7 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
      * @param type the type to select for
      * @return the elements of type <code>type</code>
      */
-    public static <T> List<T> selectByType(Collection<T> collection, TypeDescriptor<? extends IVilType> type) {
+    public static <T> List<T> selectByType(Collection<T> collection, TypeDescriptor<?> type) {
         List<T> result = new ArrayList<T>();
         Iterator<T> iter = collection.iterator();
         while (iter.hasNext()) {
@@ -165,25 +176,22 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
      * @param collection the collection to select from
      * @param evaluator the evaluator instance
      * @return the selected elements
-     * @throws ArtifactException in case that evaluation or selection fails
+     * @throws VilException in case that evaluation or selection fails
      */
     public static <T> List<T> select(Collection<T> collection, ExpressionEvaluator evaluator) 
-        throws ArtifactException {
+        throws VilException {
         List<T> result = new ArrayList<T>();
-        try {
-            if (!TypeRegistry.booleanType().isAssignableFrom(evaluator.getExpression().inferType())) {
-                throw new ArtifactException("iterator must be of type boolean", ArtifactException.ID_RUNTIME_ITERATOR);
+        if (!TypeRegistry.booleanType().isAssignableFrom(evaluator.getExpression().inferType())) {
+            throw new VilException("iterator must be of type boolean", 
+                VilException.ID_RUNTIME_ITERATOR);
+        }
+        Iterator<T> iter = collection.iterator();
+        while (iter.hasNext()) {
+            T value = iter.next();
+            Object eval = evaluator.evaluate(value);
+            if (eval instanceof Boolean && ((Boolean) eval)) {
+                result.add(value);
             }
-            Iterator<T> iter = collection.iterator();
-            while (iter.hasNext()) {
-                T value = iter.next();
-                Object eval = evaluator.evaluate(value);
-                if (eval instanceof Boolean && ((Boolean) eval)) {
-                    result.add(value);
-                }
-            }
-        } catch (ExpressionException e) {
-            throw new ArtifactException(e, e.getId());
         }
         return result;
     }
@@ -224,22 +232,135 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
         }
         return count;        
     }
-    
+
     /**
-     * Implements the sortAlpha function. However, just using a comparator does not lead to a stable sorting.
+     * Implements the sortAlpha function. 
      * 
      * @return a sorted (internal) list
      */
     protected List<T> sortAlphaImpl() {
-        java.util.Map<String, T> mapping = new TreeMap<String, T>(Collator.getInstance());
+        java.util.Map<String, List<T>> mapping = new TreeMap<String, List<T>>(Collator.getInstance());
         Iterator<T> iter = iterator();
         while (iter.hasNext()) {
             T elt = iter.next();
-            mapping.put(StringValueHelper.getStringValue(elt, null), elt);
+            getList(mapping, StringValueHelper.getStringValue(elt, null)).add(elt);
         }
-        List<T> tmp = new ArrayList<T>();
-        tmp.addAll(mapping.values());
+        return toEntryList(mapping);
+    }
+    
+    /**
+     * Returns a list indicated by <code>key</code> from the multi-entry <code>map</code>. Creates a new list
+     * if it does not exist.
+     *
+     * @param <K> the key type
+     * @param <V> the value type
+     * @param map the map to be modified as a side effect
+     * @param key the key
+     * @return the list containing entries assigned to <code>key</code>, potentially a new list
+     */
+    private static <K, V> List<V> getList(java.util.Map<K, List<V>> map, K key) {
+        List<V> list = map.get(key);
+        if (null == list) {
+            list = new ArrayList<V>();
+            map.put(key, list);
+        }
+        return list;
+    }
+
+    /**
+     * Turns the multi-entry <code>map</code> into a list of single elements, preserving the sequence of the elements
+     * in the individual lists in <code>map</code>. 
+     *
+     * @param <K> the key type
+     * @param <V> the value type
+     * @param map the map to be modified as a side effect
+     * @return the list of elements
+     */
+    private static <K, V> List<V> toEntryList(java.util.Map<K, List<V>> map) {
+        List<V> result = new ArrayList<V>();
+        for (List<V> list : map.values()) {
+            result.addAll(list);
+        }
+        return result;
+    }
+
+    /**
+     * Implements the more generic sort function (take numbers if the evaluator returns numbers, 
+     * else lexicographic sort).
+     * 
+     * @param evaluator the evaluator
+     * @return a sorted sequence
+     * @throws VilException in case of evaluation problems
+     */
+    protected List<T> sortImpl(ExpressionEvaluator evaluator) throws VilException {
+        TypeDescriptor<?> compareEltType = evaluator.getExpression().inferType();
+        java.util.Map<?, List<T>> tempMap;
+        if (TypeRegistry.realType().isAssignableFrom(compareEltType) 
+            || TypeRegistry.integerType().isAssignableFrom(compareEltType)) {
+            // lexicographic ordering does not work with negative numbers
+            java.util.Map<Number, List<T>> mapping = new TreeMap<Number, List<T>>(NUMBER_COMPARATOR);
+            Iterator<T> iter = iterator();
+            while (iter.hasNext()) {
+                T value = iter.next();
+                Object eval = evaluator.evaluate(value);
+                Number key;
+                if (eval instanceof Number) {
+                    key = (Number) eval;
+                } else { // although undefined, it the sort operation must return all values
+                    key = 0;
+                }
+                getList(mapping, key).add(value);
+            }
+            tempMap = mapping;
+        } else {
+            java.util.Map<String, List<T>> mapping = new TreeMap<String, List<T>>(Collator.getInstance());
+            Iterator<T> iter = iterator();
+            while (iter.hasNext()) {
+                T value = iter.next();
+                Object eval = evaluator.evaluate(value);
+                String key;
+                if (null != eval) { // VIL ignore
+                    key = StringValueHelper.getStringValue(eval, null);
+                } else { // although undefined, it the sort operation must return all values
+                    key = "";
+                }
+                getList(mapping, key).add(value);
+            }
+            tempMap = mapping;
+        }
+        return toEntryList(tempMap);
+    }
+    
+    /**
+     * Implements the revert operation.
+     * 
+     * @return the reverted list
+     */
+    protected List<T> revertImpl() {
+        List<T> tmp = new LinkedList<T>();
+        Iterator<T> iter = iterator();
+        while (iter.hasNext()) {
+            tmp.add(0, iter.next());
+        }
         return tmp;
+    }
+    
+    /**
+     * Constructs a collection type.
+     * 
+     * @param param the parameter
+     * @param set whether the result shall represent a set or a sequence
+     * @return the constructed type
+     */
+    protected static TypeDescriptor<?> constructType(TypeDescriptor<?>[] param, boolean set) {
+        TypeDescriptor<?> result;
+        try {
+            result = set ? TypeRegistry.getSetType(param) : TypeRegistry.getSequenceType(param);
+        } catch (VilException e) {
+            Class<?> cls = set ? Set.class : Sequence.class;
+            result = TypeRegistry.DEFAULT.findType(cls);
+        }
+        return result;
     }
     
 }

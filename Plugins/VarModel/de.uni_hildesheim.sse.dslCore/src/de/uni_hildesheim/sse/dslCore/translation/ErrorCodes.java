@@ -78,6 +78,11 @@ public class ErrorCodes {
     public static final int DISCOURAGED = 20214;
     
     /**
+     * A semantically missing element, such as a return expression.
+     */
+    public static final int MISSING = 20215;
+    
+    /**
      * Prevents creating instances of this class.
      */
     protected ErrorCodes() {

@@ -4,9 +4,8 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.exe
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallArgument;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IExpressionVisitor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 
@@ -45,9 +44,9 @@ public class StrategyCallExpression extends CallExpression {
      * @param parent the parent language unit (if given used as optional parameter during calls)
      * @param name the name of the call
      * @param arguments the parameter for the call
-     * @throws ExpressionException in case that no argument is given
+     * @throws VilException in case that no argument is given
      */
-    public StrategyCallExpression(Object parent, String name, Expression... arguments) throws ExpressionException {
+    public StrategyCallExpression(Object parent, String name, Expression... arguments) throws VilException {
         this(parent, name, CallArgument.createUnnamedArguments(arguments));
     }
 
@@ -57,9 +56,9 @@ public class StrategyCallExpression extends CallExpression {
      * @param parent the parent language unit (if given used as optional parameter during calls)
      * @param name the name of the call
      * @param arguments the parameter for the call
-     * @throws ExpressionException in case that no argument is given
+     * @throws VilException in case that no argument is given
      */
-    public StrategyCallExpression(Object parent, String name, CallArgument... arguments) throws ExpressionException {
+    public StrategyCallExpression(Object parent, String name, CallArgument... arguments) throws VilException {
         super(parent, name, arguments);
         this.type = Type.INSTANTIATOR;
     }
@@ -69,9 +68,9 @@ public class StrategyCallExpression extends CallExpression {
      * 
      * @param nameVar the variable holding the actual name/path of the executable
      * @param arguments the parameter for the call
-     * @throws ExpressionException in case that no argument is given
+     * @throws VilException in case that no argument is given
      */
-    public StrategyCallExpression(VariableDeclaration nameVar, Expression... arguments) throws ExpressionException {
+    public StrategyCallExpression(VariableDeclaration nameVar, Expression... arguments) throws VilException {
         this(nameVar, CallArgument.createUnnamedArguments(arguments));
     }
 
@@ -80,9 +79,9 @@ public class StrategyCallExpression extends CallExpression {
      * 
      * @param nameVar the variable holding the actual name/path of the executable
      * @param arguments the parameter for the call
-     * @throws ExpressionException in case that no argument is given
+     * @throws VilException in case that no argument is given
      */
-    public StrategyCallExpression(VariableDeclaration nameVar, CallArgument... arguments) throws ExpressionException {
+    public StrategyCallExpression(VariableDeclaration nameVar, CallArgument... arguments) throws VilException {
         super(null, nameVar.getName(), arguments);
         this.type = Type.EXECUTE;
         this.nameVar = nameVar;
@@ -117,8 +116,8 @@ public class StrategyCallExpression extends CallExpression {
     }
 
     @Override
-    public TypeDescriptor<? extends IVilType> inferType() throws ExpressionException {
-        TypeDescriptor<? extends IVilType> result;
+    public TypeDescriptor<?> inferType() throws VilException {
+        TypeDescriptor<?> result;
         switch (type) {
         case EXECUTE:
             result = inferTypeExecute();
@@ -127,7 +126,7 @@ public class StrategyCallExpression extends CallExpression {
             result = super.inferType(); // via determineOperand!
             break;
         default:
-            throw new ExpressionException("illegal strategy type " + type, ExpressionException.ID_INTERNAL);
+            throw new VilException("illegal strategy type " + type, VilException.ID_INTERNAL);
         }
         return result;
     }
@@ -136,18 +135,18 @@ public class StrategyCallExpression extends CallExpression {
      * Resolves the expression for system call execution.
      *  
      * @return the type of executing a system call
-     * @throws ExpressionException in case that the operands are not compatible
+     * @throws VilException in case that the operands are not compatible
      */
-    private TypeDescriptor<? extends IVilType> inferTypeExecute() throws ExpressionException {
+    private TypeDescriptor<?> inferTypeExecute() throws VilException {
         if (!execResolved) {
             for (int a = 0; a < getArgumentsCount(); a++) {
                 getArgument(a).inferType();
             }
             if (getArgumentsCount() > 0) {
-                TypeDescriptor<? extends IVilType> arg0Type = getArgument(0).inferType();
+                TypeDescriptor<?> arg0Type = getArgument(0).inferType();
                 if (null == ExecutableOperand.getExecutableType(arg0Type)) {
-                    throw new ExpressionException("cannot execute system call on " + arg0Type.getName(), 
-                        ExpressionException.ID_CANNOT_RESOLVE);
+                    throw new VilException("cannot execute system call on " + arg0Type.getName(), 
+                        VilException.ID_CANNOT_RESOLVE);
                 }
             }
             execResolved = true;
@@ -156,17 +155,17 @@ public class StrategyCallExpression extends CallExpression {
     }
 
     @Override
-    protected TypeDescriptor<? extends IVilType> determineOperand() throws ExpressionException {
-        TypeDescriptor<? extends IVilType> instantiator = TypeRegistry.DEFAULT.getInstantiator(getName());
+    protected TypeDescriptor<?> determineOperand() throws VilException {
+        TypeDescriptor<?> instantiator = TypeRegistry.DEFAULT.getInstantiator(getName());
         if (null == instantiator) {
-            throw new ExpressionException("unknown instantiator " + getName(), 
-                ExpressionException.ID_CANNOT_RESOLVE);
+            throw new VilException("unknown instantiator " + getName(), 
+                VilException.ID_CANNOT_RESOLVE);
         }
         return instantiator;
     }
     
     @Override
-    public Object accept(IExpressionVisitor visitor) throws ExpressionException {
+    public Object accept(IExpressionVisitor visitor) throws VilException {
         Object result;
         if (visitor instanceof IVisitor) {
             result = ((IVisitor) visitor).visitStrategyCallExpression(this);

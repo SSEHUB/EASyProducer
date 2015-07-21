@@ -1,6 +1,5 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.execOperand;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 
 /**
@@ -24,7 +23,7 @@ public class ExecutableOperand {
      * 
      * @see IExecutableOperandType#sameType(TypeDescriptor)
      */
-    public static IExecutableOperandType getExecutableType(TypeDescriptor<? extends IVilType> type) {
+    public static IExecutableOperandType getExecutableType(TypeDescriptor<?> type) {
         IExecutableOperandType result = null;
         for (int e = 0; null == result && e < EXEC_OPERAND_TYPES.length; e++) {
             if (EXEC_OPERAND_TYPES[e].sameType(type)) {

@@ -1,0 +1,12 @@
+project constraintSetInCompoundAssigned {
+
+    version v0;
+    
+    compound Pipeline {
+        Integer i;
+        setOf(Constraint) constraints;
+    }
+
+    Pipeline pipeline;
+    pipeline = {i = 1, constraints = {i > 0, i < 1}};
+}

@@ -1,9 +1,13 @@
 package de.uni_hildesheim.sse.easy.ui.confModel;
 
+import java.util.List;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
+import de.uni_hildesheim.sse.model.confModel.ConfigurationException;
 import de.uni_hildesheim.sse.model.confModel.ContainerVariable;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Container;
@@ -11,7 +15,10 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IntegerType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
 import de.uni_hildesheim.sse.model.varModel.datatypes.StringType;
+import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
+import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
 import de.uni_hildesheim.sse.persistency.StringProvider;
+import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 
 /**
  * GUI representation of container values.
@@ -106,4 +113,21 @@ class ContainerGUIVariable extends AbstractExpandableGUIVariable {
         }
         return editor;
     }
+    
+    @Override
+    public void setValue(Object value) {
+        // QM-IConf needs this - if this is a problem, we need an additional method through the hierarchy for this
+        if (null != value && value instanceof List) {
+            IDecisionVariable var = getVariable();
+            Object[] values = ((List<?>) value).toArray();
+            try {
+                var.setValue(ValueFactory.createValue(var.getDeclaration().getType(), values), var.getState());
+            } catch (ValueDoesNotMatchTypeException e) {
+                EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).exception(e);
+            } catch (ConfigurationException e) {
+                EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).exception(e);
+            }
+        }
+    }
+    
 }

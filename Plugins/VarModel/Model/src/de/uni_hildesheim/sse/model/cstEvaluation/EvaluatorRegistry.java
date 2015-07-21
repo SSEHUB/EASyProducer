@@ -103,6 +103,7 @@ public class EvaluatorRegistry {
         SequenceOperations.register();
         
         VersionOperations.register();
+        FreezeVarOperations.register();
     }
 
 }

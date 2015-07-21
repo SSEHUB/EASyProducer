@@ -3,15 +3,17 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
+
 /**
  * Allows the use the {@link IActualValueProvider} mechanism for reflective types. However, we need to 
  * create an instance of the reflective type in order to make the interface available. Thus, classes
  * using this descriptor must implement a (not necessarily accessible) no-argument constructor.
  * @author Holger Eichelberger
  *
- * @param <T>
+ * @param <T> the type
  */
-public class ActualValueReflectionTypeDescriptor <T extends IVilType> extends ReflectionTypeDescriptor <T> 
+public class ActualValueReflectionTypeDescriptor <T> extends ReflectionTypeDescriptor <T> 
     implements IActualValueProvider  {
 
     private IActualValueProvider template;

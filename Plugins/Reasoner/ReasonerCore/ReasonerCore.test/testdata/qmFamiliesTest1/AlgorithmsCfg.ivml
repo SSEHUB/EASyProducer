@@ -1,0 +1,326 @@
+project AlgorithmsCfg {
+    
+    import ReconfigurableHardware;
+    import ReconfigurableHardwareCfg;
+    import Algorithms;
+
+    //for TSI priority pipeline
+    Algorithm swPreprocessor;
+    swPreprocessor = {
+    	name = "preprocessor",
+    	artifact = "eu.qualimaster:Preprocessor:0.0.1-SNAPSHOT",
+    	class = "eu.qualimaster.algorithms.imp.correlation.Preprocessor",
+    	input = {
+    		{
+    			name = "springStream",
+    			fields={Field{name="symbolTuple", type=FieldType.STRING}}
+    		}
+    	},
+    	output = {
+    		{
+    			name = "preprocessedStream",
+    			fields={
+    			Field{name="symbolId", type=FieldType.STRING},
+    			Field{name="timestamp", type=FieldType.LONG},
+    			Field{name="value", type=FieldType.REAL},
+    			Field{name="volume", type=FieldType.INTEGER}
+    		}}
+    	}
+    };
+	
+	/* 
+	Algorithm hwCorrelationFinancial;
+    hwCorrelationFinancial = {
+    	name = "hwCorrelationFinancial",
+    	artifact = "eu.qualimaster:HWCorrelatioFinancialn:0.0.1",
+    	class = "eu.qualimaster.algorithms.imp.HWCorrelationFinancial",
+    	algTopologyClass = "HWCorrelationFinancial",
+    	hwNode = clusters[0],
+    	input = {
+    		{fields={
+    			Field{name="symbolId", type=FieldType.STRING},
+    			Field{name="timestamp", type=FieldType.LONG},
+    			Field{name="value", type=FieldType.REAL},
+    			Field{name="volume", type=FieldType.INTEGER}
+    		}},
+    		{fields={Field{name="allSymbols", type=FieldType.STRINGLIST}}}
+
+    	},
+    	output = {
+    		{fields={Field{name="pairwiseCorrelation", type=FieldType.STRING}}}
+    	},
+		parameters={
+			IntegerParameter{name="windowSize"}
+		}      	
+    };
+    */
+    Algorithm SWTopoCorrelationFinancial;
+    SWTopoCorrelationFinancial = {
+    	name = "TopoSoftwareCorrelationFinancial",
+    	artifact = "eu.qualimaster:topo-software-correlation-financial:0.0.1-SNAPSHOT",
+    	class = "eu.qualimaster.algorithms.imp.correlation.softwaresubtopology.TopoSoftwareCorrelationFinancial",
+    	algTopologyClass = "TopoSoftwareCorrelationFinancial",
+    	input = {
+    		{
+    			name = "preprocessedStream",
+    			fields={
+    				Field{name="symbolId", type=FieldType.STRING},
+    				Field{name="timestamp", type=FieldType.LONG},
+    				Field{name="value", type=FieldType.REAL},
+    				Field{name="volume", type=FieldType.INTEGER}
+    		}},
+    		{
+    			name = "symbolList",
+    			fields={Field{name="allSymbols", type=FieldType.STRINGLIST}}
+    		}
+
+    	},
+    	output = {
+    		{
+    			name = "pairwiseFinancial",
+    			fields={Field{name="pairwiseCorrelationFinancial", type=FieldType.STRING}}
+    		}
+    	}     	
+    };
+
+    Algorithm HWTopoCorrelationFinancial;
+    HWTopoCorrelationFinancial = {
+    	name = "TopoHardwareCorrelationFinancial",
+    	artifact = "eu.qualimaster:topo-hardware-correlation-financial:0.0.1-SNAPSHOT",
+    	class = "eu.qualimaster.algorithms.imp.correlation.hardwaresubtopology.TopoHardwareCorrelationFinancial",
+    	algTopologyClass = "TopoHardwareCorrelationFinancial",
+    	input = {
+    		{
+    			name = "preprocessedStream",
+    			fields={
+    				Field{name="symbolId", type=FieldType.STRING},
+    				Field{name="timestamp", type=FieldType.LONG},
+    				Field{name="value", type=FieldType.REAL},
+    				Field{name="volume", type=FieldType.INTEGER}
+    		}},
+    		{
+    			name = "symbolList",
+    			fields={Field{name="allSymbols", type=FieldType.STRINGLIST}}
+    		}
+
+    	},
+    	output = {
+    		{
+    			name = "pairwiseFinancial",
+    			fields={Field{name="pairwiseCorrelationFinancial", type=FieldType.STRING}}
+    		}
+    	}     	
+    };
+
+    Algorithm HWTopoCorrelationTwitter;
+    HWTopoCorrelationTwitter = {
+    	name = "TopoHardwareCorrelationTwitter",
+    	artifact = "eu.qualimaster:topo-hardware-correlation-twitter:0.0.1-SNAPSHOT",
+    	class = "eu.qualimaster.algorithms.imp.correlation.hardwaresubtopology.TopoHardwareCorrelationTwitter",
+    	algTopologyClass = "TopoHardwareCorrelationTwitter",
+    	input = {
+    		{
+    			name = "analyzedStream",
+    			fields={
+    				Field{name="symbolId", type=FieldType.STRING},
+    				Field{name="timestamp", type=FieldType.LONG},
+    				Field{name="value", type=FieldType.REAL},
+    				Field{name="volume", type=FieldType.INTEGER}
+    		}},
+    		{
+    			name = "symbolList",
+    			fields={Field{name="allSymbols", type=FieldType.STRINGLIST}}
+    		}
+
+    	},
+    	output = {
+    		{
+    			name = "pairwiseTwitter",
+    			fields={Field{name="pairwiseCorrelationTwitter", type=FieldType.STRING}}
+    		}
+    	}     	
+    };
+    
+    Algorithm SWTopoCorrelationTwitter;
+    SWTopoCorrelationTwitter = {
+    	name = "TopoSoftwareCorrelationTwitter",
+    	artifact = "eu.qualimaster:topo-software-correlation-twitter:0.0.1-SNAPSHOT",
+    	class = "eu.qualimaster.algorithms.imp.correlation.softwaresubtopology.TopoSoftwareCorrelationTwitter",
+    	algTopologyClass = "TopoSoftwareCorrelationTwitter",
+    	input = {
+    		{
+    			name = "analyzedStream",
+    			fields={
+    				Field{name="symbolId", type=FieldType.STRING},
+    				Field{name="timestamp", type=FieldType.LONG},
+    				Field{name="value", type=FieldType.REAL},
+    				Field{name="volume", type=FieldType.INTEGER}
+    		}},
+    		{
+    			name = "symbolList",
+    			fields={Field{name="allSymbols", type=FieldType.STRINGLIST}}
+    		}
+
+    	},
+    	output = {
+    		{
+    			name = "pairwiseTwitter",
+    			fields={Field{name="pairwiseCorrelationTwitter", type=FieldType.STRING}}
+    		}
+    	}     	
+    };    
+    
+    //Algorithms for L3s priority pipeline
+    Algorithm topoSentiWord;
+    topoSentiWord = {
+    	name = "sentiWord",
+    	artifact = "eu.qualimaster:SentiWordnetSubTopology:0.0.4",
+    	algTopologyClass = "SentimentAnaylsisSentiWordNetTopology",
+    	class = "eu.qualimaster.algorithms.stream.sentiment.topology.impl.SentimentAnaylsisSentiWordNetTopology",
+		input = {
+			{
+				name = "twitterStream",
+				fields={Field{name="status", type=FieldType.OBJECT}}
+			}
+		},
+		output = {
+    		{
+    			name = "analyzedStream",
+    			fields={
+    				Field{name="symbolId", type=FieldType.STRING},
+    				Field{name="timestamp", type=FieldType.LONG},
+    				Field{name="value", type=FieldType.REAL},
+    				Field{name="volume", type=FieldType.INTEGER}
+    		}}
+		}    	
+    };
+    
+    Algorithm topoSVM;
+    topoSVM = {
+    	name = "SVM",
+    	artifact = "eu.qualimaster:SVMSubTopology:0.0.4",
+    	class = "eu.qualimaster.algorithms.stream.sentiment.topology.impl.SentimentAnaylsisSVMTopology",
+    	algTopologyClass = "SentimentAnaylsisSVMTopology",
+		input = {
+			{
+				name = "twitterStream",
+				fields={Field{name="status", type=FieldType.OBJECT}}
+			}
+		},
+		output = {
+    		{
+    			name = "analyzedStream",
+    			fields={
+    				Field{name="symbolId", type=FieldType.STRING},
+    				Field{name="timestamp", type=FieldType.LONG},
+    				Field{name="value", type=FieldType.REAL},
+    				Field{name="volume", type=FieldType.INTEGER}
+    		}}
+		}    	
+    };    
+    
+    Algorithm mismatchedAlg;
+    mismatchedAlg = {
+    	name = "mismatchedAlg",
+    	artifact = "eu.qualimaster:MismatchedAlg:0.0.1",
+    	class = "eu.qualimaster.algorithms.impl.MismatchedAlg",
+		output={
+			{
+				name = "misString",
+			    fields={
+			      Field{name="streamID1", type=FieldType.STRING},
+			      Field{name="timestamp", type=FieldType.INTEGER},
+			      Field{name="quote", type=FieldType.REAL}
+		        }
+		    }
+		}, 
+		input={
+			{
+				name = "misString",
+				fields={
+					Field{name="symbolTuple1", type=FieldType.STRING},
+					Field{name="volume", type=FieldType.INTEGER}
+				}
+			}
+		}     	
+    };
+    
+   // For example pipeline 
+   /* 
+    Algorithm aNormalize;
+    aNormalize = {  
+    	name = "Normalize",
+    	artifact = "integration.algs.Normalize",
+    	class = "eu.qualimaster.algorithms.imp.Normalize",
+		output={
+			{
+			    fields={
+			      Field{name="streamID", type=FieldType.STRING},
+			      Field{name="timestamp", type=FieldType.STRING},
+			      Field{name="quote", type=FieldType.REAL},
+			      Field{name="volume", type=FieldType.INTEGER}
+		        }
+		    }
+		}, 
+		input={
+			{
+				fields={Field{name="symbolTuple", type=FieldType.STRING}}
+			}
+		}
+    };     
+    // algorithms from TSI
+    * 
+    */
+ 
+
+    
+
+    
+    
+    
+    /* 
+    Algorithm hNormalize;
+    hNormalize = {  
+    	name = "HwNormalize",
+		output={{fields={
+			Field{name="streamID", type=FieldType.STRING},
+			Field{name="timestamp", type=FieldType.STRING},
+			Field{name="quote", type=FieldType.REAL},
+			Field{name="volume", type=FieldType.INTEGER}
+		}}}, 
+		hwNode = clusters[0],
+		input={{fields={Field{name="springData", type=FieldType.STRING}}}}	
+    };
+ 
+    Algorithm topoNormalize;
+    topoNormalize = {  
+    	name = "TopoNormalize",
+		output={{fields={
+			Field{name="streamID", type=FieldType.STRING},
+			Field{name="timestamp", type=FieldType.STRING},
+			Field{name="quote", type=FieldType.REAL},
+			Field{name="volume", type=FieldType.INTEGER}
+		}}}, 
+		input={{fields={Field{name="springData", type=FieldType.STRING}}}},
+		algTopologyClass = "TopoNormalize"		
+    };   
+    */
+    
+
+     algorithms = {refBy(swPreprocessor),refBy(SWTopoCorrelationFinancial), refBy(HWTopoCorrelationFinancial), refBy(SWTopoCorrelationTwitter), refBy(HWTopoCorrelationTwitter), refBy(topoSentiWord), refBy(topoSVM), refBy(mismatchedAlg)};
+    
+	freeze{
+		swPreprocessor;
+		SWTopoCorrelationFinancial;
+		HWTopoCorrelationFinancial;
+		SWTopoCorrelationTwitter;
+		HWTopoCorrelationTwitter;
+		topoSentiWord;
+		topoSVM;
+		mismatchedAlg;
+		algorithms;
+	}  
+    
+    
+	
+}

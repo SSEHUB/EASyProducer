@@ -13,8 +13,9 @@ import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IArtifactVisitor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Binary;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Text;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArraySet;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationMeta;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
 
@@ -31,7 +32,7 @@ public class JavaClass extends JavaParentFragmentArtifact {
      * Default Constructor.
      * 
      * @param typeDeclaration
-     *            the tyoe declaration representing the class
+     *            the type declaration representing the class
      * @param parent
      *            the parent artifact
      */
@@ -41,29 +42,29 @@ public class JavaClass extends JavaParentFragmentArtifact {
     }
 
     @Override
-    public void delete() throws ArtifactException {
+    public void delete() throws VilException {
         // needed if substructures are stored
         super.delete();
     }
 
     @Override
-    public String getName() throws ArtifactException {
+    public String getName() throws VilException {
         return typeDeclaration.getName().getIdentifier();
     }
 
     @Override
-    public void rename(String name) throws ArtifactException {
+    public void rename(String name) throws VilException {
         // TODO implement
         notifyChanged();
     }
 
     @Override
-    public Text getText() throws ArtifactException {
+    public Text getText() throws VilException {
         return Text.CONSTANT_EMPTY;
     }
 
     @Override
-    public Binary getBinary() throws ArtifactException {
+    public Binary getBinary() throws VilException {
         return Binary.CONSTANT_EMPTY;
     }
 
@@ -145,6 +146,31 @@ public class JavaClass extends JavaParentFragmentArtifact {
         });
         return new ArraySet<JavaAttribute>(list.toArray(new JavaAttribute[list.size()]), JavaAttribute.class);
     }
+    
+    /**
+     * Returns the specified Java attribute.
+     * 
+     * @param name the name of the attribute
+     * @return the attribute or <b>null</b> if there is no such attribute
+     */
+    public JavaAttribute getAttributeByName(final String name) {
+        final JavaAttribute[] tmp = new JavaAttribute[1];
+        typeDeclaration.accept(new ASTVisitor() {
+            @Override
+            public boolean visit(FieldDeclaration node) {
+                String attributeName = "";
+                Object object = node.fragments().get(0);
+                if (object instanceof VariableDeclarationFragment) {
+                    attributeName = ((VariableDeclarationFragment) object).getName().toString();
+                }
+                if (null == tmp[0] && attributeName.equals(name)) {
+                    tmp[0] = new JavaAttribute(node, attributeName, JavaClass.this);
+                }
+                return false;
+            }
+        });
+        return tmp[0];
+    }
 
     /**
      * Returns all qualified names of this class.
@@ -162,4 +188,11 @@ public class JavaClass extends JavaParentFragmentArtifact {
         return new ArraySet<JavaQualifiedName>(list.toArray(new JavaQualifiedName[list.size()]),
                 JavaQualifiedName.class);
     }
+    
+    @Invisible
+    @Override
+    public String getStringValue(StringComparator comparator) {
+        return "class '" + getNameSafe() + "'";
+    }
+
 }

@@ -48,9 +48,11 @@ public class ContainerValueTest {
     
     /**
      * Tests whether cloning of ContainerValue succeeds and if the cloned objects are the same.
+     * @throws ValueDoesNotMatchTypeException Must not occur, otherwise it the setValue method of {@link ContainerValue}
+     * is detecting duplicates but there are no duplicates.
      */
     @Test
-    public void cloneContainerTest() {
+    public void cloneContainerTest() throws ValueDoesNotMatchTypeException {
         ContainerValue clone = (ContainerValue) value.clone();
         Assert.assertNotSame(clone, value);
         ContainerValue subValue = (ContainerValue) value.getElement(0);

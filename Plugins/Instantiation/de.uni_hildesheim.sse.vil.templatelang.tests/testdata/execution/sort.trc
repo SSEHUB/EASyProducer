@@ -1,0 +1,10 @@
+-> main(Configuration, Artifact) with (<config>, test.texts)
+    model <- <config>
+    -> sort(Sequence, ExpressionEvaluator) with ({SortModel::elts [0], SortModel::elts [1], SortModel::elts [2], SortModel::elts [3]}, <evaluator>) = {SortModel::elts [0], SortModel::elts [1], SortModel::elts [2], SortModel::elts [3]}
+    res <- {SortModel::elts [0], SortModel::elts [1], SortModel::elts [2], SortModel::elts [3]}
+    for e {
+        e <- SortModel::elts [3]
+        e <- SortModel::elts [1]
+        e <- SortModel::elts [0]
+        e <- SortModel::elts [2]
+    }

@@ -1,8 +1,7 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.execOperand;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IFileSystemArtifact;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 
 /**
@@ -21,12 +20,12 @@ class FileSystemArtifactExecutableOperandType implements IExecutableOperandType 
     }
     
     @Override
-    public String convert(Object object) throws ArtifactException {
+    public String convert(Object object) throws VilException {
         return PathExecutableOperandType.convert(((IFileSystemArtifact) object).getPath());
     }
 
     @Override
-    public boolean sameType(TypeDescriptor<? extends IVilType> type) {
+    public boolean sameType(TypeDescriptor<?> type) {
         return false; // not required
     }
 

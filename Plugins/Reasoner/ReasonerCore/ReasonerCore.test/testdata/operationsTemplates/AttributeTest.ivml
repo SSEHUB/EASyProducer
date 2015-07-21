@@ -4,8 +4,8 @@ project AttributeTest {
     
     enum BindingTime {compile, startup, runtime};
     
-    attribute BindingTime bindingTime = BindingTime.compile to AttributeTest;
-    attribute Boolean userVisible to AttributeTest;
+    annotate BindingTime bindingTime = BindingTime.compile to AttributeTest;
+    annotate Boolean userVisible to AttributeTest;
     
     Integer intA = 1;
     

@@ -2,15 +2,16 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ma
 
 import java.util.Iterator;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IArtifact;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.PathUtils;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ITracer;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Rule;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Rule.Side;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ruleMatch.AbstractRuleMatchExpression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Collection;
+import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 
 /**
  * A generic loop over LHS/RHS matches determining which combinations need a build. Upon such
@@ -28,43 +29,48 @@ public class LhsRhsMatchLoop {
      *     multiple, may be <b>null</b> or empty)
      * @param applicator the applicator instance to be called on each match requiring a build
      * @param tracer the tracer instance (needed to reorder the match sequence if required)
-     * @throws VilLanguageException in case that determining the expected LHS value or applying 
+     * @throws VilException in case that determining the expected LHS value or applying 
      *     the <code>applicator</code> fails
      */
     public static void matchLoop(Rule rule, Object[] rhsValues, Applicator applicator, ITracer tracer) 
-        throws VilLanguageException {
+        throws VilException {
         if (null != rhsValues) {
             applicator.initialize(rule, rhsValues);
             int lhsCondCount = rule.getRuleConditionCount(Side.LHS);
             // loop: just in case that we will have multiple in future
             for (int c = 0; !applicator.stopConditionLoop() && c < rhsValues.length; c++) { 
-                Collection<?> coll = (Collection<?>) rhsValues[c];
-                coll = tracer.adjustSequenceForMap(coll);
-                Iterator<?> iter = coll.iterator();
-                AbstractRuleMatchExpression rhs = rule.getRuleCondition(Side.RHS, c);
-                AbstractRuleMatchExpression lhs;
-                if (c < lhsCondCount) {
-                    lhs = rule.getRuleCondition(Side.LHS, c);
-                } else {
-                    lhs = null;
-                }
-                while (iter.hasNext() && !applicator.stopMatchLoop()) {
-                    Object rhsValue = iter.next();
-                    Object expectedLhsValue;
-                    if (null != lhs) {
-                        try {
-                            expectedLhsValue = lhs.determineExpected(rhs, rhsValue);
-                        } catch (ArtifactException e) {
-                            throw new VilLanguageException(e);
-                        }
-                    } else {
-                        expectedLhsValue = null;
+                if (rhsValues[c] instanceof Boolean) {
+                    if (Boolean.TRUE == rhsValues[c]) {
+                        applicator.apply(rhsValues[c], rhsValues[c], c);
                     }
-                    if (buildNeeded(expectedLhsValue, rhsValue)) {
-                        applicator.apply(expectedLhsValue, rhsValue, c);
-                    }    
+                } else if (rhsValues[c] instanceof Collection<?>) {
+                    Collection<?> coll = (Collection<?>) rhsValues[c];
+                    coll = tracer.adjustSequenceForMap(coll);
+                    Iterator<?> iter = coll.iterator();
+                    AbstractRuleMatchExpression rhs = rule.getRuleCondition(Side.RHS, c);
+                    AbstractRuleMatchExpression lhs;
+                    if (c < lhsCondCount) {
+                        lhs = rule.getRuleCondition(Side.LHS, c);
+                    } else {
+                        lhs = null;
+                    }
+                    while (iter.hasNext() && !applicator.stopMatchLoop()) {
+                        Object rhsValue = iter.next();
+                        Object expectedLhsValue;
+                        if (null != lhs) {
+                            expectedLhsValue = lhs.determineExpected(rhs, rhsValue);
+                        } else {
+                            expectedLhsValue = null;
+                        }
+                        if (buildNeeded(expectedLhsValue, rhsValue)) {
+                            applicator.apply(expectedLhsValue, rhsValue, c);
+                        }    
+                    }
+                    applicator.matchLoopFinished();
+                } else if (null != rhsValues[c]) {
+                    EASyLoggerFactory.INSTANCE.getLogger(LhsRhsMatchLoop.class, Bundle.ID).error(
+                        "unrecognized LHS/RHS value: " + rhsValues[c]);
                 }
-                applicator.matchLoopFinished();
             }
             applicator.conditionLoopFinished();
         }

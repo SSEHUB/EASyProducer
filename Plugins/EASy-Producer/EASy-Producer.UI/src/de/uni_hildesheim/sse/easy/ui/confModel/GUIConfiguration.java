@@ -161,6 +161,16 @@ public class GUIConfiguration implements IGUIConfigurableElement {
 
             for (int i = 0; i < warnings.length; i++) {
                 Message warning = warnings[i];
+                StringBuffer userMessage = new StringBuffer();
+                List<String> labels = warning.getConflictLabels();
+                if (null != labels && !labels.isEmpty()) {
+                    userMessage.append(labels.get(0));
+                    for (int j = 1; j < labels.size(); j++) {
+                        userMessage.append("\n");
+                        userMessage.append(labels.get(j));
+                    }
+                }
+                errorSetter.setErrorMsg(userMessage.toString());
                 List<ModelElement> conflictingElements = warning.getConflicts();
                 if (!conflictingElements.isEmpty()) {
                     for (int j = 0; j < conflictingElements.size(); j++) {
@@ -168,6 +178,7 @@ public class GUIConfiguration implements IGUIConfigurableElement {
                         conflictingElement.accept(errorSetter);
                     }
                 }
+                errorSetter.setErrorMsg(null);
             }
         }
         
@@ -219,4 +230,14 @@ public class GUIConfiguration implements IGUIConfigurableElement {
             guiVariable.freeze();
         }
     }
+    
+    /**
+     * Returns the variability configuration.
+     * 
+     * @return the variability configuration
+     */
+    public Configuration getConfig() {
+        return config;
+    }
+    
 }

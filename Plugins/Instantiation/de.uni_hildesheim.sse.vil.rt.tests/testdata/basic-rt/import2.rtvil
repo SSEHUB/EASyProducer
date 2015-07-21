@@ -1,0 +1,9 @@
+import vil;
+
+rtVilScript typedRule (Project source, Configuration config, Project target) {
+
+    Integer test1() = : {
+        test();
+    }
+
+}

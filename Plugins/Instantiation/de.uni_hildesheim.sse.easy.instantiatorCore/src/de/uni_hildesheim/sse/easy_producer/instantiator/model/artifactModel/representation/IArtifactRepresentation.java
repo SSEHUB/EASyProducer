@@ -1,7 +1,7 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IArtifactChangedListenerQueue;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
 
@@ -30,9 +30,9 @@ public interface IArtifactRepresentation extends IVilType {
     /**
      * Updates the contents.
      * 
-     * @throws ArtifactException in case that reading fails for some reason
+     * @throws VilException in case that reading fails for some reason
      */
     @Invisible(inherit = true)
-    public void updateContents() throws ArtifactException;
+    public void updateContents() throws VilException;
 
 }

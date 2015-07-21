@@ -6,11 +6,11 @@ import de.uni_hildesheim.sse.ivml.AccessName;
 import de.uni_hildesheim.sse.ivml.ActualParameterList;
 import de.uni_hildesheim.sse.ivml.AdditiveExpression;
 import de.uni_hildesheim.sse.ivml.AdditiveExpressionPart;
+import de.uni_hildesheim.sse.ivml.AnnotateTo;
 import de.uni_hildesheim.sse.ivml.AssignmentExpression;
 import de.uni_hildesheim.sse.ivml.AssignmentExpressionPart;
 import de.uni_hildesheim.sse.ivml.AttrAssignment;
 import de.uni_hildesheim.sse.ivml.AttrAssignmentPart;
-import de.uni_hildesheim.sse.ivml.AttributeTo;
 import de.uni_hildesheim.sse.ivml.BasicType;
 import de.uni_hildesheim.sse.ivml.Call;
 import de.uni_hildesheim.sse.ivml.CollectionInitializer;
@@ -29,8 +29,6 @@ import de.uni_hildesheim.sse.ivml.ExpressionListOrRange;
 import de.uni_hildesheim.sse.ivml.ExpressionStatement;
 import de.uni_hildesheim.sse.ivml.FeatureCall;
 import de.uni_hildesheim.sse.ivml.Freeze;
-import de.uni_hildesheim.sse.ivml.FreezeButExpression;
-import de.uni_hildesheim.sse.ivml.FreezeButList;
 import de.uni_hildesheim.sse.ivml.FreezeStatement;
 import de.uni_hildesheim.sse.ivml.IfExpression;
 import de.uni_hildesheim.sse.ivml.ImplicationExpression;
@@ -114,6 +112,12 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 					return; 
 				}
 				else break;
+			case IvmlPackage.ANNOTATE_TO:
+				if(context == grammarAccess.getAnnotateToRule()) {
+					sequence_AnnotateTo(context, (AnnotateTo) semanticObject); 
+					return; 
+				}
+				else break;
 			case IvmlPackage.ASSIGNMENT_EXPRESSION:
 				if(context == grammarAccess.getAssignmentExpressionRule()) {
 					sequence_AssignmentExpression(context, (AssignmentExpression) semanticObject); 
@@ -135,12 +139,6 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 			case IvmlPackage.ATTR_ASSIGNMENT_PART:
 				if(context == grammarAccess.getAttrAssignmentPartRule()) {
 					sequence_AttrAssignmentPart(context, (AttrAssignmentPart) semanticObject); 
-					return; 
-				}
-				else break;
-			case IvmlPackage.ATTRIBUTE_TO:
-				if(context == grammarAccess.getAttributeToRule()) {
-					sequence_AttributeTo(context, (AttributeTo) semanticObject); 
 					return; 
 				}
 				else break;
@@ -249,18 +247,6 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 			case IvmlPackage.FREEZE:
 				if(context == grammarAccess.getFreezeRule()) {
 					sequence_Freeze(context, (Freeze) semanticObject); 
-					return; 
-				}
-				else break;
-			case IvmlPackage.FREEZE_BUT_EXPRESSION:
-				if(context == grammarAccess.getFreezeButExpressionRule()) {
-					sequence_FreezeButExpression(context, (FreezeButExpression) semanticObject); 
-					return; 
-				}
-				else break;
-			case IvmlPackage.FREEZE_BUT_LIST:
-				if(context == grammarAccess.getFreezeButListRule()) {
-					sequence_FreezeButList(context, (FreezeButList) semanticObject); 
 					return; 
 				}
 				else break;
@@ -538,6 +524,15 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	
 	/**
 	 * Constraint:
+	 *     ((sname='attribute' | sname='annotate') annotationType=Type annotationDecl=VariableDeclarationPart names+=Identifier names+=Identifier*)
+	 */
+	protected void sequence_AnnotateTo(EObject context, AnnotateTo semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
 	 *     (op=AssignmentOperator (ex=LogicalExpression | collection=CollectionInitializer))
 	 */
 	protected void sequence_AssignmentExpressionPart(EObject context, AssignmentExpressionPart semanticObject) {
@@ -582,15 +577,6 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	 *     )
 	 */
 	protected void sequence_AttrAssignment(EObject context, AttrAssignment semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
-	}
-	
-	
-	/**
-	 * Constraint:
-	 *     (attributeType=Type attributeDecl=VariableDeclarationPart names+=Identifier names+=Identifier*)
-	 */
-	protected void sequence_AttributeTo(EObject context, AttributeTo semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
@@ -757,24 +743,6 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	
 	/**
 	 * Constraint:
-	 *     (name=QualifiedName access=AccessName? wildcard='*'?)
-	 */
-	protected void sequence_FreezeButExpression(EObject context, FreezeButExpression semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
-	}
-	
-	
-	/**
-	 * Constraint:
-	 *     (list+=FreezeButExpression list+=FreezeButExpression*)
-	 */
-	protected void sequence_FreezeButList(EObject context, FreezeButList semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
-	}
-	
-	
-	/**
-	 * Constraint:
 	 *     (name=QualifiedName access=AccessName?)
 	 */
 	protected void sequence_FreezeStatement(EObject context, FreezeStatement semanticObject) {
@@ -784,7 +752,7 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	
 	/**
 	 * Constraint:
-	 *     (names+=FreezeStatement+ but=FreezeButList?)
+	 *     (names+=FreezeStatement+ (id=Identifier ex=LogicalExpression)?)
 	 */
 	protected void sequence_Freeze(EObject context, Freeze semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -1042,7 +1010,7 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	 *             elements+=Freeze | 
 	 *             elements+=Eval | 
 	 *             elements+=ExpressionStatement | 
-	 *             elements+=AttributeTo | 
+	 *             elements+=AnnotateTo | 
 	 *             elements+=OpDefStatement | 
 	 *             elements+=AttrAssignment
 	 *         )*

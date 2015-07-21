@@ -1,3 +1,18 @@
+/*
+ * Copyright 2009-2015 University of Hildesheim, Software Systems Engineering
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.uni_hildesheim.sse.easy.ui.productline_editor.project_configuration;
 
 import java.io.File;
@@ -26,7 +41,7 @@ import de.uni_hildesheim.sse.easy.ui.internal.Activator;
 import de.uni_hildesheim.sse.easy.ui.productline_editor.AbstractEASyEditorPage;
 import de.uni_hildesheim.sse.easy.ui.productline_editor.AbstractHeaderMenu;
 import de.uni_hildesheim.sse.easy.ui.productline_editor.EasyProducerDialog;
-import de.uni_hildesheim.sse.easy.ui.productline_editor.PTNSelectionDialog.PtnSelectionDialog;
+import de.uni_hildesheim.sse.easy.ui.productline_editor.predecessorSelection.PredecessorSelectionDialog;
 import de.uni_hildesheim.sse.easy.ui.project_management.ProjectCreator;
 import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
 import de.uni_hildesheim.sse.easy_producer.persistency.project_creation.InvalidProjectnameException;
@@ -205,10 +220,11 @@ public class ProductLineHeaderMenu extends AbstractHeaderMenu {
      * Creates a Dialog for choosing new predecessors.
      */
     private void displayCreateAddPredecessorDialog() {
-        PtnSelectionDialog selectiondlg = new PtnSelectionDialog(getShell(), SWT.TITLE | SWT.BORDER
+        PredecessorSelectionDialog selectiondlg = new PredecessorSelectionDialog(getShell(), SWT.TITLE | SWT.BORDER
                 | SWT.APPLICATION_MODAL, getProductLineProject().getProjectID());
         ArrayList<String> newPredecessors = selectiondlg.open();
         getProductLineProject().setPredecessors(newPredecessors);
+        revalidateButtons();
     }
 
     /**

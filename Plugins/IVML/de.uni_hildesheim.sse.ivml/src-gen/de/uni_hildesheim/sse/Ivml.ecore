@@ -117,10 +117,11 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="op" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//Type" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AttributeTo">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeType" eType="#//Type"
+  <eClassifiers xsi:type="ecore:EClass" name="AnnotateTo">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sname" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="annotationType" eType="#//Type"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeDecl" eType="#//VariableDeclarationPart"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="annotationDecl" eType="#//VariableDeclarationPart"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="names" unique="false" upperBound="-1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -128,7 +129,8 @@
   <eClassifiers xsi:type="ecore:EClass" name="Freeze">
     <eStructuralFeatures xsi:type="ecore:EReference" name="names" upperBound="-1"
         eType="#//FreezeStatement" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="but" eType="#//FreezeButList"
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ex" eType="#//LogicalExpression"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FreezeStatement">
@@ -136,17 +138,6 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="access" eType="#//AccessName"
         containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="FreezeButList">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="list" upperBound="-1" eType="#//FreezeButExpression"
-        containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="FreezeButExpression">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="name" eType="#//QualifiedName"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="access" eType="#//AccessName"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="wildcard" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Eval">
     <eStructuralFeatures xsi:type="ecore:EReference" name="nested" upperBound="-1"

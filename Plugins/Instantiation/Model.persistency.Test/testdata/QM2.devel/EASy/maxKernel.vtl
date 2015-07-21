@@ -5,7 +5,7 @@ template maxKernel(Configuration config, FileArtifact target, Pipeline pipeline)
     String streamOutType = "dfeInt(32)"; // fixed for now
 
     def main(Configuration config, FileArtifact target, Pipeline pip) { 
-    	DecisionVariable name = pip.name();
+    	String name = pip.name;
 
     	'package qm;'
     	''
@@ -18,7 +18,7 @@ template maxKernel(Configuration config, FileArtifact target, Pipeline pipeline)
         '    PipelineKernel(KernelParameters parameters) {'
 		'        super(parameters);'
 		'        DFEVar inData = io.input("inData", $streamInType);'
-    	for (DecisionVariable r : pip.sources()) {
+    	for (DecisionVariable r : pip.sources) {
     		processElement(r, "inData");
     	}
 		'    }' 
@@ -29,27 +29,27 @@ template maxKernel(Configuration config, FileArtifact target, Pipeline pipeline)
     }
     
     def processElement(FamilyElement elt, String lastName) {
-	    Family family = elt.family();
-	    for (Algorithm alg : family.members()) {
-            if (alg.hwNode().type() == ReconfigurableHardware::MPCCNode) {
-            	String familyName = elt.$varName();
+	    Family family = elt.family;
+	    for (Algorithm alg : family.members) {
+            if (alg.hwNode.type() == ReconfigurableHardware::MPCCNode) {
+            	String familyName = elt.varName();
             	String enabledSwitch = "${familyName}Enabled";
             	String resultName = "${familyName}Result";
 		        'DFEVar $enabledSwitch = io.scalarInput("$familyName", dfeInt(32));' | 8;
 		        'DFEVar $resultName;' | 8;
-		        '$resultName = ($enabledSwitch != 0 ? ${alg.artifact()}($lastName) : $lastName);' | 8;
+		        '$resultName = ($enabledSwitch != 0 ? ${alg.artifact}($lastName) : $lastName);' | 8;
 		        lastName = resultName;
             }
         }
-		for (Flow flow : elt.output()) {
-			processElement(flow.destination(), lastName);
+		for (Flow flow : elt.output) {
+			processElement(flow.destination, lastName);
 		}
     }
 
     def processElement(Source elt, String lastName) {
 		// simplifying assumption - only family elements are suitable for hw
-		for (Flow flow : elt.output()) {
-			processElement(flow.destination(), lastName);
+		for (Flow flow : elt.output) {
+			processElement(flow.destination, lastName);
 		}
     }
 

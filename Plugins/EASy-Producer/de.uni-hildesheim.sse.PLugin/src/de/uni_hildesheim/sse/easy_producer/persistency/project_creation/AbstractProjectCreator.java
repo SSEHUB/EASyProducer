@@ -137,13 +137,20 @@ abstract class AbstractProjectCreator {
             }
         }
         
-        //Configure project to java Project
+        // Configure project to java Project
         if (null != configurators) {
             for (IEASyProjectConfigurator configurator : configurators) {
-                configurator.configure(project);
+                configureProject(project, configurator);
             }
         }
     }
+
+    /**
+     * Configures the newly created Eclipse project.
+     * @param createdProject The newly created EASy (Eclipse) project.
+     * @param configurator The configurator to use for configuring the project.
+     */
+    protected abstract void configureProject(IProject createdProject, IEASyProjectConfigurator configurator);
     
     /**
      * Create the project related information, i.e., the PLP instance, possibly including the containing project.

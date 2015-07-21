@@ -616,6 +616,9 @@ public abstract class ModelManagement <M extends IModel> {
                         events.removeAllListeners(resolved);
                         resolved.dispose();
                     }
+                    if (vInfos.isEmpty()) {
+                        availableModels.removeAvailable(info.getName());
+                    }
                 }
             }
             try {
@@ -643,7 +646,7 @@ public abstract class ModelManagement <M extends IModel> {
      * 
      * @return the available modelss or <b>null</b>
      */
-    List<VersionedModelInfos<M>> getAvailable(String name) {
+    public List<VersionedModelInfos<M>> getAvailable(String name) {
         return availableModels.getAvailable(name);
     }
 

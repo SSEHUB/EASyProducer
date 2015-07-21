@@ -36,12 +36,7 @@ public class RealTests extends AbstractScenarioTest {
     @Override
     protected void addTestDataLocations() {
     }
-    
-    @Override
-    protected String getSystemPropertyName() {
-        return "easy_producer.scenarios.testdata.home";
-    }
-    
+
     /**
      * Starts up the test.
      */
@@ -374,6 +369,45 @@ public class RealTests extends AbstractScenarioTest {
     public void testQualiMasterMay14() throws IOException {
         String[] versions = {"0", "0"};
         File base = executeCase("may14", versions, "QualiMaster/", null);
+        assertFileEqualityRec(new File(base, "expected"), base);
+    }
+
+    /**
+     * Tests the QualiMaster model / derivation in its state at the first review (February 2015).
+     * 
+     * @throws IOException shall not occur
+     */
+    @Test
+    public void testQualiMasterFeb15() throws IOException {
+        String[] versions = {"0", "0"};
+        String[] names = {"feb15", "QM"};
+        File base = executeCase(names, versions, "QualiMaster/", null);
+        assertFileEqualityRec(new File(base, "expected"), base);
+    }
+    
+    /**
+     * Tests the QualiMaster model / derivation for VIL field migration (March 2015).
+     * 
+     * @throws IOException shall not occur
+     */
+    @Test
+    public void testQualiMasterMar15() throws IOException {
+        String[] versions = {"0", "0"};
+        String[] names = {"mar15", "QM"};
+        File base = executeCase(names, versions, "QualiMaster/", null);
+        assertFileEqualityRec(new File(base, "expected"), base);
+    }
+
+    /**
+     * Tests the QualiMaster model / derivation (June 2015, without rt-VIL).
+     * 
+     * @throws IOException shall not occur
+     */
+    @Test
+    public void testQualiMasterJun15() throws IOException {
+        String[] versions = {"0", "0"};
+        String[] names = {"jun15", "QM"};
+        File base = executeCase(names, versions, "QualiMaster/", null);
         assertFileEqualityRec(new File(base, "expected"), base);
     }
 

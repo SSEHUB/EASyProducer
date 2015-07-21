@@ -13,7 +13,7 @@ vilScript may14 (Project source, Configuration config, Project target) {
 
     processElement(sequenceOf(DecisionVariable) output, Configuration config) = : {
         map(Flow v = output) {
-        	DecisionVariable elt = v.destination();
+        	DecisionVariable elt = v.destination;
         	String name = elt.varName().firstToUpperCase() + elt.type();
         	vilTemplateProcessor("storm" + elt.type(), config, "$srcGen/$name.java", elt=elt);
         	processElement(elt.byName("output").variables(), config);
@@ -23,7 +23,7 @@ vilScript may14 (Project source, Configuration config, Project target) {
     main(Project source, Configuration config, Project target) = : cleanup(target) {
     	Pipeline pip = config.byName("pipeline");
         vilTemplateProcessor("stormPipeline", config, "$srcGen/Topology.java", pipeline=pip);
-        map(DecisionVariable v = pip.sources()) {
+        map(DecisionVariable v = pip.sources) {
         	String name = v.varName().firstToUpperCase() + v.type();
         	vilTemplateProcessor("storm" + v.type(), config, "$srcGen/$name.java", elt=v);
         	processElement(v.byName("output").variables(), config);

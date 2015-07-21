@@ -4,7 +4,16 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ListSet;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
 
@@ -44,9 +53,9 @@ public class PathUtils {
      * @param container the container to select from
      * @param path the normalized (!) path to the elements (use {@link #normalize(String)} before calling)
      * @return the matching elements (may be empty)
-     * @throws ArtifactException in case invalid XmlElements are used.
+     * @throws VilException in case invalid XmlElements are used.
      */
-    static Set<XmlElement> selectByPath(IXmlContainer container, String path) throws ArtifactException {
+    static Set<XmlElement> selectByPath(IXmlContainer container, String path) throws VilException {
         Set<XmlElement> result;
         int pos = path.indexOf('/');
         if (pos > 0) {
@@ -68,4 +77,44 @@ public class PathUtils {
         return result;
     }
 
+    /**
+     * Selects XML elements based on a given XPath expression.
+     * 
+     * @param path the XPath expression
+     * @param root the XML element to start evaluating the XPath expression at
+     * @param container the XML container
+     * @return the resulting elements
+     * @throws VilException in case invalid XmlElements are used or <code>path</code> is invalid.
+     */
+    public static Set<XmlElement> selectByXPath(String path, Object root, IXmlContainer container) throws VilException {
+        Set<XmlElement> result = null;
+        try {
+            XPathFactory xpathFactory = XPathFactory.newInstance();
+            XPath xpath = xpathFactory.newXPath();
+            XPathExpression expr = xpath.compile(path);
+            NodeList nodes = (NodeList) expr.evaluate(root, XPathConstants.NODESET);
+            List<XmlElement> tmp = new ArrayList<XmlElement>(nodes.getLength());
+            for (int i = 0; i < nodes.getLength(); i++) {
+                Node node = nodes.item(i);
+                String nodePath = "";
+                Node par = node;
+                while (null != par.getParentNode()) {
+                    if (nodePath.length() > 0) {
+                        nodePath += "/";
+                    }
+                    nodePath += node.getNodeName();
+                    par = par.getParentNode();
+                }
+                Set<XmlElement> nodeRes = PathUtils.selectByPath(container, nodePath);
+                for (XmlElement elt : nodeRes) {
+                    tmp.add(elt);
+                }
+            }
+            result = new ListSet<XmlElement>(tmp, XmlElement.class);
+        } catch (XPathExpressionException e) {
+            throw new VilException(e.getMessage(), VilException.ID_RUNTIME);
+        }
+        return result;
+    }
+    
 }

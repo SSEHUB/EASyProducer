@@ -1,0 +1,10 @@
+vilScript typedRuleFail2 (Project source, Project target, Configuration config) {
+
+    Integer helper(Integer i) = : {
+    }
+
+    main() = : {
+        Integer j = helper(10);
+    }
+
+}

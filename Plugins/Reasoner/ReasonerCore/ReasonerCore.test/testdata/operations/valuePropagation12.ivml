@@ -5,7 +5,7 @@ project valuePropagation12 {
     //   - Assign block on variables and constraints (two assign block, same attributes)
 
    enum View {BA, DE, Impl};
-   attribute View modelView to valuePropagation12;
+   annotate View modelView to valuePropagation12;
    
    enum ContentType {text, movie, audio, picture};
     

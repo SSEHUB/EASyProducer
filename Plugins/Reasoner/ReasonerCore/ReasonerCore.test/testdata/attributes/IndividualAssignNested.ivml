@@ -1,0 +1,15 @@
+project IndividualAssignNested {
+
+    version v0;
+    
+    annotate Integer at to IndividualAssignNested;
+    
+    compound cmp {
+        Integer nest;
+    }
+    
+    cmp C; 
+    
+    C.nest.at = 5;  
+
+}

@@ -1,6 +1,5 @@
 package test.de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
@@ -18,7 +17,7 @@ public class TypePrinter {
      * @param args ignored
      */
     public static void main(String[] args) {
-        for (TypeDescriptor<? extends IVilType> type : TypeRegistry.DEFAULT.allTypes()) {
+        for (TypeDescriptor<?> type : TypeRegistry.DEFAULT.allTypes()) {
             System.out.println(type.getName());
             for (OperationDescriptor op : type.getOperations()) {
                 System.out.println(" - " + op.getJavaSignature());

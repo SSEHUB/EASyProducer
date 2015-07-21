@@ -1,0 +1,16 @@
+project BlockAssign {
+
+    version v0;
+    
+    annotate Integer at to BlockAssign; // change to annotation
+    
+    compound cmp {
+        Integer nest;
+    }
+    
+    assign (at = 5) to {
+        cmp C;  
+        Integer var;        
+    }
+
+}

@@ -42,7 +42,7 @@ public class VilBuildLanguageProposalProvider extends AbstractVilBuildLanguagePr
     
     @Override
     public void completeLanguageUnit_Advices(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-//        System.err.println("completeLanguageUnit_Advices");
+        System.err.println("completeLanguageUnit_Advices");
         String ivmlModelName = VilBuildLangProposalProviderUtility.INSTANCE.getIvmlModelName(context.getRootModel());
         if (ivmlModelName == null || ivmlModelName.isEmpty()) {
             ivmlModelName = "<IvmlModel>";
@@ -54,7 +54,7 @@ public class VilBuildLanguageProposalProvider extends AbstractVilBuildLanguagePr
     
     @Override
     public void completeImplementationUnit_Imports(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-//        System.err.println("completeImplementationUnit_Imports");
+        System.err.println("completeImplementationUnit_Imports");
         String proposalString = "import <ScriptName>;";
         // Propose simple script import
         acceptor.accept(createCompletionProposal(proposalString, new StyledString("Script import"),
@@ -67,7 +67,7 @@ public class VilBuildLanguageProposalProvider extends AbstractVilBuildLanguagePr
     
     @Override
     public void completeImplementationUnit_Scripts(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-//        System.err.println("completeImplementationUnit_Scripts");
+        System.err.println("completeImplementationUnit_Scripts");
         if (!VilBuildLangProposalProviderUtility.INSTANCE.hasScript(context.getLastCompleteNode())) {            
             String vilFileName = VilBuildLangProposalProviderUtility.INSTANCE.getVilFileName(context.getRootModel());
             if (vilFileName == null || vilFileName.isEmpty()) {
@@ -85,7 +85,7 @@ public class VilBuildLanguageProposalProvider extends AbstractVilBuildLanguagePr
     
     @Override
     public void complete_ScriptParentDecl(EObject model, RuleCall ruleCall, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-//        System.err.println("complete_ScriptParentDecl");
+        System.err.println("complete_ScriptParentDecl");
         String proposalString = "extends <ExtendingScriptName>";
         acceptor.accept(createCompletionProposal(proposalString, new StyledString("Script extension"),
                 imageHelper.getImage(Images.NAME_VILSCRIPTEXTENSION), 980, context.getPrefix(), context));
@@ -93,7 +93,7 @@ public class VilBuildLanguageProposalProvider extends AbstractVilBuildLanguagePr
     
     @Override
     public void completeScriptContents_Elements(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-//        System.err.println("completeScriptContents_Elements");
+        System.err.println("completeScriptContents_Elements");
         if (!VilBuildLangProposalProviderUtility.INSTANCE.isMainRuleDeclared(context.getLastCompleteNode())) {
             String scriptParameters = VilBuildLangProposalProviderUtility.INSTANCE.
                     getScriptParametersForMainRule(context.getLastCompleteNode());
@@ -118,7 +118,7 @@ public class VilBuildLanguageProposalProvider extends AbstractVilBuildLanguagePr
     
     @Override
     public void completeLanguageUnit_Version(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-//        System.err.println("completeLanguageUnit_Version");
+        System.err.println("completeLanguageUnit_Version");
         if (!VilBuildLangProposalProviderUtility.INSTANCE.hasVersion(context.getLastCompleteNode())) {
             String proposalString = "version v<VersionNumber>;";
             acceptor.accept(createCompletionProposal(proposalString, new StyledString("Version"),
@@ -128,7 +128,7 @@ public class VilBuildLanguageProposalProvider extends AbstractVilBuildLanguagePr
     
     @Override
     public void completeLanguageUnit_LoadProperties(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-//        System.err.println("completeLanguageUnit_LoadProperties");
+        System.err.println("completeLanguageUnit_LoadProperties");
         String proposalString = "load properties \"<PathToPropertiesFile>\";";
         acceptor.accept(createCompletionProposal(proposalString, new StyledString("Load properties"),
                 imageHelper.getImage(Images.NAME_PROP), 940, context.getPrefix(), context));
@@ -137,7 +137,7 @@ public class VilBuildLanguageProposalProvider extends AbstractVilBuildLanguagePr
     //TODO: move to ExpressionDslProposalProvider
     @Override
     public void completeVariableDeclaration_Type(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-//        System.err.println("completeVariableDeclaration_Type");
+        System.err.println("completeVariableDeclaration_Type");
         List<String> allTypes = VilBuildLangProposalProviderUtility.INSTANCE.getAllTypes(context.getLastCompleteNode());
         for (String type : allTypes) {
             acceptor.accept(createCompletionProposal(type, new StyledString(type),
@@ -148,7 +148,7 @@ public class VilBuildLanguageProposalProvider extends AbstractVilBuildLanguagePr
     //TODO: move to ExpressionDslProposalProvider   
     @Override
     public void completeVariableDeclaration_Expression(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-//        System.err.println("completeVariableDeclaration_Expression");
+        System.err.println("completeVariableDeclaration_Expression");
         // Propose script parameters and already declared/defined variables
         proposeScriptParamsVars(model, assignment, context, acceptor, true); 
         // Propose all operations (as we do not know what the user wants to define)
@@ -168,7 +168,7 @@ public class VilBuildLanguageProposalProvider extends AbstractVilBuildLanguagePr
     //TODO: move to ExpressionDslProposalProvider   
     @Override
     public void completeParameterList_Param(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-//        System.err.println("completeParameterList_Param");
+        System.err.println("completeParameterList_Param");
         // Reuse variable declaration type proposal as parameters are defined equal to variables in VIL
         completeVariableDeclaration_Type(model, assignment, context, acceptor);
         
@@ -178,7 +178,7 @@ public class VilBuildLanguageProposalProvider extends AbstractVilBuildLanguagePr
 
     @Override
     public void completeSubCall_Call(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-//        System.err.println("completeSubCall_Call");
+        System.err.println("completeSubCall_Call");
         /*
          * TODO Currently, concatenated sub-calls are not supported sufficiently!
          * Example: fa.copy(...). <- call for content assist
@@ -204,15 +204,16 @@ public class VilBuildLanguageProposalProvider extends AbstractVilBuildLanguagePr
     
     @Override
     public void complete_RuleDeclaration(EObject model, RuleCall ruleCall, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-//        System.err.println("complete_RuleDeclaration");
+        System.err.println("complete_RuleDeclaration");
         String proposalString = "<RuleName>() = : {\n\n    }";
         acceptor.accept(createCompletionProposal(proposalString, new StyledString("Rule"),
                 imageHelper.getImage(Images.NAME_RULE), 700, context.getPrefix(), context));
     }
     
+    
     @Override
     public void completeRuleConditions_Preconditions(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-//        System.err.println("completeRuleDeclaration_Preconditions");
+        System.err.println("completeRuleConditions_Preconditions");
         // Propose path-pattern
         proposePathPattern(model, assignment, context, acceptor);
         /*
@@ -227,7 +228,7 @@ public class VilBuildLanguageProposalProvider extends AbstractVilBuildLanguagePr
     
     @Override
     public void completeRuleConditions_Postcondition(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-//        System.err.println("completeRuleDeclaration_Postcondition");
+        System.err.println("completeRuleConditions_Postcondition");
         // Propose path-pattern
         proposePathPattern(model, assignment, context, acceptor);
         /*
@@ -242,7 +243,7 @@ public class VilBuildLanguageProposalProvider extends AbstractVilBuildLanguagePr
     
     @Override
     public void completeRuleElementBlock_Elements(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-//        System.err.println("completeRuleElementBlock_Elements");
+        System.err.println("completeRuleElementBlock_Elements");
         /*
          * Propose an individual artifact or artifact collection in terms of a global script variable and parameter.
          * Operations on a variable that yield such an artifact (collection) will be proposed
@@ -265,19 +266,19 @@ public class VilBuildLanguageProposalProvider extends AbstractVilBuildLanguagePr
     }
     
     public void completeMap_Block(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-//        System.err.println("completeMap_Block");
+        System.err.println("completeMap_Block");
         proposeParentParamsVars(model, assignment, context, acceptor, false);
         proposeParamsWithSpecifiedTypes(model, assignment, context, acceptor);
     }
     
     @Override
     public void completeCall_Param(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-//        System.err.println("completeCall_Param");
+        System.err.println("completeCall_Param");
         debugPath2Root(context.getLastCompleteNode());
     }
     @Override
     public void completeArgumentList_Param(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-//        System.err.println("completeArgumentList_Param");
+        System.err.println("completeArgumentList_Param");
         debugPath2Root(context.getLastCompleteNode());
         proposeParamsWithSpecifiedTypes(model, assignment, context, acceptor);
     }
@@ -288,7 +289,7 @@ public class VilBuildLanguageProposalProvider extends AbstractVilBuildLanguagePr
     
     @Override
     public void completeEqualityExpressionPart_Ex(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-//        System.err.println("completeEqualityExpressionPart_Ex");
+        System.err.println("completeEqualityExpressionPart_Ex");
         debugPath2Root(context.getLastCompleteNode());
         EObject semanticElement = context.getLastCompleteNode().getSemanticElement();
         if (semanticElement instanceof EqualityExpressionPartImpl) {
@@ -315,7 +316,7 @@ public class VilBuildLanguageProposalProvider extends AbstractVilBuildLanguagePr
 //                acceptor.accept(proposal);
 //            }
 //        }
-//        System.err.println("completeCall_Decl");
+        System.err.println("completeCall_Decl");
         debugPath2Root(context.getLastCompleteNode());
         proposeParamsWithSpecifiedTypes(model, assignment, context, acceptor);
     }
@@ -467,8 +468,10 @@ public class VilBuildLanguageProposalProvider extends AbstractVilBuildLanguagePr
     }
     
     private void proposeParamsWithSpecifiedTypes(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-//        System.err.println("proposeParamsWithSpecifiedTypes");
+        System.err.println("proposeParamsWithSpecifiedTypes");
         debugPath2Root(context.getLastCompleteNode());
+//        ExpressionOrQualifiedExecutionImpl impl = VilBuildLangProposalProviderUtility.INSTANCE.getExprOrExecution(context.getLastCompleteNode());
+//        System.out.println("EXECUTION: " + impl.get);
         
         List<String> typeList = null;
         CallImpl call = VilBuildLangProposalProviderUtility.INSTANCE.getCallImpl(context.getLastCompleteNode());
@@ -494,10 +497,10 @@ public class VilBuildLanguageProposalProvider extends AbstractVilBuildLanguagePr
     
     private void debugPath2Root(INode node) {
         INode result = null;
-//        System.out.println("_debugPath2Root_1 : " + node.getSemanticElement());
+        System.out.println("_debugPath2Root_1 : " + node.getSemanticElement());
         result = node.getParent();
         while (result != null) {
-//            System.out.println("_debugPath2Root : " + result.getSemanticElement());
+            System.out.println("_debugPath2Root : " + result.getSemanticElement());
             result = result.getParent();
         }
     }

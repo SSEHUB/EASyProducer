@@ -3,6 +3,7 @@ package de.uni_hildesheim.sse.dslcore.ui.editors;
 import java.net.URI;
 
 import org.eclipse.core.resources.IResource;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.xtext.ui.editor.model.IXtextDocument;
 
 import de.uni_hildesheim.sse.utils.modelManagement.IModel;
@@ -30,11 +31,10 @@ import de.uni_hildesheim.sse.utils.modelManagement.IModel;
 public abstract class AbstractModelChangeListener {
 
     /**
-     * The <code>de.uni_hildesheim.sse.dslcore.ui.editors.XtextEditor</code> instance which
-     * is registered to this listener in order to be updated if the underlying
+     * The editor instance which is registered to this listener in order to be updated if the underlying
      * model changes.
      */
-    protected CommonXtextEditor xtextEditor;
+    protected IUpdatableEditor xtextEditor;
     
     /**
      * Indicates whether this listener is currently listening
@@ -100,7 +100,7 @@ public abstract class AbstractModelChangeListener {
      * @param editor the <code>org.eclipse.xtext.ui.editor.XtextEditor</code> instance
      * which has to be updated.
      */
-    public void register(CommonXtextEditor editor) {
+    public void register(IUpdatableEditor editor) {
         if (editor != null) {
             if (xtextEditor == null) {                
                 xtextEditor = editor;
@@ -140,7 +140,15 @@ public abstract class AbstractModelChangeListener {
      * 
      */
     protected void updateRegisteredEditor() {
-        xtextEditor.updateEditor();
+        /*
+         * Avoid: org.eclipse.swt.SWTException: Invalid thread access
+         */
+        Display.getDefault().asyncExec(new Runnable() {
+            @Override
+            public void run() {
+                xtextEditor.updateEditor();
+            }
+        });
     }
     
     /**

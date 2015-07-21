@@ -1,0 +1,4 @@
+project ConstantInCustomOperation {
+    def Integer myRound(Real r) = r.round();
+    myRound(1.1) == 1;
+}

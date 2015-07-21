@@ -1,5 +1,7 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes;
 
+import java.lang.annotation.Annotation;
+
 /**
  * Generic type operations.
  * 
@@ -85,6 +87,31 @@ public class TypeHelper {
     public static boolean isBasicType(Class<?> cls) {
         return cls == PseudoBoolean.class || cls == PseudoInteger.class 
             || cls == PseudoReal.class || cls == PseudoString.class;
+    }
+    
+    /**
+     * Returns the QM generic annotation if defined.
+     * 
+     * @param <T> the annotation type to search for
+     * @param annotations the parameter annotations to consider
+     * @param index the index of the parameter
+     * @param cls the annotation class to return
+     * @return the annotation or <b>null</b>
+     */
+    public static <T extends Annotation> T getParameterAnnotation(Annotation[][] annotations, int index, 
+        Class<T> cls) {
+        T result = null;
+        if (null != annotations) {
+            Annotation[] tmp = annotations[index];
+            if (null != tmp) {
+                for (int a = 0; null == result && a < tmp.length; a++) {
+                    if (cls.isInstance(tmp[a])) {
+                        result = cls.cast(tmp[a]);
+                    }
+                }
+            }
+        }
+        return result;
     }
 
 }

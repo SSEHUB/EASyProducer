@@ -1,5 +1,6 @@
 package de.uni_hildesheim.sse.vil;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.widgets.Composite;
@@ -41,7 +42,13 @@ public abstract class AbstractXTextEditor <T extends EObject, R> extends CommonX
             doc.readOnly(new IUnitOfWork<T, XtextResource>() {
                 @SuppressWarnings("unchecked")
                 public T exec(XtextResource resource) {
-                    T root = (T) resource.getContents().get(0);
+                    EList<?> lst = resource.getContents();
+                    T root; 
+                    if (lst.isEmpty()) {
+                        root = null;
+                    } else {
+                        root = (T) resource.getContents().get(0);
+                    }
                     if (null != resource) {
                         AbstractXTextEditor.this.resourceUri = resource.getURI();
                     }

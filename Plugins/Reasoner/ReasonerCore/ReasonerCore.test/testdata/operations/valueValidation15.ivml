@@ -5,7 +5,7 @@ project valueValidation15 {
     //   - Assign block on constraints
 
    enum View {BA, DE, Impl};
-   attribute View modelView to valueValidation15;
+   annotate View modelView to valueValidation15;
    
    enum ContentType {text, movie, audio, picture};
     

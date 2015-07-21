@@ -1,0 +1,22 @@
+@advice(EASyDemoCommandsGen)
+template programConfig(Configuration config, FileArtifact target, String further) {
+	
+	String basePath = "io.ssehub.easy.demo.command.commands";
+
+    def String append(Boolean var, String name, String cmds) {
+		if (var) {
+			cmds = cmds + basePath + "." + name + " ";
+		}
+		cmds;
+    }
+	
+	def main(Configuration config, FileArtifact target, String further) {
+		EASyDemoCommandsGen cfg = config;
+		'appName = ${cfg.appName}'
+		String cmds = append(cfg.hasAddCommand, "AddIntCommand", "");
+		cmds = append(cfg.hasSubCommand, "SubIntCommand", cmds);
+		cmds = append(cfg.hasPrintCommand, "PrintCommand", cmds);
+		'cmds = $cmds $further'
+	}
+
+}

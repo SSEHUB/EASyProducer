@@ -77,6 +77,15 @@ public interface RtVilFactory extends EFactory
   BreakdownElement createBreakdownElement();
 
   /**
+   * Returns a new object of class '<em>Weighting Statement</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Weighting Statement</em>'.
+   * @generated
+   */
+  WeightingStatement createWeightingStatement();
+
+  /**
    * Returns a new object of class '<em>Breakdown Statement</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -102,15 +111,6 @@ public interface RtVilFactory extends EFactory
    * @generated
    */
   TacticDeclaration createTacticDeclaration();
-
-  /**
-   * Returns a new object of class '<em>Script Contents</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Script Contents</em>'.
-   * @generated
-   */
-  ScriptContents createScriptContents();
 
   /**
    * Returns the package supported by this factory.

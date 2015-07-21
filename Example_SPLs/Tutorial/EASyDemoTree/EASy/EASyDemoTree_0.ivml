@@ -1,0 +1,25 @@
+project EASyDemoTree {
+
+	version v0;
+	compound Car {
+		AC ac;
+		Engine engine;
+		engine <> null;
+		ac <> null implies engine.horsePower > 70;
+	}
+
+	compound AC {
+		Boolean automatic;
+	}
+
+	compound Engine {
+		Integer horsePower;
+		SportMode sportMode;
+	}
+
+	compound SportMode {
+	}
+
+	Car car;
+	car = {};
+}

@@ -98,7 +98,7 @@ public class AbstractFrozenElementsFinderTest {
         project.add(cmpB);
         
         //Create a freeze block
-        FREEZEBLOCKS[index] = new FreezeBlock(new IFreezable[] {intA, cmpB}, null, project);
+        FREEZEBLOCKS[index] = new FreezeBlock(new IFreezable[] {intA, cmpB}, null, null, project);
         project.add(FREEZEBLOCKS[index]);
     }
 }

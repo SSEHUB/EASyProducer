@@ -122,7 +122,13 @@ public class EasyProducerDialog {
                 msg.append("\n");
                 msg.append(oneMsg.getDescription());
                 List<ModelElement> conflicts = oneMsg.getConflicts();
-                if (conflicts.size() > 0) {
+                List<String> labels = oneMsg.getConflictLabels();
+                if (null != labels && !labels.isEmpty()) {
+                    for (int j = 0; j < labels.size(); j++) {
+                        msg.append("\n - ");
+                        msg.append(labels.get(j));
+                    }
+                } else if (conflicts.size() > 0) {
                     msg.append(":");
                     for (int j = 0; j < conflicts.size(); j++) {
                         ModelElement conflictingElement = conflicts.get(j);

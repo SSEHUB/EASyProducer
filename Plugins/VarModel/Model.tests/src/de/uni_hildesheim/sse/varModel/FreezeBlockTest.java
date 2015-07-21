@@ -2,6 +2,7 @@ package de.uni_hildesheim.sse.varModel;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
@@ -45,40 +46,23 @@ public class FreezeBlockTest {
      */
     @Test
     public void creatingFreezeBlock() {
-        frb = new FreezeBlock(list, null, pro);
+        frb = new FreezeBlock(list, null, null, pro);
         Assert.assertTrue(frb.getFreezableCount() == 2);
         Assert.assertEquals(dec2, frb.getFreezable(1));
         Assert.assertEquals(dec1, frb.getFreezable(0));
-        Assert.assertEquals(0, frb.getButCount());
-        Assert.assertTrue(frb.getFrozenCount() == 2);
-        Assert.assertEquals(dec1, frb.getFrozen(0));
     }
 
     /**
      * Creating a freeze block with a but.
      */
+    @Ignore("but expression would need full test against configuration")
     @Test
     public void creatingFBWithBut() {
         but[0] = "Name";
-        frb = new FreezeBlock(list, but, pro);
+        frb = new FreezeBlock(list, null, null, pro);
         Assert.assertTrue(frb.getFreezableCount() == 2);
         Assert.assertEquals(dec2, frb.getFreezable(1));
         Assert.assertEquals(dec1, frb.getFreezable(0));
-        Assert.assertEquals(1, frb.getButCount());
-        Assert.assertTrue(frb.getFrozenCount() == 1);
-        Assert.assertEquals(dec2, frb.getFrozen(0));
-        Assert.assertEquals(but[0], frb.getBut(0));
     }
     
-    /**
-     * Tests the but wildcard.
-     */
-    @Test
-    public void wildcardBut() {
-        but[0] = "Na*";
-        frb = new FreezeBlock(list, but, pro);
-        Assert.assertEquals(1, frb.getButCount());
-        Assert.assertTrue(frb.getFrozenCount() == 0);
-        Assert.assertEquals(but[0], frb.getBut(0));
-    }
 }   

@@ -15,11 +15,22 @@ public class ConfigNameFilter extends AbstractConfigurationFilter {
     private Pattern namePattern;
     
     /**
-     * Sole constructor for this name filter.
+     * Creates a name filter.
      * @param name A regular expression, only variables matching to this regular expressions will be displayed.
      * @throws PatternSyntaxException If the expression's syntax is invalid
      */
-    ConfigNameFilter(String name) throws PatternSyntaxException {
+    public ConfigNameFilter(String name) throws PatternSyntaxException {
+        this(name, true);
+    }
+
+    /**
+     * Creates a name filter.
+     * @param name A regular expression, only variables matching to this regular expressions will be displayed.
+     * @param showAllNestedElements whether nested elements of a shown variable will also be filtered
+     * @throws PatternSyntaxException If the expression's syntax is invalid
+     */
+    public ConfigNameFilter(String name, boolean showAllNestedElements) throws PatternSyntaxException {
+        super(showAllNestedElements);
         // Compile the pattern only once
         this.namePattern = Pattern.compile(name);
     }

@@ -361,8 +361,11 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
      * 
      * @param location the location to be considered
      * @return <code>true</code> if it handles the specified location, <code>false</code> else
+     * @see #getExtension()
      */
-    protected abstract boolean handles(File location);
+    protected boolean handles(File location) {
+        return location.isFile() && location.getName().endsWith("." + getExtension());        
+    }
 
     @Override
     public void scan(File location, IModelInfoHolder<R> holder) {
@@ -440,5 +443,12 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
         }
         return new LoadResult<R>(models, messages);
     }
+    
+    /**
+     * Returns the file extension / identifier to react on.
+     * 
+     * @return the extension
+     */
+    public abstract String getExtension();
     
 }

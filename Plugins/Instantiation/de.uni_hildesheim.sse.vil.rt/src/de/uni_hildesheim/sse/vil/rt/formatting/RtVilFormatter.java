@@ -4,8 +4,10 @@
 package de.uni_hildesheim.sse.vil.rt.formatting;
 
 import com.google.inject.Inject;
+
 import org.eclipse.xtext.formatting.impl.AbstractDeclarativeFormatter;
 import org.eclipse.xtext.formatting.impl.FormattingConfig;
+
 import de.uni_hildesheim.sse.vil.rt.services.RtVilGrammarAccess;
 
 /**
@@ -18,7 +20,8 @@ import de.uni_hildesheim.sse.vil.rt.services.RtVilGrammarAccess;
  */
 public class RtVilFormatter extends AbstractDeclarativeFormatter {
 	
-	@Inject
+	@SuppressWarnings("unused")
+        @Inject
 	private RtVilGrammarAccess grammarAccess; 
 	
 	@Override

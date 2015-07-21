@@ -23,12 +23,12 @@ import java.util.Set;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.Advice;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IDirectTypeRegistryAccess;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ITypeResolver;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.VilException;
 import de.uni_hildesheim.sse.model.varModel.Attribute;
 import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
@@ -51,25 +51,21 @@ public class IvmlTypeResolver implements ITypeResolver {
     private static final boolean STATIC = true;
     private static final EASyLogger LOGGER = EASyLoggerFactory.INSTANCE.getLogger(IvmlTypeResolver.class, Bundle.ID);
     
-    private String qnPrefix;
     private IDirectTypeRegistryAccess access;
     private Project project;
     private TypeRegistry typeRegistry;
     private Map<IDatatype, Set<Attribute>> attributes = new HashMap<IDatatype, Set<Attribute>>();
-    private Map<IDatatype, TypeDescriptor<? extends IVilType>> ivmlMap 
-        = new HashMap<IDatatype, TypeDescriptor<? extends IVilType>>();
+    private Map<IDatatype, TypeDescriptor<?>> ivmlMap = new HashMap<IDatatype, TypeDescriptor<?>>();
 
     /**
      * Creates an IVML type resolver.
      * 
      * @param project the IVML model
      * @param typeRegistry the type registry this resolver is working for
-     * @param qnPrefix the prefix for the qualified name
      */
-    public IvmlTypeResolver(Project project, TypeRegistry typeRegistry, String qnPrefix) {
+    public IvmlTypeResolver(Project project, TypeRegistry typeRegistry) {
         this.project = project;
         this.typeRegistry = typeRegistry;
-        this.qnPrefix = qnPrefix;
         
         int eCount = project.getElementCount();
         for (int e = 0; e < eCount; e++) {
@@ -101,8 +97,8 @@ public class IvmlTypeResolver implements ITypeResolver {
     }
     
     @Override
-    public TypeDescriptor<? extends IVilType> resolveType(String name, boolean addIfMissing) {
-        TypeDescriptor<? extends IVilType> result = access.get(name);
+    public TypeDescriptor<?> resolveType(String name, boolean addIfMissing) {
+        TypeDescriptor<?> result = access.get(name);
         if (null == result) {
             try {
                 IDatatype type = ModelQuery.findType(project, name, null);
@@ -144,8 +140,8 @@ public class IvmlTypeResolver implements ITypeResolver {
      * @return the type descriptor
      * @throws VilException in case that creating the type descriptor fails
      */
-    TypeDescriptor<? extends IVilType> obtainType(IDatatype type) throws VilException {
-        TypeDescriptor<? extends IVilType> result = null;
+    TypeDescriptor<?> obtainType(IDatatype type) throws VilException {
+        TypeDescriptor<?> result = null;
         if (null != type) {
             result = access.get(type.getQualifiedName());
             if (null == result) {
@@ -155,8 +151,10 @@ public class IvmlTypeResolver implements ITypeResolver {
                 }
             }
             if (null == result) {
-                result = new IvmlTypeDescriptor(project, type, this, attributes.get(type));
-                ivmlMap.put(type, result);
+                IvmlTypeDescriptor itd = new IvmlTypeDescriptor(project, type, this);
+                ivmlMap.put(type, itd);
+                itd.resolve(project, type, attributes.get(type));
+                result = itd;
             }
         }
         return result;
@@ -168,7 +166,7 @@ public class IvmlTypeResolver implements ITypeResolver {
      * @param name the name of the type
      * @param type the type to be registered
      */
-    void addType(String name, TypeDescriptor<? extends IVilType> type) {
+    void addType(String name, TypeDescriptor<?> type) {
         if (!isKnown(name)) {
             access.add(name, type);
         }
@@ -176,7 +174,7 @@ public class IvmlTypeResolver implements ITypeResolver {
 
     @Override
     public TypeDescriptor<? extends IVilType> resolveInstantiator(String name) {
-        return null;
+        return null; // Do not create FakeType -> Serialization
     }
     
     /**
@@ -213,8 +211,8 @@ public class IvmlTypeResolver implements ITypeResolver {
     }
 
     @Override
-    public TypeDescriptor<? extends IVilType> resolveType(IDatatype type) {
-        TypeDescriptor<? extends IVilType> result = ivmlMap.get(type);
+    public TypeDescriptor<?> resolveType(IDatatype type) {
+        TypeDescriptor<?> result = ivmlMap.get(type);
         if (null == result) {
             try {
                 result = obtainType(type);
@@ -225,13 +223,4 @@ public class IvmlTypeResolver implements ITypeResolver {
         return result;
     }
     
-    /**
-     * Returns the qualified name prefix.
-     * 
-     * @return the prefix, may be empty
-     */
-    public String getQualifiedNamePrefix() {
-        return qnPrefix;
-    }
-
 }

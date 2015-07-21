@@ -1,0 +1,134 @@
+project DataManagementCfg {
+ 
+    import DataManagement;
+    import BasicsCfg;
+ 
+    //DataSources for the priority pipeline 
+    DataSource spring;
+    spring = {
+		host = "springtechno.org",
+	    name = "Spring Financial Data",
+	    artifact="eu.qualimaster:spring-client-simulator:3.0-SNAPSHOT",
+		storageLocation = "input/spring",
+		strategy = DataManagementStrategy.LeastRecentlyUsed,
+		timeLine = 1000,
+		input = {
+              {
+              	name = "symbolList",
+              	fields={Field{name="allSymbols", type=refBy(StringListType)}}
+              },
+              {
+              	name = "springStream",
+              	fields={Field{name="symbolTuple", type=refBy(StringType)}}
+              }
+		},
+		sourceCls = "eu.qualimaster.algorithms.imp.correlation.SpringClientSimulator"
+	}; 
+	 
+	DataSource twitter;
+	twitter = {
+		host = "twitter.com",
+		name = "Twitter Stream Data",
+		artifact = "eu.qualimaster:TwitterStreamDataSource:0.0.5-SNAPSHOT",
+		storageLocation = "input/twitter",
+		strategy = DataManagementStrategy.None,
+		timeLine = 0,
+		input = {
+			{
+				name = "symbolList",
+				fields={Field{name="allSymbols", type=refBy(StringListType)}}
+			},
+			{
+				name = "twitterStream",
+				fields={Field{name="status", type=refBy(ObjectType)}}
+			}
+		},
+		sourceCls = "eu.qualimaster.data.stream.source.TwitterFileStreaming",
+		parameters={
+			StringParameter{name="consumerKey"},
+			StringParameter{name="consumerSecret"},
+			StringParameter{name="accessToken"},
+			StringParameter{name="accessTokenSecret"},
+			IntegerParameter{name="queueSize"},
+			StringParameter{name="tweetDirectory"},
+			RealParameter{name="speedFactor"},
+			BooleanParameter{name="runLocally"},
+			BooleanParameter{name="adjustTimeToNow"},
+			BooleanParameter{name="realLoops"}
+		}			
+	};
+	
+	DataSource randomSource;
+	randomSource = {
+		name = "Random Source",
+		artifact = "eu.qualimaster.test:RandomSourceAlg:0.0.2-SNAPSHOT",
+		input = {
+			{
+				name = "randomData",
+			    fields={Field{name="randomInteger", type=refBy(IntegerType)}}
+			}			
+		},
+		parameters = {
+			IntegerParameter{name="delay"}
+		},
+		sourceCls = "eu.qualimaster.algorithms.RandomSourceAlg"			
+	};
+
+        dataSources = {refBy(spring), refBy(twitter), refBy(randomSource)};	
+
+    DataSink priorSnk;
+    priorSnk = {
+    	name = "Priority Data Sink",
+    	artifact = "eu.qualimaster:hy-priority-data-sink:3.0-SNAPSHOT",
+    	storageLocation = "output/prior",
+    	strategy = DataManagementStrategy.None,
+    	timeLine = 0,
+    	output = {
+    		{
+    			name = "pairwiseFinancial",
+    			fields={Field{name="pairwiseCorrelationFinancial", type=refBy(StringType)}}
+    		},
+    		{
+    			name = "pairwiseTwitter",
+    			fields={Field{name="pairwiseCorrelationTwitter", type=refBy(StringType)}}
+    		}
+    	},
+    	sinkCls = "eu.qualimaster.algorithms.imp.correlation.PriorityDataSinkForFinancialAndTwitter"
+    };
+    
+    DataSink randomSink;
+    randomSink = {
+    	name = "Random Sink",
+    	artifact = "eu.qualimaster.test:RandomSinkAlg:0.0.2-SNAPSHOT",
+    	output = {
+			{
+				name = "proccessedData",
+			    fields={Field{name="randomInteger", type=refBy(IntegerType)}}
+			}			
+		},
+		sinkCls = "eu.qualimaster.algorithms.RandomSinkAlg"
+    };
+   
+	dataSinks = {refBy(priorSnk),refBy(randomSink)};
+	
+	PersistentDataElement hBaseDataManagement;
+	hBaseDataManagement = {
+		name = "hBase DataManagement",
+		storageLocation = "hBase-l3s",
+		strategy = DataManagementStrategy.FirstInFirstOut,
+		timeLine = 0
+	};
+	persistentDataElements = {refBy(hBaseDataManagement)};
+	freeze {
+		spring;
+		twitter; 
+		randomSource;
+		dataSources;
+		priorSnk;
+		randomSink;
+		dataSinks;
+		hBaseDataManagement;
+		persistentDataElements;
+	} but (f|f.bindingTime == BindingTime.runtime)
+	
+}

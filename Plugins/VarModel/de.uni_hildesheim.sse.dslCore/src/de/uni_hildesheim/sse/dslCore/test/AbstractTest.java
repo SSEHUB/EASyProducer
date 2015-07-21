@@ -464,6 +464,7 @@ public abstract class AbstractTest<R extends IModel> {
         private File expectedTrace;
         private Map<String, Object> parameter;
         private File expectedOutputFile;
+        private boolean enableEquals = true;
 
         /**
          * Creates an instance with no trace output and empty parameters.
@@ -591,6 +592,24 @@ public abstract class AbstractTest<R extends IModel> {
          */
         public void setExpectedOutputFile(File expectedOutputFile) {
             this.expectedOutputFile = expectedOutputFile;
+        }
+        
+        /**
+         * Returns wehther equal comparison shall be enabled.
+         * 
+         * @return <code>true</code> if enabled, <code>false</code> else
+         */
+        public boolean enableEquals() {
+            return enableEquals;
+        }
+        
+        /**
+         * Enables or disables the actual equals test and passes through to execution.
+         * 
+         * @param enableEquals whether equals shall be enabled (default <code>true</code>)
+         */
+        public void setEnableEquals(boolean enableEquals) {
+            this.enableEquals = enableEquals;
         }
         
     }

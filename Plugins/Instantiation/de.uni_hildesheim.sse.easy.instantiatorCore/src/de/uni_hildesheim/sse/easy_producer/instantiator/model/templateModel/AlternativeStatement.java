@@ -1,8 +1,7 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 
@@ -24,10 +23,10 @@ public class AlternativeStatement implements ITemplateElement {
      * @param condition The condition which must be evaluated to <b>true</b> to process the if-block. 
      * @param ifStatement The if-statement which subsumes a set of template elements that will only be
      *        processed if the <b>condition</b> is evaluated to true.
-     * @throws VilLanguageException in case that the construction fails due to semantic problems
+     * @throws VilException in case that the construction fails due to semantic problems
      */
     public AlternativeStatement(Expression condition, ITemplateElement ifStatement) 
-        throws VilLanguageException {
+        throws VilException {
         this(condition, ifStatement, null);
     }
     
@@ -40,10 +39,10 @@ public class AlternativeStatement implements ITemplateElement {
      *        processed if the <b>condition</b> is evaluated to <b>true</b>.
      * @param elseStatement The else-block which subsumes a set of template elements that will only be
      *        processed if the <b>condition</b> is evaluated to <b>false</b>.
-     * @throws VilLanguageException in case that the construction fails due to semantic problems
+     * @throws VilException in case that the construction fails due to semantic problems
      */
     public AlternativeStatement(Expression condition, ITemplateElement ifStatement, ITemplateElement elseStatement) 
-        throws VilLanguageException {
+        throws VilException {
         this.condition = condition;
         this.ifStatement = ifStatement;
         this.elseStatement = elseStatement;
@@ -78,7 +77,7 @@ public class AlternativeStatement implements ITemplateElement {
     }
 
     @Override
-    public Object accept(IVisitor visitor) throws VilLanguageException {
+    public Object accept(IVisitor visitor) throws VilException {
         return visitor.visitAlternative(this);
     }
 
@@ -88,13 +87,13 @@ public class AlternativeStatement implements ITemplateElement {
     }
 
     @Override
-    public TypeDescriptor<? extends IVilType> inferType() throws VilLanguageException {
-        TypeDescriptor<? extends IVilType> result;
+    public TypeDescriptor<?> inferType() throws VilException {
+        TypeDescriptor<?> result;
         if (null == elseStatement) {
             result = ifStatement.inferType();
         } else {
-            TypeDescriptor<? extends IVilType> ifType = ifStatement.inferType();
-            TypeDescriptor<? extends IVilType> elseType = elseStatement.inferType();
+            TypeDescriptor<?> ifType = ifStatement.inferType();
+            TypeDescriptor<?> elseType = elseStatement.inferType();
             if (ifType.equals(elseType)) {
                 result = ifType;
             } else {

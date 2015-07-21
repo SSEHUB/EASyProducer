@@ -12,7 +12,7 @@ import org.eclipse.xtext.ui.label.DefaultEObjectLabelProvider;
 import com.google.inject.Inject;
 
 import de.uni_hildesheim.sse.ModelUtility;
-import de.uni_hildesheim.sse.ivml.AttributeTo;
+import de.uni_hildesheim.sse.ivml.AnnotateTo;
 import de.uni_hildesheim.sse.ivml.ConflictStmt;
 import de.uni_hildesheim.sse.ivml.Eval;
 import de.uni_hildesheim.sse.ivml.Export;
@@ -213,8 +213,8 @@ public class IvmlLabelProvider extends DefaultEObjectLabelProvider {
 	}
 
 	
-	protected Object text(AttributeTo stmt) {
-		return stmt.getAttributeDecl().getName();
+	protected Object text(AnnotateTo stmt) {
+		return stmt.getAnnotationDecl().getName();
 	}
 	
 	protected Object text(OpDefStatement stmt) {
@@ -225,7 +225,7 @@ public class IvmlLabelProvider extends DefaultEObjectLabelProvider {
 		return Images.NAME_OPERATIONDEFINITION;
 	}
 	
-	protected Object image(AttributeTo stmt) {
+	protected Object image(AnnotateTo stmt) {
 		return Images.NAME_ATTRIBUTE;
 	}
 

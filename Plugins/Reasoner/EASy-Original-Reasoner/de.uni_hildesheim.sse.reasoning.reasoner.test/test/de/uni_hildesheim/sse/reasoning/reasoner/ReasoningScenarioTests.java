@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.eclipse.emf.common.util.URI;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -28,7 +29,7 @@ import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
 import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
 
 /**
- * Configures the operation tests for Drools.
+ * Configures the operation tests for SSE reasoner.
  * 
  * @author Sizonenko
  * @author El-Sharkawy
@@ -51,6 +52,18 @@ public class ReasoningScenarioTests extends AbstractTest<Project> {
             VarModel.INSTANCE.locations().addLocation(FOLDER, ProgressObserver.NO_OBSERVER);
         } catch (ModelManagementException e) {
             Assert.fail("Could not add location of test files.");
+        }
+    }
+    
+    /**
+     * Frees the memory after testing.
+     */
+    @AfterClass
+    public static void tearDownAfterClass() {
+        try {
+            VarModel.INSTANCE.locations().removeLocation(FOLDER, ProgressObserver.NO_OBSERVER);
+        } catch (ModelManagementException e) {
+            Assert.fail("Could not remove location of test files.");
         }
     }
     
@@ -198,7 +211,7 @@ public class ReasoningScenarioTests extends AbstractTest<Project> {
      */
     @Test    
     public void initialTest() {
-        reasoningTest("InitialTest.ivml", 3, false);
+        reasoningTest("InitialTest.ivml", 2, false);
     } 
     
     /**
@@ -287,9 +300,10 @@ public class ReasoningScenarioTests extends AbstractTest<Project> {
     /**
      * Tests internal constraints.
      */ 
-    @Test    
+    @Test
+    @Ignore
     public void internalConstraintTest() {
-        reasoningTest("InternalConstraintTest.ivml", 0, false);
+        reasoningTest("InternalConstraintTest.ivml", 1, false);
     }
     
     /**
@@ -305,7 +319,7 @@ public class ReasoningScenarioTests extends AbstractTest<Project> {
      */ 
     @Test    
     public void variableAssignmentFailTest() {
-        reasoningTest("VariableAssignmentFailTest.ivml", 2, false);
+        reasoningTest("VariableAssignmentFailTest.ivml", 1, false);
     }
     
     /**
@@ -348,6 +362,15 @@ public class ReasoningScenarioTests extends AbstractTest<Project> {
     public void traceTest() {
         reasoningTest("TraceTest.ivml", 1, false);
     }
+    
+    /**
+     * Tests trace in failed elements.
+     */
+    @Test
+    public void nestedVariableReplaceTest() {
+        reasoningTest("nestedVariableReplaceTest.ivml", 1, false);
+    }
+
     
 //    /**
 //     * Tests basic arithmetical operations on Integer and Real numbers.

@@ -6,7 +6,7 @@
         -> getValue(DecisionVariable) with (import::iInt) = -1
         -> getAttribute(IvmlElement, IvmlElement) with (import::iInt, test::bindingTime) = null
         -> getIntegerValue(IvmlElement) with (null) = null
-        -> ==(Integer, Integer) with (null, 100) = false
+        -> ==(Integer, Integer) with (null, 100) = null
         var <- test::pInt
         -> name(DecisionVariable) with (test::pInt) = pInt
         -> getValue(DecisionVariable) with (test::pInt) = 0

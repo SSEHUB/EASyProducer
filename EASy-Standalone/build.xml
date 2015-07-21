@@ -3,29 +3,37 @@
 <project name="Standalone Tools" default="all" basedir=".">	
 	<property file="${user.home}/global-build.properties"/>
 	<property name="easyPlugins" value="easyPlugins"/>
-	
-	<path id="easyTaskDef.lib" >
-		<fileset dir="antLibs">
-			<include name="**/*.jar" />
-		</fileset>
-    </path>
-	
+
+	<include file="${home.base.dir}/${projects.standalone.dir}/standalone.macros.xml"/>
+			
 	<target name="init">
 		<!-- Delete generated folders -->
 		<delete dir="junitResults"/>
 		<delete dir="${easyPlugins}"/>
 		<delete dir="build"/>
+        <delete dir="${home.base.dir}/${projects.standalone.dir}/antLibs"/>
 		
 		<!-- Delete accidentally created files and folders -->
 		<delete dir="easyLoader"/>
 		<delete dir="emma"/>
 		<delete dir="newGenerator"/>
-		
+				
 		<!-- Create folders -->
 		<mkdir dir="junitResults"/>
 		<mkdir dir="${easyPlugins}"/>
 		<mkdir dir="build"/>
+		<mkdir dir="build/zip"/>
+		<mkdir dir="build/zip/Plugins"/>
+		<mkdir dir="build/zip/Features"/>
 		<mkdir dir="build/generatedLibs"/>
+        
+        <!-- Update/Prepare ANT Generator -->
+        <mkdir dir="${home.base.dir}/${projects.standalone.dir}/antLibs"/>
+        <copy todir="${home.base.dir}/${projects.standalone.dir}/antLibs" failonerror="true" overwrite="true" flatten="true">
+			<fileset dir="${home.easyLoader.dir}/build/jar">
+				<include name="**/*.jar" />
+			</fileset>
+		</copy>
 	</target>
 	
 	<target name="gather.easy.plugins">
@@ -52,8 +60,16 @@
             <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.apache.commons.io.feature"/>
             <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.easy.instantiator.java.feature"/>
             <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.easy_producer.instantiation.velocity_feature"/>
+            <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.easy.eclipseInfrastructure.Feature"/>
             <addfeature path="${projects.features.dir}"/>
         </antgenerator>
+        
+        <!-- Fix me -->
+        <copy todir="${basedir}/build/generatedLibs/unbundled" failonerror="true" overwrite="true" flatten="true">
+            <fileset dir="${easy.bundles.dir}">
+                <include name="org.eclipse.equinox.common_3.6.200.jar" />
+            </fileset>
+        </copy>
         
         <!-- copy generated bundles to command line tool before compilation -->
         <copy todir="EASyCommandLine/lib" failonerror="true" overwrite="true" flatten="true">
@@ -63,21 +79,179 @@
             <fileset dir="${home.easyLoader.dir}/libs/">
 				<include name="org.eclipse.osgi*.jar" />
 			</fileset>
+            <fileset dir="${eclipse.plugins.dir}">
+				<include name="org.apache.ant*/lib/ant.jar" />
+			</fileset>
 		</copy>
     </target>
+
+    <!-- standalone with some experimental stuff -->
+	<target name="createLibs.ex">
+        <mkdir dir="build/generatedLibs.ex"/>
+	    <!-- Lib generation with Patrik's ANT plugin for automated EASy-Bundle generation -->
+        <taskdef name="antgenerator" classname="de.uni_hildesheim.sse.easy.ant.AntGenerator" classpathref="easyTaskDef.lib"/>
+        <!-- pluginPath="${easy.bundles.dir}" -->
+        <!-- pluginPath="${easyPlugins}" -->
+        <antgenerator forced="yes" pluginPath="${easy.bundles.dir}" target="${basedir}/build/generatedLibs.ex"
+            basedir="${basedir}" eclipsepath="${eclipse.plugins.dir}" classesPath="${home.easyLoader.dir}/build/classes"
+            libsPath="${home.easyLoader.dir}/libs">
+            
+            <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.easy_producer.core.no_eclipse_feature"/>
+            <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.ivml.core_feature"/>
+            <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.vil.core_feature"/>
+            <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.reasoning.reasoner_feature"/>
+            <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.apache.commons.io.feature"/>
+            <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.easy.instantiator.java.feature"/>
+            <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.easy_producer.instantiation.velocity_feature"/>
+            <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.easy.instantiator.maven.feature"/>
+            <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.experimental.core_feature"/>
+            <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.easy.eclipseInfrastructure.Feature"/>
+            <addfeature path="${projects.features.dir}"/>
+        </antgenerator>
+        
+        <!-- Fix me -->
+        <copy todir="${basedir}/build/generatedLibs.ex/unbundled" failonerror="true" overwrite="true" flatten="true">
+            <fileset dir="${easy.bundles.dir}">
+                <include name="org.eclipse.equinox.common_3.6.200.jar" />
+                <include name="org.eclipse.equinox.preferences_3.5.100.jar" />
+            </fileset>
+        </copy>
+        
+        <!-- copy generated bundles to command line tool before compilation -->
+        <copy todir="EASyCommandLine/lib" failonerror="true" overwrite="true" flatten="true">
+            <fileset dir="${basedir}/build/generatedLibs.ex/unbundled">
+                <include name="**/*.jar" />
+            </fileset>
+            <fileset dir="${home.easyLoader.dir}/libs/">
+                <include name="org.eclipse.osgi*.jar" />
+            </fileset>
+        </copy>
+        <dist target="build/generatedLibs.ex" exclude="drools-*.jar"/>
+        <!-- cannot be bundled due to various conflicts, rans anyway in own process -->
+        <withMaven target="build/generatedLibs.ex"/>
+    </target>
+    
+    <!-- standalone runtime without xText but full Java instantiators and some experimental stuff - QM version is 
+         smaller-->
+    <target name="createLibs.runtimeNoXtext">
+        <mkdir dir="build/generatedLibs.rt.noXtext"/>
+        <!-- Lib generation with Patrik's ANT plugin for automated EASy-Bundle generation -->
+        <taskdef name="antgenerator" classname="de.uni_hildesheim.sse.easy.ant.AntGenerator" classpathref="easyTaskDef.lib"/>
+        <!-- pluginPath="${easy.bundles.dir}" -->
+        <!-- pluginPath="${easyPlugins}" -->
+        <antgenerator forced="yes" pluginPath="${easy.bundles.dir}" target="${basedir}/build/generatedLibs.rt.noXtext"
+            basedir="${basedir}" eclipsepath="${eclipse.plugins.dir}" classesPath="${home.easyLoader.dir}/build/classes"
+            libsPath="${home.easyLoader.dir}/libs">
+            
+            <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.runtime_feature_noXtext"/>
+            <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.reasoning.reasoner_feature"/>
+            <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.easy.instantiator.java.feature"/>
+            <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.apache.commons.io.feature"/>
+            <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.easy_producer.instantiation.velocity_feature"/>
+            <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.easy.instantiator.maven.feature"/>
+            <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.easy.instantiator.serializer.feature"/>
+            <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.easy.eclipseInfrastructure.Feature"/>
+            <addfeature path="${projects.features.dir}"/>
+        </antgenerator>
+        
+        <!-- Fix me -->
+        <copy todir="${basedir}/build/generatedLibs.rt.noXtext/unbundled" failonerror="true" overwrite="true" flatten="true">
+            <fileset dir="${easy.bundles.dir}">
+                <include name="org.eclipse.equinox.common_3.6.200.jar" />
+                <include name="org.eclipse.equinox.preferences_3.5.100.jar" />
+            </fileset>
+        </copy>
+        
+        <!-- copy generated bundles to command line tool before compilation -->
+        <copy todir="EASyCommandLine/lib" failonerror="true" overwrite="true" flatten="true">
+            <fileset dir="${basedir}/build/generatedLibs.rt.noXtext/unbundled">
+                <include name="**/*.jar" />
+            </fileset>
+            <fileset dir="${home.easyLoader.dir}/libs/">
+                <include name="org.eclipse.osgi*.jar" />
+            </fileset>
+        </copy>
+        <dist target="build/generatedLibs.rt.noXtext" exclude="drools-*.jar"/>
+        <!-- cannot be bundled due to various conflicts, rans anyway in own process -->
+        <withMaven target="build/generatedLibs.rt.noXtext"/>
+    </target>
 	
+    <!-- a runtime library version - however containing full EASy :o -->
+    <target name="createLibs.runtime">
+        <mkdir dir="build/generatedLibs.rt"/>
+        <!-- Lib generation with Patrik's ANT plugin for automated EASy-Bundle generation -->
+        <taskdef name="antgenerator" classname="de.uni_hildesheim.sse.easy.ant.AntGenerator" classpathref="easyTaskDef.lib"/>
+        <!-- pluginPath="${easy.bundles.dir}" -->
+        <!-- pluginPath="${easyPlugins}" -->
+        <antgenerator forced="yes" pluginPath="${easy.bundles.dir}" target="${basedir}/build/generatedLibs.rt"
+            basedir="${basedir}" eclipsepath="${eclipse.plugins.dir}" classesPath="${home.easyLoader.dir}/build/classes"
+            libsPath="${home.easyLoader.dir}/libs">
+            
+            <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.runtime_feature"/>
+            <!-- is this one really required, as no_eclipse indirectly requires full EASy -->
+            <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.easy_producer.core.no_eclipse_feature"/>
+            <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.easy.instantiator.java.feature"/>
+            <addfeature path="${projects.features.dir}"/>
+        </antgenerator>
+        
+        <!-- Fix me -->
+        <copy todir="${basedir}/build/generatedLibs.rt/unbundled" failonerror="true" overwrite="true" flatten="true">
+            <fileset dir="${easy.bundles.dir}">
+                <include name="org.eclipse.equinox.common_3.6.200.jar" />
+                <include name="org.eclipse.equinox.preferences_3.5.100.jar" />
+            </fileset>
+        </copy>
+        
+        <!-- copy generated bundles to command line tool before compilation -->
+        <copy todir="EASyCommandLine/lib" failonerror="true" overwrite="true" flatten="true">
+			<fileset dir="${basedir}/build/generatedLibs.rt/unbundled">
+				<include name="**/*.jar" />
+			</fileset>
+            <fileset dir="${home.easyLoader.dir}/libs/">
+				<include name="org.eclipse.osgi*.jar" />
+			</fileset>
+		</copy>
+		<dist target="build/generatedLibs.rt"/>
+		<!-- cannot be bundled due to various conflicts, rans anyway in own process -->
+        <withMaven target="build/generatedLibs.rt"/>
+    </target>
+    	
 	<target name="compile">	
-        <echo>##########################</echo>
-        <echo>###  CommandLine Tool  ###</echo>
-        <echo>##########################</echo>
+        <echo>#######################################</echo>
+        <echo>###  CommandLine Tool (@Standalone) ###</echo>
+        <echo>#######################################</echo>
         <ant dir="EASyCommandLine" antfile="${build.script.name}" />
         
-        <echo>##########################</echo>
-        <echo>###  CommandLine Tests ###</echo>
-        <echo>##########################</echo>
+        <echo>########################################</echo>
+        <echo>###  CommandLine Tests (@Standalone) ###</echo>
+        <echo>########################################</echo>
         <ant dir="EASyCommandLineTest" antfile="${build.script.name}" />
+        
+        <!--
+        Create Distribution for standard EASyCommandLine
+        (correct libs are already included, since they are gathered for compiling)
+        -->
+        <mkdir dir="build/generatedLibs/dist"/>
+        <dist target="build/generatedLibs"/>
+        
+        <!-- The same game for runtime... -->
+    </target>
+    
+    <target name="zip">
+        <copy todir="build/zip/Plugins" failonerror="true" overwrite="true" flatten="true">
+			<fileset dir="${easy.bundles.dir}">
+				<include name="**/*.jar" />
+			</fileset>
+		</copy>
+        <copy todir="build/zip/Features" failonerror="true" overwrite="true" flatten="false">
+			<fileset dir="${projects.features.dir}">
+				<include name="**/*.xml" />
+			</fileset>
+		</copy>
+        <zip destfile="build/zip/BundleSources.zip" basedir="build/zip"/>
     </target>
 	
 	<!--target name="all" depends="init, gather.easy.plugins, createLibs, compile"/-->
-	<target name="all" depends="init, createLibs, compile"/>
+	<target name="all" depends="init, createLibs, compile, zip, createLibs.ex, createLibs.runtime, createLibs.runtimeNoXtext"/>
+	<target name="all.runtime" depends="init, createLibs, compile, zip, createLibs.ex, createLibs.runtime, createLibs.runtimeNoXtext"/>
 </project>

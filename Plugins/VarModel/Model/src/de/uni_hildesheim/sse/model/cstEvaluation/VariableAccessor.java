@@ -25,6 +25,7 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.Container;
 import de.uni_hildesheim.sse.model.varModel.values.ContainerValue;
 import de.uni_hildesheim.sse.model.varModel.values.IntValue;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
+import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
 import de.uni_hildesheim.sse.utils.messages.Status;
 import de.uni_hildesheim.sse.utils.pool.IPoolManager;
 import de.uni_hildesheim.sse.utils.pool.Pool;
@@ -112,23 +113,26 @@ class VariableAccessor extends AbstractDecisionVariableEvaluationAccessor {
                 context.addErrorMessage("assignable value is not defined");
             } else {
                 IDecisionVariable variable = getVariable();
-                if (!Value.equalsPartially(variable.getValue(), value)) { // don't reassign / send message
-                    IAssignmentState targetState = isLocal() ? AssignmentState.ASSIGNED 
-                        : context.getTargetState(variable);
-                    if (null != targetState) {
-                        try {
-                            variable.setValue(value, targetState);
-                            successful = true;
-                            notifyVariableChange();
-                        } catch (ConfigurationException e) {
-                            context.addErrorMessage(e);
+                if (null == variable) {
+                    context.addErrorMessage("variable does not exist (attribute access failure)?");
+                } else {
+                    if (!Value.equalsPartially(variable.getValue(), value)) { // don't reassign / send message
+                        IAssignmentState targetState = isLocal() ? AssignmentState.ASSIGNED 
+                            : context.getTargetState(variable);
+                        if (null != targetState) {
+                            try {
+                                variable.setValue(value, targetState);
+                                successful = true;
+                                notifyVariableChange();
+                            } catch (ConfigurationException e) {
+                                context.addErrorMessage(e);
+                            }
+                        } else {
+                            context.addMessage(new Message("Assignment state conflict", Status.ERROR, variable));
                         }
                     } else {
-                        context.addMessage(
-                                new Message("Assignment state conflict", Status.ERROR, variable.getDeclaration()));
+                        successful = true;
                     }
-                } else {
-                    successful = true;
                 }
             }
         }
@@ -150,11 +154,16 @@ class VariableAccessor extends AbstractDecisionVariableEvaluationAccessor {
         EvaluationAccessor result = null;
         IDecisionVariable variable = getVariable();
         if (Container.TYPE.isAssignableFrom(variable.getDeclaration().getType())) {
-            ContainerValue value = (ContainerValue) variable.getValue();
-            if (null != value) {
-                Integer index = getIndex(value, accessor);
-                if (null != index) {
-                    result = IndexAccessor.POOL.getInstance().bind(variable, getContext(), index);
+            Value uncastedValue = variable.getValue();
+            if (null != uncastedValue) {
+                if (uncastedValue instanceof ContainerValue) {
+                    ContainerValue value = (ContainerValue) uncastedValue;
+                    Integer index = getIndex(value, accessor);
+                    if (null != index) {
+                        result = IndexAccessor.POOL.getInstance().bind(variable, getContext(), index);
+                    }                    
+                } else {
+                    getContext().addErrorMessage("index based access an null value", variable);
                 }
             }
         }
@@ -206,6 +215,8 @@ class VariableAccessor extends AbstractDecisionVariableEvaluationAccessor {
                     } catch (IllegalArgumentException e) {
                         context.addErrorMessage(e);
                     } catch (IndexOutOfBoundsException e) {
+                        context.addErrorMessage(e);
+                    } catch (ValueDoesNotMatchTypeException e) {
                         context.addErrorMessage(e);
                     }
                 }

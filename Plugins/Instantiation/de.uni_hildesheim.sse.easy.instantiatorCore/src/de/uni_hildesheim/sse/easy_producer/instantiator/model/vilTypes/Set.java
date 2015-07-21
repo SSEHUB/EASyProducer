@@ -15,6 +15,7 @@
  */
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionEvaluator;
 
 /**
@@ -40,7 +41,7 @@ public interface Set<T> extends Collection<T> {
      *   type for <code>type</code>)
      */
     @OperationMeta(returnGenerics = IVilType.class)
-    public Set<T> selectByType(TypeDescriptor<? extends IVilType> type);
+    public Set<T> selectByType(TypeDescriptor<?> type);
     
     /**
      * Exclude the elements in <code>set</code>.
@@ -64,23 +65,25 @@ public interface Set<T> extends Collection<T> {
      * @param element the element to be added
      * @return <code>element</code>
      */
+    @OperationMeta(genericArgument = {0 })
     public T add(T element);
     
     /**
-     * Removes the given element from this set.
+     * Removes the given element from this sequence.
      * 
-     * @param element the elemen to be removed
+     * @param element the element to be removed
+     * @return <code>true</code> of the element was removed, <code>false</code> else
      */
-    public void remove(T element);
+    public boolean remove(T element);
     
     /**
      * Selects elements in this set according to the given expression.
      * 
      * @param evaluator the evaluator (results must evaluate to Boolean results)
      * @return the selected elements
-     * @throws ArtifactException in case that selection fails
+     * @throws VilException in case that selection fails
      */
-    public Set<T> select(ExpressionEvaluator evaluator) throws ArtifactException;
+    public Set<T> select(ExpressionEvaluator evaluator) throws VilException;
 
     /**
      * Turns this set into a sequence.
@@ -95,5 +98,13 @@ public interface Set<T> extends Collection<T> {
      * @return the only element or <b>null</b>
      */
     public T projectSingle();
+
+    /**
+     * Converts back to a set for utilizing this with external classes.
+     * 
+     * @return the internal map
+     */
+    @Invisible
+    public java.util.Set<T> toMappedSet();
 
 }

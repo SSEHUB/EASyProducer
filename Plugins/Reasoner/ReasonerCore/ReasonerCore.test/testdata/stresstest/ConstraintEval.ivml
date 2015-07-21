@@ -1,0 +1,8 @@
+project ConstraintEval {
+    Integer A;
+    Constraint C;
+    
+    C = (A == 2);
+    
+    A = 3;
+}

@@ -22,7 +22,7 @@ import org.eclipse.xtext.ui.editor.contentassist.ICompletionProposalAcceptor;
 import com.google.inject.Inject;
 
 import de.uni_hildesheim.sse.ModelUtility;
-import de.uni_hildesheim.sse.ivml.AttributeTo;
+import de.uni_hildesheim.sse.ivml.AnnotateTo;
 import de.uni_hildesheim.sse.ivml.DerivedType;
 import de.uni_hildesheim.sse.ivml.Project;
 import de.uni_hildesheim.sse.ivml.Type;
@@ -34,6 +34,8 @@ import de.uni_hildesheim.sse.ivml.VariableDeclaration;
 import de.uni_hildesheim.sse.ivml.VariableDeclarationPart;
 import de.uni_hildesheim.sse.ivml.impl.TypedefCompoundImpl;
 import de.uni_hildesheim.sse.ivml.impl.VariableDeclarationImpl;
+import de.uni_hildesheim.sse.ivml.impl.VariableDeclarationPartImpl;
+import de.uni_hildesheim.sse.model.management.VarModel;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Operation;
 import de.uni_hildesheim.sse.model.varModel.datatypes.TypeMapper;
@@ -42,16 +44,12 @@ import de.uni_hildesheim.sse.translation.Utils.SplitResult;
 import de.uni_hildesheim.sse.ui.resources.Images;
 
 
-/**see
- * Customization for contentassist.
+/**
+ * Customized IVML content assist, just for statements. Please refer to the superclass for expression proposals.
  * @author Dernek
  */
-public class IvmlProposalProvider extends AbstractIvmlProposalProvider {
+public class IvmlProposalProvider extends ExpressionProposalProvider {
 	
-	// CK: clarify problems with Bartu before this goes online!
-	
-	private final String[] OPERATIONS_BLACKLIST = 
-        {"!", "*", "+", "/", "-", ">", "<", "<>", "and", "or", "xor", "not", "[]", ">=", "==", "<=", "!=", "="};
     private final String namedefinition = "<name>";
     private final String implExpr = "<implicationExpression>";
     private final String[] IVML_DATATYPES = 
@@ -91,15 +89,15 @@ public class IvmlProposalProvider extends AbstractIvmlProposalProvider {
     @Override
     public void complete_VERSION(EObject model, RuleCall ruleCall,
             ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-    	if (!isVersionStatementDeclared(context.getLastCompleteNode())) {
-    		StyledString toDisplay = new StyledString("Default version-statement");
+    	//if (context.getCurrentNode().getParent() instanceof Project // only allow in top-level context
+    	//        && !isVersionStatementDeclared(context.getLastCompleteNode())) {
+    		StyledString toDisplay = new StyledString("Version");
     		ICompletionProposal proposal = createCompletionProposal(
-    				"version v1.0;", toDisplay, 
-    				imageHelper.getImage(Images.NAME_VERSION), 
-    				700, context.getPrefix(), context);
-    		
+                    "v1.0", toDisplay, 
+                    imageHelper.getImage(Images.NAME_VERSION), 
+                    700, context.getPrefix(), context);
     		acceptor.accept(proposal);
-    	}        
+    	//}
     }
     
     /**
@@ -111,15 +109,14 @@ public class IvmlProposalProvider extends AbstractIvmlProposalProvider {
      * @param acceptor the completion proposal acceptor
      * */
     @Override
-	public void completeVersionStmt_Version(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-    	StyledString toDisplay = new StyledString("Default version number");
+    public void completeProject_Version(EObject model, Assignment assignment, ContentAssistContext context, 
+        ICompletionProposalAcceptor acceptor) {
+    	StyledString toDisplay = new StyledString("Default version statement");
     	ICompletionProposal proposal = createCompletionProposal(
-        		"v1.0;", toDisplay, 
-        		imageHelper.getImage(Images.NAME_VERSION), 
-        		700, context.getPrefix(), context);
-    	
+            "version v1.0;", toDisplay, 
+            imageHelper.getImage(Images.NAME_VERSION), 
+            700, context.getPrefix(), context);
         acceptor.accept(proposal);
-        isVersionStatementDeclared(context.getLastCompleteNode());
     }
     
     /**
@@ -559,7 +556,7 @@ public class IvmlProposalProvider extends AbstractIvmlProposalProvider {
     					imageHelper.getImage(Images.NAME_ATTACHMENT), 490, context.getPrefix(), context));
     	
     	
-    	TypedefCompoundImpl actualcomp = findTypedefCompound(context.getLastCompleteNode());  
+    	TypedefCompound actualcomp = findTypedefCompound(context.getLastCompleteNode());  
 		List<Typedef> tdList = getTypeDefs(context);
     	// search for parentcompound and propose its vars.
 		if (tdList != null && actualcomp != null) {
@@ -653,7 +650,7 @@ public class IvmlProposalProvider extends AbstractIvmlProposalProvider {
      * @param context ContentAssistContext
 	 */
     @Override
-    public void completeAttributeTo_AttributeType(EObject model,
+    public void completeAnnotateTo_AnnotationType(EObject model,
 			Assignment assignment, ContentAssistContext context,
 			ICompletionProposalAcceptor acceptor) {
 		// suggest basictypes
@@ -682,7 +679,7 @@ public class IvmlProposalProvider extends AbstractIvmlProposalProvider {
      * @param context ContentAssistContext
 	 */
     @Override
-    public void completeAttributeTo_AttributeDecl(EObject model,
+    public void completeAnnotateTo_AnnotationDecl(EObject model,
 			Assignment assignment, ContentAssistContext context,
 			ICompletionProposalAcceptor acceptor) {
     	String attrdecl = namedefinition + " = ";
@@ -698,7 +695,7 @@ public class IvmlProposalProvider extends AbstractIvmlProposalProvider {
      * @param context ContentAssistContext
 	 */
     @Override
-    public void completeAttributeTo_Names(EObject model, Assignment assignment,
+    public void completeAnnotateTo_Names(EObject model, Assignment assignment,
 			ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
     	String projectName = getProjectName(context);
     	if (projectName != null) {
@@ -810,14 +807,14 @@ public class IvmlProposalProvider extends AbstractIvmlProposalProvider {
 			Assignment assignment, ContentAssistContext context,
 			ICompletionProposalAcceptor acceptor) {
     	boolean showed = false;
-    	List<AttributeTo> attList = getAttributes(context);
+    	List<AnnotateTo> attList = getAttributes(context);
     	if (attList != null) {
-            for (AttributeTo var : attList) {
-            	if (var.getAttributeDecl().getName() != null) {
+            for (AnnotateTo var : attList) {
+            	if (var.getAnnotationDecl().getName() != null) {
                     StyledString displayName = new StyledString();
-                    String varType = ModelUtility.stringValue(var.getAttributeType());
-                    String varName = var.getAttributeDecl().getName();
-                    displayName.append(var.getAttributeDecl().getName());
+                    String varType = ModelUtility.stringValue(var.getAnnotationType());
+                    String varName = var.getAnnotationDecl().getName();
+                    displayName.append(var.getAnnotationDecl().getName());
                     displayName.append(" : " + varType,
 							StyledString.QUALIFIER_STYLER);
                     acceptor.accept(createCompletionProposal(varName + " = ",
@@ -877,7 +874,9 @@ public class IvmlProposalProvider extends AbstractIvmlProposalProvider {
      * @param acceptor CompletionProposalAcceptor
      * @param context ContentAssistContext
      */
-    public void completeCall_Call(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+    // this is now done in ExpressionProposalProvider based on IDatatype
+    /*public void completeCall_Call(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+    	System.out.println("CALLMETHOD");
     	List<StyledString> propList = proposeOperationsForType(context.getLastCompleteNode());
     	if (!isEmpty(propList)) {
     		for (StyledString display : propList) {
@@ -886,7 +885,7 @@ public class IvmlProposalProvider extends AbstractIvmlProposalProvider {
     			acceptor.accept(proposal);
     		}
     	}
-	}
+	}*/
 
     /**
      * leave empty to remove standard proposals.
@@ -909,9 +908,9 @@ public class IvmlProposalProvider extends AbstractIvmlProposalProvider {
             result = project.getName();
     	}
     	
-//    	for (int i = 0; i < VarModel.INSTANCE.getModelCount(); i++) {
-//    	    System.out.println("Project: " + VarModel.INSTANCE.getModel(i).getName());
-//    	}
+    	for (int i = 0; i < VarModel.INSTANCE.getModelCount(); i++) {
+    	    System.out.println("Project: " + VarModel.INSTANCE.getModel(i).getName());
+    	}
     	
     	return result;
     }
@@ -1096,9 +1095,9 @@ public class IvmlProposalProvider extends AbstractIvmlProposalProvider {
 	 * @return <code>List<AttributeTo></code> with all <code>AttributeTo</code> Statements.
 	 * Maybe <b>null</b>.
 	 */
-    private List<AttributeTo> getAttributes(ContentAssistContext context) {
+    private List<AnnotateTo> getAttributes(ContentAssistContext context) {
     	
-    	List<AttributeTo> result = null;
+    	List<AnnotateTo> result = null;
         Project project = findProject(context.getCurrentNode());
         if (project != null && 
         		project.getContents() != null && 
@@ -1135,8 +1134,21 @@ public class IvmlProposalProvider extends AbstractIvmlProposalProvider {
 				}
 			}
 		}
-		if (!isEmpty(result)) {
-			removeBlacklistedOperations(result);
+		return result;
+	}
+	
+	/**
+	 * Searches for a compoundstatement from inside to outside
+	 * @param node the last complete node
+	 * @return <code>TypedefCompoundImpl</code>, maybe <b>null</b>
+	 */
+	protected TypedefCompoundImpl getCompound(INode node) {
+		TypedefCompoundImpl result = null;
+		if (node.getSemanticElement() instanceof TypedefCompoundImpl) {
+			result = (TypedefCompoundImpl) node.getSemanticElement();
+		} else  {
+			INode parentnode = node.getParent();
+			result = getCompound(parentnode);
 		}
 		return result;
 	}
@@ -1153,35 +1165,37 @@ public class IvmlProposalProvider extends AbstractIvmlProposalProvider {
 		if (!isEmpty(operationList)) {
 			result = new ArrayList<StyledString>();
 			for (Operation operation : operationList) {
-				if (operation.getReturns().getName().equals(type)) {
-					StyledString display = new StyledString();
-					String name = operation.getName();
-					boolean hasParameter = false;
-					display.append(name + "(");
-					//setup parameters
-					if (operation.getParameterCount() > 0) {
-						for (int i = 0; i < operation.getParameterCount(); i++) {
-							IDatatype parameter = operation.getParameter(i);
-							if (parameter != null && parameter.getName() != null
-									&& parameter.getType() != null
-									&& parameter.getType().getName() != null) {
-								String paramName = "parameter" + i;
-								String paramType = parameter.getType().getName();
-								display.append(paramType + " " + paramName + ", ");
+				if (getOperationType("FUNCTION_CALL", operation)) {
+					if (operation.getReturns().getName().equals(type)) {
+						StyledString display = new StyledString();
+						String name = operation.getName();
+						boolean hasParameter = false;
+						display.append(name + "(");
+						//setup parameters
+						if (operation.getParameterCount() > 0) {
+							for (int i = 0; i < operation.getParameterCount(); i++) {
+								IDatatype parameter = operation.getParameter(i);
+								if (parameter != null && parameter.getName() != null
+										&& parameter.getType() != null
+										&& parameter.getType().getName() != null) {
+									String paramName = "parameter" + i;
+									String paramType = parameter.getType().getName();
+									display.append(paramType + " " + paramName + ", ");
+								}
 							}
+							hasParameter = true;
 						}
-						hasParameter = true;
+						if (hasParameter) {
+							String tempdisplay = display.getString();
+							tempdisplay = tempdisplay.substring(0,
+									tempdisplay.length() - 2);
+							display = new StyledString();
+							display.append(tempdisplay);
+						}
+						display.append(")");
+						display.append(" : " + operation.getReturns());
+						result.add(display);	
 					}
-					if (hasParameter) {
-						String tempdisplay = display.getString();
-						tempdisplay = tempdisplay.substring(0,
-								tempdisplay.length() - 2);
-						display = new StyledString();
-						display.append(tempdisplay);
-					}
-					display.append(")");
-					display.append(" : " + operation.getReturns());
-					result.add(display);	
 				}
 			}
 		}
@@ -1194,41 +1208,97 @@ public class IvmlProposalProvider extends AbstractIvmlProposalProvider {
 	 * @param the last complete node.
 	 * @return <code>String</code> of the Type. Maybe <b>null</b>.
 	 */
-	private String getTypeOfCallContext(INode node) {
+	// this is now done in ExpressionProposalProvider based on IDatatype
+	/*private String getTypeOfCallContext(INode node) {
 		String result = null;
 		if (node != null) {
 			String varName = getContextVariableName(node);
+			System.out.println("getTypeOfCallContext_varName: " + varName);
 			if (varName != null && !varName.isEmpty()) {
 				// now while we have the name of the variable, we need the VariableDeclaration-object for that name
 				// so we can find out the type
 				Project project = findProject(node);
-				if (project != null) {
-					for (EObject eObject : project.getContents().getElements()) {
-						if (eObject instanceof VariableDeclaration) {
-							VariableDeclaration var = (VariableDeclaration) eObject;
-							if (var != null) {
-								for (VariableDeclarationPart varDeclPart : var.getDecls()) {
-									if (varName.equals(varDeclPart.getName())) {
-										if (var.getType() != null) {
-											
-											if (var.getType().getType() != null &&
-													var.getType().getType().getType() != null) {
-												// variable has a basic-type
-												result = var.getType().getType().getType();
-//												System.out.println(result);
-											} 
-											if (var.getType().getId() != null) {
-												// variable has an advanced-type
-												result = Utils.getQualifiedNameString(var.getType().getId());
-//												System.out.println(result);
-											}
-											if (var.getType().getDerived() != null) {
-												// variable has a derived type
-//												System.out.println(var.getType().getDerived().getOp());
-											}
-										
-										}
+				result = getVariableType(varName, project);
+				if (result == null) {
+					//maybe Call inside of a compoundstatement
+					TypedefCompoundImpl compound = getCompound(node);
+					result = getVariableType(varName, compound);
+				}
+			}
+		}
+		return result;
+	}*/
+	
+	/**
+	 * Searches for the type of the given variablename inside of the compoundstatement.
+	 * @param variableName
+	 * @param compound
+	 * @return the variabletype, maybe <b>null</b>
+	 */
+	// this is now done in ExpressionProposalProvider based on IDatatype
+	/*private String getVariableType(String variableName, TypedefCompoundImpl compound) {
+		String result = null;
+		if (compound != null) {
+			for (EObject eObject : compound.getElements()) {
+				VariableDeclaration var = (VariableDeclaration) eObject;
+				if (var != null) {
+					for (VariableDeclarationPart varDeclPart : var.getDecls()) {
+						if (variableName.equals(varDeclPart.getName())) {
+							if (var.getType() != null) {
+								
+								if (var.getType().getType() != null &&
+										var.getType().getType().getType() != null) {
+									// variable has a basic-type
+									result = var.getType().getType().getType();
+								} 
+								if (var.getType().getId() != null) {
+									// variable has an advanced-type
+									result = Utils.getQualifiedNameString(var.getType().getId());
+								}
+								if (var.getType().getDerived() != null) {
+									// variable has a derived type
+								}
+							
+							}
+						}
+					}
+				}
+			}
+		}
+		return result;
+	}*/
+	
+	/**
+	 * Searches for the type of the given variablename inside of the project.
+	 * @param variableName
+	 * @param project
+	 * @return the variabletype, maybe <b>null</b>
+	 */
+	// this is now done in ExpressionProposalProvider based on IDatatype
+	/*private String getVariableType(String variableName, Project project) {
+		String result = null;
+		if (project != null) {
+			for (EObject eObject : project.getContents().getElements()) {
+				if (eObject instanceof VariableDeclaration) {
+					VariableDeclaration var = (VariableDeclaration) eObject;
+					if (var != null) {
+						for (VariableDeclarationPart varDeclPart : var.getDecls()) {
+							if (variableName.equals(varDeclPart.getName())) {
+								if (var.getType() != null) {
+									
+									if (var.getType().getType() != null &&
+											var.getType().getType().getType() != null) {
+										// variable has a basic-type
+										result = var.getType().getType().getType();
+									} 
+									if (var.getType().getId() != null) {
+										// variable has an advanced-type
+										result = Utils.getQualifiedNameString(var.getType().getId());
 									}
+									if (var.getType().getDerived() != null) {
+										// variable has a derived type
+									}
+								
 								}
 							}
 						}
@@ -1237,14 +1307,14 @@ public class IvmlProposalProvider extends AbstractIvmlProposalProvider {
 			}
 		}
 		return result;
-	}
+	}*/
 
 	/**
 	 * Returns the name of the variable during a call (dot-notation).
 	 * @param node the last complete node
 	 * @return <code>String</code> of the name. Maybe <b> null </b>.
 	 */
-	private String getContextVariableName(INode node) {
+	protected String getContextVariableName(INode node) {
 		String result = null;
 		if (node != null) {
 			result = node.getText();
@@ -1266,7 +1336,9 @@ public class IvmlProposalProvider extends AbstractIvmlProposalProvider {
 	 * @return <code>List<Operation></code> with all operations for the specific type.
 	 * Maybe <b>null</b>.
 	 */
-	private List<Operation> getAllOperationsForType(String type) {
+	// this is now done in ExpressionProposalProvider based on IDatatype including user-defined types not given in
+	// TypeMapper (other purpose!)
+	/*private List<Operation> getAllOperationsForType(String type) {
 		List<Operation> result = null;
 		if (TypeMapper.getType(type) != null && 
 				TypeMapper.getType(type).getOperationCount() > 0) {
@@ -1278,11 +1350,8 @@ public class IvmlProposalProvider extends AbstractIvmlProposalProvider {
 				}
 			}
 		}
-		if (!isEmpty(result)) {
-			removeBlacklistedOperations(result);
-		}
 		return result;
-	}
+	}*/
 
 	/**
 	 * Returns the <code>VariableDeclaration</code> of a variable while assigning something to it.
@@ -1300,6 +1369,23 @@ public class IvmlProposalProvider extends AbstractIvmlProposalProvider {
 		}
 		return result;
 	}
+	
+	/**
+	 * Returns if the given operationtype matches to the given operation.
+	 * @param operationType
+	 * @param operation
+	 * @return <b>true</b> if it matches, <b>false</b> otherwise.
+	 */
+	private boolean getOperationType(String operationType, Operation operation) {
+		boolean result = false;
+		String opType = operation.getFormattingHint().toString();
+		System.out.println("FH: " + opType);
+		System.out.println(operation.getName());
+		if (opType.equals(operationType)) {
+			result = true;
+		}
+		return result;
+	}
 
 	/**
      * Returns all registered operations for a specific type. This method should only be used for 
@@ -1308,44 +1394,48 @@ public class IvmlProposalProvider extends AbstractIvmlProposalProvider {
      * @return <code>List<StyledString></code> with all operations, ready to display.
      * Maybe <b>null</b>.
      */
-    private List<StyledString> proposeOperationsForType(INode node) {
+    // this is now done in ExpressionProposalProvider based on IDatatype
+    /*private List<StyledString> proposeOperationsForType(INode node) {
     	List<StyledString> result = null;
     	if (node != null) {
     		String type = getTypeOfCallContext(node);
+    		System.out.println("PROPOSEOPERATIONS_TYPE: " + type);
     		if (type != null && !type.isEmpty()) {
     			List<Operation> opList = getAllOperationsForType(type);
     			if (!isEmpty(opList)) {
     				result = new ArrayList<StyledString>();
     				for (Operation operation : opList) {
-    					StyledString display = new StyledString();
-    					String name = operation.getName();
-    					boolean hasParameter = false;
-    					display.append(name + "(");
-    					
-    					//setup parameters
-    					if (operation.getParameterCount() > 0) {
-    						for (int i = 0; i < operation.getParameterCount(); i++) {
-    							IDatatype parameter = operation.getParameter(i);
-    							if (parameter != null && parameter.getName() != null
-    									&& parameter.getType() != null
-    									&& parameter.getType().getName() != null) {
-    								String paramName = "parameter" + i;
-    								String paramType = parameter.getType().getName();
-    								display.append(paramType + " " + paramName + ", ");
+    					if (getOperationType("FUNCTION_CALL", operation)) {
+    						StyledString display = new StyledString();
+    						String name = operation.getName();
+    						boolean hasParameter = false;
+    						display.append(name + "(");
+    						
+    						//setup parameters
+    						if (operation.getParameterCount() > 0) {
+    							for (int i = 0; i < operation.getParameterCount(); i++) {
+    								IDatatype parameter = operation.getParameter(i);
+    								if (parameter != null && parameter.getName() != null
+    										&& parameter.getType() != null
+    										&& parameter.getType().getName() != null) {
+    									String paramName = "parameter" + i;
+    									String paramType = parameter.getType().getName();
+    									display.append(paramType + " " + paramName + ", ");
+    								}
     							}
+    							hasParameter = true;
     						}
-    						hasParameter = true;
+    						if (hasParameter) {
+    							String tempdisplay = display.getString();
+    							tempdisplay = tempdisplay.substring(0,
+    									tempdisplay.length() - 2);
+    							display = new StyledString();
+    							display.append(tempdisplay);
+    						}
+    						display.append(")");
+    						display.append(" : " + operation.getReturns());
+    						result.add(display);
     					}
-    					if (hasParameter) {
-    						String tempdisplay = display.getString();
-    						tempdisplay = tempdisplay.substring(0,
-    								tempdisplay.length() - 2);
-    						display = new StyledString();
-    						display.append(tempdisplay);
-    					}
-    					display.append(")");
-    					display.append(" : " + operation.getReturns());
-    					result.add(display);
     				}
     			}
     		}
@@ -1461,12 +1551,22 @@ public class IvmlProposalProvider extends AbstractIvmlProposalProvider {
 	 * @param acceptor ICompletionProposalAcceptor
 	 */
 	private void proposeDecisionVariablesToAssign(ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+		System.err.println("DEFAULT");
+		VariableDeclarationPartImpl decPart = (VariableDeclarationPartImpl) context.getLastCompleteNode().getSemanticElement();
+		System.out.println("DeclarationPart: " + decPart.getDefault());
 		VariableDeclaration declaration = getVarDeclAtDeclarationPart(context.getLastCompleteNode());
-		if (declaration != null && declaration.getType() != null &&
-				declaration.getType().getId() != null) {
-			String type = Utils.getQualifiedNameString(declaration.getType().getId());
-			if (type != null && !type.isEmpty()) {
+		if (declaration != null && declaration.getType() != null) {
+			String type = null;
+			if (declaration.getType().getId() != null) {
+				type = Utils.getQualifiedNameString(declaration.getType().getId());
+			} else {
+				if (declaration.getType().getType() != null) {
+					type = declaration.getType().getType().getType();
+				}
+			}
+			if (type != null && !type.equals("")) {
 				//proposing operations
+			        // TODO rely on ExpressionProposalProvider here!!
 				List<StyledString> proposalList = getOperationsForReturnType(type);
 				if (!isEmpty(proposalList)) {
 					for (StyledString display : proposalList) {
@@ -1679,73 +1779,6 @@ public class IvmlProposalProvider extends AbstractIvmlProposalProvider {
 			
 	}
 
-	/**
-	 * Removes unneeded operations from the operationList. The unneeded ones are registered
-	 * in the <code>OPERATIONS_BLACKLIST</code> array.
-	 * @param operationList
-	 */
-	private void removeBlacklistedOperations(List<Operation> operationList) {
-	    if (operationList != null) {
-	        for (int i = 0; i < OPERATIONS_BLACKLIST.length; i++) {
-	            for (int j = 0; j < operationList.size(); j++) {
-	                if (operationList.get(j).getName().equals(OPERATIONS_BLACKLIST[i])) {
-	                    operationList.remove(j);
-	                    // if another operation with the same name is in the list.
-	                    j--;
-	                }
-	            }
-	        }
-	    }
-	}
-
-	/**
-     * returns the <code>TypedefCompoundImpl</code>-object inside the declaration of this compound.
-     * @param node the last complete node
-     * @return <code>TypedefCompoundImpl</code>, maybe <b>null</b>.
-     */
-    private TypedefCompoundImpl findTypedefCompound(INode node) {
-    	TypedefCompoundImpl result = null;
-    	if (node.getSemanticElement() instanceof TypedefCompoundImpl) {
-			result = (TypedefCompoundImpl) node.getSemanticElement();
-		} else {
-			INode parentNode = node.getParent();
-			result = findTypedefCompound(parentNode);
-		}
-    	return result;
-    }
-    
-    /**
-	 * Checks if a version-statment already declared.
-	 * @param node the last complete node
-	 * @return <b>true</b> if there is already a version-statement. <b>false</b> otherwise.
-	 */
-	private boolean isVersionStatementDeclared(INode node) {
-		boolean result = true;
-		if (node != null) {
-			if (node.getSemanticElement() instanceof Project) {
-				Project project = (Project) node.getSemanticElement();
-				if (project.getVersion() == null) {    				
-					result = false;
-				}
-			} else {
-				INode parentNode = node.getParent();
-				result = isVersionStatementDeclared(parentNode);
-			}
-		}
-		return result;
-	}
-
-	/**
-	 * Check whether a given List is <b>null</b> or empty.
-	 * 
-	 * @param list
-	 *            The list to be checked.
-	 * @return <b>True</b> if the list is <b>null</b> or has no elements.
-	 *         <b>False</b> otherwise.
-	 */
-	private static boolean isEmpty(List<?> list) {
-		return null == list || list.isEmpty();
-	}
 
 	// Maybe useful for some case.
 //	/**

@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 
 /**
- * Contains dependancy information for a bundle.
+ * Contains dependency information for a bundle.
  * @author Patrik Pastuschek
  */
 public class EasyDependency {
@@ -23,13 +23,13 @@ public class EasyDependency {
     
     
     /**
-     * Standard Constructor. Creates an empty dependancy.
+     * Standard Constructor. Creates an empty dependency.
      */
     public EasyDependency() { }
     
     /**
-     * Constructor. Creates a dependancy.
-     * @param info String with dependancy infos that are to be parsed.
+     * Constructor. Creates a dependency.
+     * @param info String with dependency infos that are to be parsed.
      */
     public EasyDependency(String info) {
         
@@ -258,6 +258,14 @@ public class EasyDependency {
                 this.bundleVersionMax = other.getBundleVersionMax();
             }
         }
+    }
+    
+    /**
+     * Sets the name of the dependency.
+     * @param name The name as String.
+     */
+    public void setName(String name) {
+        this.bundleSymbolicName = name;
     }
     
 

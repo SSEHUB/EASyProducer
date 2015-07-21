@@ -7,8 +7,7 @@ import java.util.List;
 import java.util.Properties;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ListSet;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
@@ -24,6 +23,8 @@ import de.uni_hildesheim.sse.utils.messages.Message;
  * @author Holger Eichelberger
  */
 public class ArtifactFactory {
+    
+    private static final String DEFAULT_MODEL_BASE = "";
     
     /**
      * Stores a tree of artifact creator nodes. The top level tree node is the most generic (no 
@@ -47,7 +48,7 @@ public class ArtifactFactory {
      */
     private static void initialize() {
         if (MODELS.isEmpty()) {
-            MODELS.add(new ArtifactModel(new File("")));
+            MODELS.add(new ArtifactModel(new File(DEFAULT_MODEL_BASE)));
         }
     }
     
@@ -85,15 +86,27 @@ public class ArtifactFactory {
     }
     
     /**
+     * Clears the default model containing unmatched artifacts.
+     */
+    public static synchronized void clearDefaultModel() {
+        if (!MODELS.isEmpty()) {
+            ArtifactModel m = MODELS.get(0);
+            if (DEFAULT_MODEL_BASE.equals(m.getBase().getPath())) {
+                m.clear();
+            }
+        }
+    }
+    
+    /**
      * Creates an artifact instance.
      *  
      * @param real the real (underlying) artifact instance
      * @return the resulting handling artifact
-     * @throws ArtifactException in case that the creation fails, e.g., <code>real</code> is <b>null</b>
+     * @throws VilException in case that the creation fails, e.g., <code>real</code> is <b>null</b>
      * 
      * @see #createArtifact(Class, Object, ArtifactModel)
      */
-    public static IArtifact createArtifact(Object real) throws ArtifactException {
+    public static IArtifact createArtifact(Object real) throws VilException {
         return createArtifact(IArtifact.class, real, null);
     }
     
@@ -105,12 +118,12 @@ public class ArtifactFactory {
      * @param real the real (underlying) artifact instance (must be instance of Comparable)
      * @param model the model to add the artifact to, <b>null</b> if the factory shall determine the artifact model
      * @return the resulting handling artifact
-     * @throws ArtifactException in case that the creation fails, e.g., <code>real</code> is <b>null</b>
+     * @throws VilException in case that the creation fails, e.g., <code>real</code> is <b>null</b>
      */
     public static <T extends IArtifact> T createArtifact(Class<T> kind, Object real, ArtifactModel model) 
-        throws ArtifactException {
+        throws VilException {
         if (null == real) {
-            throw new ArtifactException("given object must not be null", ArtifactException.ID_IS_NULL);
+            throw new VilException("given object must not be null", VilException.ID_IS_NULL);
         }
         
         if (null == model) {
@@ -120,8 +133,8 @@ public class ArtifactFactory {
         if (null == artifact) {
             IArtifactCreator creator = findCreator(kind, real);
             if (null == creator) {
-                throw new ArtifactException("no artifact creator handles " + real.getClass().getName() + " " + real, 
-                    ArtifactException.ID_NO_ARTIFACT_CREATOR);
+                throw new VilException("no artifact creator handles " + real.getClass().getName() + " " + real, 
+                    VilException.ID_NO_ARTIFACT_CREATOR);
             }
             artifact = creator.createArtifactInstance(real, model);
             model.register(real, artifact);
@@ -131,9 +144,9 @@ public class ArtifactFactory {
         try {
             return kind.cast(artifact);
         } catch (ClassCastException e) {
-            throw new ArtifactException("obtained artifact is of type " 
+            throw new VilException("obtained artifact is of type " 
                 + artifact.getClass().getName() + " but " + kind.getName() + " is requested", 
-                ArtifactException.ID_INVALID_TYPE);
+                VilException.ID_INVALID_TYPE);
         }
     }
 
@@ -142,11 +155,11 @@ public class ArtifactFactory {
      * 
      * @param real the real (underlying) artifact instance
      * @return the resulting handling artifact
-     * @throws ArtifactException in case that the creation fails, e.g., <code>real</code> is <b>null</b>
+     * @throws VilException in case that the creation fails, e.g., <code>real</code> is <b>null</b>
      * 
      * @see #createArtifact(Class, Object, ArtifactModel)
      */
-    public static IFileSystemArtifact createFileSystemArtifact(File real) throws ArtifactException {
+    public static IFileSystemArtifact createFileSystemArtifact(File real) throws VilException {
         return createArtifact(IFileSystemArtifact.class, real, null);
     }
 
@@ -156,11 +169,11 @@ public class ArtifactFactory {
      * @param real the real (underlying) artifact instance
      * @param model the model to add the artifact to, <b>null</b> if the factory shall determine the artifact model
      * @return the resulting handling artifact
-     * @throws ArtifactException in case that the creation fails, e.g., <code>real</code> is <b>null</b>
+     * @throws VilException in case that the creation fails, e.g., <code>real</code> is <b>null</b>
      * 
      * @see #createArtifact(Class, Object, ArtifactModel)
      */
-    static IFileSystemArtifact createFileSystemArtifact(File real, ArtifactModel model) throws ArtifactException {
+    static IFileSystemArtifact createFileSystemArtifact(File real, ArtifactModel model) throws VilException {
         return createArtifact(IFileSystemArtifact.class, real, model);
     }
     
@@ -357,7 +370,7 @@ public class ArtifactFactory {
      * 
      * @return the found artifacts
      */
-    public static synchronized Set<FileArtifact> selectByType(Path path, Class<? extends IVilType> type) {
+    public static synchronized Set<FileArtifact> selectByType(Path path, Class<?> type) {
         initialize();
         List<FileArtifact> result = new LinkedList<FileArtifact>();
         for (int m = MODELS.size() - 1; m >= 0; m--) {

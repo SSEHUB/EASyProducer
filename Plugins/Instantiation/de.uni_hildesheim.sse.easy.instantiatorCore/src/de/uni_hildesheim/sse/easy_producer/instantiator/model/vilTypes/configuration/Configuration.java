@@ -8,13 +8,14 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactFactory;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FileArtifact;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.Path;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArraySequence;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IStringValueProvider;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationMeta;
@@ -53,6 +54,7 @@ public class Configuration extends IvmlElement implements IStringValueProvider {
     private Map<String, IvmlElement> nameMap = new HashMap<String, IvmlElement>();
     private IVariableFilter filter;
     private boolean isValid = true;
+    private ChangeHistory changed;
 
     /**
      * Creates a new configuration instance from an EASy configuration based
@@ -75,6 +77,7 @@ public class Configuration extends IvmlElement implements IStringValueProvider {
         this.configuration = configuration;
         this.project = configuration.getProject();
         this.filter = filter;
+        this.changed = new ChangeHistory(this);
     }
 
     /**
@@ -90,7 +93,28 @@ public class Configuration extends IvmlElement implements IStringValueProvider {
         this.variables = variables;
         this.project = configuration.getProject();
         this.filter = filter;
+        this.changed = new ChangeHistory(this);
         index(variables);
+    }
+
+    /**
+     * Creates a projected configuration only containing the <code>changed</code> variables.
+     * 
+     * @param configuration the base configuration
+     * @param changed the changed variables to be present in the projection
+     */
+    private Configuration(Configuration configuration, Set<AbstractIvmlVariable> changed) {
+        this.isValid = configuration.isValid;
+        this.configuration = configuration.configuration;
+        this.project = configuration.project;
+        this.changed = configuration.changed;
+        ConfigurationContextResolver resolver = new ConfigurationContextResolver(this, changed);
+        resolver.resolve();
+        this.filter = resolver.filter();
+        this.variables = resolver.variables();
+        index(this.variables);
+        this.attributes = resolver.attributes();
+        index(this.attributes);
     }
 
     /**
@@ -117,6 +141,7 @@ public class Configuration extends IvmlElement implements IStringValueProvider {
         this.isValid = configuration.isValid;
         this.filter = filter;
         this.configuration = configuration.getConfiguration();
+        this.changed = configuration.changed;
         if (null == project) {
             this.project = this.configuration.getProject();
         } else {
@@ -174,7 +199,7 @@ public class Configuration extends IvmlElement implements IStringValueProvider {
         // (re) initializes self and leaves parent untouched where instances may be reused
         if (null == variables) {
             Project project = configuration.getProject();
-            VariableCollector collector = new VariableCollector(configuration, filter);
+            VariableCollector collector = new VariableCollector(this, filter);
             project.accept(collector);
             variables = collector.getCollectedVariables();
             index(variables);
@@ -191,7 +216,7 @@ public class Configuration extends IvmlElement implements IStringValueProvider {
             for (int a = 0; a < project.getAttributesCount(); a++) {
                 IDecisionVariable var = configuration.getDecision(project.getAttribute(a));
                 if (null != var && filter.isEnabled(var)) {
-                    Attribute attr = new Attribute(var, filter);
+                    Attribute attr = new Attribute(this, var, filter);
                     tmp.add(attr);
                     nameMap.put(attr.getQualifiedName(), attr);
                 }
@@ -219,9 +244,9 @@ public class Configuration extends IvmlElement implements IStringValueProvider {
      * @param namePattern a regular name pattern (or just the full name) all variables
      *   in the resulting configuration must match
      * @return the projected configuration
-     * @throws ArtifactException in case of an illformed name pattern
+     * @throws VilException in case of an illformed name pattern
      */
-    public Configuration selectByName(String namePattern) throws ArtifactException {
+    public Configuration selectByName(String namePattern) throws VilException {
         initializeNested();
         NameRegExFilter regexFilter = new NameRegExFilter(namePattern, DataType.NAME);
         Configuration newConfig = new Configuration(this, regexFilter, filter);
@@ -235,9 +260,9 @@ public class Configuration extends IvmlElement implements IStringValueProvider {
      * @param typePattern a regular pattern (or just the full name) all variables
      *   in the resulting configuration must match
      * @return the projected configuration
-     * @throws ArtifactException in case of an illformed name pattern
+     * @throws VilException in case of an illformed name pattern
      */
-    public Configuration selectByType(String typePattern) throws ArtifactException {
+    public Configuration selectByType(String typePattern) throws VilException {
         initializeNested();
         return new Configuration(this, new NameRegExFilter(typePattern, DataType.TYPE), filter);
     }
@@ -249,9 +274,9 @@ public class Configuration extends IvmlElement implements IStringValueProvider {
      * @param namePattern a regular name pattern (or just the full name) all applied
      *   attributes of all variables in the resulting configuration must match
      * @return the projected configuration
-     * @throws ArtifactException in case of an illformed name pattern
+     * @throws VilException in case of an illformed name pattern
      */
-    public Configuration selectByAttribute(String namePattern) throws ArtifactException {
+    public Configuration selectByAttribute(String namePattern) throws VilException {
         initializeAttributes();
         return new Configuration(this, new NameRegExFilter(namePattern, DataType.ATTRIBUTE), filter);
     }
@@ -290,9 +315,9 @@ public class Configuration extends IvmlElement implements IStringValueProvider {
      * @param name the name of the attribute (may be <b>null</b>)
      * @param value the value as an IVML identifier (may be <b>null</b>)
      * @return the projected configuration
-     * @throws ArtifactException in case of an illformed name pattern
+     * @throws VilException in case of an illformed name pattern
      */
-    public Configuration selectByAttribute(String name, Object value) throws ArtifactException {
+    public Configuration selectByAttribute(String name, Object value) throws VilException {
         initializeAttributes();
         Configuration result;
         if (null == name) {
@@ -422,6 +447,9 @@ public class Configuration extends IvmlElement implements IStringValueProvider {
         if (null != match && key.length() < name.length()) {
             match = match.getElement(name);
         }
+        if (null == match) { // FQN match
+            match = nameMap.get(name);
+        }
         if (null == match) {
             Project project = configuration.getProject();
             try {
@@ -498,9 +526,9 @@ public class Configuration extends IvmlElement implements IStringValueProvider {
      * 
      * @param path the target path
      * @return the created/modified file artifact
-     * @throws ArtifactException in case that storing the configuration fails
+     * @throws VilException in case that storing the configuration fails
      */
-    public FileArtifact store(Path path) throws ArtifactException {
+    public FileArtifact store(Path path) throws VilException {
         return store(path, true);
     }
 
@@ -511,9 +539,9 @@ public class Configuration extends IvmlElement implements IStringValueProvider {
      * @param userValuesOnly store only user defined values (<code>true</code>) or the full 
      *     configuration (<code>false</code>)
      * @return the created/modified file artifact
-     * @throws ArtifactException in case that storing the configuration fails
+     * @throws VilException in case that storing the configuration fails
      */
-    public FileArtifact store(Path path, boolean userValuesOnly) throws ArtifactException {
+    public FileArtifact store(Path path, boolean userValuesOnly) throws VilException {
         File target = path.getAbsolutePath();
         FileWriter out = null;
         try {
@@ -524,7 +552,7 @@ public class Configuration extends IvmlElement implements IStringValueProvider {
             IVMLWriter.releaseInstance(writer);
             out.close();
         } catch (ConfigurationException e) {
-            throw new ArtifactException(e, ArtifactException.ID_RUNTIME_EXECUTION);
+            throw new VilException(e, VilException.ID_RUNTIME_EXECUTION);
         } catch (IOException e) {
             if (null != out) {
                 try {
@@ -532,7 +560,7 @@ public class Configuration extends IvmlElement implements IStringValueProvider {
                 } catch (IOException e1) {
                 }
             }
-            throw new ArtifactException(e, ArtifactException.ID_IO);
+            throw new VilException(e, VilException.ID_IO);
         }
         return ArtifactFactory.createArtifact(FileArtifact.class, target, null);
     }
@@ -621,6 +649,58 @@ public class Configuration extends IvmlElement implements IStringValueProvider {
      */
     public boolean isValid() {
         return isValid;
+    }
+
+    /**
+     * Projects to the changed variables only.
+     * 
+     * @return a projects of the changed variables only, may be empty
+     * @see #selectChangedWithContext()
+     */
+    public Configuration selectChanged() {
+        return new Configuration(configuration, changed.changedFilter());
+    }
+    
+    /**
+     * Projects to the changed variables with their context.
+     * 
+     * @return a projects of the changed variables only, may be empty
+     * @see #selectChanged()
+     */
+    public Configuration selectChangedWithContext() {
+        return new Configuration(this, changed.changed());
+    }
+    
+    /**
+     * Is called to notify the configuration about a changed variable value.
+     * 
+     * @param variable the variable the value has changed for
+     * @param oldValue the value of the variable before the change
+     */
+    @Invisible
+    public void notifyValueChanged(AbstractIvmlVariable variable, Value oldValue) {
+        changed.notifyChanged(variable, oldValue); 
+        // don't rely on the qualified name here due to changing pseudo names for collections
+    }
+    
+    /**
+     * Returns the mapped IVML element for <code>name</code>.
+     * 
+     * @param name the name
+     * @return the mapped element (may be <b>null</b>)
+     */
+    @Invisible
+    IvmlElement get(String name) {
+        return nameMap.get(name);
+    }
+    
+    /**
+     * Returns the change history.
+     * 
+     * @return the change history
+     */
+    public ChangeHistory getChangeHistory() {
+        return changed;
     }
 
 }

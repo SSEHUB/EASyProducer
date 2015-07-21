@@ -13,16 +13,18 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Abstra
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallArgument;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ResolvableOperationCallExpression;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionVersionRestriction;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionVersionRestrictionValidator;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.ExpressionStatement;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Resolver;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.VariableDeclaration;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.utils.modelManagement.RestrictionEvaluationException;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Call;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
+import de.uni_hildesheim.sse.vil.templatelang.TemplateLangModelUtility;
 
 /**
  * A specific expression translator for the template language.
@@ -31,7 +33,8 @@ import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
  *
  */
 public class ExpressionTranslator 
-    extends de.uni_hildesheim.sse.vil.expressions.translation.ExpressionTranslator<VariableDeclaration, Resolver> {
+    extends de.uni_hildesheim.sse.vil.expressions.translation.ExpressionTranslator<VariableDeclaration, Resolver, 
+    ExpressionStatement> {
     
     /**
      * Processes a function call.
@@ -60,17 +63,17 @@ public class ExpressionTranslator
                 ExpressionDslPackage.Literals.CALL__NAME, TranslatorException.INTERNAL);
         } else {
             result = null;
-            ExpressionException semanticException = null;
+            VilException semanticException = null;
             try {
                 result = resolver.createCallExpression(CallType.SUPER == type, name, arg);
-            } catch (ExpressionException e) {
+            } catch (VilException e) {
                 semanticException = e;
             }
             if (null == result || continueResolution(semanticException)) {
                 try {
                     result = new CallExpression(null, name, arg);
                     semanticException = checkSemantics(result);
-                } catch (ExpressionException e) {
+                } catch (VilException e) {
                     // wrong expression
                 }
             }
@@ -79,8 +82,19 @@ public class ExpressionTranslator
                 try {
                     result = resolver.createExtensionCallExpression(name, arg);
                     semanticException = checkSemantics(result);
-                } catch (ExpressionException e) {
+                } catch (VilException e) {
                     // wrong expression
+                }
+            }
+            if (null == result || continueResolution(semanticException)) {
+                VariableDeclaration opVar = resolver.resolve(name, false);
+                if (null != opVar) {
+                    try {
+                        result = new ResolvableOperationCallExpression(opVar, arg);
+                        semanticException = checkSemantics(result);
+                    } catch (VilException e) {
+                        // wrong expression
+                    }
                 }
             }
             if (null != semanticException) {
@@ -100,7 +114,7 @@ public class ExpressionTranslator
     }
     
     @Override
-    protected VariableDeclaration createVariableDeclaration(String name, TypeDescriptor<? extends IVilType> type,
+    protected VariableDeclaration createVariableDeclaration(String name, TypeDescriptor<?> type,
                     boolean isConstant, Expression expression) {
         return new VariableDeclaration(name, type, isConstant, expression);
     }
@@ -116,9 +130,19 @@ public class ExpressionTranslator
             expr.accept(validator);
             return new de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.
                 ExpressionVersionRestriction(expr, decl);
-        } catch (ExpressionException e) {
+        } catch (VilException e) {
             throw new RestrictionEvaluationException(e.getMessage(), e.getId());
         }
+    }
+
+    @Override
+    protected Expression parseExpression(String expression, Resolver resolver, StringBuilder warnings) throws VilException {
+        return TemplateLangModelUtility.INSTANCE.createExpression(expression, resolver, warnings);
+    }
+
+    @Override
+    protected ExpressionStatement createExpressionStatement(Expression expression) {
+        return new ExpressionStatement(expression);
     }
 
 }

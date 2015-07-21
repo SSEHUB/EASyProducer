@@ -11,18 +11,23 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactFactory;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.defaultInstantiators.RandomDouble;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
 
 /**
  * Tests for the basic language.
  * 
  * @author Holger Eichelberger
  */
-public class ExecutionTests extends AbstractExecutionTest {
+public class ExecutionTests extends AbstractExecutionTest<Script> {
     
     private static ExecutionTests tests;
+
+    @Override
+    protected ITestConfigurer<Script> createTestConfigurer() {
+        return new BuildLangTestConfigurer("vil.buildlang.testdata.home");
+    }
     
     /**
      * Starts up the test.
@@ -70,7 +75,7 @@ public class ExecutionTests extends AbstractExecutionTest {
      */
     @Test
     public void testLoadPropertiesFail() throws IOException {
-        assertEqual("loadPropertiesFail", VilLanguageException.ID_IS_CONSTANT);
+        assertEqual("loadPropertiesFail", VilException.ID_IS_CONSTANT);
     }
 
     /**
@@ -103,6 +108,56 @@ public class ExecutionTests extends AbstractExecutionTest {
         assertEqual("alternative");
     }
 
+    /**
+     * Tests the application of a "function pointer" as parameter.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testApply() throws IOException {
+        assertEqual("apply");
+    }
+
+    /**
+     * Tests the application of a "function pointer" as variable.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testApply2() throws IOException {
+        assertEqual("apply2");
+    }
+    
+    /**
+     * Tests typedefs and "function pointer".
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testApply3() throws IOException {
+        assertEqual("apply3");
+    }
+
+    /**
+     * Tests typedefs and "function pointer" with "Any".
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testApply4() throws IOException {
+        assertEqual("apply4");
+    }
+    
+    /**
+     * Tests a rule as function.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testFunction() throws IOException {
+        assertEqual("function");
+    }
+    
     /**
      * Tests alternative expressions without blocks.
      * 
@@ -212,7 +267,7 @@ public class ExecutionTests extends AbstractExecutionTest {
      */
     @Test
     public void testScriptParameter2() throws IOException {
-        assertEqual("scriptParameter2", VilLanguageException.ID_RUNTIME_PARAMETER);
+        assertEqual("scriptParameter2", VilException.ID_RUNTIME_PARAMETER);
         assertEqualDefaultParam("scriptParameter2");
     }
 
@@ -233,7 +288,7 @@ public class ExecutionTests extends AbstractExecutionTest {
      */
     @Test
     public void testSimpleRules2() throws IOException {
-        assertEqual("simpleRules2", VilLanguageException.ID_RUNTIME_PARAMETER);
+        assertEqual("simpleRules2", VilException.ID_RUNTIME_PARAMETER);
         assertEqualDefaultParam("simpleRules2");
     }
 
@@ -255,6 +310,36 @@ public class ExecutionTests extends AbstractExecutionTest {
     @Test
     public void testSimpleRules4() throws IOException {
         assertEqual("simpleRules4");
+    }
+    
+    /**
+     * Tests simple rule execution (boolean pre/postcondition).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testSimpleRules5() throws IOException {
+        assertEqual("simpleRules5");
+    }
+
+    /**
+     * Tests simple rule execution (boolean pre/postcondition, one failing precondition).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testSimpleRules6() throws IOException {
+        assertEqual("simpleRules6");
+    }
+
+    /**
+     * Tests simple rule execution (boolean pre/postcondition, one failing precondition).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testSimpleRules7() throws IOException {
+        assertEqual("simpleRules7");
     }
     
     /**
@@ -359,9 +444,9 @@ public class ExecutionTests extends AbstractExecutionTest {
         // the same as before, just explicitly using the default start rule
         assertSelfInstantiate("protectedRules", "main"); 
         // shall not work, protected
-        assertSelfInstantiate("protectedRules", "compile", VilLanguageException.ID_RUNTIME_STARTRULE);
+        assertSelfInstantiate("protectedRules", "compile", VilException.ID_RUNTIME_STARTRULE);
         // shall not work, does not exist
-        assertSelfInstantiate("protectedRules", "bla", VilLanguageException.ID_RUNTIME_STARTRULE); 
+        assertSelfInstantiate("protectedRules", "bla", VilException.ID_RUNTIME_STARTRULE); 
     }
 
     /**
@@ -539,6 +624,29 @@ public class ExecutionTests extends AbstractExecutionTest {
     }
     
     /**
+     * Tests creation of a new text file (inspired by S. Bender).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testNewText() throws IOException {
+        assertSelfInstantiate("newText", "main", new SelfInstantiationAsserter() {
+
+            @Override
+            public void assertIn(File base) {
+                File file = new File(base, "newText.txt");
+                File expected = new File(base, "newText.txt.expected");
+                assertFileEqualitySafe(file, expected);
+            }
+
+            @Override
+            public void deleteBetween(File base) {
+            }
+            
+        });
+    }
+    
+    /**
      * Tests the selection of the right VTL script from a VIL script (contributed by Sebastian Bender).
      * The correct scripts are nested in the <code>PL_3</code> folder, but the same are also present 
      * in the <code>PL_2</code> folder
@@ -581,7 +689,7 @@ public class ExecutionTests extends AbstractExecutionTest {
                 File file = new File(base, "xml2File.xml");
                 try {
                     ArtifactFactory.createArtifact(file).delete();
-                } catch (ArtifactException e) {
+                } catch (VilException e) {
                     e.printStackTrace();
                 }
             }
@@ -613,7 +721,7 @@ public class ExecutionTests extends AbstractExecutionTest {
                 File fileBefore = new File(base, "rename.txt");
                 try {
                     ArtifactFactory.createArtifact(fileAfter).rename(fileBefore.getPath());
-                } catch (ArtifactException e) {
+                } catch (VilException e) {
                     e.printStackTrace();
                 }
             }
@@ -646,7 +754,7 @@ public class ExecutionTests extends AbstractExecutionTest {
                 File fileBefore = new File(base, "rename1.txt");
                 try {
                     ArtifactFactory.createArtifact(fileAfter).rename(fileBefore.getPath());
-                } catch (ArtifactException e) {
+                } catch (VilException e) {
                     e.printStackTrace();
                 }
             }
@@ -678,7 +786,7 @@ public class ExecutionTests extends AbstractExecutionTest {
                 File file = new File(base, "renStoreArtifact1.txt");
                 try {
                     ArtifactFactory.createArtifact(file).delete();
-                } catch (ArtifactException e) {
+                } catch (VilException e) {
                     e.printStackTrace();
                 }
             }
@@ -710,7 +818,7 @@ public class ExecutionTests extends AbstractExecutionTest {
                 File file = new File(base, "storeArtifact2.txt");
                 try {
                     ArtifactFactory.createArtifact(file).delete();
-                } catch (ArtifactException e) {
+                } catch (VilException e) {
                     e.printStackTrace();
                 }
             }
@@ -719,4 +827,44 @@ public class ExecutionTests extends AbstractExecutionTest {
         
     }
 
+    /**
+     * Tests some VTL cases (passing IVML instances).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testVtl2() throws IOException {
+        assertSelfInstantiate("vtl2", "main", "adviceTestVIL1", new SelfInstantiationAsserterAdapter() {
+
+            @Override
+            public void assertIn(File base) {
+                File file = new File(base, "test3.txt");
+                File expected = new File(base, "templates/test3.vtl.expected");
+                assertFileEqualitySafe(file, expected);
+            }
+
+        });
+    }
+
+    /**
+     * Tests whether files are copied recursively if a file pattern was used. 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testRecursiveCopyOnInclusionPattern() throws IOException {
+        assertSelfInstantiate("RecursiveCopyTestProject/RecursiceCopyIncludePattern", "main", null,
+            new SelfInstantiationAsserterAdapter() {
+
+                @Override
+                public void assertIn(File base) {
+                    File fileToCopy = new File(base, "trgForRecursiveCopy/base/FileToCopy.txt");
+                    Assert.assertTrue("Error: File was not recursively copied to \"" + fileToCopy.getAbsolutePath()
+                        + "\"", fileToCopy.exists());
+                    File fileToBeIgnored = new File(base, "trgForRecursiveCopy/ignored/ToBeIgnored.txt");
+                    Assert.assertFalse("Error: File was copied to \"" + fileToBeIgnored.getAbsolutePath()
+                        + "\", but this must not happen.", fileToBeIgnored.exists());
+                }
+
+            });
+    }
 }

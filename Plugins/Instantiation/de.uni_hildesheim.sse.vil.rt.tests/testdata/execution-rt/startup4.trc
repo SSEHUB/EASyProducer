@@ -1,0 +1,80 @@
+-> bindValues(Configuration, mapOf(String, Real)) with (<config>, null)
+    qm <- <config>
+    map {
+        map: p <- QM1::pipelines {0}
+        -> bindValues(Pipeline) with (QM1::pipelines {0})
+            pipeline.capacity <- 0
+            map {
+                map: s <- QM1::Pipeline::
+                -> bindValues(Source, Pipeline) with (QM1::Pipeline::, QM1::pipelines {0})
+                    map {
+                        map: n <- QM1::Source::
+                        -> bindValues(FamilyElement, Pipeline) with (QM1::Source::, QM1::pipelines {0})
+                            elt.capacity <- 0
+                            map {
+                            }
+                    }
+            }
+    }
+-> status(LifecycleEvent) with (<LifecycleEvent>) = START
+-> ==(String, String) with (START, START) = true
+-> status(LifecycleEvent) with (<LifecycleEvent>) = START
+-> ==(String, String) with (START, START) = true
+-> status(LifecycleEvent) with (<LifecycleEvent>) = START
+-> ==(String, String) with (START, START) = true
+-> status(LifecycleEvent) with (<LifecycleEvent>) = START
+-> ==(String, String) with (START, START) = true
+-> startup(Project, Configuration, Project, LifecycleEvent) with (<project>, <config>, <project>, <LifecycleEvent>)
+    -> status(LifecycleEvent) with (<LifecycleEvent>) = START
+    -> ==(String, String) with (START, START) = true
+    -> status(LifecycleEvent) with (<LifecycleEvent>) = START
+    -> ==(String, String) with (START, START) = true
+    -> getPipeline(LifecycleEvent) with (<LifecycleEvent>) = pip
+    -> startupTakeFirst(Configuration, String) with (<config>, pip)
+        qm <- <config>
+        map {
+            map: pip <- QM1::pipelines {0}
+            -> ==(IvmlElement, Any) with (QM1::Pipeline::name, pip) = true
+            visit if-branch
+            map {
+                map: src <- QM1::Pipeline::
+                -> assignFirst(Source) with (QM1::Pipeline::)
+                    map {
+                        map: n <- QM1::Source::
+                        -> assignFirst(FamilyElement) with (QM1::Source::)
+                            fam <- QM1::FamilyElement::family
+                            -> isConfigured(DecisionVariable) with (QM1::FamilyElement::actual) = false
+                            -> !(Boolean) with (false) = true
+                            visit if-branch
+                            -> toSequence(Set) with ({QM1::Family::, QM1::Family::}) = {QM1::Family::, QM1::Family::}
+                            -> first(Sequence) with ({QM1::Family::, QM1::Family::}) = QM1::Family::
+                            elt.actual <- QM1::Family::
+                            map {
+                            }
+                    }
+            }
+        }
+    -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)
+        -> selectChangedWithContext(Configuration) with (<config>) = <config>
+        qm <- <config>
+        map {
+            map: p <- QM1::pipelines {0}
+            map {
+                map: s <- QM1::Pipeline::
+                -> enact(Pipeline, Source) with (QM1::pipelines {0}, QM1::Pipeline::)
+                    map {
+                        map: n <- QM1::Source::
+                        -> enact(Pipeline, FamilyElement) with (QM1::pipelines {0}, QM1::Source::)
+                            family <- QM1::FamilyElement::family
+                            -> create() with () = <CommandSequence>
+                            cmd <- <CommandSequence>
+                            -> !=(IvmlElement, Any) with (QM1::FamilyElement::actual, null) = true
+                            visit if-branch
+                            -> create(String, String, String) with (pip, famelt1, alg1) = <AlgorithmChangeCommand>
+                            -> add(CommandSequence, Command) with (<CommandSequence>, <AlgorithmChangeCommand>)
+                            map {
+                            }
+                            -> exec(CommandSequence) with (<CommandSequence>)
+                    }
+            }
+        }

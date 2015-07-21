@@ -22,14 +22,20 @@
         <pathelement path="${libs.instantiator.core}"/>
         <pathelement path="${libs.instantiator.velocity}"/>
         <pathelement path="${libs.instantiatorCore.rt.core}"/>
-        
         <!-- IVML Core -->
         <pathelement path="${libs.ivml}"/>
         <!-- reasonerCore -->
         <pathelement path="${libs.reasonerCore}"/>
+        <pathelement path="${libs.sseReasoner}"/>
         <!-- VIL -->
 		<pathelement path="${libs.vil.core}"/>
 		<pathelement path="${libs.vil.ui}"/>
+		<pathelement path="${libs.vil.tests}"/>
+		<pathelement path="${libs.template.core}"/>
+		<pathelement path="${libs.template.ui}"/>
+		<pathelement path="${libs.template.tests}"/>
+		<pathelement path="${libs.vil.rt.core}"/>
+		<!-- libs.vil.rt.ui -->
 		<!-- Eclipse-Plugins -->
 		<fileset dir="${eclipse.plugins.dir}">
 			<include name="**/*.jar" />
@@ -49,7 +55,7 @@
 	
 	<!-- Compile all files without test classes -->
 	<target name="compile" depends="init">
-		<javac srcdir="${src.dir}" debug="on" destdir="${build.classes.dir}" includeAntRuntime="no" failonerror="true" source="${javacSource}" target="${javacTarget}" encoding="${javac.encoding}">
+		<javac srcdir="${src.dir}" debug="true" destdir="${build.classes.dir}" includeAntRuntime="no" failonerror="true" source="${javacSource}" target="${javacTarget}" encoding="${javac.encoding}">
             <classpath refid="includes" />	
 		</javac>
     </target>

@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="EASy-Nightly-UpdateSite" default="createUpdateSite" basedir=".">
+<project name="EASy-Nightly-UpdateSite" default="createUpdateSite" basedir="." xmlns:plugins="antlib:de.uni_hildesheim.sse.easy.standalone.versionReplacement">
     <property file="${user.home}/global-build.properties"/>
-    
-    <path id="jsch.lib"><pathelement location="${user.home}/addtionalLibs/jsch/jsch-0.1.50.jar"/></path>
+
     <path id ="task.libs">
 		<!-- Libs of the Task -->
 		<fileset dir="task">
@@ -10,16 +9,7 @@
 		</fileset>
 	</path>
     
-    <taskdef name="plugins"
-        classname="de.uni_hildesheim.sse.easy.standalone.versionReplacement.PluginsVersion"
-        classpathref="task.libs"/>
-    <taskdef name="features"
-        classname="de.uni_hildesheim.sse.easy.standalone.versionReplacement.FeatureVersion"
-        classpathref="task.libs"/>
-    <taskdef name="updateSite"
-        classname="de.uni_hildesheim.sse.easy.standalone.versionReplacement.UpdateSiteTask"
-        classpathref="task.libs"/>
-    <property name="version" value="0.55"/>
+    <taskdef resource="VersionReplacement.properties" classpathref="task.libs" />
     
 	<target name="createUpdateSite">
         <delete dir="gen"/>
@@ -30,8 +20,11 @@
         <mkdir dir="gen/final"/>
         
         <tstamp>
-            <format property="TODAY_DE" pattern="yyyyMMdd" locale="de,DE"/>
+            <format property="DAY" pattern="yyyyMMdd" locale="de,DE"/>
+            <format property="TIME" pattern="HHmm" locale="de,DE"/>
+            <format property="GENERATED_TIME" pattern="HH:mm, dd. MMMM yyyy" locale="en,EN"/>
         </tstamp>
+        <property name="version" value="0.${DAY}.${TIME}"/>
         
         <antcall target="replacePlugins"/>
         <antcall target="createFeature"/>
@@ -44,15 +37,15 @@
     <target name="replacePlugins">
         <delete dir="gen/tmp"/>
         <mkdir dir="gen/tmp"/>
-        <plugins TempFolder="gen/tmp" SourceXML="${user.home}/Eclipse/EASyPlugins" version="${version}.${TODAY_DE}" Destination="gen/intermediate/plugins"/>
+        <plugins TempFolder="gen/tmp" SourceFolder="${user.home}/Eclipse/EASyPlugins" Version="${version}" DestinationFolder="gen/intermediate/plugins" ExclusionPattern="^.*(instantiator.copy.*.jar|(test|tests|drools).jar)$"/>
     </target>
     
     <target name="createFeature">
-        <features SourceXML="feature.xml" version="${version}.${TODAY_DE}" Destination="gen/intermediate/features/EASy.Nightly.Feature.jar"/>
+        <features SourceFolder="Features" Version="${version}" DestinationFolder="gen/intermediate/features"/>
     </target>
     
     <target name="createSiteXML">
-        <updateSite SourceXML="site.xml" version="${version}.${TODAY_DE}" Destination="gen/intermediate/site.xml"/>
+        <updatesite SourceFolder="Site" Version="${version}" DestinationFolder="gen/intermediate"/>
     </target>
     
     <target name="createArtifactJars">
@@ -75,8 +68,13 @@
     </target>
     
     <target name="publish">
-        <sshexec host="projects.sse.uni-hildesheim.de" username="jenkins" trust="true" keyfile="${user.home}/.ssh/id_rsa" command="rm -R /var/www/eclipse/update-sites/easy_nightly/*"/>
-        <scp todir="jenkins@projects.sse.uni-hildesheim.de:/var/www/eclipse/update-sites/easy_nightly" trust="true" keyfile="${user.home}/.ssh/id_rsa">
+        <echo file="${basedir}/gen/final/generated.html">
+            <![CDATA[
+                <b>Build from</b>: ${GENERATED_TIME}
+            ]]>
+        </echo>
+        <sshexec host="projects.sse.uni-hildesheim.de" username="jenkins" trust="true" keyfile="${user.home}/.ssh/id_rsa" command="rm -R /var/www/eclipse/update-sites/easy/nightly/*"/>
+        <scp todir="jenkins@projects.sse.uni-hildesheim.de:/var/www/eclipse/update-sites/easy/nightly" trust="true" keyfile="${user.home}/.ssh/id_rsa">
             <fileset dir="${basedir}/gen/final">
                 <include name="**/*"/>
             </fileset>

@@ -42,7 +42,7 @@ import de.uni_hildesheim.sse.utils.modelManagement.Version;
  * @author Holger Eichelberger
  */
 public class Project extends ModelElement implements IModel, IAttributableElement, IResolutionScope,
-        ICustomOperationAccessor, IFreezable {
+    ICustomOperationAccessor, IFreezable, IConstraintHolder {
 
     private List<ContainableModelElement> modelElements;
     private Version version;
@@ -633,4 +633,8 @@ public class Project extends ModelElement implements IModel, IAttributableElemen
         return new LocalConfiguration();
     }
 
+    @Override
+    public void addConstraint(Constraint constraint) {
+        add(constraint);
+    }
 }

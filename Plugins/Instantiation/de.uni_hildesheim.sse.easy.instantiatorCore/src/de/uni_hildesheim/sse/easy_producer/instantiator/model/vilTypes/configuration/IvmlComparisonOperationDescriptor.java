@@ -3,18 +3,17 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configur
 import java.util.ArrayList;
 import java.util.List;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.VilException;
 
 /**
  * Implements equality and unequality for the dynamic types.
  * 
  * @author Holger Eichelberger
  */
-class IvmlComparisonOperationDescriptor extends IvmlOperationDescriptor {
+public class IvmlComparisonOperationDescriptor extends IvmlOperationDescriptor {
 
     private boolean equality;
 
@@ -26,11 +25,11 @@ class IvmlComparisonOperationDescriptor extends IvmlOperationDescriptor {
      * @param equality whether equality or unequality shall be handled by the descriptor
      * @param paramType the type of the parameter (values must be a subclass of {@link IVilType})
      */
-    IvmlComparisonOperationDescriptor(TypeDescriptor<? extends IVilType> declaringType, String name, boolean equality, 
-        TypeDescriptor<? extends IVilType> paramType) {
+    IvmlComparisonOperationDescriptor(TypeDescriptor<?> declaringType, String name, boolean equality, 
+        TypeDescriptor<?> paramType) {
         super(declaringType, name, false);
         this.equality = equality;
-        List<TypeDescriptor<? extends IVilType>> parameters = new ArrayList<TypeDescriptor<? extends IVilType>>();
+        List<TypeDescriptor<?>> parameters = new ArrayList<TypeDescriptor<?>>();
         parameters.add(declaringType);
         parameters.add(paramType);
         setParameters(parameters, false, false);

@@ -1,0 +1,32 @@
+@advice(EASyDemoCommandsGen)
+template compound(Configuration config, FileArtifact target, Command cmd, String name) {
+
+    def main(Configuration config, FileArtifact target, Command cmd, String name) {
+    	'package io.ssehub.easy.demo.command.additional;'
+    	
+    	'import java.util.Map;'
+    	'import io.ssehub.easy.demo.command.commands.Command;'
+    	''
+    	'/**'
+    	' * Implements the wrapped command for <code>${cmd.class}</code>.'
+    	' */'
+    	'public class ${name} implements Command {'
+    	''
+    	'    @Override'
+    	'    public String getCommandName() {'
+    	'        return "${cmd.name}";'
+    	'    }'
+    	''
+    	'    @Override'
+    	'    public String getHelpText() {'
+    	'        return "${cmd.help}";'
+    	'    }'
+    	''
+    	'    @Override'
+    	'    public String execute(String[] args, Map<String, Object> data) {'
+    	'        return ${cmd.class}.execute(args, data);'
+    	'    }'
+    	'}'
+    }
+
+}

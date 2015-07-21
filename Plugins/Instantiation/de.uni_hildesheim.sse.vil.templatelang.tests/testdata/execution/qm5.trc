@@ -1,43 +1,26 @@
 -> main(Configuration, FileArtifact) with (<config>, test.texts)
     -> byName(Configuration, String) with (<config>, fNormalize) = qm5::fNormalize
     fm <- qm5::fNormalize
-    -> members(Family) with (qm5::fNormalize) = {qm5::Family::members {0}, qm5::Family::members {1}, qm5::Family::members {2}}
     for alg {
         alg <- qm5::Family::members {0}
-        -> name(Algorithm) with (qm5::Family::members {0}) = qm5::Algorithm::name
-        -> hwNode(Algorithm) with (qm5::Family::members {0}) = qm5::Algorithm::hwNode
         -> isNull(IvmlElement) with (qm5::Algorithm::hwNode) = false
-        -> hwNode(Algorithm) with (qm5::Family::members {0}) = qm5::Algorithm::hwNode
         -> isConfigured(DecisionVariable) with (qm5::Algorithm::hwNode) = true
-        -> hwNode(Algorithm) with (qm5::Family::members {0}) = qm5::Algorithm::hwNode
         -> isConfigured(DecisionVariable) with (qm5::Algorithm::hwNode) = true
-        -> hwNode(Algorithm) with (qm5::Family::members {0}) = qm5::Algorithm::hwNode
         -> isNull(IvmlElement) with (qm5::Algorithm::hwNode) = false
         -> !(Boolean) with (false) = true
         -> and(Boolean, Boolean) with (true, true) = true
         visit if-branch
-        -> name(Algorithm) with (qm5::Family::members {0}) = qm5::Algorithm::name
         alg <- qm5::Family::members {1}
-        -> name(Algorithm) with (qm5::Family::members {1}) = qm5::Algorithm::name
-        -> hwNode(Algorithm) with (qm5::Family::members {1}) = qm5::Algorithm::hwNode
         -> isNull(IvmlElement) with (qm5::Algorithm::hwNode) = false
-        -> hwNode(Algorithm) with (qm5::Family::members {1}) = qm5::Algorithm::hwNode
         -> isConfigured(DecisionVariable) with (qm5::Algorithm::hwNode) = false
-        -> hwNode(Algorithm) with (qm5::Family::members {1}) = qm5::Algorithm::hwNode
         -> isConfigured(DecisionVariable) with (qm5::Algorithm::hwNode) = false
-        -> hwNode(Algorithm) with (qm5::Family::members {1}) = qm5::Algorithm::hwNode
         -> isNull(IvmlElement) with (qm5::Algorithm::hwNode) = false
         -> !(Boolean) with (false) = true
         -> and(Boolean, Boolean) with (false, true) = false
         alg <- qm5::Family::members {2}
-        -> name(Algorithm) with (qm5::Family::members {2}) = qm5::Algorithm::name
-        -> hwNode(Algorithm) with (qm5::Family::members {2}) = qm5::Algorithm::hwNode
         -> isNull(IvmlElement) with (qm5::Algorithm::hwNode) = true
-        -> hwNode(Algorithm) with (qm5::Family::members {2}) = qm5::Algorithm::hwNode
         -> isConfigured(DecisionVariable) with (qm5::Algorithm::hwNode) = true
-        -> hwNode(Algorithm) with (qm5::Family::members {2}) = qm5::Algorithm::hwNode
         -> isConfigured(DecisionVariable) with (qm5::Algorithm::hwNode) = true
-        -> hwNode(Algorithm) with (qm5::Family::members {2}) = qm5::Algorithm::hwNode
         -> isNull(IvmlElement) with (qm5::Algorithm::hwNode) = true
         -> !(Boolean) with (true) = false
         -> and(Boolean, Boolean) with (true, false) = false

@@ -24,6 +24,7 @@ import de.uni_hildesheim.sse.model.confModel.IConfiguration;
 import de.uni_hildesheim.sse.model.confModel.IConfigurationElement;
 import de.uni_hildesheim.sse.model.confModel.IConfigurationVisitor;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
+import de.uni_hildesheim.sse.model.confModel.IFreezeSelector;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
@@ -92,7 +93,7 @@ public class LocalDecisionVariable implements IDecisionVariable {
     }
 
     @Override
-    public void freeze() {
+    public void freeze(IFreezeSelector selector) {
         // local variables cannot be frozen
     }
 

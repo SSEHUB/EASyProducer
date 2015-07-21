@@ -3,7 +3,7 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel;
 import java.io.Writer;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.RuntimeEnvironment;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionWriter;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Collection;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.StringValueHelper;
@@ -64,7 +64,7 @@ public class StreamTracer extends de.uni_hildesheim.sse.easy_producer.instantiat
                     String arg = StringValueHelper.getStringValue(
                         environment.getValue(rule.getParameter(i)), NORMALIZER);
                     print(makeRelative(arg));
-                } catch (VilLanguageException e) {
+                } catch (VilException e) {
                     print("<null>");
                 }
             }
@@ -90,7 +90,7 @@ public class StreamTracer extends de.uni_hildesheim.sse.easy_producer.instantiat
     public void visitMapIteratorAssignment(VariableDeclaration var, Object value) {
         printIndentation();
         print("map: ");
-        printValueDefined(var, value);
+        printValueDefined(var, null, value);
         println();
     }
     
@@ -141,8 +141,9 @@ public class StreamTracer extends de.uni_hildesheim.sse.easy_producer.instantiat
             BuildlangWriter writer = new BuildlangWriter(getOut());
             try {
                 element.accept(writer);
-            } catch (VilLanguageException e) {
+            } catch (VilException e) {
             }
+            println();
         }
     }
 

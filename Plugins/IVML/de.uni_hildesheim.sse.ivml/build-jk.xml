@@ -15,8 +15,8 @@
 		<pathelement path="${libs.utils}"/>
 		<pathelement path="${libs.model}"/>
         <!-- DSL core common classes -->
-        <pathelement path="${libs.dslCore}"/>		
-		<!-- Eclipse-Plugins -->
+        <pathelement path="${libs.dslCore}"/>	
+    	<!-- Eclipse-Plugins -->
 		<fileset dir="${eclipse.plugins.dir}">
 			<include name="**/*.jar" />
 		</fileset>
@@ -35,7 +35,7 @@
 	
 	<!-- Compile all files without test classes -->
 	<target name="compile" depends="init">
-		<javac srcdir="${src.dir}" debug="on" destdir="${build.classes.dir}" includeAntRuntime="no" failonerror="true" source="${javacSource}" target="${javacTarget}" encoding="${javac.encoding}">
+		<javac srcdir="${src.dir}" debug="true" destdir="${build.classes.dir}" includeAntRuntime="no" failonerror="true" source="${javacSource}" target="${javacTarget}" encoding="${javac.encoding}">
 			<src path="${src.gen.dir}" />
 			<src path="${xtend.gen.dir}" />
 			<classpath refid="includes" />	
@@ -46,6 +46,10 @@
 	<target name="jar" depends="compile">
         <!-- Copy needed xtext files -->
 		<copy todir="${build.classes.dir}" failonerror="true" overwrite="true">
+	        <fileset dir="${basedir}">
+                <include name="OSGI-INF/**/*" />
+                <include name="plugin.xml" />
+            </fileset>
 			<fileset dir="${src.dir}">
 				<include name="**/*.mwe2" />
 				<include name="**/*.xtext" />

@@ -26,6 +26,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link de.uni_hildesheim.sse.vil.rt.rtVil.StrategyDeclaration#getConditions <em>Conditions</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.rt.rtVil.StrategyDeclaration#getVarDecls <em>Var Decls</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.rt.rtVil.StrategyDeclaration#getObjective <em>Objective</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vil.rt.rtVil.StrategyDeclaration#getWeighting <em>Weighting</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.rt.rtVil.StrategyDeclaration#getBreakdown <em>Breakdown</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.rt.rtVil.StrategyDeclaration#getPost <em>Post</em>}</li>
  * </ul>
@@ -156,6 +157,32 @@ public interface StrategyDeclaration extends EObject
    * @generated
    */
   void setObjective(Expression value);
+
+  /**
+   * Returns the value of the '<em><b>Weighting</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Weighting</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Weighting</em>' containment reference.
+   * @see #setWeighting(WeightingStatement)
+   * @see de.uni_hildesheim.sse.vil.rt.rtVil.RtVilPackage#getStrategyDeclaration_Weighting()
+   * @model containment="true"
+   * @generated
+   */
+  WeightingStatement getWeighting();
+
+  /**
+   * Sets the value of the '{@link de.uni_hildesheim.sse.vil.rt.rtVil.StrategyDeclaration#getWeighting <em>Weighting</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Weighting</em>' containment reference.
+   * @see #getWeighting()
+   * @generated
+   */
+  void setWeighting(WeightingStatement value);
 
   /**
    * Returns the value of the '<em><b>Breakdown</b></em>' containment reference list.

@@ -1,0 +1,171 @@
+@advice(QM)
+template stormSource(Configuration config, FileArtifact target, DecisionVariable elt, String topoName) {
+
+    def String parameterTypeName(DecisionVariable var) {
+    	switch(var.type()) {
+    		"IntegerParameter" : "int",
+    		"BooleanParameter" : "boolean",
+    		"RealParameter" : "double",
+    		"StringParameter" : "String"
+    	}
+    }
+
+	def transferParameterValueType(DecisionVariable varParameter, String value) {
+		String paraType = varParameter.type();
+		Integer len = paraType.length();
+		String type;
+	    if(len>9){
+			type = paraType.substring(0, len - 9);
+		}	
+       	switch(type) {
+    		"Integer" : "Integer.parseInt($value)",
+    		"Boolean" : "Boolean.parseBoolean($value)",
+    		"Real" : "Double.parseDouble($value)",
+    		"String" : "$value"   	
+    	}					
+	}
+	
+	def produceInOrOutputVariable(sequenceOf(Tuple) tuples, Boolean output, String srcName) {
+		Integer size = tuples.size();
+		String tupleId = "";
+		Integer tupleCount = 1;
+		String ending;
+		if(output) {
+			ending = "Output";
+		} else{
+			ending = "Input";
+		}
+		for(Tuple t : tuples) {
+			if(size > 1) {
+				tupleId = "$tupleCount";
+			}
+			String srcInfName = "I" + srcName.firstToUpperCase() + "${tupleId}${ending}";
+			'    transient ${toIdentifier(srcInfName)} dataItem${tupleId} = null;'
+			tupleCount = tupleCount + 1;
+		}
+	}
+	    
+    def main(Configuration config, FileArtifact target, DecisionVariable elt, String topoName) {
+        String name = elt.varName().firstToUpperCase() + elt.type();
+        String nontopoStream = "Stream";
+        String topoStream = "TopoStream";
+        Source src = elt;   
+        DataSource dataSrc = src.source;
+        String srcName = dataSrc.name;
+        String qualifiedClsName = dataSrc.sourceCls; //dataSrc.sourceCls().firstToUpperCase() leads to a problem!! 
+        JavaPath clsNamePath = qualifiedClsName;
+        String srcClsName = clsNamePath.getName();
+        String srcInfName;
+ 
+        String streamId = elt.varName() + nontopoStream;
+        String topoStreamId = elt.varName() + topoStream;
+        'package eu.qualimaster.topologies.$topoName;'
+    	''
+    	'import java.util.*;'
+    	'import org.apache.log4j.Logger;'
+    	'import backtype.storm.topology.*;'
+    	'import backtype.storm.task.*;'
+    	'import backtype.storm.spout.*;'
+    	'import backtype.storm.tuple.*;'
+        'import eu.qualimaster.data.inf.I${toIdentifier(srcName)}.*;'
+        'import $qualifiedClsName;'
+        'import eu.qualimaster.common.signal.*;'
+    	''
+    	'/**'
+    	'* Define the source Spout class(GEN).'
+    	'**/'
+    	'@SuppressWarnings({ "rawtypes", "serial" })'
+    	'public class $name extends BaseSignalSpout {'
+    	''
+    	'    final static Logger logger = Logger.getLogger($name.class);'
+    	'    transient SpoutOutputCollector _collector;'
+    	'    transient ${toIdentifier(srcClsName)} sourceData;'
+    	produceInOrOutputVariable(dataSrc.input, true, srcName);
+	    ''
+	    '    public $name(String name, String namespace) {'
+    	'        super(name, namespace);'
+    	'    }'
+    	''
+    	'    @Override'
+        '    public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) {'
+        '		 super.open(conf, context, collector);'
+        '        _collector = collector;'  
+        '        sourceData = new ${toIdentifier(srcClsName)}();'      
+        '    }'
+        ''
+        '    @Override'
+        '    public void nextTuple() {'
+        Integer size = dataSrc.input.size();
+        String tupleId = "";
+        Integer tupleCount = size;
+        for(Tuple t : dataSrc.input){
+        	if(size > 1) {
+        		tupleId = "$tupleCount";
+        	}
+        	srcInfName = "I" + srcName.firstToUpperCase() + "${tupleId}Output";
+        '        // Emitting stream "${streamId}${tupleId}".'
+	    '        dataItem${tupleId} = sourceData.getData${tupleId}();'	
+	    '        if(dataItem${tupleId}!=null){'	   		  
+		'            logger.info("Get data tuple for data source Spout:" + dataItem${tupleId});'
+		'            _collector.emit("${streamId}${tupleId}", new Values(dataItem${tupleId}),dataItem${tupleId});'		   
+	    '        }'
+	    ''
+        	tupleCount = tupleCount - 1;
+        }
+
+        '    }'
+        ''
+        '/**' | 4;
+	    '* Receives the signal data for Source adaptation.'| 4;
+	    '* @param data the signal data' | 4;
+	    '**/' | 4;
+	    '@Override' | 4;
+        'public void onSignal(byte[] data) {' | 4;
+        'String signal=new String(data);' | 8;
+        'logger.info("Received signal: " + signal);' | 8;
+        '//handle the received signal and make related changes, e.g., give a parameter to Source' | 8;
+		'String[] parts = signal.split(":");' | 8;
+		'if (parts.length >= 2) {' | 8;
+		'if ("param".equals(parts[0]) && 3 == parts.length) {' | 12;
+		setOf(Parameter) parameters = dataSrc.parameters;
+		for(Parameter p : parameters) {
+		    String paraName = p.name;
+		    String paraValue = transferParameterValueType(p, "parts[2]");
+		'switch (parts[1]) { // just for illustration, may need parameter conversion' | 16;
+		'case "$paraName" : ' | 16;
+		'sourceData.setParameter${paraName.firstToUpperCase()}($paraValue); ' | 16;
+		'break;' | 16;
+		'}'	| 16;		
+		}		    
+		'       	     /*switch (parts[1]) { // just for illustration, may need parameter conversion'
+		' 	             case "param1" : '
+		'		         sourceData.setParameterParam1(parts[2]); '
+		' 	             break;'
+		'	          }*/'
+				    
+		'}' | 12;
+		'}' | 8;
+        '}' | 4;  
+        ''     
+        '    @Override'
+        '    public void close() {'
+        '        super.close();'
+        '    }'
+        ''
+        '	@Override'
+		'    public void declareOutputFields(OutputFieldsDeclarer declarer) {'
+		tupleId = "";
+		tupleCount = 1;
+		for(Tuple t : dataSrc.input){
+        	if(size > 1) {
+        		tupleId = "$tupleCount";
+        	}
+		'        declarer.declareStream("${streamId}${tupleId}", new Fields("datastream${tupleId}"));'        	
+        	tupleCount = tupleCount + 1;        				
+		}
+
+		'    }'
+    	'}'
+    }
+    
+}

@@ -1,0 +1,5 @@
+02-27  added the name attribute in the compound Tuple of Basics.ivm
+03-02  added the description attribute in Algorithms, Families and Pipelines.
+03-03  added an artifact attribute in Infrastructure and Pipelines.
+       added an ArtifactString in Basics
+

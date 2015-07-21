@@ -55,13 +55,11 @@ public class Feature {
      * Initializes the feature by parsing it.
      */
     private void initialize() {
-        
         load(this.file);
         this.plugins = new HashMap<String, EasyDependency>();
         if (this.doc != null) {
             build(this.doc.getDocumentElement());
         }
-    
     }
     
     /**
@@ -90,31 +88,34 @@ public class Feature {
     }
     
     /**
-     * Gathers neccessary information from the feature-file.
+     * Gathers necessary information from the feature-file.
      * @param node The node to build from.
      */
     private void build(Node node) {
     
-        if (node.getNodeName().equals("feature")) {
-            
+        if (node.getNodeName().equals("feature")) {    
             this.id = node.getAttributes().getNamedItem("id").getNodeValue();
             try {
                 this.version = new Version(node.getAttributes().getNamedItem("version").getNodeValue());
             } catch (DOMException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             } catch (BundleException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-    
         }
          
-        if (node.getNodeName().equalsIgnoreCase("import")) {
+        if (node.getNodeName().equalsIgnoreCase("import") 
+                || node.getNodeName().equalsIgnoreCase("include")) {
     
+            boolean isImport = node.getNodeName().equalsIgnoreCase("import") ? true : false;
             EasyDependency newDependency = new EasyDependency();
-    
+            
             try {
+                if (isImport && node.getAttributes().getNamedItem("feature") != null) {
+                    newDependency.setName(node.getAttributes().getNamedItem("feature").getNodeValue());
+                } else if (!isImport && node.getAttributes().getNamedItem("id") != null) {
+                    newDependency.setName(node.getAttributes().getNamedItem("id").getNodeValue());
+                }
                 if (node.getAttributes().getNamedItem("version") != null) {
                     String vers = node.getAttributes().getNamedItem("version").getNodeValue();
                     String[] versions = EasyDependency.getRange(vers);
@@ -126,10 +127,15 @@ public class Feature {
                             newDependency.setBundleVersionMax(new Version(versions[0]));
                         }
                     }
-
-                    if (node.getAttributes().getNamedItem("match").getNodeValue().equals("greaterThan")) {
+                    
+                    if (null != node.getAttributes().getNamedItem("match")) {
+                        if (node.getAttributes().getNamedItem("match").getNodeValue().equals("greaterThan")) {
+                            newDependency.setBundleVersionMax(null);
+                        } else if (node.getAttributes().getNamedItem("match").getNodeValue().equals("smallerThan")) {
+                            newDependency.setBundleVersionMin(null);
+                        }
+                    } else {
                         newDependency.setBundleVersionMax(null);
-                    } else if (node.getAttributes().getNamedItem("match").getNodeValue().equals("smallerThan")) {
                         newDependency.setBundleVersionMin(null);
                     }
                 }
@@ -140,7 +146,6 @@ public class Feature {
             }
             
             this.requiredFeatures.add(newDependency);
-    
         }
         
         if (node.getNodeName().equals("plugin")) {
@@ -149,7 +154,6 @@ public class Feature {
                 new EasyDependency("bundle-symbolic-name:=" + node.getAttributes().getNamedItem("id").getNodeValue() 
                     + ";" + "bundle-version:=[" 
                     + node.getAttributes().getNamedItem("version").getNodeValue() + "]"));
-    
         }
         
         for (int i = 0; i < node.getChildNodes().getLength(); i++) {
@@ -201,6 +205,11 @@ public class Feature {
      * @return The Id of the feature.
      */
     public String getId() {
+        return this.id;
+    }
+    
+    @Override
+    public String toString() {
         return this.id;
     }
     

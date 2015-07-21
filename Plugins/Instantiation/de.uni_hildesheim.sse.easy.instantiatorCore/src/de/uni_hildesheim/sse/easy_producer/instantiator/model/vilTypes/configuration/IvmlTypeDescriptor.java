@@ -6,12 +6,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.FieldDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaType;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.VilException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
+import de.uni_hildesheim.sse.model.varModel.IDecisionVariableContainer;
 import de.uni_hildesheim.sse.model.varModel.IModelElement;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.datatypes.BooleanType;
@@ -30,9 +32,10 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.StringType;
  * 
  * @author Holger Eichelberger
  */
-class IvmlTypeDescriptor extends AbstractIvmlTypeDescriptor {
+public class IvmlTypeDescriptor extends AbstractIvmlTypeDescriptor {
 
-    private TypeDescriptor<? extends IVilType> baseType;
+    private TypeDescriptor<?> baseType;
+    private IDatatype type;
     
     /**
      * Creates a new type descriptor.
@@ -40,50 +43,63 @@ class IvmlTypeDescriptor extends AbstractIvmlTypeDescriptor {
      * @param project the underlying IVML project the descriptor shall be created for
      * @param ivmlType the IVML type to create the descriptor for
      * @param resolver for retrieving further IVML types
-     * @param declaredAttributes attributes declared for all variables of that type, may be <b>null</b>
      * @throws VilException if analyzing the class fails for some reason
      */
-    IvmlTypeDescriptor(Project project, IDatatype ivmlType, IvmlTypeResolver resolver, 
-        Set<de.uni_hildesheim.sse.model.varModel.Attribute> declaredAttributes) throws VilException {
+    IvmlTypeDescriptor(Project project, IDatatype ivmlType, IvmlTypeResolver resolver) throws VilException {
         super(ivmlType, resolver);
+        this.type = ivmlType;
+    }
+    
+    /**
+     * Resolves the type descriptor by filling it with operations and fields. This method
+     * is separated from the constructor so that the type can be registered first and resolved then in
+     * order to enable parent resolution.
+     * 
+     * @param project the underlying IVML project the descriptor shall be created for
+     * @param ivmlType the IVML type to resolve for
+     * @param declaredAttributes attributes declared for all variables of that type, may be <b>null</b>
+     * @throws VilException if analyzing the underlying type fails for some reason
+     */
+    void resolve(Project project, IDatatype ivmlType, 
+        Set<de.uni_hildesheim.sse.model.varModel.Attribute> declaredAttributes) throws VilException {
+        TypeRegistry registry = getTypeRegistry();
         Map<String, OperationDescriptor> operations = new HashMap<String, OperationDescriptor>();
-        addMetaOperations(operations);
-        addComparisonOperations(operations);
+        Map<String, FieldDescriptor> fields = new HashMap<String, FieldDescriptor>();
+        addDecisionVariableOperations(operations);
+        addComparisonOperations(ivmlType, operations);
         // first of the type, then specific -> map, only one will be added
-        addAttributeOperations(operations, ivmlType instanceof IModelElement ? (IModelElement) ivmlType : project);
+        addAttributeFields(fields, ivmlType instanceof IModelElement ? (IModelElement) ivmlType : project, 
+            registry);
         if (null != declaredAttributes) {
             for (de.uni_hildesheim.sse.model.varModel.Attribute att : declaredAttributes) {
-                IvmlAttributeOperationDescriptor.createDescriptors(this, att, operations);
+                Utils.addField(new IvmlAnnotationFieldDescriptor(this, att, registry), fields);
             }
         }
         if (ivmlType instanceof Compound) {
             Compound comp = (Compound) ivmlType;
             Compound refines = comp.getRefines();
             if (null != refines) {
-                TypeDescriptor<? extends IVilType> tmp = resolver.obtainType(refines);
+                TypeDescriptor<?> tmp = registry.getType(refines);
                 if (tmp instanceof IvmlTypeDescriptor) { // just to be sure
                     IvmlTypeDescriptor refinesDesc = (IvmlTypeDescriptor) tmp;
                     setRefines(refinesDesc);
-                    for (int o = 0; o < refinesDesc.getOperationsCount(); o++) {
-                        OperationDescriptor op = refinesDesc.getOperation(o);
-                        // not the meta operations
-                        if (op instanceof IvmlAccessorOperationDescriptor) {
-                            addOperation(op, operations);
+                    for (int f = 0; f < refinesDesc.getFieldCount(); f++) {
+                        FieldDescriptor fi = refinesDesc.getField(f);
+                        if (fi instanceof IvmlAccessorFieldDescriptor) {
+                            Utils.addField(fi, fields);
                         }
                     }
                 }
             }
-            for (int e = 0; e < comp.getElementCount(); e++) {
-                DecisionVariableDeclaration decl = comp.getElement(e);
-                IvmlAccessorOperationDescriptor.createDescriptors(this, decl, operations);
-            }
+            addElements(comp, registry, fields);
         }
         setOperations(operations.values());
+        setFields(fields.values());
         List<OperationDescriptor> conversions = new ArrayList<OperationDescriptor>();
         conversions.add(new IvmlConversionOperationDescriptor(this));
         if (DerivedDatatype.TYPE.isAssignableFrom(ivmlType)) {
             IDatatype baseType = DerivedDatatype.resolveToBasis(ivmlType);
-            TypeDescriptor<? extends IVilType> vilBaseType = resolver.getTypeRegistry().getType(baseType.getName());
+            TypeDescriptor<?> vilBaseType = registry.getType(baseType.getName());
             if (de.uni_hildesheim.sse.model.varModel.datatypes.Set.TYPE.isAssignableFrom(baseType)) {
                 IvmlOperationDescriptor desc = new IvmlSetConversionOperationDescriptor(this, vilBaseType);
                 conversions.add(desc);
@@ -94,8 +110,27 @@ class IvmlTypeDescriptor extends AbstractIvmlTypeDescriptor {
                 this.baseType = desc.getReturnType();
             }
         }
-        addConversionOperations(conversions);
+        addConversionOperations(ivmlType, conversions);
         setConversions(conversions);
+    }
+    
+    /**
+     * Adds all the elements in this container and recursively processes attribute assignments.
+     * 
+     * @param container the container
+     * @param registry the actual type registry
+     * @param fields the name-field mapping to be modified as a side effect
+     * @throws VilException in case that creating fields for the elements fails
+     */
+    private void addElements(IDecisionVariableContainer container, TypeRegistry registry, 
+        Map<String, FieldDescriptor> fields) throws VilException {
+        for (int e = 0; e < container.getElementCount(); e++) {
+            DecisionVariableDeclaration decl = container.getElement(e);
+            Utils.addField(new IvmlAccessorFieldDescriptor(this, decl, registry), fields);
+        }
+        for (int a = 0; a < container.getAssignmentCount(); a++) {
+            addElements(container.getAssignment(a), registry, fields);
+        }
     }
     
     @Override
@@ -104,13 +139,13 @@ class IvmlTypeDescriptor extends AbstractIvmlTypeDescriptor {
     }
     
     @Override
-    public boolean isAssignableFrom(TypeDescriptor<? extends IVilType> desc) {
+    public boolean isAssignableFrom(TypeDescriptor<?> desc) {
         // final check at runtime
         // check direct type or decision variable
         boolean assignable = (desc == this || IvmlTypes.decisionVariableType() == desc);
         if (!assignable && null != desc) {
             // check refines hierarchy on desc
-            TypeDescriptor<? extends IVilType> iter = desc;
+            TypeDescriptor<?> iter = desc;
             do {
                 if (iter instanceof AbstractIvmlTypeDescriptor) {
                     iter = ((AbstractIvmlTypeDescriptor) iter).getRefines();
@@ -152,9 +187,9 @@ class IvmlTypeDescriptor extends AbstractIvmlTypeDescriptor {
             objectType = BooleanType.TYPE;
         }
         if (null != objectType) {            
-            isInstance = getDatatype().isAssignableFrom(objectType);
+            isInstance = type.isAssignableFrom(objectType);
             if (!isInstance && null != baseType) {
-                IDatatype bType = DerivedDatatype.resolveToBasis(getDatatype());
+                IDatatype bType = DerivedDatatype.resolveToBasis(type);
                 isInstance = objectType.isAssignableFrom(bType); // objectType is raw
             }
         } 
@@ -171,5 +206,15 @@ class IvmlTypeDescriptor extends AbstractIvmlTypeDescriptor {
         boolean acceptsNamedParameters) {
         return null;
     }
-    
+
+    @Override
+    public boolean isInternal() {
+        return false;
+    }
+
+    @Override
+    public boolean isInstantiator() {
+        return false;
+    }
+
 }

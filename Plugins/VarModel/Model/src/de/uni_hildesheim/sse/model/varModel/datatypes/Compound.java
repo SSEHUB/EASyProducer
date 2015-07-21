@@ -24,6 +24,7 @@ import de.uni_hildesheim.sse.model.varModel.Comment;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
+import de.uni_hildesheim.sse.model.varModel.IConstraintHolder;
 import de.uni_hildesheim.sse.model.varModel.IDecisionVariableContainer;
 import de.uni_hildesheim.sse.model.varModel.IModelVisitor;
 import de.uni_hildesheim.sse.model.varModel.ModelElement;
@@ -38,7 +39,8 @@ import de.uni_hildesheim.sse.model.varModel.ProjectImport;
  * @author heiko beck
  * @author Holger Eichelberger
  **/
-public class Compound extends StructuredDatatype implements IResolutionScope, IDecisionVariableContainer {
+public class Compound extends StructuredDatatype implements IResolutionScope, IDecisionVariableContainer, 
+    IConstraintHolder {
 
     // DO !NOT! touch the // checkstyle: comments!
 
@@ -377,6 +379,11 @@ public class Compound extends StructuredDatatype implements IResolutionScope, ID
      */
     public boolean isAbstract() {
         return isAbstract;
+    }
+
+    @Override
+    public void addConstraint(Constraint constraint) {
+        addConstraint(constraint, false);
     }
 
 }

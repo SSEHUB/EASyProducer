@@ -2,7 +2,6 @@ package de.uni_hildesheim.sse;
 
 import static com.google.inject.Guice.createInjector;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
 import java.net.URISyntaxException;
@@ -21,9 +20,8 @@ import de.uni_hildesheim.sse.dslCore.translation.TranslatorException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildlangWriter;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Resolver;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IRuntimeEnvironment;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 import de.uni_hildesheim.sse.utils.messages.Status;
@@ -106,7 +104,7 @@ public class BuildLangModelUtility extends de.uni_hildesheim.sse.dslCore.ModelUt
             for (int p = 0; p < result.getResultCount(); p++) {
                 try {
                     result.getResult(p).accept(writer);
-                } catch (VilLanguageException e) {
+                } catch (VilException e) {
                     EASyLoggerFactory.INSTANCE.getLogger(BuildLangModelUtility.class, VilBundleId.ID);
                 }
             }
@@ -130,10 +128,11 @@ public class BuildLangModelUtility extends de.uni_hildesheim.sse.dslCore.ModelUt
      * 
      * @param text the text to be parsed
      * @param environment the runtime environment for resolving variables
+     * @param an optional buffer to collect warnings
      * @return the resulting expression
-     * @throws ExpressionException in case that parsing fails
+     * @throws VilException in case that parsing fails
      */
-    public Expression createExpression(String text, IRuntimeEnvironment environment) throws ExpressionException {
+    public Expression createExpression(String text, Resolver resolver, StringBuilder warnings) throws VilException {
         Expression result = null;
         IParseResult parseResult = parseFragment("Expression", text);
         if (null != parseResult) {
@@ -150,34 +149,37 @@ public class BuildLangModelUtility extends de.uni_hildesheim.sse.dslCore.ModelUt
                 ExpressionTranslator translator = new ExpressionTranslator();
                 de.uni_hildesheim.sse.vil.expressions.expressionDsl.Expression expr = 
                     (de.uni_hildesheim.sse.vil.expressions.expressionDsl.Expression) parseResult.getRootASTElement();
+                translator.enactIvmlWarnings();
                 try {
-                    result = translator.processExpression(expr, new Resolver(environment));
-                    if (translator.getErrorCount() > 0) {
-                        for (int i = 0; i < translator.getMessageCount(); i++) {
-                            Message msg = translator.getMessage(i);
-                            if (Status.ERROR == msg.getStatus()) {
-                                appendWithNewLine(errors, msg.getDescription());
+                    result = translator.processExpression(expr, resolver);
+                    for (int i = 0; i < translator.getMessageCount(); i++) {
+                        Message msg = translator.getMessage(i);
+                        if (Status.ERROR == msg.getStatus()) {
+                            appendWithNewLine(errors, msg.getDescription());
+                        } else {
+                            if (null != warnings) {
+                                appendWithNewLine(warnings, msg.getDescription());
                             }
                         }
-                        throw new ExpressionException(errors.toString(), ExpressionException.ID_INTERNAL);
+                    }
+                    if (translator.getErrorCount() > 0) {
+                        throw new VilException(errors.toString(), VilException.ID_INTERNAL);
                     }
                 } catch (TranslatorException e) {
-                    throw new ExpressionException(e, e.getId());
+                    throw new VilException(e, e.getId());
                 }
             }
         }
         return result;
     }
     
-    /**
-     * Returns whether this model utility class handles this type of file.
-     * 
-     * @param location the location to be considered
-     * @return <code>true</code> if it handles the specified location, <code>false</code> else
-     */
+    public Expression createExpression(String text, IRuntimeEnvironment environment) throws VilException {
+        return createExpression(text, new Resolver(environment), null);
+    }
+    
     @Override
-    protected boolean handles(File location) {
-        return location.isFile() && location.getName().endsWith(".vil");
+    public String getExtension() {
+        return "vil";
     }
 
     /**

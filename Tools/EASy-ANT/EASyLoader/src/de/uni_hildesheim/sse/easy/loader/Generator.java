@@ -43,6 +43,7 @@ import de.uni_hildesheim.sse.easy.loader.framework.Utils;
 public class Generator extends AbstractLoader {
     
     private static final Class<?>[] RUNTIME_CLASSES;
+    private static IExclusionSelector exclusionSelector;
     private List<BundleInfo> data;
     private List<URL> urls;
     private Map<URL, BundleInfo> urlBundleMapping = new HashMap<URL, BundleInfo>();
@@ -96,7 +97,6 @@ public class Generator extends AbstractLoader {
         urls = new ArrayList<URL>();
         data = new ArrayList<BundleInfo>();
         Set<BundleInfo> done = new HashSet<BundleInfo>();
-        Utils.sortByContainment(roots);
         for (BundleInfo info : roots) {
             collectBootstrapData(info, urls, data, done, TAG_EASY);                    
         }
@@ -123,6 +123,15 @@ public class Generator extends AbstractLoader {
         String path = bundleURL.getPath();
         result = path.startsWith(eclipseURIPath) || path.contains("/eclipse/") || path.contains("/libs/");
         return result;
+    }
+    
+    /**
+     * Defines the exclusion selector.
+     * 
+     * @param selector the selector instance (may be <b>null</b> to ignore)
+     */
+    public static void setExclusionSelector(IExclusionSelector selector) {
+        exclusionSelector = selector;
     }
     
     /**
@@ -188,7 +197,6 @@ public class Generator extends AbstractLoader {
                 i = features.size();
             }
         }
-    
         return found;
     
     }
@@ -392,7 +400,7 @@ public class Generator extends AbstractLoader {
     private static void subGenerate(List<BundleInfo> bundles) {
         boolean changed = false;
         for (int i = 0; i < bundles.size(); i++) {
-            LoaderLog.writeLn("Subgeneratring for: " + bundles.get(i).getName() + " " + bundles.get(i).getVersion());
+            LoaderLog.writeLn("Subgenerating for: " + bundles.get(i).getName() + " " + bundles.get(i).getVersion());
             for (int k = 0; k < bundles.get(i).getRequiredBundlesCount(); k++) {
                 boolean found = false;
                 BundleInfo toAdd = null;
@@ -457,25 +465,31 @@ public class Generator extends AbstractLoader {
         
         for (int i = 0; i < features.size(); i++) {
             
-            LoaderLog.writeLn("Collecting features for: " + features.get(i).getId());
+            String featureName = features.get(i).getId();
+            LoaderLog.writeLn("Collecting features for: " + featureName);
             
             for (int j = 0; j < features.get(i).getRequirements().size(); j++) {
 
-                Feature feat = getFeatureFromListByName(
-                    additionalFeatures, features.get(i).getRequirements().get(j).getBundleSymbolicName());
-                if (!result.contains(feat)) {
-                    result.add(feat);
-                    LoaderLog.writeLn("Found Feature: " + feat.getId(), 4);
-                }
-                List<Feature> newFeat = new ArrayList<Feature>();
-                List<Feature> result2 = new ArrayList<Feature>();
-                newFeat.add(feat);
-                result2.addAll(collectFeatures(newFeat, additionalFeatures));
-                
-                for (int k = 0; k < result2.size(); k++) {
-                    if (!result.contains(result2.get(k))) {
-                        result.add(result2.get(k));
+                String symbolicName = features.get(i).getRequirements().get(j).getBundleSymbolicName();
+                Feature feat = getFeatureFromListByName(additionalFeatures, symbolicName);
+                if (null != feat) {
+                    if (!result.contains(feat)) {
+                        result.add(feat);
+                        LoaderLog.writeLn("Found Feature: " + feat.getId(), 4);
                     }
+                    List<Feature> newFeat = new ArrayList<Feature>();
+                    List<Feature> result2 = new ArrayList<Feature>();
+                    newFeat.add(feat);
+                    result2.addAll(collectFeatures(newFeat, additionalFeatures));
+                    
+                    for (int k = 0; k < result2.size(); k++) {
+                        if (!result.contains(result2.get(k))) {
+                            result.add(result2.get(k));
+                        }
+                    }
+                } else {
+                    LoaderLog.writeLn("Error: cannot find required feature with symbolic name '" + symbolicName + "' " 
+                        + " for feature '" + featureName + "'");
                 }
                 
                 //System.err.println(feat.getId() + " CAME FROM: " + features.get(i).getId());
@@ -568,6 +582,7 @@ public class Generator extends AbstractLoader {
         private String name;
         private boolean eclipsePart;
         private BundleInfo bundle;
+        private Set<String> excludeFromJar;
         
         /**
          * Create an instance for bundling (not unbundling).
@@ -624,6 +639,7 @@ public class Generator extends AbstractLoader {
          */
         void setBundleInfo(BundleInfo bundle) {
             this.bundle = bundle;
+            this.excludeFromJar = null == bundle ? null : bundle.excludeFromJar();
         }
         
         /**
@@ -671,6 +687,16 @@ public class Generator extends AbstractLoader {
             return null != target;
         }
         
+        /**
+         * Returns whether a certain path shall be excluded from a jar.
+         * 
+         * @param path the path
+         * @return <code>true</code> if it shall be excluded, <code>false</code> else 
+         */
+        boolean excludeFromJar(String path) {
+            return null != excludeFromJar && excludeFromJar.contains(path);
+        }
+        
     }
     
     /**
@@ -684,7 +710,6 @@ public class Generator extends AbstractLoader {
         UnbundleInfo unbundle = bundle ? new UnbundleInfo() : new UnbundleInfo(targetDir);
         targetDir.mkdirs();      
         LoaderLog.writeLn("generating Jar files into " + targetDir.getAbsolutePath());
-        LoaderLog.writeLn("GENERATING JAR FILES");    
         File easyJarFile = new File(targetDir, "easy-headless.jar");
         File eclipseJarFile = new File(targetDir, "eclipse-part.jar");
         List<URL> deferList = new ArrayList<URL>();
@@ -876,7 +901,8 @@ public class Generator extends AbstractLoader {
                 if (null != isEntry) {
                     String name = isEntry.getName();
                     String key = name.toLowerCase();
-                    if (!done.contains(key) && !irrelevantInJar(name) && !exclude.contains(name)) {
+                    if (!done.contains(key) && !irrelevantInJar(name) && !exclude.contains(name) 
+                        && !unbundle.excludeFromJar(name)) {
                         done.add(key);
                         JarEntry osEntry = new JarEntry(name);
                         os.putNextEntry(osEntry);
@@ -902,10 +928,10 @@ public class Generator extends AbstractLoader {
         PrintWriter out = new PrintWriter(new OutputStreamWriter(os));
         LoaderLog.writeLn("Producing Startup List");
         LoaderLog.skipLine();
-        //for (BundleInfo info : data) {
-        for (BundleInfo info : this.checkedBundles) {
+        for (BundleInfo info : Utils.sortByContainment(this.checkedBundles)) {
+            
+            // the following conditions are very weird
             if (null != info && null != info.getActivatorClassName()) {
-                
                 if (this.checkedBundles != null) {
                     for (int i = 0; i < this.checkedBundles.size(); i++) {
                         boolean inChecked = false;
@@ -1043,13 +1069,16 @@ public class Generator extends AbstractLoader {
 
     @Override
     protected boolean irrelevantInJar(String name) {
-        boolean result;
+        boolean irrelevant;
         if (name.startsWith("META-INF") && !name.equals("META-INF/MANIFEST.MF")) {
-            result = false;
+            irrelevant = false;
         } else {
-            result = super.irrelevantInJar(name);
+            irrelevant = super.irrelevantInJar(name);
         }
-        return result;
+        if (!irrelevant && null != exclusionSelector) {
+            irrelevant = exclusionSelector.isExcluded(name);
+        }
+        return irrelevant;
     }
     
 }

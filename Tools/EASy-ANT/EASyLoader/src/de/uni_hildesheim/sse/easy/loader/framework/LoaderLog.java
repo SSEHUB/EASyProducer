@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.io.Writer;
 
 /**
@@ -13,7 +14,8 @@ import java.io.Writer;
  */
 public class LoaderLog {
 
-    private static Writer writer;
+    private static Writer writer = new OutputStreamWriter(System.out); 
+    // actually this shall be a PrintWriter - this simplifies the entire class
     
     /**
      * Sets up the LoaderLogger.
@@ -25,7 +27,7 @@ public class LoaderLog {
             writer = new BufferedWriter(new OutputStreamWriter(
                   new FileOutputStream(path), "utf-8"));
         } catch (IOException ex) {
-          // report
+            reportException(ex);
         }
         
     }
@@ -38,9 +40,9 @@ public class LoaderLog {
         
         try {
             writer.write(text);
-            writer.write(System.getProperty("line.separator"));
+            skipLine();
         } catch (IOException ex) {
-          // report
+            reportException(ex);
         }
         
     }
@@ -55,13 +57,22 @@ public class LoaderLog {
         
         try {
             writer.write(text);
-            writer.write(System.getProperty("line.separator"));
+            skipLine();
         } catch (IOException ex) {
-            
+            reportException(ex);
         }
         
         stars();
         
+    }
+    
+    /**
+     * Prints a throwable.
+     * 
+     * @param throwable the throwable
+     */
+    public static void writeLn(Throwable throwable) {
+        throwable.printStackTrace(new PrintWriter(writer));
     }
     
     /**
@@ -75,11 +86,11 @@ public class LoaderLog {
         
         try {
             writer.write(text);
-            writer.write(System.getProperty("line.separator"));
+            skipLine();
             writer.write(error.getMessage());
-            writer.write(System.getProperty("line.separator"));
+            skipLine();
         } catch (IOException ex) {
-            
+            reportException(ex);
         }
         
         stars();
@@ -93,9 +104,9 @@ public class LoaderLog {
         
         try {
             writer.write("*************************************************************************");
-            writer.write(System.getProperty("line.separator"));
+            skipLine();
         } catch (IOException ex) {
-            
+            reportException(ex);
         }
         
     }
@@ -114,9 +125,9 @@ public class LoaderLog {
         
         try {
             writer.write(sIndent + text);
-            writer.write(System.getProperty("line.separator"));
+            skipLine();
         } catch (IOException ex) {
-          // report
+            reportException(ex);
         }
         
     }
@@ -128,9 +139,8 @@ public class LoaderLog {
     public static void close() {
         try {
             writer.close();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        } catch (IOException ex) {
+            reportException(ex);
         }
     }
     
@@ -142,7 +152,7 @@ public class LoaderLog {
         try {
             writer.write(System.getProperty("line.separator"));
         } catch (IOException ex) {
-          // report
+            reportException(ex);
         }
         
     }
@@ -154,14 +164,23 @@ public class LoaderLog {
     public static void line() {
         
         try {
-            writer.write(System.getProperty("line.separator"));
+            skipLine();
             writer.write("----------------------------------------------------------------");
-            writer.write(System.getProperty("line.separator"));
-            writer.write(System.getProperty("line.separator"));
+            skipLine();
+            skipLine();
         } catch (IOException ex) {
-          // report
+            reportException(ex);
         }
         
+    }
+    
+    /**
+     * Reports an exception.
+     * 
+     * @param ex the exception
+     */
+    private static void reportException(Exception ex) {
+        System.out.println(ex.getMessage()); // preliminary
     }
     
 }

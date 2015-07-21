@@ -1,12 +1,13 @@
 project QM {
 version v0;
-	import InfrastructureCfg;
+	import HardwareCfg;
 	import ReconfigurableHardwareCfg;
-	import PipelinesCfg;
+	import DataManagementCfg;     
 	import ObservablesCfg;
 	import AdaptivityCfg;
-	import HardwareCfg;
 	import AlgorithmsCfg;
 	import FamiliesCfg; 
+	import PipelinesCfg;
+	import InfrastructureCfg;
 }
  

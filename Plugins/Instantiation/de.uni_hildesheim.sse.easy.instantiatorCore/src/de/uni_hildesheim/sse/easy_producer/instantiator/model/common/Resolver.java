@@ -5,7 +5,6 @@ import java.util.Stack;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.AbstractCallExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallArgument;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IResolvable;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IRuntimeEnvironment;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Constants;
@@ -79,11 +78,7 @@ public abstract class Resolver<M extends IResolvableModel<V>, O extends IResolva
         }
     }
     
-    /**
-     * Returns the current model.
-     * 
-     * @return the current model (or <b>null</b> if there is none)
-     */
+    @Override
     public M getCurrentModel() {
         return models.isEmpty() ? null : models.peek();
     }
@@ -145,10 +140,10 @@ public abstract class Resolver<M extends IResolvableModel<V>, O extends IResolva
      * @param name the name of the operation
      * @param arguments the actual arguments
      * @return the created expression
-     * @throws ExpressionException in case of an erroneously qualified name
+     * @throws VilException in case of an erroneously qualified name
      */
     protected abstract E createCallExpression(M model, boolean isSuper, String name, CallArgument... arguments) 
-        throws ExpressionException;
+        throws VilException;
  
     /**
      * Class for successively testing and resolving call expressions (super calls, imported calls, recursive calls).
@@ -160,7 +155,7 @@ public abstract class Resolver<M extends IResolvableModel<V>, O extends IResolva
         
         private String name;
         private CallArgument[] arguments;
-        private ExpressionException lastException;
+        private VilException lastException;
         
         /**
          * Creates a call expression tester.
@@ -186,7 +181,7 @@ public abstract class Resolver<M extends IResolvableModel<V>, O extends IResolva
                 E tmp = createCallExpression(model, isSuper, name, arguments);
                 tmp.inferType();
                 result = tmp;
-            } catch (ExpressionException e) {
+            } catch (VilException e) {
                 lastException = e;
             }
             return result;
@@ -197,7 +192,7 @@ public abstract class Resolver<M extends IResolvableModel<V>, O extends IResolva
          * 
          * @return the last exception or <b>null</b>
          */
-        ExpressionException getLastException() {
+        VilException getLastException() {
             return lastException;
         }
         
@@ -210,9 +205,9 @@ public abstract class Resolver<M extends IResolvableModel<V>, O extends IResolva
      *     of imports
      * @param name (qualified) name
      * @return <b>null</b> if <code>name</code> is not qualified, the qualified model else
-     * @throws ExpressionException if qualified and cannot be resolved or qualified super call
+     * @throws VilException if qualified and cannot be resolved or qualified super call
      */
-    private M determineQualifiedModel(M model, String name) throws ExpressionException {
+    private M determineQualifiedModel(M model, String name) throws VilException {
         M result = null;
         int pos = name.indexOf(Constants.QUALIFICATION_SEPARATOR);
         String modelName;
@@ -251,20 +246,20 @@ public abstract class Resolver<M extends IResolvableModel<V>, O extends IResolva
      * @param isSuper is it a super call?
      * @param name (qualified) name
      * @return <b>null</b> if <code>name</code> is not qualified, the qualified model else
-     * @throws ExpressionException if qualified and cannot be resolved or qualified super call
+     * @throws VilException if qualified and cannot be resolved or qualified super call
      */
-    private M determineQualifiedModel(M model, boolean isSuper, String name) throws ExpressionException {
+    private M determineQualifiedModel(M model, boolean isSuper, String name) throws VilException {
         M result = null;
         int pos = name.lastIndexOf(Constants.QUALIFICATION_SEPARATOR);
         if (pos > 0) {
             if (isSuper) {
-                throw new ExpressionException("qualified names cannot be used in super calls", 
-                    ExpressionException.ID_CANNOT_RESOLVE);
+                throw new VilException("qualified names cannot be used in super calls", 
+                    VilException.ID_CANNOT_RESOLVE);
             } 
             result = determineQualifiedModel(model, name.substring(0, pos));
             if (null == result) {
-                throw new ExpressionException("cannot resolve qualification in " + name, 
-                    ExpressionException.ID_CANNOT_RESOLVE);
+                throw new VilException("cannot resolve qualification in " + name, 
+                    VilException.ID_CANNOT_RESOLVE);
             }
         }
         return result;
@@ -277,11 +272,11 @@ public abstract class Resolver<M extends IResolvableModel<V>, O extends IResolva
      * @param isSuper is it a super call?
      * @param arguments the arguments of the call
      * @return the resolved expression
-     * @throws ExpressionException in case that the function cannot be resolved.
+     * @throws VilException in case that the function cannot be resolved.
      */
     @SuppressWarnings("unchecked")
     public E createCallExpression(boolean isSuper, String name, CallArgument... arguments) 
-        throws ExpressionException {
+        throws VilException {
         CallExpressionTester tester = new CallExpressionTester(name, arguments);
         E result = null;
         if (!models.isEmpty()) {
@@ -296,8 +291,8 @@ public abstract class Resolver<M extends IResolvableModel<V>, O extends IResolva
                     result = tester.createAndCheckCall(model, isSuper);
                 } else {
                     if (null == model.getParent()) { // if it is super and no parent -> error!
-                        throw new ExpressionException("model is not extended, no super possible", 
-                            ExpressionException.ID_CANNOT_RESOLVE);
+                        throw new VilException("model is not extended, no super possible", 
+                            VilException.ID_CANNOT_RESOLVE);
                     }
                 }
                 if (null == result) {
@@ -321,14 +316,14 @@ public abstract class Resolver<M extends IResolvableModel<V>, O extends IResolva
             }
             if (null == result) {
                 if (null == tester.getLastException()) {
-                    throw new ExpressionException("cannot resolve rule " 
-                        + AbstractCallExpression.getSignature(name, arguments), ExpressionException.ID_CANNOT_RESOLVE);
+                    throw new VilException("cannot resolve rule " 
+                        + AbstractCallExpression.getSignature(name, arguments), VilException.ID_CANNOT_RESOLVE);
                 } else {
                     throw tester.getLastException();
                 }
             }
         } else {
-            throw new ExpressionException("model stack is empty", ExpressionException.ID_INTERNAL);
+            throw new VilException("model stack is empty", VilException.ID_INTERNAL);
         }
         return result;
     }
@@ -341,13 +336,13 @@ public abstract class Resolver<M extends IResolvableModel<V>, O extends IResolva
      * @param name the name of the function to be called
      * @param arguments the arguments to that function
      * @return the resolved function
-     * @throws ExpressionException in case that the function cannot be resolved.
+     * @throws VilException in case that the function cannot be resolved.
      */
     public CallExpression createExtensionCallExpression(String name, CallArgument... arguments) 
-        throws ExpressionException {
+        throws VilException {
         CallExpression result = null;
         if (!models.isEmpty()) {
-            ExpressionException lastException = null;
+            VilException lastException = null;
             M model = models.peek();
             for (int t = 0; null == result && t < model.getExtensionTypesCount(); t++) {
                 IMetaType type = model.getExtensionType(t);
@@ -357,7 +352,7 @@ public abstract class Resolver<M extends IResolvableModel<V>, O extends IResolva
                         result = new CallExpression(op, arguments);
                         result.inferType();
                     }
-                } catch (ExpressionException e) {
+                } catch (VilException e) {
                     lastException = e;
                 }
             }

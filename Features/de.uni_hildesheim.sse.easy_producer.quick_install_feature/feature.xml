@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="de.uni_hildesheim.sse.easy_producer.quick_install_feature"
-      label="EASy Producer Quick Installation"
-      version="0.11.3"
-      provider-name="University of Hildesheim - SSE">
+      id="de.uni_hildesheim.sse.easy_producer.main_feature"
+      label="EASy-Producer"
+      version="1.0.0"
+      provider-name="University of Hildesheim, SSE"
+      plugin="de.uni_hildesheim.sse.easy.ui">
 
-   <description>
-      This feature provides all required functionality of EASy Producer as a quick installation.
+   <description url="http://www.sse.uni-hildesheim.de/easy-producer">
+      This package provides all required functionality of EASy-Producer.
+This package is required to run EASy-Producer inside Eclipse.
    </description>
 
    <copyright>
       Copyright 2013 University of Hildesheim, Software Systems Engineering
    </copyright>
 
-   <license>
+   <license url="http://www.apache.org/licenses/LICENSE-2.0">
       Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
@@ -31,107 +33,87 @@ limitations under the License.
       <update label="EASy Producer Update Site" url="http://projects.sse.uni-hildesheim.de/easy/"/>
    </url>
 
-   <requires>
-      <import feature="de.uni_hildesheim.sse.ivml.ui_feature" version="0.10.3" match="greaterOrEqual"/>
-      <import feature="de.uni_hildesheim.sse.easy_producer.instantiation.velocity_feature" version="0.7.2" match="greaterOrEqual"/>
-      <import feature="de.uni_hildesheim.sse.easy_producer.core_feature" version="0.10.3" match="greaterOrEqual"/>
-      <import feature="de.uni_hildesheim.sse.easy_producer.ui_feature" version="0.11.3" match="greaterOrEqual"/>
-      <import feature="de.uni_hildesheim.sse.vil.core_feature" version="0.5.3" match="greaterOrEqual"/>
-      <import feature="de.uni_hildesheim.sse.vil.ui_feature" version="0.5.3" match="greaterOrEqual"/>
-      <import feature="de.uni_hildesheim.sse.reasoning.drools2_feature" version="0.1.6" match="greaterOrEqual"/>
-      <import plugin="de.uni_hildesheim.sse.easy.instantiator.maven" version="0.0.1" match="greaterOrEqual"/>
-      <import plugin="ReasonerCore" version="0.10.3" match="greaterOrEqual"/>
-   </requires>
+   <includes
+         id="de.uni_hildesheim.sse.easy_producer.core_feature"
+         version="1.0.0"/>
 
-   <plugin
-         id="de.uni-hildesheim.sse.easy.instantiator.serializer"
-         download-size="0"
-         install-size="0"
-         version="0.4.3"
-         unpack="false"/>
+   <includes
+         id="de.uni_hildesheim.sse.easy_producer.ui_feature"
+         version="1.0.0"/>
 
-   <plugin
-         id="de.uni-hildesheim.sse.easy.instantiator.xvcl"
-         download-size="0"
-         install-size="0"
-         version="3.3.0.2"
-         unpack="false"/>
+   <includes
+         id="de.uni_hildesheim.sse.ivml.ui_feature"
+         version="1.0.0"/>
+
+   <includes
+         id="de.uni_hildesheim.sse.vil.ui_feature"
+         version="1.0.0"/>
+
+   <includes
+         id="de.uni_hildesheim.sse.reasoning.reasoner_feature"
+         version="1.0.0"/>
 
    <plugin
          id="de.uni_hildesheim.sse.integration.common"
          download-size="0"
          install-size="0"
-         version="0.7.1"
+         version="1.0.0"
          unpack="false"/>
 
    <plugin
          id="de.uni_hildesheim.sse.integration.common.eclipse"
          download-size="0"
          install-size="0"
-         version="0.10.1"
+         version="1.0.0"
          unpack="false"/>
 
    <plugin
          id="de.uni_hildesheim.sse.integration.common.impl"
          download-size="0"
          install-size="0"
-         version="0.6.2"
+         version="1.0.0"
          unpack="false"/>
 
    <plugin
          id="de.uni_hildesheim.sse.ivml"
          download-size="0"
          install-size="0"
-         version="0.10.3"
+         version="1.0.0"
          unpack="false"/>
 
    <plugin
          id="de.uni_hildesheim.sse.varModel"
          download-size="0"
          install-size="0"
-         version="0.11.3"
-         unpack="false"/>
-
-   <plugin
-         id="de.uni_hildesheim.sse.varModel.persistency"
-         download-size="0"
-         install-size="0"
-         version="0.7.2"
+         version="1.0.0"
          unpack="false"/>
 
    <plugin
          id="de.uni_hildesheim.sse.dslCore"
          download-size="0"
          install-size="0"
-         version="0.8.3"
+         version="1.0.0"
          unpack="false"/>
 
    <plugin
          id="de.uni_hildesheim.sse.utils"
          download-size="0"
          install-size="0"
-         version="0.4.3"
-         unpack="false"/>
-
-   <plugin
-         id="de.uni_hildesheim.sse.reasoning.drools2"
-         download-size="0"
-         install-size="0"
-         version="0.1.6"
-         unpack="false"/>
-
-   <plugin
-         id="de.uni_hildesheim.sse.easy.instantiator.java"
-         download-size="0"
-         install-size="0"
-         version="0.2.3"
+         version="1.0.0"
          unpack="false"/>
 
    <plugin
          id="de.uni-hildesheim.sse.easy.instantiatorCore"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="1.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="ReasonerCore"
+         download-size="0"
+         install-size="0"
+         version="1.0.0"
          unpack="false"/>
 
 </feature>

@@ -6,8 +6,8 @@ import java.util.Map;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IArtifactVisitor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Binary;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Text;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArraySet;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationMeta;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.PseudoString;
@@ -56,12 +56,12 @@ public class JavaAnnotation extends JavaFragmentArtifact {
     }
 
     @Override
-    public void delete() throws ArtifactException {
+    public void delete() throws VilException {
         getParent().deleteChild(this);
     }
 
     @Override
-    public String getName() throws ArtifactException {
+    public String getName() throws VilException {
         return simpleName;
     }
     
@@ -75,18 +75,18 @@ public class JavaAnnotation extends JavaFragmentArtifact {
     }
 
     @Override
-    public void rename(String name) throws ArtifactException {
+    public void rename(String name) throws VilException {
         // TODO Auto-generated method stub
         //getParent().notifyChanged();
     }
 
     @Override
-    public Text getText() throws ArtifactException {
+    public Text getText() throws VilException {
         return Text.CONSTANT_EMPTY;
     }
 
     @Override
-    public Binary getBinary() throws ArtifactException {
+    public Binary getBinary() throws VilException {
         return Binary.CONSTANT_EMPTY;
     }
 
@@ -114,6 +114,12 @@ public class JavaAnnotation extends JavaFragmentArtifact {
      */
     public String getAnnotationValue(String field) {
         return fields.get(field);
+    }
+
+    @Invisible
+    @Override
+    public String getStringValue(StringComparator comparator) {
+        return "annotation '" + getNameSafe() + "'";
     }
 
 }

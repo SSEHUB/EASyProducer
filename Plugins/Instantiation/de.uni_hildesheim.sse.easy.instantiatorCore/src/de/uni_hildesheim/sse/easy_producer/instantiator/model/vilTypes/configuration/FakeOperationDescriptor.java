@@ -3,11 +3,10 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configur
 import java.util.ArrayList;
 import java.util.List;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.VilException;
 
 /**
  * Represents a fake operation descriptor, i.e., an operation which accepts every type of
@@ -25,14 +24,14 @@ public class FakeOperationDescriptor extends OperationDescriptor {
      * @param parameterCount the number of parameters of the operation
      * @param acceptsNamedParameters whether the operation accepts named parameters
      */
-    FakeOperationDescriptor(TypeDescriptor<? extends IVilType> declaringType, 
+    FakeOperationDescriptor(TypeDescriptor<?> declaringType, 
         String name, int parameterCount, boolean acceptsNamedParameters) {
         super(declaringType, name, OperationDescriptor.CONSTRUCTOR_NAME.equals(name));
-        final TypeDescriptor<? extends IVilType> any = TypeRegistry.anyType();
+        final TypeDescriptor<?> any = TypeRegistry.anyType();
         
         // allow this operation to accept everything and the return type to be acceptable for everything
         setReturnType(any);
-        List<TypeDescriptor<? extends IVilType>> param = new ArrayList<TypeDescriptor<? extends IVilType>>();
+        List<TypeDescriptor<?>> param = new ArrayList<TypeDescriptor<?>>();
         for (int p = 0; p < parameterCount; p++) {
             param.add(any);
         }
@@ -96,6 +95,11 @@ public class FakeOperationDescriptor extends OperationDescriptor {
     @Override
     public Object invoke(Object... args) throws VilException {
         return null;
+    }
+    
+    @Override
+    public int useGenericParameterAsReturn() {
+        return -1;
     }
     
     @Override

@@ -1,0 +1,6 @@
+project undefinedOperationFail {
+
+    version v0;
+    Integer aVariable;
+    aVariable() > 0;
+}

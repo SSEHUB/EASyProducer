@@ -22,7 +22,7 @@ public interface IMetaType {
     public String getQualifiedName();
     
     /**
-     * Returns the number of operations provided by this provider.
+     * Returns the number of operations provided by this type.
      * 
      * @return the number of operations
      */
@@ -31,13 +31,46 @@ public interface IMetaType {
     /**
      * Returns the specified operation.
      * 
-     * @param index the index of the operation to be returned
+     * @param index the 0-based index of the operation to be returned
      * @return the specified operation
      * @throws IndexOutOfBoundsException if <code>index &lt; 0 
      *     || index&gt;={@link #getOperationsCount()}</code>
      */
     public IMetaOperation getOperation(int index);
+    
+    /**
+     * Returns the number of generic type parameters.
+     * 
+     * @return the number of generic type parameters
+     */
+    public int getGenericParameterCount();
+    
+    /**
+     * Returns the specified generic parameter type.
+     * 
+     * @param index the index of the parameter type to return
+     * @return the specified parameter type
+     * @throws IndexOutOfBoundsException if <code>index &lt; 0 || index &gt;= {@link #getGenericParameterCount()}</code>
+     */
+    public TypeDescriptor<?> getGenericParameterType(int index);
 
+    /**
+     * Returns the number of fields provided by this type.
+     * 
+     * @return the number of fields
+     */
+    public int getFieldCount();
+    
+    /**
+     * Returns the specified field.
+     * 
+     * @param index the 0-based index of the field to be returned
+     * @return the specified field
+     * @throws IndexOutOfBoundsException if <code>index &lt; 0 
+     *     || index&gt;={@link #getFieldCount()}</code>
+     */
+    public IMetaField getField(int index);
+    
     /**
      * Returns whether this type is the same or a super class of <code>type</code>.
      * 
@@ -112,5 +145,19 @@ public interface IMetaType {
      * @return the base type or <b>null</b>
      */
     public IMetaType getBaseType();
+    
+    /**
+     * Returns the type this type is refined from.
+     * 
+     * @return the super type or <b>null</b> if there is none
+     */
+    public IMetaType getSuperType();
+    
+    /**
+     * Returns whether this type is internal and shall not be visible to the user.
+     * 
+     * @return <code>true</code> if this type is internal, <code>false</code> else
+     */
+    public boolean isInternal();
     
 }

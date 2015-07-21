@@ -1,0 +1,23 @@
+-> main()
+    seq <- {1, 2, 3, 4, 5, 6}
+    -> iter(sequenceOf(Integer), FunCall) with ({1, 2, 3, 4, 5, 6}, func(Integer))
+        map {
+            map: i <- 1
+            -> func(Integer) with (1)
+                -> println(Any) with (1)
+            map: i <- 2
+            -> func(Integer) with (2)
+                -> println(Any) with (2)
+            map: i <- 3
+            -> func(Integer) with (3)
+                -> println(Any) with (3)
+            map: i <- 4
+            -> func(Integer) with (4)
+                -> println(Any) with (4)
+            map: i <- 5
+            -> func(Integer) with (5)
+                -> println(Any) with (5)
+            map: i <- 6
+            -> func(Integer) with (6)
+                -> println(Any) with (6)
+        }

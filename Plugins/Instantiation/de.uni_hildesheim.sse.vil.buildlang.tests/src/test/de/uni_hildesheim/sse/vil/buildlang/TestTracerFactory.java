@@ -13,7 +13,7 @@ import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
  * 
  * @author Holger Eichelberger
  */
-class TestTracerFactory extends TracerFactory {
+public class TestTracerFactory extends TracerFactory {
 
     private static final boolean DEBUG = false;
     private de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ITracer buildTracer;
@@ -77,13 +77,15 @@ class TestTracerFactory extends TracerFactory {
     
     @Override
     protected de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.ITracer 
-    createTemplateLanguageTracerImpl() {
+        createTemplateLanguageTracerImpl() {
+        
         return templateTracer;
     }
 
     @Override
     protected de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ITracer 
-    createBuildLanguageTracerImpl() {
+        createBuildLanguageTracerImpl() {
+        
         return buildTracer;
     }
 

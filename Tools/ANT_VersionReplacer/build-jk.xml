@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="VersionReplacementTasks" default="dist" basedir=".">
+	<!-- Settings for this project-->
+	<property name="src.dir" value="src"/>
+	<property name="lib.dir" value="lib"/>
+	<property name="resources.internal.dir" value="res"/>
+	<property name="resources.external.dir" value="externalResources"/>
+	<property name="javacSource" value="1.7"/>
+	<property name="javacTarget" value="1.7"/>	
+	<property name="build.base.dir" value="build"/>
+	<property name="build.classes.dir" value="${build.base.dir}/classes"/>
+	<property name="build.jar.dir" value="${build.base.dir}/jar"/>
+	<property name="javac.encoding" value="iso-8859-1"/>
+	
+	<path id ="includes">
+		<!-- Libs -->
+		<fileset dir="${lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+	
+	<!-- Targets  -->
+	<target name="init">
+		<!-- Delete generated folders -->
+		<delete dir="${build.base.dir}"/>
+		
+		<!-- Create folders -->
+        <mkdir dir="${build.base.dir}"/>
+		<mkdir dir="${build.classes.dir}"/>
+		<mkdir dir="${build.jar.dir}"/>
+	</target>
+	
+	<!-- Compile all files without test classes -->
+	<target name="compile" depends="init">
+		<javac srcdir="${src.dir}" debug="off" destdir="${build.classes.dir}" includeAntRuntime="no" failonerror="true" source="${javacSource}" target="${javacTarget}" encoding="${javac.encoding}">
+			<classpath refid="includes" />
+			<exclude name="**/package-info.java"/>
+		</javac>
+    </target>
+	
+	<!-- Creates a jar file -->
+	<target name="jar" depends="compile">
+		<copy todir="${build.classes.dir}">
+            <fileset dir="${resources.internal.dir}" includes="**/*"/>
+        </copy>
+		<jar destfile="${build.jar.dir}/${ant.project.name}.jar" basedir="${build.classes.dir}"/>
+    </target>
+	
+	<target name="dist" depends="jar">
+		<copy todir="${build.jar.dir}">
+            <fileset dir="${resources.external.dir}" includes="**/*"/>
+            <fileset dir="${lib.dir}" includes="**/*.jar">
+            	<exclude name="ant-1.8.4.jar"/>
+			</fileset>
+        </copy>
+		<zip destfile="${build.base.dir}/${ant.project.name}.zip" basedir="${build.jar.dir}"/>
+	</target>
+</project>

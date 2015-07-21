@@ -34,9 +34,9 @@ public class ExpressionStatement {
      * 
      * @param visitor the visitor
      * @return the result of visiting the given statement (may be <b>null</b>)
-     * @throws VilLanguageException in case that visiting fails (e.g., execution)
+     * @throws VilException in case that visiting fails (e.g., execution)
      */
-    public Object accept(IVisitor visitor) throws VilLanguageException {
+    public Object accept(IVisitor visitor) throws VilException {
         return visitor.visitExpressionStatement(this);
     }
 

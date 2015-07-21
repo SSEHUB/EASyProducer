@@ -1,5 +1,6 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.utils.messages.IMessageHandler;
 
 /**
@@ -34,12 +35,12 @@ public class ExpressionVersionRestrictionValidator implements IExpressionVisitor
     }
     
     @Override
-    public Object visitParenthesisExpression(ParenthesisExpression par) throws ExpressionException {
+    public Object visitParenthesisExpression(ParenthesisExpression par) throws VilException {
         return par.getExpr().accept(this);
     }
 
     @Override
-    public Object visitCallExpression(CallExpression call) throws ExpressionException {
+    public Object visitCallExpression(CallExpression call) throws VilException {
         for (int a = 0; a < call.getArgumentsCount(); a++) {
             call.getArgument(a).accept(this);
         }
@@ -47,44 +48,64 @@ public class ExpressionVersionRestrictionValidator implements IExpressionVisitor
     }
 
     @Override
-    public Object visitConstantExpression(ConstantExpression cst) throws ExpressionException {
+    public Object visitConstantExpression(ConstantExpression cst) throws VilException {
         return null; // is ok
     }
 
     @Override
     public Object visitVarModelIdentifierExpression(VarModelIdentifierExpression identifier) 
-        throws ExpressionException {
+        throws VilException {
         return null; // probably ok for future
     }
 
     @Override
-    public Object visitVilTypeExpression(VilTypeExpression typeExpression) throws ExpressionException {
+    public Object visitVilTypeExpression(VilTypeExpression typeExpression) throws VilException {
         return null; // probably ok for future
     }
 
     @Override
-    public Object visitVariableExpression(VariableExpression cst) throws ExpressionException {
+    public Object visitVariableExpression(VariableExpression cst) throws VilException {
         return null; // ok
     }
-
+    
     @Override
-    public Object visitExpressionEvaluator(ExpressionEvaluator ex) throws ExpressionException {
-        return null; // probably ok for future
-    }
-
-    @Override
-    public Object visitExpression(Expression ex) throws ExpressionException {
-        return null; // generic fallback
-    }
-
-    @Override
-    public Object visitValueAssignmentExpression(ValueAssignmentExpression ex) throws ExpressionException {
-        emit("no value assignments supported here", true, ExpressionException.ID_SEMANTIC);
+    public Object visitFieldAccessExpression(FieldAccessExpression ex) throws VilException {
         return null;
     }
 
     @Override
-    public Object visitContainerInitializerExpression(ContainerInitializerExpression ex) throws ExpressionException {
+    public Object visitExpressionEvaluator(ExpressionEvaluator ex) throws VilException {
+        return null; // probably ok for future
+    }
+
+    @Override
+    public Object visitExpression(Expression ex) throws VilException {
+        return null; // generic fallback
+    }
+
+    @Override
+    public Object visitValueAssignmentExpression(ValueAssignmentExpression ex) throws VilException {
+        emit("no value assignments supported here", true, VilException.ID_SEMANTIC);
+        return null;
+    }
+
+    @Override
+    public Object visitContainerInitializerExpression(ContainerInitializerExpression ex) throws VilException {
+        return null; // probably ok
+    }
+
+    @Override
+    public Object visitCompositeExpression(CompositeExpression ex) throws VilException {
+        return null; // probably ok
+    }
+
+    @Override
+    public Object visitResolvableOperationExpression(ResolvableOperationExpression ex) throws VilException {
+        return null; // probably ok
+    }
+
+    @Override
+    public Object visitResolvableOperationCallExpression(ResolvableOperationCallExpression ex) throws VilException {
         return null; // probably ok
     }
 

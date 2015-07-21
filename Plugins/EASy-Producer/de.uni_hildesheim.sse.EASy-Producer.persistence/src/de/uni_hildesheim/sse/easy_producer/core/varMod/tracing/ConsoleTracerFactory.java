@@ -9,7 +9,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.ITra
  * VIL template language tracer.
  * 
  * This is used to send tracer messages about the execution of VIL
- * build scripts and templates to the GUI, in particule, the Eclipse
+ * build scripts and templates to the GUI, in particle, the Eclipse
  * console.
  * 
  * @author kroeher
@@ -40,7 +40,8 @@ public class ConsoleTracerFactory extends TracerFactory {
 
     @Override
     protected de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ITracer
-    createBuildLanguageTracerImpl() {
+        createBuildLanguageTracerImpl() {
+        
         return TRACER;
     }
 

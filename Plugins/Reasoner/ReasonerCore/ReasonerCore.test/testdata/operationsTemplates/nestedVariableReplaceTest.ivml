@@ -1,0 +1,17 @@
+project NestedVariableReplaceTest {
+
+    version v0;    
+    
+    Integer i = 0;   
+    
+    compound Pipeline {   
+        Integer i;
+        Integer y;
+        i > y;
+        setOf(Constraint) constraints;
+    }
+
+    Pipeline pipeline;
+    pipeline = {i = 0, constraints = {i > 0}};
+    
+}

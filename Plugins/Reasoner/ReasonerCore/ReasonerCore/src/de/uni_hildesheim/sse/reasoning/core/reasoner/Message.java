@@ -2,19 +2,28 @@ package de.uni_hildesheim.sse.reasoning.core.reasoner;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
+import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.ModelElement;
+import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.utils.messages.Status;
 
 /**
  * Part of the {@link ReasoningResult} class, expressing on error/warning of a complete {@link ReasoningResult}.
  * @author El-Sharkawy
+ * @author Sizonenko
  *
  */
 public class Message extends de.uni_hildesheim.sse.utils.messages.Message {
 
     private List<ModelElement> conflictingElements;
     private List<String> conflictingElementLabels;
+    private List<Set<AbstractVariable>> constraintVariables;
+    private List<String> conflictingElementComments;
+    private List<Project> conflictingElementProjects;
+    private List<String> conflictingElementSuggestions;
+    
 
     /**
      * Sole constructor for multiple conflicting elements.
@@ -74,5 +83,82 @@ public class Message extends de.uni_hildesheim.sse.utils.messages.Message {
      */
     public List<String> getConflictLabels() {
         return conflictingElementLabels;
+    }
+    
+    /**
+     * Method for adding conflicting element comments.
+     * @param conflictingElementComments conflicting element comments.
+     */
+    public void addConflictingElementComments(List<String> conflictingElementComments) {
+        this.conflictingElementComments = new ArrayList<String>();
+        if (null != conflictingElementComments) {
+            this.conflictingElementComments.addAll(conflictingElementComments);
+        }
+    }
+    
+    /**
+     * Returns the list of conflicting item comments.
+     * @return The list of conflicting item comments.
+     */
+    public List<String> getConflictComments() {
+        return conflictingElementComments;
+    }
+    
+    /**
+     * Method for adding conflicting element Suggestions.
+     * @param conflictingElementSuggestions conflicting element Suggestions.
+     */
+    public void addConflictingElementSuggestions(List<String> conflictingElementSuggestions) {
+        this.conflictingElementSuggestions = new ArrayList<String>();
+        if (null != conflictingElementSuggestions) {
+            this.conflictingElementSuggestions.addAll(conflictingElementSuggestions);
+        }
+    }
+    
+    /**
+     * Returns the list of conflicting item Suggestions.
+     * @return The list of conflicting item Suggestions.
+     */
+    public List<String> getConflictSuggestions() {
+        return conflictingElementSuggestions;
+    }
+    
+    /**
+     * Method for adding conflicting element Projects.
+     * @param conflictingElementProjects conflicting element Projects.
+     */
+    public void addConflictingElementProjects(List<Project> conflictingElementProjects) {
+        this.conflictingElementProjects = new ArrayList<Project>();
+        if (null != conflictingElementProjects) {
+            this.conflictingElementProjects.addAll(conflictingElementProjects);
+        }
+    }
+    
+    /**
+     * Returns the list of conflicting item Projects.
+     * @return The list of conflicting item Projects.
+     */
+    public List<Project> getConflictProjects() {
+        return conflictingElementProjects;
+    }
+
+    
+    /**
+     * Method for adding a a list of variables that are involved in each failed constraint.
+     * @param variables List of variables.
+     */
+    public void addConstraintVariables(List<Set<AbstractVariable>> variables) {
+        this.constraintVariables = new ArrayList<Set<AbstractVariable>>();
+        if (null != constraintVariables) {
+            this.constraintVariables.addAll(variables);
+        }
+    }
+    
+    /**
+     * Method for returning a a list of variables that are involved in each failed constraint.
+     * @return List of variables.
+     */
+    public List<Set<AbstractVariable>> getConstraintVariables() {
+        return constraintVariables;
     }
 }

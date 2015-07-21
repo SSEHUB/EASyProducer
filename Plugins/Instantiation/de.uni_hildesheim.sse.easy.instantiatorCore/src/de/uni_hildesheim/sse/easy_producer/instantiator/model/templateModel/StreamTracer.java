@@ -4,7 +4,7 @@ import java.io.Writer;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.RuntimeEnvironment;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VariableDeclaration;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionWriter;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.StringValueHelper;
 
@@ -62,7 +62,7 @@ public class StreamTracer extends de.uni_hildesheim.sse.easy_producer.instantiat
                 }
                 try {
                     print(StringValueHelper.getStringValue(environment.getValue(def.getParameter(i)), NORMALIZER));
-                } catch (VilLanguageException e) {
+                } catch (VilException e) {
                     print("<null>");
                 }
             }
@@ -119,7 +119,7 @@ public class StreamTracer extends de.uni_hildesheim.sse.easy_producer.instantiat
             TemplateLangWriter writer = new TemplateLangWriter(getOut());
             try {
                 element.accept(writer);
-            } catch (VilLanguageException e) {
+            } catch (VilException e) {
             }
         }
     }

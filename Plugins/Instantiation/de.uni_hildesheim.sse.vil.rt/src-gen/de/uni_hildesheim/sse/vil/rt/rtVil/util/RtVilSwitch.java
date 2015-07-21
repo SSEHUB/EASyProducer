@@ -117,6 +117,13 @@ public class RtVilSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case RtVilPackage.WEIGHTING_STATEMENT:
+      {
+        WeightingStatement weightingStatement = (WeightingStatement)theEObject;
+        T result = caseWeightingStatement(weightingStatement);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case RtVilPackage.BREAKDOWN_STATEMENT:
       {
         BreakdownStatement breakdownStatement = (BreakdownStatement)theEObject;
@@ -135,14 +142,6 @@ public class RtVilSwitch<T> extends Switch<T>
       {
         TacticDeclaration tacticDeclaration = (TacticDeclaration)theEObject;
         T result = caseTacticDeclaration(tacticDeclaration);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case RtVilPackage.SCRIPT_CONTENTS:
-      {
-        ScriptContents scriptContents = (ScriptContents)theEObject;
-        T result = caseScriptContents(scriptContents);
-        if (result == null) result = casertContents(scriptContents);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -247,6 +246,22 @@ public class RtVilSwitch<T> extends Switch<T>
   }
 
   /**
+   * Returns the result of interpreting the object as an instance of '<em>Weighting Statement</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Weighting Statement</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseWeightingStatement(WeightingStatement object)
+  {
+    return null;
+  }
+
+  /**
    * Returns the result of interpreting the object as an instance of '<em>Breakdown Statement</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
@@ -290,22 +305,6 @@ public class RtVilSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseTacticDeclaration(TacticDeclaration object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>Script Contents</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Script Contents</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseScriptContents(ScriptContents object)
   {
     return null;
   }

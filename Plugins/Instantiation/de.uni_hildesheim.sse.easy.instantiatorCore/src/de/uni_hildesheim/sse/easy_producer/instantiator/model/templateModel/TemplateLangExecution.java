@@ -14,17 +14,18 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.Arti
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.ExecutionVisitor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.IResolvableModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.ModelCallExpression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.Typedef;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.AbstractCallExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallArgument;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ConstantExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionParserRegistry;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IExpressionParser;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.StringReplacer;
+//import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.StringReplacer;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionParserRegistry.ILanguage;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ResolvableOperationCallExpression;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.StringReplacer;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Collection;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.StringValueHelper;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
@@ -154,7 +155,7 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
             try {
                 DEFAULT_EXTENSIONS.add(new JavaExtension(extension, TypeRegistry.DEFAULT));
                 logger.info("registered default VTL extension " + extension.getName());
-            } catch (VilLanguageException e) {
+            } catch (VilException e) {
                 logger.exception(e);
             }
         }
@@ -182,7 +183,7 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
     }
     
     @Override
-    public Object visitTemplate(Template template) throws VilLanguageException {
+    public Object visitTemplate(Template template) throws VilException {
         environment.switchContext(template); // initial context, assumption that method is only called from outside
         tracer.visitTemplate(template);
         visitModelHeader(template);
@@ -201,8 +202,8 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
             }
         }
         if (null == main) {
-            throw new VilLanguageException("no '" + mainName + "' template found with suitable parameters", 
-                VilLanguageException.ID_RUNTIME_STARTRULE);
+            throw new VilException("no '" + mainName + "' template found with suitable parameters", 
+                VilException.ID_RUNTIME_STARTRULE);
         }
         Object result = executeMain(template, main);
         tracer.visitedTemplate(template);
@@ -210,18 +211,14 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
     }
 
     @Override
-    public Object visitDef(Def def) throws VilLanguageException {
+    public Object visitDef(Def def) throws VilException {
         Object result;
         if (def.isPlaceholder()) {
             result = null;
         } else {
-            try {
-                tracer.visitDef(def, environment);
-                result = visitTemplateBlock(def); // increases indentation
-                tracer.visitedDef(def, environment, result);
-            } catch (VilLanguageException e) {
-                throw new VilLanguageException(e);
-            }
+            tracer.visitDef(def, environment);
+            result = visitTemplateBlock(def); // increases indentation
+            tracer.visitedDef(def, environment, result);
         }
         return result;
     }
@@ -253,51 +250,43 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
     }
 
     @Override
-    public Object visitTemplateBlock(TemplateBlock block) throws VilLanguageException {
+    public Object visitTemplateBlock(TemplateBlock block) throws VilException {
         boolean ok = true;
         Object value = null;
         environment.increaseIndentation();
-        try {
-            for (int e = 0; ok && e < block.getBodyElementCount(); e++) {
-                ITemplateElement elt = block.getBodyElement(e);
-                value = elt.accept(this);
-                if (mayFail(elt)) {
-                    ok = checkConditionResult(value, block, ConditionTest.DONT_CARE);
-                }
-                if (!ok) {
-                    tracer.failedAt(block.getBodyElement(e));
-                }
+        for (int e = 0; ok && e < block.getBodyElementCount(); e++) {
+            ITemplateElement elt = block.getBodyElement(e);
+            value = elt.accept(this);
+            if (mayFail(elt)) {
+                ok = checkConditionResult(value, block, ConditionTest.DONT_CARE);
             }
-        } catch (VilLanguageException e) {
-            throw e;
+            if (!ok) {
+                tracer.failedAt(block.getBodyElement(e));
+            }
         }
         environment.decreaseIndentation();
         return value;
     }
 
     @Override
-    public Object visitAlternative(AlternativeStatement alternative) throws VilLanguageException {
+    public Object visitAlternative(AlternativeStatement alternative) throws VilException {
         Object value = null;
-        try {
-            Expression cond = alternative.getCondition();
-            Object condValue = cond.accept(this);
-            if (checkConditionResult(condValue, cond, ConditionTest.DONT_CARE)) {
-                ITemplateElement ifStmt = alternative.getIfStatement();
-                increaseIndentation(ifStmt);
-                tracer.visitAlternative(true);
-                value = ifStmt.accept(this);
-                decreaseIndentation(ifStmt);
-            } else {
-                if (null != alternative.getElseStatement()) {
-                    ITemplateElement elseStmt = alternative.getElseStatement();
-                    increaseIndentation(elseStmt);
-                    tracer.visitAlternative(false);
-                    value = elseStmt.accept(this);
-                    decreaseIndentation(elseStmt);
-                }
+        Expression cond = alternative.getCondition();
+        Object condValue = cond.accept(this);
+        if (checkConditionResult(condValue, cond, ConditionTest.DONT_CARE)) {
+            ITemplateElement ifStmt = alternative.getIfStatement();
+            increaseIndentation(ifStmt);
+            tracer.visitAlternative(true);
+            value = ifStmt.accept(this);
+            decreaseIndentation(ifStmt);
+        } else {
+            if (null != alternative.getElseStatement()) {
+                ITemplateElement elseStmt = alternative.getElseStatement();
+                increaseIndentation(elseStmt);
+                tracer.visitAlternative(false);
+                value = elseStmt.accept(this);
+                decreaseIndentation(elseStmt);
             }
-        } catch (ExpressionException e) {
-            throw new VilLanguageException(e);
         }
         return value;
     }
@@ -307,16 +296,12 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
      * 
      * @param expression the expression (may be <b>null</b>)
      * @return the separator (or <b>null</b>)
-     * @throws VilLanguageException in case of evaluation problems
+     * @throws VilException in case of evaluation problems
      */
-    private String getSeparatorFromExpression(Expression expression) throws VilLanguageException {
+    private String getSeparatorFromExpression(Expression expression) throws VilException {
         String separator;
         if (null != expression) {
-            try {
-                separator = StringValueHelper.getStringValue(expression.accept(this), null);
-            } catch (ExpressionException e) {
-                throw new VilLanguageException(e);
-            }
+            separator = StringValueHelper.getStringValue(expression.accept(this), null);
         } else {
             separator = null;
         }
@@ -324,85 +309,65 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
     }
 
     @Override
-    public Object visitLoop(LoopStatement loop) throws VilLanguageException {
+    public Object visitLoop(LoopStatement loop) throws VilException {
         Object object;
-        try {
-            Expression expr = loop.getContainerExpression();
-            object = convertToContainer(expr, expr.accept(this), "loop");
-        } catch (ExpressionException e) {
-            throw new VilLanguageException(e);
-        }
+        Expression expr = loop.getContainerExpression();
+        object = convertToContainer(expr, expr.accept(this), "loop");
         String separator = getSeparatorFromExpression(loop.getSeparatorExpression());
         String finalSeparator = getSeparatorFromExpression(loop.getFinalSeparatorExpression());
             
         if (object instanceof Collection<?>) {
-            try {
-                VariableDeclaration iterVar = loop.getIteratorVariable();
-                environment.pushLevel();
-                Collection<?> collection = (Collection<?>) object;
-                Iterator<?> iter = collection.iterator();
-                tracer.visitLoop(iterVar);
-                while (iter.hasNext()) {
-                    Object value = iter.next();
-                    environment.addValue(iterVar, value);
-                    tracer.valueDefined(iterVar, value);
-                    ITemplateElement loopStmt = loop.getLoopStatement();
-                    increaseIndentation(loopStmt);
-                    loopStmt.accept(this);
-                    decreaseIndentation(loopStmt);
-                    if (null != separator && iter.hasNext()) {
-                        out.print(separator);
-                    }
-                    if (null != finalSeparator && !iter.hasNext()) {
-                        out.print(finalSeparator);
-                    }
+            VariableDeclaration iterVar = loop.getIteratorVariable();
+            environment.pushLevel();
+            Collection<?> collection = (Collection<?>) object;
+            Iterator<?> iter = collection.iterator();
+            tracer.visitLoop(iterVar);
+            while (iter.hasNext()) {
+                Object value = iter.next();
+                environment.addValue(iterVar, value);
+                tracer.valueDefined(iterVar, null, value);
+                ITemplateElement loopStmt = loop.getLoopStatement();
+                increaseIndentation(loopStmt);
+                loopStmt.accept(this);
+                decreaseIndentation(loopStmt);
+                if (null != separator && iter.hasNext()) {
+                    out.print(separator);
                 }
-                tracer.visitedLoop(iterVar);
-            } catch (VilLanguageException e) {
-                throw e;
-            } 
-            try {
-                environment.popLevel();
-            } catch (ArtifactException e) {
-                throw new VilLanguageException(e);
+                if (null != finalSeparator && !iter.hasNext()) {
+                    out.print(finalSeparator);
+                }
             }
+            tracer.visitedLoop(iterVar);
+            environment.popLevel();
         } else {
             if (null != object) {
-                throw new VilLanguageException("loop must iterate over collection", VilLanguageException.ID_SEMANTIC);
+                throw new VilException("loop must iterate over collection", VilException.ID_SEMANTIC);
             }
         }
         return Boolean.TRUE;
     }
 
     @Override
-    public Object visitSwitch(SwitchStatement swtch) throws VilLanguageException {
+    public Object visitSwitch(SwitchStatement swtch) throws VilException {
         Object value;
-        try {
-            environment.pushLevel();
-            Object select = swtch.getSwitchExpression().accept(this);
-            environment.addValue(swtch.getImplicitVariable(), select);
-            int found = -1;
-            value = null;
-            // currently no indentation as content is not allowe in switch
-            for (int a = 0; found < 0 && a < swtch.getAlternativeCount(); a++) {
-                SwitchStatement.Alternative alt = swtch.getAlternative(a);
-                Expression cond = alt.getCondition();
-                Object condValue = cond.accept(this);
-                if (alt.isDefault() || equals(condValue, select)) {
-                    value = alt.getValue().accept(this);
-                    found = a;
-                }
+        environment.pushLevel();
+        Object select = swtch.getSwitchExpression().accept(this);
+        environment.addValue(swtch.getImplicitVariable(), select);
+        int found = -1;
+        value = null;
+        // currently no indentation as content is not allowe in switch
+        for (int a = 0; found < 0 && a < swtch.getAlternativeCount(); a++) {
+            SwitchStatement.Alternative alt = swtch.getAlternative(a);
+            Expression cond = alt.getCondition();
+            Object condValue = cond.accept(this);
+            if (alt.isDefault() || equals(condValue, select)) {
+                value = alt.getValue().accept(this);
+                found = a;
             }
-            // currently no indentation as content is not allowe in switch
-            tracer.visitedSwitch(select, found, value);
-        } catch (ExpressionException e) {
-            throw new VilLanguageException(e);
-        } 
-        try {
-            environment.popLevel();
-        } catch (ArtifactException e) {
-            throw new VilLanguageException(e);
         }
+        // currently no indentation as content is not allowe in switch
+        tracer.visitedSwitch(select, found, value);
+        environment.popLevel();
         return value;
     }
 
@@ -436,47 +401,43 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
     }
 
     @Override
-    public Object visitContentStatement(ContentStatement cnt) throws VilLanguageException {
+    public Object visitContentStatement(ContentStatement cnt) throws VilException {
         String content;
-        try {
-            // search for \r\n, \r, \n followed by indentation*step whitespaces or tabs +1
-            content = StringReplacer.substitute(cnt.getContent(), environment, getExpressionParser(), this);
-            if (null != content) {
-                int indentation = environment.getIndentation();
-                if (indentation > 0) {
-                    IndentationConfiguration config = environment.getIndentationConfiguration();
-                    // experiment... is this sufficient for '-indentation?
-                    int indent = indentation + environment.getIndentationConfiguration().getAdditional();
-                    content = IndentationUtils.removeIndentation(content, indent, config.getTabEmulation());
-                }
-                if (null != cnt.getIndentExpression()) {
-                    Object val = cnt.getIndentExpression().accept(this);
-                    if (val instanceof Integer) {
-                        int forced = ((Integer) val).intValue();
-                        if (forced > 0) { // precondition of insertIndentation
-                            content = IndentationUtils.insertIndentation(content, forced);
-                        }
-                    } else {
-                        throw new VilLanguageException("indentation value is no integer", 
-                            VilLanguageException.ID_SEMANTIC);
+        // search for \r\n, \r, \n followed by indentation*step whitespaces or tabs +1
+        content = (String) cnt.getContent().accept(this);
+        if (null != content) {
+            int indentation = environment.getIndentation();
+            if (indentation > 0) {
+                IndentationConfiguration config = environment.getIndentationConfiguration();
+                // experiment... is this sufficient for '-indentation?
+                int indent = indentation + environment.getIndentationConfiguration().getAdditional();
+                content = IndentationUtils.removeIndentation(content, indent, config.getTabEmulation());
+            }
+            if (null != cnt.getIndentExpression()) {
+                Object val = cnt.getIndentExpression().accept(this);
+                if (val instanceof Integer) {
+                    int forced = ((Integer) val).intValue();
+                    if (forced > 0) { // precondition of insertIndentation
+                        content = IndentationUtils.insertIndentation(content, forced);
                     }
-                }
-                if (cnt.printLineEnd()) {
-                    out.println(content);
                 } else {
-                    out.print(content);
+                    throw new VilException("indentation value is no integer", 
+                        VilException.ID_SEMANTIC);
                 }
             }
-        } catch (ExpressionException e) {
-            throw new VilLanguageException(e);
+            if (cnt.printLineEnd()) {
+                out.println(content);
+            } else {
+                out.print(content);
+            }
         }
         return content;
     }
     
     @Override
-    public Object visitConstantExpression(ConstantExpression cst) throws ExpressionException {
+    public Object visitConstantExpression(ConstantExpression cst) throws VilException {
         Object result = cst.getValue();
-        // we have to care for $name and ${} but only in strings
+//         we have to care for $name and ${} but only in strings
         if (result instanceof String) {
             result = StringReplacer.substitute(result.toString(), environment, getExpressionParser(), this);
         }
@@ -484,24 +445,24 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
     }
 
     @Override
-    public Object visitJavaExtension(JavaExtension ext) throws VilLanguageException {
+    public Object visitJavaExtension(JavaExtension ext) throws VilException {
         // operations shall already be resolvable and handled by expressions
         return null;
     }
 
     @Override
-    public Object visitTemplateCallExpression(TemplateCallExpression call) throws ExpressionException {
+    public Object visitTemplateCallExpression(TemplateCallExpression call) throws VilException {
         return visitModelCallExpression(call);
     }
 
     @Override
-    protected Object executeModelCall(Def def) throws VilLanguageException {
+    protected Object executeModelCall(Def def) throws VilException {
         return def.accept(this);
     }
 
     @Override
     protected ModelCallExpression<VariableDeclaration, Template, Def> createModelCall(Template model, Def operation,
-        CallArgument... arguments) throws ExpressionException {
+        CallArgument... arguments) throws VilException {
         return new TemplateCallExpression(model, operation, arguments);
     }
 
@@ -512,7 +473,7 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
 
     @Override
     protected void handleParameterInSequence(IResolvableModel<VariableDeclaration> model,
-        Map<String, VariableDeclaration> varMap) throws VilLanguageException {
+        Map<String, VariableDeclaration> varMap) throws VilException {
         if (model.getParameterCount() >= 2) {
             // check default sequence instead, config, target
             boolean ok = IvmlTypes.configurationType().isAssignableFrom(model.getParameter(0).getType());
@@ -536,4 +497,23 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
         return ExpressionParserRegistry.getExpressionParser(LANGUAGE);
     }
 
+    @Override
+    public Object visitResolvableOperationCallExpression(ResolvableOperationCallExpression ex) throws VilException {
+        Object result;
+        Object val = environment.getValue(ex.getVariable());
+        if (val instanceof Def) {
+            Def def = (Def) val;
+            result = proceedModelCall(def, def.getName(), (Template) environment.getContextModel(), ex, 
+                ex.isPlaceholder());
+        } else {
+            result = super.visitResolvableOperationCallExpression(ex);
+        }
+        return result;
+    }
+
+    @Override
+    public Object visitTypedef(Typedef typedef) throws VilException {
+        return null; // typedefs are processed during parsing
+    }
+    
 }

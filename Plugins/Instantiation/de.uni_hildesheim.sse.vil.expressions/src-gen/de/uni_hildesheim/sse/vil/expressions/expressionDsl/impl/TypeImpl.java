@@ -28,6 +28,8 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.TypeImpl#getParam <em>Param</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.TypeImpl#getSeq <em>Seq</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.TypeImpl#getMap <em>Map</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.TypeImpl#getCall <em>Call</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.TypeImpl#getReturn <em>Return</em>}</li>
  * </ul>
  * </p>
  *
@@ -114,6 +116,36 @@ public class TypeImpl extends MinimalEObjectImpl.Container implements Type
    * @ordered
    */
   protected String map = MAP_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getCall() <em>Call</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getCall()
+   * @generated
+   * @ordered
+   */
+  protected static final String CALL_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getCall() <em>Call</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getCall()
+   * @generated
+   * @ordered
+   */
+  protected String call = CALL_EDEFAULT;
+
+  /**
+   * The cached value of the '{@link #getReturn() <em>Return</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getReturn()
+   * @generated
+   * @ordered
+   */
+  protected Type return_;
 
   /**
    * <!-- begin-user-doc -->
@@ -306,6 +338,77 @@ public class TypeImpl extends MinimalEObjectImpl.Container implements Type
    * <!-- end-user-doc -->
    * @generated
    */
+  public String getCall()
+  {
+    return call;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setCall(String newCall)
+  {
+    String oldCall = call;
+    call = newCall;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, ExpressionDslPackage.TYPE__CALL, oldCall, call));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Type getReturn()
+  {
+    return return_;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetReturn(Type newReturn, NotificationChain msgs)
+  {
+    Type oldReturn = return_;
+    return_ = newReturn;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ExpressionDslPackage.TYPE__RETURN, oldReturn, newReturn);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setReturn(Type newReturn)
+  {
+    if (newReturn != return_)
+    {
+      NotificationChain msgs = null;
+      if (return_ != null)
+        msgs = ((InternalEObject)return_).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ExpressionDslPackage.TYPE__RETURN, null, msgs);
+      if (newReturn != null)
+        msgs = ((InternalEObject)newReturn).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ExpressionDslPackage.TYPE__RETURN, null, msgs);
+      msgs = basicSetReturn(newReturn, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, ExpressionDslPackage.TYPE__RETURN, newReturn, newReturn));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
@@ -315,6 +418,8 @@ public class TypeImpl extends MinimalEObjectImpl.Container implements Type
         return basicSetName(null, msgs);
       case ExpressionDslPackage.TYPE__PARAM:
         return basicSetParam(null, msgs);
+      case ExpressionDslPackage.TYPE__RETURN:
+        return basicSetReturn(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -339,6 +444,10 @@ public class TypeImpl extends MinimalEObjectImpl.Container implements Type
         return getSeq();
       case ExpressionDslPackage.TYPE__MAP:
         return getMap();
+      case ExpressionDslPackage.TYPE__CALL:
+        return getCall();
+      case ExpressionDslPackage.TYPE__RETURN:
+        return getReturn();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -367,6 +476,12 @@ public class TypeImpl extends MinimalEObjectImpl.Container implements Type
         return;
       case ExpressionDslPackage.TYPE__MAP:
         setMap((String)newValue);
+        return;
+      case ExpressionDslPackage.TYPE__CALL:
+        setCall((String)newValue);
+        return;
+      case ExpressionDslPackage.TYPE__RETURN:
+        setReturn((Type)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -397,6 +512,12 @@ public class TypeImpl extends MinimalEObjectImpl.Container implements Type
       case ExpressionDslPackage.TYPE__MAP:
         setMap(MAP_EDEFAULT);
         return;
+      case ExpressionDslPackage.TYPE__CALL:
+        setCall(CALL_EDEFAULT);
+        return;
+      case ExpressionDslPackage.TYPE__RETURN:
+        setReturn((Type)null);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -421,6 +542,10 @@ public class TypeImpl extends MinimalEObjectImpl.Container implements Type
         return SEQ_EDEFAULT == null ? seq != null : !SEQ_EDEFAULT.equals(seq);
       case ExpressionDslPackage.TYPE__MAP:
         return MAP_EDEFAULT == null ? map != null : !MAP_EDEFAULT.equals(map);
+      case ExpressionDslPackage.TYPE__CALL:
+        return CALL_EDEFAULT == null ? call != null : !CALL_EDEFAULT.equals(call);
+      case ExpressionDslPackage.TYPE__RETURN:
+        return return_ != null;
     }
     return super.eIsSet(featureID);
   }
@@ -442,6 +567,8 @@ public class TypeImpl extends MinimalEObjectImpl.Container implements Type
     result.append(seq);
     result.append(", map: ");
     result.append(map);
+    result.append(", call: ");
+    result.append(call);
     result.append(')');
     return result.toString();
   }

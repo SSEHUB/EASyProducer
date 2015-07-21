@@ -1,0 +1,6 @@
+project opDefImport {
+
+    import opDefString;
+    String test = "";
+    myFunc(test);
+}

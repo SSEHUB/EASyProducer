@@ -2,10 +2,12 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: SSE Variability Model (IVML), optional persistency mechanisms
 Bundle-SymbolicName: de.uni_hildesheim.sse.varModel.persistency;singleton:=true
-Bundle-Version: 0.7.2
+Bundle-Version: 0.8.0
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Import-Package: org.osgi.framework
+Service-Component: OSGI-INF/instantiator.xml
+Import-Package: org.osgi.framework,
+ org.osgi.service.component
 Bundle-Vendor: University of Hildesheim - SSE
 Bundle-ClassPath: .,
  lib/xstream/cglib-nodep-2.2.jar,
@@ -24,5 +26,11 @@ Bundle-ClassPath: .,
  lib/xstream/xpp3_min-1.1.4c.jar,
  lib/xstream/xstream-1.4.3.jar
 Require-Bundle: de.uni_hildesheim.sse.varModel;bundle-version="0.0.10",
- de.uni-hildesheim.sse.easy.instantiatorCore
-Export-Package: de.uni_hildesheim.sse.persistency.xml
+ org.apache.commons.io,
+ org.eclipse.equinox.ds,
+ org.eclipse.core.runtime,
+ org.apache.commons.lang,
+ de.uni-hildesheim.sse.easy.instantiatorCore,
+ de.uni_hildesheim.sse.reasoning.reasoner;bundle-version="0.0.2"
+Export-Package: de.uni_hildesheim.sse.persistency.xml,
+ de.uni_hildesheim.sse.persistency.xml.loader

@@ -1,5 +1,7 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
+
 /**
  * Represents an actual VIL type, its meta information and operations.
  * 
@@ -7,31 +9,43 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes;
  *
  * @param <T> the specific VilType or Artifact
  */
-public abstract class TypeDescriptor <T extends IVilType> implements IMetaType {
+public abstract class TypeDescriptor <T> implements IMetaType {
 
+    public static final TypeDescriptor<?>[] EMPTY = null;
+    
     private String name;
     private String qualifiedName;
     private OperationDescriptor[] operations;
+    private FieldDescriptor[] fields;
     private OperationDescriptor[] conversions;
-    private TypeDescriptor<? extends IVilType>[] parameter;
+    private TypeDescriptor<?>[] parameter;
 
     /**
-     * Creates a new type descriptor. Overridden constructors shall call {@link #setOperations(java.util.Collection)}
-     * and {@link #setConversions(java.util.Collection)}.
+     * Creates a new type descriptor. Overridden constructors shall call {@link #setOperations(java.util.Collection)}, 
+     * {@link #setFields(java.util.Collection)} or {@link #setConversions(java.util.Collection)}.
      * 
      * @param parameter type parameter (may be <b>null</b>)
-     * @throws VilException if analyzing the class fails for some reason
+     * @throws VilException if initialization fails for some reason
      */
-    protected TypeDescriptor(TypeDescriptor<? extends IVilType>... parameter) throws VilException {
+    protected TypeDescriptor(TypeDescriptor<?>... parameter) throws VilException {
         this.parameter = parameter;
+    }
+    
+    /**
+     * Returns whether this descriptor was initialized.
+     * 
+     * @return <code>true</code> if it was initialized, <code>false</code> slese
+     */
+    protected boolean isInitialized() {
+        return null != operations;
     }
     
     /**
      * Defines the name of this descriptor explicitly.
      * 
-     * @param name the name of this descriptor
+     * @param name the name of this descriptor (may be qualified by :: and is split internally)
      */
-    protected void setName(String name) { // TODO preliminary, needs introduction of qualified names in grammars
+    protected void setName(String name) {
         if (null == name) {
             this.name = null;
             this.qualifiedName = null;
@@ -45,6 +59,15 @@ public abstract class TypeDescriptor <T extends IVilType> implements IMetaType {
                 this.qualifiedName = name;
             }
         }
+    }
+    
+    /**
+     * Returns whether the name of this type descriptor (single or qualified) has yet been set.
+     * 
+     * @return <b>true</b> if the name has been set, <code>false</code> else
+     */
+    protected boolean isNameSet() {
+        return null != qualifiedName || null != name;
     }
 
     /**
@@ -60,6 +83,20 @@ public abstract class TypeDescriptor <T extends IVilType> implements IMetaType {
             operations.toArray(this.operations);
         }
     }
+
+    /**
+     * Defines the fields for this type.
+     *  
+     * @param fields the fields (may be <b>null</b>)
+     */
+    protected void setFields(java.util.Collection<FieldDescriptor> fields) {
+        if (null == fields) {
+            this.fields = new FieldDescriptor[0];
+        } else {
+            this.fields = new FieldDescriptor[fields.size()];
+            fields.toArray(this.fields);
+        }
+    }
     
     /**
      * Adds an operation.
@@ -68,9 +105,12 @@ public abstract class TypeDescriptor <T extends IVilType> implements IMetaType {
      */
     protected void addOperation(OperationDescriptor operation) {
         // adding operations was not intended and is typically only used by fake types
-        OperationDescriptor[] tmp = new OperationDescriptor[operations.length + 1];
-        System.arraycopy(operations, 0, tmp, 0, operations.length);
-        tmp[operations.length] = operation;
+        int opLen = null == operations ? 0 : operations.length;
+        OperationDescriptor[] tmp = new OperationDescriptor[opLen + 1];
+        if (null != operations) {
+            System.arraycopy(operations, 0, tmp, 0, operations.length);
+        }
+        tmp[opLen] = operation;
         operations = tmp;
     }
     
@@ -138,24 +178,55 @@ public abstract class TypeDescriptor <T extends IVilType> implements IMetaType {
     }
     
     /**
-     * Returns the number of operations provided by this type descriptor.
+     * Returns the available conversions.
      * 
-     * @return the number of operations
+     * @return the available conversion
      */
+    public Iterable<OperationDescriptor> getConversions() {
+        return new ArrayIterable<OperationDescriptor>(conversions);
+    }
+    
+    @Override
     public int getOperationsCount() {
         return operations.length;
     }
     
-    /**
-     * Returns the specified operation.
-     * 
-     * @param index the index of the operation to be returned
-     * @return the specified operation
-     * @throws IndexOutOfBoundsException if <code>index &lt; 0 
-     *     || index&gt;={@link #getOperationsCount()}</code>
-     */
+    @Override
     public OperationDescriptor getOperation(int index) {
         return operations[index];
+    }
+    
+    @Override
+    public FieldDescriptor getField(int index) {
+        if (null == fields) {
+            throw new IndexOutOfBoundsException();
+        }
+        return fields[index];
+    }
+    
+    /**
+     * Returns the field descriptor with the specified name.
+     * 
+     * @param name the name of the field
+     * @return the field descriptor (may be <b>null</b> if not found)
+     */
+    public FieldDescriptor getField(String name) {
+        FieldDescriptor result = null;
+        if (null != name) {
+            int count = getFieldCount();
+            for (int i = 0; null == result && i < count; i++) {
+                FieldDescriptor tmp = getField(i);
+                if (name.equals(tmp.getName())) {
+                    result = tmp;
+                }
+            }
+        }
+        return result;
+    }
+    
+    @Override
+    public int getFieldCount() {
+        return null == fields ? 0 : fields.length;
     }
     
     /**
@@ -185,7 +256,7 @@ public abstract class TypeDescriptor <T extends IVilType> implements IMetaType {
      * @param desc the descriptor to be tested
      * @return <code>true</code> if both descriptors are assignment compatible, <code>false</code> else
      */
-    public abstract boolean isAssignableFrom(TypeDescriptor<? extends IVilType> desc);
+    public abstract boolean isAssignableFrom(TypeDescriptor<?> desc);
     
     /**
      * Returns the most specific conversion operation from this type to target type (if there is any).
@@ -217,8 +288,8 @@ public abstract class TypeDescriptor <T extends IVilType> implements IMetaType {
      * @return the most specific conversion operation as defined in the underlying implementation class, 
      *   <b>null</b> if no matching can be found
      */
-    public static final OperationDescriptor findConversionOnBoth(TypeDescriptor<? extends IVilType> sourceType, 
-        TypeDescriptor<? extends IVilType> targetType) {
+    public static final OperationDescriptor findConversionOnBoth(TypeDescriptor<?> sourceType, 
+        TypeDescriptor<?> targetType) {
         OperationDescriptor c1 = targetType.findConversion(sourceType, targetType);
         OperationDescriptor c2 = sourceType.findConversion(sourceType, targetType);
         return TypeHelper.getMoreSpecificParam1(c1, c2);
@@ -232,8 +303,8 @@ public abstract class TypeDescriptor <T extends IVilType> implements IMetaType {
      * @return the most specific conversion operation as defined in the underlying implementation class, 
      *   <b>null</b> if no matching can be found
      */
-    public OperationDescriptor findConversion(TypeDescriptor<? extends IVilType> sourceType, 
-        TypeDescriptor<? extends IVilType> targetType) {
+    public OperationDescriptor findConversion(TypeDescriptor<?> sourceType, 
+        TypeDescriptor<?> targetType) {
         return (OperationDescriptor) findConversion((IMetaType) sourceType, (IMetaType) targetType);
     }
     
@@ -264,22 +335,27 @@ public abstract class TypeDescriptor <T extends IVilType> implements IMetaType {
     }
     
     /**
-     * Returns the number of type parameters.
-     * 
-     * @return the number of type parameter
+     * Returns the type parameters as array.
+     * @return the type parameters as array, may be <b>null</b>
      */
-    public int getParameterCount() {
+    public TypeDescriptor<?>[] getGenericParameter() {
+        TypeDescriptor<?>[] result;
+        if (null == parameter) {
+            result = null;
+        } else {
+            result = new TypeDescriptor<?>[parameter.length];
+            System.arraycopy(parameter, 0, result, 0, parameter.length);
+        }
+        return result;
+    }
+    
+    @Override
+    public int getGenericParameterCount() {
         return null == parameter ? 0 : parameter.length;
     }
     
-    /**
-     * Returns the specified parameter type.
-     * 
-     * @param index the index of the parameter type to return
-     * @return the specified parameter type
-     * @throws IndexOutOfBoundsException if <code>index &lt; 0 || index &gt;= {@link #getParameterCount()}</code>
-     */
-    public TypeDescriptor<? extends IVilType> getParameterType(int index) {
+    @Override
+    public TypeDescriptor<?> getGenericParameterType(int index) {
         return parameter[index];
     }
 
@@ -289,8 +365,7 @@ public abstract class TypeDescriptor <T extends IVilType> implements IMetaType {
      * @param length the length of the array to be created
      * @return the array instance
      */
-    @SuppressWarnings("unchecked")
-    public static TypeDescriptor<? extends IVilType>[] createArray(int length) {
+    public static TypeDescriptor<?>[] createArray(int length) {
         return new TypeDescriptor[length];
     }
     
@@ -298,18 +373,19 @@ public abstract class TypeDescriptor <T extends IVilType> implements IMetaType {
      * Appends the type parameters to <code>name</code>.
      * 
      * @param name the VIL name of this type
+     * @param exclude the parameters from the end to exclude, <code>0</code> for none
      * @return the VIL name including parameter types if applicable
      */
-    protected String appendParameter(String name) {
+    protected String appendParameter(String name, int exclude) {
         StringBuilder tmp = new StringBuilder(name);
-        int count = getParameterCount();
+        int count = getGenericParameterCount();
         if (count > 0) {
             tmp.append('(');
-            for (int p = 0; p < count; p++) {
+            for (int p = 0; p < count - exclude; p++) {
                 if (p > 0) {
                     tmp.append(", ");
                 }
-                TypeDescriptor<? extends IVilType> param = getParameterType(p);
+                TypeDescriptor<?> param = getGenericParameterType(p);
                 if (null == param) {
                     tmp.append("<null>"); // shall not happen
                 } else {
@@ -378,4 +454,21 @@ public abstract class TypeDescriptor <T extends IVilType> implements IMetaType {
     public abstract OperationDescriptor addPlaceholderOperation(String name, int parameterCount, 
         boolean acceptsNamedParameters);
 
+    /**
+     * Returns whether this type is an instantiator.
+     * 
+     * @return <code>true</code> if it is an instantiator, <code>false</code> else
+     */
+    public abstract boolean isInstantiator();
+    
+    /**
+     * Returns whether a given <code>object</code> is the same.
+     * 
+     * @param typeDescriptor the object to be checked
+     * @return <code>true</code> if the object is the same, <code>false</code> else
+     */
+    public boolean isSame(TypeDescriptor<?> typeDescriptor) {
+        return isAssignableFrom(typeDescriptor) && typeDescriptor.isAssignableFrom(this);
+    }
+    
 }

@@ -1,5 +1,9 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArraySequence;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArraySet;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
@@ -15,14 +19,22 @@ import de.uni_hildesheim.sse.model.confModel.IAssignmentState;
 import de.uni_hildesheim.sse.model.confModel.IConfigurationElement;
 import de.uni_hildesheim.sse.model.confModel.IConfigurationVisitor;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
+import de.uni_hildesheim.sse.model.confModel.IFreezeSelector;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
+import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
+import de.uni_hildesheim.sse.model.varModel.datatypes.IntegerType;
+import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
+import de.uni_hildesheim.sse.model.varModel.datatypes.TypeQueries;
 import de.uni_hildesheim.sse.model.varModel.values.CompoundValue;
 import de.uni_hildesheim.sse.model.varModel.values.ContainerValue;
 import de.uni_hildesheim.sse.model.varModel.values.NullValue;
 import de.uni_hildesheim.sse.model.varModel.values.ReferenceValue;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
+import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
+import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
+import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 
 /**
  * Wraps a decision variable. Primitive values may be obtained using the getter methods. Complex
@@ -37,15 +49,18 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
     protected IDecisionVariable variable;
     protected IVariableFilter filter;
     private DecisionVariable[] nested;
+    private Configuration parent;
     
     /**
      * Creates a new IVML variable.
      * 
+     * @param parent the parent configuration
      * @param variable the variable to be wrapped
      * @param filter the variable filter to apply
      */
-    protected AbstractIvmlVariable(IDecisionVariable variable, IVariableFilter filter) {
+    protected AbstractIvmlVariable(Configuration parent, IDecisionVariable variable, IVariableFilter filter) {
         origVariable = variable; // keep the variable before dereferencing it
+        this.parent = parent;
         this.filter = filter;
         Value val = variable.getValue();
         if (val instanceof ReferenceValue) {
@@ -56,22 +71,39 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
             this.variable = variable;
         }
     }
+    
+    /**
+     * Returns the configuration parent.
+     * 
+     * @return the configuration parent
+     */
+    @Invisible
+    public Configuration getParent() {
+        return parent;
+    }
 
     @Override
     protected void initializeNested() {
         if (null == nested) {
             if (variable.getNestedElementsCount() > 0) {
+                List<DecisionVariable> tmp = new ArrayList<DecisionVariable>();
                 nested = new DecisionVariable[variable.getNestedElementsCount()];
-                for (int n = 0; n < nested.length; n++) {
-                    nested[n] = new DecisionVariable(variable.getNestedElement(n), filter);
+                for (int n = 0; n < variable.getNestedElementsCount(); n++) {
+                    IDecisionVariable var = variable.getNestedElement(n);
+                    if (filter.isEnabled(var)) {
+                        tmp.add(new DecisionVariable(parent, variable.getNestedElement(n), filter));
+                    }
                 }
+                nested = tmp.toArray(new DecisionVariable[tmp.size()]);
             } else {
                 Value val = variable.getValue();
                 if (val instanceof ContainerValue) {
                     ContainerValue cont = (ContainerValue) val;
                     nested = new DecisionVariable[cont.getElementSize()];
                     for (int n = 0; n < nested.length; n++) {
-                        nested[n] = new DecisionVariable(new DecVar(variable, cont.getElement(n), null), filter);
+                        // FILTER???
+                        nested[n] = new DecisionVariable(parent, 
+                            new DecVar(variable, cont.getElement(n), null), filter);
                     }
                 }
             }
@@ -158,7 +190,7 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
         }
 
         @Override
-        public void freeze() {
+        public void freeze(IFreezeSelector selector) {
             // temporary only, do not allow freeze
         }
 
@@ -243,6 +275,16 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
         }
         
     }
+    
+    /**
+     * Returns the underlying IVML (un-dereferenced) variable.
+     * 
+     * @return the underlying IVML variable
+     */
+    @Invisible
+    public IDecisionVariable getVariable() {
+        return origVariable;
+    }
 
     /**
      * Returns the simple name of the decision variable.
@@ -315,7 +357,59 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
      * @return <code>true</code> if the variable is configured, <code>false</code> else
      */
     public boolean isConfigured() {
-        return AssignmentState.UNDEFINED != variable.getState();
+        return AssignmentState.UNDEFINED != variable.getState() && null != variable.getValue();
+    }
+    
+    /**
+     * Returns whether this element is frozen.
+     * 
+     * @return <code>true</code> if it is frozen, <code>false</code> else
+     */
+    public boolean isFrozen() {
+        // TODO check parent state - as variable from above!
+        return AssignmentState.FROZEN == variable.getState();
+    }
+
+    /**
+     * Changes the value of this variable. This method works only if the variable
+     * is not {@link #isFrozen() frozen}, in particular at runtime.
+     * 
+     * @param value the new value
+     */
+    public void setValue(Object value) {
+        if (!isFrozen()) {
+            // if I'm a reference, I expect a variable declaration
+            if (value instanceof AbstractIvmlVariable 
+                && Reference.TYPE.isAssignableFrom(variable.getDeclaration().getType())) {
+                value = ((AbstractIvmlVariable) value).variable.getDeclaration(); // the dereferenced one
+            } else if (value instanceof IvmlElement) {
+                value = ((IvmlElement) value).getValue();
+            }
+            if (null == value) { // VIL null / undefined is handled while evaluating the field value expression
+                value = NullValue.INSTANCE;
+            }
+            IDatatype varType = variable.getDeclaration().getType();
+            if (TypeQueries.sameTypes(IntegerType.TYPE, varType) && value instanceof Double) {
+                value = ((Double) value).intValue();
+            }
+            try {
+                Value oldValue = variable.getValue();
+                Value val = ValueFactory.createValue(varType, value);
+                IAssignmentState varState = variable.getState();
+                if (AssignmentState.UNDEFINED == varState) {
+                    varState = AssignmentState.ASSIGNED;
+                }
+                variable.setValue(val, varState);
+                parent.notifyValueChanged(this, oldValue);
+            } catch (ConfigurationException e) {
+                EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).error(e.getMessage());
+            } catch (ValueDoesNotMatchTypeException e) {
+                EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).error(e.getMessage());
+            }
+        } else {
+            EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).error(
+                "setting a new value is not possible as variable " + getName() + " is frozen");
+        }
     }
 
     @Override

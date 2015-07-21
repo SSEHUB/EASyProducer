@@ -44,7 +44,7 @@
 	
 	<!-- Compile all files without test classes -->
 	<target name="compile" depends="init">
-		<javac srcdir="${src.dir}" debug="on" destdir="${build.classes.dir}" includeAntRuntime="no" failonerror="true" source="${javacSource}" target="${javacTarget}" encoding="${javac.encoding}">
+		<javac srcdir="${src.dir}" debug="true" destdir="${build.classes.dir}" includeAntRuntime="no" failonerror="true" source="${javacSource}" target="${javacTarget}" encoding="${javac.encoding}">
 			<src path="${src.gen.dir}" />
 			<classpath refid="includes" />	
 		</javac>
@@ -55,7 +55,8 @@
         <!-- Copy needed non class files -->
 		<copy todir="${build.classes.dir}" failonerror="true" overwrite="true">
 			<fileset dir="${basedir}">
-				<include name="plugin.xml" />
+                <include name="OSGI-INF/**/*" />
+			    <include name="plugin.xml" />
 				<include name="icons/**/*" />
 				<include name="lib/**/*" />
 			</fileset>

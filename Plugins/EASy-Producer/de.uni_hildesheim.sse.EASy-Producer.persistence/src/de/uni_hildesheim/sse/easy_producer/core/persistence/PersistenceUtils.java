@@ -25,6 +25,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.uni_hildesheim.sse.dslCore.TopLevelModelAccessor;
+import de.uni_hildesheim.sse.dslCore.TopLevelModelAccessor.IModelAccessor;
 import de.uni_hildesheim.sse.easy_producer.core.mgmt.PLPInfo;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.Configuration.PathKind;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.Entity;
@@ -45,11 +47,10 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Rul
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Utils;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.VariableDeclaration;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallArgument;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VariableExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypes;
@@ -167,6 +168,18 @@ public class PersistenceUtils {
                 .addLocation(config.getPathFile(PathKind.VTL).getAbsoluteFile(), observer);
         } catch (ModelManagementException exc) {
             returnExc = exc;
+        }
+        
+        for (IModelAccessor<?> accessor : TopLevelModelAccessor.registered()) {
+            PathKind kind = PathKind.valueOf(accessor.getPathKindHint());
+            if (null == kind) {
+                kind = PathKind.IVML;
+            }
+            try {
+                accessor.addLocation(config.getPathFile(kind).getAbsoluteFile(), observer);
+            } catch (ModelManagementException exc) {
+                returnExc = exc;
+            }
         }
         
         if (null != returnExc) {
@@ -475,7 +488,7 @@ public class PersistenceUtils {
             fileWriter.close();
         } catch (IOException e) {
             throw new PersistenceException(e);
-        } catch (VilLanguageException e) {
+        } catch (VilException e) {
             throw new PersistenceException(e);
         }
     }
@@ -618,11 +631,9 @@ public class PersistenceUtils {
                             mainRule.setBody(new IRuleElement[] {mapStatement});
                             // If changes where successful (no exception occurred, notify model that script was edited.
                             plp.buildScriptWasEdited();
-                        } catch (ExpressionException e) {
+                        } catch (VilException e) {
                             LOGGER.warn("Rule could not be modified. Reason: " + e.getMessage());
-                        } catch (VilLanguageException e) {
-                            LOGGER.warn("Rule could not be modified. Reason: " + e.getMessage());
-                        } 
+                        }
                     }
                 }
             }
@@ -641,7 +652,8 @@ public class PersistenceUtils {
      *     <tt>false</tt> otherwise
      */
     public static final void addImport(PLPInfo plp, PLPInfo predecessor, boolean considerVIL) {
-        String projectName = predecessor.getProjectName();
+        String projectName = (null != predecessor.getProject()) ? predecessor.getProject().getName()
+            : predecessor.getProjectName();
         boolean hasProjectVersion = null != predecessor.getProject() && null != predecessor.getProject().getVersion();
 
         // Variability Model
@@ -682,7 +694,9 @@ public class PersistenceUtils {
      * @param predecessor The predecessor project which shall be imported.
      */
     private static void addScriptImportToPLP(PLPInfo plp, PLPInfo predecessor) {
-        ModelImport<Script> scriptImport = new ModelImport<Script>(predecessor.getProjectName());
+        String scriptName = (null != predecessor.getBuildScript()) ?  predecessor.getBuildScript().getName()
+            : predecessor.getProjectName();
+        ModelImport<Script> scriptImport = new ModelImport<Script>(scriptName);
         
         boolean hasScriptVersion = null != predecessor.getBuildScript()
             && null != predecessor.getBuildScript().getVersion();

@@ -1,0 +1,8 @@
+vilScript newText (Project source, Project target, Configuration config) {
+
+    main(Project source, Project target, Configuration config) = : {
+        FileArtifact textF = "$target/newText.txt";
+        textF.getText().setText("newText");
+    }
+
+}

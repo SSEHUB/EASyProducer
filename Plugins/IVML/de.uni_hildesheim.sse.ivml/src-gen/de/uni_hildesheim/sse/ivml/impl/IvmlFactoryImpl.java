@@ -84,11 +84,9 @@ public class IvmlFactoryImpl extends EFactoryImpl implements IvmlFactory
       case IvmlPackage.ACCESS_NAME: return createAccessName();
       case IvmlPackage.VALUE: return createValue();
       case IvmlPackage.DERIVED_TYPE: return createDerivedType();
-      case IvmlPackage.ATTRIBUTE_TO: return createAttributeTo();
+      case IvmlPackage.ANNOTATE_TO: return createAnnotateTo();
       case IvmlPackage.FREEZE: return createFreeze();
       case IvmlPackage.FREEZE_STATEMENT: return createFreezeStatement();
-      case IvmlPackage.FREEZE_BUT_LIST: return createFreezeButList();
-      case IvmlPackage.FREEZE_BUT_EXPRESSION: return createFreezeButExpression();
       case IvmlPackage.EVAL: return createEval();
       case IvmlPackage.INTERFACE_DECLARATION: return createInterfaceDeclaration();
       case IvmlPackage.EXPORT: return createExport();
@@ -360,10 +358,10 @@ public class IvmlFactoryImpl extends EFactoryImpl implements IvmlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public AttributeTo createAttributeTo()
+  public AnnotateTo createAnnotateTo()
   {
-    AttributeToImpl attributeTo = new AttributeToImpl();
-    return attributeTo;
+    AnnotateToImpl annotateTo = new AnnotateToImpl();
+    return annotateTo;
   }
 
   /**
@@ -386,28 +384,6 @@ public class IvmlFactoryImpl extends EFactoryImpl implements IvmlFactory
   {
     FreezeStatementImpl freezeStatement = new FreezeStatementImpl();
     return freezeStatement;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public FreezeButList createFreezeButList()
-  {
-    FreezeButListImpl freezeButList = new FreezeButListImpl();
-    return freezeButList;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public FreezeButExpression createFreezeButExpression()
-  {
-    FreezeButExpressionImpl freezeButExpression = new FreezeButExpressionImpl();
-    return freezeButExpression;
   }
 
   /**

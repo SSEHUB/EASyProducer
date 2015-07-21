@@ -5,10 +5,9 @@ import static de.uni_hildesheim.sse.easy_producer.instantiator.model.templateMod
 import java.io.Writer;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.IVisitor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.WriterVisitor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Constants;
 import de.uni_hildesheim.sse.utils.modelManagement.IndentationConfiguration;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
@@ -47,9 +46,9 @@ public class TemplateLangWriter extends WriterVisitor<VariableDeclaration> imple
     }
 
     @Override
-    public Object visitTemplate(Template template) throws VilLanguageException {
+    public Object visitTemplate(Template template) throws VilException {
         for (int i = 0; i < template.getImportsCount(); i++) {
-            ModelImport<Template> ref = template.getImport(i);
+            ModelImport<? extends Template> ref = template.getImport(i);
             printIndentation();
             print("import ");
             print(ref.getName());
@@ -77,13 +76,18 @@ public class TemplateLangWriter extends WriterVisitor<VariableDeclaration> imple
             print(template.getSuper().getName());
         }
         println(" {");
-        int contained = template.getVariableDeclarationCount() + template.getDefCount() + o2i(template.getVersion());
+        int contained = template.getVariableDeclarationCount() + template.getDefCount() + o2i(template.getVersion()) 
+            + template.getTypedefCount();
         if (contained > 0) {
             println();
             increaseIndentation();
             if (null != template.getVersion()) {
                 printIndentation();
                 printVersion(template.getVersion());
+                println();
+            }
+            if (template.getTypedefCount() > 0) {
+                printTypedefs(template);
                 println();
             }
             for (int v = 0; v < template.getVariableDeclarationCount(); v++) {
@@ -141,7 +145,7 @@ public class TemplateLangWriter extends WriterVisitor<VariableDeclaration> imple
     }
     
     @Override
-    public Object visitJavaExtension(JavaExtension ext) throws VilLanguageException {
+    public Object visitJavaExtension(JavaExtension ext) throws VilException {
         if (!ext.isDefault()) {
             printIndentation();
             print("extension ");
@@ -152,7 +156,7 @@ public class TemplateLangWriter extends WriterVisitor<VariableDeclaration> imple
     }
 
     @Override
-    public Object visitDef(Def def) throws VilLanguageException {
+    public Object visitDef(Def def) throws VilException {
         printIndentation();
         print("def ");
         if (null != def.getSpecifiedType()) {
@@ -168,7 +172,7 @@ public class TemplateLangWriter extends WriterVisitor<VariableDeclaration> imple
     }
 
     @Override
-    public Object visitTemplateBlock(TemplateBlock block) throws VilLanguageException {
+    public Object visitTemplateBlock(TemplateBlock block) throws VilException {
         println("{");
         increaseIndentation();
         for (int b = 0; b < block.getBodyElementCount(); b++) {
@@ -181,14 +185,10 @@ public class TemplateLangWriter extends WriterVisitor<VariableDeclaration> imple
     }
 
     @Override
-    public Object visitAlternative(AlternativeStatement alternative) throws VilLanguageException {
+    public Object visitAlternative(AlternativeStatement alternative) throws VilException {
         printIndentation();
         print("if (");
-        try {
-            alternative.getCondition().accept(this);
-        } catch (ExpressionException e) {
-            throw new VilLanguageException(e);
-        }
+        alternative.getCondition().accept(this);
         print(") ");
         boolean printIndentation = isPrintExpressionStatementIndentation();
         boolean ifIsBlock = alternative.getIfStatement().isBlock();
@@ -220,32 +220,24 @@ public class TemplateLangWriter extends WriterVisitor<VariableDeclaration> imple
      * Prints a separator expression.
      * 
      * @param expression the expression to be printed
-     * @throws VilLanguageException in case of evaluation problems
+     * @throws VilException in case of evaluation problems
      */
-    private void printSeparatorExpression(Expression expression) throws VilLanguageException {
+    private void printSeparatorExpression(Expression expression) throws VilException {
         if (null != expression) {
             print(", ");
-            try {
-                expression.accept(this);
-            } catch (ExpressionException e) {
-                throw new VilLanguageException(e);
-            }
+            expression.accept(this);
         }
     }
 
     @Override
-    public Object visitLoop(LoopStatement loop) throws VilLanguageException {
+    public Object visitLoop(LoopStatement loop) throws VilException {
         printIndentation();
         print("for (");
         printType(loop.getIteratorVariable().getType());
         printWhitespace();
         print(loop.getIteratorVariable().getName());
         print(" : ");
-        try {
-            loop.getContainerExpression().accept(this);
-        } catch (ExpressionException e) {
-            throw new VilLanguageException(e);
-        }
+        loop.getContainerExpression().accept(this);
         printSeparatorExpression(loop.getSeparatorExpression());
         if (null != loop.getSeparatorExpression()) {
             printSeparatorExpression(loop.getFinalSeparatorExpression());
@@ -263,14 +255,10 @@ public class TemplateLangWriter extends WriterVisitor<VariableDeclaration> imple
     }
 
     @Override
-    public Object visitSwitch(SwitchStatement swtch) throws VilLanguageException {
+    public Object visitSwitch(SwitchStatement swtch) throws VilException {
         printIndentation();
         print("switch(");
-        try {
-            swtch.getSwitchExpression().accept(this);
-        } catch (ExpressionException e) {
-            throw new VilLanguageException(e);
-        }
+        swtch.getSwitchExpression().accept(this);
         println(") {");
         increaseIndentation();
         for (int a = 0; a < swtch.getAlternativeCount(); a++) {
@@ -279,18 +267,10 @@ public class TemplateLangWriter extends WriterVisitor<VariableDeclaration> imple
             if (alt.isDefault()) {
                 print("default : ");
             } else {
-                try {
-                    alt.getCondition().accept(this);
-                } catch (ExpressionException e) {
-                    throw new VilLanguageException(e);
-                }
+                alt.getCondition().accept(this);
                 print(" : ");
             }
-            try {
-                alt.getValue().accept(this);
-            } catch (ExpressionException e) {
-                throw new VilLanguageException(e);
-            }
+            alt.getValue().accept(this);
             if (a + 1 < swtch.getAlternativeCount()) {
                 println(",");
             } else {
@@ -304,32 +284,36 @@ public class TemplateLangWriter extends WriterVisitor<VariableDeclaration> imple
     }
 
     @Override
-    public Object visitContentStatement(ContentStatement cnt) throws VilLanguageException {
+    public Object visitContentStatement(ContentStatement cnt) throws VilException {
         printIndentation();
         if (!cnt.printLineEnd()) {
             print("print ");
         }
         String terminal = cnt.getTerminal();
         print(terminal);
-        String content = cnt.getContent();
-        content = content.replace(terminal, "\\" + terminal);
-        print(content);
-        print(terminal);
-        if (null != cnt.getIndentExpression()) {
-            print(" | ");
-            try {
+        // TODO: Catching of exception ok?
+        try {
+            setInContent(true);
+            cnt.getContent().accept(this);
+            setInContent(false);
+//            content = content.replace(terminal, "\\" + terminal);
+//            print(content);
+            print(terminal);
+            if (null != cnt.getIndentExpression()) {
+                print(" | ");
                 cnt.getIndentExpression().accept(this);
-            } catch (ExpressionException e) {
-                throw new VilLanguageException(e);
+                print(";");
             }
-            print(";");
+            println();
+        } catch (VilException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
         }
-        println();
         return null;
     }
 
     @Override
-    public Object visitTemplateCallExpression(TemplateCallExpression call) throws ExpressionException {
+    public Object visitTemplateCallExpression(TemplateCallExpression call) throws VilException {
         if (call.isSuper()) {
             print("super.");
         }

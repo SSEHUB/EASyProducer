@@ -5,7 +5,7 @@ project qm1 {
     enum BindingTime {compile, startup, runtime};
     enum FieldType {INTEGER, STRING, BOOLEAN, REAL};
 
-    attribute BindingTime bindingTime = BindingTime.compile to qm1;
+    annotate BindingTime bindingTime = BindingTime.compile to qm1;
     
     typedef Tuples sequenceOf(Tuple);
     typedef Parameters setOf(Parameter);

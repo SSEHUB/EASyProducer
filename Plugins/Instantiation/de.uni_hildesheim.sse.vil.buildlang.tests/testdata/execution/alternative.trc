@@ -9,3 +9,7 @@
     i1 <- 2
     -> !(Boolean) with (true) = false
     visit else-branch
+    -> !(Boolean) with (true) = false
+    visit else-branch
+    -> -(Integer, Integer) with (2, 1) = 1
+    i1 <- 1

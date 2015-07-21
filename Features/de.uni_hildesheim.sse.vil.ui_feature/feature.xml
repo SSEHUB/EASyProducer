@@ -2,7 +2,7 @@
 <feature
       id="de.uni_hildesheim.sse.vil.ui_feature"
       label="VIL UI"
-      version="0.5.3"
+      version="1.0.0"
       provider-name="University of Hildesheim - SSE">
 
    <description>
@@ -32,32 +32,36 @@ limitations under the License.
       <update label="EASy Producer Update Site" url="http://projects.sse.uni-hildesheim.de/easy/"/>
    </url>
 
+   <includes
+         id="de.uni_hildesheim.sse.vil.core_feature"
+         version="0.0.0"/>
+
    <plugin
          id="de.uni_hildesheim.sse.vil.buildlang.ui"
          download-size="0"
          install-size="0"
-         version="0.5.3"
+         version="1.0.0"
          unpack="false"/>
 
    <plugin
          id="de.uni_hildesheim.sse.vil.expressions.ui"
          download-size="0"
          install-size="0"
-         version="0.5.3"
+         version="1.0.0"
          unpack="false"/>
 
    <plugin
          id="de.uni_hildesheim.sse.vil.templatelang.ui"
          download-size="0"
          install-size="0"
-         version="0.5.3"
+         version="1.0.0"
          unpack="false"/>
 
    <plugin
          id="de.uni_hildesheim.sse.dslCore.ui"
          download-size="0"
          install-size="0"
-         version="0.0.1"
+         version="1.0.0"
          unpack="false"/>
 
 </feature>

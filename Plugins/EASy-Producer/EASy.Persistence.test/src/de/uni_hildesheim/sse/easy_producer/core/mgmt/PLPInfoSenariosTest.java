@@ -13,7 +13,8 @@ import org.junit.Test;
 
 import de.uni_hildesheim.sse.easy_producer.core.AllTests;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
+import de.uni_hildesheim.sse.model.confModel.AllFreezeSelector;
 import de.uni_hildesheim.sse.model.varModel.ModelElement;
 import de.uni_hildesheim.sse.persistency.StringProvider;
 import de.uni_hildesheim.sse.reasoning.core.frontend.IReasonerListener;
@@ -119,11 +120,11 @@ public class PLPInfoSenariosTest extends AbstractPLPInfoTest {
     /**
      * Tests simple hierarchical instantiation. Test created by Sebastian Bender.
      * @throws PersistenceException If the project could not be loaded from the file system.
-     * @throws VilLanguageException If instantiation is not possible (this should be tested by this test!)
+     * @throws VilException If instantiation is not possible (this should be tested by this test!)
      */
 //    @Ignore
     @Test
-    public void testHierarchicalInstantiation() throws PersistenceException, VilLanguageException {
+    public void testHierarchicalInstantiation() throws PersistenceException, VilException {
         // Load projects
         PLPInfo plp1 = loadPLPInfo(TEST_HIERARCHICAL_INSTANTIATION_STEP1);
         Assert.assertNotNull(plp1.getBuildScript());
@@ -136,17 +137,17 @@ public class PLPInfoSenariosTest extends AbstractPLPInfoTest {
         printPLP(plp3);
         
         // Hierarchical instantiation
-        plp3.instantiate(null);
+        plp3.instantiate();
     }
     
     /**
      * Tests whether the instantiation process of templates will work.
      * @throws PersistenceException If the project could not be loaded from the file system.
-     * @throws VilLanguageException If instantiation is not possible
+     * @throws VilException If instantiation is not possible
      * @throws IOException If the produced file was not saved or the expected file was not found for comparison
      */
     @Test
-    public void testInstantiateNumericCSVInstantiation() throws PersistenceException, VilLanguageException,
+    public void testInstantiateNumericCSVInstantiation() throws PersistenceException, VilException,
         IOException {
 
         File expectedFile = new File(TEST_TEMPLATE_INSTANTIATION, "expected/NumericCSVInstantiationTest.csv");
@@ -165,7 +166,7 @@ public class PLPInfoSenariosTest extends AbstractPLPInfoTest {
         Assert.assertFalse(actualFile.exists());
         
         //Instantiate project
-        plp.instantiate(null);
+        plp.instantiate();
         
         // Test postcondition: actualFile must exist and have exactly the same content as expectedFile.
         Assert.assertTrue(expectedFile.exists());
@@ -220,11 +221,11 @@ public class PLPInfoSenariosTest extends AbstractPLPInfoTest {
                 }
                 Assert.assertFalse(errorMsg.toString(), result.hasConflict());
                 
-                plp.getConfiguration().freeze();
+                plp.getConfiguration().freeze(AllFreezeSelector.INSTANCE);
                 
                 try {
-                    plp.instantiate(null);
-                } catch (VilLanguageException e) {
+                    plp.instantiate();
+                } catch (VilException e) {
                     Assert.fail(e.getMessage());
                 }
                 
@@ -264,8 +265,8 @@ public class PLPInfoSenariosTest extends AbstractPLPInfoTest {
         Assert.assertFalse(actualFile.exists());
         
         try {
-            plp.instantiate(null);
-        } catch (VilLanguageException e) {
+            plp.instantiate();
+        } catch (VilException e) {
             Assert.fail(e.getMessage());
         }
         

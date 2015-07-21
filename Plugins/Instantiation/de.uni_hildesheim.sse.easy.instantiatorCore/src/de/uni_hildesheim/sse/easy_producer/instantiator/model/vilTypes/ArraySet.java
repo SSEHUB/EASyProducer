@@ -15,6 +15,7 @@
  */
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionEvaluator;
 
 /**
@@ -32,7 +33,7 @@ public class ArraySet<T> extends AbstractArrayWrapper<T> implements Set<T> {
      * @param array the wrapped array
      * @param param the only type parameter characterizing <T>
      */
-    public ArraySet(T[] array, Class<? extends IVilType> param) {
+    public ArraySet(T[] array, Class<?> param) {
         this(array, param, TypeRegistry.DEFAULT);
     }
 
@@ -43,8 +44,8 @@ public class ArraySet<T> extends AbstractArrayWrapper<T> implements Set<T> {
      * @param registry the type registry to use
      * @param param the only type parameter characterizing <T>
      */
-    public ArraySet(T[] array, Class<? extends IVilType> param, TypeRegistry registry) {
-        super(removeDuplicates(array), registry.convert(param));
+    public ArraySet(T[] array, Class<?> param, TypeRegistry registry) {
+        super(removeDuplicates(array), true, registry.convert(param));
     }
 
     /**
@@ -53,8 +54,8 @@ public class ArraySet<T> extends AbstractArrayWrapper<T> implements Set<T> {
      * @param array the wrapped array
      * @param params the type parameter characterizing <T>
      */
-    public ArraySet(T[] array, TypeDescriptor<? extends IVilType>... params) {
-        super(removeDuplicates(array), params);
+    public ArraySet(T[] array, TypeDescriptor<?>... params) {
+        super(removeDuplicates(array), true, params);
     }
 
     /**
@@ -78,7 +79,7 @@ public class ArraySet<T> extends AbstractArrayWrapper<T> implements Set<T> {
      * @param <T> the element type
      */
     @Invisible
-    public static final <T> Set<T> empty(Class<? extends IVilType> param, TypeRegistry registry) {
+    public static final <T> Set<T> empty(Class<?> param, TypeRegistry registry) {
         return empty(registry.findType(param));
     }
     
@@ -90,33 +91,33 @@ public class ArraySet<T> extends AbstractArrayWrapper<T> implements Set<T> {
      * @param <T> the element type
      */
     @Invisible
-    public static final <T> Set<T> empty(TypeDescriptor<? extends IVilType> param) {
-        TypeDescriptor<? extends IVilType>[] params = TypeDescriptor.createArray(1);
+    public static final <T> Set<T> empty(TypeDescriptor<?> param) {
+        TypeDescriptor<?>[] params = TypeDescriptor.createArray(1);
         params[0] = param;
         return new ArraySet<T>(null, params);
     }
 
     @Override
     @OperationMeta(returnGenerics = IVilType.class)
-    public Set<T> selectByType(TypeDescriptor<? extends IVilType> type) {
-        return new ListSet<T>(selectByType(this, type), getParameter());
+    public Set<T> selectByType(TypeDescriptor<?> type) {
+        return new ListSet<T>(selectByType(this, type), getGenericParameter());
     }
 
     @Override
     @OperationMeta(returnGenerics = IVilType.class)
     public Set<T> excluding(Collection<T> set) {
-        return new ListSet<T>(excluding(this, set), getParameter());
+        return new ListSet<T>(excluding(this, set), getGenericParameter());
     }
 
     @Override
     @OperationMeta(returnGenerics = IVilType.class)
     public Set<T> including(Collection<T> set) {
-        return new ListSet<T>(including(this, set), getParameter());
+        return new ListSet<T>(including(this, set), getGenericParameter());
     }
 
     @Override
-    public Set<T> select(ExpressionEvaluator evaluator) throws ArtifactException {
-        TypeDescriptor<? extends IVilType>[] param = TypeDescriptor.createArray(1);
+    public Set<T> select(ExpressionEvaluator evaluator) throws VilException {
+        TypeDescriptor<?>[] param = TypeDescriptor.createArray(1);
         param[0] = evaluator.getIteratorVariable().getType();
         return new ListSet<T>(select(this, evaluator), param);
     }
@@ -129,7 +130,7 @@ public class ArraySet<T> extends AbstractArrayWrapper<T> implements Set<T> {
 
     @Override
     public Sequence<T> toSequence() {
-        return new ArraySequence<T>(getArray(), getParams());
+        return new ArraySequence<T>(getArray(), getGenericParameter());
     }
     
     @Override
@@ -138,16 +139,12 @@ public class ArraySet<T> extends AbstractArrayWrapper<T> implements Set<T> {
     }
 
     @Override
+    @OperationMeta(genericArgument = {0 })
     public T add(T element) {
         extendCapacity(1);
         T[] array = getArray();
         array[array.length - 1] = element;
         return element;
-    }
-
-    @Override
-    public void remove(T element) {
-        decreaseCapacity(1);
     }
 
 }

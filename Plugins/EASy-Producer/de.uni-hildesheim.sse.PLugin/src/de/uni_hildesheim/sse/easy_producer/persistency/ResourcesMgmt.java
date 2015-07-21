@@ -33,33 +33,6 @@ public class ResourcesMgmt {
     private ResourcesMgmt() {}
     
     /**
-    /**
-     * Returns the singleton-instance of this class.
-     * 
-     * @return ResourcesMgmt.INSTANCE The Singleton of the class ResourcesMgmt.
-     
-    public static ResourcesMgmt getInstance() {
-        return INSTANCE;
-    }
-    **/
-     
-     // FIXME SE: Removed CopyMechanism
-//    @Override
-//    public String getMainSourceFolder() {
-//        return ProjectConstants.FOLDER_SOURCE;
-//    }
-//
-//    @Override
-//    public String getResourcesFolder() {
-//        return ProjectConstants.FOLDER_RES;
-//    }
-//    
-//    @Override
-//    public String getConfigFolder() {
-//        return ProjectConstants.EASY_FILES;
-//    }
-    
-    /**
      * Enables or disables background tasks. This may be helpful in non-full EASy environments, such as the 
      * QualiMaster configuration application. May require shutting down
      * {@link de.uni_hildesheim.sse.easy_producer.PLPWorkspaceListener}.

@@ -63,7 +63,17 @@ public abstract class EvaluationContext implements IConfiguration {
      * @param message the message to be added
      */
     public void addErrorMessage(String message) {
-        addMessage(new EvaluationVisitor.Message(message, Status.ERROR, null));
+        addErrorMessage(message, null);
+    }
+    
+    /**
+     * Adds an evaluation error message.
+     * 
+     * @param message the message to be added
+     * @param variable Optional {@link IDecisionVariable} which caused the error
+     */
+    public void addErrorMessage(String message, IDecisionVariable variable) {
+        addMessage(new EvaluationVisitor.Message(message, Status.ERROR, variable));
     }
 
     /**
@@ -74,5 +84,17 @@ public abstract class EvaluationContext implements IConfiguration {
     public void addErrorMessage(Throwable throwable) {
         addErrorMessage(throwable.getMessage());
     }
+    
+    /**
+     * Indicates that the evaluation of this constraint shall lead to a warning.
+     */
+    public abstract void issueWarning();
+    
+    /**
+     * Returns whether the expression to be evaluated is a propagation.
+     * 
+     * @return <code>true</code> if it is a propagation, i.e. propagation shall be allowed, <code>false</code> else
+     */
+    public abstract boolean allowPropagation();
    
 }

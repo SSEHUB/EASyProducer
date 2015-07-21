@@ -15,9 +15,9 @@ import org.eclipse.xtext.ui.editor.outline.impl.DocumentRootNode;
 import com.google.inject.Inject;
 
 import de.uni_hildesheim.sse.ModelUtility;
+import de.uni_hildesheim.sse.ivml.AnnotateTo;
 import de.uni_hildesheim.sse.ivml.AttrAssignment;
 import de.uni_hildesheim.sse.ivml.AttrAssignmentPart;
-import de.uni_hildesheim.sse.ivml.AttributeTo;
 import de.uni_hildesheim.sse.ivml.ConflictStmt;
 import de.uni_hildesheim.sse.ivml.Eval;
 import de.uni_hildesheim.sse.ivml.ExpressionStatement;
@@ -287,17 +287,17 @@ public class IvmlOutlineTreeProvider extends DefaultOutlineTreeProvider {
      * @param attrList The list of attribute-declarations of this project.
      * @param parentNode The parent node of the attribute-nodes (the project-contents-node).
      */
-    private void createAttributeNodes(List<AttributeTo> attrList, IOutlineNode parentNode) {
-        for (AttributeTo attrStmt : attrList) {
+    private void createAttributeNodes(List<AnnotateTo> attrList, IOutlineNode parentNode) {
+        for (AnnotateTo attrStmt : attrList) {
             if (!isEmpty(attrStmt)) {
                 StyledString resultString = new StyledString();
-                String typeText = ModelUtility.stringValue(attrStmt.getAttributeType());
+                String typeText = ModelUtility.stringValue(attrStmt.getAnnotationType());
                 for (String attachText : attrStmt.getNames()) {
-                    String attributeName = attrStmt.getAttributeDecl().getName();
+                    String attributeName = attrStmt.getAnnotationDecl().getName();
                     resultString.append(attributeName);
                     resultString.append(" : " + typeText + " -> " + attachText, StyledString.QUALIFIER_STYLER);
                     createEStructuralFeatureNode(parentNode, attrStmt,
-                        IvmlPackage.Literals.ATTRIBUTE_TO__ATTRIBUTE_DECL, imageHelper.getImage(Images.NAME_ATTRIBUTE),
+                        IvmlPackage.Literals.ANNOTATE_TO__ANNOTATION_DECL, imageHelper.getImage(Images.NAME_ATTRIBUTE),
                         resultString, true);
                 }
             }
@@ -485,12 +485,12 @@ public class IvmlOutlineTreeProvider extends DefaultOutlineTreeProvider {
      * @param attrStmt The attribute-statement to be checked.
      * @return <b>True</b> if the attribute-statement is empty. <b>False</b> otherwise.
      */
-    private boolean isEmpty(AttributeTo attrStmt) {
+    private boolean isEmpty(AnnotateTo attrStmt) {
         return attrStmt == null
-                || attrStmt.getAttributeType() == null
-                || attrStmt.getAttributeDecl() == null
-                || attrStmt.getAttributeDecl().getName() == null
-                || attrStmt.getAttributeDecl().getName().length() <= 0
+                || attrStmt.getAnnotationType() == null
+                || attrStmt.getAnnotationDecl() == null
+                || attrStmt.getAnnotationDecl().getName() == null
+                || attrStmt.getAnnotationDecl().getName().length() <= 0
                 || noNames(attrStmt); 
     }
     
@@ -501,7 +501,7 @@ public class IvmlOutlineTreeProvider extends DefaultOutlineTreeProvider {
      * @param attrStmt The attribute-statement to be checked.
      * @return <b>True</b> if the attribute-statement has no names. <b>False</b> otherwise.
      */
-    private boolean noNames(AttributeTo attrStmt) {
+    private boolean noNames(AnnotateTo attrStmt) {
         return attrStmt.getNames() == null || attrStmt.getNames().isEmpty();
     }
     

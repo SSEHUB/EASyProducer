@@ -2,7 +2,7 @@ project attributeCompound {
 
     version v0;
     enum bindingTimes {compile, startup, runtime};
-    attribute bindingTimes binding to attributeCompound;
+    annotate bindingTimes binding to attributeCompound;
     compound comp {
     }
 

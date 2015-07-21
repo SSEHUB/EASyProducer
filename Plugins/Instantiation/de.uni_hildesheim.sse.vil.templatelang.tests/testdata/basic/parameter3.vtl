@@ -1,0 +1,16 @@
+template parameter3(Configuration config, Artifact target) {
+
+    def main(Configuration config, Artifact target) {
+        setOf(String) res = {};
+        ret(res);
+    }
+
+    def Integer ret(setOf(String) param) {
+        ret2(param);
+    }
+
+    def Integer ret2(setOf(String) param) {
+        param.size();
+    }
+
+}

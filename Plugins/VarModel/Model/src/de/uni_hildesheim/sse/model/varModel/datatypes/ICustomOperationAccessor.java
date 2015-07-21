@@ -15,6 +15,8 @@
  */
 package de.uni_hildesheim.sse.model.varModel.datatypes;
 
+import de.uni_hildesheim.sse.model.varModel.ProjectImport;
+
 /**
  * Provides access to custom operations.
  * 
@@ -47,5 +49,23 @@ public interface ICustomOperationAccessor {
      * @return the number of operations
      */
     public int getOperationCount();
+    
+    /**
+     * Returns the number of imports.
+     * 
+     * @return the number of imports
+     */
+    public int getImportsCount();
+
+    /**
+     * Returns the project import specified by <code>index</code>.
+     * 
+     * @param index
+     *            a 0-based index specifying the import to be returned
+     * @return the project import
+     * @throws IndexOutOfBoundsException
+     *             if <code>index&lt;0 || index&gt;={@link #getImportsCount()}</code>
+     */
+    public ProjectImport getImport(int index);
 
 }

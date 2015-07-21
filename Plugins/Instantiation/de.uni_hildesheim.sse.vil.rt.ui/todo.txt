@@ -1,2 +1,1 @@
-xtexteditor
-plugin.xml
+relies on EASy-UI... check!

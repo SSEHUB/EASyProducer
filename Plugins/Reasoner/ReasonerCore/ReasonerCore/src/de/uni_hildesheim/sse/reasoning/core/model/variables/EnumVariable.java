@@ -2,7 +2,6 @@ package de.uni_hildesheim.sse.reasoning.core.model.variables;
 
 import de.uni_hildesheim.sse.model.confModel.AssignmentState;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Enum;
 import de.uni_hildesheim.sse.model.varModel.datatypes.EnumLiteral;
 import de.uni_hildesheim.sse.reasoning.core.model.ReasonerModel;
 
@@ -28,7 +27,7 @@ public class EnumVariable extends ReasonerVariable {
      */
     EnumVariable(IDecisionVariable configVariable, String name, ReasonerModel model, ReasonerVariable parent) {
         super(configVariable, name, model, parent);
-        Enum type = (Enum) configVariable.getDeclaration().getType();
+        //Enum type = (Enum) configVariable.getDeclaration().getType();
         
         // Default value is the smallest ordinal or 0 if no literal exists.
         //value = type.getLiteralCount() > 0 ? type.getLiteral(0).getOrdinal() : 0;

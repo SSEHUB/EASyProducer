@@ -11,7 +11,9 @@
     <genClasses ecoreClass="RtVil.ecore#//LanguageUnit">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference RtVil.ecore#//LanguageUnit/rtContents"/>
     </genClasses>
-    <genClasses ecoreClass="RtVil.ecore#//rtContents"/>
+    <genClasses ecoreClass="RtVil.ecore#//rtContents">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference RtVil.ecore#//rtContents/elements"/>
+    </genClasses>
     <genClasses ecoreClass="RtVil.ecore#//GlobalVariableDeclaration">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute RtVil.ecore#//GlobalVariableDeclaration/persistent"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference RtVil.ecore#//GlobalVariableDeclaration/varDecl"/>
@@ -22,6 +24,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference RtVil.ecore#//StrategyDeclaration/conditions"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference RtVil.ecore#//StrategyDeclaration/varDecls"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference RtVil.ecore#//StrategyDeclaration/objective"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference RtVil.ecore#//StrategyDeclaration/weighting"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference RtVil.ecore#//StrategyDeclaration/breakdown"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference RtVil.ecore#//StrategyDeclaration/post"/>
     </genClasses>
@@ -29,6 +32,10 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference RtVil.ecore#//BreakdownElement/varDecl"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference RtVil.ecore#//BreakdownElement/exprStmt"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference RtVil.ecore#//BreakdownElement/breakdownStmt"/>
+    </genClasses>
+    <genClasses ecoreClass="RtVil.ecore#//WeightingStatement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute RtVil.ecore#//WeightingStatement/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference RtVil.ecore#//WeightingStatement/expr"/>
     </genClasses>
     <genClasses ecoreClass="RtVil.ecore#//BreakdownStatement">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute RtVil.ecore#//BreakdownStatement/type"/>
@@ -47,9 +54,6 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference RtVil.ecore#//TacticDeclaration/paramList"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference RtVil.ecore#//TacticDeclaration/conditions"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference RtVil.ecore#//TacticDeclaration/block"/>
-    </genClasses>
-    <genClasses ecoreClass="RtVil.ecore#//ScriptContents">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference RtVil.ecore#//ScriptContents/elements"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

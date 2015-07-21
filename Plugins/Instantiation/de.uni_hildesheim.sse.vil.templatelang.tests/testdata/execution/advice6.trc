@@ -1,8 +1,5 @@
 -> main(Configuration, FileArtifact) with (<config>, test.texts)
     prj <- <config>
-    -> c1(adviceTestVM6) with (<config>) = adviceTestVM6::c1
     cmp <- adviceTestVM6::c1
-    -> bindingTime(TestCompoundType) with (adviceTestVM6::c1) = adviceTestVM6::bindingTime
     bt <- adviceTestVM6::bindingTime
-    -> meta(TestCompoundType) with (adviceTestVM6::c1) = adviceTestVM6::meta
     i <- 0

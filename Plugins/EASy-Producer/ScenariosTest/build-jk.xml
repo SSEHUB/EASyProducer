@@ -20,6 +20,8 @@
         <pathelement path="${libs.reasonerCore}"/>
         <pathelement path="${libs.ivml}"/>
         <pathelement path="${libs.instantiator.java}"/>
+        <pathelement path="${libs.instantiator.ant}"/>
+        <pathelement path="${libs.instantiator.aspectj}"/>
         <pathelement path="${libs.vil.tests}"/>
         <!-- Eclipse-Plugins -->
 		<fileset dir="${eclipse.plugins.dir}">

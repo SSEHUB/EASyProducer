@@ -3,7 +3,7 @@ package de.uni_hildesheim.sse.easy.ui.productline_editor.configuration;
 import org.eclipse.jface.viewers.ViewerFilter;
 
 /**
- * Container for applayable ViewerFilter.
+ * Container for usable ViewerFilter.
  * @author El-Sharkawy
  *
  */
@@ -15,7 +15,7 @@ class GUIConfigurationFilter {
      * Sole constructor of this class for creating an empty filter, which filter nothing.
      */
     public GUIConfigurationFilter() {
-        filters = new ViewerFilter[4];
+        filters = new ViewerFilter[5];
     }
     
 
@@ -49,6 +49,14 @@ class GUIConfigurationFilter {
      */
     void setAssignmentStateFilter(AbstractConfigurationFilter filter) {
         filters[3] = filter;
+    }
+    
+    /**
+     * Sets the {@link InterfaceFilter}.
+     * @param filter an {@link InterfaceFilter} or <tt>null</tt> to delete an existing filter.
+     */
+    void setInterfaceFilter(AbstractConfigurationFilter filter) {
+        filters[4] = filter;
     }
     
     /**

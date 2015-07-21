@@ -3,8 +3,8 @@ template qm1_3(Configuration config, FileArtifact target) {
 
     def main(Configuration config, FileArtifact target) {
         Family fm = config.byName("fNormalize");
-        Algorithm alg = fm.members().toSequence().get(0);
-        'System.out.print("${alg.name()}");'
+        Algorithm alg = fm.members.toSequence().get(0);
+        'System.out.print("${alg.name}");'
     }
 
 }

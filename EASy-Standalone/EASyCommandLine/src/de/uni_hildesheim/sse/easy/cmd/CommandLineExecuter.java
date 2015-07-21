@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 
 import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
@@ -72,7 +72,7 @@ public class CommandLineExecuter {
             }
         } catch (ModelManagementException e) {
             LOGGER.exception(e);
-        } catch (VilLanguageException e) {
+        } catch (VilException e) {
             LOGGER.exception(e);
         } catch (PersistenceException e) {
             LOGGER.exception(e);
@@ -105,7 +105,7 @@ public class CommandLineExecuter {
                 LOGGER.warn("Unspecified combination of arguments passed. # Arguments = " + args.length);
                 break;
             }
-        } catch (VilLanguageException e) {
+        } catch (VilException e) {
             LOGGER.exception(e);
         } catch (PersistenceException e) {
             LOGGER.exception(e);

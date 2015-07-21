@@ -1,0 +1,11 @@
+rtVilScript tactic1 (Project source, Configuration config, Project target) {
+
+    tactic t1() = {
+        Integer i1 = 5;
+    }
+
+    tactic t2() = true : true {
+        Integer i2 = 10;
+    }
+
+}

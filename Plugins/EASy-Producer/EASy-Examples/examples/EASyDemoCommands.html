@@ -1,0 +1,21 @@
+<html>
+    <body>
+        <h2>EASy Command Platform Example</h2>
+        Demonstrates a hierarchical product line of a command executor platform. The platform provides
+        some mandatory and optional commands as well as basic instantiation capabilities. The refining
+        product lines instantiate or extend the platform in different manner, in particular
+        <ul>
+        <li><b>EASyDemoCommandsConstants:</b> Instantiate by modifying Java source code constants.</li>
+        <li><b>EASyDemoCommandsFile:</b> Instantiate by removing unneeded Java source code artifacts.</li>
+        <li><b>EASyDemoCommandsGen:</b> Instantiate by generating a properties file for startup time variability.
+           In addition, this product line allows to integrate arbitrary simple commands, which are frontended by
+           generated glue code.</li>
+        </ul>
+        <li><b>EASyDemoCommandsGenStatic:</b> Instantiate by removing generating Java source code for a 
+           constants class.</li> 
+        <li><b>EASyDemoCommandsVelocity:</b> Instantiate using Apache Velocity.</li>        
+        <br/><br/>
+        <i>Please derive a product first before configuring and instantiating. Actually, the platform 
+           EASyDemoCommandsPlatform does not provide own instantiation functionality.</i>        
+    </body>
+</html>

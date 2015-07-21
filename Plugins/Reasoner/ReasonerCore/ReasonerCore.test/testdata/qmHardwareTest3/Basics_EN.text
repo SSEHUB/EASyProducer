@@ -1,0 +1,8 @@
+Basics::Tuple::fields = data fields
+Basics::Field::name = name
+Basics::Field::type = type
+Basics::Parameter::name = name
+Basics::IntegerParameter::name = value
+Basics::StringParameter::name = value
+Basics::RealParameter::name = value
+Basics::BooleanParameter::name = value

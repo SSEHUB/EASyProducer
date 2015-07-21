@@ -10,9 +10,11 @@ import org.junit.runners.Suite.SuiteClasses;
  * @author El-Sharkawy
  */
 @RunWith(Suite.class)
-@SuiteClasses({    
+@SuiteClasses({
+    EvaluationIntegrityTest.class,
     IntegrityTests.class,  
-    ReasoningScenarioTests.class
+    ReasoningScenarioTests.class,
+    StressTest.class
     })
 public class AllTests {
 

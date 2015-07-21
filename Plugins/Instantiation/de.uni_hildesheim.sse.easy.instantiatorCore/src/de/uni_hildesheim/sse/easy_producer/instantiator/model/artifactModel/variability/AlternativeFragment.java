@@ -4,7 +4,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.Frag
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IArtifactVisitor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Binary;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Text;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 
 /**
  * Describes an alternative fragment.
@@ -47,27 +47,27 @@ public class AlternativeFragment extends VariabilityFragment {
     }
     
     @Override
-    public void delete() throws ArtifactException {
+    public void delete() throws VilException {
         // TODO Auto-generated method stub
     }
 
     @Override
-    public String getName() throws ArtifactException {
+    public String getName() throws VilException {
         return "";
     }
 
     @Override
-    public void rename(String name) throws ArtifactException {
+    public void rename(String name) throws VilException {
         // TODO Auto-generated method stub
     }
 
     @Override
-    public Text getText() throws ArtifactException {
+    public Text getText() throws VilException {
         return Text.CONSTANT_EMPTY; // TODO let's see
     }
 
     @Override
-    public Binary getBinary() throws ArtifactException {
+    public Binary getBinary() throws VilException {
         return Binary.CONSTANT_EMPTY; // TODO let's see
     }
 
@@ -77,7 +77,7 @@ public class AlternativeFragment extends VariabilityFragment {
     }
 
     @Override
-    public void update() throws ArtifactException {
+    public void update() throws VilException {
         // TODO Auto-generated method stub
     }
 

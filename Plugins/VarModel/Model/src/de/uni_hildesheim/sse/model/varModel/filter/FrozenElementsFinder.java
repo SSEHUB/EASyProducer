@@ -16,7 +16,9 @@
 package de.uni_hildesheim.sse.model.varModel.filter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.uni_hildesheim.sse.model.varModel.CompoundAccessStatement;
 import de.uni_hildesheim.sse.model.varModel.FreezeBlock;
@@ -31,6 +33,7 @@ import de.uni_hildesheim.sse.model.varModel.Project;
 public class FrozenElementsFinder extends AbstractFrozenElementsFinder {
     
     private List<IFreezable> frozenElements;
+    private Map<IFreezable, FreezeBlock> frozenMap;
     
     /**
      * Default constructor for this class.
@@ -40,6 +43,7 @@ public class FrozenElementsFinder extends AbstractFrozenElementsFinder {
     public FrozenElementsFinder(Project project, FilterType filtertype) {
         super(project, filtertype);
         frozenElements = new ArrayList<IFreezable>();
+        frozenMap = new HashMap<IFreezable, FreezeBlock>();
         project.accept(this);
     }
     
@@ -50,12 +54,24 @@ public class FrozenElementsFinder extends AbstractFrozenElementsFinder {
     public List<IFreezable> getFrozenElements() {
         return frozenElements;
     }
+    
+    /**
+     * Returns the freeze block to the given <code>freezable</code>.
+     * 
+     * @param freezable the freezable
+     * @return the freeze block (if also in {@link #getFrozenElements()}, <b>null</b> else)
+     */
+    public FreezeBlock getFreezeBlock(IFreezable freezable) {
+        return frozenMap.get(freezable);
+    }
 
     @Override
     public void visitFreezeBlock(FreezeBlock freeze) {
         // Save frozen elements.
         for (int i = 0; i < freeze.getFreezableCount(); i++) {
-            frozenElements.add(freeze.getFreezable(i));
+            IFreezable freezable = freeze.getFreezable(i);
+            frozenElements.add(freezable);
+            frozenMap.put(freezable, freeze);
         }
     }
 

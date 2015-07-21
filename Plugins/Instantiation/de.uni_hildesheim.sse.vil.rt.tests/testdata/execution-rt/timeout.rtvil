@@ -1,0 +1,30 @@
+rtVilScript timeout (Project source, Configuration config, Project target) {
+
+    strategy s0(Project source, Configuration config, Project target) = true : true {
+        objective true;
+        breakdown {
+            strategy s2() @-2;
+            tactic t1() @1;
+        }
+    }
+
+    strategy s2() = {
+        objective true;
+        breakdown {
+            tactic t1() @1000;
+        }
+    }
+
+    strategy s3() = {
+        breakdown {
+            tactic t1();
+        }
+    }
+
+    tactic t1() = {
+    }
+
+    enact(Project source, Configuration config, Project target) = : {
+    }
+
+}

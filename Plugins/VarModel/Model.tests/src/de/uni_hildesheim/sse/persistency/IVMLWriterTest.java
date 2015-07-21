@@ -7,17 +7,22 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.uni_hildesheim.sse.model.confModel.AssignmentState;
+import de.uni_hildesheim.sse.model.confModel.Configuration;
+import de.uni_hildesheim.sse.model.confModel.ConfigurationException;
+import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
+import de.uni_hildesheim.sse.model.cst.AttributeVariable;
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
 import de.uni_hildesheim.sse.model.cst.CompoundAccess;
 import de.uni_hildesheim.sse.model.cst.ConstantValue;
 import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
 import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
 import de.uni_hildesheim.sse.model.cst.Variable;
+import de.uni_hildesheim.sse.model.varModel.Attribute;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.ExpressionVersionRestriction;
 import de.uni_hildesheim.sse.model.varModel.FreezeBlock;
-import de.uni_hildesheim.sse.model.varModel.IFreezable;
 import de.uni_hildesheim.sse.model.varModel.IvmlException;
 import de.uni_hildesheim.sse.model.varModel.IvmlKeyWords;
 import de.uni_hildesheim.sse.model.varModel.Project;
@@ -28,6 +33,7 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Container;
 import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Enum;
+import de.uni_hildesheim.sse.model.varModel.datatypes.FreezeVariableType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IntegerType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
 import de.uni_hildesheim.sse.model.varModel.datatypes.RealType;
@@ -582,19 +588,29 @@ public class IVMLWriterTest {
     
     /**
      * Tests whether writing freeze block succeeds.
-     * @throws IOException 
+     * @throws IOException shall not happen - otherwise failure
+     * @throws ValueDoesNotMatchTypeException shall not happen - otherwise failure
+     * @throws CSTSemanticException shall not happen - otherwise failure
      */
     @Test
-    public void writingFreezeBlock() throws IOException {
+    public void writingFreezeBlock() throws IOException, ValueDoesNotMatchTypeException, CSTSemanticException {
         DecisionVariableDeclaration dec1 = new DecisionVariableDeclaration("Hans", StringType.TYPE, pro);
         DecisionVariableDeclaration dec2 = new DecisionVariableDeclaration("Klaus", StringType.TYPE, pro);
         DecisionVariableDeclaration[] decs = new DecisionVariableDeclaration[2];
         decs[0] = dec1;
         decs[1] = dec2;
-        String[] but = new String[1];
-        but[0] = "Kla*";
+        //String[] but = new String[1];
+        //but[0] = "Kla*";
         
-        FreezeBlock fb = new FreezeBlock(decs, but, pro);
+        FreezeVariableType type = new FreezeVariableType(decs, pro);
+        DecisionVariableDeclaration var = new DecisionVariableDeclaration("v", type, pro);
+        ConstraintSyntaxTree selector = new OCLFeatureCall(new Variable(var), "name");
+        selector.inferDatatype();
+        selector = new OCLFeatureCall(selector, "matches", 
+            new ConstantValue(ValueFactory.createValue(StringType.TYPE, "Kla*")));
+        selector.inferDatatype();
+
+        FreezeBlock fb = new FreezeBlock(decs, var, selector, pro);
         pro.add(fb);
         
         pro.accept(writer);
@@ -603,46 +619,7 @@ public class IVMLWriterTest {
         expected += "    freeze {\r\n";
         expected += "        Hans;\r\n";
         expected += "        Klaus;\r\n";
-        expected += "    } but (Kla*)\r\n";
-        expected += "}\r\n";
-        
-        writer.flush();
-        Assert.assertEquals(expected, strWriter.toString());
-    }
-    
-    /**
-     * Tests whether writing freeze block with more than one but succeeds.
-     * @throws IOException 
-     * @throws ValueDoesNotMatchTypeException 
-     */
-    @Test
-    public void writingFreezeBlockButs() throws IOException, ValueDoesNotMatchTypeException {
-        Compound comp = new Compound("Compound1", pro);
-        DecisionVariableDeclaration dec1 = new DecisionVariableDeclaration("Hans", StringType.TYPE, pro);
-        DecisionVariableDeclaration dec2 = new DecisionVariableDeclaration("Klaus", StringType.TYPE, pro);
-        DecisionVariableDeclaration dec3 = new DecisionVariableDeclaration("name", StringType.TYPE, comp);
-        
-        IFreezable[] decs = new IFreezable[3];
-        decs[0] = dec1;
-        decs[1] = dec2;
-        decs[2] = dec3;
-        
-        String[] but = new String[3];
-        but[0] = "Kla*";
-        but[1] = "Rof*";
-        but[2] = "SSE";
-        
-        FreezeBlock fb = new FreezeBlock(decs, but, pro);
-        pro.add(fb);
-        
-        pro.accept(writer);
-        
-        String expected = "project Name {\r\n\r\n";
-        expected += "    freeze {\r\n";
-        expected += "        Hans;\r\n";
-        expected += "        Klaus;\r\n";
-        expected += "        Compound1.name;\r\n";
-        expected += "    } but (Kla*, Rof*, SSE)\r\n";
+        expected += "    } but (v|matches(name(v), \"Kla*\"))\r\n";
         expected += "}\r\n";
         
         writer.flush();
@@ -810,6 +787,98 @@ public class IVMLWriterTest {
         }
         pro.addImport(imp);
         return var;
+    }
+    
+    /**
+     * Tests whether the configuration is able to handle assigned attributes during its save process.
+     * @throws ValueDoesNotMatchTypeException Must not occur, otherwise string values cannot be assigned to string
+     *     variables
+     * @throws CSTSemanticException Must not occur, otherwise assignment constraints cannot be created.
+     * @throws ConfigurationException Must not occcur, otherwise {@link Configuration#toProject(boolean)} is broken.
+     */
+    @Test
+    public void testSaveConfiguredAttributes() throws ValueDoesNotMatchTypeException, CSTSemanticException,
+        ConfigurationException {
+        
+        assertSavingAttributeValues(false);
+        assertSavingAttributeValues(true);
+    }
+
+    /**
+     * Part of {@link #testSaveConfiguredAttributes()}. Creates two attributes on different ways for the same
+     * {@link IDecisionVariable}, configures them and test whether they are saved correctly.
+     * @param changeStates One variable is created with a default value, the other with an assigned value. <tt>true</tt>
+     *     will change the sates to check whether both kinds of attributes can be saved.
+     * @throws ValueDoesNotMatchTypeException Must not occur, otherwise string values cannot be assigned to string
+     *     variables
+     * @throws CSTSemanticException Must not occur, otherwise assignment constraints cannot be created.
+     * @throws ConfigurationException Must not occcur, otherwise {@link Configuration#toProject(boolean)} is broken.
+     */
+    private void assertSavingAttributeValues(boolean changeStates) throws ValueDoesNotMatchTypeException,
+            CSTSemanticException, ConfigurationException {
+        
+        Project pro = new Project("test_Project_for_saving_attribute_values");
+        DecisionVariableDeclaration intA = new DecisionVariableDeclaration("intA", IntegerType.TYPE, pro);
+        pro.add(intA);
+        Attribute attributeDef1 = new Attribute("attribute1", StringType.TYPE, pro, pro);
+        String firstAttrValue = "a Default Value";
+        attributeDef1.setValue(firstAttrValue);
+        pro.add(attributeDef1);
+        pro.attribute(attributeDef1);
+        Attribute attributeDef2 = new Attribute("attribute2", StringType.TYPE, pro, pro);
+        pro.add(attributeDef2);
+        pro.attribute(attributeDef2);
+        
+        // Assignment of 2nd attribute via constraint
+        Constraint constraint = new Constraint(pro);
+        AttributeVariable attrVar = new AttributeVariable(new Variable(intA), attributeDef2);
+        Value assignedValue = ValueFactory.createValue(attributeDef2.getType(), "Hello World");
+        ConstantValue cstValue = new ConstantValue(assignedValue);
+        OCLFeatureCall assignment = new OCLFeatureCall(attrVar, OclKeyWords.ASSIGNMENT, cstValue);
+        constraint.setConsSyntax(assignment);
+        pro.add(constraint);
+        
+        // Test whether project is valid and can be used for testing
+        ProjectTestUtilities.validateProject(pro);
+        
+        // Create configuration and check whether the attributes are configured correctly
+        Configuration config = new Configuration(pro);
+        IDecisionVariable var = config.getDecision(intA);
+        Assert.assertEquals(2, var.getAttributesCount());
+        IDecisionVariable firstAttribute = var.getAttribute(0);
+        IDecisionVariable secondAttribute = var.getAttribute(1);
+        Assert.assertNotNull(firstAttribute);
+        Assert.assertEquals(firstAttrValue, firstAttribute.getValue().getValue().toString());
+        Assert.assertSame(AssignmentState.DEFAULT, firstAttribute.getState());
+        Assert.assertNotNull(secondAttribute);
+        Assert.assertEquals(assignedValue, secondAttribute.getValue());
+        Assert.assertSame(AssignmentState.ASSIGNED, secondAttribute.getState());
+        
+        
+        if (changeStates) {
+            firstAttribute.setValue(firstAttribute.getValue(), AssignmentState.ASSIGNED);
+            secondAttribute.setValue(secondAttribute.getValue(), AssignmentState.DEFAULT);
+        }
+        
+        // Save configuration and test whether the attribute values appear inside the saved configuration
+        Project confProject = config.toProject(true);
+        StringWriter sWriter = new StringWriter();
+        IVMLWriter iWriter = new IVMLWriter(sWriter);
+        confProject.accept(iWriter);
+        String savedResult = sWriter.toString();
+        
+        // Test: Attribute1 shall NOT be saved, Attribute 2 should be saved. 
+        String assignmentStr1 = intA.getName() + "." + attributeDef1.getName() + " " + OclKeyWords.ASSIGNMENT + " \""
+            + firstAttrValue + "\";";
+        String assignmentStr2 = intA.getName() + "." + attributeDef2.getName() + " " + OclKeyWords.ASSIGNMENT 
+            + " \"" + assignedValue.getValue().toString() + "\";";
+        System.out.println(savedResult);
+        Assert.assertEquals("Error: value of attribute \"" + firstAttribute.getDeclaration().getName() + "\" was saved"
+            + " but its state is \"" + firstAttribute.getState() + "\"", changeStates,
+            savedResult.contains(assignmentStr1));
+        Assert.assertEquals("Error: value of attribute \"" + secondAttribute.getDeclaration().getName() + "\" was saved"
+            + " but its state is \"" + secondAttribute.getState() + "\"", !changeStates,
+            savedResult.contains(assignmentStr2));
     }
 
 }

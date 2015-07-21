@@ -1,21 +1,25 @@
 package de.uni_hildesheim.sse.buildLanguageTranslation;
 
+import org.eclipse.emf.ecore.EObject;
+
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Resolver;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Rule;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.RuleDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
-import de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 
 /**
  * Stores (temporary) information about the relation of an ECore and an Rule 
  * model instance.
  * 
+ * @param <D> the Ecore language declaration type
+ * @param <R> the model rule type
+ * 
  * @author Holger Eichelberger
  */
-class RuleInfo {
+public class RuleInfo <D extends EObject, R extends Rule> {
     
-    private RuleDeclaration ruleDecl;
-    private Rule rule;
+    private D ruleDecl;
+    private R rule;
     private RuleDescriptor descriptor;
 
     /**
@@ -25,7 +29,7 @@ class RuleInfo {
      * @param rule the related rule model instance
      * @param descriptor the descriptor used to build up <code>rule</code> for registering the variables lateron 
      */
-    public RuleInfo(RuleDeclaration ruleDecl, Rule rule, RuleDescriptor descriptor) {
+    public RuleInfo(D ruleDecl, R rule, RuleDescriptor descriptor) {
         this.ruleDecl = ruleDecl;
         this.rule = rule;
         this.descriptor = descriptor;
@@ -36,7 +40,7 @@ class RuleInfo {
      * 
      * @return the VTL rule declaration
      */
-    public RuleDeclaration getRuleDeclaration() {
+    public D getRuleDeclaration() {
         return ruleDecl;
     }
     
@@ -45,7 +49,7 @@ class RuleInfo {
      * 
      * @return the rule instance
      */
-    public Rule getRule() {
+    public R getRule() {
         return rule;
     }
     
@@ -53,10 +57,10 @@ class RuleInfo {
      * Registers the LHS/RHS variables in <code>resolver</code> if applicable.
      * 
      * @param resolver the resolver instance
-     * @throws ExpressionException in case that resolving one of the expressions fails
+     * @throws VilException in case that resolving one of the expressions fails
      * @see RuleDescriptor#registerVariables(Resolver)
      */
-    public void registerVariables(Resolver resolver) throws ExpressionException {
+    public void registerVariables(Resolver resolver) throws VilException {
         for (int p = 0; p < rule.getParameterCount(); p++) {
             resolver.add(rule.getParameter(p));
         }

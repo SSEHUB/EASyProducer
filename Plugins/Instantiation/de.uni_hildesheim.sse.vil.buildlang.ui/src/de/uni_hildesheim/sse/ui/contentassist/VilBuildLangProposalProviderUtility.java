@@ -35,6 +35,7 @@ import de.uni_hildesheim.sse.vil.expressions.translation.Utils;
 import de.uni_hildesheim.sse.vilBuildLanguage.ImplementationUnit;
 import de.uni_hildesheim.sse.vilBuildLanguage.LanguageUnit;
 import de.uni_hildesheim.sse.vilBuildLanguage.MapVariable;
+import de.uni_hildesheim.sse.vilBuildLanguage.RuleConditions;
 import de.uni_hildesheim.sse.vilBuildLanguage.RuleElement;
 import de.uni_hildesheim.sse.vilBuildLanguage.RuleElementBlock;
 import de.uni_hildesheim.sse.vilBuildLanguage.ScriptContents;
@@ -253,9 +254,9 @@ public class VilBuildLangProposalProviderUtility {
         List<String> allTypes = null;
         TypeRegistry typeRegistry = ResourceRegistry.getTypeRegistry(node);
         if (typeRegistry != null) {
-            Iterable<TypeDescriptor<? extends IVilType>> types = typeRegistry.allTypes();
+            Iterable<TypeDescriptor<?>> types = typeRegistry.allTypes();
             if (types != null) {
-                Iterator<TypeDescriptor<? extends IVilType>> typeIterator = types.iterator();
+                Iterator<TypeDescriptor<?>> typeIterator = types.iterator();
                 if (typeIterator != null) {
                     allTypes = new ArrayList<String>();
                     while (typeIterator.hasNext()) {
@@ -471,7 +472,7 @@ public class VilBuildLangProposalProviderUtility {
                                 if (rule.getParamList().getParam() != null) {
                                     for (Parameter param : rule.getParamList().getParam()) {
                                         String toAdd = Utils.getQualifiedNameString(param.getType().getName());
-//                                        System.out.println("SearchForTypes: " + toAdd);
+                                        System.out.println("SearchForTypes: " + toAdd);
                                         parameterTypes.add(toAdd); 
                                     }                           
                                 }
@@ -969,9 +970,9 @@ public class VilBuildLangProposalProviderUtility {
         List<OperationDescriptor> operations = new ArrayList<OperationDescriptor>();
         TypeRegistry typeRegistry = ResourceRegistry.getTypeRegistry(node);
         if (typeRegistry != null) {            
-            Iterable<TypeDescriptor<? extends IVilType>> types = typeRegistry.allTypes();
+            Iterable<TypeDescriptor<?>> types = typeRegistry.allTypes();
             if (types != null) {
-                Iterator<TypeDescriptor<? extends IVilType>> typeIterator = types.iterator();
+                Iterator<TypeDescriptor<?>> typeIterator = types.iterator();
                 if (typeIterator != null) {
                     while (typeIterator.hasNext()) {
                         Iterable<OperationDescriptor> typeOperations = typeIterator.next().getOperations();
@@ -1049,8 +1050,9 @@ public class VilBuildLangProposalProviderUtility {
         String typeName = "";
         if (ruleDecl != null && !name.isEmpty()) {
             // If the name of the element is LHS, it identifies the first precondition of the given rule
-            if (name.equals("LHS") && ruleDecl.getConditions() != null && hasElements(ruleDecl.getConditions().getPreconditions())) {
-                LogicalExpression ruleFirstPrecondition = ruleDecl.getConditions().getPreconditions().get(0);
+            RuleConditions cond = ruleDecl.getConditions();
+            if (name.equals("LHS") && null != cond && hasElements(cond.getPreconditions())) {
+                LogicalExpression ruleFirstPrecondition = cond.getPreconditions().get(0);
                 // Can only be a path match, an artefact or an artefact collection (as defined in the language specification)
                 typeName = getType(ruleFirstPrecondition, name);
             } else {

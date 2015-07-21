@@ -4,13 +4,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.StringValueHelper;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 
 /**
- * Helper meethods for the tracers.
+ * Helper methods for the tracers.
  * 
  * @author Holger Eichelberger
  */
@@ -20,7 +19,6 @@ class TracerHelper {
      * The types excluded from tracing.
      */
     private static final Set<TypeDescriptor<?>> EXCLUDED_TYPES = new HashSet<TypeDescriptor<?>>();
-    private static final Set<OperationType> EXCLUDED_OPERATIONS = new HashSet<OperationType>();
     
     static {
         // don't show too much details
@@ -28,11 +26,6 @@ class TracerHelper {
         EXCLUDED_TYPES.add(TypeRegistry.integerType());
         EXCLUDED_TYPES.add(TypeRegistry.booleanType());
         EXCLUDED_TYPES.add(TypeRegistry.realType());
-        
-        // don't show too much details
-        EXCLUDED_OPERATIONS.add(OperationType.INFIX);
-        EXCLUDED_OPERATIONS.add(OperationType.POSTFIX);
-        EXCLUDED_OPERATIONS.add(OperationType.PREFIX);
     }
     
     /**
@@ -48,8 +41,7 @@ class TracerHelper {
      * @return <code>true</code> if the descriptor shall be traced, <code>false</code> else
      */
     static boolean trace(OperationDescriptor descriptor) {
-        return !descriptor.isConversion() && !EXCLUDED_TYPES.contains(descriptor.getDeclaringType()) 
-            && !EXCLUDED_OPERATIONS.contains(descriptor.getOperationType());
+        return !EXCLUDED_TYPES.contains(descriptor.getDeclaringType()) && descriptor.trace();
     }
     
     /**

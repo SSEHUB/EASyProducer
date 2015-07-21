@@ -47,6 +47,32 @@ public class BooleanOperations {
             return result;
         }
     };
+    
+    /**
+     * Implements the warning operation. If the inner expression is defined, then go to true. If undefined, 
+     * remain on undefined.
+     */
+    static final IOperationEvaluator WARNING = new IOperationEvaluator() {
+
+        @Override
+        public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
+            EvaluationAccessor result = null;
+            if (null != operand) {
+                EvaluationContext context = operand.getContext();
+                Value value = operand.getValue();
+                if (value instanceof BooleanValue) {
+                    Boolean bool = ((BooleanValue) value).getValue();
+                    if (null != bool) {
+                        if (Boolean.FALSE == bool) {
+                            context.issueWarning();
+                        }
+                    }
+                }
+                result = ConstantAccessor.POOL.getInstance().bind(BooleanValue.TRUE, context);
+            }
+            return result;
+        }
+    };
 
     /**
      * Defines the interface for a binary boolean operation.
@@ -116,6 +142,7 @@ public class BooleanOperations {
         EvaluatorRegistry.registerEvaluator(GenericOperations.ASSIGNMENT, BooleanType.ASSIGNMENT);
         EvaluatorRegistry.registerEvaluator(GenericOperations.IS_DEFINED, BooleanType.IS_DEFINED);
         EvaluatorRegistry.registerEvaluator(NOT, BooleanType.NOT);
+        EvaluatorRegistry.registerEvaluator(WARNING, BooleanType.WARNING);
         EvaluatorRegistry.registerEvaluator(new BinaryOperationEvaluator(new BinaryBooleanOperation() {
             
             public boolean evaluate(boolean b1, boolean b2) {

@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Project name must not contain whitespaces -->
-<project name="VariabilityModel" default="all" basedir=".">	
+<project name="VariabilityModel" default="all" basedir="." xmlns:jacoco="antlib:org.jacoco.ant">	
 	<property file="${user.home}/global-build.properties"/>
-	<path id="emma.lib" >    		
-		<pathelement location="${emma.path}/emma.jar" />	
-		<pathelement location="${emma.path}/emma_ant.jar" />	
-	</path>
-	<taskdef resource="emma_ant.properties" classpathref="emma.lib" />
+    
+    <taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
+        <classpath path="${jacoco.path}/jacocoant.jar"/>
+    </taskdef>
 
 	<target name="init">
 		<!-- Delete generated folders -->
@@ -37,7 +36,7 @@
         <echo>###  Compiling Model Test Suite ###</echo>
         <echo>###################################</echo>
 		<ant dir="Model.tests" antfile="${build.script.name}" />
-        
+
         <echo>############################</echo>
         <echo>###  Compiling DSL Core  ###</echo>
         <echo>############################</echo>
@@ -49,23 +48,6 @@
         <ant dir="${home.dslCore.ui.dir}" antfile="${build.script.name}" />
         
     </target>
-	
-	<target name="instrumment">
-		<emma enabled="true" verbosity="verbose">
-			<instr destdir="${coverage.instr.dir}" metadatafile="${coverage.results.dir}/metadata.emma" mode="fullcopy" >
-				<filter includes="*de.uni_hildesheim.sse*"/>
-				<filter excludes="*Activator*"/>
-				<filter excludes="*AllTests*"/>
-				<instrpath>
-					<fileset dir="${home.dslCore.ui.dir}/${build.jar.dir}/" includes="**/*.jar" />
-                    <fileset dir="${home.utils.dir}/${build.jar.dir}/" includes="**/*.jar" />
-					<fileset dir="${home.model.dir}/${build.jar.dir}/" includes="**/*.jar" />
-					<fileset dir="${home.model.persistency.dir}/${build.jar.dir}/" includes="**/*.jar" />
-					<fileset dir="${home.model.tests.dir}/${build.jar.dir}/" includes="**/*.jar" />
-				</instrpath>
-			</instr>
-	    </emma>
-	</target>
 	
 	<target name="prepareTestEclipse" if="${unzipNewEclipse}">
 		<delete dir="${test.eclipse.name}"/>
@@ -83,47 +65,69 @@
 		</condition>
 		<antcall target="prepareTestEclipse"/>
 		
-		<copy todir="${test.eclipse.path}/plugins" failonerror="true" overwrite="true">
-			<fileset dir="${coverage.instr.dir}/lib"/>
+        <!-- Copy Plugins, which shall be tested -->
+		<copy todir="${test.eclipse.path}/plugins" failonerror="true" overwrite="true" flatten="true">
+			<fileset dir="${basedir}" includes="**/${build.jar.dir}/*.jar" />
 		</copy>
 	</target>
 	
-	<target name="coreTestEMMA" depends="instrumment, copy.to.eclipse">
-		<property name="eclipse-home" value="${test.eclipse.path}"/>
-		<ant target="core-test" antfile="plugins/${test.eclipse.testFW.dir}/library.xml" dir="${test.eclipse.path}">
-		  <property name="data-dir" value="${test.eclipse.workspace.dir} -clean"/>
-		  <property name="plugin-name" value="de.uni_hildesheim.sse.varModel.tests"/>
-		  <property name="classname" value="test.de.uni_hildesheim.sse.AllTests"/>
-		  <property name="vmargs" value="-Dbaz=true"/>
-		  <property name="extraVMargs" value="-Demma.coverage.out.file=${basedir}/${coverage.results.dir}/${ant.project.name}.emma -Dosgi.dev=${emma.path}/emma.jar" />
-		  <property name="os" value="win32"/>
-		  <property name="ws" value="win32"/>
-		  <property name="arch" value="x86"/>
-		  <property name="timeout" value="240000"/>
-		</ant>
+	<target name="coreTest" depends="copy.to.eclipse">
+        <property name="eclipse-home" value="${test.eclipse.path}"/>
+        <ant target="core-test" antfile="plugins/${test.eclipse.testFW.dir}/library.xml" dir="${test.eclipse.path}">       
+          <property name="data-dir" value="${test.eclipse.workspace.dir} -clean"/>
+          <property name="plugin-name" value="de.uni_hildesheim.sse.varModel.tests"/>
+          <property name="classname" value="test.de.uni_hildesheim.sse.AllTests"/>
+          <!-- property name="vmargs" value="-Dbaz=true"/ -->
+          <property name="extraVMargs" value="-javaagent:${jacoco.path}/jacocoagent.jar=append=true,destfile=${basedir}/${coverage.results.dir}/${ant.project.name}.exec"/>
+          <property name="os" value="win32"/>
+          <property name="ws" value="win32"/>
+          <property name="arch" value="x86"/>
+          <property name="timeout" value="240000"/>
+        </ant>
 	</target>
-	
-	<target name="emmaReport" depends="coreTestEMMA">
-		<emma enabled="true" verbosity="verbose">
-			<report>
-				<property name="report.html.out.encoding" value="UTF-8"/>
-				<sourcepath>
-					<pathelement path="Utils/src/"/>
-                    <pathelement path="Model/src/"/>
-					<pathelement path="Model.persistency/src/"/>
-					<pathelement path="Model.tests/src/"/>
-				</sourcepath>
-		        <fileset dir="${coverage.results.dir}" >
-		          <include name="*.emma" />
-		        </fileset>
-
-		        <xml outfile="${coverage.results.dir}/coverage.xml" depth="method"/>
-		        <html outfile="${coverage.results.dir}/coverage.html" />
-		      </report>
-	    </emma>
+    
+	<target name="report">
+        <jacoco:report>                 
+            <executiondata>
+                <file file="${basedir}/${coverage.results.dir}/${ant.project.name}.exec"/>
+            </executiondata>
+                                
+            <structure name="${ant.project.name}">
+                <group name="Utils">
+                    <classfiles>
+                        <fileset dir="${home.utils.dir}/${build.jar.dir}/" includes="**/*.jar" />
+                    </classfiles>
+                    <sourcefiles encoding="UTF-8">
+                        <fileset dir="${home.utils.dir}/src" />
+                    </sourcefiles>
+                </group>
+                <group name="VarModel">
+                    <classfiles>
+                        <fileset dir="${home.model.dir}/${build.jar.dir}/" includes="**/*.jar" />
+                        <fileset dir="${home.model.tests.dir}/${build.jar.dir}/" includes="**/*.jar" />
+                    </classfiles>
+                    <sourcefiles encoding="UTF-8">
+                        <fileset dir="${home.model.dir}/src" />
+                        <fileset dir="${home.model.tests.dir}/src" />
+                    </sourcefiles>
+                </group>
+                <group name="DSL-Core">
+                    <classfiles>
+                        <fileset dir="${home.dslCore.dir}/${build.jar.dir}/" includes="**/*.jar" />
+                        <fileset dir="${home.dslCore.ui.dir}/${build.jar.dir}/" includes="**/*.jar" />
+                    </classfiles>
+                    <sourcefiles encoding="UTF-8">
+                        <fileset dir="${home.dslCore.dir}/src" />
+                        <fileset dir="${home.dslCore.ui.dir}/src" />
+                    </sourcefiles>
+                </group>
+            </structure>
+                                
+            <html destdir="${basedir}/${coverage.results.dir}"/>                        
+        </jacoco:report>
 	</target> 
 	
-	<target name="test" depends="emmaReport">
+	<target name="test" depends="coreTest, report">
 		<!-- Gather Junit results -->
 		<copy todir="junitResults" failonerror="true" overwrite="true">
 			<fileset dir="${test.eclipse.path}/results/">

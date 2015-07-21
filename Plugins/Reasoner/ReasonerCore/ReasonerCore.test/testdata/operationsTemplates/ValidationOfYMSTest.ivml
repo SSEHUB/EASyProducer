@@ -36,9 +36,9 @@ project ValidationOfYMSTest {
     JockeyComponent jockeyComponent;
     MobilityComponent mobilityComponent;
     DdsComponent ddsComponent;
-    attribute Boolean metaInformation to jockeyComponent;
-    attribute Boolean metaInformation to mobilityComponent;
-    attribute Boolean metaInformation to ddsComponent;
+    annotate Boolean metaInformation to jockeyComponent;
+    annotate Boolean metaInformation to mobilityComponent;
+    annotate Boolean metaInformation to ddsComponent;
     useJms == true implies not (size(jmsConnection) == 0);
     useJms == true implies not (size(queueName) == 0);
     gpsBased implies isDefined(mobilityComponent);

@@ -9,6 +9,7 @@
             class="de.uni_hildesheim.sse.vil.rt.ui.RtVilExecutableExtensionFactory:org.eclipse.xtext.ui.editor.XtextEditor"
             contributorClass="org.eclipse.ui.editors.text.TextEditorActionContributor"
             default="true"
+            icon="icons/rtvil_file_icon.gif"
             extensions="rtvil"
             id="de.uni_hildesheim.sse.vil.rt.RtVil"
             name="RtVil Editor">
@@ -80,20 +81,21 @@
     <extension
             point="org.eclipse.ui.preferencePages">
         <page
+            category="de.uni_hildesheim.sse.EASy"
             class="de.uni_hildesheim.sse.vil.rt.ui.RtVilExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
             id="de.uni_hildesheim.sse.vil.rt.RtVil"
-            name="RtVil">
+            name="Runtime Variability Instantiation Language (rt-VIL)">
             <keywordReference id="de.uni_hildesheim.sse.vil.rt.ui.keyword_RtVil"/>
         </page>
         <page
-            category="de.uni_hildesheim.sse.vil.rt.RtVil"
+            category="de.uni_hildesheim.sse.EASy/de.uni_hildesheim.sse.vil.rt.RtVil"
             class="de.uni_hildesheim.sse.vil.rt.ui.RtVilExecutableExtensionFactory:org.eclipse.xtext.ui.editor.syntaxcoloring.SyntaxColoringPreferencePage"
             id="de.uni_hildesheim.sse.vil.rt.RtVil.coloring"
             name="Syntax Coloring">
             <keywordReference id="de.uni_hildesheim.sse.vil.rt.ui.keyword_RtVil"/>
         </page>
         <page
-            category="de.uni_hildesheim.sse.vil.rt.RtVil"
+            category="de.uni_hildesheim.sse.EASy/de.uni_hildesheim.sse.vil.rt.RtVil"
             class="de.uni_hildesheim.sse.vil.rt.ui.RtVilExecutableExtensionFactory:org.eclipse.xtext.ui.editor.templates.XtextTemplatePreferencePage"
             id="de.uni_hildesheim.sse.vil.rt.RtVil.templates"
             name="Templates">
@@ -105,7 +107,7 @@
         <page
             class="de.uni_hildesheim.sse.vil.rt.ui.RtVilExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
             id="de.uni_hildesheim.sse.vil.rt.RtVil"
-            name="RtVil">
+            name="Runtime Variability Instantiation Language (rt-VIL)">
             <keywordReference id="de.uni_hildesheim.sse.vil.rt.ui.keyword_RtVil"/>
             <enabledWhen>
 	            <adapt type="org.eclipse.core.resources.IProject"/>
@@ -253,6 +255,7 @@
             class="de.uni_hildesheim.sse.vil.rt.ui.RtVilExecutableExtensionFactory:org.eclipse.xtext.builder.IXtextBuilderParticipant">
       </participant>
    </extension>
+   <!-- disable the compiler settings
    <extension
             point="org.eclipse.ui.preferencePages">
         <page
@@ -276,7 +279,7 @@
 			</enabledWhen>
 	        <filter name="projectNature" value="org.eclipse.xtext.ui.shared.xtextNature"/>
         </page>
-    </extension>
+    </extension>-->
 
 	<!-- Quick Outline -->
 	<extension
@@ -364,6 +367,7 @@
          </command>
       </menuContribution>
    </extension>
+   <!--
    <extension point="org.eclipse.ui.preferencePages">
 	    <page
 	        category="de.uni_hildesheim.sse.vil.rt.RtVil"
@@ -373,6 +377,7 @@
 	        <keywordReference id="de.uni_hildesheim.sse.vil.rt.ui.keyword_RtVil"/>
 	    </page>
 	</extension>
+	-->
 
   <extension point="org.eclipse.compare.contentViewers">
     <viewer id="de.uni_hildesheim.sse.vil.rt.RtVil.compare.contentViewers"
@@ -391,6 +396,21 @@
             class="de.uni_hildesheim.sse.vil.rt.ui.RtVilExecutableExtensionFactory:org.eclipse.xtext.ui.editor.model.XtextDocumentProvider"
             extensions="rtvil">
     </provider>
+  </extension>
+
+    <extension
+        point="org.eclipse.ui.newWizards">
+      <wizard
+            name="Adaptation / Reconfiguration Specification (rt-VIL)"
+            icon="icons/rtvil_file_icon.gif"
+            category="de.uni_hildesheim.sse.EASy_Producer"
+            class="de.uni_hildesheim.sse.vil.rt.ui.wizards.VILFiletypeWizard"
+            id="de.uni_hildesheim.sse.vil.rt.ui.wizards.VILFiletypeWizard">
+      </wizard>
+      <category
+            id="de.uni_hildesheim.sse.EASy_Producer"
+            name="EASy-Producer">
+      </category>        
   </extension>
 
 </plugin>

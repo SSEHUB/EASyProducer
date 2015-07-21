@@ -82,6 +82,7 @@ public class TemplateLangParser extends AbstractContentAssistParser {
 					put(grammarAccess.getJavaQualifiedNameAccess().getGroup_1(), "rule__JavaQualifiedName__Group_1__0");
 					put(grammarAccess.getVariableDeclarationAccess().getGroup(), "rule__VariableDeclaration__Group__0");
 					put(grammarAccess.getVariableDeclarationAccess().getGroup_3(), "rule__VariableDeclaration__Group_3__0");
+					put(grammarAccess.getTypeDefAccess().getGroup(), "rule__TypeDef__Group__0");
 					put(grammarAccess.getAdviceAccess().getGroup(), "rule__Advice__Group__0");
 					put(grammarAccess.getVersionSpecAccess().getGroup(), "rule__VersionSpec__Group__0");
 					put(grammarAccess.getParameterListAccess().getGroup(), "rule__ParameterList__Group__0");
@@ -91,6 +92,7 @@ public class TemplateLangParser extends AbstractContentAssistParser {
 					put(grammarAccess.getImportAccess().getGroup(), "rule__Import__Group__0");
 					put(grammarAccess.getExpressionStatementAccess().getGroup(), "rule__ExpressionStatement__Group__0");
 					put(grammarAccess.getExpressionStatementAccess().getGroup_0(), "rule__ExpressionStatement__Group_0__0");
+					put(grammarAccess.getExpressionStatementAccess().getGroup_0_1(), "rule__ExpressionStatement__Group_0_1__0");
 					put(grammarAccess.getLogicalExpressionAccess().getGroup(), "rule__LogicalExpression__Group__0");
 					put(grammarAccess.getLogicalExpressionPartAccess().getGroup(), "rule__LogicalExpressionPart__Group__0");
 					put(grammarAccess.getEqualityExpressionAccess().getGroup(), "rule__EqualityExpression__Group__0");
@@ -125,6 +127,7 @@ public class TemplateLangParser extends AbstractContentAssistParser {
 					put(grammarAccess.getTypeAccess().getGroup_1(), "rule__Type__Group_1__0");
 					put(grammarAccess.getTypeAccess().getGroup_2(), "rule__Type__Group_2__0");
 					put(grammarAccess.getTypeAccess().getGroup_3(), "rule__Type__Group_3__0");
+					put(grammarAccess.getTypeAccess().getGroup_4(), "rule__Type__Group_4__0");
 					put(grammarAccess.getTypeParametersAccess().getGroup(), "rule__TypeParameters__Group__0");
 					put(grammarAccess.getTypeParametersAccess().getGroup_2(), "rule__TypeParameters__Group_2__0");
 					put(grammarAccess.getContainerInitializerAccess().getGroup(), "rule__ContainerInitializer__Group__0");
@@ -138,8 +141,9 @@ public class TemplateLangParser extends AbstractContentAssistParser {
 					put(grammarAccess.getLanguageUnitAccess().getParamAssignment_7(), "rule__LanguageUnit__ParamAssignment_7");
 					put(grammarAccess.getLanguageUnitAccess().getExtAssignment_9_1(), "rule__LanguageUnit__ExtAssignment_9_1");
 					put(grammarAccess.getLanguageUnitAccess().getVersionAssignment_11(), "rule__LanguageUnit__VersionAssignment_11");
-					put(grammarAccess.getLanguageUnitAccess().getVarsAssignment_12(), "rule__LanguageUnit__VarsAssignment_12");
-					put(grammarAccess.getLanguageUnitAccess().getDefsAssignment_13(), "rule__LanguageUnit__DefsAssignment_13");
+					put(grammarAccess.getLanguageUnitAccess().getTypeDefsAssignment_12(), "rule__LanguageUnit__TypeDefsAssignment_12");
+					put(grammarAccess.getLanguageUnitAccess().getVarsAssignment_13(), "rule__LanguageUnit__VarsAssignment_13");
+					put(grammarAccess.getLanguageUnitAccess().getDefsAssignment_14(), "rule__LanguageUnit__DefsAssignment_14");
 					put(grammarAccess.getIndentationHintAccess().getPartsAssignment_2(), "rule__IndentationHint__PartsAssignment_2");
 					put(grammarAccess.getIndentationHintAccess().getPartsAssignment_3_1(), "rule__IndentationHint__PartsAssignment_3_1");
 					put(grammarAccess.getIndentationHintPartAccess().getNameAssignment_0(), "rule__IndentationHintPart__NameAssignment_0");
@@ -194,6 +198,8 @@ public class TemplateLangParser extends AbstractContentAssistParser {
 					put(grammarAccess.getVariableDeclarationAccess().getTypeAssignment_1(), "rule__VariableDeclaration__TypeAssignment_1");
 					put(grammarAccess.getVariableDeclarationAccess().getNameAssignment_2(), "rule__VariableDeclaration__NameAssignment_2");
 					put(grammarAccess.getVariableDeclarationAccess().getExpressionAssignment_3_1(), "rule__VariableDeclaration__ExpressionAssignment_3_1");
+					put(grammarAccess.getTypeDefAccess().getNameAssignment_1(), "rule__TypeDef__NameAssignment_1");
+					put(grammarAccess.getTypeDefAccess().getTypeAssignment_2(), "rule__TypeDef__TypeAssignment_2");
 					put(grammarAccess.getAdviceAccess().getNameAssignment_2(), "rule__Advice__NameAssignment_2");
 					put(grammarAccess.getAdviceAccess().getVersionSpecAssignment_4(), "rule__Advice__VersionSpecAssignment_4");
 					put(grammarAccess.getVersionSpecAccess().getRestrictionAssignment_1(), "rule__VersionSpec__RestrictionAssignment_1");
@@ -205,6 +211,7 @@ public class TemplateLangParser extends AbstractContentAssistParser {
 					put(grammarAccess.getImportAccess().getNameAssignment_1(), "rule__Import__NameAssignment_1");
 					put(grammarAccess.getImportAccess().getVersionSpecAssignment_2(), "rule__Import__VersionSpecAssignment_2");
 					put(grammarAccess.getExpressionStatementAccess().getVarAssignment_0_0(), "rule__ExpressionStatement__VarAssignment_0_0");
+					put(grammarAccess.getExpressionStatementAccess().getFieldAssignment_0_1_1(), "rule__ExpressionStatement__FieldAssignment_0_1_1");
 					put(grammarAccess.getExpressionStatementAccess().getExprAssignment_1(), "rule__ExpressionStatement__ExprAssignment_1");
 					put(grammarAccess.getExpressionAccess().getExprAssignment_0(), "rule__Expression__ExprAssignment_0");
 					put(grammarAccess.getExpressionAccess().getInitAssignment_1(), "rule__Expression__InitAssignment_1");
@@ -280,6 +287,9 @@ public class TemplateLangParser extends AbstractContentAssistParser {
 					put(grammarAccess.getTypeAccess().getParamAssignment_2_1(), "rule__Type__ParamAssignment_2_1");
 					put(grammarAccess.getTypeAccess().getMapAssignment_3_0(), "rule__Type__MapAssignment_3_0");
 					put(grammarAccess.getTypeAccess().getParamAssignment_3_1(), "rule__Type__ParamAssignment_3_1");
+					put(grammarAccess.getTypeAccess().getCallAssignment_4_0(), "rule__Type__CallAssignment_4_0");
+					put(grammarAccess.getTypeAccess().getReturnAssignment_4_1(), "rule__Type__ReturnAssignment_4_1");
+					put(grammarAccess.getTypeAccess().getParamAssignment_4_2(), "rule__Type__ParamAssignment_4_2");
 					put(grammarAccess.getTypeParametersAccess().getParamAssignment_1(), "rule__TypeParameters__ParamAssignment_1");
 					put(grammarAccess.getTypeParametersAccess().getParamAssignment_2_1(), "rule__TypeParameters__ParamAssignment_2_1");
 					put(grammarAccess.getContainerInitializerAccess().getExprsAssignment_2_0(), "rule__ContainerInitializer__ExprsAssignment_2_0");

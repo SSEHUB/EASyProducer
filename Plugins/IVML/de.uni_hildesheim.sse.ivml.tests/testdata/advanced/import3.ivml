@@ -1,0 +1,5 @@
+project importTest3 {
+
+    import testInterface2::iface1;
+    c3 = {state = State.off};
+}

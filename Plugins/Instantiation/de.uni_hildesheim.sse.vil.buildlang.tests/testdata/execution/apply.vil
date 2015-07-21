@@ -1,0 +1,20 @@
+vilScript apply (Project source, Configuration config, Project target) {
+
+    version v0;
+
+    func(Integer i) = : {
+        println(i);
+    }
+
+    main() = : {
+        sequenceOf(Integer) seq = {1, 2, 3, 4, 5, 6};
+        iter(seq, func);
+    }
+
+    iter(sequenceOf(Integer) seq, callOf(Integer) r) = : {
+        map(i:seq) {
+            r(i);
+        };
+    }
+
+}

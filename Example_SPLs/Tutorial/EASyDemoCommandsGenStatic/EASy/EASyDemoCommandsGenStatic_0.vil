@@ -1,0 +1,17 @@
+import EASyDemoCommandsPlatform;
+
+@advice(EASyDemoCommandsGenStatic)
+vilScript EASyDemoCommandsGenStatic (Project source, Configuration config, Project target) {
+
+    version v0;
+
+    main(Project source, Configuration config, Project target) = : {
+     	map(Project p : source.predecessors()) {
+    		instantiate p (p, config, target);
+    	};
+		copySRCFiles(source, target);
+    	vilTemplateProcessor("constants", config, "$target/src/io/ssehub/easy/demo/command/genStatic/Constants.java");
+    	javac("$target/src/**/*.java", "$target/bin");
+    }
+
+}

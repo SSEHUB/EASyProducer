@@ -13,8 +13,8 @@ import org.eclipse.jdt.core.dom.SingleMemberAnnotation;
 import org.eclipse.jdt.core.dom.StringLiteral;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FragmentArtifact;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArraySet;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationMeta;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
 
@@ -42,7 +42,7 @@ abstract class JavaParentFragmentArtifact extends JavaFragmentArtifact implement
     }
 
     @Override
-    public void deleteChild(FragmentArtifact child) throws ArtifactException {
+    public void deleteChild(FragmentArtifact child) throws VilException {
         notifyChanged();
     }
 

@@ -12,12 +12,12 @@ import org.junit.runners.Suite.SuiteClasses;
  */
 @RunWith(Suite.class)
 @SuiteClasses({ 
-    ReadTest.class, 
-    WriteTest.class, 
+//    ReadTest.class, 
+//    WriteTest.class, 
     VilPersistencyTest.class, 
     VtlPersistencyTest.class,
     SerializeQM2ModelTest.class,
-    ReadQM2ModelFromXMLTest.class
+    ExecuteQM2ModelFromXMLTest.class,
 })
 public class AllTests {
 

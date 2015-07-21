@@ -33,7 +33,7 @@ ProjectContents:
 		//#< EvalFreeze
 		| elements+=ExpressionStatement
 		//#> Compounds
-		| elements+=AttributeTo
+		| elements+=AnnotateTo
 		//#< Compounds
 		| elements+=OpDefStatement
 		| elements+=AttrAssignment
@@ -190,11 +190,11 @@ DerivedType :
 //#> Compounds
 // --------------------- Extension: Compounds ----------------------
 
-AttributeTo :
-    'attribute'
-	attributeType=Type
+AnnotateTo :
+    sname=('attribute' | 'annotate')
+	annotationType=Type
 	
-	attributeDecl=VariableDeclarationPart
+	annotationDecl=VariableDeclarationPart
 	'to'
 	names+=Identifier (',' names += Identifier)*
 	';'
@@ -207,23 +207,13 @@ AttributeTo :
 Freeze: 
 	'freeze' '{'
 	names+=(FreezeStatement)+
-	'}' ('but' but=FreezeButList)? ';'?
+	'}' ('but' '(' id=Identifier '|' ex=LogicalExpression ')')? ';'?
 	; 
 	
 FreezeStatement:
 	name=QualifiedName 
 	access=AccessName?
 	';'	
-;
-
-FreezeButList:
-	'(' list+=FreezeButExpression (',' list+=FreezeButExpression)* ')'
-;
-
-FreezeButExpression:
-	name=QualifiedName
-	access=AccessName?
-	wildcard='*'?
 ;
 	
 Eval: 

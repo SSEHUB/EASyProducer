@@ -1,0 +1,16 @@
+vilScript simpleRules5 () {
+
+    finalize() = : {
+    }
+
+    package() = false : true {
+        finalize();
+    }
+
+    compile() = true : true {
+    }
+
+    main() = : compile(), package() {
+    }
+
+}

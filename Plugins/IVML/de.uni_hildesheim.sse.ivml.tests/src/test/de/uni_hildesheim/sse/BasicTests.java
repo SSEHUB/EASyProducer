@@ -3,6 +3,7 @@ package test.de.uni_hildesheim.sse;
 import java.io.File;
 import java.io.IOException;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
@@ -87,6 +88,20 @@ public class BasicTests extends AbstractTest {
     public void testAbstractCompoundFail() throws IOException {
         assertEqual(createFile("abstractCompoundFail"), "abstractCompoundFail", "0", 
             ValueDoesNotMatchTypeException.IS_ABSTRACT);
+    }
+    
+    /**
+     * Tests a failing project, where accidentally parentheses are added behind a variable
+     * name. No user defined operations are defined.
+     * Bug detected at 01.07.2015
+     * 
+     * @throws IOException should not occur
+     */
+    //@Ignore
+    @Test
+    public void testUndefinedOperationFail() throws IOException {
+        assertEqual(createFile("undefinedOperationFail"), "undefinedOperationFail", "0",
+            CSTSemanticException.UNKNOWN_OPERATION);
     }
     
     /**

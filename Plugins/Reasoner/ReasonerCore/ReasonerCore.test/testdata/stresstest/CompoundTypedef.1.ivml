@@ -1,0 +1,14 @@
+project CompoundTypedef {
+
+    compound MyComp {
+        Integer value;
+    }
+    
+    typedef Alias MyComp;
+    
+    Alias instance;
+    instance.value > 1;
+    
+    instance.value = 2;
+
+}

@@ -1,6 +1,5 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.execOperand;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 
@@ -25,7 +24,7 @@ class StringExecutableOperandType implements IExecutableOperandType {
     }
 
     @Override
-    public boolean sameType(TypeDescriptor<? extends IVilType> type) {
+    public boolean sameType(TypeDescriptor<?> type) {
         return type == TypeRegistry.stringType();
     }
 

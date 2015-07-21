@@ -34,6 +34,7 @@ import de.uni_hildesheim.sse.model.varModel.filter.DeclrationInConstraintFinder;
  */
 class ErrorSetter implements IModelVisitor {
     private Map<AbstractVariable, GUIVariable> variableMap;
+    private String errorMsg;
     
     /**
      * Sole constructor for setting error messages by this class.
@@ -42,6 +43,15 @@ class ErrorSetter implements IModelVisitor {
      */
     ErrorSetter(Map<AbstractVariable, GUIVariable> variableMap) {
         this.variableMap = variableMap;
+    }
+    
+    /**
+     * For specifying a readable error message.
+     * @param errorMsg A error message which can be ready by a normal user.
+     * <tt>null</tt> deletes the error message (should be done before handling the next conflict).
+     */
+    void setErrorMsg(String errorMsg) {
+        this.errorMsg = errorMsg;
     }
 
     @Override
@@ -104,7 +114,7 @@ class ErrorSetter implements IModelVisitor {
     public void visitDecisionVariableDeclaration(DecisionVariableDeclaration decl) {
         GUIVariable guiVariable = variableMap.get(decl);
         if (null != guiVariable) {
-            guiVariable.addErrorMessage(decl);
+            guiVariable.addErrorMessage(decl, errorMsg);
         }
     }
 
@@ -123,7 +133,7 @@ class ErrorSetter implements IModelVisitor {
             for (AbstractVariable abstractVariable : delcarations) {
                 GUIVariable guiVariable = variableMap.get(abstractVariable);
                 if (null != guiVariable) {
-                    guiVariable.addErrorMessage(constraint);
+                    guiVariable.addErrorMessage(constraint, errorMsg);
                 }
             }
         }

@@ -1,3 +1,18 @@
+/*
+ * Copyright 2009-2015 University of Hildesheim, Software Systems Engineering
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.uni_hildesheim.sse.easy_producer.instantiator.velocity;
 
 import java.io.File;
@@ -14,18 +29,21 @@ import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.ParseErrorException;
+import org.osgi.service.component.ComponentContext;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactFactory;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FileArtifact;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.Path;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArraySet;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Collection;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IRegistration;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Instantiator;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Map;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.StringValueHelper;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.Configuration;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.DecisionVariable;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
@@ -35,20 +53,50 @@ import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
  * A VIL instantiator for velocity.
  * 
  * @author Holger Eichelberger
+ * @author Sascha El-Sharkawy
  */
 @Instantiator("velocity")
-public class VelocityInstantiator implements IVilType {
+public class VelocityInstantiator implements IVilType, IRegistration {
+    
+    private static boolean registered = false;
+    
+    /**
+     * Registers the Java artifacts and instantiators.
+     */
+    public static final void register() {
+        if (!registered) {
+            registered = true;
+            TypeRegistry.DEFAULT.register(VelocityInstantiator.class);
+        }
+    }
+    
+    /**
+     * Private method to activate plugin.
+     * @param context Context.
+     */
+    protected void activate(ComponentContext context) {
+        // this is not the official way of using DS but the official way is instable
+        register();
+    }
 
+    /**
+     * Private method to to de-activate plugin.
+     * @param context Context.
+     */
+    protected void deactivate(ComponentContext context) {
+        // this is not the official way of using DS but the official way is instable
+    }
+    
     /**
      * Instantiates a collection of file artifacts using the given <code>configuration</code>.
      * 
      * @param templates the templates to be instantiated
      * @param config the configuration to be considered
      * @return the modified artifacts
-     * @throws ArtifactException in case that instantiation fails
+     * @throws VilException In case that instantiation fails
      */
     public static Set<FileArtifact> velocity(Collection<FileArtifact> templates, Configuration config) 
-        throws ArtifactException {
+        throws VilException {
         return velocity(templates, config, null);
     }
     
@@ -59,15 +107,15 @@ public class VelocityInstantiator implements IVilType {
      * @param config the configuration to be considered
      * @param nameMapping an optional mapping from IVML names to names used in the target artifact(s)
      * @return the modified artifacts
-     * @throws ArtifactException in case that instantiation fails
+     * @throws VilException in case that instantiation fails
      */
     public static Set<FileArtifact> velocity(Collection<FileArtifact> templates, Configuration config, 
-        Map<?, ?> nameMapping) throws ArtifactException {
+        Map<?, ?> nameMapping) throws VilException {
         VelocityEngine engine = createEngine();
         VelocityContext context = createContext(config, nameMapping);
         List<FileArtifact> tmp = new ArrayList<FileArtifact>();
         Iterator<FileArtifact> iter = templates.iterator();
-        while(iter.hasNext()) {
+        while (iter.hasNext()) {
             tmp.add(instantiate(iter.next(), engine, context));
         }
         FileArtifact[] result = new FileArtifact[tmp.size()];
@@ -81,9 +129,25 @@ public class VelocityInstantiator implements IVilType {
      * @return the actual velocity engine instance
      */
     private static VelocityEngine createEngine() {
-        Properties prop = new Properties();
-        Utils.disableLogging(prop);
-        return Utils.createVelocityEngine(prop);
+        // Disable logging
+        Properties properties = new Properties();
+        properties.put("runtime.log.logsystem.class", "org.apache.velocity.runtime.log.NullLogSystem");
+        
+        // Configure Velocity
+        VelocityEngine engine = new VelocityEngine();
+        properties.put("resource.loader", "file");
+        properties.put("file.resource.loader.class", "org.apache.velocity.runtime.resource.loader.FileResourceLoader");
+        properties.put("file.resource.loader.path", "");
+        
+        //checkstyle: stop exception type check 
+        try {
+            engine.init(properties);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //checkstyle: resume exception type check 
+        
+        return engine;
     }
 
     /**
@@ -92,9 +156,9 @@ public class VelocityInstantiator implements IVilType {
      * @param template the template to be instantiated
      * @param config the configuration to be considered
      * @return the modified artifact
-     * @throws ArtifactException in case that instantiation fails
+     * @throws VilException in case that instantiation fails
      */
-    public static Set<FileArtifact> velocity(Path template, Configuration config) throws ArtifactException {
+    public static Set<FileArtifact> velocity(Path template, Configuration config) throws VilException {
         return velocity(template, config, null);
     }
     
@@ -105,12 +169,11 @@ public class VelocityInstantiator implements IVilType {
      * @param config the configuration to be considered
      * @param nameMapping an optional mapping from IVML names to names used in the target artifact(s)
      * @return the modified artifact
-     * @throws ArtifactException in case that instantiation fails
+     * @throws VilException in case that instantiation fails
      */
     public static Set<FileArtifact> velocity(Path template, Configuration config, Map<?, ?> nameMapping) 
-        throws ArtifactException {
+        throws VilException {
         Set<FileArtifact> result;
-//        Path templatePath = template.getPath();
         if (template.isPattern()) {
             result = velocity(template.selectAll(), config, nameMapping);
         } else {
@@ -118,7 +181,8 @@ public class VelocityInstantiator implements IVilType {
             VelocityContext context = createContext(config, nameMapping);
             FileArtifact[] tmp = new FileArtifact[1];
             FileArtifact templateArtifact 
-                = ArtifactFactory.createArtifact(FileArtifact.class, template.getAbsolutePath(), template.getArtifactModel());
+                = ArtifactFactory.createArtifact(FileArtifact.class, template.getAbsolutePath(),
+                    template.getArtifactModel());
             tmp[0] = instantiate(templateArtifact, engine, context);
             result = new ArraySet<FileArtifact>(tmp, FileArtifact.class);
         }
@@ -129,9 +193,11 @@ public class VelocityInstantiator implements IVilType {
      * Creates the velocity context.
      * 
      * @param config the configuration to create the context from
+     * @param nameMapping an optional mapping from IVML names to names used in the target artifact(s)
      * @return the velocity context
      */
     private static final VelocityContext createContext(Configuration config, Map<?, ?> nameMapping) {
+        
         VelocityContext context = new VelocityContext();
         for (DecisionVariable var : config.variables()) {
             IDecisionVariable dVar = var.getDecisionVariable();
@@ -160,13 +226,15 @@ public class VelocityInstantiator implements IVilType {
      * @param engine the engine for instantiation
      * @param context the velocity context
      * @return the created file artifact
-     * @throws ArtifactException
+     * @throws VilException in case of problems
      */
     private static final FileArtifact instantiate(FileArtifact template, VelocityEngine engine, 
-        VelocityContext context) throws ArtifactException {
+        VelocityContext context) throws VilException {
         File file = template.getPath().getAbsolutePath();
         String path = file.getAbsolutePath();
         StringWriter writer = null;
+        
+        //checkstyle: stop exception type check 
         try {
             Template t = engine.getTemplate(path);
             writer = new StringWriter();
@@ -183,11 +251,12 @@ public class VelocityInstantiator implements IVilType {
             int start = detailedMsg.indexOf("\n");
             //Remove first line of VelocityMessage and append it to the current message
             errorMsg.append(detailedMsg.substring(start + 1));
-            throw new ArtifactException(errorMsg.toString(), ArtifactException.ID_IO);
+            throw new VilException(errorMsg.toString(), VilException.ID_IO);
         } catch (Exception e) {
             EASyLoggerFactory.INSTANCE.getLogger(VelocityInstantiator.class, "velocity").exception(e);
-            throw new ArtifactException(e.getLocalizedMessage(), ArtifactException.ID_IO);
+            throw new VilException(e.getLocalizedMessage(), VilException.ID_IO);
         }
+        //checkstyle: resume exception type check 
 
         Writer fileWriter = null;
         try {
@@ -195,7 +264,7 @@ public class VelocityInstantiator implements IVilType {
             fileWriter.write(writer.toString());
         } catch (IOException e) {
             EASyLoggerFactory.INSTANCE.getLogger(VelocityInstantiator.class, "velocity").exception(e);
-            throw new ArtifactException(e.getLocalizedMessage(), ArtifactException.ID_IO);
+            throw new VilException(e.getLocalizedMessage(), VilException.ID_IO);
         } finally {
             if (fileWriter != null) {
                 try {

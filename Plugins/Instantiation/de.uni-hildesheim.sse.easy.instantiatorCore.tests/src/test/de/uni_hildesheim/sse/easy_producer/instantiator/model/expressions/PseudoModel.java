@@ -2,9 +2,11 @@ package test.de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.RuntimeEnvironment;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IExpressionVisitor;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaField;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaOperation;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ITypedModel;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.utils.modelManagement.IRestrictionEvaluationContext;
 import de.uni_hildesheim.sse.utils.modelManagement.IndentationConfiguration;
@@ -130,6 +132,36 @@ public class PseudoModel implements ITypedModel {
     @Override
     public IMetaType getBaseType() {
         return null;
+    }
+
+    @Override
+    public int getFieldCount() {
+        return 0;
+    }
+
+    @Override
+    public IMetaField getField(int index) {
+        throw new IndexOutOfBoundsException();
+    }
+
+    @Override
+    public boolean isInternal() {
+        return false;
+    }
+
+    @Override
+    public IMetaType getSuperType() {
+        return null;
+    }
+
+    @Override
+    public int getGenericParameterCount() {
+        return 0;
+    }
+
+    @Override
+    public TypeDescriptor<?> getGenericParameterType(int index) {
+        throw new IllegalArgumentException();
     }
 
 }

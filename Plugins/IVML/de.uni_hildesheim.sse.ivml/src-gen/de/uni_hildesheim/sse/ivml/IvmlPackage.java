@@ -869,32 +869,41 @@ public interface IvmlPackage extends EPackage
   int DERIVED_TYPE_FEATURE_COUNT = 2;
 
   /**
-   * The meta object id for the '{@link de.uni_hildesheim.sse.ivml.impl.AttributeToImpl <em>Attribute To</em>}' class.
+   * The meta object id for the '{@link de.uni_hildesheim.sse.ivml.impl.AnnotateToImpl <em>Annotate To</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see de.uni_hildesheim.sse.ivml.impl.AttributeToImpl
-   * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getAttributeTo()
+   * @see de.uni_hildesheim.sse.ivml.impl.AnnotateToImpl
+   * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getAnnotateTo()
    * @generated
    */
-  int ATTRIBUTE_TO = 20;
+  int ANNOTATE_TO = 20;
 
   /**
-   * The feature id for the '<em><b>Attribute Type</b></em>' containment reference.
+   * The feature id for the '<em><b>Sname</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int ATTRIBUTE_TO__ATTRIBUTE_TYPE = 0;
+  int ANNOTATE_TO__SNAME = 0;
 
   /**
-   * The feature id for the '<em><b>Attribute Decl</b></em>' containment reference.
+   * The feature id for the '<em><b>Annotation Type</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int ATTRIBUTE_TO__ATTRIBUTE_DECL = 1;
+  int ANNOTATE_TO__ANNOTATION_TYPE = 1;
+
+  /**
+   * The feature id for the '<em><b>Annotation Decl</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ANNOTATE_TO__ANNOTATION_DECL = 2;
 
   /**
    * The feature id for the '<em><b>Names</b></em>' attribute list.
@@ -903,16 +912,16 @@ public interface IvmlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int ATTRIBUTE_TO__NAMES = 2;
+  int ANNOTATE_TO__NAMES = 3;
 
   /**
-   * The number of structural features of the '<em>Attribute To</em>' class.
+   * The number of structural features of the '<em>Annotate To</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int ATTRIBUTE_TO_FEATURE_COUNT = 3;
+  int ANNOTATE_TO_FEATURE_COUNT = 4;
 
   /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.ivml.impl.FreezeImpl <em>Freeze</em>}' class.
@@ -934,13 +943,22 @@ public interface IvmlPackage extends EPackage
   int FREEZE__NAMES = 0;
 
   /**
-   * The feature id for the '<em><b>But</b></em>' containment reference.
+   * The feature id for the '<em><b>Id</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int FREEZE__BUT = 1;
+  int FREEZE__ID = 1;
+
+  /**
+   * The feature id for the '<em><b>Ex</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FREEZE__EX = 2;
 
   /**
    * The number of structural features of the '<em>Freeze</em>' class.
@@ -949,7 +967,7 @@ public interface IvmlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int FREEZE_FEATURE_COUNT = 2;
+  int FREEZE_FEATURE_COUNT = 3;
 
   /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.ivml.impl.FreezeStatementImpl <em>Freeze Statement</em>}' class.
@@ -989,80 +1007,6 @@ public interface IvmlPackage extends EPackage
   int FREEZE_STATEMENT_FEATURE_COUNT = 2;
 
   /**
-   * The meta object id for the '{@link de.uni_hildesheim.sse.ivml.impl.FreezeButListImpl <em>Freeze But List</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see de.uni_hildesheim.sse.ivml.impl.FreezeButListImpl
-   * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getFreezeButList()
-   * @generated
-   */
-  int FREEZE_BUT_LIST = 23;
-
-  /**
-   * The feature id for the '<em><b>List</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int FREEZE_BUT_LIST__LIST = 0;
-
-  /**
-   * The number of structural features of the '<em>Freeze But List</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int FREEZE_BUT_LIST_FEATURE_COUNT = 1;
-
-  /**
-   * The meta object id for the '{@link de.uni_hildesheim.sse.ivml.impl.FreezeButExpressionImpl <em>Freeze But Expression</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see de.uni_hildesheim.sse.ivml.impl.FreezeButExpressionImpl
-   * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getFreezeButExpression()
-   * @generated
-   */
-  int FREEZE_BUT_EXPRESSION = 24;
-
-  /**
-   * The feature id for the '<em><b>Name</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int FREEZE_BUT_EXPRESSION__NAME = 0;
-
-  /**
-   * The feature id for the '<em><b>Access</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int FREEZE_BUT_EXPRESSION__ACCESS = 1;
-
-  /**
-   * The feature id for the '<em><b>Wildcard</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int FREEZE_BUT_EXPRESSION__WILDCARD = 2;
-
-  /**
-   * The number of structural features of the '<em>Freeze But Expression</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int FREEZE_BUT_EXPRESSION_FEATURE_COUNT = 3;
-
-  /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.ivml.impl.EvalImpl <em>Eval</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1070,7 +1014,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getEval()
    * @generated
    */
-  int EVAL = 25;
+  int EVAL = 23;
 
   /**
    * The feature id for the '<em><b>Nested</b></em>' containment reference list.
@@ -1107,7 +1051,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getInterfaceDeclaration()
    * @generated
    */
-  int INTERFACE_DECLARATION = 26;
+  int INTERFACE_DECLARATION = 24;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1144,7 +1088,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getExport()
    * @generated
    */
-  int EXPORT = 27;
+  int EXPORT = 25;
 
   /**
    * The feature id for the '<em><b>Names</b></em>' containment reference list.
@@ -1172,7 +1116,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getImportStmt()
    * @generated
    */
-  int IMPORT_STMT = 28;
+  int IMPORT_STMT = 26;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1218,7 +1162,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getConflictStmt()
    * @generated
    */
-  int CONFLICT_STMT = 29;
+  int CONFLICT_STMT = 27;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1255,7 +1199,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getVersionStmt()
    * @generated
    */
-  int VERSION_STMT = 30;
+  int VERSION_STMT = 28;
 
   /**
    * The feature id for the '<em><b>Version</b></em>' attribute.
@@ -1283,7 +1227,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getOpDefStatement()
    * @generated
    */
-  int OP_DEF_STATEMENT = 31;
+  int OP_DEF_STATEMENT = 29;
 
   /**
    * The feature id for the '<em><b>Result</b></em>' containment reference.
@@ -1338,7 +1282,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getOpDefParameterList()
    * @generated
    */
-  int OP_DEF_PARAMETER_LIST = 32;
+  int OP_DEF_PARAMETER_LIST = 30;
 
   /**
    * The feature id for the '<em><b>List</b></em>' containment reference list.
@@ -1366,7 +1310,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getOpDefParameter()
    * @generated
    */
-  int OP_DEF_PARAMETER = 33;
+  int OP_DEF_PARAMETER = 31;
 
   /**
    * The feature id for the '<em><b>Type</b></em>' containment reference.
@@ -1412,7 +1356,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getExpressionStatement()
    * @generated
    */
-  int EXPRESSION_STATEMENT = 34;
+  int EXPRESSION_STATEMENT = 32;
 
   /**
    * The feature id for the '<em><b>Expr</b></em>' containment reference.
@@ -1440,7 +1384,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getExpression()
    * @generated
    */
-  int EXPRESSION = 35;
+  int EXPRESSION = 33;
 
   /**
    * The feature id for the '<em><b>Let</b></em>' containment reference.
@@ -1486,7 +1430,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getLetExpression()
    * @generated
    */
-  int LET_EXPRESSION = 36;
+  int LET_EXPRESSION = 34;
 
   /**
    * The feature id for the '<em><b>Type</b></em>' containment reference.
@@ -1541,7 +1485,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getAssignmentExpression()
    * @generated
    */
-  int ASSIGNMENT_EXPRESSION = 37;
+  int ASSIGNMENT_EXPRESSION = 35;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -1578,7 +1522,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getAssignmentExpressionPart()
    * @generated
    */
-  int ASSIGNMENT_EXPRESSION_PART = 38;
+  int ASSIGNMENT_EXPRESSION_PART = 36;
 
   /**
    * The feature id for the '<em><b>Op</b></em>' attribute.
@@ -1624,7 +1568,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getImplicationExpression()
    * @generated
    */
-  int IMPLICATION_EXPRESSION = 39;
+  int IMPLICATION_EXPRESSION = 37;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -1661,7 +1605,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getImplicationExpressionPart()
    * @generated
    */
-  int IMPLICATION_EXPRESSION_PART = 40;
+  int IMPLICATION_EXPRESSION_PART = 38;
 
   /**
    * The feature id for the '<em><b>Op</b></em>' attribute.
@@ -1698,7 +1642,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getLogicalExpression()
    * @generated
    */
-  int LOGICAL_EXPRESSION = 41;
+  int LOGICAL_EXPRESSION = 39;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -1735,7 +1679,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getLogicalExpressionPart()
    * @generated
    */
-  int LOGICAL_EXPRESSION_PART = 42;
+  int LOGICAL_EXPRESSION_PART = 40;
 
   /**
    * The feature id for the '<em><b>Op</b></em>' attribute.
@@ -1772,7 +1716,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getEqualityExpression()
    * @generated
    */
-  int EQUALITY_EXPRESSION = 43;
+  int EQUALITY_EXPRESSION = 41;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -1809,7 +1753,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getEqualityExpressionPart()
    * @generated
    */
-  int EQUALITY_EXPRESSION_PART = 44;
+  int EQUALITY_EXPRESSION_PART = 42;
 
   /**
    * The feature id for the '<em><b>Op</b></em>' attribute.
@@ -1855,7 +1799,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getRelationalExpression()
    * @generated
    */
-  int RELATIONAL_EXPRESSION = 45;
+  int RELATIONAL_EXPRESSION = 43;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -1892,7 +1836,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getRelationalExpressionPart()
    * @generated
    */
-  int RELATIONAL_EXPRESSION_PART = 46;
+  int RELATIONAL_EXPRESSION_PART = 44;
 
   /**
    * The feature id for the '<em><b>Op</b></em>' attribute.
@@ -1929,7 +1873,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getAdditiveExpression()
    * @generated
    */
-  int ADDITIVE_EXPRESSION = 47;
+  int ADDITIVE_EXPRESSION = 45;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -1966,7 +1910,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getAdditiveExpressionPart()
    * @generated
    */
-  int ADDITIVE_EXPRESSION_PART = 48;
+  int ADDITIVE_EXPRESSION_PART = 46;
 
   /**
    * The feature id for the '<em><b>Op</b></em>' attribute.
@@ -2003,7 +1947,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getMultiplicativeExpression()
    * @generated
    */
-  int MULTIPLICATIVE_EXPRESSION = 49;
+  int MULTIPLICATIVE_EXPRESSION = 47;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -2040,7 +1984,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getMultiplicativeExpressionPart()
    * @generated
    */
-  int MULTIPLICATIVE_EXPRESSION_PART = 50;
+  int MULTIPLICATIVE_EXPRESSION_PART = 48;
 
   /**
    * The feature id for the '<em><b>Op</b></em>' attribute.
@@ -2077,7 +2021,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getUnaryExpression()
    * @generated
    */
-  int UNARY_EXPRESSION = 51;
+  int UNARY_EXPRESSION = 49;
 
   /**
    * The feature id for the '<em><b>Op</b></em>' attribute.
@@ -2114,7 +2058,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getPostfixExpression()
    * @generated
    */
-  int POSTFIX_EXPRESSION = 52;
+  int POSTFIX_EXPRESSION = 50;
 
   /**
    * The feature id for the '<em><b>Call</b></em>' containment reference.
@@ -2169,7 +2113,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getCall()
    * @generated
    */
-  int CALL = 53;
+  int CALL = 51;
 
   /**
    * The feature id for the '<em><b>Call</b></em>' containment reference.
@@ -2215,7 +2159,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getFeatureCall()
    * @generated
    */
-  int FEATURE_CALL = 54;
+  int FEATURE_CALL = 52;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -2252,7 +2196,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getSetOp()
    * @generated
    */
-  int SET_OP = 55;
+  int SET_OP = 53;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -2298,7 +2242,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getDeclarator()
    * @generated
    */
-  int DECLARATOR = 56;
+  int DECLARATOR = 54;
 
   /**
    * The feature id for the '<em><b>Decl</b></em>' containment reference list.
@@ -2326,7 +2270,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getDeclaration()
    * @generated
    */
-  int DECLARATION = 57;
+  int DECLARATION = 55;
 
   /**
    * The feature id for the '<em><b>Type</b></em>' containment reference.
@@ -2372,7 +2316,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getActualParameterList()
    * @generated
    */
-  int ACTUAL_PARAMETER_LIST = 58;
+  int ACTUAL_PARAMETER_LIST = 56;
 
   /**
    * The feature id for the '<em><b>Param</b></em>' containment reference list.
@@ -2400,7 +2344,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getExpressionAccess()
    * @generated
    */
-  int EXPRESSION_ACCESS = 59;
+  int EXPRESSION_ACCESS = 57;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -2446,7 +2390,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getPrimaryExpression()
    * @generated
    */
-  int PRIMARY_EXPRESSION = 60;
+  int PRIMARY_EXPRESSION = 58;
 
   /**
    * The feature id for the '<em><b>Lit</b></em>' containment reference.
@@ -2519,7 +2463,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getCollectionInitializer()
    * @generated
    */
-  int COLLECTION_INITIALIZER = 61;
+  int COLLECTION_INITIALIZER = 59;
 
   /**
    * The feature id for the '<em><b>Type</b></em>' containment reference.
@@ -2556,7 +2500,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getExpressionListOrRange()
    * @generated
    */
-  int EXPRESSION_LIST_OR_RANGE = 62;
+  int EXPRESSION_LIST_OR_RANGE = 60;
 
   /**
    * The feature id for the '<em><b>List</b></em>' containment reference list.
@@ -2584,7 +2528,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getExpressionListEntry()
    * @generated
    */
-  int EXPRESSION_LIST_ENTRY = 63;
+  int EXPRESSION_LIST_ENTRY = 61;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -2639,7 +2583,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getLiteral()
    * @generated
    */
-  int LITERAL = 64;
+  int LITERAL = 62;
 
   /**
    * The feature id for the '<em><b>Val</b></em>' containment reference.
@@ -2667,7 +2611,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getIfExpression()
    * @generated
    */
-  int IF_EXPRESSION = 65;
+  int IF_EXPRESSION = 63;
 
   /**
    * The feature id for the '<em><b>If Ex</b></em>' containment reference.
@@ -3435,47 +3379,58 @@ public interface IvmlPackage extends EPackage
   EReference getDerivedType_Type();
 
   /**
-   * Returns the meta object for class '{@link de.uni_hildesheim.sse.ivml.AttributeTo <em>Attribute To</em>}'.
+   * Returns the meta object for class '{@link de.uni_hildesheim.sse.ivml.AnnotateTo <em>Annotate To</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Attribute To</em>'.
-   * @see de.uni_hildesheim.sse.ivml.AttributeTo
+   * @return the meta object for class '<em>Annotate To</em>'.
+   * @see de.uni_hildesheim.sse.ivml.AnnotateTo
    * @generated
    */
-  EClass getAttributeTo();
+  EClass getAnnotateTo();
 
   /**
-   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.ivml.AttributeTo#getAttributeType <em>Attribute Type</em>}'.
+   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.ivml.AnnotateTo#getSname <em>Sname</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Attribute Type</em>'.
-   * @see de.uni_hildesheim.sse.ivml.AttributeTo#getAttributeType()
-   * @see #getAttributeTo()
+   * @return the meta object for the attribute '<em>Sname</em>'.
+   * @see de.uni_hildesheim.sse.ivml.AnnotateTo#getSname()
+   * @see #getAnnotateTo()
    * @generated
    */
-  EReference getAttributeTo_AttributeType();
+  EAttribute getAnnotateTo_Sname();
 
   /**
-   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.ivml.AttributeTo#getAttributeDecl <em>Attribute Decl</em>}'.
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.ivml.AnnotateTo#getAnnotationType <em>Annotation Type</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Attribute Decl</em>'.
-   * @see de.uni_hildesheim.sse.ivml.AttributeTo#getAttributeDecl()
-   * @see #getAttributeTo()
+   * @return the meta object for the containment reference '<em>Annotation Type</em>'.
+   * @see de.uni_hildesheim.sse.ivml.AnnotateTo#getAnnotationType()
+   * @see #getAnnotateTo()
    * @generated
    */
-  EReference getAttributeTo_AttributeDecl();
+  EReference getAnnotateTo_AnnotationType();
 
   /**
-   * Returns the meta object for the attribute list '{@link de.uni_hildesheim.sse.ivml.AttributeTo#getNames <em>Names</em>}'.
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.ivml.AnnotateTo#getAnnotationDecl <em>Annotation Decl</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Annotation Decl</em>'.
+   * @see de.uni_hildesheim.sse.ivml.AnnotateTo#getAnnotationDecl()
+   * @see #getAnnotateTo()
+   * @generated
+   */
+  EReference getAnnotateTo_AnnotationDecl();
+
+  /**
+   * Returns the meta object for the attribute list '{@link de.uni_hildesheim.sse.ivml.AnnotateTo#getNames <em>Names</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute list '<em>Names</em>'.
-   * @see de.uni_hildesheim.sse.ivml.AttributeTo#getNames()
-   * @see #getAttributeTo()
+   * @see de.uni_hildesheim.sse.ivml.AnnotateTo#getNames()
+   * @see #getAnnotateTo()
    * @generated
    */
-  EAttribute getAttributeTo_Names();
+  EAttribute getAnnotateTo_Names();
 
   /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.ivml.Freeze <em>Freeze</em>}'.
@@ -3499,15 +3454,26 @@ public interface IvmlPackage extends EPackage
   EReference getFreeze_Names();
 
   /**
-   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.ivml.Freeze#getBut <em>But</em>}'.
+   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.ivml.Freeze#getId <em>Id</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>But</em>'.
-   * @see de.uni_hildesheim.sse.ivml.Freeze#getBut()
+   * @return the meta object for the attribute '<em>Id</em>'.
+   * @see de.uni_hildesheim.sse.ivml.Freeze#getId()
    * @see #getFreeze()
    * @generated
    */
-  EReference getFreeze_But();
+  EAttribute getFreeze_Id();
+
+  /**
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.ivml.Freeze#getEx <em>Ex</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Ex</em>'.
+   * @see de.uni_hildesheim.sse.ivml.Freeze#getEx()
+   * @see #getFreeze()
+   * @generated
+   */
+  EReference getFreeze_Ex();
 
   /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.ivml.FreezeStatement <em>Freeze Statement</em>}'.
@@ -3540,70 +3506,6 @@ public interface IvmlPackage extends EPackage
    * @generated
    */
   EReference getFreezeStatement_Access();
-
-  /**
-   * Returns the meta object for class '{@link de.uni_hildesheim.sse.ivml.FreezeButList <em>Freeze But List</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Freeze But List</em>'.
-   * @see de.uni_hildesheim.sse.ivml.FreezeButList
-   * @generated
-   */
-  EClass getFreezeButList();
-
-  /**
-   * Returns the meta object for the containment reference list '{@link de.uni_hildesheim.sse.ivml.FreezeButList#getList <em>List</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>List</em>'.
-   * @see de.uni_hildesheim.sse.ivml.FreezeButList#getList()
-   * @see #getFreezeButList()
-   * @generated
-   */
-  EReference getFreezeButList_List();
-
-  /**
-   * Returns the meta object for class '{@link de.uni_hildesheim.sse.ivml.FreezeButExpression <em>Freeze But Expression</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Freeze But Expression</em>'.
-   * @see de.uni_hildesheim.sse.ivml.FreezeButExpression
-   * @generated
-   */
-  EClass getFreezeButExpression();
-
-  /**
-   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.ivml.FreezeButExpression#getName <em>Name</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Name</em>'.
-   * @see de.uni_hildesheim.sse.ivml.FreezeButExpression#getName()
-   * @see #getFreezeButExpression()
-   * @generated
-   */
-  EReference getFreezeButExpression_Name();
-
-  /**
-   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.ivml.FreezeButExpression#getAccess <em>Access</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Access</em>'.
-   * @see de.uni_hildesheim.sse.ivml.FreezeButExpression#getAccess()
-   * @see #getFreezeButExpression()
-   * @generated
-   */
-  EReference getFreezeButExpression_Access();
-
-  /**
-   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.ivml.FreezeButExpression#getWildcard <em>Wildcard</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Wildcard</em>'.
-   * @see de.uni_hildesheim.sse.ivml.FreezeButExpression#getWildcard()
-   * @see #getFreezeButExpression()
-   * @generated
-   */
-  EAttribute getFreezeButExpression_Wildcard();
 
   /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.ivml.Eval <em>Eval</em>}'.
@@ -5679,30 +5581,38 @@ public interface IvmlPackage extends EPackage
     EReference DERIVED_TYPE__TYPE = eINSTANCE.getDerivedType_Type();
 
     /**
-     * The meta object literal for the '{@link de.uni_hildesheim.sse.ivml.impl.AttributeToImpl <em>Attribute To</em>}' class.
+     * The meta object literal for the '{@link de.uni_hildesheim.sse.ivml.impl.AnnotateToImpl <em>Annotate To</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see de.uni_hildesheim.sse.ivml.impl.AttributeToImpl
-     * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getAttributeTo()
+     * @see de.uni_hildesheim.sse.ivml.impl.AnnotateToImpl
+     * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getAnnotateTo()
      * @generated
      */
-    EClass ATTRIBUTE_TO = eINSTANCE.getAttributeTo();
+    EClass ANNOTATE_TO = eINSTANCE.getAnnotateTo();
 
     /**
-     * The meta object literal for the '<em><b>Attribute Type</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Sname</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference ATTRIBUTE_TO__ATTRIBUTE_TYPE = eINSTANCE.getAttributeTo_AttributeType();
+    EAttribute ANNOTATE_TO__SNAME = eINSTANCE.getAnnotateTo_Sname();
 
     /**
-     * The meta object literal for the '<em><b>Attribute Decl</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Annotation Type</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference ATTRIBUTE_TO__ATTRIBUTE_DECL = eINSTANCE.getAttributeTo_AttributeDecl();
+    EReference ANNOTATE_TO__ANNOTATION_TYPE = eINSTANCE.getAnnotateTo_AnnotationType();
+
+    /**
+     * The meta object literal for the '<em><b>Annotation Decl</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference ANNOTATE_TO__ANNOTATION_DECL = eINSTANCE.getAnnotateTo_AnnotationDecl();
 
     /**
      * The meta object literal for the '<em><b>Names</b></em>' attribute list feature.
@@ -5710,7 +5620,7 @@ public interface IvmlPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute ATTRIBUTE_TO__NAMES = eINSTANCE.getAttributeTo_Names();
+    EAttribute ANNOTATE_TO__NAMES = eINSTANCE.getAnnotateTo_Names();
 
     /**
      * The meta object literal for the '{@link de.uni_hildesheim.sse.ivml.impl.FreezeImpl <em>Freeze</em>}' class.
@@ -5731,12 +5641,20 @@ public interface IvmlPackage extends EPackage
     EReference FREEZE__NAMES = eINSTANCE.getFreeze_Names();
 
     /**
-     * The meta object literal for the '<em><b>But</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Id</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference FREEZE__BUT = eINSTANCE.getFreeze_But();
+    EAttribute FREEZE__ID = eINSTANCE.getFreeze_Id();
+
+    /**
+     * The meta object literal for the '<em><b>Ex</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference FREEZE__EX = eINSTANCE.getFreeze_Ex();
 
     /**
      * The meta object literal for the '{@link de.uni_hildesheim.sse.ivml.impl.FreezeStatementImpl <em>Freeze Statement</em>}' class.
@@ -5763,58 +5681,6 @@ public interface IvmlPackage extends EPackage
      * @generated
      */
     EReference FREEZE_STATEMENT__ACCESS = eINSTANCE.getFreezeStatement_Access();
-
-    /**
-     * The meta object literal for the '{@link de.uni_hildesheim.sse.ivml.impl.FreezeButListImpl <em>Freeze But List</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see de.uni_hildesheim.sse.ivml.impl.FreezeButListImpl
-     * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getFreezeButList()
-     * @generated
-     */
-    EClass FREEZE_BUT_LIST = eINSTANCE.getFreezeButList();
-
-    /**
-     * The meta object literal for the '<em><b>List</b></em>' containment reference list feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference FREEZE_BUT_LIST__LIST = eINSTANCE.getFreezeButList_List();
-
-    /**
-     * The meta object literal for the '{@link de.uni_hildesheim.sse.ivml.impl.FreezeButExpressionImpl <em>Freeze But Expression</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see de.uni_hildesheim.sse.ivml.impl.FreezeButExpressionImpl
-     * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getFreezeButExpression()
-     * @generated
-     */
-    EClass FREEZE_BUT_EXPRESSION = eINSTANCE.getFreezeButExpression();
-
-    /**
-     * The meta object literal for the '<em><b>Name</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference FREEZE_BUT_EXPRESSION__NAME = eINSTANCE.getFreezeButExpression_Name();
-
-    /**
-     * The meta object literal for the '<em><b>Access</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference FREEZE_BUT_EXPRESSION__ACCESS = eINSTANCE.getFreezeButExpression_Access();
-
-    /**
-     * The meta object literal for the '<em><b>Wildcard</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute FREEZE_BUT_EXPRESSION__WILDCARD = eINSTANCE.getFreezeButExpression_Wildcard();
 
     /**
      * The meta object literal for the '{@link de.uni_hildesheim.sse.ivml.impl.EvalImpl <em>Eval</em>}' class.

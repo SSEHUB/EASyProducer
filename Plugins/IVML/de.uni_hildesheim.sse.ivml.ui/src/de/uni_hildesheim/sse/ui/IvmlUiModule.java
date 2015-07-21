@@ -7,6 +7,9 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.xtext.ui.editor.DirtyStateEditorSupport.IConcurrentEditingCallback;
 import org.eclipse.xtext.ui.editor.DirtyStateEditorSupport.IDirtyStateEditorSupportClient;
 import org.eclipse.xtext.ui.editor.DirtyStateEditorSupport.InteractiveConcurrentEditingQuestion;
+import org.eclipse.xtext.ui.editor.hyperlinking.IHyperlinkHelper;
+
+import de.uni_hildesheim.sse.ui.hyperlinking.IvmlHyperlinkHelper;
 
 //import com.google.inject.name.Names;
 
@@ -40,4 +43,15 @@ public class IvmlUiModule extends de.uni_hildesheim.sse.ui.AbstractIvmlUiModule 
 		}
 		
 	}
+	
+	/**
+	 * Binds the custom <code>IvmlHyperlinkHelper</code> for the creation of the <code>com.google.inject.Bindery</code>.
+	 * 
+	 * This enables the creation of <code>IvmlHyperlinks</code> for IVML-elements in an IVML-file and the custom
+	 * reaction on selecting these Hyperlinks (or pressing F3), e.g. showing the element's declaration.
+	 */
+	public Class<? extends IHyperlinkHelper> bindIHyperlinkHelper() {
+		return IvmlHyperlinkHelper.class;
+	}
+	
 }

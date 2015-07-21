@@ -35,10 +35,10 @@ class DroolsDelegationVisitor {
         sbuffer.append("dialect " + "\"" + "mvel" + "\"" + "\n");
         sbuffer.append("\n" + "when" + "\n" + "P0 : Project0()" + "\n" + "then");
         
-        for (int i = 0; i < freeze.getFrozenCount(); i++) {
-            if (freeze.getFrozen(i).getType() instanceof Compound) {
-                String frozenVarname = freeze.getFrozen(i).getName();
-                Compound compound = (Compound) freeze.getFrozen(i).getType();
+        for (int i = 0; i < freeze.getFreezableCount(); i++) {
+            if (freeze.getFreezable(i).getType() instanceof Compound) {
+                String frozenVarname = freeze.getFreezable(i).getName();
+                Compound compound = (Compound) freeze.getFreezable(i).getType();
                 for (int j = 0; j < compound.getElementCount(); j++) {
                     String fListToAdd = "\nfList.add(" + "\"" 
                             + frozenVarname + "." + compound.getElement(j).getName() + "\"" + ");";
@@ -46,7 +46,7 @@ class DroolsDelegationVisitor {
                 }
             }
                 
-            sbuffer.append("\n" + "fList.add(" + "\"" + freeze.getFrozen(i).getName() + "\"" + ");");
+            sbuffer.append("\n" + "fList.add(" + "\"" + freeze.getFreezable(i).getName() + "\"" + ");");
             sbuffer.append("modify(P0){};");
         }
         sbuffer.append("\n" + "end");

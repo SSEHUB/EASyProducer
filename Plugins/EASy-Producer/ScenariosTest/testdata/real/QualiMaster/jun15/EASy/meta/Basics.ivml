@@ -1,0 +1,85 @@
+project Basics {
+
+    // common type definitions
+
+    typedef NaturalNumber Integer with (NaturalNumber >= 0);
+	typedef PositiveInteger Integer with (PositiveInteger > 0);
+	typedef NonEmptyString String with (NonEmptyString.size() > 0);
+	typedef PortInteger Integer with (PortInteger > 0 and PortInteger < 65536);
+	typedef NonNegativeReal Real with (NonNegativeReal >= 0);
+	typedef ArtifactString String with (ArtifactString.size() > 0); 
+	typedef ClassString String with (ClassString.size() > 0);
+	typedef Description String;
+	
+	typedef MemorySize PositiveInteger;
+	typedef Frequency PositiveInteger;
+	
+	enum BindingTime {compile, startup, runtime};
+
+	attribute BindingTime bindingTime = BindingTime.compile to Basics;
+
+    compound FieldType {
+   	    NonEmptyString name = "";
+   	    ClassString class = "";
+   	    ArtifactString artifact; // optional
+   	    ClassString serializer; // optional
+   	    ArtifactString serializerArtifact; // optional
+   	    // currently unclear: own compounds for inherited types, generic types
+    }
+
+    setOf(refTo(FieldType)) types = {};
+	Constraint typeNamesUnique = types->collect(t|t.name).size() == types.size();
+
+	typedef Tuples sequenceOf(Tuple);
+	typedef Parameters setOf(Parameter) with (Parameters->collect(p|p.name).size() == Parameters.size());
+	typedef Fields sequenceOf(Field) with (Fields->collect(f|f.name).hasDuplicates() == false);
+	
+	// for the moment we assume that we will not have nested Tuples
+	compound Tuple { // this conception is based on how the Storm describes the stream
+		NonEmptyString name;
+		Fields fields;
+		Constraint fieldsCheck = fields.size() > 0; 
+	} 
+	
+	compound Field { // in order to fit the data structure in the Storm
+		NonEmptyString name;
+		refTo(FieldType) type;
+	}
+	
+	// parameters are different than fields as they may have a configured default value for startup
+	
+	compound Parameter {
+		NonEmptyString name;
+	}
+	
+	compound IntegerParameter refines Parameter {
+		assign(bindingTime = BindingTime.runtime) to {
+			Integer value; // this may get a "default/startup" value from the configuration
+		}
+	}
+	
+	compound StringParameter refines Parameter {
+		assign(bindingTime = BindingTime.runtime) to {
+			String value; // this may get a "default/startup" value from the configuration
+		}
+	}
+
+	compound RealParameter refines Parameter {
+		assign(bindingTime = BindingTime.runtime) to {
+			Real value; // this may get a "default/startup" value from the configuration
+		}
+	}
+
+	compound BooleanParameter refines Parameter {
+		assign(bindingTime = BindingTime.runtime) to {
+			Boolean value; // this may get a "default/startup" value from the configuration
+		}
+	}
+	
+	compound LongParameter refines Parameter {
+		assign(bindingTime = BindingTime.runtime) to {
+			Boolean value; // this may get a "default/startup" value from the configuration
+		}
+	}
+
+}

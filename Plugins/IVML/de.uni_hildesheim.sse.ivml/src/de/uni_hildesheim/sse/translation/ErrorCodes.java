@@ -38,6 +38,11 @@ public class ErrorCodes extends de.uni_hildesheim.sse.dslCore.translation.ErrorC
     public static final int FREEZE = 20210;
     
     /**
+     * Usage of warning function at wrong position.
+     */
+    public static final int WARNING_USAGE = 20211;
+    
+    /**
      * Prevents creating instances of this class.
      */
     private ErrorCodes() {

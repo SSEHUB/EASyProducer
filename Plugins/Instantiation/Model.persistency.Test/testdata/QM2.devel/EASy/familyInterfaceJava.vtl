@@ -14,145 +14,78 @@ template familyInterfaceJava(Configuration config, FileArtifact target, Decision
     
     def String fieldTypeName(DecisionVariable var) {
     	String type = var.byName("type");
-    	/* 
-    	switch(type) {
+       	switch(type) {
     		"INTEGER" : "int",
     		"BOOLEAN" : "boolean",
     		"REAL" : "double",
-    		"STRING" : "String"
-    	}
-    	* */
-    	if(type == "INTEGER") {
-    	    "int";
-    	}else if(type == "BOOLEAN"){
-    		"boolean";
-    	}else if(type == "REAL") {
-    		"double";
-    	}else {
-    		"String";
-    	}
+    		"STRING" : "String",
+    		"OBJECT": "Object",
+    		"LONG": "long",
+    		"STRINGLIST": "java.util.List<String>"
+    	}  	    	
     }
     
-    def String produceForTuples(DecisionVariable tuples, Boolean output, Boolean implementation, String ifName, Integer indent) {
+    /*
+     * Produces the tuple type classes.
+     */
+    def produceForTuples(DecisionVariable tuples, Boolean output, String fName, Integer indent) {
 	    String type;
 	    String typeName;
-    	if (output) {
-    		type = "${ifName}Output";
-    		typeName = "output";
-    	} else {
-    		type = "${ifName}Input";
-    		typeName = "input";
-    	}
-    	String langElt;
-    	String implements;
-    	if (implementation) {
-    		langElt = "class";
-    		implements = "implements ${ifName}.I${type} ";
-    	} else {
+    	String tupleName;  	
+  					    
+	    for (Tuple t : tuples){
+    		tupleName = t.name;	
+	   		if (output) {
+    			type = "${fName}${firstToUpperCase(tupleName)}Output";
+    			typeName = "output";
+    		} else {
+    			type = "${fName}${firstToUpperCase(tupleName)}Input";
+    			typeName = "input";   		
+    		}   	
     		type = "I" + type;
-    		langElt = "interface";
-    		implements = "";
-    	}
-		'/**' | indent;
-    	if (implementation) {
-        	'* Provides a default implementation of the data ${typeName} for the {@link ${type}} algorithm.' | indent + 1;
-        	'* Actual execution system code may also directly wrap the respective tuple concept.' | indent + 1;
-    	} else {
+    		'/**' | indent;
     		'* Defines the data ${typeName} interface for the {@link ${type}} algorithm (over all defined ${typeName} tuples).' | indent + 1;
-    	}
-		'*/' | indent + 1;
-    	'public $langElt $type ${implements}{' | indent;
-    	''
-    	
-    	// if implementation, produce attributes first
-    	Integer tuplesSize = tuples.variables().size();
-    	String tupleId;
-    	Integer tupleCount = 1;
-    	if (implementation) {
-    		for (Tuple t : tuples) {      
-	    		String tupleId = "";
-	    		if (tuplesSize > 1) {
-	    			tupleId = "Tuple${tupleCount}"; // we need an operator
-	    		}
-    			for (Field f : t.fields()) {
-    				String fname = toIdentifier("${tupleId}${f.name()}");
-    				String ftype = fieldTypeName(f);
-    				'private ${ftype} ${fname}' | indent + 4;
-    			}
-    		}
-    		tupleCount = tupleCount + 1;
+			'*/' | indent + 1;
+    		'public static interface $type extends Serializable{' | indent;
     		''
-    	}
-    	
-    	// and now the signatures / implementations
-		String signatureEnd;
-		if (implementation) {
-			signatureEnd = " {";
-		} else {
-			signatureEnd = ";";
-		}
-		tupleCount = 1;
-    	for (Tuple t : tuples) {
-    		String tupleId = "";
-    		if (tuplesSize > 1) {
-    			tupleId = "Tuple${tupleCount}"; // we need an operator
-    		}
-    		for (Field f : t.fields()) {
-    			String fname = toIdentifier("${tupleId}${f.name()}");
+    		for (Field f : t.fields) {
+    			String fname = toIdentifier("${f.name}");
     			String mname = firstToUpperCase(fname);
     			String ftype = fieldTypeName(f);
-	
-					if (implementation) {
-						'@Override' | indent + 4;
-					} else {
-						'/**' | indent + 4;
-						'* Returns the input value for tuple field "${f.name()}".' | indent + 5;
-						'* @return the tuple value' | indent + 5;
-						'*/' | indent + 5;
-					}
-	    			'public ${ftype} get${mname}()${signatureEnd}' | indent + 4;
-	    			if (implementation) {
-	    				'return ${fname};' | indent + 8;
-	    				'}' | indent + 4;
-	    			}
-	    			''
-			
-			
-					if (implementation) {
-						'@Override' | indent + 4;
-					} else {
-						'/**' | indent + 4;
-						'* Changes the output value for tuple field "${f.name()}".' | indent + 5;
-						'* @param ${fname} the field value' | indent + 5;
-						'*/' | indent + 5;
-					}
-	    			'public void set${mname}(${ftype} ${fname})${signatureEnd}' | indent + 4;
-	    			if (implementation) {
-	    				'this.${fname} = ${fname};' | indent + 8;
-	    				'}' | indent + 4;
-	    			}
-				
+    			'/**' | indent + 4;
+				'* Returns the input value for tuple field "${f.name}".' | indent + 5;
+				'* @return the tuple value' | indent + 5;
+				'*/' | indent + 5;
+    			'public ${ftype} get${mname}();' | indent + 4;
+    			''
+    			'/**' | indent + 4;
+				'* Changes the output value for tuple field "${f.name}".' | indent + 5;
+				'* @param ${fname} the field value' | indent + 5;
+				'*/' | indent + 5;
+    			'public void set${mname}(${ftype} ${fname});' | indent + 4;
     		}
-    		tupleCount = tupleCount + 1;
-    	}
+    	
     	'}' | indent;
-    	''
-    	type;
+    	''	    		    	
+	    }
     }
-
-    def main(Configuration config, FileArtifact target, DecisionVariable family, String ifName) {
-    	'package eu.qualiMaster.families.inf;'
-    	''
-    	//produceForTuples(family.byName("input"), false, true, ifName, 0);
-    	//produceForTuples(family.byName("output"), true, true, ifName, 0);
-    	''
-    	'/**'
-    	' * Defines the interface for the algorithm family "${ifName}".'
-    	' */'
-    	'public interface ${toIdentifier(ifName)} {'
-    	''
-    	String inTypeName = produceForTuples(family.byName("input"), false, false, ifName, 4);
-    	String outTypeName = produceForTuples(family.byName("output"), true, false, ifName, 4);
+ 	
+ 	/*
+ 	 * Produces the calculate methods based on input-output tuples.
+ 	 */
+    def produceForCalculate(DecisionVariable inputTuples, DecisionVariable outputTuples) {   	 
+    	 String inputTupleName;
+    	 String outputTupleName;
+   	   	 
+   	   	 //input tuples loop	  
+    	 for(Tuple t : inputTuples){ 
+			inputTupleName = t.name;      	        	      	 	
+    	 	String inTypeName = "I${ifName}${firstToUpperCase(inputTupleName)}Input";
+			//output tuples loop
+    	 	for(Tuple p : outputTuples){  
+			  outputTupleName = p.name;
+    	 	  String outTypeName = "I${ifName}${firstToUpperCase(outputTupleName)}Output";  	 
+    	
     	'    /**'
     	'     * Calculates the actual <code>result</code> for <code>input</code>.'
     	'     *'
@@ -161,17 +94,47 @@ template familyInterfaceJava(Configuration config, FileArtifact target, Decision
     	'     */'
         '    public void calculate(${inTypeName} input, ${outTypeName} result);'
         ''
+           }
+       }
+    } 	
+
+    def main(Configuration config, FileArtifact target, DecisionVariable family, String ifName) {
+    	/* think about the family interface name is better from varName or name field
+    	Family fm = family;
+    	String familyName = fm.name;
+    	familyName = "I" + familyName.firstToUpperCase();
+    	* 
+    	*/
+    	'package eu.qualimaster.families.inf;'
+    	''
+    	'import java.io.Serializable;'
+    	'import eu.qualimaster.base.algorithm.IFamily;'
+    	''
+    	'/**'
+    	' * Defines the interface for the algorithm family "${ifName}" (GEN).'
+    	' */'
+    	'public interface ${toIdentifier(ifName)} extends IFamily{'
+    	''
+    	 produceForTuples(family.byName("input"), false, ifName, 4);
+    	 produceForTuples(family.byName("output"), true, ifName, 4);
+    	 
+    	 //produce the calculate method based on multiple input and output string
+         produceForCalculate(family.byName("input"), family.byName("output"));        
+        
         if (family.byName("parameters").variables().size()>0) {
 	        '    // algorithm parameters'
 	        ''
 	        for (Parameter p : family.byName("parameters")) {
-	        	String paramName = p.name();
+	        	String paramName = p.name;
     			String mname = firstToUpperCase(toIdentifier(paramName));
+    			String type = parameterTypeName(p);
+    		
 	        	'    /**'
 	        	'     * Sets the algorithm parameter "${paramName}".'
 	        	'     *'
 	        	'     * @param value the new value of the algorithm parameter'
 	        	'     */'
+	        	
 	        	'    public void setParameter${mname}(${parameterTypeName(p)} value);'
 	        	''
 	    	}

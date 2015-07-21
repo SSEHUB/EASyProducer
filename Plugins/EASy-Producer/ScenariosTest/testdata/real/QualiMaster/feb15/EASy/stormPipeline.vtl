@@ -1,0 +1,299 @@
+@advice(QM)
+template stormPipeline(Configuration config, FileArtifact target, Pipeline pipeline, mapOf(String, setOf(DecisionVariable)) familiesInPipeline) { 
+
+	setOf(String) bolts = {};
+	setOf(String) flows = {};
+	setOf(String) produced = {};
+	mapOf(String, Integer) nodeToRepeatNumMap = {};
+	String pipName = pipeline.name;
+    // check for endless recursions    
+    def main(Configuration config, FileArtifact target, Pipeline pip, mapOf(String, setOf(DecisionVariable)) familiesInPipeline) {
+    	
+    	String pipName = pip.name;
+    	Integer numworkers=pip.numworkers;
+    	//Integer numworkers=1;
+    	Integer timeout = pip.timeout;
+    	//get all families used in this pipeline
+    	setOf(DecisionVariable) families = {};
+    	if(familiesInPipeline.containsKey(pipName)) {
+    		families = familiesInPipeline.get(pipName);
+    	}
+    	'package eu.qualimaster.topologies.$pipName;'
+    	''
+    	'import org.apache.log4j.Logger;'    	
+    	'import backtype.storm.*;'
+    	'import backtype.storm.topology.*;'
+    	'import eu.qualimaster.Configuration;'
+    	'import eu.qualimaster.base.algorithm.*;'
+    	for(Family fm : families) {
+    		for(Algorithm alg : fm.members) {
+    			String qualifiedClsName = alg.class;
+				'import $qualifiedClsName;'
+    		}
+    	}
+    	''
+    	'/**'
+    	'* Define the main topology class(GEN).'
+    	'**/'
+    	'public class Topology {'
+    	'    final static Logger logger = Logger.getLogger(Topology.class);'
+    	'    static final String TOPOLOGY_NAME = "$pipName";'
+    	'    private static int maxNumWorkers = 1; //initialized by default value'
+    	'    private static int maxTaskParallelism = 1; //initialized by default value'
+    	''
+    	'    public static void main(String[] args) throws Exception {'
+    	'        int numWorkers = $numworkers; //initialized by the pipeline configuration'
+    	'        Config config = new Config();'
+    	'        config.setMessageTimeoutSecs($timeout);'
+    	'        config.setDebug(false);'
+    	'        config.put("windowSize", 1 * 30);  // Window size (in secs)'
+        '        config.put("windowAdvance", 1);  // Advance of the window (in secs)'
+    	''
+    	'        if (args != null && args.length > 0) {'
+    	'            config.put(Configuration.HOST_EVENT, Configuration.getEventHost());'
+        '            config.put(Configuration.PORT_EVENT, Configuration.getEventPort());'
+    	'        }'
+    	''
+    	'        TopologyBuilder b = new TopologyBuilder();'
+    	for (DecisionVariable r : pip.sources) {
+    		setOf(String) s1 = {};
+    		setOf(String) s2 = {};
+    		Integer num = r.byName("output").variables().size();
+    		processElement(r, Grouping.shuffleGrouping, s1, s2, true, num);
+    	}  
+    	'' 
+    	'        if (args != null && args.length > 0) {'  
+    	'if(maxNumWorkers > numWorkers) {' |12;
+    	'logger.error("ERROR: the number of workers in sub-topology is larger than in the main topology!");' | 16;
+    	'}' | 12;
+    	'            config.setNumWorkers(numWorkers);'
+        '            StormSubmitter.submitTopology(args[0], config, b.createTopology());'
+    	'        }'
+    	'        else{'
+    	'           config.setMaxTaskParallelism(maxTaskParallelism);'
+    	'           final LocalCluster cluster = new LocalCluster();'
+		'           cluster.submitTopology(TOPOLOGY_NAME, config, b.createTopology());'		
+		'        }'
+    	'    }'
+    	'}'
+    }
+     
+    def processElement(DecisionVariable elt, Grouping grouping, setOf(String) preNameForTopo, setOf(String) lastName, Boolean newFlow, Integer numOfOutputFromLastNode) {
+		'// unhandled type ${elt.type()}' | 8;
+    }
+
+	def processElement(DataManagementElement elt, Grouping grouping, setOf(String) preNameForTopo, setOf(String) lastName, Boolean newFlow, Integer numOfOutputFromLastNode) {
+        // currently the same as FamilyElement -> infer grouping to fieldsGrouping?
+    	setOf(String) listName = {};        
+    	String name = elt.varName();
+    	Integer outputSize = elt.output.size();
+    	if(newFlow){
+     	    produceStatement(elt, grouping, preNameForTopo, lastName, true, numOfOutputFromLastNode);    	
+		} 
+		if(isStringExisted(name, produced)){			
+		}else {
+    	    listName.add(name);
+    	    produced.add(name);   		
+    	}
+        Boolean nFlow;
+		for (Flow flow : elt.output) {
+			String flowName = flow.varName();
+			if(isStringExisted(flowName, flows)){
+				nFlow = false;
+			} else {
+				nFlow = true;
+				flows.add(flowName);
+			}			
+			processElement(flow.destination, flow.grouping, lastName, listName, nFlow, outputSize);
+		}
+    }
+
+    def processElement(FamilyElement elt, Grouping grouping, setOf(String) preNameForTopo, setOf(String) lastName, Boolean newFlow, Integer numOfOutputFromLastNode) {
+        // currently the same as DataManagementElement -> infer grouping to shuffleGrouping?
+    	setOf(String) listName = {}; 
+    	String nameVar = elt.varName();  
+    	Integer outputSize = elt.output.size();     
+        if(newFlow){
+    	    produceStatement(elt, grouping, preNameForTopo, lastName, true, numOfOutputFromLastNode);
+    	}
+    	if(isStringExisted(nameVar, produced)){    		
+    	}
+    	else{     		
+		    String snkBolt = "";
+		    Family fm = elt.family;
+		    Integer topoCount = 1;		
+    	    for (Algorithm alg : fm.members) {
+			    if(!alg.algTopologyClass.isNull()) {			    	
+				    snkBolt = nameVar.firstToUpperCase() + "${topoCount}SubOutput";
+				    String algName = alg.class;
+				    JavaPath algPath = algName;
+		            String algClsName = algPath.getName();
+					String streamId = nameVar + "${topoCount}TopoStream";	
+					
+			   		String topologyCls = alg.algTopologyClass;
+			    	'        //generate the Storm-based algorithm topology name:$algClsName'
+			    	'        SubTopologyOutput $snkBolt = new $topologyCls().createSubTopology(b,config,"$algClsName", "$nameVar", "$streamId");'
+			    	'maxNumWorkers = Math.max(maxNumWorkers, $snkBolt.getNumWorkers());' | 8;
+			    	'maxTaskParallelism = Math.max(maxTaskParallelism, $snkBolt.getMaxTaskParallelism());' | 8;	
+			    	listName.add(snkBolt);
+			    	topoCount = topoCount + 1;		    	    
+		    	} else {
+		     		listName.add(nameVar);
+		    	}					 
+    	 	} 
+    	 	produced.add(nameVar);       	
+        }
+		Boolean nFlow;		   	
+		for (Flow flow : elt.output) {
+			String flowName = flow.varName();
+			if(isStringExisted(flowName, flows)){
+				nFlow = false;
+			} else {
+				nFlow = true;
+				flows.add(flowName);
+			}						
+			processElement(flow.destination, flow.grouping, lastName, listName, nFlow, outputSize);
+		}
+    }
+    
+    def processElement(Source elt, Grouping grouping, setOf(String) preNameForTopo, setOf(String) lastName, Boolean newFlow, Integer numOfOutputFromLastNode) {
+    	setOf(String) listName = {};
+    	String name = elt.varName();
+    	Integer outputSize = elt.output.size();
+    	if(newFlow){
+     		produceStatement(elt, grouping, preNameForTopo, lastName, false, numOfOutputFromLastNode);    	
+		} 
+		if(isStringExisted(name, produced)){			
+		}else {
+    	    listName.add(name);
+    	    produced.add(name);   		
+    	}
+	    Boolean nFlow;
+		for (Flow flow : elt.output) {
+			String flowName = flow.varName();
+			if(isStringExisted(flowName, flows)){
+				nFlow = false;
+			} else {
+				nFlow = true;
+				flows.add(flowName);
+			}
+			processElement(flow.destination, flow.grouping, lastName, listName, nFlow, outputSize);
+		}
+    }
+    
+    def processElement(Sink elt, Grouping grouping, setOf(String) preNameForTopo, setOf(String) lastName, Boolean newFlow, Integer numOfOutputFromLastNode) {   	
+    	if(newFlow){
+    	    produceStatement(elt, grouping, preNameForTopo, lastName, true, 1);	
+    	}
+    	
+    }
+    
+    def produceStatement(DecisionVariable elt, Grouping grouping, setOf(String) preNameForTopo, setOf(String) lastName, Boolean bolt, Integer numOfOutputFromLastNode) {
+    	String name = elt.varName();
+    	String clsName = className(elt);
+    	Integer parallelism = elt.byName("parallelism"); 
+    	//obtain the meaningfule name of the element
+    	String eltType = elt.type();
+    	String displayName;
+    	if(eltType == "Source") {
+    		Source source = elt;
+    		displayName = source.name;
+    	} else if (eltType == "FamilyElement") {
+    		FamilyElement familyElt = elt;
+    		displayName = familyElt.name;
+    	} else if(eltType == "Sink") {
+    		Sink sink = elt;
+    		displayName = sink.name;
+    	} else if(eltType == "DataManagementElement") {
+    		DataManagementElement dmElt = elt;
+    		displayName = dmElt.name;
+    	}
+    	//String boltName = elt.name();
+        if (bolt) {    	    
+    	    if(isStringExisted(name, bolts)){ 
+ 	    	} else {
+ 	    	  '// Declare a Bolt "$displayName"' | 8;
+ 	          'BoltDeclarer $name = b.setBolt("$name", new $clsName("$name", "$pipName"), $parallelism);' | 8;  
+    	      bolts.add(name); 
+ 	    	}
+ 	    	//String grouping = grouping(elt, grouping, preNameForTopo, lastName);
+    	    '$name' | 8;
+    	    grouping(elt, grouping, preNameForTopo, lastName, numOfOutputFromLastNode);
+        } else {
+        	'// Declare a Spout "$displayName"' | 8;
+		    'b.setSpout("$name", new $clsName("$name", "$pipName"), $parallelism);' | 8;
+        }
+    }
+    
+    def grouping(DecisionVariable elt, Grouping grouping, setOf(String) preLastName, setOf(String) lastName, Integer numOfOutputFromLastNode) { 
+    	String groupingStr = ""; 
+    	String gStr = ".$grouping";  	   	
+    	String name = elt.varName();	
+        String sname;
+        String preStream = preLastName + "Stream";
+        
+    	if (elt.varName().length() > 0) {
+    		for(String last : lastName) {   						
+    		    if(containsEnding(last,"SubOutput")) { // for topo
+    			    '.$grouping($last.getBoltName(), $last.getStreamId())' | 8;
+    			    /* 
+    			    for(String pre : preLastName){
+    				    preStream = pre + "Stream";
+    				    '.$grouping("$pre", "$preStream");' | 8;
+    			    } 
+    			    * 
+    			    */ 			
+    		    }
+    		    else { // for non-topo 	
+    		    	String numId = "";
+    		    	//the number of times the last node is passed
+    		    	if(!nodeToRepeatNumMap.containsKey(last)) {
+    		    		nodeToRepeatNumMap.add(last, 1);
+    		    	} else {
+    		    		Integer num = nodeToRepeatNumMap.get(last);
+    		    		num = num + 1;
+    		    		nodeToRepeatNumMap.add(last, num);
+    		    	}
+    		        //if the last node has more than one output
+    		    	if(numOfOutputFromLastNode>1) {
+    		    		Integer i = nodeToRepeatNumMap.get(last);
+    		    		numId = "${i}";
+    		    	}    		    		    	
+    				sname = last + "Stream${numId}";   				    
+    				'.$grouping("$last", "$sname")' | 8;
+    		    }     			
+    		}
+    		';' | 8; 		  	 
+    	}    	   	
+    }
+    
+    def className(DecisionVariable elt) {
+    	elt.varName().firstToUpperCase() + elt.type(); 
+    }
+    
+    def Boolean isStringExisted(String name, setOf(String) checkSet) {
+    	Boolean exist = false;
+    	for(String n : checkSet) {
+    		if(name == n) {
+    			exist = true;   			
+    		}
+    	}
+    	exist;
+    }
+        
+    def Boolean containsEnding(String str, String subString) {
+    	Integer strLen = str.length();
+    	Integer subStringLen = subString.length();   	
+    	if(subStringLen > strLen){
+    		false;
+    	} else {
+    		String sub = str.substring(strLen-subStringLen, strLen);
+    		if(sub == subString) {
+    			true;
+    		} else {
+    			false;
+    		}
+    	}   	
+    }
+    
+}

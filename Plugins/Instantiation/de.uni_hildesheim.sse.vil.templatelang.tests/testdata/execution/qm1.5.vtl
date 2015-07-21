@@ -3,7 +3,7 @@ template qm1_5(Configuration config, FileArtifact target) {
 
     def main(Configuration config, FileArtifact target) {
         Family fm = config.byName("fNormalize");
-        filterTuples(fm.output(), fm.input());
+        filterTuples(fm.output, fm.input);
     }
 
     def filterTuples(Tuples outputTuples, Tuples inputTuples) {

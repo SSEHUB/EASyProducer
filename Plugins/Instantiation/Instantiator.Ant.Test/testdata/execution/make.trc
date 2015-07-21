@@ -1,0 +1,7 @@
+-> main(Project, Project, Configuration) with (<project>, <project>, <config>)
+    pfad <- /testdata/artifacts/antTestFiles/makeFile/
+    buildTarget <- make
+    arguments <- Product=JNI
+    -> getPath(Project) with (<project>) = 
+    -> getPath(Path) with () = 
+    -> make(Path, String, String) with (C:/Users/Sebastian/workspaceEasyAlt234/Instantiator.Java.Test, /testdata/artifacts/antTestFiles/makeFile/, make, {{n, Product=JNI}}) = {}

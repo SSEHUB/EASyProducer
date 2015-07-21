@@ -27,7 +27,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.xml.
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.xml.XmlAttribute;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.xml.XmlElement;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.xml.XmlFileArtifact;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
 
 /**
@@ -136,7 +136,7 @@ public class XmlFileArtifactTest extends AbstractTest {
                 Assert.fail("Rootelement of testartifact not found!");
             }
               
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             Assert.fail(e.getMessage());
         }
         //initiate copying
@@ -206,7 +206,7 @@ public class XmlFileArtifactTest extends AbstractTest {
                 }
             }
 
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             Assert.fail(e.getMessage());
         }  
         return equal;
@@ -284,7 +284,7 @@ public class XmlFileArtifactTest extends AbstractTest {
                 indentFileCopy, model);
             artifactXsdFragmentCopy = (XmlFileArtifact) creator.createArtifactInstance(
                 xsdFileCopy, model);
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             Assert.fail(e.getMessage());
         }
 
@@ -300,7 +300,7 @@ public class XmlFileArtifactTest extends AbstractTest {
         try {
             artifactMenubarCopy = (XmlFileArtifact) creator.createArtifactInstance(
                 menuFileCopy, model);
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             Assert.fail(e.getMessage());
         }
         
@@ -440,7 +440,7 @@ public class XmlFileArtifactTest extends AbstractTest {
             if (newFirstElement.equals(oldFirstElementName)) {
                 Assert.fail();
             }        
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             Assert.fail(e.getMessage());
         }
     }
@@ -448,10 +448,10 @@ public class XmlFileArtifactTest extends AbstractTest {
     /**
      *  Basic test deletion.
      * 
-     * @throws ArtifactException Exception.
+     * @throws VilException Exception.
      */
     @Test
-    public final void testDeletion() throws ArtifactException {
+    public final void testDeletion() throws VilException {
         
         switchToOriginal();
         
@@ -550,7 +550,7 @@ public class XmlFileArtifactTest extends AbstractTest {
             if (deleted != expectedDeletions) {
                 Assert.fail();
             }
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             Assert.fail(e.getMessage());
         }
  
@@ -593,12 +593,12 @@ public class XmlFileArtifactTest extends AbstractTest {
                     }
                 }
             }  
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             Assert.fail(e.getMessage());
         }
         try {
             springArtifact.store();
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             Assert.fail(e.getMessage());
         }
     }
@@ -620,7 +620,7 @@ public class XmlFileArtifactTest extends AbstractTest {
                 if (entry.getAttribute("name").getValue().equals(elemName)) {
                     entry.delete();
                 }
-            } catch (ArtifactException e1) {
+            } catch (VilException e1) {
                 Assert.fail(e1.getMessage());
             } 
         }
@@ -655,7 +655,7 @@ public class XmlFileArtifactTest extends AbstractTest {
             
             newElementCount = elements.size();
             
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             Assert.fail(e.getMessage());
         }
     
@@ -667,10 +667,10 @@ public class XmlFileArtifactTest extends AbstractTest {
 /**
      * Test DTD-handling.
      * 
-     * @throws ArtifactException 
+     * @throws VilException 
      */
     @Test
-    public void testDTD() throws ArtifactException {
+    public void testDTD() throws VilException {
     
         switchToOriginal();
         
@@ -679,7 +679,7 @@ public class XmlFileArtifactTest extends AbstractTest {
         try {
             //Store the copy, thus content could be lost...
             artifactMenubarCopy.store();
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             Assert.fail(e.getMessage());
         }
         
@@ -737,7 +737,7 @@ public class XmlFileArtifactTest extends AbstractTest {
                 XmlElement newElem2 = XmlElement.create(artifactCopy.getRootElement().elements().
                     iterator().next(), "created");
                 
-            } catch (ArtifactException e) {
+            } catch (VilException e) {
                 Assert.fail(e.getMessage());
             } catch (NoSuchElementException e) {
                 Assert.fail(e.getMessage());
@@ -749,17 +749,17 @@ public class XmlFileArtifactTest extends AbstractTest {
                 XmlElement.create(artifact.getRootElement(), "/(�)");
                 //should never occur.
                 Assert.fail();
-            } catch (ArtifactException e) {
+            } catch (VilException e) {
                 //expected to happen due to invalid naming.
             } 
             //Try to create an XmlElement for not existing parent
             try {
                 XmlElement.create((XmlElement) null, "test");
                 Assert.fail();
-            } catch (ArtifactException e) { 
+            } catch (VilException e) { 
                 //expected to happen. Appending a child without any parent does not serve any purpose.
             }
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             Assert.fail(e.getMessage());
         }
     }
@@ -778,7 +778,7 @@ public class XmlFileArtifactTest extends AbstractTest {
             XmlAttribute.create(artifactCopy.getRootElement(), "/$(�", "&%/$");
             //should never occur.
             Assert.fail();
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             //expected to happen due to invalid naming.
         }
         
@@ -789,7 +789,7 @@ public class XmlFileArtifactTest extends AbstractTest {
                     Assert.fail();
                 }
             }
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             Assert.fail(e.getMessage());
         }  
         
@@ -800,19 +800,19 @@ public class XmlFileArtifactTest extends AbstractTest {
                 || newElem.attributes().isEmpty()) {
                 Assert.fail();
             }
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             Assert.fail(e.getMessage());
         }
         
         try {
             XmlAttribute.create(null, "test", "value");
             Assert.fail();
-        } catch (ArtifactException e2) {
+        } catch (VilException e2) {
             //expected to happen due to non existing element.     
             //Try to add attributes to the root element. Root elements tend to be rather delicate.
             try {
                 XmlAttribute.create(artifactCopy.getRootElement(), "TestRoot", "ValueRoot");
-            } catch (ArtifactException e) {
+            } catch (VilException e) {
                 Assert.fail(e.getMessage());
             }     
             //Try to overwrite existing element without permission.
@@ -823,7 +823,7 @@ public class XmlFileArtifactTest extends AbstractTest {
                         Assert.fail();
                     }
                 }
-            } catch (ArtifactException e) {
+            } catch (VilException e) {
                 Assert.fail(e.getMessage());
             }
             Assert.assertFalse(compareXmlFilesManually(artifact, artifactCopy));
@@ -877,7 +877,7 @@ public class XmlFileArtifactTest extends AbstractTest {
             
             Assert.assertEquals(artifactCopy.selectByPath("project").iterator().next().elements().size(), size2 + 2);
             Assert.assertFalse(compareXmlFilesManually(artifact, artifactCopy));
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             Assert.fail("unexpected exception: " + e.getMessage());
         }
     }
@@ -902,7 +902,7 @@ public class XmlFileArtifactTest extends AbstractTest {
 
             artifactCopy.getRootElement().attributes().iterator().next().delete();
             
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             Assert.fail(e.getMessage());
         } catch (NullPointerException e) {
             deletionSucceeded = true;
@@ -920,7 +920,7 @@ public class XmlFileArtifactTest extends AbstractTest {
             
             Assert.assertFalse(compareXmlFilesManually(artifact, artifactCopy));
             
-        } catch (ArtifactException e1) {
+        } catch (VilException e1) {
             Assert.fail(e1.getMessage());
         } catch (NullPointerException e1) {
             deletionSucceeded2 = true;
@@ -953,7 +953,7 @@ public class XmlFileArtifactTest extends AbstractTest {
             
             Assert.assertTrue((elemSize - 2) == newElemSize);
             
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             Assert.fail(e.getMessage());
         } catch (NullPointerException e) {
             Assert.fail(e.getMessage());
@@ -1056,7 +1056,7 @@ public class XmlFileArtifactTest extends AbstractTest {
                     Assert.fail(e.getMessage());
                 }
             }
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             Assert.fail(e.getMessage());
         } catch (NullPointerException e) {
             Assert.fail(e.getMessage());
@@ -1116,7 +1116,7 @@ public class XmlFileArtifactTest extends AbstractTest {
             
             Assert.assertFalse(compareXmlFilesManually(artifact, artifactCopy));
             
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             Assert.fail(e.getMessage());
         }
     }

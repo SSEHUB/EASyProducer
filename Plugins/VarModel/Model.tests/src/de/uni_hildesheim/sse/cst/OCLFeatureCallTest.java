@@ -188,6 +188,22 @@ public class OCLFeatureCallTest {
         Assert.assertTrue(resultType.isAssignableFrom(IntegerType.TYPE));
     }
     
+    /**
+     * Tests {@link ConstraintSyntaxTree#isSemanticallyEqual(ConstraintSyntaxTree)} of Boolean operations.
+     */
+    @Test
+    public void testEqualsOfBooleanCommutativeOperations() {
+        DecisionVariableDeclaration boolA = new DecisionVariableDeclaration("boolA", BooleanType.TYPE, project);
+        project.add(boolA);
+        DecisionVariableDeclaration boolB = new DecisionVariableDeclaration("boolB", BooleanType.TYPE, project);
+        project.add(boolB);
+        
+        ConstraintSyntaxTree or1 = new OCLFeatureCall(new Variable(boolA), OclKeyWords.OR, new Variable(boolB));
+        ConstraintSyntaxTree or2 = new OCLFeatureCall(new Variable(boolB), OclKeyWords.OR, new Variable(boolA));
+        Assert.assertNotEquals(or1, or2);
+        Assert.assertTrue(or1.isSemanticallyEqual(or2));
+    }
+    
 //    /**
 //     * Tests initialization of enum compound slot.
 //     * 

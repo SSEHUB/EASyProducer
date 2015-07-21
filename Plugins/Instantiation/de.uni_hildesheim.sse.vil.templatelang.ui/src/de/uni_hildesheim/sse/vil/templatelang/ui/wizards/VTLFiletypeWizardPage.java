@@ -2,7 +2,7 @@ package de.uni_hildesheim.sse.vil.templatelang.ui.wizards;
 
 import org.eclipse.jface.viewers.ISelection;
 
-import de.uni_hildesheim.sse.vil.wizards.AbstractFiletypeWizardPage;
+import de.uni_hildesheim.sse.dslcore.ui.wizards.AbstractFiletypeWizardPage;
 
 /**
  * The "New" wizard page allows setting the container for the new file as well

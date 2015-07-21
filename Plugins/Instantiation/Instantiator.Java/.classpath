@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-     <classpathentry exported="true" kind="lib" path="lib/aspectJ/runtime/aspectjrt.jar"/>
-     <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
-     <classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-     <classpathentry kind="src" path="src"/>
-     <classpathentry excluding="*" including="lib/aspectJ/runtime/aspectjrt.jar" kind="src" path="."/>
-     <classpathentry kind="lib" path="lib/aspectJ/aspectjtools.jar"/>
-     <classpathentry kind="lib" path="lib/ant/ant-launcher.jar"/>
-     <classpathentry kind="lib" path="lib/ant/ant.jar"/>
-     <classpathentry kind="output" path="bin"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry excluding="*" including="lib/aspectJ/runtime/aspectjrt.jar" kind="src" path=""/>
+	<classpathentry kind="output" path="bin"/>
 </classpath>

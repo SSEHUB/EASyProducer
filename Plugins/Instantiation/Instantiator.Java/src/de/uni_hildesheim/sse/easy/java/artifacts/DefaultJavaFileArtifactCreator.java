@@ -6,7 +6,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.Arti
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.DefaultFileArtifactCreator;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FileArtifact;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IArtifact;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 
 /**
  * Defines the default file artifact creator.
@@ -22,7 +22,7 @@ public class DefaultJavaFileArtifactCreator extends DefaultFileArtifactCreator {
     }
 
     @Override
-    public FileArtifact createArtifactInstance(Object real, ArtifactModel model) throws ArtifactException {
+    public FileArtifact createArtifactInstance(Object real, ArtifactModel model) throws VilException {
         return new JavaFileArtifact((File) real, model);
     }
     

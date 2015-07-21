@@ -4,6 +4,8 @@ import de.uni_hildesheim.sse.BuildLangModelUtility;
 import de.uni_hildesheim.sse.ModelUtility;
 import de.uni_hildesheim.sse.dslCore.EclipseResourceInitializer;
 import de.uni_hildesheim.sse.dslCore.StandaloneInitializer;
+import de.uni_hildesheim.sse.dslCore.TopLevelModelAccessor;
+import de.uni_hildesheim.sse.dslCore.TopLevelModelAccessor.IModelAccessor;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.internal.Activator;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateModel;
@@ -20,6 +22,11 @@ import de.uni_hildesheim.sse.vil.templatelang.TemplateLangModelUtility;
  *
  */
 public abstract class EASyInitializer {
+    
+    public static final String IVML_EXTENSION = ModelUtility.INSTANCE.getExtension();
+    public static final String VIL_EXTENSION = BuildLangModelUtility.INSTANCE.getExtension();
+    public static final String VTL_EXTENSION = TemplateLangModelUtility.INSTANCE.getExtension();
+    
     private static final EASyLogger LOGGER = EASyLoggerFactory.INSTANCE.getLogger(EASyInitializer.class
         , Activator.PLUGIN_ID);    
     
@@ -29,23 +36,31 @@ public abstract class EASyInitializer {
      */
     public static void setInitializer() {
         setInitializer(false);
+        ProgressObserver observer = ProgressObserver.NO_OBSERVER;
         try {
-            VarModel.INSTANCE.loaders().registerLoader(ModelUtility.INSTANCE, ProgressObserver.NO_OBSERVER);
+            VarModel.INSTANCE.loaders().registerLoader(ModelUtility.INSTANCE, observer);
         } catch (ModelManagementException e) {
             LOGGER.exception(e);
         }
         
         try {
-            BuildModel.INSTANCE.loaders().registerLoader(BuildLangModelUtility.INSTANCE, ProgressObserver.NO_OBSERVER);
+            BuildModel.INSTANCE.loaders().registerLoader(BuildLangModelUtility.INSTANCE, observer);
         } catch (ModelManagementException e) {
             LOGGER.exception(e);
         }
         
         try {
-            TemplateModel.INSTANCE.loaders().registerLoader(TemplateLangModelUtility.INSTANCE,
-                ProgressObserver.NO_OBSERVER);
+            TemplateModel.INSTANCE.loaders().registerLoader(TemplateLangModelUtility.INSTANCE, observer);
         } catch (ModelManagementException e) {
             LOGGER.exception(e);
+        }
+        
+        for (IModelAccessor<?> accessor : TopLevelModelAccessor.registered()) {
+            try {
+                accessor.registerLoader(observer);
+            } catch (ModelManagementException e) {
+                LOGGER.exception(e);
+            }
         }
     }
     

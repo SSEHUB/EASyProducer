@@ -85,6 +85,11 @@ public class ExpressionDslAdapterFactory extends AdapterFactoryImpl
         return createVariableDeclarationAdapter();
       }
       @Override
+      public Adapter caseTypeDef(TypeDef object)
+      {
+        return createTypeDefAdapter();
+      }
+      @Override
       public Adapter caseAdvice(Advice object)
       {
         return createAdviceAdapter();
@@ -327,6 +332,21 @@ public class ExpressionDslAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createVariableDeclarationAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.TypeDef <em>Type Def</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.TypeDef
+   * @generated
+   */
+  public Adapter createTypeDefAdapter()
   {
     return null;
   }

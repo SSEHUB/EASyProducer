@@ -1,0 +1,5 @@
+project NullSize {
+    sequenceOf(Integer) seq;
+    size(seq) == 6;
+    seq = null;
+}

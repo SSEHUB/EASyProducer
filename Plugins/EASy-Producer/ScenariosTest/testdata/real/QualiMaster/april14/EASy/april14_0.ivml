@@ -113,6 +113,12 @@ project april14 {
     // ----------------------- freeze for instantiation ----------------------
 
     freeze {
+        clusters;
+        alg_c1;
+        alg_c2;
+        alg_c3;
+        alg_f1;
+        alg_f2;
     	causality;
     	filter;
     	families;

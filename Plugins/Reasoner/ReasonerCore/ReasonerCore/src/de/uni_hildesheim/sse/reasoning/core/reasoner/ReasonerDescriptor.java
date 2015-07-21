@@ -1,6 +1,11 @@
 package de.uni_hildesheim.sse.reasoning.core.reasoner;
 
 import java.net.URL;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
+import de.uni_hildesheim.sse.capabilities.IReasonerCapability;
 
 /**
  * Represents descriptive information about a reasoner. This class is intended to be subclassed in order to provide
@@ -15,6 +20,7 @@ public class ReasonerDescriptor {
     private String version;
     private String license;
     private String licenseRestriction;
+    private Set<IReasonerCapability> capabilities;
 
     /**
      * Creates a new reasoner descriptor.
@@ -36,7 +42,35 @@ public class ReasonerDescriptor {
         this.name = name;
         this.version = version;
         this.license = license;
+        this.licenseRestriction = licenseRestriction;
         this.downloadSource = downloadSource;
+    }
+    
+    /**
+     * Adds a capability.
+     * 
+     * @param capability the capability to add (<b>null</b> is ignored)
+     */
+    protected void addCapability(IReasonerCapability capability) {
+        if (null != capability) {
+            if (null == capabilities) {
+                capabilities = new HashSet<IReasonerCapability>();
+            }
+            capabilities.add(capability);
+        }
+    }
+    
+    /**
+     * Adds a collection of capabilities.
+     * 
+     * @param capabilities the capabilities to be added (<b>null</b> is ignored)
+     */
+    protected void addCapabilities(Collection<IReasonerCapability> capabilities) {
+        if (null != capabilities) {
+            for (IReasonerCapability capability : capabilities) {
+                addCapability(capability);
+            }
+        }
     }
 
     /**
@@ -103,6 +137,22 @@ public class ReasonerDescriptor {
      */
     public boolean providesAffectedVariables() {
         return true;
+    }
+    
+    /**
+     * Returns whether the described reasoner has the given capability.
+     * 
+     * @param capability the capability to search for (<b>null</b> is ignored)
+     * @return the capability
+     */
+    public boolean hasCapability(IReasonerCapability capability) {
+        boolean result;
+        if (null == capabilities || null == capability) {
+            result = false;
+        } else {
+            result = capabilities.contains(capability);
+        }
+        return result;
     }
     
 }

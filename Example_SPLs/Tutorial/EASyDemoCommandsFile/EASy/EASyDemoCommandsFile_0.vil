@@ -1,0 +1,35 @@
+import EASyDemoCommandsPlatform;
+
+@advice(EASyDemoCommandsFile)
+vilScript EASyDemoCommandsFile (Project source, Configuration config, Project target) {
+
+    version v0;
+    
+    String basePath = "src/io/ssehub/easy/demo/command";
+    
+    delete(Project target, String fName, Boolean keep) = : !keep {
+    	// alternative: if (!keep)
+    	Path path = "$target/$basePath/commands/$fName.java";
+	    path.delete();
+    }
+
+    main(Project source, Configuration config, Project target) = : {
+    	map(Project p : source.predecessors()) {
+    		instantiate p (p, config, target);
+    	};
+    	copySRCFiles(source, target);
+    	EASyDemoCommandsFile cfg = config;
+    	// delete files
+    	// alternative: store relation in mapOf
+    	delete(target, "AddIntCommand", cfg.hasAddCommand);
+    	delete(target, "PrintCommand", cfg.hasPrintCommand);
+    	delete(target, "SubIntCommand", cfg.hasSubCommand);
+    	
+    	// instantiate name
+    	JavaFileArtifact f = "$target/$basePath/file/Main.java";
+    	f.defaultClass().attributeByName("APP_NAME").setValue(cfg.appName);
+    	
+    	javac("$target/src/**/*.java", "$target/bin");
+    }
+
+}

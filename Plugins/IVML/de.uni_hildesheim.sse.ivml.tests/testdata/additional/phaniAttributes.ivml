@@ -1,7 +1,7 @@
 project PhaniAttributes {
 
     version v0;
-    attribute Integer metaI = 0 to PhaniAttributes;
+    annotate Integer metaI = 0 to PhaniAttributes;
     Integer b;
     b.metaI = 10;
 }

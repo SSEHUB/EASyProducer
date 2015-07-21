@@ -1,0 +1,115 @@
+// specific variability model for tests.eu.qualimaster.storm
+
+project QM {
+
+    enum BindingTime {compile, runtime};
+    annotate BindingTime bindingTime = BindingTime.compile to QM;
+
+    compound Node {
+        String name;
+        setOf(Constraint) constraints = {};
+    }
+    
+    compound Source refines Node {
+        setOf(refTo(Node)) next;
+    }
+    
+    compound FamilyElement refines Node {
+        setOf(refTo(Node)) next;
+        refTo(Family) family;
+
+        assign (bindingTime = BindingTime.runtime) to {
+          refTo(Algorithm) actual;
+          Real capacity;
+          Integer executors;
+        }
+    }
+    
+    compound Sink refines Node {
+    }
+    
+    compound Family {
+        String name;
+        setOf(refTo(Algorithm)) members;
+    }
+    
+    compound Algorithm {
+        String name;
+        assign (bindingTime = BindingTime.runtime) to {
+          Real latency;
+          Integer throughputItem;
+        }
+    }
+
+    compound Pipeline {
+        String artifact;
+        String name;
+        setOf(refTo(Source)) sources;
+
+        assign (bindingTime = BindingTime.runtime) to {
+          Real latency;
+          Integer throughputItem;
+          Real capacity;
+          Integer executors;
+        }
+        setOf(Constraint) constraints;
+        //setOf(Constraint) constraints = {};
+    }
+    
+    setOf(refTo(Pipeline)) pipelines;
+    setOf(refTo(Algorithm)) algorithms;
+    
+    // ---------------------- instances ---------------------
+    
+    Algorithm alg1 = {
+        name = "alg1"
+    };
+
+    Algorithm alg2 = {
+        name = "alg2"
+    };
+    
+    Family fam1 = {
+        name = "fam1",
+        members = {refBy(alg1), refBy(alg2)}
+    };
+
+    Sink snk = {
+        name = "sink"
+    };
+    
+    FamilyElement famElt1 = {
+        name = "process",
+        family = refBy(fam1), 
+        next = {refBy(snk)},
+        constraints = {capacity < 0.1}
+    };
+    
+    Source src = {
+        name = "source", 
+        next = {refBy(famElt1)}
+    };
+    
+    Pipeline pip = {
+        artifact = "eu.qualiMaster:TestPipeline:0.0.1",
+        name = "pipeline",
+        sources = {refBy(src)},
+        capacity = 1,
+        constraints = {capacity < 0.1}
+    };
+    
+    pipelines = {refBy(pip)};
+    algorithms = {refBy(alg1), refBy(alg2)};
+    
+    freeze {
+        alg1;
+        alg2;
+        fam1;
+        snk;
+        famElt1;
+        src;
+        pip;
+        pipelines;
+        algorithms;
+    } but (v | v.bindingTime == BindingTime.runtime);
+}

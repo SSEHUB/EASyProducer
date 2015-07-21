@@ -3,10 +3,10 @@ template qm6(Configuration config, FileArtifact target) {
 
     def main(Configuration config, FileArtifact target) {
         Pipeline pip = config.byName("pipTSI");
-        for (Source src : pip.sources()) {
-            '${src.source()} ${src.source().isConfigured()}'
-            DataSource dsrc = src.source();
-            '${dsrc.name()}'
+        for (Source src : pip.sources) {
+            '${src.source} ${src.source.isConfigured()}'
+            DataSource dsrc = src.source;
+            '${dsrc.name}'
         }
     }
 

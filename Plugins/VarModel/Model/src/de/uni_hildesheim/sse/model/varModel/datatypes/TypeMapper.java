@@ -72,6 +72,7 @@ public class TypeMapper {
         put("OrderedEnum", OrderedEnum.TYPE);
         put("Reference", Reference.TYPE);
         put("Constraint", ConstraintType.TYPE);
+        put("FreezeVariable", FreezeVariableType.TYPE);
     }
     
     /**

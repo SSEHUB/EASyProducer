@@ -23,7 +23,7 @@ import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.ProjectImport;
 
 /**
- * An IVML writer which may or not emit comments.
+ * An IVML writer which may or not emit imports.
  * 
  * @author Holger Eichelberger
  */

@@ -1,0 +1,22 @@
+import callLib;
+
+@advice(QM1)
+rtVilScript call (Project source, Configuration config, Project target) {
+
+    strategy main(Project source, Configuration config, Project target) = {
+        objective true;
+        breakdown {
+            tactic t(config);
+        }
+    }
+
+    tactic t(Configuration config) = {
+        test();
+        QM1 qm1 = config;
+        initCapacity(qm1, 4);
+    }
+
+    enact(Project source, Configuration config, Project target) = : {
+    }
+
+}

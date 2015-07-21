@@ -1,0 +1,162 @@
+@advice(QM)
+template familyInterfaceJava(Configuration config, FileArtifact target, DecisionVariable family, String ifName) {
+
+    // needs to be translated into new advice-style of writing
+
+    def String parameterTypeName(DecisionVariable var) {
+    	switch(var.type()) {
+    		"IntegerParameter" : "int",
+    		"BooleanParameter" : "boolean",
+    		"RealParameter" : "double",
+    		"StringParameter" : "String"
+    	}
+    }
+    
+    def String fieldTypeName(DecisionVariable var) {
+    	String type = var.byName("type");
+       	switch(type) {
+    		"INTEGER" : "int",
+    		"BOOLEAN" : "boolean",
+    		"REAL" : "double",
+    		"STRING" : "String",
+    		"OBJECT": "Object",
+    		"LONG": "long",
+    		"STRINGLIST": "java.util.List<String>"
+    	}  	    	
+    }
+    
+    def produceForTuples(DecisionVariable tuples, Boolean output, String fName, Integer indent) {
+	    String type;
+	    String typeName;
+   	    Integer tuplesSize = tuples.variables().size();
+    	String tupleId;
+    	String fields;    	
+		Integer tupleCount = 1;	   					    
+	    for (Tuple t : tuples){
+   		String tupleId = "";
+    		if (tuplesSize > 1) {
+    			tupleId = "${tupleCount}"; // we need an operator
+    		}
+    		
+	    if (output) {
+    		type = "${fName}${tupleId}Output";
+    		typeName = "output";
+    	} else {
+    		type = "${fName}${tupleId}Input";
+    		typeName = "input";   		
+    	}
+    	
+    	type = "I" + type;
+    	'/**' | indent;
+    	'* Defines the data ${typeName} interface for the {@link ${type}} algorithm (over all defined ${typeName} tuples).' | indent + 1;
+		'*/' | indent + 1;
+    	'public static interface $type extends Serializable{' | indent;
+    	''
+
+ 
+    		for (Field f : t.fields) {
+    			String fname = toIdentifier("${f.name}");
+    			String mname = firstToUpperCase(fname);
+    			String ftype = fieldTypeName(f);
+    			'/**' | indent + 4;
+				'* Returns the input value for tuple field "${f.name}".' | indent + 5;
+				'* @return the tuple value' | indent + 5;
+				'*/' | indent + 5;
+    			'public ${ftype} get${mname}();' | indent + 4;
+    			''
+    			'/**' | indent + 4;
+				'* Changes the output value for tuple field "${f.name}".' | indent + 5;
+				'* @param ${fname} the field value' | indent + 5;
+				'*/' | indent + 5;
+    			'public void set${mname}(${ftype} ${fname});' | indent + 4;
+    		}
+    		tupleCount = tupleCount + 1;
+    	
+    	'}' | indent;
+    	''	    	
+	    	
+	    }
+
+    }
+ 	
+    def produceForCalculate(DecisionVariable inputTuples, DecisionVariable outputTuples) {
+    	 Integer inputTuplesSize = inputTuples.variables().size();
+    	 Integer outputTuplesSize = outputTuples.variables().size();    	 
+    	 String inputTupleId = "";
+    	 String outputTupleId = "";
+         Integer inputTupleCount = 1;   	   	 	  
+    	 for(Tuple t : inputTuples){
+    	    Integer outputTupleCount = 1;
+    	    if(inputTuplesSize > 1){
+    	 	   inputTupleId = "$inputTupleCount";
+    	    }       	        	      	 	
+    	 	String inTypeName = "I${ifName}${inputTupleId}Input";
+    	 	
+    	 	outputTupleCount = 1;
+    	 	for(Tuple p : outputTuples){
+    	      if(outputTuplesSize > 1){
+    	 	   outputTupleId = "$outputTupleCount";
+    	      }  
+    	 	  String outTypeName = "I${ifName}${outputTupleId}Output";  	 
+    	
+    	'    /**'
+    	'     * Calculates the actual <code>result</code> for <code>input</code>.'
+    	'     *'
+    	'     * @param input the algorithm input taken from the input stream'
+    	'     * @param result the result calculated by the algorithm'
+    	'     */'
+        '    public void calculate(${inTypeName} input, ${outTypeName} result);'
+        ''
+            outputTupleCount = outputTupleCount +1;
+           }
+        inputTupleCount = inputTupleCount +1;  
+       }
+    } 	
+
+    def main(Configuration config, FileArtifact target, DecisionVariable family, String ifName) {
+    	/* think about the family interface name is better from varName or name field
+    	Family fm = family;
+    	String familyName = fm.name;
+    	familyName = "I" + familyName.firstToUpperCase();
+    	* 
+    	*/
+    	'package eu.qualimaster.families.inf;'
+    	''
+    	'import java.io.Serializable;'
+    	'import eu.qualimaster.base.algorithm.IFamily;'
+    	//produceForTuples(family.byName("input"), false, true, ifName, 0);
+    	//produceForTuples(family.byName("output"), true, true, ifName, 0);
+    	''
+    	'/**'
+    	' * Defines the interface for the algorithm family "${ifName}" (GEN).'
+    	' */'
+    	'public interface ${toIdentifier(ifName)} extends IFamily{'
+    	''
+    	 produceForTuples(family.byName("input"), false, ifName, 4);
+    	 produceForTuples(family.byName("output"), true, ifName, 4);
+    	 
+    	 //produce the calculate method based on multiple input and output string
+         produceForCalculate(family.byName("input"), family.byName("output"));        
+        
+        if (family.byName("parameters").variables().size()>0) {
+	        '    // algorithm parameters'
+	        ''
+	        for (Parameter p : family.byName("parameters")) {
+	        	String paramName = p.name;
+    			String mname = firstToUpperCase(toIdentifier(paramName));
+    			String type = parameterTypeName(p);
+    		
+	        	'    /**'
+	        	'     * Sets the algorithm parameter "${paramName}".'
+	        	'     *'
+	        	'     * @param value the new value of the algorithm parameter'
+	        	'     */'
+	        	
+	        	'    public void setParameter${mname}(${parameterTypeName(p)} value);'
+	        	''
+	    	}
+    	}
+    	'}'
+    }
+    
+}

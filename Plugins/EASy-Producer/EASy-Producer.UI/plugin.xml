@@ -28,15 +28,6 @@
             name="Product Line Configuration Editor">
       </editor>
    </extension>
-   <extension
-         id="de.uni_hildesheim.sse.EASy-Producer"
-         name="EASy-Producer 2.0"
-         point="org.eclipse.core.resources.natures">
-      <runtime>
-         <run class="de.uni_hildesheim.sse.easy_producer.persistency.eclipse.EASyNature">
-         </run>
-      </runtime>
-   </extension>
    <extension point="org.eclipse.ui.startup">
      <startup class="de.uni_hildesheim.sse.easy.ui.internal.Startup"/>
    </extension>

@@ -181,9 +181,8 @@ public class GenericOperations {
         if (null != operand && null != arguments && arguments.length == 1) {
             Value oValue = operand.getValue();
             Value aValue = arguments[0].getValue();
-            boolean equals;            
-         
-            if (!negate) {
+            boolean equals; 
+            if (!negate && operand.getContext().allowPropagation()) {
                 // special if not assigned, but assignable (not constant), we can do this now
                 if (((null == oValue || !operand.isAssigned()) && operand.isAssignable()) 
                         || isAssignableCompound(operand)) {
@@ -197,7 +196,7 @@ public class GenericOperations {
                     aValue = operand.getValue();
                 }
             }
-            if (null == oValue && null == aValue) {
+            if (null == oValue || null == aValue) {
                 result = null;
             } else {
                 if (null == oValue || null == aValue) {

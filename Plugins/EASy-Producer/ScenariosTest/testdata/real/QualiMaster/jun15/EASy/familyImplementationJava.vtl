@@ -1,0 +1,145 @@
+@advice(QM)
+template familyImplementationJava(Configuration config, FileArtifact target, DecisionVariable family, String fName) {
+
+    // needs to be translated into new advice-style of writing
+
+    def String parameterTypeName(DecisionVariable var) { 
+    	switch(var.type()) {
+    		"IntegerParameter" : "int",
+    		"BooleanParameter" : "boolean",
+    		"RealParameter" : "double",
+    		"StringParameter" : "String",
+    		"LongParameter" : "long"
+    	}
+    	 
+    }
+    
+    def String fieldTypeName(DecisionVariable f) {
+		DecisionVariable type = f.byName("type");
+		String typeName = type.byName("class");
+		typeName;
+	}
+    
+    def produceForTuples(DecisionVariable tuples, Boolean output, Boolean implementation, String fName, Integer indent) {
+	    String type;
+	    String typeName;
+    	String tupleName; 	    	   	   	
+    	for (Tuple t : tuples) {
+    		tupleName = t.name;
+    		tupleName = firstToUpperCase(tupleName);
+	        if (output) {
+    		    type = "${fName}${tupleName}Output";
+    		    typeName = "output";
+    	    } else {
+    		    type = "${fName}${tupleName}Input";
+    		    typeName = "input";   		
+    	    }
+    	    		  	    	   		   
+		    '/**' | indent;
+            '* Provides a default implementation of the data ${typeName} for the {@link ${type}} algorithm.' | indent + 1;
+            '* Actual execution system code may also directly wrap the respective tuple concept.' | indent + 1; 
+		    '*/' | indent + 1;
+    	    'public static class $type implements I${type} {' | indent;    	
+    	    ''	
+    	    //'private static final long serialVersionUID = 1L;' | indent + 4;   
+    		for (Field f : t.fields) {
+    			String fname = toIdentifier("${f.name}");
+    			String ftype = fieldTypeName(f);
+    			'private ${ftype} ${fname};' | indent + 4;
+    		}
+    		''
+    		
+    		for (Field f : t.fields) {
+    			String fname = toIdentifier("${f.name}");
+    			String mname = firstToUpperCase(fname);
+    			String ftype = fieldTypeName(f);
+				'@Override' | indent + 4;
+	    		'public ${ftype} get${mname}(){' | indent + 4;
+	    			'return ${fname};' | indent + 8;
+	    		'}' | indent + 4;	    			
+	    		''
+	    		
+				'@Override' | indent + 4;
+	    		'public void set${mname}(${ftype} ${fname}){' | indent + 4;
+	    			   'this.${fname} = ${fname};' | indent + 8;
+	    		'}' | indent + 4;
+    		}
+    	'}' | indent;
+    	''	   	       	
+      }
+    }
+
+    def produceForCalculate(DecisionVariable inputTuples, DecisionVariable outputTuples, String ifName) {   	 
+    	 String inputTupleName;
+    	 String outputTupleName;
+  	  
+    	 for(Tuple t : inputTuples){
+    	    inputTupleName = t.name;
+    	    inputTupleName = firstToUpperCase(inputTupleName);        	      	 	
+    	 	String inTypeName = "I${ifName}${inputTupleName}Input";
+
+    	 	for(Tuple p : outputTuples){
+    	 		outputTupleName = p.name;
+    	        outputTupleName = firstToUpperCase(outputTupleName);    	 		
+    	 		String outTypeName = "I${ifName}${outputTupleName}Output";  	 
+    	
+    	'    /**'
+    	'     * Calculates the actual <code>result</code> for <code>input</code>.'
+    	'     *'
+    	'     * @param input the algorithm input taken from the input stream'
+    	'     * @param result the result calculated by the algorithm'
+    	'     */'
+    	'    @Override'
+        '    public void calculate(${inTypeName} input, ${outTypeName} result){'
+        '    }'
+        ''
+           }
+       }
+    }
+
+    def main(Configuration config, FileArtifact target, DecisionVariable family, String fName) {
+    	'package eu.qualimaster.families.imp;'
+    	''
+    	//'import java.io.Serializable;'
+    	'import eu.qualimaster.families.inf.*;'
+    	'import eu.qualimaster.observables.IObservable;'
+    	''
+    	String ifName = "I" + fName;
+    	'/**'
+    	' * The implementation for the algorithm family "${ifName}" (GEN).'
+    	' */'
+    	'public class $fName implements $ifName {'
+    	''
+    	produceForTuples(family.byName("input"), false, true, ifName, 4);
+    	produceForTuples(family.byName("output"), true, true, ifName, 4);
+    	
+    	//produce the calculate method based on multiple input and output string
+        produceForCalculate(family.byName("input"), family.byName("output"), ifName); 
+             	
+        if (family.byName("parameters").variables().size()>0) {
+	        ''
+	        for (Parameter p : family.byName("parameters")) {
+	        	String paramName = p.name;
+    			String mname = firstToUpperCase(toIdentifier(paramName));
+	        	'    /**'
+	        	'     * Sets the algorithm parameter "${paramName}".'
+	        	'     *'
+	        	'     * @param value the new value of the algorithm parameter'
+	        	'     */'
+	        	'    public void setParameter${mname}(${parameterTypeName(p)} value) {'
+	        	'    }'
+	        	''      	
+	    	}
+    	}
+				'    @Override'
+				'    public void switchState(State arg0) {'					
+				'    }'
+				''
+				'    @Override'
+				'    public Double getMeasurement(IObservable arg0) {'
+				'	    return null;'
+				'    }'     	
+    '}'
+    }
+    
+}

@@ -17,6 +17,7 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes;
 
 import java.util.List;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionEvaluator;
 
 /**
@@ -34,8 +35,8 @@ public class ListSequence<T> extends AbstractListWrapper<T> implements Sequence<
      * @param list the wrapped list
      * @param param the only type parameter characterizing <T>
      */
-    public ListSequence(List<T> list, Class<? extends IVilType> param) {
-        super(list, TypeRegistry.DEFAULT, param);
+    public ListSequence(List<T> list, Class<?> param) {
+        super(list, TypeRegistry.DEFAULT, false, param);
     }
 
     /**
@@ -45,8 +46,8 @@ public class ListSequence<T> extends AbstractListWrapper<T> implements Sequence<
      * @param registry the registry to convert <code>param</code>
      * @param param the only type parameter characterizing <T>
      */
-    public ListSequence(List<T> list, TypeRegistry registry, Class<? extends IVilType> param) {
-        super(list, registry, param);
+    public ListSequence(List<T> list, TypeRegistry registry, Class<?> param) {
+        super(list, registry, false, param);
     }
 
     /**
@@ -55,8 +56,8 @@ public class ListSequence<T> extends AbstractListWrapper<T> implements Sequence<
      * @param list the wrapped list
      * @param params the type parameter characterizing <T>
      */
-    public ListSequence(List<T> list, TypeDescriptor<? extends IVilType>... params) {
-        super(list, params);
+    public ListSequence(List<T> list, TypeDescriptor<?>... params) {
+        super(list, false, params);
     }
     
     @Override
@@ -84,33 +85,33 @@ public class ListSequence<T> extends AbstractListWrapper<T> implements Sequence<
      * @param <T> the element type
      */
     @Invisible
-    public static final <T> Sequence<T> empty(TypeDescriptor<? extends IVilType> param) {
-        TypeDescriptor<? extends IVilType>[] params = TypeDescriptor.createArray(1);
+    public static final <T> Sequence<T> empty(TypeDescriptor<?> param) {
+        TypeDescriptor<?>[] params = TypeDescriptor.createArray(1);
         params[0] = param;
         return new ListSequence<T>(null, params);
     }
 
     @Override
     @OperationMeta(returnGenerics = IVilType.class)
-    public Sequence<T> selectByType(TypeDescriptor<? extends IVilType> type) {
-        return new ListSequence<T>(selectByType(this, type), getParameter());
+    public Sequence<T> selectByType(TypeDescriptor<?> type) {
+        return new ListSequence<T>(selectByType(this, type), getGenericParameter());
     }
 
     @Override
     @OperationMeta(returnGenerics = IVilType.class)
     public Sequence<T> excluding(Collection<T> sequence) {
-        return new ListSequence<T>(excluding(this, sequence), getParameter());
+        return new ListSequence<T>(excluding(this, sequence), getGenericParameter());
     }
 
     @Override
     @OperationMeta(returnGenerics = IVilType.class)
     public Sequence<T> append(Collection<T> sequence) {
-        return new ListSequence<T>(append(this, sequence), getParameter());
+        return new ListSequence<T>(append(this, sequence), getGenericParameter());
     }
 
     @Override
-    public Sequence<T> select(ExpressionEvaluator evaluator) throws ArtifactException {
-        TypeDescriptor<? extends IVilType>[] param = TypeDescriptor.createArray(1);
+    public Sequence<T> select(ExpressionEvaluator evaluator) throws VilException {
+        TypeDescriptor<?>[] param = TypeDescriptor.createArray(1);
         param[0] = evaluator.getIteratorVariable().getType();
         return new ListSequence<T>(select(this, evaluator), param);
     }
@@ -123,7 +124,7 @@ public class ListSequence<T> extends AbstractListWrapper<T> implements Sequence<
 
     @Override
     public Set<T> toSet() {
-        return new ListSet<T>(getList(), getParams());
+        return new ListSet<T>(getList(), getGenericParameter());
     }
 
     @Override
@@ -133,7 +134,31 @@ public class ListSequence<T> extends AbstractListWrapper<T> implements Sequence<
         if (null == getList()) {
             result = this;
         } else {
-            result = new ListSequence<T>(sortAlphaImpl(), getParams());
+            result = new ListSequence<T>(sortAlphaImpl(), getGenericParameter());
+        }
+        return result;
+    }
+    
+    @Override
+    @OperationMeta(returnGenerics = IVilType.class)
+    public Sequence<T> sort(ExpressionEvaluator evaluator) throws VilException {
+        Sequence<T> result;
+        if (null == getList()) {
+            result = this;
+        } else {
+            result = new ListSequence<T>(sortImpl(evaluator), getGenericParameter());
+        }
+        return result;
+    }
+    
+    @Override
+    @OperationMeta(returnGenerics = IVilType.class)
+    public Sequence<T> revert() {
+        Sequence<T> result;
+        if (null == getList()) {
+            result = this;
+        } else {
+            result = new ListSequence<T>(revertImpl(), getGenericParameter());
         }
         return result;
     }
@@ -168,19 +193,25 @@ public class ListSequence<T> extends AbstractListWrapper<T> implements Sequence<
     }
 
     @Override
+    @OperationMeta(genericArgument = {0 })
     public T add(T element) {
         getList().add(element);
         return element;
     }
 
     @Override
-    public void remove(T element) {
-        getList().remove(element);
+    public boolean remove(T element) {
+        return getList().remove(element);
     }
 
     @Override
     public Map<T, T> mapSequence(Sequence<T> other) {
         return SequenceOperations.mapSequence(this, other);
+    }
+
+    @Override
+    public Map<T, T> mapAny(Sequence<T> other) {
+        return SequenceOperations.mapAny(this, other);
     }
 
 }

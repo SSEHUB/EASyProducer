@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProductLineProject id="fe903347-a993-45c9-bda2-35181f8aff05" name="EASyDemoCommandsPlatform" version="0" location="EASyDemoCommandsPlatform">
+	<predecessors>
+	</predecessors>
+	<successors>
+		<entity id="81efd75f-84cb-4998-a65f-50b667cd065a" name="EASyDemoCommandsVelocity" version="0" location="EASyDemoCommandsVelocity" />
+	</successors>
+	<settings>
+		<entity debug="false" />
+	</settings>
+	<reasoners>
+		<entity timeout="0" />
+	</reasoners>
+	<instantiators>
+	</instantiators>
+</ProductLineProject>

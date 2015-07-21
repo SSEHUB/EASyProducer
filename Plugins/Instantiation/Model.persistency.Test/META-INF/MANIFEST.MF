@@ -5,14 +5,17 @@ Bundle-SymbolicName: Model.persistency.Test
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: University of Hildesheim - SSE
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Require-Bundle: de.uni-hildesheim.sse.easy.instantiatorCore,
- de.uni_hildesheim.sse.varModel.persistency,
+Require-Bundle: org.junit,
  de.uni_hildesheim.sse.utils,
+ de.uni_hildesheim.sse.varModel.persistency,
+ de.uni-hildesheim.sse.easy.instantiatorCore,
  de.uni_hildesheim.sse.varModel,
- de.uni_hildesheim.sse.vil.buildlang,
- de.uni_hildesheim.sse.ivml;bundle-version="0.10.2",
- org.junit,
- de.uni_hildesheim.sse.vil.templatelang,
+ de.uni_hildesheim.sse.ivml,
+ org.apache.commons.io;bundle-version="2.0.1",
+ de.uni_hildesheim.sse.vil.buildlang;bundle-version="0.5.3",
+ de.uni_hildesheim.sse.vil.expressions;bundle-version="0.5.3",
+ de.uni_hildesheim.sse.vil.templatelang;bundle-version="0.5.3",
+ de.uni_hildesheim.sse.easy.instantiator.maven;bundle-version="3.2.3",
  de.uni_hildesheim.sse.easy_producer.core,
- org.apache.commons.io,
- de.uni_hildesheim.sse.easy.instantiator.java;bundle-version="0.2.2"
+ ReasonerCore,
+ de.uni_hildesheim.sse.reasoning.reasoner

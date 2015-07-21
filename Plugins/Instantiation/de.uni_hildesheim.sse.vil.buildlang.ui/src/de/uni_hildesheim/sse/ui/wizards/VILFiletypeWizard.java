@@ -3,7 +3,7 @@ package de.uni_hildesheim.sse.ui.wizards;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
-import de.uni_hildesheim.sse.vil.wizards.AbstractFiletypeWizard;
+import de.uni_hildesheim.sse.dslcore.ui.wizards.AbstractFiletypeWizard;
 
 /**
  * This is a sample new wizard. Its role is to create a new file resource in the

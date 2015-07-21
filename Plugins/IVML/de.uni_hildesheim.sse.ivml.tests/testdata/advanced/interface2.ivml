@@ -1,0 +1,13 @@
+project testInterface2 {
+
+    version v0;
+    interface iface1 {
+        export c3;
+    }
+    enum State {on, off};
+    compound comp {
+        State state;
+    }
+
+    comp c3;
+}

@@ -1,0 +1,13 @@
+project CompoundRefineConstraint {
+    compound Comp1 {
+        Integer member1;
+    }
+
+    compound Comp2 refines Comp1 {
+        Integer member2;
+        member2 > 0;
+    }
+
+    Comp2 myComp;
+    myComp = {member2 = -1};
+}

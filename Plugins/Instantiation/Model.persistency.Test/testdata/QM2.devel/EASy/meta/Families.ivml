@@ -7,33 +7,26 @@ project Families {
 	
 	compound Family {
 		NonEmptyString name;
+		String description;
 		Tuples input;
 		Tuples output;
 		Parameters parameters;
 		setOf(refTo(Algorithm)) members; 
-		assign(bindingTime = BindingTime.runtime) to {
-			refTo(Algorithm) actual;
-		} // similar: actual.bindingTime = BindingTime.runtime;		
 
-        // more efficient with a let expression holding collectFieldTypes(input) or collectFieldTypes(output)		
-		Constraint inputCheck = members->forAll(refTo(Algorithm) algorithm | equals(input, algorithm.input));
-		Constraint outputCheck = members->forAll(refTo(Algorithm) algorithm | equals(output, algorithm.output));
+        // we go now for names + types as required by the pipeline		
+		Constraint inputCheck = members->forAll(refTo(Algorithm) algorithm | input == algorithm.input);
+		Constraint outputCheck = members->forAll(refTo(Algorithm) algorithm | output == algorithm.output);
 		Constraint parameterCheck = members->forAll(refTo(Algorithm) algorithm | contains(parameters, algorithm.parameters));
-		// TODO parameter names must be unique (via toIdentifier)
+		Constraint memberCount = members.size() > 0;
+		Constraint inputGivenCheck = input != null;
+		Constraint outputGivenCheck = output != null;
 	}
 
     def Boolean contains(Parameters parameters1, Parameters parameters2) = 
         parameters2->forAll(p2 | parameters1->exists(p1 | p1.name == p2.name and p1.typeOf() == p2.typeOf()));
-        
-	def Boolean equals(Tuples tuples1, Tuples tuples2) =
-	    collectFieldTypes(tuples1) == collectFieldTypes(tuples2);
-	
-	def sequenceOf(FieldType) collectFieldTypes(Tuples tuples) =
-	    tuples->apply(Tuple t; sequenceOf(FieldType) r = {} | r = r.union(collectFieldTypes(t)));
-	
-	def sequenceOf(FieldType) collectFieldTypes(Tuple tuple) =
-		tuple.fields->collect(Field f | f.type);
-	  
+        	  
 	setOf(refTo(Family)) families;
+	
+	Constraint familyNameUnqiue = families->collect(f|f.name).size() == families.size();
 	
 } 

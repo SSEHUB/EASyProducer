@@ -1,0 +1,5 @@
+project BooleanDefault {
+    
+    Boolean A = false;
+    
+}

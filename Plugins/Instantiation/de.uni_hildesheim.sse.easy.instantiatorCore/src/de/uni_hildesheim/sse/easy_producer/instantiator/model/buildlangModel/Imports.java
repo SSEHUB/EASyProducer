@@ -8,9 +8,11 @@ import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
 /**
  * Stores the model imports and VTL requirements for a Script.
  * 
+ * @param <M> the actual model type
  * @author Holger Eichelberger
  */
-public class Imports extends de.uni_hildesheim.sse.easy_producer.instantiator.model.common.Imports<Script> {
+public class Imports <M extends Script> 
+    extends de.uni_hildesheim.sse.easy_producer.instantiator.model.common.Imports<M> {
 
     private List<ModelImport<Template>> vtlRestrictions;
 
@@ -20,7 +22,7 @@ public class Imports extends de.uni_hildesheim.sse.easy_producer.instantiator.mo
      * @param imports the actual imports
      * @param vtlRestrictions the VTL restrictions (may be <b>null</b>)
      */
-    public Imports(List<ModelImport<Script>> imports, List<ModelImport<Template>> vtlRestrictions) {
+    public Imports(List<ModelImport<M>> imports, List<ModelImport<Template>> vtlRestrictions) {
         super(imports);
     }
     
@@ -30,7 +32,7 @@ public class Imports extends de.uni_hildesheim.sse.easy_producer.instantiator.mo
      * @param imports the actual imports
      * @param vtlRestrictions the VTL restrictions (may be <b>null</b>)
      */
-    public Imports(de.uni_hildesheim.sse.easy_producer.instantiator.model.common.Imports<Script> imports, 
+    public Imports(de.uni_hildesheim.sse.easy_producer.instantiator.model.common.Imports<M> imports, 
         List<ModelImport<Template>> vtlRestrictions) {
         super(imports);
         this.vtlRestrictions = vtlRestrictions;

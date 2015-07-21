@@ -15,29 +15,34 @@ import java.util.List;
 public abstract class AbstractArrayWrapper<T> extends AbstractCollectionWrapper<T> implements Collection<T> {
 
     private T[] array;
-    private TypeDescriptor<? extends IVilType>[] params;
+    private TypeDescriptor<?>[] params;
+    private TypeDescriptor<?> type;
 
     /**
      * Creates a new array collection wrapper.
      * 
      * @param array the wrapped array
+     * @param set does this type  represent a set or a sequence
      * @param registry the type registry to use for the conversion of <code>param</code>
      * @param param the type parameter characterizing <T>
      */
-    public AbstractArrayWrapper(T[] array, TypeRegistry registry, Class<? extends IVilType> param) {
+    public AbstractArrayWrapper(T[] array, TypeRegistry registry, boolean set, Class<?> param) {
         this.array = array;
         this.params = registry.convert(param);
+        this.type = constructType(this.params, set);
     }
     
     /**
      * Creates a new array collection wrapper.
      * 
      * @param array the wrapped array
+     * @param set does this type represent a set or a sequence
      * @param params the type parameter characterizing <T>
      */
-    public AbstractArrayWrapper(T[] array, TypeDescriptor<? extends IVilType>... params) {
+    public AbstractArrayWrapper(T[] array, boolean set, TypeDescriptor<?>... params) {
         this.array = array;
         this.params = params;
+        this.type = constructType(this.params, set);
     }
     
     /**
@@ -50,11 +55,11 @@ public abstract class AbstractArrayWrapper<T> extends AbstractCollectionWrapper<
     }
     
     /**
-     * Returns the params for further use.
+     * Returns the generic parameter for further use.
      * 
-     * @return the params
+     * @return the generic parameter
      */
-    protected TypeDescriptor<? extends IVilType>[] getParams() {
+    protected TypeDescriptor<?>[] getGenericParameter() {
         return params;
     }
     
@@ -86,15 +91,6 @@ public abstract class AbstractArrayWrapper<T> extends AbstractCollectionWrapper<
         return result;
     }
     
-    /**
-     * Returns the parameter for further use.
-     * 
-     * @return the parameter
-     */
-    protected TypeDescriptor<? extends IVilType>[] getParameter() {
-        return params;
-    }
-    
     @Override
     public Iterator<T> iterator() {
         return new Iterator<T>() {
@@ -124,16 +120,21 @@ public abstract class AbstractArrayWrapper<T> extends AbstractCollectionWrapper<
     }
 
     @Override
-    public int getDimensionCount() {
+    public int getGenericParameterCount() {
         return null == params ? 0 : params.length;
     }
 
     @Override
-    public TypeDescriptor<? extends IVilType> getDimensionType(int index) {
+    public TypeDescriptor<?> getGenericParameterType(int index) {
         if (null == params) {
             throw new IndexOutOfBoundsException();
         }
         return params[index];
+    }
+    
+    @Override
+    public TypeDescriptor<?> getType() {
+        return type;
     }
     
     @Override
@@ -163,7 +164,7 @@ public abstract class AbstractArrayWrapper<T> extends AbstractCollectionWrapper<
     /**
      * Decreases the capacity.
      * 
-     * @param decrement the decrement for decreasing the capactiy
+     * @param decrement the decrement for decreasing the capacity
      */
     protected void decreaseCapacity(int decrement) {
         if (decrement > 0 && array.length - decrement >= 0) {
@@ -178,12 +179,83 @@ public abstract class AbstractArrayWrapper<T> extends AbstractCollectionWrapper<
 
     @Override
     public boolean equals(Object object) {
-        return array.equals(object);
+        return null == array ? object == null : array.equals(object);
     }
     
     @Override
     public int hashCode() {
-        return array.hashCode();
+        return null == array ? super.hashCode() : array.hashCode();
+    }
+
+    /**
+     * Turns the array into a list for mapping to external Java types.
+     * 
+     * @return the list
+     */
+    @Invisible
+    public java.util.List<T> toMappedList() {
+        java.util.List<T> result;
+        if (null != array) {
+            result = new ArrayList<T>(array.length);
+            for (int i = 0; i < array.length; i++) {
+                result.add(array[i]);
+            }
+        } else {
+            result = null;
+        }
+        return result;
+    }
+
+    /**
+     * Turns the array into a set for mapping to external Java types.
+     * 
+     * @return the list
+     */
+    @Invisible
+    public java.util.Set<T> toMappedSet() {
+        java.util.Set<T> result;
+        if (null != array) {
+            result = new HashSet<T>(array.length);
+            for (int i = 0; i < array.length; i++) {
+                result.add(array[i]);
+            }
+        } else {
+            result = null;
+        }
+        return result;
+    }
+    
+    /**
+     * Removes the first occurrence of the given element from this sequence.
+     * 
+     * @param element the element to be removed
+     * @return <code>true</code> of the element was removed, <code>false</code> else
+     */
+    public boolean remove(T element) {
+        int shift = 0;
+        if (null != element) {
+            T[] array = getArray();
+            for (int t = 0; t < array.length; t++) {
+                boolean found = false;
+                if (0 == shift) {
+                    if (null == element) {
+                        found = array[t] == null;
+                    } else if (element.equals(array[t])) {
+                        found = true;
+                    }
+                    if (found) {
+                        shift++;
+                    }
+                }
+                if (shift > 0 && t - shift > 0) {
+                    array[t - shift] = array[t];
+                }
+            }
+            if (shift > 0) {
+                decreaseCapacity(1);
+            }
+        }
+        return shift > 0;
     }
 
 }

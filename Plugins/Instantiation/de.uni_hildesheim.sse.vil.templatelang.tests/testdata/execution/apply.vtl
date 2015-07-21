@@ -1,0 +1,21 @@
+template apply(Configuration config, FileArtifact target) {
+
+    callOf(Integer) f = func;
+
+    def func(Integer i) {
+        '$i'
+    }
+
+    def loop(sequenceOf(Integer) seq, callOf(Integer) d) {
+        for (Integer i : seq) {
+            d(i);
+            f(i);
+        }
+    }
+
+    def main(Configuration config, FileArtifact target) {
+        sequenceOf(Integer) seq = {1, 2, 3, 4, 5, 6};
+        loop(seq, func);
+    }
+
+}

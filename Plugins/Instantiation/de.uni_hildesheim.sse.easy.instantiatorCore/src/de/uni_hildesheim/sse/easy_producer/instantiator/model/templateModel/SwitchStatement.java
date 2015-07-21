@@ -2,10 +2,8 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel;
 
 import java.util.List;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 
@@ -80,9 +78,9 @@ public class SwitchStatement implements ITemplateElement {
          * Infers the type of this alternative based on its value.
          * 
          * @return the type of the alternative
-         * @throws ExpressionException in case that type resolution fails
+         * @throws VilException in case that type resolution fails
          */
-        public TypeDescriptor<? extends IVilType> inferType() throws ExpressionException {
+        public TypeDescriptor<?> inferType() throws VilException {
             return value.inferType();
         }
 
@@ -94,10 +92,10 @@ public class SwitchStatement implements ITemplateElement {
      * @param switchExpression the switch expression
      * @param implicitVar the implicit variable representing the actual value of the switch expression
      * @param alternatives the alternatives in the switch including an optional default alternative
-     * @throws VilLanguageException in case of semantic problems while creating this instance
+     * @throws VilException in case of semantic problems while creating this instance
      */
     public SwitchStatement(Expression switchExpression, VariableDeclaration implicitVar, 
-        List<Alternative> alternatives) throws VilLanguageException {
+        List<Alternative> alternatives) throws VilException {
         this(switchExpression, implicitVar, toArray(alternatives));
     }
     
@@ -107,20 +105,16 @@ public class SwitchStatement implements ITemplateElement {
      * @param switchExpression the switch expression
      * @param implicitVar the implicit variable representing the actual value of the switch expression
      * @param alternatives the alternatives in the switch including an optional default alternative
-     * @throws VilLanguageException in case of semantic problems while creating this instance
+     * @throws VilException in case of semantic problems while creating this instance
      */
     public SwitchStatement(Expression switchExpression, VariableDeclaration implicitVar, Alternative[] alternatives) 
-        throws VilLanguageException {
+        throws VilException {
         this.switchExpression = switchExpression;
         this.implicitVar = implicitVar;
-        try {
-            this.switchExpression.inferType();
-        } catch (ExpressionException e) {
-            throw new VilLanguageException(e);
-        }
+        this.switchExpression.inferType();
         if (null == alternatives || 0 == alternatives.length) {
-            throw new VilLanguageException("switch must contain at least on alternative", 
-                VilLanguageException.ID_SEMANTIC);
+            throw new VilException("switch must contain at least on alternative", 
+                VilException.ID_SEMANTIC);
         }
         int dfltCount = 0;
         for (int a = 0; a < alternatives.length; a++) {
@@ -129,8 +123,8 @@ public class SwitchStatement implements ITemplateElement {
             }
         }
         if (dfltCount > 1) {
-            throw new VilLanguageException("switch must not contain several defaults", 
-                VilLanguageException.ID_SEMANTIC);
+            throw new VilException("switch must not contain several defaults", 
+                VilException.ID_SEMANTIC);
         }
         this.alternatives = alternatives;
     }
@@ -194,7 +188,7 @@ public class SwitchStatement implements ITemplateElement {
     }
 
     @Override
-    public Object accept(IVisitor visitor) throws VilLanguageException {
+    public Object accept(IVisitor visitor) throws VilException {
         return visitor.visitSwitch(this);
     }
     
@@ -204,22 +198,18 @@ public class SwitchStatement implements ITemplateElement {
     }
 
     @Override
-    public TypeDescriptor<? extends IVilType> inferType() throws VilLanguageException {
-        try {
-            TypeDescriptor<? extends IVilType> result = null;
-            for (int a = 0; TypeRegistry.anyType() != result && a < alternatives.length; a++) {
-                Alternative alt = alternatives[a];
-                TypeDescriptor<? extends IVilType> tmp = alt.inferType();
-                if (null == result) {
-                    result = tmp;
-                } else if (!tmp.equals(result)) {
-                    result = TypeRegistry.anyType();
-                }
+    public TypeDescriptor<?> inferType() throws VilException {
+        TypeDescriptor<?> result = null;
+        for (int a = 0; TypeRegistry.anyType() != result && a < alternatives.length; a++) {
+            Alternative alt = alternatives[a];
+            TypeDescriptor<?> tmp = alt.inferType();
+            if (null == result) {
+                result = tmp;
+            } else if (!tmp.equals(result)) {
+                result = TypeRegistry.anyType();
             }
-            return result;
-        } catch (ExpressionException e) {
-            throw new VilLanguageException(e);
         }
+        return result;
     }
 
 }

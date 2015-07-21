@@ -472,11 +472,10 @@ public class Operation {
     }
 
     /**
-     * Marks this operation by a formatting hint. Introduced as constructors grew to
-     * more than 5 parameter.
+     * Marks this operation by a formatting hint.
      *  
      * @param formattingHint the formatting hint
-     * @return <b>this</b>
+     * @return <b>this</b> (builder pattern)
      */
     Operation markByFormattingHint(FormattingHint formattingHint) {
         if (null != formattingHint) {

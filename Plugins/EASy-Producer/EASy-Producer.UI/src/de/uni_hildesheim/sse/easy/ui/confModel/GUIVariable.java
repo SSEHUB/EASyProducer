@@ -3,6 +3,7 @@ package de.uni_hildesheim.sse.easy.ui.confModel;
 import org.eclipse.jface.viewers.CellEditor;
 
 import de.uni_hildesheim.sse.easy.ui.productline_editor.EasyProducerDialog;
+import de.uni_hildesheim.sse.model.confModel.AllFreezeSelector;
 import de.uni_hildesheim.sse.model.confModel.AssignmentState;
 import de.uni_hildesheim.sse.model.confModel.ConfigurationException;
 import de.uni_hildesheim.sse.model.confModel.DisplayNameProvider;
@@ -87,7 +88,7 @@ public abstract class GUIVariable implements IGUIConfigurableElement, Comparable
      * Setter for the wrapped {@link IDecisionVariable}.
      * @param variable The new {@link IDecisionVariable}
      */
-    protected void setVariable(IDecisionVariable variable) {
+    public void setVariable(IDecisionVariable variable) {
         this.variable = variable;
     }
     
@@ -270,7 +271,7 @@ public abstract class GUIVariable implements IGUIConfigurableElement, Comparable
      * @return <tt>true</tt> if the variable is frozen, otherwise <tt>false</tt>.
      */
     public boolean isFrozen() {
-        return getVariable().getState() == AssignmentState.FROZEN;
+        return null != getVariable() && getVariable().getState() == AssignmentState.FROZEN;
     }
     
     /**
@@ -293,7 +294,7 @@ public abstract class GUIVariable implements IGUIConfigurableElement, Comparable
         if (!isFrozen()) {
             // Add value to history if variable is toplevel
             getTopLevelParent().history.assignValue(getTopLevelParent().getVariable());
-            getVariable().freeze();
+            getVariable().freeze(AllFreezeSelector.INSTANCE);
             // Inform listeners only if state has been changed.
             if (isFrozen()) {
                 getConfiguration().changed(this);
@@ -355,15 +356,19 @@ public abstract class GUIVariable implements IGUIConfigurableElement, Comparable
      * Adds a new error message to this {@link GUIVariable}.
      * @param conflictingElement A {@link ContainableModelElement} which lead to the conflict and where 
      * {@link #getVariable()} is included.
+     * @param userMessage Optional: A error message which can be ready by a normal user. If <tt>null</tt>,
+     * the constraint will be used for displaying an error message.
      */
-    final void addErrorMessage(ContainableModelElement conflictingElement) {
+    final void addErrorMessage(ContainableModelElement conflictingElement, String userMessage) {
         StringBuffer errorMsg = new StringBuffer();
         if (this.errorMsg != null) {
             errorMsg.append(this.errorMsg);
             errorMsg.append(", ");
         }
         
-        if (conflictingElement instanceof Constraint) {
+        if (null != userMessage && !userMessage.isEmpty()) {
+            errorMsg.append(userMessage);
+        } else if (conflictingElement instanceof Constraint) {
             Constraint constraint = (Constraint) conflictingElement;
             errorMsg.append(StringProvider.toIvmlString(constraint.getConsSyntax()));
         }

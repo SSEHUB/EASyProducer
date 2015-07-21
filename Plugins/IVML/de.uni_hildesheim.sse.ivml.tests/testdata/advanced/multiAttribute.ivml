@@ -1,7 +1,7 @@
 project multiAttribute {
 
     version v0;
-    attribute bindingTimes binding to i, b;
+    annotate bindingTimes binding to i, b;
     enum bindingTimes {compile, startup, runtime};
     Integer i;
     Boolean b;

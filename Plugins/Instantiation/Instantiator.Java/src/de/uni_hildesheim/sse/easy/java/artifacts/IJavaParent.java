@@ -1,7 +1,7 @@
 package de.uni_hildesheim.sse.easy.java.artifacts;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FragmentArtifact;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 
 /**
  * The interface of an artifact / fragment which may act as the parent of a Java element.
@@ -23,15 +23,15 @@ interface IJavaParent {
      * is not needed
      * 
      * @param child the child to be deleted
-     * @throws ArtifactException in case that deletion fails
+     * @throws VilException in case that deletion fails
      */
-    public void deleteChild(FragmentArtifact child) throws ArtifactException;
+    public void deleteChild(FragmentArtifact child) throws VilException;
     
     /**
      * Stores the artifact / fragment.
      * 
-     * @throws ArtifactException in case that storing fails
+     * @throws VilException in case that storing fails
      */
-    public void store() throws ArtifactException;
+    public void store() throws VilException;
     
 }

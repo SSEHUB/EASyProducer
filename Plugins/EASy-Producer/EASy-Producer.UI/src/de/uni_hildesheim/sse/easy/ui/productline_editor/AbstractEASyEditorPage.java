@@ -192,4 +192,14 @@ public abstract class AbstractEASyEditorPage extends Composite implements IPageC
 
         return client;
     }
+
+    /**
+     * Is called by the parent to perform save operations if needed.
+     * 
+     * @return <code>true</code> if save was needed and performed, <code>false</code> else
+     */
+    protected boolean doSave() {
+        return false;
+    }
+    
 }

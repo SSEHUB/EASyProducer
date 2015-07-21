@@ -1,3 +1,18 @@
+/*
+ * Copyright 2009-2015 University of Hildesheim, Software Systems Engineering
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.uni_hildesheim.sse.easy_producer.instantiator.velocity;
 
 import java.util.ArrayList;
@@ -31,12 +46,23 @@ import de.uni_hildesheim.sse.model.varModel.values.Value;
 import de.uni_hildesheim.sse.model.varModel.values.VersionValue;
 import de.uni_hildesheim.sse.utils.modelManagement.Version;
 
+/**
+ * Converts an {@link IDecisionVariable} into flat {@link VelocityContextItem}, because Velocity needs a
+ * simple (name, value) tuple for instantiation.
+ * @author Sascha El-Sharkawy
+ *
+ */
 class VelocityContextInitializer implements IDatatypeVisitor {
-    private static final char SLOT_ACCESS = '-';
+    public static final char SLOT_ACCESS = '-';
     private List<VelocityContextItem> values;
     private StringBuffer variableName;
     private IDecisionVariable variable;
     
+    /**
+     * Sole constructor, will immediately start the conversation.
+     * @param variable A frozen {@link IDecisionVariable} of the configuration which shall be
+     * used inside the instantiation process.
+     */
     VelocityContextInitializer(IDecisionVariable variable) {
         values = new ArrayList<VelocityContextItem>();
         variableName = new StringBuffer();
@@ -44,6 +70,12 @@ class VelocityContextInitializer implements IDatatypeVisitor {
         variable.getDeclaration().getType().accept(this);
     }
     
+    /**
+     * The converted {@link VelocityContextItem}s.
+     * Structured variables like compounds oder container will be converted into multiple items, one item
+     * for each nested element.
+     * @return The converted items of the {@link IDecisionVariable} passed to the constructor.
+     */
     List<VelocityContextItem> getItems() {
         return values;
     }
@@ -73,6 +105,10 @@ class VelocityContextInitializer implements IDatatypeVisitor {
         datatype.getBasisType().accept(this);    
     }
 
+    /**
+     * Shall convert {@link de.uni_hildesheim.sse.model.confModel.ContainerVariable}
+     * into {@link VelocityContextItem}s, but not implemented yet.
+     */
     private void handleContainer() {
 //        variableName.append(variable.getDeclaration().getName());
 //        ContainerValue containerValue = (ContainerValue) variable.getValue();

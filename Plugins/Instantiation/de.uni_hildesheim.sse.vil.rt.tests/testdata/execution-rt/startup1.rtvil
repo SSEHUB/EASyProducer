@@ -1,0 +1,26 @@
+rtVilScript startup (Project source, Configuration config, Project target, IAdaptationEvent event) {
+
+    strategy main(Project source, Configuration config, Project target, IAdaptationEvent event) = {
+        objective true;
+        breakdown {
+            tactic t();
+        }
+    }
+
+    strategy main(Project source, Configuration config, Project target, LifecycleEvent event) = {
+        objective true;
+        breakdown {
+            tactic t1();
+        }
+    }
+
+    tactic t() = {
+    }
+
+    tactic t1() = {
+    }
+
+    enact(Project source, Configuration config, Project target) = : {
+    }
+
+}

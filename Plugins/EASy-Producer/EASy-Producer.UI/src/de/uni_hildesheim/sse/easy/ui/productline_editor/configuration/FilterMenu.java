@@ -27,10 +27,12 @@ import org.eclipse.swt.widgets.Text;
 
 import de.uni_hildesheim.sse.easy.ui.productline_editor.EasyProducerDialog;
 import de.uni_hildesheim.sse.easy.ui.productline_editor.IOButton;
+import de.uni_hildesheim.sse.easy.ui.productline_editor.components.AbstractComboBox.ComboBoxListener;
 import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
 import de.uni_hildesheim.sse.model.confModel.AssignmentState;
 import de.uni_hildesheim.sse.model.varModel.Attribute;
 import de.uni_hildesheim.sse.model.varModel.Project;
+import de.uni_hildesheim.sse.model.varModel.ProjectInterface;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Enum;
 import de.uni_hildesheim.sse.model.varModel.datatypes.EnumLiteral;
 import de.uni_hildesheim.sse.model.varModel.filter.NamespaceFinder;
@@ -45,6 +47,7 @@ import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
  * <li>{@link ConfigNameFilter}</li>
  * <li>{@link NamespaceFilter}</li>
  * <li>{@link AttributeFilter}</li>
+ * <li>{@link InterfaceFilter}</li>
  * </ul>
  * @author El-Sharkawy
  *
@@ -56,11 +59,13 @@ public class FilterMenu extends AbstractConfigMenu {
     private ComboViewer attributeValueCombo;
     private Combo comboProjectSelection;
     private Combo comboAssignmentSelection;
+    private InterfaceDropDown comboInterfaceSelection;
     private IAttributeSelectionChangedListener attributeChangedListener;
     private IOButton chkNameFilterActive;
     private IOButton chkNamespaceFilterActive;
     private IOButton chkAttributeFilterActive;
     private IOButton chkAssignmentFilterActive;
+    private IOButton chkInterfaceActive;
     private Button btnAddFilter;
     
     /**
@@ -94,7 +99,8 @@ public class FilterMenu extends AbstractConfigMenu {
         createNameFilter();
         createNamespaceFilter();
         createAttributeFilter();
-        createAssignmentStateFilter();     
+        createAssignmentStateFilter();
+        createInterfaceFilter();
     }
 
     /**
@@ -320,6 +326,40 @@ public class FilterMenu extends AbstractConfigMenu {
     }
     
     /**
+     * Created GUI elements for filtering the configuration for variables exported by a project defined interface.
+     */
+    private void createInterfaceFilter() {
+        Composite pnlAssignmentFilter = new Composite(this, SWT.NONE);
+        GridLayout layout = new GridLayout();
+        layout.numColumns = 2;
+        pnlAssignmentFilter.setLayout(layout);
+        chkInterfaceActive = new IOButton(pnlAssignmentFilter, "Show variables exported by interface:");
+        comboInterfaceSelection = new InterfaceDropDown(getProductLineProject(), pnlAssignmentFilter,
+            new ComboBoxListener<ProjectInterface>() {
+
+                @Override
+                public void valueSelected(ProjectInterface selectedValue) {
+                    selectInterfaceFilter(selectedValue);
+                }
+            });
+        
+        //comboInterfaceSelection.select(1);
+    }
+    
+    /**
+     * Part of the {@link SelectionListener} of the interface selection combo box.
+     * Reads the current selection of the combo box. If <tt>[all]</tt> was selected (index = 0),
+     * no filter is set, otherwise the selected interface is used to filter the configuration.
+     * @param iface The selected propject interface or <tt>null</tt> if no interface was selected.
+     */
+    private void selectInterfaceFilter(final ProjectInterface iface) {
+        InterfaceFilter interfacefilter = (null != iface) ? new InterfaceFilter(iface) : null;
+        chkInterfaceActive.setActivated(null != interfacefilter);
+        filters.setInterfaceFilter(interfacefilter);
+        setFilter(filters);
+    }
+    
+    /**
      * Created GUI elements for filtering the configuration for variables created in a specific project.
      */
     private void createNamespaceFilter() {
@@ -366,6 +406,10 @@ public class FilterMenu extends AbstractConfigMenu {
                 if (null != attributesCombo) {
                     Project project = getProductLineProject().getProject();
                     attributesCombo.populate(project);
+                }
+                
+                if (null != comboInterfaceSelection) {
+                    comboInterfaceSelection.update();
                 }
             }
         });

@@ -10,6 +10,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.Fold
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IFileSystemArtifact;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.Path;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IProjectDescriptor.ModelKind;
 import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
 
@@ -25,12 +26,15 @@ public class Project implements IVilType, IStringValueProvider {
     private ArtifactModel artifactModel;
     private File base;
     private IProjectDescriptor descriptor;
+    private boolean empty;
+    private String name;
 
     /**
      * Creates an empty project without scanning. Just for testing.
      */
     public Project() {
         this.base = new File(".");
+        this.empty = true;
         artifactModel = ArtifactFactory.createArtifactModel(base);
     }
     
@@ -39,12 +43,35 @@ public class Project implements IVilType, IStringValueProvider {
      * 
      * @param base the base directory (shall be an absolute path)
      * @param observer to notify the caller in case of long-running scans
-     * @throws ArtifactException in case that the creation of artifacts fails
+     * @throws VilException in case that the creation of artifacts fails
      */
-    public Project(File base, ProgressObserver observer) throws ArtifactException {
+    public Project(File base, ProgressObserver observer) throws VilException {
         this.base = base.getAbsoluteFile();
+        name = base.getName();
+        this.empty = false;
         artifactModel = ArtifactFactory.createArtifactModel(base);
         artifactModel.scanAll(observer);
+    }
+    
+    /**
+     * Creates a new project by for the base directory given in <code>project</code>. Please note that this
+     * constructor is intended to be called to re-instantiate <code>project</code> after {@link #release()} has been 
+     * called on <code>project</code>. Thereby, the instance created by this constructor is fully initialized with a 
+     * artifact model and, dependent on <code>project</code>, also an artifact scan is executed. This constructor is
+     * mainly intended to allow testing based on the VIL execution visitor and the VIL executor afterwards in sequence.
+     * 
+     * @param project the project the data shall be taken from
+     * @param observer to notify the caller in case of long-running scans
+     * @throws VilException in case that the creation of artifacts fails
+     */
+    public Project(Project project, ProgressObserver observer) throws VilException {
+        this.base = project.base;
+        this.empty = project.empty;
+        this.name = project.name;
+        this.artifactModel = ArtifactFactory.createArtifactModel(this.base);
+        if (!this.empty) {
+            artifactModel.scanAll(observer);    
+        }
     }
     
     /**
@@ -52,12 +79,15 @@ public class Project implements IVilType, IStringValueProvider {
      * 
      * @param descriptor the descriptor to create the project for
      * @param observer to notify the caller in case of long-running scans
-     * @throws ArtifactException in case that the creation of artifacts fails
+     * @throws VilException in case that the creation of artifacts fails
      */
     private Project(IProjectDescriptor descriptor, ProgressObserver observer) 
-        throws ArtifactException {
+        throws VilException {
         this(descriptor.getBase().getAbsoluteFile(), observer);
         this.descriptor = descriptor;
+        if (null != descriptor.getMainVilScript()) {
+            this.name = descriptor.getMainVilScript().getName();
+        }
     }
     
     /**
@@ -66,7 +96,7 @@ public class Project implements IVilType, IStringValueProvider {
      * @return the name of the project
      */
     public String getName() {
-        return base.getName();
+        return name;
     }
     
     /**
@@ -115,9 +145,9 @@ public class Project implements IVilType, IStringValueProvider {
      * @param source the source project
      * @param artifact the target artifact
      * @return the localized path
-     * @throws ArtifactException in case that localization is not possible due to <code>artifact</code>
+     * @throws VilException in case that localization is not possible due to <code>artifact</code>
      */
-    public Path localize(Project source, IFileSystemArtifact artifact) throws ArtifactException {
+    public Path localize(Project source, IFileSystemArtifact artifact) throws VilException {
         return new Path(artifact.getPath(), artifactModel);
     }
 
@@ -139,7 +169,7 @@ public class Project implements IVilType, IStringValueProvider {
      *   type of <code>type</code>)
      */
     @OperationMeta(returnGenerics = FileArtifact.class)
-    public Set<FileArtifact> selectByType(Class<? extends IVilType> type) {
+    public Set<FileArtifact> selectByType(Class<?> type) {
         return artifactModel.selectByType(type);
     }
 
@@ -160,9 +190,9 @@ public class Project implements IVilType, IStringValueProvider {
      * 
      * @param descriptor the descriptor to return the project for
      * @return the related project
-     * @throws ArtifactException in case that creating / scanning the project base fails
+     * @throws VilException in case that creating / scanning the project base fails
      */
-    public static Project getProjectFor(IProjectDescriptor descriptor) throws ArtifactException {
+    public static Project getProjectFor(IProjectDescriptor descriptor) throws VilException {
         String key = descriptor.getBase().getAbsoluteFile().toString();
         Project result = CACHE.get(key);
         if (null == result) {
@@ -171,15 +201,22 @@ public class Project implements IVilType, IStringValueProvider {
         }
         return result;
     }
+    
+    /**
+     * Clears the project descriptor cache. Handle with care and do not call this during a VIL execution!
+     */
+    public static void clearProjectDescriptorCache() {
+        CACHE.clear();
+    }
 
     /**
      * Returns the predecessors of this project.
      * 
      * @return the predecessors
-     * @throws ArtifactException in case that creating / scanning the project base fails
+     * @throws VilException in case that creating / scanning the project base fails
      */
     @OperationMeta(returnGenerics = Project.class)
-    public Set<Project> predecessors() throws ArtifactException {
+    public Set<Project> predecessors() throws VilException {
         Project[] tmp;
         if (null != descriptor) {
             int count = descriptor.getPredecessorCount();

@@ -16,7 +16,7 @@ public class UnmodifiableMap<K, V> extends Map<K, V> {
      * @param map the map to be wrapped
      * @param types the types in <code>map</code>
      */
-    public UnmodifiableMap(java.util.Map<Object, Object> map, TypeDescriptor<? extends IVilType>[] types) {
+    public UnmodifiableMap(java.util.Map<Object, Object> map, TypeDescriptor<?>[] types) {
         super(map, types);
     }
     

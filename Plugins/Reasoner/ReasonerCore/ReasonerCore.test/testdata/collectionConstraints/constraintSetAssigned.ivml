@@ -1,0 +1,9 @@
+project constraintSetAssigned {
+
+    version v0;
+    
+    Integer i = 1;
+    setOf(Constraint) constraints;
+
+    constraints = {i > 0, i < 1};
+}

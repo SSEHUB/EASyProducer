@@ -1,0 +1,176 @@
+project FamiliesCfg {
+ 
+    import ReconfigurableHardware;
+	import Families;
+	import AlgorithmsCfg;	
+	
+	//priority pipeline TSI
+	Family fPreprocessor;
+	fPreprocessor = {
+		name = "fPreprocessor",
+		members = {refBy(swPreprocessor)},
+    	input = {    		
+    		{
+    			name = "springStream",
+    			fields={Field{name="symbolTuple", type=FieldType.STRING}}
+    		}
+    	},
+    	output = {
+    		{
+    			name = "preprocessedStream",
+    			fields={
+    			Field{name="symbolId", type=FieldType.STRING},
+    			Field{name="timestamp", type=FieldType.LONG},
+    			Field{name="value", type=FieldType.REAL},
+    			Field{name="volume", type=FieldType.INTEGER}
+    		}}
+    	}		
+	};
+	
+    Family fCorrelationFinancial;
+    fCorrelationFinancial = {
+    	name = "fCorrelationFinancial",
+    	members = {refBy(SWTopoCorrelationFinancial), refBy(HWTopoCorrelationFinancial)},
+    	input = {
+    		{
+    			name = "preprocessedStream",
+    			fields={
+    			Field{name="symbolId", type=FieldType.STRING},
+    			Field{name="timestamp", type=FieldType.LONG},
+    			Field{name="value", type=FieldType.REAL},
+    			Field{name="volume", type=FieldType.INTEGER}
+    		}},
+    		{
+    			name = "symbolList",
+    			fields={Field{name="allSymbols", type=FieldType.STRINGLIST}}
+    		}
+
+    	},
+    	output = {
+    		{
+    			name = "pairwiseFinancial",
+    			fields={Field{name="pairwiseCorrelationFinancial", type=FieldType.STRING}}
+    		}
+    	},
+		parameters={
+			IntegerParameter{name="windowSize"}
+		}    	    	
+    };	
+	
+	//priority pipeline L3S
+	Family fSentimentAnalysis;
+	fSentimentAnalysis = {
+		name = "fSentimentAnalysis",
+		members = {refBy(topoSentiWord), refBy(topoSVM)},
+		input = {
+			{
+				name = "twitterStream",
+				fields={Field{name="status", type=FieldType.OBJECT}}
+			}
+		},
+		output = {
+    		{
+    			name = "analyzedStream",
+    			fields={
+    			Field{name="symbolId", type=FieldType.STRING},
+    			Field{name="timestamp", type=FieldType.LONG},
+    			Field{name="value", type=FieldType.REAL},
+    			Field{name="volume", type=FieldType.INTEGER}
+    		}}
+		},
+		parameters={
+			IntegerParameter{name="timeSeriesGranularity"},
+			IntegerParameter{name="sentimentClass"},
+			RealParameter{name="classificationThreshold"}
+		}
+	};
+
+    Family fCorrelationTwitter;
+    fCorrelationTwitter = {
+    	name = "fCorrelationTwitter",
+    	members = {refBy(SWTopoCorrelationTwitter), refBy(HWTopoCorrelationTwitter)},
+    	input = {
+    		{
+    			name = "analyzedStream",
+    			fields={
+    				Field{name="symbolId", type=FieldType.STRING},
+    				Field{name="timestamp", type=FieldType.LONG},
+    				Field{name="value", type=FieldType.REAL},
+    				Field{name="volume", type=FieldType.INTEGER}
+    		}},
+    		{
+    			name = "symbolList",
+    			fields={Field{name="allSymbols", type=FieldType.STRINGLIST}}
+    		}
+
+    	},
+    	output = {
+    		{
+    			name = "pairwiseTwitter",
+    			fields={Field{name="pairwiseCorrelationTwitter", type=FieldType.STRING}}
+    		}
+    	},
+		parameters={
+			IntegerParameter{name="windowSize"}
+		}    	    	
+    };	
+	// For example pipeline
+	/* 	
+	Family fNormalize;
+    fNormalize = {  
+		name = "fNormalize",
+		members = {refBy(aNormalize)},
+		actual = refBy(aNormalize),
+		output={
+			{
+			    fields={
+			      Field{name="streamID", type=FieldType.STRING},
+			      Field{name="timestamp", type=FieldType.STRING},
+			      Field{name="quote", type=FieldType.REAL},
+			      Field{name="volume", type=FieldType.INTEGER}
+		        }
+		    }
+		}, 
+		input={
+			{
+				fields={Field{name="symbolTuple", type=FieldType.STRING}}
+			}
+		}
+	}; 	  
+     */
+    Family fMismatchedFamily;
+    fMismatchedFamily = {
+    	name = "fMismatchedFamily",
+    	members = {refBy(mismatchedAlg)},
+		output={
+			{
+				name = "misString",
+			    fields={
+			      Field{name="streamID1", type=FieldType.STRING},
+			      Field{name="timestamp", type=FieldType.INTEGER},
+			      Field{name="quote", type=FieldType.REAL}
+		        }
+		    }
+		}, 
+		input={
+			{
+				name = "misString",
+				fields={
+					Field{name="symbolTuple1", type=FieldType.STRING},
+					Field{name="volume", type=FieldType.INTEGER}
+				}
+			}
+		}    	
+    };
+
+	families = {refBy(fPreprocessor), refBy(fCorrelationFinancial), refBy(fSentimentAnalysis), refBy(fCorrelationTwitter), refBy(fMismatchedFamily)};
+	freeze {
+		fPreprocessor;
+		fCorrelationFinancial;
+		fCorrelationTwitter;
+		fSentimentAnalysis;
+		fMismatchedFamily;
+		families;
+    }
+     
+} 

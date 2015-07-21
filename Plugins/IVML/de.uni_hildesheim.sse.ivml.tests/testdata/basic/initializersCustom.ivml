@@ -19,7 +19,7 @@ project testInitializersCustom {
 
     sequenceOf(cTest) seq;
     setOf(AbstractComponent) components = {};
-    attribute Integer a = 0 to components;
+    annotate Integer a = 0 to components;
     seq = {{i = 10, j = 20}, {i = 11, j = 21}};
 //    seq = {{i = 10, j = 20}, {i = 11, j = 21}};
 //    components = {DdsComponent {specialDocks = false, specialDocks.a = 1}, JockeyComponent {reassignments = false}};

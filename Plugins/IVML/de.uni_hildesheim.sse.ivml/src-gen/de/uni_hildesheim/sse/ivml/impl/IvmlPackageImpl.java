@@ -6,11 +6,11 @@ import de.uni_hildesheim.sse.ivml.AccessName;
 import de.uni_hildesheim.sse.ivml.ActualParameterList;
 import de.uni_hildesheim.sse.ivml.AdditiveExpression;
 import de.uni_hildesheim.sse.ivml.AdditiveExpressionPart;
+import de.uni_hildesheim.sse.ivml.AnnotateTo;
 import de.uni_hildesheim.sse.ivml.AssignmentExpression;
 import de.uni_hildesheim.sse.ivml.AssignmentExpressionPart;
 import de.uni_hildesheim.sse.ivml.AttrAssignment;
 import de.uni_hildesheim.sse.ivml.AttrAssignmentPart;
-import de.uni_hildesheim.sse.ivml.AttributeTo;
 import de.uni_hildesheim.sse.ivml.BasicType;
 import de.uni_hildesheim.sse.ivml.Call;
 import de.uni_hildesheim.sse.ivml.CollectionInitializer;
@@ -29,8 +29,6 @@ import de.uni_hildesheim.sse.ivml.ExpressionListOrRange;
 import de.uni_hildesheim.sse.ivml.ExpressionStatement;
 import de.uni_hildesheim.sse.ivml.FeatureCall;
 import de.uni_hildesheim.sse.ivml.Freeze;
-import de.uni_hildesheim.sse.ivml.FreezeButExpression;
-import de.uni_hildesheim.sse.ivml.FreezeButList;
 import de.uni_hildesheim.sse.ivml.FreezeStatement;
 import de.uni_hildesheim.sse.ivml.IfExpression;
 import de.uni_hildesheim.sse.ivml.ImplicationExpression;
@@ -231,7 +229,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass attributeToEClass = null;
+  private EClass annotateToEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -246,20 +244,6 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * @generated
    */
   private EClass freezeStatementEClass = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private EClass freezeButListEClass = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private EClass freezeButExpressionEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -1296,9 +1280,9 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getAttributeTo()
+  public EClass getAnnotateTo()
   {
-    return attributeToEClass;
+    return annotateToEClass;
   }
 
   /**
@@ -1306,9 +1290,9 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getAttributeTo_AttributeType()
+  public EAttribute getAnnotateTo_Sname()
   {
-    return (EReference)attributeToEClass.getEStructuralFeatures().get(0);
+    return (EAttribute)annotateToEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1316,9 +1300,9 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getAttributeTo_AttributeDecl()
+  public EReference getAnnotateTo_AnnotationType()
   {
-    return (EReference)attributeToEClass.getEStructuralFeatures().get(1);
+    return (EReference)annotateToEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1326,9 +1310,19 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getAttributeTo_Names()
+  public EReference getAnnotateTo_AnnotationDecl()
   {
-    return (EAttribute)attributeToEClass.getEStructuralFeatures().get(2);
+    return (EReference)annotateToEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getAnnotateTo_Names()
+  {
+    return (EAttribute)annotateToEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -1356,9 +1350,19 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getFreeze_But()
+  public EAttribute getFreeze_Id()
   {
-    return (EReference)freezeEClass.getEStructuralFeatures().get(1);
+    return (EAttribute)freezeEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getFreeze_Ex()
+  {
+    return (EReference)freezeEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -1389,66 +1393,6 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
   public EReference getFreezeStatement_Access()
   {
     return (EReference)freezeStatementEClass.getEStructuralFeatures().get(1);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EClass getFreezeButList()
-  {
-    return freezeButListEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EReference getFreezeButList_List()
-  {
-    return (EReference)freezeButListEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EClass getFreezeButExpression()
-  {
-    return freezeButExpressionEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EReference getFreezeButExpression_Name()
-  {
-    return (EReference)freezeButExpressionEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EReference getFreezeButExpression_Access()
-  {
-    return (EReference)freezeButExpressionEClass.getEStructuralFeatures().get(1);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EAttribute getFreezeButExpression_Wildcard()
-  {
-    return (EAttribute)freezeButExpressionEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -2939,26 +2883,20 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     createEAttribute(derivedTypeEClass, DERIVED_TYPE__OP);
     createEReference(derivedTypeEClass, DERIVED_TYPE__TYPE);
 
-    attributeToEClass = createEClass(ATTRIBUTE_TO);
-    createEReference(attributeToEClass, ATTRIBUTE_TO__ATTRIBUTE_TYPE);
-    createEReference(attributeToEClass, ATTRIBUTE_TO__ATTRIBUTE_DECL);
-    createEAttribute(attributeToEClass, ATTRIBUTE_TO__NAMES);
+    annotateToEClass = createEClass(ANNOTATE_TO);
+    createEAttribute(annotateToEClass, ANNOTATE_TO__SNAME);
+    createEReference(annotateToEClass, ANNOTATE_TO__ANNOTATION_TYPE);
+    createEReference(annotateToEClass, ANNOTATE_TO__ANNOTATION_DECL);
+    createEAttribute(annotateToEClass, ANNOTATE_TO__NAMES);
 
     freezeEClass = createEClass(FREEZE);
     createEReference(freezeEClass, FREEZE__NAMES);
-    createEReference(freezeEClass, FREEZE__BUT);
+    createEAttribute(freezeEClass, FREEZE__ID);
+    createEReference(freezeEClass, FREEZE__EX);
 
     freezeStatementEClass = createEClass(FREEZE_STATEMENT);
     createEReference(freezeStatementEClass, FREEZE_STATEMENT__NAME);
     createEReference(freezeStatementEClass, FREEZE_STATEMENT__ACCESS);
-
-    freezeButListEClass = createEClass(FREEZE_BUT_LIST);
-    createEReference(freezeButListEClass, FREEZE_BUT_LIST__LIST);
-
-    freezeButExpressionEClass = createEClass(FREEZE_BUT_EXPRESSION);
-    createEReference(freezeButExpressionEClass, FREEZE_BUT_EXPRESSION__NAME);
-    createEReference(freezeButExpressionEClass, FREEZE_BUT_EXPRESSION__ACCESS);
-    createEAttribute(freezeButExpressionEClass, FREEZE_BUT_EXPRESSION__WILDCARD);
 
     evalEClass = createEClass(EVAL);
     createEReference(evalEClass, EVAL__NESTED);
@@ -3258,26 +3196,20 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     initEAttribute(getDerivedType_Op(), ecorePackage.getEString(), "op", null, 0, 1, DerivedType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getDerivedType_Type(), this.getType(), null, "type", null, 0, 1, DerivedType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(attributeToEClass, AttributeTo.class, "AttributeTo", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getAttributeTo_AttributeType(), this.getType(), null, "attributeType", null, 0, 1, AttributeTo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getAttributeTo_AttributeDecl(), this.getVariableDeclarationPart(), null, "attributeDecl", null, 0, 1, AttributeTo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getAttributeTo_Names(), ecorePackage.getEString(), "names", null, 0, -1, AttributeTo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEClass(annotateToEClass, AnnotateTo.class, "AnnotateTo", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getAnnotateTo_Sname(), ecorePackage.getEString(), "sname", null, 0, 1, AnnotateTo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getAnnotateTo_AnnotationType(), this.getType(), null, "annotationType", null, 0, 1, AnnotateTo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getAnnotateTo_AnnotationDecl(), this.getVariableDeclarationPart(), null, "annotationDecl", null, 0, 1, AnnotateTo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getAnnotateTo_Names(), ecorePackage.getEString(), "names", null, 0, -1, AnnotateTo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(freezeEClass, Freeze.class, "Freeze", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getFreeze_Names(), this.getFreezeStatement(), null, "names", null, 0, -1, Freeze.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getFreeze_But(), this.getFreezeButList(), null, "but", null, 0, 1, Freeze.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getFreeze_Id(), ecorePackage.getEString(), "id", null, 0, 1, Freeze.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getFreeze_Ex(), this.getLogicalExpression(), null, "ex", null, 0, 1, Freeze.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(freezeStatementEClass, FreezeStatement.class, "FreezeStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getFreezeStatement_Name(), this.getQualifiedName(), null, "name", null, 0, 1, FreezeStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getFreezeStatement_Access(), this.getAccessName(), null, "access", null, 0, 1, FreezeStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(freezeButListEClass, FreezeButList.class, "FreezeButList", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getFreezeButList_List(), this.getFreezeButExpression(), null, "list", null, 0, -1, FreezeButList.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(freezeButExpressionEClass, FreezeButExpression.class, "FreezeButExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getFreezeButExpression_Name(), this.getQualifiedName(), null, "name", null, 0, 1, FreezeButExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getFreezeButExpression_Access(), this.getAccessName(), null, "access", null, 0, 1, FreezeButExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getFreezeButExpression_Wildcard(), ecorePackage.getEString(), "wildcard", null, 0, 1, FreezeButExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(evalEClass, Eval.class, "Eval", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getEval_Nested(), this.getEval(), null, "nested", null, 0, -1, Eval.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

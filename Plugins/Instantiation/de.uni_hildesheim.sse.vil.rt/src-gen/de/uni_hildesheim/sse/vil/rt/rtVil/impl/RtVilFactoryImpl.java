@@ -70,10 +70,10 @@ public class RtVilFactoryImpl extends EFactoryImpl implements RtVilFactory
       case RtVilPackage.GLOBAL_VARIABLE_DECLARATION: return createGlobalVariableDeclaration();
       case RtVilPackage.STRATEGY_DECLARATION: return createStrategyDeclaration();
       case RtVilPackage.BREAKDOWN_ELEMENT: return createBreakdownElement();
+      case RtVilPackage.WEIGHTING_STATEMENT: return createWeightingStatement();
       case RtVilPackage.BREAKDOWN_STATEMENT: return createBreakdownStatement();
       case RtVilPackage.BREAKDOWN_WITH_PART: return createBreakdownWithPart();
       case RtVilPackage.TACTIC_DECLARATION: return createTacticDeclaration();
-      case RtVilPackage.SCRIPT_CONTENTS: return createScriptContents();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
     }
@@ -150,6 +150,17 @@ public class RtVilFactoryImpl extends EFactoryImpl implements RtVilFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  public WeightingStatement createWeightingStatement()
+  {
+    WeightingStatementImpl weightingStatement = new WeightingStatementImpl();
+    return weightingStatement;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public BreakdownStatement createBreakdownStatement()
   {
     BreakdownStatementImpl breakdownStatement = new BreakdownStatementImpl();
@@ -176,17 +187,6 @@ public class RtVilFactoryImpl extends EFactoryImpl implements RtVilFactory
   {
     TacticDeclarationImpl tacticDeclaration = new TacticDeclarationImpl();
     return tacticDeclaration;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public ScriptContents createScriptContents()
-  {
-    ScriptContentsImpl scriptContents = new ScriptContentsImpl();
-    return scriptContents;
   }
 
   /**

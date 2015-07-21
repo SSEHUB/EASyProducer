@@ -24,6 +24,8 @@ import de.uni_hildesheim.sse.model.varModel.AttributeAssignment;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.IModelElement;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
+import de.uni_hildesheim.sse.model.varModel.datatypes.ConstraintType;
+import de.uni_hildesheim.sse.model.varModel.datatypes.Container;
 import de.uni_hildesheim.sse.model.varModel.values.MetaTypeValue;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
 
@@ -35,7 +37,7 @@ import de.uni_hildesheim.sse.model.varModel.values.Value;
 public class StaticAccessFinder implements IConstraintTreeVisitor {
 
     private Self self = null;
-    private Set<DecisionVariableDeclaration> result = new HashSet<DecisionVariableDeclaration>();
+    private Set<AbstractVariable> result = new HashSet<AbstractVariable>();
     private Set<DecisionVariableDeclaration> defined = new HashSet<DecisionVariableDeclaration>();
 
     /**
@@ -43,7 +45,7 @@ public class StaticAccessFinder implements IConstraintTreeVisitor {
      * 
      * @return the static accesses
      */
-    public Iterator<DecisionVariableDeclaration> getResults() {
+    public Iterator<AbstractVariable> getResults() {
         return result.iterator();
     }
     
@@ -134,7 +136,7 @@ public class StaticAccessFinder implements IConstraintTreeVisitor {
 
     @Override
     public void visitCompoundAccess(CompoundAccess access) {
-        DecisionVariableDeclaration decl = access.getResolvedSlot();
+        AbstractVariable decl = access.getResolvedSlot();
         if (!defined.contains(decl)) {
             ConstraintSyntaxTree cEx = access.getCompoundExpression();
             if (cEx instanceof ConstantValue) {
@@ -154,15 +156,24 @@ public class StaticAccessFinder implements IConstraintTreeVisitor {
 
     @Override
     public void visitCompoundInitializer(CompoundInitializer initializer) {
+        Compound type = initializer.getType();
         for (int i = 0, n = initializer.getExpressionCount(); i < n; i++) {
-            initializer.getExpression(i).accept(this);
+            String slotName = initializer.getSlot(i);
+            DecisionVariableDeclaration decl = type.getElement(slotName);
+            if (!ConstraintType.TYPE.isAssignableFrom(decl.getType())) {
+                // don't evaluate constraint variables in initializers - deferred (see EvaluationVisitor)
+                initializer.getExpression(i).accept(this);
+            }
         }
     }
 
     @Override
     public void visitContainerInitializer(ContainerInitializer initializer) {
-        for (int i = 0, n = initializer.getExpressionCount(); i < n; i++) {
-            initializer.getExpression(i).accept(this);
+        if (!Container.isContainer(initializer.getType(), ConstraintType.TYPE)) {
+            // dont' evaluate constraint container - deferred (see EvaluationVisitor)
+            for (int i = 0, n = initializer.getExpressionCount(); i < n; i++) {
+                initializer.getExpression(i).accept(this);
+            }
         }
     }
 

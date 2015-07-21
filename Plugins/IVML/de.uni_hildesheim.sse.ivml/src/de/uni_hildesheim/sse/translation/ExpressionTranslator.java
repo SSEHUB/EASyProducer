@@ -10,6 +10,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
 import de.uni_hildesheim.sse.IvmlBundleId;
+import de.uni_hildesheim.sse.capabilities.DefaultReasonerAccess;
+import de.uni_hildesheim.sse.capabilities.IvmlReasonerCapabilities;
 import de.uni_hildesheim.sse.dslCore.translation.Message;
 import de.uni_hildesheim.sse.dslCore.translation.TranslatorException;
 import de.uni_hildesheim.sse.ivml.ActualParameterList;
@@ -65,14 +67,17 @@ import de.uni_hildesheim.sse.model.varModel.IvmlKeyWords;
 import de.uni_hildesheim.sse.model.varModel.ModelElement;
 import de.uni_hildesheim.sse.model.varModel.ModelQueryException;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
+import de.uni_hildesheim.sse.model.varModel.datatypes.ConstraintType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Container;
 import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Enum;
+import de.uni_hildesheim.sse.model.varModel.datatypes.FreezeVariableType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.MetaType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
 import de.uni_hildesheim.sse.model.varModel.values.CompoundValue;
+import de.uni_hildesheim.sse.model.varModel.values.ConstraintValue;
 import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
 import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
@@ -90,11 +95,33 @@ import de.uni_hildesheim.sse.utils.messages.IIdentifiable;
 public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translation.ExpressionTranslator {
 
     private AssignmentDetector assignmentDetector = new AssignmentDetector();
+    private int level;
+    private boolean hasTopLevelWarning; 
     
     /**
      * Creates an expression translator (to be used within this package only).
      */
     public ExpressionTranslator() {
+    }
+    
+    /**
+     * Initializes the levels.
+     */
+    void initLevel() {
+        level = -1;
+        hasTopLevelWarning = false;
+    }
+
+    /**
+     * Checks for illegal top-level warnings and emits an error if required.
+     * 
+     * @param cause the causing EObject
+     * @param causingFeature the causing feature
+     */
+    void errorAboutTopLevelWarning(EObject cause, EStructuralFeature causingFeature) {
+        if (hasTopLevelWarning) {
+            error("warning not allowed here", cause, causingFeature, ErrorCodes.WARNING_USAGE);
+        }
     }
 
     /**
@@ -150,7 +177,8 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
     // ---------------------------------- processing --------------------------
 
     /**
-     * Processes an expression and returns the result as a syntax tree.
+     * Processes an expression and returns the result as a syntax tree. Calls {@link #initLevel()}, 
+     * i.e., do not call from inside.
      * 
      * @param expr
      *            the expression to be processed
@@ -165,11 +193,13 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
      */
     public ConstraintSyntaxTree processExpression(Expression expr,
         TypeContext context, IModelElement parent) throws TranslatorException {
+        initLevel();
         return processExpression(null, expr, context, parent);
     }
 
     /**
-     * Processes an expression and returns the result as a syntax tree.
+     * Processes an expression and returns the result as a syntax tree. Call {@link #initLevel()} 
+     * if called from outside.
      * 
      * @param lhsType the data type on the left hand side of the expression
      * @param expr the expression to be processed
@@ -186,6 +216,7 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
         if (null != expr) {
             if (null != expr.getLet()) {
                 // an expression may either be nested in a let expression
+                level++;
                 LetExpression letEx = expr.getLet();
                 IDatatype type = context.resolveType(letEx.getType());
                 DecisionVariableDeclaration var = new DecisionVariableDeclaration(
@@ -193,16 +224,15 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
                 context.pushLayer(parent);
                 context.addToContext(var);
                 try {
-                    var.setValue(processExpression(letEx.getValueExpr(),
-                            context, parent));
-                    result = new Let(var, processExpression(letEx.getSubExpr(),
-                            context, parent));
+                    var.setValue(processExpression(null, letEx.getValueExpr(), context, parent));
+                    result = new Let(var, processExpression(null, letEx.getSubExpr(), context, parent));
                 } catch (TranslatorException e) {
                     throw e;
                 } catch (IvmlException e) {
                     error(e, expr.getLet(), IvmlPackage.Literals.LET_EXPRESSION__VALUE_EXPR);
                 } finally {
                     context.popLayer();
+                    level--;
                 }
             } else if (null != expr.getExpr()) {
                 // processing of the expression
@@ -244,12 +274,13 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
      *             in case that the processing of the <code>expr</code> must be
      *             terminated abnormally
      */
-    ConstraintSyntaxTree processAssignmentExpression(
+    private ConstraintSyntaxTree processAssignmentExpression(
         AssignmentExpression expr, TypeContext context, IModelElement parent)
         throws TranslatorException {
         ConstraintSyntaxTree result = processLogicalExpression(
                 expr.getLeft(), context, parent);
         if (null != expr.getRight()) {
+            level++;
             for (AssignmentExpressionPart part : expr.getRight()) {
                 ConstraintSyntaxTree rhs = null;
                 if (null != part.getEx()) {
@@ -266,6 +297,7 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
                     result = new OCLFeatureCall(result, part.getOp(), context.getProject(), rhs);
                 }
             }
+            level--;
         }
         return result;
     }
@@ -284,12 +316,13 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
      *             in case that the processing of the <code>expr</code> must be
      *             terminated abnormally
      */
-    ConstraintSyntaxTree processImplicationExpression(
+    private ConstraintSyntaxTree processImplicationExpression(
         ImplicationExpression expr, TypeContext context, IModelElement parent)
         throws TranslatorException {
         ConstraintSyntaxTree result = processAssignmentExpression(
             expr.getLeft(), context, parent);
         if (null != expr.getRight()) {
+            level++;
             if (!expr.getRight().isEmpty()) {
                 checkForAssigment(result, true, expr, IvmlPackage.Literals.IMPLICATION_EXPRESSION__LEFT);
             }
@@ -299,6 +332,7 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
                 result = new OCLFeatureCall(result, part.getOp(),
                     context.getProject(), cst);
             }
+            level--;
         }
         return result;
     }
@@ -328,7 +362,8 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
     }
     
     /**
-     * Process a logical expression and turn it into a feature call.
+     * Process a logical expression and turn it into a feature call. If called from outside, 
+     * call {@link #initLevel()} before.
      * 
      * @param expr
      *            the expression to be processed
@@ -346,6 +381,7 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
         throws TranslatorException {
         ConstraintSyntaxTree result = processEqualityExpression(expr.getLeft(), context, parent);
         if (null != expr.getRight()) {
+            level++;
             if (!expr.getRight().isEmpty()) {
                 checkForAssigment(result, false, expr, IvmlPackage.Literals.LOGICAL_EXPRESSION__LEFT);
             }
@@ -355,6 +391,7 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
                 result = new OCLFeatureCall(result, part.getOp(),
                     context.getProject(), cst);
             }
+            level--;
         }
         return result;
     }
@@ -379,6 +416,7 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
         ConstraintSyntaxTree result = processRelationalExpression(expr.getLeft(), context, parent);
         EqualityExpressionPart right = expr.getRight();
         if (null != right) {
+            level++;
             String op = expr.getRight().getOp();
             // normalize to OCL
             if (IvmlKeyWords.UNEQUALS_ALIAS.equals(op)) {
@@ -400,6 +438,7 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
             if (null != rhs) {
                 result = new OCLFeatureCall(result, op, context.getProject(), rhs);
             }
+            level--;
         }
         return result;
     }
@@ -423,11 +462,13 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
         throws TranslatorException {
         ConstraintSyntaxTree result = processAdditiveExpression(expr.getLeft(), context, parent);
         if (null != expr.getRight()) {
+            level++;
             checkForAssigment(result, false, expr, IvmlPackage.Literals.RELATIONAL_EXPRESSION__LEFT);
             String op = expr.getRight().getOp();
             ConstraintSyntaxTree cst = processAdditiveExpression(expr.getRight().getEx(), context, parent);
             checkForAssigment(cst, false, expr, IvmlPackage.Literals.RELATIONAL_EXPRESSION__RIGHT);
             result = new OCLFeatureCall(result, op, context.getProject(), cst);
+            level--;
         }
         return result;
     }
@@ -451,6 +492,7 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
         throws TranslatorException {
         ConstraintSyntaxTree result = processMultiplicativeExpression(expr.getLeft(), context, parent);
         if (null != expr.getRight()) {
+            level++;
             if (!expr.getRight().isEmpty()) {
                 checkForAssigment(result, false, expr, IvmlPackage.Literals.ADDITIVE_EXPRESSION__LEFT);
             }
@@ -459,6 +501,7 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
                 checkForAssigment(cst, false, part, IvmlPackage.Literals.ADDITIVE_EXPRESSION_PART__EX);
                 result = new OCLFeatureCall(result, part.getOp(), context.getProject(), cst);
             }
+            level--;
         }
         return result;
     }
@@ -482,10 +525,12 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
             IModelElement parent) throws TranslatorException {
         ConstraintSyntaxTree result = processUnaryExpression(expr.getLeft(), context, parent);
         if (null != expr.getRight()) {
+            level++;
             checkForAssigment(result, false, expr, IvmlPackage.Literals.MULTIPLICATIVE_EXPRESSION__LEFT);
             ConstraintSyntaxTree cst = processUnaryExpression(expr.getRight().getExpr(), context, parent);
             checkForAssigment(cst, false, expr, IvmlPackage.Literals.MULTIPLICATIVE_EXPRESSION__RIGHT);
             result = new OCLFeatureCall(result, expr.getRight().getOp(), context.getProject(), cst);
+            level--;
         }
         return result;
     }
@@ -509,7 +554,9 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
         throws TranslatorException {
         ConstraintSyntaxTree result = processPostfixExpression(expr.getExpr(), context, parent);
         if (null != expr.getOp()) {
+            level++;
             result = new OCLFeatureCall(result, expr.getOp(), context.getProject());
+            level--;
         }
         return result;
     }
@@ -534,8 +581,8 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
      *             terminated abnormally
      */
     private ConstraintSyntaxTree processFeatureCall(ConstraintSyntaxTree lhs,
-        FeatureCall call, TypeContext context, IModelElement parent)
-        throws TranslatorException {
+        FeatureCall call, TypeContext context, IModelElement parent) throws TranslatorException {
+        level++;
         boolean regularFeatureCall = true;
         ActualParameterList pList = call.getParam();
         String callName = call.getName();
@@ -548,10 +595,8 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
                     if (leftType.isAssignableFrom(Compound.TYPE)) {
                         // check whether it could be an operation
                         boolean isOp = false;
-                        for (int o = 0; !isOp
-                                && o < leftType.getOperationCount(); o++) {
-                            isOp = leftType.getOperation(o).getName()
-                                    .equals(callName);
+                        for (int o = 0; !isOp && o < leftType.getOperationCount(); o++) {
+                            isOp = leftType.getOperation(o).getName().equals(callName);
                         }
                         if (isOp) {
                             checkForCompoundElement((Compound) leftType, callName, call);
@@ -567,11 +612,11 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
                 param = null;
             } else {
                 if (null == lhs) {
-                    lhs = processExpression(pList.getParam().get(0), context, parent);
+                    lhs = processExpression(null, pList.getParam().get(0), context, parent);
                     if (pListSize - 1 > 0) {
                         param = new ConstraintSyntaxTree[pListSize - 1];
                         for (int p = 1; p < pListSize; p++) {
-                            param[p - 1] = processExpression(pList.getParam().get(p), context, parent);
+                            param[p - 1] = processExpression(null, pList.getParam().get(p), context, parent);
                         }
                     } else {
                         param = null;
@@ -579,7 +624,7 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
                 } else {
                     param = new ConstraintSyntaxTree[pListSize];
                     for (int p = 0; p < pListSize; p++) {
-                        param[p] = processExpression(pList.getParam().get(p), context, parent);
+                        param[p] = processExpression(null, pList.getParam().get(p), context, parent);
                     }
                 }
             }
@@ -589,6 +634,15 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
             // a feature call node
             lhs = new OCLFeatureCall(lhs, callName, context.getProject(), param);
         }
+        if (OclKeyWords.WARNING.equals(callName)) {
+            if (level > 1) {                 
+                error("warning is not allowed in nested expressions", call, IvmlPackage.Literals.FEATURE_CALL__NAME, 
+                    ErrorCodes.WARNING_USAGE);
+            } else {
+                this.hasTopLevelWarning = true;
+            }
+        }
+        level--;
         return lhs;
     }
     
@@ -623,6 +677,7 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
      */
     private void processDeclaration(ConstraintSyntaxTree lhs, SetOp op, TypeContext context, IModelElement parent, 
         Declaration declaration, List<DecisionVariableDeclaration> declarators) throws TranslatorException {
+        level++;
         IDatatype type = null;
         if (null != declaration.getType()) {
             // if specified, take type from declaration (may collide)
@@ -662,6 +717,7 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
                 declarators.add(declarator);
             }
         }
+        level--;
     }
 
     /**
@@ -683,6 +739,7 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
     private ConstraintSyntaxTree processSetOp(ConstraintSyntaxTree lhs,
         SetOp op, TypeContext context, IModelElement parent)
         throws TranslatorException {
+        level++;
         // process a set operation, i.e. a quantor call after ->
         EList<Declaration> declarations = op.getDecl().getDecl();
         // grammar ensures that at least one declarator is present
@@ -708,7 +765,7 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
             context.addToContext(decls[ds]);
         }
         try {
-            ConstraintSyntaxTree ex = processExpression(op.getDeclEx(), context, parent);
+            ConstraintSyntaxTree ex = processExpression(null, op.getDeclEx(), context, parent);
             ex.inferDatatype();
             lhs = new ContainerOperationCall(lhs, op.getName(), ex, decls); 
             lhs.inferDatatype();
@@ -719,6 +776,7 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
         } finally {
             context.popLayer();
         }
+        level--;
         return lhs;
     }
 
@@ -739,6 +797,7 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
     private ConstraintSyntaxTree processPostfixExpression(
         PostfixExpression expr, TypeContext context, IModelElement parent)
         throws TranslatorException {
+        level++;
         ConstraintSyntaxTree result;
         if (null == expr) {
             throw new TranslatorException("<consume>", expr, IvmlPackage.Literals.POSTFIX_EXPRESSION__LEFT,
@@ -754,6 +813,7 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
             throw new TranslatorException("<consume>", expr, IvmlPackage.Literals.POSTFIX_EXPRESSION__LEFT,
                 TranslatorException.CONSUME);
         }
+        level--;
         return result;
     }
 
@@ -774,6 +834,7 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
     private ConstraintSyntaxTree processPrimaryExpression(
         PrimaryExpression expr, TypeContext context, IModelElement parent)
         throws TranslatorException {
+        level++;
         ConstraintSyntaxTree result = null;
         if (null != expr.getRefName()) { // (refby)
             try {
@@ -801,16 +862,14 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
             }
         } else if (null != expr.getEx()) {
             // process "( expr )"
-            result = new Parenthesis(processExpression(expr.getEx(), context,
-                    parent));
+            result = new Parenthesis(processExpression(null, expr.getEx(), context, parent));
         } else if (null != expr.getIfEx()) {
             // process if-then-else expression by combining related expressions
             // into one node
             IfExpression ifExpr = expr.getIfEx();
-            result = new IfThen(processExpression(ifExpr.getIfEx(), context,
-                parent), processExpression(ifExpr.getThenEx(), context,
-                    parent), processExpression(ifExpr.getElseEx(), context,
-                        parent));
+            result = new IfThen(processExpression(null, ifExpr.getIfEx(), context,
+                parent), processExpression(null, ifExpr.getThenEx(), context,
+                    parent), processExpression(null, ifExpr.getElseEx(), context, parent));
         } else if (null != expr.getLit()) {
             // process one of the various types of literals
             Value value = expr.getLit().getVal();
@@ -822,6 +881,7 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
             result = handleBasicComment(expr.getLit(), result);
         }
         result = processCallsAndAccess(result, expr.getCalls(), expr.getAccess(), context, parent);
+        level--;
         return result;
     }
 
@@ -848,6 +908,7 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
         ConstraintSyntaxTree lhs, List<Call> calls,
         ExpressionAccess access, TypeContext context, IModelElement parent)
         throws TranslatorException {
+        level++;
         ConstraintSyntaxTree result = lhs;
         if (null != calls) {
             for (Call call : calls) {
@@ -858,13 +919,14 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
                 } else if (null != call.getArrayEx()) {
                     // operation is obvious, no custom operation holder
                     result = new OCLFeatureCall(result, OclKeyWords.INDEX_ACCESS, 
-                        processExpression(call.getArrayEx(), context, parent));
+                        processExpression(null, call.getArrayEx(), context, parent));
                 }
             }
         }
         if (null != access) {
             result = processAccess(result, access, context, parent);
         }
+        level--;
         return result;
     }
 
@@ -919,6 +981,7 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
     private ConstraintSyntaxTree processAccess(ConstraintSyntaxTree lhs,
         ExpressionAccess access, TypeContext context, IModelElement parent)
         throws TranslatorException {
+        level++;
         ConstraintSyntaxTree result = null;
         String name = access.getName();
         try {
@@ -931,13 +994,17 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
             if (Compound.TYPE.isAssignableFrom(type) && hasSlot((Compound) type, name)) {
                 result = new CompoundAccess(lhs, name);
                 IDatatype lhsType = lhs.inferDatatype();
-                if (Constants.REASONER_UNQUALIFIED_NAME_WARNING && MetaType.TYPE.isAssignableFrom(lhsType)) {
+                if (!DefaultReasonerAccess.hasCapability(IvmlReasonerCapabilities.QUALIFIED_COMPOUND_ACCESS) 
+                    && MetaType.TYPE.isAssignableFrom(lhsType)) {
                     warning("Qualified compound type '" + lhsType.getName() 
                         + "' outside a compound is currently not supported in reasoning.", access, 
                         IvmlPackage.Literals.EXPRESSION_ACCESS__NAME, Message.CODE_IGNORE);
                 }
             } else if (Enum.TYPE.isAssignableFrom(type) && hasLiteral((Enum) type, name)) {
                 result = new ConstantValue(ValueFactory.createValue(type, name));
+            } else if (FreezeVariableType.TYPE.isAssignableFrom(type) 
+                && null != ((FreezeVariableType) type).getAttribute(name)) {
+                result = new AttributeVariable(lhs, ((FreezeVariableType) type).getAttribute(name));
             } else {
                 Attribute attr = ModelElement.findAttribute(lhs, name);
                 if (null == attr) {
@@ -962,6 +1029,7 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
         } catch (IvmlException e) {
             throw new TranslatorException(e, access, IvmlPackage.Literals.EXPRESSION_ACCESS__NAME);
         }
+        level--;
         return result;
     }
 
@@ -1033,7 +1101,7 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
                     throw new TranslatorException("type '" + sTypeName + "' is not defined", initializer,
                         IvmlPackage.Literals.COLLECTION_INITIALIZER__TYPE, ErrorCodes.TYPE_CONSISTENCY);
                 }
-                if (!lhsType.isAssignableFrom(specificType)) {
+                if (null != lhsType && !lhsType.isAssignableFrom(specificType)) {
                     throw new TranslatorException("collection type '" + IvmlDatatypeVisitor.getQualifiedType(lhsType)
                         + "' does not match specified entry type'" + sTypeName + "'", initializer,
                         IvmlPackage.Literals.COLLECTION_INITIALIZER__TYPE, ErrorCodes.TYPE_CONSISTENCY);
@@ -1063,6 +1131,7 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
      */
     private ConstraintSyntaxTree processLiteralCollection(IDatatype lhsType, CollectionInitializer initializer, 
         TypeContext context, IModelElement parent) throws TranslatorException, CSTSemanticException, IvmlException {
+        level++;
         ConstraintSyntaxTree result = null;
         lhsType = DerivedDatatype.resolveToBasis(lhsType);
         IDatatype specificType = getSpecificType(lhsType, initializer, context);
@@ -1110,9 +1179,18 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
                     IvmlPackage.Literals.EXPRESSION_LIST_OR_RANGE__LIST, ErrorCodes.INITIALIZER_CONSISTENCY);
             }
             result = processCompoundInitializer(lhsType, context, parent, specificType, entryList);
+            IDatatype resType = result.inferDatatype();
+            if (resType instanceof Compound) {
+                if (((Compound) resType).isAbstract()) {
+                    throw new TranslatorException("Cannot instantiate abstract compound '" + resType.getName() + "'", 
+                        init, IvmlPackage.Literals.EXPRESSION_LIST_OR_RANGE__LIST, 
+                        ValueDoesNotMatchTypeException.IS_ABSTRACT);
+                }
+            }
         } else {
             result = EmptyInitializer.INSTANCE; // to be replaced as soon as possible, assignable to any type!
         }
+        level--;
         return result;
     }
 
@@ -1138,8 +1216,11 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
     private ConstraintSyntaxTree processCompoundInitializer(IDatatype lhsType, TypeContext context,
         IModelElement parent, IDatatype specificType, EList<ExpressionListEntry> entryList)
         throws TranslatorException, CSTSemanticException, IvmlException, ValueDoesNotMatchTypeException {
+        level++;
         ConstraintSyntaxTree result;
         Compound comp = (Compound) lhsType;
+        context.pushLayer(comp);
+        context.addToContext(comp);
         int entryCount = (null == entryList ? 0 : entryList.size());
         ConstraintSyntaxTree[] exprs = new ConstraintSyntaxTree[entryCount];
         String[] slots = new String[entryCount];
@@ -1185,6 +1266,8 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
         } else {
             result = new CompoundInitializer(comp, slots, slotDecls, exprs);
         }
+        context.popLayer();
+        level--;
         return result;
     }
 
@@ -1208,6 +1291,7 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
     private ConstraintSyntaxTree processContainerInitializer(IDatatype lhsType, TypeContext context,
         IModelElement parent, EList<ExpressionListEntry> entryList) 
         throws TranslatorException, CSTSemanticException, IvmlException, ValueDoesNotMatchTypeException {
+        level++;
         ConstraintSyntaxTree result;
         int entryCount = (null == entryList ? 0 : entryList.size());
         ConstraintSyntaxTree[] exprs = new ConstraintSyntaxTree[entryCount];
@@ -1216,7 +1300,9 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
             ExpressionListEntry entry = entryList.get(e);
             if (null != entry.getValue()) {
                 exprs[e] = processLogicalExpression(entry.getValue(), context, parent);
-                exprs[e].inferDatatype();
+                if (null != exprs[e]) {
+                    exprs[e].inferDatatype();
+                }
             }
             if (null != entry.getCollection()) {
                 exprs[e] = processLiteralCollection(contained, entry.getCollection(), context, parent);
@@ -1227,10 +1313,22 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
             for (int e = 0; e < obj.length; e++) {
                 obj[e] = exprs[e];
             }
-            result = new ConstantValue(ValueFactory.createValue(lhsType, translateToValues(obj)));
+            Object[] values = translateToValues(obj);
+            // basically, translateToValues creates constant values but no constraint values
+            if (null != values && Container.isContainer(lhsType, ConstraintType.TYPE)) {
+                for (int v = 0; v < values.length; v++) {
+                    Object val = values[v];
+                    if (!(val instanceof ConstraintValue)) {
+                        values[v] = ValueFactory.createValue(ConstraintType.TYPE, 
+                            new ConstantValue((de.uni_hildesheim.sse.model.varModel.values.Value) val));
+                    }
+                }
+            }
+            result = new ConstantValue(ValueFactory.createValue(lhsType, values));
         } else {
             result = new ContainerInitializer((Container) lhsType, exprs);
         }
+        level--;
         return result;
     }
 

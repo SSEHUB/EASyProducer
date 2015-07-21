@@ -3,9 +3,8 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ConstantExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VariableExpression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.utils.modelManagement.RestrictionEvaluationException;
@@ -36,13 +35,13 @@ public class Utils {
     public static ExpressionVersionRestriction createSingleRestriction(Object parent, String operation, 
         Version version) throws RestrictionEvaluationException {
         try {
-            TypeDescriptor<? extends IVilType> versionType = TypeRegistry.versionType();
+            TypeDescriptor<?> versionType = TypeRegistry.versionType();
             VariableDeclaration var = new VariableDeclaration("version", versionType);
             Expression verExpr = new ConstantExpression(versionType, version, TypeRegistry.DEFAULT);
             Expression expr = new CallExpression(parent, operation, new VariableExpression(var), verExpr);
             expr.inferType();
             return new ExpressionVersionRestriction(expr, var);
-        } catch (ExpressionException e) {
+        } catch (VilException e) {
             throw new RestrictionEvaluationException(e.getMessage(), e.getId());
         }
     }

@@ -1,13 +1,10 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IExpressionVisitor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.VilException;
 
 /**
  * Describes a map statement.
@@ -19,8 +16,8 @@ public class MapExpression extends Expression implements IRuleBlock {
     private VariableDeclaration[] variables;
     private Expression expr;
     private IRuleElement[] body;
-    private TypeDescriptor<? extends IVilType> type;
-    private TypeDescriptor<? extends IVilType>[] givenTypes;
+    private TypeDescriptor<?> type;
+    private TypeDescriptor<?>[] givenTypes;
     private boolean colon;
     
     /**
@@ -34,20 +31,20 @@ public class MapExpression extends Expression implements IRuleBlock {
      *   same length as <code>variables</code>, may contain <b>null</b> if no type
      *   is given, types must at least be supertypes of those in <code>variables</code>)
      * @param colon <code>true</code> it it was a colon, <code>else</code> if it was an equals character
-     * @throws VilLanguageException in case of syntactic or semantic problems
+     * @throws VilException in case of syntactic or semantic problems
      */
     public MapExpression(VariableDeclaration[] variables, Expression expr, IRuleElement[] body, 
-        TypeDescriptor<? extends IVilType>[] givenTypes, boolean colon) throws VilLanguageException {
+        TypeDescriptor<?>[] givenTypes, boolean colon) throws VilException {
         if (null == variables || variables.length < 1) {
-            throw new VilLanguageException("no iterator variables given", VilLanguageException.ID_SEMANTIC);
+            throw new VilException("no iterator variables given", VilException.ID_SEMANTIC);
         }
         if (null != givenTypes && variables.length != givenTypes.length) {
-            throw new VilLanguageException("given types length does not match to variables length", 
-                VilLanguageException.ID_SEMANTIC);
+            throw new VilException("given types length does not match to variables length", 
+                VilException.ID_SEMANTIC);
         }
         this.variables = variables;
         if (null == expr) {
-            throw new VilLanguageException("no expression given", VilLanguageException.ID_SEMANTIC);
+            throw new VilException("no expression given", VilException.ID_SEMANTIC);
         }
         this.expr = expr;
         this.body = body;
@@ -97,7 +94,7 @@ public class MapExpression extends Expression implements IRuleBlock {
      * @throws IndexOutOfBoundsException in case that 
      *   <code>index &lt; 0 || index &gt;={@link #getVariablesCount()}</code>
      */    
-    public TypeDescriptor<? extends IVilType> getGivenType(int index) {
+    public TypeDescriptor<?> getGivenType(int index) {
         return null == givenTypes ? null : givenTypes[index]; 
     }
     
@@ -111,7 +108,7 @@ public class MapExpression extends Expression implements IRuleBlock {
     }
     
     @Override
-    public Object accept(IExpressionVisitor visitor) throws ExpressionException {
+    public Object accept(IExpressionVisitor visitor) throws VilException {
         Object result;
         if (visitor instanceof IVisitor) {
             result = ((IVisitor) visitor).visitMapExpression(this);
@@ -122,20 +119,16 @@ public class MapExpression extends Expression implements IRuleBlock {
     }
     
     @Override
-    public TypeDescriptor<? extends IVilType> inferType() throws ExpressionException {
+    public TypeDescriptor<?> inferType() throws VilException {
         if (null == type) {
             // don't care for variable assignments, this happens in a variable assignment expression
             Expression expr = Utils.findLastExpression(this);
             if (null == expr) {
                 type = TypeRegistry.voidType();
             } else {
-                try {
-                    TypeDescriptor<? extends IVilType>[] param = TypeDescriptor.createArray(1);
-                    param[0] = expr.inferType();
-                    type = TypeRegistry.getSequenceType(param);
-                } catch (VilException e) {
-                    throw new ExpressionException(e);
-                }
+                TypeDescriptor<?>[] param = TypeDescriptor.createArray(1);
+                param[0] = expr.inferType();
+                type = TypeRegistry.getSequenceType(param);
             }
         } 
         return type;
@@ -162,6 +155,11 @@ public class MapExpression extends Expression implements IRuleBlock {
     @Override
     public boolean isVirtual() {
         return false;
+    }
+
+    @Override
+    public void addBodyElement(int index, IRuleElement elt) {
+        body = RuleBlock.addBodyElement(body, index, elt);
     }
 
 }

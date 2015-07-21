@@ -11,24 +11,26 @@ import javax.tools.ToolProvider;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import test.de.uni_hildesheim.sse.vil.buildlang.AbstractExecutionTest;
+import test.de.uni_hildesheim.sse.vil.buildlang.BuildLangTestConfigurer;
+import test.de.uni_hildesheim.sse.vil.buildlang.ITestConfigurer;
 import de.uni_hildesheim.sse.easy.java.Registration;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
 
 /**
  * Tests for the basic language.
  * 
  * @author Holger Eichelberger
  */
-public class ExecutionTests extends AbstractExecutionTest {
+public class ExecutionTests extends AbstractExecutionTest<Script> {
 
     private static ExecutionTests tests;
     
     @Override
-    protected String getSystemPropertyName() {
-        return "instantiator.java.testdata.home";
+    protected ITestConfigurer<Script> createTestConfigurer() {
+        return new BuildLangTestConfigurer("instantiator.java.testdata.home");
     }
 
     @Override
@@ -64,27 +66,6 @@ public class ExecutionTests extends AbstractExecutionTest {
     public void testJavac() throws IOException {
         assertSelfInstantiate("javac");
     }
-    
-    /**
-     * The execution of the Ant builder.
-     * 
-     * @throws IOException should not occur
-     */
-    @Test
-    public void testAnt() throws IOException {
-        assertSelfInstantiate("ant");
-    }
-    
-    /**
-     * The execution of the Ant builder.
-     * 
-     * @throws IOException should not occur
-     */
-    @Ignore("does not work on Windows")
-    @Test
-    public void testMake() throws IOException {
-        assertSelfInstantiate("make");
-    }
 
     /**
      * Tests the implicit LHSMATCH variable.
@@ -113,16 +94,6 @@ public class ExecutionTests extends AbstractExecutionTest {
         System.setProperty("java.home", homeProperty);
     }
     
-    /**
-     * The execution of the aspectJ compiler.
-     * 
-     * @throws IOException should not occur
-     */
-    @Test
-    public void testAspectJ() throws IOException {
-        assertSelfInstantiate("aspectj");
-    }
-
     /**
      * The execution of jar operations.
      * 

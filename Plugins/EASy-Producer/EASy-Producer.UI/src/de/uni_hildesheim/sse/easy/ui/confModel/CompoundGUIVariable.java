@@ -40,7 +40,7 @@ class CompoundGUIVariable extends AbstractExpandableGUIVariable {
         }
         return result;
     }
-
+    
     @Override
     public Object getValue() {
         // TODO Auto-generated method stub

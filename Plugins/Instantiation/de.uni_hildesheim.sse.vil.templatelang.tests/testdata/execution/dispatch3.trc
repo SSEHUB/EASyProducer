@@ -1,0 +1,3 @@
+-> main(Configuration, Artifact) with (<config>, test.texts)
+    dp <- <config>
+    -> process(ElementNode) with (dispatch3::fam)

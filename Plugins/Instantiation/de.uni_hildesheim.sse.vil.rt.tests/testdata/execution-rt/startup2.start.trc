@@ -1,0 +1,21 @@
+-> status(LifecycleEvent) with (<LifecycleEvent>) = START
+-> ==(String, String) with (START, START) = true
+-> status(LifecycleEvent) with (<LifecycleEvent>) = START
+-> ==(String, String) with (START, START) = true
+-> status(LifecycleEvent) with (<LifecycleEvent>) = START
+-> ==(String, String) with (START, END) = false
+-> status(LifecycleEvent) with (<LifecycleEvent>) = START
+-> ==(String, String) with (START, END) = false
+-> status(LifecycleEvent) with (<LifecycleEvent>) = START
+-> ==(String, String) with (START, END) = false
+-> status(LifecycleEvent) with (<LifecycleEvent>) = START
+-> ==(String, String) with (START, START) = true
+-> status(LifecycleEvent) with (<LifecycleEvent>) = START
+-> ==(String, String) with (START, START) = true
+-> startup(Project, Configuration, Project, LifecycleEvent) with (<project>, <config>, <project>, <LifecycleEvent>)
+    -> status(LifecycleEvent) with (<LifecycleEvent>) = START
+    -> ==(String, String) with (START, START) = true
+    -> status(LifecycleEvent) with (<LifecycleEvent>) = START
+    -> ==(String, String) with (START, START) = true
+    -> startupTactic()
+    -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)

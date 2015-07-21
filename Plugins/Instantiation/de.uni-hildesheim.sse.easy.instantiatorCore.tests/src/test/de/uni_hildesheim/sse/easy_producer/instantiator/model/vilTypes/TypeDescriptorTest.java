@@ -11,7 +11,7 @@ import org.junit.Test;
 import test.de.uni_hildesheim.sse.easy_producer.instantiator.model.AbstractTest;
 import test.de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.testArtifacts.MyArtifact;
 import test.de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.testArtifacts.MySubArtifact;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor.AliasType;
@@ -24,7 +24,6 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.PseudoStr
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.SignatureUtils;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.VilException;
 
 /**
  * Tests the type descriptor class. This test must be executed 
@@ -83,14 +82,14 @@ public class TypeDescriptorTest extends AbstractTest {
      * @see #getExpectedSignatures(Class, String)
      * @see OperationsIterator
      */
-    private void assertOperations(Class<? extends IVilType> cls, boolean qualified) {
+    private void assertOperations(Class<?> cls, boolean qualified) {
         String clsName;
         if (qualified) {
             clsName = cls.getName();
         } else {
             clsName = cls.getSimpleName();
         }
-        TypeDescriptor<? extends IVilType> descriptor = getRegistry().getType(clsName);
+        TypeDescriptor<?> descriptor = getRegistry().getType(clsName);
         Assert.assertNotNull(descriptor);
         assertOperations(cls, descriptor.getOperations());
         assertOperations(cls, new OperationsIterator(descriptor));
@@ -102,7 +101,7 @@ public class TypeDescriptorTest extends AbstractTest {
      * @param cls the class of the VIL type
      * @param iter the operations to analyze
      */
-    private void assertOperations(Class<? extends IVilType> cls, Iterable<OperationDescriptor> iter) {
+    private void assertOperations(Class<?> cls, Iterable<OperationDescriptor> iter) {
         Set<String> exCons = new HashSet<String>();
         addOperations(cls, exCons, true);
         Set<String> exOps = new HashSet<String>();
@@ -243,13 +242,13 @@ public class TypeDescriptorTest extends AbstractTest {
      *   <code>java.lang.String</code>)
      */
     private void testBasicType(Class<?> typeClass, String vilName, Class<?> wrapperClass, String primitiveName) {
-        TypeDescriptor<? extends IVilType> cDesc = getRegistry().getType(typeClass.getName());
+        TypeDescriptor<?> cDesc = getRegistry().getType(typeClass.getName());
         Assert.assertNotNull(cDesc);
-        TypeDescriptor<? extends IVilType> vDesc = getRegistry().getType(vilName);
+        TypeDescriptor<?> vDesc = getRegistry().getType(vilName);
         Assert.assertNotNull(vDesc);
-        TypeDescriptor<? extends IVilType> wDesc = getRegistry().getType(wrapperClass.getName());
+        TypeDescriptor<?> wDesc = getRegistry().getType(wrapperClass.getName());
         Assert.assertNotNull(wDesc);
-        TypeDescriptor<? extends IVilType> pDesc;
+        TypeDescriptor<?> pDesc;
         if (null != primitiveName) {
             pDesc = getRegistry().getType(primitiveName);
             Assert.assertNotNull(pDesc);
@@ -280,7 +279,7 @@ public class TypeDescriptorTest extends AbstractTest {
      */
     @Test
     public void testConversions() {
-        TypeDescriptor<? extends IVilType> cDesc = TypeRegistry.integerType();
+        TypeDescriptor<?> cDesc = TypeRegistry.integerType();
         Assert.assertNotNull(cDesc);
         Assert.assertTrue("there must be at least on conversion in Integer", cDesc.getConversionsCount() > 0);
         int count = 0;

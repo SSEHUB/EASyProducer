@@ -1,6 +1,6 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 
 /**
  * A nested rule block. Please note that this block must be visited explicitly.
@@ -24,7 +24,7 @@ public class NestedRuleBlock extends RuleBlock {
     }
 
     @Override
-    public Object accept(IVisitor visitor) throws VilLanguageException {
+    public Object accept(IVisitor visitor) throws VilException {
         return null; // must be visited explicitly
     }
 

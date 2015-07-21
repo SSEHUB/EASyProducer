@@ -1,5 +1,7 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
+
 /**
  * A visitor interface for expressions.
  * 
@@ -12,89 +14,126 @@ public interface IExpressionVisitor {
      * 
      * @param par the node
      * @return the result of visiting this expression (may be <b>null</b>)
-     * @throws ExpressionException in case that visiting fails (e.g., execution)
+     * @throws VilException in case that visiting fails (e.g., execution)
      */
-    public Object visitParenthesisExpression(ParenthesisExpression par) throws ExpressionException;
+    public Object visitParenthesisExpression(ParenthesisExpression par) throws VilException;
 
     /**
      * Visits a call node.
      * 
      * @param call the node
      * @return the result of visiting this expression (may be <b>null</b>)
-     * @throws ExpressionException in case that visiting fails (e.g., execution)
+     * @throws VilException in case that visiting fails (e.g., execution)
      */
-    public Object visitCallExpression(CallExpression call) throws ExpressionException;
+    public Object visitCallExpression(CallExpression call) throws VilException;
 
     /**
      * Visits a constant node.
      * 
      * @param cst the node
      * @return the result of visiting this expression (may be <b>null</b>)
-     * @throws ExpressionException in case that visiting fails (e.g., execution)
+     * @throws VilException in case that visiting fails (e.g., execution)
      */
-    public Object visitConstantExpression(ConstantExpression cst) throws ExpressionException;
+    public Object visitConstantExpression(ConstantExpression cst) throws VilException;
 
     /**
      * Visits a variability model identifier.
      * 
      * @param identifier the identifier
      * @return the result of visiting this expression (may be <b>null</b>)
-     * @throws ExpressionException in case that visiting fails (e.g., execution)
+     * @throws VilException in case that visiting fails (e.g., execution)
      */
-    public Object visitVarModelIdentifierExpression(VarModelIdentifierExpression identifier) throws ExpressionException;
+    public Object visitVarModelIdentifierExpression(VarModelIdentifierExpression identifier) 
+        throws VilException;
 
     /**
      * Visits a VIL type expression.
      * 
      * @param typeExpression the expression
      * @return the result of visiting this expression (may be <b>null</b>)
-     * @throws ExpressionException in case that visiting fails (e.g., execution)
+     * @throws VilException in case that visiting fails (e.g., execution)
      */
-    public Object visitVilTypeExpression(VilTypeExpression typeExpression) throws ExpressionException;
+    public Object visitVilTypeExpression(VilTypeExpression typeExpression) throws VilException;
     
     /**
      * Visits a constant node.
      * 
      * @param cst the node
      * @return the result of visiting the given statement (may be <b>null</b>)
-     * @throws ExpressionException in case that visiting fails (e.g., execution)
+     * @throws VilException in case that visiting fails (e.g., execution)
      */
-    public Object visitVariableExpression(VariableExpression cst) throws ExpressionException;
+    public Object visitVariableExpression(VariableExpression cst) throws VilException;
 
     /**
      * Visits an expression evaluator.
      * 
      * @param ex the evaluator
      * @return the result of visiting this expression (may be <b>null</b>)
-     * @throws ExpressionException in case that visiting fails (e.g., execution)
+     * @throws VilException in case that visiting fails (e.g., execution)
      */
-    public Object visitExpressionEvaluator(ExpressionEvaluator ex) throws ExpressionException;
+    public Object visitExpressionEvaluator(ExpressionEvaluator ex) throws VilException;
     
     /**
      * Visits an unspecified expression (in case of specialized nodes).
      * 
      * @param ex the node
      * @return the result of visiting this expression (may be <b>null</b>)
-     * @throws ExpressionException in case that visiting fails (e.g., execution)
+     * @throws VilException in case that visiting fails (e.g., execution)
      */
-    public Object visitExpression(Expression ex) throws ExpressionException;
+    public Object visitExpression(Expression ex) throws VilException;
 
     /**
      * Visits a value assignment expression.
      * 
      * @param ex the expression
      * @return the result of visiting the given statement (may be <b>null</b>)
-     * @throws ExpressionException in case that visiting fails (e.g., execution)
+     * @throws VilException in case that visiting fails (e.g., execution)
      */
-    public Object visitValueAssignmentExpression(ValueAssignmentExpression ex) throws ExpressionException;
+    public Object visitValueAssignmentExpression(ValueAssignmentExpression ex) throws VilException;
 
     /**
      * Visits a container initializer expression.
      * 
      * @param ex the expression
      * @return the result of visiting the given statement (may be <b>null</b>)
-     * @throws ExpressionException in case that visiting fails (e.g., execution)
+     * @throws VilException in case that visiting fails (e.g., execution)
      */
-    public Object visitContainerInitializerExpression(ContainerInitializerExpression ex) throws ExpressionException;
+    public Object visitContainerInitializerExpression(ContainerInitializerExpression ex) throws VilException;
+    
+    /**
+     * Visits a composite expression.
+     * 
+     * @param ex the expression
+     * @return the result of visiting the given statement
+     * @throws VilException in case that visiting fails (e.g., execution)
+     */
+    public Object visitCompositeExpression(CompositeExpression ex) throws VilException;
+
+    /**
+     * Visits a field access expression.
+     * 
+     * @param ex the expression
+     * @return the result of visiting the given statement (may be <b>null</b>)
+     * @throws VilException in case that visiting fails (e.g., execution)
+     */
+    public Object visitFieldAccessExpression(FieldAccessExpression ex) throws VilException;
+
+    /**
+     * Visits resolvable operation expression (function pointer resolution).
+     * 
+     * @param ex the expression
+     * @return the result of visiting the given statement (may be <b>null</b>)
+     * @throws VilException in case that visiting fails (e.g., execution)
+     */
+    public Object visitResolvableOperationExpression(ResolvableOperationExpression ex) throws VilException;
+
+    /**
+     * Visits resolvable operation call expression (function pointer call).
+     * 
+     * @param ex the expression
+     * @return the result of visiting the given statement (may be <b>null</b>)
+     * @throws VilException in case that visiting fails (e.g., execution)
+     */    
+    public Object visitResolvableOperationCallExpression(ResolvableOperationCallExpression ex) throws VilException;
     
 }

@@ -1,7 +1,7 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VariableDeclaration;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IStringValueProvider;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
@@ -54,17 +54,13 @@ public class ExpressionEvaluator extends Expression implements IVilType, IString
      * 
      * @param iteratorValue the current value when iterating with the expression
      * @return the result of evaluating {@link #expression} in the current context of {@link #evaluationVisitor}
-     * @throws ExpressionException in case that the evaluation fails
+     * @throws VilException in case that the evaluation fails
      */
-    public Object evaluate(Object iteratorValue) throws ExpressionException {
+    public Object evaluate(Object iteratorValue) throws VilException {
         if (null == expression) {
-            throw new ExpressionException("cannot evaluate null", ExpressionException.ID_INTERNAL);
+            throw new VilException("cannot evaluate null", VilException.ID_INTERNAL);
         }
-        try {
-            evaluationVisitor.getRuntimeEnvironment().setValue(iterator, iteratorValue);
-        } catch (VilLanguageException e) {
-            throw new ExpressionException(e);
-        }
+        evaluationVisitor.getRuntimeEnvironment().setValue(iterator, iteratorValue);
         return expression.accept(evaluationVisitor);
     }
     
@@ -88,12 +84,12 @@ public class ExpressionEvaluator extends Expression implements IVilType, IString
     }
     
     @Override
-    public TypeDescriptor<? extends IVilType> inferType() throws ExpressionException {
+    public TypeDescriptor<?> inferType() throws VilException {
         return TypeRegistry.DEFAULT.getType(ExpressionEvaluator.class);
     }
 
     @Override
-    public Object accept(IExpressionVisitor visitor) throws ExpressionException {
+    public Object accept(IExpressionVisitor visitor) throws VilException {
         return visitor.visitExpressionEvaluator(this);
     }
 

@@ -1,0 +1,11 @@
+project constraintSetDefaultInCompound {
+
+    version v0;
+    
+    compound Pipeline {
+        Integer i = 1;
+        setOf(Constraint) constraints = {i > 0, i < 1};
+    }
+
+    Pipeline pipeline;
+}

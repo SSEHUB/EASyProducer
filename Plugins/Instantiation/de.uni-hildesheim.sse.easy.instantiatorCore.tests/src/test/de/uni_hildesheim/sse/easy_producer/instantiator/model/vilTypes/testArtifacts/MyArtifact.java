@@ -1,7 +1,7 @@
 package test.de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.testArtifacts;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IArtifactChangedListener;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
 
 /**
@@ -72,7 +72,7 @@ public class MyArtifact extends DefaultSimpleArtifact implements IMyArtifact, IA
     }
 
     @Override
-    public void artifactChanged(Object cause) throws ArtifactException {
+    public void artifactChanged(Object cause) throws VilException {
     }
    
     /**
@@ -87,7 +87,7 @@ public class MyArtifact extends DefaultSimpleArtifact implements IMyArtifact, IA
     }
 
     @Override
-    public void store() throws ArtifactException {
+    public void store() throws VilException {
         // does not care here as we use this class just for testing the TypeRegistry
     }
 
@@ -102,7 +102,7 @@ public class MyArtifact extends DefaultSimpleArtifact implements IMyArtifact, IA
     }
 
     @Override
-    public void update() throws ArtifactException {
+    public void update() throws VilException {
     }
 
 }

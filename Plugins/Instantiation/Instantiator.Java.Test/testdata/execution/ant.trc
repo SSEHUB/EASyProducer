@@ -1,5 +1,0 @@
--> main(Project, Project, Configuration) with (<project>, <project>, <config>)
-    pfad <- /antTestFiles/build.xml
-    buildTarget <- specialTarget
-    -> getPath(Project) with (<project>) = 
-    -> ant(Path, String, String) with (, /antTestFiles/build.xml, specialTarget) = {}

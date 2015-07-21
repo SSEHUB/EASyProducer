@@ -49,7 +49,17 @@
         <echo>##########################</echo>
         <echo>###  Compiling EASy-UI ###</echo>
         <echo>##########################</echo>
-        <ant dir="${home.easy.easy-producer.ui.dir}" antfile="${build.script.name}" />     
+        <ant dir="${home.easy.easy-producer.ui.dir}" antfile="${build.script.name}" /> 
+
+        <echo>############################</echo>
+        <echo>###  Compiling EASy-Help ###</echo>
+        <echo>############################</echo>
+        <ant dir="de.uni-hildesheim.sse.easy.help" antfile="${build.script.name}" />
+
+        <echo>#################################</echo>
+        <echo>###  Compiling EASy-Examples  ###</echo>
+        <echo>#################################</echo>
+        <ant dir="EASy-Examples" antfile="${build.script.name}" />         
         
         <echo>#############################</echo>
         <echo>###  Compiling Test-Suite ###</echo>
@@ -118,6 +128,7 @@
             <!-- VarModel -->
             <fileset dir="${home.utils.dir}/${build.jar.dir}" includes="**/*.jar" />
             <fileset dir="${home.model.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <fileset dir="${home.dslCore.ui.dir}/${build.jar.dir}" includes="**/*.jar" />
 			<!-- IVML -->
             <fileset dir="${home.dslCore.dir}/${build.jar.dir}" includes="**/*.jar" />
             <fileset dir="${home.ivml.dir}/${build.jar.dir}" includes="**/*.jar" />
@@ -138,7 +149,9 @@
             <fileset dir="${home.vil.expressions.core.dir}/${build.jar.dir}" includes="**/*.jar" />
             <fileset dir="${home.model.tests.dir}/${build.jar.dir}" includes="**/*.jar" />
             <fileset dir="${home.instantiator.java.dir}/${build.jar.dir}" includes="**/*.jar" />
-		</copy>
+            <fileset dir="${home.instantiator.ant.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <fileset dir="${home.instantiator.aspectj.dir}/${build.jar.dir}" includes="**/*.jar" />
+        </copy>
 	</target>
 	
 	<target name="copy.to.eclipseGUI">

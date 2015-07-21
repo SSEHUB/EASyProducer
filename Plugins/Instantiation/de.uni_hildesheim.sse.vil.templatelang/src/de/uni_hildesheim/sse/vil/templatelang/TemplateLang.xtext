@@ -14,6 +14,7 @@ LanguageUnit: // do not rename - required for reuse
     ('extends' ext=Identifier)? 
     '{' 
         version=VersionStmt?
+        typeDefs+=TypeDef*
         vars+=VariableDeclaration* 
         defs+=VilDef* 
     '}' 

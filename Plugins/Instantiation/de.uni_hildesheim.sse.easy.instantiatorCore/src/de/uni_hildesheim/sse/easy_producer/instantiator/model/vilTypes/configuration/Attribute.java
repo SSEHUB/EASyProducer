@@ -21,11 +21,12 @@ public class Attribute extends AbstractIvmlVariable {
     /**
      * Creates a new attribute instance.
      * 
+     * @param parent the parent configuration
      * @param attribute the IVML attribute
      * @param filter the variable filter to apply
      */
-    Attribute(IDecisionVariable attribute, IVariableFilter filter) {
-        super(attribute, filter);
+    Attribute(Configuration parent, IDecisionVariable attribute, IVariableFilter filter) {
+        super(parent, attribute, filter);
     }
 
     @Override

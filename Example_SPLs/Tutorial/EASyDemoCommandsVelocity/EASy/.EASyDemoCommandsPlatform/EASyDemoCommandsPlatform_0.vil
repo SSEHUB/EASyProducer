@@ -1,0 +1,20 @@
+vilScript EASyDemoCommandsPlatform (Project source, Configuration config, Project target) {
+
+    version v0;
+
+    cleanup(Project target) = : {
+    	Path p = "$target/src";
+    	p.deleteAll();
+    	p = "$target/bin";
+    	p.deleteAll();
+    }
+
+    copySRCFiles(Project source, Project target) = "$target/src/**/*.java" : "$source/src/**/*.java" {
+        RHS.copy(LHS);
+    }
+
+    main(Project source, Configuration conf, Project target) = : cleanup(target) {
+        copySRCFiles(source, target);
+    }
+
+}

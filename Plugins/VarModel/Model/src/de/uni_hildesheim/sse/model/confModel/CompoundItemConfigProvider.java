@@ -18,6 +18,7 @@ package de.uni_hildesheim.sse.model.confModel;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
 import de.uni_hildesheim.sse.model.varModel.values.CompoundValue;
+import de.uni_hildesheim.sse.model.varModel.values.NullValue;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
 import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
 
@@ -51,31 +52,40 @@ class CompoundItemConfigProvider extends NestedVarConfigProvider {
 
     @Override
     protected Value getValue() {
-        CompoundValue cmpValue = (CompoundValue) getParent().getValue();
-        return cmpValue.getNestedValue(slotName);
+        Value parentValue = getParent().getValue();
+        return (parentValue instanceof NullValue) ? parentValue
+            : ((CompoundValue) parentValue).getNestedValue(slotName);
     }
 
     @Override
     protected void setValue(Value value, IAssignmentState state) throws ConfigurationException {
-        CompoundValue cmpValue = (CompoundValue) getParent().getValue();
+        Value parentValue = getParent().getValue();
+        if (null == parentValue || parentValue instanceof NullValue) {
+            // Set empty value instead of NULL value, which can be configured
+            getParent().setValue(null, state);
+            parentValue = getParent().getValue();
+        }
+        CompoundValue cmpValue = (CompoundValue) parentValue;
         try {
             cmpValue.configureValue(slotName, value);
             setState(state);
         } catch (ValueDoesNotMatchTypeException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        
+            throw new ConfigurationException(getConfiguration(), e.getMessage(),
+                ConfigurationException.TYPE_MISMATCH);
+        }            
     }
 
     @Override
     protected IAssignmentState getState() {
         IAssignmentState state = this.state;
         // Handle special situations
-        if (getParent().getState() == AssignmentState.FROZEN && null != getValue()) {
-            state = AssignmentState.FROZEN;
-        } else if (!getParent().ownStateAllowed() && null != getValue()) {
-            state = getParent().getState();
+        if (!getParent().ownStateAllowed()) { 
+            if (getParent().getState() == AssignmentState.FROZEN && null != getValue()) {
+                // this is not correct in the general case as individual vars may still be assignable
+                state = AssignmentState.FROZEN; 
+            } else if (!getParent().ownStateAllowed() && null != getValue()) {
+                state = getParent().getState();
+            }
         }
         return state;
     }

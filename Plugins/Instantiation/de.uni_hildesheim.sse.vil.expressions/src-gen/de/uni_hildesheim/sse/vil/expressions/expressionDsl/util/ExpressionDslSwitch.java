@@ -86,6 +86,13 @@ public class ExpressionDslSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case ExpressionDslPackage.TYPE_DEF:
+      {
+        TypeDef typeDef = (TypeDef)theEObject;
+        T result = caseTypeDef(typeDef);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case ExpressionDslPackage.ADVICE:
       {
         Advice advice = (Advice)theEObject;
@@ -391,6 +398,22 @@ public class ExpressionDslSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseVariableDeclaration(VariableDeclaration object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Type Def</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Type Def</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseTypeDef(TypeDef object)
   {
     return null;
   }

@@ -84,4 +84,13 @@ public class TestEvaluationContext extends EvaluationContext {
         return cfg.getAllInstances(var);
     }
 
+    @Override
+    public void issueWarning() {
+    }
+
+    @Override
+    public boolean allowPropagation() {
+        return true; // default before adding this method
+    }
+
 }

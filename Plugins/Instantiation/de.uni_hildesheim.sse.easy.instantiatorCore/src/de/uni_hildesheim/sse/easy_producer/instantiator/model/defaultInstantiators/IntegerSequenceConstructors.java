@@ -37,7 +37,7 @@ public class IntegerSequenceConstructors implements IVilType {
                 values[i] = start + i;
             }
         }
-        TypeDescriptor<? extends IVilType>[] param = TypeDescriptor.createArray(1);
+        TypeDescriptor<?>[] param = TypeDescriptor.createArray(1);
         param[0] = TypeRegistry.integerType();
         return new ArraySequence<Integer>(values, param);
     }

@@ -1,12 +1,11 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaOperation;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.VilException;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 
 /**
@@ -45,7 +44,7 @@ public class CallExpression extends AbstractCallExpression implements IArgumentP
     private Object parent;
     private CallArgument[] arguments;
     private OperationDescriptor resolved;
-    private TypeDescriptor<? extends IVilType> type;
+    private TypeDescriptor<?> type;
     private CallType callType = CallType.NORMAL;
     private boolean dotRight;
 
@@ -55,9 +54,9 @@ public class CallExpression extends AbstractCallExpression implements IArgumentP
      * @param parent the parent language unit (if given used as optional parameter during calls)
      * @param name the name of the call
      * @param arguments the arguments for the call
-     * @throws ExpressionException in case that no argument is given
+     * @throws VilException in case that no argument is given
      */
-    public CallExpression(Object parent, String name, Expression... arguments) throws ExpressionException {
+    public CallExpression(Object parent, String name, Expression... arguments) throws VilException {
         this(parent, name, false, CallArgument.createUnnamedArguments(arguments));
     }
     
@@ -67,9 +66,9 @@ public class CallExpression extends AbstractCallExpression implements IArgumentP
      * @param parent the parent language unit (if given used as optional parameter during calls)
      * @param name the name of the call.
      * @param arguments the arguments for the call
-     * @throws ExpressionException in case that no argument is given
+     * @throws VilException in case that no argument is given
      */
-    public CallExpression(Object parent, String name, CallArgument... arguments) throws ExpressionException {
+    public CallExpression(Object parent, String name, CallArgument... arguments) throws VilException {
         this(parent, name, false, arguments);
     }
     
@@ -80,14 +79,14 @@ public class CallExpression extends AbstractCallExpression implements IArgumentP
      * @param name the name of the call
      * @param dotRight if this expression occurred on the right side of a "."
      * @param arguments the arguments for the call
-     * @throws ExpressionException in case that no argument is given
+     * @throws VilException in case that no argument is given
      */
     public CallExpression(Object parent, String name, boolean dotRight, CallArgument... arguments) 
-        throws ExpressionException {
+        throws VilException {
         super(name, true);
         if (doZeroArgumentTest() && 0 == arguments.length) {
-            throw new ExpressionException("at least one argument must be provided to '" + name + "'(owner)", 
-                ExpressionException.ID_INTERNAL);
+            throw new VilException("at least one argument must be provided to '" + name + "'(owner)", 
+                VilException.ID_INTERNAL);
         }
         this.parent = parent;
         this.dotRight = dotRight;
@@ -99,17 +98,17 @@ public class CallExpression extends AbstractCallExpression implements IArgumentP
      * 
      * @param operation the operation to be considered
      * @param arg the one and only argument
-     * @throws ExpressionException in case that the operation does not exactly take one argument and provide a result
+     * @throws VilException in case that the operation does not exactly take one argument and provide a result
      */
-    public CallExpression(OperationDescriptor operation, CallArgument arg) throws ExpressionException {
+    public CallExpression(OperationDescriptor operation, CallArgument arg) throws VilException {
         super(operation.getName(), false);
         if (1 != operation.getParameterCount()) {
-            throw new ExpressionException("operation " + operation.getJavaSignature()  
-                + " does not accept exactly one parameter", ExpressionException.ID_INTERNAL);
+            throw new VilException("operation " + operation.getJavaSignature()  
+                + " does not accept exactly one parameter", VilException.ID_INTERNAL);
         }
         if (TypeRegistry.voidType() == operation.getReturnType()) {
-            throw new ExpressionException("operation " + operation.getJavaSignature()  
-                + " does not return a return value", ExpressionException.ID_INTERNAL);
+            throw new VilException("operation " + operation.getJavaSignature()  
+                + " does not return a return value", VilException.ID_INTERNAL);
         }
         resolved = operation;
         callType = CallType.TRANSPARENT;
@@ -122,12 +121,12 @@ public class CallExpression extends AbstractCallExpression implements IArgumentP
      * 
      * @param operation the operation to be considered
      * @param param the one and only parameter
-     * @throws ExpressionException in case that the operation does not exactly take one argument and provide a result
+     * @throws VilException in case that the operation does not exactly take one argument and provide a result
      */
-    public CallExpression(IMetaOperation operation, CallArgument... param) throws ExpressionException {
+    public CallExpression(IMetaOperation operation, CallArgument... param) throws VilException {
         super(operation.getName(), false);
         if (!(operation instanceof OperationDescriptor)) {
-            throw new ExpressionException("operation is of wrong type", ExpressionException.ID_INTERNAL);
+            throw new VilException("operation is of wrong type", VilException.ID_INTERNAL);
         }
         resolved = (OperationDescriptor) operation;
         callType = CallType.EXTERNAL;
@@ -180,97 +179,148 @@ public class CallExpression extends AbstractCallExpression implements IArgumentP
     }
     
     /**
-     * Returns the signature of this operation for exception messages.
-     * 
-     * @return the signature
-     * @throws ExpressionException in case of type resolution problems
-     */
-    private String getSignature() throws ExpressionException {
-        StringBuilder signature = new StringBuilder(getName());
-        signature.append("(");
-        for (int a = 0; a < arguments.length; a++) {
-            signature.append(arguments[a].getExpression().inferType().getName());
-            if (a < arguments.length - 1) {
-                signature.append(",");
-            }
-        }
-        signature.append(")");
-        return signature.toString();
-    }
-    
-    /**
      * Determines the operand for searching operations on. Is called by {@link #inferType()}.
      * 
      * @return the operand
-     * @throws ExpressionException in case that determining the operand fails
+     * @throws VilException in case that determining the operand fails
      */
-    protected TypeDescriptor<? extends IVilType> determineOperand() throws ExpressionException {
-        TypeDescriptor<? extends IVilType> operand = null;
+    protected TypeDescriptor<?> determineOperand() throws VilException {
+        TypeDescriptor<?> operand = null;
         // resolve types and determine operand (to search operations on)
         for (int p = 0; p < arguments.length; p++) {
-            TypeDescriptor<? extends IVilType> tmp = arguments[p].inferType();
+            TypeDescriptor<?> tmp = arguments[p].inferType();
             if (0 == p) {
                 operand = tmp;
             }
         }
         if (0 == arguments.length) {
-            throw new ExpressionException("cannot resolve operations without a parameter: " + getSignature(), 
-                            ExpressionException.ID_INTERNAL);
+            throw new VilException("cannot resolve call without a parameter: " 
+                + getSignature(getName(), arguments), VilException.ID_INTERNAL);
         }
         return operand;
     }
+    
+    /**
+     * Returns whether the field meta type shall be checked in {@link #resolveOperation()}.
+     * 
+     * @return <code>true</code>
+     */
+    protected boolean checkMetaForFirstArgField() {
+        return true;
+    }
+    
+    /**
+     * Resolves the operation and takes into account that an operation directly on a field could be
+     * appropriate (not equals for decision variables).
+     * 
+     * @return the resolved operation or <b>null</b>
+     * @throws VilException in case that resolution fails
+     */
+    private IMetaOperation resolveOperation() throws VilException {
+        IMetaOperation op = null;
+        if (arguments.length > 0 && checkMetaForFirstArgField() 
+            && arguments[0].getExpression() instanceof FieldAccessExpression) {
+            FieldAccessExpression fae = (FieldAccessExpression) arguments[0].getExpression();
+            TypeDescriptor<?> operand = fae.getField().getMetaType();
+            if (null != operand) {
+                CallArgument[] args = new CallArgument[arguments.length];
+                args[0] = new CallArgument(operand);
+                for (int a = 1; a < arguments.length; a++) {
+                    args[a] = arguments[a];
+                }
+                try {
+                    op = resolveOperation(operand, getName(), args);
+                    if (null == args[0].getExpression() && op instanceof OperationDescriptor) {
+                        fae.enableMetaAccess();
+                    } else {
+                        op = null; // args[0] indicates that a conversion was inserted; no conversions here!
+                    }
+                } catch (VilException e) {
+                    // ignore as this was just a trial
+                }
+            }
+        }
+        if (null == op) {
+            TypeDescriptor<?> operand = determineOperand();
+            op = resolveOperation(operand, getName(), arguments);
+        }
+        return op;
+    }
+    
+    /**
+     * Checks whether one of the parameter / argument types shall be used.
+     * 
+     * @return the parameter type or <b>null</b>
+     * @throws VilException in case of type problems
+     */
+    private TypeDescriptor<?> checkUseParameter() throws VilException {
+        TypeDescriptor<?> result = null;
+        int useParam = resolved.useParameterAsReturn();
+        if (useParam >= 0) {
+            useParam++; // ignore implicit
+            if (0 <= useParam && useParam < arguments.length) {
+                Expression param = arguments[useParam].getExpression();
+                if (param instanceof ExpressionEvaluator) {
+                    param = ((ExpressionEvaluator) param).getExpression();
+                }
+                result = param.inferType();
+            }
+        }
+        return result;
+    }
 
     @Override
-    public TypeDescriptor<? extends IVilType> inferType() throws ExpressionException {
+    public TypeDescriptor<?> inferType() throws VilException {
         if (null == type) {
             if (null == resolved) {
-                TypeDescriptor<? extends IVilType> operand = determineOperand();
-                IMetaOperation op = resolveOperation(operand, getName(), arguments);
+                IMetaOperation op = resolveOperation();
                 if (op instanceof OperationDescriptor) {
                     resolved = (OperationDescriptor) op;
                 } else {
-                    throw new ExpressionException(op.getJavaSignature() + " is not a valid operation", 
-                        ExpressionException.ID_CANNOT_RESOLVE);
+                    throw new VilException(op.getJavaSignature() + " is not a valid operation", 
+                        VilException.ID_CANNOT_RESOLVE);
                 }
             }
-            TypeDescriptor<? extends IVilType> result = resolved.getReturnType();
-            TypeDescriptor<? extends IVilType>[] returnGenerics = null;
+            TypeDescriptor<?> result = resolved.getReturnType();
+            TypeDescriptor<?>[] returnGenerics = null;
             if (resolved.isTypeSelect() && arguments[1].getExpression() instanceof VilTypeExpression) {
-                // 2 param are ensured by isTypeSelect
-                // determine actual return type
+                // 2 param are ensured by isTypeSelect, determine actual return type
                 returnGenerics = TypeDescriptor.createArray(1);
-                // ugly
-                returnGenerics[0] = ((VilTypeExpression) arguments[1].getExpression()).getResolved();
+                returnGenerics[0] = ((VilTypeExpression) arguments[1].getExpression()).getResolved(); // ugly
             }
             if (resolved.isGenericCollectionOperation()) {
                 // implicit parameter 1 determines type
-                TypeDescriptor<? extends IVilType> arg0Type = arguments[0].getExpression().inferType();
-                if (arg0Type.getParameterCount() > 0) {
+                TypeDescriptor<?> arg0Type = arguments[0].getExpression().inferType();
+                if (arg0Type.getGenericParameterCount() > 0) { 
                     returnGenerics = TypeDescriptor.createArray(1);
-                    returnGenerics[0] = arg0Type.getParameterType(0);
+                    returnGenerics[0] = checkUseParameter();
+                    if (null == returnGenerics[0]) { // take value from implicit parameter
+                        returnGenerics[0] = arg0Type.getGenericParameterType(0);
+                    }
                 }
             }
             if (resolved.getReturnType().isMap() && 2 == resolved.getParameterCount() 
                 && resolved.getParameterType(0).isCollection() && resolved.getParameterType(1).isCollection()) {
-                TypeDescriptor<? extends IVilType> arg0Type = arguments[0].getExpression().inferType();
-                TypeDescriptor<? extends IVilType> arg1Type = arguments[1].getExpression().inferType();
-                if (arg0Type.getParameterCount() > 0 && arg1Type.getParameterCount() > 0) {
+                TypeDescriptor<?> arg0Type = arguments[0].getExpression().inferType();
+                TypeDescriptor<?> arg1Type = arguments[1].getExpression().inferType();
+                if (arg0Type.getGenericParameterCount() > 0 && arg1Type.getGenericParameterCount() > 0) {
                     returnGenerics = TypeDescriptor.createArray(2);
-                    returnGenerics[0] = arg0Type.getParameterType(0);
-                    returnGenerics[1] = arg1Type.getParameterType(0);
+                    returnGenerics[0] = arg0Type.getGenericParameterType(0);
+                    returnGenerics[1] = arg1Type.getGenericParameterType(0);
                 }
             }
-            int useParam = resolved.useParameterAsReturn();
+            int useParam = resolved.useGenericParameterAsReturn();
             if (useParam >= 0 && null != resolved.getDeclaringType()
-                && useParam < arguments[0].inferType().getParameterCount()) {
-                result = arguments[0].inferType().getParameterType(useParam);
+                && arguments.length > 0
+                && useParam < arguments[0].inferType().getGenericParameterCount()) {
+                result = arguments[0].inferType().getGenericParameterType(useParam);
             }
             if (!resolved.isStatic() && TypeRegistry.anyType() == result) {
                 // the operation has a generic return value -> implicit parameter determines actual type
                 // current assumption: ANY points to original template parameter 
-                TypeDescriptor<? extends IVilType> arg0Type = arguments[0].getExpression().inferType();
-                if (1 == arg0Type.getParameterCount()) {
-                    result = arg0Type.getParameterType(0);
+                TypeDescriptor<?> arg0Type = arguments[0].getExpression().inferType();
+                if (1 == arg0Type.getGenericParameterCount()) {
+                    result = arg0Type.getGenericParameterType(0);
                 }
             }
             if (null != returnGenerics) {
@@ -321,7 +371,7 @@ public class CallExpression extends AbstractCallExpression implements IArgumentP
     }
 
     @Override
-    public Object accept(IExpressionVisitor visitor) throws ExpressionException {
+    public Object accept(IExpressionVisitor visitor) throws VilException {
         return visitor.visitCallExpression(this);
     }
 

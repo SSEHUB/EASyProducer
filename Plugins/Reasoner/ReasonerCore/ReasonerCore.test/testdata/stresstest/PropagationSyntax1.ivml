@@ -1,0 +1,9 @@
+project PropagationSyntax1 {
+
+    Integer a;
+    Integer b;
+    
+    a == 1 implies b == 2;
+    if a == 2 then b == 1 else b == 3 endif;
+    a == 0;
+}

@@ -10,7 +10,8 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ConstantExpressionTest.class, CallExpressionTest.class, 
-    StringReplacerTest.class, ConstructorCallExpressionTest.class })
+//    StringReplacerTest.class, 
+    ConstructorCallExpressionTest.class })
 public class ExpressionTests {
 
 }

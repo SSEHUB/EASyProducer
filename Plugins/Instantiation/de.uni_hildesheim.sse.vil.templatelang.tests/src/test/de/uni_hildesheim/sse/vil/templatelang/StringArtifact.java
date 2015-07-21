@@ -4,8 +4,8 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IArt
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.SimpleArtifact;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Binary;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Text;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArraySet;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IStringValueProvider;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationMeta;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.PseudoString;
@@ -42,25 +42,25 @@ public class StringArtifact extends SimpleArtifact implements IStringValueProvid
     }
 
     @Override
-    public void delete() throws ArtifactException {
+    public void delete() throws VilException {
     }
 
     @Override
-    public String getName() throws ArtifactException {
+    public String getName() throws VilException {
         return "<StringArtifact>";
     }
 
     @Override
-    public void rename(String name) throws ArtifactException {
+    public void rename(String name) throws VilException {
     }
 
     @Override
-    public Text getText() throws ArtifactException {
+    public Text getText() throws VilException {
         return Text.CONSTANT_EMPTY;
     }
 
     @Override
-    public Binary getBinary() throws ArtifactException {
+    public Binary getBinary() throws VilException {
         return Binary.CONSTANT_EMPTY;
     }
 
@@ -75,7 +75,7 @@ public class StringArtifact extends SimpleArtifact implements IStringValueProvid
     }
 
     @Override
-    public void store() throws ArtifactException {
+    public void store() throws VilException {
     }
 
     @Override
@@ -89,7 +89,7 @@ public class StringArtifact extends SimpleArtifact implements IStringValueProvid
     }
 
     @Override
-    public void update() throws ArtifactException {
+    public void update() throws VilException {
     }
     
 }

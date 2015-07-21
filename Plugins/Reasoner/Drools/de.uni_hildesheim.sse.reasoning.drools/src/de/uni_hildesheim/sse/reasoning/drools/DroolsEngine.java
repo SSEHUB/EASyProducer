@@ -23,6 +23,7 @@ import org.drools.definition.type.FactType;
 import org.drools.io.ResourceFactory;
 import org.drools.runtime.StatefulKnowledgeSession;
 
+import de.uni_hildesheim.sse.model.confModel.AllFreezeSelector;
 import de.uni_hildesheim.sse.model.confModel.AssignmentState;
 import de.uni_hildesheim.sse.model.confModel.CompoundVariable;
 import de.uni_hildesheim.sse.model.confModel.Configuration;
@@ -970,7 +971,7 @@ public class DroolsEngine {
      */
     private void freezeDecisionvariable(String name, IDecisionVariable dc) {
         if (fixedVariables.contains(name)) {
-            dc.freeze();
+            dc.freeze(AllFreezeSelector.INSTANCE);
         } 
     }
     

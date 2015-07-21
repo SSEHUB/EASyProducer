@@ -1,6 +1,6 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationMeta;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
 
@@ -15,9 +15,9 @@ public abstract class CompositeFragmentArtifact extends FragmentArtifact {
      * Returns all artifacts this composite artifact is composed of.
      * 
      * @return all fragments
-     * @throws ArtifactException in case that this element or query is invalid
+     * @throws VilException in case that this element or query is invalid
      */
     @OperationMeta(returnGenerics = FragmentArtifact.class)
-    public abstract Set<? extends FragmentArtifact> selectAll() throws ArtifactException;
+    public abstract Set<? extends FragmentArtifact> selectAll() throws VilException;
      
 }

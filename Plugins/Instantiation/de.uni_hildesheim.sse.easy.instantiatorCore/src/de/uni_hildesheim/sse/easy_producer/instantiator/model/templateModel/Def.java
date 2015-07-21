@@ -1,9 +1,9 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.IResolvableOperation;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaType;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IStringValueProvider;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 
@@ -12,12 +12,13 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegis
  * 
  * @author Holger Eichelberger
  */
-public class Def extends TemplateBlock implements ITemplateLangElement, IResolvableOperation<VariableDeclaration> {
+public class Def extends TemplateBlock implements ITemplateLangElement, IResolvableOperation<VariableDeclaration>, 
+    IStringValueProvider {
 
     private Template parent;
     private String name;
     private VariableDeclaration[] param;
-    private TypeDescriptor<? extends IVilType> specifiedType;
+    private TypeDescriptor<?> specifiedType;
     
     /**
      * Creates a new sub-template ('def').
@@ -29,7 +30,7 @@ public class Def extends TemplateBlock implements ITemplateLangElement, IResolva
      * @param specifiedType the specified type (may be <b>null</b> if none is given)
      */
     public Def(String name, VariableDeclaration[] param, ITemplateElement[] body, 
-        TypeDescriptor<? extends IVilType> specifiedType, Template parent) {
+        TypeDescriptor<?> specifiedType, Template parent) {
         super(body);
         this.parent = parent;
         this.name = name;
@@ -51,7 +52,7 @@ public class Def extends TemplateBlock implements ITemplateLangElement, IResolva
      * 
      * @return the specified type, may be <b>null</b> if none is given
      */
-    public TypeDescriptor<? extends IVilType> getSpecifiedType() {
+    public TypeDescriptor<?> getSpecifiedType() {
         return specifiedType;
     }
     
@@ -80,7 +81,7 @@ public class Def extends TemplateBlock implements ITemplateLangElement, IResolva
     }
     
     @Override
-    public Object accept(IVisitor visitor) throws VilLanguageException {
+    public Object accept(IVisitor visitor) throws VilException {
         return visitor.visitDef(this);
     }
 
@@ -114,8 +115,8 @@ public class Def extends TemplateBlock implements ITemplateLangElement, IResolva
     }
 
     @Override
-    public TypeDescriptor<? extends IVilType> getReturnType() {
-        return TypeRegistry.anyType(); // let's see at runtime
+    public TypeDescriptor<?> getReturnType() {
+        return null != specifiedType ? specifiedType : TypeRegistry.anyType(); // let's see at runtime
     }
 
     @Override
@@ -124,12 +125,12 @@ public class Def extends TemplateBlock implements ITemplateLangElement, IResolva
     }
 
     @Override
-    public TypeDescriptor<? extends IVilType> inferType() throws VilLanguageException {
-        TypeDescriptor<? extends IVilType> result = super.inferType();
+    public TypeDescriptor<?> inferType() throws VilException {
+        TypeDescriptor<?> result = super.inferType();
         if (null != specifiedType && !specifiedType.isAssignableFrom(result)) {
-            throw new VilLanguageException("resulting type of def-block " + result.getVilName() 
+            throw new VilException("resulting type of def-block " + result.getVilName() 
                 + " does not fit to specified type " + specifiedType.getVilName(), 
-                VilLanguageException.ID_SEMANTIC);
+                VilException.ID_SEMANTIC);
         }
         return result;
     }
@@ -152,6 +153,11 @@ public class Def extends TemplateBlock implements ITemplateLangElement, IResolva
     @Override
     public boolean isPlaceholder() {
         return false;
+    }
+
+    @Override
+    public String getStringValue(StringComparator comparator) {
+        return getSignature();
     }
 
 }

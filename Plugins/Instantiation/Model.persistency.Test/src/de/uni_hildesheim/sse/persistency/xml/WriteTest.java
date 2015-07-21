@@ -1,8 +1,6 @@
 package de.uni_hildesheim.sse.persistency.xml;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +45,7 @@ public class WriteTest extends AbstractTest {
      * Defines the operation of the first constraint (for further testing).
      */
     public static final Operation FIRST_CONSTRAINT_OPERATION = IntegerType.LESS_EQUALS_INTEGER_INTEGER;
-
+    
     /**
      * Executes the test.
      */
@@ -72,24 +70,20 @@ public class WriteTest extends AbstractTest {
             OperationDefinition opDef = new OperationDefinition(p);
             opDef.setOperation(cOp);
             p.add(opDef);
-            
-            FileOutputStream out = new FileOutputStream(FILE);
             List<IModel> modelList = new ArrayList<IModel>();
             modelList.add(p);
-            XmlIo.write(modelList, out);
-            out.close();
-            FileInputStream in = new FileInputStream(FILE);
-            List<IModel> loadedModelList = XmlIo.read(in);
+            XmlIo.write(modelList, FILE, true);
+            List<IModel> loadedModelList = XmlIo.read(FILE, true);
             Project p1 = (Project) loadedModelList.get(0);
             String pAsString = StringProvider.toIvmlString(p);
             String p1AsString = StringProvider.toIvmlString(p1);
             Assert.assertEquals(pAsString, p1AsString);
         } catch (ValueDoesNotMatchTypeException e) {
-            logger.exception(e);
+            Assert.fail(e.getMessage());
         } catch (CSTSemanticException e) {
-            logger.exception(e);
+            Assert.fail(e.getMessage());
         } catch (IOException e) {
-            logger.exception(e);
+            Assert.fail(e.getMessage());
         }
     }
 }

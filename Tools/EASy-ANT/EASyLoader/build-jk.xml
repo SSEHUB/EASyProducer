@@ -74,7 +74,8 @@
 	<!-- Creates ANT Jar and uses the new created jar to create the two EASy Jars -->
 	<target name="all">
 		<antcall target="createAntJar" />
-		<antcall target="deployAntJar" />
+        <!-- Currently, Standalone is pulling the generator -->
+		<!-- antcall target="deployAntJar" /-->
 	</target>
 	
 	<target name="createAndDeployLibs">

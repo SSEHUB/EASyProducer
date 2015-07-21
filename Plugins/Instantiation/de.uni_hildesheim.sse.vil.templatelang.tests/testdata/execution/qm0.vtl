@@ -1,0 +1,14 @@
+@advice(qm0)
+template qm0(Configuration config, FileArtifact target) {
+
+    def main(Configuration config, FileArtifact target) {
+        Family fm = config.byName("fNormalize");
+        for (Algorithm alg : fm.members) {
+            if (alg.hwType <> null) {
+                String algName = alg.name;
+                'System.out.print("$algName ${alg.hwType}");'
+            }
+        }
+    }
+
+}

@@ -203,13 +203,13 @@ public interface IvmlFactory extends EFactory
   DerivedType createDerivedType();
 
   /**
-   * Returns a new object of class '<em>Attribute To</em>'.
+   * Returns a new object of class '<em>Annotate To</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>Attribute To</em>'.
+   * @return a new object of class '<em>Annotate To</em>'.
    * @generated
    */
-  AttributeTo createAttributeTo();
+  AnnotateTo createAnnotateTo();
 
   /**
    * Returns a new object of class '<em>Freeze</em>'.
@@ -228,24 +228,6 @@ public interface IvmlFactory extends EFactory
    * @generated
    */
   FreezeStatement createFreezeStatement();
-
-  /**
-   * Returns a new object of class '<em>Freeze But List</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Freeze But List</em>'.
-   * @generated
-   */
-  FreezeButList createFreezeButList();
-
-  /**
-   * Returns a new object of class '<em>Freeze But Expression</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Freeze But Expression</em>'.
-   * @generated
-   */
-  FreezeButExpression createFreezeButExpression();
 
   /**
    * Returns a new object of class '<em>Eval</em>'.

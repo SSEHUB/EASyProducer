@@ -1,0 +1,14 @@
+project PipelinesCfg {
+
+	import PriorityPipCfg;
+	import PipelineVar_1Cfg;
+	import PipelineVar_2Cfg;
+	import PipelineVar_3Cfg;
+	attribute BindingTime bindingTime = BindingTime.compile to PipelinesCfg;
+	pipelines = {
+		refBy(PriorityPip), refBy(PipelineVar_1), /*refBy(PipelineVar_2), */refBy(PipelineVar_3)
+	};
+	freeze {
+		pipelines;
+	} but (f|f.bindingTime == BindingTime.runtime)
+}

@@ -18,6 +18,13 @@ VariableDeclaration:
     ';'
 ;
 
+TypeDef:
+    'typedef'
+    name=Identifier
+    type=Type
+    ';'
+;
+
 // used in extending languages
 Advice:
     '@advice' '(' name=QualifiedName ')' 
@@ -53,7 +60,7 @@ Import:
 
 // used in extending languages
 ExpressionStatement:
-    (var=Identifier '=')? 
+    (var=Identifier ('.' field=Identifier)? '=')? 
     expr=Expression 
     ';'
     ;
@@ -221,7 +228,7 @@ QualifiedPrefix:
     ;
 
 QualifiedName:
-    prefix=QualifiedPrefix (qname+='.' qname+=Identifier)?
+    prefix=QualifiedPrefix (qname+='.' qname+=Identifier)*
 ;
 
 Constant:
@@ -246,6 +253,7 @@ Type:
     | (set='setOf' param=TypeParameters)
     | (seq='sequenceOf' param=TypeParameters)
     | (map='mapOf' param=TypeParameters)
+    | (call='callOf' (return=Type)? param=TypeParameters)
 ;
 
 TypeParameters:

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+<extension
+         point="org.eclipse.ui.newWizards">
+      <!--category
+            id="de.uni_hildesheim.sse.EASy_Producer"
+            name="EASy-Producer">
+      </category-->
+      <wizard
+            category="de.uni_hildesheim.sse.EASy_Producer"
+            class="de.uni_hildesheim.sse.easy.examples.internal.ExamplesWizard"
+            icon="icons/logo_icon.gif"
+            id="de.uni_hildesheim.sse.easy.examples.internal.ExamplesWizard"
+            name="Import EASy-Producer Examples"
+            project="true">
+      </wizard>
+   </extension>
+</plugin>

@@ -5,7 +5,7 @@ project valuePropagation6 {
    //  - Assign block on constraint
 
    enum View {BA, DE, Impl};
-   attribute View modelView to valuePropagation6;
+   annotate View modelView to valuePropagation6;
    
    enum ContentType {text, movie, audio, picture};
     

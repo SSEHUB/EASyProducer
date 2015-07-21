@@ -3,41 +3,143 @@ package de.uni_hildesheim.sse.easy.loader.framework;
 import java.util.logging.Logger;
 
 /**
- * Very simple logging support (was intended differently, now a simple frontend for a static Java logger).
+ * Very simple logging support.
  * 
  * @author Holger Eichelberger
  */
 public class Log {
 
-    private static final Logger LOGGER = java.util.logging.Logger.getLogger("EASyLoader");
+    private static LoaderLogger logger = new JavaLoaderLogger();
 
     /**
-     * Emits an error to the console.
+     * Defines an interface for logging in the EASy loader. We cannot rely on the EASy logger as this is not known.
+     * Further, we do not rely on other logger frameworks in order to avoid conflicts. They can be used by delegation.
+     * 
+     * @author Holger Eichelberger
+     */
+    public interface LoaderLogger {
+
+        /**
+         * Logs an error.
+         * 
+         * @param error the error text
+         */
+        public void error(String error);
+
+        /**
+         * Logs an error with exception.
+         * 
+         * @param error the error text
+         * @param exception the exception to be added
+         */
+        public void error(String error, Exception exception);
+
+        /**
+         * Logs a warning.
+         * 
+         * @param warning the warning text
+         */
+        public void warn(String warning);
+
+        /**
+         * Emits a warning and adds the message of the given <code>exception</code>.
+         * 
+         * @param warning the warning text
+         * @param exception the exception to be added
+         */
+        public void warn(String warning, Exception exception);
+
+        /**
+         * Logs an information message.
+         * 
+         * @param msg the message to be logged
+         */
+        public void info(String msg);
+
+    }
+    
+    /**
+     * Implements the default loader logger.
+     * 
+     * @author Holger Eichelberger
+     */
+    private static class JavaLoaderLogger implements LoaderLogger {
+        
+        private Logger javaLogger = java.util.logging.Logger.getLogger("EASyLoader");
+
+        @Override
+        public void error(String error) {
+            javaLogger.severe(error);
+        }
+
+        @Override
+        public void error(String error, Exception exception) {
+            javaLogger.severe(error + ": " + exception.getMessage());
+        }
+
+        @Override
+        public void warn(String warning) {
+            javaLogger.warning(warning);
+        }
+
+        @Override
+        public void warn(String warning, Exception exception) {
+            javaLogger.warning(warning + ": " + exception.getMessage());
+        }
+
+        @Override
+        public void info(String msg) {
+            javaLogger.info(msg);
+        }
+        
+    }
+
+    /**
+     * Returns the logger instance.
+     * 
+     * @return the logger instance
+     */
+    public static LoaderLogger getLogger() {
+        return logger;
+    }
+    
+    /**
+     * Defines a new logger instance.
+     * 
+     * @param newLogger the new logger instance (ignored if <b>null</b>)
+     */
+    public static void setLogger(LoaderLogger newLogger) {
+        if (null != newLogger) {
+            logger = newLogger;
+        }
+    }
+    
+    /**
+     * Logs an error.
      * 
      * @param error the error text
      */
     public static void error(String error) {
-        LOGGER.severe(error);
+        logger.error(error);
     }
     
     /**
-     * Emits an error to the console.
+     * Logs an error with exception.
      * 
      * @param error the error text
      * @param exception the exception to be added
      */
     public static void error(String error, Exception exception) {
-        LOGGER.severe(error + ": " + exception.getMessage());
+        logger.error(error, exception);
     }
-
     
     /**
-     * Emits a warning to the console.
+     * Logs a warning.
      * 
      * @param warning the warning text
      */
     public static void warn(String warning) {
-        LOGGER.warning(warning);
+        logger.warn(warning);
     }
 
     /**
@@ -47,7 +149,7 @@ public class Log {
      * @param exception the exception to be added
      */
     public static void warn(String warning, Exception exception) {
-        LOGGER.warning(warning + ": " + exception.getMessage());
+        logger.warn(warning, exception);
     }
     
     /**
@@ -56,7 +158,7 @@ public class Log {
      * @param msg the message to be logged
      */
     public static void info(String msg) {
-        System.out.println(msg);
+        logger.info(msg);
     }
 
 }

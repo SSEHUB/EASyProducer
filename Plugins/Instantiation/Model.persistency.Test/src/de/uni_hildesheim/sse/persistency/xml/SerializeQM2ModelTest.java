@@ -1,33 +1,35 @@
 package de.uni_hildesheim.sse.persistency.xml;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.BuildLangModelUtility;
 import de.uni_hildesheim.sse.ModelUtility;
 import de.uni_hildesheim.sse.VilExpressionParser;
-import de.uni_hildesheim.sse.easy.java.Registration;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.BuiltIn;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildlangExecution;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionParserRegistry;
+//import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.RtVilModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Template;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateLangExecution;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateModel;
 import de.uni_hildesheim.sse.model.management.VarModel;
 import de.uni_hildesheim.sse.model.varModel.Project;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
+import de.uni_hildesheim.sse.utils.Environment;
 import de.uni_hildesheim.sse.utils.modelManagement.IModel;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
@@ -35,111 +37,286 @@ import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
 import de.uni_hildesheim.sse.vil.templatelang.TemplateLangModelUtility;
 import de.uni_hildesheim.sse.vil.templatelang.VtlExpressionParser;
 
+// TODO: Über alle tests im workspace iterieren und serializieren.
+
 /**
  * Test if the whole QM2 model can be serialized.
  * 
  * @author Sass
- *
+ * 
  */
 public class SerializeQM2ModelTest extends AbstractUtil {
-    
-    protected static EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(SerializeQM2ModelTest.class, 
-            "Model.persistency.Test");
-    
+
     protected static final ProgressObserver OBSERVER = ProgressObserver.NO_OBSERVER;
+
+    private static final File VIL = new File(TEMPDATA, "qm2.xml");
     
-    private static final File FILE = new File("qm2.xml");
+    private static final File IVML = new File(TEMPDATA, "qm2ivml.xml");
+    
+    private static final File APPLY = new File(XMLDATA, "apply");
+    
+    private static final File APPLY_XML = new File(TEMPDATA, "apply.xml");
+
     private final String[] vtlFilter = {"vtl" };
+
     private final String[] vilFilter = {"vil" };
+
     private final String[] ivmlFilter = {"ivml" };
-    private final Collection<File> vtlFiles = FileUtils.listFiles(getTestDataDir(), vtlFilter, true);
-    private final Collection<File> vilFiles = FileUtils.listFiles(getTestDataDir(), vilFilter, true);
-    private final Collection<File> ivmlFiles = FileUtils.listFiles(getTestDataDir(), ivmlFilter, true);
+
+    private final Collection<File> vtlFiles = FileUtils.listFiles(MODELDATA, vtlFilter, true);
+
+    private final Collection<File> vilFiles = FileUtils.listFiles(MODELDATA, vilFilter, true);
+
+    private final Collection<File> ivmlFiles = FileUtils.listFiles(MODELDATA, ivmlFilter, true);
+    
+    private static List<ISerializerPlugin<?>> registeredPluginsBackup;
+
+    /**
+     * Delete XML file.
+     */
+    @BeforeClass
+    public static void setUpBeforeClass() {
+        if (TEMPDATA.exists()) {
+            try {
+                FileUtils.deleteDirectory(TEMPDATA);
+            } catch (IOException e) {
+                Assert.fail("Could not cleanup temp data directory: " + TEMPDATA.getAbsolutePath());
+            }
+        }
+        TEMPDATA.mkdir();
+        if (!Environment.runsInEclipse()) {
+            Registration.register();
+            BuiltIn.initialize();
+            ExpressionParserRegistry.setExpressionParser(BuildlangExecution.LANGUAGE, new VilExpressionParser());
+            ExpressionParserRegistry.setExpressionParser(TemplateLangExecution.LANGUAGE, new VtlExpressionParser());
+            de.uni_hildesheim.sse.easy.maven.Registration.register();
+        }
+        try {
+            Assert.assertEquals(0, VarModel.INSTANCE.loaders().getLoaderCount());
+            Assert.assertEquals(0, BuildModel.INSTANCE.loaders().getLoaderCount());
+            Assert.assertEquals(0, TemplateModel.INSTANCE.loaders().getLoaderCount());
+            Assert.assertEquals(0, VarModel.INSTANCE.locations().getLocationCount());
+            Assert.assertEquals(0, BuildModel.INSTANCE.locations().getLocationCount());
+            Assert.assertEquals(0, TemplateModel.INSTANCE.locations().getLocationCount());
+            VarModel.INSTANCE.loaders().registerLoader(ModelUtility.INSTANCE, OBSERVER);
+            BuildModel.INSTANCE.loaders().registerLoader(BuildLangModelUtility.INSTANCE, OBSERVER);
+            TemplateModel.INSTANCE.loaders().registerLoader(TemplateLangModelUtility.INSTANCE, OBSERVER);
+            VarModel.INSTANCE.locations().addLocation(MODELDATA, OBSERVER);
+            BuildModel.INSTANCE.locations().addLocation(MODELDATA, OBSERVER);
+            TemplateModel.INSTANCE.locations().addLocation(MODELDATA, OBSERVER);
+            Assert.assertEquals(1, VarModel.INSTANCE.loaders().getLoaderCount());
+            Assert.assertEquals(1, BuildModel.INSTANCE.loaders().getLoaderCount());
+            Assert.assertEquals(1, TemplateModel.INSTANCE.loaders().getLoaderCount());
+            Assert.assertEquals(1, VarModel.INSTANCE.locations().getLocationCount());
+            Assert.assertEquals(1, BuildModel.INSTANCE.locations().getLocationCount());
+            Assert.assertEquals(1, TemplateModel.INSTANCE.locations().getLocationCount());
+        } catch (ModelManagementException e) {
+            Assert.fail(e.getMessage());
+        }
+        // Unregister all Extensions, registered via descriptive services
+        if (Environment.runsInEclipse()) {
+            registeredPluginsBackup = new ArrayList<ISerializerPlugin<?>>();
+            Iterator<ISerializerPlugin<?>> registeredPluginsIterator = Extensions.getPluginList().iterator();
+            while (registeredPluginsIterator.hasNext()) {
+                ISerializerPlugin<?> registeredPlugin = registeredPluginsIterator.next();
+                if (null != registeredPlugin) {
+                    registeredPluginsBackup.add(registeredPlugin);
+                    registeredPluginsIterator.remove();
+                }
+            }
+        }
+    }
+    
+    /**
+     * Clean up: unregister loader and remove locations.
+     */
+    @AfterClass
+    public static void tearDownAfterClass() {
+        Assert.assertEquals(1, VarModel.INSTANCE.loaders().getLoaderCount());
+        Assert.assertEquals(1, BuildModel.INSTANCE.loaders().getLoaderCount());
+        Assert.assertEquals(1, TemplateModel.INSTANCE.loaders().getLoaderCount());
+        Assert.assertEquals(1, VarModel.INSTANCE.locations().getLocationCount());
+        Assert.assertEquals(1, BuildModel.INSTANCE.locations().getLocationCount());
+        Assert.assertEquals(1, TemplateModel.INSTANCE.locations().getLocationCount());
+        // Remove locations
+        try {
+            VarModel.INSTANCE.locations().removeLocation(MODELDATA, OBSERVER);
+            BuildModel.INSTANCE.locations().removeLocation(MODELDATA, OBSERVER);
+            TemplateModel.INSTANCE.locations().removeLocation(MODELDATA, OBSERVER);
+        } catch (ModelManagementException e) {
+            Assert.fail(e.getMessage());
+        }
+        // Unregister Loader
+        VarModel.INSTANCE.loaders().unregisterLoader(ModelUtility.INSTANCE, OBSERVER);
+        BuildModel.INSTANCE.loaders().unregisterLoader(BuildLangModelUtility.INSTANCE, OBSERVER);
+        TemplateModel.INSTANCE.loaders().unregisterLoader(TemplateLangModelUtility.INSTANCE, OBSERVER);
+        // Check if all loaders and locations were removed
+        Assert.assertEquals(0, VarModel.INSTANCE.loaders().getLoaderCount());
+        Assert.assertEquals(0, BuildModel.INSTANCE.loaders().getLoaderCount());
+        Assert.assertEquals(0, TemplateModel.INSTANCE.loaders().getLoaderCount());
+        Assert.assertEquals(0, VarModel.INSTANCE.locations().getLocationCount());
+        Assert.assertEquals(0, BuildModel.INSTANCE.locations().getLocationCount());
+        Assert.assertEquals(0, TemplateModel.INSTANCE.locations().getLocationCount());
+        // Re-register all Extensions, registered via descriptive services
+        if (Environment.runsInEclipse()) {
+            if (null != registeredPluginsBackup) {
+                for (int i = 0; i < registeredPluginsBackup.size(); i++) {
+                    Extensions.register(registeredPluginsBackup.get(i));
+                }
+            }
+        }
+    }
+ 
+    /**
+     * Calls the test methods. Write must be called before read to insure that the XMl files are created.
+     */
+    @Test
+    public void testReadWrite() {
+        assertWriteQM2();
+        assertReadQM2();
+    }
 
     /**
      * Test if the whole QM2 model can be serialized.
      */
-    @Test
-    public void testWriteQM2() {
-        long before = System.nanoTime();
-        Registration.register();
-        BuiltIn.initialize();
-        ExpressionParserRegistry.setExpressionParser(BuildlangExecution.LANGUAGE, new VilExpressionParser());
-        ExpressionParserRegistry.setExpressionParser(TemplateLangExecution.LANGUAGE, new VtlExpressionParser());
-        try {
-            VarModel.INSTANCE.loaders().registerLoader(ModelUtility.INSTANCE, OBSERVER);
-            BuildModel.INSTANCE.loaders().registerLoader(BuildLangModelUtility.INSTANCE, OBSERVER);
-            TemplateModel.INSTANCE.loaders().registerLoader(TemplateLangModelUtility.INSTANCE, OBSERVER);
-            VarModel.INSTANCE.locations().addLocation(getTestDataDir(), OBSERVER);
-            BuildModel.INSTANCE.locations().addLocation(getTestDataDir(), OBSERVER);
-            TemplateModel.INSTANCE.locations().addLocation(getTestDataDir(), OBSERVER);
-        } catch (ModelManagementException e) {
-            logger.exception(e);
-        }
-        List<IModel> modelList = new ArrayList<IModel>();
-        for (File file : ivmlFiles) {
-            String pattern = "(_\\d)*.ivml";
-            String fileName = file.getName().replaceAll(pattern, "");
-            List<ModelInfo<Project>> list = VarModel.INSTANCE.availableModels().getModelInfo(fileName);
-            ModelInfo<Project> model = list.get(0);
-            try {
-                VarModel.INSTANCE.load(model);
-                Project project = model.getResolved();
-                modelList.add(project);
-            } catch (ModelManagementException e) {
-                logger.exception(e);
-            }
-        }
-        for (File file : vtlFiles) {
-            String fileName = file.getName().replace(".vtl", "");
-            List<ModelInfo<Template>> list = TemplateModel.INSTANCE.availableModels().getModelInfo(fileName);
-            ModelInfo<Template> model = list.get(0);
-            try {
-                TemplateModel.INSTANCE.load(model);
-                Template template = model.getResolved();
-                modelList.add(template);
-            } catch (ModelManagementException e) {
-                logger.exception(e);
-            }
-        }
-        for (File file : vilFiles) {
-            String pattern = "(_\\d)*.vil";
-            String fileName = file.getName().replaceAll(pattern, "");
-            List<ModelInfo<Script>> list = BuildModel.INSTANCE.availableModels().getModelInfo(fileName);
-            ModelInfo<Script> model = list.get(0);
-            try {
-                BuildModel.INSTANCE.load(model);
-                Script script = model.getResolved();
-                modelList.add(script);
-            } catch (ModelManagementException e) {
-                logger.exception(e);
-            }
-        }
-        FileOutputStream out;
-        try {
-            out = new FileOutputStream(FILE);
-            XmlIo.write(modelList, out);
-        } catch (FileNotFoundException e) {
-            logger.exception(e);
-        }
-        long after = System.nanoTime();
-        long runningTimeMs = (after - before) / 1000000;
-        System.out.println("Duration: " + runningTimeMs);
+    private void assertWriteQM2() {
+        // Test precondition: xml files must not exist
+        Assert.assertFalse("File does exist: " + VIL.getAbsolutePath(), VIL.exists());
+        Assert.assertFalse("File does exist: " + IVML.getAbsolutePath(), IVML.exists());
+        ModelSerializer.serializeModel(MODELDATA.toPath(), VIL.toPath());
+        // Test postcondition: xml files must exist
+        Assert.assertTrue("File does not exist: " + VIL.getAbsolutePath(), VIL.exists());
+        Assert.assertTrue("File does not exist: " + IVML.getAbsolutePath(), IVML.exists());
     }
-    
+
     /**
-     * Test if the QM2 model can be loaded from a XML file.
+     * Test if the QM2 model can be loaded from a XML file and if the result is the same as if the model was loaded from
+     * the file system.
      */
-    @Test
-    public void testReadQM2() {
-        FileInputStream in;
-        int countFiles = vilFiles.size() + ivmlFiles.size() + vtlFiles.size();
+    private void assertReadQM2() {
+        int countFiles = vilFiles.size() + vtlFiles.size();
         try {
-            in = new FileInputStream(FILE);
-            List<IModel> list = XmlIo.read(in);
+            Assert.assertTrue("File does not exist: " + IVML.getAbsolutePath(), IVML.exists());
+            List<IModel> ivmlList = XmlIo.read(IVML, true);
+            Assert.assertEquals(ivmlFiles.size(), ivmlList.size());
+            for (IModel xmlModel : ivmlList) {
+                String filename = xmlModel.getName();
+                Project xmlProject = (Project) xmlModel;
+                List<ModelInfo<Project>> list1 = VarModel.INSTANCE.availableModels().getModelInfo(filename);
+                ModelInfo<Project> model = list1.get(0);
+                Project project = model.getResolved();
+                String xmlProjectAsString;
+                try {
+                    xmlProjectAsString = toIVMLString(xmlProject);
+                    String projectAsString = toIVMLString(project);
+                    Assert.assertEquals(projectAsString, xmlProjectAsString);
+                } catch (VilException e) {
+                    Assert.fail(e.getMessage());
+                }
+            }
+            // read vtl and vil model from XML
+            List<IModel> list = XmlIo.read(VIL, false);
+            List<File> tmp = new ArrayList<File>();
+            tmp.addAll(vilFiles);
+            tmp.addAll(vtlFiles);
+            for (IModel iModel : list) {
+                String fileName = iModel.getName();
+                // Check if Template output is the same after reading from XML
+                if (iModel instanceof Template) {
+                    Template template1 = (Template) iModel;
+                    List<ModelInfo<Template>> list1 = TemplateModel.INSTANCE.availableModels().getModelInfo(fileName);
+                    ModelInfo<Template> model = list1.get(0);
+                    Template template = model.getResolved();
+                    try {
+                        String template1AsString = toVtlString(template1);
+                        String templateAsString = toVtlString(template);
+                        Assert.assertEquals(templateAsString, template1AsString);
+                    } catch (VilException e) {
+                        Assert.fail(e.getMessage());
+                    }
+                }
+                // Check if Script output is the same after reading from XML
+                if (iModel instanceof Script) {
+                    try {
+                        checkScriptEquality(iModel, fileName);
+                    } catch (VilException e) {
+                        Assert.fail(e.getMessage());
+                    }
+                }
+            }
             Assert.assertEquals(countFiles, list.size());
         } catch (FileNotFoundException e) {
-            logger.exception(e);
+            Assert.fail(e.getMessage());
+        } catch (IOException e) {
+            Assert.fail(e.getMessage());
         }
+    }
+
+    /**
+     * Checks a script for equality.
+     * 
+     * @param iModel    the loaded model from the XML file
+     * @param fileName  name of the model
+     * @throws VilException in case something goes wrong
+     */
+    private void checkScriptEquality(IModel iModel, String fileName) throws VilException {
+//        if (iModel instanceof de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Script) {
+//            de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Script script1 = 
+//                (de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Script) iModel;
+//            List<ModelInfo<de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Script>> list1 =
+//                    RtVilModel.INSTANCE.availableModels().getModelInfo(fileName);
+//            ModelInfo<de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Script> model = list1
+//                    .get(0);
+//            de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Script script = 
+//                (de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Script) model
+//                .getResolved();
+//            String scriptAsString = toVilString(script);
+//            String script1AsString = toVilString(script1);
+//            Assert.assertEquals(scriptAsString, script1AsString);
+//        } else {
+            Script script1 = (Script) iModel;
+            List<ModelInfo<Script>> list1 = BuildModel.INSTANCE.availableModels()
+                    .getModelInfo(fileName);
+            ModelInfo<Script> model = list1.get(0);
+            Script script = (Script) model.getResolved();
+            String scriptAsString = toVilString(script);
+            String script1AsString = toVilString(script1);
+            Assert.assertEquals(scriptAsString, script1AsString);
+//        }
+    }
+    
+    @Test
+    public void testApplyVilScript() {
+        if (TEMPDATA.exists()) {
+            try {
+                FileUtils.deleteDirectory(TEMPDATA);
+            } catch (IOException e) {
+                Assert.fail("Could not cleanup temp data directory: " + TEMPDATA.getAbsolutePath());
+            }
+        }
+        TEMPDATA.mkdir();
+        // Write
+        Assert.assertFalse("File does exist: " + APPLY_XML.getAbsolutePath(), APPLY_XML.exists());
+        ModelSerializer.serializeModel(APPLY.toPath(), APPLY_XML.toPath());
+        // Test postcondition: xml files must exist
+        Assert.assertTrue("File does not exist: " + APPLY_XML.getAbsolutePath(), APPLY_XML.exists());
+        // Read
+        try {
+            List<IModel> list = XmlIo.read(APPLY_XML, false);
+            for (IModel iModel : list) {
+                String fileName = iModel.getName();
+                // Check if Script output is the same after reading from XML
+                if (iModel instanceof Script) {
+                    try {
+                        checkScriptEquality(iModel, fileName);
+                    } catch (VilException e) {
+                        Assert.fail(e.getMessage());
+                    }
+                }
+            }
+        } catch (IOException e1) {
+            Assert.fail(e1.getMessage());
+        }
+        
     }
 }

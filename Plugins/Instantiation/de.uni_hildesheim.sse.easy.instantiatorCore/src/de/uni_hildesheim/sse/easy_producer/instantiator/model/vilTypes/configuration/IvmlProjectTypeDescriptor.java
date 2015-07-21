@@ -3,15 +3,19 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configur
 import java.util.HashMap;
 import java.util.Map;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.FieldDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IActualValueProvider;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaType;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.VilException;
+import de.uni_hildesheim.sse.model.varModel.AttributeAssignment;
 import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
+import de.uni_hildesheim.sse.model.varModel.IDecisionVariableContainer;
 import de.uni_hildesheim.sse.model.varModel.Project;
+import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 
 /**
  * Implements a dynamic type descriptor for a project containing IVML decision variables. 
@@ -36,36 +40,74 @@ class IvmlProjectTypeDescriptor extends AbstractIvmlTypeDescriptor implements IA
         super(project.getType(), resolver);
         this.project = project;
         Map<String, OperationDescriptor> operations = new HashMap<String, OperationDescriptor>();
-        addMetaOperations(operations);
+        Map<String, FieldDescriptor> fields = new HashMap<String, FieldDescriptor>();
+        addDecisionVariableOperations(operations);
         // comparison operations is unclear
         //addAttributeOperations(operations, project); // attributes declare but do not have projects
-        addOperations(operations, project);
+        addOperations(operations, fields, project);
         setOperations(operations.values());
+        setFields(fields.values());
         setConversions(null);
+    }
+    
+    /**
+     * Adds operations for the given variable declaration.
+     * 
+     * @param decl the variable declaration
+     * @param operations the name-operation mapping to be filled as a side effect
+     * @param fields the name-field mapping to be filled as a side effect
+     */
+    private void addOperations(DecisionVariableDeclaration decl, Map<String, OperationDescriptor> operations, 
+        Map<String, FieldDescriptor> fields) {
+        String name = decl.getName();
+        if (!fields.containsKey(name)) {
+            try {
+                fields.put(name, new IvmlConfigurationFieldDescriptor(this, decl, getTypeRegistry()));
+            } catch (VilException ex) {
+                EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).exception(ex);
+            }
+        }
+    }
+    
+    /**
+     * Adds operations for elements defined by <code>cont</code>.
+     * 
+     * @param cont the container
+     * @param operations the name-operation mapping to be filled as a side effect
+     * @param fields the name-field mapping to be filled as a side effect
+     */
+    private void addOperations(IDecisionVariableContainer cont, Map<String, OperationDescriptor> operations, 
+        Map<String, FieldDescriptor> fields) {
+        for (int e = 0; e < cont.getElementCount(); e++) {
+            addOperations(cont.getElement(e), operations, fields);
+        }
+        for (int a = 0; a < cont.getAssignmentCount(); a++) {
+            addOperations(cont.getAssignment(a), operations, fields);
+        }
     }
 
     /**
      * Adds all operations of <code>project</code> and its imports to <code>operations</code>.
      * 
      * @param operations the name-operation mapping to be filled as a side effect
+     * @param fields the name-field mapping to be filled as a side effect
      * @param project the project the operations shall be added for
      */
-    private void addOperations(Map<String, OperationDescriptor> operations, Project project) {
+    private void addOperations(Map<String, OperationDescriptor> operations, Map<String, FieldDescriptor> fields, 
+        Project project) {
         int eCount = project.getElementCount();
         for (int e = 0; e < eCount; e++) {
             ContainableModelElement elt = project.getElement(e);
             if (elt instanceof DecisionVariableDeclaration) {
-                DecisionVariableDeclaration decl = (DecisionVariableDeclaration) elt;
-                String name = decl.getName();
-                if (!operations.containsKey(name)) {
-                    operations.put(name, new IvmlConfigurationOperationDescriptor(this, decl));
-                }
+                addOperations((DecisionVariableDeclaration) elt, operations, fields);
+            } else if (elt instanceof AttributeAssignment) {
+                addOperations((AttributeAssignment) elt, operations, fields);
             }
         }
         for (int i = 0; i < project.getImportsCount(); i++) {
             Project imp = project.getImport(i).getResolved();
             if (null != imp) {
-                addOperations(operations, imp);
+                addOperations(operations, fields, imp);
             }
         }
     }
@@ -80,7 +122,7 @@ class IvmlProjectTypeDescriptor extends AbstractIvmlTypeDescriptor implements IA
     }
     
     @Override
-    public boolean isAssignableFrom(TypeDescriptor<? extends IVilType> desc) {
+    public boolean isAssignableFrom(TypeDescriptor<?> desc) {
         // final check at runtime
         return (desc == this || IvmlTypes.configurationType() == desc);
     }
@@ -120,6 +162,16 @@ class IvmlProjectTypeDescriptor extends AbstractIvmlTypeDescriptor implements IA
     @Override
     public IMetaType getBaseType() {
         return null;
+    }
+
+    @Override
+    public boolean isInternal() {
+        return false;
+    }
+
+    @Override
+    public boolean isInstantiator() {
+        return false;
     }
 
 }

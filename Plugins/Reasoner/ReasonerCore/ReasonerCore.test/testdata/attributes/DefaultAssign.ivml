@@ -1,0 +1,15 @@
+project DefaultAssign {
+
+    version v0;
+    
+    annotate Integer at = (5 + 1) to DefaultAssign;
+    
+    compound cmp {
+        Integer nest;
+    }
+    
+    cmp C;
+    
+    Integer var = 1 + 1;
+
+}

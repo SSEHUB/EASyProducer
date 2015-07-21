@@ -1,0 +1,54 @@
+import enactment;
+import mapping;
+
+@advice(QM)
+rtVilScript QM (Project source, Configuration config, Project target, AdaptationEvent event, mapOf(String, Real) bindings) {
+
+    strategy main(Project source, Configuration config, Project target, AdaptationEvent event) = {
+        objective true;
+        breakdown {
+            tactic defaultTactic();
+        }
+    }
+
+    strategy startup(Project source, Configuration config, Project target, StartupAdaptationEvent event) = {
+        objective true;
+        breakdown {
+            tactic startupTakeFirst(config, event.getPipeline());
+        }
+    }
+
+    tactic defaultTactic() = {
+    }
+
+    tactic startupTakeFirst(Configuration config, String pipName) = {
+        QM qm = config;
+        map(Pipeline pip:qm.pipelines) {
+            if (pip.name == pipName) {
+                map(Source src:pip.sources) {
+                    assignFirst(src);
+                };
+            }
+        };
+    }
+
+    assignFirst(PipelineNode node) = : {
+    }
+
+    assignFirst(Source src) = : {
+        map(Flow f:src.output) {
+            assignFirst(f.destination);
+        };
+    }
+
+    assignFirst(FamilyElement elt) = : {
+        Family fam = elt.family;
+        if (!elt.actual.isConfigured()) {
+            elt.actual = fam.members.toSequence().first();
+        }
+        map(Flow f:elt.output) {
+            assignFirst(f.destination);
+        };
+    }
+    
+}

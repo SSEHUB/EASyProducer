@@ -2,7 +2,7 @@ project attributeAssignment2 {
 
     version v0;
     enum States {One, Two};
-    attribute States state to attributeAssignment2;
+    annotate States state to attributeAssignment2;
     assign (state = States.One) to {
         Integer a;
     }

@@ -34,7 +34,8 @@ public class ClassWrapper implements IMetaType {
                 if (Modifier.isPublic(modifier) && Modifier.isStatic(modifier) 
                     && !Modifier.isAbstract(modifier)) {
                     // null as type is dangerous
-                    tmp.add(new ReflectionOperationDescriptor(null, methods[m]));
+                    tmp.add(new ReflectionOperationDescriptor(null, methods[m], 
+                        OperationDescriptor.isConstructor(methods[m])));
                 }
             }
             operations = new OperationDescriptor[tmp.size()];
@@ -105,6 +106,46 @@ public class ClassWrapper implements IMetaType {
     @Override
     public IMetaType getBaseType() {
         return null;
+    }
+
+    @Override
+    public int getFieldCount() {
+        return 0;
+    }
+
+    @Override
+    public IMetaField getField(int index) {
+        throw new IndexOutOfBoundsException();
+    }
+
+    @Override
+    public boolean isInternal() {
+        return true;
+    }
+    
+    /**
+     * Returns the class of the wrapped class.
+     * 
+     * @return class
+     */
+    @Invisible
+    public Class<?> getWrappedClass() {
+        return cls;
+    }
+
+    @Override
+    public IMetaType getSuperType() {
+        return null; // just wraps a Java class - no supertype required here
+    }
+
+    @Override
+    public int getGenericParameterCount() {
+        return 0;
+    }
+
+    @Override
+    public TypeDescriptor<?> getGenericParameterType(int index) {
+        throw new IllegalArgumentException();
     }
 
 }

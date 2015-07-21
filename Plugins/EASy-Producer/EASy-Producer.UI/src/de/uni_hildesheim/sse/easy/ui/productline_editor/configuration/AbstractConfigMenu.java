@@ -18,7 +18,7 @@ import de.uni_hildesheim.sse.reasoning.core.reasoner.Message;
 public abstract class AbstractConfigMenu extends AbstractHeaderMenu implements IConfigurationChangeListener {
 
     private IGUIConfigurationContainer guiConfigContainer;
-    
+    private GUIConfigurationFilter filters;
     /**
      * Sole constructor for this class.
      * @param parent The parent holding this menu.
@@ -44,9 +44,14 @@ public abstract class AbstractConfigMenu extends AbstractHeaderMenu implements I
         }
         this.guiConfigContainer = guiConfigContainer;
         
-        // unregister at new configuration
+        // register new configuration
         if (null != this.guiConfigContainer) {
             this.guiConfigContainer.getConfig().register(this);
+        }
+        
+        // Apply current filters to new guiContainer
+        if (null != filters) {
+            setFilter(filters);
         }
     }
     
@@ -70,6 +75,8 @@ public abstract class AbstractConfigMenu extends AbstractHeaderMenu implements I
         if (null != guiConfigContainer) {
             guiConfigContainer.setFilters(filters.getFilters());
         }
+        
+        this.filters = filters;
     }
     
     /**

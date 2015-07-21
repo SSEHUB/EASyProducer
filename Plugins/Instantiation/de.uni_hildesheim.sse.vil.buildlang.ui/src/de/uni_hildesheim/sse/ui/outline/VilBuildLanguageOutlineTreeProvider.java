@@ -172,7 +172,8 @@ public class VilBuildLanguageOutlineTreeProvider extends DefaultOutlineTreeProvi
             if (checkParameter(param)) {
                 StyledString displayString = new StyledString();
                 displayString.append("" + param.getName());
-                displayString.append(" : " + param.getType().getName(), StyledString.QUALIFIER_STYLER);
+                String type = Utils.getQualifiedNameString(param.getType().getName());
+                displayString.append(" : " + type, StyledString.QUALIFIER_STYLER);
                 createEStructuralFeatureNode(parentNode, param, ExpressionDslPackage.Literals.PARAMETER__NAME,
                         imageHelper.getImage(Images.NAME_PARAM), displayString, true);
             }
@@ -229,9 +230,9 @@ public class VilBuildLanguageOutlineTreeProvider extends DefaultOutlineTreeProvi
      */
     private void createScriptContentNodes(EList<EObject> content, VirtualOutlineNode parentNode) {
         // RuleDeclarations
-        for (EObject rule : content) {
-            try {
-                RuleDeclaration ruleCast = (RuleDeclaration) rule;
+        for (EObject element : content) {
+            if (element instanceof RuleDeclaration) {
+                RuleDeclaration ruleCast = (RuleDeclaration) element;
                 if (checkRuleDeclaration(ruleCast)) {
                     StyledString displayString = new StyledString();
                     displayString.append("" + ruleCast.getName());
@@ -240,24 +241,20 @@ public class VilBuildLanguageOutlineTreeProvider extends DefaultOutlineTreeProvi
                             VilBuildLanguagePackage.Literals.RULE_DECLARATION__NAME,
                             imageHelper.getImage(Images.NAME_RULE_INSTANCE), displayString, true);
                 }
-            } catch (ClassCastException e) {
-                // Do nothing
             }
-        }
-        // VariableDeclarations
-        for (EObject var : content) {
-            try {
-                VariableDeclaration varCast = (VariableDeclaration) var;
+            
+            if (element instanceof VariableDeclaration) {
+                // VariableDeclarations                
+                VariableDeclaration varCast = (VariableDeclaration) element;
                 if (checkVariableDeclaration(varCast)) {
                     StyledString displayString = new StyledString();
                     displayString.append("" + varCast.getName());
-                    displayString.append(" : " + varCast.getType().getName(), StyledString.QUALIFIER_STYLER);
+                    String type = Utils.getQualifiedNameString(varCast.getType().getName());
+                    displayString.append(" : " + type, StyledString.QUALIFIER_STYLER);
                     createEStructuralFeatureNode(parentNode, varCast,
                             VilBuildLanguagePackage.Literals.RULE_DECLARATION__NAME,
                             imageHelper.getImage(Images.NAME_VARIABLEDECLARATION), displayString, true);
                 }
-            } catch (ClassCastException e) {
-                // Do nothing
             }
         }
     }

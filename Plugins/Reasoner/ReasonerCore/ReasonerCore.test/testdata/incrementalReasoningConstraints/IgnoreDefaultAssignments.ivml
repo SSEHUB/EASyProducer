@@ -1,0 +1,17 @@
+project IgnoreDefaultAssignments {
+
+    version v0;
+    
+    Integer a = 5;
+    
+    compound C {
+        Integer cmpA = 1 + cmpB;
+        Integer cmpB = 2;
+        cmpA < 0;
+    }
+    
+    C cmp;
+    
+    a < 0;
+    cmp.cmpB < 0;
+}

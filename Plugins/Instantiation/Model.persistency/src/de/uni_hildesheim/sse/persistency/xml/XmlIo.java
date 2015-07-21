@@ -1,16 +1,44 @@
 package de.uni_hildesheim.sse.persistency.xml;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
+import org.apache.commons.io.FilenameUtils;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.CompactWriter;
+import com.thoughtworks.xstream.mapper.MapperWrapper;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Template;
-import de.uni_hildesheim.sse.model.varModel.Project;
+import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
+import de.uni_hildesheim.sse.persistency.xml.converter.AdviceConverter;
+import de.uni_hildesheim.sse.persistency.xml.converter.ClassWrapperConverter;
+import de.uni_hildesheim.sse.persistency.xml.converter.DelegatingTypeConverter;
+import de.uni_hildesheim.sse.persistency.xml.converter.EnumValueConverter;
+import de.uni_hildesheim.sse.persistency.xml.converter.IVMLTypeDescriptorConverter;
+import de.uni_hildesheim.sse.persistency.xml.converter.IvmlComparisonOperationDescriptorConverter;
+import de.uni_hildesheim.sse.persistency.xml.converter.NullValueConverter;
+import de.uni_hildesheim.sse.persistency.xml.converter.NullValueTypeConverter;
+import de.uni_hildesheim.sse.persistency.xml.converter.OperationConverter;
+import de.uni_hildesheim.sse.persistency.xml.converter.ProjectConverter;
+import de.uni_hildesheim.sse.persistency.xml.converter.ReflectionOperationDescriptorConverter;
+import de.uni_hildesheim.sse.persistency.xml.converter.ReflectionTypeDescriptorConverter;
+import de.uni_hildesheim.sse.persistency.xml.converter.TypeRegistryConverter;
+import de.uni_hildesheim.sse.persistency.xml.converter.VTLTypeConverter;
+import de.uni_hildesheim.sse.persistency.xml.mapper.ClassNameAliasingMapper;
+import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
+import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
 import de.uni_hildesheim.sse.utils.modelManagement.IModel;
 
 /**
@@ -20,146 +48,141 @@ import de.uni_hildesheim.sse.utils.modelManagement.IModel;
  * mechanisms, loaders and listeners there are not considered by this class (this would require a specific XML loader).
  * [req SAP, TUV]
  * 
- * @author Holger Eichelberger
+ * @author Holger Eichelberger, Aike Sass
  */
 public class XmlIo {
 
-    // /**
-    // * Writes an entire project including references to the given output stream.
-    // *
-    // * @param project the project to be written
-    // * @param out the output stream where to write the project to
-    // */
-    // public static final void write(Project project, OutputStream out) {
-    // XStream xstream = createStream();
-    // xstream.toXML(new IvmlModel(project), out);
-    // }
-    //
-    // /**
-    // * Writes an entire script including references to the given output stream.
-    // *
-    // * @param script the script to be written
-    // * @param out the output stream where to write the script to
-    // */
-    // public static final void write(Script script, OutputStream out) {
-    // XStream xstream = createStream();
-    // xstream.toXML(new VilModel(script), out);
-    // }
-
-    // /**
-    // * Writes an entire template including references to the given output stream.
-    // *
-    // * @param template the template to be written
-    // * @param out the output stream where to write the script to
-    // */
-    // public static final void write(Template template, OutputStream out) {
-    // XStream xstream = createStream();
-    // xstream.toXML(new VtlModel(template), out);
-    // }
-
+    public static final Map<String, String> CLASSES = new HashMap<String, String>();
+    
+    protected static EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(XmlIo.class,
+            Bundle.ID);
+    
     /**
      * Writes a list of {@link IModel} to the given output stream.
      * 
+     * IF YOU WANT TO WRITE IVML THEN CALL {@link #isIvmlFile()} TO DISABLE CERTAIN
+     * CONVERTERS!
+     * 
      * @param list
      *            the list to be written
-     * @param out
-     *            the output stream where to write the list to
+     * @param target
+     *            the target where to write the list to
+     * @param isIvmlFile switch to enable specific converter
+     * @throws IOException 
      */
-    public static final void write(List<IModel> list, OutputStream out) {
-        XStream xstream = createStream();
-        xstream.toXML(list, out);
+    public static final void write(List<IModel> list, File target, boolean isIvmlFile) throws IOException {
+        XStream xStream = createStream();
+        if (!isIvmlFile) {
+            xStream.registerConverter(new ProjectConverter());
+        }
+        // PRODUCTION
+        Writer writer = null;
+        FileOutputStream out =  null;
+        try {
+            out = new FileOutputStream(target);
+            writer = new OutputStreamWriter(out, "UTF-8");
+            xStream.marshal(list, new CompactWriter(writer));
+            printMap(CLASSES, target);
+        } catch (UnsupportedEncodingException e) {
+            logger.exception(e);
+        } finally {
+            if (null != out) {
+                out.close();
+                writer.close();
+            }
+        }
+        // FOR DEBUGGING ONLY: This will print the xml with pretty printing. 
+        //         xStream.toXML(list, out);
     }
 
-    // /**
-    // * Reads a project from an input stream.
-    // *
-    // * @param in the input stream to read the project definition from
-    // * @return the instantiated project
-    // */
-    // public static final Project read(InputStream in) {
-    // XStream xstream = createStream();
-    // IvmlModel model = (IvmlModel) xstream.fromXML(in);
-    // return model.getProject();
-    // }
+    /**
+     * Print map to properties file.
+     * 
+     * @param classes map to be printed
+     * @param target target
+     * @throws IOException 
+     */
+    private static void printMap(Map<String, String> classes, File target) throws IOException {
+        Properties properties = new Properties();
+        for (Map.Entry<String, String> entry : CLASSES.entrySet()) {
+            properties.put(entry.getKey(), entry.getValue());
+        }
+        FileOutputStream out = null;
+        try {
+            out = new FileOutputStream(new File(target.getParent(), 
+                FilenameUtils.removeExtension(target.getName()) + ".properties"));
+            properties.store(out, null);
+        } catch (FileNotFoundException e) {
+            logger.exception(e);
+        } catch (IOException e) {
+            logger.exception(e);
+        } finally {
+            if (null != out) {
+                out.close();
+            }
+        }
+    }
+    
+    /**
+     * Read map from properties file.
+     * @param target target file
+     * @throws IOException 
+     */
+    private static void readMap(File target) throws IOException {
+        Properties properties = new Properties();
+        FileInputStream fis = null;
+        try {
+            fis = new FileInputStream(new File(target.getParent(), 
+                FilenameUtils.removeExtension(target.getName()) + ".properties"));
+            properties.load(fis);
+        } catch (FileNotFoundException e) {
+            logger.exception(e);
+        } catch (IOException e) {
+            logger.exception(e);
+        } finally {
+            if (null != fis) {
+                fis.close();
+            }
+        }
+        for (String key : properties.stringPropertyNames()) {
+            CLASSES.put(key, properties.get(key).toString());
+        }
+    }
 
     /**
      * Reads a list of {@link IModel} from an input stream.
      * 
-     * @param in
-     *            the input stream to read the project definition from
-     * @return the instantiated IModel
-     */
-    public static final List<IModel> read(InputStream in) {
-        XStream xstream = createStream();
-        List<IModel> list = (List<IModel>) xstream.fromXML(in);
-//        List<IModel> list = castList(IModel.class, xstream.fromXML(in));
-        return list;
-    }
-
-    // TODO: refactor: does not work. same object will be casted again and again.
-    /**
-     *
-     * Casts a Collection to a List with TypeSafety.
+     * IF YOU WANT TO WRITE IVML THEN CALL {@link #isIvmlFile()} TO DISABLE CERTAIN
+     * CONVERTERS!
      * 
-     * @param clazz
-     *            Class for type safety
-     * @param obj
-     *            The object to be casted.
-     * @param <T>
-     *            Type
-     * @return List with casted collection
+     * @param source
+     *            the source to read the project definition from
+     * @param isIvmlFile switch to enable specific converter
+     * @return the instantiated IModel
+     * @throws IOException 
      */
-    private static <T> List<IModel> castList(Class<? extends T> clazz, Object obj) {
-        // Check it's an ArrayList
-        List<IModel> list = new ArrayList<IModel>();
-        if (obj instanceof ArrayList<?>) {
-            // Get the List.
-            ArrayList<?> al = (ArrayList<?>) obj;
-            if (al.size() > 0) {
-                // Iterate.
-                for (int i = 0; i < al.size(); i++) {
-                    Object o = al.get(0);
-                    if (o instanceof Project) {
-                        Project p = (Project) o;
-                        list.add(p);
-                    }
-                    if (o instanceof Template) {
-                        Template t = (Template) o;
-                        list.add(t);
-                    }
-                    if (o instanceof Script) {
-                        Script s = (Script) o;
-                        list.add(s);
-                    }
-                }
+    @SuppressWarnings("unchecked")
+    public static final List<IModel> read(File source, boolean isIvmlFile) throws IOException {
+        List<IModel> list = null;
+        InputStream in = null;
+        try {
+            in = new FileInputStream(source);
+            readMap(source);
+            XStream xstream = createStream();
+            if (!isIvmlFile) {
+                xstream.registerConverter(new ProjectConverter());
+            }
+            list = (List<IModel>) xstream.fromXML(in);
+            if (null == list) {
+                logger.warn("List is null");
+            }
+        } finally {
+            if (null != in) {
+                in.close();
             }
         }
         return list;
     }
-
-    // /**
-    // * Reads a script from an input stream.
-    // *
-    // * @param in the input stream to read the script definition from
-    // * @return the instantiated script
-    // */
-    // public static final Script readVilXML(InputStream in) {
-    // XStream xstream = createStream();
-    // VilModel model = (VilModel) xstream.fromXML(in);
-    // return model.getScript();
-    // }
-    //
-    // /**
-    // * Reads a template from an input stream.
-    // *
-    // * @param in the input stream to read the template definition from
-    // * @return the instantiated template
-    // */
-    // public static final Template readVtlXML(InputStream in) {
-    // XStream xstream = createStream();
-    // VtlModel model = (VtlModel) xstream.fromXML(in);
-    // return model.getTemplate();
-    // }
 
     /**
      * Creates a stream instance for reading and writing.
@@ -167,19 +190,28 @@ public class XmlIo {
      * @return the stream instance
      */
     private static final XStream createStream() {
-        XStream xstream = new XStream();
-        // xstream.alias("ivmlModel", IvmlModel.class);
-        // xstream.alias("VtlModel", VtlModel.class);
-        // xstream.alias("VilModel", VilModel.class);
+        XStream xstream = new XStream() {
+            @Override
+            protected MapperWrapper wrapMapper(MapperWrapper next) {
+                return new ClassNameAliasingMapper(next);
+            }
+        };
+        xstream.setMode(XStream.ID_REFERENCES);
         xstream.alias("model", Model.class);
         xstream.addImplicitCollection(Model.class, "models");
         xstream.registerConverter(new DelegatingTypeConverter());
+        xstream.registerConverter(new EnumValueConverter());
         xstream.registerConverter(new OperationConverter());
         xstream.registerConverter(new TypeRegistryConverter());
         xstream.registerConverter(new VTLTypeConverter());
         xstream.registerConverter(new AdviceConverter());
-//        xstream.registerConverter(new ContentExpressionConverter());
-//        xstream.registerConverter(new ConstantValueConverter());
+        xstream.registerConverter(new NullValueTypeConverter());
+        xstream.registerConverter(new NullValueConverter());
+        xstream.registerConverter(new ReflectionOperationDescriptorConverter());
+        xstream.registerConverter(new ReflectionTypeDescriptorConverter());
+        xstream.registerConverter(new IVMLTypeDescriptorConverter());
+        xstream.registerConverter(new IvmlComparisonOperationDescriptorConverter());
+        xstream.registerConverter(new ClassWrapperConverter());
         return xstream;
     }
 
@@ -195,6 +227,7 @@ public class XmlIo {
         /**
          * Creates the top-level wrapping instance.
          */
+        @SuppressWarnings("unused")
         public Model() {
             models = new ArrayList<IModel>();
         }
@@ -205,107 +238,11 @@ public class XmlIo {
          * @param model
          *            the IModel that should be added
          */
+        @SuppressWarnings("unused")
         public void addModel(IModel model) {
             models.add(model);
         }
 
     }
-
-    // /**
-    // * Defines the top level element in the XML. In future versions this class
-    // * may contain a file version information.
-    // *
-    // * @author Holger Eichelberger
-    // */
-    // private static class IvmlModel extends Model {
-    //
-    // /**
-    // * The project to be persisted or read from a file.
-    // */
-    // private Project project;
-    //
-    // /**
-    // * Creates the top-level wrapping instance.
-    // *
-    // * @param project the project to be contained
-    // */
-    // public IvmlModel(Project project) {
-    // super(project);
-    // }
-    //
-    // /**
-    // * Returns the contained project instance.
-    // *
-    // * @return the contained project instance
-    // */
-    // public Project getProject() {
-    // return project;
-    // }
-    // }
-
-    // /**
-    // * Defines the top level element in the XML. In future versions this class
-    // * may contain a file version information.
-    // *
-    // * @author Aike Sass
-    // */
-    // private static class VilModel extends Model {
-    //
-    // /**
-    // * The script to be persisted or read from a file.
-    // */
-    // private Script script;
-    //
-    //
-    // /**
-    // * Creates the top-level wrapping instance.
-    // *
-    // * @param script the script to be contained
-    // */
-    // public VilModel(Script script) {
-    // super(script);
-    // }
-    //
-    // /**
-    // * Returns the contained script instance.
-    // *
-    // * @return the contained script instance
-    // */
-    // public Script getScript() {
-    // return script;
-    // }
-    // }
-
-    // /**
-    // * Defines the top level element in the XML. In future versions this class
-    // * may contain a file version information.
-    // *
-    // * @author Aike Sass
-    // */
-    // private static class VtlModel extends Model {
-    //
-    // /**
-    // * The template to be persisted or read from a file.
-    // */
-    // private Template template;
-    //
-    // /**
-    // * Creates the top-level wrapping instance.
-    // *
-    // * @param template the template to be contained
-    // */
-    // public VtlModel(Template template) {
-    // super(template);
-    // }
-    //
-    // /**
-    // * Returns the contained template instance.
-    // *
-    // * @return the contained template instance
-    // */
-    // public Template getTemplate() {
-    // return template;
-    // }
-    // }
 
 }

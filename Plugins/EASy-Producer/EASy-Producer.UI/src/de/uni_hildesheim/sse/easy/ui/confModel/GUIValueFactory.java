@@ -123,6 +123,7 @@ public class GUIValueFactory {
         @Override
         public void visitBooleanType(BooleanType type) {
             ComboboxGUIVariable.ComboItem[] items = createComboItemArray(variable, 2);
+            // never change this sequence :| QM-IConf relies on that
             items[0] = new ComboboxGUIVariable.ComboItem("true", true);
             items[1] = new ComboboxGUIVariable.ComboItem("false", false);
             

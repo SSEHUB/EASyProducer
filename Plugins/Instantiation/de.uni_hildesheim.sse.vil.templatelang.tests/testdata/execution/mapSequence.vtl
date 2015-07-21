@@ -1,0 +1,10 @@
+template testForMap(Configuration config, FileArtifact target) {
+
+    def main(Configuration config, FileArtifact target) {
+        sequenceOf(String) inputStrings = {"a", "b"};
+        sequenceOf(String) outputStrings = {"b", "c", "a"};
+        mapOf(String, String) result = {};
+        result = outputStrings.mapAny(inputStrings);
+    }
+
+}

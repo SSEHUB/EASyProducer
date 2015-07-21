@@ -1,0 +1,36 @@
+rtVilScript startup (Project source, Configuration config, Project target, IAdaptationEvent event) {
+
+    strategy main(Project source, Configuration config, Project target, IAdaptationEvent event) = {
+        objective true;
+        breakdown {
+            tactic defaultTactic();
+        }
+    }
+
+    strategy startup(Project source, Configuration config, Project target, LifecycleEvent event) = : event.status() == LifecycleEventStatus.START {
+        objective true;
+        breakdown {
+            tactic startupTactic();
+        }
+    }
+
+    strategy shutdown(Project source, Configuration config, Project target, LifecycleEvent event) = : event.status() == LifecycleEventStatus.END {
+        objective true;
+        breakdown {
+            tactic shutdownTactic();
+        }
+    }
+
+    tactic defaultTactic() = {
+    }
+
+    tactic startupTactic() = {
+    }
+
+    tactic shutdownTactic() = {
+    }
+
+    enact(Project source, Configuration config, Project target) = : {
+    }
+
+}

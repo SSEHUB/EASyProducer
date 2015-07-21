@@ -1,6 +1,5 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 
@@ -23,7 +22,7 @@ public class ArtifactTypes {
      * 
      * @return the type descriptor
      */
-    public static final TypeDescriptor<? extends IVilType> artifactType() {
+    public static final TypeDescriptor<?> artifactType() {
         return TypeRegistry.DEFAULT.getType(IArtifact.class);
     }
 
@@ -32,7 +31,7 @@ public class ArtifactTypes {
      * 
      * @return the type descriptor
      */
-    public static final TypeDescriptor<? extends IVilType> pathType() {
+    public static final TypeDescriptor<?> pathType() {
         return TypeRegistry.DEFAULT.getType(Path.class);
     }
 

@@ -164,6 +164,8 @@ ruleLanguageUnit returns [EObject current=null]
 
 
 
+
+
 // Entry rule entryRuleAdvice
 entryRuleAdvice returns [EObject current=null] 
 	:
@@ -2383,7 +2385,7 @@ ruleQualifiedName returns [EObject current=null]
 	    }
 
 )
-))?)
+))*)
 ;
 
 
@@ -2757,6 +2759,58 @@ ruleType returns [EObject current=null]
        			$current, 
        			"param",
         		lv_param_6_0, 
+        		"TypeParameters");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+))
+    |((
+(
+		lv_call_7_0=	'callOf' 
+    {
+        newLeafNode(lv_call_7_0, grammarAccess.getTypeAccess().getCallCallOfKeyword_4_0_0());
+    }
+ 
+	    {
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getTypeRule());
+	        }
+       		setWithLastConsumed($current, "call", lv_call_7_0, "callOf");
+	    }
+
+)
+)(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getTypeAccess().getReturnTypeParserRuleCall_4_1_0()); 
+	    }
+		lv_return_8_0=ruleType		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getTypeRule());
+	        }
+       		set(
+       			$current, 
+       			"return",
+        		lv_return_8_0, 
+        		"Type");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)?(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getTypeAccess().getParamTypeParametersParserRuleCall_4_2_0()); 
+	    }
+		lv_param_9_0=ruleTypeParameters		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getTypeRule());
+	        }
+       		set(
+       			$current, 
+       			"param",
+        		lv_param_9_0, 
         		"TypeParameters");
 	        afterParserOrEnumRuleCall();
 	    }

@@ -18,9 +18,11 @@ package de.uni_hildesheim.sse.model.confModel;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Container;
+import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 import de.uni_hildesheim.sse.model.varModel.values.ContainerValue;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
+import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
 
 /**
  * 
@@ -62,11 +64,17 @@ class ContainerItemConfigProvider extends NestedVarConfigProvider {
     protected void setValue(Value value, IAssignmentState state) throws ConfigurationException {
         ContainerValue parentValue = (ContainerValue) getParent().getValue();
         if (parentValue != null) {
-            parentValue.setValue(index, value);
+            try {
+                parentValue.setValue(index, value);
+            } catch (ValueDoesNotMatchTypeException e) {
+                throw new ConfigurationException(getConfiguration(), e.getMessage(),
+                    ConfigurationException.DUPLICATES_IN_SET);
+            }
         } else {
             ContainerVariable parent = getParent();
             String nestedName = parent.getElementName(index);
-            IDatatype type = ((Container) parent.getDeclaration().getType()).getContainedType();
+            IDatatype type = DerivedDatatype.resolveToBasis(parent.getDeclaration().getType());
+            type = ((Container) type).getContainedType();
             DecisionVariableDeclaration nestedDecl = new DecisionVariableDeclaration(nestedName,
                 type, parent.getDeclaration());
             VariableCreator creator = new VariableCreator(nestedDecl, parent, parent.isVisible());

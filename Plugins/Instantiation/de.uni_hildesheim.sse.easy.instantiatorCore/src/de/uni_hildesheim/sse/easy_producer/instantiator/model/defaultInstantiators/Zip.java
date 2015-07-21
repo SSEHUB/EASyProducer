@@ -9,8 +9,8 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.Arti
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FileArtifact;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.Path;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArraySet;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Collection;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Instantiator;
@@ -34,10 +34,10 @@ public class Zip implements IVilType {
      * @param artifacts the artifacts to be handled
      * @param zip the target zip file
      * @return the created artifacts
-     * @throws ArtifactException in case that processing the JAR file fails for some reason
+     * @throws VilException in case that processing the JAR file fails for some reason
      */
     @OperationMeta(returnGenerics = FileArtifact.class)
-    public static Set<FileArtifact> zip(Path base, Path artifacts, Path zip) throws ArtifactException {
+    public static Set<FileArtifact> zip(Path base, Path artifacts, Path zip) throws VilException {
         // needed as paths are typically expressed as strings and string->path->collection conversion is not supported
         return add(base, artifacts.selectAll(), zip, new ZipHandler());
     }
@@ -50,11 +50,11 @@ public class Zip implements IVilType {
      * @param artifacts the artifacts to be handled
      * @param zip the target zip file
      * @return the created artifacts
-     * @throws ArtifactException in case that processing the JAR file fails for some reason
+     * @throws VilException in case that processing the JAR file fails for some reason
      */
     @OperationMeta(returnGenerics = FileArtifact.class)
     public static Set<FileArtifact> zip(Path base, Collection<FileArtifact> artifacts, Path zip) 
-        throws ArtifactException {
+        throws VilException {
         return add(base, artifacts, zip, new ZipHandler());
     }
 
@@ -67,17 +67,17 @@ public class Zip implements IVilType {
      * @param target the target ZIP/JAR file
      * @param handler the actual ZIP handler
      * @return the created artifacts
-     * @throws ArtifactException in case that processing the JAR file fails for some reason
+     * @throws VilException in case that processing the JAR file fails for some reason
      */
     @Invisible
     public static Set<FileArtifact> add(Path base, Collection<FileArtifact> artifacts, Path target, ZipHandler handler) 
-        throws ArtifactException {
+        throws VilException {
         List<File> files = toFileList(artifacts);
         List<File> zipResult;
         try {
             zipResult = handler.add(base.getAbsolutePath(), files, target.getAbsolutePath());
         } catch (IOException e) {
-            throw new ArtifactException(e, ArtifactException.ID_IO);
+            throw new VilException(e, VilException.ID_IO);
         }
         return toFileArtifactSet(zipResult, target.getArtifactModel());
     }
@@ -103,11 +103,11 @@ public class Zip implements IVilType {
      * @param files the files to be turned into file artifacts
      * @param model the artifact model to be used (may be <b>null</b> for auto-detection)s
      * @return the set of file artifacts
-     * @throws ArtifactException if creating a file artifact instance fails
+     * @throws VilException if creating a file artifact instance fails
      */
     @Invisible
     public static final Set<FileArtifact> toFileArtifactSet(List<File> files, ArtifactModel model)
-        throws ArtifactException {
+        throws VilException {
         FileArtifact[] result = new FileArtifact[files.size()];
         for (int f = 0; f < files.size(); f++) {
             File file = files.get(f);

@@ -2,7 +2,6 @@ package de.uni_hildesheim.sse;
 
 import static com.google.inject.Guice.createInjector;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
 import java.net.URISyntaxException;
@@ -25,10 +24,15 @@ import de.uni_hildesheim.sse.ivml.Type;
 import de.uni_hildesheim.sse.ivml.VariabilityUnit;
 import de.uni_hildesheim.sse.ivml.VersionStmt;
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
+import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
+import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
+import de.uni_hildesheim.sse.model.varModel.IModelElement;
 import de.uni_hildesheim.sse.model.varModel.IvmlKeyWords;
 import de.uni_hildesheim.sse.model.varModel.ModelQuery;
 import de.uni_hildesheim.sse.model.varModel.Project;
+import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
+import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 import de.uni_hildesheim.sse.persistency.ConfigurableIVMLWriter;
 import de.uni_hildesheim.sse.translation.ExpressionTranslator;
 import de.uni_hildesheim.sse.translation.ImportTranslator;
@@ -291,6 +295,7 @@ public class ModelUtility extends de.uni_hildesheim.sse.dslCore.ModelUtility<Var
                         }
                         throw new CSTSemanticException(errors.toString(), CSTSemanticException.INTERNAL);
                     }
+                    constraint.getConsSyntax().inferDatatype();
                 } catch (TranslatorException e) {
                     throw new CSTSemanticException(e.getMessage(), CSTSemanticException.INTERNAL);
                 }
@@ -304,14 +309,88 @@ public class ModelUtility extends de.uni_hildesheim.sse.dslCore.ModelUtility<Var
     }
     
     /**
-     * Returns whether this model utility class handles this type of file.
+     * Parses a text into an expression in the context of <code>project</code>. Project is not modified!
      * 
-     * @param location the location to be considered
-     * @return <code>true</code> if it handles the specified location, <code>false</code> else
+     * @param text the text to be parsed containing the constraint
+     * @param parent the intended parent model element (turned into {@link Compound} or {@link Project} 
+     *     depending on nesting
+     * @return the expression, <b>null</b> in case of internal instantiation errors
+     * @throws CSTSemanticException in case of semantic problems in <code>text</code>
+     * @throws ConstraintSyntaxException in case of syntax problems in <code>text</code>
      */
+    public ConstraintSyntaxTree createExpression(String text, IModelElement parent) throws CSTSemanticException, 
+        ConstraintSyntaxException {
+        ConstraintSyntaxTree expression = null;
+        IParseResult result = parseFragment("Expression", text);
+        if (null != result) {
+            StringBuilder errors = new StringBuilder();
+            for (INode error : result.getSyntaxErrors()) {
+                appendWithNewLine(errors, error.getText());
+            }
+            if (0 == errors.length()) {
+                if (null == result.getRootASTElement()) {
+                    appendWithNewLine(errors, "empty constraint");
+                }
+            }
+            if (0 == errors.length()) {
+                ExpressionTranslator translator = new ExpressionTranslator();
+                MessageReceiver messageReceiver = translator;
+                Expression expr = (Expression) result.getRootASTElement();
+
+                // determine project and containing element within project for expression
+                IModelElement expressionParent = null;
+                if (parent instanceof AbstractVariable) {
+                    IDatatype type = ((AbstractVariable) parent).getType();
+                    if (type instanceof IModelElement) {
+                        parent = (IModelElement) type;
+                    }
+                }
+                IModelElement iter = parent;
+                while (null != iter && !(iter instanceof Project)) {
+                    if (iter instanceof Compound) {
+                        expressionParent = iter;
+                    }
+                    iter = iter.getParent();
+                }
+                Project project = null;
+                if (iter instanceof Project) {
+                    project = (Project) iter;
+                }
+                if (null == expressionParent) {
+                    expressionParent = null == project ? parent : project;
+                }
+                TypeContext context = new TypeContext(project, messageReceiver);
+                if (expressionParent instanceof Compound) {
+                    context.pushLayer(expressionParent);
+                    context.addToContext((Compound) expressionParent);
+                }
+                try {
+                    expression = translator.processExpression(expr, context, expressionParent);
+                    if (translator.getErrorCount() > 0) {
+                        for (int i = 0; i < translator.getMessageCount(); i++) {
+                            Message msg = translator.getMessage(i);
+                            if (Status.ERROR == msg.getStatus()) {
+                                appendWithNewLine(errors, msg.getDescription());
+                            }
+                        }
+                        throw new CSTSemanticException(errors.toString(), CSTSemanticException.INTERNAL);
+                    }
+                    expression.inferDatatype();
+                } catch (TranslatorException e) {
+                    throw new CSTSemanticException(e.getMessage(), CSTSemanticException.INTERNAL);
+                }
+            } else {
+                throw new ConstraintSyntaxException(errors.toString());
+            }
+        } else {
+            throw new ConstraintSyntaxException("internal: IVML grammar not available");
+        }
+        return expression;
+    }
+    
     @Override
-    protected boolean handles(File location) {
-        return location.isFile() && location.getName().endsWith(".ivml");
+    public String getExtension() {
+        return "ivml";
     }
 
 }

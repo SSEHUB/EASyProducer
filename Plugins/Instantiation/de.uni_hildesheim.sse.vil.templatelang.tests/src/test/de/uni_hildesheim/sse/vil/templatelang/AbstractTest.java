@@ -21,16 +21,14 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.BuiltIn;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FileUtils;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IFileSystemArtifact;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.PathUtils;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionParserRegistry;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.ExtensionClassLoaders;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.StreamTracer;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Template;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateLangExecution;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateModel;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.VilException;
 import de.uni_hildesheim.sse.model.management.VarModel;
 import de.uni_hildesheim.sse.utils.messages.Status;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
@@ -191,7 +189,7 @@ public abstract class AbstractTest extends de.uni_hildesheim.sse.dslCore.test.Ab
                         errorMsg = checkEqualsAndPrepareMessage(fileAsString, writer, false);
                         Assert.assertTrue(errorMsg, null == errorMsg);
                     }
-                } catch (VilLanguageException e) {
+                } catch (VilException e) {
                     if (null == messages) {
                         messages = new ArrayList<Message>();
                     }
@@ -237,7 +235,7 @@ public abstract class AbstractTest extends de.uni_hildesheim.sse.dslCore.test.Ab
                             path = path.getParentFile();
                         }
                         tmp.add(PathUtils.normalize(path.getAbsolutePath()));
-                    } catch (ArtifactException e) {
+                    } catch (VilException e) {
                     }
                 }
             }

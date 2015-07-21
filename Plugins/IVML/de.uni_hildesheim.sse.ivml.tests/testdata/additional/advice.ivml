@@ -11,6 +11,6 @@ project PL_WMS {
   UIDeviceType VP4;
   
   enum BindingTime {designTime, compileTime, initTime, runTime};
-  attribute BindingTime bindingTime = BindingTime.designTime to PL_WMS;
+  annotate BindingTime bindingTime = BindingTime.designTime to PL_WMS;
   VP2.bindingTime = BindingTime.runtime;
 }

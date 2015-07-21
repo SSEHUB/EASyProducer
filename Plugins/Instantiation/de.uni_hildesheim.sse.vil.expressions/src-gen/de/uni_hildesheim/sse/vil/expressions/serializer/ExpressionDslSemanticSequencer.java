@@ -38,6 +38,7 @@ import de.uni_hildesheim.sse.vil.expressions.expressionDsl.RelationalExpressionP
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.SubCall;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.SuperExecution;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Type;
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.TypeDef;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.TypeParameters;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.UnaryExpression;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.UnqualifiedExecution;
@@ -275,6 +276,12 @@ public class ExpressionDslSemanticSequencer extends AbstractDelegatingSemanticSe
 					return; 
 				}
 				else break;
+			case ExpressionDslPackage.TYPE_DEF:
+				if(context == grammarAccess.getTypeDefRule()) {
+					sequence_TypeDef(context, (TypeDef) semanticObject); 
+					return; 
+				}
+				else break;
 			case ExpressionDslPackage.TYPE_PARAMETERS:
 				if(context == grammarAccess.getTypeParametersRule()) {
 					sequence_TypeParameters(context, (TypeParameters) semanticObject); 
@@ -471,7 +478,7 @@ public class ExpressionDslSemanticSequencer extends AbstractDelegatingSemanticSe
 	
 	/**
 	 * Constraint:
-	 *     (var=Identifier? expr=Expression)
+	 *     ((var=Identifier field=Identifier?)? expr=Expression)
 	 */
 	protected void sequence_ExpressionStatement(EObject context, ExpressionStatement semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -641,7 +648,7 @@ public class ExpressionDslSemanticSequencer extends AbstractDelegatingSemanticSe
 	
 	/**
 	 * Constraint:
-	 *     (prefix=QualifiedPrefix (qname+='.' qname+=Identifier)?)
+	 *     (prefix=QualifiedPrefix (qname+='.' qname+=Identifier)*)
 	 */
 	protected void sequence_QualifiedName(EObject context, QualifiedName semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -705,6 +712,25 @@ public class ExpressionDslSemanticSequencer extends AbstractDelegatingSemanticSe
 	
 	/**
 	 * Constraint:
+	 *     (name=Identifier type=Type)
+	 */
+	protected void sequence_TypeDef(EObject context, TypeDef semanticObject) {
+		if(errorAcceptor != null) {
+			if(transientValues.isValueTransient(semanticObject, ExpressionDslPackage.Literals.TYPE_DEF__NAME) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, ExpressionDslPackage.Literals.TYPE_DEF__NAME));
+			if(transientValues.isValueTransient(semanticObject, ExpressionDslPackage.Literals.TYPE_DEF__TYPE) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, ExpressionDslPackage.Literals.TYPE_DEF__TYPE));
+		}
+		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
+		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
+		feeder.accept(grammarAccess.getTypeDefAccess().getNameIdentifierParserRuleCall_1_0(), semanticObject.getName());
+		feeder.accept(grammarAccess.getTypeDefAccess().getTypeTypeParserRuleCall_2_0(), semanticObject.getType());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * Constraint:
 	 *     (param+=Type param+=Type*)
 	 */
 	protected void sequence_TypeParameters(EObject context, TypeParameters semanticObject) {
@@ -714,7 +740,13 @@ public class ExpressionDslSemanticSequencer extends AbstractDelegatingSemanticSe
 	
 	/**
 	 * Constraint:
-	 *     (name=QualifiedPrefix | (set='setOf' param=TypeParameters) | (seq='sequenceOf' param=TypeParameters) | (map='mapOf' param=TypeParameters))
+	 *     (
+	 *         name=QualifiedPrefix | 
+	 *         (set='setOf' param=TypeParameters) | 
+	 *         (seq='sequenceOf' param=TypeParameters) | 
+	 *         (map='mapOf' param=TypeParameters) | 
+	 *         (call='callOf' return=Type? param=TypeParameters)
+	 *     )
 	 */
 	protected void sequence_Type(EObject context, Type semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);

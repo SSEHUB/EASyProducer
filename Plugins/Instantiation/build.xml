@@ -1,21 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="InstantiationAll" default="all" basedir=".">	
+<project name="Instantiation" default="all" basedir="." xmlns:jacoco="antlib:org.jacoco.ant">	
 	<property file="${user.home}/global-build.properties"/>
-	<path id="emma.lib" >    		
-		<pathelement location="${emma.path}/emma.jar" />	
-		<pathelement location="${emma.path}/emma_ant.jar" />	
-	</path>
-	<taskdef resource="emma_ant.properties" classpathref="emma.lib" />
+	<taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
+        <classpath path="${jacoco.path}/jacocoant.jar"/>
+    </taskdef>
     
-    <!-- Indivdual properties for this build script -->
+    <!-- Individual properties for this build script -->
     <property name="test.plugin.instantiation" value="de.uni-hildesheim.sse.easy.instantiatorCore.tests"/>
     <property name="test.suite.instantiation" value="test.AllTests"/>
     <property name="test.plugin.instantiation.java" value="de.uni_hildesheim.sse.easy.instantiator.java.test"/>
     <property name="test.suite.instantiation.java" value="test.de.uni_hildesheim.sse.java.AllTests"/>
+    <property name="test.plugin.instantiation.ant" value="de.uni_hildesheim.sse.easy.instantiator.ant.test"/>
+    <property name="test.suite.instantiation.ant" value="test.de.uni_hildesheim.sse.ant.AllTests"/>
+    <property name="test.plugin.instantiation.aspectj" value="de.uni_hildesheim.sse.easy.instantiator.aspectj.test"/>
+    <property name="test.suite.instantiation.aspectj" value="test.de.uni_hildesheim.sse.aspectj.AllTests"/>
     <property name="test.plugin.vil" value="de.uni_hildesheim.sse.vil.buildlang.tests"/>
     <property name="test.suite.vil" value="test.de.uni_hildesheim.sse.vil.buildlang.AllTests"/>
     <property name="test.plugin.template" value="de.uni_hildesheim.sse.vil.templatelang.tests"/>
     <property name="test.suite.template" value="test.de.uni_hildesheim.sse.vil.templatelang.AllTests"/>
+	<property name="test.plugin.instantiation.serializer" value="Model.persistency.Test" />
+	<property name="test.suite.instantiation.serializer" value="de.uni_hildesheim.sse.persistency.xml.AllTests"/>
     
 	<target name="init">
 		<!-- Delete generated folders -->
@@ -32,35 +36,42 @@
 	</target>
 	
 	<target name="compile">
-		<!--echo>#############################</echo>
-        <echo>###  Compiling Copy Core  ###</echo>
-        <echo>#############################</echo>
-        <ant dir="de.uni_hildesheim.sse.easy.instantiator.copy.core" antfile="${build.script.name}" /-->
 
         <echo>#####################################</echo>
         <echo>###  Compiling Instantiator Core  ###</echo>
         <echo>#####################################</echo>
         <ant dir="de.uni_hildesheim.sse.easy.instantiatorCore" antfile="${build.script.name}" />
-
+            
+        <!-- Must be compiled before rt-Instantiator Core -->
+        <echo>###########################################</echo>
+        <echo>###  Compiling Instantiator Serializer  ###</echo>
+        <echo>###########################################</echo>
+        <ant dir="${home.instantiator.serializer.dir}" antfile="${build.script.name}" /> 
+        
         <echo>#######################################</echo>
         <echo>###  Compiling rt-Instantiator Core ###</echo>
         <echo>#######################################</echo>
         <ant dir="de.uni-hildesheim.sse.easy.instantiatorCore.rt" antfile="${build.script.name}" />
         
-        <!--echo>#############################</echo>
-        <echo>###  Compiling Copy Java  ###</echo>
-        <echo>#############################</echo>
-        <ant dir="de.uni_hildesheim.sse.instantiator.copy.java" antfile="${build.script.name}" /--> 
-        
         <echo>#######################################</echo>
         <echo>###   Compiling Java Instantiator   ###</echo>
         <echo>#######################################</echo>
         <ant dir="${home.instantiator.java.dir}" antfile="${build.script.name}" />
-		
-        <!--echo>###############################</echo>
-        <echo>###  Compiling VelocityLib  ###</echo>
-        <echo>###############################</echo>
-        <ant dir="${home.instantiator.velocityLib.dir}" antfile="${build.script.name}" /-->
+
+        <echo>#######################################</echo>
+        <echo>###   Compiling ANT Instantiator    ###</echo>
+        <echo>#######################################</echo>
+        <ant dir="${home.instantiator.ant.dir}" antfile="${build.script.name}" />
+        
+        <echo>##########################################</echo>
+        <echo>###   Compiling AspectJ Instantiator   ###</echo>
+        <echo>##########################################</echo>
+        <ant dir="${home.instantiator.aspectj.dir}" antfile="${build.script.name}" />
+        
+        <echo>#######################################</echo>
+        <echo>###   Compiling Maven Instantiator  ###</echo>
+        <echo>#######################################</echo>
+        <ant dir="${home.instantiator.maven.dir}" antfile="${build.script.name}" />
 		
         <echo>#############################</echo>
         <echo>###  Compiling Velocity   ###</echo>
@@ -116,6 +127,11 @@
         <echo>###  Compiling Instantiator Core Tests  ###</echo>
         <echo>###########################################</echo>
         <ant dir="${home.instantiatorCore.tests.dir}" antfile="${build.script.name}" />
+		
+		<echo>#################################################</echo>
+        <echo>###  Compiling Instantiator Serializer Tests  ###</echo>
+        <echo>#################################################</echo>
+        <ant dir="${home.instantiator.serializer.test.dir}" antfile="${build.script.name}" />
         
         <echo>##################################</echo>
         <echo>###  Compiling Template Tests  ###</echo>
@@ -136,40 +152,16 @@
         <echo>###   Compiling Java Instantiator Tests   ###</echo>
         <echo>#############################################</echo>
         <ant dir="${home.instantiator.java.test.dir}" antfile="${build.script.name}" />
-    
-        <echo>#####################################</echo>
-        <echo>###  Compiling Model Persistency  ###</echo>
-        <echo>#####################################</echo>
-        <ant dir="Model.persistency" antfile="${build.script.name}" /> 
-        
-	</target>
-	
-	<target name="instrument">
-		<emma enabled="true" verbosity="verbose">
-			<instr destdir="${coverage.instr.dir}" metadatafile="${coverage.results.dir}/metadata.emma" mode="fullcopy" >
-				<filter includes="*de.uni_hildesheim.sse*"/>
-				<filter excludes="*Activator*"/>
-				<filter excludes="*AllTests*"/>
-				<filter excludes="de.uni_hildesheim.sse.parser.antlr.internal.*"/>
-				<filter excludes="de.uni_hildesheim.sse.vil.templatelang.parser.antlr.internal.*"/>
-				<instrpath>
-				    <!-- disabled UI and legacy -->
-					<!--fileset dir="${home.instantiator.copy.core.dir}/${build.jar.dir}/" includes="**/*.jar" /-->
-					<fileset dir="${home.instantiatorCore.dir}/${build.jar.dir}/" includes="**/*.jar" />
-                    <fileset dir="${home.instantiatorCore.rt.dir}/${build.jar.dir}/" includes="**/*.jar" />
-					<fileset dir="${home.instantiatorCore.tests.dir}/${build.jar.dir}/" includes="**/*.jar" />
-					<fileset dir="${home.instantiator.java.dir}/${build.jar.dir}/" includes="**/*.jar" />
-					<fileset dir="${home.instantiator.java.test.dir}/${build.jar.dir}/" includes="**/*.jar" />
-					<!--fileset dir="${home.instantiator.velocityLib.dir}/${build.jar.dir}/" includes="**/*.jar" /-->
-					<fileset dir="${home.instantiator.velocity.dir}/${build.jar.dir}/" includes="**/*.jar" />
-                    <fileset dir="${home.vil.expressions.core.dir}/${build.jar.dir}/" includes="**/*.jar" />
-					<fileset dir="${home.vil.core.dir}/${build.jar.dir}/" includes="**/*.jar" />
-					<fileset dir="${home.vil.tests.dir}/${build.jar.dir}/" includes="**/*.jar" />
-                    <fileset dir="${home.template.core.dir}/${build.jar.dir}/" includes="**/*.jar" />
-					<fileset dir="${home.template.tests.dir}/${build.jar.dir}/" includes="**/*.jar" />
-				</instrpath>
-			</instr>
-		</emma>
+
+        <echo>#############################################</echo>
+        <echo>###   Compiling ANT Instantiator Tests    ###</echo>
+        <echo>#############################################</echo>
+        <ant dir="${home.instantiator.ant.test.dir}" antfile="${build.script.name}" />
+
+        <echo>################################################</echo>
+        <echo>###   Compiling AspectJ Instantiator Tests   ###</echo>
+        <echo>################################################</echo>
+        <ant dir="${home.instantiator.aspectj.test.dir}" antfile="${build.script.name}" />        
 	</target>
 	
 	<target name="prepareTestEclipse" if="${unzipNewEclipse}">
@@ -188,32 +180,54 @@
 		</condition>
 		<antcall target="prepareTestEclipse"/>
 		
-        <!-- Copy needed plug-ins and libaries to test eclipse -->
-		<copy todir="${test.eclipse.path}/plugins" failonerror="true" overwrite="true">
-			<fileset dir="${coverage.instr.dir}/lib"/>
-            <!-- Model -->
+        <copy todir="${test.eclipse.path}/plugins" failonerror="true" overwrite="true" flatten="true">
+			<!-- Copy Plug-ins, which shall be tested -->
+            <fileset dir="${basedir}" includes="**/${build.jar.dir}/*.jar" excludes="${home.instantiator.maven.dir}/${build.jar.dir}/**/*.jar"/>
+            <!-- Copy dependent Plug-ins -->
+			<!-- Model -->
             <fileset dir="${home.utils.dir}/${build.jar.dir}" includes="**/*.jar" />
             <fileset dir="${home.model.dir}/${build.jar.dir}" includes="**/*.jar" />
             <fileset dir="${home.model.tests.dir}/${build.jar.dir}" includes="**/*.jar" />
             <!-- Reasoner (Check whether Drools2 is needed) -->
 			<fileset dir="${home.reasonerCore.dir}/${build.jar.dir}" includes="**/*.jar" />
 			<fileset dir="${home.drools2.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <fileset dir="${home.sseReasoner.dir}/${build.jar.dir}" includes="**/*.jar" />
 			<!-- IVML Parser -->
             <fileset dir="${home.dslCore.dir}/${build.jar.dir}" includes="**/*.jar" />
             <fileset dir="${home.ivml.dir}/${build.jar.dir}" includes="**/*.jar" />
             <fileset dir="${home.ivml.tests.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <!-- EASy-Producer: Needed for Serializer.Tests -->
+            <fileset dir="${home.easy.persistence.dir}/${build.jar.dir}" includes="**/*.jar" />
 		</copy>
+        
+        <!-- Maven Instantiatior must be unpacked -->
+        <mkdir dir="${test.eclipse.path}/plugins/de.uni_hildesheim.sse.easy.instantiator.maven"/>
+        <unzip dest="${test.eclipse.path}/plugins/de.uni_hildesheim.sse.easy.instantiator.maven">
+            <fileset dir="${home.instantiator.maven.dir}/${build.jar.dir}">
+                <include name="**/*.jar"/>
+            </fileset>
+       </unzip>
 	</target>
 	
-	<target name="coreTestEMMA" depends="instrument, copy.to.eclipse">
+	<target name="coreTest" depends="copy.to.eclipse">
 		<property name="eclipse-home" value="${test.eclipse.path}"/>
-		<!-- Instantiator Core test -->
+		<!-- Serializer Test -->
+		<ant target="core-test" antfile="plugins/${test.eclipse.testFW.dir}/library.xml" dir="${test.eclipse.path}">
+          <property name="data-dir" value="${test.eclipse.workspace.dir}"/>
+          <property name="plugin-name" value="${test.plugin.instantiation.serializer}"/>
+          <property name="classname" value="${test.suite.instantiation.serializer}"/>
+          <property name="extraVMargs" value="-Dinstantiation.serializer.testdata.home=${home.instantiator.serializer.test.dir}/testdata -javaagent:${jacoco.path}/jacocoagent.jar=append=true,destfile=${basedir}/${coverage.results.dir}/${ant.project.name}.exec" />
+          <property name="os" value="win32"/>
+          <property name="ws" value="win32"/>
+          <property name="arch" value="x86"/>
+          <property name="timeout" value="240000"/>
+        </ant>
+        <!-- Instantiator Core test -->
         <ant target="core-test" antfile="plugins/${test.eclipse.testFW.dir}/library.xml" dir="${test.eclipse.path}">
 		  <property name="data-dir" value="${test.eclipse.workspace.dir}"/>
 		  <property name="plugin-name" value="${test.plugin.instantiation}"/>
 		  <property name="classname" value="${test.suite.instantiation}"/>
-		  <property name="vmargs" value="-Dbaz=true"/>
-		  <property name="extraVMargs" value="-DinstantiatorCore.testdata.home=${home.instantiatorCore.tests.dir}/testdata -Demma.coverage.out.file=${basedir}/${coverage.results.dir}/${ant.project.name}.emma -Dosgi.dev=${emma.path}/emma.jar" />
+		  <property name="extraVMargs" value="-DinstantiatorCore.testdata.home=${home.instantiatorCore.tests.dir}/testdata -javaagent:${jacoco.path}/jacocoagent.jar=append=true,destfile=${basedir}/${coverage.results.dir}/${ant.project.name}.exec" />
 		  <property name="os" value="win32"/>
 		  <property name="ws" value="win32"/>
 		  <property name="arch" value="x86"/>
@@ -224,8 +238,7 @@
 		  <property name="data-dir" value="${test.eclipse.workspace.dir}"/>
 		  <property name="plugin-name" value="${test.plugin.vil}"/>
 		  <property name="classname" value="${test.suite.vil}"/>
-		  <property name="vmargs" value="-Dbaz=true"/>
-		  <property name="extraVMargs" value="-Dvil.buildlang.testdata.home=${home.vil.tests.dir}/testdata -Demma.coverage.out.file=${basedir}/${coverage.results.dir}/${ant.project.name}.emma -Dosgi.dev=${emma.path}/emma.jar" />
+		  <property name="extraVMargs" value="-Dvil.buildlang.testdata.home=${home.vil.tests.dir}/testdata -javaagent:${jacoco.path}/jacocoagent.jar=append=true,destfile=${basedir}/${coverage.results.dir}/${ant.project.name}.exec" />
 		  <property name="os" value="win32"/>
 		  <property name="ws" value="win32"/>
 		  <property name="arch" value="x86"/>
@@ -236,8 +249,7 @@
 		  <property name="data-dir" value="${test.eclipse.workspace.dir}"/>
 		  <property name="plugin-name" value="${test.plugin.template}"/>
 		  <property name="classname" value="${test.suite.template}"/>
-		  <property name="vmargs" value="-Dbaz=true"/>
-		  <property name="extraVMargs" value="-Dvil.templatelang.testdata.home=${home.template.tests.dir}/testdata -Demma.coverage.out.file=${basedir}/${coverage.results.dir}/${ant.project.name}.emma -Dosgi.dev=${emma.path}/emma.jar" />
+		  <property name="extraVMargs" value="-Dvil.templatelang.testdata.home=${home.template.tests.dir}/testdata -javaagent:${jacoco.path}/jacocoagent.jar=append=true,destfile=${basedir}/${coverage.results.dir}/${ant.project.name}.exec" />
 		  <property name="os" value="win32"/>
 		  <property name="ws" value="win32"/>
 		  <property name="arch" value="x86"/>
@@ -248,37 +260,132 @@
 		  <property name="data-dir" value="${test.eclipse.workspace.dir}"/>
 		  <property name="plugin-name" value="${test.plugin.instantiation.java}"/>
 		  <property name="classname" value="${test.suite.instantiation.java}"/>
-		  <property name="vmargs" value="-Dbaz=true"/>
-		  <property name="extraVMargs" value="-Dinstantiator.java.testdata.home=${home.instantiator.java.test.dir}/testdata -Demma.coverage.out.file=${basedir}/${coverage.results.dir}/${ant.project.name}.emma -Dosgi.dev=${emma.path}/emma.jar" />
+		  <property name="extraVMargs" value="-Dinstantiator.java.testdata.home=${home.instantiator.java.test.dir}/testdata -javaagent:${jacoco.path}/jacocoagent.jar=append=true,destfile=${basedir}/${coverage.results.dir}/${ant.project.name}.exec" />
 		  <property name="os" value="win32"/>
 		  <property name="ws" value="win32"/>
 		  <property name="arch" value="x86"/>
 		  <property name="timeout" value="240000"/>
 		</ant>
-	</target>
+        <!-- ANT Instantiation test -->
+        <ant target="core-test" antfile="plugins/${test.eclipse.testFW.dir}/library.xml" dir="${test.eclipse.path}">
+          <property name="data-dir" value="${test.eclipse.workspace.dir}"/>
+          <property name="plugin-name" value="${test.plugin.instantiation.ant}"/>
+          <property name="classname" value="${test.suite.instantiation.ant}"/>
+          <property name="extraVMargs" value="-Dinstantiator.ant.testdata.home=${home.instantiator.ant.test.dir}/testdata -javaagent:${jacoco.path}/jacocoagent.jar=append=true,destfile=${basedir}/${coverage.results.dir}/${ant.project.name}.exec" />
+          <property name="os" value="win32"/>
+          <property name="ws" value="win32"/>
+          <property name="arch" value="x86"/>
+          <property name="timeout" value="240000"/>
+        </ant>
+        <!-- AspectJ Instantiation test -->
+        <ant target="core-test" antfile="plugins/${test.eclipse.testFW.dir}/library.xml" dir="${test.eclipse.path}">
+          <property name="data-dir" value="${test.eclipse.workspace.dir}"/>
+          <property name="plugin-name" value="${test.plugin.instantiation.aspectj}"/>
+          <property name="classname" value="${test.suite.instantiation.aspectj}"/>
+          <property name="extraVMargs" value="-Dinstantiator.aspectj.testdata.home=${home.instantiator.aspectj.test.dir}/testdata -javaagent:${jacoco.path}/jacocoagent.jar=append=true,destfile=${basedir}/${coverage.results.dir}/${ant.project.name}.exec" />
+          <property name="os" value="win32"/>
+          <property name="ws" value="win32"/>
+          <property name="arch" value="x86"/>
+          <property name="timeout" value="240000"/>
+        </ant>
+      </target>
 	
-	<target name="emmaReport" depends="coreTestEMMA">
-		<emma enabled="true" verbosity="verbose">
+	<target name="report">
+		<jacoco:report>                 
+            <executiondata>
+                <file file="${basedir}/${coverage.results.dir}/${ant.project.name}.exec"/>
+            </executiondata>
+                                
+            <structure name="${ant.project.name}">
+                <group name="Parsers">
+                    <classfiles>
+                        <fileset dir="${home.vil.expressions.core.dir}/${build.jar.dir}/" includes="**/*.jar" />
+                        <fileset dir="${home.vil.core.dir}/${build.jar.dir}/" includes="**/*.jar" />
+                        <fileset dir="${home.vil.tests.dir}/${build.jar.dir}/" includes="**/*.jar" />
+                        <fileset dir="${home.template.core.dir}/${build.jar.dir}/" includes="**/*.jar" />
+                        <fileset dir="${home.template.tests.dir}/${build.jar.dir}/" includes="**/*.jar" />
+                    </classfiles>
+                    <sourcefiles encoding="UTF-8">
+                        <fileset dir="${home.vil.expressions.core.dir}/src/" />
+                        <fileset dir="${home.vil.expressions.core.dir}/src-gen/" />
+                        <fileset dir="${home.vil.expressions.core.dir}/xtend-gen/" />
+                        <fileset dir="${home.vil.core.dir}/src/" />
+                        <fileset dir="${home.vil.core.dir}/src-gen/" />
+                        <fileset dir="${home.vil.core.dir}/xtend-gen/" />
+                        <fileset dir="${home.vil.tests.dir}/src/" />
+                        <fileset dir="${home.template.core.dir}/src/" />
+                        <fileset dir="${home.template.core.dir}/src-gen/" />
+                        <fileset dir="${home.template.core.dir}/xtend-gen/" />
+                        <fileset dir="${home.template.tests.dir}/src/" />
+                    </sourcefiles>
+                </group>
+                <group name="Model">
+                    <classfiles>
+                        <fileset dir="${home.instantiatorCore.dir}/${build.jar.dir}/" includes="**/*.jar" />
+                        <fileset dir="${home.instantiatorCore.tests.dir}/${build.jar.dir}/" includes="**/*.jar" />
+                        <fileset dir="${home.instantiatorCore.rt.dir}/${build.jar.dir}/" includes="**/*.jar" />
+                    </classfiles>
+                    <sourcefiles encoding="UTF-8">
+                        <fileset dir="${home.instantiatorCore.dir}/src/" />
+                        <fileset dir="${home.instantiatorCore.tests.dir}/src/" />
+                        <fileset dir="${home.instantiatorCore.rt.dir}/src/" />
+                    </sourcefiles>
+                </group>
+                <group name="Instantiators">
+                    <classfiles>
+                        <!-- Jacoco also supports JAR files, but his will cause that also the complete eclipse infrastructure is measured here -->
+                        <fileset dir="${home.instantiator.java.dir}/${build.classes.dir}/" includes="**/*.class" />
+                        <fileset dir="${home.instantiator.java.test.dir}/${build.classes.dir}/" includes="**/*.class"  />
+                        <fileset dir="${home.instantiator.ant.dir}/${build.classes.dir}/" includes="**/*.class"  />
+                        <fileset dir="${home.instantiator.ant.test.dir}/${build.classes.dir}/" includes="**/*.class"  />
+                        <fileset dir="${home.instantiator.aspectj.dir}/${build.classes.dir}/" includes="**/*.class"  />
+                        <fileset dir="${home.instantiator.aspectj.test.dir}/${build.classes.dir}/" includes="**/*.class"  />
+                        <fileset dir="${home.instantiator.velocity.dir}/${build.classes.dir}/" includes="**/*.class" />
+                        <fileset dir="${home.instantiator.serializer.dir}/${build.classes.dir}/" includes="**/*.class" />
+                        <fileset dir="${home.instantiator.serializer.test.dir}/${build.classes.dir}/" includes="**/*.class" />
+                        <fileset dir="${home.instantiator.maven.dir}/${build.classes.dir}/" includes="**/*.class" />
+                    </classfiles>
+                    <sourcefiles encoding="UTF-8">
+                        <fileset dir="${home.instantiator.java.dir}/src/" />
+                        <fileset dir="${home.instantiator.java.test.dir}/src/" />
+                        <fileset dir="${home.instantiator.ant.dir}/src/" />
+                        <fileset dir="${home.instantiator.ant.test.dir}/src/" />
+                        <fileset dir="${home.instantiator.aspectj.dir}/src/" />
+                        <fileset dir="${home.instantiator.aspectj.test.dir}/src/" />
+                        <fileset dir="${home.instantiator.velocity.dir}/src/" />
+                        <fileset dir="${home.instantiator.serializer.dir}/src/" />
+                        <fileset dir="${home.instantiator.serializer.test.dir}/src/" />
+                        <fileset dir="${home.instantiator.maven.dir}/src/" />
+                    </sourcefiles>
+                </group>
+            </structure>
+                                
+            <html destdir="${basedir}/${coverage.results.dir}"/>                        
+        </jacoco:report>
+        <!--
+        <emma enabled="true" verbosity="verbose">
 			<report>
 				<property name="report.html.out.encoding" value="UTF-8"/>
 				<sourcepath>
-                    <!--pathelement path="${home.instantiator.copy.core.dir}/src/"/-->
 					<pathelement path="${home.instantiatorCore.dir}/src/"/>
 					<pathelement path="${home.instantiatorCore.tests.dir}/src/"/>
 					<pathelement path="${home.instantiatorCore.rt.dir}/src/"/>
-					<!--pathelement path="${home.instantiator.copy.java.dir}/src/"/-->
 					<pathelement path="${home.instantiator.java.dir}/src/"/>
 					<pathelement path="${home.instantiator.java.test.dir}/src/"/>
-                    <pathelement path="${home.instantiator.velocity.dir}/src/"/>
-                    <pathelement path="${home.vil.expressions.core.dir}/src/"/>
-                    <pathelement path="${home.vil.expressions.core.dir}/src-gen/"/>
-                    <pathelement path="${home.vil.expressions.core.dir}/xtend-gen/"/>
+                    <pathelement path="${home.instantiator.ant.dir}/src/"/>
+                    <pathelement path="${home.instantiator.ant.test.dir}/src/"/>
+					<pathelement path="${home.instantiator.aspectj.dir}/src/"/>
+                    <pathelement path="${home.instantiator.aspectj.test.dir}/src/"/>
+					<pathelement path="${home.instantiator.velocity.dir}/src/"/>
+                    <pathelement path="${home.instantiator.serializer.test.dir}/src/"/>
+					<pathelement path="${home.instantiator.serializer.dir}/src/"/>
                     <pathelement path="${home.vil.core.dir}/src/"/>
 					<pathelement path="${home.vil.core.dir}/src-gen/"/>
 					<pathelement path="${home.vil.core.dir}/xtend-gen/"/>
 					<pathelement path="${home.vil.tests.dir}/src/"/>
 					<pathelement path="${home.template.core.dir}/src/"/>
 					<pathelement path="${home.template.tests.dir}/src/"/>
+					
 				</sourcepath>
 		        <fileset dir="${coverage.results.dir}" >
 		          <include name="*.emma" />
@@ -287,10 +394,10 @@
 		        <xml outfile="${coverage.results.dir}/coverage.xml" depth="method"/>
 		        <html outfile="${coverage.results.dir}/coverage.html" />
 		      </report>
-	    </emma>
+	    </emma-->
 	</target> 
 	
-	<target name="test" depends="emmaReport">
+	<target name="test" depends="coreTest, report">
 		<!-- Gather Junit results -->
 		<copy todir="junitResults" failonerror="true" overwrite="true">
 			<fileset dir="${test.eclipse.path}/results/">

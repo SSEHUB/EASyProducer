@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="EASy.Nightly.Feature"
+      label="EASy-Nightly: Core Bundles"
+      version="0.0.0"
+      plugin="de.uni_hildesheim.sse.easy.ui">
+
+   <description url="http://sse.uni-hildesheim.de/en/fb4/institutes/ifi/software-systems-engineering-sse/research/projects/easy-producer-flexible-generation-of-software-product-lines">
+      EASy-Producer is a prototypical tool for the development of Software Product Lines (SPL). EASy stands for Engineering Adaptive Systems and describes the easy development, management and combination of SPLs with this tool. For this purpose, EASy-Producer integrates efficient techniques for the reduction complexity, and the composition and derivation of products. The Software Systems Engineering (SSE) group further develops these techniques continuously. The focus is, in particular, on the support for the development of large-scale and complex SPLs. 
+   </description>
+
+   <copyright url="http://sse.uni-hildesheim.de/">
+      Copyright (C) 2013 by Stiftung University Hildesheim / Software Systems Engineering, Hildesheim, Germany  
+   </copyright>
+
+   <license url="http://www.apache.org/licenses/LICENSE-2.0">
+    Copyright 2015 by Stiftung University Hildesheim - Software Systems Engineering, Hildesheim, Germany
+    
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+   </license>
+
+   <plugin
+         id="de.uni-hildesheim.sse.easy.instantiator.velocity"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="de.uni-hildesheim.sse.easy.instantiatorCore"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="de.uni-hildesheim.sse.ivml.ui.comments"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="de.uni_hildesheim.sse.dslCore"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="de.uni_hildesheim.sse.dslCore.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="de.uni_hildesheim.sse.easy.instantiator.java"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="de.uni_hildesheim.sse.easy.instantiator.ant"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="de.uni_hildesheim.sse.easy.instantiator.aspectj"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+   
+   <plugin
+         id="de.uni_hildesheim.sse.easy.instantiator.maven"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="de.uni_hildesheim.sse.easy.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="de.uni-hildesheim.sse.easy.help"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+         
+   <plugin
+         id="de.uni_hildesheim.sse.easy_producer.core"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="de.uni_hildesheim.sse.easy_producer.eclipse"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="de.uni_hildesheim.sse.ivml"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="de.uni_hildesheim.sse.ivml.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="de.uni_hildesheim.sse.reasoning.reasoner"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+         
+   <plugin
+         id="de.uni_hildesheim.sse.utils"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="de.uni_hildesheim.sse.varModel"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="de.uni_hildesheim.sse.vil.buildlang"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="de.uni_hildesheim.sse.vil.buildlang.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="de.uni_hildesheim.sse.vil.expressions"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="de.uni_hildesheim.sse.vil.expressions.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="de.uni_hildesheim.sse.vil.templatelang"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="de.uni_hildesheim.sse.vil.templatelang.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="ReasonerCore"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+   
+   <plugin
+         id="de.uni_hildesheim.sse.easy.examples"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

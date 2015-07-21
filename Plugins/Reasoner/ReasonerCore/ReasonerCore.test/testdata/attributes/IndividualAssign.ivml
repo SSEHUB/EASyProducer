@@ -1,0 +1,17 @@
+project IndividualAssign {
+
+    version v0;
+    
+    annotate Integer at to IndividualAssign;
+    
+    compound cmp {
+        Integer nest;
+    }
+    
+    cmp C;  
+    Integer var;
+    
+    C.at = 5;
+    var.at = 5;
+
+}

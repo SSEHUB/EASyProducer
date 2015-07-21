@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProductLineProject id="e41d09e4-72fb-4cdc-99c4-cc407fd1b6eb" name="MultiInstantiation" version="0" location="MultiInstantiation">
+	<predecessors>
+	</predecessors>
+	<successors>
+	</successors>
+	<settings>
+		<entity debug="false" />
+	</settings>
+	<reasoners>
+		<entity timeout="0" />
+	</reasoners>
+	<instantiators>
+	</instantiators>
+</ProductLineProject>

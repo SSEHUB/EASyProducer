@@ -3,15 +3,8 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configur
 import java.util.ArrayList;
 import java.util.List;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.VilException;
-import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
-import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Sequence;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Set;
 
 /**
  * Implements a delegating operation descriptor, i.e., virtual operations representing access to 
@@ -30,31 +23,8 @@ abstract class IvmlOperationDescriptor extends OperationDescriptor {
      * @param name the alias name (may be <b>null</b> if the original name of <code>method</code> shall be used)
      * @param isConstructor whether the operation is a constructor
      */
-    IvmlOperationDescriptor(TypeDescriptor<? extends IVilType> declaringType, String name, boolean isConstructor) {
+    IvmlOperationDescriptor(TypeDescriptor<?> declaringType, String name, boolean isConstructor) {
         super(declaringType, name, isConstructor);
-    }
-
-    /**
-     * Determines the VIL/VTL return type for the given IVML <code>type</code>.
-     * @param type the IVML type
-     * @return the return type
-     * @throws VilException in case that creating the type fails
-     */
-    protected TypeDescriptor<? extends IVilType> determineReturnType(IDatatype type) throws VilException {
-        TypeDescriptor<? extends IVilType> result;
-        type = DerivedDatatype.resolveToBasis(type);
-        if (Set.TYPE.isAssignableFrom(type)) {
-            TypeDescriptor<? extends IVilType>[] generics = TypeDescriptor.createArray(1);
-            generics[0] = IvmlTypes.decisionVariableType();
-            result = TypeRegistry.getSetType(generics);
-        } else if (Sequence.TYPE.isAssignableFrom(type)) {
-            TypeDescriptor<? extends IVilType>[] generics = TypeDescriptor.createArray(1);
-            generics[0] = IvmlTypes.decisionVariableType();
-            result = TypeRegistry.getSequenceType(generics);
-        } else {
-            result = IvmlTypes.decisionVariableType();
-        }
-        return result;
     }
     
     @Override
@@ -73,9 +43,9 @@ abstract class IvmlOperationDescriptor extends OperationDescriptor {
      * @param param the parameter type
      * @return the parameter list
      */
-    protected static List<TypeDescriptor<? extends IVilType>> createParameterList(
-        TypeDescriptor<? extends IVilType> param) {
-        List<TypeDescriptor<? extends IVilType>> result = new ArrayList<TypeDescriptor<? extends IVilType>>();
+    protected static List<TypeDescriptor<?>> createParameterList(
+        TypeDescriptor<?> param) {
+        List<TypeDescriptor<?>> result = new ArrayList<TypeDescriptor<?>>();
         result.add(param);
         return result;
     }
@@ -122,36 +92,14 @@ abstract class IvmlOperationDescriptor extends OperationDescriptor {
         return tmp.toString(); 
     }
 
-    /**
-     * Generic implementation of the compatibility method for one parameter of type {@link DecisionVariable}.
-     * 
-     * @param params the actual parameters
-     * @return the compatibility result
-     */
-    protected static CompatibilityResult isCompatibleToDecisionVariable(Object[] params) {
-        return isCompatible(params, DecisionVariable.class);
-    }
-  
-    /**
-     * Generic implementation of the compatibility method for one parameter.
-     * 
-     * @param params the actual parameters
-     * @param paramType the expected parameter type
-     * @return the compatibility result
-     */
-    protected static CompatibilityResult isCompatible(Object[] params, Class<?> paramType) {
-        CompatibilityResult result;
-        if (null != params && params.length == 1 && paramType.isInstance(params[0])) {
-            result = CompatibilityResult.COMPATIBLE;
-        } else {
-            result = CompatibilityResult.INCOMPATIBLE;
-        }
-        return result;
-    }
-
     @Override
     public boolean isPlaceholder() {
         return false;
+    }
+    
+    @Override
+    public int useGenericParameterAsReturn() {
+        return -1;
     }
     
     @Override

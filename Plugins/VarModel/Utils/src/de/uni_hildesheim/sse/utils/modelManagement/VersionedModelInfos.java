@@ -328,26 +328,28 @@ public class VersionedModelInfos <M extends IModel> {
     private static <M extends IModel> ModelInfo<M> searchOnParentLevel(List<ModelInfo<M>> infos, URI uri, 
         List<String> modelPath) {
         ModelInfo<M> result = null;
-        File uriFile = new File(uri);
-        File uriParent = uriFile.getParentFile();
-        File parent = uriParent;
-        // step two levels up... 
-        // uri = EASy/.core/core.ivml; uri-parent = EASy/.core; uri-parent-parent = EASy
-        if (null != parent) {
-            if (parent.getName().startsWith(".")) { // do not consider other parents, EASy-folder not known here!
-                parent = parent.getParentFile();
-            } else {
-                parent = null;
+        if (isFileScheme(uri)) {
+            File uriFile = new File(uri);
+            File uriParent = uriFile.getParentFile();
+            File parent = uriParent;
+            // step two levels up... 
+            // uri = EASy/.core/core.ivml; uri-parent = EASy/.core; uri-parent-parent = EASy
+            if (null != parent) {
+                if (parent.getName().startsWith(".")) { // do not consider other parents, EASy-folder not known here!
+                    parent = parent.getParentFile();
+                } else {
+                    parent = null;
+                }
             }
-        }
-        if (null != parent) {
-            File[] siblings = parent.listFiles();
-            if (null != siblings) {
-                for (int s = 0; null == result && s < siblings.length; s++) {
-                    File sibling = siblings[s];
-                    if (sibling.isDirectory() && !sibling.equals(uriParent)) {
-                        URI siblingUri = sibling.toURI().normalize();
-                        result = search(infos, siblingUri.toString(), modelPath);
+            if (null != parent) {
+                File[] siblings = parent.listFiles();
+                if (null != siblings) {
+                    for (int s = 0; null == result && s < siblings.length; s++) {
+                        File sibling = siblings[s];
+                        if (sibling.isDirectory() && !sibling.equals(uriParent)) {
+                            URI siblingUri = sibling.toURI().normalize();
+                            result = search(infos, siblingUri.toString(), modelPath);
+                        }
                     }
                 }
             }
@@ -367,13 +369,14 @@ public class VersionedModelInfos <M extends IModel> {
      */
     private static <M extends IModel> ModelInfo<M> searchOnSameFolderLevel(List<ModelInfo<M>> infos, URI uri, 
         List<String> modelPath) {
-        List<ModelInfo<M>> tmp = new ArrayList<ModelInfo<M>>();
-        File uriFile = new File(uri).getParentFile();
-        File searchFolder = uriFile.getParentFile();
-        if (null != searchFolder) {
-            File[] files = searchFolder.listFiles();
-            if (null != files) {
-                for (int f = 0; f < files.length; f++) {
+        ModelInfo<M> result = null;
+        if (isFileScheme(uri)) {
+            List<ModelInfo<M>> tmp = new ArrayList<ModelInfo<M>>();
+            File uriFile = new File(uri).getParentFile();
+            File searchFolder = uriFile.getParentFile();
+            if (null != searchFolder) {
+                File[] files = searchFolder.listFiles();
+                for (int f = 0; null != files && f < files.length; f++) {
                     File file = files[f];
                     if (file.isDirectory() && !file.equals(uriFile)) {
                         String searchUriText = file.toURI().normalize().toString();
@@ -384,14 +387,21 @@ public class VersionedModelInfos <M extends IModel> {
                     }
                 }
             }
-        }
-        ModelInfo<M> result;
-        if (1 == tmp.size()) {
-            result = tmp.get(0);
-        } else {
-            result = null; // if not found or multiple are found
+            if (1 == tmp.size()) {
+                result = tmp.get(0);
+            } // else -> result = null; // if not found or multiple are found
         }
         return result;
+    }
+    
+    /**
+     * Returns whether the given URI is a file (file scheme).
+     * 
+     * @param uri the URI to test for
+     * @return <code>true</code> if it is a file, <code>false</code> else
+     */
+    public static boolean isFileScheme(URI uri) {
+        return "file".equals(uri.getScheme());
     }
     
     /**
@@ -507,6 +517,30 @@ public class VersionedModelInfos <M extends IModel> {
                 VersionedModelInfos<M> info = infos.get(i);
                 if (Version.equals(info.getVersion(), version)) {
                     result = info;
+                }
+            }
+        }
+        return result;
+    }
+    
+    /**
+     * Returns the model information object with highest version number from <code>list</code>.
+     * Unspecified versions are treated as implicit minimum.
+     * 
+     * @param <M> the actual model type
+     * @param list the list of model information objects to determine the maximum from (may be <b>null</b>)
+     * @return the maximum version
+     */
+    public static <M extends IModel> ModelInfo<M> maxVersion(List<ModelInfo<M>> list) {
+        ModelInfo<M> result = null;
+        if (null != list) {
+            Version highest = null;
+            for (int i = 0, n = list.size(); i < n; i++) {
+                ModelInfo<M> tmp = list.get(i);
+                Version tmpVersion = tmp.getVersion();
+                if (null == result || Version.compare(tmpVersion, highest) > 0) {
+                    result = tmp;
+                    highest = tmpVersion;
                 }
             }
         }

@@ -34,7 +34,7 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.Set;
 class VariableCollector implements IModelVisitor {
     
     private List<DecisionVariable> variables = new ArrayList<DecisionVariable>();
-    private de.uni_hildesheim.sse.model.confModel.Configuration configuration;
+    private Configuration configuration;
     private IVariableFilter filter;
 
     /**
@@ -43,8 +43,7 @@ class VariableCollector implements IModelVisitor {
      * @param configuration the configuration to determine the configured variables from
      * @param filter the variable filter
      */
-    public VariableCollector(de.uni_hildesheim.sse.model.confModel.Configuration configuration, 
-        IVariableFilter filter) {
+    public VariableCollector(Configuration configuration, IVariableFilter filter) {
         this.configuration = configuration;
         this.filter = filter;
     }
@@ -121,9 +120,10 @@ class VariableCollector implements IModelVisitor {
     @Override
     public void visitDecisionVariableDeclaration(DecisionVariableDeclaration decl) {
         // retrieve and if ok wrap
-        IDecisionVariable var = configuration.getDecision(decl);
+        de.uni_hildesheim.sse.model.confModel.Configuration cfg = configuration.getConfiguration();
+        IDecisionVariable var = cfg.getDecision(decl);
         if (null != var && filter.isEnabled(var)) {
-            variables.add(new DecisionVariable(var, filter));
+            variables.add(new DecisionVariable(configuration, var, filter));
         }
     }
 

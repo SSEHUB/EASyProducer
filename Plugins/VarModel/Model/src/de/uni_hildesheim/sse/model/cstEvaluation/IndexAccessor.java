@@ -1,5 +1,6 @@
 package de.uni_hildesheim.sse.model.cstEvaluation;
 
+import de.uni_hildesheim.sse.Bundle;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.Attribute;
@@ -12,6 +13,7 @@ import de.uni_hildesheim.sse.model.varModel.values.ContainerValue;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
 import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
 import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
+import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 import de.uni_hildesheim.sse.utils.pool.IPoolManager;
 import de.uni_hildesheim.sse.utils.pool.Pool;
 
@@ -75,8 +77,12 @@ class IndexAccessor extends AbstractDecisionVariableEvaluationAccessor {
         if (Container.TYPE.isAssignableFrom(variable.getDeclaration().getType())) {
             ContainerValue val = (ContainerValue) variable.getValue();
             if (null != val) {
-                val.setValue(index, value);
-                done = true;
+                try {
+                    val.setValue(index, value);
+                    done = true;
+                } catch (ValueDoesNotMatchTypeException e) {
+                    EASyLoggerFactory.INSTANCE.getLogger(IndexAccessor.class, Bundle.ID).exception(e);
+                }
             }
         }
         return done;

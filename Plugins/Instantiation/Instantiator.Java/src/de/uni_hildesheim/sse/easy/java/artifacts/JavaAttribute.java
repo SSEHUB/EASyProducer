@@ -16,10 +16,11 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IArtifactVisitor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Binary;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Text;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationMeta;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.DecisionVariable;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
 
@@ -50,19 +51,19 @@ public class JavaAttribute extends JavaParentFragmentArtifact {
     }
 
     @Override
-    public void delete() throws ArtifactException {
+    public void delete() throws VilException {
         fieldDeclaration.delete();
         super.delete();
     }
 
     @Override
-    public String getName() throws ArtifactException {
+    public String getName() throws VilException {
         return attributeName;
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public void rename(String name) throws ArtifactException {
+    public void rename(String name) throws VilException {
         List<VariableDeclarationFragment> list = fieldDeclaration.fragments();
         for (VariableDeclarationFragment variableDeclarationFragment : list) {
             variableDeclarationFragment.setName(fieldDeclaration.getAST().newSimpleName(name));
@@ -71,12 +72,12 @@ public class JavaAttribute extends JavaParentFragmentArtifact {
     }
 
     @Override
-    public Text getText() throws ArtifactException {
+    public Text getText() throws VilException {
         return Text.CONSTANT_EMPTY;
     }
 
     @Override
-    public Binary getBinary() throws ArtifactException {
+    public Binary getBinary() throws VilException {
         return Binary.CONSTANT_EMPTY;
     }
 
@@ -111,6 +112,9 @@ public class JavaAttribute extends JavaParentFragmentArtifact {
              * initializer directly.
              */
             if (value != null) {
+                if (value instanceof DecisionVariable) {
+                    value = ((DecisionVariable) value).getValue();
+                }
                 int type = fragment.getInitializer().getNodeType();
                 Expression expression = null;
                 switch (type) {
@@ -122,7 +126,7 @@ public class JavaAttribute extends JavaParentFragmentArtifact {
                     ((StringLiteral) expression).setLiteralValue(String.valueOf(value));
                     break;
                 case Expression.BOOLEAN_LITERAL:
-                    expression = fieldDeclaration.getAST().newBooleanLiteral((Boolean) value);
+                    expression = fieldDeclaration.getAST().newBooleanLiteral(Boolean.valueOf(value.toString()));
                     break;
                 case Expression.CHARACTER_LITERAL:
                     expression = fieldDeclaration.getAST().newCharacterLiteral();
@@ -226,6 +230,12 @@ public class JavaAttribute extends JavaParentFragmentArtifact {
     @Invisible
     FieldDeclaration getFieldDeclaration() {
         return fieldDeclaration;
+    }
+
+    @Invisible
+    @Override
+    public String getStringValue(StringComparator comparator) {
+        return "attribute '" + getNameSafe() + "'";
     }
 
     // override deleteChild in case of stored attributes or other substructures

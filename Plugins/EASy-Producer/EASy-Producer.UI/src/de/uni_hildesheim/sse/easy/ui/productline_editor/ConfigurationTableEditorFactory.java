@@ -5,30 +5,41 @@ import java.util.Map;
 
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Text;
 
+import de.uni_hildesheim.sse.dslcore.ui.ConfigurationEditorFactory.IConfigurationEditorCreator;
 import de.uni_hildesheim.sse.easy.ui.confModel.GUIConfiguration;
 import de.uni_hildesheim.sse.easy.ui.confModel.GUIEditor;
 import de.uni_hildesheim.sse.easy.ui.confModel.GUIValueFactory;
 import de.uni_hildesheim.sse.easy.ui.confModel.GUIVariable;
+import de.uni_hildesheim.sse.easy.ui.productline_editor.configuration.AttributeRegExFilter;
+import de.uni_hildesheim.sse.easy.ui.productline_editor.configuration.ConfigNameFilter;
 import de.uni_hildesheim.sse.easy.ui.productline_editor.configuration.ConfigurationTableEditor;
+import de.uni_hildesheim.sse.easy.ui.productline_editor.configuration.NonFrozenFilter;
+import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
 import de.uni_hildesheim.sse.model.confModel.AssignmentState;
 import de.uni_hildesheim.sse.model.confModel.Configuration;
 import de.uni_hildesheim.sse.model.confModel.DisplayNameProvider;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
+import de.uni_hildesheim.sse.model.management.VarModel;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.IvmlDatatypeVisitor;
+import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Container;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
+import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
+import de.uni_hildesheim.sse.utils.modelManagement.IModelListener;
 
 /**
  * An UI element factory (preliminary).
  * 
  * @author Holger Eichelberger
  */
-public class ConfigurationTableEditorFactory {
+public class ConfigurationTableEditorFactory implements IConfigurationEditorCreator {
 
     private static final Map<String, IEditorCreator> CREATORS = new HashMap<String, IEditorCreator>();
     
@@ -114,7 +125,7 @@ public class ConfigurationTableEditorFactory {
      * 
      * @author Holger Eichelberger
      */
-    public static class UIConfiguration {
+    public static class UIConfiguration implements IModelListener<Project> {
         
         private GUIConfiguration config;
         private IEASyEditorPage parent;
@@ -129,6 +140,7 @@ public class ConfigurationTableEditorFactory {
         UIConfiguration(Configuration config, IEASyEditorPage parent) {
             this.config = new GUIConfiguration(config, parent.getContentPane());
             this.parent = parent;
+            VarModel.INSTANCE.events().addModelListener(config.getProject(), this);
         }
 
         /**
@@ -220,6 +232,7 @@ public class ConfigurationTableEditorFactory {
          * This instance shall not be used afterwards.
          */
         public void release() {
+            VarModel.INSTANCE.events().removeModelListener(config.getConfig().getProject(), this);
             map.clear();
             map = null;
             config = null;
@@ -234,6 +247,112 @@ public class ConfigurationTableEditorFactory {
          */
         void add(GUIVariable variable, GUIEditor editor) {
             map.put(variable, editor);
+        }
+        
+        /**
+         * Deconfigures the given control.
+         * 
+         * @param control the control to be deconfigured
+         */
+        public void deconfigure(Control control) {
+            for (Map.Entry<GUIVariable, GUIEditor> entry : map.entrySet()) {
+                if (entry.getValue().getControl().equals(control)) {
+                    entry.getKey().setEmptyValue();
+                    entry.getValue().refreshContents();
+                    if (control instanceof Text) {
+                        ((Text) control).setText(entry.getKey().getNullLabel());
+                    }
+                    break;
+                }
+            }
+        }
+        
+        /**
+         * Maps a variable to its configuration following nested elements up and down.
+         * 
+         * @param var the variable to be mapped
+         * @param cfg the configuration containing the top-level variables
+         * @return the mapped variable, <b>null</b> if there is no mapping
+         */
+        private IDecisionVariable mapVariable(IDecisionVariable var, Configuration cfg) {
+            IDecisionVariable result = null;
+            if (var.getParent() instanceof IDecisionVariable) {
+                IDecisionVariable par = mapVariable((IDecisionVariable) var.getParent(), cfg);
+                if (null != par) {
+                    AbstractVariable decl = var.getDeclaration();
+                    for (int p = 0; null == result && p < par.getNestedElementsCount(); p++) {
+                        IDecisionVariable nested = par.getNestedElement(p);
+                        if (nested.getDeclaration().equals(decl)) {
+                            result = nested;
+                        }
+                    }
+                }
+            } else { // assume top-level
+                result = cfg.getDecision(var.getDeclaration());
+            } 
+            return result;
+        }
+
+        @Override
+        public void notifyReplaced(Project oldModel, Project newModel) {
+            // needed to update the variables upon a model change :o otherwise UI changes do not have any effect
+            Configuration cfg = config.getConfig();
+            for (Map.Entry<GUIVariable, GUIEditor> entry : map.entrySet()) {
+                GUIVariable guiVar = entry.getKey();
+                IDecisionVariable newVar = mapVariable(guiVar.getVariable(), cfg);
+                if (null != newVar) {
+                    guiVar.setVariable(newVar);
+                } else {
+                    EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID)
+                        .error("No variable found in new configuratio, i.e., discontinued mapping!");
+                }
+            }
+        }
+        
+        /**
+         * Returns the control (of the editor for) <code>var</code>.
+         * 
+         * @param var the variable to search for
+         * @return the control (may be <b>null</b> if not found)
+         */
+        public Control getEditorFor(AbstractVariable var) {
+            GUIEditor editor = null;
+            // currently not really efficient, let's see. Having a second map would increase the effort 
+            // in notifyReplaced.
+            for (Map.Entry<GUIVariable, GUIEditor> entry : map.entrySet()) {
+                if (var.equals(entry.getKey().getVariable().getDeclaration())) {
+                    editor = entry.getValue();
+                    break;
+                }
+            }
+            Control result = null;
+            if (null != editor) {
+                result = editor.getControl();
+            }
+            return result;
+        }
+
+        /**
+         * Returns the control (of the editor for) <code>var</code>.
+         * 
+         * @param var the variable to search for
+         * @return the control (may be <b>null</b> if not found)
+         */
+        public Control getEditorFor(IDecisionVariable var) {
+            GUIEditor editor = null;
+            // currently not really efficient, let's see. Having a second map would increase the effort 
+            // in notifyReplaced.
+            for (Map.Entry<GUIVariable, GUIEditor> entry : map.entrySet()) {
+                if (var.equals(entry.getKey().getVariable())) {
+                    editor = entry.getValue();
+                    break;
+                }
+            }
+            Control result = null;
+            if (null != editor) {
+                result = editor.getControl();
+            }
+            return result;            
         }
         
     }
@@ -372,5 +491,26 @@ public class ConfigurationTableEditorFactory {
     public static final void createUpdatableCellEditors(boolean updatable) {
         GUIValueFactory.createUpdatableCellEditors(updatable);
     }
-    
+
+    @Override
+    public TreeViewer createEditor(Configuration config, Composite parent) {
+        return createConfigurationTableEditor(config, new DelegatingEasyEditorPage(parent));
+    }
+
+    @Override
+    public ViewerFilter createNameFilter(String nameRegEx, boolean showAllNestedElements) {
+        return new ConfigNameFilter(nameRegEx, showAllNestedElements);
+    }
+
+    @Override
+    public ViewerFilter createAttributeFilter(String attributeNameRegEx, String valueRegEx, 
+        boolean showAllNestedElements) {
+        return new AttributeRegExFilter(attributeNameRegEx, valueRegEx, showAllNestedElements);
+    }
+
+    @Override
+    public ViewerFilter createNonFrozenFilter(boolean showAllNestedElements) {
+        return new NonFrozenFilter(showAllNestedElements);
+    }
+
 }

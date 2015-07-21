@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Stack;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
+import de.uni_hildesheim.sse.utils.modelManagement.IModel;
 
 /**
  * A basic implementation for a hierarchical resolver.
@@ -246,6 +247,15 @@ public abstract class Resolver<V extends IResolvable> implements IResolver<V> {
     @Override
     public Object getIvmlElement(String name) {
         return null; // cannot resolve by default
+    }
+    
+    /**
+     * Returns the current model.
+     * 
+     * @return the current model (or <b>null</b> if there is none)
+     */
+    public IModel getCurrentModel() {
+        return null; // shall be overridden
     }
 
 }

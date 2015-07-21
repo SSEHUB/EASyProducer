@@ -23,6 +23,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * The following features are implemented:
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionStatementImpl#getVar <em>Var</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionStatementImpl#getField <em>Field</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionStatementImpl#getExpr <em>Expr</em>}</li>
  * </ul>
  * </p>
@@ -50,6 +51,26 @@ public class ExpressionStatementImpl extends MinimalEObjectImpl.Container implem
    * @ordered
    */
   protected String var = VAR_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getField() <em>Field</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getField()
+   * @generated
+   * @ordered
+   */
+  protected static final String FIELD_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getField() <em>Field</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getField()
+   * @generated
+   * @ordered
+   */
+  protected String field = FIELD_EDEFAULT;
 
   /**
    * The cached value of the '{@link #getExpr() <em>Expr</em>}' containment reference.
@@ -103,6 +124,29 @@ public class ExpressionStatementImpl extends MinimalEObjectImpl.Container implem
     var = newVar;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, ExpressionDslPackage.EXPRESSION_STATEMENT__VAR, oldVar, var));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String getField()
+  {
+    return field;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setField(String newField)
+  {
+    String oldField = field;
+    field = newField;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, ExpressionDslPackage.EXPRESSION_STATEMENT__FIELD, oldField, field));
   }
 
   /**
@@ -181,6 +225,8 @@ public class ExpressionStatementImpl extends MinimalEObjectImpl.Container implem
     {
       case ExpressionDslPackage.EXPRESSION_STATEMENT__VAR:
         return getVar();
+      case ExpressionDslPackage.EXPRESSION_STATEMENT__FIELD:
+        return getField();
       case ExpressionDslPackage.EXPRESSION_STATEMENT__EXPR:
         return getExpr();
     }
@@ -199,6 +245,9 @@ public class ExpressionStatementImpl extends MinimalEObjectImpl.Container implem
     {
       case ExpressionDslPackage.EXPRESSION_STATEMENT__VAR:
         setVar((String)newValue);
+        return;
+      case ExpressionDslPackage.EXPRESSION_STATEMENT__FIELD:
+        setField((String)newValue);
         return;
       case ExpressionDslPackage.EXPRESSION_STATEMENT__EXPR:
         setExpr((Expression)newValue);
@@ -220,6 +269,9 @@ public class ExpressionStatementImpl extends MinimalEObjectImpl.Container implem
       case ExpressionDslPackage.EXPRESSION_STATEMENT__VAR:
         setVar(VAR_EDEFAULT);
         return;
+      case ExpressionDslPackage.EXPRESSION_STATEMENT__FIELD:
+        setField(FIELD_EDEFAULT);
+        return;
       case ExpressionDslPackage.EXPRESSION_STATEMENT__EXPR:
         setExpr((Expression)null);
         return;
@@ -239,6 +291,8 @@ public class ExpressionStatementImpl extends MinimalEObjectImpl.Container implem
     {
       case ExpressionDslPackage.EXPRESSION_STATEMENT__VAR:
         return VAR_EDEFAULT == null ? var != null : !VAR_EDEFAULT.equals(var);
+      case ExpressionDslPackage.EXPRESSION_STATEMENT__FIELD:
+        return FIELD_EDEFAULT == null ? field != null : !FIELD_EDEFAULT.equals(field);
       case ExpressionDslPackage.EXPRESSION_STATEMENT__EXPR:
         return expr != null;
     }
@@ -258,6 +312,8 @@ public class ExpressionStatementImpl extends MinimalEObjectImpl.Container implem
     StringBuffer result = new StringBuffer(super.toString());
     result.append(" (var: ");
     result.append(var);
+    result.append(", field: ");
+    result.append(field);
     result.append(')');
     return result.toString();
   }

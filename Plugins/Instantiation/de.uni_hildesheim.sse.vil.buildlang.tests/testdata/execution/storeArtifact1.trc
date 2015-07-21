@@ -2,4 +2,4 @@
     targetFile <- storeArtifact1.txt
     -> text(FileArtifact) with (storeArtifact1.txt) = <text>
     -> append(Text, String) with (<text>, Hello) = <text>
-    -> rename(FileArtifact, String) with (storeArtifact1.txt, renStoreArtifact1.txt) = null
+    -> rename(FileArtifact, String) with (storeArtifact1.txt, renStoreArtifact1.txt)

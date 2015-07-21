@@ -2,7 +2,7 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Binary;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Text;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ClassMeta;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
@@ -18,45 +18,45 @@ public interface IArtifact extends IVilType {
     /**
      * Deletes this artifact.
      * 
-     * @throws ArtifactException in case of serious problems so that this operation 
+     * @throws VilException in case of serious problems so that this operation 
      *   cannot continue
      */
-    public void delete() throws ArtifactException;
+    public void delete() throws VilException;
 
     /**
      * Returns the name of this artifact.
      * 
      * @return the name of this artifact
-     * @throws ArtifactException in case of serious problems so that this operation 
+     * @throws VilException in case of serious problems so that this operation 
      *   cannot continue
      */
-    public String getName() throws ArtifactException;
+    public String getName() throws VilException;
     
     /**
      * Renames this artifact.
      * 
      * @param name the new name of this artifact
-     * @throws ArtifactException in case of serious problems so that this operation 
+     * @throws VilException in case of serious problems so that this operation 
      *   cannot continue
      */
-    public void rename(String name) throws ArtifactException;
+    public void rename(String name) throws VilException;
     
     /**
      * Returns the textual representation of <i>the contents</i> of this artifact for manipulation.
      * In case of binary artifacts, the returned object may be empty.
      * 
      * @return the textual representation of the contents
-     * @throws ArtifactException in case of obtaining the representation causes serious problems
+     * @throws VilException in case of obtaining the representation causes serious problems
      */
-    public Text getText() throws ArtifactException;
+    public Text getText() throws VilException;
     
     /**
      * Returns the binary representation of <i>the contents</i> of this artifact for manipulation.
      * 
      * @return the binary representation of the contents
-     * @throws ArtifactException in case of obtaining the representation causes serious problems
+     * @throws VilException in case of obtaining the representation causes serious problems
      */
-    public Binary getBinary() throws ArtifactException;
+    public Binary getBinary() throws VilException;
     
     /**
      * Visits this artifact (and dependent on the visitor also contained artifacts and fragments) 
@@ -70,10 +70,10 @@ public interface IArtifact extends IVilType {
     /**
      * Called if the underlying real artifact may have been updated, e.g., by overriding it by another file.
      * 
-     * @throws ArtifactException in case that updating fails
+     * @throws VilException in case that updating fails
      */
     @Invisible(inherit = true)
-    public void update() throws ArtifactException;
+    public void update() throws VilException;
     
     /**
      * Returns the last modification timestamp of this artifact.
@@ -93,9 +93,9 @@ public interface IArtifact extends IVilType {
     /**
      * Stores this artifact in case of changes.
      * 
-     * @throws ArtifactException in case of problems storing this artifact
+     * @throws VilException in case of problems storing this artifact
      */
     @Invisible(inherit = true)
-    public void store() throws ArtifactException;
+    public void store() throws VilException;
     
 }

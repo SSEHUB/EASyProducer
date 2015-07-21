@@ -1,0 +1,5 @@
+project opDefString {
+
+    def Boolean myFunc(String str) = true;
+    
+}

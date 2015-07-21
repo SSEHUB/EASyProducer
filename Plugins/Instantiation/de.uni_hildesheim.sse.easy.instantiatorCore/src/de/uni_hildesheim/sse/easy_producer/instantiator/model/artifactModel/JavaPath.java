@@ -1,6 +1,6 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Conversion;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
 
@@ -18,9 +18,9 @@ public class JavaPath extends Path {
      * Creates a new java path from a given path.
      * 
      * @param path the path to create this java path from
-     * @throws ArtifactException in case that path cannot be converted
+     * @throws VilException in case that path cannot be converted
      */
-    protected JavaPath(Path path) throws ArtifactException {
+    protected JavaPath(Path path) throws VilException {
         this(path, null);
     }
     
@@ -30,9 +30,9 @@ public class JavaPath extends Path {
      * @param path the path to create this java path from
      * @param prefixRegEx an optional regular expression (intended for prefixes) to be 
      *   replaced by the empty string (may be <b>null</b>)
-     * @throws ArtifactException in case that path cannot be converted
+     * @throws VilException in case that path cannot be converted
      */
-    protected JavaPath(Path path, String prefixRegEx) throws ArtifactException {
+    protected JavaPath(Path path, String prefixRegEx) throws VilException {
         super(path.getPath(), path.getArtifactModel());
         String tmp = path.getPath();
         if (null != prefixRegEx) {
@@ -64,17 +64,17 @@ public class JavaPath extends Path {
      * Checks the given path for compliance to Java path conventions.
      * @param path the path to be checked
      * @return <code>path</code>
-     * @throws ArtifactException in case that the path does not comply to Java conventions
+     * @throws VilException in case that the path does not comply to Java conventions
      */
-    private static String checkJavaPath(String path) throws ArtifactException {
+    private static String checkJavaPath(String path) throws VilException {
         // we allow empty paths!
         boolean atIdentifierStart = true;
         for (int i = 0; i < path.length(); i++) {
             char c = path.charAt(i);
             if (atIdentifierStart) {
                 if (!Character.isJavaIdentifierStart(c)) {
-                    throw new ArtifactException("Java identifer must not start with '" + c + "'", 
-                        ArtifactException.ID_INVALID_CHARACTER);
+                    throw new VilException("Java identifer must not start with '" + c + "'", 
+                        VilException.ID_INVALID_CHARACTER);
                 }
                 atIdentifierStart = false;
             } else {
@@ -82,14 +82,15 @@ public class JavaPath extends Path {
                     atIdentifierStart = true;
                 } else {
                     if (!Character.isJavaIdentifierPart(c)) {
-                        throw new ArtifactException("Java identifier must not contain '" + c + "'", 
-                            ArtifactException.ID_INVALID_CHARACTER);
+                        throw new VilException("Java identifier must not contain '" + c + "'", 
+                            VilException.ID_INVALID_CHARACTER);
                     }
                 }
             }
         }
         if (0 == path.length() && atIdentifierStart) {
-            throw new ArtifactException("Java path must not end with '.'", ArtifactException.ID_INVALID_CHARACTER);
+            throw new VilException("Java path must not end with '.'", 
+                VilException.ID_INVALID_CHARACTER);
         }
         return path;
     }
@@ -102,7 +103,7 @@ public class JavaPath extends Path {
     
     @Invisible
     @Override
-    public JavaPath toJavaPath() throws ArtifactException {
+    public JavaPath toJavaPath() throws VilException {
         return this; // disabled
     }
     
@@ -126,7 +127,7 @@ public class JavaPath extends Path {
     }
     
     @Override
-    public String getName() throws ArtifactException {
+    public String getName() throws VilException {
         String name;
         int pos = path.lastIndexOf('.');
         if (pos > 0) {
@@ -184,7 +185,7 @@ public class JavaPath extends Path {
         JavaPath result;
         try {
             result = new JavaPath(Path.convert(val));
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             result = null;
         }
         return result;

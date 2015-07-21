@@ -4,6 +4,9 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.uni_hildesheim.sse.capabilities.DefaultReasonerAccess;
+import de.uni_hildesheim.sse.capabilities.IReasonerCapability;
+import de.uni_hildesheim.sse.capabilities.DefaultReasonerAccess.IDefaultReasonerProvider;
 import de.uni_hildesheim.sse.model.confModel.Configuration;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.Project;
@@ -39,10 +42,30 @@ public class ReasonerFrontend {
     private int timeout = 0;
 
     /**
+     * Implements the default reasoner provider.
+     * 
+     * @author Holger Eichelberger
+     */
+    private class DefaultReasonerProvider implements IDefaultReasonerProvider {
+
+        @Override
+        public boolean hasCapability(IReasonerCapability capability) {
+            return hasReasonerCapability(capability);
+        }
+
+        @Override
+        public void initialize(Configuration config, ProgressObserver observer) {
+            propagate(config.getProject(), config, null, observer);
+        }
+        
+    }
+    
+    /**
      * Singleton constructor for this class.
      */
     private ReasonerFrontend() {
         registry = ReasonerRegistry.getInstance();
+        DefaultReasonerAccess.setProvider(new DefaultReasonerProvider()); // called when a reasoner is registered
     }
 
     /**
@@ -65,13 +88,10 @@ public class ReasonerFrontend {
      * Returns the actual and matching reasoner. Considers whether
      * the reasoner is ready for use via {@link ReasonerDescriptor#isReadyForUse()}.
      * 
-     * @param project
-     *            the project to reason on
-     * @param configuration
-     *            the configuration to reason on (may be <b>null</b>)
-     * @param constraints
-     *            the additional constraints to reason on (may be <b>null</b>)
-     * @param reasonerConfiguration the configuration to be used for the specific reasoner call           
+     * @param project the project to reason on (may be <b>null</b>)
+     * @param configuration the configuration to reason on (may be <b>null</b>)
+     * @param constraints the additional constraints to reason on (may be <b>null</b>)
+     * @param reasonerConfiguration the configuration to be used for the specific reasoner call (may be <b>null</b>)
      * @return the actual reasoner (may be <b>null</b>)
      */
     private IReasoner getActualReasoner(Project project, Configuration configuration, List<Constraint> constraints, 
@@ -501,6 +521,31 @@ public class ReasonerFrontend {
     }
 
     /**
+     * Return whether the current reasoner hint has a specific capability. [convenience]
+     * 
+     * @param capability the capability to look for
+     * @return <code>true</code> if the capability is provided, <code>false</code> else
+     */
+    public boolean hasReasonerCapability(IReasonerCapability capability) {
+        return hasReasonerCapability(capability, null);
+    }
+    /**
+     * Return whether the current reasoner hint has a specific capability. [convenience]
+     * 
+     * @param capability the capability to look for
+     * @param reasonerConfiguration the configuration to consider (may be <b>null</b>)
+     * @return <code>true</code> if the capability is provided, <code>false</code> else
+     */
+    public boolean hasReasonerCapability(IReasonerCapability capability, ReasonerConfiguration reasonerConfiguration) {
+        boolean result = false;
+        IReasoner reasoner = getActualReasoner(null, null, null, reasonerConfiguration);
+        if (null != reasoner) {
+            result = reasoner.getDescriptor().hasCapability(capability);
+        }
+        return result;
+    }
+
+    /**
      * Returns the current reasoner hint.
      * 
      * @return the current reasoner hint, may be <b>null</b>;
@@ -593,5 +638,6 @@ public class ReasonerFrontend {
      */
     public int getTimeout() {
         return timeout;
-    }    
+    }
+
 }

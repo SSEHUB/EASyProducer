@@ -216,12 +216,14 @@ public class ConfigurationTableEditor extends TreeViewer implements IGUIConfigCh
      * @param async whether execution shall happen asynchronously or synchronously
      */
     private void execOnParent(Runnable runnable, boolean async) {
-        Display parentDisplay = parentPage.getDisplay();
-        if (null != parentDisplay) {
-            if (async) {
-                parentDisplay.asyncExec(runnable);
-            } else {
-                parentDisplay.syncExec(runnable);
+        if (!parentPage.isDisposed()) {
+            Display parentDisplay = parentPage.getDisplay();
+            if (null != parentDisplay) {
+                if (async) {
+                    parentDisplay.asyncExec(runnable);
+                } else {
+                    parentDisplay.syncExec(runnable);
+                }
             }
         }
     }

@@ -3,7 +3,7 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 
 /**
  * Handles {@link IArtifactChangedListener}.
@@ -32,23 +32,23 @@ public class ArtifactChangedListenerQueue implements IArtifactChangedListenerQue
      * 
      * @param cause the cause for the event
      * 
-     * @throws ArtifactException in case that some listeners fail
+     * @throws VilException in case that some listeners fail
      */
-    public synchronized void triggerArtifactChanged(Object cause) throws ArtifactException {
-        List<ArtifactException> caught = null;
+    public synchronized void triggerArtifactChanged(Object cause) throws VilException {
+        List<VilException> caught = null;
         int size = listeners.size();
         for (int l = 0; l < size; l++) {
             try {
                 listeners.get(l).artifactChanged(cause);
-            } catch (ArtifactException e) {
+            } catch (VilException e) {
                 if (null == caught) {
-                    caught = new ArrayList<ArtifactException>();
+                    caught = new ArrayList<VilException>();
                 }
                 caught.add(e);
             }
         }
         if (null != caught) {
-            throw new ArtifactException(caught);
+            throw new VilException(caught);
         }
     }
     

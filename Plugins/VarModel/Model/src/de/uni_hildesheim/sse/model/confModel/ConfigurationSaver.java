@@ -153,14 +153,11 @@ public class ConfigurationSaver {
                 if (0 == code) {
                     code = c;
                 }
-                for (int a = 0; a < varDecl.getAttributesCount(); a++) {
-                    Value value = null;
-                    ConstraintSyntaxTree cst = varDecl.getAttribute(a).getDefaultValue();
-                    if (cst instanceof ConstantValue) {
-                        value = ((ConstantValue) cst).getConstantValue();
-                    }
+                for (int a = 0; a < var.getAttributesCount(); a++) {
+                    IDecisionVariable attrVar = var.getAttribute(a);
+                    Value value = attrVar.getValue();
                     if (null != value) {
-                        c = processAssignment(destProject, errors, varDecl.getAttribute(a), var, value);
+                        c = processAssignment(destProject, errors, attrVar.getDeclaration(), attrVar, value);
                         if (0 == code) {
                             code = c;
                         }
@@ -428,8 +425,19 @@ public class ConfigurationSaver {
         if (frozenElements.size() > 0) {
             IFreezable[] freezables = new IFreezable[frozenElements.size()];
             frozenElements.toArray(freezables);
-            FreezeBlock freeze = new FreezeBlock(freezables, null, confProject);
+            FreezeBlock freeze = createFreezeBlock(freezables, confProject);
             confProject.add(freeze);
         }
+    }
+    
+    /**
+     * Creates a freeze block, allowing customization (factory method).
+     * 
+     * @param freezables the freezables
+     * @param parent the parent of the freeze block
+     * @return the freeze block
+     */
+    protected FreezeBlock createFreezeBlock(IFreezable[] freezables, Project parent) {
+        return new FreezeBlock(freezables, null, null, parent);
     }
 }

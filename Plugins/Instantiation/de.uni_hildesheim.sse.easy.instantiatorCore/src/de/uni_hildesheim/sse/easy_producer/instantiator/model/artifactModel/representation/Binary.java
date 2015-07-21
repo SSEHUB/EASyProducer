@@ -7,7 +7,7 @@ import java.io.OutputStream;
 import org.apache.commons.io.FileUtils;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IArtifactChangedListener;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IStringValueProvider;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
 
@@ -43,9 +43,9 @@ public class Binary extends AbstractArtifactRepresentation implements IArtifactC
      * @param text the text to construct the representation from
      * @param modifiable whether this representation shall be modifiable
      * 
-     * @throws ArtifactException in case that reading fails for some reason
+     * @throws VilException in case that reading fails for some reason
      */
-    public Binary(String text, boolean modifiable) throws ArtifactException {
+    public Binary(String text, boolean modifiable) throws VilException {
         super(modifiable);
         data = text.getBytes();
         updateContents(); // does nothing
@@ -57,9 +57,9 @@ public class Binary extends AbstractArtifactRepresentation implements IArtifactC
      * @param file the file to be considered as input
      * @param modifiable whether this representation shall be modifiable
      * 
-     * @throws ArtifactException in case that reading fails for some reason
+     * @throws VilException in case that reading fails for some reason
      */
-    public Binary(File file, boolean modifiable) throws ArtifactException {
+    public Binary(File file, boolean modifiable) throws VilException {
         super(modifiable);
         this.file = file;
         updateContents();
@@ -68,15 +68,15 @@ public class Binary extends AbstractArtifactRepresentation implements IArtifactC
     /**
      * Updates the text contents.
      * 
-     * @throws ArtifactException in case that reading fails for some reason
+     * @throws VilException in case that reading fails for some reason
      */
-    public void updateContents() throws ArtifactException {
+    public void updateContents() throws VilException {
         if (isModifiable()) {
             if (null != file) {
                 try {
                     data = FileUtils.readFileToByteArray(file);
                 } catch (IOException e) {
-                    throw new ArtifactException(e, ArtifactException.ID_IO);
+                    throw new VilException(e, VilException.ID_IO);
                 }
             }
         }
@@ -88,7 +88,7 @@ public class Binary extends AbstractArtifactRepresentation implements IArtifactC
     }
 
     @Override
-    public void artifactChanged(Object cause) throws ArtifactException {
+    public void artifactChanged(Object cause) throws VilException {
         updateContents();
     }
     

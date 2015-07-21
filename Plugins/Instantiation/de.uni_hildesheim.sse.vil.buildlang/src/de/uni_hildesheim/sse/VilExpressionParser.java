@@ -4,12 +4,17 @@ import org.osgi.service.component.ComponentContext;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildlangExecution;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionParserRegistry;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IExpressionParser;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IRuntimeEnvironment;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
+import de.uni_hildesheim.sse.utils.modelManagement.AbstractModelInitializer;
+import de.uni_hildesheim.sse.utils.modelManagement.IModelLoader;
+import de.uni_hildesheim.sse.utils.modelManagement.ModelInitializer;
+import de.uni_hildesheim.sse.utils.modelManagement.ModelManagement;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
 import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
 
@@ -18,7 +23,7 @@ import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
  * 
  * @author Holger Eichelberger
  */
-public class VilExpressionParser implements IExpressionParser {
+public class VilExpressionParser extends AbstractModelInitializer<Script> implements IExpressionParser {
 
     // no private constructor!!!
     
@@ -58,6 +63,7 @@ public class VilExpressionParser implements IExpressionParser {
             EASyLoggerFactory.INSTANCE.getLogger(VilExpressionParser.class, VilBundleId.ID);
         }
         ExpressionParserRegistry.setExpressionParser(BuildlangExecution.LANGUAGE, this);
+        ModelInitializer.register(this);
     }
 
     /**
@@ -69,11 +75,22 @@ public class VilExpressionParser implements IExpressionParser {
             ProgressObserver.NO_OBSERVER);
         // this is not the official way of using DS but the official way is instable
         ExpressionParserRegistry.setExpressionParser(BuildlangExecution.LANGUAGE, null);
+        ModelInitializer.unregister(this);
     }
 
     @Override
-    public Expression parse(String text, IRuntimeEnvironment environment) throws ExpressionException {
+    public Expression parse(String text, IRuntimeEnvironment environment) throws VilException {
         return BuildLangModelUtility.INSTANCE.createExpression(text, environment);
+    }
+
+    @Override
+    public ModelManagement<Script> getModelManagement() {
+        return BuildModel.INSTANCE;
+    }
+
+    @Override
+    protected IModelLoader<Script> getModelLoader() {
+        return BuildLangModelUtility.INSTANCE;
     }
 
 }

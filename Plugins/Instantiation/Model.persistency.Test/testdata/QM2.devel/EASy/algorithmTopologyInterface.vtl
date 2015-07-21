@@ -2,17 +2,20 @@ template algorithmTopologyInterface(Configuration config, FileArtifact target) {
 	
 	def main(Configuration config, FileArtifact target){
 		
-		'package eu.qualiMaster.algorithms;'
+		'package eu.qualimaster.algorithms.inf;'
 		''
 		'/**'
-		' * Define the interface for creating algorithm topology.'
+		' * Define the interface for creating topology-based algorithm.'
 		'**/'
 		'public interface ITopologyCreate {'
 		
 		'    /**'
-		'     * Create the algorithm topology without Spout'
+		'     * Create the algorithm topology'
+		'     * @param lastPipelineNodeName    the name of the last pipeline node to be linked with'
+		'     * @param streamId    the stream identification'
+		'     * @return the name of the ending node in this sub-topology'
 		'    **/'
-		'    public String createTopology(String spoutName);'
+		'    public String createTopology(String lastPiplineNodeName, String streamId);'
 		
 		
 		'}'

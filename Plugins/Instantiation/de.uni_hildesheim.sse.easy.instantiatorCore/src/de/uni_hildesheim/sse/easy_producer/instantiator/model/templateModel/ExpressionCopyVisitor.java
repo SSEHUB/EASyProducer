@@ -3,10 +3,9 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel;
 import java.util.Map;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VariableDeclaration;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CopyVisitor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
 import de.uni_hildesheim.sse.utils.modelManagement.IVersionRestriction.IVariableMapper;
 
 /**
@@ -39,47 +38,47 @@ public class ExpressionCopyVisitor extends CopyVisitor implements IVisitor {
     }
 
     @Override
-    public Object visitTemplate(Template template) throws VilLanguageException {
-        throw new VilLanguageException("not an expression", VilLanguageException.ID_INTERNAL);
+    public Object visitTemplate(Template template) throws VilException {
+        throw new VilException("not an expression", VilException.ID_INTERNAL);
     }
 
     @Override
-    public Object visitDef(Def def) throws VilLanguageException {
-        throw new VilLanguageException("not an expression", VilLanguageException.ID_INTERNAL);
+    public Object visitDef(Def def) throws VilException {
+        throw new VilException("not an expression", VilException.ID_INTERNAL);
     }
 
     @Override
-    public Object visitTemplateBlock(TemplateBlock block) throws VilLanguageException {
-        throw new VilLanguageException("not an expression", VilLanguageException.ID_INTERNAL);
+    public Object visitTemplateBlock(TemplateBlock block) throws VilException {
+        throw new VilException("not an expression", VilException.ID_INTERNAL);
     }
 
     @Override
-    public Object visitAlternative(AlternativeStatement alternative) throws VilLanguageException {
-        throw new VilLanguageException("not an expression", VilLanguageException.ID_INTERNAL);
+    public Object visitAlternative(AlternativeStatement alternative) throws VilException {
+        throw new VilException("not an expression", VilException.ID_INTERNAL);
     }
 
     @Override
-    public Object visitLoop(LoopStatement loop) throws VilLanguageException {
-        throw new VilLanguageException("not an expression", VilLanguageException.ID_INTERNAL);
+    public Object visitLoop(LoopStatement loop) throws VilException {
+        throw new VilException("not an expression", VilException.ID_INTERNAL);
     }
 
     @Override
-    public Object visitSwitch(SwitchStatement swtch) throws VilLanguageException {
-        throw new VilLanguageException("not an expression", VilLanguageException.ID_INTERNAL);
+    public Object visitSwitch(SwitchStatement swtch) throws VilException {
+        throw new VilException("not an expression", VilException.ID_INTERNAL);
     }
 
     @Override
-    public Object visitContentStatement(ContentStatement cnt) throws VilLanguageException {
-        throw new VilLanguageException("not an expression", VilLanguageException.ID_INTERNAL);
+    public Object visitContentStatement(ContentStatement cnt) throws VilException {
+        throw new VilException("not an expression", VilException.ID_INTERNAL);
     }
 
     @Override
-    public Object visitJavaExtension(JavaExtension ext) throws VilLanguageException {
-        throw new VilLanguageException("not an expression", VilLanguageException.ID_INTERNAL);
+    public Object visitJavaExtension(JavaExtension ext) throws VilException {
+        throw new VilException("not an expression", VilException.ID_INTERNAL);
     }
 
     @Override
-    public Object visitTemplateCallExpression(TemplateCallExpression call) throws ExpressionException {
+    public Object visitTemplateCallExpression(TemplateCallExpression call) throws VilException {
         Expression result = new TemplateCallExpression(call.getModel(), call.getResolved(), copyCallArguments(call));
         result.inferType();
         return result;

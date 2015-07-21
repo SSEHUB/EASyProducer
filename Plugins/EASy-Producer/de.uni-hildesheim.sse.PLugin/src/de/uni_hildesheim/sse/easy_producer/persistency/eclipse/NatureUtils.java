@@ -55,6 +55,9 @@ public final class NatureUtils {
         System.arraycopy(natures, 0, newNatures, 0, natures.length);
         newNatures[natures.length] = nature;
         description.setNatureIds(newNatures);
+        if (project == null || !project.isOpen()) {
+            throw new RuntimeException("Project not running");
+        }
         project.setDescription(description, monitor);
     }
 

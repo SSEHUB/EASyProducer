@@ -1,0 +1,8 @@
+project warn2 {
+
+    version v0;
+    Integer a = 1;
+    Integer b = 0;
+
+    Constraint c = a + b > 0 and warning(a < b);
+}

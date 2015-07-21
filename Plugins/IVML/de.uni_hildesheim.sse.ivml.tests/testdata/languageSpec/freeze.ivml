@@ -9,5 +9,5 @@ project ivmlSpec_freeze {
     appContent.contentName = "Text";
     freeze {
         appContent;
-    } but (appContent.bitrate)
+    } but (f|name(f) == "bitrate")
 }

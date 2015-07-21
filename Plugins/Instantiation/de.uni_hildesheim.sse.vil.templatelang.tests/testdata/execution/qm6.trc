@@ -1,13 +1,8 @@
 -> main(Configuration, FileArtifact) with (<config>, test.texts)
     -> byName(Configuration, String) with (<config>, pipTSI) = qm6::pipTSI
     pip <- qm6::pipTSI
-    -> sources(Pipeline) with (qm6::pipTSI) = {qm6::Pipeline::sources {0}}
     for src {
         src <- qm6::Pipeline::sources {0}
-        -> source(Source) with (qm6::Pipeline::sources {0}) = qm6::Source::source
-        -> source(Source) with (qm6::Pipeline::sources {0}) = qm6::Source::source
         -> isConfigured(DecisionVariable) with (qm6::Source::source) = true
-        -> source(Source) with (qm6::Pipeline::sources {0}) = qm6::Source::source
         dsrc <- qm6::Source::source
-        -> name(DataElement) with (qm6::Source::source) = qm6::DataElement::name
     }

@@ -1,0 +1,17 @@
+project QM {
+
+    version v0;
+    abstract compound PipelineElement {
+        String name;
+    }
+
+    abstract compound PipelineNode refines PipelineElement {
+    }
+
+    compound Bla refines PipelineNode {
+    }
+
+    PipelineNode p1 = Bla {name = "Blubb"};
+    PipelineNode p2;
+    p1.name == p2.name;
+}

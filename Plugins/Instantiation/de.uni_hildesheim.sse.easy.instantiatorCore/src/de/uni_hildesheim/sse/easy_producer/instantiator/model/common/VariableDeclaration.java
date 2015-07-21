@@ -1,8 +1,12 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.common;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IResolvable;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ResolvableOperationExpression;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaOperation;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.utils.modelManagement.IVariable;
 
@@ -15,10 +19,11 @@ import de.uni_hildesheim.sse.utils.modelManagement.IVariable;
 public abstract class VariableDeclaration implements IResolvable, IVariable {
 
     private String name;
-    private TypeDescriptor<? extends IVilType> type;
+    private TypeDescriptor<?> type;
     private boolean isConstant;
     private Expression expression;
     private boolean hasExplicitType;
+    private List<IModifier> modifiers;
     
     /**
      * Creates a new variable declaration. Explicit type is assumed.
@@ -28,7 +33,7 @@ public abstract class VariableDeclaration implements IResolvable, IVariable {
      * 
      * @see #hasExplicitType()
      */
-    public VariableDeclaration(String name, TypeDescriptor<? extends IVilType> type) {
+    public VariableDeclaration(String name, TypeDescriptor<?> type) {
         this(name, type, false, null);
     }
 
@@ -42,7 +47,7 @@ public abstract class VariableDeclaration implements IResolvable, IVariable {
      * 
      * @see #hasExplicitType()
      */
-    public VariableDeclaration(String name, TypeDescriptor<? extends IVilType> type, boolean isConstant, 
+    public VariableDeclaration(String name, TypeDescriptor<?> type, boolean isConstant, 
         Expression expression) {
         this.name = name;
         this.type = type;
@@ -65,7 +70,7 @@ public abstract class VariableDeclaration implements IResolvable, IVariable {
      * 
      * @return the type of this variable
      */
-    public TypeDescriptor<? extends IVilType> getType() {
+    public TypeDescriptor<?> getType() {
         return type;
     }
     
@@ -101,9 +106,9 @@ public abstract class VariableDeclaration implements IResolvable, IVariable {
      * 
      * @param visitor the visitor
      * @return the result of visiting the given statement (may be <b>null</b>)
-     * @throws VilLanguageException in case that visiting fails (e.g., execution)
+     * @throws VilException in case that visiting fails (e.g., execution)
      */
-    public Object accept(IVisitor visitor) throws VilLanguageException {
+    public Object accept(IVisitor visitor) throws VilException {
         return visitor.visitVariableDeclaration(this);
     }
     
@@ -123,6 +128,62 @@ public abstract class VariableDeclaration implements IResolvable, IVariable {
      */
     public boolean hasExplicitType() {
         return hasExplicitType;
+    }
+
+    /**
+     * Adds the specified modifier.
+     * 
+     * @param modifier the modifier to be added
+     */
+    public void addModifier(IModifier modifier) {
+        if (null == modifiers) {
+            modifiers = new ArrayList<IModifier>();
+        }
+        modifiers.add(modifier);
+    }
+    
+    /**
+     * Returns the number of modifiers.
+     * 
+     * @return the number of modifiers
+     */
+    public int getModifierCount() {
+        return null == modifiers ? 0 : modifiers.size();
+    }
+    
+    /**
+     * Returns the specified modifier.
+     * 
+     * @param index the 0-based index of the modifier to return
+     * @return the specified modifier
+     * @throws IndexOutOfBoundsException if <code>index &lt; 0 || index &get;={@link #getModifierCount()}</code>
+     */
+    public IModifier getModifier(int index) {
+        if (null == modifiers) {
+            throw new IndexOutOfBoundsException();
+        }
+        return modifiers.get(index);
+    }
+    
+    /**
+     * Returns whether this variable declaration has a given <code>modifier</code>.
+     * 
+     * @param modifier the modifier to search for
+     * @return <code>true</code> if this variable declaration has the <code>modifier</code> attached, 
+     *   <code>false</code> else
+     */
+    public boolean hasModifier(IModifier modifier) {
+        return null == modifiers ? false : modifiers.contains(modifier);
+    }
+    
+    /**
+     * Resolves a (temporary) initialization expression to a {@link ResolvableOperationExpression} ("function pointer").
+     * 
+     * @param type the declared type (of the function pointer)
+     * @param operation the resolved base operation
+     */
+    public void resolveOperation(TypeDescriptor<?> type, IMetaOperation operation) {
+        this.expression = new ResolvableOperationExpression(type, operation);
     }
 
 }

@@ -34,7 +34,7 @@ public class TypeMapperTests {
      */
     private static final IDatatype[] ALL_TYPES = {IntegerType.TYPE, RealType.TYPE, BooleanType.TYPE, StringType.TYPE,
         MetaType.TYPE, AnyType.TYPE, Container.TYPE, Set.TYPE, Sequence.TYPE, Compound.TYPE, DerivedDatatype.TYPE,
-        Enum.TYPE, OrderedEnum.TYPE, Reference.TYPE, ConstraintType.TYPE};
+        Enum.TYPE, OrderedEnum.TYPE, Reference.TYPE, ConstraintType.TYPE, FreezeVariableType.TYPE};
     
     /**
      * Internal helper method for converting the name of a {@link IDatatype} to a name as it should be supported

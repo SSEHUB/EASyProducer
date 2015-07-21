@@ -1,12 +1,10 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IExpressionVisitor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.VilException;
 
 /**
  * Realizes a VIL join, typically over the variability model configuration and / or 
@@ -19,7 +17,7 @@ public class JoinExpression extends Expression {
     private JoinVariableDeclaration[] joinVariables;
     private JoinVariableDeclaration[] visibleVariables;
     private Expression condition;
-    private TypeDescriptor<? extends IVilType> type;
+    private TypeDescriptor<?> type;
 
     /**
      * Creates a new join expression.
@@ -27,14 +25,14 @@ public class JoinExpression extends Expression {
      * @param joinVariables the join variables (must not be <b>null</b> and must contain at least 
      *   two variables although a higher number might be not supported)
      * @param condition the join condition, may be <b>null</b>
-     * @throws ExpressionException in case that structural or semantic constraints are not satisfied
+     * @throws VilException in case that structural or semantic constraints are not satisfied
      */
-    public JoinExpression(JoinVariableDeclaration[] joinVariables, Expression condition) throws ExpressionException {
+    public JoinExpression(JoinVariableDeclaration[] joinVariables, Expression condition) throws VilException {
         if (null == joinVariables || 0 == joinVariables.length) {
-            throw new ExpressionException("no join variables given", ExpressionException.ID_SEMANTIC);
+            throw new VilException("no join variables given", VilException.ID_SEMANTIC);
         }
         if (1 == joinVariables.length) {
-            throw new ExpressionException("not enough join variables given", ExpressionException.ID_SEMANTIC);
+            throw new VilException("not enough join variables given", VilException.ID_SEMANTIC);
         }
         this.joinVariables = joinVariables;
         int visibleCount = 0;
@@ -44,8 +42,8 @@ public class JoinExpression extends Expression {
             }
         }
         if (0 == joinVariables.length) {
-            throw new ExpressionException("at least one join variable must be visible " 
-                + "(i.e., not all must be excluded)", ExpressionException.ID_SEMANTIC);
+            throw new VilException("at least one join variable must be visible " 
+                + "(i.e., not all must be excluded)", VilException.ID_SEMANTIC);
         }
         visibleVariables = new JoinVariableDeclaration[visibleCount];
         visibleCount = 0;
@@ -57,7 +55,7 @@ public class JoinExpression extends Expression {
         if (null != condition) {
             this.condition = condition;
             if (!TypeRegistry.booleanType().isAssignableFrom(this.condition.inferType())) {
-                throw new ExpressionException("join expression must be boolean", ExpressionException.ID_SEMANTIC);
+                throw new VilException("join expression must be boolean", VilException.ID_SEMANTIC);
             }
         }
     }
@@ -114,27 +112,23 @@ public class JoinExpression extends Expression {
     }
 
     @Override
-    public TypeDescriptor<? extends IVilType> inferType() throws ExpressionException {
+    public TypeDescriptor<?> inferType() throws VilException {
         if (null == type) {
-            TypeDescriptor<? extends IVilType>[] tmp = TypeDescriptor.createArray(visibleVariables.length);
+            TypeDescriptor<?>[] tmp = TypeDescriptor.createArray(visibleVariables.length);
             for (int j = 0; j < visibleVariables.length; j++) {
                 tmp[j] = visibleVariables[j].getType();
-                if (tmp[j].getParameterCount() > 0) {
+                if (tmp[j].getGenericParameterCount() > 0) {
                     // just to be sure, can only be the first
-                    tmp[j] = tmp[j].getParameterType(0);
+                    tmp[j] = tmp[j].getGenericParameterType(0);
                 }
             }
-            try {
-                type = TypeRegistry.getSequenceType(tmp);
-            } catch (VilException e) {
-                throw new ExpressionException(e);
-            }
+            type = TypeRegistry.getSequenceType(tmp);
         }
         return type;
     }
 
     @Override
-    public Object accept(IExpressionVisitor visitor) throws ExpressionException {
+    public Object accept(IExpressionVisitor visitor) throws VilException {
         Object result;
         if (visitor instanceof IVisitor) {
             result = ((IVisitor) visitor).visitJoinExpression(this);

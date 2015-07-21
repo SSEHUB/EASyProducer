@@ -1,6 +1,6 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Conversion;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
 
@@ -16,11 +16,11 @@ public class ArtifactOperations {
      * 
      * @param path the path to be converted
      * @return the converted value
-     * @throws ArtifactException in case that creating the artifact fails
+     * @throws VilException in case that creating the artifact fails
      */
     @Invisible
     @Conversion
-    public static IArtifact convert(Path path) throws ArtifactException {
+    public static IArtifact convert(Path path) throws VilException {
         return ArtifactFactory.createArtifact(IArtifact.class, path.getAbsolutePath(), path.getArtifactModel());
     }
     
@@ -29,11 +29,11 @@ public class ArtifactOperations {
      * 
      * @param val the value to be converted
      * @return the converted value
-     * @throws ArtifactException in case that creating the artifact fails
+     * @throws VilException in case that creating the artifact fails
      */
     @Invisible
     @Conversion
-    public static IArtifact convert(String val) throws ArtifactException {
+    public static IArtifact convert(String val) throws VilException {
         return convert(Path.convert(val));
     }
     

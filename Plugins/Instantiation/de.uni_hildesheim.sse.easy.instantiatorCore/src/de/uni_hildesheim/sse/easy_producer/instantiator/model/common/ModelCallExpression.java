@@ -2,11 +2,9 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.common;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.AbstractCallExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallArgument;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IArgumentProvider;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IResolvable;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaOperation;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 
 /**
@@ -33,10 +31,10 @@ public abstract class ModelCallExpression<V extends IResolvable, M extends IReso
      * @param isSuper this is a super call
      * @param name the name of the operation
      * @param arguments the actual arguments
-     * @throws ExpressionException in case of illegal (qualified) names
+     * @throws VilException in case of illegal (qualified) names
      */
     public ModelCallExpression(M model, boolean isSuper, String name, CallArgument... arguments) 
-        throws ExpressionException {
+        throws VilException {
         super(name, true);
         this.model = model;
         this.isSuper = isSuper;
@@ -49,9 +47,9 @@ public abstract class ModelCallExpression<V extends IResolvable, M extends IReso
      * @param model the actual model <code>resolved</code> belongs to
      * @param resolved the resolved operation
      * @param arguments the actual arguments
-     * @throws ExpressionException in case of illegal (qualified) names
+     * @throws VilException in case of illegal (qualified) names
      */
-    protected ModelCallExpression(M model, O resolved, CallArgument...arguments) throws ExpressionException {
+    protected ModelCallExpression(M model, O resolved, CallArgument...arguments) throws VilException {
         this(model, false, resolved.getName(), arguments);
         this.resolved = resolved;
     }
@@ -125,21 +123,31 @@ public abstract class ModelCallExpression<V extends IResolvable, M extends IReso
      * 
      * @return the operation class
      */
-    protected abstract Class<O> getOperationClass();
+    protected abstract Class<? extends O> getOperationClass();
 
     @Override
-    public TypeDescriptor<? extends IVilType> inferType() throws ExpressionException {
+    public TypeDescriptor<?> inferType() throws VilException {
         if (null == resolved) {
             IMetaOperation op = resolveOperation(model, getName(), arguments);
             Class<? extends O> opClass = getOperationClass();
             if (opClass.isInstance(op)) {
                 resolved = opClass.cast(op);
             } else {
-                throw new ExpressionException(op.getJavaSignature() + " is not a valid operation", 
-                    ExpressionException.ID_CANNOT_RESOLVE);
+                throw new VilException(getInvalidOperationMessage(op), 
+                    VilException.ID_CANNOT_RESOLVE);
             }
         }
         return resolved.getReturnType();
+    }
+
+    /**
+     * Returns the message to be returned in case of an invalid operation.
+     * 
+     * @param op the invalid operation
+     * @return the related message
+     */
+    protected String getInvalidOperationMessage(IMetaOperation op) {
+        return op.getJavaSignature() + " is not a valid operation";
     }
     
     @Override

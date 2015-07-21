@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="SSEreasonerAll" default="all" basedir=".">	
+<project name="SSE-Reasoner" default="all" basedir="." xmlns:jacoco="antlib:org.jacoco.ant">	
 	<property file="${user.home}/global-build.properties"/>
-	<path id="emma.lib" >    		
-		<pathelement location="${emma.path}/emma.jar" />	
-		<pathelement location="${emma.path}/emma_ant.jar" />	
-	</path>
-	<taskdef resource="emma_ant.properties" classpathref="emma.lib" />
+	<taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
+        <classpath path="${jacoco.path}/jacocoant.jar"/>
+    </taskdef>
 
 	<target name="init">
 		
@@ -28,25 +26,11 @@
         <echo>################################</echo>
 		<ant dir="${home.sseReasoner.dir}" antfile="${build.script.name}" />
         
-        <echo>###################################</echo>
+        <echo>#######################################</echo>
         <echo>###   Compiling SSE Reasoner Tests  ###</echo>
-        <echo>###################################</echo>
+        <echo>#######################################</echo>
 		<ant dir="${home.sseReasoner.test.dir}" antfile="${build.script.name}" />
     </target>
-	
-	<target name="instrumment">
-		<emma enabled="true" verbosity="verbose">
-			<instr destdir="${coverage.instr.dir}" metadatafile="${coverage.results.dir}/metadata.emma" mode="fullcopy" >
-				<filter includes="*de.uni_hildesheim.sse*"/>
-				<filter excludes="*Activator*"/>
-				<filter excludes="*AllTests*"/>
-				<instrpath>
-					<fileset dir="${home.sseReasoner.dir}/${build.jar.dir}/" includes="**/*.jar" />
-					<fileset dir="${home.sseReasoner.test.dir}/${build.jar.dir}/" includes="**/*.jar" />
-				</instrpath>
-			</instr>
-	    </emma>
-	</target>
 	
 	<target name="prepareTestEclipse" if="${unzipNewEclipse}">
 		<delete dir="${test.eclipse.name}"/>
@@ -64,8 +48,10 @@
 		</condition>
 		<antcall target="prepareTestEclipse"/>
 		
-		<copy todir="${test.eclipse.path}/plugins" failonerror="true" overwrite="true">
-			<fileset dir="${coverage.instr.dir}/lib"/>
+        <copy todir="${test.eclipse.path}/plugins" failonerror="true" overwrite="true" flatten="true">
+			<!-- Copy Plug-ins, which shall be tested -->
+            <fileset dir="${basedir}" includes="**/${build.jar.dir}/*.jar" />
+            <!-- Copy dependent Plug-ins -->
 			<fileset dir="${home.utils.dir}/${build.jar.dir}" includes="**/*.jar" />
 			<fileset dir="${home.model.dir}/${build.jar.dir}" includes="**/*.jar" />
 			<fileset dir="${home.model.tests.dir}/${build.jar.dir}" includes="**/*.jar" />
@@ -73,19 +59,16 @@
 			<fileset dir="${home.ivml.dir}/${build.jar.dir}" includes="**/*.jar" />
 			<fileset dir="${home.reasonerCore.dir}/${build.jar.dir}" includes="**/*.jar" />
 			<fileset dir="${home.reasonerCore.test.dir}/${build.jar.dir}" includes="**/*.jar" />
-			<!--fileset dir="${home.sseReasoner.dir}/${build.jar.dir}" includes="**/*.jar" />
-			<fileset dir="${home.sseReasoner.test.dir}/${build.jar.dir}" includes="**/*.jar" /-->
 		</copy>
 	</target>
 	
-	<target name="coreTestEMMA" depends="instrumment, copy.to.eclipse">
+	<target name="coreTest" depends="copy.to.eclipse">
 		<property name="eclipse-home" value="${test.eclipse.path}"/>
         <ant target="core-test" antfile="plugins/${test.eclipse.testFW.dir}/library.xml" dir="${test.eclipse.path}">
 		  <property name="data-dir" value="${test.eclipse.workspace.dir} -clean"/>
 		  <property name="plugin-name" value="de.uni_hildesheim.sse.reasoning.reasoner.test"/>
-		  <property name="classname" value="de.uni_hildesheim.sse.reasoning.reasoner.AllTests"/>
-		  <property name="vmargs" value="-Dbaz=true"/>
-		  <property name="extraVMargs" value="-DreasonerCore.testdata.home=${home.reasonerCore.test.dir}/testdata -Demma.coverage.out.file=${basedir}/${coverage.results.dir}/${ant.project.name}.emma -Dosgi.dev=${emma.path}/emma.jar" />
+		  <property name="classname" value="de.uni_hildesheim.sse.reasoning.AllTests"/>
+		  <property name="extraVMargs" value="-DreasonerCore.testdata.home=${home.reasonerCore.test.dir}/testdata -javaagent:${jacoco.path}/jacocoagent.jar=append=true,destfile=${basedir}/${coverage.results.dir}/${ant.project.name}.exec" />
 		  <property name="os" value="win32"/>
 		  <property name="ws" value="win32"/>
 		  <property name="arch" value="x86"/>
@@ -93,25 +76,28 @@
 		</ant>
 	</target>
 	
-	<target name="emmaReport" depends="coreTestEMMA">
-		<emma enabled="true" verbosity="verbose">
-			<report>
-				<property name="report.html.out.encoding" value="UTF-8"/>
-				<sourcepath>
-					<pathelement path="de.uni_hildesheim.sse.reasoning.reasoner/src/"/>
-					<pathelement path="de.uni_hildesheim.sse.reasoning.reasoner.test/src/"/>
-				</sourcepath>
-		        <fileset dir="${coverage.results.dir}" >
-		          <include name="*.emma" />
-		        </fileset>
-
-		        <xml outfile="${coverage.results.dir}/coverage.xml" depth="method"/>
-		        <html outfile="${coverage.results.dir}/coverage.html" />
-		      </report>
-	    </emma>
+	<target name="report">
+		<jacoco:report>                 
+            <executiondata>
+                <file file="${basedir}/${coverage.results.dir}/${ant.project.name}.exec"/>
+            </executiondata>
+                                
+            <structure name="${ant.project.name}">
+                <classfiles>
+                    <fileset dir="${home.sseReasoner.dir}/${build.jar.dir}/" includes="**/*.jar" />
+                    <fileset dir="${home.sseReasoner.test.dir}/${build.jar.dir}/" includes="**/*.jar" />
+                </classfiles>
+                <sourcefiles encoding="UTF-8">
+                    <fileset dir="${home.sseReasoner.dir}/src" />
+                    <fileset dir="${home.sseReasoner.test.dir}/test" />
+                </sourcefiles>
+            </structure>
+                                
+            <html destdir="${basedir}/${coverage.results.dir}"/>                        
+        </jacoco:report>
 	</target> 
 	
-	<target name="test" depends="emmaReport">
+	<target name="test" depends="coreTest, report">
 		<!-- Gather Junit results -->
 		<copy todir="junitResults" failonerror="true" overwrite="true">
 			<fileset dir="${test.eclipse.path}/results/">

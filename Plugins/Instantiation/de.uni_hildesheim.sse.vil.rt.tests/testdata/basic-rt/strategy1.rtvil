@@ -1,0 +1,44 @@
+rtVilScript strategy1 (Project source, Configuration config, Project target) {
+
+    Integer timeout = 2000;
+
+    strategy s0(Project source, Configuration config, Project target) = true : true {
+        Integer test = 0;
+        objective test >= 0;
+        breakdown {
+            weighting (id : id.a + id.b);
+            strategy s1(source, config, target);
+            strategy (test == 2) s2();
+            strategy (test == 3) s2() with (a = 7, b = 9);
+            strategy (test == 4) s2() @timeout;
+            tactic t1();
+            tactic (test == 10) t1();
+            tactic (test == 11) t1() with (a = 8, b = 10);
+            tactic (test == 11) t1() @timeout;
+        }
+    }
+
+    strategy s1(Project source, Configuration config, Project target) = {
+        objective true;
+        breakdown {
+            tactic t1();
+        }
+    }
+
+    strategy s2() = {
+        objective true;
+        breakdown {
+            tactic t1();
+        }
+    }
+
+    strategy s3() = {
+        breakdown {
+            tactic t1();
+        }
+    }
+
+    tactic t1() = {
+    }
+
+}

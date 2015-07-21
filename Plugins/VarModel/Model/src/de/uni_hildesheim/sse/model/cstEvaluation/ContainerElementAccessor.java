@@ -101,8 +101,7 @@ class ContainerElementAccessor extends AbstractDecisionVariableEvaluationAccesso
                             context.addErrorMessage(e);
                         }
                     } else {
-                        context.addMessage(
-                              new Message("Assignment state conflict", Status.ERROR, elementVariable.getDeclaration()));
+                        context.addMessage(new Message("Assignment state conflict", Status.ERROR, elementVariable));
                     }
                 } else {
                     successful = true;

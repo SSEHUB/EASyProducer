@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ListSet;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
 
@@ -29,25 +29,25 @@ public class FileUtils {
      * sense of VIL. 
      * 
      * @param file the file to be deleted
-     * @throws ArtifactException in case that anything goes seriously wrong
+     * @throws VilException in case that anything goes seriously wrong
      */
-    static void delete(File file) throws ArtifactException {
+    static void delete(File file) throws VilException {
         if (file.exists()) {
             try {
                 if (FileUtils.isDirectory(file)) {
                     try {
                         org.apache.commons.io.FileUtils.deleteDirectory(file);
                     } catch (IOException e) {
-                        throw new ArtifactException(e.getMessage(), ArtifactException.ID_IO);
+                        throw new VilException(e.getMessage(), VilException.ID_IO);
                     }
                 } else {
                     if (!file.delete()) {
-                        throw new ArtifactException("cannot delete " + file.getAbsolutePath(), 
-                            ArtifactException.ID_IO);
+                        throw new VilException("cannot delete " + file.getAbsolutePath(), 
+                            VilException.ID_IO);
                     }
                 }
             } catch (SecurityException e) {
-                throw new ArtifactException(e, ArtifactException.ID_SECURITY);
+                throw new VilException(e, VilException.ID_SECURITY);
             }
         } // exception ??
     }
@@ -58,13 +58,13 @@ public class FileUtils {
      * 
      * @param file the file to be renamed
      * @param newFile the new file name
-     * @throws ArtifactException in case that anything goes seriously wrong
+     * @throws VilException in case that anything goes seriously wrong
      */
-    static void rename(File file, File newFile) throws ArtifactException {
+    static void rename(File file, File newFile) throws VilException {
         try {
             file.renameTo(newFile);
         } catch (SecurityException e) {
-            throw new ArtifactException(e, ArtifactException.ID_SECURITY);
+            throw new VilException(e, VilException.ID_SECURITY);
         }
     }
 
@@ -74,9 +74,9 @@ public class FileUtils {
      * 
      * @param file the file to be renamed
      * @param name the new name
-     * @throws ArtifactException in case that anything goes seriously wrong
+     * @throws VilException in case that anything goes seriously wrong
      */
-    static void rename(File file, String name) throws ArtifactException {
+    static void rename(File file, String name) throws VilException {
         rename(file, new File(name));
     }
 
@@ -86,10 +86,10 @@ public class FileUtils {
      * @param source the source file system artifact
      * @param target the target file system artifact
      * @return the created or touched artifacts
-     * @throws ArtifactException in case of serious (I/O) errors
+     * @throws VilException in case of serious (I/O) errors
      */
     static List<IFileSystemArtifact> move(IFileSystemArtifact source, IFileSystemArtifact target) 
-        throws ArtifactException {
+        throws VilException {
         return copyOrMove(source, target, true);
     }
 
@@ -100,10 +100,10 @@ public class FileUtils {
      * @param target the target artifact
      * @param move move or copy
      * @return the created or touched artifacts
-     * @throws ArtifactException in case that file system operations or artifact model operations fail
+     * @throws VilException in case that file system operations or artifact model operations fail
      */
     static Set<IFileSystemArtifact> copyOrMove(Path source, IFileSystemArtifact target, boolean move) 
-        throws ArtifactException {
+        throws VilException {
         List<IFileSystemArtifact> result = new ArrayList<IFileSystemArtifact>();
         Path tp = target.getPath();
         File tf = tp.getAbsolutePath();
@@ -113,13 +113,14 @@ public class FileUtils {
         ArtifactModel tm = tp.getArtifactModel();
         for (FileArtifact f : source.selectAll()) {
             Path sp = f.getPath();
+            File destinationFile = determineDestination(source, f, tf);
             ArtifactModel sm;
             if (move) {
                 sm = sp.getArtifactModel();
             } else {
                 sm = null;
             }
-            FileUtils.copyOrMove(sp.getAbsolutePath(), tf, sm, tm, result);
+            FileUtils.copyOrMove(sp.getAbsolutePath(), destinationFile, sm, tm, result);
         }
         return new ListSet<IFileSystemArtifact>(result, IFileSystemArtifact.class);
     }
@@ -132,10 +133,10 @@ public class FileUtils {
      * @param target the target to copy to
      * @param move move or copy
      * @return the created or touched artifacts
-     * @throws ArtifactException in case that file system operations or artifact model operations fail
+     * @throws VilException in case that file system operations or artifact model operations fail
      */
     private static List<IFileSystemArtifact> copyOrMove(IFileSystemArtifact source, IFileSystemArtifact target, 
-        boolean move) throws ArtifactException {
+        boolean move) throws VilException {
         List<IFileSystemArtifact> result = new ArrayList<IFileSystemArtifact>();
         Path sp = source.getPath();
         Path tp = target.getPath();
@@ -166,10 +167,10 @@ public class FileUtils {
      * @param targetModel the target artifact model
      * @param artifacts the created or touched artifacts (may be <b>null</b> then resulting artifacts will not be 
      *     collected)
-     * @throws ArtifactException in case that file system operations or artifact model operations fail
+     * @throws VilException in case that file system operations or artifact model operations fail
      */
     private static void copyOrMove(File source, File target, ArtifactModel sourceModel, ArtifactModel targetModel, 
-        List<IFileSystemArtifact> artifacts) throws ArtifactException {
+        List<IFileSystemArtifact> artifacts) throws VilException {
         if (source.isDirectory()) {
             if (target.isFile()) {
                 target = target.getParentFile();
@@ -205,7 +206,7 @@ public class FileUtils {
                     }
                 }
             } catch (IOException e) {
-                throw new ArtifactException(e, ArtifactException.ID_IO);
+                throw new VilException(e, VilException.ID_IO);
             }
             IFileSystemArtifact artifact = ArtifactFactory.createArtifact(IFileSystemArtifact.class, 
                 target, targetModel);
@@ -222,10 +223,10 @@ public class FileUtils {
      * @param source the source file system artifact
      * @param target the target file system artifact
      * @return the created or touched artifacts
-     * @throws ArtifactException in case of serious (I/O) errors
+     * @throws VilException in case of serious (I/O) errors
      */
     static List<IFileSystemArtifact> copy(IFileSystemArtifact source, IFileSystemArtifact target) 
-        throws ArtifactException {
+        throws VilException {
         return copyOrMove(source, target, false);
     }
     
@@ -290,7 +291,7 @@ public class FileUtils {
      */
     public static class ScanResult <T extends IArtifact> {
         private List<T> result;
-        private List<ArtifactException> errors;
+        private List<VilException> errors;
 
         /**
          * Creates a new scan result with a list to put the created artifacts into.
@@ -298,7 +299,7 @@ public class FileUtils {
          * @param result the list to store the created artifacts (may be <b>null</b>)
          */
         public ScanResult(List<T> result) {
-            this(result, new ArrayList<ArtifactException>());
+            this(result, new ArrayList<VilException>());
         }
 
         /**
@@ -307,7 +308,7 @@ public class FileUtils {
          * @param result the list to store the created artifacts (may be <b>null</b>)
          * @param errors the list to store the caused exceptions into (may be <b>null</b>)
          */
-        public ScanResult(List<T> result, List<ArtifactException> errors) {
+        public ScanResult(List<T> result, List<VilException> errors) {
             this.result = result;
             this.errors = errors;
         }
@@ -316,11 +317,11 @@ public class FileUtils {
          * Default handling of collected errors. If errors occurred, put them into a 
          * combined {@link ArtifactException}.
          * 
-         * @throws ArtifactException thrown if errors were collected
+         * @throws VilException thrown if errors were collected
          */
-        public void checkForException() throws ArtifactException {
+        public void checkForException() throws VilException {
             if (null != errors && !errors.isEmpty()) {
-                throw new ArtifactException(errors);
+                throw new VilException(errors);
             }
         }
         
@@ -354,7 +355,7 @@ public class FileUtils {
                         if (null != result && null != result.result) {
                             result.result.add(artifact);
                         }
-                    } catch (ArtifactException e) {
+                    } catch (VilException e) {
                         if (null != result && null != result.errors) {
                             result.errors.add(e);
                         }
@@ -372,5 +373,49 @@ public class FileUtils {
     public static File getTempDirectory() {
         return org.apache.commons.io.FileUtils.getTempDirectory();
     }
+    
+    /**
+     * Determines the destination of an artefact, which shall be copied/moved from a given source path (e.g. a pattern)
+     * to a given target (folder). Considers sub folder structures, will not consider constant parts at the beginning of
+     * a pattern. For instance:<br/>
+     * 
+     * Elements of <tt>"src/foo/**&#47;/bar/*.java"</tt> will be copied to
+     * <tt>"targetFile/**&#47;/bar/*.java"</tt>
+     * 
+     * <br/>
+     * Part of the {@link #copyOrMove(Path, IFileSystemArtifact, boolean)} method.
+     * @param sourcePath The sourcepath, containing the sourceArtefact (may be a pattern). Must not be <tt>null</tt>.
+     * @param sourceArtefakt An artefact inside the given sourcePath. Must not be <tt>null</tt>
+     * @param targetFile The destination, should be a folder. Must not be <tt>null</tt>
+     * @return The destination of the the file to be copied/moved.
+     */
+    private static File determineDestination(Path sourcePath, FileArtifact sourceArtefakt, File targetFile) {
+        String srcFile = sourceArtefakt.getPath().getPath();
+        String relativeFile = sourcePath.getArtifactModel().makeRelative(srcFile);
+        String relativeDir = sourcePath.getArtifactModel().makeRelative(sourcePath.getAbsolutePath());
+        String[] segmentsDir = relativeDir.split("/");
+        String[] segmentsFile = relativeFile.split("/");
+        
+        // Determine constant part of the pattern
+        boolean constantPart = true;
+        int variableSegment = 0;
+        for (int i = 0, end = Math.min(segmentsDir.length, segmentsFile.length); i < end && constantPart; i++) {
+            if (segmentsDir[i].equals(segmentsFile[i])) {
+                variableSegment++;
+            } else {
+                constantPart = false;
+            }
+        }
+        
+        // Determine sub structure inside pattern, which shall be retained
+        StringBuffer variablePart = new StringBuffer();
+        for (int i = variableSegment; i < segmentsFile.length; i++) {
+            variablePart.append(segmentsFile[i]);
+            variablePart.append("/");
+        }
+        
+        return new File(targetFile, variablePart.toString());
+    }
+
     
 }

@@ -5,8 +5,8 @@ import java.io.File;
 import de.uni_hildesheim.sse.easy.java.artifacts.JavaFileArtifact;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactFactory;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FileArtifact;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArraySet;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Collection;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Instantiator;
@@ -31,10 +31,10 @@ public class CocktailInstantiator implements IVilType {
      * @param target the target project
      * 
      * @return the created artifacts
-     * @throws ArtifactException in case that something fails
+     * @throws VilException in case that something fails
      */
     @OperationMeta(returnGenerics = FileArtifact.class)
-    public static Set<FileArtifact> cocktailInstantiator(Project target) throws ArtifactException {
+    public static Set<FileArtifact> cocktailInstantiator(Project target) throws VilException {
         FileArtifact[] result = new FileArtifact[1];
         // just pretend that something was created - otherwise script will fail
         result[0] = ArtifactFactory.createArtifact(FileArtifact.class, 

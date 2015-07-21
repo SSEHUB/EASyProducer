@@ -33,4 +33,9 @@ public class SRCFolderConfigurator implements IEASyProjectConfigurator {
     void checkExecution() {
         Assert.assertTrue(SRCFolderConfigurator.class.getSimpleName() + " was not executed.", wasExecuted);
     }
+
+    @Override
+    public void configure(IProject project, IProject parentProject) {
+        configure(project);
+    }
 }

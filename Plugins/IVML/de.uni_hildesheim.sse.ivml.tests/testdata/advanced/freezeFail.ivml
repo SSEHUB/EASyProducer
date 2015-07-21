@@ -7,5 +7,5 @@ project freezeFail {
 
     freeze {
         c.j;
-    } but (c*)
+    } but (f|matches(name(f), "c*"))
 }

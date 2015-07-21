@@ -18,9 +18,11 @@ package de.uni_hildesheim.sse.persistency;
 import java.io.StringWriter;
 
 import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
+import de.uni_hildesheim.sse.model.varModel.IModelElement;
 import de.uni_hildesheim.sse.model.varModel.IPartialEvaluable;
 import de.uni_hildesheim.sse.model.varModel.IvmlDatatypeVisitor;
 import de.uni_hildesheim.sse.model.varModel.ModelElement;
+import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
 
@@ -46,17 +48,50 @@ public class StringProvider {
         IVMLWriter.releaseInstance(visitor);
         return result;
     }
-    
+
     /**
-     * Turns a syntax tree into a string containing IVML.
+     * Turns a syntax tree into a string containing IVML (without context).
      * 
      * @param cst the constraint syntax tree to be turned into a string
      * @return The resulting string
      */
     public static final String toIvmlString(ConstraintSyntaxTree cst) {
+        return toIvmlString(cst, null);
+    }
+    
+    /**
+     * Turns a syntax tree into a string containing IVML.
+     * 
+     * @param cst the constraint syntax tree to be turned into a string
+     * @param context the context within the <code>cst</code> shall be printed, e.g., to exploit implicitly qualified 
+     *     variable names
+     * @return The resulting string
+     */
+    public static final String toIvmlString(ConstraintSyntaxTree cst, IModelElement context) {
         StringWriter writer = new StringWriter();
         IVMLWriter visitor = IVMLWriter.getInstance(writer);
+        int parAdded = 0;
+        if (null != context) {
+            visitor.addParent(IVMLWriter.DUMMY_PARENT);
+            parAdded++;
+            IModelElement iter = context;
+            while (null != iter && !(iter instanceof Project)) {
+                iter = iter.getParent();
+            }
+            if (null != iter && iter != context) {
+                visitor.addParent(iter);
+                parAdded++;
+            }
+            visitor.addParent(context);
+            parAdded++;
+        }
         cst.accept(visitor);
+        if (null != context) {
+            while (parAdded > 0) {
+                visitor.removeLastParent();
+                parAdded--;
+            }
+        }
         String result = writer.toString();
         IVMLWriter.releaseInstance(visitor);
         return result;        

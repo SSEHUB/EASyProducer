@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2014 University of Hildesheim, Software Systems Engineering
+ * Copyright 2009-2015 University of Hildesheim, Software Systems Engineering
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,6 +60,8 @@ import de.uni_hildesheim.sse.model.varModel.values.NullValue;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
 import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
 import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
+import de.uni_hildesheim.sse.utils.messages.Status;
+import de.uni_hildesheim.sse.varModel.testSupport.ProjectTestUtilities;
 
 /**
  * Tests the {@link EvaluationVisitor}.
@@ -89,6 +91,7 @@ public class EvaluationVisitorTest {
      * @param oValue A value for setting the value.
      *     See {@link ValueFactory#createValue(de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype, Object...)}
      *     for more information.
+     *     If oValue is already one {@link Value}, this value will be used for creating the constraint.
      * @return The assignment constraint, expressing <code>decl = oValue</code>. This constraint is not added to the
      *     project to avoid side effects during initialization of the configuration.
      */
@@ -96,13 +99,18 @@ public class EvaluationVisitorTest {
         Object... oValue) {
         
         ConstraintSyntaxTree assignment = null;
-        try {
-            Value value = ValueFactory.createValue(decl.getType(), oValue);
-            ConstantValue constValue = new ConstantValue(value);
-            
+        if (null != oValue && 1 == oValue.length && oValue[0] instanceof Value) {
+            ConstantValue constValue = new ConstantValue((Value) oValue[0]);
             assignment = createAssignmentConstraint(decl, constValue);
-        } catch (ValueDoesNotMatchTypeException e) {
-            Assert.fail(e.getMessage());
+        } else {
+            try {
+                Value value = ValueFactory.createValue(decl.getType(), oValue);
+                ConstantValue constValue = new ConstantValue(value);
+                
+                assignment = createAssignmentConstraint(decl, constValue);
+            } catch (ValueDoesNotMatchTypeException e) {
+                Assert.fail(e.getMessage());
+            }
         }
         
         return assignment;
@@ -175,6 +183,126 @@ public class EvaluationVisitorTest {
         // Test whether listener was executed, rest of the test is inside listening method.
         Assert.assertTrue(listener.wasCalled());
         visitor.clear();
+    }
+
+    
+    /**
+     * Tests whether the <tt>at</tt> operation works on a sequence variable with was set to <tt>null</tt>.
+     * Adam Krafczyk detected an uncaught NullPointerException.
+     * @throws CSTSemanticException Must not occur otherwise is this test broken.
+     * @throws ValueDoesNotMatchTypeException Must not occur otherwise is this test broken.
+     * @see <a href="https://projects.sse.uni-hildesheim.de/agilo/QualiMaster/ticket/121">
+     * https://projects.sse.uni-hildesheim.de/agilo/QualiMaster/ticket/121</a>
+     */
+    @Test
+    public void testAtOperationOnNullValue() throws CSTSemanticException, ValueDoesNotMatchTypeException {
+        /*
+         * Create project with following constraints and evaluate it:
+         * sequenceOf(Integer) seq;
+         * seq = null;
+         * at(seq, 5) == 6;
+         */
+        Sequence seqType = new Sequence("IntegerSequence", IntegerType.TYPE, project);
+        project.add(seqType);
+        DecisionVariableDeclaration decl = new DecisionVariableDeclaration("seq", seqType, project);
+        project.add(decl);
+        // Null assignment
+        ConstraintSyntaxTree assignment = createAssignmentConstraint(decl, NullValue.INSTANCE);
+        Constraint constraint1 = new Constraint(project);
+        constraint1.setConsSyntax(assignment);
+        project.add(constraint1);
+        // Equals operation
+        ConstantValue val5 = new ConstantValue(ValueFactory.createValue(IntegerType.TYPE, 5));
+        ConstantValue val6 = new ConstantValue(ValueFactory.createValue(IntegerType.TYPE, 6));
+        ConstraintSyntaxTree atOperation = new OCLFeatureCall(new Variable(decl), OclKeyWords.AT, val5);
+        ConstraintSyntaxTree equalsOperation = new OCLFeatureCall(atOperation, OclKeyWords.EQUALS, val6);
+        Constraint constraint2 = new Constraint(project);
+        constraint2.setConsSyntax(equalsOperation);
+        project.add(constraint2);
+        // Validate Projects
+        ProjectTestUtilities.validateProject(project);
+        
+        // Create Configuration
+        Configuration config = new Configuration(project);
+        final IDecisionVariable var = config.getDecision(decl);
+        Assert.assertSame(NullValue.INSTANCE, var.getValue());
+        
+     // Test correct behavior of visitor
+        assertEvaluationVisitor(equalsOperation, config, "At");
+    }
+    
+    /**
+     * Tests whether the <tt>size</tt> operation works on a sequence variable with was set to <tt>null</tt>.
+     * Adam Krafczyk detected an uncaught NullPointerException.
+     * @throws CSTSemanticException Must not occur otherwise is this test broken.
+     * @throws ValueDoesNotMatchTypeException Must not occur otherwise is this test broken.
+     * @see <a href="https://projects.sse.uni-hildesheim.de/agilo/QualiMaster/ticket/122">
+     * https://projects.sse.uni-hildesheim.de/agilo/QualiMaster/ticket/122</a>
+     */
+    @Test
+    public void testSizeOperationOnNullValue() throws CSTSemanticException, ValueDoesNotMatchTypeException {
+        /*
+         * Create project with following constraints and evaluate it:
+         * sequenceOf(Integer) seq;
+         * seq = null;
+         * size(seq) == 6;
+         */
+        Sequence seqType = new Sequence("IntegerSequence", IntegerType.TYPE, project);
+        project.add(seqType);
+        DecisionVariableDeclaration decl = new DecisionVariableDeclaration("seq", seqType, project);
+        project.add(decl);
+        // Null assignment
+        ConstraintSyntaxTree assignment = createAssignmentConstraint(decl, NullValue.INSTANCE);
+        Constraint constraint1 = new Constraint(project);
+        constraint1.setConsSyntax(assignment);
+        project.add(constraint1);
+        // Equals operation
+        ConstantValue val6 = new ConstantValue(ValueFactory.createValue(IntegerType.TYPE, 6));
+        ConstraintSyntaxTree seziOperation = new OCLFeatureCall(new Variable(decl), OclKeyWords.SIZE);
+        ConstraintSyntaxTree equalsOperation = new OCLFeatureCall(seziOperation, OclKeyWords.EQUALS, val6);
+        Constraint constraint2 = new Constraint(project);
+        constraint2.setConsSyntax(equalsOperation);
+        project.add(constraint2);
+        // Validate Projects
+        ProjectTestUtilities.validateProject(project, true);
+        
+        // Create Configuration
+        Configuration config = new Configuration(project);
+        final IDecisionVariable var = config.getDecision(decl);
+        Assert.assertSame(NullValue.INSTANCE, var.getValue());
+        
+        // Test correct behavior of visitor
+        assertEvaluationVisitor(equalsOperation, config, "Size");
+    }
+
+    /**
+     * Tests the correct behavior of the {@link EvaluationVisitor}, while working with sequences, which are set to
+     * {@link NullValue}.
+     * @param cst A sequence operation which shall be visited by the {@link EvaluationVisitor}.
+     * @param config The configuration of a project containing the <tt>cst</tt> constraint.
+     * @param operation The name of the operation for creating sufficient error messages if the assertion fails.
+     */
+    private void assertEvaluationVisitor(ConstraintSyntaxTree cst, Configuration config, String operation) {
+        EvaluationVisitor visitor = new EvaluationVisitor();
+        
+        visitor.init(config, AssignmentState.ASSIGNED, false, null);
+        try {
+            cst.accept(visitor);
+        } catch (NullPointerException npe) {
+            Assert.fail(operation + "-operation causes a NullPointerException on NullValues for a sequence variable.");
+            npe.printStackTrace();
+        }
+        
+        EvaluationVisitor.Message errorMsg = visitor.getMessage(0);
+        Assert.assertNotNull(errorMsg);
+        Assert.assertSame(Status.ERROR, errorMsg.getStatus());
+        Assert.assertNotNull("Error message does not have a description what failed!", errorMsg.getDescription());
+        try {
+            errorMsg.getVariable();
+        } catch (NullPointerException npe) {
+            Assert.fail("Error: EvaluationVisitor.Message.getVariable() is producing NullPointerExceptions!");
+            npe.printStackTrace();
+        }
     }
     
     /**

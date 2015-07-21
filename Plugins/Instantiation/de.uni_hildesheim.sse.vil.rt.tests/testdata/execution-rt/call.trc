@@ -1,0 +1,6 @@
+-> main(Project, Configuration, Project) with (<project>, <config>, <project>)
+    -> t(Configuration) with (<config>)
+        -> test()
+        qm1 <- <config>
+        -> initCapacity(QM1, Integer) with (<config>, 4)
+    -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)

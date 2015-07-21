@@ -1,0 +1,21 @@
+rtVilScript weigh (Project source, Configuration config, Project target) {
+
+    strategy main(Project source, Configuration config, Project target) = {
+        objective true;
+        breakdown {
+            tactic t1();
+        }
+    }
+
+    tactic t1() = {
+    }
+
+    enact(Project source, Configuration config, Project target) = : {
+        AlgorithmChangeCommand cmd = new AlgorithmChangeCommand("a", "b", "c");
+        mapOf(Integer, String) m = {};
+        m.add(1, "aa");
+        cmd.setMap(m);
+        mapOf(Integer, String) map2 = cmd.getMap();
+    }
+
+}

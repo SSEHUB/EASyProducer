@@ -1,0 +1,21 @@
+@advice(Add)
+rtVilScript add (Project source, Configuration config, Project target) {
+
+    strategy main(Project source, Configuration config, Project target) = {
+        objective true;
+        breakdown {
+            tactic t(config);
+        }
+    }
+
+    tactic t(Configuration config) = {
+        Add a = config;
+        Node node = a.node;
+        node.capacity = 0;
+        node.capacity = node.capacity + 1;
+    }
+
+    enact(Project source, Configuration config, Project target) = : {
+    }
+
+}

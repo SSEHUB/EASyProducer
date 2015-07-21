@@ -75,7 +75,7 @@
  * Artifact or instantiator operations may cause VIL rules and templates to fail if they return a non-true result, 
  * i.e., an empty 
  * collection or <b>null</b>. However, in order to state explicitly that an operation cannot be executed, an operation 
- * shall throw an {@link de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException}.<br/>
+ * shall throw an {@link de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException}.<br/>
  * Basically, artifact or instantiator operations are identified by their name, the number, sequence and type of their 
  * parameter. However, some operations such as template processors may require an unlimited number of not previously
  * defined parameters. In this case, VIL allows to pass in named parameters. In the respective artifact or

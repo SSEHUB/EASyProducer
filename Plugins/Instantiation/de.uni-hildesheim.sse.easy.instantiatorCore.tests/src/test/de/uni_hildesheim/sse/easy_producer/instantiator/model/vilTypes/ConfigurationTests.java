@@ -7,7 +7,7 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.Configuration;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.DecisionVariable;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlElement;
@@ -71,7 +71,7 @@ public class ConfigurationTests {
                 bindingTime.getQualifiedName(), null).variables().size(), 0);
             // the case that the element was not resolved
             Assert.assertEquals(configuration.selectByAttribute(null, 100).variables().size(), 0);
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             Assert.fail("unexpected exception " + e.getMessage());
         }
     }

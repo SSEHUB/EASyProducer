@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Binary;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Text;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Conversion;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IActualValueProvider;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
@@ -57,45 +57,46 @@ public class FolderArtifact extends SimpleArtifact implements IFileSystemArtifac
      * Creates a temporary file artifact.
      * 
      * @return the created file artifact
-     * @throws ArtifactException in case that the creation fails
+     * @throws VilException in case that the creation fails
      */
-    public static FolderArtifact create() throws ArtifactException {
+    public static FolderArtifact create() throws VilException {
         try { 
             File file = File.createTempFile("folderArtifact", "");
             file.delete();
             file.mkdirs();
+            file.deleteOnExit();
             return ArtifactFactory.createArtifact(FolderArtifact.class, file, null);
         } catch (IOException e) {
-            throw new ArtifactException(e, ArtifactException.ID_IO);
+            throw new VilException(e, VilException.ID_IO);
         }
     }
 
     @Override
     @OperationMeta(storeArtifactsBefore = true)
-    public void delete() throws ArtifactException {
+    public void delete() throws VilException {
         path.delete();
     }
 
     @Override
-    public String getName() throws ArtifactException {
+    public String getName() throws VilException {
         return path.getName();
     }
 
     @Override
     @OperationMeta(storeArtifactsBefore = true)
-    public void rename(String name) throws ArtifactException {
+    public void rename(String name) throws VilException {
         path.getArtifactModel().beforeRename(this);
         path = path.rename(name);
         path.getArtifactModel().afterRename(this);
     }
 
     @Override
-    public Text getText() throws ArtifactException {
+    public Text getText() throws VilException {
         return Text.CONSTANT_EMPTY;
     }
 
     @Override
-    public Binary getBinary() throws ArtifactException {
+    public Binary getBinary() throws VilException {
         return Binary.CONSTANT_EMPTY;
     }
     
@@ -111,27 +112,27 @@ public class FolderArtifact extends SimpleArtifact implements IFileSystemArtifac
 
     @Override
     @OperationMeta(returnGenerics = IFileSystemArtifact.class, storeArtifactsBefore = true )
-    public Set<IFileSystemArtifact> move(IFileSystemArtifact target) throws ArtifactException {
+    public Set<IFileSystemArtifact> move(IFileSystemArtifact target) throws VilException {
         return new ListSet<IFileSystemArtifact>(FileUtils.move(this, target), IFileSystemArtifact.class);
     }
 
     @Override
     @OperationMeta(returnGenerics = IFileSystemArtifact.class, storeArtifactsBefore = true )
-    public Set<IFileSystemArtifact> copy(IFileSystemArtifact target) throws ArtifactException {
+    public Set<IFileSystemArtifact> copy(IFileSystemArtifact target) throws VilException {
         return new ListSet<IFileSystemArtifact>(FileUtils.copy(this, target), IFileSystemArtifact.class);
     }
 
     /**
      * Returns the contained file system artifacts, i.e., folder and file artifacts.
      * @return the contained artifacts as collection
-     * @throws ArtifactException in case that obtaining the artifacts fails
+     * @throws VilException in case that obtaining the artifacts fails
      */
-    public Set<FileArtifact> selectAll() throws ArtifactException { // TODO turn into IFileSystemArtifact
+    public Set<FileArtifact> selectAll() throws VilException { // TODO turn into IFileSystemArtifact
         return getPath().selectAll();
     }
 
     @Override
-    public void artifactChanged(Object cause) throws ArtifactException {
+    public void artifactChanged(Object cause) throws VilException {
     }
    
     /**
@@ -152,11 +153,11 @@ public class FolderArtifact extends SimpleArtifact implements IFileSystemArtifac
      * 
      * @param val the value to be converted
      * @return the converted value
-     * @throws ArtifactException in case of problems
+     * @throws VilException in case of problems
      */
     @Invisible
     @Conversion
-    public static Path convert(FolderArtifact val) throws ArtifactException {
+    public static Path convert(FolderArtifact val) throws VilException {
         return val.getPath();
     }
 
@@ -165,11 +166,11 @@ public class FolderArtifact extends SimpleArtifact implements IFileSystemArtifac
      * 
      * @param path the path to be converted
      * @return the resulting folder
-     * @throws ArtifactException in case of problems
+     * @throws VilException in case of problems
      */
     @Invisible
     @Conversion
-    public static FolderArtifact convert(Path path) throws ArtifactException {
+    public static FolderArtifact convert(Path path) throws VilException {
         return new FolderArtifact(path);
     }
     
@@ -195,7 +196,7 @@ public class FolderArtifact extends SimpleArtifact implements IFileSystemArtifac
     }
 
     @Override
-    public void store() throws ArtifactException {
+    public void store() throws VilException {
         // do nothing, we cannot store a folder
     }
     
@@ -209,7 +210,7 @@ public class FolderArtifact extends SimpleArtifact implements IFileSystemArtifac
     }
 
     @Override
-    public void update() throws ArtifactException {
+    public void update() throws VilException {
         // TODO check whether functionality is actually needed
     }
 

@@ -1,0 +1,14 @@
+project constraintSet {
+
+    version v0;
+    Integer i;
+    annotate Integer a = 0 to constraintSet;
+    compound Pipeline {
+        assign (a = 1) to {
+            Integer i;
+        }
+        setOf(Constraint) constraints;
+    }
+
+    Pipeline pipeline = {constraints = {i > 0}};
+}

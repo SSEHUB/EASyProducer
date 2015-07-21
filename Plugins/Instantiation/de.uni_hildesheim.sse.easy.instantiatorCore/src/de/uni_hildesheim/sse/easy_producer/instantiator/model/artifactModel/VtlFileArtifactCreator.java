@@ -2,7 +2,7 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel;
 
 import java.io.File;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 
 /**
  * The artifact creator for VTL files.
@@ -17,7 +17,7 @@ public class VtlFileArtifactCreator extends DefaultFileArtifactCreator {
     }
 
     @Override
-    public FileArtifact createArtifactInstance(Object real, ArtifactModel model) throws ArtifactException {
+    public FileArtifact createArtifactInstance(Object real, ArtifactModel model) throws VilException {
         return new VtlFileArtifact((File) real, model);
     }
     

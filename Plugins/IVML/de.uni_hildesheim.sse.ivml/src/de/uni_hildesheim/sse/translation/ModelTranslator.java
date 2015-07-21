@@ -15,16 +15,15 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 
 import de.uni_hildesheim.sse.ModelUtility;
 import de.uni_hildesheim.sse.dslCore.translation.TranslatorException;
+import de.uni_hildesheim.sse.ivml.AnnotateTo;
 import de.uni_hildesheim.sse.ivml.AttrAssignment;
 import de.uni_hildesheim.sse.ivml.AttrAssignmentPart;
-import de.uni_hildesheim.sse.ivml.AttributeTo;
 import de.uni_hildesheim.sse.ivml.ConflictStmt;
 import de.uni_hildesheim.sse.ivml.Eval;
 import de.uni_hildesheim.sse.ivml.Export;
 import de.uni_hildesheim.sse.ivml.Expression;
 import de.uni_hildesheim.sse.ivml.ExpressionStatement;
 import de.uni_hildesheim.sse.ivml.Freeze;
-import de.uni_hildesheim.sse.ivml.FreezeButExpression;
 import de.uni_hildesheim.sse.ivml.FreezeStatement;
 import de.uni_hildesheim.sse.ivml.ImportStmt;
 import de.uni_hildesheim.sse.ivml.InterfaceDeclaration;
@@ -69,10 +68,13 @@ import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.ProjectImport;
 import de.uni_hildesheim.sse.model.varModel.ProjectInterface;
 import de.uni_hildesheim.sse.model.varModel.StructuredComment;
+import de.uni_hildesheim.sse.model.varModel.datatypes.BooleanType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
+import de.uni_hildesheim.sse.model.varModel.datatypes.ConstraintType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.CustomOperation;
 import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.EnumLiteral;
+import de.uni_hildesheim.sse.model.varModel.datatypes.FreezeVariableType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Operation;
 import de.uni_hildesheim.sse.model.varModel.datatypes.OrderedEnum;
@@ -225,7 +227,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
         Utils.SplitResult splitRes = Utils.split(contents.getElements());
         processDefinitions(splitRes.getTypedefs(), splitRes.getVarDecls(), splitRes.getAttrAssignments(), context);
         if (null != splitRes.getAttrs()) {
-            for (AttributeTo attribute : splitRes.getAttrs()) {
+            for (AnnotateTo attribute : splitRes.getAttrs()) {
                 processAttribute(attribute, context);
             }
         }
@@ -370,8 +372,13 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
             DecisionVariableDeclaration decVar = entry.getValue();
             VariableDeclarationPart part = entry.getKey();
             try {
+                expressionTranslator.initLevel();
                 decVar.setValue(expressionTranslator.processExpression(decVar.getType(), part.getDefault(), context,
                     decVar.getParent()));
+                if (!ConstraintType.TYPE.isAssignableFrom(decVar.getType())) {
+                    expressionTranslator.errorAboutTopLevelWarning(part, 
+                        IvmlPackage.Literals.VARIABLE_DECLARATION_PART__DEFAULT);
+                }
             } catch (IvmlException e) {
                 error(e, part, IvmlPackage.Literals.VARIABLE_DECLARATION_PART__DEFAULT);
             } catch (TranslatorException e) {
@@ -468,8 +475,11 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
             context.addToContext(assignment);
             try {
                 for (AttrAssignmentPart part : assgn.getParts()) {
+                    expressionTranslator.initLevel();
                     ConstraintSyntaxTree valueEx = expressionTranslator.processLogicalExpression(
                         part.getValue(), context, assignment);
+                    expressionTranslator.errorAboutTopLevelWarning(part, 
+                        IvmlPackage.Literals.ATTR_ASSIGNMENT_PART__VALUE);
                     AttributeAssignment.Assignment data = new AttributeAssignment.Assignment(part.getName(), 
                         IvmlKeyWords.ASSIGNMENT, valueEx);
                     assignment.add(data);
@@ -842,8 +852,10 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
                     params[p] = new DecisionVariableDeclaration(parameter.getId(), type, opDef);
                     if (null != parameter.getVal()) {
                         try {
-                            params[p].setValue(
-                                expressionTranslator.processExpression(parameter.getVal(), context, opDef));
+                            params[p].setValue(expressionTranslator.processExpression(parameter.getVal(), 
+                                context, opDef));
+                            expressionTranslator.errorAboutTopLevelWarning(op, 
+                                IvmlPackage.Literals.OP_DEF_PARAMETER__VAL);
                         } catch (IvmlException e) {
                             throw new TranslatorException(e, op, IvmlPackage.Literals.OP_DEF_PARAMETER__VAL);
                         }
@@ -958,7 +970,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
      * @param attribute the interface to be processed
      * @param context the type context to be considered
      */
-    protected void processAttribute(AttributeTo attribute, TypeContext context) {
+    protected void processAttribute(AnnotateTo attribute, TypeContext context) {
         if (null != attribute.getNames()) { // incomplete parsing
             Attribute initial = null;
             for (String name : attribute.getNames()) {
@@ -980,7 +992,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
      * @param initial the initial attribute created in series
      * @return the created attribute or <b>null</b>
      */
-    protected Attribute processAttribute(AttributeTo attribute, String name, TypeContext context, Attribute initial) {
+    protected Attribute processAttribute(AnnotateTo attribute, String name, TypeContext context, Attribute initial) {
         Attribute attr = null;
         IAttributableElement elt = null;
         try {
@@ -989,26 +1001,26 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
                 if (context.getProject().getName().equals(name)) {
                     elt = context.getProject().getVariable();
                 } else {
-                    error("cannot find '" + name + '"', attribute, IvmlPackage.Literals.ATTRIBUTE_TO__NAMES,
+                    error("cannot find '" + name + '"', attribute, IvmlPackage.Literals.ANNOTATE_TO__NAMES,
                         ErrorCodes.UNKNOWN_ELEMENT);
                 }
             } else if (var instanceof Attribute) {
-                error("cannot attribute attributes", attribute, IvmlPackage.Literals.ATTRIBUTE_TO__NAMES,
+                error("cannot annotate annotations", attribute, IvmlPackage.Literals.ANNOTATE_TO__NAMES,
                     ErrorCodes.ATTRIBUTION);
             } else {
                 elt = (DecisionVariableDeclaration) var;
             }
         } catch (IvmlException e) {
-            error(e, attribute, IvmlPackage.Literals.ATTRIBUTE_TO__NAMES);
+            error(e, attribute, IvmlPackage.Literals.ANNOTATE_TO__NAMES);
         }
         if (null != elt) {
             try {
-                IDatatype type = context.resolveType(attribute.getAttributeType());
-                VariableDeclarationPart vDecl = attribute.getAttributeDecl();
+                IDatatype type = context.resolveType(attribute.getAnnotationType());
+                VariableDeclarationPart vDecl = attribute.getAnnotationDecl();
                 Comment comment = handleBasicComment(attribute, context);
                 if (vDecl.getName().startsWith("e") || vDecl.getName().startsWith("v")) {
-                    error("attribute name '" + vDecl.getName() + "' must not start with 'v' or 'e'"
-                        + elt.getName() + "'", attribute, IvmlPackage.Literals.ATTRIBUTE_TO__NAMES,
+                    error("annotation name '" + vDecl.getName() + "' must not start with 'v' or 'e'"
+                        + elt.getName() + "'", attribute, IvmlPackage.Literals.ANNOTATE_TO__NAMES,
                         ErrorCodes.ATTRIBUTION);
                 }
                 expressionTranslator.warnDiscouragedNames(vDecl.getName(), vDecl, 
@@ -1023,8 +1035,8 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
                     }
                 }
                 if (!elt.attribute(attr)) {
-                    error("attribute '" + attr.getName() + "' is defined multiple times on '"
-                        + elt.getName() + "'", attribute, IvmlPackage.Literals.ATTRIBUTE_TO__NAMES,
+                    error("annotation '" + attr.getName() + "' is defined multiple times on '"
+                        + elt.getName() + "'", attribute, IvmlPackage.Literals.ANNOTATE_TO__NAMES,
                         ErrorCodes.ATTRIBUTION);
                 }
                 context.addToProject(attribute, comment, attr);
@@ -1034,6 +1046,10 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
             } catch (TranslatorException e) {
                 error(e);
             }
+        }
+        if (attribute.getSname().equals("attribute")) {
+            warning("The keyword 'attribute' is deprecated. For future compatibility please use 'annotate' instead.", 
+                attribute, IvmlPackage.Literals.ANNOTATE_TO__SNAME, ErrorCodes.ATTRIBUTION);
         }
         return attr;
     }
@@ -1478,26 +1494,33 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
                 error(e, freeze, IvmlPackage.Literals.FREEZE__NAMES);
             }
         }
-        String[] buts;
-        if (null != freeze.getBut()) {
-            List<String> tmp = new ArrayList<String>();
-            for (FreezeButExpression expr : freeze.getBut().getList()) {
-                String but = Utils.getQualifiedNameString(expr.getName(),
-                        expr.getAccess());
-                if (null != expr.getWildcard()) {
-                    but += "*";
-                }
-                tmp.add(but);
-            }
-            buts = new String[tmp.size()];
-            tmp.toArray(buts);
-        } else {
-            buts = null;
-        }
         IFreezable[] aFreeze = new IFreezable[freezes.size()];
         freezes.toArray(aFreeze);
+        DecisionVariableDeclaration var = null;
+        ConstraintSyntaxTree selector = null;
+        IModelElement parent = context.getProject();
+        if (null != freeze.getId()) {
+            FreezeVariableType type = new FreezeVariableType(aFreeze, parent);
+            var = new DecisionVariableDeclaration(freeze.getId(), type, parent);
+            TypeContext local = new TypeContext(context);
+            local.pushLayer(parent);
+            local.addToContext(var);
+            try {
+                selector = getExpressionTranslator().processLogicalExpression(freeze.getEx(), local, parent);
+                if (!BooleanType.TYPE.isAssignableFrom(selector.inferDatatype())) {
+                    error("selector expression must be of type Boolean", freeze, IvmlPackage.Literals.FREEZE__EX, 
+                        ErrorCodes.TYPE_CONSISTENCY);
+                }
+            } catch (CSTSemanticException e) {
+                error(e.getMessage(), freeze, IvmlPackage.Literals.FREEZE__EX, ErrorCodes.TYPE_CONSISTENCY);
+            } catch (TranslatorException e) {
+                error(e);
+            } finally {
+                local.popLayer();
+            }
+        }
         StructuredComment sComment = createStructuredComment(freeze, context, comments);
-        FreezeBlock block = new FreezeBlock(aFreeze, buts, context.getProject());
+        FreezeBlock block = new FreezeBlock(aFreeze, var, selector, parent);
         List<FreezeStatement> stmts = freeze.getNames();
         // currently only if fully processed
         if (null != sComment && freezes.size() == stmts.size() && stmts.size() == comments.size()) {

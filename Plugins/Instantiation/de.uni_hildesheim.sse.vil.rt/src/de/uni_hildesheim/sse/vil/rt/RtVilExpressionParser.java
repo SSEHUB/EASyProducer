@@ -3,13 +3,18 @@ package de.uni_hildesheim.sse.vil.rt;
 import org.osgi.service.component.ComponentContext;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionParserRegistry;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IExpressionParser;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IRuntimeEnvironment;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.RtVilExecution;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.RtVilModel;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Script;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
+import de.uni_hildesheim.sse.utils.modelManagement.AbstractModelInitializer;
+import de.uni_hildesheim.sse.utils.modelManagement.IModelLoader;
+import de.uni_hildesheim.sse.utils.modelManagement.ModelInitializer;
+import de.uni_hildesheim.sse.utils.modelManagement.ModelManagement;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
 import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
 
@@ -18,7 +23,7 @@ import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
  * 
  * @author Holger Eichelberger
  */
-public class RtVilExpressionParser implements IExpressionParser {
+public class RtVilExpressionParser extends AbstractModelInitializer<Script> implements IExpressionParser {
 
     // no private constructor!!!
     
@@ -58,6 +63,7 @@ public class RtVilExpressionParser implements IExpressionParser {
             EASyLoggerFactory.INSTANCE.getLogger(RtVilExpressionParser.class, RtVilBundleId.ID);
         }
         ExpressionParserRegistry.setExpressionParser(RtVilExecution.LANGUAGE, this);
+        ModelInitializer.register(this);
     }
 
     /**
@@ -69,11 +75,22 @@ public class RtVilExpressionParser implements IExpressionParser {
             ProgressObserver.NO_OBSERVER);
         // this is not the official way of using DS but the official way is instable
         ExpressionParserRegistry.setExpressionParser(RtVilExecution.LANGUAGE, null);
+        ModelInitializer.unregister(this);
     }
 
     @Override
-    public Expression parse(String text, IRuntimeEnvironment environment) throws ExpressionException {
+    public Expression parse(String text, IRuntimeEnvironment environment) throws VilException {
         return RtVilModelUtility.INSTANCE.createExpression(text, environment);
+    }
+
+    @Override
+    protected ModelManagement<Script> getModelManagement() {
+        return RtVilModel.INSTANCE;
+    }
+
+    @Override
+    protected IModelLoader<Script> getModelLoader() {
+        return RtVilModelUtility.INSTANCE;
     }
 
 }

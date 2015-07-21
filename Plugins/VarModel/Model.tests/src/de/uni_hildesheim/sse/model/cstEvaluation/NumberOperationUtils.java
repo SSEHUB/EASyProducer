@@ -19,10 +19,12 @@ import java.util.Random;
 
 import org.junit.Assert;
 
+import de.uni_hildesheim.sse.model.confModel.Configuration;
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
 import de.uni_hildesheim.sse.model.cst.ConstantValue;
 import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
 import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
+import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.datatypes.BooleanType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IntegerType;
@@ -303,10 +305,11 @@ class NumberOperationUtils {
     static void assertArithmeticConstraint(Number value1, Number value2, String operation, Object expectedResult,
         boolean symmetric, IDatatype numberType) {
         
-        EvaluationVisitor evalutator = new EvaluationVisitor();
+        EvaluationVisitor evaluator = new EvaluationVisitor();
+        evaluator.init(new Configuration(new Project("test")), null, false, null);
         ConstraintSyntaxTree cst = createArithmeticConstraint(value1, value2, operation);
-        cst.accept(evalutator);
-        Value result = evalutator.getResult();
+        cst.accept(evaluator);
+        Value result = evaluator.getResult();
         Assert.assertNotNull(result);
         Assert.assertSame(result.getType(), numberType);
         String errorMsg = "Error in " + operation + "-Operation. Expected: " 
@@ -314,10 +317,11 @@ class NumberOperationUtils {
         Assert.assertEquals(errorMsg, expectedResult, result.getValue());
         
         if (symmetric) {
-            evalutator.clear();
+            evaluator.clear();
+            evaluator.init(new Configuration(new Project("test")), null, false, null);
             cst = createArithmeticConstraint(value2, value1, operation);
-            cst.accept(evalutator);
-            result = evalutator.getResult();
+            cst.accept(evaluator);
+            result = evaluator.getResult();
             Assert.assertNotNull(result);
             Assert.assertSame(result.getType(), numberType);
             errorMsg = "Error in " + operation + "-Operation. Expected: " 

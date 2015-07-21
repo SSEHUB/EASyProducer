@@ -22,6 +22,9 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.MultiPageEditorPart;
 
+import de.uni_hildesheim.sse.dslCore.TopLevelModelAccessor;
+import de.uni_hildesheim.sse.dslcore.ui.editors.ModelEditorConfigurer;
+import de.uni_hildesheim.sse.dslcore.ui.editors.ModelEditorConfigurer.IModelEditorConfigurer;
 import de.uni_hildesheim.sse.easy.ui.contributions.Contributions;
 import de.uni_hildesheim.sse.easy.ui.contributions.Contributions.UIElement;
 import de.uni_hildesheim.sse.easy.ui.core.contributions.ExternalEditor;
@@ -34,6 +37,7 @@ import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceUtils;
 import de.uni_hildesheim.sse.easy_producer.core.varMod.container.SemanticErrorDescription;
 import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
 import de.uni_hildesheim.sse.easy_producer.persistency.ResourcesMgmt;
+import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 
 /**
  * Multipage editor for editing and configuring one product line project.
@@ -89,6 +93,17 @@ public class Editor extends MultiPageEditorPart implements Observer, IPropertyLi
             EasyProducerDialog.showErrorDialog(errorMessage.toString());
         }
     }
+    
+    /**
+     * Adds an editor page.
+     * 
+     * @param page the editor page (ignored if <b>null</b>)
+     */
+    private void addConditionalPage(AbstractEASyEditorPage page) {
+        if (null != page) {
+            pages.add(page);
+        }
+    }
 
     @Override
     protected void createPages() {
@@ -97,6 +112,12 @@ public class Editor extends MultiPageEditorPart implements Observer, IPropertyLi
         pages.add(new InstantiatorConfigPage(getContainer(), plp));
         if (Contributions.isEnabled(UIElement.ATTRIBUTES_VALUE_PAGE)) {
             pages.add(new AttributeValuesPage(plp, getContainer()));
+        }
+        
+        String projectName = plp.getProject().getName(); // same as IVML
+        for (IModelEditorConfigurer configurer : ModelEditorConfigurer.registered()) {
+            ModelInfo<?> info = TopLevelModelAccessor.getTopLevelModel(configurer.getExtension(), projectName, plp);
+            addConditionalPage(ModelEditorPage.createPage(plp, getContainer(), configurer, info));
         }
         
         /*
@@ -151,8 +172,16 @@ public class Editor extends MultiPageEditorPart implements Observer, IPropertyLi
     @Override
     public void doSaveAs() {
         if (isDirty && plp.isSaveable()) {
-            plp.save();
-            ResourcesMgmt.INSTANCE.refreshProject(plp.getProjectName());
+            // save the changed editor only
+            boolean saved = false;
+            for (int p = 0; !saved && p < pages.size(); p++) {
+                AbstractEASyEditorPage page = pages.get(p);
+                saved = page.doSave();
+            }
+            if (!saved) {
+                plp.save();
+                ResourcesMgmt.INSTANCE.refreshProject(plp.getProjectName());
+            }
             isDirty = false;
             firePropertyChange(PROP_DIRTY);
         }

@@ -5,7 +5,7 @@ project qm7 {
     enum BindingTime {compile, startup, runtime};
     enum FieldType {INTEGER, STRING, BOOLEAN, REAL};
 
-    attribute BindingTime bindingTime = BindingTime.compile to qm7;
+    annotate BindingTime bindingTime = BindingTime.compile to qm7;
 
     // basics 
     

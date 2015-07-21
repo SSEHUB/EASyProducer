@@ -31,9 +31,8 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Bui
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ITracer;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.RuleExecutionResult;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArraySequence;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IProjectDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ListSequence;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ListSet;
@@ -155,8 +154,17 @@ public class Executor {
      * @return this executor instance
      */
     public Executor frozenOnly(boolean frozenOnly) {
-        this.frozenOnly = frozenOnly;
+        setFrozenOnly(frozenOnly);
         return this;
+    }
+
+    /**
+     * Changes the frozen-only flag.
+     * 
+     * @param frozenOnly the frozen-only flag
+     */
+    protected void setFrozenOnly(boolean frozenOnly) {
+        this.frozenOnly = frozenOnly;
     }
 
     /**
@@ -377,10 +385,10 @@ public class Executor {
     /**
      * Executes the contained VIL build language script without observer and with default parameter checks. 
      * 
-     * @throws VilLanguageException in case that artifact operations or script execution fails
+     * @throws VilException in case that artifact operations or script execution fails
      * @throws IllegalArgumentException in case that input is missing or wrong
      */
-    public void execute() throws VilLanguageException {
+    public void execute() throws VilException {
         execute(true);
     }
 
@@ -390,10 +398,10 @@ public class Executor {
      * 
      * @param check carry out default parameter checks and default argument settings for EASy script execution (if 
      *     disabled, full responsibility for proper execution is on caller side)
-     * @throws VilLanguageException in case that artifact operations or script execution fails
+     * @throws VilException in case that artifact operations or script execution fails
      * @throws IllegalArgumentException in case that input is missing or wrong
      */
-    public void execute(boolean check) throws VilLanguageException {
+    public void execute(boolean check) throws VilException {
         execute(ProgressObserver.NO_OBSERVER, check);
     }
 
@@ -404,10 +412,10 @@ public class Executor {
      * @param observer the observer to be considered (must not be <b>null</b>)
      * @param check carry out default parameter checks and default argument settings for EASy script execution (if 
      *     disabled, full responsibility for proper execution is on caller side)
-     * @throws VilLanguageException in case that artifact operations or script execution fails
+     * @throws VilException in case that artifact operations or script execution fails
      * @throws IllegalArgumentException in case that input is missing or wrong
      */
-    public void execute(ProgressObserver observer, boolean check) throws VilLanguageException {
+    public void execute(ProgressObserver observer, boolean check) throws VilException {
         if (null == observer) {
             throw new IllegalArgumentException("observer must not be null");
         }
@@ -427,7 +435,6 @@ public class Executor {
                 throw new IllegalArgumentException(
                     "no target project specified, neither via target project nor explicitly");
             }
-            
             if (null == base) {
                 Object tmp = actArgs.get(PARAM_TARGET);
                 if (tmp instanceof Project) {
@@ -436,8 +443,7 @@ public class Executor {
             }
         }
         if (null == base) {
-            throw new IllegalArgumentException(
-                "no base folder specified, neither via target project nor explicitly");
+            throw new IllegalArgumentException("no base folder specified, neither via target project nor explicitly");
         }
         if (script.isDirty()) {
             Script old = script;
@@ -445,7 +451,7 @@ public class Executor {
             EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).info("Reloading model " + script.getName() 
                 + " " + System.identityHashCode(script) + " as it was marked dirty " + (old != script)); // for Cui
         }
-        BuildlangExecution executor = new BuildlangExecution(tracer, base, startRuleName, actArgs);
+        BuildlangExecution executor = createExecutionEnvironment(tracer, base, startRuleName, actArgs);
         try {
             Object result = script.accept(executor);
             if (result instanceof RuleExecutionResult) {
@@ -465,17 +471,44 @@ public class Executor {
                             tmp.append(executor.getFailed(f).getName());
                         }
                     }
-                    VilLanguageException e = new VilLanguageException(tmp.toString(), 
-                        VilLanguageException.ID_RUNTIME_RULE_FAILED);
+                    VilException e = new VilException(tmp.toString(), 
+                        VilException.ID_RUNTIME_RULE_FAILED);
                     tracer.traceExecutionException(e);
                     throw e;
                 }
             }
-        } catch (VilLanguageException e) {
+            Project.clearProjectDescriptorCache();
+            executor.release(true);
+        } catch (VilException e) {
             tracer.traceExecutionException(e);
             throw e;
         }
         tracer.reset();
+    }
+    
+    /**
+     * Reloads the given script.
+     * 
+     * @param script the script to be reloaded
+     * @return the reloaded script
+     */
+    protected Script reload(Script script) {
+        return BuildModel.INSTANCE.reload(script);
+    }
+
+    /**
+     * Creates a new execution environment.
+     * 
+     * @param tracer the tracer
+     * @param base the base directory for making files absolute
+     * @param startRuleName the name of the start rule; if multiple source projects are given,
+     *   as a convention the first one shall the top-level project that needs to be executed.
+     * @param parameter the top-level parameter for the script to be executed
+     * @return the execution environment
+     */
+    protected BuildlangExecution createExecutionEnvironment(ITracer tracer, File base, String startRuleName, 
+        Map<String, Object> parameter) {
+        return new BuildlangExecution(tracer, base, startRuleName, parameter);
     }
     
     /**
@@ -484,51 +517,35 @@ public class Executor {
      * @param args the name-argument mapping
      * @param param the name of the parameter to be analyzed
      * @param observer the observer for longer operations
-     * @throws VilLanguageException in case that artifact operations fail
+     * @throws VilException in case that artifact operations fail
      * @throws IllegalArgumentException in case that input is missing or wrong
      */
     private static void checkProjectArgument(Map<String, Object> args, String param, ProgressObserver observer) 
-        throws VilLanguageException {
+        throws VilException {
         if (null == args.get(param)) {
             throw new IllegalArgumentException(param + " not given");
         }
         if (args.get(param) instanceof File) {
-            try {
-                args.put(param, new Project((File) args.get(param), observer));
-            } catch (ArtifactException e) {
-                throw new VilLanguageException(e.getMessage(), e.getId());
-            }
+            args.put(param, new Project((File) args.get(param), observer));
         }
         if (args.get(param) instanceof IProjectDescriptor) {
-            try {
-                args.put(param, Project.getProjectFor((IProjectDescriptor) args.get(param)));
-            } catch (ArtifactException e) {
-                throw new VilLanguageException(e.getMessage(), e.getId());
-            }
+            args.put(param, Project.getProjectFor((IProjectDescriptor) args.get(param)));
         }
         if (param.equals(PARAM_SOURCE) && args.get(PARAM_SOURCE) instanceof IProjectDescriptor[]) {
-            try {
-                IProjectDescriptor[] tmp = (IProjectDescriptor[]) args.get(PARAM_SOURCE);
-                Project[] sources = new Project[tmp.length];
-                for (int f = 0; f < tmp.length; f++) {
-                    sources[f] = Project.getProjectFor(tmp[f]);
-                }
-                args.put(PARAM_SOURCE, sources);
-            } catch (ArtifactException e) {
-                throw new VilLanguageException(e.getMessage(), e.getId());
+            IProjectDescriptor[] tmp = (IProjectDescriptor[]) args.get(PARAM_SOURCE);
+            Project[] sources = new Project[tmp.length];
+            for (int f = 0; f < tmp.length; f++) {
+                sources[f] = Project.getProjectFor(tmp[f]);
             }
+            args.put(PARAM_SOURCE, sources);
         }
         if (param.equals(PARAM_SOURCE) && args.get(PARAM_SOURCE) instanceof File[]) {
-            try {
-                File[] tmp = (File[]) args.get(PARAM_SOURCE);
-                Project[] sources = new Project[tmp.length];
-                for (int f = 0; f < tmp.length; f++) {
-                    sources[f] = new Project(tmp[f], observer);
-                }
-                args.put(PARAM_SOURCE, sources);
-            } catch (ArtifactException e) {
-                throw new VilLanguageException(e.getMessage(), e.getId());
+            File[] tmp = (File[]) args.get(PARAM_SOURCE);
+            Project[] sources = new Project[tmp.length];
+            for (int f = 0; f < tmp.length; f++) {
+                sources[f] = new Project(tmp[f], observer);
             }
+            args.put(PARAM_SOURCE, sources);
         }
         if (!(args.get(param) instanceof Project)) {
             if (!(param.equals(PARAM_SOURCE) && args.get(PARAM_SOURCE) instanceof Project[])) {
@@ -543,11 +560,11 @@ public class Executor {
      * 
      * @param args the name-argument mapping
      * @param observer the observer for longer operations
-     * @throws VilLanguageException in case that artifact operations fail
+     * @throws VilException in case that artifact operations fail
      * @throws IllegalArgumentException in case that input is missing or wrong
      */
     private void checkArguments(Map<String, Object> args, ProgressObserver observer) 
-        throws VilLanguageException {
+        throws VilException {
         checkProjectArgument(args, PARAM_SOURCE, observer);
         checkProjectArgument(args, PARAM_TARGET, observer);
         if (null == args.get(PARAM_CONFIG)) {

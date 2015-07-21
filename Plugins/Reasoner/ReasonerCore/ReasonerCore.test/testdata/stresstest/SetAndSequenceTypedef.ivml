@@ -1,0 +1,21 @@
+project SetAndSequenceTypedef {
+    typedef IntegerList sequenceOf(Integer);
+    
+    IntegerList list1;
+    size(list1) == 5;
+    list1 = {2, 4, 2, 6, 6};
+    
+    IntegerList list2;
+    size(list2) == 3;
+    list2 = {2, 4};
+    
+    typedef IntegerSet setOf(Integer);
+    
+    IntegerSet set1;
+    size(set1) == 2;
+    set1 = {1, 2};
+    
+    IntegerSet set2;
+    size(set2) == 3;
+    set2 = {1, 2};
+}

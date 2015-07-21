@@ -1,7 +1,7 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallArgument;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IRuntimeEnvironment;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 
@@ -49,7 +49,7 @@ public class Resolver extends de.uni_hildesheim.sse.easy_producer.instantiator.m
 
     @Override
     protected RuleCallExpression createCallExpression(Script model, boolean isSuper, String name,
-        CallArgument... arguments) throws ExpressionException {
+        CallArgument... arguments) throws VilException {
         return new RuleCallExpression(model, isSuper, name, arguments);
     }
     

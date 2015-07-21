@@ -104,4 +104,15 @@ public class Variable extends Leaf {
     public ConstraintSyntaxTree getQualifier() {
         return null;
     }
+    
+    @Override
+    public boolean isSemanticallyEqual(ConstraintSyntaxTree otherTree) {
+        boolean equals = false;
+        
+        if (otherTree instanceof Variable) {
+            equals = nestedVariable.equals(((Variable) otherTree).nestedVariable);
+        }
+        
+        return equals;
+    }
 }

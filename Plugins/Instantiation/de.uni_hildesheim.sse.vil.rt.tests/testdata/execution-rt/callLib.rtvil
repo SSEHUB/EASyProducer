@@ -1,0 +1,10 @@
+@advice(QM1)
+rtVilScript callLib (Project source, Configuration config, Project target) {
+
+    test() = {
+    }
+
+    initCapacity(QM1 cfg, Integer executorPool) = {
+    }
+
+}

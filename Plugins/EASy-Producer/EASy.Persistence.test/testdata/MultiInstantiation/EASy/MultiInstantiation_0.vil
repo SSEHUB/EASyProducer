@@ -1,0 +1,16 @@
+vilScript MultiInstantiation (Project source, Configuration config, Project target) {
+
+    version v0;
+
+    copy() = "$target/src/**/*.java" : "$source/template/**/*.java" {
+		RHS.copy(LHS);
+	}
+
+    main(Project source, Configuration config, Project target) = : {
+    	Path dest = "$target/src/**/*.java";
+    	
+    	dest.deleteAll();
+    	copy();
+    }
+
+}

@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: de.uni_hildesheim.sse.vil.templatelang
 Bundle-Vendor: SSE - University of Hildesheim
-Bundle-Version: 0.5.3
+Bundle-Version: 1.0.0
 Bundle-SymbolicName: de.uni_hildesheim.sse.vil.templatelang; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.xtext;bundle-version="2.5.0";visibility:=reexport,
@@ -21,7 +21,7 @@ Require-Bundle: org.eclipse.xtext;bundle-version="2.5.0";visibility:=reexport,
  org.eclipse.osgi.services,
  de.uni-hildesheim.sse.easy.instantiatorCore;bundle-version="0.5.0",
  de.uni_hildesheim.sse.vil.expressions;bundle-version="0.0.1",
- org.eclipse.emf.mwe2.launch;bundle-version="2.3.0"
+ org.eclipse.emf.mwe2.launch;bundle-version="2.3.0";resolution:=optional
 Import-Package: org.apache.log4j,
  org.eclipse.xtext.xbase.lib
 Service-Component: OSGI-INF/vilParser.xml

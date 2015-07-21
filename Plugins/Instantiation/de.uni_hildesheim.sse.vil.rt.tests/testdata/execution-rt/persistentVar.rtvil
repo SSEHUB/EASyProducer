@@ -1,0 +1,19 @@
+rtVilScript persistentVar (Project source, Configuration config, Project target) {
+
+    persistent Integer global = 0;
+
+    strategy main(Project source, Configuration config, Project target) = {
+        objective true;
+        breakdown {
+            tactic t();
+        }
+        global = global + 1;
+    }
+
+    tactic t() = {
+    }
+
+    enact(Project source, Configuration config, Project target) = : {
+    }
+
+}

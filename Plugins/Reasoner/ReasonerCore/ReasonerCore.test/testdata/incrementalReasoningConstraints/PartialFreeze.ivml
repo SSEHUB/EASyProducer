@@ -1,0 +1,15 @@
+project PartialFreeze {
+
+    version v0;
+    annotate Integer at = 0 to PartialFreeze;
+    Integer a;
+    assign (at = 1) to {
+        Integer b;
+    }
+    a.at = 0;
+    
+    freeze {
+        a;
+        b;
+    } but (v|v.at == 1)
+}

@@ -69,4 +69,8 @@ public class AttributeVariable extends Variable {
         return super.hashCode() + qualifier.hashCode();
     }
     
+    @Override
+    public String toString() {
+        return qualifier != null ? qualifier.toString() + "." + super.toString() : super.toString();
+    }
 }

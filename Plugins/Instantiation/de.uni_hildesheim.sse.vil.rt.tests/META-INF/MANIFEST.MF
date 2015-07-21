@@ -5,11 +5,26 @@ Bundle-Vendor: SSE - University of Hildesheim
 Bundle-Version: 0.0.1
 Bundle-SymbolicName: de.uni_hildesheim.sse.vil.rt.tests; singleton:=true
 Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: .
 Require-Bundle: de.uni_hildesheim.sse.vil.rt,
- de.uni_hildesheim.sse.vil.rt.ui,
  org.eclipse.core.runtime,
  org.eclipse.xtext.junit4,
- org.eclipse.ui.workbench;resolution:=optional
+ org.eclipse.ui.workbench;resolution:=optional,
+ de.uni_hildesheim.sse.vil.buildlang.tests,
+ de.uni_hildesheim.sse.vil.buildlang,
+ org.junit;bundle-version="4.8.2",
+ de.uni_hildesheim.sse.varModel,
+ de.uni-hildesheim.sse.easy.instantiatorCore,
+ de.uni_hildesheim.sse.varModel.tests,
+ de.uni_hildesheim.sse.vil.templatelang,
+ de.uni_hildesheim.sse.vil.templatelang.tests,
+ de.uni_hildesheim.sse.ivml,
+ de.uni-hildesheim.sse.easy.instantiator.velocity;bundle-version="1.7.12",
+ org.apache.commons.io;bundle-version="2.0.1",
+ org.apache.commons.lang;bundle-version="2.6.0",
+ de.uni-hildesheim.sse.easy.instantiatorCore.rt,
+ ReasonerCore;bundle-version="0.10.3",
+ de.uni_hildesheim.sse.reasoning.reasoner;bundle-version="0.0.2"
 Import-Package: org.apache.log4j,
  org.junit;version="4.5.0",
  org.junit.runner;version="4.5.0",
@@ -19,4 +34,4 @@ Import-Package: org.apache.log4j,
  org.junit.runners.model;version="4.5.0",
  org.hamcrest.core
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Export-Package: 
+Export-Package: de.uni_hildesheim.sse.vil.rt.tests

@@ -1,0 +1,12 @@
+project SortModel {
+
+    compound Element {
+        Real capacity; 
+    } 
+    
+    sequenceOf(Element) elts = {{capacity=0.5}, {capacity=-0.1}, {capacity=0.8}, {capacity=-0.2}};
+    
+    freeze {
+        elts;
+    }
+}

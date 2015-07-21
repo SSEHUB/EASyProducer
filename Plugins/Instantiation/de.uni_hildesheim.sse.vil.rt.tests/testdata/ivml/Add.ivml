@@ -1,0 +1,18 @@
+project Add {
+
+    enum BindingTime {compile, runtime};
+    annotate BindingTime bindingTime = BindingTime.compile to Add;
+
+    compound Node {
+        assign (bindingTime = BindingTime.runtime) to {
+            Integer capacity;
+        }
+    }
+
+    Node node = {};    
+    
+    freeze {
+        node;
+    } but (v | v.bindingTime == BindingTime.runtime);
+    
+}

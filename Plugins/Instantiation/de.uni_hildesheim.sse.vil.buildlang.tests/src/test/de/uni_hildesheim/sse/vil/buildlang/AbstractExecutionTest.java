@@ -3,6 +3,7 @@ package test.de.uni_hildesheim.sse.vil.buildlang;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
@@ -10,11 +11,14 @@ import org.apache.commons.lang.SystemUtils;
 import org.junit.Assert;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactFactory;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.Executor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateModel;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Project;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.Configuration;
+import de.uni_hildesheim.sse.model.management.VarModel;
+import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
 import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
 import de.uni_hildesheim.sse.varModel.testSupport.DefaultConfiguration;
@@ -22,9 +26,10 @@ import de.uni_hildesheim.sse.varModel.testSupport.DefaultConfiguration;
 /**
  * Implements the functionality of an abstract execution test (basis for reuse).
  * 
+ * @param <M> the actual model type
  * @author Holger Eichelberger
  */
-public abstract class AbstractExecutionTest extends AbstractTest {
+public abstract class AbstractExecutionTest <M extends Script> extends AbstractTest<M> {
 
     @Override
     protected File getTestFolder() {
@@ -47,7 +52,7 @@ public abstract class AbstractExecutionTest extends AbstractTest {
      *            the name of the file (excluding ".trc")
      * @return the file
      */
-    private File createTraceFile(String name) {
+    protected File createTraceFile(String name) {
         File file = new File(getTestFolder(), name + ".trc");
         if (SystemUtils.IS_OS_MAC) {
             file = insertAndCheckInfix(file, "macos");
@@ -101,7 +106,7 @@ public abstract class AbstractExecutionTest extends AbstractTest {
      * @param config the configuration (use empty if <b>null</b>)
      * @return the parameter map
      */
-    private static Map<String, Object> createParameterMap(Project source, Project target, Configuration config) {
+    protected static Map<String, Object> createParameterMap(Project source, Project target, Configuration config) {
         Map<String, Object> param = new HashMap<String, Object>();
         if (null == source) {
             source = new Project(); // just dummy
@@ -188,7 +193,7 @@ public abstract class AbstractExecutionTest extends AbstractTest {
         }
         
     }
-    
+
     /**
      * Execute the script in <code>name</code> with equally named trace in a self-instantiation
      * project setting (1 project).
@@ -202,6 +207,23 @@ public abstract class AbstractExecutionTest extends AbstractTest {
      */
     protected void assertSelfInstantiate(String name, String startRuleName, SelfInstantiationAsserter asserter, 
         int... expectedExceptions) throws IOException {
+        assertSelfInstantiate(name, startRuleName, null, asserter, expectedExceptions);
+    }
+    
+    /**
+     * Execute the script in <code>name</code> with equally named trace in a self-instantiation
+     * project setting (1 project).
+     * 
+     * @param name the name of the test file (without extension), the name of the project and
+     *   the name of the trace file (without extension)
+     * @param startRuleName the name of the start rule
+     * @param configName the IVML name of the configuration to be used
+     * @param expectedExceptions the expected extensions
+     * @param asserter optional instance to check the outcome
+     * @throws IOException in case that loading files or preparing the test environment fails
+     */
+    protected void assertSelfInstantiate(String name, String startRuleName, String configName, 
+        SelfInstantiationAsserter asserter, int... expectedExceptions) throws IOException {
         // do not operate on the original artifacts
         ArtifactFactory.clear();
         File temp = createTempDir("artifacts");
@@ -213,7 +235,25 @@ public abstract class AbstractExecutionTest extends AbstractTest {
         }
         try {
             Project project = new Project(temp, ProgressObserver.NO_OBSERVER);
-            Map<String, Object> param = createParameterMap(project, project, null);
+            Configuration config = null;
+            if (null != configName) {
+                List<ModelInfo<de.uni_hildesheim.sse.model.varModel.Project>> info = 
+                    VarModel.INSTANCE.availableModels().getModelInfo(configName);
+                if (info.isEmpty()) {
+                    Assert.fail("cannot find IVML model " + configName);
+                }
+                if (info.size() > 1) {
+                    Assert.fail("IVML model ambiguous " + info);
+                }
+                try {
+                    config = new Configuration(new de.uni_hildesheim.sse.model.confModel.Configuration(
+                        VarModel.INSTANCE.load(info.get(0))));
+                } catch (ModelManagementException e) {
+                    Assert.fail(e.getMessage());
+                }
+            }
+            
+            Map<String, Object> param = createParameterMap(project, project, config);
             String pName = name;
             int pos = pName.lastIndexOf("/");
             if (pos > 0) {
@@ -227,7 +267,7 @@ public abstract class AbstractExecutionTest extends AbstractTest {
             }
             project.release();
             //FileUtils.contentEquals(file1, file2)
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             Assert.fail("unexpected exception: " + e.getMessage());
         } finally {
             try {

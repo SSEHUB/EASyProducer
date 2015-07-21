@@ -247,5 +247,19 @@
             name="EASy-Producer">
       </category>        
   </extension>
+  <extension
+        point="org.eclipse.ui.newWizards">
+      <wizard
+            name="Variability Model Comments (TEXT)"
+            icon="icons/comments_file_icon.gif"
+            category="de.uni_hildesheim.sse.EASy_Producer"
+            class="de.uni_hildesheim.sse.ivml.ui.wizards.CommentsFiletypeWizard"
+            id="de.uni_hildesheim.sse.ivml.filetype.wizards.CommentsFiletypeWizard">
+      </wizard>
+      <category
+            id="de.uni_hildesheim.sse.EASy_Producer"
+            name="EASy-Producer">
+      </category>        
+  </extension>
 
 </plugin>

@@ -2,7 +2,6 @@ package test.de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes;
 
 import java.util.Iterator;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 
@@ -13,7 +12,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescr
  */
 class OperationsIterator implements Iterable<OperationDescriptor>, Iterator<OperationDescriptor> {
 
-    private TypeDescriptor<? extends IVilType> descriptor;
+    private TypeDescriptor<?> descriptor;
     private int pos = 0;
 
     /**
@@ -21,7 +20,7 @@ class OperationsIterator implements Iterable<OperationDescriptor>, Iterator<Oper
      * 
      * @param descriptor the descriptor to iterate over
      */
-    public OperationsIterator(TypeDescriptor<? extends IVilType> descriptor) {
+    public OperationsIterator(TypeDescriptor<?> descriptor) {
         this.descriptor = descriptor;
     }
     

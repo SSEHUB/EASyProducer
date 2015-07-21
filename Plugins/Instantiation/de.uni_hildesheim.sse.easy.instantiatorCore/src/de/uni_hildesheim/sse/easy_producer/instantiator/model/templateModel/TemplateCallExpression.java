@@ -2,8 +2,9 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.ModelCallExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallArgument;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IExpressionVisitor;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaOperation;
 
 /**
  * Represents the explicit execution of a template.
@@ -19,10 +20,10 @@ public class TemplateCallExpression extends ModelCallExpression<VariableDeclarat
      * @param isSuper this is a super call
      * @param name the name of the template
      * @param arguments the actual arguments
-     * @throws ExpressionException in case of an erroneously qualified name
+     * @throws VilException in case of an erroneously qualified name
      */
     public TemplateCallExpression(Template template, boolean isSuper, String name, CallArgument... arguments) 
-        throws ExpressionException {
+        throws VilException {
         super(template, isSuper, name, arguments);
     }
     
@@ -32,14 +33,14 @@ public class TemplateCallExpression extends ModelCallExpression<VariableDeclarat
      * @param template the actual template to containing <code>def</code>
      * @param def the resolved sub-template
      * @param arguments the actual arguments
-     * @throws ExpressionException in case of an erroneously qualified name
+     * @throws VilException in case of an erroneously qualified name
      */
-    TemplateCallExpression(Template template, Def def, CallArgument... arguments) throws ExpressionException {
+    TemplateCallExpression(Template template, Def def, CallArgument... arguments) throws VilException {
         super(template, def, arguments);
     }
 
     @Override
-    public Object accept(IExpressionVisitor visitor) throws ExpressionException {
+    public Object accept(IExpressionVisitor visitor) throws VilException {
         Object result;
         if (visitor instanceof IVisitor) {
             result = ((IVisitor) visitor).visitTemplateCallExpression(this);
@@ -54,4 +55,9 @@ public class TemplateCallExpression extends ModelCallExpression<VariableDeclarat
         return Def.class;
     }
     
+    @Override
+    protected String getInvalidOperationMessage(IMetaOperation op) {
+        return op.getJavaSignature() + " is not a valid template";
+    }
+
 }

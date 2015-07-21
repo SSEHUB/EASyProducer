@@ -3,7 +3,6 @@ package de.uni_hildesheim.sse.dslCore.translation;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource.Diagnostic;
@@ -39,7 +38,7 @@ public abstract class ModelTranslator <E extends ExpressionTranslator> extends M
      * @param type the type as selection criterion
      * @return the selected objects being instance of <code>type</code>
      */
-    protected static <T extends EObject> List<T> select(EList<? extends EObject> objects,  Class<T> type) {
+    public static <T extends EObject> List<T> select(List<? extends EObject> objects,  Class<T> type) {
         List<T> decls = new ArrayList<T>();
         for (EObject elt : objects) {
             if (type.isInstance(elt)) {

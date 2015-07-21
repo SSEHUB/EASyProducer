@@ -1,5 +1,6 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.common;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
@@ -25,12 +26,13 @@ import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
  * @author Holger Eichelberger
  */
 public abstract class AbstractResolvableModel<V extends IResolvable, M extends IModel> implements IResolvableModel<V>, 
-    IModelListener<Project> {
+    IModelListener<Project>, ITypedefReceiver {
 
-    private boolean dirty = false;
+    private transient boolean dirty = false;
     private Imports<M> imports;
     private TypeRegistry registry;
     private Advice[] advices;
+    private List<Typedef> typedefs;
 
     /**
      * Creates an abstract resolvable model.
@@ -123,16 +125,16 @@ public abstract class AbstractResolvableModel<V extends IResolvable, M extends I
     }
 
     /**
-     * Get the number of advices of this script.
+     * Get the number of advices of this model.
      * 
-     * @return The number of advices of this script.
+     * @return The number of advices of this model.
      */
     public int getAdviceCount() {
         return null == advices ? 0 : advices.length;
     }
     
     /**
-     * Get the advice of this rule at the specified index.
+     * Get the advice at the specified index.
      * 
      * @param index The 0-based index of the advice to be returned.
      * @return The advice parameter at the given index.
@@ -143,6 +145,41 @@ public abstract class AbstractResolvableModel<V extends IResolvable, M extends I
             throw new IndexOutOfBoundsException();
         }
         return advices[index];
+    }
+    
+    /**
+     * Get the number of typedefs of this model.
+     * 
+     * @return The number of typedefs of this model.
+     */
+    public int getTypedefCount() {
+        return null == typedefs ? 0 : typedefs.size();
+    }
+    
+    /**
+     * Get the typedef at the specified index.
+     * 
+     * @param index The 0-based index of the advice to be returned.
+     * @return The advice parameter at the given index.
+     * @throws IndexOutOfBoundsException if <code>index &lt; 0 || index &gt;={@link #getTypedefCount()}</code>
+     */
+    public Typedef getTypedef(int index) {
+        if (null == typedefs) {
+            throw new IndexOutOfBoundsException();
+        }
+        return typedefs.get(index);
+    }
+    
+    /**
+     * Adds a typedef.
+     * 
+     * @param typedef the typedef to be added
+     */
+    public void addTypedef(Typedef typedef) {
+        if (null == typedefs) {
+            typedefs = new ArrayList<Typedef>();
+        }
+        typedefs.add(typedef);
     }
 
     @Override

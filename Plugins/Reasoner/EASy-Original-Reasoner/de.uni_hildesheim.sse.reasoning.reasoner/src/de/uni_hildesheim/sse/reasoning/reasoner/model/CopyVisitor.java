@@ -146,6 +146,7 @@ public class CopyVisitor implements IConstraintTreeVisitor {
 
     @Override
     public void visitParenthesis(Parenthesis parenthesis) {
+        parenthesis.getExpr().accept(this);
         result = new Parenthesis(result);
         try {
             result.inferDatatype();

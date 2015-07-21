@@ -20,9 +20,24 @@ public class SignatureUtils {
      * @return the signature
      */
     public static String getJavaSignature(Method method, String name, boolean acceptsNamedParameter) {
-        StringBuilder tmp = new StringBuilder(null == name ? method.getName() : name);
+        return getJavaSignature(method.getName(), method.getParameterTypes(), name, acceptsNamedParameter);
+    }
+    
+    /**
+     * Returns a normalized Java signature for <code>method</code>. The signature
+     * consists of name and parameters. This method may be simplified in future to 
+     * optimize performance (public for testing).
+     * 
+     * @param methodName the actual method name
+     * @param param the parameters
+     * @param name an alias name
+     * @param acceptsNamedParameter whether the method accepts named parameter
+     * @return the signature
+     */
+    public static String getJavaSignature(String methodName, Class<?>[] param, String name, 
+        boolean acceptsNamedParameter) {
+        StringBuilder tmp = new StringBuilder(null == name ? methodName : name);
         tmp.append("(");
-        Class<?>[] param = method.getParameterTypes();
         if (null != param) {
             int count = param.length;
             if (acceptsNamedParameter) {

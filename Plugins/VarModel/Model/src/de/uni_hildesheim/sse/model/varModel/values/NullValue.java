@@ -30,10 +30,26 @@ public final class NullValue extends Value {
     public static final Value INSTANCE = new NullValue();
     
     /**
+     * Defines the type of the singleton null value. Actually, object would be sufficient, 
+     * but for serialization a specific type is required.
+     * 
+     * @author Holger Eichelberger
+     */
+    public static class NullValueType {
+
+        /**
+         * Creates an instance and prevents external instantiation.
+         */
+        private NullValueType() {
+        }
+        
+    }
+    
+    /**
      * The value to be returned by {@link #getValue()}. <b>null</b> would be
      * an alternative but this may break existing code.
      */
-    public static final Object VALUE = new Object();
+    public static final Object VALUE = new NullValueType();
     
     /**
      * Creates a null value. Not visible due to singlton constant character.

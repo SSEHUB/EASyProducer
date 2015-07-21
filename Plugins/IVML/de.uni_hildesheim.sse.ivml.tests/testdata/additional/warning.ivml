@@ -1,0 +1,14 @@
+project warn {
+
+    version v0;
+    Integer a = 1;
+    Integer b = 0;
+    warning(a < b);
+    Constraint c = warning(a < b);
+    compound comp {
+        Integer y;
+        Integer z;
+        warning(z < y);
+    }
+
+}

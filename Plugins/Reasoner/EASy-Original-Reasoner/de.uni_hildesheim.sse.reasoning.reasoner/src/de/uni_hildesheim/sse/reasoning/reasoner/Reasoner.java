@@ -46,21 +46,24 @@ public class Reasoner implements IReasoner {
     @Override
     public ReasoningResult isConsistent(Project project, ReasonerConfiguration reasonerConfig, 
                 ProgressObserver observer) {
-        Engine engine = new Engine(project, createConfiguration(project), reasonerConfig, observer);           
+        Engine engine = new Engine(project, createConfiguration(project, null, reasonerConfig), 
+            reasonerConfig, observer);           
         return engine.reason();
     }
 
     @Override
     public ReasoningResult check(Project project, Configuration cfg, ReasonerConfiguration reasonerConfig,
         ProgressObserver observer) {
-        Engine engine = new Engine(project, createConfiguration(project), reasonerConfig, observer);           
+        Engine engine = new Engine(project, createConfiguration(project, cfg, reasonerConfig), 
+            reasonerConfig, observer);           
         return engine.reason();
     }
 
     @Override
     public ReasoningResult propagate(Project project, Configuration cfg, ReasonerConfiguration reasonerConfig,
         ProgressObserver observer) {
-        Engine engine = new Engine(project, createConfiguration(project), reasonerConfig, observer);
+        Engine engine = new Engine(project, createConfiguration(project, cfg, reasonerConfig), 
+            reasonerConfig, observer);
         return engine.reason();
     }
 
@@ -98,12 +101,22 @@ public class Reasoner implements IReasoner {
     }
     
     /**
-     * Method for creating a clean {@link Configuration}.
+     * Method for creating a clean {@link Configuration} if required.
      * @param project Project for {@link Configuration}
+     * @param cfg the initial configuration
+     * @param rConfig the reasoner configuration
      * @return Created {@link Configuration}
      */
-    private Configuration createConfiguration(Project project) {
-        Configuration config = new Configuration(project, false);
-        return config;
+    private Configuration createConfiguration(Project project, Configuration cfg, ReasonerConfiguration rConfig) {
+        Configuration result;
+        if (rConfig.reasonIncrementally()) {
+            result = cfg;
+        } else {
+            result = null;
+        }
+        if (null == result) {
+            result = new Configuration(project, false);
+        }
+        return result;
     }
 }

@@ -1,0 +1,12 @@
+rtVilScript tacticFail1 (Project source, Configuration config, Project target) {
+
+    tactic t1(Project source, Configuration config, Project target) = {
+    }
+
+    tactic t1(Project source, Configuration config, Project target) = {
+    }
+    
+    tactic t1() = {
+    }
+
+}

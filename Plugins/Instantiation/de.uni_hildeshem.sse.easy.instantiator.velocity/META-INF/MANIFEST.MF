@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Velocity Instantiator
 Bundle-SymbolicName: de.uni-hildesheim.sse.easy.instantiator.velocity;singleton:=true
-Bundle-Version: 1.8.2
+Bundle-Version: 1.8.3
 Bundle-Vendor: University of Hildesheim - SSE
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Service-Component: OSGI-INF/instantiator.xml
@@ -12,7 +12,6 @@ Require-Bundle: de.uni-hildesheim.sse.easy.instantiatorCore;bundle-version="0.0.
  de.uni_hildesheim.sse.varModel;bundle-version="0.5.5"
 Import-Package: org.osgi.service.component
 Bundle-ActivationPolicy: lazy
-Bundle-Activator: de.uni_hildesheim.sse.easy_producer.instantiator.internal.VelocityActivator
 Bundle-ClassPath: .,
  lib/velocity-1.7-dep.jar
 Export-Package: de.uni_hildesheim.sse.easy_producer.instantiator.velocity;

@@ -1,8 +1,8 @@
 -> main(Configuration, FileArtifact) with (<config>, test.texts)
     m <- {}
-    -> add(Map, Any, Any) with ({{test, {}}}, test, {}) = null
+    -> add(Map, String, Map) with ({{test, {}}}, test, {})
     -> get(Map, Any) with ({{test, {}}}, test) = {}
     test <- {}
-    -> add(Map, Any, Any) with ({{test1, 1}}, test1, 1) = null
+    -> add(Map, String, Integer) with ({{test1, 1}}, test1, 1)
     -> get(Map, Any) with ({{test1, 1}}, test1) = 1
     -> get(Map, Any) with ({{test, {{test1, 1}}}}, test) = {{test1, 1}}

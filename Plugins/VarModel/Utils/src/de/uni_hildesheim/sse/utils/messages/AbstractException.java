@@ -44,6 +44,11 @@ public abstract class AbstractException extends Exception implements IIdentifiab
      */
     public static final int ID_AMBIGUOUS = 70003;
     
+    /**
+     * Indicates a warning to be filtered out.
+     */
+    public static final int ID_WARNING = 70004;
+    
     private int id;
     
     /**

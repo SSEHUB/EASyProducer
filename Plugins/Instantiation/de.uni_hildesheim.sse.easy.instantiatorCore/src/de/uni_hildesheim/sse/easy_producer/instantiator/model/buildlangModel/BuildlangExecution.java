@@ -16,12 +16,9 @@
 
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -34,6 +31,7 @@ import java.util.Stack;
 import org.apache.commons.lang.SystemUtils;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactFactory;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.Path;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Rule.Side;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.RuleExecutionResult.Status;
@@ -46,28 +44,32 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.mat
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.matchLoop.RuleBodyExecutor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ruleMatch.AbstractRuleMatchExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ruleMatch.ArtifactMatchExpression;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ruleMatch.BooleanMatchExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ruleMatch.CollectionMatchExpression;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ruleMatch.CompoundMatchExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ruleMatch.MatchResolver;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ruleMatch.PathMatchExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ruleMatch.StringMatchExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.ExecutionVisitor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.IResolvableModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.ModelCallExpression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.StreamGobbler;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.Typedef;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.AbstractCallExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallArgument;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ConstantExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionParserRegistry;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ResolvableOperationCallExpression;
+//import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.StringReplacer;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionParserRegistry.ILanguage;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IExpressionParser;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IResolvable;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.StringReplacer;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionParserRegistry.ILanguage;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArraySequence;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArraySet;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Collection;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.FixedListSequence;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ITypedModel;
@@ -136,6 +138,7 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
     private ExecutableRules executableRules;
     private Stack<RuleExecutionContext> ruleStack = new Stack<RuleExecutionContext>();
     private Resolver resolver;
+    private boolean enableRuleElementFailed = true;
         
     /**
      * Creates a new execution environment.
@@ -160,7 +163,7 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
     public BuildlangExecution(ITracer tracer, File base, String startRuleName, Map<String, Object> parameter) {
         super(new RuntimeEnvironment(), tracer, parameter);
         this.tracer = tracer;
-        this.environment = (RuntimeEnvironment) getRuntimeEnvironment();
+        this.environment = getRuntimeEnvironment();
         this.base = base;
         this.startRuleName = startRuleName;
         initialize();
@@ -171,7 +174,7 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
      * 
      * @param environment the runtime environment to be used for expression evaluation
      */
-    BuildlangExecution(RuntimeEnvironment environment) {
+    protected BuildlangExecution(RuntimeEnvironment environment) {
         super(environment, NoTracer.INSTANCE, new HashMap<String, Object>());
         this.tracer = NoTracer.INSTANCE;
         this.environment = environment;
@@ -180,9 +183,58 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
         initialize();
     }
     
+    /**
+     * Enables / disables failed rule elements in some situations.
+     * 
+     * @param enableRuleElementFailed whether rule elements shall be enabled
+     * @return the old state
+     */
+    protected boolean setEnableRuleElementFailed(boolean enableRuleElementFailed) {
+        boolean old = this.enableRuleElementFailed;
+        this.enableRuleElementFailed = enableRuleElementFailed;
+        return old;
+    }
+    
+    /**
+     * Creates the initial runtime environment.
+     * 
+     * @return the initial runtime environment
+     */
+    protected RuntimeEnvironment createRuntimeEnvironment() {
+        return new RuntimeEnvironment(); // go with default VIL type registry as basis - switch context asks the model
+    }
+    
+    @Override
+    public RuntimeEnvironment getRuntimeEnvironment() {
+        return (RuntimeEnvironment) super.getRuntimeEnvironment();
+    }
+    
+    @Override
+    protected ITracer getTracer() {
+        return tracer;
+    }
+    
     @Override
     protected IExpressionParser getExpressionParser() {
         return ExpressionParserRegistry.getExpressionParser(LANGUAGE);
+    }
+    
+    /**
+     * Returns the top element on the rule stack.
+     * 
+     * @return the top element
+     */
+    protected RuleExecutionContext peekRuleStack() {
+        return ruleStack.peek();
+    }
+    
+    /**
+     * Returns the size of the rule stack.
+     * 
+     * @return the size of the rule stack
+     */
+    protected int getRuleStackSize() {
+        return ruleStack.size();
     }
     
     /**
@@ -191,8 +243,17 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
     private void initialize() {
         this.matchResolver = new MatchResolver(environment, getExpressionParser(), this);
         this.variableFinder = new VariableFinder();
-        this.executableRules = new ExecutableRules();
+        this.executableRules = createExecutableRulesInstance();
         this.resolver = new Resolver(environment.getTypeRegistry());
+    }
+    
+    /**
+     * Creates an executable rules instance.
+     * 
+     * @return the created instance
+     */
+    protected ExecutableRules createExecutableRulesInstance() {
+        return new ExecutableRules();
     }
     
     /**
@@ -251,7 +312,7 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
     }
 
     @Override
-    public Object visitScript(Script script) throws VilLanguageException {
+    public Object visitScript(Script script) throws VilException {
         environment.switchContext(script); // the initial context, method is called only from outside
         return executeScript(script, null);
     }
@@ -262,15 +323,10 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
      * @param script the script to be executed
      * @param start the start rule (may be <b>null</b> to determine main)
      * @return the result of the execution
-     * @throws VilLanguageException if the execution fails
+     * @throws VilException if the execution fails
      */
-    private Object executeScript(Script script, RuleCallExpression start) throws VilLanguageException {
-        Map<String, Object> scriptParam;
-        try {
-            scriptParam = determineScriptParam(start);
-        } catch (ExpressionException e) {
-            throw new VilLanguageException(e);
-        }
+    private Object executeScript(Script script, RuleCallExpression start) throws VilException {
+        Map<String, Object> scriptParam = determineScriptParam(start);
         resolver.pushModel(script);
         tracer.visitScript(script);
         if (null != scriptParam) {
@@ -282,7 +338,7 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
             Object value;
             try {
                 value = environment.getValue(script.getParameter(p));
-            } catch (VilLanguageException e) {
+            } catch (VilException e) {
                 value = null; // don't care for undefined variables
             }
             if (value instanceof Configuration) {
@@ -312,13 +368,9 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
         tracer.visitedScript(script);
         Object result;
         if (null == start) {
-            result = executeMain(script, script.determineStartRule(startRuleName));
+            result = executeDefault(script);
         } else {
-            try {
-                result = start.accept(this);
-            } catch (ExpressionException e) {
-                throw new VilLanguageException(e);
-            }
+            result = start.accept(this);
         }
         resolver.popModel();
         if (null != scriptParam) {
@@ -326,6 +378,37 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
         }
         environment.switchContext(oldContext);
         return result;
+    }
+
+    /**
+     * Releases the resources allocated by this execution.
+     * 
+     * @param releaseDefault shall also default artifacts, i.e., artifacts that cannot be assigned to a source / target
+     *   artifact model be released? May affect execution of other VIL models.
+     */
+    public void release(boolean releaseDefault) {
+        Object target = getParameter(PARAM_TARGET);
+        if (target instanceof Project) {
+            ((Project) target).release();
+        }
+        Object source = getParameter(PARAM_SOURCE);
+        if (source != target && source instanceof Project) {
+            ((Project) source).release();
+        }
+        if (releaseDefault) {
+            ArtifactFactory.clearDefaultModel(); // may affect other executions
+        }
+    }
+    
+    /**
+     * Executes the given <code>script</code> via its default entry point.
+     * 
+     * @param script the script to be executed
+     * @return the execution result
+     * @throws VilException if execution fails
+     */
+    protected Object executeDefault(Script script) throws VilException {
+        return executeMain(script, script.determineStartRule(startRuleName));
     }
     
     /**
@@ -344,7 +427,7 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
         if (null == target && script.getParameterCount() >= 3) {
             try {
                 target = environment.getValue(script.getParameter(2));
-            } catch (VilLanguageException e) {
+            } catch (VilException e) {
             }
             if (!(target instanceof Project)) {
                 target = null;
@@ -356,7 +439,7 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
                 if (decl.getName().equals(PARAM_TARGET)) {
                     try {
                         target = environment.getValue(decl);
-                    } catch (VilLanguageException e) {
+                    } catch (VilException e) {
                     }
                 }
             }
@@ -370,7 +453,7 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
     
     @Override
     protected void initializeImplicitVariables(IResolvableModel<VariableDeclaration> model) 
-        throws VilLanguageException {
+        throws VilException {
         if (model instanceof Script) {
             Script script = (Script) model;
             VariableDeclaration var = script.getVariableDeclaration(Script.NAME_OTHERPROJECTS);
@@ -393,21 +476,21 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
     
     @Override
     protected ModelCallExpression<VariableDeclaration, Script, Rule> createModelCall(Script model, Rule operation,
-        CallArgument... arguments) throws ExpressionException {
+        CallArgument... arguments) throws VilException {
         return new RuleCallExpression(model, operation, arguments);
     }
     
     @Override
-    protected void setModelArgument(VariableDeclaration param, Object value) throws VilLanguageException {
+    protected void setModelArgument(VariableDeclaration param, Object value) throws VilException {
         // input may be Project or Project[] instance, expected may be collection or project
         // perform explicit conversion if possible - otherways fail and execution will fail anyway
         // this is needed for multi-project instantiation
         Object newVal = value;
         if (null != value) {
-            TypeDescriptor<? extends IVilType> projectType = IvmlTypes.projectType();
-            TypeDescriptor<? extends IVilType> type = param.getType();
-            if (type.isCollection() && 1 == type.getParameterCount() 
-                && projectType.isAssignableFrom(type.getParameterType(0))) {
+            TypeDescriptor<?> projectType = IvmlTypes.projectType();
+            TypeDescriptor<?> type = param.getType();
+            if (type.isCollection() && 1 == type.getGenericParameterCount() 
+                && projectType.isAssignableFrom(type.getGenericParameterType(0))) {
                 // expected type is a collection of Projects
                 Project[] pArray = null;
                 if (value instanceof Project[]) {
@@ -444,18 +527,14 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
      * 
      * @param script the script to process the properties for
      * @param base the base path to make relative paths absolute
-     * @throws VilLanguageException in case that something goes wrong
+     * @throws VilException in case that something goes wrong
      */
-    private void processProperties(Script script, File base) throws VilLanguageException {
+    protected void processProperties(Script script, File base) throws VilException {
         Properties loaded = new Properties();
         for (int p = 0; p < script.getPropertiesCount(); p++) {
             LoadProperties prop = script.getProperties(p);
             String path = prop.getPath();
-            try {
-                path = StringReplacer.substitute(path, environment, getExpressionParser(), this);
-            } catch (ExpressionException e) {
-                throw new VilLanguageException(e);
-            }
+            path = StringReplacer.substitute(path, environment, getExpressionParser(), this);
             File file = absolute(path, base);
             loadProperties(file, loaded, null);
             if (SystemUtils.IS_OS_MAC) {
@@ -471,12 +550,12 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
             String value = loaded.getProperty(var.getName(), null);
             if (null != value) {
                 if (var.isConstant() && null != var.getExpression()) {
-                    throw new VilLanguageException("constant '" + var.getName() + "' is already assigned a value", 
-                        VilLanguageException.ID_IS_CONSTANT);
+                    throw new VilException("constant '" + var.getName() + "' is already assigned a value", 
+                        VilException.ID_IS_CONSTANT);
                 }
                 Object actValue = evaluateExternalValue(var, value);
                 environment.setValue(var, actValue);
-                tracer.valueDefined(var, actValue);
+                tracer.valueDefined(var, null, actValue);
             }
         }
     }
@@ -489,9 +568,9 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
      * @param prop the loaded properties (to be modified as a side effect)
      * @param os if not <b>null</b> to be inserted after the last "." with a following ".". If file
      *   not exists, no exception will be thrown.
-     * @throws VilLanguageException in case of loading problems
+     * @throws VilException in case of loading problems
      */
-    private void loadProperties(File file, Properties prop, String os) throws VilLanguageException {
+    private void loadProperties(File file, Properties prop, String os) throws VilException {
         boolean loadFile = true;
         if (null != os) {
             String f = file.toString();
@@ -511,8 +590,19 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
                 p.load(fis);
                 prop.putAll(p);
                 fis.close();
+                
+                for (String key : prop.stringPropertyNames()) {
+                    String value = prop.getProperty(key);
+                    // Replace value
+                    try {
+                        value = StringReplacer.substitute(value, environment, getExpressionParser(), this);
+                    } catch (VilException e) {
+                        EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).exception(e);
+                    }
+                    prop.setProperty(key, value);
+                }
             } catch (IOException e) {
-                throw new VilLanguageException(e.getMessage(), e, VilLanguageException.ID_IO);
+                throw new VilException(e.getMessage(), e, VilException.ID_IO);
             }
         }
     }
@@ -523,29 +613,25 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
      * @param var the variable to evaluate the value for
      * @param value the external value
      * @return the actual value for <code>var</code>
-     * @throws VilLanguageException in case that conversion does not work
+     * @throws VilException in case that conversion does not work
      */
-    private Object evaluateExternalValue(VariableDeclaration var, String value) throws VilLanguageException {
+    private Object evaluateExternalValue(VariableDeclaration var, String value) throws VilException {
         Object actValue;
         try {
             ConstantExpression ex = new ConstantExpression(var.getType(), value, environment.getTypeRegistry());
             actValue = ex.accept(this);
-        } catch (ExpressionException e) {
+        } catch (VilException e) {
             // cannot be turned into a primitive value
-            try {
-                actValue = value;
-                TypeDescriptor<? extends IVilType> varType = var.getType();
-                TypeDescriptor<? extends IVilType> exType = TypeRegistry.stringType();
-                if (!varType.isAssignableFrom(exType)) {
-                    OperationDescriptor desc = TypeDescriptor.findConversionOnBoth(exType, varType);
-                    if (null != desc) {
-                        Expression ex = new ConstantExpression(exType, value, environment.getTypeRegistry());
-                        ex = new CallExpression(desc, new CallArgument(ex));
-                        actValue = ex.accept(this);
-                    }
+            actValue = value;
+            TypeDescriptor<?> varType = var.getType();
+            TypeDescriptor<?> exType = TypeRegistry.stringType();
+            if (!varType.isAssignableFrom(exType)) {
+                OperationDescriptor desc = TypeDescriptor.findConversionOnBoth(exType, varType);
+                if (null != desc) {
+                    Expression ex = new ConstantExpression(exType, value, environment.getTypeRegistry());
+                    ex = new CallExpression(desc, new CallArgument(ex));
+                    actValue = ex.accept(this);
                 }
-            } catch (ExpressionException e1) {
-                throw new VilLanguageException(e1);
             }
         }       
         return actValue;
@@ -555,15 +641,15 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
      * Checks the constant values for proper initialization.
      * 
      * @param script the project to process the properties for
-     * @throws VilLanguageException in case that something goes wrong
+     * @throws VilException in case that something goes wrong
      */
-    private void checkConstants(Script script) throws VilLanguageException {
+    private void checkConstants(Script script) throws VilException {
         for (int v = 0; v < script.getVariableDeclarationCount(); v++) {
             VariableDeclaration var = script.getVariableDeclaration(v);
             if (var.isConstant()) {
                 if (!environment.isDefined(var)) {
-                    throw new VilLanguageException("constant '" + var.getName() + "' must be assigned a value " 
-                        + "(either in script or via loaded properties)", VilLanguageException.ID_SEMANTIC);
+                    throw new VilException("constant '" + var.getName() + "' must be assigned a value " 
+                        + "(either in script or via loaded properties)", VilException.ID_SEMANTIC);
                 }
             }
         }        
@@ -580,7 +666,7 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
     }
 
     @Override
-    public Object visitStrategyCallExpression(StrategyCallExpression call) throws ExpressionException {
+    public Object visitStrategyCallExpression(StrategyCallExpression call) throws VilException {
         Object result;
         if (call.isPlaceholder()) {
             result = null;
@@ -595,24 +681,20 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
      * 
      * @param call the call to execute
      * @return the execution result
-     * @throws ExpressionException in case of execution problems
+     * @throws VilException in case of execution problems
      */
-    public Object visitStrategyCallExpressionImpl(StrategyCallExpression call) throws ExpressionException {
+    public Object visitStrategyCallExpressionImpl(StrategyCallExpression call) throws VilException {
         Object result;
         switch (call.getType()) {
         case EXECUTE:
             String exec;
-            try {
-                Object nameVarVal = environment.getValue(call.getNameVariable());
-                if (nameVarVal instanceof Path) {
-                    exec = ((Path) nameVarVal).getAbsolutePath().getAbsolutePath();
-                } else {
-                    exec = StringValueHelper.getStringValue(nameVarVal, null);
-                    exec = StringReplacer.substitute(exec, environment, getExpressionParser(), this);
-                }
-            } catch (VilLanguageException e) {
-                throw new ExpressionException(e);
-            } 
+            Object nameVarVal = environment.getValue(call.getNameVariable());
+            if (nameVarVal instanceof Path) {
+                exec = ((Path) nameVarVal).getAbsolutePath().getAbsolutePath();
+            } else {
+                exec = StringValueHelper.getStringValue(nameVarVal, null);
+//              exec = StringReplacer.substitute(exec, environment, getExpressionParser(), this);
+            }
             String[] args = new String[call.getArgumentsCount() + 1];
             args[0] = postprocessSystemCallArgument(exec);
             for (int a = 1; a < args.length; a++) {
@@ -625,14 +707,10 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
                         args[a] = o.toString();
                     }
                 } else {
-                    try {
-                        args[a] = type.convert(o);
-                    } catch (ArtifactException e) {
-                        throw new ExpressionException(e, ExpressionException.ID_RUNTIME);
-                    }
+                    args[a] = type.convert(o);
                 }
-                args[a] = postprocessSystemCallArgument(
-                    StringReplacer.substitute(args[a], environment, getExpressionParser(), this));
+                args[a] = postprocessSystemCallArgument(args[a]);
+//                    StringReplacer.substitute(args[a], environment, getExpressionParser(), this));
             }
             
             EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(StrategyCallExpression.class, Bundle.ID);
@@ -641,19 +719,13 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
             ProcessBuilder builder = new ProcessBuilder(args);
             try {
                 Process process = builder.start();
-                InputStream is = process.getInputStream();
-                InputStreamReader isr = new InputStreamReader(is);
-                BufferedReader br = new BufferedReader(isr);
-                String line;
-                while ((line = br.readLine()) != null) {
-                    logger.info(line);
-                }
+                StreamGobbler.gobble(process);
                 int res = process.waitFor();
                 logger.info("execution result: " + res);
             } catch (InterruptedException e) {
-                throw new ExpressionException(e, ExpressionException.ID_SYSTEM_EXEC);
+                throw new VilException(e, VilException.ID_SYSTEM_EXEC);
             } catch (IOException e) {
-                throw new ExpressionException(e, ExpressionException.ID_SYSTEM_EXEC);
+                throw new VilException(e, VilException.ID_SYSTEM_EXEC);
             }
             result = Boolean.TRUE;
             break;
@@ -663,7 +735,7 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
             tracer.visitedInstantiator(call.getName(), result);
             break;
         default:
-            throw new ExpressionException("illegal strategy type " + call.getType(), ExpressionException.ID_INTERNAL);
+            throw new VilException("illegal strategy type " + call.getType(), VilException.ID_INTERNAL);
         }
         return result;
     }
@@ -673,7 +745,7 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
     }*/
 
     @Override
-    public Object visitLoadProperties(LoadProperties properties) throws VilLanguageException {
+    public Object visitLoadProperties(LoadProperties properties) throws VilException {
         // done in processProperties
         return null;
     }
@@ -682,21 +754,17 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
      * Registers the parameter of <code>rule</code>.
      * 
      * @param rule the rule to register the parameter for
-     * @throws VilLanguageException in case of any execution error
+     * @throws VilException in case of any execution error
      */
-    private void registerParameter(Rule rule) throws VilLanguageException {
+    private void registerParameter(Rule rule) throws VilException {
         for (int p = 0; p < rule.getParameterCount(); p++) {
             VariableDeclaration var = rule.getParameter(p);
             IResolvable res = environment.get(var.getName());
             if (null == res) {
-                throw new VilLanguageException("parameter " + var.getName() + " is not defined", 
-                    VilLanguageException.ID_RUNTIME_PARAMETER);
+                throw new VilException("parameter " + var.getName() + " is not defined", 
+                    VilException.ID_RUNTIME_PARAMETER);
             } else {
-                try {
-                    environment.addValue(var, environment.getValue(res));
-                } catch (ExpressionException e) {
-                    throw new VilLanguageException(e);
-                }
+                environment.addValue(var, environment.getValue(res));
             }
         }
     }
@@ -734,13 +802,12 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
      *   and therefore are Objects)
      * @param context the rule execution context, may be <b>null</b> if actually no execution of the rule 
      *   body shall be performed and just pre-postcondition matches shall be tested
-     * @return the execution status if <code>execute</code> is true, the matching status else (in particular 
-     *   {@link Status#SUCCESS} and {@link Status#NOT_APPLICABLE}).
-     * @throws VilLanguageException in case of serious execution problems
+     * @return depending on {@link Rule#returnActualValue()}, the actual body evaluation result or the execution status 
+     * @throws VilException in case of serious execution problems
      */
-    private Status applyRuleBody(Rule rule, Object[] rhsValues, RuleExecutionContext context) 
-        throws VilLanguageException {
-        
+    protected Object applyRuleBody(Rule rule, Object[] rhsValues, RuleExecutionContext context) 
+        throws VilException {
+        Object bodyRes = null;
         Status status = Status.SUCCESS;
         if (null != context) {
             // determine whether rule match variables are actually used and determine body execution strategy
@@ -764,7 +831,8 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
                 LhsRhsMatchLoop.matchLoop(rule, rhsValues, applicator, tracer);
                 status = applicator.getStatus();
             } else {
-                status = executeRuleBody(rule, context);
+                bodyRes = executeRuleBody(rule, context);
+                status = Status.toStatus(bodyRes);
             }
         } else {
             // check for enabling
@@ -772,24 +840,47 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
             LhsRhsMatchLoop.matchLoop(rule, rhsValues, applicator, tracer);
             status = applicator.allConditionsEnabled() ? Status.SUCCESS : Status.NOT_APPLICABLE;
         }
-        return status;
+        
+        Object result;
+        if (rule.returnActualValue()) {
+            result = bodyRes;
+        } else {
+            result = status;
+        }
+        return result;
     }
 
     @Override
-    public Status executeRuleBody(RuleBlock ruleBody, RuleExecutionContext context) throws VilLanguageException {
+    public Object executeRuleBody(IRuleBlock ruleBody, RuleExecutionContext context) throws VilException {
         Status status = Status.SUCCESS;
-        for (int e = 0; Status.SUCCESS == status && e < ruleBody.getBodyElementCount(); e++) {
-            IRuleElement elt = ruleBody.getBodyElement(e);
-            Object eltVal = elt.accept(this);
-            if (mayFail(elt) // guard expression
-                && !checkConditionResult(eltVal, elt, ConditionTest.DONT_CARE)) {
-                tracer.failedAt(ruleBody.getBodyElement(e));
-                status = Status.FAIL;
-            } else {
-                context.add(eltVal);
+        Object resVal = null;
+        if (null != ruleBody) {
+            for (int e = 0; Status.SUCCESS == status && e < ruleBody.getBodyElementCount(); e++) {
+                IRuleElement elt = ruleBody.getBodyElement(e);
+                Object eltVal = elt.accept(this);
+                resVal = eltVal;
+                if (mayFail(elt) // guard expression
+                    && !checkConditionResult(eltVal, elt, ConditionTest.DONT_CARE)) {
+                    if (enableRuleElementFailed) {
+                        tracer.failedAt(ruleBody.getBodyElement(e));
+                        status = Status.FAIL;
+                    }
+                } else {
+                    context.add(eltVal);
+                }
             }
         }
-        return status;
+        
+        Object result;
+        if (context.getRule().returnActualValue()) {
+            if (Status.FAIL == status) {
+                resVal = null;
+            }
+            result = resVal;
+        } else {
+            result = status;
+        }
+        return result;
     }
     
     /**
@@ -797,9 +888,9 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
      * 
      * @param rule the rule to consider
      * @param side the side of the rule
-     * @throws ExpressionException in case of resolution problems
+     * @throws VilException in case of resolution problems
      */
-    void resolveMatches(Rule rule, Side side) throws ExpressionException {
+    void resolveMatches(Rule rule, Side side) throws VilException {
         int count = rule.getRuleConditionCount(side);
         if (count > 0) {
             for (int i = 0; i < count; i++) {
@@ -831,11 +922,9 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
      * @return the status of the matching, i.e., {@link Status#SUCCESS} if execution can go on, 
      *   {@link Status#NOT_APPLICABLE} if the rule shall not be applied, {@link Status#FAIL} if already the (execution 
      *   of the preconditions) fails and, thus, the entire rule shall fail
-     * @throws ExpressionException in case of evaluating an LHS/RHS expression fails
-     * @throws VilLanguageException in case that execution seriously fails
+     * @throws VilException in case of evaluating an LHS/RHS expression fails
      */
-    private Status determineRhsLhsMatching(Rule rule, Object[] rhsValues) throws ExpressionException, 
-        VilLanguageException {
+    private Status determineRhsLhsMatching(Rule rule, Object[] rhsValues) throws VilException {
         Status status = Status.SUCCESS;
         // determine the RHS matching results -> collections; stop if no result
         int rhsCondCount = rule.getRuleConditionCount(Side.RHS);
@@ -854,121 +943,163 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
         }
         // look into the RHS-LHS matching based on timestamp/existence; stop if no matches
         if (Status.SUCCESS == status) {
-            status = applyRuleBody(rule, rhsValues, null); // 
+            status = Status.toStatus(applyRuleBody(rule, rhsValues, null));
         }
         return status;
     }
     
     @Override
-    public Object visitRule(Rule rule) throws VilLanguageException {
-        RuleExecutionContext context = new RuleExecutionContext(rule, environment); 
-        RuleExecutionResult result;
-        if (rule.isPlaceholder()) {
-            result = new RuleExecutionResult(Status.NOT_APPLICABLE, context);
-        } else {
-            ruleStack.push(context);
-            Status status = Status.SUCCESS;
-            boolean visited = false;
-            try {
-                environment.pushLevel(); 
-                // evaluate parameter and replace generic matches
-                registerParameter(rule); 
-                resolveMatches(rule, Side.RHS);
-                resolveMatches(rule, Side.LHS);
-                Object[] rhsValues = null; // store for iteration
-                int rhsCondCount = rule.getRuleConditionCount(Side.RHS);
-                if (rhsCondCount > 0) {
-                    rhsValues = new Object[rhsCondCount];
-                    status = determineRhsLhsMatching(rule, rhsValues);
-                }
-                for (int c = 0; Status.SUCCESS == status && c < rule.getRuleCallCount(Side.RHS); c++) {
-                    RuleCallExpression ex = rule.getRuleCall(Side.RHS, c);
-                    RuleExecutionResult res = (RuleExecutionResult) ex.accept(this);
-                    if (Status.FAIL == res.getStatus()) {
-                        status = Status.FAIL; // don't care fore not_applicable or success
-                    }
-                    environment.addValue(rule.getVariable(Side.RHS, rhsCondCount + c), res);
-                    context.add(res);
-                }
-                // process the body
-                tracer.visitRule(rule, environment);
-                visited = true;
-                if (Status.SUCCESS == status) {
-                    status = applyRuleBody(rule, rhsValues, context);
-                    for (int c = 0; Status.SUCCESS == status && c < rule.getRuleConditionCount(Side.LHS); c++) {
-                        AbstractRuleMatchExpression ex = rule.getRuleCondition(Side.LHS, c);
-                        if (!checkConditionResult(ex.accept(this), ex, ConditionTest.EXISTS)) {
-                            status = Status.FAIL;
-                            tracer.failedAt(ex);
-                        }
-                    }
-                }
-            } catch (ExpressionException e) {
-                throw new VilLanguageException(e);
-            } catch (VilLanguageException e) {
-                throw new VilLanguageException(e);
-            } 
-            try {
-                ruleStack.pop();
-                environment.popLevel();
-            } catch (ArtifactException e) {
-                throw new VilLanguageException(e);
-            }
-            if (Status.FAIL == status) {
-                this.failed.add(rule);
-            }
-            result = new RuleExecutionResult(status, context);
-            if (visited) {
-                tracer.visitedRule(rule, environment, result);
+    public Object visitRule(Rule rule) throws VilException {
+        boolean visited = false;
+        Object bodyRes = null;
+        boolean ruleExecResult = true;
+        RuleExecutionContext context = new RuleExecutionContext(rule, environment);
+        if (prepareExecution(context)) {
+            tracer.visitRule(rule, environment);
+            visited = true;
+            if (Status.SUCCESS == context.getStatus()) {
+                bodyRes = applyRuleBody(rule, context.getRhsValues(), context);
+                ruleExecResult = bodyRes instanceof Status;
+                context.setStatus(bodyRes);
+                checkPostconditions(context);
             }
         }
+        cleanupRuleExecution(context);
+        Object result;
+        if (ruleExecResult) {
+            result = new RuleExecutionResult(context.getStatus(), context);
+        } else {
+            result = bodyRes;
+        }
+        if (visited) {
+            tracer.visitedRule(rule, environment, result);
+        }
         return result;
+    } 
+
+    /**
+     * Evaluates the rule header and returns whether the rule is applicable. Call 
+     * {@link #checkPostconditions(RuleExecutionContext)} afterwards if required and 
+     * {@link #cleanupRuleExecution(RuleExecutionContext)} at the end of the evaluation.
+     * 
+     * @param context the rule execution context, to be modified as a side effect (at least the 
+     *   {@link RuleExecutionContext#getStatus() status}, possibly also the 
+     *   {@link RuleExecutionContext#getRhsValues()} RHS values).
+     * @return <code>true</code> if the {@link RuleExecutionContext#getRule() rule} is applicable, <code>false</code>
+     *   else
+     * @throws VilException in case of execution / evaluation problems
+     */
+    protected boolean prepareExecution(RuleExecutionContext context) throws VilException {
+        boolean goOn;
+        Rule rule = context.getRule();
+        if (rule.isPlaceholder()) {
+            context.setStatus(Status.NOT_APPLICABLE);
+            goOn = false;
+        } else {
+            ruleStack.push(context);
+            context.setStatus(Status.SUCCESS);
+            environment.pushLevel(); 
+            // evaluate parameter and replace generic matches
+            registerParameter(rule);
+            resolveMatches(rule, Side.RHS);
+            resolveMatches(rule, Side.LHS);
+            int rhsCondCount = rule.getRuleConditionCount(Side.RHS);
+            if (rhsCondCount > 0) {
+                Object[] rhsValues = new Object[rhsCondCount];
+                context.setStatus(determineRhsLhsMatching(rule, rhsValues));
+                context.setRhsValues(rhsValues);
+            }
+            for (int c = 0; Status.SUCCESS == context.getStatus() && c < rule.getRuleCallCount(Side.RHS); c++) {
+                RuleCallExpression ex = rule.getRuleCall(Side.RHS, c);
+                RuleExecutionResult res = (RuleExecutionResult) ex.accept(this);
+                if (Status.FAIL == res.getStatus()) {
+                    context.setStatus(Status.FAIL); // don't care fore not_applicable or success
+                }
+                environment.addValue(rule.getVariable(Side.RHS, rhsCondCount + c), res);
+                context.add(res);
+            }
+            goOn = true;
+        }
+        return goOn;
+    }
+    
+    /**
+     * Checks the postconditions of the {@link RuleExecutionContext#getRule() rule}. Call 
+     * {@link #prepareExecution(RuleExecutionContext)} before and 
+     * {@link #cleanupRuleExecution(RuleExecutionContext)} after.
+     * 
+     * @param context the execution context, to be modified as a side effect with respect to the
+     *   {@link RuleExecutionContext#getStatus() status}
+     * @throws VilException in case of execution / evaluation problems
+     */
+    protected void checkPostconditions(RuleExecutionContext context) throws VilException {
+        Rule rule = context.getRule();
+        for (int c = 0; Status.SUCCESS == context.getStatus() && c < rule.getRuleConditionCount(Side.LHS); c++) {
+            AbstractRuleMatchExpression ex = rule.getRuleCondition(Side.LHS, c);
+            if (!checkConditionResult(ex.accept(this), ex, ConditionTest.EXISTS)) {
+                context.setStatus(Status.FAIL);
+                tracer.failedAt(ex);
+            }
+        }
+    }
+
+    /**
+     * Cleans up the rule execution. 
+     * 
+     * @param context the execution context
+     * @throws VilException in case of execution problems
+     */
+    protected void cleanupRuleExecution(RuleExecutionContext context) throws VilException {
+        if (Status.NOT_APPLICABLE != context.getStatus()) {
+            Rule rule = context.getRule();
+            ruleStack.pop();
+            environment.popLevel();
+            if (Status.FAIL == context.getStatus()) {
+                this.failed.add(rule);
+            }
+        }
     }
 
     @Override
-    public Object visitRuleCallExpression(RuleCallExpression ex) throws ExpressionException {
+    public Object visitRuleCallExpression(RuleCallExpression ex) throws VilException {
         return visitModelCallExpression(ex);
     }
 
     @Override
-    protected Object executeModelCall(Rule rule) throws VilLanguageException {
+    protected Object executeModelCall(Rule rule) throws VilException {
         return rule.accept(this);
     }
 
     @Override
-    public Object visitPathMatchExpression(PathMatchExpression expression) throws ExpressionException {
+    public Object visitPathMatchExpression(PathMatchExpression expression) throws VilException {
         return expression.evaluate(this);
     }
     
     @Override
-    public Object visitStringMatchExpression(StringMatchExpression expression) throws ExpressionException {
+    public Object visitBooleanMatchExpression(BooleanMatchExpression expression) throws VilException {
+        return expression.getExpression().accept(this);
+    }
+    
+    @Override
+    public Object visitStringMatchExpression(StringMatchExpression expression) throws VilException {
         return expression.evaluate(this);
     }
     
     @Override
-    public Object visitArtifactMatchExpression(ArtifactMatchExpression expression) throws ExpressionException {
+    public Object visitArtifactMatchExpression(ArtifactMatchExpression expression) throws VilException {
         return expression.evaluate(this);
     }
 
     @Override
-    public Object visitCollectionMatchExpression(CollectionMatchExpression expression) throws ExpressionException {
+    public Object visitCollectionMatchExpression(CollectionMatchExpression expression) throws VilException {
         return expression.evaluate(this);
     }
 
     @Override
-    public Object visitJoinExpression(JoinExpression ex) throws ExpressionException {
+    public Object visitJoinExpression(JoinExpression ex) throws VilException {
         environment.pushLevel();
-        Object result;
-        try {
-            result = join(ex);
-        } catch (VilLanguageException e) {
-            throw new ExpressionException(e);
-        } 
-        try {
-            environment.popLevel();
-        } catch (ArtifactException e) {
-            throw new ExpressionException(e);
-        }
+        Object result = join(ex);
+        environment.popLevel();
         return result;
     }
     
@@ -977,11 +1108,11 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
      * 
      * @param var the variable to be evaluated
      * @return the evaluation result
-     * @throws ExpressionException in case of expression evaluation errors
+     * @throws VilException in case of expression evaluation errors
      */
     @SuppressWarnings("unchecked")
     private Collection<Object> evaluate(JoinVariableDeclaration var) 
-        throws ExpressionException {
+        throws VilException {
         return (Collection<Object>) var.getExpression().accept(this);
     }
     
@@ -1012,10 +1143,9 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
      * 
      * @param join the join expression to be evaluated
      * @return the join result
-     * @throws ExpressionException in case of expression problems
-     * @throws VilLanguageException in case of execution problems
+     * @throws VilException in case of execution problems
      */
-    private Object join(JoinExpression join) throws ExpressionException, VilLanguageException {
+    private Object join(JoinExpression join) throws VilException {
         List<IVilType> simpleResult = new ArrayList<IVilType>();
         List<IVilType[]> complexResult = new ArrayList<IVilType[]>();
         // simple (inefficient) join for the initial implementation...
@@ -1083,9 +1213,9 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
      * @param join the join expression
      * @param index the index of the variable
      * @param value the value
-     * @throws VilLanguageException in case that setting the variable fails
+     * @throws VilException in case that setting the variable fails
      */
-    private void setJoinVariableValue(JoinExpression join, int index, Object value) throws VilLanguageException {
+    private void setJoinVariableValue(JoinExpression join, int index, Object value) throws VilException {
         environment.addValue(join.getVariable(index), value);
     }
 
@@ -1095,11 +1225,10 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
      * @param join the join to be evaluated
      * @param simpleResult modified in case of 1-sided joins
      * @param complexResult modified in case of multi-sided joins
-     * @throws ExpressionException in case that the evaluation fails
-     * @throws VilLanguageException in case that the evaluation fails
+     * @throws VilException in case that the evaluation fails
      */
     private void evaluateJoinCombination(JoinExpression join, List<IVilType> simpleResult, 
-        List<IVilType[]> complexResult) throws ExpressionException, VilLanguageException {
+        List<IVilType[]> complexResult) throws VilException {
         Boolean bool;
         if (null != join.getCondition()) {
             bool = (Boolean) join.getCondition().accept(this);
@@ -1127,10 +1256,9 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
      * 
      * @return the types
      */
-    @SuppressWarnings("unchecked")
-    private static Class<? extends IVilType>[] types(JoinExpression join) {
+    private static Class<?>[] types(JoinExpression join) {
         int count = join.getVisibleVariablesCount();
-        Class<? extends IVilType>[] result = new Class[count];
+        Class<?>[] result = new Class[count];
         for (int i = 0; i < count; i++) {
             result[i] = join.getVisibleVariable(i).getType().getTypeClass();
         }
@@ -1138,16 +1266,12 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
     }
 
     @Override
-    public Object visitJoinVariableDeclaration(JoinVariableDeclaration decl) throws VilLanguageException {
-        try {
-            return decl.getExpression().accept(this);
-        } catch (ExpressionException e) {
-            throw new VilLanguageException(e);
-        }
+    public Object visitJoinVariableDeclaration(JoinVariableDeclaration decl) throws VilException {
+        return decl.getExpression().accept(this);
     }
     
     @Override
-    public Object visitAlternativeExpression(AlternativeExpression alt) throws ExpressionException {
+    public Object visitAlternativeExpression(AlternativeExpression alt) throws VilException {
         Object result = null;
         Object condition = alt.getCondition().accept(this);
         if (condition instanceof Boolean) {
@@ -1163,35 +1287,29 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
                 RuleExecutionContext context = ruleStack.peek();
                 boolean failed = false;
                 IRuleElement determinesResult = Utils.findLastExpressionStatement(execute);
-                try {
-                    environment.pushLevel();
-                    for (int e = 0; !failed && e < execute.getBodyElementCount(); e++) {
-                        IRuleElement elt = execute.getBodyElement(e);
-                        Object eltRes = elt.accept(this);
-                        context.add(eltRes);
-                        if (elt == determinesResult) {
-                            result = eltRes; // collect the last one
-                        } else if (mayFail(elt)) {
-                            failed = !checkConditionResult(eltRes, elt, ConditionTest.DONT_CARE);
-                        }
+                environment.pushLevel();
+                for (int e = 0; !failed && e < execute.getBodyElementCount(); e++) {
+                    IRuleElement elt = execute.getBodyElement(e);
+                    Object eltRes = elt.accept(this);
+                    context.add(eltRes);
+                    if (elt == determinesResult) {
+                        result = eltRes; // collect the last one
+                    } else if (mayFail(elt)) {
+                        failed = !checkConditionResult(eltRes, elt, ConditionTest.DONT_CARE);
                     }
-                    environment.popLevel();
-                } catch (VilLanguageException e) {
-                    throw new ExpressionException(e);
-                } catch (ArtifactException e) {
-                    throw new ExpressionException(e);
                 }
+                environment.popLevel();
             }
         }
         return result;
     }
 
     @Override
-    public Object visitMapExpression(MapExpression map) throws ExpressionException {
+    public Object visitMapExpression(MapExpression map) throws VilException {
         boolean failed = false;
         List<Object> result;
         RuleExecutionContext context = ruleStack.peek();
-        TypeDescriptor<? extends IVilType> mapType = map.inferType();
+        TypeDescriptor<?> mapType = map.inferType();
         result = TypeRegistry.voidType() == mapType ? null : new ArrayList<Object>(); 
         try {
             environment.pushLevel();
@@ -1234,18 +1352,12 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
                 }
             }
             tracer.visitedMap(map, environment);
-        } catch (VilLanguageException e) {
-            throw new ExpressionException(e);
         } catch (ClassCastException e) { // for handcrafted models
-            throw new ExpressionException(e.getMessage(), VilLanguageException.ID_INTERNAL); 
+            throw new VilException(e.getMessage(), VilException.ID_INTERNAL); 
         } catch (IndexOutOfBoundsException e) { // for handcrafted models
-            throw new ExpressionException("index out of bounds " + e.getMessage(), VilLanguageException.ID_INTERNAL);
+            throw new VilException("index out of bounds " + e.getMessage(), VilException.ID_INTERNAL);
         } 
-        try {
-            environment.popLevel();
-        } catch (ArtifactException e) {
-            throw new ExpressionException(e);
-        }
+        environment.popLevel();
         return mapResult(mapType, result, failed);
     }
     
@@ -1257,15 +1369,15 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
      * @param failed whether the actual execution failed
      * @return the return object for the map
      */
-    private static Object mapResult(TypeDescriptor<? extends IVilType> mapType, List<Object> result, boolean failed) {
+    private static Object mapResult(TypeDescriptor<?> mapType, List<Object> result, boolean failed) {
         Object mapResult;
         if (null == result) {
             mapResult = !failed; // no problem as not processed further and allows further execution
         } else {
-            TypeDescriptor<? extends IVilType>[] param;
-            if (1 == mapType.getParameterCount()) {
+            TypeDescriptor<?>[] param;
+            if (1 == mapType.getGenericParameterCount()) {
                 param = TypeDescriptor.createArray(1);
-                param[0] = mapType.getParameterType(0);
+                param[0] = mapType.getGenericParameterType(0);
             } else {
                 param = null;
             }
@@ -1276,12 +1388,14 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
     }
     
     @Override
-    public Object visitConstantExpression(ConstantExpression cst) throws ExpressionException {
+    public Object visitConstantExpression(ConstantExpression cst) throws VilException {
         Object result = cst.getValue();
         // we have to care for $name and ${} but only in strings
-        if (result instanceof String) {
-            result = StringReplacer.substitute(result.toString(), environment, getExpressionParser(), this);
-        }
+//        if (result instanceof String) {
+//            System.out.println("BuildLangExecution: " +  result);
+
+//            result = StringReplacer.substitute(result.toString(), environment, getExpressionParser(), this);
+//        }
         return result;
     }
 
@@ -1292,7 +1406,7 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
     
     @Override
     protected void handleParameterInSequence(IResolvableModel<VariableDeclaration> model, 
-        Map<String, VariableDeclaration> varMap) throws VilLanguageException {
+        Map<String, VariableDeclaration> varMap) throws VilException {
         if (model.getParameterCount() >= 3) {
             // check default sequence instead, source, config, target, optional
             boolean ok = IvmlTypes.projectType().isAssignableFrom(model.getParameter(0).getType());
@@ -1315,9 +1429,9 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
      * @param project the project to resolve the script on
      * @param restrictions the version restrictions (may be <b>null</b>)
      * @return the resolved script
-     * @throws ExpressionException in case that the version is not valid or that the script cannot be found
+     * @throws VilException in case that the version is not valid or that the script cannot be found
      */
-    private Script resolveScript(Project project, IVersionRestriction restrictions) throws ExpressionException {
+    private Script resolveScript(Project project, IVersionRestriction restrictions) throws VilException {
         Script script = null;
         //ModelInfo<Script> info = null;
         AvailableModels<Script> available = BuildModel.INSTANCE.availableModels();
@@ -1327,7 +1441,7 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
             script = BuildModel.INSTANCE.resolve(project.getName(), restrictions, 
                 currentInfo.getLocation(), environment);
         } catch (ModelManagementException e) {
-            throw new ExpressionException(e.getMessage(), e.getId());
+            throw new VilException(e.getMessage(), e.getId());
         }
         /*List<ModelInfo<Script>> infos = available.getVisibleModelInfo(project.getName(), currentInfo.getLocation());
         if (null != infos) {
@@ -1361,7 +1475,7 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
     }
     
     @Override
-    public Object visitInstantiateExpression(InstantiateExpression inst) throws ExpressionException {
+    public Object visitInstantiateExpression(InstantiateExpression inst) throws VilException {
         // no tracer needed, will happen in ex.accept
         Script script = null;
         String name = null;
@@ -1370,26 +1484,22 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
             if (null == name) {
                 name = DEFAULT_MAIN_RULE;
             }
-            try {
-                Object pr = environment.getValue(inst.getProject());
-                if (pr instanceof Project) {
-                    Project project = (Project) pr;
-                    script = resolveScript(project, inst.getVersionRestriction()); // resolve it in the local context
-                    if (null == script) { // fallback - ask the project
-                        script = project.getMainVilScript();  
-                    }
-                    if (null == script) {
-                        // this may only happen if the projects are initially passed in as files
-                        throw new ExpressionException("cannot resolve script " + name + " in project " 
-                            + project.getName() , ExpressionException.ID_RUNTIME);
-                    }
+            Object pr = environment.getValue(inst.getProject());
+            if (pr instanceof Project) {
+                Project project = (Project) pr;
+                script = resolveScript(project, inst.getVersionRestriction()); // resolve it in the local context
+                if (null == script) { // fallback - ask the project
+                    script = project.getMainVilScript();  
                 }
-            } catch (VilLanguageException e) {
-                throw new ExpressionException(e);
+                if (null == script) {
+                    // this may only happen if the projects are initially passed in as files
+                    throw new VilException("cannot resolve script " + name + " in project " 
+                        + project.getName() , VilException.ID_RUNTIME);
+                }
             }
             if (null == script) {
                 // this may only happen if the projects are initially passed in as files
-                throw new ExpressionException("cannot resolve script " + name, ExpressionException.ID_RUNTIME);
+                throw new VilException("cannot resolve script " + name, VilException.ID_RUNTIME);
             }
             resolver.pushModel(script);
         } else {
@@ -1405,19 +1515,37 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
             resolver.popModel();
         }
         if (null == ex) {
-            throw new ExpressionException("cannot resolve rule " + name, ExpressionException.ID_RUNTIME);
+            throw new VilException("cannot resolve rule " + name, VilException.ID_RUNTIME);
         }
         Object result;
         if (null == script) {
             result = ex.accept(this);
         } else {
-            try {
-                result = executeScript(script, ex);
-            } catch (VilLanguageException e) {
-                throw new ExpressionException(e);
-            }
+            result = executeScript(script, ex);
         }
         return result;
+    }
+
+    @Override
+    public Object visitCompoundMatchExpression(CompoundMatchExpression expression) throws VilException {
+        return expression.evaluate(this);
+    }
+    
+    @Override
+    public Object visitResolvableOperationCallExpression(ResolvableOperationCallExpression ex) throws VilException {
+        Object result;
+        Object val = environment.getValue(ex.getVariable());
+        if (val instanceof IBuildlangElement) {
+            result = ((IBuildlangElement) val).accept(this);
+        } else {
+            result = super.visitResolvableOperationCallExpression(ex);
+        }
+        return result;
+    }
+
+    @Override
+    public Object visitTypedef(Typedef typedef) throws VilException {
+        return null; // typedefs are processed during parsing
     }
 
 }

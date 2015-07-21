@@ -2,7 +2,7 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Binary;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Text;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationMeta;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
 
@@ -27,7 +27,7 @@ public abstract class CompositeArtifact implements IArtifact, IArtifactChangedLi
     public abstract Set<? extends FragmentArtifact> selectAll();
     
     @Override
-    public final Text getText() throws ArtifactException {
+    public final Text getText() throws VilException {
         if (null == textRepresentation) {
             textRepresentation = createText();
             listeners.registerListener(textRepresentation);
@@ -37,7 +37,7 @@ public abstract class CompositeArtifact implements IArtifact, IArtifactChangedLi
     }
 
     @Override
-    public final Binary getBinary() throws ArtifactException {
+    public final Binary getBinary() throws VilException {
         if (null == binaryRepresentation) {
             binaryRepresentation = createBinary();
             listeners.registerListener(binaryRepresentation);
@@ -47,7 +47,7 @@ public abstract class CompositeArtifact implements IArtifact, IArtifactChangedLi
     }
     
     @Override
-    public void artifactChanged(Object cause) throws ArtifactException {
+    public void artifactChanged(Object cause) throws VilException {
         representationChanged = true;
     }
     
@@ -88,21 +88,21 @@ public abstract class CompositeArtifact implements IArtifact, IArtifactChangedLi
      * this method and registers the listeners appropriately.
      * 
      * @return the created text representation
-     * @throws ArtifactException in case of serious problems creating the representation
+     * @throws VilException in case of serious problems creating the representation
      */
-    protected abstract Text createText() throws ArtifactException;
+    protected abstract Text createText() throws VilException;
 
     /**
      * Actually creates the binary representation. Please note that {@link #getBinary()} calls
      * this method and registers the listeners appropriately.
      * 
      * @return the created binary representation
-     * @throws ArtifactException in case of serious problems creating the representation
+     * @throws VilException in case of serious problems creating the representation
      */
-    protected abstract Binary createBinary() throws ArtifactException;
+    protected abstract Binary createBinary() throws VilException;
 
     @Override
-    public void update() throws ArtifactException {
+    public void update() throws VilException {
         if (null != binaryRepresentation) {
             binaryRepresentation.updateContents();
         }

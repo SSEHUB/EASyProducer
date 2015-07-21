@@ -1,0 +1,3 @@
+-> main(Project, Configuration, Project, LifecycleEvent) with (<project>, <config>, <project>, <LifecycleEvent>)
+    -> t1()
+    -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)

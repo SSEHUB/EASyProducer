@@ -10,7 +10,7 @@ import java.util.regex.PatternSyntaxException;
 import org.apache.commons.io.FileUtils;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IArtifactChangedListener;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IStringValueProvider;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
 
@@ -44,9 +44,9 @@ public class Text extends AbstractArtifactRepresentation implements IArtifactCha
      * @param file the file to be considered as input
      * @param modifiable whether this representation shall be modifiable
      * 
-     * @throws ArtifactException in case that reading fails for some reason
+     * @throws VilException in case that reading fails for some reason
      */
-    public Text(File file, boolean modifiable) throws ArtifactException {
+    public Text(File file, boolean modifiable) throws VilException {
         super(modifiable);
         this.file = file;
         updateContents();
@@ -58,20 +58,20 @@ public class Text extends AbstractArtifactRepresentation implements IArtifactCha
      * @param text the text to be considered as input
      * @param modifiable whether this representation shall be modifiable
      * 
-     * @throws ArtifactException in case that reading fails for some reason
+     * @throws VilException in case that reading fails for some reason
      */
-    public Text(String text, boolean modifiable) throws ArtifactException {
+    public Text(String text, boolean modifiable) throws VilException {
         super(modifiable);
         this.text = text;
     }
 
     @Override
-    public void updateContents() throws ArtifactException {
+    public void updateContents() throws VilException {
         if (null != file && file.exists()) {           
             try {
                 text = FileUtils.readFileToString(file);
             } catch (IOException e) {
-                throw new ArtifactException(e, ArtifactException.ID_IO);
+                throw new VilException(e, VilException.ID_IO);
             }
         } else {
             text = "";
@@ -90,9 +90,9 @@ public class Text extends AbstractArtifactRepresentation implements IArtifactCha
      * @param regex the regular expression to search for
      * @param replacement the replacement
      * @return <b>this</b> (for concatenated operations)
-     * @throws ArtifactException in case that listener updates fail
+     * @throws VilException in case that listener updates fail
      */
-    public Text substitute(String regex, String replacement) throws ArtifactException {
+    public Text substitute(String regex, String replacement) throws VilException {
         if (isModifiable()) {
             text = text.replaceAll(regex, replacement);
             triggerArtifactChanged();
@@ -106,14 +106,14 @@ public class Text extends AbstractArtifactRepresentation implements IArtifactCha
      * @param regex the regular expression to be matched
      * @return <code>true</code> if <code>regex</code> matches this textual representation, 
      *   <code>false</code> else
-     * @throws ArtifactException if the pattern is invalid
+     * @throws VilException if the pattern is invalid
      */
-    public boolean matches(String regex) throws ArtifactException {
+    public boolean matches(String regex) throws VilException {
         try {
             Pattern pattern = Pattern.compile(regex, Pattern.DOTALL);
             return pattern.matcher(text).matches();
         } catch (PatternSyntaxException e) {
-            throw new ArtifactException(e.getMessage(), ArtifactException.ID_INVALID_PATTERN);
+            throw new VilException(e.getMessage(), VilException.ID_INVALID_PATTERN);
         }
     }
 
@@ -123,9 +123,9 @@ public class Text extends AbstractArtifactRepresentation implements IArtifactCha
      * @param search the string to search for
      * @param replacement the replacement string
      * @return <b>this</b> (for concatenated operations)
-     * @throws ArtifactException in case that listener updates fail
+     * @throws VilException in case that listener updates fail
      */
-    public Text replace(String search, String replacement) throws ArtifactException {
+    public Text replace(String search, String replacement) throws VilException {
         if (isModifiable()) {
             text = text.replace(search, replacement);
             triggerArtifactChanged();
@@ -138,9 +138,9 @@ public class Text extends AbstractArtifactRepresentation implements IArtifactCha
      * 
      * @param text the text to be appended
      * @return <b>this</b> (for concatenated operations)
-     * @throws ArtifactException in case that listener updates fail
+     * @throws VilException in case that listener updates fail
      */
-    public Text append(String text) throws ArtifactException {
+    public Text append(String text) throws VilException {
         if (isModifiable()) {
             this.text = this.text + text;
             triggerArtifactChanged();
@@ -153,9 +153,9 @@ public class Text extends AbstractArtifactRepresentation implements IArtifactCha
      * 
      * @param text the text to be prepended
      * @return <b>this</b> (for concatenated operations)
-     * @throws ArtifactException in case that listener updates fail
+     * @throws VilException in case that listener updates fail
      */
-    public Text prepend(String text) throws ArtifactException {
+    public Text prepend(String text) throws VilException {
         if (isModifiable()) {
             this.text = text + this.text;
             triggerArtifactChanged();
@@ -168,9 +168,9 @@ public class Text extends AbstractArtifactRepresentation implements IArtifactCha
      * 
      * @param text the text to be appended
      * @return <b>this</b> (for concatenated operations)
-     * @throws ArtifactException in case that listener updates fail
+     * @throws VilException in case that listener updates fail
      */
-    public Text append(Text text) throws ArtifactException {
+    public Text append(Text text) throws VilException {
         if (isModifiable()) {
             this.text = this.text + text.text;
             triggerArtifactChanged();
@@ -183,9 +183,9 @@ public class Text extends AbstractArtifactRepresentation implements IArtifactCha
      * 
      * @param text the text to be prepended
      * @return <b>this</b> (for concatenated operations)
-     * @throws ArtifactException in case that listener updates fail
+     * @throws VilException in case that listener updates fail
      */
-    public Text prepend(Text text) throws ArtifactException {
+    public Text prepend(Text text) throws VilException {
         if (isModifiable()) {
             this.text = text.text + this.text;
             triggerArtifactChanged();
@@ -200,9 +200,9 @@ public class Text extends AbstractArtifactRepresentation implements IArtifactCha
      * @param index the index in <b>this</b>
      * @param insertion the text to be inserted
      * @return <b>this</b> (for concatenated operations)
-     * @throws ArtifactException in case that listener updates fail
+     * @throws VilException in case that listener updates fail
      */
-    public Text insert(int index, Text insertion) throws ArtifactException {
+    public Text insert(int index, Text insertion) throws VilException {
         return insert(index, insertion.text);
     }
     
@@ -212,9 +212,9 @@ public class Text extends AbstractArtifactRepresentation implements IArtifactCha
      * @param index the index in <b>this</b>
      * @param insertion the string to be inserted
      * @return <b>this</b> (for concatenated operations)
-     * @throws ArtifactException in case that listener updates fail
+     * @throws VilException in case that listener updates fail
      */
-    public Text insert(int index, String insertion) throws ArtifactException {
+    public Text insert(int index, String insertion) throws VilException {
         if (isModifiable() && index <= this.text.length()) {
             String before = this.text.substring(0, index);
             String after = this.text.substring(index, this.text.length());
@@ -344,9 +344,9 @@ public class Text extends AbstractArtifactRepresentation implements IArtifactCha
      * 
      * @param part the textual representation of another artifact to be removed
      * @return <b>this</b> (for concatenated operations)
-     * @throws ArtifactException ArtifactException in case that listener updates fail
+     * @throws VilException ArtifactException in case that listener updates fail
      */
-    public Text remove(Text part) throws ArtifactException {
+    public Text remove(Text part) throws VilException {
         return remove(part.text);
     }
     
@@ -355,9 +355,9 @@ public class Text extends AbstractArtifactRepresentation implements IArtifactCha
      * 
      * @param part the string to be removed
      * @return <b>this</b> (for concatenated operations)
-     * @throws ArtifactException ArtifactException in case that listener updates fail
+     * @throws VilException ArtifactException in case that listener updates fail
      */
-    public Text remove(String part) throws ArtifactException {
+    public Text remove(String part) throws VilException {
         if (isModifiable()) {
             if (this.text.contains(part)) {
                 String before = this.text.substring(0, this.indexOf(part));
@@ -419,9 +419,9 @@ public class Text extends AbstractArtifactRepresentation implements IArtifactCha
      * 
      * @param part the textual representation of another artifact to be removed
      * @return <b>this</b> (for concatenated operations)
-     * @throws ArtifactException ArtifactException in case that listener updates fail
+     * @throws VilException ArtifactException in case that listener updates fail
      */
-    public Text removeAll(Text part) throws ArtifactException {
+    public Text removeAll(Text part) throws VilException {
         return removeAll(part.text);
     }
     
@@ -430,9 +430,9 @@ public class Text extends AbstractArtifactRepresentation implements IArtifactCha
      * 
      * @param part the string to be removed
      * @return <b>this</b> (for concatenated operations)
-     * @throws ArtifactException ArtifactException in case that listener updates fail
+     * @throws VilException in case that listener updates fail
      */
-    public Text removeAll(String part) throws ArtifactException {
+    public Text removeAll(String part) throws VilException {
         Text result = this;
         if (isModifiable()) {
             while (this.text.contains(part) || containsRegex(part)) {
@@ -477,7 +477,7 @@ public class Text extends AbstractArtifactRepresentation implements IArtifactCha
     }
 
     @Override
-    public void artifactChanged(Object cause) throws ArtifactException {
+    public void artifactChanged(Object cause) throws VilException {
         updateContents();
     }
     
@@ -486,12 +486,11 @@ public class Text extends AbstractArtifactRepresentation implements IArtifactCha
      * 
      * @param text the text to be changed
      */
-    @Invisible
     public void setText(String text) {
         this.text = text;
         try {
             triggerArtifactChanged();
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             // unsure
         }
     }

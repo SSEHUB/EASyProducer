@@ -21,7 +21,7 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
  * The IFreezable interface represents model elements that can be frozen
  * in a freeze block. 
  **/
-public interface IFreezable {
+public interface IFreezable extends IAttributeAccess {
     
     /** 
      * Returns the name of the freezable.

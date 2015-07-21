@@ -1,0 +1,6 @@
+global <- 0
+-> main(Project, Configuration, Project) with (<project>, <config>, <project>)
+    -> t()
+    -> +(Integer, Integer) with (0, 1) = 1
+    global <- 1
+    -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)

@@ -2,8 +2,8 @@ package de.uni_hildesheim.sse.ui.wizards;
 
 import org.eclipse.jface.viewers.ISelection;
 
-import de.uni_hildesheim.sse.vil.wizards.AbstractFiletypeWizardPage;
-import de.uni_hildesheim.sse.vil.wizards.IWizardPageFactory;
+import de.uni_hildesheim.sse.dslcore.ui.wizards.AbstractFiletypeWizardPage;
+import de.uni_hildesheim.sse.dslcore.ui.wizards.IWizardPageFactory;
 
 /**
  * Creates the contents of the {@link VILFiletypeWizard}.

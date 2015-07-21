@@ -1,0 +1,5 @@
+project EASyDemoCommandsFile {
+
+	version v0;
+	import EASyDemoCommandsPlatform;
+}

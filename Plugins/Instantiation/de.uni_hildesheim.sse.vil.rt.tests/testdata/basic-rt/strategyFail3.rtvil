@@ -1,0 +1,13 @@
+rtVilScript strategyFail3 (Project source, Configuration config, Project target) {
+
+    strategy s3() = {
+        objective true;
+        breakdown {
+            strategy t1();
+        }
+    }
+
+    tactic t1() = {
+    }
+
+}

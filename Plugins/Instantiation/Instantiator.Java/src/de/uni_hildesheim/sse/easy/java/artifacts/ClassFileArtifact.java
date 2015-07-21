@@ -4,8 +4,8 @@ import java.io.File;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FileArtifact;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArraySet;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationMeta;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
 
@@ -40,12 +40,12 @@ public class ClassFileArtifact extends FileArtifact {
     }
 
     @Override
-    public void artifactChanged(Object cause) throws ArtifactException {
+    public void artifactChanged(Object cause) throws VilException {
         // TODO 
     }
 
     @Override
-    public void store() throws ArtifactException {
+    public void store() throws VilException {
         // TODO consider super
     }
     

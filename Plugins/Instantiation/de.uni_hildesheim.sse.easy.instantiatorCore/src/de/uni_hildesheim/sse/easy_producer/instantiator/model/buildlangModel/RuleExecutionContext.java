@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IArtifact;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.RuleExecutionResult.Status;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Collection;
 
 /**
@@ -17,6 +18,8 @@ public class RuleExecutionContext {
     private Rule rule;
     private Set<IArtifact> result;
     private Set<IArtifact> allResults;
+    private Status status;
+    private Object[] rhsValues;
 
     /**
      * Creates a rule execution context.
@@ -24,7 +27,7 @@ public class RuleExecutionContext {
      * @param rule the rule being executed
      * @param environment the runtime environment holding the OTHERPROJECTS variable
      */
-    RuleExecutionContext(Rule rule, RuntimeEnvironment environment) {
+    public RuleExecutionContext(Rule rule, RuntimeEnvironment environment) {
         this.rule = rule;
         this.result = new HashSet<IArtifact>();
         this.allResults = new HashSet<IArtifact>();
@@ -36,7 +39,7 @@ public class RuleExecutionContext {
      * 
      * @return the rule
      */
-    Rule getRule() {
+    public Rule getRule() {
         return rule;
     }
 
@@ -96,6 +99,52 @@ public class RuleExecutionContext {
      */
     java.util.Collection<IArtifact> resultAsCollection() {
         return result;        
+    }
+    
+    /**
+     * Defines the actual execution status.
+     * 
+     * @param status the new execution status
+     */
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    /**
+     * Defines the actual execution status. [convenience]
+     * 
+     * @param object the new execution status or execution result
+     * @see Status#toStatus(Object)
+     */
+    public void setStatus(Object object) {
+        setStatus(Status.toStatus(status));
+    }
+
+    /**
+     * Returns the actual execution status.
+     * 
+     * @return the actual execution status (<b>null</b> if not set)
+     */
+    public Status getStatus() {
+        return status;
+    }
+
+    /**
+     * Returns the actual evaluation results of the RHS expressions.
+     * 
+     * @return the actual values (<b>null</b> if not set)
+     */
+    public Object[] getRhsValues() {
+        return rhsValues;
+    }
+
+    /**
+     * Defines the actual evaluation results of the RHS expressions.
+     * 
+     * @param rhsValues the actual values (<b>null</b> if not set)
+     */
+    void setRhsValues(Object[] rhsValues) {
+        this.rhsValues = rhsValues;
     }
 
 }

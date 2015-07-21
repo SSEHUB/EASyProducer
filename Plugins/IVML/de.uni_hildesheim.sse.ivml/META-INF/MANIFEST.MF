@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: de.uni_hildesheim.sse.ivml
 Bundle-Vendor: University of Hildesheim - SSE
-Bundle-Version: 0.10.3
+Bundle-Version: 1.0.0
 Bundle-SymbolicName: de.uni_hildesheim.sse.ivml;singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.xtext;bundle-version="2.5.0";visibility:=reexport,
@@ -19,9 +19,10 @@ Require-Bundle: org.eclipse.xtext;bundle-version="2.5.0";visibility:=reexport,
  org.eclipse.osgi.services,
  org.eclipse.xtext.common.types,
  org.eclipse.core.runtime,
+ com.google.guava,
  de.uni_hildesheim.sse.varModel;bundle-version="0.0.3";visibility:=reexport,
  de.uni_hildesheim.sse.dslCore;bundle-version="0.0.1";visibility:=reexport,
- org.eclipse.emf.mwe2.launch;bundle-version="2.5.0"
+ org.eclipse.emf.mwe2.launch;bundle-version="2.5.0";resolution:=optional
 Service-Component: OSGI-INF/ivmlParser.xml
 Import-Package: org.apache.log4j,
  org.apache.commons.logging,

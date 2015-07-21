@@ -1,0 +1,58 @@
+@advice(QM)
+template pipelinesXml(Configuration config, FileArtifact target, sequenceOf(DecisionVariable) pipelines, String interfaceArtifact) {
+
+	def appendBasics(Text text) {
+		text.append("<project name=\"pipelines\" default=\"deploy\" basedir=\".\">
+
+    <property file=\""+"$"+"{user.home}/global-build.properties\"/>
+    <property file=\""+"$"+"{user.home}/qualimaster-build.properties\"/>
+    <include file=\""+"$"+"{user.home}/macros.xml\"/>
+
+    <!--
+    <taskdef uri=\"antlib:org.jacoco.ant\" resource=\"org/jacoco/ant/antlib.xml\"/>
+
+    <path id=\"easyTaskDef.lib\">
+      <fileset dir=\""+"$"+"{home.base.dir}/"+"$"+"{projects.standalone.dir}/build/generatedLibs.ex/dist\">
+        <include name=\"*.jar\"/>
+      </fileset>
+    </path>
+    -->
+");
+	}
+	
+	def appendPipelinesDeploy(sequenceOf(DecisionVariable) pipelines, Text text) {
+		for(Pipeline pip : pipelines) {
+			String pipName = pip.name;
+			String artifact = pip.artifact;
+			sequenceOf(String) artList = artifact.split(":");
+			String artifactId = artList[1];
+		    String versionNum = artList[2];
+		    String pipelineJarFileName = artifactId + "-"+versionNum+"-jar-with-dependencies";
+		    text.append("      <mvnDeploy folderName=\"eu/qualimaster/$pipName\" pomFile=\"pipelines/eu/qualimaster/$pipName/pom.xml\" 
+        jarFolder=\"pipelines/eu/qualimaster/$pipName/target\" jarFile= \"${pipelineJarFileName}.jar\"/>\n");
+		}
+	}
+	
+	def appendInterfaceDeploy(String interfaceArtifact, Text text) {
+		sequenceOf(String) artList = interfaceArtifact.split(":");
+		if(artList.size() == 3) {
+			String artifactId = artList[1];
+		    String versionNum = artList[2];
+		    String interfaceJarFileName = artifactId + "-" + versionNum;
+		    text.append("      <mvnDeploy folderName=\"if-gen\" pomFile=\"if-gen/pom.xml\" 
+        jarFolder=\"if-gen/target\" jarFile= \"${interfaceJarFileName}.jar\"/>\n");
+		}		
+	}
+
+	def main(Configuration config, FileArtifact target, sequenceOf(DecisionVariable) pipelines, String interfaceArtifact) {
+		Text text = target.getText();
+//		text.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+		appendBasics(text);
+		text.append("    <target name=\"deploy\">\n");
+		appendPipelinesDeploy(pipelines, text);
+		appendInterfaceDeploy(interfaceArtifact, text);
+		text.append("    </target>\n");
+		text.append("</project>\n");
+		target.rename("pipelines.xml");
+	}
+}

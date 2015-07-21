@@ -1,6 +1,7 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IExpressionVisitor;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 
 /**
  * A specific runtime environment containing the global OTHERPROJECTS variable.
@@ -16,6 +17,22 @@ public class RuntimeEnvironment extends
      * a certain script including imported scripts etc.
      */
     private OtherProjects otherProjects = new OtherProjects();
+
+    /**
+     * Creates a new runtime environment using the default type registry.
+     */
+    public RuntimeEnvironment() {
+        super();
+    }
+
+    /**
+     * Creates a new runtime environment with a given type registry instance.
+     * 
+     * @param typeRegistry the type registry to use
+     */
+    public RuntimeEnvironment(TypeRegistry typeRegistry) {
+        super(typeRegistry);
+    }
 
     /**
      * Returns the other projects variable (for package internal use only).

@@ -15,6 +15,7 @@
  */
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionEvaluator;
 
 /**
@@ -59,7 +60,7 @@ public interface Sequence<T> extends Collection<T> {
      *   type for <code>type</code>)
      */
     @OperationMeta(returnGenerics = IVilType.class)
-    public Sequence<T> selectByType(TypeDescriptor<? extends IVilType> type);
+    public Sequence<T> selectByType(TypeDescriptor<?> type);
 
     /**
      * Exclude the elements in <code>sequence</code>.
@@ -83,23 +84,25 @@ public interface Sequence<T> extends Collection<T> {
      * @param element the element to be added
      * @return <code>element</code>
      */
+    @OperationMeta(genericArgument = {0 })
     public T add(T element);
     
     /**
-     * Removes the given element from this sequence.
+     * Removes the first occurrence of the given element from this sequence.
      * 
      * @param element the element to be removed
+     * @return <code>true</code> of the element was removed, <code>false</code> else
      */
-    public void remove(T element);
+    public boolean remove(T element);
     
     /**
-     * Selects elements in this set according to the given expression.
+     * Selects elements in this sequence according to the given expression.
      * 
      * @param evaluator the evaluator (results must evaluate to Boolean results)
      * @return the selected elements
-     * @throws ArtifactException in case that selection fails
+     * @throws VilException in case that selection fails
      */
-    public Sequence<T> select(ExpressionEvaluator evaluator) throws ArtifactException;
+    public Sequence<T> select(ExpressionEvaluator evaluator) throws VilException;
 
     /**
      * Turns this sequence into a set.
@@ -116,6 +119,24 @@ public interface Sequence<T> extends Collection<T> {
      */
     @OperationMeta(returnGenerics = IVilType.class)
     public Sequence<T> sortAlpha();
+
+    /**
+     * Sorts the elements in this sequence according to the given expression in ascending order.
+     * 
+     * @param evaluator the evaluator
+     * @return the selected elements
+     * @throws VilException in case that selection fails
+     */
+    @OperationMeta(returnGenerics = IVilType.class)
+    public Sequence<T> sort(ExpressionEvaluator evaluator) throws VilException;
+
+    /**
+     * Reverts this sequence.
+     * 
+     * @return the reverted sequence
+     */
+    @OperationMeta(returnGenerics = IVilType.class)
+    public Sequence<T> revert();
     
     /**
      * Returns the first element.
@@ -141,7 +162,7 @@ public interface Sequence<T> extends Collection<T> {
     
     /**
      * Maps the elements of this sequence to the elements of <code>other</code>
-     * and returns the mapping pairs (based on the equals operation). Please note that
+     * and returns the mapping pairs (based on the equals operation) in the given sequence. Please note that
      * both sequences must have exactly one type parameter. 
      * 
      * @param other the second sequence to map against
@@ -149,5 +170,24 @@ public interface Sequence<T> extends Collection<T> {
      */
     @OperationMeta(returnGenerics = {IVilType.class, IVilType.class })
     public Map<T, T> mapSequence(Sequence<T> other);
+
+    /**
+     * Maps the elements of this sequence to the elements of <code>other</code>
+     * and returns the mapping pairs (based on the equals operation) regardless of the sequence. Please note that
+     * both sequences must have exactly one type parameter. 
+     * 
+     * @param other the second sequence to map against
+     * @return the mapping (key is taken from this sequence, value from <code>other</code>)
+     */
+    @OperationMeta(returnGenerics = {IVilType.class, IVilType.class })
+    public Map<T, T> mapAny(Sequence<T> other);
+    
+    /**
+     * Converts back to a list for utilizing this with external classes.
+     * 
+     * @return the internal map
+     */
+    @Invisible
+    public java.util.List<T> toMappedList();
     
 }

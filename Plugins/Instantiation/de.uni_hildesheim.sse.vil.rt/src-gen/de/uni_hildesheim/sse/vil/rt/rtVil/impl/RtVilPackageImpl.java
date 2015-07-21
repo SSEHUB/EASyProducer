@@ -12,9 +12,9 @@ import de.uni_hildesheim.sse.vil.rt.rtVil.ImplementationUnit;
 import de.uni_hildesheim.sse.vil.rt.rtVil.LanguageUnit;
 import de.uni_hildesheim.sse.vil.rt.rtVil.RtVilFactory;
 import de.uni_hildesheim.sse.vil.rt.rtVil.RtVilPackage;
-import de.uni_hildesheim.sse.vil.rt.rtVil.ScriptContents;
 import de.uni_hildesheim.sse.vil.rt.rtVil.StrategyDeclaration;
 import de.uni_hildesheim.sse.vil.rt.rtVil.TacticDeclaration;
+import de.uni_hildesheim.sse.vil.rt.rtVil.WeightingStatement;
 import de.uni_hildesheim.sse.vil.rt.rtVil.rtContents;
 
 import de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage;
@@ -81,6 +81,13 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  private EClass weightingStatementEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   private EClass breakdownStatementEClass = null;
 
   /**
@@ -96,13 +103,6 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * @generated
    */
   private EClass tacticDeclarationEClass = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private EClass scriptContentsEClass = null;
 
   /**
    * Creates an instance of the model <b>Package</b>, registered with
@@ -215,6 +215,16 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EReference getrtContents_Elements()
+  {
+    return (EReference)rtContentsEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getGlobalVariableDeclaration()
   {
     return globalVariableDeclarationEClass;
@@ -305,7 +315,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getStrategyDeclaration_Breakdown()
+  public EReference getStrategyDeclaration_Weighting()
   {
     return (EReference)strategyDeclarationEClass.getEStructuralFeatures().get(5);
   }
@@ -315,9 +325,19 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getStrategyDeclaration_Post()
+  public EReference getStrategyDeclaration_Breakdown()
   {
     return (EReference)strategyDeclarationEClass.getEStructuralFeatures().get(6);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getStrategyDeclaration_Post()
+  {
+    return (EReference)strategyDeclarationEClass.getEStructuralFeatures().get(7);
   }
 
   /**
@@ -358,6 +378,36 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
   public EReference getBreakdownElement_BreakdownStmt()
   {
     return (EReference)breakdownElementEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getWeightingStatement()
+  {
+    return weightingStatementEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getWeightingStatement_Name()
+  {
+    return (EAttribute)weightingStatementEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getWeightingStatement_Expr()
+  {
+    return (EReference)weightingStatementEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -515,26 +565,6 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getScriptContents()
-  {
-    return scriptContentsEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EReference getScriptContents_Elements()
-  {
-    return (EReference)scriptContentsEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public RtVilFactory getRtVilFactory()
   {
     return (RtVilFactory)getEFactoryInstance();
@@ -566,6 +596,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
     createEReference(languageUnitEClass, LANGUAGE_UNIT__RT_CONTENTS);
 
     rtContentsEClass = createEClass(RT_CONTENTS);
+    createEReference(rtContentsEClass, RT_CONTENTS__ELEMENTS);
 
     globalVariableDeclarationEClass = createEClass(GLOBAL_VARIABLE_DECLARATION);
     createEAttribute(globalVariableDeclarationEClass, GLOBAL_VARIABLE_DECLARATION__PERSISTENT);
@@ -577,6 +608,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
     createEReference(strategyDeclarationEClass, STRATEGY_DECLARATION__CONDITIONS);
     createEReference(strategyDeclarationEClass, STRATEGY_DECLARATION__VAR_DECLS);
     createEReference(strategyDeclarationEClass, STRATEGY_DECLARATION__OBJECTIVE);
+    createEReference(strategyDeclarationEClass, STRATEGY_DECLARATION__WEIGHTING);
     createEReference(strategyDeclarationEClass, STRATEGY_DECLARATION__BREAKDOWN);
     createEReference(strategyDeclarationEClass, STRATEGY_DECLARATION__POST);
 
@@ -584,6 +616,10 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
     createEReference(breakdownElementEClass, BREAKDOWN_ELEMENT__VAR_DECL);
     createEReference(breakdownElementEClass, BREAKDOWN_ELEMENT__EXPR_STMT);
     createEReference(breakdownElementEClass, BREAKDOWN_ELEMENT__BREAKDOWN_STMT);
+
+    weightingStatementEClass = createEClass(WEIGHTING_STATEMENT);
+    createEAttribute(weightingStatementEClass, WEIGHTING_STATEMENT__NAME);
+    createEReference(weightingStatementEClass, WEIGHTING_STATEMENT__EXPR);
 
     breakdownStatementEClass = createEClass(BREAKDOWN_STATEMENT);
     createEAttribute(breakdownStatementEClass, BREAKDOWN_STATEMENT__TYPE);
@@ -602,9 +638,6 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
     createEReference(tacticDeclarationEClass, TACTIC_DECLARATION__PARAM_LIST);
     createEReference(tacticDeclarationEClass, TACTIC_DECLARATION__CONDITIONS);
     createEReference(tacticDeclarationEClass, TACTIC_DECLARATION__BLOCK);
-
-    scriptContentsEClass = createEClass(SCRIPT_CONTENTS);
-    createEReference(scriptContentsEClass, SCRIPT_CONTENTS__ELEMENTS);
   }
 
   /**
@@ -642,7 +675,6 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
     // Add supertypes to classes
     implementationUnitEClass.getESuperTypes().add(theVilBuildLanguagePackage.getImplementationUnit());
     languageUnitEClass.getESuperTypes().add(theVilBuildLanguagePackage.getLanguageUnit());
-    scriptContentsEClass.getESuperTypes().add(this.getrtContents());
 
     // Initialize classes and features; add operations and parameters
     initEClass(implementationUnitEClass, ImplementationUnit.class, "ImplementationUnit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -651,6 +683,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
     initEReference(getLanguageUnit_RtContents(), this.getrtContents(), null, "rtContents", null, 0, 1, LanguageUnit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(rtContentsEClass, rtContents.class, "rtContents", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getrtContents_Elements(), ecorePackage.getEObject(), null, "elements", null, 0, -1, rtContents.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(globalVariableDeclarationEClass, GlobalVariableDeclaration.class, "GlobalVariableDeclaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getGlobalVariableDeclaration_Persistent(), ecorePackage.getEString(), "persistent", null, 0, 1, GlobalVariableDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -662,6 +695,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
     initEReference(getStrategyDeclaration_Conditions(), theVilBuildLanguagePackage.getRuleConditions(), null, "conditions", null, 0, 1, StrategyDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getStrategyDeclaration_VarDecls(), theExpressionDslPackage.getVariableDeclaration(), null, "varDecls", null, 0, -1, StrategyDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getStrategyDeclaration_Objective(), theExpressionDslPackage.getExpression(), null, "objective", null, 0, 1, StrategyDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getStrategyDeclaration_Weighting(), this.getWeightingStatement(), null, "weighting", null, 0, 1, StrategyDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getStrategyDeclaration_Breakdown(), this.getBreakdownElement(), null, "breakdown", null, 0, -1, StrategyDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getStrategyDeclaration_Post(), theVilBuildLanguagePackage.getRuleElement(), null, "post", null, 0, -1, StrategyDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -669,6 +703,10 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
     initEReference(getBreakdownElement_VarDecl(), theExpressionDslPackage.getVariableDeclaration(), null, "varDecl", null, 0, 1, BreakdownElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getBreakdownElement_ExprStmt(), theVilBuildLanguagePackage.getExpressionStatement(), null, "exprStmt", null, 0, 1, BreakdownElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getBreakdownElement_BreakdownStmt(), this.getBreakdownStatement(), null, "breakdownStmt", null, 0, 1, BreakdownElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(weightingStatementEClass, WeightingStatement.class, "WeightingStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getWeightingStatement_Name(), ecorePackage.getEString(), "name", null, 0, 1, WeightingStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getWeightingStatement_Expr(), theExpressionDslPackage.getExpression(), null, "expr", null, 0, 1, WeightingStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(breakdownStatementEClass, BreakdownStatement.class, "BreakdownStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getBreakdownStatement_Type(), ecorePackage.getEString(), "type", null, 0, 1, BreakdownStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -687,9 +725,6 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
     initEReference(getTacticDeclaration_ParamList(), theExpressionDslPackage.getParameterList(), null, "paramList", null, 0, 1, TacticDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getTacticDeclaration_Conditions(), theVilBuildLanguagePackage.getRuleConditions(), null, "conditions", null, 0, 1, TacticDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getTacticDeclaration_Block(), theVilBuildLanguagePackage.getRuleElementBlock(), null, "block", null, 0, 1, TacticDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(scriptContentsEClass, ScriptContents.class, "ScriptContents", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getScriptContents_Elements(), ecorePackage.getEObject(), null, "elements", null, 0, -1, ScriptContents.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource
     createResource(eNS_URI);

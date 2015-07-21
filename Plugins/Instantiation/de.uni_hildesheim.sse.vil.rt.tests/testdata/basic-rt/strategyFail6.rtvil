@@ -1,0 +1,23 @@
+rtVilScript strategyFail6 (Project source, Configuration config, Project target) {
+
+    strategy s0(Project source, Configuration config, Project target) = true : true {
+        Integer test = 0;
+        objective test >= 0;
+        breakdown {
+            weighting (id : 1);
+            strategy s2() with (a = 7, b = 9);
+            tactic t1() with (a = true, b = 10);
+        }
+    }
+    
+    strategy s2() = {
+        objective true;
+        breakdown {
+            tactic t1();
+        }
+    }
+
+    tactic t1() = {
+    }
+
+}

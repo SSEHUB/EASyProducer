@@ -21,7 +21,7 @@ import de.uni_hildesheim.sse.easy_producer.core.varMod.container.ProjectContaine
 import de.uni_hildesheim.sse.easy_producer.core.varMod.container.ScriptContainer;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
 import de.uni_hildesheim.sse.model.management.VarModel;
 import de.uni_hildesheim.sse.model.varModel.Project;
@@ -30,7 +30,7 @@ import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
 
 /**
  * Static commands for instantiating projects via the command line or by a build tool. Files/Folders 
- * to be passed in through this interface shall be absolute!<br/>
+ * to be passed in through this interface shall be absolute! This class considers {@link ProjectNameMapper}.<br/>
  * 
  * <b>Before calling any of the methods here, EASy must be loaded via calling {@link LowlevelCommands#startEASy()}.</b>
  * 
@@ -44,7 +44,7 @@ public final class InstantiationCommands {
     private InstantiationCommands() {}
 
     /**
-     * Instatiates the given project.
+     * Instantiates the given project.
      * The project must:
      * <ul>
      * <li>be a valid EASy project with the usual configuration files and folders.</li>
@@ -56,9 +56,9 @@ public final class InstantiationCommands {
      * 
      * @throws PersistenceException Will be thrown if the project could not be loaded, e.g. if the project has no
      *     valid EASy structure.
-     * @throws VilLanguageException In case that artifact operations or script execution fails
+     * @throws VilException In case that artifact operations or script execution fails
      */
-    public static void instantiateSelf(File project) throws PersistenceException, VilLanguageException {
+    public static void instantiateSelf(File project) throws PersistenceException, VilException {
         instantiateSelf(project, (Map<String, Object>) null);
     }
     
@@ -77,17 +77,17 @@ public final class InstantiationCommands {
      * 
      * @throws PersistenceException Will be thrown if the project could not be loaded, e.g. if the project has no
      *     valid EASy structure.
-     * @throws VilLanguageException In case that artifact operations or script execution fails
+     * @throws VilException In case that artifact operations or script execution fails
      */
     public static void instantiateSelf(File project, Map<String, Object> arguments) 
-        throws PersistenceException, VilLanguageException {
+        throws PersistenceException, VilException {
         // This is the usual way:
         VilArgumentProvider provider = createArgumentProvider(arguments);
         LowlevelCommands.loadProject(project);
-        String projectName = project.getName();
+        String projectName = ProjectNameMapper.getInstance().getName(project);
         PLPInfo plp = LowlevelCommands.getProject(projectName);
         if (null != plp) {
-            plp.instantiate(null);
+            plp.instantiate();
         } else {
             throw new PersistenceException("Project \"" + projectName + "\" could not be loaded.");
         }
@@ -108,11 +108,11 @@ public final class InstantiationCommands {
      * 
      * @throws ModelManagementException In case that the available information
      *   may be come inconsistent due to this update
-     * @throws VilLanguageException In case that artifact operations or script execution fails
+     * @throws VilException In case that artifact operations or script execution fails
      * @throws PersistenceException Will be thrown if at least one of the IVML or VIL files could not be loaded.
      */
     public static void instantiateSelf(File project, File ivmlFile) throws ModelManagementException,
-        VilLanguageException, PersistenceException {
+        VilException, PersistenceException {
         instantiateSelf(project, ivmlFile, (Map<String, Object>) null);
     }
     
@@ -131,15 +131,15 @@ public final class InstantiationCommands {
      * 
      * @throws ModelManagementException In case that the available information
      *   may be come inconsistent due to this update
-     * @throws VilLanguageException In case that artifact operations or script execution fails
+     * @throws VilException In case that artifact operations or script execution fails
      * @throws PersistenceException Will be thrown if at least one of the IVML or VIL files could not be loaded.
      */
     public static void instantiateSelf(File project, File ivmlFile, Map<String, Object> arguments) 
-        throws ModelManagementException, VilLanguageException, PersistenceException {
+        throws ModelManagementException, VilException, PersistenceException {
         
         // This is an unusual way (a hack):  
         // Determine default build script location
-        String projectName = project.getName();
+        String projectName = ProjectNameMapper.getInstance().getName(project);
         File configFolder = PersistenceUtils.getLocationFile(project, PathKind.IVML);
         String path = PersistenceUtils.vilFileLocation(projectName, "0", configFolder.getAbsolutePath());
         File buildScriptFile = new File(path);
@@ -148,7 +148,7 @@ public final class InstantiationCommands {
     }
 
     /**
-     * Instatiates the given project. <br />
+     * Instantiates the given project. <br />
      * It's <b>not</b> necessary that the project has a valid EASy structure. This method is a convenience wrapper for 
      * {@link #instantiateSelf(File, File, File, Map)} with <b>null</b> as arguments.
      * 
@@ -158,16 +158,16 @@ public final class InstantiationCommands {
      * 
      * @throws ModelManagementException In case that the available information
      *   may become inconsistent due to this update
-     * @throws VilLanguageException In case that artifact operations or script execution fails
+     * @throws VilException In case that artifact operations or script execution fails
      * @throws PersistenceException Will be thrown if at least one of the IVML or VIL files could not be loaded.
      */
     public static void instantiateSelf(File project, File ivmlFile, File buildScriptFile)
-        throws ModelManagementException, VilLanguageException, PersistenceException {
+        throws ModelManagementException, VilException, PersistenceException {
         instantiateSelf(project, ivmlFile, buildScriptFile, null);
     }
     
     /**
-     * Instatiates the given project. <br />
+     * Instantiates the given project. <br />
      * It's <b>not</b> necessary that the project has a valid EASy structure.
      * 
      * @param project The toplevel absolute folder of the project
@@ -178,11 +178,11 @@ public final class InstantiationCommands {
      *   
      * @throws ModelManagementException In case that the available information
      *   may become inconsistent due to this update
-     * @throws VilLanguageException In case that artifact operations or script execution fails
+     * @throws VilException In case that artifact operations or script execution fails
      * @throws PersistenceException Will be thrown if at least one of the IVML or VIL files could not be loaded.
      */
     public static void instantiateSelf(File project, File ivmlFile, File buildScriptFile, Map<String, Object> arguments)
-        throws ModelManagementException, VilLanguageException, PersistenceException {
+        throws ModelManagementException, VilException, PersistenceException {
         
         // This is an unusual way (a hack):
         // Load ivml file
@@ -196,11 +196,11 @@ public final class InstantiationCommands {
         // Create temporary PLP
         if (null != ivmlProject && null != buildScript) {
             VilArgumentProvider provider = createArgumentProvider(arguments);
-            String projectName = project.getName();
+            String projectName = ProjectNameMapper.getInstance().getName(project);
             ProjectContainer pCont = new ProjectContainer(ivmlProject, config);
             ScriptContainer sCont = new ScriptContainer(buildScript, config);
             PLPInfo plp = new ProductLineProject(UUID.randomUUID().toString(), projectName, pCont, project, sCont);
-            plp.instantiate(null);
+            plp.instantiate();
             VilArgumentProvider.remove(provider); // ok if provider is null
         } else {
             throw new PersistenceException("The specified IVML/VIL files could not be loaded.");
@@ -246,11 +246,11 @@ public final class InstantiationCommands {
      * 
      * @throws PersistenceException Will be thrown if one of the projects could not be loaded,
      *     e.g. if the project has no valid EASy structure.
-     * @throws VilLanguageException In case that artifact operations or script execution fails
+     * @throws VilException In case that artifact operations or script execution fails
      * @throws IOException If source or destination is invalid, or if an IO error occurs during copying
      */
     public static void instantiate(File projectSource, File projectTarget) throws PersistenceException,
-        VilLanguageException, IOException {
+        VilException, IOException {
         instantiate(projectSource, projectTarget, null);
     }
     
@@ -278,11 +278,11 @@ public final class InstantiationCommands {
      * 
      * @throws PersistenceException Will be thrown if one of the projects could not be loaded,
      *     e.g. if the project has no valid EASy structure.
-     * @throws VilLanguageException In case that artifact operations or script execution fails
+     * @throws VilException In case that artifact operations or script execution fails
      * @throws IOException If source or destination is invalid, or if an IO error occurs during copying
      */
     public static void instantiate(File projectSource, File projectTarget, Map<String, Object> arguments) 
-        throws PersistenceException, VilLanguageException, IOException {
+        throws PersistenceException, VilException, IOException {
         
         if (projectSource.exists() && projectTarget.exists()) {
             // This is the usual way:
@@ -292,13 +292,13 @@ public final class InstantiationCommands {
             
             // 1. Load Predecessor
             LowlevelCommands.loadProject(projectSource);
-            String projectName =  projectSource.getName();
+            String projectName =  ProjectNameMapper.getInstance().getName(projectSource);
             PLPInfo plpPre = LowlevelCommands.getProject(projectName);
             
             // 2. Create successor
             Configuration configTarget = PersistenceUtils.getConfiguration(projectTarget);
             File parentFolder = projectTarget.getParentFile();
-            String projectNameTrg = projectTarget.getName();
+            String projectNameTrg = ProjectNameMapper.getInstance().getName(projectTarget);
             PathEnvironment pathEnv = new PathEnvironment(parentFolder);
             File easyConfigFile = PersistenceUtils.getLocationFile(projectTarget, PathKind.IVML);
             Persistencer persistencer = new Persistencer(pathEnv, projectTarget, easyConfigFile.getAbsolutePath(),
@@ -317,7 +317,7 @@ public final class InstantiationCommands {
             plpSuc.save();
             
             // 3. Instantiate
-            plpSuc.instantiate(null);
+            plpSuc.instantiate();
             VilArgumentProvider.remove(provider); // works with null as argument
         }
     }
@@ -344,21 +344,21 @@ public final class InstantiationCommands {
      * 
      * @throws PersistenceException Will be thrown if one of the projects could not be loaded,
      *     e.g. if the project has no valid EASy structure.
-     * @throws VilLanguageException In case that artifact operations or script execution fails
+     * @throws VilException In case that artifact operations or script execution fails
      */
     private static void instantiateEASyProjects(File projectSource, File projectTarget, Map<String, Object> arguments) 
-        throws PersistenceException, VilLanguageException {
+        throws PersistenceException, VilException {
             
         VilArgumentProvider provider = createArgumentProvider(arguments);
         
         // This is the usual way:
         LowlevelCommands.loadProject(projectSource);
         LowlevelCommands.loadProject(projectTarget);
-        String projectName =  projectTarget.getName();
+        String projectName =  ProjectNameMapper.getInstance().getName(projectTarget);
         PLPInfo plp = LowlevelCommands.getProject(projectName);
         
         if (null != plp) {
-            plp.instantiate(null);
+            plp.instantiate();
         } else {
             throw new PersistenceException("Project \"" + projectName + "\" could not be loaded.");
         }
@@ -385,12 +385,12 @@ public final class InstantiationCommands {
      *     method does not permit <tt>projectTarget</tt> directory to be created
      * @throws ModelManagementException In case that the available information
      *   may become inconsistent due to this update
-     * @throws VilLanguageException In case that artifact operations or script execution fails
+     * @throws VilException In case that artifact operations or script execution fails
      * @throws PersistenceException Will be thrown if at least one of the IVML or VIL files could not be loaded.
      * @throws IOException If source or destination is invalid, or if an IO error occurs during copying
      */
     public static void instantiate(File projectSource, File projectTarget, File ivmlFile, File scriptFile) 
-        throws ModelManagementException, SecurityException, PersistenceException, VilLanguageException, IOException {
+        throws ModelManagementException, SecurityException, PersistenceException, VilException, IOException {
         instantiate(projectSource, projectTarget, ivmlFile, scriptFile, null);
     }
     
@@ -414,13 +414,13 @@ public final class InstantiationCommands {
      *     method does not permit <tt>projectTarget</tt> directory to be created
      * @throws ModelManagementException In case that the available information
      *   may become inconsistent due to this update
-     * @throws VilLanguageException In case that artifact operations or script execution fails
+     * @throws VilException In case that artifact operations or script execution fails
      * @throws PersistenceException Will be thrown if at least one of the IVML or VIL files could not be loaded.
      * @throws IOException If source or destination is invalid, or if an IO error occurs during copying
      */
     public static void instantiate(File projectSource, File projectTarget, File ivmlFile, File scriptFile, 
         Map<String, Object> arguments) throws ModelManagementException, SecurityException, PersistenceException, 
-        VilLanguageException, IOException {
+        VilException, IOException {
         
         // This is an unusual way (a hack):
         //check whether ivmlFile and scriptFile are located in target oder in source
@@ -468,27 +468,27 @@ public final class InstantiationCommands {
      * @param arguments a name-element mapping specifying the top-level parameter of a VIL instantiation (may 
      *   be <b>null</b>)
      * 
-     * @throws VilLanguageException In case that artifact operations or script execution fails
+     * @throws VilException In case that artifact operations or script execution fails
      */
     private static void createPLPsAndInstantiate(File projectSource, File projectTarget, Project ivmlProject,
-        Script buildScript, Map<String, Object> arguments) throws VilLanguageException {
+        Script buildScript, Map<String, Object> arguments) throws VilException {
         
         VilArgumentProvider provider = createArgumentProvider(arguments);
         
         // Create Predecessor
-        String projectNameSrc = projectSource.getName();
+        String projectNameSrc = ProjectNameMapper.getInstance().getName(projectSource);
         PLPInfo plpPre = new ProductLineProject(projectNameSrc, projectSource);
         
         // Create Successor
         Configuration config = PersistenceUtils.getConfiguration(projectTarget);
         
-        String projectNameTrg = projectTarget.getName();
+        String projectNameTrg = ProjectNameMapper.getInstance().getName(projectTarget);
         ProjectContainer pCont = new ProjectContainer(ivmlProject, config);
         ScriptContainer sCont = new ScriptContainer(buildScript, config);
         PLPInfo plpSuc = new ProductLineProject(UUID.randomUUID().toString(), projectNameTrg, pCont,
             projectTarget, sCont);
         plpSuc.getMemberController().addPredecessor(plpPre);
-        plpSuc.instantiate(null);
+        plpSuc.instantiate();
         
         VilArgumentProvider.remove(provider); // works with null as argument
     }
@@ -520,11 +520,11 @@ public final class InstantiationCommands {
      * @throws IOException If source or destination is invalid, or if an IO error occurs during copying
      * @throws ModelManagementException In case that the available information
      *     may become inconsistent due to this update
-     * @throws VilLanguageException In case that artifact operations or script execution fails
+     * @throws VilException In case that artifact operations or script execution fails
      */
     public static void instantiate(File projectSource, File projectTarget, ModelLoadDefinition ivmlDefinition,
         ModelLoadDefinition vilDefinition) throws PersistenceException, IOException, ModelManagementException, 
-        VilLanguageException {
+        VilException {
         instantiate(projectSource, projectTarget, ivmlDefinition, vilDefinition, null);
     }
     
@@ -555,11 +555,11 @@ public final class InstantiationCommands {
      * @throws IOException If source or destination is invalid, or if an IO error occurs during copying
      * @throws ModelManagementException In case that the available information
      *     may become inconsistent due to this update
-     * @throws VilLanguageException In case that artifact operations or script execution fails
+     * @throws VilException In case that artifact operations or script execution fails
      */
     public static void instantiate(File projectSource, File projectTarget, ModelLoadDefinition ivmlDefinition,
         ModelLoadDefinition vilDefinition, Map<String, Object> arguments) 
-        throws PersistenceException, IOException, ModelManagementException, VilLanguageException {
+        throws PersistenceException, IOException, ModelManagementException, VilException {
         
         /*
          * Create trg and copy EASy files, if it does not exist. In the next step the files will be loaded,

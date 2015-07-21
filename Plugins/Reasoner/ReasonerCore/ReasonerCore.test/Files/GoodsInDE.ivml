@@ -29,7 +29,7 @@ project GoodsInDE {
     //TODO Warum geht das nicht: attribute workflowVariability to isGoodsInPosIdentifiedByBarcode?
     //TODO Macht das Sinn, die Art der Variabilität über ein Attribut zu beschreiben? 
     //So geht's
-    attribute WorkflowVariability workflowVariability to isGoodsInPosIdentifiedByBarcode;
+    annotate WorkflowVariability workflowVariability to isGoodsInPosIdentifiedByBarcode;
     
         
     //Mischpaletten ja, nein?

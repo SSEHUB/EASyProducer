@@ -1,0 +1,18 @@
+project ReconfigurableHardwareCfg {
+
+    import ReconfigurableHardware;	
+
+	clusters = { 
+	    MPCCNode{
+	        name = "MPCCCluster",
+	        host = "147.172.177.22:6666",
+			numCPUs = 12,
+			numDFEs = 4
+		}
+	}; 
+		 
+	freeze {
+		clusters; 
+	}
+
+}

@@ -9,6 +9,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
 import de.uni_hildesheim.sse.ModelUtility;
+import de.uni_hildesheim.sse.capabilities.DefaultReasonerAccess;
+import de.uni_hildesheim.sse.capabilities.IvmlReasonerCapabilities;
 import de.uni_hildesheim.sse.dslCore.translation.Message;
 import de.uni_hildesheim.sse.dslCore.translation.MessageReceiver;
 import de.uni_hildesheim.sse.dslCore.translation.TranslatorException;
@@ -83,12 +85,10 @@ import de.uni_hildesheim.sse.utils.modelManagement.Version;
  */
 public class TypeContext implements IResolutionScope {
 
-    private static final boolean EMIT_NULL_WARNING = false;
-
     private ContainableModelElementList implicitDefinitions = new ContainableModelElementList(null);
     private Project project;
     private MessageReceiver messageReceiver;
-    private VariablePool variablePool;
+    private VariablePool variablePool = new VariablePool();
     private Map<Compound, Self> selfPool = new HashMap<Compound, Self>();
 
     // may support shadowed variables
@@ -106,12 +106,22 @@ public class TypeContext implements IResolutionScope {
     public TypeContext(Project project, MessageReceiver messageReceiver) {
         this.project = project;
         this.messageReceiver = messageReceiver;
-        this.variablePool = new VariablePool();
+    }
+    
+    /**
+     * Creates a local type context.
+     * 
+     * @param context the global type context to take basic information from
+     */
+    public TypeContext(TypeContext context) {
+        this.project = context.project;
+        this.messageReceiver = context.messageReceiver;
     }
 
     /**
      * Push a resolution layer in case that intermediary variables shell be considered, e.g.
-     * within a compound.
+     * within a compound. Please note that the parent itself is not added to the layer/context
+     * and neeeds a specific subsequent add call.
      * 
      * @param parent the parent (scope, may be <b>null</b> - in this case the parent scope of the previous 
      *   layer is considered)
@@ -143,6 +153,9 @@ public class TypeContext implements IResolutionScope {
         for (int c = 0; c < count; c++) {
             addToContext(comp.getElement(c));
         }
+        for (int a = 0; a < comp.getAssignmentCount(); a++) {
+            addToContext(comp.getAssignment(a));
+        }
     }
 
     /**
@@ -154,6 +167,9 @@ public class TypeContext implements IResolutionScope {
         int count = assignment.getElementCount();
         for (int c = 0; c < count; c++) {
             addToContext(assignment.getElement(c));
+        }
+        for (int a = 0; a < assignment.getAssignmentCount(); a++) {
+            addToContext(assignment.getAssignment(a));
         }
     }
     
@@ -207,46 +223,49 @@ public class TypeContext implements IResolutionScope {
         String typeName = "";
         EStructuralFeature causingFeature = null;
         Class<? extends IDatatype> restriction = null;
-        if (null != type.getType()) {
-            typeName = type.getType().getType();
-            restriction = IDatatype.class;
-            causingFeature = IvmlPackage.Literals.TYPE__ID;
-        } else if (null != type.getId()) {
-            typeName = Utils.getQualifiedNameString(type.getId());
-            restriction = IDatatype.class;
-            causingFeature = IvmlPackage.Literals.TYPE__ID;
-        } else if (null != type.getDerived()) {
-            causingFeature = IvmlPackage.Literals.TYPE__TYPE;
-            // basicType (type), ID (id), derived
-            DerivedType derived = type.getDerived();
-            typeName = ModelUtility.stringValue(derived.getType());
-            if (derived.getOp().equals(IvmlKeyWords.SETOF)) {
-                restriction = Container.class;
-            } else if (derived.getOp().equals(IvmlKeyWords.SEQUENCEOF)) {
-                restriction = Container.class;
-            } else if (derived.getOp().equals(IvmlKeyWords.REFTO)) {
-                restriction = Reference.class;
-            } else {
-                throw new TranslatorException("<unspecified type>", type, causingFeature, TranslatorException.INTERNAL);
-            }
-            // search the implicit ones
-            try {
-                String searchName = ModelUtility.stringValue(derived.getType(), true);
-                result = ModelQuery.findElementByTypeName(this, searchName, restriction);
-            } catch (ModelQueryException e) {
-                throw new TranslatorException(e, type, causingFeature);
-            }
-            if (null == result) {
-                IDatatype containedType = resolveType(derived.getType());
+        if (null != type) { // due to xText incremental parsing
+            if (null != type.getType()) {
+                typeName = type.getType().getType();
+                restriction = IDatatype.class;
+                causingFeature = IvmlPackage.Literals.TYPE__ID;
+            } else if (null != type.getId()) {
+                typeName = Utils.getQualifiedNameString(type.getId());
+                restriction = IDatatype.class;
+                causingFeature = IvmlPackage.Literals.TYPE__ID;
+            } else if (null != type.getDerived()) {
+                causingFeature = IvmlPackage.Literals.TYPE__TYPE;
+                // basicType (type), ID (id), derived
+                DerivedType derived = type.getDerived();
+                typeName = ModelUtility.stringValue(derived.getType());
                 if (derived.getOp().equals(IvmlKeyWords.SETOF)) {
-                    result = addImplicitDefinition(new Set(typeName, containedType, project));
-                    restriction = Set.class;
+                    restriction = Container.class;
                 } else if (derived.getOp().equals(IvmlKeyWords.SEQUENCEOF)) {
-                    result = addImplicitDefinition(new Sequence(typeName, containedType, project));
-                    restriction = Sequence.class;
+                    restriction = Container.class;
                 } else if (derived.getOp().equals(IvmlKeyWords.REFTO)) {
-                    result = addImplicitDefinition(new Reference(typeName, containedType, project));
                     restriction = Reference.class;
+                } else {
+                    throw new TranslatorException("<unspecified type>", type, causingFeature, 
+                        TranslatorException.INTERNAL);
+                }
+                // search the implicit ones
+                try {
+                    String searchName = ModelUtility.stringValue(derived.getType(), true);
+                    result = ModelQuery.findElementByTypeName(this, searchName, restriction);
+                } catch (ModelQueryException e) {
+                    throw new TranslatorException(e, type, causingFeature);
+                }
+                if (null == result) {
+                    IDatatype containedType = resolveType(derived.getType());
+                    if (derived.getOp().equals(IvmlKeyWords.SETOF)) {
+                        result = addImplicitDefinition(new Set(typeName, containedType, project));
+                        restriction = Set.class;
+                    } else if (derived.getOp().equals(IvmlKeyWords.SEQUENCEOF)) {
+                        result = addImplicitDefinition(new Sequence(typeName, containedType, project));
+                        restriction = Sequence.class;
+                    } else if (derived.getOp().equals(IvmlKeyWords.REFTO)) {
+                        result = addImplicitDefinition(new Reference(typeName, containedType, project));
+                        restriction = Reference.class;
+                    }
                 }
             }
         }
@@ -464,7 +483,7 @@ public class TypeContext implements IResolutionScope {
             result = resolveSelf(parent, object, feature);
         } else if (null != value.getNullValue()) {
             result = new ConstantValue(NullValue.INSTANCE);
-            if (EMIT_NULL_WARNING) {
+            if (!DefaultReasonerAccess.hasCapability(IvmlReasonerCapabilities.NULL_VALUE)) {
                 messageReceiver.warning("'null' values are currently not fully supported by the reasoner", object, 
                     feature, Message.CODE_IGNORE);
             }

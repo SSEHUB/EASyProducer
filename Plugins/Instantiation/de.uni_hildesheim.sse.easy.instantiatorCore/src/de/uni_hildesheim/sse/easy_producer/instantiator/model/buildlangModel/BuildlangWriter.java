@@ -1,19 +1,34 @@
+/*
+ * Copyright 2009-2014 University of Hildesheim, Software Systems Engineering
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel;
 
 import java.io.Writer;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Rule.Side;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ruleMatch.ArtifactMatchExpression;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ruleMatch.BooleanMatchExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ruleMatch.CollectionMatchExpression;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ruleMatch.CompoundMatchExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ruleMatch.PathMatchExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ruleMatch.StringMatchExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.ExpressionStatement;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.WriterVisitor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Template;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Constants;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
 
@@ -56,7 +71,7 @@ public class BuildlangWriter extends WriterVisitor<VariableDeclaration> implemen
     }
                 
     @Override
-    public Object visitStrategyCallExpression(StrategyCallExpression call) throws ExpressionException {
+    public Object visitStrategyCallExpression(StrategyCallExpression call) throws VilException {
         if (StrategyCallExpression.Type.EXECUTE == call.getType()) {
             print("execute ");
         }
@@ -66,7 +81,7 @@ public class BuildlangWriter extends WriterVisitor<VariableDeclaration> implemen
     }
 
     @Override
-    public Object visitRuleCallExpression(RuleCallExpression ex) throws ExpressionException {
+    public Object visitRuleCallExpression(RuleCallExpression ex) throws VilException {
         if (ex.isSuper()) {
             print("super.");
         }
@@ -78,16 +93,31 @@ public class BuildlangWriter extends WriterVisitor<VariableDeclaration> implemen
         printArgumentList(ex, 0);
         return null;
     }
-
-    @Override
-    public Object visitScript(Script script) throws VilLanguageException {
+    
+    /**
+     * Returns the language element name for a "script". [extensibility]
+     * 
+     * @return the language element name ("vilScript")
+     */
+    protected String getScriptElementName() {
+        return "vilScript";
+    }
+     
+    /**
+     * Prints the header of <code>script</code>. [extensibility]
+     * 
+     * @param script the script to be printed
+     * @throws VilException in case that printing the script header fails
+     * @see #getScriptElementName()
+     */
+    protected void printScriptHeader(Script script) throws VilException {
         printImports(script);
         printVtlRestrictions(script);
         for (int a = 0; a < script.getAdviceCount(); a++) {
             script.getAdvice(a).accept(this);
         }
         printIndentation();
-        print("vilScript");
+        print(getScriptElementName());
         printWhitespace();
         print(script.getName());
         printWhitespace();
@@ -98,49 +128,103 @@ public class BuildlangWriter extends WriterVisitor<VariableDeclaration> implemen
             print(script.getSuper().getName());
             printWhitespace();
         }
+    }
+
+    /**
+     * Returns whether <code>script</code> has contained elements. [extensibility]
+     * 
+     * @param script the script to consider
+     * @return <code>true</code> if <code>script</code> has contained elements, <code>false</code> if 
+     *     <code>script</code> is empty
+     */
+    protected boolean hasContainedElements(Script script) {
+        return script.getImportsCount() + script.getRuleCount() + script.getVariableDeclarationCount()
+            + script.getPropertiesCount() + o2i(script.getVersion()) > 0;
+    }
+    
+    /**
+     * Prints the script contents. [extensibility]
+     * 
+     * @param script the script to be printed
+     * @throws VilException in case that printing the script contents fails
+     * @see #printScriptContentsBeforeRules(Script)
+     */
+    protected void printScriptContents(Script script) throws VilException {
+        if (null != script.getVersion()) {
+            printIndentation();
+            printVersion(script.getVersion());
+            println();
+        }
+        if (script.getPropertiesCount() > 0) {
+            for (int l = 0; l < script.getPropertiesCount(); l++) {
+                script.getProperties(l).accept(this);
+            }
+            println();
+        }
+        if (script.getTypedefCount() > 0) {
+            printTypedefs(script);
+            println();
+        }
+        if (script.getVariableDeclarationCount() > 0) {
+            int implCount = 0;
+            for (int v = 0; v < script.getVariableDeclarationCount(); v++) {
+                VariableDeclaration varDecl = script.getVariableDeclaration(v);
+                if (!script.isImplicit(varDecl)) {
+                    script.getVariableDeclaration(v).accept(this);
+                } else {
+                    implCount++;
+                }
+            }
+            if (implCount != script.getVariableDeclarationCount()) {
+                println();
+            }
+        }
+        printScriptContentsBeforeRules(script);
+        if (script.getRuleCount() > 0) {
+            for (int r = 0; r < script.getRuleCount(); r++) {
+                script.getRule(r).accept(this);
+            }
+            println();
+        }
+    }
+
+    /**
+     * Prints the script contents before rules. [extensibility]
+     * 
+     * @param script the script to be printed
+     * @throws VilException in case that printing the script contents fails
+     */
+    protected void printScriptContentsBeforeRules(Script script) throws VilException {
+    }
+    
+    /**
+     * Prints an entire script. [extensibility]
+     * 
+     * @param script the script to be printed
+     * @throws VilException
+     * @see #printScriptHeader(Script)
+     * @see #hasContainedElements(Script)
+     * @see #printScriptContents(Script)
+     * @throws VilException in case that printing the script fails
+     */
+    protected void printScript(Script script) throws VilException {
+        printScriptHeader(script);
         println('{');
         println();
-        int contained = script.getImportsCount() + script.getRuleCount() + script.getVariableDeclarationCount()
-            + script.getPropertiesCount() + o2i(script.getVersion());
-        if (contained > 0) {
+        if (hasContainedElements(script)) {
             println();
             increaseIndentation();
-            if (null != script.getVersion()) {
-                printIndentation();
-                printVersion(script.getVersion());
-                println();
-            }
-            if (script.getPropertiesCount() > 0) {
-                for (int l = 0; l < script.getPropertiesCount(); l++) {
-                    script.getProperties(l).accept(this);
-                }
-                println();
-            }
-            if (script.getVariableDeclarationCount() > 0) {
-                int implCount = 0;
-                for (int v = 0; v < script.getVariableDeclarationCount(); v++) {
-                    VariableDeclaration varDecl = script.getVariableDeclaration(v);
-                    if (!script.isImplicit(varDecl)) {
-                        script.getVariableDeclaration(v).accept(this);
-                    } else {
-                        implCount++;
-                    }
-                }
-                if (implCount != script.getVariableDeclarationCount()) {
-                    println();
-                }
-            }
-            if (script.getRuleCount() > 0) {
-                for (int r = 0; r < script.getRuleCount(); r++) {
-                    script.getRule(r).accept(this);
-                }
-                println();
-            }
+            printScriptContents(script);
             decreaseIndentation();
         } else {
             println();
         }
         println('}');
+    }
+
+    @Override
+    public Object visitScript(Script script) throws VilException {
+        printScript(script);
         return null;
     }
     
@@ -148,9 +232,9 @@ public class BuildlangWriter extends WriterVisitor<VariableDeclaration> implemen
      * Prints the imports of <code>script</code>.
      * 
      * @param script the script the versions shall be printed for
-     * @throws VilLanguageException in case of problems while printing the version restrictions
+     * @throws VilException in case of problems while printing the version restrictions
      */
-    private void printImports(Script script) throws VilLanguageException {
+    private void printImports(Script script) throws VilException {
         if (script.getImportsCount() > 0) {
             for (int i = 0; i < script.getImportsCount(); i++) {
                 ModelImport<Script> imp = script.getImport(i);
@@ -168,9 +252,9 @@ public class BuildlangWriter extends WriterVisitor<VariableDeclaration> implemen
      * Prints the VTL restrictions.
      * 
      * @param script the script the versions shall be printed for
-     * @throws VilLanguageException in case of problems while printing the version restrictions
+     * @throws VilException in case of problems while printing the version restrictions
      */
-    private void printVtlRestrictions(Script script) throws VilLanguageException {
+    private void printVtlRestrictions(Script script) throws VilException {
         if (script.getVtlRestrictionsCount() > 0) {
             for (int i = 0; i < script.getVtlRestrictionsCount(); i++) {
                 ModelImport<Template> imp = script.getVtlRestriction(i);
@@ -185,7 +269,7 @@ public class BuildlangWriter extends WriterVisitor<VariableDeclaration> implemen
     }
     
     @Override
-    public Object visitLoadProperties(LoadProperties properties) throws VilLanguageException {
+    public Object visitLoadProperties(LoadProperties properties) throws VilException {
         printIndentation();
         print("load properties ");
         printString(properties.getPath());
@@ -193,24 +277,16 @@ public class BuildlangWriter extends WriterVisitor<VariableDeclaration> implemen
         return null;
     }
     
-/*    @Override
-    public void visitAlternative(Alternative alt) throws BuildlangException {
-    }*/
-
-/*    @Override
-    public void visitDefer(Defer defer) throws BuildlangException {
-    }*/
-
-/*    @Override
-    public void visitLoop(Loop loop) throws BuildlangException {
-    }*/
-
     @Override
-    public Object visitRule(Rule rule) throws VilLanguageException {
+    public Object visitRule(Rule rule) throws VilException {
         printIndentation();
         if (null != rule.getName()) {
             if (rule.isProtected()) {
                 print("protected");
+                printWhitespace();
+            }
+            if (rule.getDefaultReturnType() != rule.getReturnType()) { // show only for "functions"
+                printType(rule.getReturnType());
                 printWhitespace();
             }
             print(rule.getName());
@@ -219,13 +295,9 @@ public class BuildlangWriter extends WriterVisitor<VariableDeclaration> implemen
             print("=");
             printWhitespace();
         }
-        try {
-            printRuleConditions(rule, Side.LHS);
-            print(": ");
-            printRuleConditions(rule, Side.RHS);
-        } catch (ExpressionException e) {
-            throw new VilLanguageException(e);
-        }
+        printRuleConditions(rule, Side.LHS);
+        print(": ");
+        printRuleConditions(rule, Side.RHS);
         printBlock(rule);
         println();
         
@@ -245,9 +317,9 @@ public class BuildlangWriter extends WriterVisitor<VariableDeclaration> implemen
      * 
      * @param rule the rule to print the conditions for
      * @param side the side (LHS = postconditions, RHS = preconditions)
-     * @throws ExpressionException in case that visiting fails
+     * @throws VilException in case that visiting fails
      */
-    private void printRuleConditions(Rule rule, Side side) throws ExpressionException {
+    protected void printRuleConditions(Rule rule, Side side) throws VilException {
         int conditionCount = rule.getRuleConditionCount(side);
         for (int c = 0; c < conditionCount; c++) {
             if (c > 0) {
@@ -267,14 +339,28 @@ public class BuildlangWriter extends WriterVisitor<VariableDeclaration> implemen
         }
         
     }
+    
+
+    /**
+     * Prints the actual block contents.
+     * 
+     * @param block the block to be printed
+     * @throws VilException in case of visiting problems
+     */
+    protected void printBlockContents(IRuleBlock block) throws VilException {
+        for (int b = 0; b < block.getBodyElementCount(); b++) {
+            block.getBodyElement(b).accept(this);
+        }
+    }
 
     /**
      * Prints an entire block including braces.
      * 
      * @param block the block to be printed
-     * @throws VilLanguageException in case of visiting problems
+     * @throws VilException in case of visiting problems
+     * @see #printBlockContents(IRuleBlock)
      */
-    private void printBlock(IRuleBlock block) throws VilLanguageException {
+    protected void printBlock(IRuleBlock block) throws VilException {
         boolean exprIndent = isPrintExpressionStatementIndentation();
         boolean exprNewLine = isPrintExpressionStatementNewLine();
         boolean emitBrackets = !block.isVirtual();
@@ -285,9 +371,7 @@ public class BuildlangWriter extends WriterVisitor<VariableDeclaration> implemen
             setPrintExpressionStatementIndentation(false);
             setPrintExpressionStatementNewLine(false);
         }
-        for (int b = 0; b < block.getBodyElementCount(); b++) {
-            block.getBodyElement(b).accept(this);
-        }
+        printBlockContents(block);
         if (emitBrackets) {
             decreaseIndentation();
             printIndentation();
@@ -299,38 +383,39 @@ public class BuildlangWriter extends WriterVisitor<VariableDeclaration> implemen
     }
 
     @Override
-    public Object visitStringMatchExpression(StringMatchExpression expression) throws ExpressionException {
+    public Object visitStringMatchExpression(StringMatchExpression expression) throws VilException {
         printString(expression.getText());
         return null;
     }
     
     @Override
-    public Object visitPathMatchExpression(PathMatchExpression expression) throws ExpressionException {
+    public Object visitPathMatchExpression(PathMatchExpression expression) throws VilException {
         return expression.getExpression().accept(this);
     }
     
     @Override
-    public Object visitArtifactMatchExpression(ArtifactMatchExpression expression) throws ExpressionException {
+    public Object visitBooleanMatchExpression(BooleanMatchExpression expression) throws VilException {
+        return expression.getExpression().accept(this);
+    }
+    
+    @Override
+    public Object visitArtifactMatchExpression(ArtifactMatchExpression expression) throws VilException {
         return expression.getExpression().accept(this);
     }
 
     @Override
-    public Object visitCollectionMatchExpression(CollectionMatchExpression expression) throws ExpressionException {
+    public Object visitCollectionMatchExpression(CollectionMatchExpression expression) throws VilException {
         return expression.getExpression().accept(this);
     }
 
     @Override
-    public Object visitJoinExpression(JoinExpression ex) throws ExpressionException {
+    public Object visitJoinExpression(JoinExpression ex) throws VilException {
         print("join(");
         for (int i = 0; i < ex.getVariablesCount(); i++) {
             if (i > 0) {
                 print(", ");
             }
-            try {
-                ex.getVariable(i).accept(this);
-            } catch (VilLanguageException e) {
-                throw new ExpressionException(e);
-            }
+            ex.getVariable(i).accept(this);
         }
         print(")");
         if (null != ex.getCondition()) {
@@ -342,25 +427,21 @@ public class BuildlangWriter extends WriterVisitor<VariableDeclaration> implemen
     }
 
     @Override
-    public Object visitJoinVariableDeclaration(JoinVariableDeclaration decl) throws VilLanguageException {
+    public Object visitJoinVariableDeclaration(JoinVariableDeclaration decl) throws VilException {
         if (decl.isExcluded()) {
             print("exclude ");
         }
         print(decl.getName());
         print(":");
-        try {
-            decl.getExpression().accept(this);
-        } catch (ExpressionException e) {
-            throw new VilLanguageException(e);
-        }
+        decl.getExpression().accept(this);
         return null;
     }
 
     @Override
-    public Object visitMapExpression(MapExpression map) throws ExpressionException {
+    public Object visitMapExpression(MapExpression map) throws VilException {
         print("map(");
         for (int v = 0; v < map.getVariablesCount(); v++) {
-            TypeDescriptor<? extends IVilType> givenType = map.getGivenType(v);
+            TypeDescriptor<?> givenType = map.getGivenType(v);
             if (null != givenType) {
                 print(givenType.getVilName());
                 print(" ");
@@ -377,16 +458,12 @@ public class BuildlangWriter extends WriterVisitor<VariableDeclaration> implemen
         }
         map.getExpression().accept(this);
         print(") ");
-        try {
-            printBlock(map);
-        } catch (VilLanguageException e) {
-            throw new ExpressionException(e);
-        }
+        printBlock(map);
         return null;
     }
 
     @Override
-    public Object visitInstantiateExpression(InstantiateExpression inst) throws ExpressionException {
+    public Object visitInstantiateExpression(InstantiateExpression inst) throws VilException {
         print("instantiate ");
         if (null != inst.getProject()) {
             print(inst.getProject().getName());
@@ -404,21 +481,22 @@ public class BuildlangWriter extends WriterVisitor<VariableDeclaration> implemen
     }
 
     @Override
-    public Object visitAlternativeExpression(AlternativeExpression alt) throws ExpressionException {
+    public Object visitAlternativeExpression(AlternativeExpression alt) throws VilException {
         print("if (");
         alt.getCondition().accept(this);
         print(") ");
-        try {
-            printBlock(alt.getIfPart());
-            if (null != alt.getElsePart()) {
-                print(" else ");
-                printBlock(alt.getElsePart());
-            } 
-            println();
-        } catch (VilLanguageException e) {
-            throw new ExpressionException(e);
-        }
+        printBlock(alt.getIfPart());
+        if (null != alt.getElsePart()) {
+            print(" else ");
+            printBlock(alt.getElsePart());
+        } 
+        println();
         return null;
+    }
+
+    @Override
+    public Object visitCompoundMatchExpression(CompoundMatchExpression expression) throws VilException {
+        return expression.getCompositeExpression().accept(this);
     }
 
 }

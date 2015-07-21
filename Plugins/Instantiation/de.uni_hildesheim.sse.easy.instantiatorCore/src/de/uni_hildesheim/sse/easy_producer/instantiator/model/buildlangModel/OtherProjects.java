@@ -7,16 +7,16 @@ import java.util.List;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactTypes;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IArtifact;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionEvaluator;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.AbstractCollectionWrapper;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Collection;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ListSequence;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ListSet;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Sequence;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 
 /**
  * Realizes the implicit variable OTHERPROJECTS in {@link Script}.
@@ -26,7 +26,8 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescr
 class OtherProjects implements Set<IArtifact> {
 
     private java.util.Set<IArtifact> data = new HashSet<IArtifact>();
-    private TypeDescriptor<? extends IVilType>[] parameter;
+    private TypeDescriptor<?>[] parameter;
+    private TypeDescriptor<?> type;
     
     /**
      * Creates an instance.
@@ -34,15 +35,20 @@ class OtherProjects implements Set<IArtifact> {
     OtherProjects() {
         parameter = TypeDescriptor.createArray(1);
         parameter[0] = ArtifactTypes.artifactType();
+        try {
+            type = TypeRegistry.getSetType(parameter);
+        } catch (VilException e) {
+            type = TypeRegistry.DEFAULT.findType(Set.class);
+        }
     }
     
     @Override
-    public int getDimensionCount() {
+    public int getGenericParameterCount() {
         return 1;
     }
 
     @Override
-    public TypeDescriptor<? extends IVilType> getDimensionType(int index) {
+    public TypeDescriptor<?> getGenericParameterType(int index) {
         return parameter[index];
     }
 
@@ -97,7 +103,7 @@ class OtherProjects implements Set<IArtifact> {
     }
 
     @Override
-    public Set<IArtifact> selectByType(TypeDescriptor<? extends IVilType> type) {
+    public Set<IArtifact> selectByType(TypeDescriptor<?> type) {
         return new ListSet<IArtifact>(AbstractCollectionWrapper.selectByType(this, type), parameter);
     }
 
@@ -112,7 +118,7 @@ class OtherProjects implements Set<IArtifact> {
     }
 
     @Override
-    public Set<IArtifact> select(ExpressionEvaluator evaluator) throws ArtifactException {
+    public Set<IArtifact> select(ExpressionEvaluator evaluator) throws VilException {
         return new ListSet<IArtifact>(AbstractCollectionWrapper.select(this, evaluator), parameter);
     }
 
@@ -135,8 +141,18 @@ class OtherProjects implements Set<IArtifact> {
     }
 
     @Override
-    public void remove(IArtifact element) {
-        data.remove(element);
+    public boolean remove(IArtifact element) {
+        return data.remove(element);
+    }
+
+    @Override
+    public java.util.Set<IArtifact> toMappedSet() {
+        return null; // used internally only
+    }
+
+    @Override
+    public TypeDescriptor<?> getType() {
+        return type;
     }
 
 }

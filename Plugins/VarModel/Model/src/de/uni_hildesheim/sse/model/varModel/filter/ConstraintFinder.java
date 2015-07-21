@@ -18,6 +18,8 @@ package de.uni_hildesheim.sse.model.varModel.filter;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
+import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
 import de.uni_hildesheim.sse.model.varModel.Attribute;
 import de.uni_hildesheim.sse.model.varModel.AttributeAssignment;
 import de.uni_hildesheim.sse.model.varModel.Comment;
@@ -35,13 +37,14 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
 import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Enum;
 import de.uni_hildesheim.sse.model.varModel.datatypes.EnumLiteral;
+import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
 import de.uni_hildesheim.sse.model.varModel.datatypes.OrderedEnum;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Sequence;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Set;
 
 /**
- * This class locates all (visible) constraints in a ivml project.
+ * This class locates all (visible) constraints in an IVML project.
  * @author El-Sharkawy
  *
  */
@@ -49,6 +52,8 @@ public class ConstraintFinder implements IModelVisitor {
     
     private List<Constraint> constraints;
     private boolean considerImports;
+    private boolean excludeAssignments;
+    private List<AttributeAssignment> allAttributes;
     
     /**
      * This constructor will consider imported projects.
@@ -57,24 +62,44 @@ public class ConstraintFinder implements IModelVisitor {
     public ConstraintFinder(Project project) {
        this(project, true);
     }
-    
+
     /**
      * Constructor for specifying whether imported projects should be considered while finding the constraints.
      * @param project The project, where all constraints should be found.
      * @param considerImports <tt>true</tt> if constraints of imported projects should also be found
      */
     public ConstraintFinder(Project project, boolean considerImports) {
+        this(project, considerImports, false);
+    }
+
+    /**
+     * Constructor for specifying whether imported projects should be considered while finding the constraints.
+     * @param project The project, where all constraints should be found.
+     * @param considerImports <tt>true</tt> if constraints of imported projects should also be found
+     * @param excludeAssignments whether top-level assignments shall be excluded
+     */
+    public ConstraintFinder(Project project, boolean considerImports, boolean excludeAssignments) {
         constraints = new ArrayList<Constraint>();
         this.considerImports = considerImports;
+        this.excludeAssignments = excludeAssignments;
+        this.allAttributes = new ArrayList<AttributeAssignment>();
         project.accept(this);
     }
-    
+
     /**
      * Getter for returning all constraints of an ivml project.
      * @return A list of all constraints in the specified ivml project.
      */
     public List<Constraint> getConstraints() {
         return constraints;
+    }
+    
+    /**
+     * Method for returning all attribute assignments.
+     * @return All attribute assignments.
+     */
+    public List<AttributeAssignment> getAttributeAssignments() {
+        return allAttributes;
     }
 
     @Override
@@ -103,6 +128,7 @@ public class ConstraintFinder implements IModelVisitor {
         for (int a = 0; a < assignment.getAssignmentCount(); a++) {
             assignment.getAssignment(a).accept(this);
         }
+        allAttributes.add(assignment);
     }
    
     @Override
@@ -161,7 +187,17 @@ public class ConstraintFinder implements IModelVisitor {
 
     @Override
     public void visitConstraint(Constraint constraint) {
-        constraints.add(constraint);       
+        boolean add = true;
+        if (excludeAssignments) {
+            ConstraintSyntaxTree cst = constraint.getConsSyntax();
+            if (cst instanceof OCLFeatureCall) {
+                OCLFeatureCall call = (OCLFeatureCall) cst;
+                add = !OclKeyWords.ASSIGNMENT.equals(call.getOperation());
+            }
+        }
+        if (add) {
+            constraints.add(constraint);
+        }
     }
 
     @Override

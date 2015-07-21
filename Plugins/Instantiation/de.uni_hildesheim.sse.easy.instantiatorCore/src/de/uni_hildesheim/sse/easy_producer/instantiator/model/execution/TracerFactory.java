@@ -37,13 +37,15 @@ public abstract class TracerFactory {
 
         @Override
         protected de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.ITracer 
-        createTemplateLanguageTracerImpl() {
+            createTemplateLanguageTracerImpl() {
+            
             return de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.NoTracer.INSTANCE;
         }
 
         @Override
         protected de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ITracer 
-        createBuildLanguageTracerImpl() {
+            createBuildLanguageTracerImpl() {
+            
             return de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.NoTracer.INSTANCE;
         }
 
@@ -81,7 +83,7 @@ public abstract class TracerFactory {
      *     corresponding result by {@link #DEFAULT}) 
      */
     protected abstract de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.ITracer 
-    createTemplateLanguageTracerImpl();
+        createTemplateLanguageTracerImpl();
     
     /**
      * Creates a tracer for the VIL build language.
@@ -90,7 +92,7 @@ public abstract class TracerFactory {
      *     corresponding result by {@link #DEFAULT})
      */
     protected abstract de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ITracer 
-    createBuildLanguageTracerImpl();
+        createBuildLanguageTracerImpl();
     
     /**
      * Creates a tracer for instantiators, i.e., to send messages to the VIL output.
@@ -105,7 +107,8 @@ public abstract class TracerFactory {
      * @return a tracer instance for the VIL template language
      */
     public static de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.ITracer 
-    createTemplateLanguageTracer() {
+        createTemplateLanguageTracer() {
+        
         de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.ITracer result;
         result = getInstance().createTemplateLanguageTracerImpl();
         if (null == result) {
@@ -120,7 +123,8 @@ public abstract class TracerFactory {
      * @return a tracer instance for the VIL build language
      */
     public static de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ITracer 
-    createBuildLanguageTracer() {
+        createBuildLanguageTracer() {
+        
         de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ITracer result;
         result = getInstance().createBuildLanguageTracerImpl();
         if (null == result) {
@@ -134,7 +138,7 @@ public abstract class TracerFactory {
      * 
      * @return a tracer for instantiators
      */
-    public static IInstantiatorTracer createInstantitorTracer() {
+    public static IInstantiatorTracer createInstantiatorTracer() {
         IInstantiatorTracer result;
         result = getInstance().createInstantiatorTracerImpl();
         if (null == result) {

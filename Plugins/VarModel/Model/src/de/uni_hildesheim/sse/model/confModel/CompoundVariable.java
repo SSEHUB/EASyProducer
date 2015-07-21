@@ -22,6 +22,7 @@ import java.util.Set;
 
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
+import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
 import de.uni_hildesheim.sse.model.varModel.values.CompoundValue;
 import de.uni_hildesheim.sse.model.varModel.values.NullValue;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
@@ -54,7 +55,8 @@ public class CompoundVariable extends StructuredVariable {
         }
         // this is only for the base type - in case of a more specific type, missing nestedElements will be
         // created upon setting the value
-        Compound cmpType = (Compound) varDeclaration.getType();
+        
+        Compound cmpType = (Compound) DerivedDatatype.resolveToBasis(varDeclaration.getType());
         for (int i = 0; i < cmpType.getInheritedElementCount(); i++) {
             AbstractVariable nestedItem = cmpType.getInheritedElement(i);
             VariableCreator creator = new VariableCreator(nestedItem, this, isVisible);
@@ -73,11 +75,13 @@ public class CompoundVariable extends StructuredVariable {
         
         // check whether the whole compound was frozen already
         if (state != AssignmentState.FROZEN && ownStateAllowed()) {
-            CompoundValue cmpValue = (CompoundValue) getValue();
-            if (cmpValue != null && null != cmpValue.getValue() && cmpValue != NullValue.INSTANCE) {                
-                state = AssignmentState.ASSIGNED;    
-            } else {
-                state = AssignmentState.UNDEFINED;
+            if (getValue() != NullValue.INSTANCE) {
+                CompoundValue cmpValue = (CompoundValue) getValue();
+                if (cmpValue != null && null != cmpValue.getValue()) {                
+                    state = AssignmentState.ASSIGNED;    
+                } else {
+                    state = AssignmentState.UNDEFINED;
+                }                
             }
 //            if (ownStateAllowed()) {
 //                // A (partial) assigned compound should be assigned       
@@ -125,7 +129,7 @@ public class CompoundVariable extends StructuredVariable {
         super.setValue(value, state); // TODO if state==FREEZE this leads to Exception in second part
         if (null != value && value != NullValue.INSTANCE) {
             CompoundValue cmpValue = (CompoundValue) value;
-            Compound cmpType = (Compound) getDeclaration().getType();
+            Compound cmpType = (Compound) DerivedDatatype.resolveToBasis(getDeclaration().getType());
             
             // polymorphic case - vType is more specific, then nested elements are missing
             if (!value.getType().equals(cmpType)) {
@@ -177,7 +181,23 @@ public class CompoundVariable extends StructuredVariable {
     @Override
     public void freeze(String nestedElement) {
         IDecisionVariable nestedVar = nestedElements.get(nestedElement);
-        nestedVar.freeze();
+        nestedVar.freeze(AllFreezeSelector.INSTANCE);
+    }
+    
+    @Override
+    public void freeze(IFreezeSelector selector) {
+        super.freeze(selector);
+        for (IDecisionVariable var : nestedElements.values()) {
+            var.freeze(selector);
+        }
+    }
+    
+    @Override
+    public void unfreeze(IAssignmentState state) {
+        super.unfreeze(state);
+        for (IDecisionVariable var : nestedElements.values()) {
+            var.unfreeze(state);
+        }
     }
 
     @Override

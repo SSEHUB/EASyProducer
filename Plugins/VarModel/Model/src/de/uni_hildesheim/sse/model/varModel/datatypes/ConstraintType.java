@@ -50,6 +50,7 @@ public class ConstraintType extends BasisDatatype {
         AnyType.CONSTRAINT_TYPE.addOperation(UNEQUALS);
         AnyType.CONSTRAINT_TYPE.addOperation(ASSIGNMENT);
         AnyType.CONSTRAINT_TYPE.addOperation(IS_DEFINED);
+        AnyType.CONSTRAINT_TYPE.addOperation(TYPE_OF);
     }
     
     /**

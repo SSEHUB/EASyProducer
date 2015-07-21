@@ -3,6 +3,7 @@ package test.de.uni_hildesheim.sse.vil.templatelang;
 import java.io.File;
 import java.io.IOException;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.dslCore.translation.ErrorCodes;
@@ -162,7 +163,27 @@ public class BasicTests extends AbstractTest {
     public void testParameter() throws IOException {
         assertEqual("parameter");
     }
+    
+    /**
+     * Tests derived types parameter at sub-template (QM, Cui Qin).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testParameter2() throws IOException {
+        assertEqual("parameter2");
+    }
 
+    /**
+     * Tests derived types returns at sub-template (QM, Cui Qin).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testParameter3() throws IOException {
+        assertEqual("parameter3");
+    }
+    
     /**
      * Tests a simple Java extension.
      * 

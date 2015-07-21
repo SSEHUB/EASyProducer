@@ -3,8 +3,8 @@ template adviceTest3(Configuration config, FileArtifact target) {
 
     def main(Configuration config, FileArtifact target) {
         TestCompoundType cmp = config.byName("c1");
-        String varName = cmp.$variable().name();
-        String typeName = cmp.$declaration().type();
+        String varName = cmp.name();
+        String typeName = cmp.type();
         '$varName $typeName'
     }
 

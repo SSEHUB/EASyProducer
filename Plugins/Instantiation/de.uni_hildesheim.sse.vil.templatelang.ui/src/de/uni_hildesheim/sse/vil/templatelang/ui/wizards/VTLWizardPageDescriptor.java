@@ -2,7 +2,7 @@ package de.uni_hildesheim.sse.vil.templatelang.ui.wizards;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 
-import de.uni_hildesheim.sse.vil.wizards.IWizardPageDescriptor;
+import de.uni_hildesheim.sse.dslcore.ui.wizards.IWizardPageDescriptor;
 
 /**
  * Specification of the {@link VTLFiletypeWizardPage}.

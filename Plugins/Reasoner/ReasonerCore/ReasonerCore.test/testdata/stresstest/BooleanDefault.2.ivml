@@ -1,0 +1,6 @@
+project BooleanDefault {
+    Boolean A;
+    Boolean B = true;
+    A = true;
+    A xor B;
+}

@@ -264,21 +264,23 @@ public class VilBuildLanguageGrammarAccess extends AbstractGrammarElementFinder 
 		private final Assignment cElementsAssignment_1_0 = (Assignment)cAlternatives_1.eContents().get(0);
 		private final RuleCall cElementsVariableDeclarationParserRuleCall_1_0_0 = (RuleCall)cElementsAssignment_1_0.eContents().get(0);
 		private final Assignment cElementsAssignment_1_1 = (Assignment)cAlternatives_1.eContents().get(1);
-		private final RuleCall cElementsRuleDeclarationParserRuleCall_1_1_0 = (RuleCall)cElementsAssignment_1_1.eContents().get(0);
+		private final RuleCall cElementsTypeDefParserRuleCall_1_1_0 = (RuleCall)cElementsAssignment_1_1.eContents().get(0);
+		private final Assignment cElementsAssignment_1_2 = (Assignment)cAlternatives_1.eContents().get(2);
+		private final RuleCall cElementsRuleDeclarationParserRuleCall_1_2_0 = (RuleCall)cElementsAssignment_1_2.eContents().get(0);
 		
 		//ScriptContents: // ensure object creation
-		//	{ScriptContents} (elements+=VariableDeclaration | elements+=RuleDeclaration)*;
+		//	{ScriptContents} (elements+=VariableDeclaration | elements+=TypeDef | elements+=RuleDeclaration)*;
 		public ParserRule getRule() { return rule; }
 
 		//// ensure object creation
-		//{ScriptContents} (elements+=VariableDeclaration | elements+=RuleDeclaration)*
+		//{ScriptContents} (elements+=VariableDeclaration | elements+=TypeDef | elements+=RuleDeclaration)*
 		public Group getGroup() { return cGroup; }
 
 		//// ensure object creation
 		//{ScriptContents}
 		public Action getScriptContentsAction_0() { return cScriptContentsAction_0; }
 
-		//(elements+=VariableDeclaration | elements+=RuleDeclaration)*
+		//(elements+=VariableDeclaration | elements+=TypeDef | elements+=RuleDeclaration)*
 		public Alternatives getAlternatives_1() { return cAlternatives_1; }
 
 		//elements+=VariableDeclaration
@@ -287,11 +289,17 @@ public class VilBuildLanguageGrammarAccess extends AbstractGrammarElementFinder 
 		//VariableDeclaration
 		public RuleCall getElementsVariableDeclarationParserRuleCall_1_0_0() { return cElementsVariableDeclarationParserRuleCall_1_0_0; }
 
-		//elements+=RuleDeclaration
+		//elements+=TypeDef
 		public Assignment getElementsAssignment_1_1() { return cElementsAssignment_1_1; }
 
+		//TypeDef
+		public RuleCall getElementsTypeDefParserRuleCall_1_1_0() { return cElementsTypeDefParserRuleCall_1_1_0; }
+
+		//elements+=RuleDeclaration
+		public Assignment getElementsAssignment_1_2() { return cElementsAssignment_1_2; }
+
 		//RuleDeclaration
-		public RuleCall getElementsRuleDeclarationParserRuleCall_1_1_0() { return cElementsRuleDeclarationParserRuleCall_1_1_0; }
+		public RuleCall getElementsRuleDeclarationParserRuleCall_1_2_0() { return cElementsRuleDeclarationParserRuleCall_1_2_0; }
 	}
 
 	public class RuleDeclarationElements extends AbstractParserRuleElementFinder {
@@ -522,7 +530,11 @@ public class VilBuildLanguageGrammarAccess extends AbstractGrammarElementFinder 
 		private final Group cGroup_0_0 = (Group)cGroup_0.eContents().get(0);
 		private final Assignment cVarAssignment_0_0_0 = (Assignment)cGroup_0_0.eContents().get(0);
 		private final RuleCall cVarIdentifierParserRuleCall_0_0_0_0 = (RuleCall)cVarAssignment_0_0_0.eContents().get(0);
-		private final Keyword cEqualsSignKeyword_0_0_1 = (Keyword)cGroup_0_0.eContents().get(1);
+		private final Group cGroup_0_0_1 = (Group)cGroup_0_0.eContents().get(1);
+		private final Keyword cFullStopKeyword_0_0_1_0 = (Keyword)cGroup_0_0_1.eContents().get(0);
+		private final Assignment cFieldAssignment_0_0_1_1 = (Assignment)cGroup_0_0_1.eContents().get(1);
+		private final RuleCall cFieldIdentifierParserRuleCall_0_0_1_1_0 = (RuleCall)cFieldAssignment_0_0_1_1.eContents().get(0);
+		private final Keyword cEqualsSignKeyword_0_0_2 = (Keyword)cGroup_0_0.eContents().get(2);
 		private final Assignment cExprAssignment_0_1 = (Assignment)cGroup_0.eContents().get(1);
 		private final RuleCall cExprExpressionParserRuleCall_0_1_0 = (RuleCall)cExprAssignment_0_1.eContents().get(0);
 		private final Keyword cSemicolonKeyword_0_2 = (Keyword)cGroup_0.eContents().get(2);
@@ -533,16 +545,16 @@ public class VilBuildLanguageGrammarAccess extends AbstractGrammarElementFinder 
 		
 		//// ----------------------- overriding and extending parts of the expression grammar -------------------
 		//ExpressionStatement:
-		//	(var=Identifier "=")? expr=Expression ";" | alt=Alternative ";"?;
+		//	(var=Identifier ("." field=Identifier)? "=")? expr=Expression ";" | alt=Alternative ";"?;
 		public ParserRule getRule() { return rule; }
 
-		//(var=Identifier "=")? expr=Expression ";" | alt=Alternative ";"?
+		//(var=Identifier ("." field=Identifier)? "=")? expr=Expression ";" | alt=Alternative ";"?
 		public Alternatives getAlternatives() { return cAlternatives; }
 
-		//(var=Identifier "=")? expr=Expression ";"
+		//(var=Identifier ("." field=Identifier)? "=")? expr=Expression ";"
 		public Group getGroup_0() { return cGroup_0; }
 
-		//(var=Identifier "=")?
+		//(var=Identifier ("." field=Identifier)? "=")?
 		public Group getGroup_0_0() { return cGroup_0_0; }
 
 		//var=Identifier
@@ -551,8 +563,20 @@ public class VilBuildLanguageGrammarAccess extends AbstractGrammarElementFinder 
 		//Identifier
 		public RuleCall getVarIdentifierParserRuleCall_0_0_0_0() { return cVarIdentifierParserRuleCall_0_0_0_0; }
 
+		//("." field=Identifier)?
+		public Group getGroup_0_0_1() { return cGroup_0_0_1; }
+
+		//"."
+		public Keyword getFullStopKeyword_0_0_1_0() { return cFullStopKeyword_0_0_1_0; }
+
+		//field=Identifier
+		public Assignment getFieldAssignment_0_0_1_1() { return cFieldAssignment_0_0_1_1; }
+
+		//Identifier
+		public RuleCall getFieldIdentifierParserRuleCall_0_0_1_1_0() { return cFieldIdentifierParserRuleCall_0_0_1_1_0; }
+
 		//"="
-		public Keyword getEqualsSignKeyword_0_0_1() { return cEqualsSignKeyword_0_0_1; }
+		public Keyword getEqualsSignKeyword_0_0_2() { return cEqualsSignKeyword_0_0_2; }
 
 		//expr=Expression
 		public Assignment getExprAssignment_0_1() { return cExprAssignment_0_1; }
@@ -1185,7 +1209,7 @@ public class VilBuildLanguageGrammarAccess extends AbstractGrammarElementFinder 
 	}
 
 	//ScriptContents: // ensure object creation
-	//	{ScriptContents} (elements+=VariableDeclaration | elements+=RuleDeclaration)*;
+	//	{ScriptContents} (elements+=VariableDeclaration | elements+=TypeDef | elements+=RuleDeclaration)*;
 	public ScriptContentsElements getScriptContentsAccess() {
 		return (pScriptContents != null) ? pScriptContents : (pScriptContents = new ScriptContentsElements());
 	}
@@ -1249,7 +1273,7 @@ public class VilBuildLanguageGrammarAccess extends AbstractGrammarElementFinder 
 
 	//// ----------------------- overriding and extending parts of the expression grammar -------------------
 	//ExpressionStatement:
-	//	(var=Identifier "=")? expr=Expression ";" | alt=Alternative ";"?;
+	//	(var=Identifier ("." field=Identifier)? "=")? expr=Expression ";" | alt=Alternative ";"?;
 	public ExpressionStatementElements getExpressionStatementAccess() {
 		return (pExpressionStatement != null) ? pExpressionStatement : (pExpressionStatement = new ExpressionStatementElements());
 	}
@@ -1358,6 +1382,16 @@ public class VilBuildLanguageGrammarAccess extends AbstractGrammarElementFinder 
 	
 	public ParserRule getVariableDeclarationRule() {
 		return getVariableDeclarationAccess().getRule();
+	}
+
+	//TypeDef:
+	//	"typedef" name=Identifier type=Type ";";
+	public ExpressionDslGrammarAccess.TypeDefElements getTypeDefAccess() {
+		return gaExpressionDsl.getTypeDefAccess();
+	}
+	
+	public ParserRule getTypeDefRule() {
+		return getTypeDefAccess().getRule();
 	}
 
 	//// used in extending languages
@@ -1724,7 +1758,7 @@ public class VilBuildLanguageGrammarAccess extends AbstractGrammarElementFinder 
 	}
 
 	//QualifiedName:
-	//	prefix=QualifiedPrefix (qname+="." qname+=Identifier)?;
+	//	prefix=QualifiedPrefix (qname+="." qname+=Identifier)*;
 	public ExpressionDslGrammarAccess.QualifiedNameElements getQualifiedNameAccess() {
 		return gaExpressionDsl.getQualifiedNameAccess();
 	}
@@ -1767,7 +1801,7 @@ public class VilBuildLanguageGrammarAccess extends AbstractGrammarElementFinder 
 	//Type:
 	//	name= // specific types will be dynamically loaded at start-up
 	//	QualifiedPrefix | set="setOf" param=TypeParameters | seq="sequenceOf" param=TypeParameters | map="mapOf"
-	//	param=TypeParameters;
+	//	param=TypeParameters | call="callOf" return=Type? param=TypeParameters;
 	public ExpressionDslGrammarAccess.TypeElements getTypeAccess() {
 		return gaExpressionDsl.getTypeAccess();
 	}

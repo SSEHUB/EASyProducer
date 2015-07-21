@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="EASy.Nightly.Experimental.Feature"
+      label="EASy-Nightly: Experimental Bundles"
+      version="0.0.0">
+
+   <description url="http://sse.uni-hildesheim.de/en/fb4/institutes/ifi/software-systems-engineering-sse/research/projects/easy-producer-flexible-generation-of-software-product-lines">
+      Nightly builds of new experimental bundles, which are in a pre-alpha state. 
+   </description>
+
+   <copyright url="http://sse.uni-hildesheim.de/">
+      Copyright (C) 2013 by Stiftung University Hildesheim / Software Systems Engineering, Hildesheim, Germany  
+   </copyright>
+
+   <license url="http://www.apache.org/licenses/LICENSE-2.0">
+    Copyright 2015 by Stiftung University Hildesheim - Software Systems Engineering, Hildesheim, Germany
+    
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+   </license>
+
+   <requires>
+      <import feature="EASy.Nightly.Feature" version="0.0.0"/>
+   </requires>
+   
+   <plugin
+         id="de.uni_hildesheim.sse.reasoning.drools2"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="de.uni_hildesheim.sse.vil.rt"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="de.uni_hildesheim.sse.vil.rt.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="de.uni-hildesheim.sse.easy.instantiatorCore.rt"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+   
+   <plugin
+         id="de.uni_hildesheim.sse.varModel.persistency"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+   
+</feature>

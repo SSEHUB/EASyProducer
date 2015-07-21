@@ -3,22 +3,15 @@
     pip <- qm7::pipTSI
     name2Tuples <- {}
     inputOutputMapping <- {}
-    -> sources(Pipeline) with (qm7::pipTSI) = {qm7::Pipeline::sources {0}}
     for src {
         src <- qm7::Pipeline::sources {0}
         -> process(Source, mapOf(String, Tuple), mapOf(String, mapOf(Tuple, Tuple))) with (qm7::Pipeline::sources {0}, {}, {})
-            -> output(Source) with (qm7::Pipeline::sources {0}) = {qm7::Source::output {0}}
             for f {
                 f <- qm7::Source::output {0}
-                -> destination(Flow) with (qm7::Source::output {0}) = qm7::Flow::destination
                 -> process(FamilyElement, mapOf(String, Tuple), mapOf(String, mapOf(Tuple, Tuple))) with (qm7::Flow::destination, {}, {})
-                    -> family(FamilyElement) with (qm7::Flow::destination) = qm7::FamilyElement::family
                     family <- qm7::FamilyElement::family
-                    -> input(Family) with (qm7::FamilyElement::family) = {qm7::Family::input [0]}
                     inTuples <- {qm7::Family::input [0]}
-                    -> output(Family) with (qm7::FamilyElement::family) = {qm7::Family::output [0]}
                     outTuples <- {qm7::Family::output [0]}
-                    -> name(Family) with (qm7::FamilyElement::family) = qm7::Family::name
                     name <- normalize
                     -> +(String, String) with (normalize, input) = normalizeinput
                     -> processTuples(Tuples, mapOf(String, Tuple), String) with ({qm7::Family::input [0]}, {}, normalizeinput)
@@ -29,7 +22,7 @@
                             count <- 1
                             -> +(String, String) with (normalizeinput, 1) = normalizeinput1
                             name <- normalizeinput1
-                            -> add(Map, Any, Any) with ({{normalizeinput1, qm7::Family::input [0]}}, normalizeinput1, qm7::Family::input [0]) = null
+                            -> add(Map, String, Tuple) with ({{normalizeinput1, qm7::Family::input [0]}}, normalizeinput1, qm7::Family::input [0])
                         }
                     -> +(String, String) with (normalize, output) = normalizeoutput
                     -> processTuples(Tuples, mapOf(String, Tuple), String) with ({qm7::Family::output [0]}, {{normalizeinput1, qm7::Family::input [0]}}, normalizeoutput)
@@ -40,24 +33,17 @@
                             count <- 1
                             -> +(String, String) with (normalizeoutput, 1) = normalizeoutput1
                             name <- normalizeoutput1
-                            -> add(Map, Any, Any) with ({{normalizeinput1, qm7::Family::input [0]}, {normalizeoutput1, qm7::Family::output [0]}}, normalizeoutput1, qm7::Family::output [0]) = null
+                            -> add(Map, String, Tuple) with ({{normalizeinput1, qm7::Family::input [0]}, {normalizeoutput1, qm7::Family::output [0]}}, normalizeoutput1, qm7::Family::output [0])
                         }
-                    -> family(FamilyElement) with (qm7::Flow::destination) = qm7::FamilyElement::family
-                    -> name(DecisionVariable) with (qm7::FamilyElement::family) = family
+                    fName <- normalize
                     -> mapSequence(Sequence, Sequence) with ({qm7::Family::input [0]}, {qm7::Family::output [0]}) = {}
-                    -> add(Map, Any, Any) with ({{family, {}}}, family, {}) = null
-                    -> output(ProcessingElement) with (qm7::Flow::destination) = {qm7::ProcessingElement::output {0}}
+                    -> add(Map, String, Map) with ({{normalize, {}}}, normalize, {})
                     for f {
                         f <- qm7::ProcessingElement::output {0}
-                        -> destination(Flow) with (qm7::ProcessingElement::output {0}) = qm7::Flow::destination
-                        -> process(FamilyElement, mapOf(String, Tuple), mapOf(String, mapOf(Tuple, Tuple))) with (qm7::Flow::destination, {{normalizeinput1, qm7::Family::input [0]}, {normalizeoutput1, qm7::Family::output [0]}}, {{family, {}}})
-                            -> family(FamilyElement) with (qm7::Flow::destination) = qm7::FamilyElement::family
+                        -> process(FamilyElement, mapOf(String, Tuple), mapOf(String, mapOf(Tuple, Tuple))) with (qm7::Flow::destination, {{normalizeinput1, qm7::Family::input [0]}, {normalizeoutput1, qm7::Family::output [0]}}, {{normalize, {}}})
                             family <- qm7::FamilyElement::family
-                            -> input(Family) with (qm7::FamilyElement::family) = {qm7::Family::input [0]}
                             inTuples <- {qm7::Family::input [0]}
-                            -> output(Family) with (qm7::FamilyElement::family) = {qm7::Family::output [0]}
                             outTuples <- {qm7::Family::output [0]}
-                            -> name(Family) with (qm7::FamilyElement::family) = qm7::Family::name
                             name <- process
                             -> +(String, String) with (process, input) = processinput
                             -> processTuples(Tuples, mapOf(String, Tuple), String) with ({qm7::Family::input [0]}, {{normalizeinput1, qm7::Family::input [0]}, {normalizeoutput1, qm7::Family::output [0]}}, processinput)
@@ -68,7 +54,7 @@
                                     count <- 1
                                     -> +(String, String) with (processinput, 1) = processinput1
                                     name <- processinput1
-                                    -> add(Map, Any, Any) with ({{normalizeinput1, qm7::Family::input [0]}, {normalizeoutput1, qm7::Family::output [0]}, {processinput1, qm7::Family::input [0]}}, processinput1, qm7::Family::input [0]) = null
+                                    -> add(Map, String, Tuple) with ({{normalizeinput1, qm7::Family::input [0]}, {normalizeoutput1, qm7::Family::output [0]}, {processinput1, qm7::Family::input [0]}}, processinput1, qm7::Family::input [0])
                                 }
                             -> +(String, String) with (process, output) = processoutput
                             -> processTuples(Tuples, mapOf(String, Tuple), String) with ({qm7::Family::output [0]}, {{normalizeinput1, qm7::Family::input [0]}, {normalizeoutput1, qm7::Family::output [0]}, {processinput1, qm7::Family::input [0]}}, processoutput)
@@ -79,13 +65,11 @@
                                     count <- 1
                                     -> +(String, String) with (processoutput, 1) = processoutput1
                                     name <- processoutput1
-                                    -> add(Map, Any, Any) with ({{normalizeinput1, qm7::Family::input [0]}, {normalizeoutput1, qm7::Family::output [0]}, {processinput1, qm7::Family::input [0]}, {processoutput1, qm7::Family::output [0]}}, processoutput1, qm7::Family::output [0]) = null
+                                    -> add(Map, String, Tuple) with ({{normalizeinput1, qm7::Family::input [0]}, {normalizeoutput1, qm7::Family::output [0]}, {processinput1, qm7::Family::input [0]}, {processoutput1, qm7::Family::output [0]}}, processoutput1, qm7::Family::output [0])
                                 }
-                            -> family(FamilyElement) with (qm7::Flow::destination) = qm7::FamilyElement::family
-                            -> name(DecisionVariable) with (qm7::FamilyElement::family) = family
+                            fName <- process
                             -> mapSequence(Sequence, Sequence) with ({qm7::Family::input [0]}, {qm7::Family::output [0]}) = {{qm7::Family::output [0], qm7::Family::input [0]}}
-                            -> add(Map, Any, Any) with ({{family, {{qm7::Family::output [0], qm7::Family::input [0]}}}}, family, {{qm7::Family::output [0], qm7::Family::input [0]}}) = null
-                            -> output(ProcessingElement) with (qm7::Flow::destination) = {}
+                            -> add(Map, String, Map) with ({{normalize, {}}, {process, {{qm7::Family::output [0], qm7::Family::input [0]}}}}, process, {{qm7::Family::output [0], qm7::Family::input [0]}})
                             for f {
                             }
                     }

@@ -1,8 +1,6 @@
-- open product line editor
-- derive new product line member
-- fill value for floors
-- validate/propagate
-- freeze
-- instantiate
-
-- switch off *. resources for demo
+- Open product line editor
+- Derive new product line member
+- Fill value for floors
+- Validate/propagate
+- Freeze
+- Instantiate

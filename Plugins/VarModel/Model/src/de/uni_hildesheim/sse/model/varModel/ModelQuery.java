@@ -114,6 +114,21 @@ public class ModelQuery {
         releaseDatatypeVisitor(vis);
         return result;
     }
+    
+    /**
+     * Returns the textual representation of the given type.
+     * 
+     * @param type the type to be represented
+     * @param mode the name mode
+     * @return the textual representation
+     */
+    private static final String getType(IDatatype type, QualifiedNameMode mode) {
+        MqDatatypeVisitor vis = getDatatypeVisitorInstance(mode);
+        type.accept(vis);
+        String result = vis.getResult();
+        releaseDatatypeVisitor(vis);
+        return result;
+    }
 
     /**
      * Returns the name to be used for searching for a reference with contained type <code>type</code>.
@@ -289,6 +304,17 @@ public class ModelQuery {
                     break;
                 }
             }
+            if (element instanceof AbstractVariable) { 
+                // in case of interface resolutions - consider dependent types of exports
+                AbstractVariable var = (AbstractVariable) element;
+                IDatatype varType = var.getType();
+                if (varType instanceof Compound) {
+                    result = findElementByTypeName((Compound) varType, typeName);
+                    if (null != result) {
+                        break;
+                    }
+                }
+            }
         }
         
         // search unqualified imported elements
@@ -304,6 +330,32 @@ public class ModelQuery {
             }
         }
 
+        return result;
+    }
+
+    /**
+     * Finds the specified data type definition in the given <code>container</code>.
+     * 
+     * @param container the container to search for
+     * @param typeName the name of the type to search for (may be qualified)
+     * @return the corresponding type or <b>null</b>
+     * @throws ModelQueryException in case of violated project access restrictions
+     */
+    public static IDatatype findElementByTypeName(IDecisionVariableContainer container, String typeName) 
+        throws ModelQueryException {
+        IDatatype result = null;
+        for (int c = 0; null == result && c < container.getElementCount(); c++) {
+            DecisionVariableDeclaration element = container.getElement(c);
+            IDatatype type = element.getType();
+            String tName = getType(element.getType(), TYPE_SEARCH_MODE);
+            if (tName.equals(typeName)) {
+                result = type;
+                break;
+            }
+        }
+        for (int a = 0; null == result && a < container.getAssignmentCount(); a++) {
+            result = findElementByTypeName(container.getAssignment(a), typeName);
+        }
         return result;
     }
 

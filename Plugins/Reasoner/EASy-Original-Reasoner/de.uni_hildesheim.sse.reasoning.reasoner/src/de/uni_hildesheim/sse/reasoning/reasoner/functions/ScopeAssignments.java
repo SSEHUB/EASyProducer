@@ -3,6 +3,7 @@ package de.uni_hildesheim.sse.reasoning.reasoner.functions;
 import java.util.HashSet;
 import java.util.Set;
 
+import de.uni_hildesheim.sse.model.confModel.AssignmentState;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 
 /**
@@ -18,7 +19,9 @@ public class ScopeAssignments {
      * @param variable Assigned variable.
      */
     public static void addAssignedVariable(IDecisionVariable variable) {
-        SCOPE_ASSIGNMENTS.add(variable);
+        if (variable.getState() == AssignmentState.DERIVED) {
+            SCOPE_ASSIGNMENTS.add(variable);            
+        }
     }
     
     /**

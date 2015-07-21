@@ -1,18 +1,26 @@
 project internalConstraintTest {
 
-  typedef Bitrate Integer with (Bitrate >= 128 and Bitrate <= 256);
-  typedef CustomBitrate1 Integer with (CustomBitrate1 >= 199 and CustomBitrate1 <= 199);
-  typedef CustomBitrate2 Integer with (CustomBitrate2 > 198 and CustomBitrate2 < 200);
-  typedef CustomBitrate3 Integer with (CustomBitrate3 == 199);
+  compound Alias {
+    Integer value;
+  }
+  
+  //typedef Bitrate Integer with (Bitrate >= 128 and Bitrate <= 256);
+  //typedef CustomBitrate1 Integer with (CustomBitrate1 >= 199 and CustomBitrate1 <= 199);
+  //typedef CustomBitrate2 Integer with (CustomBitrate2 > 198 and CustomBitrate2 < 200);
+  //typedef CustomBitrate3 Integer with (CustomBitrate3 == 199);
+  typedef CmpType Alias with (CmpType.value > 0);
+  
    
-  Bitrate b;
-  CustomBitrate1 c1;
-  CustomBitrate2 c2;
-  CustomBitrate3 c3;  
+  //Bitrate b;
+  //CustomBitrate1 c1;
+  //CustomBitrate2 c2;
+  //CustomBitrate3 c3;
+  CmpType cmp;  
 
-  b = 128;
-  c1 = 199;
-  c2 = 199; 
-  c3 = 199; 
+  //b = 500;
+  //c1 = 199;
+  //c2 = 199; 
+  //c3 = 199; 
+  cmp.value = -10; 
 
 }

@@ -1,0 +1,130 @@
+// specific rt-VIL script for tests.eu.qualimaster.storm
+
+@advice(ALtest)
+rtVilScript ALtest (Project source, Configuration config, Project target, AdaptationEvent event, mapOf(String, Real) bindings) {
+
+    strategy main(Project source, Configuration config, Project target, AdaptationEvent event) = {
+        objective true;
+        breakdown {
+            tactic defaultTactic();
+        }
+    }
+
+    strategy startup(Project source, Configuration config, Project target, StartupAdaptationEvent event) = {
+        objective true;
+        breakdown {
+            tactic startupTakeFirst(config, event.getPipeline());
+        }
+    }
+
+    tactic defaultTactic() = {
+    }
+
+    tactic startupTakeFirst(Configuration config, String pipName) = {
+        ALtest qm = config;
+        map(Pipeline pip:qm.pipelines) {
+            if (pip.name == pipName) {
+                map(Source src:pip.sources) {
+                    assignFirst(src);
+                };
+            }
+        };
+    }
+
+    assignFirst(Node node) = : {
+    }
+
+    assignFirst(Source src) = : {
+        map(Node n:src.next) {
+            assignFirst(n);
+        };
+    }
+
+    assignFirst(FamilyElement elt) = : {
+        Family fam = elt.family;
+        if (!isConfigured(elt.actual)) {
+            elt.actual = fam.members.toSequence().first();
+        }
+        map(Node n:elt.next) {
+            assignFirst(n);
+        };
+    }
+
+    enact(Project source, Configuration config, Project target) = : {
+        ALtest qm = config.selectChangedWithContext();
+        map(Pipeline p:qm.pipelines) {
+            map(Source s:p.sources) {
+                enact(p, s);
+            };
+        };
+    }
+
+    enact(Pipeline pipeline, Node node) = : {
+    }
+
+    enact(Pipeline pipeline, Source source) = : {
+        map(Node n:source.next) {
+            enact(pipeline, n);
+        };
+    }
+
+    enact(Pipeline pipeline, FamilyElement elt) = : {
+        Family family = elt.family;
+        CommandSequence cmd = new CommandSequence();
+        if (elt.actual != null) {
+            cmd.add(new AlgorithmChangeCommand(pipeline.name, elt.name, elt.actual.name));
+        }
+        map(Node n:elt.next) {
+            enact(pipeline, n);
+        };
+        cmd.exec();
+    }
+
+    bindValues(Configuration config, mapOf(String, Real) bindings) = : {
+        ALtest qm = config;
+        FrozenSystemState state = new FrozenSystemState(bindings);
+        map(Algorithm a:qm.algorithms) {
+            bindValues(a, state);
+        };
+        map(Pipeline p:qm.pipelines) {
+            bindValues(p, state);
+        };
+    }
+
+    bindValues(Algorithm algorithm, FrozenSystemState state) = : {
+        String algName = algorithm.name;
+        algorithm.latency = state.getAlgorithmObservation(algName, TimeBehavior.LATENCY);
+        algorithm.throughputItem = state.getAlgorithmObservation(algName, TimeBehavior.THROUGHPUT_ITEMS);
+    }
+
+    bindValues(Pipeline pipeline, FrozenSystemState state) = : {
+        String pipName = pipeline.name;
+        pipeline.latency = state.getPipelineObservation(pipName, TimeBehavior.LATENCY);
+        pipeline.throughputItem = state.getPipelineObservation(pipName, TimeBehavior.THROUGHPUT_ITEMS);
+        pipeline.capacity = state.getPipelineObservation(pipName, ResourceUsage.CAPACITY);
+        pipeline.executors = state.getPipelineObservation(pipName, ResourceUsage.EXECUTORS);
+        map(Source s:pipeline.sources) {
+            bindValues(s, pipeline, state);
+        };
+    }
+
+    bindValues(Node node, Pipeline pipeline, FrozenSystemState state) = : {
+    }
+
+    bindValues(Source src, Pipeline pipeline, FrozenSystemState state) = : {
+        map(Node n:src.next) {
+            bindValues(n, pipeline, state);
+        };
+    }
+
+    bindValues(FamilyElement elt, Pipeline pipeline, FrozenSystemState state) = : {
+        String pipName = pipeline.name;
+        String eltName = elt.name;
+        elt.capacity = state.getPipelineElementObservation(pipName, eltName, ResourceUsage.CAPACITY);
+        elt.executors = state.getPipelineElementObservation(pipName, eltName, ResourceUsage.EXECUTORS);
+        map(Node n:elt.next) {
+            bindValues(n, pipeline, state);
+        };
+    }
+
+}

@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.uni_hildesheim.sse.Bundle;
+import de.uni_hildesheim.sse.model.cstEvaluation.FreezeEvaluator;
 import de.uni_hildesheim.sse.model.management.VarModel;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.Attribute;
@@ -125,7 +126,6 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
         VarModel.INSTANCE.events().addModelListener(project, this);
         listeners = new ArrayList<IConfigurationChangeListener>();
         init();
-        
     }
     
     /**
@@ -181,7 +181,7 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
                 
                 // TODO freezing shall be done incrementally by the Reasoner, currently freeze-state would not work
                 // Assign frozen state to already frozen variables
-                freezeValues();                
+                freezeValues(project, FilterType.ALL);
             }
         }
     }
@@ -263,21 +263,26 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
     
     /**
      * Sets {@link AssignmentState#FROZEN} state to already frozen variables. 
+     * 
+     * @param project the project to be frozen
+     * @param filter the filter type
      */
-    private void freezeValues() {
-        FrozenElementsFinder finder = new FrozenElementsFinder(project, FilterType.ALL);
+    public void freezeValues(Project project, FilterType filter) {
+        FrozenElementsFinder finder = new FrozenElementsFinder(project, filter);
         List<IFreezable> frozenElements = finder.getFrozenElements();
         
+        FreezeEvaluator selector = new FreezeEvaluator(this);
         for (int i = 0; i < frozenElements.size(); i++) {
             IFreezable frozenElement = frozenElements.get(i);
+            selector.setFreeze(finder.getFreezeBlock(frozenElement));
             if (frozenElement instanceof AbstractVariable) {
-                freezeValues((AbstractVariable) frozenElement);
+                freezeValues((AbstractVariable) frozenElement, selector);
             } else if (frozenElement instanceof Project) {
                 Project prj = (Project) frozenElement;
                 for (int e = 0; e < prj.getElementCount(); e++) {
                     ContainableModelElement elt = prj.getElement(e);
                     if (elt instanceof AbstractVariable) {
-                        freezeValues((AbstractVariable) elt);
+                        freezeValues((AbstractVariable) elt, selector);
                     }
                 }
             }
@@ -288,14 +293,15 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
      * Sets {@link AssignmentState#FROZEN} state to the given variables <code>var</code>. 
      * 
      * @param var the variable to be frozen
+     * @param selector the freeze selector
      */
-    private void freezeValues(AbstractVariable var) {
+    private void freezeValues(AbstractVariable var, IFreezeSelector selector) {
         if (var.isTopLevel() || var.getParent() instanceof AttributeAssignment) {
             IDecisionVariable frozenVariable = getDecision(var);
-            frozenVariable.freeze();
+            frozenVariable.freeze(selector);
         } else {
             IModelElement parent = var.getParent();
-            System.out.println(parent);
+            System.out.println("Config freeze for nested variable not implemented: " + parent);
             //TODO SE: Handle nested Variables.
             //DecisionVariableDeclaration parent = (DecisionVariableDeclaration) frozenElement.getParent();
             //freezeNestedVariable(parent, frozenElement);
@@ -538,11 +544,13 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
     }
 
     /**
-     * Freezes the whole configuration.
+     * Freezes on the whole configuration.
+     * 
+     * @param selector the selector deciding what to freeze
      */
-    public void freeze() {
+    public void freeze(IFreezeSelector selector) {
         for (IDecisionVariable variable : decisions.values()) {
-            variable.freeze();
+            variable.freeze(selector);
         }
     }
 
@@ -564,7 +572,7 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
     public void freeze(String nestedElement) {
         for (IDecisionVariable nestedVariable : decisions.values()) {
             if (nestedVariable.getDeclaration().getName().equals(nestedElement)) {
-                nestedVariable.freeze();
+                nestedVariable.freeze(AllFreezeSelector.INSTANCE); // preliminary
             }
         }
     }

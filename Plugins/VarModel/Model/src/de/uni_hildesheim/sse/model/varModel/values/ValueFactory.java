@@ -324,8 +324,8 @@ public class ValueFactory {
         map.put(Reference.class, new IValueCreator() {
             public ReferenceValue createValue(IDatatype type, Object... value) throws ValueDoesNotMatchTypeException {
                 if (!(type instanceof Reference)) {
-                    throw new ValueDoesNotMatchTypeException("type '" + type.getName() + "' is not a reference", 
-                        ValueDoesNotMatchTypeException.TYPE_MISMATCH);
+                    throw new ValueDoesNotMatchTypeException("type '" + (null == type ? "?" : type.getName()) 
+                        + "' is not a reference", ValueDoesNotMatchTypeException.TYPE_MISMATCH);
                 }
                 Reference ref = (Reference) type;
                 return new ReferenceValue(ref, value);

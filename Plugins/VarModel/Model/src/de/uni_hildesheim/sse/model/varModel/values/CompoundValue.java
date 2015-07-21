@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 University of Hildesheim, Software Systems Engineering
+ * Copyright 2009-2015 University of Hildesheim, Software Systems Engineering
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,10 +62,6 @@ public class CompoundValue extends StructuredValue implements Cloneable {
      */
     CompoundValue(Compound compound, Object... value) throws ValueDoesNotMatchTypeException {
         super(compound);
-        if (compound.isAbstract()) {
-            throw new ValueDoesNotMatchTypeException("cannot assign value as '" + compound.getName() + "' is abstract",
-                ValueDoesNotMatchTypeException.IS_ABSTRACT);
-        }
         nestedElements = new HashMap<String, Value>();
         if (null != value && value.length % 2 != 0) {
             throw new ValueDoesNotMatchTypeException("amount of slot names and values does not match", 
@@ -258,7 +254,7 @@ public class CompoundValue extends StructuredValue implements Cloneable {
                             ValueDoesNotMatchTypeException.TYPE_MISMATCH);
                     }
                     Value oldValue = getNestedValue(name);
-                    if (oldValue != null && oldValue instanceof CompoundValue) {
+                    if (oldValue != null && oldValue instanceof CompoundValue && newValue instanceof CompoundValue) {
                         ((CompoundValue) oldValue).copyValuesFrom((CompoundValue) newValue);
                         newValue = oldValue;
                     }
@@ -420,5 +416,35 @@ public class CompoundValue extends StructuredValue implements Cloneable {
     public boolean equalsPartially(Value value) {
         return equals(value, true);
     }
-        
+
+    /**
+     * Returns the string value of <code>slot</code>. [utility method]
+     * 
+     * @param slot the slot to return the string value for
+     * @return the string value, <b>null</b> if not configured or if <code>slot</code> does not contain a string value
+     */
+    public String getStringValue(String slot) {
+        String result = null;
+        Value nameVal = getNestedValue(slot);
+        if (nameVal instanceof StringValue) {
+            result = ((StringValue) nameVal).getValue();
+        }
+        return result;
+    }
+
+    /**
+     * Returns the boolean value of <code>slot</code>. [utility method]
+     * 
+     * @param slot the slot to return the string value for
+     * @return the boolean value, <b>null</b> if not configured or if <code>slot</code> does not contain a boolean value
+     */
+    public Boolean getBooleanValue(String slot) {
+        Boolean result = null;
+        Value nameVal = getNestedValue(slot);
+        if (nameVal instanceof BooleanValue) {
+            result = ((BooleanValue) nameVal).getValue();
+        }
+        return result;
+    }
+
 }

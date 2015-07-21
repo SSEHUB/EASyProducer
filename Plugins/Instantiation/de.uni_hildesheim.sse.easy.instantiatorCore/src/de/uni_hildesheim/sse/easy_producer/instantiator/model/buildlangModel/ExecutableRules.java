@@ -7,8 +7,7 @@ import java.util.Set;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Rule.Side;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ruleMatch.AbstractRuleMatchExpression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Collection;
 
 /**
@@ -78,17 +77,17 @@ class ExecutableRules {
      * @param expression the failing expression which shall match after the contributing ones are built
      * @param visitor the execution visitor
      * @return the result of <code>expression</code> after the contributing ones are considered
-     * @throws VilLanguageException in case of any execution error
+     * @throws VilException in case of any execution error
      */
     public Object buildContributing(AbstractRuleMatchExpression expression, BuildlangExecution visitor) 
-        throws VilLanguageException {
+        throws VilException {
         List<Rule> contributing = new ArrayList<Rule>();
         for (int r = 0; r < rules.size(); r++) {
             Rule candidate = rules.get(r);
             if (!visitor.isOnStack(candidate)) {
                 try {
                     visitor.resolveMatches(candidate, Side.LHS);
-                } catch (ExpressionException e1) {
+                } catch (VilException e1) {
                 }
                 for (int c = 0; c < candidate.getRuleConditionCount(Side.LHS); c++) {
                     AbstractRuleMatchExpression lhsEx = candidate.getRuleCondition(Side.LHS, c);
@@ -102,14 +101,10 @@ class ExecutableRules {
         for (int c = 0; c < contributing.size(); c++) {
             contributing.get(c).accept(visitor);
         }
-        try {
-            Object value = expression.accept(visitor);
-            assert expression.inferType().isCollection();
-            assert value instanceof Collection;
-            return value;
-        } catch (ExpressionException e) {
-            throw new VilLanguageException(e);
-        }
+        Object value = expression.accept(visitor);
+        assert expression.inferType().isCollection();
+        assert value instanceof Collection;
+        return value;
     }
     
 }

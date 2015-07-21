@@ -1,8 +1,0 @@
-vilScript vtl (Project source, Project target, Configuration config) {
-
-    main(Project source, Project target, Configuration config) = : {
-        sequenceOf(String) cp = {"$source/lib/commons-io-2.4.jar"};
-        aspectJ("$source/src/**/*.java", "$target/bin", classpath=cp);
-    }
-
-}

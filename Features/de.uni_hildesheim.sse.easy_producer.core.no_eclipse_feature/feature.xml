@@ -2,7 +2,7 @@
 <feature
       id="de.uni_hildesheim.sse.easy_producer.core.no_eclipse_feature"
       label="EASy Producer Core Standalone"
-      version="0.10.3"
+      version="1.0.0"
       provider-name="University of Hildesheim - SSE">
 
    <description url="http://www.sse.uni-hildesheim.de/easy-producer">
@@ -41,28 +41,28 @@ limitations under the License.
          id="ReasonerCore"
          download-size="0"
          install-size="0"
-         version="0.10.3"
+         version="1.0.0"
          unpack="false"/>
 
    <plugin
          id="de.uni-hildesheim.sse.easy.instantiatorCore"
          download-size="0"
          install-size="0"
-         version="0.11.3"
+         version="1.0.0"
          unpack="false"/>
 
    <plugin
          id="de.uni_hildesheim.sse.easy_producer.core"
          download-size="0"
          install-size="0"
-         version="0.11.3"
+         version="1.0.0"
          unpack="false"/>
 
    <plugin
          id="de.uni_hildesheim.sse.easy_producer.eclipse"
          download-size="0"
          install-size="0"
-         version="0.11.3"
+         version="1.0.0"
          unpack="false"/>
 
 </feature>

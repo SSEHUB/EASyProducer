@@ -3,7 +3,7 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configur
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 
 /**
  * A name filter based on regular expressions (Perl-Style).
@@ -45,9 +45,9 @@ class NameRegExFilter implements IConfigurationFilter {
      * 
      * @param pattern the (valid) pattern
      * @param type the data type to filter on
-     * @throws ArtifactException in case that the pattern is illformed
+     * @throws VilException in case that the pattern is illformed
      */
-    public NameRegExFilter(String pattern, DataType type) throws ArtifactException {
+    public NameRegExFilter(String pattern, DataType type) throws VilException {
         this(pattern, type, null);
     }
     
@@ -57,16 +57,16 @@ class NameRegExFilter implements IConfigurationFilter {
      * @param pattern the (valid) pattern
      * @param type the data type to filter on
      * @param further an (optional) filter to be considered (may be <b>null</b>)
-     * @throws ArtifactException in case that the pattern is illformed
+     * @throws VilException in case that the pattern is illformed
      */
     public NameRegExFilter(String pattern, DataType type, IConfigurationFilter further) 
-        throws ArtifactException {
+        throws VilException {
         this.type = type;
         this.further = further;
         try {
             this.pattern = Pattern.compile(pattern);
         } catch (PatternSyntaxException e) {
-            throw new ArtifactException(e.getMessage(), ArtifactException.ID_INVALID_PATTERN);
+            throw new VilException(e.getMessage(), VilException.ID_INVALID_PATTERN);
         }
     }
 

@@ -1,5 +1,7 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
+
 /**
  * Defines the interface for a rule block, i.e., a block containing {@link IRuleElement rule elements}.
  * 
@@ -30,5 +32,14 @@ public interface IRuleBlock {
      * @return <code>true</code> if this block is virtual, <code>false</code> else
      */
     public boolean isVirtual();
+    
+    /**
+     * Changes the given rule block. Shifts elements if necessary.
+     * 
+     * @param index index at which the specified element is to be inserted
+     * @param element the element to be inserted
+     * @throws VilException in case that adding the element fails
+     */
+    public void addBodyElement(int index, IRuleElement element) throws VilException;
 
 }

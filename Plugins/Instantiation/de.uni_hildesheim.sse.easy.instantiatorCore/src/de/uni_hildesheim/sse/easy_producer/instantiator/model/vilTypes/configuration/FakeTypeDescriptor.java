@@ -1,11 +1,10 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaType;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.VilException;
 
 /**
  * Represents a fake type descriptor for IVML. This type descriptor which not correspond to
@@ -26,7 +25,7 @@ public class FakeTypeDescriptor extends TypeDescriptor<IvmlElement> {
      * @throws VilException in case that the creation fails
      */
     FakeTypeDescriptor(TypeRegistry registry, String name) throws VilException {
-        super((TypeDescriptor<? extends IVilType>[]) null);
+        super((TypeDescriptor<?>[]) null);
         this.registry = registry;
         setName(name);
         setOperations(null); // to be added incrementally
@@ -69,7 +68,7 @@ public class FakeTypeDescriptor extends TypeDescriptor<IvmlElement> {
     }
 
     @Override
-    public boolean isAssignableFrom(TypeDescriptor<? extends IVilType> desc) {
+    public boolean isAssignableFrom(TypeDescriptor<?> desc) {
         return true; // accept everything
     }
 
@@ -114,6 +113,21 @@ public class FakeTypeDescriptor extends TypeDescriptor<IvmlElement> {
     @Override
     public IMetaType getBaseType() {
         return null;
+    }
+
+    @Override
+    public boolean isInternal() {
+        return false;
+    }
+
+    @Override
+    public boolean isInstantiator() {
+        return false; // actually fakes are only created for IVML
+    }
+
+    @Override
+    public IMetaType getSuperType() {
+        return null; // no information about types
     }
 
 }

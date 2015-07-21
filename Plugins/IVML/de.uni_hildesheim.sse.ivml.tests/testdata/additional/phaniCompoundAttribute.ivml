@@ -1,7 +1,7 @@
 project PhaniCompoundAttribute {
 
     version v0;
-    attribute Integer metaI = 0 to PhaniCompoundAttribute;
+    annotate Integer metaI = 0 to PhaniCompoundAttribute;
     compound C {
         Integer a;
     }

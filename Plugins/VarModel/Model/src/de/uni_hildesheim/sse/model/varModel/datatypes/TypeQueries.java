@@ -90,4 +90,14 @@ public class TypeQueries {
         return same;
     }
 
+    /**
+     * Returns whether <code>type</code> is an enum.
+     * 
+     * @param type the type to check
+     * @return <code>true</code> if <code>type</code> is an enum, <code>false</code> else
+     */
+    public static boolean isEnum(IDatatype type) {
+        return Enum.TYPE.isAssignableFrom(type);
+    }
+
 }

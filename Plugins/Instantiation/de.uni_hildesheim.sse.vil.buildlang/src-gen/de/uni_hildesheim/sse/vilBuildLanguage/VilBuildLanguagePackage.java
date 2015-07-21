@@ -539,6 +539,15 @@ public interface VilBuildLanguagePackage extends EPackage
   int EXPRESSION_STATEMENT__VAR = ExpressionDslPackage.EXPRESSION_STATEMENT__VAR;
 
   /**
+   * The feature id for the '<em><b>Field</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int EXPRESSION_STATEMENT__FIELD = ExpressionDslPackage.EXPRESSION_STATEMENT__FIELD;
+
+  /**
    * The feature id for the '<em><b>Expr</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

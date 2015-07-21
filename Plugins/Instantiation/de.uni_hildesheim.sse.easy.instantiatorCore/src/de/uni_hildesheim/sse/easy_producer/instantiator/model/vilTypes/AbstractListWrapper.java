@@ -15,29 +15,34 @@ import java.util.List;
 public abstract class AbstractListWrapper<T> extends AbstractCollectionWrapper<T> implements Collection<T> {
 
     private List<T> list;
-    private TypeDescriptor<? extends IVilType>[] params;
+    private TypeDescriptor<?> type;
+    private TypeDescriptor<?>[] params;
 
     /**
      * Creates a new array collection wrapper.
      * 
      * @param list the wrapped list
+     * @param set does this type represent a set or a sequence
      * @param registry the type registry to use for the conversion of <code>param</code>
      * @param param the type parameter characterizing <T>
      */
-    public AbstractListWrapper(List<T> list, TypeRegistry registry, Class<? extends IVilType> param) {
+    public AbstractListWrapper(List<T> list, TypeRegistry registry, boolean set, Class<?> param) {
         this.list = list;
         this.params = registry.convert(param);
+        this.type = constructType(this.params, set);
     }
     
     /**
      * Creates a new array collection wrapper.
      * 
      * @param list the wrapped list
+     * @param set does this type represent a set or a sequence
      * @param params the type parameter characterizing <T>
      */
-    public AbstractListWrapper(List<T> list, TypeDescriptor<? extends IVilType>... params) {
+    public AbstractListWrapper(List<T> list, boolean set, TypeDescriptor<?>... params) {
         this.list = list;
         this.params = params;
+        this.type = constructType(this.params, set);
     }
     
     /**
@@ -81,16 +86,7 @@ public abstract class AbstractListWrapper<T> extends AbstractCollectionWrapper<T
      * 
      * @return the params
      */
-    protected TypeDescriptor<? extends IVilType>[] getParams() {
-        return params;
-    }
-
-    /**
-     * Returns the parameter for further use.
-     * 
-     * @return the parameter
-     */
-    protected TypeDescriptor<? extends IVilType>[] getParameter() {
+    protected TypeDescriptor<?>[] getGenericParameter() {
         return params;
     }
 
@@ -105,16 +101,21 @@ public abstract class AbstractListWrapper<T> extends AbstractCollectionWrapper<T
     }
 
     @Override
-    public int getDimensionCount() {
+    public int getGenericParameterCount() {
         return null == params ? 0 : params.length;
     }
 
     @Override
-    public TypeDescriptor<? extends IVilType> getDimensionType(int index) {
+    public TypeDescriptor<?> getGenericParameterType(int index) {
         if (null == params) {
             throw new IndexOutOfBoundsException();
         }
         return params[index];
+    }
+    
+    @Override
+    public TypeDescriptor<?> getType() {
+        return type;
     }
 
     @Override
@@ -135,6 +136,40 @@ public abstract class AbstractListWrapper<T> extends AbstractCollectionWrapper<T
     @Override
     public int hashCode() {
         return list.hashCode();
+    }
+
+    /**
+     * Turns the array into a list for mapping to external Java types.
+     * 
+     * @return the list
+     */
+    @Invisible
+    public java.util.List<T> toMappedList() {
+        java.util.List<T> result;
+        if (null != list) {
+            result = new ArrayList<T>(list.size());
+            result.addAll(list);
+        } else {
+            result = null;
+        }
+        return result;
+    }
+
+    /**
+     * Turns the array into a set for mapping to external Java types.
+     * 
+     * @return the list
+     */
+    @Invisible
+    public java.util.Set<T> toMappedSet() {
+        java.util.Set<T> result;
+        if (null != list) {
+            result = new HashSet<T>(list.size());
+            result.addAll(list);
+        } else {
+            result = null;
+        }
+        return result;
     }
 
 }

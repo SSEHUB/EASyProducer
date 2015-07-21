@@ -17,6 +17,7 @@ import de.uni_hildesheim.sse.easy.ui.internal.Activator;
 import de.uni_hildesheim.sse.easy.ui.productline_editor.ImageProvider;
 import de.uni_hildesheim.sse.easy.ui.productline_editor.ImageProvider.ImageType;
 import de.uni_hildesheim.sse.model.confModel.AssignmentState;
+import de.uni_hildesheim.sse.model.confModel.DisplayNameProvider;
 import de.uni_hildesheim.sse.model.confModel.IAssignmentState;
 
 /**
@@ -83,7 +84,7 @@ abstract class AbstractConfigurationLabelProvider extends CellLabelProvider impl
         
         switch (columnType) {
         case NAME:
-            result = var.getName();
+            result = DisplayNameProvider.getInstance().getDisplayName(var.getVariable());
             break;
         case VALUE:
             result = var.getValueText();

@@ -1,24 +1,28 @@
 package de.uni_hildesheim.sse.easy_producer.core.varMod.tracing;
 
+import java.io.StringWriter;
 import java.util.Map;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildModel;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildlangWriter;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.IBuildlangElement;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.MapExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Rule;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.RuntimeEnvironment;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VariableDeclaration;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.IInstantiatorTracer;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression.CallType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Def;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.ITemplateLangElement;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Template;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateLangWriter;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Collection;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Constants;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.FieldDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 import de.uni_hildesheim.sse.utils.modelManagement.Version;
@@ -79,11 +83,11 @@ public abstract class AbstractVilTracer
     }
 
     @Override
-    public void valueDefined(VariableDeclaration var, Object value) {
+    public void valueDefined(VariableDeclaration var, FieldDescriptor field, Object value) {
     }
 
     @Override
-    public void traceExecutionException(VilLanguageException exception) {
+    public void traceExecutionException(VilException exception) {
         write("exception " + exception.getMessage());
     }
 
@@ -146,14 +150,14 @@ public abstract class AbstractVilTracer
 
     @Override
     public void visitRule(Rule rule, RuntimeEnvironment environment) {
-        String msg = "execute " + rule.getName() + "(";
+        String msg = "execute " + rule.getSignature() + " with (";
         for (int p = 0; p < rule.getParameterCount(); p++) {
             try {
                 if (p > 0) {
                     msg += ", ";
                 }
                 msg += TracerHelper.toString(environment.getValue(rule.getParameter(p)), true);
-            } catch (VilLanguageException e) {
+            } catch (VilException e) {
                 // just ignore this
             }
         }
@@ -221,7 +225,13 @@ public abstract class AbstractVilTracer
 
     @Override
     public void failedAt(IBuildlangElement element) {
-        write("rule failed at " + element.toString());
+        StringWriter out = new StringWriter();
+        BuildlangWriter writer = new BuildlangWriter(out);
+        try {
+            element.accept(writer);
+        } catch (VilException e) {
+        }
+        write("failed at: " + out.toString());
     }
 
     @Override
@@ -246,14 +256,14 @@ public abstract class AbstractVilTracer
 
     @Override
     public void visitDef(Def def, RuntimeEnvironment environment) {
-        String msg = "execute def " + def.getName() + "(";
+        String msg = "execute def " + def.getSignature() + " with (";
         for (int p = 0; p < def.getParameterCount(); p++) {
             try {
                 if (p > 0) {
                     msg += ", ";
                 }
                 msg += TracerHelper.toString(environment.getValue(def.getParameter(p)), true);
-            } catch (VilLanguageException e) {
+            } catch (VilException e) {
                 // just ignore this
             }
         }
@@ -285,6 +295,13 @@ public abstract class AbstractVilTracer
 
     @Override
     public void failedAt(ITemplateLangElement element) {
+        StringWriter out = new StringWriter();
+        TemplateLangWriter writer = new TemplateLangWriter(out);
+        try {
+            element.accept(writer);
+        } catch (VilException e) {
+        }
+        write("failed at: " + out.toString());
     }
 
     @Override

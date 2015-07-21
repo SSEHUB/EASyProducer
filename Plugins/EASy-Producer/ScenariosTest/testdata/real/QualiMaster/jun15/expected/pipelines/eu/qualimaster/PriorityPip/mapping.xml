@@ -1,0 +1,33 @@
+<mapping>
+  <pipeline name="PriorityPip" class="eu.qualimaster.PriorityPip.topology.Topology">
+      <node name="Spring Financial Data" type="source">
+          <component name="PriorityPip_Source0" container="PriorityPip" class="eu.qualimaster.PriorityPip.topology.PriorityPip_Source0Source" receiver="true"/>
+      </node>
+      <node name="fPreprocessor" type="family">
+          <component name="PriorityPip_FamilyElement0" container="PriorityPip" class="eu.qualimaster.PriorityPip.topology.PriorityPip_FamilyElement0FamilyElement" receiver="true"/>
+      </node>
+      <node name="fCorrelationFinancial" type="family">
+          <component name="PriorityPip_FamilyElement1" container="PriorityPip" class="eu.qualimaster.PriorityPip.topology.PriorityPip_FamilyElement1FamilyElement" receiver="true"/>
+      </node>
+      <node name="Priority Data Sink" type="sink">
+          <component name="PriorityPip_Sink0" container="PriorityPip" class="eu.qualimaster.PriorityPip.topology.PriorityPip_Sink0Sink" receiver="true"/>
+      </node>
+      <node name="Twitter Stream Data" type="source">
+          <component name="PriorityPip_Source1" container="PriorityPip" class="eu.qualimaster.PriorityPip.topology.PriorityPip_Source1Source" receiver="true"/>
+      </node>
+      <node name="fSentimentAnalysis" type="family">
+          <component name="PriorityPip_FamilyElement2" container="PriorityPip" class="eu.qualimaster.PriorityPip.topology.PriorityPip_FamilyElement2FamilyElement" receiver="true"/>
+      </node>
+      <node name="fCorrelationTwitter" type="family">
+          <component name="PriorityPip_FamilyElement3" container="PriorityPip" class="eu.qualimaster.PriorityPip.topology.PriorityPip_FamilyElement3FamilyElement" receiver="true"/>
+      </node>
+      <algorithm name="Preprocessor" class="eu.qualimaster.algorithms.imp.correlation.Preprocessor"/>
+      <algorithm name="TopoSoftwareCorrelationFinancial" class="eu.qualimaster.algorithms.imp.correlation.softwaresubtopology.TopoSoftwareCorrelationFinancial"/>
+      <algorithm name="TopoHardwareCorrelationFinancial" class="eu.qualimaster.algorithms.imp.correlation.hardwaresubtopology.TopoHardwareCorrelationFinancial"/>
+      <algorithm name="SentimentAnaylsisSentiWordNetTopology" class="eu.qualimaster.algorithms.stream.sentiment.topology.impl.SentimentAnaylsisSentiWordNetTopology"/>
+      <algorithm name="SentimentAnaylsisSVMTopology" class="eu.qualimaster.algorithms.stream.sentiment.topology.impl.SentimentAnaylsisSVMTopology"/>
+      <algorithm name="TopoSoftwareCorrelationTwitter" class="eu.qualimaster.algorithms.imp.correlation.softwaresubtopology.TopoSoftwareCorrelationTwitter"/>
+      <algorithm name="TopoHardwareCorrelationTwitter" class="eu.qualimaster.algorithms.imp.correlation.hardwaresubtopology.TopoHardwareCorrelationTwitter"/>
+  </pipeline>
+
+</mapping>

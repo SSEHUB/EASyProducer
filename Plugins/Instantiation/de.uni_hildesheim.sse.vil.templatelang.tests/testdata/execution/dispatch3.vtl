@@ -1,0 +1,15 @@
+@advice(dispatch3)
+template dispatch3(Configuration config, Artifact target) {
+
+    def main(Configuration config, Artifact target) {
+        dispatch3 dp = config;
+        process(dp.fam);
+    }
+
+    def process(Node node) {
+    }
+
+    def process(ElementNode element) {
+    }
+
+}

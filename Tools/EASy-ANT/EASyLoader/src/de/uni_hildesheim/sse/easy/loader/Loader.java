@@ -74,7 +74,7 @@ public class Loader extends AbstractLoader {
         List<URL> urls = new ArrayList<URL>();
         data = new ArrayList<BundleInfo>();
         Set<BundleInfo> done = new HashSet<BundleInfo>();
-        Utils.sortByContainment(roots);
+//        Utils.sortByContainment(roots);
         for (BundleInfo info : roots) {
             collectBootstrapData(info, urls, data, done, TAG_EASY);                    
         }

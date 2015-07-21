@@ -75,12 +75,14 @@ public class IntegerTextHandler implements IGUITextHandler {
                 }
             } else {
                 // no range found. Try to cast whole value from string to integer
-                try {
-                    newNumber = Integer.valueOf(currentValue);
-                    numbers.add(newNumber);
-                } catch (NumberFormatException exp) {
-                    // handle cast errors with simple number
-                    throw exp;
+                if (null != currentValue && currentValue.length() > 0) {
+                    try {
+                        newNumber = Integer.valueOf(currentValue);
+                        numbers.add(newNumber);
+                    } catch (NumberFormatException exp) {
+                        // handle cast errors with simple number
+                        throw exp;
+                    }
                 }
             }
         }

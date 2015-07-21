@@ -160,9 +160,9 @@ public class IvmlKeyWords extends OclKeyWords {
     public static final String DEF = "def";
 
     /**
-     * <b>IVML Keyword:</b> Keyword for "attribute".
+     * <b>IVML Keyword:</b> Keyword for "annotate".
      */
-    public static final String ATTRIBUTE = "attribute";
+    public static final String ATTRIBUTE = "annotate";
 
     /**
      * <b>IVML Keyword:</b> Keyword for "assign".

@@ -19,7 +19,6 @@ import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.ModelType;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.PersistentProject;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.standard.PersistenceConstants;
 import de.uni_hildesheim.sse.easy_producer.core.varMod.container.ProjectContainer;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.FileInstantiator;
 import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.AttributeException;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.AttributeValues;
@@ -109,7 +108,7 @@ public class EASyPersistencer implements PersistenceConstants {
                 plp.getMemberController().setSuccessors(model2Relatives(model));
                 break;
             case INSTANTIATORS:
-                createInstantiators(plp, model);
+                // Not longer supported -> Functionality moved to VIL
                 break;
             case REASONERS:
                 createReasonerConfiguration(plp, model);
@@ -133,39 +132,6 @@ public class EASyPersistencer implements PersistenceConstants {
             }
         }
         return plp;
-    }
-
-    /**
-     * Creates instantiator model.
-     * @param model A model of type {@link ModelType#INSTANTIATORS} holding all instantiator information.
-     * @param plp The {@link ProductLineProject} where the instantiators should be saved
-     */
-    private void createInstantiators(PLPInfo plp, Model model) {
-        ArrayList<FileInstantiator> instantiators = new ArrayList<FileInstantiator>();
-        for (int j = 0; j < model.getEntityCount(); j++) {
-            Entity entity = model.getEntity(j);
-            String engine = entity.getAttributeValue(INSTANTIATOR_ENGINE);
-            String projectID = entity.getAttributeValue(INSTANTIATOR_UUID);
-            String[] paths = entity.getAttributeValue(INSTANTIATOR_PATHS).split(INSTANTIATOR_PATH_REGEX);
-            // get the inheritance chain as a list
-            String inheritanceAsString = entity.getAttributeValue(INSTANTIATOR_INHERITED);
-            String[] inheritanceAsArray = inheritanceAsString.split(INSTANTIATOR_PATH_REGEX);
-            List<String> inheritanceChain = new ArrayList<String>(inheritanceAsArray.length);
-            for (String projectName : inheritanceAsArray) {
-                inheritanceChain.add(projectName);
-            }
-            // get the files as a list
-            String filesAsString = entity.getAttributeValue(INSTANTIATOR_FILE);
-            String[] filesAsArray = filesAsString.split(INSTANTIATOR_PATH_REGEX);
-            List<File> filesToInstantiate = new ArrayList<File>(filesAsArray.length);
-            for (String file : filesAsArray) {
-                filesToInstantiate.add(new File(file));
-            }
-            FileInstantiator instantiator = new FileInstantiator(projectID, engine, filesToInstantiate, paths,
-                    inheritanceChain, SPLsManager.INSTANCE, plp.getProjectID());
-            instantiators.add(instantiator);
-        }
-        plp.getInstantiatorController().setFileTypeTransformers(instantiators);
     }
     
     /**

@@ -1,0 +1,15 @@
+project constraintSetInNestedCompoundDefault {
+
+    version v0;
+    
+    compound Cloud {
+        String name;
+        Pipeline pipeline;
+    }
+    compound Pipeline {
+        Integer i;
+        setOf(Constraint) constraints;
+    }
+
+    Cloud cloud = {name = "QM", pipeline = {i = 1, constraints = {cloud.pipeline.i > 0, cloud.pipeline.i < 1}}};
+}

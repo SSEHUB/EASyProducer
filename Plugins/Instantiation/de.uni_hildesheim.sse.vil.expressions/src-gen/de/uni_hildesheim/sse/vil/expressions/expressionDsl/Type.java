@@ -17,6 +17,8 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.Type#getParam <em>Param</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.Type#getSeq <em>Seq</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.Type#getMap <em>Map</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.Type#getCall <em>Call</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.Type#getReturn <em>Return</em>}</li>
  * </ul>
  * </p>
  *
@@ -155,5 +157,57 @@ public interface Type extends EObject
    * @generated
    */
   void setMap(String value);
+
+  /**
+   * Returns the value of the '<em><b>Call</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Call</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Call</em>' attribute.
+   * @see #setCall(String)
+   * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage#getType_Call()
+   * @model
+   * @generated
+   */
+  String getCall();
+
+  /**
+   * Sets the value of the '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.Type#getCall <em>Call</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Call</em>' attribute.
+   * @see #getCall()
+   * @generated
+   */
+  void setCall(String value);
+
+  /**
+   * Returns the value of the '<em><b>Return</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Return</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Return</em>' containment reference.
+   * @see #setReturn(Type)
+   * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage#getType_Return()
+   * @model containment="true"
+   * @generated
+   */
+  Type getReturn();
+
+  /**
+   * Sets the value of the '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.Type#getReturn <em>Return</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Return</em>' containment reference.
+   * @see #getReturn()
+   * @generated
+   */
+  void setReturn(Type value);
 
 } // Type

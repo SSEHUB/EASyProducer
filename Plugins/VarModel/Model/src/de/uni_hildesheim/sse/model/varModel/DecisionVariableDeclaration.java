@@ -18,7 +18,13 @@ package de.uni_hildesheim.sse.model.varModel;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.uni_hildesheim.sse.Bundle;
+import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
+import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
+import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
+import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
+import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
 import de.uni_hildesheim.sse.utils.modelManagement.IVariable;
 
 /**
@@ -142,7 +148,26 @@ public class DecisionVariableDeclaration extends AbstractVariable
 
     @Override
     public boolean propagateAttribute(Attribute attribute) {
-        return addAttribute(new Attribute(attribute.getName(), attribute.getType(), getParent(), this));
+        Attribute att = new Attribute(attribute.getName(), attribute.getType(), getParent(), this);
+        ConstraintSyntaxTree deflt = attribute.getDefaultValue();
+        if (null != deflt) {
+            try {
+                att.setValue(deflt);
+            } catch (ValueDoesNotMatchTypeException e) {
+                logger().exception(e);
+            } catch (CSTSemanticException e) {
+                logger().exception(e);
+            }
+        }
+        return addAttribute(att);
+    }
+    
+    /**
+     * Logger.
+     * @return logger
+     */
+    private static EASyLogger logger() {
+        return EASyLoggerFactory.INSTANCE.getLogger(DecisionVariableDeclaration.class, Bundle.ID);
     }
     
 }

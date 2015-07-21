@@ -37,7 +37,8 @@ public class GuiTracerFactory extends TracerFactory {
 
     @Override
     protected de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ITracer
-    createBuildLanguageTracerImpl() {
+        createBuildLanguageTracerImpl() {
+        
         return VilTracer.INSTANCE;
     }
 

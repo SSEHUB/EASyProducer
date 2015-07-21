@@ -2,6 +2,7 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.SortedMap;
@@ -21,6 +22,8 @@ import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 public class StringValueHelper {
 
     public static final String NULL_VALUE = "null"; // we do not really have a value for null in VIL
+    private static final HashMap<Class<?>, IRegisteredStringValueProvider> REGISTERED_PROVIDERS 
+        = new HashMap<Class<?>, IRegisteredStringValueProvider>();
     
     /**
      * Turns the first character into an upper case character.
@@ -71,6 +74,26 @@ public class StringValueHelper {
         }
         return getStringValue(object, comparator);
     }
+
+    /**
+     * Registers a string value provider.
+     * @param objectClass the class to register the provider for
+     * @param provider the provider
+     */
+    public static void registerStringValueProvider(Class<?> objectClass, IRegisteredStringValueProvider provider) {
+        if (null != objectClass) {
+            REGISTERED_PROVIDERS.put(objectClass, provider);
+        }
+    }
+    
+    /**
+     * Returns the registered string value provider.
+     * @param objectClass the class the provider was registered for
+     * @return the registered provider (or <b>null</b> if none was found)
+     */
+    public static IRegisteredStringValueProvider getStringValueProvider(Class<?> objectClass) {
+        return null == objectClass ? null : REGISTERED_PROVIDERS.get(objectClass);
+    }
     
     /**
      * Turns the given object into a string using {@link IStringValueProvider}.
@@ -91,8 +114,13 @@ public class StringValueHelper {
         } else if (null == object || TypeRegistry.NULL == object) {
             result = NULL_VALUE; // we no 
         } else {
-            // don't are for Pseudo* as they are just types and no instances
-            result = object.toString();
+            IRegisteredStringValueProvider provider = getStringValueProvider(object.getClass());
+            if (null != provider) {
+                result = provider.getStringValue(object, comparator);
+            } else {
+                // don't care for Pseudo* as they are just types and no instances
+                result = object.toString();
+            }
         }
         return result;
     }
@@ -159,9 +187,9 @@ public class StringValueHelper {
             }
             List<T> sorted = new ArrayList<T>();
             sorted.addAll(sortedCollectionEntries.values());
-            TypeDescriptor<? extends IVilType>[] param = TypeDescriptor.createArray(collection.getDimensionCount());
+            TypeDescriptor<?>[] param = TypeDescriptor.createArray(collection.getGenericParameterCount());
             for (int d = 0; d < param.length; d++) {
-                param[d] = collection.getDimensionType(d);
+                param[d] = collection.getGenericParameterType(d);
             }
             if (collection instanceof Set<?>) {
                 collection = new ListSet<T>(sorted, param);

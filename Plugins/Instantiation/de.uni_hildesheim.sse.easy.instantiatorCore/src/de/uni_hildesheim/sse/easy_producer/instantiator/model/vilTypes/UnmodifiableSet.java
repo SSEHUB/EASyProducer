@@ -2,6 +2,7 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes;
 
 import java.util.Iterator;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionEvaluator;
 
 /**
@@ -24,13 +25,13 @@ public class UnmodifiableSet<T> implements Set<T> {
     }
     
     @Override
-    public int getDimensionCount() {
-        return set.getDimensionCount();
+    public int getGenericParameterCount() {
+        return set.getGenericParameterCount();
     }
 
     @Override
-    public TypeDescriptor<? extends IVilType> getDimensionType(int index) {
-        return set.getDimensionType(index);
+    public TypeDescriptor<?> getGenericParameterType(int index) {
+        return set.getGenericParameterType(index);
     }
 
     @Override
@@ -84,7 +85,7 @@ public class UnmodifiableSet<T> implements Set<T> {
     }
 
     @Override
-    public Set<T> selectByType(TypeDescriptor<? extends IVilType> type) {
+    public Set<T> selectByType(TypeDescriptor<?> type) {
         return set.selectByType(type);
     }
 
@@ -99,17 +100,19 @@ public class UnmodifiableSet<T> implements Set<T> {
     }
 
     @Override
+    @OperationMeta(genericArgument = {0 })
     public T add(T element) {
         return element; // do nothing, unmodifiable
     }
 
     @Override
-    public void remove(T element) {
+    public boolean remove(T element) {
         // do nothing, unmodifiable
+        return false;
     }
 
     @Override
-    public Set<T> select(ExpressionEvaluator evaluator) throws ArtifactException {
+    public Set<T> select(ExpressionEvaluator evaluator) throws VilException {
         return set.select(evaluator);
     }
 
@@ -135,6 +138,16 @@ public class UnmodifiableSet<T> implements Set<T> {
     @Override
     public int hashCode() {
         return set.hashCode();
+    }
+
+    @Override
+    public java.util.Set<T> toMappedSet() {
+        return set.toMappedSet();
+    }
+
+    @Override
+    public TypeDescriptor<?> getType() {
+        return set.getType();
     }
 
 }

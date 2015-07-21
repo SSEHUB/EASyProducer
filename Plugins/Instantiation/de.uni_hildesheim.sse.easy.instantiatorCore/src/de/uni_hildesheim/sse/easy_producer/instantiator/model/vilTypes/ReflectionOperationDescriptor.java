@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor.CompatibilityResult;
+import de.uni_hildesheim.sse.model.varModel.values.NullValue;
 
 /**
  * Represents an individual operation available to the VIL languages based on reflection 
@@ -18,30 +20,28 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Operation
  * 
  * @author Holger Eichelberger
  */
-class ReflectionOperationDescriptor extends OperationDescriptor {
+public class ReflectionOperationDescriptor extends OperationDescriptor implements ILazyDescriptor {
 
     /**
      * Stores implicit type equalities handled by boxing/unboxing in Java reflection.
      */
     private static final Map<Class<?>, Class<?>> REFLECTION_EQUALITIES = new HashMap<Class<?>, Class<?>>();
 
-    /**
-     * Stores lazy default values (primitives are sufficient).
-     */
-    private static final Map<Class<?>, Object> LAZY_DEFAULTS = new HashMap<Class<?>, Object>();
-    
     private Method method;
+    private int returnGenericParameterIndex = -1;
     private int returnParameterIndex = -1;
     private boolean storeArtifactsBeforeExecution = false;
+    private boolean trace = true;
     
     /**
      * Creates a new operation descriptor.
      * 
      * @param declaringType the declaring type
      * @param method the reflection method to be called
+     * @param isConstructor whether this descriptor shall act as constructor
      */
-    ReflectionOperationDescriptor(TypeDescriptor<? extends IVilType> declaringType, Method method) {
-        this(declaringType, method, null);
+    public ReflectionOperationDescriptor(TypeDescriptor<?> declaringType, Method method, boolean isConstructor) {
+        this(declaringType, method, null, isConstructor);
     }
     
     /**
@@ -50,11 +50,12 @@ class ReflectionOperationDescriptor extends OperationDescriptor {
      * @param declaringType the declaring type
      * @param method the reflection method to be called
      * @param name the alias name (may be <b>null</b> if the original name of <code>method</code> shall be used)
+     * @param isConstructor whether this descriptor shall act as a constructor
      */
-    ReflectionOperationDescriptor(TypeDescriptor<? extends IVilType> declaringType, Method method, String name) {
-        super(declaringType, name, isConstructor(method));
+    public ReflectionOperationDescriptor(TypeDescriptor<?> declaringType, Method method, String name, 
+        boolean isConstructor) {
+        super(declaringType, name, isConstructor);
         this.method = method;
-        
         AliasType aliasType = getAliasType();
         OperationType opType = getOperationType();
         String opName = null;
@@ -65,10 +66,12 @@ class ReflectionOperationDescriptor extends OperationDescriptor {
         OperationMeta meta = method.getAnnotation(OperationMeta.class);
         if (null != meta) {
             opType = meta.opType();
+            trace = meta.trace();
             if (null != meta.name() && meta.name().length > 0) {
                 aliasType = AliasType.EXPLICIT;
             }
-            returnParameterIndex = meta.useGenericParameter();
+            returnGenericParameterIndex = meta.useGenericParameter();
+            returnParameterIndex = meta.useParameter();
             storeArtifactsBeforeExecution = meta.storeArtifactsBefore();
         }
         boolean isConversion = null != method.getAnnotation(Conversion.class);
@@ -95,32 +98,50 @@ class ReflectionOperationDescriptor extends OperationDescriptor {
         addReflectionEquality(Character.TYPE, Character.class);
         addReflectionEquality(Byte.TYPE, Byte.class);
         addReflectionEquality(Short.TYPE, Short.class);
-
-        LAZY_DEFAULTS.put(Integer.TYPE, 0);
-        LAZY_DEFAULTS.put(Long.TYPE, 0L);
-        LAZY_DEFAULTS.put(Float.TYPE, 0.0F);
-        LAZY_DEFAULTS.put(Double.TYPE, 0.0D);
-        LAZY_DEFAULTS.put(Boolean.TYPE, false);
-        LAZY_DEFAULTS.put(Character.TYPE, 0);
-        LAZY_DEFAULTS.put(Byte.TYPE, 0);
-        LAZY_DEFAULTS.put(Short.TYPE, 0);
+    }
+    
+    @Override
+    public void forceInitialization() {
+        initializeParameters();
+        initializeReturnType();
+    }
+    
+    /**
+     * Returns whether named parameters shall be considered for this descriptor.
+     * 
+     * @return <code>true</code> if named parameters shall be considered, <code>false</code> else
+     */
+    protected boolean considerNamedParameters() {
+        return true;
     }
     
     @Override
     protected void initializeParameters() {
         boolean acceptsNamedParameters = false;
         boolean acceptsImplicitParameters = false;
-        ArrayList<TypeDescriptor<? extends IVilType>> parameter = new ArrayList<TypeDescriptor<? extends IVilType>>();
-        TypeDescriptor<? extends IVilType> declaringType = getDeclaringType();
+        ArrayList<TypeDescriptor<?>> parameter = new ArrayList<TypeDescriptor<?>>();
+        TypeDescriptor<?> declaringType = getDeclaringType();
         if (!Modifier.isStatic(method.getModifiers()) && null != declaringType) {
             parameter.add(declaringType);
         }
+        boolean considerNamed = considerNamedParameters();
         Class<?>[] params = method.getParameterTypes();
+        OperationMeta meta = method.getAnnotation(OperationMeta.class);
+        int[] argGenericIndex = null == meta ? null : meta.genericArgument();
+        TypeDescriptor<?> declaring = getDeclaringType();
+        
         for (int i = 0; i < params.length; i++) {
-            if (i == params.length - 1 && Map.class.isAssignableFrom(params[i])) {
+            if (considerNamed && i == params.length - 1 && Map.class.isAssignableFrom(params[i])) {
                 acceptsNamedParameters = true;
             } else {
-                parameter.add(resolveType(params[i], false));
+                TypeDescriptor<?> type = ReflectionResolver.resolveType(params[i], getParameterGenerics(i));
+                if (null != argGenericIndex && i < argGenericIndex.length) {
+                    int genIndex = argGenericIndex[i];
+                    if (genIndex >= 0 && genIndex < declaring.getGenericParameterCount()) {
+                        type = declaring.getGenericParameterType(genIndex);
+                    }
+                }
+                parameter.add(type);
             }
         }
         if (acceptsNamedParameters) {
@@ -137,10 +158,22 @@ class ReflectionOperationDescriptor extends OperationDescriptor {
         }
         setParameters(parameter, acceptsNamedParameters, acceptsImplicitParameters);
     }
+
+    @Override
+    public OperationDescriptor specializeFor(TypeDescriptor<?> declaringType) {
+        OperationDescriptor result = this;
+        if (declaringType.getGenericParameterCount() > 0) {
+            OperationMeta meta = method.getAnnotation(OperationMeta.class);
+            if (null != meta && null != meta.genericArgument() && meta.genericArgument().length > 0) {
+                result = new ReflectionOperationDescriptor(declaringType, method, isConstructor());
+            }
+        }
+        return result;
+    }
     
     @Override
     protected void initializeReturnType() {
-        setReturnType(resolveType(method.getReturnType(), true));
+        setReturnType(ReflectionResolver.resolveType(method.getReturnType(), getReturnGenerics()));
     }
     
     @Override
@@ -153,7 +186,8 @@ class ReflectionOperationDescriptor extends OperationDescriptor {
             callArgs = args;
         } else {
             if (0 == args.length) {
-                throw new VilException("object missing (first implicit parameter)", VilException.ID_EXECUTION_ERROR);
+                throw new VilException("object missing (first implicit parameter)", 
+                    VilException.ID_EXECUTION_ERROR);
             }
             object = args[0];
             callArgs = new Object[args.length - 1];
@@ -176,11 +210,14 @@ class ReflectionOperationDescriptor extends OperationDescriptor {
             CompatibilityResult comp = isCompatible(null, callArgs);
             if (CompatibilityResult.INCOMPATIBLE == comp) {
                 throwIncompatibleParameter(args);
-            } else if (CompatibilityResult.LAZY_POSSIBLE == comp) {
-                result = lazyExecutionResult();
+            } else if (CompatibilityResult.ARG_EVALUATION_FAILED == comp) {
+                result = null; // cannot evaluate
             } else {
                 try {
                     result = method.invoke(object, callArgs);
+                    if (null == result && Void.TYPE == method.getReturnType()) {
+                        result = NullValue.VALUE; // void methods otherwise cause failing of the calling rule / template
+                    }
                 } catch (IllegalArgumentException e) {
                     throw new VilException(e, VilException.ID_TYPE_INCOMPATIBILITY);
                 } catch (IllegalAccessException e) {
@@ -189,30 +226,12 @@ class ReflectionOperationDescriptor extends OperationDescriptor {
                     if (e.getCause() instanceof NullPointerException) {
                         result = null; // fail-termination-semantics
                     } else {
-                        throw new VilException(e.getCause(), VilException.ID_EXECUTION_ERROR);
+                        throw new VilException("while executing " + getSignature() + ": " + e.getCause(), 
+                            VilException.ID_EXECUTION_ERROR);
                     }
                 }
             }
         }
-        return result;
-    }
-    
-    /**
-     * Determines the (assumed) lazy execution result from the return type.
-     * 
-     * @return the lazy execution result
-     */
-    private Object lazyExecutionResult() {
-        Class<?> returnType = method.getReturnType();
-        Object result;
-        if (!returnType.isPrimitive()) {
-            // get rid of wrappers
-            Class<?> eq = REFLECTION_EQUALITIES.get(returnType);
-            if (null != eq) {
-                returnType = eq;
-            }
-        }
-        result = LAZY_DEFAULTS.get(returnType); // primitives are covered, all others are null
         return result;
     }
     
@@ -227,7 +246,7 @@ class ReflectionOperationDescriptor extends OperationDescriptor {
      */
     public CompatibilityResult isCompatible(Class<?> retType, Object... params) {
         Class<?>[] par = method.getParameterTypes();
-        boolean lazyPossible = true;
+        boolean cannotEvaluate = true;
         boolean compatible = (null == params ? 0 : params.length) == par.length;
         if (null != retType) {
             compatible &= method.getReturnType().isAssignableFrom(retType);
@@ -247,7 +266,7 @@ class ReflectionOperationDescriptor extends OperationDescriptor {
                 || REFLECTION_EQUALITIES.get(par[p]) == cls // basic types match?
                 || (par[p] == Class.class && params[p] instanceof Class); // parameter is class
             if (!parCompatible) {
-                lazyPossible &= params[p] == null;
+                cannotEvaluate &= params[p] == null;
             }
             compatible &= parCompatible;
         }
@@ -255,8 +274,8 @@ class ReflectionOperationDescriptor extends OperationDescriptor {
         if (compatible) {
             result = CompatibilityResult.COMPATIBLE;
         } else {
-            if (lazyPossible) {
-                result = CompatibilityResult.LAZY_POSSIBLE;
+            if (cannotEvaluate) {
+                result = CompatibilityResult.ARG_EVALUATION_FAILED;
             } else {
                 result = CompatibilityResult.INCOMPATIBLE;
             }
@@ -290,6 +309,15 @@ class ReflectionOperationDescriptor extends OperationDescriptor {
             tmp.append(getName());
         }
         tmp.append("(");
+        int pCount = getParameterCount();
+        for (int p = 0; p < pCount; p++) {
+            TypeDescriptor<?> pType = getParameterType(p);
+            tmp.append(pType.getVilName());
+            if (p < pCount - 1) {
+                tmp.append(",");
+            }
+        }
+        /* old:
         Class<?>[] param = method.getParameterTypes();
         if (null != param) {
             for (int p = 0; p < param.length; p++) {
@@ -298,7 +326,7 @@ class ReflectionOperationDescriptor extends OperationDescriptor {
                     tmp.append(",");
                 }
             }
-        }
+        }*/
         tmp.append(")");
         return tmp.toString();
     }
@@ -308,6 +336,15 @@ class ReflectionOperationDescriptor extends OperationDescriptor {
         return method.getDeclaringClass().getSimpleName();
     }
     
+    /**
+     * Returns the wrapped method.
+     * 
+     * @return the method
+     */
+    protected Method getMethod() {
+        return method;
+    }
+    
     @Override
     public String getName() {
         String tmp = getStoredName();
@@ -315,52 +352,28 @@ class ReflectionOperationDescriptor extends OperationDescriptor {
     }
     
     /**
-     * Resolves the given type to a type descriptor.
-     *  
-     * @param cls the class to be resolved
-     * @param returnType whether a return type shall be resolved
-     * @return the resolved type descriptor
+     * Determines the return type of a parameter.
+     * 
+     * @param index the index of the parameter
+     * @return the parameter generics (<b>null</b> if none are specified)
+     * @throws IndexOutOfBoundsException if <code>index &lt; 0 || index &gt;= {@link #getParameterCount()}</code>
      */
-    private TypeDescriptor<? extends IVilType> resolveType(Class<?> cls, boolean returnType) {
-        TypeDescriptor<? extends IVilType> result = null;
-        if (Void.TYPE == cls) {
-            result = ReflectionTypeDescriptor.VOID;
-        } else {
-            TypeDescriptor<?>[] parameter = null;
-            if (returnType) {
-                OperationMeta opMeta = method.getAnnotation(OperationMeta.class);
-                if (null != opMeta) {
-                    Class<?>[] param = opMeta.returnGenerics();
-                    parameter = TypeDescriptor.createArray(param.length);
-                    for (int i = 0; i < param.length; i++) {
-                        parameter[i] = TypeRegistry.DEFAULT.getType(ReflectionTypeDescriptor.getRegName(param[i]));
-                    }
-                }
-            }
-            try {
-                if (ReflectionTypeDescriptor.isSet(cls)) {
-                    result = TypeRegistry.getSetType(parameter);
-                } else if (ReflectionTypeDescriptor.isSequence(cls)) {
-                    result = TypeRegistry.getSequenceType(parameter);
-                }
-            } catch (VilException e) {
-                // no type -> handled later
-            }
-            if (null == result) {
-                result = TypeRegistry.DEFAULT.getType(cls.getName());
-                if (null == result) {
-                    result = TypeRegistry.DEFAULT.getType(cls.getSimpleName()); // artifacts
-                }
-            }
-            if (null == result) {
-                if (Object.class == cls) {
-                    result = ReflectionTypeDescriptor.ANY;
-                } else {
-                    result = ReflectionTypeDescriptor.VOID;
-                }
-            }
+    protected Class<?>[] getParameterGenerics(int index) {
+        return null;
+    }
+
+    /**
+     * Determines the return type generics.
+     * 
+     * @return the return type generics (<b>null</b> if none are specified)
+     */
+    protected Class<?>[] getReturnGenerics() {
+        Class<?>[] param = null;
+        OperationMeta opMeta = method.getAnnotation(OperationMeta.class);
+        if (null != opMeta) {
+            param = opMeta.returnGenerics();
         }
-        return result;
+        return param;
     }
 
     @Override
@@ -369,6 +382,11 @@ class ReflectionOperationDescriptor extends OperationDescriptor {
     }
 
     @Override
+    public int useGenericParameterAsReturn() {
+        return returnGenericParameterIndex;
+    }
+    
+    @Override
     public int useParameterAsReturn() {
         return returnParameterIndex;
     }
@@ -376,6 +394,23 @@ class ReflectionOperationDescriptor extends OperationDescriptor {
     @Override
     public boolean storeArtifactsBeforeExecution() {
         return storeArtifactsBeforeExecution;
+    }
+
+    @Override
+    public boolean requiresDynamicExpressionProcessing() {
+        boolean result;
+        OperationMeta annotation = method.getAnnotation(OperationMeta.class);
+        if (null != annotation) {
+            result = annotation.requiresDynamicExpressionProcessing();
+        } else {
+            result = false;
+        }
+        return result;
+    }
+    
+    @Override
+    public boolean trace() {
+        return trace && super.trace();
     }
 
 }

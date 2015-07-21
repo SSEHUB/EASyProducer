@@ -1,0 +1,10 @@
+-> main(Configuration, FileArtifact) with (<config>, test.texts)
+    -> byName(Configuration, String) with (<config>, fNormalize) = qm1::fNormalize
+    fm <- qm1::fNormalize
+    name <- xxx
+    for alg {
+        alg <- qm1::Family::members {0}
+        -> !=(IvmlElement, Any) with (qm1::Algorithm::algTopologyClass, null) = true
+        visit if-branch
+        topologyCls <- TSITopology
+    }

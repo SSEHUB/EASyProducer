@@ -2,8 +2,9 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.ModelCallExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallArgument;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IExpressionVisitor;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaOperation;
 
 /**
  * Represents the explicit execution of a rule (precondition, rule body).
@@ -19,10 +20,10 @@ public class RuleCallExpression extends ModelCallExpression<VariableDeclaration,
      * @param isSuper this is a super call
      * @param name the name of the rule
      * @param arguments the actual arguments
-     * @throws ExpressionException in case of an erroneously qualified name
+     * @throws VilException in case of an erroneously qualified name
      */
     public RuleCallExpression(Script script, boolean isSuper, String name, CallArgument... arguments) 
-        throws ExpressionException {
+        throws VilException {
         super(script, isSuper, name, arguments);
     }
     
@@ -32,19 +33,19 @@ public class RuleCallExpression extends ModelCallExpression<VariableDeclaration,
      * @param script the actual script to containing <code>rule</code>
      * @param rule the resolved rule to call
      * @param arguments the actual arguments
-     * @throws ExpressionException in case of an erroneously qualified name
+     * @throws VilException in case of an erroneously qualified name
      */
-    RuleCallExpression(Script script, Rule rule, CallArgument... arguments) throws ExpressionException {
+    RuleCallExpression(Script script, Rule rule, CallArgument... arguments) throws VilException {
         super(script, rule, arguments);
     }
 
     @Override
-    protected Class<Rule> getOperationClass() {
+    protected Class<? extends Rule> getOperationClass() {
         return Rule.class;
     }
 
     @Override
-    public Object accept(IExpressionVisitor visitor) throws ExpressionException {
+    public Object accept(IExpressionVisitor visitor) throws VilException {
         Object result;
         if (visitor instanceof IVisitor) {
             result = ((IVisitor) visitor).visitRuleCallExpression(this);
@@ -52,6 +53,11 @@ public class RuleCallExpression extends ModelCallExpression<VariableDeclaration,
             result = visitor.visitExpression(this);
         }
         return result;
+    }
+    
+    @Override
+    protected String getInvalidOperationMessage(IMetaOperation op) {
+        return op.getJavaSignature() + " is not a valid rule";
     }
     
 }

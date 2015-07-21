@@ -1,3 +1,18 @@
+/*
+ * Copyright 2009-2015 University of Hildesheim, Software Systems Engineering
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.uni_hildesheim.sse.easy.ui.productline_editor.configuration;
 
 import java.util.HashMap;
@@ -6,9 +21,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.IWorkspaceDescription;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.jobs.Job;
@@ -31,12 +43,9 @@ import de.uni_hildesheim.sse.easy.ui.core.reasoning.AbstractReasonerListener;
 import de.uni_hildesheim.sse.easy.ui.productline_editor.AbstractEASyEditorPage;
 import de.uni_hildesheim.sse.easy.ui.productline_editor.EasyProducerDialog;
 import de.uni_hildesheim.sse.easy.ui.productline_editor.EclipseConsole;
-import de.uni_hildesheim.sse.easy.ui.productline_editor.TransformatorProgressDialog;
 import de.uni_hildesheim.sse.easy_producer.core.mgmt.IProductLineProjectListener;
-import de.uni_hildesheim.sse.easy_producer.core.mgmt.PLPInfo;
 import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
-import de.uni_hildesheim.sse.easy_producer.instantiator.TranformatorNotificationDelegate;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
 import de.uni_hildesheim.sse.model.confModel.ConfigurationException;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
@@ -61,8 +70,7 @@ import de.uni_hildesheim.sse.utils.messages.Status;
  * @author EL-Sharkawy
  * 
  */
-public class ConfigurationHeaderMenu extends AbstractConfigMenu implements TranformatorNotificationDelegate,
-    IProductLineProjectListener {
+public class ConfigurationHeaderMenu extends AbstractConfigMenu implements IProductLineProjectListener {
 
     private static final EASyLogger LOGGER = EASyLoggerFactory.INSTANCE.getLogger(ConfigurationHeaderMenu.class, 
             Bundle.ID);
@@ -80,8 +88,6 @@ public class ConfigurationHeaderMenu extends AbstractConfigMenu implements Tranf
     private Button undoButton;
     private Button btnInstantiate;
     private Button btnFreezeAll;
-    private TransformatorProgressDialog progressDialog;
-    private PLPInfo plp;
 
     /**
      * Created for demonstrating only. Please remove this after Dry-Run-Review.
@@ -100,6 +106,7 @@ public class ConfigurationHeaderMenu extends AbstractConfigMenu implements Tranf
 
         @Override
         public void endReasoning(ReasoningResult result) {
+            clearErrorMessages();
             if (result.hasConflict()) {
                 Message[] errorMessages = new Message[result.getMessageCount()];
                 for (int i = 0; i < errorMessages.length; i++) {
@@ -108,7 +115,6 @@ public class ConfigurationHeaderMenu extends AbstractConfigMenu implements Tranf
                 setErrorMessages(errorMessages);
                 EasyProducerDialog.showReasonerErrorDialog(getParent().getShell(), errorMessages);
             } else {
-                clearErrorMessages();
                 boolean hasWarnings = false;
                 for (int i = 0; i < result.getMessageCount() && !hasWarnings; i++) {
                     hasWarnings |= result.getMessage(i).getStatus() == Status.WARNING;
@@ -191,7 +197,6 @@ public class ConfigurationHeaderMenu extends AbstractConfigMenu implements Tranf
 
         super(parent, plp);
         setBackground(parent.getBackground());
-        this.plp = plp;
         this.parentPage = parentPage;
         plp.register(this);
         createButtons();
@@ -361,10 +366,10 @@ public class ConfigurationHeaderMenu extends AbstractConfigMenu implements Tranf
                     protected IStatus run(IProgressMonitor monitor) {
                         try {
                             ProductLineProject plp = getProductLineProject();
-                            plp.instantiate(ConfigurationHeaderMenu.this);
+                            plp.instantiate();
                             plp.refreshArtifacts(); // force Eclipse to show new files
-                        } catch (VilLanguageException e) {
-                            final VilLanguageException exc = e;
+                        } catch (VilException e) {
+                            final VilException exc = e;
                             Display.getDefault().asyncExec(new Runnable() {
                                 
                                 @Override
@@ -431,48 +436,6 @@ public class ConfigurationHeaderMenu extends AbstractConfigMenu implements Tranf
     }
 
     @Override
-    public void tranformatorDidFinish() {
-        if (null != progressDialog) {
-            progressDialog.close();
-            progressDialog = null;
-        }
-    }
-
-    @Override
-    public void tranformatorDidStart(final int numberOfFiles) {
-        if (null != progressDialog) {
-            progressDialog.setNumberOfFiles(numberOfFiles);
-        }
-    }
-
-    @Override
-    public void transformatorDidFinishInQueue(final int numberOfFiles) {
-        if (null != progressDialog) {
-            progressDialog.incrementProgress(numberOfFiles);
-        }
-    }
-
-    @Override
-    public void transformatorDidFail(final String message) {
-        if (null != progressDialog) {
-            progressDialog.close();
-            progressDialog = null;
-        }
-        showInfoDialog(message);
-    }
-
-    @Override
-    public void showInfoDialog(final String message) {
-        Display.getDefault().asyncExec(new Runnable() {
-
-            @Override
-            public void run() {
-                EasyProducerDialog.showErrorDialog(getParent().getShell(), message);
-            }
-        });
-    }
-
-    @Override
     public void revalidateButtons() {        
         Display.getDefault().asyncExec(new Runnable() {
             
@@ -505,7 +468,7 @@ public class ConfigurationHeaderMenu extends AbstractConfigMenu implements Tranf
 
     @Override
     public void dispose() {
-        plp.unregister(this);
+        getProductLineProject().unregister(this);
         super.dispose();
     }
 

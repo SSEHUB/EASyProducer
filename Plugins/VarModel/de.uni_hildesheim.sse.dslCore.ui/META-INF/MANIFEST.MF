@@ -2,15 +2,18 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: DSL Core UI
 Bundle-SymbolicName: de.uni_hildesheim.sse.dslCore.ui;singleton:=true
-Bundle-Version: 0.0.1
+Bundle-Version: 1.0.0
 Bundle-Activator: de.uni_hildesheim.sse.dslcore.ui.Activator
 Bundle-Vendor: SSE University of Hildesheim
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.xtext.ui,
+  org.eclipse.ui.ide,
  de.uni_hildesheim.sse.utils,
- de.uni_hildesheim.sse.dslCore
+ de.uni_hildesheim.sse.dslCore,
+ de.uni_hildesheim.sse.varModel;bundle-version="0.11.3"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: de.uni_hildesheim.sse.dslcore.ui,
- de.uni_hildesheim.sse.dslcore.ui.editors
+ de.uni_hildesheim.sse.dslcore.ui.editors,
+ de.uni_hildesheim.sse.dslcore.ui.wizards

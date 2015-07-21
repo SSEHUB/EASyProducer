@@ -16,6 +16,9 @@
 
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Defines a rule block, i.e., a set of rule elements.
  * 
@@ -74,6 +77,33 @@ public abstract class RuleBlock extends ProjectElement implements IRuleBlock {
      */
     public void setBody(IRuleElement[] body) {
         this.body = body;
+    }
+    
+    /**
+     * Changes the given rule block. Shifts elements if necessary.
+     * 
+     * @param body the body to modify
+     * @param index index at which the specified element is to be inserted
+     * @param elt the element to be inserted
+     * @return the changed body
+     */
+    public static IRuleElement[] addBodyElement(IRuleElement[] body, int index, IRuleElement elt) {
+        List<IRuleElement> tmp = new ArrayList<IRuleElement>();
+        if (null != body) {
+            for (int i = 0; i < body.length; i++) {
+                tmp.add(body[i]);
+            }
+            tmp.add(index, elt);
+        } else {
+            tmp.add(elt);
+        }
+        body = new IRuleElement[tmp.size()];
+        return tmp.toArray(body);
+    }
+    
+    @Override
+    public void addBodyElement(int index, IRuleElement elt) {
+        body = addBodyElement(body, index, elt);
     }
 
 }

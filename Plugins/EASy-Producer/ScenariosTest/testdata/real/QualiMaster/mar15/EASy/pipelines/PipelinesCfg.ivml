@@ -1,0 +1,11 @@
+project PipelinesCfg {
+
+	import PriorityPipCfg;
+	
+	pipelines = {
+		refBy(PriorityPip)
+	};
+	freeze {
+		pipelines;
+	}
+}

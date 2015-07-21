@@ -12,12 +12,14 @@ import org.w3c.dom.Node;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.CompositeFragmentArtifact;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FragmentArtifact;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IArtifactChangedListener;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IArtifactVisitor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Binary;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Text;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArraySet;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IStringValueProvider;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ListSet;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationMeta;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
@@ -28,7 +30,8 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
  * @author Holger Eichelberger
  * @author Patrik Pastuschek
  */
-public class XmlElement extends CompositeFragmentArtifact implements IXmlContainer, IStringValueProvider {
+public class XmlElement extends CompositeFragmentArtifact implements IXmlContainer, IStringValueProvider, 
+    IArtifactChangedListener {
 
     private XmlElement[] elements;
     private XmlAttribute[] attributes; // lazy, elements may be null if deleted
@@ -58,14 +61,14 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
      * @param parent The parent of the new XmlElement.
      * @param name The name of the new XmlElement.
      * @return The created XmlElement.
-     * @throws ArtifactException if element could not be created.
+     * @throws VilException if element could not be created.
      */
-    public static XmlElement create(XmlElement parent, String name) throws ArtifactException {
+    public static XmlElement create(XmlElement parent, String name) throws VilException {
         
         XmlElement newElement = null;
         
         if (null == parent) {
-            throw new ArtifactException("Can not append child from NULL element!", ArtifactException.ID_IS_NULL);
+            throw new VilException("Can not append child from NULL element!", VilException.ID_IS_NULL);
         }
 
         try {
@@ -76,7 +79,7 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
             newElement = new XmlElement(parent, name, null, newNode);
             parent.addChild(newElement);
         } catch (DOMException exc) {
-            throw new ArtifactException("Invalid character, name or ID!", ArtifactException.ID_INVALID);
+            throw new VilException("Invalid character, name or ID!", VilException.ID_INVALID);
         }
         
         return newElement;
@@ -87,14 +90,14 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
      * @param parent The parent of the new XmlElement.
      * @param name The name of the new XmlElement.
      * @return The created XmlElement.
-     * @throws ArtifactException if element could not be created.
+     * @throws VilException if element could not be created.
      */
-    public static XmlElement create(XmlFileArtifact parent, String name) throws ArtifactException {
+    public static XmlElement create(XmlFileArtifact parent, String name) throws VilException {
         return create(parent.getRootElement(), name);
     }
     
     @Override
-    public void delete() throws ArtifactException {
+    public void delete() throws VilException {
         checkValidity();
         checkRoot();
         parent.deleteChild(this);
@@ -132,13 +135,13 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
     }
 
     @Override
-    public String getName() throws ArtifactException {
+    public String getName() throws VilException {
         //checkValidity();
         return name;
     }
 
     @Override
-    public void rename(String name) throws ArtifactException {
+    public void rename(String name) throws VilException {
         //checkValidity();
         checkRoot();
         
@@ -168,16 +171,16 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
     }
 
     @Override
-    public Text getText() throws ArtifactException {
+    public Text getText() throws VilException {
         //checkValidity();
         if (null == this.text) {
             this.text = new Text(true);
         }
         return this.text;
     }
-
+    
     @Override
-    public Binary getBinary() throws ArtifactException {
+    public Binary getBinary() throws VilException {
         //checkValidity();
         return new Binary("", true); // TODO to be replaced by parsed text
     }
@@ -189,7 +192,7 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
 
     @Override
     @OperationMeta(returnGenerics = FragmentArtifact.class)
-    public Set<? extends FragmentArtifact> selectAll() throws ArtifactException {
+    public Set<? extends FragmentArtifact> selectAll() throws VilException {
         //checkValidity();
         return new ArraySet<XmlAttribute>(attributes, FragmentArtifact.class);
     }
@@ -201,7 +204,7 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
         
         try {
             checkValidity();
-        } catch (ArtifactException exc) {
+        } catch (VilException exc) {
             exists = false;
         }
         
@@ -212,10 +215,10 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
      * Returns all attributes.
      * 
      * @return the attributes
-     * @throws ArtifactException in case that access is not possible
+     * @throws VilException in case that access is not possible
      */
     @OperationMeta(returnGenerics = XmlAttribute.class)
-    public Set<XmlAttribute> attributes() throws ArtifactException {
+    public Set<XmlAttribute> attributes() throws VilException {
         //checkValidity();
         return new ArraySet<XmlAttribute>(attributes, XmlAttribute.class);
     }
@@ -224,10 +227,10 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
      * Returns all elements.
      * 
      * @return the elements
-     * @throws ArtifactException in case that access is not possible
+     * @throws VilException in case that access is not possible
      */
     @OperationMeta(returnGenerics = XmlElement.class)
-    public Set<XmlElement> elements() throws ArtifactException {
+    public Set<XmlElement> elements() throws VilException {
         //checkValidity();         
         return new ArraySet<XmlElement>(elements, XmlElement.class);
     }
@@ -237,13 +240,13 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
      * 
      * @param name the name of the attribute (may be a regular expression)
      * @return the attribute or <b>null</b> if there is none
-     * @throws ArtifactException in case of already deleted attributes
+     * @throws VilException in case of already deleted attributes
      */
-    public XmlAttribute getAttribute(String name) throws ArtifactException {
+    public XmlAttribute getAttribute(String name) throws VilException {
         //checkValidity();
         XmlAttribute result = null;
         if (null != attributes) {
-            List<ArtifactException> caught = null;
+            List<VilException> caught = null;
             Pattern pattern;
             try {
                 pattern = Pattern.compile(name);
@@ -262,16 +265,16 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
                                 result = attr;
                             }
                         }
-                    } catch (ArtifactException e) {
+                    } catch (VilException e) {
                         if (null == caught) {
-                            caught = new ArrayList<ArtifactException>();
+                            caught = new ArrayList<VilException>();
                         }
                         caught.add(e);
                     }
                 }
             }
             if (null != caught && !caught.isEmpty()) {
-                throw new ArtifactException(caught);
+                throw new VilException(caught);
             }
         }
         return result;
@@ -282,9 +285,9 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
      * 
      * @param name the name of the attribute
      * @param value the new value of the attribute
-     * @throws ArtifactException in case that the attribute cannot be found
+     * @throws VilException in case that the attribute cannot be found
      */
-    public void setAttribute(String name, String value) throws ArtifactException {
+    public void setAttribute(String name, String value) throws VilException {
         //checkValidity();
         checkRoot();
         if (null != attributes) {
@@ -311,17 +314,17 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
      * 
      * @param regEx a regular expression specifying the attributes to be selected
      * @return the set of attribute, being empty if there is none
-     * @throws ArtifactException in case that <code>regEx</code> is invalid
+     * @throws VilException in case that <code>regEx</code> is invalid
      */
     @OperationMeta(returnGenerics = XmlAttribute.class)
-    public Set<XmlAttribute> selectAttributeByRegex(String regEx) throws ArtifactException {
+    public Set<XmlAttribute> selectAttributeByRegex(String regEx) throws VilException {
         //checkValidity();
         List<XmlAttribute> result = new ArrayList<XmlAttribute>();
         Pattern pattern;
         try {
             pattern = Pattern.compile(regEx);
         } catch (PatternSyntaxException e) {
-            throw new ArtifactException(e, ArtifactException.ID_PATTERN);
+            throw new VilException(e, VilException.ID_PATTERN);
         }
         if (null != attributes) {
             for (int a = 0; a < attributes.length; a++) {
@@ -339,14 +342,20 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
     
     @Override
     @OperationMeta(returnGenerics = XmlElement.class)
-    public Set<XmlElement> selectByName(String name) throws ArtifactException {
+    public Set<XmlElement> selectByName(String name) throws VilException {
         return selectByName(name, true);
     }
     
     @Override
     @OperationMeta(returnGenerics = XmlElement.class)
-    public Set<XmlElement> selectByPath(String path) throws ArtifactException {
+    public Set<XmlElement> selectByPath(String path) throws VilException {
         return PathUtils.selectByPath(this, PathUtils.normalize(path));
+    }
+    
+    @Override
+    @OperationMeta(returnGenerics = XmlElement.class)
+    public Set<XmlElement> selectByXPath(String path) throws VilException {
+        return PathUtils.selectByXPath(path, node, this);
     }
     
     /**
@@ -356,10 +365,10 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
      * @param name The required name.
      * @param caseSensitive True if case-sensitive, false otherwise.
      * @return set with matching XmlElements.
-     * @throws ArtifactException in case that invalid Elements are used.
+     * @throws VilException in case that invalid Elements are used.
      */
     @OperationMeta(returnGenerics = XmlElement.class)
-    public Set<XmlElement> selectByName(String name, boolean caseSensitive) throws ArtifactException {
+    public Set<XmlElement> selectByName(String name, boolean caseSensitive) throws VilException {
         //checkValidity();
         List<XmlElement> result = new ArrayList<XmlElement>();
         
@@ -400,10 +409,10 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
      * 
      * @param regEx a regular expression specifying the elements to be selected
      * @return Set of XmlElements matching the regEx.
-     * @throws ArtifactException in case that invalid Elements are used.
+     * @throws VilException in case that invalid Elements are used.
      */
     @OperationMeta(returnGenerics = XmlElement.class)
-    public Set<XmlElement> selectByRegEx(String regEx) throws ArtifactException {
+    public Set<XmlElement> selectByRegEx(String regEx) throws VilException {
         //checkValidity();
         List<XmlElement> result = new ArrayList<XmlElement>();
         Pattern pattern;
@@ -411,7 +420,7 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
         try {
             pattern = Pattern.compile(regEx);
         } catch (PatternSyntaxException e) {
-            throw new ArtifactException(e, ArtifactException.ID_PATTERN);
+            throw new VilException(e, VilException.ID_PATTERN);
         }
         
         if (pattern.matcher(this.getName()).matches()) {
@@ -441,7 +450,7 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
                         this.node.getAttributes().removeNamedItem(attribute.getName());
                     } catch (DOMException e) {
                         e.printStackTrace();
-                    } catch (ArtifactException e) {
+                    } catch (VilException e) {
                         e.printStackTrace();
                     }
                     attributes[a] = null;    
@@ -456,11 +465,11 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
      * 
      * @param attribute the attribute to be renamed.
      * @param name the new name of this attribute
-     * @throws ArtifactException in case that invalid attributes are used
+     * @throws VilException in case that invalid attributes are used
      */
-    void renameAttribute(XmlAttribute attribute, String name) throws ArtifactException {
+    void renameAttribute(XmlAttribute attribute, String name) throws VilException {
         if (null != attributes) {
-            List<ArtifactException> caught = null;
+            List<VilException> caught = null;
             boolean foundAttribute = false;
             boolean foundName = false;
             for (int a = 0; a < attributes.length; a++) {
@@ -468,9 +477,9 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
                 foundAttribute |= (attr == attribute);
                 try {
                     foundName |= (attr != attribute && attr.getName().equals(name));
-                } catch (ArtifactException e) {
+                } catch (VilException e) {
                     if (null == caught) {
-                        caught = new ArrayList<ArtifactException>();
+                        caught = new ArrayList<VilException>();
                     }
                     caught.add(e);
                 }
@@ -482,7 +491,7 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
                 attribute.setName(name);                
             }
             if (null != caught && !caught.isEmpty()) {
-                throw new ArtifactException(caught);
+                throw new VilException(caught);
             }
         }
     }
@@ -499,21 +508,21 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
     /**
      * Checks the validity of this object.
      * 
-     * @throws ArtifactException in case that this object is invalid
+     * @throws VilException in case that this object is invalid
      */
-    private void checkValidity() throws ArtifactException {
+    private void checkValidity() throws VilException {
         if (null == this.node) {
-            throw new ArtifactException("element already deleted", ArtifactException.ID_INVALID);
+            throw new VilException("element already deleted", VilException.ID_INVALID);
         }
     }
     
     /**
      * Checks if this object represents the Root element. Root elements can not be changed.
-     * @throws ArtifactException in case that this object is the root element.
+     * @throws VilException in case that this object is the root element.
      */
-    private void checkRoot() throws ArtifactException {
+    private void checkRoot() throws VilException {
         if (null != this.node && this.node.getOwnerDocument().getDocumentElement() == this.node) {
-            throw new ArtifactException("root element can not be changed", ArtifactException.ID_SECURITY);
+            throw new VilException("root element can not be changed", VilException.ID_SECURITY);
         }        
     }
 
@@ -543,19 +552,28 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
     
     /**
      * Sets the cdata of the element.
+     * 
      * @param cdata String of the cdata to store
-     * @throws ArtifactException in case that reading fails for some reason
+     * @throws VilException in case that reading fails for some reason
      */
-    void setCdata(String cdata) throws ArtifactException {
-        this.cdata = new Text(cdata, true);
+    public void setCdata(String cdata) throws VilException {
+        if (null == this.cdata) {
+            this.cdata = new Text(cdata, true);
+            this.cdata.getListeners().registerListener(this);
+        } else {
+            this.cdata.setText(cdata);
+        }
     }
     
     /**
      * Returns the cdata of the element.
      * @return the cdata information of this element. Null if there is no cdata
-     * @throws ArtifactException if element is invalid.
+     * @throws VilException if element is invalid.
      */
-    public Text getCdata() throws ArtifactException {
+    public Text getCdata() throws VilException {
+        if (null == cdata) {
+            setCdata("");
+        }
         //checkValidity();
         return this.cdata;
     }
@@ -579,7 +597,7 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
     }
     
     @Override
-    public void update() throws ArtifactException {
+    public void update() throws VilException {
         //Method not needed at the moment.
     }
     
@@ -587,13 +605,13 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
     /**
      * Adds a child XmlElement to this XmlElement.
      * @param child The new child.
-     * @throws ArtifactException If child could not be added.
+     * @throws VilException If child could not be added.
      */
-    void addChild(XmlElement child) throws ArtifactException {
+    void addChild(XmlElement child) throws VilException {
         
         if (null == child) {
-            throw new ArtifactException("NULL can not be added as a child of an XmlElement!", 
-                    ArtifactException.ID_IS_NULL);
+            throw new VilException("NULL can not be added as a child of an XmlElement!", 
+                VilException.ID_IS_NULL);
         }
         
         XmlElement[] newElements;
@@ -619,13 +637,13 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
      * @param child The new child XmlElement.
      * @param childNode The new child Node.
      * @return The created XmlElement.
-     * @throws ArtifactException If child could not be appended.
+     * @throws VilException If child could not be appended.
      */
-    XmlElement appendChild(XmlElement child, Node childNode) throws ArtifactException {
+    XmlElement appendChild(XmlElement child, Node childNode) throws VilException {
         
         if (null == child || null == childNode) {
-            throw new ArtifactException("NULL can not be added as a child of an XmlElement!", 
-                    ArtifactException.ID_IS_NULL);
+            throw new VilException("NULL can not be added as a child of an XmlElement!", 
+                VilException.ID_IS_NULL);
         }
         
         this.insertElement(child, this.elements[this.elements.length - 1]);
@@ -633,8 +651,8 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
         try {
             this.node.appendChild(childNode);
         } catch (DOMException exc) {
-            throw new ArtifactException("Unable to append a child from a " + this.node.getNodeName() + " Node!", 
-                ArtifactException.ID_INVALID);
+            throw new VilException("Unable to append a child from a " + this.node.getNodeName() + " Node!", 
+                VilException.ID_INVALID);
         }
         
         return child;
@@ -647,9 +665,9 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
      * @param name The name of the new attribute.
      * @param value The value of the new attribute.
      * @return The created attribute.
-     * @throws ArtifactException If attribute could not be added.
+     * @throws VilException If attribute could not be added.
      */
-    XmlAttribute addAttribute(String name, String value) throws ArtifactException {
+    XmlAttribute addAttribute(String name, String value) throws VilException {
 
         return addAttribute(name, value, true);
         
@@ -662,9 +680,9 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
      * @param value The value of the new attribute.
      * @param forceOverwrite True if existing attributes with same name shall be overwritten. Default = true.
      * @return The created attribute.
-     * @throws ArtifactException If attribute could not be added.
+     * @throws VilException If attribute could not be added.
      */
-    XmlAttribute addAttribute(String name, String value, boolean forceOverwrite) throws ArtifactException {
+    XmlAttribute addAttribute(String name, String value, boolean forceOverwrite) throws VilException {
         
         XmlAttribute previousAtt = this.getAttribute(name);
         XmlAttribute newAtt = null;
@@ -701,12 +719,12 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
      * Inserts an XmlElement at a certain position.
      * @param elem The XmlElement that is to be inserted.
      * @param previous The XmlElement previous to the new XmlElement. If null, XmlElement will be inserted as first.
-     * @throws ArtifactException if XmlElement could not be inserted for whatever reason.
+     * @throws VilException if XmlElement could not be inserted for whatever reason.
      */
-    private void insertElement(XmlElement elem, XmlElement previous) throws ArtifactException {
+    private void insertElement(XmlElement elem, XmlElement previous) throws VilException {
         
         if (null == elem) {
-            throw new ArtifactException("Tried to insert NULL element as child!", ArtifactException.ID_IS_NULL);
+            throw new VilException("Tried to insert NULL element as child!", VilException.ID_IS_NULL);
         }
         
         XmlElement[] newElements;
@@ -737,4 +755,10 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
         return "xmlElement \"" + name + "\"";
     }
 
+    @Invisible
+    @Override
+    public void artifactChanged(Object cause) throws VilException {
+        node.setTextContent(cdata.getText());
+    }
+    
 }

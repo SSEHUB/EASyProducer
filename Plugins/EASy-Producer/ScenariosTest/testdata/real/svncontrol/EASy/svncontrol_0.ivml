@@ -2,7 +2,7 @@ project svncontrol {
     version v0;
 	
 	enum BindingTime {compile, startup, runtime};
-	attribute BindingTime bindingTime to svncontrol;
+	annotate BindingTime bindingTime to svncontrol;
 	
 	Boolean OPT_HOOKS;
 	Boolean OPT_SCHEDULES;

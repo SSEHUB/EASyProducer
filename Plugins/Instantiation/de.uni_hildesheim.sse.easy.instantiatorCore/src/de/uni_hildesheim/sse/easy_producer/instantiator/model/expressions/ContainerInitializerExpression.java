@@ -3,10 +3,9 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.VilException;
 
 /**
  * Represents a container initializer expression consisting of various entries
@@ -17,7 +16,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.VilExcept
 public class ContainerInitializerExpression extends Expression {
 
     private Expression[] initExpressions;
-    private TypeDescriptor<? extends IVilType> type;
+    private TypeDescriptor<?> type;
 
     /**
      * Creates a new empty container initializer expression.
@@ -44,7 +43,7 @@ public class ContainerInitializerExpression extends Expression {
      *   or container initializer expression
      * @param type the type of the expression
      */
-    private ContainerInitializerExpression(Expression[] initExpressions, TypeDescriptor<? extends IVilType> type) {
+    private ContainerInitializerExpression(Expression[] initExpressions, TypeDescriptor<?> type) {
         this.initExpressions = initExpressions;
         this.type = type;
     } 
@@ -76,9 +75,9 @@ public class ContainerInitializerExpression extends Expression {
      * @param t2 the second type
      * @return the more common type or "Any"
      */
-    private static  TypeDescriptor<? extends IVilType> moreCommon(TypeDescriptor<? extends IVilType> t1, 
-        TypeDescriptor<? extends IVilType> t2) {
-        TypeDescriptor<? extends IVilType> result;
+    private static  TypeDescriptor<?> moreCommon(TypeDescriptor<?> t1, 
+        TypeDescriptor<?> t2) {
+        TypeDescriptor<?> result;
         if (t1.isAssignableFrom(t2)) {
             result = t1;
         } else if (t2.isAssignableFrom(t1)) {
@@ -90,12 +89,12 @@ public class ContainerInitializerExpression extends Expression {
     }
     
     @Override
-    public TypeDescriptor<? extends IVilType> inferType() throws ExpressionException {
+    public TypeDescriptor<?> inferType() throws VilException {
         if (null == type) {
-            TypeDescriptor<? extends IVilType>[] parameter;
+            TypeDescriptor<?>[] parameter;
             if (getInitExpressionsCount() > 0) {
-                List<TypeDescriptor<? extends IVilType>> params = new ArrayList<TypeDescriptor<? extends IVilType>>();
-                List<TypeDescriptor<? extends IVilType>> local = new ArrayList<TypeDescriptor<? extends IVilType>>();
+                List<TypeDescriptor<?>> params = new ArrayList<TypeDescriptor<?>>();
+                List<TypeDescriptor<?>> local = new ArrayList<TypeDescriptor<?>>();
                 for (int e = 0; e < getInitExpressionsCount(); e++) {
                     Expression ex = getInitExpression(e);
                     local.clear();
@@ -111,8 +110,8 @@ public class ContainerInitializerExpression extends Expression {
                         params.addAll(local);
                     } else {
                         if (params.size() != local.size()) {
-                            throw new ExpressionException("parameter size does not match", 
-                                ExpressionException.ID_SEMANTIC);
+                            throw new VilException("parameter size does not match", 
+                                VilException.ID_SEMANTIC);
                         } else {
                             for (int p = 0; p < params.size(); p++) {
                                 params.set(p, moreCommon(params.get(p), local.get(p)));
@@ -125,17 +124,13 @@ public class ContainerInitializerExpression extends Expression {
             } else {
                 parameter = null;
             }
-            try {
-                type = TypeRegistry.getSequenceType(parameter); // allow duplicates, map will convert automatically
-            } catch (VilException e) {
-                throw new ExpressionException(e);
-            }
+            type = TypeRegistry.getSequenceType(parameter); // allow duplicates, map will convert automatically
         }
         return type;
     }
 
     @Override
-    public Object accept(IExpressionVisitor visitor) throws ExpressionException {
+    public Object accept(IExpressionVisitor visitor) throws VilException {
         return visitor.visitContainerInitializerExpression(this);
     }
     
@@ -146,10 +141,10 @@ public class ContainerInitializerExpression extends Expression {
      * @throws VilException in case that conversion fails
      */
     public ContainerInitializerExpression toSet() throws VilException {
-        TypeDescriptor<? extends IVilType>[] parameter;
-        parameter = TypeDescriptor.createArray(type.getParameterCount());
+        TypeDescriptor<?>[] parameter;
+        parameter = TypeDescriptor.createArray(type.getGenericParameterCount());
         for (int p = 0; p < parameter.length; p++) {
-            parameter[p] = type.getParameterType(p);
+            parameter[p] = type.getGenericParameterType(p);
         }
         return new ContainerInitializerExpression(initExpressions, TypeRegistry.getSetType(parameter));
     }

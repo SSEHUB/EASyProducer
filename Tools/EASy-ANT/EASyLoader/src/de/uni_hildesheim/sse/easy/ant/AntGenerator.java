@@ -3,11 +3,14 @@ package de.uni_hildesheim.sse.easy.ant;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 import java.util.Vector;
 
 import org.apache.tools.ant.Task;
+import org.apache.tools.ant.types.selectors.SelectorUtils;
 
 import de.uni_hildesheim.sse.easy.loader.Generator;
+import de.uni_hildesheim.sse.easy.loader.IExclusionSelector;
 
 /**
  * Ant Task that will start the automated generation.
@@ -15,6 +18,7 @@ import de.uni_hildesheim.sse.easy.loader.Generator;
  */
 public class AntGenerator extends Task {
 
+    private static final boolean DEBUG = false;
     private Vector<BaseFeature> base = new Vector<BaseFeature>();
     private Vector<AddFeature> addF = new Vector<AddFeature>();
     private boolean forced = true;
@@ -23,6 +27,8 @@ public class AntGenerator extends Task {
     private String eclipsePath = "plugins/eclipse";
     private String baseDir = ".";
     private String libsPath = ".";
+    private IExclusionSelector exclusionSelector = null;
+    
     /**
      * Where to find compiled classes, relative to base dir.
      */
@@ -66,6 +72,47 @@ public class AntGenerator extends Task {
         if (null != target) {
             this.target = target;
         }
+    }
+    
+    /**
+     * Defines optional global exclusion patterns.
+     * 
+     * @param excludes the exclusion patterns
+     */
+    public void setExcludes(String excludes) {
+        this.exclusionSelector = new AntPathExclusionSelector(excludes);
+    }
+    
+    /**
+     * Implements a global exclusion selector based on ANT patterns.
+     * 
+     * @author Holger Eichelberger
+     */
+    private static class AntPathExclusionSelector implements IExclusionSelector {
+
+        private List<String> patterns = new ArrayList<String>();
+        
+        /**
+         * Creates an exclusion selector.
+         * 
+         * @param excludes the exclude patterns in ANT-style, comma separated
+         */
+        private AntPathExclusionSelector(String excludes) {
+            StringTokenizer tok = new StringTokenizer(excludes, ", ", false); // ANT style
+            while (tok.hasMoreTokens()) {
+                patterns.add(tok.nextToken());
+            }
+        }
+        
+        @Override
+        public boolean isExcluded(String name) {
+            boolean excluded = false;
+            for (int p = 0; !excluded && p < patterns.size(); p++) {
+                excluded = SelectorUtils.match(patterns.get(p), name);
+            }
+            return excluded;
+        }
+        
     }
     
     /**
@@ -127,16 +174,18 @@ public class AntGenerator extends Task {
      * The task executer.
      */
     public void execute() {
-        System.out.println();
-        System.out.println("Base: ");
-        for (int i = 0; i < base.size(); i++) {
-            System.out.println(base.get(i).getFile().getAbsolutePath());
+        if (DEBUG) {
+            System.out.println();
+            System.out.println("Base: ");
+            for (int i = 0; i < base.size(); i++) {
+                System.out.println(base.get(i).getFile().getAbsolutePath());
+            }
+            System.out.println("Add: ");
+            for (int i = 0; i < addF.size(); i++) {
+                System.out.println(addF.get(i).getFile().getAbsolutePath());
+            }
+            System.out.println("Forced: " + forced);
         }
-        System.out.println("Add: ");
-        for (int i = 0; i < addF.size(); i++) {
-            System.out.println(addF.get(i).getFile().getAbsolutePath());
-        }
-        System.out.println("Forced: " + forced);
         
         List<File> baseList = new ArrayList<File>();
         List<File> addList = new ArrayList<File>();
@@ -149,15 +198,18 @@ public class AntGenerator extends Task {
             addList.add(addF.get(i).getFile());
         }
         
-        System.out.println();
-        System.out.println("Base: ");
-        for (int i = 0; i < baseList.size(); i++) {
-            System.out.println(baseList.get(i).getAbsolutePath());
+        if (DEBUG) {
+            System.out.println();
+            System.out.println("Base: ");
+            for (int i = 0; i < baseList.size(); i++) {
+                System.out.println(baseList.get(i).getAbsolutePath());
+            }
+            System.out.println("Add: ");
+            for (int i = 0; i < addList.size(); i++) {
+                System.out.println(addList.get(i).getAbsolutePath());
+            }
         }
-        System.out.println("Add: ");
-        for (int i = 0; i < addList.size(); i++) {
-            System.out.println(addList.get(i).getAbsolutePath());
-        }
+        Generator.setExclusionSelector(exclusionSelector);
         Generator.autoGenerate(baseList, addList, forced, pluginPath, eclipsePath, target, baseDir, 
                 classesPath, libsPath);
         

@@ -187,7 +187,7 @@ public class ModelLocations <M extends IModel> {
  
     }
     
-    private static Map<String, Location> knownLocations = new HashMap<String, Location>();
+    private Map<String, Location> knownLocations = new HashMap<String, Location>();
     private IModelManagementRepository<M> repository;
     private List<Location> locations = new ArrayList<Location>();
     private Set<File> excludedLocations = new HashSet<File>();
@@ -262,7 +262,7 @@ public class ModelLocations <M extends IModel> {
      * 
      * @see {@link #getLocationFor(File, boolean)}
      */
-    public static Location getLocationFor(File file) throws ModelManagementException {
+    private Location getLocationFor(File file) throws ModelManagementException {
         return getLocationFor(file, false);
     }
     
@@ -275,7 +275,7 @@ public class ModelLocations <M extends IModel> {
      * @return the location related to <code>file</code>, may be <b>null</b> depending on <code>create</code>
      * @throws ModelManagementException in case that <code>file</code> cannot be accessed / resolved
      */
-    public static synchronized Location getLocationFor(File file, boolean create) throws ModelManagementException {
+    private synchronized Location getLocationFor(File file, boolean create) throws ModelManagementException {
         try {
             File cFile = file.getCanonicalFile();
             String key = cFile.toString();
@@ -519,6 +519,27 @@ public class ModelLocations <M extends IModel> {
             if (!depsExist && null != toRemove) {
                 knownLocations.remove(toRemove);
             }
+        }
+    }
+    
+    /**
+     * Updates all model information for all locations.
+     * 
+     * @throws ModelManagementException in case that updating fails for some reason
+     */
+    public void updateModelInformation() throws ModelManagementException {
+        ModelManagementException ex = null;
+        for (int l = 0; l < locations.size(); l++) {
+            try {
+                repository.updateModelInformation(locations.get(l).getLocation(), ProgressObserver.NO_OBSERVER);
+            } catch (ModelManagementException e) {
+                if (null == ex) {
+                    ex = e;
+                }
+            }
+        }
+        if (null != ex) {
+            throw ex;
         }
     }
     

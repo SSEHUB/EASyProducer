@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry excluding="de/uni_hildesheim/sse/easy/loader/framework/package-info.java" kind="src" path="test"/>
-	<classpathentry kind="lib" path="libs/ant/ant.jar"/>
+	<classpathentry kind="lib" path="libs/ant/ant.jar" sourcepath="W:/apache-libs/apache-ant-1.8.2-src/apache-ant-1.8.2/src"/>
 	<classpathentry kind="lib" path="libs/eclipse/org.eclipse.osgi_3.9.1.v20140110-1610.jar"/>
 	<classpathentry kind="lib" path="libs/eclipse/org.eclipse.osgi.services_3.3.100.v20130513-1956.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>

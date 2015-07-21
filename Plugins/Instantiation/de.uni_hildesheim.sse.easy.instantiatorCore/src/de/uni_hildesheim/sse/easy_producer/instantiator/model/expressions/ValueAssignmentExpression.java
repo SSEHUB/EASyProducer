@@ -1,7 +1,8 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VariableDeclaration;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.FieldDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
@@ -14,6 +15,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegis
 public class ValueAssignmentExpression extends Expression {
 
     private VariableDeclaration varDecl;
+    private FieldDescriptor field;
     private Expression valueExpression;
     
     /**
@@ -24,7 +26,20 @@ public class ValueAssignmentExpression extends Expression {
      * @param valueExpression the value expression
      */
     public ValueAssignmentExpression(VariableDeclaration varDecl, Expression valueExpression) {
+        this(varDecl, null, valueExpression);
+    }
+
+    /**
+     * Creates a new value assignment expression which assigns <code>valueExpression</code> to 
+     * <code>field</code> in <code>varDecl</code>.
+     * 
+     * @param varDecl the variable declaration
+     * @param field the field declaration (optional, may be <b>null</b>)
+     * @param valueExpression the value expression
+     */
+    public ValueAssignmentExpression(VariableDeclaration varDecl, FieldDescriptor field, Expression valueExpression) {
         this.varDecl = varDecl;
+        this.field = field;
         this.valueExpression = valueExpression;
     }
 
@@ -38,6 +53,15 @@ public class ValueAssignmentExpression extends Expression {
     }
 
     /**
+     * The field to assign to.
+     * 
+     * @return the field (may be <b>null</b>)
+     */
+    public FieldDescriptor getField() {
+        return field;
+    }
+    
+    /**
      * Returns the value expression.
      * 
      * @return the value expression
@@ -47,9 +71,9 @@ public class ValueAssignmentExpression extends Expression {
     }
     
     @Override
-    public TypeDescriptor<? extends IVilType> inferType() throws ExpressionException {
-        TypeDescriptor<? extends IVilType> varType = this.varDecl.getType();
-        TypeDescriptor<? extends IVilType> valType = this.valueExpression.inferType();
+    public TypeDescriptor<?> inferType() throws VilException {
+        TypeDescriptor<?> varType = this.varDecl.getType();
+        TypeDescriptor<?> valType = this.valueExpression.inferType();
         if (!varType.isAssignableFrom(valType)) {
             OperationDescriptor operation = valType.findConversion(valType, varType);
             if (null == operation) {
@@ -58,15 +82,15 @@ public class ValueAssignmentExpression extends Expression {
             if (null != operation) {
                 this.valueExpression = new CallExpression(operation, new CallArgument(valueExpression));
             } else {
-                throw new ExpressionException("cannot assign/convert " + valType.getVilName() 
-                    + " to " + varType.getVilName(), ExpressionException.ID_SEMANTIC);
+                throw new VilException("cannot assign/convert " + valType.getVilName() 
+                    + " to " + varType.getVilName(), VilException.ID_SEMANTIC);
             }
         }
         return TypeRegistry.voidType();
     }
 
     @Override
-    public Object accept(IExpressionVisitor visitor) throws ExpressionException {
+    public Object accept(IExpressionVisitor visitor) throws VilException {
         return visitor.visitValueAssignmentExpression(this);
     }
 

@@ -34,8 +34,9 @@ import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
  * @author kroeher
  * @author Holger Eichelberger
  */
-public abstract class CommonXtextEditor <T extends EObject, R> extends org.eclipse.xtext.ui.editor.XtextEditor {
-    
+public abstract class CommonXtextEditor <T extends EObject, R> extends org.eclipse.xtext.ui.editor.XtextEditor 
+    implements IUpdatableEditor {
+
     /**
      * The listener which will be registered to this editor in order to receive
      * notifications about updates of the underlying model.
@@ -67,11 +68,7 @@ public abstract class CommonXtextEditor <T extends EObject, R> extends org.eclip
         return doc;
     }
     
-    /**
-     * Updates this editor by "touching" its <code>org.eclipse.core.resources.IResource</code>.
-     * 
-     * @see <code>void org.eclipse.core.resources.IResource.touch(IProgressMonitor monitor) throws CoreException</code>
-     */
+    @Override
     public void updateEditor() {
         // run this for sure in the UI thread
         Display display = Display.getDefault();
@@ -117,13 +114,8 @@ public abstract class CommonXtextEditor <T extends EObject, R> extends org.eclip
             modelListener.buildModel(getDocument());
         }
     }
-    
-    /**
-     * Creates the model in the given xText document <code>doc</code>. This method synchronizes over <code>doc</code>
-     * in order to avoid reentrant model validation.
-     * 
-     * @param doc the document to create the model for
-     */
+
+    @Override
     public void buildModel(IXtextDocument doc) {
         if (doc != null) {
             doc.readOnly(new UnitOfWork()); 
@@ -210,5 +202,4 @@ public abstract class CommonXtextEditor <T extends EObject, R> extends org.eclip
      * @param out the output stream / writer
      */
     protected abstract void print(TranslationResult<R> result, Writer out);
-
 }

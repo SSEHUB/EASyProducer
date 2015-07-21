@@ -1,0 +1,9 @@
+project SequenceTypedefWith {
+    typedef ListOfInteger sequenceOf(Integer);
+    typedef ListOfFive ListOfInteger with (size(ListOfFive) == 5);
+    
+    ListOfFive list1;
+    ListOfFive list2;
+    list1 = {1, 2, 3, 4, 5};
+    list2 = {1, 2, 3, 4};
+}

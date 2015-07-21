@@ -43,4 +43,11 @@ public interface IEASyEditorPage  {
      */
     public void refresh();
 
+    /**
+     * Returns whether the editor page is disposed.
+     * 
+     * @return <code>true</code> if the editor page is disposed, <code>false</code> else
+     */
+    public boolean isDisposed();
+    
 }

@@ -1,0 +1,57 @@
+import EASyDemoCommandsPlatform;
+
+@advice(EASyDemoCommandsAspecj)
+vilScript EASyDemoCommandsAspecj (Project source, Configuration config, Project target) {
+
+    version v0;
+
+    collectWeavingSet(String aspectFile, Boolean enabled, setOf(FileArtifact) weavingSet) = : {
+    	if (enabled) {
+    		weavingSet.add(aspectFile);
+    	}
+    }
+    
+    copyAjFiles(Project source, Project target) = "$target/src/**/*.aj" : "$source/src/**/*.aj" {
+        RHS.copy(LHS);
+    }
+    
+    copyLibFiles(Project source, Project target) = "$target/lib/**/*.jar" : "$source/lib/**/*.jar" {
+        RHS.copy(LHS);
+    }
+    
+    copyLaunchFiles(Project source, Project target) = "$target/*.launch" : "$source/*.launch" {
+        RHS.copy(LHS);
+    }
+    
+    main(Project source, Configuration config, Project target) = : {
+    	map(Project p : source.predecessors()) {
+    		instantiate p (p, config, target);
+    	};
+    	copySRCFiles(source, target);
+    	copyAjFiles(source, target);
+    	copyLibFiles(source, target);
+    	copyLaunchFiles(source, target);
+    	
+    	EASyDemoCommandsAspecj cfg = config;
+    	String base = "$target/src/io/ssehub/easy/demo/command/aspects";
+    	setOf(FileArtifact) weavingSet = {};
+    	collectWeavingSet("$base/AddIntVariabilityAspect.aj", cfg.hasAddCommand, weavingSet);
+    	collectWeavingSet("$base/SubIntVariabilityAspect.aj", cfg.hasSubCommand, weavingSet);
+    	collectWeavingSet("$base/PrintVariabilityAspect.aj", cfg.hasPrintCommand, weavingSet);
+    	if (not(weavingSet.isEmpty())) {
+    		weavingSet.add("$base/AbstractVariabilityAspect.aj");
+    		weavingSet.add("$base/Main.java");
+    	}
+    	
+    	// instantiate name
+    	JavaFileArtifact f = "$base/Main.java";
+    	f.defaultClass().attributeByName("APP_NAME").setValue(cfg.appName);
+    	
+    	Path bin = "$target/build";
+    	bin.delete();
+    	sequenceOf(String) cp = {"$target/build"};
+    	javac("$target/src/**/*.java", bin, classpath=cp);
+    	aspectJ(weavingSet, bin, classpath=cp);
+    }
+
+}

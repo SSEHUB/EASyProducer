@@ -1,0 +1,20 @@
+project ValidationConstraintFilter {
+
+    version v0;
+    
+    Integer a;
+    a = 5;
+    
+    compound C {
+        Integer cmpA;
+        Integer cmpB;
+        cmpB = 2;
+        cmpA < 0;
+    }
+    
+    C cmp;
+    
+    a < 0;
+    cmp.cmpB < 0;
+    cmp.cmpA = 1 + cmp.cmpB;
+}

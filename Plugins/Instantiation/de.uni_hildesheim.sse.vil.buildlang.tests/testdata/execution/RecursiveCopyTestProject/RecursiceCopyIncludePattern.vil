@@ -1,0 +1,11 @@
+vilScript RecursiceCopy (Project source, Configuration config, Project target) {
+
+    version v0;
+
+    main(Project source, Configuration config, Project target) = : {
+        Path from = "$source/srcForRecursiveCopy/toCopy/**/*";
+        Path to = "$target/trgForRecursiveCopy/";
+        from.copy(to);
+    }
+
+}

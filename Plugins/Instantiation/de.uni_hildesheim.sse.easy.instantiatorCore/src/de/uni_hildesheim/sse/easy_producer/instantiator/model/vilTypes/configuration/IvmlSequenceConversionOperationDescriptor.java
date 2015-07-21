@@ -1,11 +1,10 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Sequence;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.VilException;
 
 /**
  * Operation descriptor for decision variable to sequence conversion using 
@@ -16,12 +15,12 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.VilExcept
 class IvmlSequenceConversionOperationDescriptor extends IvmlOperationDescriptor {
     
     public static final String NAME = "convertToSequence";
-    private static final TypeDescriptor<? extends IVilType> RETURN;
+    private static final TypeDescriptor<?> RETURN;
     
     static {
-        TypeDescriptor<? extends IVilType> returnType;
+        TypeDescriptor<?> returnType;
         try {
-            TypeDescriptor<? extends IVilType>[] types = TypeDescriptor.createArray(1);
+            TypeDescriptor<?>[] types = TypeDescriptor.createArray(1);
             types[0] = IvmlTypes.decisionVariableType();
             returnType = TypeRegistry.getSequenceType(types);
         } catch (VilException e) {
@@ -35,7 +34,7 @@ class IvmlSequenceConversionOperationDescriptor extends IvmlOperationDescriptor 
      * 
      * @param declaringType the declaring class
      */
-    IvmlSequenceConversionOperationDescriptor(TypeDescriptor<? extends IVilType> declaringType) {
+    IvmlSequenceConversionOperationDescriptor(TypeDescriptor<?> declaringType) {
         this(declaringType, null);
     }
     
@@ -45,11 +44,11 @@ class IvmlSequenceConversionOperationDescriptor extends IvmlOperationDescriptor 
      * @param declaringType the declaring class
      * @param generic the generic type for the set to convert to, may be <b>null</b> for DecisionVariable
      */
-    IvmlSequenceConversionOperationDescriptor(TypeDescriptor<? extends IVilType> declaringType, 
-        TypeDescriptor<? extends IVilType> generic) {
+    IvmlSequenceConversionOperationDescriptor(TypeDescriptor<?> declaringType, 
+        TypeDescriptor<?> generic) {
         super(declaringType, NAME, false);
         if (null != generic) {
-            TypeDescriptor<? extends IVilType>[] types = TypeDescriptor.createArray(1);
+            TypeDescriptor<?>[] types = TypeDescriptor.createArray(1);
             types[0] = generic;
             try {
                 setReturnType(TypeRegistry.getSequenceType(types));
@@ -65,7 +64,7 @@ class IvmlSequenceConversionOperationDescriptor extends IvmlOperationDescriptor 
     
     @Override
     public CompatibilityResult isCompatible(Class<?> retType, Object... params) {
-        return isCompatible(params, DecisionVariable.class);
+        return Utils.isCompatible(params, DecisionVariable.class);
     }
 
     @Override

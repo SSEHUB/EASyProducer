@@ -75,4 +75,22 @@ public class CompoundAccessStatement extends ContainableModelElement implements 
         return result;
     }
 
+    @Override
+    public int getAttributesCount() {
+        AbstractVariable var = getSlotDeclaration();
+        return null == var ? 0 : var.getAttributesCount();
+    }
+
+    @Override
+    public Attribute getAttribute(String name) {
+        AbstractVariable var = getSlotDeclaration();
+        return null == var ? null : var.getAttribute(name);
+    }
+
+    @Override
+    public Attribute getAttribute(int index) {
+        AbstractVariable var = getSlotDeclaration();
+        return null == var ? null : var.getAttribute(index);
+    }
+
 }

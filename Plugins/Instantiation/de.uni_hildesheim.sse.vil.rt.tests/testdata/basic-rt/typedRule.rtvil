@@ -1,0 +1,7 @@
+rtVilScript typedRule (Project source, Configuration config, Project target) {
+
+    Integer test() = : {
+        1;
+    }
+
+}

@@ -8,8 +8,8 @@ import java.io.PrintWriter;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Binary;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Text;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArraySet;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Conversion;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IActualValueProvider;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
@@ -68,15 +68,15 @@ public class FileArtifact extends CompositeArtifact implements IFileSystemArtifa
      * Creates a temporary file artifact.
      * 
      * @return the created file artifact
-     * @throws ArtifactException in case that the creation fails
+     * @throws VilException in case that the creation fails
      */
-    public static FileArtifact create() throws ArtifactException {
+    public static FileArtifact create() throws VilException {
         try {
             File file = File.createTempFile("fileArtifact", "vil");
             file.deleteOnExit();
             return ArtifactFactory.createArtifact(FileArtifact.class, file, null);
         } catch (IOException e) {
-            throw new ArtifactException(e, ArtifactException.ID_IO);
+            throw new VilException(e, VilException.ID_IO);
         }
     }
     
@@ -92,7 +92,7 @@ public class FileArtifact extends CompositeArtifact implements IFileSystemArtifa
     
     @Override
     @OperationMeta(storeArtifactsBefore = true)
-    public void delete() throws ArtifactException {
+    public void delete() throws VilException {
         path.delete();
     }
 
@@ -100,10 +100,10 @@ public class FileArtifact extends CompositeArtifact implements IFileSystemArtifa
      * Returns the simple name of this artifact. 
      * 
      * @return the simple name
-     * @throws ArtifactException in case that the operation cannot continue
+     * @throws VilException in case that the operation cannot continue
      */
     @Override
-    public String getName() throws ArtifactException {
+    public String getName() throws VilException {
         return path.getName();
     }
     
@@ -111,9 +111,9 @@ public class FileArtifact extends CompositeArtifact implements IFileSystemArtifa
      * Returns the plain name without (possible) extension.
      * 
      * @return the plain name of the artifact
-     * @throws ArtifactException in case that errors occur
+     * @throws VilException in case that errors occur
      */
-    public String getPlainName() throws ArtifactException {
+    public String getPlainName() throws VilException {
         String name = getName();
         int pos = name.lastIndexOf('.');
         if (pos > 0) {
@@ -138,7 +138,7 @@ public class FileArtifact extends CompositeArtifact implements IFileSystemArtifa
 
     @Override
     @OperationMeta(storeArtifactsBefore = true)
-    public void rename(String name) throws ArtifactException {
+    public void rename(String name) throws VilException {
         path.getArtifactModel().beforeRename(this);
         path = path.rename(name);
         path.getArtifactModel().afterRename(this);
@@ -151,13 +151,13 @@ public class FileArtifact extends CompositeArtifact implements IFileSystemArtifa
 
     @Override
     @OperationMeta(returnGenerics = IFileSystemArtifact.class, storeArtifactsBefore = true )
-    public Set<IFileSystemArtifact> move(IFileSystemArtifact target) throws ArtifactException {
+    public Set<IFileSystemArtifact> move(IFileSystemArtifact target) throws VilException {
         return new ListSet<IFileSystemArtifact>(FileUtils.move(this, target), IFileSystemArtifact.class);
     }
 
     @Override
     @OperationMeta(returnGenerics = IFileSystemArtifact.class, storeArtifactsBefore = true )
-    public Set<IFileSystemArtifact> copy(IFileSystemArtifact target) throws ArtifactException {
+    public Set<IFileSystemArtifact> copy(IFileSystemArtifact target) throws VilException {
         return new ListSet<IFileSystemArtifact>(FileUtils.copy(this, target), IFileSystemArtifact.class);
     }
 
@@ -168,12 +168,12 @@ public class FileArtifact extends CompositeArtifact implements IFileSystemArtifa
     }
 
     @Override
-    protected Text createText() throws ArtifactException {
+    protected Text createText() throws VilException {
         return new Text(path.getAbsolutePath(), true);
     }
 
     @Override
-    protected Binary createBinary() throws ArtifactException {
+    protected Binary createBinary() throws VilException {
         return new Binary(path.getAbsolutePath(), true);
     }
     
@@ -181,9 +181,9 @@ public class FileArtifact extends CompositeArtifact implements IFileSystemArtifa
      * Substitutes the extension.
      * @param extension the new extension
      * @return the path
-     * @throws ArtifactException in case of problems
+     * @throws VilException in case of problems
      */
-    public Path substituteExtension(String extension) throws ArtifactException {
+    public Path substituteExtension(String extension) throws VilException {
         return getPath(); // TODO implement
     }
     
@@ -192,11 +192,11 @@ public class FileArtifact extends CompositeArtifact implements IFileSystemArtifa
      * 
      * @param val the value to be converted
      * @return the converted value
-     * @throws ArtifactException in case that creating the artifact fails
+     * @throws VilException in case that creating the artifact fails
      */
     @Invisible
     @Conversion
-    public static FileArtifact convert(String val) throws ArtifactException {
+    public static FileArtifact convert(String val) throws VilException {
         Path path = Path.convert(val);
         return convert(path);
     }
@@ -222,11 +222,11 @@ public class FileArtifact extends CompositeArtifact implements IFileSystemArtifa
      * 
      * @param val the value to be converted
      * @return the converted value
-     * @throws ArtifactException in case of problems
+     * @throws VilException in case of problems
      */
     @Invisible
     @Conversion
-    public static Path convert(FileArtifact val) throws ArtifactException {
+    public static Path convert(FileArtifact val) throws VilException {
         return val.getPath();
     }
     
@@ -235,11 +235,11 @@ public class FileArtifact extends CompositeArtifact implements IFileSystemArtifa
      * 
      * @param path the path to be converted
      * @return the converted value
-     * @throws ArtifactException in case that creating the artifact fails
+     * @throws VilException in case that creating the artifact fails
      */
     @Invisible
     @Conversion
-    public static FileArtifact convert(Path path) throws ArtifactException {
+    public static FileArtifact convert(Path path) throws VilException {
         return ArtifactFactory.createArtifact(FileArtifact.class, path.getAbsolutePath(), path.getArtifactModel());
     }
 
@@ -265,7 +265,7 @@ public class FileArtifact extends CompositeArtifact implements IFileSystemArtifa
     }
     
     @Override
-    public void store() throws ArtifactException {
+    public void store() throws VilException {
         if (getRepresentationChanged(true)) {
             File file = path.getAbsolutePath();
             Text text = getTextInstance();
@@ -279,7 +279,7 @@ public class FileArtifact extends CompositeArtifact implements IFileSystemArtifa
                     out.flush();
                     out.close();
                 } catch (IOException e) {
-                    throw new ArtifactException(e, ArtifactException.ID_IO);
+                    throw new VilException(e, VilException.ID_IO);
                 }
             } else if (null != binary) {
                 file.getParentFile().mkdirs();
@@ -289,7 +289,7 @@ public class FileArtifact extends CompositeArtifact implements IFileSystemArtifa
                     out.flush();
                     out.close();
                 } catch (IOException e) {
-                    throw new ArtifactException(e, ArtifactException.ID_IO);
+                    throw new VilException(e, VilException.ID_IO);
                 }
             }
         }

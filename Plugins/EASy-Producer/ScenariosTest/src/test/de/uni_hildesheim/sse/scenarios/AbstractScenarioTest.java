@@ -14,12 +14,11 @@ import de.uni_hildesheim.sse.easy.java.Registration;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactFactory;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.Executor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.IInstantiatorTracer;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.TracerFactory;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateModel;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Project;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.Configuration;
 import de.uni_hildesheim.sse.model.management.VarModel;
@@ -28,13 +27,15 @@ import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
 import de.uni_hildesheim.sse.utils.modelManagement.VersionFormatException;
 import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
 import test.de.uni_hildesheim.sse.vil.buildlang.AbstractTest;
+import test.de.uni_hildesheim.sse.vil.buildlang.BuildLangTestConfigurer;
+import test.de.uni_hildesheim.sse.vil.buildlang.ITestConfigurer;
 
 /**
  * Abstract functionality for scenario tests.
  * 
  * @author Holger Eichelberger
  */
-public abstract class AbstractScenarioTest extends AbstractTest {
+public abstract class AbstractScenarioTest extends AbstractTest<Script> {
 
     protected static boolean debug = true;
 
@@ -51,11 +52,14 @@ public abstract class AbstractScenarioTest extends AbstractTest {
     @Override
     protected void furtherInitialization() {
         Registration.register();
+        de.uni_hildesheim.sse.easy.ant.Registration.register();
+        de.uni_hildesheim.sse.easy.aspectj.Registration.register();
+        //de.uni_hildesheim.sse.easy.maven.Registration.register();
     }
-
+    
     @Override
-    protected String getSystemPropertyName() {
-        return "easy_producer.scenarios.testdata.home";
+    protected ITestConfigurer<Script> createTestConfigurer() {
+        return new BuildLangTestConfigurer("easy_producer.scenarios.testdata.home");
     }
 
     /**
@@ -66,7 +70,7 @@ public abstract class AbstractScenarioTest extends AbstractTest {
      */
     protected void configureExecution(String projectName, Map<String, Object> args) {
     }
-    
+
     /**
      * Executes a "real-world" case.
      * 
@@ -82,8 +86,31 @@ public abstract class AbstractScenarioTest extends AbstractTest {
      */
     protected File executeCase(String projectName, String[] versions, String caseFolder, 
         String sourceProjectName, String... makeExecutable) throws IOException {
+        String[] names = new String[1];
+        names[0] = projectName;
+        return executeCase(names, versions, caseFolder, sourceProjectName, makeExecutable);
+    }
+    
+    /**
+     * Executes a "real-world" case.
+     * 
+     * @param names the name of the project, if only one entry the project folder / model name, else project folder 
+     * name, IVML/VIL model name
+     * @param versions the version of the models, index 0 IVML, index 1 VIL build file (may be <b>null</b>)
+     * @param caseFolder an optional set of intermediary folders where the actual case study (innermost folder 
+     *   corresponds to name) is located in
+     * @param makeExecutable those files (in relative paths) within the temporary copy of the project to be 
+     *   made executable
+     * @param sourceProjectName the optional name of the source project (null if same as <code>projectName</code>)
+     * @return the base directory of the instantiated project
+     * @throws IOException in case of I/O problems
+     */
+    protected File executeCase(String[] names, String[] versions, String caseFolder, 
+        String sourceProjectName, String... makeExecutable) throws IOException {
         ProgressObserver observer = ProgressObserver.NO_OBSERVER;
         ArtifactFactory.clear();
+        String projectName = names[0];
+        String modelName = names.length > 1 ? names[1] : names[0];
         File temp = createTempDir(projectName);
         File base = new File(getTestFolder(), caseFolder + projectName);
         FileUtils.copyDirectory(base, temp);
@@ -106,7 +133,7 @@ public abstract class AbstractScenarioTest extends AbstractTest {
         } catch (ModelManagementException e) {
             Assert.fail("unexpected exception: " + e.getMessage());
         }
-        de.uni_hildesheim.sse.model.varModel.Project ivmlModel = obtainIvmlModel(projectName, versions[0], ivmlFolder);
+        de.uni_hildesheim.sse.model.varModel.Project ivmlModel = obtainIvmlModel(modelName, versions[0], ivmlFolder);
         Configuration config = new Configuration(new de.uni_hildesheim.sse.model.confModel.Configuration(ivmlModel));
         File sourceFile = temp.getAbsoluteFile();
         Project source = createProjectInstance(sourceFile);
@@ -126,12 +153,12 @@ public abstract class AbstractScenarioTest extends AbstractTest {
         TracerFactory current = TracerFactory.getInstance();
         MyTracerFactory tFactory = new MyTracerFactory();
         TracerFactory.setInstance(tFactory);
-        Script script = obtainVilModel(projectName, versions[1], vilFolder);
+        Script script = obtainVilModel(modelName, versions[1], vilFolder);
         Executor executor = new Executor(script, param);
         executor.addBase(targetFile);
         try {
             executor.execute();
-        } catch (VilLanguageException e) {
+        } catch (VilException e) {
             System.out.println(tFactory);
             e.printStackTrace(System.out);
             Assert.fail("VIL execution issue " + e);
@@ -147,7 +174,6 @@ public abstract class AbstractScenarioTest extends AbstractTest {
         } catch (ModelManagementException e) {
             Assert.fail("unexpected exception: " + e.getMessage());
         }
-
         return targetFile;
     }
 
@@ -262,7 +288,7 @@ public abstract class AbstractScenarioTest extends AbstractTest {
         Project result = null;
         try {
             result = new Project(folder, ProgressObserver.NO_OBSERVER);
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             Assert.fail("unexpected exeption: " + e);
         }
         return result;
@@ -301,13 +327,15 @@ public abstract class AbstractScenarioTest extends AbstractTest {
         
         @Override
         protected de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ITracer 
-        createBuildLanguageTracerImpl() {
+            createBuildLanguageTracerImpl() {
+            
             return new de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.StreamTracer(writer, true);
         }
 
         @Override
         protected de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.ITracer 
-        createTemplateLanguageTracerImpl() {
+            createTemplateLanguageTracerImpl() {
+            
             return new de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.StreamTracer(writer, true);
         }
 

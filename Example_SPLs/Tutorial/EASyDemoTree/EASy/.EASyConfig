@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProductLineProject id="b75bc73d-2466-47ac-96a1-46245d2027b0" name="EASyDemoTree" version="0" location="EASyDemoTree">
+	<predecessors>
+	</predecessors>
+	<successors>
+		<entity id="65670c48-8355-4941-96c6-60cbc670b7cb" name="New_Product" location="New_Product" />
+		<entity id="d1e33156-df78-4b9e-8e0a-8a29d9de050b" name="New_Product" location="New_Product" />
+		<entity id="3af89b9f-24e2-4759-8207-f039a1cad21d" name="New_Product" version="0" location="New_Product" />
+	</successors>
+	<settings>
+		<entity debug="false" />
+	</settings>
+	<reasoners>
+		<entity timeout="0" />
+	</reasoners>
+	<instantiators>
+	</instantiators>
+</ProductLineProject>

@@ -43,7 +43,11 @@ public abstract class DisplayNameProvider {
             
             @Override
             public String getParentNames(AbstractVariable variable) {
-                return variable.getParent().getQualifiedName();
+                String result = null;
+                if (variable.getParent() != null) {
+                    result = variable.getParent().getQualifiedName();
+                }
+                return result;
             }
 
             @Override
@@ -61,6 +65,16 @@ public abstract class DisplayNameProvider {
                 return false;
             }
         };
+    }
+
+    /**
+     * Returns the display name of a variable.
+     * 
+     * @param variable the variable to return the name for
+     * @return the display name (must not be <b>null</b>)
+     */
+    public String getDisplayName(IDecisionVariable variable) {
+        return getDisplayName(variable.getDeclaration());
     }
         
     /**

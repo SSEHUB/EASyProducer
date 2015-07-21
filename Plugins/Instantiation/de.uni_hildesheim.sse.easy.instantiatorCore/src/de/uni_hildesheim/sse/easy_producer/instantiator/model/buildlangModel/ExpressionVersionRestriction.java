@@ -5,7 +5,7 @@ import java.util.Map;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VariableDeclaration;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.utils.modelManagement.IModel;
 import de.uni_hildesheim.sse.utils.modelManagement.IVariable;
@@ -44,7 +44,7 @@ public class ExpressionVersionRestriction extends
             ExpressionCopyVisitor visitor = new ExpressionCopyVisitor(mapping, true);
             Expression expr = (Expression) getExpression().accept(visitor);
             return new ExpressionVersionRestriction(expr, decl);
-        } catch (ExpressionException e) {
+        } catch (VilException e) {
             throw new RestrictionEvaluationException(e.getMessage(), e.getId());
         }
     }
@@ -60,7 +60,7 @@ public class ExpressionVersionRestriction extends
                 decl = (VariableDeclaration) decl;
             }
             return new ExpressionVersionRestriction(expr, decl);
-        } catch (ExpressionException e) {
+        } catch (VilException e) {
             throw new RestrictionEvaluationException(e.getMessage(), e.getId());
         }
     }

@@ -119,8 +119,7 @@ class CompoundSlotAccessor extends AbstractDecisionVariableEvaluationAccessor {
                             context.addErrorMessage(e);
                         }
                     } else {
-                        context.addMessage(
-                                new Message("Assignment state conflict", Status.ERROR, slotVariable.getDeclaration()));
+                        context.addMessage(new Message("Assignment state conflict", Status.ERROR, slotVariable));
                     }
                 } else {
                     successful = true;

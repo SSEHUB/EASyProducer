@@ -14,7 +14,9 @@ import de.uni_hildesheim.sse.logger.JavaLoggerTest;
 import de.uni_hildesheim.sse.model.confModel.AssignmentResolverTest;
 import de.uni_hildesheim.sse.model.confModel.CompoundVariableTest;
 import de.uni_hildesheim.sse.model.confModel.ConfigurationTest;
+import de.uni_hildesheim.sse.model.confModel.ConfigurationTest2;
 import de.uni_hildesheim.sse.model.confModel.DecisionVariableTest;
+import de.uni_hildesheim.sse.model.confModel.DerivedVeriableTest;
 import de.uni_hildesheim.sse.model.confModel.SetVariableTest;
 import de.uni_hildesheim.sse.model.cstEvaluation.CstEvaluationTests;
 import de.uni_hildesheim.sse.model.validation.IvmlIdentifierCheckTest;
@@ -106,10 +108,13 @@ import de.uni_hildesheim.sse.varModel.versioning.ImportValidationTest;
     ReferenceValueTest.class,
     FreezeBlockFinderTest.class,
     FrozenElementsFinderTest.class,
+    ProjectInterfaceTest.class,
     ConstraintSeparatorTest.class,
     ParenthesisTest.class,
     ConfigurationTest.class,
+    ConfigurationTest2.class,
     CommentTest.class,
+    DerivedVeriableTest.class,
     SetVariableTest.class,
     ImportValidationTest.class,
 //    IVMLValidationVisitorTest.class,

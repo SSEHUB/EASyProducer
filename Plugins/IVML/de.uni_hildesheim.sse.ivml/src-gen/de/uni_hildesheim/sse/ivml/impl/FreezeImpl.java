@@ -3,9 +3,9 @@
 package de.uni_hildesheim.sse.ivml.impl;
 
 import de.uni_hildesheim.sse.ivml.Freeze;
-import de.uni_hildesheim.sse.ivml.FreezeButList;
 import de.uni_hildesheim.sse.ivml.FreezeStatement;
 import de.uni_hildesheim.sse.ivml.IvmlPackage;
+import de.uni_hildesheim.sse.ivml.LogicalExpression;
 
 import java.util.Collection;
 
@@ -31,7 +31,8 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.FreezeImpl#getNames <em>Names</em>}</li>
- *   <li>{@link de.uni_hildesheim.sse.ivml.impl.FreezeImpl#getBut <em>But</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.ivml.impl.FreezeImpl#getId <em>Id</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.ivml.impl.FreezeImpl#getEx <em>Ex</em>}</li>
  * </ul>
  * </p>
  *
@@ -50,14 +51,34 @@ public class FreezeImpl extends MinimalEObjectImpl.Container implements Freeze
   protected EList<FreezeStatement> names;
 
   /**
-   * The cached value of the '{@link #getBut() <em>But</em>}' containment reference.
+   * The default value of the '{@link #getId() <em>Id</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getBut()
+   * @see #getId()
    * @generated
    * @ordered
    */
-  protected FreezeButList but;
+  protected static final String ID_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getId() <em>Id</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getId()
+   * @generated
+   * @ordered
+   */
+  protected String id = ID_EDEFAULT;
+
+  /**
+   * The cached value of the '{@link #getEx() <em>Ex</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getEx()
+   * @generated
+   * @ordered
+   */
+  protected LogicalExpression ex;
 
   /**
    * <!-- begin-user-doc -->
@@ -99,9 +120,9 @@ public class FreezeImpl extends MinimalEObjectImpl.Container implements Freeze
    * <!-- end-user-doc -->
    * @generated
    */
-  public FreezeButList getBut()
+  public String getId()
   {
-    return but;
+    return id;
   }
 
   /**
@@ -109,13 +130,36 @@ public class FreezeImpl extends MinimalEObjectImpl.Container implements Freeze
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetBut(FreezeButList newBut, NotificationChain msgs)
+  public void setId(String newId)
   {
-    FreezeButList oldBut = but;
-    but = newBut;
+    String oldId = id;
+    id = newId;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, IvmlPackage.FREEZE__ID, oldId, id));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public LogicalExpression getEx()
+  {
+    return ex;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetEx(LogicalExpression newEx, NotificationChain msgs)
+  {
+    LogicalExpression oldEx = ex;
+    ex = newEx;
     if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, IvmlPackage.FREEZE__BUT, oldBut, newBut);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, IvmlPackage.FREEZE__EX, oldEx, newEx);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -126,20 +170,20 @@ public class FreezeImpl extends MinimalEObjectImpl.Container implements Freeze
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setBut(FreezeButList newBut)
+  public void setEx(LogicalExpression newEx)
   {
-    if (newBut != but)
+    if (newEx != ex)
     {
       NotificationChain msgs = null;
-      if (but != null)
-        msgs = ((InternalEObject)but).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - IvmlPackage.FREEZE__BUT, null, msgs);
-      if (newBut != null)
-        msgs = ((InternalEObject)newBut).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - IvmlPackage.FREEZE__BUT, null, msgs);
-      msgs = basicSetBut(newBut, msgs);
+      if (ex != null)
+        msgs = ((InternalEObject)ex).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - IvmlPackage.FREEZE__EX, null, msgs);
+      if (newEx != null)
+        msgs = ((InternalEObject)newEx).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - IvmlPackage.FREEZE__EX, null, msgs);
+      msgs = basicSetEx(newEx, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, IvmlPackage.FREEZE__BUT, newBut, newBut));
+      eNotify(new ENotificationImpl(this, Notification.SET, IvmlPackage.FREEZE__EX, newEx, newEx));
   }
 
   /**
@@ -154,8 +198,8 @@ public class FreezeImpl extends MinimalEObjectImpl.Container implements Freeze
     {
       case IvmlPackage.FREEZE__NAMES:
         return ((InternalEList<?>)getNames()).basicRemove(otherEnd, msgs);
-      case IvmlPackage.FREEZE__BUT:
-        return basicSetBut(null, msgs);
+      case IvmlPackage.FREEZE__EX:
+        return basicSetEx(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -172,8 +216,10 @@ public class FreezeImpl extends MinimalEObjectImpl.Container implements Freeze
     {
       case IvmlPackage.FREEZE__NAMES:
         return getNames();
-      case IvmlPackage.FREEZE__BUT:
-        return getBut();
+      case IvmlPackage.FREEZE__ID:
+        return getId();
+      case IvmlPackage.FREEZE__EX:
+        return getEx();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -193,8 +239,11 @@ public class FreezeImpl extends MinimalEObjectImpl.Container implements Freeze
         getNames().clear();
         getNames().addAll((Collection<? extends FreezeStatement>)newValue);
         return;
-      case IvmlPackage.FREEZE__BUT:
-        setBut((FreezeButList)newValue);
+      case IvmlPackage.FREEZE__ID:
+        setId((String)newValue);
+        return;
+      case IvmlPackage.FREEZE__EX:
+        setEx((LogicalExpression)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -213,8 +262,11 @@ public class FreezeImpl extends MinimalEObjectImpl.Container implements Freeze
       case IvmlPackage.FREEZE__NAMES:
         getNames().clear();
         return;
-      case IvmlPackage.FREEZE__BUT:
-        setBut((FreezeButList)null);
+      case IvmlPackage.FREEZE__ID:
+        setId(ID_EDEFAULT);
+        return;
+      case IvmlPackage.FREEZE__EX:
+        setEx((LogicalExpression)null);
         return;
     }
     super.eUnset(featureID);
@@ -232,10 +284,29 @@ public class FreezeImpl extends MinimalEObjectImpl.Container implements Freeze
     {
       case IvmlPackage.FREEZE__NAMES:
         return names != null && !names.isEmpty();
-      case IvmlPackage.FREEZE__BUT:
-        return but != null;
+      case IvmlPackage.FREEZE__ID:
+        return ID_EDEFAULT == null ? id != null : !ID_EDEFAULT.equals(id);
+      case IvmlPackage.FREEZE__EX:
+        return ex != null;
     }
     return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString()
+  {
+    if (eIsProxy()) return super.toString();
+
+    StringBuffer result = new StringBuffer(super.toString());
+    result.append(" (id: ");
+    result.append(id);
+    result.append(')');
+    return result.toString();
   }
 
 } //FreezeImpl

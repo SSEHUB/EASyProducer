@@ -10,6 +10,9 @@ import org.eclipse.swt.widgets.Label;
 
 import de.uni_hildesheim.sse.model.confModel.ContainerVariable;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
+import de.uni_hildesheim.sse.model.varModel.datatypes.ConstraintType;
+import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
+import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
 import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
 
@@ -53,6 +56,11 @@ abstract class AbstractExpandableGUIVariable extends GUIVariable {
         return composite;
     }
     
+    @Override
+    public int getNestedElementsCount() {
+        return nested.size();
+    }
+    
     /**
      * Creates nested GUIVariables for this variable.
      * This method should be called inside the constructor and if the number of nested variables has been changed,
@@ -61,10 +69,14 @@ abstract class AbstractExpandableGUIVariable extends GUIVariable {
     protected void createNestedVariables() {
         nested.clear();
         for (int n = 0; n < getVariable().getNestedElementsCount(); n++) {
-            nested.add(GUIValueFactory.createVariable(
-                getVariable().getNestedElement(n),
-                composite,
-                getConfiguration(), this));
+            IDecisionVariable nestedVariable = getVariable().getNestedElement(n);
+            IDatatype nestedType = DerivedDatatype.resolveToBasis(nestedVariable.getDeclaration().getType());
+            if (ConstraintType.TYPE != nestedType) {
+                nested.add(GUIValueFactory.createVariable(
+                    nestedVariable,
+                    composite,
+                    getConfiguration(), this));
+            }
         }        
     }
     
@@ -83,7 +95,7 @@ abstract class AbstractExpandableGUIVariable extends GUIVariable {
     }
     
     @Override
-    public final void setValue(Object value) {
+    public void setValue(Object value) {
         //Not needed (only the nested variables can be configured, not the parent itself)
     }
 

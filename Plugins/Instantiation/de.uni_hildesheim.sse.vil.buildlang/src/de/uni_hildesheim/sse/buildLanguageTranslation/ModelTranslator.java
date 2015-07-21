@@ -10,26 +10,23 @@ import de.uni_hildesheim.sse.dslCore.translation.ErrorCodes;
 import de.uni_hildesheim.sse.dslCore.translation.TranslatorException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Imports;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.LoadProperties;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Resolver;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script.ScriptDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.VariableDeclaration;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.Advice;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
+import de.uni_hildesheim.sse.utils.modelManagement.IModelLoader;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
-import de.uni_hildesheim.sse.utils.modelManagement.Version;
-import de.uni_hildesheim.sse.utils.modelManagement.VersionFormatException;
+import de.uni_hildesheim.sse.utils.modelManagement.ModelManagement;
 import de.uni_hildesheim.sse.vil.expressions.ResourceRegistry;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
 import de.uni_hildesheim.sse.vilBuildLanguage.ImplementationUnit;
-import de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage;
+import de.uni_hildesheim.sse.vilBuildLanguage.LanguageUnit;
 
 /**
  * Implements the translation from the DSL to the build model in the instantiator core.
  * 
  * @author Holger Eichelberger
  */
-public class ModelTranslator extends AbstractModelTranslator {
+public class ModelTranslator extends AbstractModelTranslator<Script, LanguageUnit> {
 
     /**
      * Creates a model translator.
@@ -53,13 +50,13 @@ public class ModelTranslator extends AbstractModelTranslator {
         List<Script> result = new ArrayList<Script>();
         if (null != unit.getScripts()) {
             HashSet<String> names = new HashSet<String>();
-            Imports imports = null;
+            Imports<Script> imports = null;
             try {
                 imports = processImports(unit.getImports(), unit.getRequires());
             } catch (TranslatorException e) {
                 error(e);
             }
-            for (de.uni_hildesheim.sse.vilBuildLanguage.LanguageUnit script : unit.getScripts()) {
+            for (LanguageUnit script : unit.getScripts()) {
                 String name = script.getName();
                 if (!names.contains(name)) {
                     try {
@@ -73,69 +70,34 @@ public class ModelTranslator extends AbstractModelTranslator {
                         ExpressionDslPackage.Literals.LANGUAGE_UNIT__NAME, ErrorCodes.NAME_CLASH);
                 }
             }
+            getExpressionTranslator().enactIvmlWarnings();
         }
         return result;
     }
     
     /**
-     * Creates a script instance from an EMF instance.
+     * Creates a script instance.
      * 
-     * @param script the EMF instance to work on
-     * @param uri the URI of the project to resolve (in order to find the
-     *        closest project, may be <b>null</b>)
-     * @param registerSuccessful successfully created models shall be registered
-     * @param inProgress the scripts currently being translated
-     * @param imports the global imports
-     * @return the created script
-     * @throws TranslatorException in case that a problem occurred
+     * @param name Name of the project.
+     * @param parent the super script to inherit from (as a script import, may be <b>null</b>, shall be member of 
+     *     <code>imports</code> or also <b>null</b>)
+     * @param descriptor the descriptor carrying parameters, advices and imports (may be <b>null</b>)
+     * @param registry the responsible type registry 
      */
-    private Script createScript(de.uni_hildesheim.sse.vilBuildLanguage.LanguageUnit script, URI uri, 
-        boolean registerSuccessful, List<de.uni_hildesheim.sse.vilBuildLanguage.LanguageUnit> inProgress, 
-        Imports imports) throws TranslatorException {
-        int errorCount = getErrorCount();
-        Advice[] advices = processAdvices(script.getAdvices(), uri);
-        VariableDeclaration[] param = resolveParameters(script.getParam());
-        ModelImport<Script> parent = null;
-        if (null != script.getParent()) {
-            parent = getExtensionImport(script.getParent().getName(), imports, script.getParent(), 
-                VilBuildLanguagePackage.Literals.SCRIPT_PARENT_DECL__NAME);
-        }
-        ScriptDescriptor desc = new ScriptDescriptor(param, advices, imports);
-        Resolver resolver = getResolver();
-        Script result = new Script(script.getName(), parent, desc, resolver.getTypeRegistry());
-        resolver.pushModel(result);
-        if (null != script.getVersion()) {
-            try {
-                result.setVersion(new Version(script.getVersion().getVersion()));
-            } catch (VersionFormatException e) {
-                error(e.getMessage(), script, ExpressionDslPackage.Literals.LANGUAGE_UNIT__VERSION, 
-                    ErrorCodes.FORMAT_ERROR);
-            }
-        }
-        if (null != script.getLoadProperties()) {
-            for (de.uni_hildesheim.sse.vilBuildLanguage.LoadProperties prop : script.getLoadProperties()) {
-                result.addLoadProperties(new LoadProperties(ExpressionTranslator.convertString(prop.getPath())));
-            }
-        }
-        resolveImports(script, ExpressionDslPackage.Literals.LANGUAGE_UNIT__IMPORTS, result, uri, inProgress);
-        resolver.enumerateImports(result);
-        if (null != script.getContents()) {
-            if (null != script.getContents().getElements()) {
-                List<de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration> decls = select(
-                    script.getContents().getElements(), de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration.class);
-                // process variable declarations first
-                processVariableDeclarations(decls, result);
-                // then rules
-                processRules(script, result);
-            }
-        }
-        checkConstants(result, script);
-        resolver.popModel();
-        if (registerSuccessful && errorCount == getErrorCount()) {
-            // required if models in the same file refer to each other
-            BuildModel.INSTANCE.updateModel(result, uri, BuildLangModelUtility.INSTANCE);
-        }
-        return result;
+    @Override
+    protected Script createScript(String name, ModelImport<Script> parent, ScriptDescriptor<Script> descriptor, 
+        TypeRegistry registry) {
+        return new Script(name, parent, descriptor, registry);
+    }
+    
+    @Override
+    protected ModelManagement<Script> getManagementInstance() {
+        return BuildModel.INSTANCE;
+    }
+    
+    @Override
+    protected IModelLoader<Script> getModelLoader() {
+        return BuildLangModelUtility.INSTANCE;
     }
 
 }

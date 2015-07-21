@@ -2,11 +2,25 @@ package test.de.uni_hildesheim.sse;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
+import org.eclipse.emf.common.util.URI;
+import org.junit.Assert;
 import org.junit.Test;
 
+import de.uni_hildesheim.sse.ModelUtility;
+import de.uni_hildesheim.sse.dslCore.TranslationResult;
+import de.uni_hildesheim.sse.model.confModel.AssignmentState;
+import de.uni_hildesheim.sse.model.confModel.Configuration;
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
+import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
+import de.uni_hildesheim.sse.model.cstEvaluation.EvaluationVisitor;
+import de.uni_hildesheim.sse.model.management.VarModel;
+import de.uni_hildesheim.sse.model.varModel.Constraint;
+import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
+import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.translation.ErrorCodes;
+import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 
 /**
  * A test class for blackbox testing parser and type resolution of 
@@ -50,6 +64,26 @@ public class ExternalTests extends AbstractTest {
     @Test
     public void scaleLogGoodsIn() throws IOException {
         assertEqual(createFile("GoodsIn_Instances"), null, null);
+    }
+
+    /**
+     * Constraint set test case. Simplified version contributed by QualiMaster.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testConstraintSet() throws IOException {
+        assertEqual(createFile("constraintSet"), null, null);
+    }
+
+    /**
+     * Constraint set test case. Simplified version contributed by QualiMaster (R. Sizonenko).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testConstraintSet2() throws IOException {
+        assertEqual(createFile("constraintSet2"), null, null);
     }
 
     /**
@@ -125,6 +159,54 @@ public class ExternalTests extends AbstractTest {
     @Test
     public void testAlarmSeqSelf() throws IOException {
         assertEqual(createFile("alarmSeqSelf"), null, null);
+    }
+    
+    /**
+     * Assign abstract case (contributed by R. Sizonenko and S. El-Sharkawy).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testAssignAbstract() throws IOException {
+        File file = createFile("assignAbstract");
+        assertEqual(file, null, null);
+        URI uri = URI.createFileURI(file.getAbsolutePath());
+        TranslationResult<Project> result = ModelUtility.INSTANCE.parse(uri);
+        for (int r = 0; r < result.getResultCount(); r++) {
+            new Configuration(result.getResult(r));
+        }
+    }
+
+    /**
+     * Simple alarm system case (sequences, using self).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testNestedAttribute() throws IOException {
+        assertEqual(createFile("nestedAttribute"), null, null);
+
+        // obtain the model
+        List<ModelInfo<Project>> infos = VarModel.INSTANCE.availableModels().getModelInfo("nestedAttribute");
+        Assert.assertTrue(null != infos && 1 == infos.size());
+        Project project = infos.get(0).getResolved();
+        Assert.assertNotNull(project);
+
+        // resolve the constraints...
+        Configuration config = new Configuration(project);
+        EvaluationVisitor evaluator = new EvaluationVisitor(config, AssignmentState.ASSIGNED, false, null);
+        for (int c = 0; c < project.getElementCount(); c++) {
+            ContainableModelElement elt = project.getElement(c);
+            if (elt instanceof Constraint) {
+                Constraint constraint = (Constraint) elt;
+                ConstraintSyntaxTree cst = constraint.getConsSyntax();
+                if (null != cst) {
+                    evaluator.visit(cst);
+                    Assert.assertTrue(evaluator.constraintFulfilled());
+                    evaluator.clearResult();
+                }
+            }
+        }
     }
 
 }

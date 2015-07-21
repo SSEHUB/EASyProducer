@@ -1,5 +1,6 @@
 package de.uni_hildesheim.sse.varModel.testSupport;
 
+import de.uni_hildesheim.sse.model.confModel.AllFreezeSelector;
 import de.uni_hildesheim.sse.model.confModel.AssignmentState;
 import de.uni_hildesheim.sse.model.confModel.Configuration;
 import de.uni_hildesheim.sse.model.confModel.ConfigurationException;
@@ -207,7 +208,7 @@ public class DefaultConfiguration {
             }
         }
         if (freeze) {
-            decVar.freeze();
+            decVar.freeze(AllFreezeSelector.INSTANCE);
         }
     }
 

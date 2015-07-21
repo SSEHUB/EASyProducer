@@ -7,13 +7,11 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Bui
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.VariableDeclaration;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.RuntimeEnvironment;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallArgument;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ConstantExpression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VariableExpression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 
@@ -39,7 +37,7 @@ public class VariableExpressionTest extends AbstractTest {
      * @param defineVariable define the variable or not (and cause and catch an exception)
      */
     public void testStaticExpression(boolean defineVariable) {
-        TypeDescriptor<? extends IVilType> iDesc = TypeRegistry.integerType();
+        TypeDescriptor<?> iDesc = TypeRegistry.integerType();
         Assert.assertNotNull("integer type descriptor must exist", iDesc);
         try {
             VariableDeclaration xVar = new VariableDeclaration("x", iDesc);
@@ -49,7 +47,7 @@ public class VariableExpressionTest extends AbstractTest {
             if (defineVariable) {
                 try {
                     env.setValue(xVar, Integer.valueOf(1));
-                } catch (VilLanguageException e) {
+                } catch (VilException e) {
                     Assert.fail("unexpected exception: " + e.getMessage());
                 }
             }
@@ -57,18 +55,18 @@ public class VariableExpressionTest extends AbstractTest {
             CallArgument param2 = new CallArgument(
                  new ConstantExpression(iDesc, Integer.valueOf(2), getRegistry()));
             CallExpression ex = new CallExpression(null, "+", param1, param2);
-            TypeDescriptor<? extends IVilType> eDesc = ex.inferType();
+            TypeDescriptor<?> eDesc = ex.inferType();
             Assert.assertNotNull("result type must not be null", eDesc);
             Assert.assertTrue("result must be of type Integer", eDesc == iDesc);
             Object result = ex.accept(exec);
             Assert.assertNotNull("result must not be null", result);
             Assert.assertTrue("result must be of type Integer", result instanceof Integer);
             Assert.assertEquals("result is incorrect", 3, ((Integer) result).intValue());
-        } catch (ExpressionException e) {
+        } catch (VilException e) {
             if (defineVariable) {
                 Assert.fail("unexpected exception: " + e);
             } else {
-                Assert.assertEquals(VilLanguageException.ID_NOT_FOUND, e.getId());
+                Assert.assertEquals(VilException.ID_NOT_FOUND, e.getId());
             }
         }
     }

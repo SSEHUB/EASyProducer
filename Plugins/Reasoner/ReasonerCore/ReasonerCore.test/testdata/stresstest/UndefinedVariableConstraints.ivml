@@ -1,0 +1,13 @@
+project UndefinedVariableConstraints {
+    Integer a;
+    a < 4;
+    a <= 4;
+    a > 4;
+    a >= 4;
+    a <> 4;
+    not(a < 4);
+    not(a <= 4);
+    not(a > 4);
+    not(a >= 4);
+    not(a <> 4);
+}

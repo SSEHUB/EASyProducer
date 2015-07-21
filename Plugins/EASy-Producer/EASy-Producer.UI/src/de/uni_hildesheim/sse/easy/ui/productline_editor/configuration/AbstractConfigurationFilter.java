@@ -81,4 +81,20 @@ public abstract class AbstractConfigurationFilter extends ViewerFilter {
      */
     protected abstract boolean checkVariable(GUIVariable variable);
 
+    /**
+     * Calls {@link #checkVariable(GUIVariable)} recursively on <code>variable</code>.
+     * 
+     * @param variable the variable to check
+     * @return <tt>true</tt> if the variable should be displayed, <tt>false</tt> otherwise.
+     */
+    protected boolean checkVariableRecursivley(GUIVariable variable) {
+        boolean matches = false;
+        for (int i = 0; i < variable.getNestedElementsCount() && !matches; i++) {
+            GUIVariable nestedVariable = variable.getNestedElement(i);
+            if (null != nestedVariable) {
+                matches = checkVariable(variable.getNestedElement(i));
+            }
+        }
+        return matches;
+    }
 }

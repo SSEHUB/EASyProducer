@@ -66,6 +66,7 @@ public class ExpressionDslFactoryImpl extends EFactoryImpl implements Expression
     {
       case ExpressionDslPackage.LANGUAGE_UNIT: return createLanguageUnit();
       case ExpressionDslPackage.VARIABLE_DECLARATION: return createVariableDeclaration();
+      case ExpressionDslPackage.TYPE_DEF: return createTypeDef();
       case ExpressionDslPackage.ADVICE: return createAdvice();
       case ExpressionDslPackage.VERSION_SPEC: return createVersionSpec();
       case ExpressionDslPackage.PARAMETER_LIST: return createParameterList();
@@ -130,6 +131,17 @@ public class ExpressionDslFactoryImpl extends EFactoryImpl implements Expression
   {
     VariableDeclarationImpl variableDeclaration = new VariableDeclarationImpl();
     return variableDeclaration;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public TypeDef createTypeDef()
+  {
+    TypeDefImpl typeDef = new TypeDefImpl();
+    return typeDef;
   }
 
   /**

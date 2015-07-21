@@ -23,24 +23,40 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "ImplementationUnit");
 		private final Group cGroup = (Group)rule.eContents().get(1);
 		private final Action cImplementationUnitAction_0 = (Action)cGroup.eContents().get(0);
-		private final Assignment cScriptsAssignment_1 = (Assignment)cGroup.eContents().get(1);
-		private final RuleCall cScriptsLanguageUnitParserRuleCall_1_0 = (RuleCall)cScriptsAssignment_1.eContents().get(0);
+		private final Assignment cImportsAssignment_1 = (Assignment)cGroup.eContents().get(1);
+		private final RuleCall cImportsImportParserRuleCall_1_0 = (RuleCall)cImportsAssignment_1.eContents().get(0);
+		private final Assignment cRequiresAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final RuleCall cRequiresRequireParserRuleCall_2_0 = (RuleCall)cRequiresAssignment_2.eContents().get(0);
+		private final Assignment cScriptsAssignment_3 = (Assignment)cGroup.eContents().get(3);
+		private final RuleCall cScriptsLanguageUnitParserRuleCall_3_0 = (RuleCall)cScriptsAssignment_3.eContents().get(0);
 		
 		//ImplementationUnit:
-		//	{ImplementationUnit} scripts+=LanguageUnit*;
+		//	{ImplementationUnit} imports+=Import* requires+=Require* scripts+=LanguageUnit*;
 		public ParserRule getRule() { return rule; }
 
-		//{ImplementationUnit} scripts+=LanguageUnit*
+		//{ImplementationUnit} imports+=Import* requires+=Require* scripts+=LanguageUnit*
 		public Group getGroup() { return cGroup; }
 
 		//{ImplementationUnit}
 		public Action getImplementationUnitAction_0() { return cImplementationUnitAction_0; }
 
+		//imports+=Import*
+		public Assignment getImportsAssignment_1() { return cImportsAssignment_1; }
+
+		//Import
+		public RuleCall getImportsImportParserRuleCall_1_0() { return cImportsImportParserRuleCall_1_0; }
+
+		//requires+=Require*
+		public Assignment getRequiresAssignment_2() { return cRequiresAssignment_2; }
+
+		//Require
+		public RuleCall getRequiresRequireParserRuleCall_2_0() { return cRequiresRequireParserRuleCall_2_0; }
+
 		//scripts+=LanguageUnit*
-		public Assignment getScriptsAssignment_1() { return cScriptsAssignment_1; }
+		public Assignment getScriptsAssignment_3() { return cScriptsAssignment_3; }
 
 		//LanguageUnit
-		public RuleCall getScriptsLanguageUnitParserRuleCall_1_0() { return cScriptsLanguageUnitParserRuleCall_1_0; }
+		public RuleCall getScriptsLanguageUnitParserRuleCall_3_0() { return cScriptsLanguageUnitParserRuleCall_3_0; }
 	}
 
 	public class LanguageUnitElements extends AbstractParserRuleElementFinder {
@@ -133,7 +149,7 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	public class RtContentsElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "rtContents");
 		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Action cScriptContentsAction_0 = (Action)cGroup.eContents().get(0);
+		private final Action cRtContentsAction_0 = (Action)cGroup.eContents().get(0);
 		private final Alternatives cAlternatives_1 = (Alternatives)cGroup.eContents().get(1);
 		private final Assignment cElementsAssignment_1_0 = (Assignment)cAlternatives_1.eContents().get(0);
 		private final RuleCall cElementsGlobalVariableDeclarationParserRuleCall_1_0_0 = (RuleCall)cElementsAssignment_1_0.eContents().get(0);
@@ -145,18 +161,18 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cElementsTacticDeclarationParserRuleCall_1_3_0 = (RuleCall)cElementsAssignment_1_3.eContents().get(0);
 		
 		//rtContents: // ensure object creation
-		//	{ScriptContents} (elements+=GlobalVariableDeclaration | elements+=RuleDeclaration | elements+=StrategyDeclaration |
+		//	{rtContents} (elements+=GlobalVariableDeclaration | elements+=RuleDeclaration | elements+=StrategyDeclaration |
 		//	elements+=TacticDeclaration)*;
 		public ParserRule getRule() { return rule; }
 
 		//// ensure object creation
-		//{ScriptContents} (elements+=GlobalVariableDeclaration | elements+=RuleDeclaration | elements+=StrategyDeclaration |
+		//{rtContents} (elements+=GlobalVariableDeclaration | elements+=RuleDeclaration | elements+=StrategyDeclaration |
 		//elements+=TacticDeclaration)*
 		public Group getGroup() { return cGroup; }
 
 		//// ensure object creation
-		//{ScriptContents}
-		public Action getScriptContentsAction_0() { return cScriptContentsAction_0; }
+		//{rtContents}
+		public Action getRtContentsAction_0() { return cRtContentsAction_0; }
 
 		//(elements+=GlobalVariableDeclaration | elements+=RuleDeclaration | elements+=StrategyDeclaration |
 		//elements+=TacticDeclaration)*
@@ -236,12 +252,15 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cObjectiveKeyword_10_0 = (Keyword)cGroup_10.eContents().get(0);
 		private final Assignment cObjectiveAssignment_10_1 = (Assignment)cGroup_10.eContents().get(1);
 		private final RuleCall cObjectiveExpressionParserRuleCall_10_1_0 = (RuleCall)cObjectiveAssignment_10_1.eContents().get(0);
+		private final Keyword cSemicolonKeyword_10_2 = (Keyword)cGroup_10.eContents().get(2);
 		private final Group cGroup_11 = (Group)cGroup.eContents().get(11);
 		private final Keyword cBreakdownKeyword_11_0 = (Keyword)cGroup_11.eContents().get(0);
 		private final Keyword cLeftCurlyBracketKeyword_11_1 = (Keyword)cGroup_11.eContents().get(1);
-		private final Assignment cBreakdownAssignment_11_2 = (Assignment)cGroup_11.eContents().get(2);
-		private final RuleCall cBreakdownBreakdownElementParserRuleCall_11_2_0 = (RuleCall)cBreakdownAssignment_11_2.eContents().get(0);
-		private final Keyword cRightCurlyBracketKeyword_11_3 = (Keyword)cGroup_11.eContents().get(3);
+		private final Assignment cWeightingAssignment_11_2 = (Assignment)cGroup_11.eContents().get(2);
+		private final RuleCall cWeightingWeightingStatementParserRuleCall_11_2_0 = (RuleCall)cWeightingAssignment_11_2.eContents().get(0);
+		private final Assignment cBreakdownAssignment_11_3 = (Assignment)cGroup_11.eContents().get(3);
+		private final RuleCall cBreakdownBreakdownElementParserRuleCall_11_3_0 = (RuleCall)cBreakdownAssignment_11_3.eContents().get(0);
+		private final Keyword cRightCurlyBracketKeyword_11_4 = (Keyword)cGroup_11.eContents().get(4);
 		private final Assignment cPostAssignment_12 = (Assignment)cGroup.eContents().get(12);
 		private final RuleCall cPostRuleElementParserRuleCall_12_0 = (RuleCall)cPostAssignment_12.eContents().get(0);
 		private final Keyword cRightCurlyBracketKeyword_13 = (Keyword)cGroup.eContents().get(13);
@@ -249,13 +268,13 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//StrategyDeclaration:
 		//	{StrategyDeclaration} "strategy" name=Identifier "(" paramList=ParameterList? ")" "=" conditions=RuleConditions? "{"
-		//	varDecls+=VariableDeclaration* ("objective" objective=Expression) ("breakdown" "{" breakdown+=BreakdownElement* "}")
-		//	post+=RuleElement* "}" ";"?;
+		//	varDecls+=VariableDeclaration* ("objective" objective=Expression ";")? ("breakdown" "{" weighting=WeightingStatement?
+		//	breakdown+=BreakdownElement+ "}") post+=RuleElement* "}" ";"?;
 		public ParserRule getRule() { return rule; }
 
 		//{StrategyDeclaration} "strategy" name=Identifier "(" paramList=ParameterList? ")" "=" conditions=RuleConditions? "{"
-		//varDecls+=VariableDeclaration* ("objective" objective=Expression) ("breakdown" "{" breakdown+=BreakdownElement* "}")
-		//post+=RuleElement* "}" ";"?
+		//varDecls+=VariableDeclaration* ("objective" objective=Expression ";")? ("breakdown" "{" weighting=WeightingStatement?
+		//breakdown+=BreakdownElement+ "}") post+=RuleElement* "}" ";"?
 		public Group getGroup() { return cGroup; }
 
 		//{StrategyDeclaration}
@@ -300,7 +319,7 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 		//VariableDeclaration
 		public RuleCall getVarDeclsVariableDeclarationParserRuleCall_9_0() { return cVarDeclsVariableDeclarationParserRuleCall_9_0; }
 
-		//"objective" objective=Expression
+		//("objective" objective=Expression ";")?
 		public Group getGroup_10() { return cGroup_10; }
 
 		//"objective"
@@ -312,7 +331,10 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 		//Expression
 		public RuleCall getObjectiveExpressionParserRuleCall_10_1_0() { return cObjectiveExpressionParserRuleCall_10_1_0; }
 
-		//"breakdown" "{" breakdown+=BreakdownElement* "}"
+		//";"
+		public Keyword getSemicolonKeyword_10_2() { return cSemicolonKeyword_10_2; }
+
+		//"breakdown" "{" weighting=WeightingStatement? breakdown+=BreakdownElement+ "}"
 		public Group getGroup_11() { return cGroup_11; }
 
 		//"breakdown"
@@ -321,14 +343,20 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 		//"{"
 		public Keyword getLeftCurlyBracketKeyword_11_1() { return cLeftCurlyBracketKeyword_11_1; }
 
-		//breakdown+=BreakdownElement*
-		public Assignment getBreakdownAssignment_11_2() { return cBreakdownAssignment_11_2; }
+		//weighting=WeightingStatement?
+		public Assignment getWeightingAssignment_11_2() { return cWeightingAssignment_11_2; }
+
+		//WeightingStatement
+		public RuleCall getWeightingWeightingStatementParserRuleCall_11_2_0() { return cWeightingWeightingStatementParserRuleCall_11_2_0; }
+
+		//breakdown+=BreakdownElement+
+		public Assignment getBreakdownAssignment_11_3() { return cBreakdownAssignment_11_3; }
 
 		//BreakdownElement
-		public RuleCall getBreakdownBreakdownElementParserRuleCall_11_2_0() { return cBreakdownBreakdownElementParserRuleCall_11_2_0; }
+		public RuleCall getBreakdownBreakdownElementParserRuleCall_11_3_0() { return cBreakdownBreakdownElementParserRuleCall_11_3_0; }
 
 		//"}"
-		public Keyword getRightCurlyBracketKeyword_11_3() { return cRightCurlyBracketKeyword_11_3; }
+		public Keyword getRightCurlyBracketKeyword_11_4() { return cRightCurlyBracketKeyword_11_4; }
 
 		//post+=RuleElement*
 		public Assignment getPostAssignment_12() { return cPostAssignment_12; }
@@ -379,6 +407,54 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 		public RuleCall getBreakdownStmtBreakdownStatementParserRuleCall_2_0() { return cBreakdownStmtBreakdownStatementParserRuleCall_2_0; }
 	}
 
+	public class WeightingStatementElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "WeightingStatement");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Keyword cWeightingKeyword_0 = (Keyword)cGroup.eContents().get(0);
+		private final Keyword cLeftParenthesisKeyword_1 = (Keyword)cGroup.eContents().get(1);
+		private final Assignment cNameAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final RuleCall cNameIdentifierParserRuleCall_2_0 = (RuleCall)cNameAssignment_2.eContents().get(0);
+		private final Keyword cColonKeyword_3 = (Keyword)cGroup.eContents().get(3);
+		private final Assignment cExprAssignment_4 = (Assignment)cGroup.eContents().get(4);
+		private final RuleCall cExprExpressionParserRuleCall_4_0 = (RuleCall)cExprAssignment_4.eContents().get(0);
+		private final Keyword cRightParenthesisKeyword_5 = (Keyword)cGroup.eContents().get(5);
+		private final Keyword cSemicolonKeyword_6 = (Keyword)cGroup.eContents().get(6);
+		
+		//WeightingStatement:
+		//	"weighting" "(" name=Identifier ":" expr=Expression ")" ";";
+		public ParserRule getRule() { return rule; }
+
+		//"weighting" "(" name=Identifier ":" expr=Expression ")" ";"
+		public Group getGroup() { return cGroup; }
+
+		//"weighting"
+		public Keyword getWeightingKeyword_0() { return cWeightingKeyword_0; }
+
+		//"("
+		public Keyword getLeftParenthesisKeyword_1() { return cLeftParenthesisKeyword_1; }
+
+		//name=Identifier
+		public Assignment getNameAssignment_2() { return cNameAssignment_2; }
+
+		//Identifier
+		public RuleCall getNameIdentifierParserRuleCall_2_0() { return cNameIdentifierParserRuleCall_2_0; }
+
+		//":"
+		public Keyword getColonKeyword_3() { return cColonKeyword_3; }
+
+		//expr=Expression
+		public Assignment getExprAssignment_4() { return cExprAssignment_4; }
+
+		//Expression
+		public RuleCall getExprExpressionParserRuleCall_4_0() { return cExprExpressionParserRuleCall_4_0; }
+
+		//")"
+		public Keyword getRightParenthesisKeyword_5() { return cRightParenthesisKeyword_5; }
+
+		//";"
+		public Keyword getSemicolonKeyword_6() { return cSemicolonKeyword_6; }
+	}
+
 	public class BreakdownStatementElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "BreakdownStatement");
 		private final Group cGroup = (Group)rule.eContents().get(1);
@@ -386,8 +462,11 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 		private final Alternatives cTypeAlternatives_0_0 = (Alternatives)cTypeAssignment_0.eContents().get(0);
 		private final Keyword cTypeStrategyKeyword_0_0_0 = (Keyword)cTypeAlternatives_0_0.eContents().get(0);
 		private final Keyword cTypeTacticKeyword_0_0_1 = (Keyword)cTypeAlternatives_0_0.eContents().get(1);
-		private final Assignment cGuardAssignment_1 = (Assignment)cGroup.eContents().get(1);
-		private final RuleCall cGuardLogicalExpressionParserRuleCall_1_0 = (RuleCall)cGuardAssignment_1.eContents().get(0);
+		private final Group cGroup_1 = (Group)cGroup.eContents().get(1);
+		private final Keyword cLeftParenthesisKeyword_1_0 = (Keyword)cGroup_1.eContents().get(0);
+		private final Assignment cGuardAssignment_1_1 = (Assignment)cGroup_1.eContents().get(1);
+		private final RuleCall cGuardLogicalExpressionParserRuleCall_1_1_0 = (RuleCall)cGuardAssignment_1_1.eContents().get(0);
+		private final Keyword cRightParenthesisKeyword_1_2 = (Keyword)cGroup_1.eContents().get(2);
 		private final Assignment cNameAssignment_2 = (Assignment)cGroup.eContents().get(2);
 		private final RuleCall cNameQualifiedPrefixParserRuleCall_2_0 = (RuleCall)cNameAssignment_2.eContents().get(0);
 		private final Keyword cLeftParenthesisKeyword_3 = (Keyword)cGroup.eContents().get(3);
@@ -408,14 +487,15 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cCommercialAtKeyword_7_0 = (Keyword)cGroup_7.eContents().get(0);
 		private final Assignment cTimeAssignment_7_1 = (Assignment)cGroup_7.eContents().get(1);
 		private final RuleCall cTimeExpressionParserRuleCall_7_1_0 = (RuleCall)cTimeAssignment_7_1.eContents().get(0);
+		private final Keyword cSemicolonKeyword_8 = (Keyword)cGroup.eContents().get(8);
 		
 		//BreakdownStatement:
-		//	type=("strategy" | "tactic") guard=LogicalExpression? name=QualifiedPrefix "(" param=ArgumentList? ")" ("with" "("
-		//	part+=BreakdownWithPart ("," part+=BreakdownWithPart) ")")? ("@" time=Expression)?;
+		//	type=("strategy" | "tactic") ("(" guard=LogicalExpression ")")? name=QualifiedPrefix "(" param=ArgumentList? ")"
+		//	("with" "(" part+=BreakdownWithPart ("," part+=BreakdownWithPart) ")")? ("@" time=Expression)? ";";
 		public ParserRule getRule() { return rule; }
 
-		//type=("strategy" | "tactic") guard=LogicalExpression? name=QualifiedPrefix "(" param=ArgumentList? ")" ("with" "("
-		//part+=BreakdownWithPart ("," part+=BreakdownWithPart) ")")? ("@" time=Expression)?
+		//type=("strategy" | "tactic") ("(" guard=LogicalExpression ")")? name=QualifiedPrefix "(" param=ArgumentList? ")" ("with"
+		//"(" part+=BreakdownWithPart ("," part+=BreakdownWithPart) ")")? ("@" time=Expression)? ";"
 		public Group getGroup() { return cGroup; }
 
 		//type=("strategy" | "tactic")
@@ -430,11 +510,20 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 		//"tactic"
 		public Keyword getTypeTacticKeyword_0_0_1() { return cTypeTacticKeyword_0_0_1; }
 
-		//guard=LogicalExpression?
-		public Assignment getGuardAssignment_1() { return cGuardAssignment_1; }
+		//("(" guard=LogicalExpression ")")?
+		public Group getGroup_1() { return cGroup_1; }
+
+		//"("
+		public Keyword getLeftParenthesisKeyword_1_0() { return cLeftParenthesisKeyword_1_0; }
+
+		//guard=LogicalExpression
+		public Assignment getGuardAssignment_1_1() { return cGuardAssignment_1_1; }
 
 		//LogicalExpression
-		public RuleCall getGuardLogicalExpressionParserRuleCall_1_0() { return cGuardLogicalExpressionParserRuleCall_1_0; }
+		public RuleCall getGuardLogicalExpressionParserRuleCall_1_1_0() { return cGuardLogicalExpressionParserRuleCall_1_1_0; }
+
+		//")"
+		public Keyword getRightParenthesisKeyword_1_2() { return cRightParenthesisKeyword_1_2; }
 
 		//name=QualifiedPrefix
 		public Assignment getNameAssignment_2() { return cNameAssignment_2; }
@@ -495,6 +584,9 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 
 		//Expression
 		public RuleCall getTimeExpressionParserRuleCall_7_1_0() { return cTimeExpressionParserRuleCall_7_1_0; }
+
+		//";"
+		public Keyword getSemicolonKeyword_8() { return cSemicolonKeyword_8; }
 	}
 
 	public class BreakdownWithPartElements extends AbstractParserRuleElementFinder {
@@ -606,6 +698,7 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	private GlobalVariableDeclarationElements pGlobalVariableDeclaration;
 	private StrategyDeclarationElements pStrategyDeclaration;
 	private BreakdownElementElements pBreakdownElement;
+	private WeightingStatementElements pWeightingStatement;
 	private BreakdownStatementElements pBreakdownStatement;
 	private BreakdownWithPartElements pBreakdownWithPart;
 	private TacticDeclarationElements pTacticDeclaration;
@@ -649,7 +742,7 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 
 	
 	//ImplementationUnit:
-	//	{ImplementationUnit} scripts+=LanguageUnit*;
+	//	{ImplementationUnit} imports+=Import* requires+=Require* scripts+=LanguageUnit*;
 	public ImplementationUnitElements getImplementationUnitAccess() {
 		return (pImplementationUnit != null) ? pImplementationUnit : (pImplementationUnit = new ImplementationUnitElements());
 	}
@@ -671,7 +764,7 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//rtContents: // ensure object creation
-	//	{ScriptContents} (elements+=GlobalVariableDeclaration | elements+=RuleDeclaration | elements+=StrategyDeclaration |
+	//	{rtContents} (elements+=GlobalVariableDeclaration | elements+=RuleDeclaration | elements+=StrategyDeclaration |
 	//	elements+=TacticDeclaration)*;
 	public RtContentsElements getRtContentsAccess() {
 		return (pRtContents != null) ? pRtContents : (pRtContents = new RtContentsElements());
@@ -693,8 +786,8 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 
 	//StrategyDeclaration:
 	//	{StrategyDeclaration} "strategy" name=Identifier "(" paramList=ParameterList? ")" "=" conditions=RuleConditions? "{"
-	//	varDecls+=VariableDeclaration* ("objective" objective=Expression) ("breakdown" "{" breakdown+=BreakdownElement* "}")
-	//	post+=RuleElement* "}" ";"?;
+	//	varDecls+=VariableDeclaration* ("objective" objective=Expression ";")? ("breakdown" "{" weighting=WeightingStatement?
+	//	breakdown+=BreakdownElement+ "}") post+=RuleElement* "}" ";"?;
 	public StrategyDeclarationElements getStrategyDeclarationAccess() {
 		return (pStrategyDeclaration != null) ? pStrategyDeclaration : (pStrategyDeclaration = new StrategyDeclarationElements());
 	}
@@ -713,9 +806,19 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 		return getBreakdownElementAccess().getRule();
 	}
 
+	//WeightingStatement:
+	//	"weighting" "(" name=Identifier ":" expr=Expression ")" ";";
+	public WeightingStatementElements getWeightingStatementAccess() {
+		return (pWeightingStatement != null) ? pWeightingStatement : (pWeightingStatement = new WeightingStatementElements());
+	}
+	
+	public ParserRule getWeightingStatementRule() {
+		return getWeightingStatementAccess().getRule();
+	}
+
 	//BreakdownStatement:
-	//	type=("strategy" | "tactic") guard=LogicalExpression? name=QualifiedPrefix "(" param=ArgumentList? ")" ("with" "("
-	//	part+=BreakdownWithPart ("," part+=BreakdownWithPart) ")")? ("@" time=Expression)?;
+	//	type=("strategy" | "tactic") ("(" guard=LogicalExpression ")")? name=QualifiedPrefix "(" param=ArgumentList? ")"
+	//	("with" "(" part+=BreakdownWithPart ("," part+=BreakdownWithPart) ")")? ("@" time=Expression)? ";";
 	public BreakdownStatementElements getBreakdownStatementAccess() {
 		return (pBreakdownStatement != null) ? pBreakdownStatement : (pBreakdownStatement = new BreakdownStatementElements());
 	}
@@ -778,7 +881,7 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//ScriptContents: // ensure object creation
-	//	{ScriptContents} (elements+=VariableDeclaration | elements+=RuleDeclaration)*;
+	//	{ScriptContents} (elements+=VariableDeclaration | elements+=TypeDef | elements+=RuleDeclaration)*;
 	public VilBuildLanguageGrammarAccess.ScriptContentsElements getScriptContentsAccess() {
 		return gaVilBuildLanguage.getScriptContentsAccess();
 	}
@@ -842,7 +945,7 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 
 	//// ----------------------- overriding and extending parts of the expression grammar -------------------
 	//ExpressionStatement:
-	//	(var=Identifier "=")? expr=Expression ";" | alt=Alternative ";"?;
+	//	(var=Identifier ("." field=Identifier)? "=")? expr=Expression ";" | alt=Alternative ";"?;
 	public VilBuildLanguageGrammarAccess.ExpressionStatementElements getExpressionStatementAccess() {
 		return gaVilBuildLanguage.getExpressionStatementAccess();
 	}
@@ -951,6 +1054,16 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	
 	public ParserRule getVariableDeclarationRule() {
 		return getVariableDeclarationAccess().getRule();
+	}
+
+	//TypeDef:
+	//	"typedef" name=Identifier type=Type ";";
+	public ExpressionDslGrammarAccess.TypeDefElements getTypeDefAccess() {
+		return gaVilBuildLanguage.getTypeDefAccess();
+	}
+	
+	public ParserRule getTypeDefRule() {
+		return getTypeDefAccess().getRule();
 	}
 
 	//// used in extending languages
@@ -1317,7 +1430,7 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//QualifiedName:
-	//	prefix=QualifiedPrefix (qname+="." qname+=Identifier)?;
+	//	prefix=QualifiedPrefix (qname+="." qname+=Identifier)*;
 	public ExpressionDslGrammarAccess.QualifiedNameElements getQualifiedNameAccess() {
 		return gaVilBuildLanguage.getQualifiedNameAccess();
 	}
@@ -1360,7 +1473,7 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	//Type:
 	//	name= // specific types will be dynamically loaded at start-up
 	//	QualifiedPrefix | set="setOf" param=TypeParameters | seq="sequenceOf" param=TypeParameters | map="mapOf"
-	//	param=TypeParameters;
+	//	param=TypeParameters | call="callOf" return=Type? param=TypeParameters;
 	public ExpressionDslGrammarAccess.TypeElements getTypeAccess() {
 		return gaVilBuildLanguage.getTypeAccess();
 	}

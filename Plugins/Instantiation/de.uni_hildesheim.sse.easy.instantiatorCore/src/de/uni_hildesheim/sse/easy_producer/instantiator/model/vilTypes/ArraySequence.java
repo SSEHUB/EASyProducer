@@ -15,6 +15,7 @@
  */
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionEvaluator;
 
 /**
@@ -32,8 +33,8 @@ public class ArraySequence<T> extends AbstractArrayWrapper<T> implements Sequenc
      * @param array the wrapped array
      * @param param the only type parameter characterizing <T>
      */
-    public ArraySequence(T[] array, Class<? extends IVilType> param) {
-        super(array, TypeRegistry.DEFAULT, param);
+    public ArraySequence(T[] array, Class<?> param) {
+        super(array, TypeRegistry.DEFAULT, false, param);
     }
     
     /**
@@ -43,8 +44,8 @@ public class ArraySequence<T> extends AbstractArrayWrapper<T> implements Sequenc
      * @param param the only type parameter characterizing <T>
      * @param registry the type registry to be used for conversion of <code>param</code>
      */
-    public ArraySequence(T[] array, Class<? extends IVilType> param, TypeRegistry registry) {
-        super(array, registry, param);
+    public ArraySequence(T[] array, Class<?> param, TypeRegistry registry) {
+        super(array, registry, false, param);
     }
 
     /**
@@ -53,8 +54,8 @@ public class ArraySequence<T> extends AbstractArrayWrapper<T> implements Sequenc
      * @param array the wrapped array
      * @param params the type parameter characterizing <T>
      */
-    public ArraySequence(T[] array, TypeDescriptor<? extends IVilType>... params) {
-        super(array, params);
+    public ArraySequence(T[] array, TypeDescriptor<?>... params) {
+        super(array, false, params);
     }
     
     @Override
@@ -83,7 +84,7 @@ public class ArraySequence<T> extends AbstractArrayWrapper<T> implements Sequenc
      * @param <T> the element type
      */
     @Invisible
-    public static final <T> Sequence<T> empty(Class<? extends IVilType> param, TypeRegistry registry) {
+    public static final <T> Sequence<T> empty(Class<?> param, TypeRegistry registry) {
         return empty(registry.findType(param));
     }
     
@@ -95,33 +96,33 @@ public class ArraySequence<T> extends AbstractArrayWrapper<T> implements Sequenc
      * @param <T> the element type
      */
     @Invisible
-    public static final <T> Sequence<T> empty(TypeDescriptor<? extends IVilType> param) {
-        TypeDescriptor<? extends IVilType>[] params = TypeDescriptor.createArray(1);
+    public static final <T> Sequence<T> empty(TypeDescriptor<?> param) {
+        TypeDescriptor<?>[] params = TypeDescriptor.createArray(1);
         params[0] = param;
         return new ArraySequence<T>(null, params);
     }
 
     @Override
     @OperationMeta(returnGenerics = IVilType.class)
-    public Sequence<T> selectByType(TypeDescriptor<? extends IVilType> type) {
-        return new ListSequence<T>(selectByType(this, type), getParameter());
+    public Sequence<T> selectByType(TypeDescriptor<?> type) {
+        return new ListSequence<T>(selectByType(this, type), getGenericParameter());
     }
 
     @Override
     @OperationMeta(returnGenerics = IVilType.class)
     public Sequence<T> excluding(Collection<T> sequence) {
-        return new ListSequence<T>(excluding(this, sequence), getParameter());
+        return new ListSequence<T>(excluding(this, sequence), getGenericParameter());
     }
     
     @Override
     @OperationMeta(returnGenerics = IVilType.class)
     public Sequence<T> append(Collection<T> sequence) {
-        return new ListSequence<T>(append(this, sequence), getParameter());
+        return new ListSequence<T>(append(this, sequence), getGenericParameter());
     }
 
     @Override
-    public Sequence<T> select(ExpressionEvaluator evaluator) throws ArtifactException {
-        TypeDescriptor<? extends IVilType>[] param = TypeDescriptor.createArray(1);
+    public Sequence<T> select(ExpressionEvaluator evaluator) throws VilException {
+        TypeDescriptor<?>[] param = TypeDescriptor.createArray(1);
         param[0] = evaluator.getIteratorVariable().getType();
         return new ListSequence<T>(select(this, evaluator), param);
     }
@@ -134,7 +135,7 @@ public class ArraySequence<T> extends AbstractArrayWrapper<T> implements Sequenc
 
     @Override
     public Set<T> toSet() {
-        return new ArraySet<T>(getArray(), getParams());
+        return new ArraySet<T>(getArray(), getGenericParameter());
     }
 
     @Override
@@ -144,7 +145,31 @@ public class ArraySequence<T> extends AbstractArrayWrapper<T> implements Sequenc
         if (null == getArray()) {
             result = this;
         } else {
-            result = new ListSequence<T>(sortAlphaImpl(), getParams());
+            result = new ListSequence<T>(sortAlphaImpl(), getGenericParameter());
+        }
+        return result;
+    }
+    
+    @Override
+    @OperationMeta(returnGenerics = IVilType.class)
+    public Sequence<T> sort(ExpressionEvaluator evaluator) throws VilException {
+        Sequence<T> result;
+        if (null == getArray()) {
+            result = this;
+        } else {
+            result = new ListSequence<T>(sortImpl(evaluator), getGenericParameter());
+        }
+        return result;
+    }
+    
+    @Override
+    @OperationMeta(returnGenerics = IVilType.class)
+    public Sequence<T> revert() {
+        Sequence<T> result;
+        if (null == getArray()) {
+            result = this;
+        } else {
+            result = new ListSequence<T>(revertImpl(), getGenericParameter());
         }
         return result;
     }
@@ -188,6 +213,7 @@ public class ArraySequence<T> extends AbstractArrayWrapper<T> implements Sequenc
     }
 
     @Override
+    @OperationMeta(genericArgument = {0 })
     public T add(T element) {
         extendCapacity(1);
         T[] array = getArray();
@@ -196,13 +222,13 @@ public class ArraySequence<T> extends AbstractArrayWrapper<T> implements Sequenc
     }
 
     @Override
-    public void remove(T element) {
-        decreaseCapacity(1);
+    public Map<T, T> mapSequence(Sequence<T> other) {
+        return SequenceOperations.mapSequence(this, other);
     }
 
     @Override
-    public Map<T, T> mapSequence(Sequence<T> other) {
-        return SequenceOperations.mapSequence(this, other);
+    public Map<T, T> mapAny(Sequence<T> other) {
+        return SequenceOperations.mapAny(this, other);
     }
 
 }

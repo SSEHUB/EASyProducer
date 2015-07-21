@@ -6,6 +6,7 @@ import java.io.IOException;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
+import de.uni_hildesheim.sse.translation.ErrorCodes;
 
 /**
  * A test class for blackbox testing parser and type resolution of additional
@@ -109,5 +110,45 @@ public class AdditionalTests extends AbstractTest {
     public void testBooleanAlgebraOp() throws IOException {
         assertEqual(createFile("BooleanAlgebraOpTest"), null, null);
     }   
+
+    /**
+     * Tests warnings (experimental).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testWarning() throws IOException {
+        assertEqual(createFile("warning"), null, null);
+    }   
+
+    /**
+     * Tests warnings (experimental, failing due to illegal positions).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testWarning1() throws IOException {
+        assertEqual(createFile("warning1"), null, null, ErrorCodes.WARNING_USAGE);
+    }   
+
+    /**
+     * Tests warnings (experimental, failing due to illegal positions).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testWarning2() throws IOException {
+        assertEqual(createFile("warning2"), null, null, ErrorCodes.WARNING_USAGE);
+    }   
     
+    /**
+     * Tests warnings (experimental, failing due to illegal positions).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testWarning3() throws IOException {
+        assertEqual(createFile("warning3"), null, null, ErrorCodes.WARNING_USAGE);
+    }   
+
 }

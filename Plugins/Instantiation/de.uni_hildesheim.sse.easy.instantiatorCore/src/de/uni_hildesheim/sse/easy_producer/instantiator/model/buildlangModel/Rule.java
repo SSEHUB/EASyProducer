@@ -18,21 +18,21 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ruleMatch.AbstractRuleMatchExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.IResolvableOperation;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallArgument;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VariableExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Constants;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaType;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IStringValueProvider;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 
 /**
  * Represents a VIL build rule (production strategy).
  * 
  * @author kroeher
  */
-public class Rule extends RuleBlock implements IResolvableOperation<VariableDeclaration> {
+public class Rule extends RuleBlock implements IResolvableOperation<VariableDeclaration>, IStringValueProvider {
     
     private AbstractRuleMatchExpression[] lhsRuleMatches;
     private RuleCallExpression[] lhsRuleCalls;
@@ -44,21 +44,29 @@ public class Rule extends RuleBlock implements IResolvableOperation<VariableDecl
     private VariableDeclaration[] lhsVars;
     private VariableDeclaration[] rhsVars;
     private VariableDeclaration[] rhsMatchVars;
+    private TypeDescriptor<?> returnType;
 
     /**
      * Create a new rule with the given name. As no descriptor is given,
      * call {@link #setDescriptorInformation(RuleDescriptor)} somewhen before using this rule.
      * 
      * @param name The name of the rule.
-     * @param parent the parent rule
      * @param isProtected if the visibility of the rule is actually restricted 
+     * @param returnType the return type (may be <b>null</b> to use the default)
      * @param parameters the parameters of this rule (may be <b>null</b>)
+     * @param parent the parent rule
      */
-    public Rule(String name, boolean isProtected, VariableDeclaration[] parameters, Script parent) {
+    public Rule(String name, boolean isProtected, TypeDescriptor<?> returnType, VariableDeclaration[] parameters, 
+        Script parent) {
         super(name, null);
         this.isProtected = isProtected;
         this.parent = parent;
         this.parameters = parameters;
+        if (null != returnType) {
+            this.returnType = returnType;
+        } else {
+            this.returnType = getDefaultReturnType();
+        }
     }
     
     /**
@@ -73,7 +81,7 @@ public class Rule extends RuleBlock implements IResolvableOperation<VariableDecl
      */
     public Rule(String name, boolean isProtected, VariableDeclaration[] parameters, RuleDescriptor descriptor, 
         Script parent) {
-        this(name, isProtected, parameters, parent);
+        this(name, isProtected, null, parameters, parent);
         setDescriptorInformation(descriptor);
     }
     
@@ -91,6 +99,9 @@ public class Rule extends RuleBlock implements IResolvableOperation<VariableDecl
         this.rhsVars = descriptor.getVariables(Side.RHS);
         //this.lhsMatchVars = descriptor.getMatchVariables(Side.LHS);
         this.rhsMatchVars = descriptor.getMatchVariables(Side.RHS);
+        if (null != descriptor.getReturnType()) {
+            this.returnType = descriptor.getReturnType();
+        }
     }
     
     /**
@@ -321,7 +332,7 @@ public class Rule extends RuleBlock implements IResolvableOperation<VariableDecl
     }
     
     @Override
-    public Object accept(IVisitor visitor) throws VilLanguageException {
+    public Object accept(IVisitor visitor) throws VilException {
         return visitor.visitRule(this);
     }
 
@@ -351,9 +362,27 @@ public class Rule extends RuleBlock implements IResolvableOperation<VariableDecl
         return signature.toString();
     }
 
-    @Override
-    public TypeDescriptor<? extends IVilType> getReturnType() {
+    /**
+     * Returns the default return type that shall not be emitted / does not require return expressions.
+     * 
+     * @return the default return type
+     */
+    public TypeDescriptor<?> getDefaultReturnType() {
         return RuleExecutionResult.TYPE;
+    }
+    
+    /**
+     * Returns whether this rule shall return an actual value (function) or a rule execution result.
+     * 
+     * @return <code>true</code> in case of an actual value, <code>false</code> else
+     */
+    public boolean returnActualValue() {
+        return !TypeRegistry.equals(getDefaultReturnType(), getReturnType());
+    }
+    
+    @Override
+    public TypeDescriptor<?> getReturnType() {
+        return returnType;
     }
 
     @Override
@@ -382,9 +411,9 @@ public class Rule extends RuleBlock implements IResolvableOperation<VariableDecl
      * 
      * @param target the rule to append the call to
      * @param qualifiedCall insert a qualified call if <code>true</code>, an unqualified call if <code>false</code>
-     * @throws ExpressionException in case that creating / resolving the rule call fails
+     * @throws VilException in case that creating / resolving the rule call fails
      */
-    public void appendCallTo(Rule target, boolean qualifiedCall) throws ExpressionException {
+    public void appendCallTo(Rule target, boolean qualifiedCall) throws VilException {
         if (null != target) {
             CallArgument[] args = new CallArgument[getParameterCount()];
             for (int p = 0; p < args.length; p++) {
@@ -408,6 +437,11 @@ public class Rule extends RuleBlock implements IResolvableOperation<VariableDecl
     @Override
     public boolean isVirtual() {
         return false;
+    }
+
+    @Override
+    public String getStringValue(StringComparator comparator) {
+        return getSignature();
     }
 
 }

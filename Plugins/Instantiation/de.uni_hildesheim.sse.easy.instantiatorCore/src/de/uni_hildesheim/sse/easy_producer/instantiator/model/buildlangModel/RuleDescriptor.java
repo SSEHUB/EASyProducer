@@ -9,7 +9,8 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Rul
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ruleMatch.AbstractRuleMatchExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ruleMatch.MatchFactory;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 
 /**
  * Defines the complex parts of a rule. Instances of this class are just for
@@ -29,6 +30,7 @@ public class RuleDescriptor {
     private VariableDeclaration[] rhsVariables;
     private VariableDeclaration[] lhsMatchVariables;
     private VariableDeclaration[] rhsMatchVariables;
+    private TypeDescriptor<?> returnType;
 
     /**
      * Creates an empty descriptor.
@@ -66,7 +68,7 @@ public class RuleDescriptor {
                         throw new RuleDescriptorException("unrecongnized expression of type " 
                             + expr.inferType().getVilName(), c);
                     }
-                } catch (ExpressionException e) {
+                } catch (VilException e) {
                     throw new RuleDescriptorException(e, c);
                 }
             }
@@ -149,9 +151,9 @@ public class RuleDescriptor {
      * Registers the LHS/RHS variables in <code>resolver</code> if applicable.
      * 
      * @param resolver the resolver instance
-     * @throws ExpressionException in case that resolving one of the expressions fails
+     * @throws VilException in case that resolving one of the expressions fails
      */
-    public void registerVariables(Resolver resolver) throws ExpressionException {
+    public void registerVariables(Resolver resolver) throws VilException {
         Map<String, Integer> known = new HashMap<String, Integer>();
         registerVariables(Side.LHS, resolver, known);
         registerVariables(Side.RHS, resolver, known);
@@ -164,10 +166,10 @@ public class RuleDescriptor {
      * @param resolver the resolver instance
      * @param names a mapping of names and a related counter how often the variable name (without number) has been used
      *    so far in this rule head
-     * @throws ExpressionException in case that resolving one of the expressions fails
+     * @throws VilException in case that resolving one of the expressions fails
      */
     private void registerVariables(Side side, Resolver resolver, Map<String, Integer> names) 
-        throws ExpressionException {
+        throws VilException {
         VariableDeclaration[] result;
         VariableDeclaration[] matchResult;
         String predefined;
@@ -280,6 +282,24 @@ public class RuleDescriptor {
             result = rhsMatchVariables;
         }
         return result;
+    }
+    
+    /**
+     * Defines the return type of this rule descriptor.
+     * 
+     * @param returnType the return type (may be <b>null</b> if undefined, use default instead)
+     */
+    public void setReturnType(TypeDescriptor<?> returnType) {
+        this.returnType = returnType;
+    }
+    
+    /**
+     * Returns the return type of this rule descriptor.
+     * 
+     * @return the return type (may be <b>null</b> if undefined, use default instead)
+     */
+    public TypeDescriptor<?> getReturnType() {
+        return returnType;
     }
  
 }

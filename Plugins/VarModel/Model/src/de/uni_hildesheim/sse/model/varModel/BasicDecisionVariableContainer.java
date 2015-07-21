@@ -40,11 +40,11 @@ public class BasicDecisionVariableContainer extends ModelElement implements IDec
     private List<ContainableModelElement> modelElements = new ArrayList<ContainableModelElement>();
     
     /**
-     * This includes all {@link DecisionVariableDeclaration}, injcluding nested {@link DecisionVariableDeclaration}s
+     * This includes all {@link DecisionVariableDeclaration}, including nested {@link DecisionVariableDeclaration}s
      * of attribute assignments.
      * This list will only be generated on demand, i.e. if <tt>getDeclarationCount()</tt> is called.
      */
-    private List<DecisionVariableDeclaration> allDeclarations = new ArrayList<DecisionVariableDeclaration>();
+    private List<DecisionVariableDeclaration> allDeclarations = null;
     
     /**
      * Creates a container instance.
@@ -212,13 +212,13 @@ public class BasicDecisionVariableContainer extends ModelElement implements IDec
 
     @Override
     public int getDeclarationCount() {
-        allDeclarations.clear();
-        
-        for (int i = 0; i < modelElements.size(); i++) {
-            DeclarationInContainerFinder finder = new DeclarationInContainerFinder(modelElements.get(i));
-            allDeclarations.addAll(finder.getDeclarations());
+        if (null == allDeclarations) {
+            allDeclarations = new ArrayList<DecisionVariableDeclaration>();
+            for (int i = 0; i < modelElements.size(); i++) {
+                DeclarationInContainerFinder finder = new DeclarationInContainerFinder(modelElements.get(i));
+                allDeclarations.addAll(finder.getDeclarations());
+            }
         }
-        
         return allDeclarations.size();
     }
 

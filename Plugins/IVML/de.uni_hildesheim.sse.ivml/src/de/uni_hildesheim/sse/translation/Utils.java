@@ -6,8 +6,8 @@ import java.util.List;
 import org.eclipse.emf.ecore.EObject;
 
 import de.uni_hildesheim.sse.ivml.AccessName;
+import de.uni_hildesheim.sse.ivml.AnnotateTo;
 import de.uni_hildesheim.sse.ivml.AttrAssignment;
-import de.uni_hildesheim.sse.ivml.AttributeTo;
 import de.uni_hildesheim.sse.ivml.Eval;
 import de.uni_hildesheim.sse.ivml.ExpressionStatement;
 import de.uni_hildesheim.sse.ivml.Freeze;
@@ -100,7 +100,7 @@ public class Utils {
         private List<Freeze> freezes;
         private List<Eval> evals;
         private List<ExpressionStatement> exprs;
-        private List<AttributeTo> attrs;
+        private List<AnnotateTo> attrs;
         private List<OpDefStatement> opdefs;
         private List<AttrAssignment> attrAssignments;
 
@@ -154,7 +154,7 @@ public class Utils {
          * 
          * @return the attributes or <b>null</b>
          */
-        public List<AttributeTo> getAttrs() {
+        public List<AnnotateTo> getAttrs() {
             return attrs;
         }
 
@@ -232,7 +232,7 @@ public class Utils {
             result.freezes = assign(result.freezes, tmp, Freeze.class);
             result.evals = assign(result.evals, tmp, Eval.class);
             result.exprs = assign(result.exprs, tmp, ExpressionStatement.class);
-            result.attrs = assign(result.attrs, tmp, AttributeTo.class);
+            result.attrs = assign(result.attrs, tmp, AnnotateTo.class);
             result.opdefs = assign(result.opdefs, tmp, OpDefStatement.class);
             result.attrAssignments = assign(result.attrAssignments, tmp, AttrAssignment.class);
             //if (tmp instanceof AttrAssignment) {

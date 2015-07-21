@@ -1,0 +1,8 @@
+-> main(Project, Configuration, Project) with (<project>, <config>, <project>)
+    -> t(Configuration) with (<config>)
+        a <- <config>
+        node <- Add::node
+        node.capacity <- 0
+        -> +(Integer, Integer) with (0, 1) = 1
+        node.capacity <- 1
+    -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)

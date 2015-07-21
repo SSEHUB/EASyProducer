@@ -2,9 +2,8 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.ModelCallExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallArgument;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IExpressionVisitor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.utils.modelManagement.IVersionRestriction;
@@ -26,10 +25,10 @@ public class InstantiateExpression extends ModelCallExpression<VariableDeclarati
      * @param restriction optional version restrictions (may be <b>null</b>)
      * @param name the optional name of the rule to be executed (may be <b>null</b> and points then to the main rule)
      * @param arguments the rule call arguments
-     * @throws ExpressionException in case that the expression cannot be resolved
+     * @throws VilException in case that the expression cannot be resolved
      */
     public InstantiateExpression(VariableDeclaration project, IVersionRestriction restriction, String name, 
-        CallArgument... arguments) throws ExpressionException {
+        CallArgument... arguments) throws VilException {
         super(null, false, name, arguments);
         this.project = project;
         this.restriction = restriction;
@@ -40,9 +39,9 @@ public class InstantiateExpression extends ModelCallExpression<VariableDeclarati
      * 
      * @param name the (qualified) name of the rule to be called
      * @param arguments the rule call arguments
-     * @throws ExpressionException in case that the expression cannot be resolved
+     * @throws VilException in case that the expression cannot be resolved
      */
-    public InstantiateExpression(String name, CallArgument... arguments) throws ExpressionException {
+    public InstantiateExpression(String name, CallArgument... arguments) throws VilException {
         super(null, false, name, arguments);
     }
 
@@ -66,18 +65,18 @@ public class InstantiateExpression extends ModelCallExpression<VariableDeclarati
     }
 
     @Override
-    protected Class<Rule> getOperationClass() {
+    protected Class<? extends Rule> getOperationClass() {
         return Rule.class;
     }
     
     @Override
-    public TypeDescriptor<? extends IVilType> inferType() throws ExpressionException {
+    public TypeDescriptor<?> inferType() throws VilException {
         // real resolution happens at runtime!
         return TypeRegistry.voidType();
     }
 
     @Override
-    public Object accept(IExpressionVisitor visitor) throws ExpressionException {
+    public Object accept(IExpressionVisitor visitor) throws VilException {
         Object result;
         if (visitor instanceof IVisitor) {
             result = ((IVisitor) visitor).visitInstantiateExpression(this);

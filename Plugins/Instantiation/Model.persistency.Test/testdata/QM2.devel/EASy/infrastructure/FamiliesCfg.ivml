@@ -2,187 +2,196 @@ project FamiliesCfg {
  
     import ReconfigurableHardware;
 	import Families;
-	import AlgorithmsCfg;
+	import AlgorithmsCfg;	
+    import BasicsCfg;
 	
-    // families	from TSI
-
-	Family fNormalize;
-    fNormalize = {  
-		name = "normalize",
-		members = {refBy(aNormalize)},
-		actual = refBy(aNormalize),
-		output={{fields={
-			Field{name="streamID", type=FieldType.STRING},
-			Field{name="timestamp", type=FieldType.STRING},
-			Field{name="quote", type=FieldType.REAL},
-			Field{name="volume", type=FieldType.INTEGER}
-		}}}, 
-		input={{fields={Field{name="springData", type=FieldType.STRING}}}},
-		parameters={IntegerParameter{name="test"}}
-	};              
-
-    Family fAdd10;
-    fAdd10 = {
-		name = "add10",
-		members = {refBy(aAdd10)},
-		input={{fields={
-			Field{name="streamID", type=FieldType.STRING},
-			Field{name="timestamp", type=FieldType.STRING},
-			Field{name="quote", type=FieldType.REAL},
-			Field{name="volume", type=FieldType.INTEGER}
-		}}},
-		output={{fields={Field{name="valuePlus10", type=FieldType.REAL}}}},				
-		actual = refBy(aAdd10)
-    };
-    
-    Family fDouble;
-    fDouble = {
-		name = "double",
-		members = {refBy(aDouble)},
-		input={{fields={Field{name="valuePlus10", type=FieldType.REAL}}}},
-		output={{fields={Field{name="batchDoubleValue", type=FieldType.REAL}}}},		
-		actual = refBy(aDouble) 
-    };
-    
-    Family fShow;
-    fShow = {
-		name = "showResult",
-		members = {refBy(aShow)},
-		input={{fields={Field{name="batchDoubleValue", type=FieldType.REAL}}}},	
-		output={{fields={Field{name="result", type=FieldType.REAL}}}},	
-		actual = refBy(aShow) 
-    };  
- 
-    //Families from L3S
-    Family fFilterTweet;
-    fFilterTweet = {
-    	name = "filterTweet",
-    	members = {refBy(aFilterTweet)}, 
-    	input={{fields={Field{name="tweet", type=FieldType.STRING}}}},	
-    	output={{fields={
-    		Field{name="hashtag", type=FieldType.STRING},
-    		Field{name="tweet", type=FieldType.STRING}
-    	}}},	
-    	actual = refBy(aFilterTweet)	
-    };
-    
-    Family fCountTweets;
-    fCountTweets = {
-    	name = "countTweets",
-    	members = {refBy(aCountTweets)}, 
-    	input={{fields={
-    		Field{name="hashtag", type=FieldType.STRING},
-    		Field{name="tweet", type=FieldType.STRING}
-    	}}},
-    	output={{fields={
-    		Field{name="timestamp", type=FieldType.STRING},
-    		Field{name="tweet", type=FieldType.STRING},
-    		Field{name="counts", type=FieldType.INTEGER}
-    	}}},   	
-    	actual = refBy(aCountTweets)
-    };
-    
-	Family fSentimentTwitterBatch;
-	fSentimentTwitterBatch={
-		name="sentiment_twitter_batch",
-		members={refBy(aBatchSVM),refBy(aBatchDictionary)},
-		actual = refBy(aBatchSVM)
+	//priority pipeline TSI
+	Family fPreprocessor;
+	fPreprocessor = {
+		name = "fPreprocessor",
+		members = {refBy(swPreprocessor)},
+    	input = {    		
+    		{
+    			name = "springStream",
+    			fields={Field{name="symbolTuple", type=FieldType.STRING}}
+    		}
+    	},
+    	output = {
+    		{
+    			name = "preprocessedStream",
+    			fields={
+    			Field{name="symbolId", type=FieldType.STRING},
+    			Field{name="timestamp", type=FieldType.LONG},
+    			Field{name="value", type=FieldType.REAL},
+    			Field{name="volume", type=FieldType.INTEGER}
+    		}}
+    	}		
 	};
 	
-	Family fSentimentTwitterStream;
-	fSentimentTwitterStream={
-		name="sentiment_twitter_stream",
-		members={refBy(aStreamSVM),refBy(aStreamDictionary)},
-		actual = refBy(aStreamSVM)
-	};  
+    Family fCorrelationFinancial;
+    fCorrelationFinancial = {
+    	name = "fCorrelationFinancial",
+    	members = {refBy(SWTopoCorrelationFinancial), refBy(HWTopoCorrelationFinancial)},
+    	input = {
+    		{
+    			name = "preprocessedStream",
+    			fields={
+    			Field{name="symbolId", type=FieldType.STRING},
+    			Field{name="timestamp", type=FieldType.LONG},
+    			Field{name="value", type=FieldType.REAL},
+    			Field{name="volume", type=FieldType.INTEGER}
+    		}},
+    		{
+    			name = "symbolList",
+    			fields={Field{name="allSymbols", type=FieldType.STRINGLIST}}
+    		}
+
+    	},
+    	output = {
+    		{
+    			name = "pairwiseFinancial",
+    			fields={Field{name="pairwiseCorrelationFinancial", type=FieldType.STRING}}
+    		}
+    	},
+		parameters={
+			IntegerParameter{name="windowSize"}
+		}    	    	
+    };	
 	
-	//Families from the priority pipeline
-	Family fFinancialStreamIngestion;
-    fFinancialStreamIngestion = {
-    	name = "financialStreamIngestion",
-    	members = {refBy(aFinancialStreamIngestion)},  
-    	actual = refBy(aFinancialStreamIngestion)    	
-    };
-    
-    Family fTwitterStreamIngestion;
-    fTwitterStreamIngestion = {
-    	name = "twitterStreamIngestion",
-		members = {refBy(aTwitterStreamIngestion)},
-		actual = refBy(aTwitterStreamIngestion)
-    };
-    
-    Family fFinancialDataFilter;
-    fFinancialDataFilter = {
-    	name = "financialDataFilter",
-    	members = {refBy(aFinancialDataFilter)},
-    	actual = refBy(aFinancialDataFilter)
-    };
-    
-    Family fTwitterStreamFilter;
-    fTwitterStreamFilter = {
-    	name = "twitterStreamFilter",
-    	members = {refBy(aTwitterStreamFilter)},
-    	actual = refBy(aTwitterStreamFilter)
-    };
-    
-    Family fCorrelation;
-    fCorrelation = {
-    	name = "correlation",
-    	members = {refBy(aCorrelation)},
-    	actual = refBy(aCorrelation)
-    };
-    
-    Family fSentimentAnalysis;
-    fSentimentAnalysis = {
-    	name = "sentimentAnalysis",
-    	members = {refBy(aSentimentAnalysis)},
-    	actual = refBy(aSentimentAnalysis)
-    };
-    
-    Family fResultCombination;
-    fResultCombination = {
-    	name = "resultCombination",
-    	members = {refBy(aResultCombination)},
-    	actual = refBy(aResultCombination)
-    };
-    
-    Family fResultVisualization;
-    fResultVisualization = {
-    	name = "resultVisualization",
-    	members = {refBy(aResultVisualization)},
-    	actual = refBy(aResultVisualization)
-    };
-    
-    Family fTest;
-    fTest = {
-    	name = "fTest",
-    	members = {refBy(aTest)}
+	//priority pipeline L3S
+	Family fSentimentAnalysis;
+	fSentimentAnalysis = {
+		name = "fSentimentAnalysis",
+		members = {refBy(topoSentiWord), refBy(topoSVM)},
+		input = {
+			{
+				name = "twitterStream",
+				fields={Field{name="status", type=FieldType.OBJECT}}
+			}
+		},
+		output = {
+    		{
+    			name = "analyzedStream",
+    			fields={
+    			Field{name="symbolId", type=FieldType.STRING},
+    			Field{name="timestamp", type=FieldType.LONG},
+    			Field{name="value", type=FieldType.REAL},
+    			Field{name="volume", type=FieldType.INTEGER}
+    		}}
+		},
+		parameters={
+			IntegerParameter{name="timeSeriesGranularity"},
+			IntegerParameter{name="sentimentClass"},
+			RealParameter{name="classificationThreshold"}
+		}
+	};
+
+    Family fCorrelationTwitter;
+    fCorrelationTwitter = {
+    	name = "fCorrelationTwitter",
+    	members = {refBy(SWTopoCorrelationTwitter), refBy(HWTopoCorrelationTwitter)},
+    	input = {
+    		{
+    			name = "analyzedStream",
+    			fields={
+    				Field{name="symbolId", type=FieldType.STRING},
+    				Field{name="timestamp", type=FieldType.LONG},
+    				Field{name="value", type=FieldType.REAL},
+    				Field{name="volume", type=FieldType.INTEGER}
+    		}},
+    		{
+    			name = "symbolList",
+    			fields={Field{name="allSymbols", type=FieldType.STRINGLIST}}
+    		}
+
+    	},
+    	output = {
+    		{
+    			name = "pairwiseTwitter",
+    			fields={Field{name="pairwiseCorrelationTwitter", type=FieldType.STRING}}
+    		}
+    	},
+		parameters={
+			IntegerParameter{name="windowSize"}
+		}    	    	
+    };	
+	// For example pipeline
+	/* 	
+	Family fNormalize;
+    fNormalize = {  
+		name = "fNormalize",
+		members = {refBy(aNormalize)},
+		actual = refBy(aNormalize),
+		output={
+			{
+			    fields={
+			      Field{name="streamID", type=FieldType.STRING},
+			      Field{name="timestamp", type=FieldType.STRING},
+			      Field{name="quote", type=FieldType.REAL},
+			      Field{name="volume", type=FieldType.INTEGER}
+		        }
+		    }
+		}, 
+		input={
+			{
+				fields={Field{name="symbolTuple", type=FieldType.STRING}}
+			}
+		}
+	}; 	  
+     */
+    Family fMismatchedFamily;
+    fMismatchedFamily = {
+    	name = "fMismatchedFamily",
+    	members = {refBy(mismatchedAlg)},
+		output={
+			{
+				name = "misString",
+			    fields={
+			      Field{name="streamID1", type=FieldType.STRING},
+			      Field{name="timestamp", type=FieldType.INTEGER},
+			      Field{name="quote", type=FieldType.REAL}
+		        }
+		    }
+		}, 
+		input={
+			{
+				name = "misString",
+				fields={
+					Field{name="symbolTuple1", type=FieldType.STRING},
+					Field{name="volume", type=FieldType.INTEGER}
+				}
+			}
+		}    	
     };
 
-	families = {refBy(fNormalize), refBy(fAdd10), refBy(fDouble), refBy(fShow), refBy(fFilterTweet), refBy(fCountTweets), refBy(fSentimentTwitterStream),refBy(fSentimentTwitterBatch),
-		refBy(fFinancialStreamIngestion), refBy(fTwitterStreamIngestion), refBy(fFinancialDataFilter), refBy(fTwitterStreamFilter), refBy(fCorrelation), refBy(fSentimentAnalysis),
-		refBy(fResultCombination), refBy(fResultVisualization), refBy(fTest)
-	}; 
-	 	
+	Family randomFamily;
+	randomFamily = {
+		name="randomFamily",
+		members = {refBy(randomAlg1), refBy(randomAlg2)},
+		input = {
+			{
+				name = "randomData",
+				fields={Field{name="randomInteger", type=FieldType.INTEGER}}
+			}
+		},
+		output = {
+    		{
+    			name = "proccessedData",
+    			fields={
+    				Field{name="randomInteger", type=FieldType.INTEGER}
+    		}}
+		} 			
+	};
+	
+	families = {refBy(fPreprocessor), refBy(fCorrelationFinancial), refBy(fSentimentAnalysis), refBy(fCorrelationTwitter), refBy(fMismatchedFamily), refBy(randomFamily)};
 	freeze {
-		fNormalize;
-		fAdd10;
-		fDouble;
-		fShow;	
-		fFilterTweet;
-		fCountTweets;	
-		fSentimentTwitterBatch;
-		fSentimentTwitterStream;
-		fFinancialStreamIngestion;
-		fTwitterStreamIngestion;
-		fFinancialDataFilter;
-		fTwitterStreamFilter;
-		fCorrelation;
+		fPreprocessor;
+		fCorrelationFinancial;
+		fCorrelationTwitter;
 		fSentimentAnalysis;
-		fResultCombination;
-		fResultVisualization;
-		fTest;
+		fMismatchedFamily;
+		randomFamily;
 		families;
-    }
+    } but (f|f.bindingTime == BindingTime.runtime)
      
 } 

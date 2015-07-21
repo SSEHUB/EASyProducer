@@ -1,5 +1,7 @@
 package de.uni_hildesheim.sse.reasoning.reasoner;
 
+import de.uni_hildesheim.sse.capabilities.IvmlReasonerCapabilities;
+import de.uni_hildesheim.sse.reasoning.core.reasoner.GeneralReasonerCapabilities;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerDescriptor;
 
 /**
@@ -18,6 +20,8 @@ public class Descriptor extends ReasonerDescriptor {
      */
     public static final String BUNDLE_NAME = "de.uni_hildesheim.sse.reasoning.reasoner"; 
 
+    public static final boolean LOGGING = false; 
+    
     static final String NAME = "EASy-Producer reasoner v1";
 
     static final String VERSION = "0.1";
@@ -214,6 +218,9 @@ public class Descriptor extends ReasonerDescriptor {
      */
     public Descriptor() {
         super(NAME, VERSION, LICENSE, null, null);
+        addCapability(IvmlReasonerCapabilities.NULL_VALUE);
+        addCapability(IvmlReasonerCapabilities.QUALIFIED_COMPOUND_ACCESS);
+        addCapability(GeneralReasonerCapabilities.INCREMENTAL_REASONING);
     }
     
     

@@ -50,7 +50,9 @@ public class BundleInfo {
     private Object tag;
     private String sampleClass;
     private ClassLoader loader;
+    private boolean doBundleClassPath;
     private String[] classpath;
+    private String[] origClasspath;
 
     /**
      * Creates a bundle information object from a given JAR <code>manifest</code>.
@@ -128,7 +130,7 @@ public class BundleInfo {
                 info = BundleRegistry.getInstance().get(name, dependancy);
                 if (null == info) {
                     info = new BundleInfo(file, mf);
-                } else {
+                } else { // TODO this is very strange <-> factory
                     info = new BundleInfo(file, mf);
                     //info.resolve(file, mf);
                 }
@@ -487,8 +489,41 @@ public class BundleInfo {
             exportPackages = parsePackageList(attributes, "Export-Package");
             requiredBundles = parseBundleList(attributes, "Require-Bundle");
             dsSpec = attributes.getValue("Service-Component");
-            classpath = parseClasspath(attributes);
+            doBundleClassPath = parseDoBundleClassPath(attributes); 
+            origClasspath = parseClasspath(attributes);
+            if (!doBundleClassPath) {
+                classpath = null;
+            } else {
+                classpath = origClasspath;
+            }
         }
+    }
+    
+    /**
+     * Returns those paths in the bundle that shall be excluded from a Jar.
+     * 
+     * @return the paths to be excluded, <b>null</b> if all shall be included
+     */
+    public Set<String> excludeFromJar() {
+        Set<String> result = null;
+        if (!doBundleClassPath && null != origClasspath) {
+            result = new HashSet<String>();
+            for (String path : origClasspath) {
+                result.add(path);
+            }
+        }
+        return result;
+    }
+    
+    /**
+     * Parses the the EASy-specific flag whether the class path shall be bundled.
+     * 
+     * @param attributes the attributes
+     * @return <code>true</code> if the classpath shall be bundled
+     */
+    private static boolean parseDoBundleClassPath(Attributes attributes) {
+        String tmp = attributes.getValue("EASyLoader-BundleClassPath");
+        return (null == tmp || Boolean.valueOf(tmp));
     }
     
     /**
@@ -594,8 +629,10 @@ public class BundleInfo {
                 }
             }
         } catch (ParserConfigurationException e) {
+            LoaderLog.writeLn(e.getMessage());
             throw new IOException(e);
         } catch (SAXException e) {
+            LoaderLog.writeLn(e.getMessage());
             throw new IOException(e);
         }
         if (!tmp.isEmpty()) {
@@ -638,37 +675,6 @@ public class BundleInfo {
                 }
             }
             known.remove(this);
-        }
-    }
-    
-    /**
-     * Returns those bundles (including dependent bundles) to be initialized by
-     * activators or DS initializers.
-     * 
-     * @return the list of bundles to be initialized
-     */
-    public List<BundleInfo> getBundlesToInitialize() {
-        List<BundleInfo> result = new ArrayList<BundleInfo>();
-//        for (int r = 0; r < getRequiredBundlesCount(); r++) {
-//            getRequiredBundle(r).
-        collectBundlesToInitialize(result);
-//        }
-        return result;
-    }
-    
-    /**
-     * Collects those bundles (including this one and dependent bundles), which shall be initialized explicitly.
-     * 
-     * @param result the bundle information objects to be initialized (modified as a side effect)
-     */
-    private void collectBundlesToInitialize(List<BundleInfo> result) {
-        if (null != getActivatorClassName() || getDsClassesCount() > 0) {
-            if (!result.contains(this)) {
-                result.add(this);
-            }
-        }
-        for (int r = 0; r < getRequiredBundlesCount(); r++) {
-            getRequiredBundle(r).collectBundlesToInitialize(result);
         }
     }
     

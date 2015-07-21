@@ -404,13 +404,33 @@ public class AdvancedTests extends AbstractTest {
     /**
      * Tests imports and exports.
      * 
-     * @throws IOException
-     *             should not occur
+     * @throws IOException should not occur
      */
     @Test
     public void testImportExport() throws IOException {
         assertEqual(createFile("import"), null, "0", ErrorCodes.UNKNOWN_ELEMENT);
     }
+    
+    /**
+     * Tests imports and exports including enums (inspired by S. Bender).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testImportExport2() throws IOException {
+        assertEqual(createFile("import2"), null, "0");
+    }
+    
+    /**
+     * Tests imports and exports including enums (contributed by S. Bender).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testImportExport3() throws IOException {
+        assertEqual(createFile("import3"), null, "0");
+    }
+
 
     /**
      * Tests dependent operation definitions.
@@ -561,4 +581,14 @@ public class AdvancedTests extends AbstractTest {
             ErrorCodes.UNKNOWN_ELEMENT, ErrorCodes.UNKNOWN_ELEMENT, ErrorCodes.UNKNOWN_ELEMENT);
     }
 
+    /**
+     * Test whether operation definitions can be imported.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testOpDefImport() throws IOException {
+        assertEqual(createFile("opDefImport"), null, null);
+    }
+    
 }

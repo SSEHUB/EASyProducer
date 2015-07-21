@@ -10,8 +10,7 @@ import java.util.regex.PatternSyntaxException;
 
 import org.apache.tools.ant.types.selectors.SelectorUtils;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ListSet;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
 import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
@@ -69,9 +68,9 @@ public class ArtifactModel {
      * 
      * @param observer the observer to be notified in case of progress, use 
      *   {@link ProgressObserver#NO_OBSERVER} if progress shall not be monitored
-     * @throws ArtifactException in case that creating / obtaining artifacts fails
+     * @throws VilException in case that creating / obtaining artifacts fails
      */
-    public void scanAll(ProgressObserver observer) throws ArtifactException {
+    public void scanAll(ProgressObserver observer) throws VilException {
         if (null != base) {
             ITask task = observer.registerTask("creating complete artifact model for " + base.getAbsolutePath());
             int count = 0;
@@ -79,11 +78,11 @@ public class ArtifactModel {
                 count = scanAll(base, 0, null, null, null);
             }
             observer.notifyProgress(task, 0, count);
-            List<ArtifactException> errors = new ArrayList<ArtifactException>();
+            List<VilException> errors = new ArrayList<VilException>();
             scanAll(base, 0, observer, task, errors);
             observer.notifyEnd(task);
             if (errors.size() > 0) {
-                throw new ArtifactException(errors);
+                throw new VilException(errors);
             }
         }
     }
@@ -102,7 +101,7 @@ public class ArtifactModel {
      * @see ArtifactFactory#createFileSystemArtifact(File)
      */
     private int scanAll(File location, int count, ProgressObserver observer, ITask task, 
-        List<ArtifactException> errors) {
+        List<VilException> errors) {
         if (null != location) {
             if (location.isDirectory()) {
                 File[] files = location.listFiles();
@@ -115,7 +114,7 @@ public class ArtifactModel {
                 if (null != observer && null != errors) {
                     try {
                         ArtifactFactory.createFileSystemArtifact(location, this);
-                    } catch (ArtifactException e) {
+                    } catch (VilException e) {
                         errors.add(e);
                     }
                     if (null != task) {
@@ -150,7 +149,7 @@ public class ArtifactModel {
      * @return the selected artifacts (the type will be adjusted to the actual
      *   type of <code>type</code>)
      */
-    public Set<FileArtifact> selectByType(Class<? extends IVilType> type) {
+    public Set<FileArtifact> selectByType(Class<?> type) {
         List<FileArtifact> result = new ArrayList<FileArtifact>();
         selectByType(null, type, result);
         return new ListSet<FileArtifact>(result, type);
@@ -195,7 +194,7 @@ public class ArtifactModel {
                     if (ok) {
                         result.add((FileArtifact) artifact);
                     }
-                } catch (ArtifactException e) {
+                } catch (VilException e) {
                     // no path, no match
                 }
             }
@@ -209,7 +208,7 @@ public class ArtifactModel {
      * @param type the type to be considered (may be <b>null</b>, than this parameter is ignored)
      * @param result to be modified as a side effect
      */
-    void selectByType(Path path, Class<? extends IVilType> type, List<FileArtifact> result) {
+    void selectByType(Path path, Class<?> type, List<FileArtifact> result) {
         if (null == type) {
             type = FileArtifact.class; // TODO -> remove in case of IFileSystemArtifact as return type
         }
@@ -237,7 +236,7 @@ public class ArtifactModel {
         } else {
             try {
                 match = path.matches(artifact.getPath());
-            } catch (ArtifactException e) {
+            } catch (VilException e) {
                 // don't care
                 match = false;
             }
@@ -395,9 +394,9 @@ public class ArtifactModel {
      * Called before renaming an artifact to cleanup.
      * 
      * @param artifact the artifact being renamed
-     * @throws ArtifactException in case of problems obtaining the path
+     * @throws VilException in case of problems obtaining the path
      */
-    synchronized void beforeRename(IFileSystemArtifact artifact) throws ArtifactException {
+    synchronized void beforeRename(IFileSystemArtifact artifact) throws VilException {
         delete(artifact.getPath());
     }
 
@@ -405,10 +404,10 @@ public class ArtifactModel {
      * Called after rename in order to create the changed artifacts.
      * 
      * @param artifact the renamed artifact
-     * @throws ArtifactException in case of problems obtaining the path
+     * @throws VilException in case of problems obtaining the path
      */
-    synchronized void afterRename(IFileSystemArtifact artifact) throws ArtifactException {
-        List<ArtifactException> errors = new ArrayList<ArtifactException>();
+    synchronized void afterRename(IFileSystemArtifact artifact) throws VilException {
+        List<VilException> errors = new ArrayList<VilException>();
         scanAll(artifact.getPath().getAbsolutePath(), 0, ProgressObserver.NO_OBSERVER, null, errors);
     }
 
@@ -442,6 +441,14 @@ public class ArtifactModel {
                 }
             }
         }
+    }
+
+    /**
+     * Clears this artifact. For internal use only.
+     */
+    void clear() {
+        fileArtifacts.clear();
+        otherArtifacts.clear();
     }
     
 }

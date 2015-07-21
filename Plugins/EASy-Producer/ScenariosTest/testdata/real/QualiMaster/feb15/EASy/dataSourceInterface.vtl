@@ -1,0 +1,125 @@
+@advice(QM)
+template dataSourceInterface(Configuration config, FileArtifact target, DecisionVariable elt) {
+
+    def String parameterTypeName(DecisionVariable var) {
+    	switch(var.type()) {
+    		"IntegerParameter" : "int",
+    		"BooleanParameter" : "boolean",
+    		"RealParameter" : "double",
+    		"StringParameter" : "String"
+    	}
+    }
+    	
+	def String fieldTypeName(DecisionVariable var) {
+    	String type = var.byName("type");
+    	switch(type) {
+    		"INTEGER" : "int",
+    		"BOOLEAN" : "boolean",
+    		"REAL" : "double",
+    		"STRING" : "String",
+    		"OBJECT": "Object",
+    		"LONG": "long",
+    		"STRINGLIST": "java.util.List<String>"
+    	}		
+	}
+	
+	def produceForTuples(sequenceOf(Tuple) tuples, String srcName, Integer indent) {
+		Integer tuplesSize = tuples.size();
+		String inputName = "I" + srcName.firstToUpperCase();
+    	String tupleId;
+    	Integer tupleCount = 1;
+    		for (Tuple t : tuples) {      
+	    		String tupleId = "";
+	    		if (tuplesSize > 1) {
+	    			tupleId = "${tupleCount}"; // we need an operator
+	    		}
+		        '/**' | 4;
+		        '* Define the source data input interface.' | 4;
+		        '**/' | 4;
+		        'public static interface ${toIdentifier(inputName)}${tupleId}Output extends Serializable{' | 4;	    		
+    			for (Field f : t.fields) {
+    				String fname = toIdentifier("${f.name}");
+    				String mname = firstToUpperCase(fname);
+    				String ftype = fieldTypeName(f);
+    				'/**' | indent + 4;
+					'* Returns the input value for tuple field "${f.name}".' | indent + 5;
+					'* @return the tuple value' | indent + 5;
+					'*/' | indent + 5;
+    				'public ${ftype} get${mname}();' | indent + 4;
+    				''
+    				'/**' | indent + 4;
+					'* Sets the output value for tuple field "${f.name}".' | indent + 5;
+					'* @param ${fname} the field value' | indent + 5;
+					'*/' | indent + 5;
+					'public void set${mname}(${ftype} ${fname});' | indent + 4;
+    			}
+    			tupleCount = tupleCount + 1;
+    			'}' | 4;
+    		}
+    		
+    		''   	
+	}
+	
+	def main(Configuration config, FileArtifact target, DecisionVariable elt){
+		Source src = elt;   
+		DataSource dataSrc = src.source;
+		String srcName =dataSrc.name;
+		String inputName = "I" + srcName.firstToUpperCase();
+		'package eu.qualimaster.data.inf;'
+		''
+		'import java.io.Serializable;'
+		''
+		'/**'
+		'* Define the data source interface(GEN).'
+		'**/'
+		'public interface I${toIdentifier(srcName)} {'
+		''
+		 produceForTuples(dataSrc.input, srcName, 4);		
+		''
+		String dataSymbol;
+		String tupleId = "";
+		Integer tupleCount = 1;
+		for(Tuple t : dataSrc.input){
+			dataSymbol = "";
+			Integer size = dataSrc.input.size();
+			if(size > 1) {
+				tupleId = "$tupleCount";
+			}
+			for(Field f : t.fields) {
+			    String fname = toIdentifier("${f.name}");
+    		    String mname = firstToUpperCase(fname);
+    		    dataSymbol = dataSymbol + mname;	
+			}
+			
+		'/**' | 4;
+		'* Returns a specific type of data source.' | 4;
+		'* @return ${toIdentifier(inputName)}${tupleId}Output the source data' | 4;
+		'**/' | 4;
+	    'public ${toIdentifier(inputName)}${tupleId}Output getData${tupleId}();' | 4;
+	    
+	      tupleCount = tupleCount + 1;
+		}
+		
+        if (dataSrc.parameters.size()>0) {
+	        '    // data source parameters'
+	        ''
+	        for (Parameter p : dataSrc.parameters) {
+	        	String paramName = p.name;
+    			String mname = firstToUpperCase(toIdentifier(paramName));
+    			String type = parameterTypeName(p);
+	        	'    /**'
+	        	'     * Sets the data source parameter "${paramName}".'
+	        	'     *'
+	        	'     * @param value the new value of the data source parameter'
+	        	'     */'
+	        	
+	        	'    public void setParameter${mname}(${parameterTypeName(p)} value);'
+	        	''
+	    	}
+    	}		
+		'}' 
+		}
+		
+		
+ 
+}

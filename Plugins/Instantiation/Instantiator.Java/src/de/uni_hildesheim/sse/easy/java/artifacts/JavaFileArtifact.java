@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.FilenameUtils;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.ToolFactory;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
@@ -27,14 +29,17 @@ import org.eclipse.text.edits.MalformedTreeException;
 import org.eclipse.text.edits.TextEdit;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
+import de.uni_hildesheim.sse.easy_producer.instantiator.JavaUtilities;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactCreator;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactFactory;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FileArtifact;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FragmentArtifact;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IFileSystemArtifact;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.Path;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Text;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArraySet;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Conversion;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationMeta;
@@ -160,7 +165,7 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
                     hasAnnotation = true;
                     break;
                 }
-            } catch (ArtifactException e) {
+            } catch (VilException e) {
                 logger.exception(e);
             }
         }
@@ -168,7 +173,7 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
     }
 
     @Override
-    public void artifactChanged(Object cause) throws ArtifactException {
+    public void artifactChanged(Object cause) throws VilException {
         super.artifactChanged(cause);
         if (cause instanceof Text && null != getText()) {
             initialize(getText().getText().toCharArray());
@@ -179,7 +184,7 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
     }
 
     @Override
-    public void store() throws ArtifactException {
+    public void store() throws VilException {
         // store changes in the representation if there are some, store tree afterwards
         // both changes shall not overlap...
         super.store();
@@ -197,30 +202,33 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
                 writer = new BufferedWriter(new FileWriter(file));
                 String code = unitNode.toString();
                 CodeFormatter codeFormatter = ToolFactory.createCodeFormatter(null);
-                TextEdit textEdit = codeFormatter.format(CodeFormatter.K_UNKNOWN, code, 0, code.length(), 0, null);
+                TextEdit textEdit = codeFormatter.format(CodeFormatter.K_COMPILATION_UNIT, code, 0, 
+                    code.length(), 0, null);
                 IDocument doc = new Document(code);
                 try {
-                    textEdit.apply(doc);
+                    if (null != textEdit) {
+                        textEdit.apply(doc);
+                    }
                 } catch (MalformedTreeException e) {
-                    throw new ArtifactException(e, ArtifactException.ID_ARTIFACT_INTERNAL);
+                    throw new VilException(e, VilException.ID_ARTIFACT_INTERNAL);
                 } catch (BadLocationException e) {
-                    throw new ArtifactException(e, ArtifactException.ID_ARTIFACT_INTERNAL);
+                    throw new VilException(e, VilException.ID_ARTIFACT_INTERNAL);
                 }
                 // Save output
                 try {
                     writer.write(doc.get());
                 } catch (IOException e) {
-                    throw new ArtifactException(e, ArtifactException.ID_ARTIFACT_INTERNAL);
+                    throw new VilException(e, VilException.ID_ARTIFACT_INTERNAL);
                 }
             } catch (IOException e) {
-                throw new ArtifactException(e, ArtifactException.ID_IO);
+                throw new VilException(e, VilException.ID_IO);
             } finally {
                 try {
                     if (writer != null) {
                         writer.close();
                     }
                 } catch (IOException e) {
-                    throw new ArtifactException(e, ArtifactException.ID_IO);
+                    throw new VilException(e, VilException.ID_IO);
                 }
             }
             changed = false;
@@ -238,6 +246,52 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
             initialize();
         }
         return new ArraySet<JavaClass>(classList.toArray(new JavaClass[classList.size()]), JavaClass.class);
+    }
+    
+    /**
+     * Returns the specified classes of this java file.
+     * 
+     * @param name the name of the class
+     * @return the specified class or <b>null</b>
+     */
+    public JavaClass getClassByName(String name) {
+        JavaClass result = null;
+        if (null == classList) {
+            initialize();
+        }
+        
+        for (int c = 0; null == result && c < classList.size(); c++) {
+            JavaClass cls = classList.get(c);
+            try {
+                if (cls.getName().equals(name)) {
+                    result = cls;
+                }
+            } catch (VilException e) {
+                logger.exception(e);
+            }
+        }
+        return result;
+    }
+    
+    /**
+     * Returns the default class of this Java File artifact, i.e., the class corresponding to the name 
+     * of this artifact.
+     * 
+     * @return the default class or <b>null</b> if there is none
+     */
+    public JavaClass getDefaultClass() {
+        JavaClass result;
+        try {
+            String name = getName();
+            if (name.endsWith(".java")) {
+                name = name.substring(0, name.length() - 5);
+            }
+            result = getClassByName(name);
+        } catch (VilException e) {
+            logger.exception(e);
+            result = null;
+        }
+        return result;
     }
 
     /**
@@ -259,6 +313,17 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
         ASTParser parser = ASTParser.newParser(AST.JLS4);
         parser.setSource(data);
         parser.setKind(ASTParser.K_COMPILATION_UNIT);
+        // Set options to resolve bindings
+        parser.setBindingsRecovery(true);
+        parser.setResolveBindings(true);
+        Map<?, ?> options = JavaCore.getOptions();
+        parser.setCompilerOptions(options);
+        String unitName = FilenameUtils.getBaseName(file.getName());
+        parser.setUnitName(unitName);
+//        String[] sources = {file.getParent()}; 
+        String[] classpath = JavaUtilities.JRE_CLASS_PATH;
+//        parser.setEnvironment(classpath, sources, new String[] {"UTF-8"}, true);
+        parser.setEnvironment(classpath, classpath, new String[] {"UTF-8"}, true);
         // Create AST
         unitNode = (CompilationUnit) parser.createAST(null);
         unitNode.accept(new ASTVisitor() {
@@ -309,7 +374,7 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
     }
 
     @Override
-    public void deleteChild(FragmentArtifact child) throws ArtifactException {
+    public void deleteChild(FragmentArtifact child) throws VilException {
         // implement if substructures are stored / cached
     }
 
@@ -380,7 +445,7 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
             renameQualifiedNames(oldName, newName);
             renamePackages(oldName, newName);
             store();
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             logger.exception(e);
         }
     }
@@ -399,7 +464,7 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
             renameQualifiedNames(nameMapping);
             renamePackages(nameMapping);
             store();
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             logger.exception(e);
         }
     }
@@ -413,10 +478,10 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
      *            the old package name
      * @param newName
      *            the new package name
-     * @throws ArtifactException
+     * @throws VilException
      *             in case that the operation cannot be executed due to syntax or I/O problems
      */
-    public void renamePackages(String oldName, String newName) throws ArtifactException {
+    public void renamePackages(String oldName, String newName) throws VilException {
         Map<String, String> tmp = new HashMap<String, String>();
         tmp.put(oldName, newName);
         renamePackages(tmp);
@@ -429,10 +494,10 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
      * 
      * @param nameMapping
      *            pairs of old and new package names (key = old, value = new)
-     * @throws ArtifactException
+     * @throws VilException
      *             in case that the operation cannot be executed due to syntax or I/O problems
      */
-    public void renamePackages(Map<String, String> nameMapping) throws ArtifactException {
+    public void renamePackages(Map<String, String> nameMapping) throws VilException {
         JavaPackage javaPackage = this.javaPackage();
         String path = javaPackage.getName();
         for (Map.Entry<String, String> entry : nameMapping.entrySet()) {
@@ -449,10 +514,10 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
      *            the old import name
      * @param newName
      *            the new import name
-     * @throws ArtifactException
+     * @throws VilException
      *             in case that the operation cannot be executed due to syntax or I/O problems
      */
-    public void renameImports(String oldName, String newName) throws ArtifactException {
+    public void renameImports(String oldName, String newName) throws VilException {
         Map<String, String> tmp = new HashMap<String, String>();
         tmp.put(oldName, newName);
         renameImports(tmp);
@@ -465,10 +530,10 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
      * 
      * @param nameMapping
      *            pairs of old and new import names (key = old, value = new)
-     * @throws ArtifactException
+     * @throws VilException
      *             in case that the operation cannot be executed due to syntax or I/O problems
      */
-    public void renameImports(Map<String, String> nameMapping) throws ArtifactException {
+    public void renameImports(Map<String, String> nameMapping) throws VilException {
         Set<JavaImport> imports = this.imports();
         for (Map.Entry<String, String> entry : nameMapping.entrySet()) {
             for (JavaImport javaImport : imports) {
@@ -488,10 +553,10 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
      *            the old qualified name
      * @param newName
      *            the new qualified name
-     * @throws ArtifactException
+     * @throws VilException
      *             in case that the operation cannot be executed due to syntax or I/O problems
      */
-    public void renameQualifiedNames(String oldName, String newName) throws ArtifactException {
+    public void renameQualifiedNames(String oldName, String newName) throws VilException {
         Map<String, String> tmp = new HashMap<String, String>();
         tmp.put(oldName, newName);
         renameQualifiedNames(tmp);
@@ -504,10 +569,10 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
      * 
      * @param nameMapping
      *            pairs of old and new qualified names (key = old, value = new)
-     * @throws ArtifactException
+     * @throws VilException
      *             in case that the operation cannot be executed due to syntax or I/O problems
      */
-    public void renameQualifiedNames(Map<String, String> nameMapping) throws ArtifactException {
+    public void renameQualifiedNames(Map<String, String> nameMapping) throws VilException {
         Set<JavaClass> classes = this.classes();
         for (JavaClass javaClass : classes) {
             Set<JavaQualifiedName> qualifiedNames = javaClass.qualifiedNames();
@@ -534,4 +599,32 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
         }
         return convertedValue;
     }
+    
+    /**
+     * Conversion operation.
+     * 
+     * @param val the value to be converted
+     * @return the converted value
+     * @throws VilException in case that creating the artifact fails
+     */
+    @Invisible
+    @Conversion
+    public static JavaFileArtifact convert(String val) throws VilException {
+        Path path = Path.convert(val);
+        return convert(path);
+    }
+    
+    /**
+     * Conversion operation.
+     * 
+     * @param path the path to be converted
+     * @return the converted value
+     * @throws VilException in case that creating the artifact fails
+     */
+    @Invisible
+    @Conversion
+    public static JavaFileArtifact convert(Path path) throws VilException {
+        return ArtifactFactory.createArtifact(JavaFileArtifact.class, path.getAbsolutePath(), path.getArtifactModel());
+    }
+
 }

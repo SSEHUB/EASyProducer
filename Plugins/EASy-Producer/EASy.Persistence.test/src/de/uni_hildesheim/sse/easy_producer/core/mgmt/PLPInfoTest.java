@@ -28,7 +28,7 @@ import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.IProjectCr
 import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.PathEnvironment;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.standard.Persistencer;
 import de.uni_hildesheim.sse.easy_producer.core.varMod.container.ProjectContainer;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.model.confModel.AssignmentState;
 import de.uni_hildesheim.sse.model.confModel.Configuration;
 import de.uni_hildesheim.sse.model.confModel.ConfigurationException;
@@ -145,6 +145,14 @@ public class PLPInfoTest extends AbstractPLPInfoTest {
      */
     private static final File TEST_SAVE_DEBUG_INFORMATION
         = new File(AllTests.TESTDATA_DIR_COPY, "SavingDebugInformation");
+    
+    /**
+     * Project for testing multiple instantiation.
+     * Test will tests whether instantiation works fine.
+     * -> PLP must be stored to {@link AllTests#TESTDATA_DIR_COPY}.
+     */
+    private static final File TEST_MULTI_INSTANTIATION
+        = new File(AllTests.TESTDATA_DIR_COPY, "MultiInstantiation");
     
     private static Set<PLPInfo> loadedInfos = new HashSet<PLPInfo>();
     
@@ -411,10 +419,10 @@ public class PLPInfoTest extends AbstractPLPInfoTest {
     /**
      * Tests whether the instantiation process works.
      * @throws PersistenceException If the project could not be loaded from the file system.
-     * @throws VilLanguageException If instantiation is not possible
+     * @throws VilException If instantiation is not possible
      */
     @Test
-    public void testInstantiate() throws PersistenceException, VilLanguageException {
+    public void testInstantiate() throws PersistenceException, VilException {
         // Load project
         PLPInfo plp = loadPLPInfo(TEST_PROJECT_INSTANTIATE);
         
@@ -422,10 +430,37 @@ public class PLPInfoTest extends AbstractPLPInfoTest {
         compile(plp.getProjectLocation(), false);
         
         //Instantiate project
-        plp.instantiate(null);
+        plp.instantiate();
         
         // Test that instantiated SRC-Files are compileable
         compile(plp.getProjectLocation(), true);
+    }
+
+    /**
+     * Tests whether VIL scripts with own function containing a path as precondition can be executed twice.
+     * @throws PersistenceException If the project could not be loaded from the file system.
+     */
+    @Test
+    public void testMultipleInstantiation() throws PersistenceException {
+        PLPInfo plp = loadPLPInfo(TEST_MULTI_INSTANTIATION);
+        File copiedFile = new File(plp.getProjectLocation(), "src");
+        copiedFile = new File(copiedFile, "HelloWorld.java");
+        Assert.assertFalse(copiedFile.exists());
+        try {
+            plp.instantiate();
+        } catch (VilException e) {
+            e.printStackTrace();
+            Assert.fail("First instantiation failed: " + e.getMessage());
+        }
+        Assert.assertTrue(copiedFile.exists());
+        Assert.assertTrue(copiedFile.delete());
+        try {
+            plp.instantiate();
+        } catch (VilException e) {
+            e.printStackTrace();
+            Assert.fail("Second instantiation failed: " + e.getMessage());
+        }
+        Assert.assertTrue(copiedFile.exists());
     }
     
     /**
@@ -501,11 +536,11 @@ public class PLPInfoTest extends AbstractPLPInfoTest {
     /**
      * Tests whether IVML, VIL, and VTL folder may be different.
      * @throws PersistenceException Must not occur, otherwise the config files inside the toplevel location are corrupt.
-     * @throws VilLanguageException If instantiation is not possible (this may include, that three different folders are
+     * @throws VilException If instantiation is not possible (this may include, that three different folders are
      *     not supported).
      */
     @Test
-    public void testMultipleConfigFolders() throws PersistenceException, VilLanguageException {
+    public void testMultipleConfigFolders() throws PersistenceException, VilException {
         // Load project
         PLPInfo plp = loadPLPInfo(TEST_MULTIPLE_CONFIG_FOLDERS);
         File generatedFile = new File(plp.getProjectLocation(), "out.txt");
@@ -523,7 +558,7 @@ public class PLPInfoTest extends AbstractPLPInfoTest {
         Assert.assertFalse(generatedFile.exists());
         
         // Start instantiation
-        plp.instantiate(null);
+        plp.instantiate();
         
         // Test postcondition: File must be created and contain a "Hello World" ;-)
         Assert.assertTrue(generatedFile.exists());
@@ -540,6 +575,7 @@ public class PLPInfoTest extends AbstractPLPInfoTest {
      * @throws ConfigurationException If configuration is not supported (Error in VarModel).
      * @throws IOException If the generated file could not read from the file system
      */
+    @Ignore("Not working with Java 1.8")
     @Test
     public void testMultipleProjectsInIVMLFile() throws PersistenceException,
         ValueDoesNotMatchTypeException, ConfigurationException, IOException {

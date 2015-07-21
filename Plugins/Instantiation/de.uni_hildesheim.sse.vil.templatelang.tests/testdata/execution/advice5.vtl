@@ -3,14 +3,14 @@ template adviceTest5(Configuration config, FileArtifact target) {
 
     def main(Configuration config, FileArtifact target) {
         adviceTestVM1 prj = config;
-        TestCompoundType cmp = prj.c1();
-        String varName = cmp.$variable().name();
-        String typeName = cmp.$declaration().type();
+        TestCompoundType cmp = prj.c1;
+        String varName = cmp.name();
+        String typeName = cmp.type();
         '$varName $typeName'
         adviceTestVM4 prj4 = config;
-        cmp = prj4.c1();
-        varName = cmp.$variable().name();
-        typeName = cmp.$declaration().type();
+        cmp = prj4.c1;
+        varName = cmp.name();
+        typeName = cmp.type();
         '$varName $typeName'
     }
 

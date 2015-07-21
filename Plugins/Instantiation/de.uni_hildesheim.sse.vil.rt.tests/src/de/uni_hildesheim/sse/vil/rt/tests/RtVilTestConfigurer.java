@@ -1,0 +1,121 @@
+/*
+ * Copyright 2009-2014 University of Hildesheim, Software Systems Engineering
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package de.uni_hildesheim.sse.vil.rt.tests;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.Writer;
+import java.util.Map;
+
+import org.eclipse.emf.common.util.URI;
+import org.junit.Assert;
+
+import de.uni_hildesheim.sse.BuildLangModelUtility;
+import de.uni_hildesheim.sse.dslCore.TranslationResult;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildModel;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildlangExecution;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ITracer;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.TracerFactory;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionParserRegistry;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.BuiltIn;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.RtVilExecution;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.RtVilModel;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Script;
+import de.uni_hildesheim.sse.model.management.VarModel;
+import de.uni_hildesheim.sse.utils.modelManagement.IModelLoader;
+import de.uni_hildesheim.sse.utils.modelManagement.ModelManagement;
+import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
+import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
+import de.uni_hildesheim.sse.vil.rt.RtVilExpressionParser;
+import de.uni_hildesheim.sse.vil.rt.RtVilModelUtility;
+import de.uni_hildesheim.sse.vil.rt.tests.types.Register;
+import test.de.uni_hildesheim.sse.vil.buildlang.ITestConfigurer;
+import test.de.uni_hildesheim.sse.vil.buildlang.TestTracerFactory;
+
+/**
+ * Configures the tests for rt-VIL.
+ * 
+ * @author Holger Eichelberger
+ */
+public class RtVilTestConfigurer implements ITestConfigurer<Script> {
+
+    @Override
+    public String getSystemPropertyName() {
+        return "vil.rt.testdata.home";
+    }
+
+    @Override
+    public ModelManagement<Script> getModelManagement() {
+        return RtVilModel.INSTANCE;
+    }
+
+    @Override
+    public IModelLoader<Script> getModelLoader() {
+        return RtVilModelUtility.INSTANCE;
+    }
+
+    @Override
+    public TranslationResult<Script> parse(URI uri) throws IOException {
+        return RtVilModelUtility.INSTANCE.parse(uri);
+    }
+
+    @Override
+    public void print(TranslationResult<Script> result, Writer out, boolean emitComments, boolean emitImports) {
+        RtVilModelUtility.INSTANCE.print(result, out, emitComments, emitImports);
+    }
+    
+    @Override
+    public void furtherInitialization() {
+        ExpressionParserRegistry.setExpressionParser(RtVilExecution.LANGUAGE, new RtVilExpressionParser());
+        BuiltIn.initialize();
+        
+        try {
+            BuildModel.INSTANCE.loaders().registerLoader(BuildLangModelUtility.INSTANCE, ProgressObserver.NO_OBSERVER);
+        } catch (ModelManagementException e) {
+            e.printStackTrace(System.err);
+            Assert.assertTrue(false); // shall not happen
+        }
+        Register.register();
+    }
+    
+    @Override
+    public void addTestDataLocations(File dir) {
+        try {
+            VarModel.INSTANCE.locations().addLocation(dir, ProgressObserver.NO_OBSERVER);
+            BuildModel.INSTANCE.locations().addLocation(dir, ProgressObserver.NO_OBSERVER);
+        } catch (ModelManagementException e) {
+            e.printStackTrace(System.err);
+            Assert.assertTrue(false); // shall not happen
+        }
+    }
+    
+    @Override
+    public String getFileExtension() {
+        return "rtvil";
+    }
+
+    @Override
+    public BuildlangExecution createExecutionEnvironment(ITracer tracer, File base, String startRuleName,
+        Map<String, Object> parameter) {
+        return new RtVilExecution(tracer, base, parameter, false, true); // TODO adjust tracer
+    }
+
+    @Override
+    public TracerFactory createTestTracerFactory(Writer trace, String[] baseFolders) {
+        return new TestTracerFactory(trace, baseFolders); // TODO adjust
+    }
+
+}

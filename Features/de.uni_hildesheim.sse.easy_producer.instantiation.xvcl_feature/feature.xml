@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="de.uni_hildesheim.sse.easy_producer.instantiation.xvcl_feature"
+      id="de.uni_hildesheim.sse.easy.instantiation.xvcl_feature"
       label="XVCL Instantiator"
-      version="0.5.2"
+      version="3.3.0.3"
       provider-name="University of Hildesheim - SSE">
 
    <description url="http://xvcl.comp.nus.edu.sg/cms/">
@@ -13,7 +13,7 @@
       Copyright 2013 University of Hildesheim, Software Systems Engineering
    </copyright>
 
-   <license>
+   <license url="http://www.apache.org/licenses/LICENSE-2.0">
       Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
@@ -35,7 +35,7 @@ limitations under the License.
          id="de.uni-hildesheim.sse.easy.instantiator.xvcl"
          download-size="0"
          install-size="0"
-         version="3.3.0.2"
+         version="3.3.0.3"
          unpack="false"/>
 
 </feature>

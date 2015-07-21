@@ -1,6 +1,6 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ClassWrapper;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
@@ -21,10 +21,10 @@ public class JavaExtension {
      * 
      * @param name the name of the Java class extending the functionality
      * @param registry the type registry being responsible for this extension
-     * @throws VilLanguageException in case that the related class denoted by 
+     * @throws VilException in case that the related class denoted by 
      *     <code>name</code> cannot be resolved
      */
-    public JavaExtension(String name, TypeRegistry registry) throws VilLanguageException {
+    public JavaExtension(String name, TypeRegistry registry) throws VilException {
         this.name = name;
         // try more specific first
         for (int l = ExtensionClassLoaders.getLoaderCount() - 1; null == resolved && l >= 0; l--) {
@@ -35,8 +35,8 @@ public class JavaExtension {
             }
         }
         if (null == resolved) {
-            throw new VilLanguageException("extension class " + name + " not found (class loader registered?)", 
-                VilLanguageException.ID_CANNOT_RESOLVE_JAVA_EXTENSION);
+            throw new VilException("extension class " + name + " not found (class loader registered?)", 
+                VilException.ID_CANNOT_RESOLVE_JAVA_EXTENSION);
         }
     }
 
@@ -45,10 +45,10 @@ public class JavaExtension {
      * 
      * @param extension the extension class
      * @param registry the type registry being responsible for this extension
-     * @throws VilLanguageException in case that the related class denoted by 
+     * @throws VilException in case that the related class denoted by 
      *     <code>name</code> cannot be resolved
      */
-    public JavaExtension(Class<?> extension, TypeRegistry registry) throws VilLanguageException {
+    public JavaExtension(Class<?> extension, TypeRegistry registry) throws VilException {
         this.name = extension.getName();
         resolved = new ClassWrapper(extension, registry);
         isDefault = true;
@@ -77,9 +77,9 @@ public class JavaExtension {
      * 
      * @param visitor the visitor
      * @return the result of visiting this instance (may be <b>null</b>)
-     * @throws VilLanguageException in case that visiting fails (e.g., execution)
+     * @throws VilException in case that visiting fails (e.g., execution)
      */
-    public Object accept(IVisitor visitor) throws VilLanguageException {
+    public Object accept(IVisitor visitor) throws VilException {
         return visitor.visitJavaExtension(this);
     }
     

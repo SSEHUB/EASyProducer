@@ -1,0 +1,11 @@
+@advice(adviceTestVIL1)
+vilScript vtl2 (Project source, Project target, Configuration config) {
+
+    main(Project source, Project target, Configuration config) = : {
+        adviceTestVIL1 prj = config;
+        TestCompound tc = prj.c1;
+        FileArtifact fa = "$source/templates/test3.vtl";
+        vilTemplateProcessor(fa, config, "$target/test3.txt", comp=tc);
+    }
+
+}

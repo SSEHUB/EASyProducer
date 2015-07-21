@@ -1,0 +1,25 @@
+import EASyDemoCommandsPlatform;
+
+@advice(EASyDemoCommandsConstants)
+vilScript EASyDemoCommandsConstants (Project source, Configuration config, Project target) {
+
+    version v0;
+
+    main(Project source, Configuration config, Project target) = : {
+    	map(Project p : source.predecessors()) {
+    		instantiate p (p, config, target);
+    	};
+		copySRCFiles(source, target);
+
+        EASyDemoCommandsConstants cfg = config;
+    	JavaFileArtifact f = "$target/src/io/ssehub/easy/demo/command/constants/Main.java";
+    	JavaClass cls = f.defaultClass();
+    	cls.attributeByName("APP_NAME").setValue(cfg.appName);
+    	cls.attributeByName("hasAddCommand").setValue(cfg.hasAddCommand);
+    	cls.attributeByName("hasSubCommand").setValue(cfg.hasSubCommand);
+    	cls.attributeByName("hasPrintCommand").setValue(cfg.hasPrintCommand);
+
+    	javac("$target/src/**/*.java", "$target/bin");
+    }
+
+}

@@ -15,7 +15,7 @@ public interface IDirectTypeRegistryAccess {
      * @param name the name of the type
      * @param type the type to be added
      */
-    public void add(String name, TypeDescriptor<? extends IVilType> type);
+    public void add(String name, TypeDescriptor<?> type);
     
     /**
      * Returns whether the type given by <code>name</code> is already registered.
@@ -31,7 +31,7 @@ public interface IDirectTypeRegistryAccess {
      * @param name the name of the type
      * @return the registered descriptor (may be <b>null</b> if none was registered)
      */
-    public TypeDescriptor<? extends IVilType> get(String name);
+    public TypeDescriptor<?> get(String name);
 
     /**
      * Adds an instantiator.

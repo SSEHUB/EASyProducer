@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: AspectJ Instantiator Test
+Bundle-SymbolicName: de.uni_hildesheim.sse.easy.instantiator.aspectj.test;singleton:=true
+Bundle-Version: 0.0.1
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Require-Bundle: de.uni_hildesheim.sse.vil.buildlang.tests;bundle-version="0.0.1",
+ de.uni_hildesheim.sse.dslCore;bundle-version="0.5.5",
+ org.junit;bundle-version="4.8.2",
+ de.uni-hildesheim.sse.easy.instantiatorCore;bundle-version="0.5.5",
+ de.uni_hildesheim.sse.varModel;bundle-version="0.5.5",
+ de.uni_hildesheim.sse.easy.instantiator.aspectj;bundle-version="0.0.1",
+ de.uni_hildesheim.sse.varModel.tests;bundle-version="0.0.10"

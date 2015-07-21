@@ -16,19 +16,22 @@
 package de.uni_hildesheim.sse.model.cst;
 
 import java.util.Arrays;
+import java.util.HashSet;
 
 import de.uni_hildesheim.sse.Bundle;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.IvmlKeyWords;
+import de.uni_hildesheim.sse.model.varModel.ProjectImport;
 import de.uni_hildesheim.sse.model.varModel.datatypes.BaseTypeVisitor;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Container;
 import de.uni_hildesheim.sse.model.varModel.datatypes.ICustomOperationAccessor;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.MetaType;
+import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Operation;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Operation.ReturnTypeMode;
+import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Sequence;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Set;
 import de.uni_hildesheim.sse.model.varModel.datatypes.TypeQueries;
@@ -282,8 +285,6 @@ public class OCLFeatureCall extends ConstraintSyntaxTree {
     private Operation customInferDatatype() throws CSTSemanticException {
         Operation op = null;
         if (null != opAccessor) {
-            // the operand of custom operation is always the project
-            IDatatype operandType = opAccessor.getType();
             // map operand of feature call to first parameter
             IDatatype fcOperandType;
             int fcOperandIncrement;
@@ -307,32 +308,63 @@ public class OCLFeatureCall extends ConstraintSyntaxTree {
                     paramTypes[p] = Reference.dereference(parameters[p - fcOperandIncrement].inferDatatype());
                 }
             }
-            op = getCustomOperation(operandType, paramTypes);
+            op = getCustomOperation(opAccessor, paramTypes, new HashSet<ICustomOperationAccessor>());
             if (null != op) {
+                IDatatype operandType = op.getOperand();
                 replaceEmptyInitializer(op);
                 checkRequiredAssignableParameter(op, operandType, paramTypes);
                 result = getActualReturnType(op, operandType, paramTypes);
                 resolvedOperation = op;
-            } // not found exception is thrown in dflt
+            } else {
+                throw new UnknownOperationException(operation, CSTSemanticException.UNKNOWN_OPERATION, 
+                    fcOperandType, paramTypes);
+            }
         } else {
             throw new CSTSemanticException("no custom operator accessor given for " + getOperation(), 
                 CSTSemanticException.INTERNAL);
         }
         return op;
     }
+    
+    /**
+     * Searches for a custom operation on <code>accessor</code> and, if not found, on the imports of 
+     * <code>accessor</code>.
+     * 
+     * @param accessor the custom operation accessor
+     * @param paramTypes the parameter types
+     * @param done the already processed custom operation accessors to avoid cycles
+     * @return the operation or <b>null</b> if not found
+     */
+    private Operation getCustomOperation(ICustomOperationAccessor accessor, IDatatype[] paramTypes, 
+        HashSet<ICustomOperationAccessor> done) {
+        Operation result = null;
+        if (!done.contains(accessor)) {
+            done.add(accessor);
+            result = getCustomOperation(accessor, paramTypes);
+            if (null == result) {
+                for (int i = 0; null == result && i < accessor.getImportsCount(); i++) {
+                    ProjectImport imp = accessor.getImport(i);
+                    if (null == imp.getInterfaceName() && null != imp.getResolved()) {
+                        result = getCustomOperation(imp.getResolved(), paramTypes, done);
+                    }
+                }
+            }
+        }
+        return result;
+    }
         
     /**
-     * Searches for a custom operation on {@link #opAccessor}. {@link #opAccessor} must not
-     * be <b>null</b>.
+     * Searches for a custom operation on <code>accessor</code>.
      * 
-     * @param operandType the operand type
+     * @param accessor the custom operation accessor
      * @param paramTypes the parameter types
-     * @return the operation or <b>null</b>
+     * @return the operation or <b>null</b> if not found
      */
-    private Operation getCustomOperation(IDatatype operandType, IDatatype[] paramTypes) {
+    private Operation getCustomOperation(ICustomOperationAccessor accessor, IDatatype[] paramTypes) {
         Operation op = null;
-        for (int o = 0; null == op && o < opAccessor.getOperationCount(); o++) {
-            Operation tmp = opAccessor.getOperation(o);
+        IDatatype operandType = accessor.getType();
+        for (int o = 0; null == op && o < accessor.getOperationCount(); o++) {
+            Operation tmp = accessor.getOperation(o);
             if (tmp.getName().equals(operation)) {
                 if (operandType.equals(tmp.getOperand())) { // operations of the same project only, not isAssignable!
                     int tmpParamCount = tmp.getParameterCount();
@@ -471,5 +503,36 @@ public class OCLFeatureCall extends ConstraintSyntaxTree {
             }
         }
         return result.toString();
+    }
+    
+    @Override
+    public boolean isSemanticallyEqual(ConstraintSyntaxTree otherTree) {
+        boolean equals = false;
+        if (otherTree instanceof OCLFeatureCall) {
+            OCLFeatureCall other = (OCLFeatureCall) otherTree;
+            equals = operation.equals(other.operation);
+            if (null != opAccessor) {
+                equals &= opAccessor.equals(other.opAccessor);    
+            }
+            if (equals) {
+                boolean isCommutative = (operation.equals(OclKeyWords.AND)
+                    || operation.equals(OclKeyWords.OR) || operation.equals(OclKeyWords.XOR));
+                
+                if (isCommutative) {     
+                    equals &= (operand.isSemanticallyEqual(other.operand)
+                        && parameters[0].isSemanticallyEqual(other.parameters[0]))
+                        || (operand.isSemanticallyEqual(other.parameters[0])
+                           && parameters[0].isSemanticallyEqual(other.operand));
+                    
+                } else {
+                    equals &= operand.isSemanticallyEqual(other.operand)
+                        && this.parameters.length == other.parameters.length;
+                    for (int i = 0; i < parameters.length && equals; i++) {
+                        equals &= parameters[i].isSemanticallyEqual(other.parameters[i]);
+                    }
+                }
+            }
+        }
+        return equals;
     }
 }

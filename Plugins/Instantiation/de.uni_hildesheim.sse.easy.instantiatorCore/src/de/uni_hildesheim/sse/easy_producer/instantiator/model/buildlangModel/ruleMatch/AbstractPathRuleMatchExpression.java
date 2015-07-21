@@ -1,3 +1,18 @@
+/*
+ * Copyright 2009-2014 University of Hildesheim, Software Systems Engineering
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ruleMatch;
 
 import java.util.ArrayList;
@@ -8,7 +23,7 @@ import org.apache.tools.ant.types.selectors.SelectorUtils;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactFactory;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IFileSystemArtifact;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.Path;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.StringValueHelper;
 
 /**
@@ -37,7 +52,7 @@ public abstract class AbstractPathRuleMatchExpression extends AbstractRuleMatchE
     protected abstract Path getResolved();
  
     @Override
-    public Object determineExpected(AbstractRuleMatchExpression rhsExpr, Object rhsValue) throws ArtifactException {
+    public Object determineExpected(AbstractRuleMatchExpression rhsExpr, Object rhsValue) throws VilException {
         IFileSystemArtifact result = null;
         if (null != getResolved()) {
             // no absolute paths in here

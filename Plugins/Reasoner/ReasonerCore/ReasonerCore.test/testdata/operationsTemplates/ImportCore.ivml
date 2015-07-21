@@ -1,4 +1,4 @@
-project ImportChild {
+project ImportCore {
 
 	version v0;
 	

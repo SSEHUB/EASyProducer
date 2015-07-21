@@ -4,9 +4,9 @@ project attributes {
     enum bindingTimes {compile, startup, runtime};
     Integer i;
     Boolean b;
-    attribute Integer k to i;
-    attribute bindingTimes binding to i;
-    attribute Integer j to attributes;
+    annotate Integer k to i;
+    annotate bindingTimes binding to i;
+    annotate Integer j to attributes;
     i.k = 0;
     i.binding = bindingTimes.compile;
 // similar to a problem Romans had    

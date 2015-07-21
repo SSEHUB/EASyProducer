@@ -46,7 +46,6 @@ import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.FreezeBlock;
 import de.uni_hildesheim.sse.model.varModel.IDecisionVariableContainer;
 import de.uni_hildesheim.sse.model.varModel.IFreezable;
-import de.uni_hildesheim.sse.model.varModel.IModelElement;
 import de.uni_hildesheim.sse.model.varModel.IvmlDatatypeVisitor;
 import de.uni_hildesheim.sse.model.varModel.OperationDefinition;
 import de.uni_hildesheim.sse.model.varModel.PartialEvaluationBlock;
@@ -55,6 +54,7 @@ import de.uni_hildesheim.sse.model.varModel.ProjectImport;
 import de.uni_hildesheim.sse.model.varModel.ProjectInterface;
 import de.uni_hildesheim.sse.model.varModel.datatypes.AnyType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
+import de.uni_hildesheim.sse.model.varModel.datatypes.ConstraintType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Container;
 import de.uni_hildesheim.sse.model.varModel.datatypes.CustomOperation;
 import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
@@ -191,6 +191,9 @@ public class IVMLWriter extends AbstractVarModelWriter {
         writer.setWriter(null);
         writer.emitComments = true; // just to be sure -> ConfigurableIVMLWriter vs. POOL
         writer.lastComment.clear();
+        // reset formatting to default
+        writer.setIndentationStep(getIvmlIndentStep().length());
+        writer.setUseWhitespaces(getUseIvmlWhitespace());
         POOL.add(writer);
     }
 
@@ -367,9 +370,22 @@ public class IVMLWriter extends AbstractVarModelWriter {
             appendOutput(WHITESPACE);
             appendOutput(ASSIGNMENT);
             appendOutput(WHITESPACE);
-            dflt.accept(this);
+            emitDecisionVariableDeclarationDefault(decl, dflt);
         } 
         inDecl = null;
+    }
+
+    /**
+     * Emits the default value of a decision variable declaration (for extension).
+     * 
+     * @param decl the declaration
+     * @param defaultValue the specified default value
+     */
+    protected void emitDecisionVariableDeclarationDefault(DecisionVariableDeclaration decl, 
+        ConstraintSyntaxTree defaultValue) {
+        setExpressionContext(decl);
+        defaultValue.accept(this);
+        setExpressionContext(null);
     }
     
     @Override
@@ -420,36 +436,6 @@ public class IVMLWriter extends AbstractVarModelWriter {
     @Override
     public void visitCompoundValue(CompoundValue value) {
         emitType(value.getType(), true);
-        /*if (!nestedValues.isEmpty()) {
-            Value containing = nestedValues.peek();
-            if (containing instanceof ContainerValue) {
-                Container container = (Container) ((ContainerValue) containing).getType();
-                IDatatype containedType = container.getContainedType();
-                IDatatype thisType = value.getType();
-                if (forceCompoundTypes || !containedType.equals(thisType)) { // equals is not really defined
-                    appendOutput(IvmlDatatypeVisitor.getUniqueType(thisType));
-                    appendOutput(WHITESPACE);
-                }
-            }
-        }*/
-/*
- 
-        if (!nestedExpressions.isEmpty()) {
-            ConstraintSyntaxTree containing = nestedExpressions.peek();
-            if (containing instanceof ContainerInitializer) {
-                Container container = ((ContainerInitializer) containing).getType();
-                IDatatype containedType = container.getContainedType();
-                IDatatype thisType = initializer.getType();
-                if (forceCompoundTypes || !containedType.equals(thisType)) { // equals is not really defined
-                    appendOutput(IvmlDatatypeVisitor.getUniqueType(thisType));
-                    appendOutput(WHITESPACE);
-                }
-            }
-        }
-         
-         
-         
- */
         nestedValues.push(value);
         appendOutput(BEGINNING_BLOCK);
         if (formatInitializer) {
@@ -576,18 +562,6 @@ public class IVMLWriter extends AbstractVarModelWriter {
      */
     public void visitCompoundInitializer(CompoundInitializer initializer) {
         emitType(initializer.getType(), false);
-        /*if (!nestedExpressions.isEmpty()) {
-            ConstraintSyntaxTree containing = nestedExpressions.peek();
-            if (containing instanceof ContainerInitializer) {
-                Container container = ((ContainerInitializer) containing).getType();
-                IDatatype containedType = container.getContainedType();
-                IDatatype thisType = initializer.getType();
-                if (forceCompoundTypes || !containedType.equals(thisType)) { // equals is not really defined
-                    appendOutput(IvmlDatatypeVisitor.getUniqueType(thisType));
-                    appendOutput(WHITESPACE);
-                }
-            }
-        }*/
         nestedExpressions.push(initializer);
         appendOutput(BEGINNING_BLOCK);
         if (formatInitializer) {
@@ -627,6 +601,7 @@ public class IVMLWriter extends AbstractVarModelWriter {
      * @param initializer the container initializer node
      */
     public void visitContainerInitializer(ContainerInitializer initializer) {
+        boolean isConstraintType = ConstraintType.TYPE.isAssignableFrom(initializer.getContainedType());
         nestedExpressions.push(initializer);
         appendOutput(BEGINNING_BLOCK);
         if (formatInitializer && initializer.getExpressionCount() > 0) {
@@ -640,7 +615,11 @@ public class IVMLWriter extends AbstractVarModelWriter {
                 appendOutput(COMMA);
                 appendOutput(WHITESPACE);
             }
-            expr.accept(this);
+            if (isConstraintType) { // basically the same but allows splits
+                emitConstraintExpression(getExpressionContext(), expr);
+            } else {
+                expr.accept(this);
+            }
         }
         if (formatInitializer && initializer.getExpressionCount() > 0) {
             removeLastParent();
@@ -650,7 +629,6 @@ public class IVMLWriter extends AbstractVarModelWriter {
         appendOutput(ENDING_BLOCK);
         nestedExpressions.pop();
     }
-
 
     @Override
     public void visitAttribute(Attribute attribute) {
@@ -713,19 +691,17 @@ public class IVMLWriter extends AbstractVarModelWriter {
         removeLastParent();
         appendIndentation();
         appendOutput(ENDING_BLOCK);
-        int butCount = freeze.getButCount();
-        if (butCount > 0) {
+        
+        DecisionVariableDeclaration iter = freeze.getIter();
+        ConstraintSyntaxTree selector = freeze.getSelector();
+        if (null != iter && null != selector) {
             appendOutput(WHITESPACE);
             appendOutput(BUT);
             appendOutput(WHITESPACE);
             appendOutput(BEGINNING_PARENTHESIS);
-            for (int b = 0; b < butCount; b++) {
-                if (b > 0) {
-                    appendOutput(COMMA);
-                    appendOutput(WHITESPACE);
-                }
-                appendOutput(freeze.getBut(b));
-            }
+            appendOutput(iter.getName());
+            appendOutput(PIPE);
+            selector.accept(this);
             appendOutput(ENDING_PARENTHESIS);
         }
         appendOutput(LINEFEED);
@@ -891,31 +867,55 @@ public class IVMLWriter extends AbstractVarModelWriter {
         boolean found = false;
         String name = var.getName();
         for (int p = getParentCount() - 1; !found && p > 0; p--) {
-            IModelElement par = getParent(p);
-            if (par instanceof IDecisionVariableContainer) {
-                IDecisionVariableContainer cont = (IDecisionVariableContainer) par;
-                DecisionVariableDeclaration elt = cont.getElement(name);
-                // using the simple name would point to the wrong variable
-                found = (null != elt && elt.getName().equals(name) && var != elt);
-            }
+            found = needsQualificationThroughContext(getParent(p), name, var, true);
         }
         if (!found) {
-            Project underVisiting = getParent(Project.class);
-            if (var.getTopLevelParent() != underVisiting) {
-                found = variableUsage.needsQualification(var);
+            for (int n = nestedValues.size() - 1; !found && n >= 0; n--) {
+                found = needsQualificationThroughContext(nestedValues.get(n).getType(), name, var, false);
+            }
+            if (found) {
+                found = false;
+            } else {
+                Project underVisiting = getParent(Project.class);
+                if (var.getTopLevelParent() != underVisiting) {
+                    found = variableUsage.needsQualification(var);
+                }
             }
         }
         return found;
+    }
+    
+    /**
+     * Returns whether the variable name <code>name</code> of <code>var</code> needs qualification within its context 
+     * <code>context</code>.
+     * 
+     * @param context the context (only considered if {@link IDecisionVariableContainer}
+     * @param name the name of the variable to determine qualification need for
+     * @param var the variable itself
+     * @param exclude whether this call is intended to exclude (<code>true</code>) the qualification of <code>var</code>
+     *   or whether it shall search for the existence of <code>name</code> in <code>context</code>(<code>false</code>)
+     * @return whether <code>var</code> needs qualification if <code>exclude</code> is <code>true</code> or whether 
+     * <code>name</code> was found in <code>context</code> if <code>exclude</code> is <code>false</code>
+     */
+    private boolean needsQualificationThroughContext(Object context, String name, AbstractVariable var, 
+        boolean exclude) {
+        boolean found = false;
+        if (context instanceof IDecisionVariableContainer) {
+            IDecisionVariableContainer cont = (IDecisionVariableContainer) context;
+            DecisionVariableDeclaration elt = cont.getElement(name);
+            // using the simple name would point to the wrong variable, identical var does not need qualification
+            found = (null != elt && elt.getName().equals(name));
+            if (exclude) {
+                found &= (var != elt);
+            }
+        }
+        return found;
+        
     }
 
     @Override
     public void visitVariable(Variable variable) {
         AbstractVariable var = variable.getVariable();
-        /*if (var instanceof Attribute) {
-            Attribute attribute = (Attribute) var;
-            appendOutput(attribute.getElement().getName());
-            appendOutput(".");
-        }*/
         boolean needsFqn = false;
         if (null != variable.getQualifier()) {
             variable.getQualifier().accept(this);

@@ -1,8 +1,6 @@
 package de.uni_hildesheim.sse.easy_producer.model;
 
-import java.beans.PropertyChangeSupport;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -19,7 +17,6 @@ import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceUtils;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.standard.EASyConfigFileImporter;
 import de.uni_hildesheim.sse.easy_producer.core.varMod.container.ProjectContainer;
 import de.uni_hildesheim.sse.easy_producer.core.varMod.container.ScriptContainer;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.FileInstantiator;
 import de.uni_hildesheim.sse.easy_producer.internal.ReasoningProgressObserver;
 import de.uni_hildesheim.sse.easy_producer.persistency.EASyPersistencer;
 import de.uni_hildesheim.sse.easy_producer.persistency.ResourcesMgmt;
@@ -46,18 +43,9 @@ import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
  * @since 20.09.2011
  */
 public class ProductLineProject extends PLPInfo {
-    /**
-     * Constant for the property change name.
-     */
-    private static final String PROP_NAME = "productlineModelChanged";
     
     private static final EASyLogger LOGGER = EASyLoggerFactory.INSTANCE.getLogger(
         ProductLineProject.class, Activator.PLUGIN_ID); 
-
-    /*
-     * TODO SE: Check whether this property is still needed.
-     */
-    private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
     /**
      * This constructor is for the creation of a new product line project.
@@ -151,60 +139,21 @@ public class ProductLineProject extends PLPInfo {
         // TODO SE: Remove this as far as Transformators are not longer needed.
         EASyConfigFileImporter importer = new EASyConfigFileImporter(this);
         // These list temporarily save the instantiators from all predecessors
-        List<FileInstantiator> compareTransformators = new ArrayList<FileInstantiator>();
         
         MemberIterator predecessors = getMemberController().predecessors();
         while (predecessors.hasNext()) {
             PLPInfo predecessorPLP = predecessors.next();
             
-            // Copy Instantiator settings
-            compareTransformators.addAll(predecessorPLP.getInstantiatorController().getTransformators());
             
             // Copy (imported) ivml files
             // Insert a dot to hide imported folders
             importer.copyConfigFiles(predecessorPLP, "." + predecessorPLP.getProjectName());
         }
-
-        // compare this PTNs Decisions and Dependencies with the compareLists
-        compareAndMerge(compareTransformators);
         
         //Refresh
         EASyPersistencer.refreshModels(this);
         getConfiguration().refresh();
         configurationPulled();
-    }
-
-    /**
-     * Compares and merges {@link FileInstantiator}s while pulling the configuration.
-     * @param compareTransformators Pulled {@link FileInstantiator}s.
-     */
-    @SuppressWarnings("unchecked")
-    private void compareAndMerge(List<FileInstantiator> compareTransformators) {
-        HashSet<FileInstantiator> oldTransformators;
-
-        oldTransformators = (HashSet<FileInstantiator>) getInstantiatorController().getTransformators().clone();
-        
-        // ------FileInstantiators--------------
-        ArrayList<FileInstantiator> clonedInstantiators = new ArrayList<FileInstantiator>(compareTransformators.size());
-        try {
-            for (FileInstantiator i : compareTransformators) {
-                FileInstantiator clone = (FileInstantiator) i.clone();
-                // Check inheritance state
-                clone.checkInheritance(getProject().getName());
-                clonedInstantiators.add(clone);
-            }
-        } catch (CloneNotSupportedException e) {
-            // cannot happen
-        }
-        getInstantiatorController().setFileTypeTransformers(clonedInstantiators);
-        
-
-        // ------ TRANSFORMATORS --------
-        for (FileInstantiator oldT : oldTransformators) {
-            getInstantiatorController().getTransformators().add(oldT);
-        }
-
-        propertyChangeSupport.firePropertyChange(PROP_NAME, false, true);
     }
 
     /**
@@ -226,7 +175,6 @@ public class ProductLineProject extends PLPInfo {
      * @param observer The Observer which should be registered for notification
      */
     public void registerObserver(Observer observer) {
-        getInstantiatorController().addObserver(observer);
         getMemberController().addObserver(observer);
     }
 
@@ -237,7 +185,6 @@ public class ProductLineProject extends PLPInfo {
      * @since 20.10.2011
      */
     public void unRegisterObserver(Observer observer) {
-        getInstantiatorController().deleteObserver(observer);
         getMemberController().deleteObserver(observer);
     }
 
@@ -250,35 +197,7 @@ public class ProductLineProject extends PLPInfo {
      * @return true, if it should be possible
      */
     public boolean isTransformable() {
-        return isTransformableOldStyle() || isTransformableVIL();
-    }
-    
-    /**
-     * Checks whether instantiation should be possible. Checks whether at least one inherited instantiator has been
-     * found and whether at least one associated predecessor is located in the current workspace. Note: a complete
-     * Instantiation might still not be possible due to missing instantiator engines
-     * 
-     * @see FileInstantiator#getOperationalPath()
-     * @return true, if it should be possible
-     */
-    private boolean isTransformableOldStyle() {
-        Set<FileInstantiator> inheritedInstantiators = getInstantiatorController().getInheritedInstantiators();
-        boolean result = inheritedInstantiators.size() > 0;
-        boolean found = false;
-        if (result) {
-            for (FileInstantiator instantiator : inheritedInstantiators) {
-                if (ResourcesMgmt.INSTANCE.isPLPInWorkspace(instantiator.getPredecessor())) {
-                    found = true;
-                    // increase performance by skipping further tests
-                    break;
-                }
-            }
-        }
-        /*
-         * TODO: muss noch mal ordentlich gemacht werden...
-         * Workaround für ScaleLog (Oder-Block)
-         */
-        return result && found || getInstantiatorController().getTransformators().size() > 0;
+        return isTransformableVIL();
     }
     
     @Override

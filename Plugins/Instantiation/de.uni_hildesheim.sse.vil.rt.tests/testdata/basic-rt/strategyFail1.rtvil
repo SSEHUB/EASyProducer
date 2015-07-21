@@ -1,0 +1,20 @@
+rtVilScript strategyFail1 (Project source, Configuration config, Project target) {
+
+    strategy s0 (Project source, Configuration config, Project target) = true : true {
+        objective true;
+        breakdown {
+            tactic t1();
+        }
+    }
+    
+    strategy s0(Project source, Configuration config, Project target) = {
+        objective true;
+        breakdown {
+            tactic t1();
+        }
+    }
+
+    tactic t1() = {
+    }
+
+}

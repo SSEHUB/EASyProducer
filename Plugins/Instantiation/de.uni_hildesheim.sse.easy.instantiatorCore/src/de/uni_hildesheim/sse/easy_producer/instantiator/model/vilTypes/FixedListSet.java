@@ -19,7 +19,7 @@ public class FixedListSet<T> extends ListSet<T> {
      * @param registry the registry to convert <code>params</code>
      * @param params the type parameter characterizing <T>
      */
-    public FixedListSet(List<T> list, TypeRegistry registry, Class<? extends IVilType>... params) {
+    public FixedListSet(List<T> list, TypeRegistry registry, Class<?>... params) {
         super(list, registry.convert(params));
     }
     
@@ -29,7 +29,7 @@ public class FixedListSet<T> extends ListSet<T> {
      * @param list the wrapped list
      * @param params the type parameter characterizing <T>
      */
-    public FixedListSet(List<T> list, TypeDescriptor<? extends IVilType>... params) {
+    public FixedListSet(List<T> list, TypeDescriptor<?>... params) {
         super(list, params);
     }
     

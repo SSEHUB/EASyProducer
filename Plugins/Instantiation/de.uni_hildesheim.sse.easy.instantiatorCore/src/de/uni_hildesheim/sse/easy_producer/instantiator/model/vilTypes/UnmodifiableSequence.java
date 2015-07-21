@@ -1,7 +1,9 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes;
 
 import java.util.Iterator;
+import java.util.List;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionEvaluator;
 
 /**
@@ -24,13 +26,13 @@ public class UnmodifiableSequence<T> implements Sequence<T> {
     }
     
     @Override
-    public int getDimensionCount() {
-        return sequence.getDimensionCount();
+    public int getGenericParameterCount() {
+        return sequence.getGenericParameterCount();
     }
 
     @Override
-    public TypeDescriptor<? extends IVilType> getDimensionType(int index) {
-        return sequence.getDimensionType(index);
+    public TypeDescriptor<?> getGenericParameterType(int index) {
+        return sequence.getGenericParameterType(index);
     }
 
     @Override
@@ -94,7 +96,7 @@ public class UnmodifiableSequence<T> implements Sequence<T> {
     }
 
     @Override
-    public Sequence<T> selectByType(TypeDescriptor<? extends IVilType> type) {
+    public Sequence<T> selectByType(TypeDescriptor<?> type) {
         return sequence.selectByType(type);
     }
 
@@ -109,18 +111,20 @@ public class UnmodifiableSequence<T> implements Sequence<T> {
     }
 
     @Override
+    @OperationMeta(genericArgument = {0 })
     public T add(T element) {
         // unmodifiable, do nothing
         return element;
     }
 
     @Override
-    public void remove(T element) {
+    public boolean remove(T element) {
         // unmodifiable, do nothing
+        return false;
     }
 
     @Override
-    public Sequence<T> select(ExpressionEvaluator evaluator) throws ArtifactException {
+    public Sequence<T> select(ExpressionEvaluator evaluator) throws VilException {
         return sequence.select(evaluator);
     }
 
@@ -136,6 +140,11 @@ public class UnmodifiableSequence<T> implements Sequence<T> {
     @Override
     public Sequence<T> sortAlpha() {
         return sequence.sortAlpha();
+    }
+    
+    @Override
+    public Sequence<T> sort(ExpressionEvaluator evaluator) throws VilException {
+        return sequence.sort(evaluator);
     }
 
     @Override
@@ -159,6 +168,11 @@ public class UnmodifiableSequence<T> implements Sequence<T> {
     }
 
     @Override
+    public Map<T, T> mapAny(Sequence<T> other) {
+        return sequence.mapAny(other);
+    }
+
+    @Override
     public boolean equals(Object object) {
         return sequence.equals(object);
     }
@@ -166,6 +180,21 @@ public class UnmodifiableSequence<T> implements Sequence<T> {
     @Override
     public int hashCode() {
         return sequence.hashCode();
+    }
+
+    @Override
+    public List<T> toMappedList() {
+        return sequence.toMappedList();
+    }
+
+    @Override
+    public Sequence<T> revert() {
+        return sequence.revert();
+    }
+
+    @Override
+    public TypeDescriptor<?> getType() {
+        return sequence.getType();
     }
 
 }

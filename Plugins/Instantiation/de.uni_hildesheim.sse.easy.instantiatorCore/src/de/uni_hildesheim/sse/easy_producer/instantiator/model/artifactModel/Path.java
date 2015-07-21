@@ -8,7 +8,7 @@ import java.util.List;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.tools.ant.types.selectors.SelectorUtils;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Constants;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Conversion;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IStringValueProvider;
@@ -82,9 +82,9 @@ public class Path implements IVilType, IStringValueProvider {
      * 
      * @param path the path to construct the path object from
      * @return the created path object
-     * @throws ArtifactException in case that the path does not comply to Java conventions
+     * @throws VilException in case that the path does not comply to Java conventions
      */
-    public static Path create(String path) throws ArtifactException {
+    public static Path create(String path) throws VilException {
         return new Path(path, ArtifactFactory.findModel(path));
     }
     
@@ -149,9 +149,9 @@ public class Path implements IVilType, IStringValueProvider {
      * Turns this path into a java package name.
      * 
      * @return the related java Package name
-     * @throws ArtifactException in case that the related Java path cannot be created
+     * @throws VilException in case that the related Java path cannot be created
      */
-    public JavaPath toJavaPath() throws ArtifactException {
+    public JavaPath toJavaPath() throws VilException {
         return new JavaPath(this);
     }
     
@@ -161,9 +161,9 @@ public class Path implements IVilType, IStringValueProvider {
      * @param prefixRegEx an optional regular expression (intended for path prefixes) to be 
      *   replaced by the empty string (may be <b>null</b>)
      * @return the related java Package name
-     * @throws ArtifactException in case that the related Java path cannot be created
+     * @throws VilException in case that the related Java path cannot be created
      */
-    public JavaPath toJavaPath(String prefixRegEx) throws ArtifactException {
+    public JavaPath toJavaPath(String prefixRegEx) throws VilException {
         return new JavaPath(this, prefixRegEx);
     }
     
@@ -180,18 +180,18 @@ public class Path implements IVilType, IStringValueProvider {
      * Turns this path into an absolute native OS path.
      * 
      * @return the native OS path as a string
-     * @throws ArtifactException in case that accessing the absolute path fails
+     * @throws VilException in case that accessing the absolute path fails
      */
-    public String toAbsoluteOSPath() throws ArtifactException {
+    public String toAbsoluteOSPath() throws VilException {
         return FilenameUtils.separatorsToSystem(getAbsolutePath().getPath());
     }
 
     /**
      * Deletes all files in the given path.
      * 
-     * @throws ArtifactException in case of I/O problems
+     * @throws VilException in case of I/O problems
      */
-    public void deleteAll() throws ArtifactException {
+    public void deleteAll() throws VilException {
         if (isPattern()) {
             Set<FileArtifact> all = selectAll();
             if (null != all) {
@@ -206,7 +206,7 @@ public class Path implements IVilType, IStringValueProvider {
                     org.apache.commons.io.FileUtils.cleanDirectory(file);
                 }
             } catch (IOException e) {
-                throw new ArtifactException(e, ArtifactException.ID_IO);
+                throw new VilException(e, VilException.ID_IO);
             }
         }
     }
@@ -214,12 +214,12 @@ public class Path implements IVilType, IStringValueProvider {
     /**
      * Creates the directories pointing to path.
      * 
-     * @throws ArtifactException in case of a pattern path or if access to the absolute path fails
+     * @throws VilException in case of a pattern path or if access to the absolute path fails
      */
-    public void mkdir() throws ArtifactException {
+    public void mkdir() throws VilException {
         if (isPattern()) {
-            throw new ArtifactException("cannot create a directory from the pattern '" + path + "'", 
-                ArtifactException.ID_IO);
+            throw new VilException("cannot create a directory from the pattern '" + path + "'", 
+                VilException.ID_IO);
         }
         getAbsolutePath().mkdirs();
         ArtifactFactory.createArtifact(getAbsolutePath());
@@ -242,11 +242,11 @@ public class Path implements IVilType, IStringValueProvider {
      * 
      * @param path the path to be converted
      * @return the resulting artifact
-     * @throws ArtifactException in case of problems
+     * @throws VilException in case of problems
      */
     @Invisible
     @Conversion
-    public static IFileSystemArtifact convert(Path path) throws ArtifactException {
+    public static IFileSystemArtifact convert(Path path) throws VilException {
         IFileSystemArtifact result;
         if (path.getAbsolutePath().isFile()) {
             result = FileArtifact.convert(path);
@@ -310,7 +310,7 @@ public class Path implements IVilType, IStringValueProvider {
      *   type of <code>type</code>)
      */
     @OperationMeta(returnGenerics = FileArtifact.class)
-    public Set<FileArtifact> selectByType(Class<? extends IVilType> type) { 
+    public Set<FileArtifact> selectByType(Class<?> type) { 
         return ArtifactFactory.selectByType(this, type); // TODO check IFileSystemArtifact
     }
 
@@ -390,9 +390,9 @@ public class Path implements IVilType, IStringValueProvider {
     /**
      * Deletes the underlying artifact. Handles patterns through {@link ArtifactModel#delete(Path)}.
      * 
-     * @throws ArtifactException in case that deletion fails
+     * @throws VilException in case that deletion fails
      */
-    public void delete() throws ArtifactException {
+    public void delete() throws VilException {
         model.delete(this);
         if (isPattern()) {
             Set<FileArtifact> all = selectAll();
@@ -410,9 +410,9 @@ public class Path implements IVilType, IStringValueProvider {
      * Returns the simple name of this artifact. 
      * 
      * @return the simple name
-     * @throws ArtifactException in case that the operation cannot continue
+     * @throws VilException in case that the operation cannot continue
      */
-    public String getName() throws ArtifactException {
+    public String getName() throws VilException {
         String result;
         if (isPattern()) {
             result = path;
@@ -444,9 +444,9 @@ public class Path implements IVilType, IStringValueProvider {
      * 
      * @param name the new name (absolute or relative)
      * @return the new path reflecting the replaced artifact
-     * @throws ArtifactException in case that renaming fails
+     * @throws VilException in case that renaming fails
      */
-    public Path rename(String name) throws ArtifactException {
+    public Path rename(String name) throws VilException {
         Path result = this;
         File file = new File(name);
         if (!file.isAbsolute()) {
@@ -484,9 +484,9 @@ public class Path implements IVilType, IStringValueProvider {
      * 
      * @param target the target artifact
      * @return the created or touched artifacts
-     * @throws ArtifactException in case that file system operations or artifact model operations fail
+     * @throws VilException in case that file system operations or artifact model operations fail
      */
-    public Set<IFileSystemArtifact> copy(IFileSystemArtifact target) throws ArtifactException {
+    public Set<IFileSystemArtifact> copy(IFileSystemArtifact target) throws VilException {
         return FileUtils.copyOrMove(this, target, false);
     }
 
@@ -495,9 +495,9 @@ public class Path implements IVilType, IStringValueProvider {
      * 
      * @param target the target artifact
      * @return the created or touched artifacts
-     * @throws ArtifactException in case that file system operations or artifact model operations fail
+     * @throws VilException in case that file system operations or artifact model operations fail
      */
-    public Set<IFileSystemArtifact> move(IFileSystemArtifact target) throws ArtifactException {
+    public Set<IFileSystemArtifact> move(IFileSystemArtifact target) throws VilException {
         return FileUtils.copyOrMove(this, target, true);
     }
 

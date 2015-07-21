@@ -20,6 +20,10 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ExpressionDsl.ecore#//VariableDeclaration/name"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ExpressionDsl.ecore#//VariableDeclaration/expression"/>
     </genClasses>
+    <genClasses ecoreClass="ExpressionDsl.ecore#//TypeDef">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ExpressionDsl.ecore#//TypeDef/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ExpressionDsl.ecore#//TypeDef/type"/>
+    </genClasses>
     <genClasses ecoreClass="ExpressionDsl.ecore#//Advice">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ExpressionDsl.ecore#//Advice/name"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ExpressionDsl.ecore#//Advice/versionSpec"/>
@@ -43,6 +47,7 @@
     </genClasses>
     <genClasses ecoreClass="ExpressionDsl.ecore#//ExpressionStatement">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ExpressionDsl.ecore#//ExpressionStatement/var"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ExpressionDsl.ecore#//ExpressionStatement/field"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ExpressionDsl.ecore#//ExpressionStatement/expr"/>
     </genClasses>
     <genClasses ecoreClass="ExpressionDsl.ecore#//Expression">
@@ -168,6 +173,8 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ExpressionDsl.ecore#//Type/param"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ExpressionDsl.ecore#//Type/seq"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ExpressionDsl.ecore#//Type/map"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ExpressionDsl.ecore#//Type/call"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ExpressionDsl.ecore#//Type/return"/>
     </genClasses>
     <genClasses ecoreClass="ExpressionDsl.ecore#//TypeParameters">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ExpressionDsl.ecore#//TypeParameters/param"/>

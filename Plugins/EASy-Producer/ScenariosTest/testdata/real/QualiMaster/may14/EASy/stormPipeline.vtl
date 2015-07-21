@@ -4,7 +4,7 @@ template stormPipeline(Configuration config, FileArtifact target, Pipeline pipel
     // check for endless recursions
 
     def main(Configuration config, FileArtifact target, Pipeline pip) {
-    	DecisionVariable name = pip.name();
+    	String name = pip.name;
     	Integer timeout = 120;
     	'import backtype.storm.*;'
     	'import backtype.storm.topology.*;'
@@ -16,7 +16,7 @@ template stormPipeline(Configuration config, FileArtifact target, Pipeline pipel
     	'        Config config = new Config();'
     	'        config.setMessageTimeoutSecs($timeout);'
     	'        TopologyBuilder b = new TopologyBuilder();'
-    	for (DecisionVariable r : pip.sources()) {
+    	for (Source r : pip.sources) {
     		processElement(r, "");
     	}
     	''
@@ -32,17 +32,17 @@ template stormPipeline(Configuration config, FileArtifact target, Pipeline pipel
 
     def processElement(FamilyElement elt, String lastName) {
     	produceStatement(elt, lastName, true);
-    	String name = elt.$varName();
-		for (Flow flow : elt.output()) {
-			processElement(flow.destination(), name);
+    	String name = elt.varName();
+		for (Flow flow : elt.output) {
+			processElement(flow.destination, name);
 		}
     }
     
     def processElement(Source elt, String lastName) {
     	produceStatement(elt, lastName, false);
-    	String name = elt.$varName();
-		for (Flow flow : elt.output()) {
-			processElement(flow.destination(), name);
+    	String name = elt.varName();
+		for (Flow flow : elt.output) {
+			processElement(flow.destination, name);
 		}
     }
     

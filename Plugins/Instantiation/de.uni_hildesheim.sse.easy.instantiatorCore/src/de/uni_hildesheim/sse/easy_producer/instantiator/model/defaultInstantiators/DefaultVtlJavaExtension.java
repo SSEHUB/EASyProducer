@@ -52,5 +52,15 @@ public class DefaultVtlJavaExtension {
     public static Sequence<Integer> createIntegerSequence(int start, int end) {
         return IntegerSequenceConstructors.createIntegerSequence(start, end);
     }
+    
+    /**
+     * Just prints to the instantiator tracer.
+     *  
+     * @param object the object to be printed
+     */
+    @OperationMeta(trace = false)
+    public static void println(Object object) {
+        Println.println(object);
+    }
 
 }

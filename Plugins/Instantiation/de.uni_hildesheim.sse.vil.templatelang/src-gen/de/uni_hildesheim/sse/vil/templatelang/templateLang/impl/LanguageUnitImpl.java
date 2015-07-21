@@ -3,6 +3,7 @@
 package de.uni_hildesheim.sse.vil.templatelang.templateLang.impl;
 
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ParameterList;
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.TypeDef;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration;
 
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.Extension;
@@ -37,6 +38,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.LanguageUnitImpl#getIndent <em>Indent</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.LanguageUnitImpl#getParam <em>Param</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.LanguageUnitImpl#getExt <em>Ext</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.LanguageUnitImpl#getTypeDefs <em>Type Defs</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.LanguageUnitImpl#getVars <em>Vars</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.LanguageUnitImpl#getDefs <em>Defs</em>}</li>
  * </ul>
@@ -95,6 +97,16 @@ public class LanguageUnitImpl extends de.uni_hildesheim.sse.vil.expressions.expr
    * @ordered
    */
   protected String ext = EXT_EDEFAULT;
+
+  /**
+   * The cached value of the '{@link #getTypeDefs() <em>Type Defs</em>}' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getTypeDefs()
+   * @generated
+   * @ordered
+   */
+  protected EList<TypeDef> typeDefs;
 
   /**
    * The cached value of the '{@link #getVars() <em>Vars</em>}' containment reference list.
@@ -275,6 +287,20 @@ public class LanguageUnitImpl extends de.uni_hildesheim.sse.vil.expressions.expr
    * <!-- end-user-doc -->
    * @generated
    */
+  public EList<TypeDef> getTypeDefs()
+  {
+    if (typeDefs == null)
+    {
+      typeDefs = new EObjectContainmentEList<TypeDef>(TypeDef.class, this, TemplateLangPackage.LANGUAGE_UNIT__TYPE_DEFS);
+    }
+    return typeDefs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EList<VariableDeclaration> getVars()
   {
     if (vars == null)
@@ -314,6 +340,8 @@ public class LanguageUnitImpl extends de.uni_hildesheim.sse.vil.expressions.expr
         return basicSetIndent(null, msgs);
       case TemplateLangPackage.LANGUAGE_UNIT__PARAM:
         return basicSetParam(null, msgs);
+      case TemplateLangPackage.LANGUAGE_UNIT__TYPE_DEFS:
+        return ((InternalEList<?>)getTypeDefs()).basicRemove(otherEnd, msgs);
       case TemplateLangPackage.LANGUAGE_UNIT__VARS:
         return ((InternalEList<?>)getVars()).basicRemove(otherEnd, msgs);
       case TemplateLangPackage.LANGUAGE_UNIT__DEFS:
@@ -340,6 +368,8 @@ public class LanguageUnitImpl extends de.uni_hildesheim.sse.vil.expressions.expr
         return getParam();
       case TemplateLangPackage.LANGUAGE_UNIT__EXT:
         return getExt();
+      case TemplateLangPackage.LANGUAGE_UNIT__TYPE_DEFS:
+        return getTypeDefs();
       case TemplateLangPackage.LANGUAGE_UNIT__VARS:
         return getVars();
       case TemplateLangPackage.LANGUAGE_UNIT__DEFS:
@@ -371,6 +401,10 @@ public class LanguageUnitImpl extends de.uni_hildesheim.sse.vil.expressions.expr
         return;
       case TemplateLangPackage.LANGUAGE_UNIT__EXT:
         setExt((String)newValue);
+        return;
+      case TemplateLangPackage.LANGUAGE_UNIT__TYPE_DEFS:
+        getTypeDefs().clear();
+        getTypeDefs().addAll((Collection<? extends TypeDef>)newValue);
         return;
       case TemplateLangPackage.LANGUAGE_UNIT__VARS:
         getVars().clear();
@@ -406,6 +440,9 @@ public class LanguageUnitImpl extends de.uni_hildesheim.sse.vil.expressions.expr
       case TemplateLangPackage.LANGUAGE_UNIT__EXT:
         setExt(EXT_EDEFAULT);
         return;
+      case TemplateLangPackage.LANGUAGE_UNIT__TYPE_DEFS:
+        getTypeDefs().clear();
+        return;
       case TemplateLangPackage.LANGUAGE_UNIT__VARS:
         getVars().clear();
         return;
@@ -434,6 +471,8 @@ public class LanguageUnitImpl extends de.uni_hildesheim.sse.vil.expressions.expr
         return param != null;
       case TemplateLangPackage.LANGUAGE_UNIT__EXT:
         return EXT_EDEFAULT == null ? ext != null : !EXT_EDEFAULT.equals(ext);
+      case TemplateLangPackage.LANGUAGE_UNIT__TYPE_DEFS:
+        return typeDefs != null && !typeDefs.isEmpty();
       case TemplateLangPackage.LANGUAGE_UNIT__VARS:
         return vars != null && !vars.isEmpty();
       case TemplateLangPackage.LANGUAGE_UNIT__DEFS:

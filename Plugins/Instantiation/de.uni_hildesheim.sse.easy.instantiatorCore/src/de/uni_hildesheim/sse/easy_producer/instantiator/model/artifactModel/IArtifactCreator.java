@@ -3,7 +3,7 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel;
 import java.util.List;
 import java.util.Properties;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
 import de.uni_hildesheim.sse.utils.messages.Message;
 
@@ -50,10 +50,10 @@ public interface IArtifactCreator {
      * @param real the real world object
      * @param model the artifact model to create the artifact within
      * @return the instance or <b>null</b> if <code>real</code> cannot be handled
-     * @throws ArtifactException in case that any instance creation problem occurs
+     * @throws VilException in case that any instance creation problem occurs
      */
     @Invisible(inherit = true)
-    public IArtifact createArtifactInstance(Object real, ArtifactModel model) throws ArtifactException;
+    public IArtifact createArtifactInstance(Object real, ArtifactModel model) throws VilException;
     
     /**
      * Configures its own reaction according to a set of properties.

@@ -1,0 +1,8 @@
+-> main(Configuration, FileArtifact) with (<config>, test.texts)
+    -> byName(Configuration, String) with (<config>, pipTSI) = qm7::pipTSI
+    pip <- qm7::pipTSI
+    map <- {}
+    for src {
+        src <- qm7::Pipeline::sources {0}
+        name <- Spring Financial Data
+    }

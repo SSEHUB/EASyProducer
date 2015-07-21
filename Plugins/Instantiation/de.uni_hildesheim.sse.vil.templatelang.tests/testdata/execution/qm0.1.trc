@@ -1,0 +1,5 @@
+-> main(Configuration, FileArtifact) with (<config>, test.texts)
+    -> byName(Configuration, String) with (<config>, fNormalize) = qm0::fNormalize
+    fm <- qm0::fNormalize
+    -> size(Collection) with ({qm0::Family::members {0}, qm0::Family::members {1}}) = 2
+    size <- 2

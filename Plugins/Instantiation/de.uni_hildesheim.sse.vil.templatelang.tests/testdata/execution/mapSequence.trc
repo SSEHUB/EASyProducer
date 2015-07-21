@@ -1,0 +1,6 @@
+-> main(Configuration, FileArtifact) with (<config>, test.texts)
+    inputStrings <- {a, b}
+    outputStrings <- {a, b, c}
+    result <- {}
+    -> mapAny(Sequence, Sequence) with ({a, b, c}, {a, b}) = {{a, a}, {b, b}}
+    result <- {{a, a}, {b, b}}

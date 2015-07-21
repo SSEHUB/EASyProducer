@@ -1,14 +1,11 @@
 project PipelinesCfg {
 
-	import pTSICfg;
-	import pL3SCfg;
-	import PipelineVar_2Cfg;
-	import pTest;
-	import PipelinesCfgTSI;
+	import PriorityPipCfg;
+	import PipelineVar_1Cfg;
 	pipelines = {
-		refBy(pipTSI), refBy(pTest), refBy(pTSI), refBy(pL3S), refBy(PipelineVar_2) 
+		refBy(PriorityPip), refBy(PipelineVar_1)
 	};
 	freeze {
 		pipelines;
-	}
+	} but (f|f.bindingTime == BindingTime.runtime)
 }

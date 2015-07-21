@@ -1,9 +1,7 @@
 -> main(Configuration, FileArtifact) with (<config>, test.texts)
     -> byName(Configuration, String) with (<config>, c1) = adviceTestVM1::c1
     cmp <- adviceTestVM1::c1
-    -> $variable(TestCompoundType) with (adviceTestVM1::c1) = adviceTestVM1::c1
-    -> name(DecisionVariable) with (adviceTestVM1::c1) = c1
+    -> name(TestCompoundType) with (adviceTestVM1::c1) = c1
     varName <- c1
-    -> $declaration(TestCompoundType) with (adviceTestVM1::c1) = adviceTestVM1::c1
-    -> type(IvmlDeclaration) with (adviceTestVM1::c1) = TestCompoundType
+    -> type(TestCompoundType) with (adviceTestVM1::c1) = TestCompoundType
     typeName <- TestCompoundType

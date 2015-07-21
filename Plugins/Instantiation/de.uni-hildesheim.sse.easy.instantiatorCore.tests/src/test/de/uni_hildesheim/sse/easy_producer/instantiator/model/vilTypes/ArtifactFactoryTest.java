@@ -13,7 +13,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IArt
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IFileSystemArtifact;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.VtlFileArtifact;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.xml.XmlFileArtifact;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 
 /**
  * Tests the artifact factory.
@@ -29,10 +29,10 @@ public class ArtifactFactoryTest extends AbstractTest {
      * 
      * @param cls the expected artifact class
      * @param real the real object to create the artifact from
-     * @throws ArtifactException in case that something goes wrong
+     * @throws VilException in case that something goes wrong
      */
     private static final void testFileSystemArtifact(Class<? extends IArtifact> cls, File real) 
-        throws ArtifactException {
+        throws VilException {
         IArtifact artifact = ArtifactFactory.createArtifact(real);
         Assert.assertNotNull("artifact not created" + artifact);
         // not == due to overriden artifacts
@@ -52,32 +52,32 @@ public class ArtifactFactoryTest extends AbstractTest {
     public void testDefaultArtifactCreation() {
         try {
             testFileSystemArtifact(FolderArtifact.class, TESTDATA_DIR);
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             Assert.fail("unexpected exception : " + e.getMessage());
         }
         try {
             testFileSystemArtifact(FileArtifact.class, new File(TESTDATA_DIR, "TextFile.txt"));
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             Assert.fail("unexpected exception : " + e.getMessage());
         }
         try {
             testFileSystemArtifact(XmlFileArtifact.class, new File(TESTDATA_DIR, "XmlFile.xml"));
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             Assert.fail("unexpected exception : " + e.getMessage());
         }
         try {
             ArtifactFactory.createArtifact(new Object());
             Assert.fail("most generic object cannot be handled");
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             Assert.assertEquals("no creator / input file does not exist (wrong id)", e.getId(), 
-                ArtifactException.ID_NO_ARTIFACT_CREATOR);
+                VilException.ID_NO_ARTIFACT_CREATOR);
         }
         try {
             ArtifactFactory.createArtifact(null);
             Assert.fail("null cannot be handled");
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             Assert.assertEquals("null not allowed (wrong id)", e.getId(), 
-                ArtifactException.ID_IS_NULL);
+                VilException.ID_IS_NULL);
         }
     }
 
@@ -91,7 +91,7 @@ public class ArtifactFactoryTest extends AbstractTest {
             VtlFileArtifact artifact = ArtifactFactory.createArtifact(VtlFileArtifact.class, 
                 new File("test.vtl"), null);
             Assert.assertNotNull("specific VTL artifact not created ", artifact);
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             Assert.fail("unexpected exception: " + e.getMessage());
         }
     }

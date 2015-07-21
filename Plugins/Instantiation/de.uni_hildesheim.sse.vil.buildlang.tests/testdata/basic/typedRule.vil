@@ -1,0 +1,11 @@
+vilScript typedRule (Project source, Project target, Configuration config) {
+
+    Integer helper(Integer i) = : {
+        i * 10;
+    }
+
+    main() = : {
+        Integer j = helper(10);
+    }
+
+}

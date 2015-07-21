@@ -10,7 +10,6 @@ import org.eclipse.xtext.ui.label.DefaultEObjectLabelProvider;
  * 
  * see http://www.eclipse.org/Xtext/documentation/latest/xtext.html#labelProvider
  */
-@SuppressWarnings("unused") // Delete this if customization start. For now, to keep the code clean only! 
 public class VilBuildLanguageLabelProvider extends DefaultEObjectLabelProvider {
 
     /* Include this again, if customization is done. For now, do not display anything in outline.

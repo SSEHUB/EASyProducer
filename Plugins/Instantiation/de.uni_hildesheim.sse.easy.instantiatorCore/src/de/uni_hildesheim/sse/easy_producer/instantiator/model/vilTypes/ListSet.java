@@ -17,6 +17,7 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes;
 
 import java.util.List;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionEvaluator;
 
 /**
@@ -37,8 +38,8 @@ public class ListSet<T> extends AbstractListWrapper<T> implements Set<T> {
      * @param registry the registry to convert <code>param</code>
      * @param param the only type parameter characterizing <T>
      */
-    public ListSet(List<T> list, TypeRegistry registry, Class<? extends IVilType> param) {
-        super(removeDuplicates(list), registry, param);
+    public ListSet(List<T> list, TypeRegistry registry, Class<?> param) {
+        super(removeDuplicates(list), registry, true, param);
     }
     
     /**
@@ -47,8 +48,8 @@ public class ListSet<T> extends AbstractListWrapper<T> implements Set<T> {
      * @param list the wrapped list
      * @param param the only type parameter characterizing <T>
      */
-    public ListSet(List<T> list, Class<? extends IVilType> param) {
-        super(removeDuplicates(list), TypeRegistry.DEFAULT.convert(param));
+    public ListSet(List<T> list, Class<?> param) {
+        super(removeDuplicates(list), true, TypeRegistry.DEFAULT.convert(param));
     }
 
     /**
@@ -57,31 +58,31 @@ public class ListSet<T> extends AbstractListWrapper<T> implements Set<T> {
      * @param list the wrapped list
      * @param params the type parameter characterizing <T>
      */
-    public ListSet(List<T> list, TypeDescriptor<? extends IVilType>... params) {
-        super(removeDuplicates(list), params);
+    public ListSet(List<T> list, TypeDescriptor<?>... params) {
+        super(removeDuplicates(list), true, params);
     }
 
     @Override
     @OperationMeta(returnGenerics = IVilType.class)
-    public Set<T> selectByType(TypeDescriptor<? extends IVilType> type) {
-        return new ListSet<T>(selectByType(this, type), getParameter());
+    public Set<T> selectByType(TypeDescriptor<?> type) {
+        return new ListSet<T>(selectByType(this, type), getGenericParameter());
     }
     
     @Override
     @OperationMeta(returnGenerics = IVilType.class)
     public Set<T> excluding(Collection<T> set) {
-        return new ListSet<T>(excluding(this, set), getParameter());
+        return new ListSet<T>(excluding(this, set), getGenericParameter());
     }
     
     @Override
     @OperationMeta(returnGenerics = IVilType.class)
     public Set<T> including(Collection<T> set) {
-        return new ListSet<T>(including(this, set), getParameter());
+        return new ListSet<T>(including(this, set), getGenericParameter());
     }
 
     @Override
-    public Set<T> select(ExpressionEvaluator evaluator) throws ArtifactException {
-        TypeDescriptor<? extends IVilType>[] param = TypeDescriptor.createArray(1);
+    public Set<T> select(ExpressionEvaluator evaluator) throws VilException {
+        TypeDescriptor<?>[] param = TypeDescriptor.createArray(1);
         param[0] = evaluator.getIteratorVariable().getType();
         return new ListSet<T>(select(this, evaluator), param);
     }
@@ -94,7 +95,7 @@ public class ListSet<T> extends AbstractListWrapper<T> implements Set<T> {
 
     @Override
     public Sequence<T> toSequence() {
-        return new ListSequence<T>(getList(), getParams());
+        return new ListSequence<T>(getList(), getGenericParameter());
     }
     
     @Override
@@ -110,13 +111,14 @@ public class ListSet<T> extends AbstractListWrapper<T> implements Set<T> {
      * @param <T> the element type
      */
     @Invisible
-    public static final <T> Set<T> empty(TypeDescriptor<? extends IVilType> param) {
-        TypeDescriptor<? extends IVilType>[] params = TypeDescriptor.createArray(1);
+    public static final <T> Set<T> empty(TypeDescriptor<?> param) {
+        TypeDescriptor<?>[] params = TypeDescriptor.createArray(1);
         params[0] = param;
         return new ListSet<T>(null, params);
     }
 
     @Override
+    @OperationMeta(genericArgument = {0 })
     public T add(T element) {
         if (!getList().contains(element)) {
             getList().add(element);
@@ -125,8 +127,8 @@ public class ListSet<T> extends AbstractListWrapper<T> implements Set<T> {
     }
 
     @Override
-    public void remove(T element) {
-        getList().remove(element);
+    public boolean remove(T element) {
+        return getList().remove(element);
     }
 
 }

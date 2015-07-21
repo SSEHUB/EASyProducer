@@ -1,7 +1,6 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 
 /**
@@ -22,8 +21,8 @@ public interface ITemplateElement extends ITemplateLangElement {
      * Infers the type of this language element.
      * 
      * @return the type of this language element
-     * @throws VilLanguageException in case that type errors occur
+     * @throws VilException in case that type errors occur
      */
-    public TypeDescriptor<? extends IVilType> inferType() throws VilLanguageException;
+    public TypeDescriptor<?> inferType() throws VilException;
     
 }

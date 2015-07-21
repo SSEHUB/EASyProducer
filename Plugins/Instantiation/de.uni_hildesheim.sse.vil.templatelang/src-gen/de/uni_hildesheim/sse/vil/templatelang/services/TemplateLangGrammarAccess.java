@@ -43,22 +43,24 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cLeftCurlyBracketKeyword_10 = (Keyword)cGroup.eContents().get(10);
 		private final Assignment cVersionAssignment_11 = (Assignment)cGroup.eContents().get(11);
 		private final RuleCall cVersionVersionStmtParserRuleCall_11_0 = (RuleCall)cVersionAssignment_11.eContents().get(0);
-		private final Assignment cVarsAssignment_12 = (Assignment)cGroup.eContents().get(12);
-		private final RuleCall cVarsVariableDeclarationParserRuleCall_12_0 = (RuleCall)cVarsAssignment_12.eContents().get(0);
-		private final Assignment cDefsAssignment_13 = (Assignment)cGroup.eContents().get(13);
-		private final RuleCall cDefsVilDefParserRuleCall_13_0 = (RuleCall)cDefsAssignment_13.eContents().get(0);
-		private final Keyword cRightCurlyBracketKeyword_14 = (Keyword)cGroup.eContents().get(14);
+		private final Assignment cTypeDefsAssignment_12 = (Assignment)cGroup.eContents().get(12);
+		private final RuleCall cTypeDefsTypeDefParserRuleCall_12_0 = (RuleCall)cTypeDefsAssignment_12.eContents().get(0);
+		private final Assignment cVarsAssignment_13 = (Assignment)cGroup.eContents().get(13);
+		private final RuleCall cVarsVariableDeclarationParserRuleCall_13_0 = (RuleCall)cVarsAssignment_13.eContents().get(0);
+		private final Assignment cDefsAssignment_14 = (Assignment)cGroup.eContents().get(14);
+		private final RuleCall cDefsVilDefParserRuleCall_14_0 = (RuleCall)cDefsAssignment_14.eContents().get(0);
+		private final Keyword cRightCurlyBracketKeyword_15 = (Keyword)cGroup.eContents().get(15);
 		
 		//// do not rename - required for reuse
 		//LanguageUnit:
 		//	imports+=Import* javaExts+=Extension* advices+=Advice* indent=IndentationHint? "template" name=Identifier "("
-		//	param=ParameterList? ")" ("extends" ext=Identifier)? "{" version=VersionStmt? vars+=VariableDeclaration*
-		//	defs+=VilDef* "}";
+		//	param=ParameterList? ")" ("extends" ext=Identifier)? "{" version=VersionStmt? typeDefs+=TypeDef*
+		//	vars+=VariableDeclaration* defs+=VilDef* "}";
 		public ParserRule getRule() { return rule; }
 
 		//imports+=Import* javaExts+=Extension* advices+=Advice* indent=IndentationHint? "template" name=Identifier "("
-		//param=ParameterList? ")" ("extends" ext=Identifier)? "{" version=VersionStmt? vars+=VariableDeclaration* defs+=VilDef*
-		//"}"
+		//param=ParameterList? ")" ("extends" ext=Identifier)? "{" version=VersionStmt? typeDefs+=TypeDef*
+		//vars+=VariableDeclaration* defs+=VilDef* "}"
 		public Group getGroup() { return cGroup; }
 
 		//imports+=Import*
@@ -127,20 +129,26 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 		//VersionStmt
 		public RuleCall getVersionVersionStmtParserRuleCall_11_0() { return cVersionVersionStmtParserRuleCall_11_0; }
 
+		//typeDefs+=TypeDef*
+		public Assignment getTypeDefsAssignment_12() { return cTypeDefsAssignment_12; }
+
+		//TypeDef
+		public RuleCall getTypeDefsTypeDefParserRuleCall_12_0() { return cTypeDefsTypeDefParserRuleCall_12_0; }
+
 		//vars+=VariableDeclaration*
-		public Assignment getVarsAssignment_12() { return cVarsAssignment_12; }
+		public Assignment getVarsAssignment_13() { return cVarsAssignment_13; }
 
 		//VariableDeclaration
-		public RuleCall getVarsVariableDeclarationParserRuleCall_12_0() { return cVarsVariableDeclarationParserRuleCall_12_0; }
+		public RuleCall getVarsVariableDeclarationParserRuleCall_13_0() { return cVarsVariableDeclarationParserRuleCall_13_0; }
 
 		//defs+=VilDef*
-		public Assignment getDefsAssignment_13() { return cDefsAssignment_13; }
+		public Assignment getDefsAssignment_14() { return cDefsAssignment_14; }
 
 		//VilDef
-		public RuleCall getDefsVilDefParserRuleCall_13_0() { return cDefsVilDefParserRuleCall_13_0; }
+		public RuleCall getDefsVilDefParserRuleCall_14_0() { return cDefsVilDefParserRuleCall_14_0; }
 
 		//"}"
-		public Keyword getRightCurlyBracketKeyword_14() { return cRightCurlyBracketKeyword_14; }
+		public Keyword getRightCurlyBracketKeyword_15() { return cRightCurlyBracketKeyword_15; }
 	}
 
 	public class IndentationHintElements extends AbstractParserRuleElementFinder {
@@ -1004,8 +1012,8 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	//// do not rename - required for reuse
 	//LanguageUnit:
 	//	imports+=Import* javaExts+=Extension* advices+=Advice* indent=IndentationHint? "template" name=Identifier "("
-	//	param=ParameterList? ")" ("extends" ext=Identifier)? "{" version=VersionStmt? vars+=VariableDeclaration*
-	//	defs+=VilDef* "}";
+	//	param=ParameterList? ")" ("extends" ext=Identifier)? "{" version=VersionStmt? typeDefs+=TypeDef*
+	//	vars+=VariableDeclaration* defs+=VilDef* "}";
 	public LanguageUnitElements getLanguageUnitAccess() {
 		return (pLanguageUnit != null) ? pLanguageUnit : (pLanguageUnit = new LanguageUnitElements());
 	}
@@ -1190,6 +1198,16 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 		return getVariableDeclarationAccess().getRule();
 	}
 
+	//TypeDef:
+	//	"typedef" name=Identifier type=Type ";";
+	public ExpressionDslGrammarAccess.TypeDefElements getTypeDefAccess() {
+		return gaExpressionDsl.getTypeDefAccess();
+	}
+	
+	public ParserRule getTypeDefRule() {
+		return getTypeDefAccess().getRule();
+	}
+
 	//// used in extending languages
 	//Advice:
 	//	"@advice" "(" name=QualifiedName ")" versionSpec=VersionSpec?;
@@ -1254,7 +1272,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	//// ------------------------------------- expressions -----------------------
 	//// used in extending languages
 	//ExpressionStatement:
-	//	(var=Identifier "=")? expr=Expression ";";
+	//	(var=Identifier ("." field=Identifier)? "=")? expr=Expression ";";
 	public ExpressionDslGrammarAccess.ExpressionStatementElements getExpressionStatementAccess() {
 		return gaExpressionDsl.getExpressionStatementAccess();
 	}
@@ -1577,7 +1595,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//QualifiedName:
-	//	prefix=QualifiedPrefix (qname+="." qname+=Identifier)?;
+	//	prefix=QualifiedPrefix (qname+="." qname+=Identifier)*;
 	public ExpressionDslGrammarAccess.QualifiedNameElements getQualifiedNameAccess() {
 		return gaExpressionDsl.getQualifiedNameAccess();
 	}
@@ -1620,7 +1638,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	//Type:
 	//	name= // specific types will be dynamically loaded at start-up
 	//	QualifiedPrefix | set="setOf" param=TypeParameters | seq="sequenceOf" param=TypeParameters | map="mapOf"
-	//	param=TypeParameters;
+	//	param=TypeParameters | call="callOf" return=Type? param=TypeParameters;
 	public ExpressionDslGrammarAccess.TypeElements getTypeAccess() {
 		return gaExpressionDsl.getTypeAccess();
 	}

@@ -31,12 +31,6 @@ public interface IInstantiatorProject {
     public String getProjectName();
     
     /**
-     * Returns the current {@link IInstantiatorController}.
-     * @return The current {@link IInstantiatorController}
-     */
-    public IInstantiatorController getInstantiatorController();
-    
-    /**
      * Getter for the project location.
      * @return the absolute file path of the root folder of this plp, or <code>null</code> if no file can be determined
      */

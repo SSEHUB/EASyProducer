@@ -1,33 +1,49 @@
+/*
+ * Copyright 2009-2015 University of Hildesheim, Software Systems Engineering
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.uni_hildesheim.sse.easy.ui.productline_editor.instantiator;
 
-import java.io.File;
-
-import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TreeSelection;
+import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.ide.IDE;
 
 import de.uni_hildesheim.sse.easy.ui.productline_editor.AbstractEASyEditorPage;
+import de.uni_hildesheim.sse.easy.ui.productline_editor.EasyProducerDialog;
 import de.uni_hildesheim.sse.easy.ui.productline_editor.EditorConstants;
-import de.uni_hildesheim.sse.easy_producer.instantiator.Transformator;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.FileInstantiator;
+import de.uni_hildesheim.sse.easy.ui.productline_editor.ImageProvider;
+import de.uni_hildesheim.sse.easy.ui.productline_editor.ImageProvider.ImageType;
+import de.uni_hildesheim.sse.easy.ui.productline_editor.instantiator.TreeNode.Insertable;
+import de.uni_hildesheim.sse.easy.ui.productline_editor.instantiator.TreeNode.InsertionPoint;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.VariableDeclaration;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
 
 /**
@@ -47,24 +63,13 @@ import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
  * @author El-Sharkawy
  */
 public class InstantiatorConfigPage extends AbstractEASyEditorPage {
-    private Button addFileTypeButton;
-    private ComboViewer addInstantiatorCombo;
-    private Button deleteFileTypeButton;
-
-    private ListViewer multipleList;
-    private ListViewer instantiatorList;
-
-    private Button undoButton;
-    private Button multipleButton;
-    private InstantiatorTreeViewer instantiatorViewer;
-
-    private ComboViewer filter;
-
-    private final Image addImg = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD);
-    private final Image delImg = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_ETOOL_DELETE);
-    private final Image undoImg = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_UNDO);
-    private final Image multipleImg = PlatformUI.getWorkbench().getSharedImages()
-            .getImage(ISharedImages.IMG_ELCL_SYNCED);
+    private Button addRuleButton;
+    private Button addCopyRuleButton;
+    private Button addSystemCallButton;
+    private Button insertInstantiatorButton;
+    private Button deleteElementButton;
+    
+    private TreeViewer ruleTree;
 
     /**
      * Sole constructor for this class.
@@ -74,244 +79,322 @@ public class InstantiatorConfigPage extends AbstractEASyEditorPage {
      */
     public InstantiatorConfigPage(Composite parent, ProductLineProject plp) {
         super(plp, EditorConstants.INSTANTIATOR_PAGE, parent);
-
-        createButtons();
-        createSelectionBar();
-        createContent();
+        GridData data = new GridData();
+        data.heightHint = 600;
+        setData(data);
+        
+        // Buttons
+        Composite buttonComposite = getToolkit().createComposite(getContentPane(), SWT.NONE);
+        GridLayout headerButtonCompositeLayout = new GridLayout();
+        buttonComposite.setLayout(headerButtonCompositeLayout);
+        headerButtonCompositeLayout.numColumns = 4;
+        createButtons(buttonComposite);
+        
+        // Editor
+        Label header = new Label(getContentPane(), SWT.NONE);
+        header.setText("Active VIL rules in " + getScriptSignature() + ":");
+        header.setBackground(getContentPane().getBackground());
+        createContent(getContentPane());
     }
 
     /**
-     * Creates the add and delete button.
+     * Creates the buttons.
+     * 
+     * @param parent the parent composite
      */
-    private void createButtons() {
-        // Create Composite, which holds the two buttons
-        Composite headerButtonComposite = getToolkit().createComposite(getContentPane(), SWT.NONE);
-        headerButtonComposite.setLayout(new GridLayout(4, false));
-
-        // create Buttons
-        getToolkit().createLabel(headerButtonComposite, "Choose an instantiator to add:", SWT.NONE);
-        //new Label(headerButtonComposite, SWT.NONE).setText("Choose an instantiator to add:");
-
-        addInstantiatorCombo = new ComboViewer(new Combo(headerButtonComposite, SWT.DROP_DOWN | SWT.READ_ONLY));
-        addInstantiatorCombo.setContentProvider(new ArrayContentProvider());
-        addInstantiatorCombo.setInput(Transformator.getAvailableInstantiators().toArray(new String[0]));
-
-        addFileTypeButton = new Button(headerButtonComposite, SWT.NONE);
-        addFileTypeButton.setText("Add Instantiator");
-        addFileTypeButton.setImage(addImg);
-        deleteFileTypeButton = new Button(headerButtonComposite, SWT.NONE);
-        deleteFileTypeButton.setText("Remove Instantiator");
-        deleteFileTypeButton.setImage(delImg);
-
-        // Add Listeners
-        addAddListener();
-        addDeleteListener();
+    private void createButtons(Composite parent) {
+        createAddRuleButton(parent);
+        createCopyRuleButton(parent);
+        createAddSystemCallButton(parent);
+        createAddInstantiatorButton(parent);
+        createDeleteElementButton(parent);
+    }
+    
+    /**
+     * Creates an "add rule" button.
+     * 
+     * @param parent the parent composite
+     */
+    private void createAddRuleButton(Composite parent) {   
+        addRuleButton = new Button(parent, SWT.NONE);
+        addRuleButton.setImage(ImageProvider.getInstance().getImage(ImageType.ADD));
+        addRuleButton.setText("Add Rule...");
+        addRuleButton.setEnabled(false);
+        addRuleButton.setToolTipText("In development...");
+        addRuleButton.addSelectionListener(new TreeNodeInsertionSelectionAdapter(Insertable.RULE) {
+            @Override
+            protected void insert(TreeNode selected) {
+                
+            }
+        });
     }
 
     /**
-     * The selection bar contains some labels, the save and dependency button.
+     * Creates a "copy rule" button.
+     * 
+     * @param parent the parent composite
      */
-    private void createSelectionBar() {
-        Composite comboComposite = getToolkit().createComposite(getContentPane(), SWT.NONE);
-        comboComposite.setLayout(new GridLayout(3, false));
+    private void createCopyRuleButton(Composite parent) {
+        addCopyRuleButton = new Button(parent, SWT.NONE);
+        addCopyRuleButton.setImage(PlatformUI.getWorkbench().getSharedImages()
+            .getImage(ISharedImages.IMG_TOOL_COPY));
+        addCopyRuleButton.setText("Add Copy Rule...");
+        addCopyRuleButton.setEnabled(false);
+        addCopyRuleButton.setToolTipText("In development...");
+        addCopyRuleButton.addSelectionListener(new TreeNodeInsertionSelectionAdapter(Insertable.RULE) {
+            @Override
+            protected void insert(TreeNode selected) {
+                
+            }
+        });
+    }
 
-        getToolkit().createLabel(comboComposite, "Pick an instantiator to configure it's filetree", SWT.NONE);
+    /**
+     * Creates a "system call" button.
+     * 
+     * @param parent the parent composite
+     */
+    private void createAddSystemCallButton(Composite parent) {
+        addSystemCallButton = new Button(parent, SWT.NONE);
+        addSystemCallButton.setImage(PlatformUI.getWorkbench().getSharedImages()
+            .getImage(IDE.SharedImages.IMG_OPEN_MARKER));
+        addSystemCallButton.setText("Add System Call...");
+        addSystemCallButton.setEnabled(false);
+        addSystemCallButton.setToolTipText("In development...");
+        addSystemCallButton.addSelectionListener(new TreeNodeInsertionSelectionAdapter(Insertable.RULE) {
+            @Override
+            protected void insert(TreeNode selected) {
+                
+            }
+        });
+    }
 
-        undoButton = new Button(comboComposite, SWT.NONE);
-        undoButton.setText("Undo file selection");
-        undoButton.setImage(undoImg);
-        undoButton.setEnabled(false);
+    /**
+     * Creates an "add instantiator" button.
+     * 
+     * @param parent the parent composite
+     */
+    private void createAddInstantiatorButton(Composite parent) {
+        insertInstantiatorButton = new Button(parent, SWT.NONE);
+        insertInstantiatorButton.setImage(PlatformUI.getWorkbench().getSharedImages()
+            .getImage(IDE.SharedImages.IMG_OPEN_MARKER));
+        insertInstantiatorButton.setText("Insert Instantiator...");
+        insertInstantiatorButton.setEnabled(false);
+        insertInstantiatorButton.addSelectionListener(new TreeNodeInsertionSelectionAdapter(Insertable.INSTANTIATOR) {
+            @Override
+            protected void insert(TreeNode selected) {
+                Script script = getProductLineProject().getBuildScript();
+                InsertInstantiatorDialog dlg = new InsertInstantiatorDialog(getShell(), 
+                    script, selected, getSupportedInsertionPoint(selected));
+                if (Window.OK == dlg.open()) {
+                    refresh();
+                    try {
+                        TreeUtils.store(script);
+                    } catch (VilException e) {
+                        EasyProducerDialog.showErrorDialog(getShell(), e.getMessage());
+                    }
+                }
+            }
+        });
+    }
 
-        multipleButton = new Button(comboComposite, SWT.NONE);
-        multipleButton.setText("Calculate files that will be instantiated multiple times");
-        multipleButton.setImage(multipleImg);
+    /**
+     * Creates a "delete element" button.
+     * 
+     * @param parent the parent composite
+     */
+    private void createDeleteElementButton(Composite parent) {
+        deleteElementButton = new Button(parent, SWT.NONE);
+        deleteElementButton.setImage(PlatformUI.getWorkbench().getSharedImages()
+            .getImage(ISharedImages.IMG_TOOL_DELETE));
+        deleteElementButton.setText("Delete...");
+        deleteElementButton.setEnabled(false);
+        deleteElementButton.setToolTipText("In development...");
+        deleteElementButton.addSelectionListener(new SelectionAdapter() {
+            @Override
+            public void widgetSelected(SelectionEvent evt) {
+            }
+        });
+    }
 
-        addUndoListener();
-        addMultipleListener();
+    /**
+     * A selection adapter checking for supported insertion first.
+     *  
+     * @author Holger Eichelberger
+     */
+    private abstract class TreeNodeInsertionSelectionAdapter extends SelectionAdapter {
+
+        private Insertable insertable;
+        
+        /**
+         * Creates the selection adapter.
+         * 
+         * @param insertable the intended insertable
+         */
+        private TreeNodeInsertionSelectionAdapter(Insertable insertable) {
+            this.insertable = insertable;
+        }
+        
+        @Override
+        public void widgetSelected(SelectionEvent evt) {
+            TreeNode selected = getSelected(ruleTree.getSelection());
+            if (null != selected && InsertionPoint.NONE != getSupportedInsertionPoint(selected)) {
+                insert(selected);
+            }
+        }
+        
+        /**
+         * Is called if the insertion shall happen.
+         * 
+         * @param selected the selected node
+         */
+        protected abstract void insert(TreeNode selected);
+        
+        /**
+         * Returns the supported insertion point for the given <code>selected</code> node.
+         * 
+         * @param selected the selected node
+         * @return the insertion point
+         */
+        protected InsertionPoint getSupportedInsertionPoint(TreeNode selected) {
+            return selected.supportedInsertionPoint(insertable);
+        }
+        
     }
 
     /**
      * Creates the main content with the list of instantiators, a tree for a chosen instantiator, and a list of multiple
      * instantiated files, which is only shown, if the user decides to have them calculated.
      * 
+     * @param parent the parent composite
      */
-    private void createContent() {
-        Composite instantiatorComposite = getToolkit().createComposite(getContentPane());
-        //new Composite(getContentPane(), SWT.NONE);
-        instantiatorComposite.setLayout(new GridLayout(2, false));
-
-        Composite listAndCombo = getToolkit().createComposite(instantiatorComposite);
-        GridLayout gl = new GridLayout(1, false);
-        gl.marginHeight = 0;
-        gl.marginWidth = 0;
-        listAndCombo.setLayout(gl);
+    private void createContent(Composite parent) {
+        ruleTree = new TreeViewer(parent, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL | SWT.FULL_SELECTION);
+        ruleTree.setLabelProvider(new InstantiatorTreeLabelProvider());
+        ruleTree.setContentProvider(new InstantiatorTreeContentProvider());
+        ruleTree.addSelectionChangedListener(new TreeSelectionListener());
         
-        List list = new List(listAndCombo, SWT.BORDER | SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL);
-        GridData gdList = new GridData(SWT.BEGINNING, SWT.BEGINNING, true, false);
-        gdList.widthHint = 250;
-        gdList.heightHint = 250;
-        list.setLayoutData(gdList);
-        instantiatorList = new ListViewer(list);
-        instantiatorList.setContentProvider(new InstantiatorListContentProvider());
-        instantiatorList.setLabelProvider(new InstantiatorListLabelProvider());
-        // Initialize with inherited Instantiators (if any)
-        instantiatorList.setInput(getProductLineProject().getInstantiatorController().getTransformators());
-
-        getToolkit().createLabel(listAndCombo, "Filter files by extension", SWT.NONE);
-
-        filter = new ComboViewer(new Combo(listAndCombo, SWT.DROP_DOWN | SWT.READ_ONLY));
-        filter.setContentProvider(new ArrayContentProvider());
-        Combo combo = filter.getCombo();
-        GridData gdCombo = new GridData(SWT.BEGINNING, SWT.BEGINNING, true, false);
-        combo.setLayoutData(gdCombo);
-
-        int style = SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER;
-        style |= SWT.FULL_SELECTION;
         
-        instantiatorViewer = new InstantiatorTreeViewer(instantiatorComposite, style,
-            getProductLineProject().getProjectID());
-        Tree tree = instantiatorViewer.getTree();
-        GridData gdTree = new GridData(SWT.BEGINNING, SWT.FILL, true, false);
-        gdTree.widthHint = 500;
-        tree.setLayoutData(gdTree);
-
-        List list2 = new List(listAndCombo, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
-        GridData gdList2 = new GridData(SWT.BEGINNING, SWT.BEGINNING, true, false);
-        gdList2.widthHint = 250;
-        gdList2.heightHint = 200;
-        list2.setLayoutData(gdList2);
-        multipleList = new ListViewer(list2);
-        multipleList.setContentProvider(new ArrayContentProvider());
-        multipleList.setLabelProvider(new LabelProvider());
-
-        addInstantiatorListListener();
-        addFiltenerListener();
-    }
-
-    /**
-     * A listener for the list of instantiators. On user selection a file tree is generated based on the context of the
-     * instantiator and files will be preselected based on the model data of the chosen instantiator.
-     */
-    private void addInstantiatorListListener() {
-        instantiatorList.addSelectionChangedListener(new ISelectionChangedListener() {
-            @Override
-            public void selectionChanged(SelectionChangedEvent event) {
-                StructuredSelection selection = (StructuredSelection) event.getSelection();
-                if (!selection.isEmpty()) {
-                    FileInstantiator tmp = (FileInstantiator) selection.getFirstElement();
-                    tmp.checkContext(getProductLineProject().getProjectID());
-                    instantiatorViewer.setInput(tmp);
-                    undoButton.setEnabled(true);
-
-                    java.util.List<File> files = tmp.getFilesToInstantiate();
-                    instantiatorViewer.setCheckedElements(files.toArray());
-                    multipleList.setInput(tmp.inspect());
-
-                    filter.setInput(instantiatorViewer.getFileTypes().toArray(new String[0]));
-                }
-            }
-        });
-    }
-
-    /**
-     * Creates a listener for the add button.
-     */
-    private void addAddListener() {
-        addFileTypeButton.addSelectionListener(new SelectionAdapter() {
-            @Override
-            public void widgetSelected(SelectionEvent event) {
-                StructuredSelection selection = (StructuredSelection) addInstantiatorCombo.getSelection();
-                if (!selection.isEmpty()) {
-                    String engine = (String) selection.getFirstElement();
-                    FileInstantiator n = getProductLineProject().getInstantiatorController().addFileTransformator(
-                            getProductLineProject().getProjectID(), engine);
-                    instantiatorViewer.setInput(n);
-                    refresh();
-                    instantiatorList.setSelection(new StructuredSelection(n), true);
-                }
-            }
-        });
-    }
-
-    /**
-     * Creates a listener for the filter combobox.
-     */
-    private void addFiltenerListener() {
-        filter.addSelectionChangedListener(new ISelectionChangedListener() {
-            @Override
-            public void selectionChanged(SelectionChangedEvent event) {
-                StructuredSelection selection = (StructuredSelection) filter.getSelection();
-                if (!selection.isEmpty()) {
-                    String type = (String) selection.getFirstElement();
-                    instantiatorViewer.setFilter(type);
-                    instantiatorViewer.setInput(instantiatorViewer.getInput());
-                    instantiatorList.setSelection(new StructuredSelection(instantiatorViewer.getInput()), true);
-                }
-            }
-        });
-    }
-
-    /**
-     * Creates a listener for the delete button.
-     */
-    private void addDeleteListener() {
-        deleteFileTypeButton.addSelectionListener(new SelectionAdapter() {
-            @Override
-            public void widgetSelected(SelectionEvent event) {
-                IStructuredSelection selection = (IStructuredSelection) instantiatorList.getSelection();
-                if (!selection.isEmpty()) {
-                    FileInstantiator i = (FileInstantiator) selection.getFirstElement();
-                    getProductLineProject().getInstantiatorController().deleteFileTypeTransformator(i);
-                    refresh();
-                    // Reset the Dataviews until User selects a new
-                    instantiatorViewer.setInput(null);
-                    undoButton.setEnabled(false);
-                    multipleList.setInput(null);
-                }
-            }
-        });
+        Tree table = ruleTree.getTree();
+        GridData data = new GridData(SWT.FILL, SWT.FILL, true, true);
+        /*
+         * Show scroll bars of parent composite only if less then approx. 3 rows are shown in the table
+         * Otherwise the scroll bars of the table are used.
+         */
+        data.heightHint = 60;
+        table.setLayoutData(data);
+        
+        refresh();
     }
     
     /**
-     * Creates a listener for the save button. Changes made to the filetree won't be saved without using this button.
+     * Returns the actual script signature.
+     * 
+     * @return the actual script signature
      */
-    private void addUndoListener() {
-        undoButton.addSelectionListener(new SelectionAdapter() {
-            @Override
-            public void widgetSelected(SelectionEvent evt) {
-                IStructuredSelection selection = (IStructuredSelection) instantiatorList.getSelection();
-                if (!selection.isEmpty()) {
-                    FileInstantiator i = (FileInstantiator) selection.getFirstElement();
-                    i.setFilesToInstantiateTemporary(i.getFilesToInstantiatePersistency());
-                    java.util.List<File> files = i.getFilesToInstantiatePersistency();
-                    instantiatorViewer.setCheckedElements(files.toArray());
-                    // do not loose the selection
-                    instantiatorList.setSelection(selection, true);
-                    // restore the user expanded tree
-                    instantiatorViewer.setExpandedElements(files.toArray());
+    private String getScriptSignature() {
+        String result;
+        Script vilScript = getProductLineProject().getBuildScript();
+        if (null != vilScript) {
+            result = vilScript.getName();
+            result += "(";
+            for (int p = 0; p < vilScript.getParameterCount(); p++) {
+                if (p > 0) {
+                    result += ", ";
                 }
+                VariableDeclaration decl = vilScript.getParameter(p);
+                result += decl.getType().getVilName();
+                result += " ";
+                result += decl.getName();
             }
-        });
+            result += ")";
+        } else {
+            result = "?";
+        }
+        return result;
+    }
+    
+    /**
+     * Reacts on general tree selections and enables / disables buttons.
+     * 
+     * @author Holger Eichelberger
+     */
+    private class TreeSelectionListener implements ISelectionChangedListener {
+
+        @Override
+        public void selectionChanged(SelectionChangedEvent event) {
+            TreeNode selected = getSelected(event.getSelection());
+            setEnabled(insertInstantiatorButton, selected, Insertable.INSTANTIATOR);
+            //setEnabled(addCopyRuleButton, selected, Insertable.RULE);
+            //setEnabled(addRuleButton, selected, Insertable.RULE);
+            //setEnabled(addSystemCallButton, selected, Insertable.RULE);
+            //deleteElementButton.setEnabled(null != selected);
+        }
+        
     }
 
     /**
-     * Creates a listener for the multiple files calculation button.
+     * Changes the enabled state of <code>button</code> dependent on the selected <code>node</code> and the
+     * intended <code>insertable</code>.
+     * 
+     * @param button the button
+     * @param node the selected node (may be <b>null</b>)
+     * @param insertable the insertable
      */
-    private void addMultipleListener() {
-        multipleButton.addSelectionListener(new SelectionAdapter() {
-            @Override
-            public void widgetSelected(SelectionEvent evt) {
-                multipleList.setInput(getProductLineProject().getInstantiatorController()
-                        .getListofMultipleInstantiatedFiles(getProductLineProject().getProjectName()));
+    private static void setEnabled(Button button, TreeNode node, Insertable insertable) {
+        boolean enabled;
+        if (null == node) {
+            enabled = false;
+        } else {
+            enabled = InsertionPoint.NONE != node.supportedInsertionPoint(insertable);
+        }
+        button.setEnabled(enabled);
+    }
+    
+    /**
+     * Returns the selected tree node.
+     * 
+     * @param selection the current selection
+     * @return the selected tree node (may be <b>null</b> if none is selected)
+     */
+    private TreeNode getSelected(ISelection selection) {
+        TreeNode result = null;
+        if (!selection.isEmpty() && selection instanceof TreeSelection) {
+            TreeSelection tSelection = (TreeSelection) selection;
+            Object selected = tSelection.getFirstElement(); // single selection only, see above
+            if (selected instanceof TreeNode) {
+                result = (TreeNode) selected;
             }
-        });
+        }
+        return result;
     }
 
     @Override
     public void refresh() {
-        instantiatorList.setInput(getProductLineProject().getInstantiatorController().getTransformators());
+        // TODO refresh upon VIL change
+        ruleTree.setInput(createRuleTree());
     }
-
+ 
+    /**
+     * Creates the rule tree for the tree viewer.
+     * 
+     * @return the rule tree
+     */
+    private TreeNode[] createRuleTree() {
+        TreeNode[] result = null;
+        Script vilScript = getProductLineProject().getBuildScript();
+        if (null != vilScript) {
+            RuleTreeVilVisitor visitor = new RuleTreeVilVisitor();
+            try {
+                vilScript.accept(visitor);
+            } catch (VilException e) {
+                // ignore
+            }
+            result = visitor.getRootNodes();
+        }
+        return result;
+    }
+    
     @Override
     public final String getPageText() {
         return EditorConstants.INSTANTIATOR_PAGE;
@@ -331,4 +414,5 @@ public class InstantiatorConfigPage extends AbstractEASyEditorPage {
     public void close() {
         // No action needed
     }
+    
 }

@@ -42,7 +42,7 @@
 	    <!--
 	    <echo message="${toString:includes}"/>
         -->
-		<javac srcdir="${src.dir}" debug="on" destdir="${build.classes.dir}" includeAntRuntime="no" failonerror="true" source="${javacSource}" target="${javacTarget}" encoding="${javac.encoding}">
+		<javac srcdir="${src.dir}" debug="true" destdir="${build.classes.dir}" includeAntRuntime="no" failonerror="true" source="${javacSource}" target="${javacTarget}" encoding="${javac.encoding}">
 			<classpath refid="includes" />
 		</javac>
     </target>

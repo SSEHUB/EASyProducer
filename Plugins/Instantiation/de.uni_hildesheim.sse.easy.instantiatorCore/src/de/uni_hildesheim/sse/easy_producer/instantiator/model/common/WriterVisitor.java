@@ -2,8 +2,9 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.common;
 
 import java.io.Writer;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionWriter;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IResolvable;
+import de.uni_hildesheim.sse.utils.modelManagement.IModel;
 import de.uni_hildesheim.sse.utils.modelManagement.IVersionRestriction;
 import de.uni_hildesheim.sse.utils.modelManagement.Version;
 
@@ -65,10 +66,19 @@ public class WriterVisitor<V extends VariableDeclaration> extends ExpressionWrit
     protected void setPrintExpressionStatementNewLine(boolean printExpressionStatementNewLine) {
         this.printExpressionStatementNewLine = printExpressionStatementNewLine;
     }
+
+    /**
+     * Prints the modifiers of the given variable declaration <code>var</code>.
+     * 
+     * @param var the variable declaration
+     */
+    protected void printModifiers(VariableDeclaration var) {
+    }
     
     @Override
-    public Object visitVariableDeclaration(VariableDeclaration var) throws VilLanguageException {
+    public Object visitVariableDeclaration(VariableDeclaration var) throws VilException {
         printIndentation();
+        printModifiers(var);
         if (var.isConstant()) {
             print("const ");
         }
@@ -79,18 +89,14 @@ public class WriterVisitor<V extends VariableDeclaration> extends ExpressionWrit
             printWhitespace();
             print('=');
             printWhitespace();
-            try {
-                var.getExpression().accept(this);
-            } catch (ExpressionException e) {
-                throw new VilLanguageException(e);
-            }
+            var.getExpression().accept(this);
         }
         println(";");
         return null;
     }
 
     @Override
-    public Object visitAdvice(Advice advice) throws VilLanguageException {
+    public Object visitAdvice(Advice advice) throws VilException {
         printIndentation();
         print("@advice(");
         print(advice.getName());
@@ -115,10 +121,10 @@ public class WriterVisitor<V extends VariableDeclaration> extends ExpressionWrit
      * Prints the parameter list of <code>parameterizable</code>.
      * 
      * @param parameterizable the element to print the parameter list
-     * @throws VilLanguageException in case that visiting fails
+     * @throws VilException in case that visiting fails
      */
     protected void printParameterList(IParameterizable<V> parameterizable) 
-        throws VilLanguageException {
+        throws VilException {
         print('(');
         for (int p = 0; p < parameterizable.getParameterCount(); p++) {
             if (p > 0) {
@@ -134,15 +140,11 @@ public class WriterVisitor<V extends VariableDeclaration> extends ExpressionWrit
     }
 
     @Override
-    public Object visitExpressionStatement(ExpressionStatement statement) throws VilLanguageException {
+    public Object visitExpressionStatement(ExpressionStatement statement) throws VilException {
         if (printExpressionStatementIndentation) {
             printIndentation();
         }
-        try {
-            statement.getExpression().accept(this);
-        } catch (ExpressionException e) {
-            throw new VilLanguageException(e);
-        }
+        statement.getExpression().accept(this);
         if (endsWithSemicolon(statement)) {
             print(";");
             if (printExpressionStatementNewLine) {
@@ -184,6 +186,33 @@ public class WriterVisitor<V extends VariableDeclaration> extends ExpressionWrit
      */
     protected static final int o2i(Object object) {
         return null == object ? 0 : 1;
+    }
+
+    @Override
+    public Object visitTypedef(Typedef typedef) throws VilException {
+        printIndentation();
+        print("typedef");
+        printWhitespace();
+        print(typedef.getName());
+        printWhitespace();
+        print(typedef.getType().getVilName());
+        println(";");
+        return null;
+    }
+    
+    /**
+     * Prints the typedefs of <code>model</code>.
+     * 
+     * @param <R> the resolvable type
+     * @param <M> the model type
+     * @param model the model to print the typedefs for
+     * @throws VilException in case of printing problems
+     */
+    protected <R extends IResolvable, M extends IModel> void printTypedefs(AbstractResolvableModel<R, M> model) 
+        throws VilException {
+        for (int t = 0; t < model.getTypedefCount(); t++) {
+            model.getTypedef(t).accept(this);
+        }
     }
 
 }

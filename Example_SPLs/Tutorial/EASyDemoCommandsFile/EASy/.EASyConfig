@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProductLineProject id="94c34d5b-ad4f-431f-bb72-56d245cedc18" name="EASyDemoCommandsFile" version="0" location="EASyDemoCommandsFile">
+	<predecessors>
+		<entity id="fe903347-a993-45c9-bda2-35181f8aff05" name="EASyDemoCommandsPlatform" version="0" location="EASyDemoCommandsPlatform" />
+	</predecessors>
+	<successors>
+		<entity id="92c6eef9-8f1e-478a-9cb4-e8bc2d7c7a46" name="New_Product2" version="0" location="New_Product2" />
+		<entity id="6b24a90e-063d-4440-a372-27a5fce5ec02" name="ProdFile" version="0" location="ProdFile" />
+	</successors>
+	<settings>
+		<entity debug="false" />
+	</settings>
+	<reasoners>
+		<entity timeout="0" />
+	</reasoners>
+	<instantiators>
+	</instantiators>
+</ProductLineProject>

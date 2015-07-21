@@ -1,71 +1,194 @@
 project DataManagementCfg {
  
     import DataManagement;
-  
+    import BasicsCfg;
+ 
+    //DataSources for the priority pipeline 
     DataSource spring;
     spring = {
+		host = "springtechno.org",
 	    name = "Spring Financial Data",
+	    artifact="eu.qualimaster:spring-client-simulator:0.0.1-SNAPSHOT",
 		storageLocation = "input/spring",
 		strategy = DataManagementStrategy.LeastRecentlyUsed,
-		host = "147.172.177.22",
-		timeLine = 0
+		timeLine = 1000,
+		input = {
+              {
+              	name = "symbolList",
+              	fields={Field{name="allSymbols", type=FieldType.STRINGLIST}}
+              },
+              {
+              	name = "springStream",
+              	fields={Field{name="symbolTuple", type=FieldType.STRING}}
+              }
+		},
+		sourceCls = "eu.qualimaster.algorithms.imp.correlation.SpringClientSimulator"
 	}; 
 	 
-	DataSource tweet;
-	tweet = {
-		name = "Tweet Stream data",
-		storageLocation = "input/tweet",
+	DataSource twitter;
+	twitter = {
+		host = "twitter.com",
+		name = "Twitter Stream Data",
+		artifact = "eu.qualimaster:TwitterStreamDataSource:0.0.4",
+		storageLocation = "input/twitter",
 		strategy = DataManagementStrategy.None,
-		host ="",
-		timeLine = 0
+		timeLine = 0,
+		input = {
+			{
+				name = "symbolList",
+				fields={Field{name="allSymbols", type=FieldType.STRINGLIST}}
+			},
+			{
+				name = "twitterStream",
+				fields={Field{name="status", type=FieldType.OBJECT}}
+			}
+		},
+		sourceCls = "eu.qualimaster.data.stream.source.TwitterFileStreaming",
+		parameters={
+			StringParameter{name="consumerKey"},
+			StringParameter{name="consumerSecret"},
+			StringParameter{name="accessToken"},
+			StringParameter{name="accessTokenSecret"},
+			IntegerParameter{name="queueSize"},
+			StringParameter{name="tweetDirectory"},
+			RealParameter{name="speedFactor"},
+			BooleanParameter{name="runLocally"},
+			BooleanParameter{name="adjustTimeToNow"},
+			BooleanParameter{name="realLoops"}
+		}			
 	};
 	
-	DataSource QMSource;
-	QMSource = {
-		name = "QM Source data",
-		storageLocation = "input/QMSource",
-		strategy = DataManagementStrategy.None,
-		host ="",
-		timeLine = 0
-	};
-	
-	dataSources = {refBy(spring), refBy(tweet), refBy(QMSource)};
-	
-	DataSink publicTsi;
-	publicTsi = {
-	    name = "TSI Public Financial Sink",
-		storageLocation = "output/tsi",
-		strategy = DataManagementStrategy.None,
-		timeLine = 0
-	};
-	 
-	DataSink publicL3s;
-	publicL3s = {
-		name = "L3S Public Sink",
-		storageLocation = "output/l3s",
-		strategy = DataManagementStrategy.None,
-		timeLine = 0
-	};
-	
-	DataSink QMSink;
-	QMSink = {
-		name = "QM Public Sink",
-		storageLocation = "input/QM",
-		strategy = DataManagementStrategy.None,
-		timeLine = 0
+	DataSource randomSource;
+	randomSource = {
+		name = "Random Source",
+		artifact = "eu.qualimaster.test:RandomSourceAlg:0.0.1",
+		input = {
+			{
+				name = "randomData",
+			    fields={Field{name="randomInteger", type=FieldType.INTEGER}}
+			}			
+		},
+		sourceCls = "eu.qualimaster.algorithms.RandomSourceAlg"			
 	};
 
-	dataSinks = {refBy(publicTsi), refBy(publicL3s), refBy(QMSink)};
+        dataSources = {refBy(spring), refBy(twitter), refBy(randomSource)};	
+	/* 
+	//DataSources for example pipeline --test
+	DataSource exampleSpring;
+	exampleSpring = {
+		host = "springtechno.org",
+		name = "Example Spring Data",
+		storageLocation = "input/exampleSpring",
+		strategy = DataManagementStrategy.None,
+		timeLine = 0,
+		input = {
+              {fields={Field{name="symbolTuple", type=FieldType.STRING}}}             
+		},
+		sourceCls = "eu.qualimaster.data.imp.ExampleSpringClient"
+	};
 	
+	
+	
+	//DataSinks for priority pipeline
+	DataSink publicTSI;
+	publicTSI = {
+	    name = "Public Financial Sink",
+		storageLocation = "output/tsi",
+		strategy = DataManagementStrategy.None,
+		timeLine = 0,
+		output = {
+    		{fields={Field{name="pairwiseCorrelation", type=FieldType.STRING}}}
+    	}		
+	};
+	 
+	DataSink publicL3S;
+	publicL3S = {
+		name = "Public Twitter Sink",
+		storageLocation = "output/l3s",
+		strategy = DataManagementStrategy.None,
+		timeLine = 0,
+		output = {
+    		{fields={
+    			Field{name="symbolId", type=FieldType.STRING},
+    			Field{name="timestamp", type=FieldType.LONG},
+    			Field{name="value", type=FieldType.REAL},
+    			Field{name="volume", type=FieldType.INTEGER}
+    		}}
+		}		
+	};
+    */
+    DataSink priorSnk;
+    priorSnk = {
+    	name = "Priority Data Sink",
+    	artifact = "eu.qualimaster:priority-data-sink:0.0.1-SNAPSHOT",
+    	storageLocation = "output/prior",
+    	strategy = DataManagementStrategy.None,
+    	timeLine = 0,
+    	output = {
+    		{
+    			name = "pairwiseFinancial",
+    			fields={Field{name="pairwiseCorrelationFinancial", type=FieldType.STRING}}
+    		},
+    		{
+    			name = "pairwiseTwitter",
+    			fields={Field{name="pairwiseCorrelationTwitter", type=FieldType.STRING}}
+    		}
+    	},
+    	sinkCls = "eu.qualimaster.algorithms.imp.correlation.PriorityDataSinkForFinancialAndTwitter"
+    };
+    
+    DataSink randomSink;
+    randomSink = {
+    	name = "Random Sink",
+    	artifact = "eu.qualimaster.test:RandomSinkAlg:0.0.2-SNAPSHOT",
+    	output = {
+			{
+				name = "proccessedData",
+			    fields={Field{name="randomInteger", type=FieldType.INTEGER}}
+			}			
+		},
+		sinkCls = "eu.qualimaster.algorithms.RandomSinkAlg"
+    };
+    /* 
+    //DataSinks for example pipeline --test
+    DataSink exampleSnk;
+    exampleSnk = {
+    	name = "Example Sink",
+    	storageLocation = "output/example",
+    	strategy = DataManagementStrategy.None,
+    	timeLine = 0,
+		output={
+			{
+			    fields={
+			      Field{name="streamID", type=FieldType.STRING},
+			      Field{name="timestamp", type=FieldType.STRING},
+			      Field{name="quote", type=FieldType.REAL},
+			      Field{name="volume", type=FieldType.INTEGER}
+		        }
+		    }
+		}
+    };
+    */
+	dataSinks = {refBy(priorSnk),refBy(randomSink)};
+	
+	PersistentDataElement hBaseDataManagement;
+	hBaseDataManagement = {
+		name = "hBase DataManagement",
+		storageLocation = "hBase-l3s",
+		strategy = DataManagementStrategy.FirstInFirstOut,
+		timeLine = 0
+	};
+	persistentDataElements = {refBy(hBaseDataManagement)};
 	freeze {
 		spring;
-		tweet;
-		QMSource;
+		twitter; 
+		randomSource;
 		dataSources;
-		publicTsi;
-		publicL3s;
-		QMSink;
+		priorSnk;
+		randomSink;
 		dataSinks;
-	}
+		hBaseDataManagement;
+		persistentDataElements;
+	} but (f|f.bindingTime == BindingTime.runtime)
 	
 }

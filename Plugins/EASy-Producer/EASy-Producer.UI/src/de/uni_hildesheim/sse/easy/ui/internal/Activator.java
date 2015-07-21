@@ -4,6 +4,9 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
+import de.uni_hildesheim.sse.dslCore.TopLevelModelAccessor;
+import de.uni_hildesheim.sse.dslcore.ui.ConfigurationEditorFactory;
+import de.uni_hildesheim.sse.easy.ui.productline_editor.ConfigurationTableEditorFactory;
 import de.uni_hildesheim.sse.easy_producer.core.mgmt.VilArgumentProvider;
 
 /**
@@ -41,6 +44,9 @@ public class Activator extends AbstractUIPlugin {
         plugin = this;
         VilArgumentProvider.add(new VilClasspathProvider("classpath"));
         EASyPreferenceStore.loadOnStart();
+        TopLevelModelAccessor.register(IvmlModelAccessor.EXTENSION, IvmlModelAccessor.INSTANCE);
+        TopLevelModelAccessor.register(VilModelAccessor.EXTENSION, VilModelAccessor.INSTANCE);
+        ConfigurationEditorFactory.setCreator(new ConfigurationTableEditorFactory());
     }
 
     /**
@@ -54,6 +60,8 @@ public class Activator extends AbstractUIPlugin {
     @Override
     public void stop(BundleContext context) throws Exception {
         plugin = null;
+        TopLevelModelAccessor.unregister(IvmlModelAccessor.EXTENSION);
+        TopLevelModelAccessor.unregister(VilModelAccessor.EXTENSION);
         super.stop(context);
     }
 

@@ -1,5 +1,7 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.common;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.FieldDescriptor;
+
 /**
  * Implements a no-action execution tracer.
  * 
@@ -19,11 +21,11 @@ public class NoTracer extends de.uni_hildesheim.sse.easy_producer.instantiator.m
     }
 
     @Override
-    public void valueDefined(VariableDeclaration var, Object value) {
+    public void valueDefined(VariableDeclaration var, FieldDescriptor field, Object value) {
     }
 
     @Override
-    public void traceExecutionException(VilLanguageException exception) {
+    public void traceExecutionException(VilException exception) {
     }
 
 }

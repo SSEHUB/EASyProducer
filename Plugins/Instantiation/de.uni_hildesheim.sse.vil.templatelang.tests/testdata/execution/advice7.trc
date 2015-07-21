@@ -3,6 +3,5 @@
     c1 <- adviceTestVM1::c1
     -> byName(DecisionVariable, String) with (adviceTestVM1::c1, iVal) = adviceTestVM1::TestCompoundType::iVal
     cmp <- adviceTestVM1::c1
-    -> iVal(TestCompoundType) with (adviceTestVM1::c1) = adviceTestVM1::TestCompoundType::iVal
     c2 <- adviceTestVM1::c1
     -> byName(DecisionVariable, String) with (adviceTestVM1::c1, iVal) = adviceTestVM1::TestCompoundType::iVal

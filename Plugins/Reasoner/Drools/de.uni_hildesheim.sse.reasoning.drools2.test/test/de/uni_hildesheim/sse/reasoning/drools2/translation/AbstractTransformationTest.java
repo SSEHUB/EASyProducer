@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.eclipse.emf.common.util.URI;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 
@@ -55,6 +56,18 @@ public class AbstractTransformationTest extends AbstractTest<Project> {
             VarModel.INSTANCE.locations().addLocation(FOLDER, ProgressObserver.NO_OBSERVER);
         } catch (ModelManagementException e) {
             Assert.fail("Could not add location of test files.");
+        }
+    }
+    
+    /**
+     * Frees the memory after testing.
+     */
+    @AfterClass
+    public static void tearDownAfterClass() {
+        try {
+            VarModel.INSTANCE.locations().removeLocation(FOLDER, ProgressObserver.NO_OBSERVER);
+        } catch (ModelManagementException e) {
+            Assert.fail("Could not remove location of test files.");
         }
     }
     

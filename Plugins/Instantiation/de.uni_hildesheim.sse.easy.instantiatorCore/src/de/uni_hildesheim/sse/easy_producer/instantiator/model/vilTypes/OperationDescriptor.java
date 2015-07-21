@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionEvaluator;
 
 /**
@@ -50,16 +51,16 @@ public abstract class OperationDescriptor implements IMetaOperation {
     /**
      * Defines a constant unmodifiable list for empty parameters.
      */
-    public static final List<TypeDescriptor<? extends IVilType>> EMPTY_PARAMETER 
-        = Collections.unmodifiableList(new ArrayList<TypeDescriptor<? extends IVilType>>(0));
+    public static final List<TypeDescriptor<?>> EMPTY_PARAMETER 
+        = Collections.unmodifiableList(new ArrayList<TypeDescriptor<?>>(0));
 
     private String name; // only used if alias
     private boolean isConstructor = false;
     private OperationType opType = OperationType.NORMAL;
-    private TypeDescriptor<? extends IVilType> declaringType;
-    private TypeDescriptor<? extends IVilType> returnType; // lazy
+    private TypeDescriptor<?> declaringType;
+    private TypeDescriptor<?> returnType; // lazy
     private AliasType aliasType = AliasType.NONE;
-    private List<TypeDescriptor<? extends IVilType>> parameter; // lazy
+    private List<TypeDescriptor<?>> parameter; // lazy
     private boolean acceptsNamedParameters = false; // lazy
     private boolean acceptsImplicitParameters = false; // lazy
     private boolean isConversion;
@@ -73,7 +74,7 @@ public abstract class OperationDescriptor implements IMetaOperation {
      * @param name the alias name (may be <b>null</b> if the original name of <code>method</code> shall be used)
      * @param isConstructor whether the operation is a constructor
      */
-    protected OperationDescriptor(TypeDescriptor<? extends IVilType> declaringType, String name, 
+    protected OperationDescriptor(TypeDescriptor<?> declaringType, String name, 
         boolean isConstructor) {
         this.declaringType = declaringType;
         this.name = name;
@@ -132,7 +133,7 @@ public abstract class OperationDescriptor implements IMetaOperation {
      * @param acceptsNamedParameters whether this operation accepts named parameters
      * @param acceptsImplicitParameters whether this operation accepts implicit parameters
      */
-    protected void setParameters(List<TypeDescriptor<? extends IVilType>> parameters, boolean acceptsNamedParameters, 
+    protected void setParameters(List<TypeDescriptor<?>> parameters, boolean acceptsNamedParameters, 
         boolean acceptsImplicitParameters) {
         this.parameter = parameters;
         this.acceptsNamedParameters = acceptsNamedParameters;
@@ -144,7 +145,7 @@ public abstract class OperationDescriptor implements IMetaOperation {
      * 
      * @param returnType the return type of this operation
      */
-    protected void setReturnType(TypeDescriptor<? extends IVilType> returnType) {
+    protected void setReturnType(TypeDescriptor<?> returnType) {
         this.returnType = returnType;
     }
     
@@ -277,7 +278,7 @@ public abstract class OperationDescriptor implements IMetaOperation {
      * 
      * @return the declaring type (may be <b>null</b> in case of a wrapped external Java method)
      */
-    public TypeDescriptor<? extends IVilType> getDeclaringType() {
+    public TypeDescriptor<?> getDeclaringType() {
         return declaringType;
     }
     
@@ -308,9 +309,9 @@ public abstract class OperationDescriptor implements IMetaOperation {
         INCOMPATIBLE,
 
         /**
-         * Types are incompatible but due to lazy arguments (<b>null</b>), lazy execution is possible.
+         * Argument evaluates to <b>null</b>, i.e., stop expression evaluation.
          */
-        LAZY_POSSIBLE
+        ARG_EVALUATION_FAILED
     }
     
     /**
@@ -440,7 +441,7 @@ public abstract class OperationDescriptor implements IMetaOperation {
      * 
      * @return the return type
      */
-    public TypeDescriptor<? extends IVilType> getReturnType() {
+    public TypeDescriptor<?> getReturnType() {
         initialize();
         return returnType;
     }
@@ -462,7 +463,7 @@ public abstract class OperationDescriptor implements IMetaOperation {
      * @return the specified parameter type
      * @throws IndexOutOfBoundsException if <code>index &lt; 0 || index &gt;= {@link #getParameterCount()}</code>
      */
-    public TypeDescriptor<? extends IVilType> getParameterType(int index) {
+    public TypeDescriptor<?> getParameterType(int index) {
         initialize();
         return parameter.get(index);
     }
@@ -545,6 +546,13 @@ public abstract class OperationDescriptor implements IMetaOperation {
     }
     
     /**
+     * Returns whether a generc parameter of the operand shall be used as return type.
+     * 
+     * @return the parameter to be used as index number, negative if none
+     */
+    public abstract int useGenericParameterAsReturn();
+    
+    /**
      * Returns whether a parameter shall be used as return type.
      * 
      * @return the parameter to be used as index number, negative if none
@@ -557,5 +565,36 @@ public abstract class OperationDescriptor implements IMetaOperation {
      * @return <code>true</code> if artifacts shall be stored, <code>false</code> else
      */
     public abstract boolean storeArtifactsBeforeExecution();
+
+    /**
+     * Indicates whether this function requires dynamic expression processing and may cause problems with 
+     * serialized models in standalone settings without xText.
+     * 
+     * @return <code>true</code> if this function requires dynamic exception processing, <code>false</code> else
+     */
+    public boolean requiresDynamicExpressionProcessing() {
+        return false;
+    }
+    
+    /**
+     * Returns whether an execution of this descriptor shall be traced. Conversions shall not be traced by default as 
+     * well as some operation types.
+     * 
+     * @return <code>true</code> if it shall be traced, <code>false</code>
+     */
+    public boolean trace() {
+        return !isConversion() && getOperationType().trace();
+    }
+    
+    /**
+     * Tries to specialize this operation descriptor for the given type, e.g., to consider the specific generic
+     * parameters of that type.
+     * 
+     * @param declaringType the declaring type to specialize for
+     * @return either <b>this</b> if no specialization is needed or a specializing instance
+     */
+    public OperationDescriptor specializeFor(TypeDescriptor<?> declaringType) {
+        return this;
+    }
 
 }

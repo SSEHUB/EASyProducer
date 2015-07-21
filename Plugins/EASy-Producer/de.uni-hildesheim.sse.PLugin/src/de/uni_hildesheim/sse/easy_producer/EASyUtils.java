@@ -32,7 +32,7 @@ import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceException
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Rule;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.persistency.EASyPersistencer;
 import de.uni_hildesheim.sse.easy_producer.persistency.ResourcesMgmt;
 import de.uni_hildesheim.sse.easy_producer.persistency.eclipse.PersistenceUtils;
@@ -130,7 +130,7 @@ public class EASyUtils {
                         try {
                             Rule target = imp.getResolved().getMainRule(false);
                             main.appendCallTo(target, true);
-                        } catch (ExpressionException e) {
+                        } catch (VilException e) {
                             LOGGER.exception(e);
                         }
                     }

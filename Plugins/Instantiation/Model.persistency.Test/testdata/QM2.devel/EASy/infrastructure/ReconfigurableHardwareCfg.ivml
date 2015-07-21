@@ -2,17 +2,19 @@ project ReconfigurableHardwareCfg {
 
     import ReconfigurableHardware;	
 
-	clusters = { 
-	    MPCCNode{
-	        name = "MPCCCluster",
-	        host = "147.172.177.22:6666",
-			numCPUs = 12,
-			numDFEs = 4
-		}
-	}; 
+    MPCCNode cluster1;
+    cluster1 = MPCCNode {
+        name = "MPCCCluster",
+        host = "147.172.177.22:6666",
+		numCPUs = 12,
+		numDFEs = 4
+	};
+
+	clusters = {refBy(cluster1)};
 		 
 	freeze {
+		cluster1;
 		clusters; 
-	}
+	} but (f|f.bindingTime == BindingTime.runtime)
 
 }

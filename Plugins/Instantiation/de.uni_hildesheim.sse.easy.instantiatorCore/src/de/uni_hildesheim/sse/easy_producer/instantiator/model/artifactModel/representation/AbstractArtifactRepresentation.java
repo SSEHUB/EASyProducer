@@ -2,7 +2,7 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.rep
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactChangedListenerQueue;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IArtifactChangedListenerQueue;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
 
 /**
@@ -44,9 +44,9 @@ public abstract class AbstractArtifactRepresentation implements IArtifactReprese
     /**
      * Triggers all registerered listeners in {@link #getListeners()}.
      * 
-     * @throws ArtifactException in case that some listeners fail
+     * @throws VilException in case that some listeners fail
      */
-    public void triggerArtifactChanged() throws ArtifactException {
+    public void triggerArtifactChanged() throws VilException {
         if (triggerEnabled) {
             listeners.triggerArtifactChanged(this);
         }

@@ -1,0 +1,19 @@
+project dispatch3 {
+  version v0;
+  
+  compound Node {
+  }
+  
+  compound ElementNode refines Node {
+  }
+  
+  compound FamilyNode refines ElementNode {
+  }
+  
+  FamilyNode fam = {};
+  
+  freeze {
+    fam;
+  };
+  
+}

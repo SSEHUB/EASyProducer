@@ -1,13 +1,14 @@
 project InfrastructureCfg {
 	
 	import Infrastructure;
-	import PipelinesCfg;
+	import PipelinesCfg; 
 	 
 	// alternative: activePipelines = {pipelines[0]};
-	activePipelines = {refBy(pipTSI)};
-
+	activePipelines = {refBy(PriorityPip),refBy(PipelineVar_1)};       
+	interfaceArtifact = "eu.qualimaster:PriorityPipelineInterfaces:0.0.5-SNAPSHOT";
 	freeze {
-	    activePipelines;     
-	}       
+	    activePipelines;
+        interfaceArtifact;                
+	} but (f|f.bindingTime == BindingTime.runtime)
       
-}                       
+}                          

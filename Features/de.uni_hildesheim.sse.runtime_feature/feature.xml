@@ -81,13 +81,6 @@
          unpack="false"/>
 
    <plugin
-         id="de.uni_hildesheim.sse.easy.instantiator.maven"
-         download-size="0"
-         install-size="0"
-         version="3.2.3.0"
-         unpack="false"/>
-
-   <plugin
          id="de.uni_hildesheim.sse.easy_producer.core"
          download-size="0"
          install-size="0"
@@ -106,6 +99,27 @@
          download-size="0"
          install-size="0"
          version="1.8.2"
+         unpack="false"/>
+
+   <plugin
+         id="com.google.guava"
+         download-size="0"
+         install-size="0"
+         version="10.0.1.v201203051515"
+         unpack="false"/>
+
+   <plugin
+         id="de.uni_hildesheim.sse.easy.instantiator.ant"
+         download-size="0"
+         install-size="0"
+         version="0.2.3"
+         unpack="false"/>
+
+   <plugin
+         id="de.uni_hildesheim.sse.easy.instantiator.aspectj"
+         download-size="0"
+         install-size="0"
+         version="0.2.3"
          unpack="false"/>
 
 </feature>

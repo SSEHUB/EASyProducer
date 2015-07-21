@@ -7,7 +7,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.Frag
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IArtifactVisitor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Binary;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Text;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IStringValueProvider;
 
 /**
@@ -40,9 +40,9 @@ public class XmlAttribute extends FragmentArtifact implements IStringValueProvid
      * @param name The name of the new attribute.
      * @param value The value of the new attribute.
      * @return The created XmlAttribute.
-     * @throws ArtifactException if attribute could not be created.
+     * @throws VilException if attribute could not be created.
      */
-    public static XmlAttribute create(XmlElement parent, String name, String value) throws ArtifactException {       
+    public static XmlAttribute create(XmlElement parent, String name, String value) throws VilException {       
         return create(parent, name, value, true);
     }
     
@@ -55,15 +55,15 @@ public class XmlAttribute extends FragmentArtifact implements IStringValueProvid
      * @param value The value of the new attribute.
      * @param forceOverwrite True if existing attributes with same name shall be overwritten. Default = true.
      * @return The created XmlAttribute. The existing attribute if forceOverwrite is false.
-     * @throws ArtifactException if attribute could not be created for different reason then pre-existance.
+     * @throws VilException if attribute could not be created for different reason then pre-existance.
      */
     public static XmlAttribute create(XmlElement parent, String name, String value, boolean forceOverwrite) 
-        throws ArtifactException {
+        throws VilException {
         
         XmlAttribute newAttribute = null;
         
         if (null == parent) {
-            throw new ArtifactException("Can not add attribute to NULL element!", ArtifactException.ID_IS_NULL);
+            throw new VilException("Can not add attribute to NULL element!", VilException.ID_IS_NULL);
         }
         
         Element parentElem = (Element) parent.getNode();
@@ -72,7 +72,8 @@ public class XmlAttribute extends FragmentArtifact implements IStringValueProvid
                 parentElem.setAttribute(name, value);
                 newAttribute = parent.addAttribute(name, value);
             } catch (DOMException exc) {
-                throw new ArtifactException("Invalid character, name or ID!", ArtifactException.ID_INVALID_CHARACTER);
+                throw new VilException("Invalid character, name or ID!", 
+                    VilException.ID_INVALID_CHARACTER);
             }
         } else {
             newAttribute = parent.getAttribute(name);
@@ -83,14 +84,14 @@ public class XmlAttribute extends FragmentArtifact implements IStringValueProvid
     }
     
     @Override
-    public void delete() throws ArtifactException {
+    public void delete() throws VilException {
         checkValidity();
         parent.deleteAttribute(this);
         this.parent = null;
     }
 
     @Override
-    public String getName() throws ArtifactException {
+    public String getName() throws VilException {
         checkValidity();
         return name;
     }
@@ -99,9 +100,9 @@ public class XmlAttribute extends FragmentArtifact implements IStringValueProvid
      * Returns the value of this attribute.
      * 
      * @return the value of this attribute
-     * @throws ArtifactException in case that this object is invalid (was deleted)
+     * @throws VilException in case that this object is invalid (was deleted)
      */
-    public String getValue() throws ArtifactException {
+    public String getValue() throws VilException {
         checkValidity();
         return value;
     }
@@ -110,28 +111,28 @@ public class XmlAttribute extends FragmentArtifact implements IStringValueProvid
      * Changes the value of this attribute.
      * 
      * @param value the new value of this attribute
-     * @throws ArtifactException in case that this object is invalid (was deleted)
+     * @throws VilException in case that this object is invalid (was deleted)
      */
-    public void setValue(String value) throws ArtifactException {
+    public void setValue(String value) throws VilException {
         checkValidity();
         this.value = value;
         this.parent.getNode().getAttributes().getNamedItem(this.name).setNodeValue(value);
     }
 
     @Override
-    public void rename(String name) throws ArtifactException {
+    public void rename(String name) throws VilException {
         checkValidity();
         parent.renameAttribute(this, name);
     }
 
     @Override
-    public Text getText() throws ArtifactException {
+    public Text getText() throws VilException {
         checkValidity();
         return Text.CONSTANT_EMPTY;
     }
 
     @Override
-    public Binary getBinary() throws ArtifactException {
+    public Binary getBinary() throws VilException {
         checkValidity();
         return Binary.CONSTANT_EMPTY;
     }
@@ -162,11 +163,11 @@ public class XmlAttribute extends FragmentArtifact implements IStringValueProvid
     /**
      * Checks the validity of this object.
      * 
-     * @throws ArtifactException in case that this object is invalid
+     * @throws VilException in case that this object is invalid
      */
-    private void checkValidity() throws ArtifactException {
+    private void checkValidity() throws VilException {
         if (null == parent) {
-            throw new ArtifactException("attribute already deleted", ArtifactException.ID_INVALID);
+            throw new VilException("attribute already deleted", VilException.ID_INVALID);
         }
     }
     
@@ -179,7 +180,7 @@ public class XmlAttribute extends FragmentArtifact implements IStringValueProvid
     }
 
     @Override
-    public void update() throws ArtifactException {
+    public void update() throws VilException {
         // TODO Auto-generated method stub
     }
 

@@ -186,17 +186,17 @@ public class TemplateLangProposalProvider extends AbstractTemplateLangProposalPr
             StyledString toDisplay;
             int priority = 700;
             for (String s : allTypes) {
-                if (s.equals("Set(<ElementType> [ ,<ElementType>]*)")) {
+                if ("Set(<ElementType> [ ,<ElementType>]*)".equals(s)) {
                     toDisplay = new StyledString("Set");
                     proposal = createCompletionProposal(s +" ", toDisplay,
                             imageHelper.getImage(Images.NAME_VARIABLEDECLARATION), priority, context.getPrefix(), context);
                     acceptor.accept(proposal);
-                } else if (s.equals("Sequence(<ElementType>)")) {
+                } else if ("Sequence(<ElementType>)".equals(s)) {
                     toDisplay = new StyledString("Sequence");
                     proposal = createCompletionProposal(s +" ", toDisplay,
                             imageHelper.getImage(Images.NAME_VARIABLEDECLARATION), priority, context.getPrefix(), context);
                     acceptor.accept(proposal);
-                } else if(s.equals("Map(<ElementType> [ ,<ElementType>]*)")) {
+                } else if("Map(<ElementType> [ ,<ElementType>]*)".equals(s)) {
                     toDisplay = new StyledString("Map");
                     proposal = createCompletionProposal(s +" ", toDisplay,
                             imageHelper.getImage(Images.NAME_VARIABLEDECLARATION), priority, context.getPrefix(), context);
@@ -206,9 +206,8 @@ public class TemplateLangProposalProvider extends AbstractTemplateLangProposalPr
                             imageHelper.getImage(Images.NAME_VARIABLEDECLARATION), priority, context.getPrefix(), context);
                     acceptor.accept(proposal);
                 }
-            }  
+            }
         }
-   
     }
     
     @Override

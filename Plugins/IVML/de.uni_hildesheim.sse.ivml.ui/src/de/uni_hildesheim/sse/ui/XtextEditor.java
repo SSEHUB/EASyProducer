@@ -47,14 +47,14 @@ public class XtextEditor extends CommonXtextEditor<VariabilityUnit, Project> {
             modelListener.register(this);
         }
     }
-
+ 
     @Override
     protected String getBundleId() {
         return IvmlBundleId.ID;
     }
 
     @Override
-    protected TranslationResult<Project> createModel(VariabilityUnit root, URI uri) {
+    protected TranslationResult<Project> createModel(VariabilityUnit root, URI uri) {        
         return ModelUtility.INSTANCE.createVarModel(root, uri, true);
     }
 
@@ -67,5 +67,4 @@ public class XtextEditor extends CommonXtextEditor<VariabilityUnit, Project> {
     protected void print(TranslationResult<Project> result, Writer out) {
         ModelUtility.INSTANCE.print(result, out, true, false);
     }
-
 }

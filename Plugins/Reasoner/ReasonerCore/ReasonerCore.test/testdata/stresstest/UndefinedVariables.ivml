@@ -1,0 +1,6 @@
+project UndefinedVariables {
+    Integer A;
+    Integer B;
+    A = 2;
+    (A == 2) xor (B == 2);
+}

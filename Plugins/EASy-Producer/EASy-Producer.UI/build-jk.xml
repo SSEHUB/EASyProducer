@@ -9,6 +9,8 @@
 	<property name="javacTarget" value="1.5"/>
 	
 	<path id ="includes">
+	    <pathelement path="${libs.dslCore}"/>
+	    <pathelement path="${libs.dslCore.ui}"/>
 		<!-- Var Model -->
 		<pathelement path="${libs.utils}"/>
 		<pathelement path="${libs.model}"/>
@@ -17,6 +19,8 @@
         <!-- Instantiation -->
         <pathelement path="${libs.instantiator.copy.core}"/>
         <pathelement path="${libs.instantiator.core}"/>
+        <pathelement path="${libs.vil.core}"/>
+		<pathelement path="${libs.vil.ui}"/>
         <!-- EASy-Producer -->
         <pathelement path="${libs.easy.ui.core}"/>
         <pathelement path="${libs.easy.PLugin}"/>
@@ -53,6 +57,7 @@
 			<fileset dir="${basedir}">
 				<include name="icons/**/*" />
 				<include name="plugin.xml" />
+				<include name="about.ini" />
 			</fileset>
 		</copy>
 		<jar destfile="${build.jar.dir}/${ant.project.name}.jar" basedir="${build.classes.dir}" manifest="META-INF/MANIFEST.MF"/>

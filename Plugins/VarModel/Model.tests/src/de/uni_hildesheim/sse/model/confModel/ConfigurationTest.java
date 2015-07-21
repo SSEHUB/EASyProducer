@@ -34,6 +34,8 @@ import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.FreezeBlock;
 import de.uni_hildesheim.sse.model.varModel.IFreezable;
 import de.uni_hildesheim.sse.model.varModel.Project;
+import de.uni_hildesheim.sse.model.varModel.ProjectImport;
+import de.uni_hildesheim.sse.model.varModel.ProjectInterface;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IntegerType;
 import de.uni_hildesheim.sse.model.varModel.filter.ConstraintFinder;
@@ -43,6 +45,7 @@ import de.uni_hildesheim.sse.model.varModel.values.Value;
 import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
 import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Enum;
+import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
 import de.uni_hildesheim.sse.varModel.testSupport.ProjectTestUtilities;
 
 /**
@@ -327,6 +330,51 @@ public class ConfigurationTest {
         // var2/decl2 should have two attributes (project attribute and variable attribute)
         IDecisionVariable var2 = configuration.getDecision(decl2);
         Assert.assertEquals(2, var2.getAttributesCount());
+    }
+    
+    /**
+     * Tests whether a {@link ProjectInterface} is correctly considered by the {@link Configuration}.
+     * @throws ModelManagementException Must not occur, otherwise {@link ProjectImport#setResolved(Project)}
+     *     is broken.
+     */
+    @Test
+    public void testProjectInterface() throws ModelManagementException {
+        // Create Imported Project
+        DecisionVariableDeclaration publicDecl
+            = new DecisionVariableDeclaration("publicVar", IntegerType.TYPE, project);
+        DecisionVariableDeclaration internalDecl
+            = new DecisionVariableDeclaration("internalVar", IntegerType.TYPE, project);
+        project.add(publicDecl);
+        project.add(internalDecl);
+        
+        // Create Interface
+        String interfaceName = "intf";
+        ProjectInterface pInterface = new ProjectInterface(interfaceName,
+            new DecisionVariableDeclaration[] {publicDecl}, project);
+        project.add(pInterface);
+        
+        // Create Importing Project
+        Project importingProject = new Project("importingProject");
+        ProjectImport pImport = new ProjectImport(project.getName(), interfaceName);
+        importingProject.addImport(pImport);
+        
+        // Test Correct Project Setting
+        ProjectTestUtilities.validateProject(project);
+        pImport.setResolved(project);
+        Assert.assertNotNull(pImport.getResolved());
+        ProjectTestUtilities.validateProject(importingProject);
+        
+        // Create Configuration for Importing Project
+        Configuration config2 = new Configuration(importingProject);
+        IDecisionVariable publicVar = config2.getDecision(publicDecl);
+        IDecisionVariable internalVar = config2.getDecision(internalDecl);
+        
+        // Test correct behavior of importing project
+        Assert.assertNotNull(publicDecl.getName() + " could not be found in " + importingProject.getName(), publicVar);
+        Assert.assertNotNull(internalDecl.getName() + " could not be found in " + importingProject.getName(),
+            internalVar);
+        Assert.assertTrue(publicDecl.getName() + " should be exported, but is not.", publicVar.isVisible());
+        Assert.assertFalse(internalDecl.getName() + " should NOT be exported, but IS.", internalVar.isVisible());
     }
 
 }

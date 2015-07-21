@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor.CompatibilityResult;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
@@ -16,14 +17,14 @@ import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
  * upon registration. This class works on the default type registry (only). Thereby, the available operations are 
  * determined and cached for fast access.
  * 
- * @author Holger Eichelberger
- *
  * @param <T> the specific VilType or Artifact
+ * @author Holger Eichelberger
  */
-class ReflectionTypeDescriptor <T extends IVilType> extends TypeDescriptor <T> {
+public class ReflectionTypeDescriptor <T> extends TypeDescriptor <T> {
 
     // define the constants of the pseudo types here but register
     // only those in the Type registry while startup thay may be used
+    // Add all types into PSEUDO_TYPES array.
     public static final TypeDescriptor<PseudoVoid> VOID;
     public static final TypeDescriptor<PseudoType> TYPE;
     public static final TypeDescriptor<PseudoAny> ANY;
@@ -49,6 +50,7 @@ class ReflectionTypeDescriptor <T extends IVilType> extends TypeDescriptor <T> {
                 }
 
             };
+            v.resolve();
         } catch (VilException e) {
             LOGGER.exception(e);
         }
@@ -60,7 +62,7 @@ class ReflectionTypeDescriptor <T extends IVilType> extends TypeDescriptor <T> {
                 }
 
                 @Override
-                public boolean isAssignableFrom(TypeDescriptor<? extends IVilType> desc) {
+                public boolean isAssignableFrom(TypeDescriptor<?> desc) {
                     return equals(desc); // true
                 }
 
@@ -74,6 +76,7 @@ class ReflectionTypeDescriptor <T extends IVilType> extends TypeDescriptor <T> {
                 }
 
             };
+            t.resolve();
         } catch (VilException e) {
             LOGGER.exception(e);
         }
@@ -85,7 +88,7 @@ class ReflectionTypeDescriptor <T extends IVilType> extends TypeDescriptor <T> {
                 }
 
                 @Override
-                public boolean isAssignableFrom(TypeDescriptor<? extends IVilType> desc) {
+                public boolean isAssignableFrom(TypeDescriptor<?> desc) {
                     return true;
                 }
                 
@@ -103,6 +106,7 @@ class ReflectionTypeDescriptor <T extends IVilType> extends TypeDescriptor <T> {
                     setName("Any");
                 }
             };
+            a.resolve();
         } catch (VilException e) {
             LOGGER.exception(e);
         }
@@ -119,6 +123,7 @@ class ReflectionTypeDescriptor <T extends IVilType> extends TypeDescriptor <T> {
                 }
 
             };
+            r.resolve();
         } catch (VilException e) {
             LOGGER.exception(e);
         }
@@ -131,9 +136,12 @@ class ReflectionTypeDescriptor <T extends IVilType> extends TypeDescriptor <T> {
         // we must use the own class for the conversions due to class initialization sequence
         TypeRegistry.addTypeMapping(TypeDescriptor.class.getSimpleName(), TYPE);
     }
-    
+    // checkstyle: stop declaration order check
+    public static final TypeDescriptor<?>[] PSEUDO_TYPES = {VOID, TYPE, ANY, VERSION};
+    // checkstyle: resume declaration order check    
     private Class<T> cls;
     private boolean canBeInstantiated = false; // to be initialized while adding operations
+    private IMetaType superType;
 
     /**
      * Stores non-assignable classes.
@@ -148,8 +156,8 @@ class ReflectionTypeDescriptor <T extends IVilType> extends TypeDescriptor <T> {
      * @param cls the class to create the type descriptor for
      * @throws VilException if analyzing the class fails for some reason
      */
-    ReflectionTypeDescriptor(Class<T> cls) throws VilException {
-        this(cls, (TypeDescriptor<? extends IVilType>[]) null);
+    protected ReflectionTypeDescriptor(Class<T> cls) throws VilException {
+        this(cls, (TypeDescriptor<?>[]) null);
     }
     
     /**
@@ -159,27 +167,51 @@ class ReflectionTypeDescriptor <T extends IVilType> extends TypeDescriptor <T> {
      * @param parameter type parameter (may be <b>null</b>)
      * @throws VilException if analyzing the class fails for some reason
      */
-    ReflectionTypeDescriptor(Class<T> cls, TypeDescriptor<? extends IVilType>... parameter) throws VilException {
+    ReflectionTypeDescriptor(Class<T> cls, TypeDescriptor<?>... parameter) throws VilException {
         super(parameter);
         this.cls = cls;
-        ClassMeta meta = cls.getAnnotation(ClassMeta.class);
-        Instantiator inst = cls.getAnnotation(Instantiator.class);
-        setName(getAlias(meta));
-        Class<?> further = null;
-        if (null != meta) {
-            nAssign = meta.nAssign();
-            further = meta.furtherOperations();
+    }
+    
+    /**
+     * Resolves the details of the type. Required to register the type first in order to allow resolution of the own
+     * type in operations and fields.
+     * 
+     * @return <b>this</b> (builder pattern)
+     * @throws VilException in case of resolution problems
+     */
+    protected ReflectionTypeDescriptor<T> resolve() throws VilException {
+        if (!isInitialized()) {
+            processInner(cls);
+            ClassMeta meta = cls.getAnnotation(ClassMeta.class);
+            Instantiator inst = cls.getAnnotation(Instantiator.class);
+            setName(getAlias(meta));
+            Class<?> further = null;
+            if (null != meta) {
+                nAssign = meta.nAssign();
+                further = meta.furtherOperations();
+            }
+            java.util.Map<String, OperationDescriptor> tmp = new HashMap<String, OperationDescriptor>();
+            List<OperationDescriptor> convs = new ArrayList<OperationDescriptor>();
+            addMethods(tmp, cls, cls, null != inst ? inst.value() : null);
+            addConversions(cls, convs);
+            if (null != further && Object.class != further) {
+                addMethods(tmp, further, further, null != inst ? inst.value() : null);
+                addConversions(further, convs);
+            }
+            setOperations(tmp.values());
+            setConversions(convs);
+            superType = getTypeRegistry().findType(cls.getSuperclass());
         }
-        java.util.Map<String, OperationDescriptor> tmp = new HashMap<String, OperationDescriptor>();
-        List<OperationDescriptor> convs = new ArrayList<OperationDescriptor>();
-        addMethods(tmp, cls, cls, null != inst ? inst.value() : null);
-        addConversions(cls, convs);
-        if (null != further && Object.class != further) {
-            addMethods(tmp, further, further, null != inst ? inst.value() : null);
-            addConversions(further, convs);
-        }
-        setOperations(tmp.values());
-        setConversions(convs);
+        return this;
+    }
+    
+    /**
+     * Processes the inner classes of <code>cls</code>.
+     * 
+     * @param cls the class
+     * @throws VilException in case of failures
+     */
+    protected void processInner(Class<?> cls) throws VilException {
     }
     
     /**
@@ -202,7 +234,7 @@ class ReflectionTypeDescriptor <T extends IVilType> extends TypeDescriptor <T> {
                         Class<?>[] param = method.getParameterTypes();
                         if (1 == param.length) {
                             // no type check/assignment to class for the moment
-                            convs.add(new ReflectionOperationDescriptor(this, method));
+                            convs.add(new ReflectionOperationDescriptor(this, method, considerAsConstructor(method)));
                         } else {
                             LOGGER.warn("conversion operations must have exactly one parameter (" 
                                 + method + "). Ignored.");
@@ -239,22 +271,25 @@ class ReflectionTypeDescriptor <T extends IVilType> extends TypeDescriptor <T> {
     private void addMethods(java.util.Map<String, OperationDescriptor> operations, Class<?> cls, Class<?> start, 
         String instantiatorName) {
         if (Object.class != cls) {
-            TypeDescriptor<?> tDesc = TypeRegistry.DEFAULT.getType(getRegName(cls));
-            if (null != tDesc) {
+            TypeDescriptor<?> tDesc = getTypeRegistry().getType(getRegName(cls));
+            if (null != tDesc && tDesc != this) {
                 int count = tDesc.getOperationsCount();
                 for (int o = 0; o < count; o++) {
                     OperationDescriptor op = tDesc.getOperation(o);
                     if (!op.isConstructor() || (op.isConstructor() && cls == start)) {
                         String sig = op.getJavaSignature();
                         if (!operations.containsKey(sig)) {
-                            addOperation(operations, sig, tDesc.getOperation(o));
+                            addOperation(operations, sig, tDesc.getOperation(o).specializeFor(this));
                         }
                     }
                 }
             } else {
                 Method[] methods = cls.getDeclaredMethods();
                 for (int m = 0; m < methods.length; m++) {
-                    addMethod(operations, methods[m], instantiatorName);
+                    Method method = methods[m];
+                    if (enableMethod(method)) {
+                        addMethod(operations, method, instantiatorName);
+                    }
                 }
             }
             Class<?> superCls = cls.getSuperclass();
@@ -268,6 +303,26 @@ class ReflectionTypeDescriptor <T extends IVilType> extends TypeDescriptor <T> {
                 }
             }
         }
+    }
+    
+    /**
+     * Returns whether a method shall be added.
+     * 
+     * @param method the method to be added
+     * @return <code>true</code> if the method shall be added, <code>false</code> else
+     */
+    protected boolean enableMethod(Method method) {
+        return true;
+    }
+    
+    /**
+     * Returns whether the given <code>method</code> shall be considered as constructor.
+     * 
+     * @param method the method to be checked
+     * @return <code>true</code> if the method shall be considered as constructor, <code>false</code> else
+     */
+    protected boolean considerAsConstructor(Method method) {
+        return OperationDescriptor.isConstructor(method);
     }
 
     /**
@@ -288,11 +343,27 @@ class ReflectionTypeDescriptor <T extends IVilType> extends TypeDescriptor <T> {
                 sig, method.getDeclaringClass()) && filterMethodByName(method, instantiatorName)) {
                 if (!operations.containsKey(sig) && OperationDescriptor.isOperationOrConstructor(method)) {
                     if (registerAliasOperation(operations, method)) {
-                        addOperation(operations, sig, new ReflectionOperationDescriptor(this, method));
+                        addOperation(operations, sig, createDescriptor(method, null, considerAsConstructor(method)));
                     }
                 }
             }
         }
+    }
+    
+    /**
+     * Creates a reflection operation descriptor for an usual method call.
+     * 
+     * @param method the method to be wrapped into the descriptor
+     * @param name the name of the operation (<b>null</b> use the one of <code>method</code>)
+     * @param constructor whether the method is considered to be a constructor
+     * @return the descriptor
+     */
+    protected ReflectionOperationDescriptor createDescriptor(Method method, String name, boolean constructor) {
+        String tmp = name;
+        if (null == tmp) {
+            tmp = method.getName();
+        }
+        return new ReflectionOperationDescriptor(this, method, tmp, considerAsConstructor(method));
     }
 
     /**
@@ -330,23 +401,37 @@ class ReflectionTypeDescriptor <T extends IVilType> extends TypeDescriptor <T> {
             String[] names = meta.name();
             if (null != names) {
                 for (int n = 0; n < names.length; n++) {
-                    OperationDescriptor desc = new ReflectionOperationDescriptor(this, method, names[n]);
+                    OperationDescriptor desc = createDescriptor(method, names[n], considerAsConstructor(method));
                     addOperation(operations, desc.getJavaSignature(), desc);
                 }
                 regOriginal = names.length == 0;
             }
         } else {
-            String name = method.getName();
-            if (name.startsWith(Constants.GETTER_PREFIX) && name.length() > 3) {
-                name = name.substring(3);
-                if (Character.isUpperCase(name.charAt(0))) {
-                    name = Character.toLowerCase(name.charAt(0)) + name.substring(1);
-                }
-                OperationDescriptor desc = new ReflectionOperationDescriptor(this, method, name);
+            String name = stripGetterPrefix(method.getName());
+            if (null != name) {
+                OperationDescriptor desc = createDescriptor(method, name, considerAsConstructor(method));
                 addOperation(operations, desc.getJavaSignature(), desc);
             }
         }
         return regOriginal;
+    }
+
+    /**
+     * Strips the getter prefix {@link Constants#GETTER_PREFIX} from <code>name</code>.
+     * 
+     * @param name the name to strip
+     * @return the name without the getter prefix, <b>null</b> if there was nothing to strip off
+     */
+    public static String stripGetterPrefix(String name) {
+        if (name.startsWith(Constants.GETTER_PREFIX) && name.length() > 3) {
+            name = name.substring(3);
+            if (Character.isUpperCase(name.charAt(0))) {
+                name = Character.toLowerCase(name.charAt(0)) + name.substring(1);
+            }
+        } else {
+            name = null;
+        }
+        return name;
     }
     
     /**
@@ -392,7 +477,8 @@ class ReflectionTypeDescriptor <T extends IVilType> extends TypeDescriptor <T> {
     
     @Override
     public String getQualifiedName() {
-        return getName();
+        String tmp = super.getQualifiedName();
+        return null == tmp ? getName() : tmp;
     }
     
     @Override
@@ -412,12 +498,13 @@ class ReflectionTypeDescriptor <T extends IVilType> extends TypeDescriptor <T> {
         T result = null;
         int oCount = getOperationsCount();
         for (int o = 0; !found && o < oCount; o++) {
-            OperationDescriptor op = getOperation(o);            
+            OperationDescriptor op = getOperation(o);
             if (op.isConstructor() && CompatibilityResult.COMPATIBLE == op.isCompatible(getTypeClass(), params)) {
                 found = true;
                 Object res = op.invoke(params);
                 if (null == res) {
-                    throw new VilException("VIL constructor does not return a result", VilException.ID_NO_RESULT);
+                    throw new VilException("VIL constructor does not return a result", 
+                           VilException.ID_NO_RESULT);
                 } else {
                     try {
                         result = getTypeClass().cast(res);
@@ -429,7 +516,7 @@ class ReflectionTypeDescriptor <T extends IVilType> extends TypeDescriptor <T> {
             }
         }
         if (!found) {
-            throw new VilException("VIL constructor not found", VilException.ID_NOT_FOUND);
+            throw new VilException("VIL constructor not found", VilException.ID_OP_NOT_FOUND);
         }
         return result;
     }
@@ -457,10 +544,10 @@ class ReflectionTypeDescriptor <T extends IVilType> extends TypeDescriptor <T> {
         return found;
     }
     
-    @SuppressWarnings("unchecked")
     @Override
     public boolean isAssignableFrom(IMetaType type) {
         boolean result = false;
+        type = AliasTypeDescriptor.unalias(type);
         if (ReflectionTypeDescriptor.class.isInstance(type)) {
             result = isAssignableFrom(ReflectionTypeDescriptor.class.cast(type));
         }
@@ -468,20 +555,21 @@ class ReflectionTypeDescriptor <T extends IVilType> extends TypeDescriptor <T> {
     }
 
     @Override
-    public boolean isAssignableFrom(TypeDescriptor<? extends IVilType> desc) {
+    public boolean isAssignableFrom(TypeDescriptor<?> desc) {
         boolean assignable;
+        desc = AliasTypeDescriptor.unalias(desc);
         if (desc instanceof ReflectionTypeDescriptor) {
             ReflectionTypeDescriptor<?> rDesc = (ReflectionTypeDescriptor<?>) desc;
             Class<?> descC = rDesc.getTypeClass();
             assignable = !isNAssign(descC) && !rDesc.isNAssign(cls);
             if (assignable) {
                 assignable = cls.isAssignableFrom(descC) || desc == ANY;
-                if (assignable && getParameterCount() > 0) {
-                    assignable = (getParameterCount() == desc.getParameterCount());
-                    for (int p = 0; assignable && p < getParameterCount(); p++) {
-                        if (null != getParameterType(p)) {
+                if (assignable && getGenericParameterCount() > 0) {
+                    assignable = (getGenericParameterCount() == desc.getGenericParameterCount());
+                    for (int p = 0; assignable && p < getGenericParameterCount(); p++) {
+                        if (null != getGenericParameterType(p)) {
                             // generic type without specific generic parameter e.g. in set -> match
-                            assignable = getParameterType(p).isAssignableFrom(desc.getParameterType(p));
+                            assignable = getGenericParameterType(p).isAssignableFrom(desc.getGenericParameterType(p));
                         }
                     }
                 }
@@ -506,13 +594,20 @@ class ReflectionTypeDescriptor <T extends IVilType> extends TypeDescriptor <T> {
     public String getVilName() {
         String result;
         if (Set.class.isAssignableFrom(cls)) {
-            result = appendParameter("setOf"); 
+            result = appendParameter("setOf", 0); 
         } else if (Sequence.class.isAssignableFrom(cls)) {
-            result = appendParameter("sequenceOf"); 
+            result = appendParameter("sequenceOf", 0); 
         } else if (Map.class.isAssignableFrom(cls)) {
-            result = appendParameter("mapOf"); 
-        } else if (getParameterCount() > 0) {
-            result = appendParameter(getName()); 
+            result = appendParameter("mapOf", 0); 
+        } else if (ResolvableOperationType.class.isAssignableFrom(cls)) {
+            result = "callOf";
+            TypeDescriptor<?> ret = getGenericParameterType(getGenericParameterCount() - 1);
+            if (VOID != ret) {
+                result += " " + ret.getVilName() + " ";
+            }
+            result += appendParameter("", 1); 
+        } else if (getGenericParameterCount() > 0) {
+            result = appendParameter(getName(), 0); 
         } else {
             result = getName();
         }
@@ -623,6 +718,21 @@ class ReflectionTypeDescriptor <T extends IVilType> extends TypeDescriptor <T> {
     @Override
     public IMetaType getBaseType() {
         return null;
+    }
+
+    @Override
+    public boolean isInternal() {
+        return false;
+    }
+
+    @Override
+    public boolean isInstantiator() {
+        return null != cls.getAnnotation(Instantiator.class);
+    }
+
+    @Override
+    public IMetaType getSuperType() {
+        return superType;
     }
 
 }

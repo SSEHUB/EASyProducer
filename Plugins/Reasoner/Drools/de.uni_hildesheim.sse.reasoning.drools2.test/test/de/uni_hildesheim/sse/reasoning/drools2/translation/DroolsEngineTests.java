@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.eclipse.emf.common.util.URI;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -53,6 +54,18 @@ public class DroolsEngineTests extends AbstractTest<Project> {
             VarModel.INSTANCE.locations().addLocation(FOLDER, ProgressObserver.NO_OBSERVER);
         } catch (ModelManagementException e) {
             Assert.fail("Could not add location of test files.");
+        }
+    }
+    
+    /**
+     * Frees the memory after testing.
+     */
+    @AfterClass
+    public static void tearDownAfterClass() {
+        try {
+            VarModel.INSTANCE.locations().removeLocation(FOLDER, ProgressObserver.NO_OBSERVER);
+        } catch (ModelManagementException e) {
+            Assert.fail("Could not remove location of test files.");
         }
     }
     
@@ -255,6 +268,7 @@ public class DroolsEngineTests extends AbstractTest<Project> {
     /**
      * Tests internal constraints.
      */ 
+    @Ignore
     @Test    
     public void internalConstraintTest() {
         reasoningTest("InternalConstraintTest.ivml", ReasoningOperation.VALIDATION, 0);
@@ -267,8 +281,6 @@ public class DroolsEngineTests extends AbstractTest<Project> {
     public void setTest() {
         reasoningTest("SetTest.ivml", ReasoningOperation.VALIDATION, 0);
     }
-    
-    
     
     /**
      * Tests setOf with compounds validation. CustomConstraintIgnoreTest.ivml
@@ -341,152 +353,5 @@ public class DroolsEngineTests extends AbstractTest<Project> {
     @Test
     public void interfaceUsageTest() {
         reasoningTest("InterfaceUser.ivml", ReasoningOperation.PROPAGATION, 2);
-    }
-    
-    /**
-     * Tests large scale model on linux example. Create boolean variables in RModel.
-     * Boolean var - 62482
-     */ 
-    @Ignore
-    @Test
-    public void largeIVMLforLinuxVarCreateTest() {
-        reasoningTest("IVML_boolean_var0", ReasoningOperation.VALIDATION, 0);
-    }
-    
-    /**
-     * Tests large scale model on linux example.
-     * Boolean var - 62482
-     * Constraints - 273799
-     * Level 1
-     */ 
-    @Ignore
-    @Test
-    public void largeIVMLforLinux1Test() {
-        reasoningTest("IVML_boolean_lev1.ivml", ReasoningOperation.VALIDATION, 0);
-    }
-    
-    /**
-     * Tests large scale model on linux example.
-     * Boolean var - 62482
-     * Constraints - 273799
-     * Level 2
-     */ 
-    @Ignore
-    @Test
-    public void largeIVMLforLinux2Test() {
-        reasoningTest("IVML_boolean_lev2.ivml", ReasoningOperation.VALIDATION, 0);
-    }
-    
-    /**
-     * Tests large scale model on linux example.
-     * Boolean var - 62482
-     * Constraints - 273799
-     * Level 3
-     */    
-    @Ignore 
-    @Test
-    public void largeIVMLforLinux3Test() {
-        reasoningTest("IVML_boolean_lev3.ivml", ReasoningOperation.VALIDATION, 0);
-    }
-    
-    /**
-     * Tests rb model.
-     * Boolean var - 2000
-     * Boolean Constraints - 10000
-     * Integer var - 2000
-     * Real var - 2000
-     * Arithmetical constraints - 20000
-     * Level 1
-     * -Xms128m -Xmx512m -XX:MaxPermSize=128m -Xss2m
-     * Time: 1051,647s = 17,52745
-     */
-    @Ignore
-    @Test
-    public void rbIVML1Test() {
-        reasoningTest("IVML_rb_lev1.ivml", ReasoningOperation.VALIDATION, 0);
-    }
-    
-    /**
-     * Tests rb model.
-     * Boolean var - 2000
-     * Boolean Constraints - 10000
-     * Integer var - 2000
-     * Real var - 2000
-     * Arithmetical constraints - 20000
-     * Level 2
-     * -Xmx1024M -XX:MaxPermSize=256M -Xss512K
-     * Time 1071,126s = 17,8521m
-     */
-    @Ignore
-    @Test
-    public void rbIVML2Test() {
-        reasoningTest("IVML_rb_lev2.ivml", ReasoningOperation.VALIDATION, 14160);
-    }
-    
-    /**
-     * Tests rb model.
-     * Boolean var - 2000
-     * Boolean Constraints - 10000
-     * Integer var - 2000
-     * Real var - 2000
-     * Arithmetical constraints - 20000
-     * Level 3
-     * -Xmx1024M -XX:MaxPermSize=256M -Xss512K
-     * OutOfMemoryError: Java heap space
-     */
-    @Ignore
-    @Test
-    public void rbIVML3Test() {
-        reasoningTest("IVML_rb_lev3.ivml", ReasoningOperation.VALIDATION, 0);
-    }
-    
-    /**
-     * Tests scl model.
-     * Boolean var - 500
-     * Boolean Constraints - 500
-     * Level 2
-     * Eclipse default
-     * Time: 8,722
-     * -Xms128m -Xmx512m -XX:MaxPermSize=128m -Xss2m
-     * Time: 8,425
-     */
-    @Ignore
-    @Test
-    public void sclIVML2Test() {
-        reasoningTest("IVML_scl_lev2.ivml", ReasoningOperation.VALIDATION, 214);
-    }
-    
-    /**
-     * Tests comparison model.
-     * Boolean var - 1000
-     * Boolean Constraints - 100
-     * Level 2
-     * Eclipse default
-     * Time: 4,182
-     * -Xms128m -Xmx512m -XX:MaxPermSize=128m -Xss2m
-     * Time: 3,869
-     */
-    @Ignore
-    @Test
-    public void compIVML2Test() {
-        reasoningTest("IVML_comparison_lev2.ivml", ReasoningOperation.VALIDATION, 40);
-    }
-
-    /**
-     * Tests comparison model.
-     * Boolean var - 334
-     * Boolean Constraints - 34
-     * Arithmetical var - 666
-     * Arithmetical Constraints - 66
-     * Level 2
-     * Eclipse default
-     * Time: 4,230
-     * -Xms128m -Xmx512m -XX:MaxPermSize=128m -Xss2m
-     * Time: 4,136 Prev.ver.: 7,330
-     */
-    @Ignore
-    @Test
-    public void compMixIVML2Test() {
-        reasoningTest("IVML_comparisonMix_lev2.ivml", ReasoningOperation.VALIDATION, 54);
-    }
+    }    
 }

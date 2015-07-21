@@ -1,0 +1,8 @@
+project warn1 {
+
+    version v0;
+    Integer a = 1;
+    Integer b = 0;
+
+    a + b > 0 and warning(a < b);
+}

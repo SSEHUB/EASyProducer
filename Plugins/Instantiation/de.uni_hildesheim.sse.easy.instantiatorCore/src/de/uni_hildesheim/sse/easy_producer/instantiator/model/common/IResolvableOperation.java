@@ -2,7 +2,6 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.common;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IResolvable;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaOperation;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 
 /**
@@ -20,6 +19,6 @@ public interface IResolvableOperation<V extends IResolvable> extends IParameteri
      * @return the return type
      */
     @Override
-    public TypeDescriptor<? extends IVilType> getReturnType(); // specializes the type
+    public TypeDescriptor<?> getReturnType(); // specializes the type
 
 }

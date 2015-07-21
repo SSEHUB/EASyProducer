@@ -1,8 +1,11 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VariableDeclaration;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaOperation;
 import de.uni_hildesheim.sse.utils.modelManagement.IVariable;
 import de.uni_hildesheim.sse.utils.modelManagement.IVersionRestriction.IVariableMapper;
@@ -44,7 +47,7 @@ public class CopyVisitor implements IExpressionVisitor {
     }
 
     @Override
-    public Object visitParenthesisExpression(ParenthesisExpression par) throws ExpressionException {
+    public Object visitParenthesisExpression(ParenthesisExpression par) throws VilException {
         Expression result = new ParenthesisExpression((Expression) par.accept(this));
         result.inferType();
         return result;
@@ -55,9 +58,9 @@ public class CopyVisitor implements IExpressionVisitor {
      * 
      * @param call the call the arguments shall be copied from
      * @return the copied arguments
-     * @throws ExpressionException in case that processing expressions fails
+     * @throws VilException in case that processing expressions fails
      */
-    protected CallArgument[] copyCallArguments(AbstractCallExpression call) throws ExpressionException  {
+    protected CallArgument[] copyCallArguments(AbstractCallExpression call) throws VilException  {
         CallArgument[] arguments = new CallArgument[call.getArgumentsCount()];
         for (int a = 0; a < arguments.length; a++) {
             CallArgument arg = call.getArgument(a);
@@ -67,7 +70,7 @@ public class CopyVisitor implements IExpressionVisitor {
     }
 
     @Override
-    public Object visitCallExpression(CallExpression call) throws ExpressionException {
+    public Object visitCallExpression(CallExpression call) throws VilException {
         Expression result;
         CallArgument[] arguments = copyCallArguments(call);
         switch (call.getCallType()) {
@@ -89,13 +92,13 @@ public class CopyVisitor implements IExpressionVisitor {
     }
 
     @Override
-    public Object visitConstantExpression(ConstantExpression cst) throws ExpressionException {
+    public Object visitConstantExpression(ConstantExpression cst) throws VilException {
         return cst; // reuse always for now... the type registry may be a problem :o
     }
 
     @Override
     public Object visitVarModelIdentifierExpression(VarModelIdentifierExpression identifier) 
-        throws ExpressionException {
+        throws VilException {
         Expression result;
         if (reuse) {
             result = identifier;
@@ -107,7 +110,7 @@ public class CopyVisitor implements IExpressionVisitor {
     }
 
     @Override
-    public Object visitVilTypeExpression(VilTypeExpression typeExpression) throws ExpressionException {
+    public Object visitVilTypeExpression(VilTypeExpression typeExpression) throws VilException {
         Expression result;
         if (reuse) {
             result = typeExpression;
@@ -119,7 +122,7 @@ public class CopyVisitor implements IExpressionVisitor {
     }
 
     @Override
-    public Object visitVariableExpression(VariableExpression cst) throws ExpressionException {
+    public Object visitVariableExpression(VariableExpression cst) throws VilException {
         Expression result;
         VariableDeclaration var = map(cst.getDeclaration(), true);
         if (null == var) {
@@ -130,6 +133,30 @@ public class CopyVisitor implements IExpressionVisitor {
         }
         return result;
     }
+    
+    @Override
+    public Object visitFieldAccessExpression(FieldAccessExpression ex) throws VilException {
+        Expression result;
+        if (null != ex.getVariable()) {
+            VariableDeclaration var = map(ex.getVariable(), true);
+            if (null == var) {
+                result = ex;
+            } else {
+                result = new FieldAccessExpression(var, ex.getField());
+                result.inferType();
+            }
+        } else {
+            Object nested = ex.getNested().accept(this);
+            if (nested instanceof FieldAccessExpression) {
+                result = new FieldAccessExpression((FieldAccessExpression) nested, ex.getField());
+                result.inferType();
+            } else {
+                result = null;
+            }
+        }
+        return result;
+    }
+
 
     /**
      * Maps the variable declaration considering the initially specified mapping.
@@ -159,7 +186,7 @@ public class CopyVisitor implements IExpressionVisitor {
     }
 
     @Override
-    public Object visitExpressionEvaluator(ExpressionEvaluator ex) throws ExpressionException {
+    public Object visitExpressionEvaluator(ExpressionEvaluator ex) throws VilException {
         VariableDeclaration iter = map(ex.getIteratorVariable(), false);
         Expression expr = (Expression) ex.getExpression().accept(this);
         Expression result = new ExpressionEvaluator(expr, iter);
@@ -168,21 +195,21 @@ public class CopyVisitor implements IExpressionVisitor {
     }
 
     @Override
-    public Object visitExpression(Expression ex) throws ExpressionException {
+    public Object visitExpression(Expression ex) throws VilException {
         return new ParenthesisExpression((Expression) ex.accept(this));
     }
 
     @Override
-    public Object visitValueAssignmentExpression(ValueAssignmentExpression ex) throws ExpressionException {
+    public Object visitValueAssignmentExpression(ValueAssignmentExpression ex) throws VilException {
         VariableDeclaration decl = map(ex.getVarDecl(), false);
         Expression valEx = (Expression) ex.getValueExpression().accept(this);
-        Expression result = new ValueAssignmentExpression(decl, valEx);
+        Expression result = new ValueAssignmentExpression(decl, ex.getField(), valEx);
         result.inferType();
         return result;
     }
 
     @Override
-    public Object visitContainerInitializerExpression(ContainerInitializerExpression ex) throws ExpressionException {
+    public Object visitContainerInitializerExpression(ContainerInitializerExpression ex) throws VilException {
         Expression[] init = new Expression[ex.getInitExpressionsCount()];
         for (int i = 0; i < init.length; i++) {
             init[i] = (Expression) ex.getInitExpression(i).accept(this);
@@ -190,6 +217,25 @@ public class CopyVisitor implements IExpressionVisitor {
         Expression result = new ContainerInitializerExpression(init);
         result.inferType();
         return result;
+    }
+
+    @Override
+    public Object visitCompositeExpression(CompositeExpression ex) throws VilException {
+        List<Expression> result = new ArrayList<Expression>();
+        for (Expression expression : ex.getExpressionList()) {
+            result.add((Expression) expression.accept(this));
+        }
+        return new CompositeExpression(result);
+    }
+
+    @Override
+    public Object visitResolvableOperationExpression(ResolvableOperationExpression ex) throws VilException {
+        return new ResolvableOperationExpression(ex.getType(), ex.getOperation());
+    }
+
+    @Override
+    public Object visitResolvableOperationCallExpression(ResolvableOperationCallExpression ex) throws VilException {
+        return new ResolvableOperationCallExpression(ex.getVariable(), copyCallArguments(ex));
     }
     
 }

@@ -1,0 +1,10 @@
+test <- 0
+-> >=(Integer, Integer) with (0, 0) = true
+-> main(Project, Configuration, Project) with (<project>, <config>, <project>)
+    test <- 0
+    -> >=(Integer, Integer) with (0, 0) = true
+    -> >=(Integer, Integer) with (0, -1) = true
+    -> +(Integer, Integer) with (7, 9) = 16
+    -> +(Integer, Integer) with (8, 10) = 18
+    -> t1()
+    -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)

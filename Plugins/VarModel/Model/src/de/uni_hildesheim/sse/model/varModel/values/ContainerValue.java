@@ -35,6 +35,8 @@ import de.uni_hildesheim.sse.persistency.StringProvider;
  * @author Holger Eichelberger
  */
 public class ContainerValue extends StructuredValue implements Cloneable {
+
+    // TODO add, set do not check for duplicates in case of sets!
     
     private List<Value> nestedElements = new ArrayList<Value>();
 
@@ -301,17 +303,16 @@ public class ContainerValue extends StructuredValue implements Cloneable {
      * otherwise <tt>false</tt>.
      */
     private boolean duplicateValues(Object[] values) {
-        boolean dupplicatesFound = false;
+        boolean duplicatesFound = false;
         if (isSetValue() && null != values) {
             // TODO improve - quadratic runtime complexity
-            for (int i = 0; !dupplicatesFound && i < values.length - 1; i++) {
+            for (int i = 0; !duplicatesFound && i < values.length - 1; i++) {
                 if (null != values[i]) {
-                    for (int j = i + 1; !dupplicatesFound && j < values.length; j++) {
+                    for (int j = i + 1; !duplicatesFound && j < values.length; j++) {
                         if (values[i].equals(values[j])) {
-                            // TODO equals for values is defined based on hashcode, which is not refined 
                             // for Compound/Container -> breaks in ScaleLog
                             if (!(values[i] instanceof CompoundValue) && !(values[i] instanceof ContainerValue) ) {
-                                dupplicatesFound = true;
+                                duplicatesFound = true;
                             }
                         }
                     }
@@ -319,22 +320,46 @@ public class ContainerValue extends StructuredValue implements Cloneable {
             }
         }
         
-        return dupplicatesFound;
+        return duplicatesFound;
     }
     
     /**
      * Sets the value for an already existent nested value.
      * @param index The index of the element to be configured.
      * @param nestedValue The new value of the nested element.
+     * @throws ValueDoesNotMatchTypeException IF this {@link ContainerValue} represents a value of a {@link Set}
+     *     and the new <tt>nestedValue</tt> is already part of this value.
      * @throws IllegalArgumentException if some property of the specified
      *         element prevents it from being added to this Value
      * @throws IndexOutOfBoundsException if the index is out of range
      *         (<tt>index &lt; 0 || index &gt;= {@link #getElementSize()}</tt>)
      */
-    public void setValue(int index, Value nestedValue) {
+    public void setValue(int index, Value nestedValue) throws ValueDoesNotMatchTypeException {    
         if (index >= nestedElements.size()) {
+            // Add new value
+            if (isSetValue() && null != nestedValue) {
+                boolean duplicateFound = false;
+                for (int i = 0; i < nestedElements.size() && !duplicateFound; i++) {
+                    if (nestedValue.equals(nestedElements.get(i))) {
+                        throw new ValueDoesNotMatchTypeException("'" + nestedValue.getValue().toString()
+                            + "' already contained and duplicates are not allowed for a Sets.",
+                            ValueDoesNotMatchTypeException.NOT_ALLOWED_VALUE_STRUCTURE);
+                    }
+                }
+            }
             nestedElements.add(nestedValue);
         } else {
+            // Replace existing Value            
+            if (isSetValue() && null != nestedValue) {
+                boolean duplicateFound = false;
+                for (int i = 0; i < nestedElements.size() && !duplicateFound; i++) {
+                    if (i != index && nestedValue.equals(nestedElements.get(i))) {
+                        throw new ValueDoesNotMatchTypeException("'" + nestedValue.getValue().toString()
+                            + "' already containend and duplicates are not allowed for a Sets.",
+                            ValueDoesNotMatchTypeException.NOT_ALLOWED_VALUE_STRUCTURE);
+                    }
+                }
+            }
             nestedElements.set(index, nestedValue);
         }
     }

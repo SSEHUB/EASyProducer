@@ -6,11 +6,13 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression.CallType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Constants;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IStringValueProvider.StringComparator;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.StringValueHelper;
+import de.uni_hildesheim.sse.model.varModel.values.NullValue;
 
 /**
  * Implements a simple stream-based execution tracer. Produces normalized sequences of collections
@@ -133,8 +135,12 @@ public abstract class StreamTracer extends AbstractWriter implements ITracer {
                     print(makeRelative(tmp));
                 }
             }
-            print(") = ");
-            println(makeRelative(result));
+            print(")");
+            if (NullValue.VALUE != result) {
+                print(" = ");
+                print(makeRelative(result));
+            }
+            println();
         }
     }
 
@@ -167,7 +173,7 @@ public abstract class StreamTracer extends AbstractWriter implements ITracer {
         ExpressionWriter writer = getWriter(getOut());
         try {
             expression.accept(writer);
-        } catch (ExpressionException e) {
+        } catch (VilException e) {
         }
     }
     

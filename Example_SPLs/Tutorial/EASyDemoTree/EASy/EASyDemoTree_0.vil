@@ -1,0 +1,21 @@
+@advice(EASyDemoTree)
+vilScript EASyDemoTree (Project source, Configuration config, Project target) {
+
+    version v0;
+
+    copySRCFiles(Project source, Project target) = "$target/src/**/*.java" : "$source/src/**/*.java" {
+        RHS.copy(LHS);
+    }
+
+    main(Project source, Configuration config, Project target) = : {
+    	copySRCFiles(source, target);
+    	EASyDemoTree cfg = config;
+    	JavaFileArtifact jfa = "$target/src/io/ssehub/easy/demo/tree/Engine.java";
+    	jfa.defaultClass().attributeByName("HORSEPOWER").setValue(cfg.car.engine.horsePower);
+    	if (cfg.car.ac == null) {
+    		Path p = "$target/src/io/ssehub/easy/demo/tree/AirCondition.java";
+    		p.delete();
+    	} 
+    }
+
+}

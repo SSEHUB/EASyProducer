@@ -1,7 +1,7 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaOperation;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
@@ -14,7 +14,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegis
 public class CallArgument {
     private String name;
     private Expression expr;
-    private TypeDescriptor<? extends IVilType> type;
+    private TypeDescriptor<?> type;
     private Object fixedValue;
     private boolean fixed;
 
@@ -23,7 +23,7 @@ public class CallArgument {
      * 
      * @param type the type of the argument
      */
-    public CallArgument(TypeDescriptor<? extends IVilType> type) {
+    public CallArgument(TypeDescriptor<?> type) {
         this.type = type;
         this.name = null;
         this.expr = null;
@@ -136,10 +136,10 @@ public class CallArgument {
      * Infers the type of this expression including the type of the contained sub-expressions.
      * 
      * @return the type of this expression
-     * @throws ExpressionException in case that inferring the type fails
+     * @throws VilException in case that inferring the type fails
      */
-    public TypeDescriptor<? extends IVilType> inferType() throws ExpressionException {
-        TypeDescriptor<? extends IVilType> result;
+    public TypeDescriptor<?> inferType() throws VilException {
+        TypeDescriptor<?> result;
         if (null == expr) {
             if (null == type) {
                 result = TypeRegistry.voidType();
@@ -157,10 +157,10 @@ public class CallArgument {
      * conversion.
      *  
      * @param operation the conversion operation (return type, exactly 1 argument) 
-     * @throws ExpressionException in case that using the conversion operation is not 
+     * @throws VilException in case that using the conversion operation is not 
      *     possible for some reason
      */
-    void insertConversion(OperationDescriptor operation) throws ExpressionException {
+    void insertConversion(OperationDescriptor operation) throws VilException {
         expr = new CallExpression(operation, new CallArgument(expr));        
     }
         
@@ -169,16 +169,16 @@ public class CallArgument {
      * conversion.
      *  
      * @param operation the conversion operation (return type, exactly 1 argument) 
-     * @throws ExpressionException in case that using the conversion operation is not 
+     * @throws VilException in case that using the conversion operation is not 
      *     possible for some reason
      */
-    void insertConversion(IMetaOperation operation) throws ExpressionException {
+    void insertConversion(IMetaOperation operation) throws VilException {
         if (operation instanceof OperationDescriptor) {
             insertConversion((OperationDescriptor) operation);
         } else {
             // shall not happen
-            throw new ExpressionException(operation.getJavaSignature() + " is not a valid conversion", 
-                ExpressionException.ID_CANNOT_RESOLVE);
+            throw new VilException(operation.getJavaSignature() + " is not a valid conversion", 
+                VilException.ID_CANNOT_RESOLVE);
         }
     }
     
@@ -200,15 +200,15 @@ public class CallArgument {
      * 
      * @param visitor the visitor
      * @return the result of visiting this expression (may be <b>null</b>)
-     * @throws ExpressionException in case that visiting fails (e.g., execution)
+     * @throws VilException in case that visiting fails (e.g., execution)
      */
-    public Object accept(IExpressionVisitor visitor) throws ExpressionException {
+    public Object accept(IExpressionVisitor visitor) throws VilException {
         Object result;
         if (fixed) {
             result = fixedValue;
         } else {
             if (null == expr) {
-                throw new ExpressionException("expr is null", ExpressionException.ID_INTERNAL);
+                throw new VilException("expr is null", VilException.ID_INTERNAL);
             }
             result = expr.accept(visitor);
         }
@@ -221,12 +221,35 @@ public class CallArgument {
      * 
      * @param visitor the visitor
      * @return the result of visiting this expression (may be <b>null</b>)
-     * @throws ExpressionException in case that visiting fails (e.g., execution)
+     * @throws VilException in case that visiting fails (e.g., execution)
      */
-    public Object fixValue(IExpressionVisitor visitor) throws ExpressionException {
+    public Object fixValue(IExpressionVisitor visitor) throws VilException {
         fixedValue = accept(visitor);
         fixed = true;
         return fixedValue;
+    }
+    
+    /**
+     * Fixes the value of this argument. <code>Caution:</code> There is no type check, 
+     * i.e., <code>fixedValue</code> must match the type of this argument.
+     *   
+     * @param fixedValue the fixed value
+     * @return <b>this</b> (builder pattern)
+     */
+    public CallArgument fixValue(Object fixedValue) {
+        this.fixedValue = fixedValue;
+        fixed = true;
+        return this;
+    }
+    
+    /**
+     * Resolves an operation, i.e., overwrites the expression. Handle with care.
+     * 
+     * @param type the resolvable type (function pointer)
+     * @param operation the resolving operation (actual base function)
+     */
+    public void resolveOperation(TypeDescriptor<?> type, IMetaOperation operation) {
+        this.expr = new ResolvableOperationExpression(type, operation);
     }
 
 }

@@ -7,12 +7,14 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
+
 /**
  * Tests for the basic language.
  * 
  * @author Holger Eichelberger
  */
-public class ExtraTests extends AbstractTest {
+public class ExtraTests extends AbstractTest<Script> {
 
     private static ExtraTests tests;
     
@@ -90,6 +92,11 @@ public class ExtraTests extends AbstractTest {
     @Override
     protected File getTestFolder() {
         return new File(getTestDataDir(), "extra");
+    }
+    
+    @Override
+    protected ITestConfigurer<Script> createTestConfigurer() {
+        return new BuildLangTestConfigurer("vil.buildlang.testdata.home");
     }
     
     /**

@@ -1,7 +1,6 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 
@@ -56,7 +55,7 @@ public class TemplateBlock implements ITemplateElement {
     }
     
     @Override
-    public Object accept(IVisitor visitor) throws VilLanguageException {
+    public Object accept(IVisitor visitor) throws VilException {
         return visitor.visitTemplateBlock(this);
     }
     
@@ -66,8 +65,8 @@ public class TemplateBlock implements ITemplateElement {
     }
 
     @Override
-    public TypeDescriptor<? extends IVilType> inferType() throws VilLanguageException {
-        TypeDescriptor<? extends IVilType> result;
+    public TypeDescriptor<?> inferType() throws VilException {
+        TypeDescriptor<?> result;
         if (null == body || 0 == body.length) {
             result = TypeRegistry.voidType();
         } else {

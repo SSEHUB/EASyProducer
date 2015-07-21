@@ -6,6 +6,8 @@ import "http://www.eclipse.org/emf/2002/Ecore" as ecore
 
 ImplementationUnit:
     {ImplementationUnit}
+    imports+=Import*
+    requires+=Require*
     scripts+=LanguageUnit*
 ;
 
@@ -21,7 +23,7 @@ LanguageUnit: // do not rename - required for reuse
 ;
 
 rtContents:
-    {ScriptContents} // ensure object creation
+    {rtContents} // ensure object creation
     (
         elements += GlobalVariableDeclaration
         | elements += RuleDeclaration
@@ -42,8 +44,8 @@ StrategyDeclaration:
     '=' conditions = RuleConditions?
     '{'
     varDecls += VariableDeclaration*
-    ('objective' objective=Expression)
-    ('breakdown' '{' breakdown += BreakdownElement* '}')
+    ('objective' objective=Expression ';')?
+    ('breakdown' '{' weighting=WeightingStatement? breakdown += BreakdownElement+ '}')
     post += RuleElement*
     '}'
     ';'?
@@ -55,9 +57,15 @@ BreakdownElement:
     | breakdownStmt=BreakdownStatement
 ;
 
+WeightingStatement:
+    'weighting' '(' name=Identifier ':' expr=Expression ')' ';'
+;
+
 BreakdownStatement:
     type = ('strategy' | 'tactic')
-    guard = LogicalExpression?
+    (
+      '(' guard = LogicalExpression ')' 
+    )?
     name = QualifiedPrefix
     '(' param=ArgumentList? ')'
     (
@@ -65,7 +73,10 @@ BreakdownStatement:
       part += BreakdownWithPart (',' part+= BreakdownWithPart)
       ')'  
     )?
-    ('@' time = Expression)?
+    (
+      '@' time = Expression
+    )?
+    ';'
 ;
 
 BreakdownWithPart:

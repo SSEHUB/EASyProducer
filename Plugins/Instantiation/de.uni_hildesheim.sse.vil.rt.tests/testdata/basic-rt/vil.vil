@@ -1,0 +1,7 @@
+vilScript vil (Project source, Configuration config, Project target) {
+
+    Integer test() = : {
+        1;
+    }
+
+}

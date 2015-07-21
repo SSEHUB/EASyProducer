@@ -1,6 +1,6 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Conversion;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
 
@@ -16,11 +16,11 @@ public class FileSystemArtifactOperations {
      * 
      * @param val the value to be converted
      * @return the converted value
-     * @throws ArtifactException in case of problems
+     * @throws VilException in case of problems
      */
     @Invisible
     @Conversion
-    public static Path convert(IFileSystemArtifact val) throws ArtifactException {
+    public static Path convert(IFileSystemArtifact val) throws VilException {
         return val.getPath();
     }
 

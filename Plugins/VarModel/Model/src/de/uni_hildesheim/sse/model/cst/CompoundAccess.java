@@ -15,6 +15,7 @@
  */
 package de.uni_hildesheim.sse.model.cst;
 
+import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
@@ -33,7 +34,7 @@ public class CompoundAccess extends ConstraintSyntaxTree {
     
     private ConstraintSyntaxTree compoundExpression;
     private String slotName;
-    private DecisionVariableDeclaration slot; // lazy
+    private AbstractVariable slot; // lazy
     
     /**
      * Creates a compound access node.
@@ -146,7 +147,7 @@ public class CompoundAccess extends ConstraintSyntaxTree {
      * @return the resolved slot, <b>null</b> if the slot cannot
      *   be resolved or {@link #inferDatatype()} was not called before
      */
-    public DecisionVariableDeclaration getResolvedSlot() {
+    public AbstractVariable getResolvedSlot() {
         return slot;
     }
 

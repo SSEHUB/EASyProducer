@@ -105,6 +105,11 @@ public class RtVilAdapterFactory extends AdapterFactoryImpl
         return createBreakdownElementAdapter();
       }
       @Override
+      public Adapter caseWeightingStatement(WeightingStatement object)
+      {
+        return createWeightingStatementAdapter();
+      }
+      @Override
       public Adapter caseBreakdownStatement(BreakdownStatement object)
       {
         return createBreakdownStatementAdapter();
@@ -118,11 +123,6 @@ public class RtVilAdapterFactory extends AdapterFactoryImpl
       public Adapter caseTacticDeclaration(TacticDeclaration object)
       {
         return createTacticDeclarationAdapter();
-      }
-      @Override
-      public Adapter caseScriptContents(ScriptContents object)
-      {
-        return createScriptContentsAdapter();
       }
       @Override
       public Adapter caseVilBuildLanguage_ImplementationUnit(de.uni_hildesheim.sse.vilBuildLanguage.ImplementationUnit object)
@@ -252,6 +252,21 @@ public class RtVilAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
+   * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.vil.rt.rtVil.WeightingStatement <em>Weighting Statement</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see de.uni_hildesheim.sse.vil.rt.rtVil.WeightingStatement
+   * @generated
+   */
+  public Adapter createWeightingStatementAdapter()
+  {
+    return null;
+  }
+
+  /**
    * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.vil.rt.rtVil.BreakdownStatement <em>Breakdown Statement</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
@@ -292,21 +307,6 @@ public class RtVilAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createTacticDeclarationAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.vil.rt.rtVil.ScriptContents <em>Script Contents</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see de.uni_hildesheim.sse.vil.rt.rtVil.ScriptContents
-   * @generated
-   */
-  public Adapter createScriptContentsAdapter()
   {
     return null;
   }

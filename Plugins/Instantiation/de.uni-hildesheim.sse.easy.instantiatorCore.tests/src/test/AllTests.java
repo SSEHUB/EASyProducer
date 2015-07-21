@@ -4,6 +4,7 @@ import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
+import test.de.uni_hildesheim.sse.easy_producer.instantiator.model.JavaUtilitiesTest;
 import test.de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactmodel.XmlFileArtifactTest;
 import test.de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildlangTests;
 import test.de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionTests;
@@ -20,7 +21,7 @@ import de.uni_hildesheim.sse.utils.logger.LoggingLevel;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({VilTests.class, ExpressionTests.class, 
-    BuildlangTests.class, TemplateLangTests.class, XmlFileArtifactTest.class })
+    BuildlangTests.class, TemplateLangTests.class, XmlFileArtifactTest.class, JavaUtilitiesTest.class })
 public class AllTests {
     
     /**

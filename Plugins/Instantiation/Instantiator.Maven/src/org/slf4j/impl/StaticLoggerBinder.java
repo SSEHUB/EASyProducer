@@ -25,7 +25,6 @@
 package org.slf4j.impl;
 
 import org.slf4j.ILoggerFactory;
-import org.slf4j.LoggerFactory;
 import org.slf4j.spi.LoggerFactoryBinder;
 
 /**
@@ -37,21 +36,9 @@ import org.slf4j.spi.LoggerFactoryBinder;
  */
 public class StaticLoggerBinder implements LoggerFactoryBinder {
 
-    /**
-     * The unique instance of this class.
-     * 
-     */
-    private static final StaticLoggerBinder SINGLETON = new StaticLoggerBinder();
-
-    /**
-     * Return the singleton of this class.
-     * 
-     * @return the StaticLoggerBinder singleton
-     */
-    public static final StaticLoggerBinder getSingleton() {
-        return SINGLETON;
-    }
-
+    // checkstyle: stop name check
+    // checkstyle: stop visibility modifier check
+    
     /**
      * Declare the version of the SLF4J API this implementation is compiled
      * against. The value of this field is usually modified with each release.
@@ -59,10 +46,19 @@ public class StaticLoggerBinder implements LoggerFactoryBinder {
     // to avoid constant folding by the compiler, this field must *not* be final
     public static String REQUESTED_API_VERSION = "1.6.99"; // !final
 
-    private static final String loggerFactoryClassStr = SimpleLoggerFactory.class.getName();
+    // checkstyle: resume visibility modifier check
+    // checkstyle: resume name check
+    
+    /**
+     * The unique instance of this class.
+     * 
+     */
+    private static final StaticLoggerBinder SINGLETON = new StaticLoggerBinder();
+
+    private static final String LOGGER_FACTORY_CLASS_STR = SimpleLoggerFactory.class.getName();
 
     /**
-     * The ILoggerFactory instance returned by the {@link #getLoggerFactory}
+     * The ILoggerFactory instance returned by the {@link #getLoggerFactory}.
      * method should always be the same object
      */
     private final ILoggerFactory loggerFactory;
@@ -74,6 +70,15 @@ public class StaticLoggerBinder implements LoggerFactoryBinder {
         loggerFactory = new SimpleLoggerFactory();
     }
 
+    /**
+     * Return the singleton of this class.
+     * 
+     * @return the StaticLoggerBinder singleton
+     */
+    public static final StaticLoggerBinder getSingleton() {
+        return SINGLETON;
+    }
+
     @Override
     public ILoggerFactory getLoggerFactory() {
         return loggerFactory;
@@ -81,6 +86,6 @@ public class StaticLoggerBinder implements LoggerFactoryBinder {
 
     @Override
     public String getLoggerFactoryClassStr() {
-        return loggerFactoryClassStr;
+        return LOGGER_FACTORY_CLASS_STR;
     }
 }

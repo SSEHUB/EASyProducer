@@ -1,7 +1,9 @@
 package de.uni_hildesheim.sse.vil.expressions.translation;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
@@ -10,6 +12,7 @@ import org.eclipse.xtext.util.Strings;
 
 import de.uni_hildesheim.sse.dslCore.translation.ErrorCodes;
 import de.uni_hildesheim.sse.dslCore.translation.TranslatorException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.ExpressionStatement;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VariableDeclaration;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallArgument;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression;
@@ -18,24 +21,32 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Constr
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ContainerInitializerExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionEvaluator;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.AbstractCallExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionVersionRestriction;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.FieldAccessExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IResolvable;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ParenthesisExpression;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ResolutionListener;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Resolver;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ValueAssignmentExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VarModelIdentifierExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VariableExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VilTypeExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Constants;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.FieldDescriptor;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaOperation;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlElement;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypes;
 import de.uni_hildesheim.sse.model.varModel.values.EnumValue;
 import de.uni_hildesheim.sse.utils.messages.AbstractException;
 import de.uni_hildesheim.sse.utils.modelManagement.DefaultImportResolver;
+import de.uni_hildesheim.sse.utils.modelManagement.IModel;
 import de.uni_hildesheim.sse.utils.modelManagement.IVersionRestriction;
 import de.uni_hildesheim.sse.utils.modelManagement.RestrictionEvaluationException;
 import de.uni_hildesheim.sse.utils.modelManagement.Version;
@@ -51,6 +62,7 @@ import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Declaration;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Declarator;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.EqualityExpression;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.EqualityExpressionPart;
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionOrQualifiedExecution;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.LogicalExpression;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.LogicalExpressionPart;
@@ -67,7 +79,6 @@ import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Type;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.TypeParameters;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.UnaryExpression;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.UnqualifiedExecution;
-import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VersionSpec;
 
 /**
@@ -75,8 +86,13 @@ import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VersionSpec;
  * 
  * @author Holger Eichelberger
  */
-public abstract class ExpressionTranslator<I extends VariableDeclaration, R extends Resolver<I>> extends de.uni_hildesheim.sse.dslCore.translation.ExpressionTranslator {
+public abstract class ExpressionTranslator<I extends VariableDeclaration, R extends Resolver<I>, 
+    E extends ExpressionStatement> extends de.uni_hildesheim.sse.dslCore.translation.ExpressionTranslator 
+    implements ResolutionListener {
 
+    private java.util.Map<VarModelIdentifierExpression, EObject> ivmlWarnings 
+        = new HashMap<VarModelIdentifierExpression, EObject>();
+    
     /**
      * Creates an expression translator (to be used within this package only).
      */
@@ -105,23 +121,86 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
         }
         return result;
     }
-/*
-    protected Expression processImplicationExpression(ImplicationExpression ex, R resolver) 
-        throws TranslatorException {
-        Expression result = processLogicalExpression(ex.getLeft());
-        if (null != ex.getRight()) {
-            try {
-                for (ImplicationExpressionPart part : ex.getRight()) {
-                    part.getOp();
-                    result = new CallExpression(part.getOp(), result, processLogicalExpression(part.getEx()));
-                    result.inferType();
-                }
-            } catch (ExpressionException e) {
-                throw new TranslatorException(e, ex, ExpressionDslPackage.Literals.IMPLICATION_EXPRESSION__RIGHT);
+
+    /**
+     * Enacts the IVML warnings not resolved by "function pointers" so far.
+     */
+    public void enactIvmlWarnings() {
+        for (Map.Entry<VarModelIdentifierExpression, EObject> ent : ivmlWarnings.entrySet()) {
+            VarModelIdentifierExpression ex = ent.getKey();
+            if (!ex.isMarkedAsResolved()) {
+                ivmlWarning(ex.getIdentifier(), ent.getValue(), ExpressionDslPackage.Literals.CONSTANT__QVALUE);
             }
         }
-        return result;
-    }*/
+        ivmlWarnings.clear();
+    }
+    
+    /**
+     * Creates a warning due to an unresolved IVML element.
+     * 
+     * @param name the name of the element
+     * @param cause the causing ECore element
+     * @param causingFeature the causing ECore feature
+     */
+    private void ivmlWarning(String name, EObject cause, EStructuralFeature causingFeature) {
+        warning("'" + name + "' is unknown, shall be a VIL variable, a VIL type or an IVML variable " 
+            + "/ annotation - may lead to a runtime error", cause, causingFeature, ErrorCodes.UNKNOWN_TYPE);
+    }
+    
+    /**
+     * Processes an expression statement.
+     * 
+     * @param expr the expression to be processed
+     * @param resolver a resolver instance for resolving variables etc.
+     * @return the expression statement
+     * @throws TranslatorException in case that the translation fails due to semantic reasons
+     */
+    public E processExpressionStatement(de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionStatement expr, 
+        R resolver) throws TranslatorException {
+        Expression result = processExpression(expr.getExpr(), resolver);
+        try {
+            result.inferType();
+        } catch (VilException e) {
+            throw new TranslatorException(e, expr, ExpressionDslPackage.Literals.EXPRESSION_STATEMENT__EXPR);
+        }
+        if (null != expr.getVar()) {
+            I decl = resolver.resolve(expr.getVar(), false);
+            if (null == decl) {
+                throw new TranslatorException("cannot resolve variable '" + expr.getVar() + "'", expr, 
+                    ExpressionDslPackage.Literals.EXPRESSION_STATEMENT__VAR, ErrorCodes.UNKNOWN_ELEMENT);
+            }
+            if (null != expr.getField()) {
+                FieldDescriptor fdesc = decl.getType().getField(expr.getField());
+                if (null != fdesc) {
+                    result = new ValueAssignmentExpression(decl, fdesc, result);
+                } else {
+                    throw new TranslatorException("cannot resolve field '" + expr.getField() + "'", expr, 
+                        ExpressionDslPackage.Literals.EXPRESSION_STATEMENT__FIELD, ErrorCodes.UNKNOWN_ELEMENT);
+                }
+                if (null != fdesc && fdesc.isReadOnly()) {
+                    throw new TranslatorException("Cannot assign value to readonly field '" + fdesc.getName() + "'", 
+                        expr, ExpressionDslPackage.Literals.EXPRESSION_STATEMENT__FIELD, 
+                        VilException.ID_RUNTIME_READ_WRITE);
+                }
+            } else {
+                try {
+                    result = new ValueAssignmentExpression(decl, result);
+                    result.inferType();
+                } catch (VilException e) {
+                    throw new TranslatorException(e, expr, ExpressionDslPackage.Literals.EXPRESSION_STATEMENT__VAR);
+                }
+            }
+        }
+        return createExpressionStatement(result);
+    }
+
+    /**
+     * Creates an expression statement.
+     * 
+     * @param expression the expression
+     * @return the expression statement
+     */
+    protected abstract E createExpressionStatement(Expression expression);
     
     /**
      * Processes a logical expression.
@@ -141,7 +220,7 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                         processEqualityExpression(part.getEx(), resolver));
                     result.inferType();
                 }
-            } catch (ExpressionException e) {
+            } catch (VilException e) {
                 throw new TranslatorException(e, ex, ExpressionDslPackage.Literals.LOGICAL_EXPRESSION__RIGHT);
             }
         }
@@ -164,7 +243,7 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                 EqualityExpressionPart part = ex.getRight();
                 result = new CallExpression(null, part.getOp(), result, processRelationalExpression(part.getEx(), resolver));
                 result.inferType();
-            } catch (ExpressionException e) {
+            } catch (VilException e) {
                 throw new TranslatorException(e, ex, ExpressionDslPackage.Literals.EQUALITY_EXPRESSION__RIGHT);
             }
         }
@@ -187,7 +266,7 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                 RelationalExpressionPart part = ex.getRight();
                 result = new CallExpression(null, part.getOp(), result, processAdditiveExpression(part.getEx(), resolver));
                 result.inferType();
-            } catch (ExpressionException e) {
+            } catch (VilException e) {
                 throw new TranslatorException(e, ex, ExpressionDslPackage.Literals.RELATIONAL_EXPRESSION__RIGHT);
             }
         }
@@ -211,7 +290,7 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                     result = new CallExpression(null, part.getOp(), result, processMultiplicativeExpression(part.getEx(), resolver));
                     result.inferType();
                 }
-            } catch (ExpressionException e) {
+            } catch (VilException e) {
                 throw new TranslatorException(e, ex, ExpressionDslPackage.Literals.ADDITIVE_EXPRESSION__RIGHT);
             }
         }
@@ -234,7 +313,7 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                 MultiplicativeExpressionPart part = ex.getRight();
                 result = new CallExpression(null, part.getOp(), result, processUnaryExpression(part.getExpr(), resolver));
                 result.inferType();
-            } catch (ExpressionException e) {
+            } catch (VilException e) {
                 throw new TranslatorException(e, ex, ExpressionDslPackage.Literals.EQUALITY_EXPRESSION__RIGHT);
             }
         }
@@ -256,7 +335,7 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
             try {
                 result = new CallExpression(null, ex.getOp(), result);
                 result.inferType();
-            } catch (ExpressionException e) {
+            } catch (VilException e) {
                 throw new TranslatorException(e, ex, ExpressionDslPackage.Literals.UNARY_EXPRESSION__EXPR);
             }
             
@@ -321,18 +400,18 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
             Declarator decl = call.getDecl();
             if (null != decl && null != decl.getDecl()) {
                 if (arguments.size() > 0) {
-                    TypeDescriptor<? extends IVilType> arg0Type = null; // implicit arg carries generic types
+                    TypeDescriptor<?> arg0Type = null; // implicit arg carries generic types
                     try {
                         arg0Type = arguments.get(0).inferType();
-                    } catch (ExpressionException e) {
+                    } catch (VilException e) {
                         throw new TranslatorException(e, call, ExpressionDslPackage.Literals.CALL__PARAM);
                     }
-                    if (null != arg0Type && arg0Type.isCollection() && arg0Type.getParameterCount() > 0) {
+                    if (null != arg0Type && arg0Type.isCollection() && arg0Type.getGenericParameterCount() > 0) {
                         result = new ArrayList<I>();
                         for (Declaration d : decl.getDecl()) {
                             // currently we consider only 1 dimension, see exception below
-                            TypeDescriptor<? extends IVilType> dimensionType = arg0Type.getParameterType(0); 
-                            TypeDescriptor<? extends IVilType> t;
+                            TypeDescriptor<?> dimensionType = arg0Type.getGenericParameterType(0); 
+                            TypeDescriptor<?> t;
                             if (null != d.getType()) {
                                 t = processType(d.getType(), resolver);
                                 if (!t.isAssignableFrom(dimensionType)) {
@@ -443,15 +522,15 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
         ExpressionEvaluator ex = null;
         if (arguments.size() > 0) {
             try {
-                TypeDescriptor<? extends IVilType> arg0Type = arguments.get(0).inferType();
-                if (arg0Type.isCollection() && arg0Type.getParameterCount() > 0) {
+                TypeDescriptor<?> arg0Type = arguments.get(0).inferType();
+                if (arg0Type.isCollection() && arg0Type.getGenericParameterCount() > 0) {
                     resolver.pushLevel();
-                    I iterVar = createVariableDeclaration("ITER", arg0Type.getParameterType(0), false, null);
+                    I iterVar = createVariableDeclaration("ITER", arg0Type.getGenericParameterType(0), false, null);
                     resolver.add(iterVar); // iterVar shall be strictly local!
                     ex = new ExpressionEvaluator(processExpression(param.getEx(), resolver), iterVar);
                     resolver.popLevel();
                 }
-            } catch (ExpressionException e) {
+            } catch (VilException e) {
                 throw new TranslatorException(e, param, ExpressionDslPackage.Literals.NAMED_ARGUMENT__EX);
             }
         }
@@ -466,7 +545,7 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
      * @param isConstant whether this variable is a constant
      * @param expression an expression denoting the initial value (may be <b>null</b>)
      */
-    protected abstract I createVariableDeclaration(String name, TypeDescriptor<? extends IVilType> type, 
+    protected abstract I createVariableDeclaration(String name, TypeDescriptor<?> type, 
         boolean isConstant, Expression expression);
 
     /**
@@ -489,12 +568,12 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
      * @param expr the expression to be checked
      * @return the <code>expr</code> if ok or <b>null</b>
      */
-    protected ExpressionException checkSemantics(Expression expr) {
-        ExpressionException semantic = null;
+    protected VilException checkSemantics(Expression expr) {
+        VilException semantic = null;
         if (null != expr) {
             try {
                 expr.inferType();
-            } catch (ExpressionException e) {
+            } catch (VilException e) {
                 // cannot resolve
                 semantic = e;
             }
@@ -582,7 +661,7 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                     result = new ConstructorCallExpression(processType(cEx.getType(), resolver), args);
                     result = processSubCalls(result, cEx.getCalls(), resolver);
                     result.inferType();
-                } catch (ExpressionException e) {
+                } catch (VilException e) {
                     throw new TranslatorException(e, cEx, ExpressionDslPackage.Literals.CONSTRUCTOR_EXECUTION__TYPE);
                 }
             }
@@ -598,7 +677,7 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
      * @return the resulting expression node
      * @throws TranslatorException in case that the translation fails for some reason
      */
-    protected CallArgument[] processArguments(ArgumentList arguments, R resolver) throws TranslatorException {
+    public CallArgument[] processArguments(ArgumentList arguments, R resolver) throws TranslatorException {
         CallArgument[] result;
         if (null == arguments || null == arguments.getParam()) {
             result = new CallArgument[0];
@@ -613,6 +692,9 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
         return result;
     }
     
+    protected abstract Expression parseExpression(String expression, R resolver, StringBuilder warnings) 
+        throws VilException;
+    
     /**
      * Processes a constant argument.
      * 
@@ -625,7 +707,7 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
         throws TranslatorException {
         Expression result = null;
         if (null != arg.getNValue()) {
-            TypeDescriptor<? extends IVilType> type;
+            TypeDescriptor<?> type;
             String tmp = arg.getNValue().getVal();
             if (tmp.indexOf('.') > 0) {
                 type = TypeRegistry.realType();
@@ -634,10 +716,23 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
             }
             result = createConstant(type, tmp, arg, 
                 ExpressionDslPackage.Literals.CONSTANT__NVALUE, resolver.getTypeRegistry());
+            
         } else if (null != arg.getSValue()) {
             String s = convertString(arg.getSValue());
-            result = createConstant(TypeRegistry.stringType(), s, arg, 
-                ExpressionDslPackage.Literals.CONSTANT__SVALUE, resolver.getTypeRegistry());
+            
+            Expression ex;
+            try {
+                StringBuilder warnings = new StringBuilder();
+                ex = StringResolver.substitute(s, resolver, this, warnings);
+                if (warnings.length() > 0) {
+                    warning(warnings.toString(), arg, ExpressionDslPackage.Literals.CONSTANT__SVALUE, 0);
+                }
+                result = ex;
+            } catch (VilException e) {
+                throw new TranslatorException(e, arg, ExpressionDslPackage.Literals.CONSTANT__SVALUE);
+            }
+//            result = createConstant(TypeRegistry.stringType(), ex, arg, 
+//                ExpressionDslPackage.Literals.CONSTANT__SVALUE, resolver.getTypeRegistry());
         } else if (null != arg.getQValue()) {
             String name = Utils.getQualifiedNameString(arg.getQValue());
             if (Version.isVersion(name)) { // parser mismatch fixed here
@@ -671,6 +766,37 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
         }
         return result;
     }
+    
+    private FieldAccessExpression process(VariableDeclaration var, FieldAccessExpression last, String name, 
+        Constant elt) throws TranslatorException {
+        FieldAccessExpression result;
+        if (null == last) {
+            FieldDescriptor fd = var.getType().getField(name);
+            if (null != fd) {
+                try {
+                    result = new FieldAccessExpression(var, fd);
+                } catch (VilException e) {
+                    throw new TranslatorException(e, elt, ExpressionDslPackage.Literals.CONSTANT__QVALUE);
+                }
+            } else {
+                throw new TranslatorException("cannot resolve field " + name, elt, 
+                    ExpressionDslPackage.Literals.CONSTANT__QVALUE, ErrorCodes.UNKNOWN_ELEMENT);
+            }
+        } else {
+            try {
+                FieldDescriptor fd = last.inferType().getField(name);
+                if (null != fd) {
+                    result = new FieldAccessExpression(last, fd);
+                } else {
+                    throw new TranslatorException("cannot resolve field " + name, elt, 
+                        ExpressionDslPackage.Literals.CONSTANT__QVALUE, ErrorCodes.UNKNOWN_ELEMENT);
+                }
+            } catch (VilException e) {
+                throw new TranslatorException(e, elt, ExpressionDslPackage.Literals.CONSTANT__QVALUE);
+            }
+        }
+        return result;
+    }
 
     /**
      * Processes a qualified value and creates variable expressions.
@@ -683,21 +809,53 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
      */
     protected Expression processQualifiedValue(String name, Constant arg, R resolver) throws TranslatorException {
         Expression result = null;
-        IResolvable res = resolver.resolve(name, false);
-        if (null == res) {
+        int pos = name.indexOf('.');
+        IResolvable res = null;
+        if (pos > 0 && pos < name.length()) { // grammar: there may by at maximum one "." in a qualified name
+            String head = name.substring(0, pos);
+            String tail = name.substring(pos + 1);
+            res = resolver.resolve(head, false);
+            if (res instanceof VariableDeclaration) {
+                VariableDeclaration var = (VariableDeclaration) res;
+                FieldAccessExpression fae = null;
+                do {
+                    pos = tail.indexOf('.');
+                    if (pos >= 0) {
+                        fae = process(var, fae, tail.substring(0, pos), arg);
+                        tail = tail.substring(pos + 1);
+                    } else {
+                        fae = process(var, fae, tail, arg);
+                    }
+                } while (pos >= 0);
+                result = fae;
+                res = null;
+            } else {
+                TypeDescriptor<?> type = resolver.getTypeRegistry().getType(head);
+                if (null != type) {
+                    FieldDescriptor field = type.getField(tail); // TODO deep resolution by now, refactor
+                    if (null != field && field.isStatic()) {
+                        try {
+                            result = new FieldAccessExpression(field);
+                        } catch (VilException e) {
+                            throw new TranslatorException(e, arg, ExpressionDslPackage.Literals.CONSTANT__QVALUE);
+                        }
+                    }
+                }
+                
+            }
+        } 
+        if (null == res && null == result) {
+            res = resolver.resolve(name, false);
+        }
+        if (null == res && null == result) {
             if ("ITER".equals(name)) {
                 throw new TranslatorException("iterator variable ITER cannot be resolved", arg, 
                     ExpressionDslPackage.Literals.CONSTANT__QVALUE, ErrorCodes.CANNOT_RESOLVE_ITER);
             }
             TypeRegistry registry = resolver.getTypeRegistry();
-            TypeDescriptor<? extends IVilType> type = registry.getType(name);
+            TypeDescriptor<?> type = registry.getType(name);
             if (null == type) {
                 Object ivmlElement = resolver.getIvmlElement(name);
-                if (null == ivmlElement) {
-                    warning("'" + name + "' is unknown, shall be a VIL variable, a VIL type or an IVML variable " 
-                        + "/ attribute - may lead to a runtime error", arg, 
-                        ExpressionDslPackage.Literals.CONSTANT__QVALUE, ErrorCodes.UNKNOWN_TYPE);
-                } 
                 if (ivmlElement instanceof EnumValue) {
                     EnumValue eValue = (EnumValue) ivmlElement;
                     type = registry.getType(eValue.getType());
@@ -705,22 +863,27 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                         try {
                             result = new ConstantExpression(type, new de.uni_hildesheim.sse.easy_producer.instantiator.
                                 model.vilTypes.configuration.EnumValue(eValue), registry);
-                        } catch (ExpressionException e) {
+                        } catch (VilException e) {
                             throw new TranslatorException(e, arg, ExpressionDslPackage.Literals.CONSTANT__QVALUE);
                         }
                     }
                 } 
                 if (null == result) {
-                    result = new VarModelIdentifierExpression(name); // also if elt==null
+                    VarModelIdentifierExpression vmie = new VarModelIdentifierExpression(name); // also if elt==null 
+                    result = vmie;
+                    if (null == ivmlElement) {
+                        ivmlWarnings.put(vmie, arg);
+                    } 
                 }
             } else {
                 result = new VilTypeExpression(name, type);
+                ivmlWarning(name, arg, ExpressionDslPackage.Literals.CONSTANT__QVALUE);
             }
         } else if (res instanceof VariableDeclaration) {
             result = new VariableExpression((VariableDeclaration) res, name);
         } else if (res instanceof IvmlElement) { // from VIL, model is known at parsing time
             result = new VarModelIdentifierExpression(name);
-        } else {
+        } else if (null == result) {
             // may happen although template..
             throw new TranslatorException(name + " is no variable", arg, 
                 ExpressionDslPackage.Literals.CONSTANT__QVALUE, ErrorCodes.TYPE_CONSISTENCY);
@@ -740,11 +903,11 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
      * @return the created constant expression
      * @throws TranslatorException in case that type resolution fails
      */
-    protected static final Expression createConstant(TypeDescriptor<? extends IVilType> type, Object value, 
+    protected static final Expression createConstant(TypeDescriptor<?> type, Object value, 
         EObject cause, EStructuralFeature causingFeature, TypeRegistry registry) throws TranslatorException {
         try {
             return new ConstantExpression(type, value, registry);
-        } catch (ExpressionException e) {
+        } catch (VilException e) {
             throw new TranslatorException(e, cause, causingFeature);
         }
     }
@@ -756,28 +919,44 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
      * @return the corresponding VIL type
      * @throws TranslatorException in case that type resolution fails
      */
-    public TypeDescriptor<? extends IVilType> processType(Type type, R resolver) throws TranslatorException {
-        TypeDescriptor<? extends IVilType> result;
-        if (null != type.getSeq()) {
-            TypeDescriptor<? extends IVilType>[] param = processTypeParameter(type.getParam(), type, resolver);
+    public TypeDescriptor<?> processType(Type type, R resolver) throws TranslatorException {
+        TypeDescriptor<?> result;
+        if (null != type && null != type.getSeq()) {
+            TypeDescriptor<?>[] param = processTypeParameter(type.getParam(), type, resolver);
             try {
                 result = TypeRegistry.getSequenceType(param);
             } catch (VilException e) {
                 throw new TranslatorException(e, type, ExpressionDslPackage.Literals.TYPE__SEQ);
             }
         } else if (null != type.getSet()) {
-            TypeDescriptor<? extends IVilType>[] param = processTypeParameter(type.getParam(), type, resolver);
+            TypeDescriptor<?>[] param = processTypeParameter(type.getParam(), type, resolver);
             try {
                 result = TypeRegistry.getSetType(param);
             } catch (VilException e) {
                 throw new TranslatorException(e, type, ExpressionDslPackage.Literals.TYPE__SET);
             }
         } else if (null != type.getMap()) {
-            TypeDescriptor<? extends IVilType>[] param = processTypeParameter(type.getParam(), type, resolver);
+            TypeDescriptor<?>[] param = processTypeParameter(type.getParam(), type, resolver);
             try {
                 result = TypeRegistry.getMapType(param);
             } catch (VilException e) {
                 throw new TranslatorException(e, type, ExpressionDslPackage.Literals.TYPE__SET);
+            }
+        } else if (null != type.getCall()) {
+            TypeDescriptor<?>[] param = processTypeParameter(type.getParam(), type, resolver);
+            TypeDescriptor<?>[] tmp = new TypeDescriptor<?>[param.length + 1];
+            System.arraycopy(param, 0, tmp, 0, param.length);
+            TypeDescriptor<?> ret;
+            if (null == type.getReturn()) {
+                ret = ReflectionTypeDescriptor.VOID;
+            } else {
+                ret = processType(type.getReturn(), resolver);
+            }
+            tmp[tmp.length - 1] = ret;
+            try {
+                result = TypeRegistry.getRuleType(tmp);
+            } catch (VilException e) {
+                throw new TranslatorException(e, type, ExpressionDslPackage.Literals.TYPE__CALL);
             }
         } else {
             String typeName = Utils.getQualifiedNameString(type.getName());
@@ -789,12 +968,12 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
         }
         if (result.isPlaceholder()) {
             String typeName = Utils.getQualifiedNameString(type.getName());
-            warning("'" + typeName + "' is unknown, shall be an IVML type - may lead to a runtime error", type, 
+            warning("'" + typeName + "' is unknown, shall be an IVML/known type - may lead to a runtime error", type, 
                 ExpressionDslPackage.Literals.TYPE__NAME, ErrorCodes.UNKNOWN_TYPE);
         }
         return result;
     }
-
+    
     /**
      * Processes a container initializer expression.
      * 
@@ -807,9 +986,8 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
         throws TranslatorException {
         ContainerInitializerExpression result;
         if (null != initializer.getExprs()) {
-            //List<TypeDescriptor<? extends IVilType>> dimensions = null;
             int dimensions = -1;
-            List<TypeDescriptor<? extends IVilType>> partDims = new ArrayList<TypeDescriptor<? extends IVilType>>();
+            List<TypeDescriptor<?>> partDims = new ArrayList<TypeDescriptor<?>>();
             List<Expression> inits = new ArrayList<Expression>();
             for (de.uni_hildesheim.sse.vil.expressions.expressionDsl.ContainerInitializerExpression initEx : initializer.getExprs()) {
                 Expression part = null;
@@ -820,12 +998,12 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                         partDims.add(part.inferType());
                     } else if (null != initEx.getContainer()) {
                         part = processContainerInitializer(initEx.getContainer(), resolver);
-                        TypeDescriptor<? extends IVilType> partType = part.inferType();
-                        for (int d = 0; d < partType.getParameterCount(); d++) {
-                            partDims.add(partType.getParameterType(d));
+                        TypeDescriptor<?> partType = part.inferType();
+                        for (int d = 0; d < partType.getGenericParameterCount(); d++) {
+                            partDims.add(partType.getGenericParameterType(d));
                         }
                     }
-                } catch (ExpressionException e) {
+                } catch (VilException e) {
                     throw new TranslatorException(e, initEx, 
                         ExpressionDslPackage.Literals.CONTAINER_INITIALIZER_EXPRESSION__CONTAINER);
                 }
@@ -839,13 +1017,6 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                     throw new TranslatorException("unmatching dimension of container initializer part", initEx, 
                         ExpressionDslPackage.Literals.CONTAINER_INITIALIZER_EXPRESSION__CONTAINER, ErrorCodes.DIMENSION);
                 }
-                /*if (null == dimensions) {
-                    dimensions = new ArrayList<TypeDescriptor<? extends IVilType>>();
-                    dimensions.addAll(partDims);
-                } else if (!checkDimensions(dimensions, partDims)) {
-                    throw new TranslatorException("unmatching dimension of container initializer", initEx, 
-                        ExpressionDslPackage.Literals.CONTAINER_INITIALIZER_EXPRESSION__CONTAINER, ErrorCodes.DIMENSION);
-                }*/
                 inits.add(part);
             }
             Expression[] exprs = new Expression[inits.size()];
@@ -858,22 +1029,6 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
     }
     
     /**
-     * Checks the dimension types given as parameter for assignment compatibility.
-     * 
-     * @param d1 the first list of dimension types to be checked (taken as reference)
-     * @param d2 the second list of dimension types to be checked
-     * @return <code>true</code> if the dimension types are ok, <code>false</code> else
-     */
-    /*private boolean checkDimensions(List<TypeDescriptor<? extends IVilType>> d1, 
-        List<TypeDescriptor<? extends IVilType>> d2) {
-        boolean ok = d1.size() == d2.size();
-        for (int d = 0; ok && d < d1.size(); d++) {
-            ok = d1.get(d).isAssignableFrom(d2.get(d));
-        }
-        return ok;
-    }*/
-    
-    /**
      * Processes the type parameter.
      * 
      * @param param the ECore instance containing the type parameter
@@ -882,18 +1037,12 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
      * @return the processed parameter in terms of VIL type descriptors
      * @throws TranslatorException in case that type resolution fails
      */
-    protected TypeDescriptor<? extends IVilType>[] processTypeParameter(TypeParameters param, Type type, R resolver) 
+    protected TypeDescriptor<?>[] processTypeParameter(TypeParameters param, Type type, R resolver) 
         throws TranslatorException {
         EList<Type> params = param.getParam();
-        TypeDescriptor<? extends IVilType>[] result = TypeDescriptor.createArray(params.size());
+        TypeDescriptor<?>[] result = TypeDescriptor.createArray(params.size());
         for (int i = 0; i < params.size(); i++) {
             result[i] = processType(params.get(i), resolver);
-//            String typeName = typeNames.get(i);
-//            result[i] = resolver.getTypeRegistry().getType(typeName);
-//            if (null == result[i]) {
-//                throw new TranslatorException("type '" + typeName + "' unknown", type, 
-//                    ExpressionDslPackage.Literals.TYPE__PARAM, ErrorCodes.UNKNOWN_TYPE);
-//            }
         }
         return result;
     }
@@ -914,21 +1063,21 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
             throw new TranslatorException("variable '" + name + "' was already declared", decl, 
                 ExpressionDslPackage.Literals.VARIABLE_DECLARATION__NAME, ErrorCodes.REDEFINITION);
         }
-        TypeDescriptor<? extends IVilType> type = processType(decl.getType(), resolver);
+        TypeDescriptor<?> type = processType(decl.getType(), resolver);
         boolean isConstant = null != decl.getConst();
         Expression init = null;
         if (null != decl.getExpression()) {
             init = processExpression(decl.getExpression(), resolver);
             try {
-                TypeDescriptor<? extends IVilType> exType = init.inferType();
+                TypeDescriptor<?> exType = init.inferType();
                 boolean ok = type.isAssignableFrom(exType);
-                if (!ok && type.isSequence() && exType.isSequence() && 0 == exType.getParameterCount() 
+                if (!ok && type.isSequence() && exType.isSequence() && 0 == exType.getGenericParameterCount() 
                     && init instanceof ContainerInitializerExpression) {
                     // left side is sequence and right side is empty container initializer - this works
                     ContainerInitializerExpression cie = (ContainerInitializerExpression) init;
                     ok = 0 == cie.getInitExpressionsCount();
                 }
-                if (!ok && type.isSet() && exType.isSequence() && 0 == exType.getParameterCount() 
+                if (!ok && type.isSet() && exType.isSequence() && 0 == exType.getGenericParameterCount() 
                     && init instanceof ContainerInitializerExpression) {
                     // left side is set and right side is empty container initializer - convert and ok
                     ContainerInitializerExpression cie = (ContainerInitializerExpression) init;
@@ -942,32 +1091,82 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                     // left side is set and right side is empty container initializer - convert and ok
                     ContainerInitializerExpression cie = (ContainerInitializerExpression) init;
                     ContainerInitializerExpression tmp = cie.toSet();
-                    TypeDescriptor<? extends IVilType> tmpType = tmp.inferType();
+                    TypeDescriptor<?> tmpType = tmp.inferType();
                     if (type.isAssignableFrom(tmpType)) {
                         init = tmp;
                         exType = tmpType;
                         ok = true;
                     }
                 }
+                if (!ok && TypeRegistry.resolvableOperationType().isAssignableFrom(type) 
+                    && IvmlTypes.ivmlElement().isAssignableFrom(exType)) {
+                    // this may be a "function pointer" - defer until everything is resolved and try later
+                    init = new DeferredResolvableOperationExpression(decl, type, init);
+                    ok = true; // pretend that everything is ok -> reProcessVariableDeclaration
+                }
                 if (!ok) {
                     OperationDescriptor conversion = TypeDescriptor.findConversionOnBoth(exType, type);
                     if (null == conversion) {
-                        throw new TranslatorException("variable '" + name + "' of type '" + type.getVilName() + "' cannot be " 
-                            + "initialized with an expression of type '" + exType.getVilName() + "'", decl, 
-                            ExpressionDslPackage.Literals.VARIABLE_DECLARATION__NAME, ErrorCodes.TYPE_CONSISTENCY);
+                        throwVariableCannotBeInitialized(decl, type, exType);
                     } else {
                         init = new CallExpression(conversion, new CallArgument(init));
                     }
                 }
-            } catch (ExpressionException e) {
-                throw new TranslatorException(e, decl, ExpressionDslPackage.Literals.VARIABLE_DECLARATION__TYPE);
             } catch (VilException e) {
-                throw new TranslatorException(e, decl, ExpressionDslPackage.Literals.VARIABLE_DECLARATION__NAME);
+                throw new TranslatorException(e, decl, ExpressionDslPackage.Literals.VARIABLE_DECLARATION__TYPE);
             }
         } 
         I result = createVariableDeclaration(name, type, isConstant, init);
         resolver.add(result);
         return result;
+    }
+    
+    /**
+     * Re-processes a variable declaration in order to get rid of {@link DeferredResolvableOperationExpression}.
+     * 
+     * @param decl the declaration
+     * @param resolver the resolver
+     * @throws TranslatorException in case that re-processing fails for some reason
+     */
+    public void reProcessVariableDeclaration(I decl, R resolver) throws TranslatorException {
+        Expression init = decl.getExpression();
+        if (init instanceof DeferredResolvableOperationExpression) {
+            DeferredResolvableOperationExpression defEx = (DeferredResolvableOperationExpression) init;
+            try {
+                boolean done = false;
+                IModel model = resolver.getCurrentModel();
+                Expression defExInit = defEx.getInit();
+                TypeDescriptor<?> varType = defEx.getVarType();
+                TypeDescriptor<?> defExInitType = defExInit.inferType();
+                if (model instanceof IMetaType) {
+                    IMetaOperation op = AbstractCallExpression.resolveResolvableOperation((IMetaType) model, 
+                        varType, defExInitType, defExInit, this);
+                    if (null != op) {
+                        decl.resolveOperation(defEx.getVarType(), op);
+                        done = true;
+                    }
+                }
+                if (!done) {
+                    throwVariableCannotBeInitialized(defEx.getDecl(), varType, defExInitType);
+                }
+            } catch (VilException e) {
+                throw new TranslatorException(e, defEx.getDecl(), ExpressionDslPackage.Literals.VARIABLE_DECLARATION__TYPE);
+            }
+        }
+    }
+
+    /**
+     * Throws a {@link TranslatorException} that a variable cannot be initialized.
+     * 
+     * @param decl the ECore declaration object
+     * @param declType the declaration VIL type 
+     * @param initType the init expression VIL type
+     * @throws TranslatorException the created exception
+     */
+    private void throwVariableCannotBeInitialized(de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration decl, TypeDescriptor<?> declType, TypeDescriptor<?> initType) throws TranslatorException {
+        throw new TranslatorException("variable '" + decl.getName()+ "' of type '" + declType.getVilName() + "' cannot be " 
+            + "initialized with an expression of type '" + initType.getVilName() + "'", decl, 
+            ExpressionDslPackage.Literals.VARIABLE_DECLARATION__NAME, ErrorCodes.TYPE_CONSISTENCY);
     }
 
 
@@ -978,9 +1177,9 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
      * @return <code>true</code> if resolution shall be continued (there was an exception and it points to a resolution 
      *     or a semantic problem), <code>false</code> else
      */
-    protected boolean continueResolution(ExpressionException semanticException) {
-        return null != semanticException && (semanticException.getId() == ExpressionException.ID_CANNOT_RESOLVE 
-            || semanticException.getId() == ExpressionException.ID_SEMANTIC); // legacy
+    protected boolean continueResolution(VilException semanticException) {
+        return null != semanticException && (semanticException.getId() == VilException.ID_CANNOT_RESOLVE 
+            || semanticException.getId() == VilException.ID_SEMANTIC); // legacy
     }
 
     
@@ -1026,7 +1225,12 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
         if (null == string) {
             result = null;
         } else {
-            result = Strings.convertFromJavaString(string.substring(1, string.length() - 1), true);
+            if ((string.startsWith("\"") && string.endsWith("\"")) 
+                || (string.startsWith("'") && string.endsWith("'"))) {
+                result = Strings.convertFromJavaString(string.substring(1, string.length() - 1), true);
+            } else {
+                result = string;
+            }
         }
         return result;
     }
@@ -1085,4 +1289,9 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
     protected abstract ExpressionVersionRestriction createExpressionVersionRestriction(Expression expr, 
         VariableDeclaration decl, EObject cause, EStructuralFeature feature) throws RestrictionEvaluationException;
 
+    @Override
+    public void resolved(VarModelIdentifierExpression ex) {
+        ivmlWarnings.remove(ex);
+    }
+    
 }

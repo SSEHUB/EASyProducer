@@ -14,16 +14,13 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Bui
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.StrategyCallExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.VariableDeclaration;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ConstantExpression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Instantiator;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.VilException;
 
 /**
  * Tests {@link StrategyCallExpression}.
@@ -53,20 +50,20 @@ public class StrategyCallExpressionTest extends AbstractTest {
         IArtifact artifact = null;
         try {
             artifact = ArtifactFactory.createArtifact(new File(TESTDATA_DIR, "TextFile.txt"));
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             Assert.fail("unexpected exception:" + e.getMessage());
         }
-        TypeDescriptor<? extends IVilType> artifactType = registry.getType(FileArtifact.class.getSimpleName());
+        TypeDescriptor<?> artifactType = registry.getType(FileArtifact.class.getSimpleName());
         Assert.assertNotNull("file artifact not found", artifactType);
         Assert.assertTrue("wrong artifact type", artifact instanceof FileArtifact);
         try {
             StrategyCallExpression ex = new StrategyCallExpression(null, inst.value(), 
                 new ConstantExpression(artifactType, artifact, registry));
-            TypeDescriptor<? extends IVilType> resultType = ex.inferType();
+            TypeDescriptor<?> resultType = ex.inferType();
             Assert.assertTrue("result type does not match", 
                  registry.getType(Set.class).isAssignableFrom(resultType));
             ex.accept(createExecutionInstance());
-        } catch (ExpressionException e) {
+        } catch (VilException e) {
             Assert.fail("unexpected exception:" + e.getMessage());
         }
     }
@@ -77,7 +74,7 @@ public class StrategyCallExpressionTest extends AbstractTest {
     @Test
     public void testSystemExecution() {
         TypeRegistry registry = getRegistry();
-        TypeDescriptor<? extends IVilType> stringType = TypeRegistry.stringType();
+        TypeDescriptor<?> stringType = TypeRegistry.stringType();
         try {
             StrategyCallExpression ex;
             VariableDeclaration varName = new VariableDeclaration("callName", TypeRegistry.stringType());
@@ -94,16 +91,14 @@ public class StrategyCallExpressionTest extends AbstractTest {
                     new ConstantExpression(stringType, "-l", registry),
                     new ConstantExpression(stringType, ".", registry));
             }
-            TypeDescriptor<? extends IVilType> result = ex.inferType();
+            TypeDescriptor<?> result = ex.inferType();
             Assert.assertTrue("result is not of correct type", result == TypeRegistry.voidType());
             BuildlangExecution exec = createExecutionInstance();
             exec.getRuntimeEnvironment().switchContext(new Script("test"));
             exec.getRuntimeEnvironment().addValue(varName, varNameValue);
             ex.accept(exec);
             // no result expected but also no exception
-        } catch (ExpressionException e) {
-            Assert.fail("unexpected exception:" + e.getMessage());
-        } catch (VilLanguageException e) {
+        } catch (VilException e) {
             Assert.fail("unexpected exception:" + e.getMessage());
         }
     }

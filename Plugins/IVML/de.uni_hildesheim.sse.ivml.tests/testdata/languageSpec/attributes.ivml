@@ -5,5 +5,5 @@ project ivmlSpec_attributes {
     }
 
     ContentSharing contentSharing;
-    attribute BindingTimes binding = BindingTimes.compile to contentSharing;
+    annotate BindingTimes binding = BindingTimes.compile to contentSharing;
 }

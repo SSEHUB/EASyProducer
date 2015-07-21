@@ -1,0 +1,17 @@
+project adviceTestVIL1 {
+  version v0;
+  
+  compound TestCompound {
+      Integer iVal;
+  }
+  
+  TestCompound c1;
+  c1 = {
+    iVal=1
+  };
+  
+  freeze {
+    c1;
+  };
+  
+}

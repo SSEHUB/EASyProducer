@@ -5,14 +5,31 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.List;
 
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
+import de.uni_hildesheim.sse.ConstraintSyntaxException;
+import de.uni_hildesheim.sse.dslcore.ui.editors.IEmbeddedEditor;
+import de.uni_hildesheim.sse.dslcore.ui.editors.IEmbeddedEditor.IValidationStateListener;
+import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
+import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
+import de.uni_hildesheim.sse.model.management.VarModel;
+import de.uni_hildesheim.sse.model.varModel.IModelElement;
+import de.uni_hildesheim.sse.model.varModel.Project;
+import de.uni_hildesheim.sse.persistency.StringProvider;
+import de.uni_hildesheim.sse.persistency.ConstraintSplitWriter.IConstraintFilter;
 import de.uni_hildesheim.sse.ui.embed.EditorUtils;
+import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
+import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
+import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
 
 /**
  * This class realizes a dialog which includes an embedded IVML-editor.
@@ -20,9 +37,11 @@ import de.uni_hildesheim.sse.ui.embed.EditorUtils;
  * @author kroeher
  *
  */
-public class ConstraintEditorDialog extends Dialog {
+public class ConstraintEditorDialog extends Dialog implements IValidationStateListener {
 
     private URI resourceURI;
+    private ModelInfo<Project> modelInfo;
+    private IEmbeddedEditor editor;
     
     /**
      * The constructor of this dialog.
@@ -35,8 +54,11 @@ public class ConstraintEditorDialog extends Dialog {
         if (null != in) {
             try {
                 File f = File.createTempFile("xtextEditorTest", "ivml");
+                f.delete();
+                f.mkdirs();
                 f.deleteOnExit();
-                FileOutputStream out = new FileOutputStream(f);
+                File file = new File(f, "test.ivml");
+                FileOutputStream out = new FileOutputStream(file);
                 byte[] buffer = new byte[1024];
                 int count;
                 do {
@@ -47,9 +69,23 @@ public class ConstraintEditorDialog extends Dialog {
                 } while (count > 0);
                 in.close();
                 out.close();
-                resourceURI = f.toURI();
+                resourceURI = file.toURI();
+                // assuming that the loader has been set before!
+                VarModel.INSTANCE.locations().addLocation(f, ProgressObserver.NO_OBSERVER);
+                List<ModelInfo<Project>> infos = VarModel.INSTANCE.availableModels().getModelInfo("test");
+                if (null != infos) {
+                    for (int i = 0; i < infos.size(); i++) {
+                        ModelInfo<Project> info = infos.get(i);
+                        if (info.getLocation().equals(resourceURI)) {
+                            modelInfo = info;
+                            VarModel.INSTANCE.load(modelInfo);
+                        }
+                    }
+                }
             } catch (IOException e) {
-                // dont care for open streams here...
+                // don't care for open streams here...
+                e.printStackTrace();
+            } catch (ModelManagementException e) {
                 e.printStackTrace();
             }
         }
@@ -60,7 +96,20 @@ public class ConstraintEditorDialog extends Dialog {
         Composite container = (Composite) super.createDialogArea(parent);
         if (null != resourceURI) {
             // Embed the actual editor
-            EditorUtils.embedIvmlEditor(resourceURI, parent);
+            IConstraintFilter filter = new IConstraintFilter() {
+                
+                @Override
+                public boolean splitAt(IModelElement context, ConstraintSyntaxTree constraint) {
+                    return true; // just split at the first one, the remainder constraints are ignored
+                }
+                
+            };
+            if (null == modelInfo) {
+                EditorUtils.embedIvmlEditor(resourceURI, parent);
+            } else {
+                editor = EditorUtils.embedIvmlConstraintEditor(modelInfo, parent, filter, false);
+                editor.addValidationStateListener(this);
+            }
         }
         return container;
     }
@@ -78,15 +127,33 @@ public class ConstraintEditorDialog extends Dialog {
 
     @Override
     protected void buttonPressed(int buttonId) {
-        /*
-         *  TODO If "Ok"- or "Cancel"-button is pressed ...
-         *  
-         *  1. ask if changes shall be saved
-         *  2. if 1. == true, save changes in editor to IVML-file
-         *  
-         *  Maybe add an additional "Save"-button?
-         */
+        try {
+            ConstraintSyntaxTree result = EditorUtils.obtainExpression(editor, modelInfo, null);
+            System.out.println(StringProvider.toIvmlString(result));
+        } catch (CSTSemanticException e) {
+            System.out.println(e.getMessage());
+        } catch (ConstraintSyntaxException e) {
+            System.out.println(e.getMessage());
+        } // -> filter
         super.buttonPressed(buttonId);
+    }
+
+    @Override
+    public void notifyValidationState(final boolean hasErrors) {
+        final Button button = getButton(IDialogConstants.OK_ID);
+        if (null != button) {
+            Display display = Display.getDefault();
+            if (!display.isDisposed()) {
+                display.asyncExec(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        button.setEnabled(!hasErrors);
+                    }
+                });
+            }
+        }
+        
     }
     
 }

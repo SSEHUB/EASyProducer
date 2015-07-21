@@ -1,14 +1,28 @@
+/*
+ * Copyright 2009-2014 University of Hildesheim, Software Systems Engineering
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ruleMatch;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactTypes;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FileArtifact;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IArtifact;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IExpressionVisitor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArraySet;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Collection;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 
 /**
@@ -19,18 +33,18 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescr
 public class ArtifactMatchExpression extends AbstractRuleMatchExpression {
 
     private Expression expression;
-    private Object resolved;
+    private transient Object resolved;
     
     /**
      * Creates a new collection match expression.
      * 
      * @param expression an expression which evaluates to a collection
-     * @throws ExpressionException in case that the expression does not evaluate to a collection
+     * @throws VilException in case that the expression does not evaluate to a collection
      */
-    public ArtifactMatchExpression(Expression expression) throws ExpressionException {
+    public ArtifactMatchExpression(Expression expression) throws VilException {
         if (!ArtifactTypes.artifactType().isAssignableFrom(expression.inferType())) {
-            throw new ExpressionException("expression does not evaluate to an artifact", 
-                ExpressionException.ID_SEMANTIC);
+            throw new VilException("expression does not evaluate to an artifact", 
+                VilException.ID_SEMANTIC);
         }
         this.expression = expression;
     }
@@ -45,7 +59,7 @@ public class ArtifactMatchExpression extends AbstractRuleMatchExpression {
     }
     
     @Override
-    public TypeDescriptor<? extends IVilType> getEntryType() {
+    public TypeDescriptor<?> getEntryType() {
         return ArtifactTypes.artifactType();
     }
 
@@ -55,7 +69,7 @@ public class ArtifactMatchExpression extends AbstractRuleMatchExpression {
     }
 
     @Override
-    protected Object accept(IMatchVisitor visitor) throws ExpressionException {
+    protected Object accept(IMatchVisitor visitor) throws VilException {
         return visitor.visitArtifactMatchExpression(this);
     }
 
@@ -65,25 +79,25 @@ public class ArtifactMatchExpression extends AbstractRuleMatchExpression {
     }
 
     @Override
-    public Collection<?> evaluate(IExpressionVisitor evaluator) throws ExpressionException {
+    public Collection<?> evaluate(IExpressionVisitor evaluator) throws VilException {
         // requires resolution by matchResolver before - must return a collection
         Object value = expression.accept(evaluator);
         Collection<?> result;
         if (value instanceof FileArtifact) {
             FileArtifact[] resultArray = new FileArtifact[1];
             resultArray[0] = (FileArtifact) value;
-            TypeDescriptor<? extends IVilType>[] param = TypeDescriptor.createArray(1);
+            TypeDescriptor<?>[] param = TypeDescriptor.createArray(1);
             param[0] = getEntryType();
             result = new ArraySet<FileArtifact>(resultArray, param);
         } else if (value instanceof IArtifact) {
             IArtifact[] resultArray = new IArtifact[1];
             resultArray[0] = (IArtifact) value;
-            TypeDescriptor<? extends IVilType>[] param = TypeDescriptor.createArray(1);
+            TypeDescriptor<?>[] param = TypeDescriptor.createArray(1);
             param[0] = getEntryType();
             result = new ArraySet<IArtifact>(resultArray, param);
         } else {
-            throw new ExpressionException("artifact match expression value is not of type Artifact", 
-                ExpressionException.ID_INTERNAL);
+            throw new VilException("artifact match expression value is not of type Artifact", 
+                VilException.ID_INTERNAL);
         }
         return result;
     }

@@ -1,10 +1,7 @@
 package de.uni_hildesheim.sse.easy_producer.core.persistence.standard;
 
-import java.io.File;
-import java.util.HashSet;
 import java.util.List;
 
-import de.uni_hildesheim.sse.easy_producer.core.mgmt.InstantiatorController;
 import de.uni_hildesheim.sse.easy_producer.core.mgmt.PLPInfo;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceException;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.Entity;
@@ -12,7 +9,6 @@ import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.IPersisten
 import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.Model;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.ModelType;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.PersistentProject;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.FileInstantiator;
 import de.uni_hildesheim.sse.model.confModel.ConfigurationException;
 import de.uni_hildesheim.sse.model.varModel.Attribute;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.AttributeValues;
@@ -48,13 +44,9 @@ public class PLP2ProjectConverter implements PersistenceConstants {
     @SuppressWarnings("deprecation")
     public PersistentProject plp2PersistentProject() throws PersistenceException {
         PersistentProject project = new PersistentProject(plp.getProjectLocation());
-        
-        // Instantiators
-        Model model = project.getModel(ModelType.INSTANTIATORS);
-        instantiators2Model(model, plp.getInstantiatorController());
 
         // predecessors
-        model = project.getModel(ModelType.PREDECESSORS);
+        Model model = project.getModel(ModelType.PREDECESSORS);
         for (PLPInfo member : plp.getMemberController().getPredecessors()) {
             Entity entity = relative2Entity(member);
             model.addEntity(entity);
@@ -145,57 +137,6 @@ public class PLP2ProjectConverter implements PersistenceConstants {
         if (null != tmp) {
             entity.createAttributeFileString(PRESUCCESSOR_LOCATION, tmp);
         }
-        return entity;
-    }
-    
-    /**
-     * This method converts the chosen instantiators to a model for the save method.
-     * 
-     * @param instantiatorModel The model, which should store the whole information of the chosen instantiators
-     * @param container The container of chosen instantiators to be stored
-     */
-    private void instantiators2Model(Model instantiatorModel, InstantiatorController container) {
-        HashSet<FileInstantiator> chosenInstantiators = container.getTransformators();
-
-        /*
-         * Only run this method if there is chosen at least one instantiator, otherwise the for loop will throw a
-         * nullpointer exception
-         */
-        if (null != chosenInstantiators) {
-            for (FileInstantiator instantiator : chosenInstantiators) {
-                Entity entity = instantiator2Entity(instantiator);
-                instantiatorModel.addEntity(entity);
-            }
-        }
-    }
-    
-    /**
-     * This method converts an instantiator and all of its data to an entity.
-     * 
-     * @param instantiator The chosen instantiator to be converted.
-     * @return the entity, representing the instantiator
-     */
-    private Entity instantiator2Entity(FileInstantiator instantiator) {
-        Entity entity = new Entity();
-        entity.createAttribute(INSTANTIATOR_ENGINE, instantiator.getEngine());
-        entity.createAttribute(INSTANTIATOR_UUID, instantiator.getProjectID().toString());
-        String paths = instantiator.getPredecessorPath() + INSTANTIATOR_PATH_REGEX + instantiator.getCurrentPath();
-        entity.createAttribute(INSTANTIATOR_PATHS, paths);
-        // The inheritancechain
-        List<String> projects = instantiator.getInheritanceChain();
-        String inheritanceAsString = "";
-        for (int i = 0; i < projects.size(); i++) {
-            inheritanceAsString += projects.get(i) + INSTANTIATOR_PATH_REGEX;
-        }
-        entity.createAttribute(INSTANTIATOR_INHERITED, inheritanceAsString);
-        // The files
-        instantiator.setFilesToInstantiate();
-        List<File> files = instantiator.getFilesToInstantiatePersistency();
-        String filesAsString = "";
-        for (File file : files) {
-            filesAsString += file.getAbsolutePath() + INSTANTIATOR_PATH_REGEX;
-        }
-        entity.createAttribute(INSTANTIATOR_FILE, filesAsString);
         return entity;
     }
 }

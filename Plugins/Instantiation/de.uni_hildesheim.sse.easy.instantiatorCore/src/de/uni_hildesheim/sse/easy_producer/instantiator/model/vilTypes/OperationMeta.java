@@ -33,12 +33,36 @@ public @interface OperationMeta {
     
     /**
      * Whether a generic parameter (index) of the operand shall be used as return type. 
-     * Unused by default.
+     * Unused by default. Disregards first implicit parameter. Only for collection operations.
      */
     int useGenericParameter() default -1;
+
+    /**
+     * Whether a parameter (index) be used as return type. 
+     * Unused by default.
+     */
+    int useParameter() default -1;
     
     /**
      * Whether artifacts in the current context shall be stored before executing this operation.
      */
     boolean storeArtifactsBefore() default false;
+    
+    /**
+     * Indicates whether this function requires dynamic expression processing and may cause problems with 
+     * serialized models in standalone settings without xText.
+     */
+    boolean requiresDynamicExpressionProcessing() default false;
+    
+    /**
+     * Disables tracing the execution, e.g., in case of output operations.
+     */
+    boolean trace() default true;
+    
+    /**
+     * Denotes the index values of the generic parameters to be replaced by the given argument types. Negative values
+     * indicate that the given argument types shall be used. May be required to force / enable automatic conversion.
+     */
+    int[] genericArgument() default { };
+    
 }

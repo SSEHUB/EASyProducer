@@ -1,6 +1,6 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.matchLoop;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 
 /**
  * An applicator which may enable the execution of a loop body. This applicator
@@ -16,7 +16,7 @@ public class BuildEnablingApplicator extends Applicator {
 
     
     @Override
-    public void apply(Object expectedLhsValue, Object rhsValue, int index) throws VilLanguageException {
+    public void apply(Object expectedLhsValue, Object rhsValue, int index) throws VilException {
         lhsRhsBuildMatchFound = true;
     }
     
@@ -31,7 +31,7 @@ public class BuildEnablingApplicator extends Applicator {
     }
 
     @Override
-    public void matchLoopFinished() throws VilLanguageException {
+    public void matchLoopFinished() throws VilException {
         allConditionsEnabled &= lhsRhsBuildMatchFound;
         lhsRhsBuildMatchFound = false;
     }

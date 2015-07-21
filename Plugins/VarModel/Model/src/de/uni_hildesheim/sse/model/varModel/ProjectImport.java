@@ -15,9 +15,12 @@
  */
 package de.uni_hildesheim.sse.model.varModel;
 
+import de.uni_hildesheim.sse.model.management.VarModel;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IResolutionScope;
+import de.uni_hildesheim.sse.utils.modelManagement.AvailableModels;
 import de.uni_hildesheim.sse.utils.modelManagement.IVersionRestriction;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
+import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
 
 /**
@@ -101,8 +104,16 @@ public class ProjectImport extends ModelImport<Project> {
         this.scope = null;
         // set resolved
         super.setResolved(resolved);
+        
+        boolean isTemporary = false;
+        if (null != resolved) {
+            AvailableModels<Project> available = VarModel.INSTANCE.availableModels();
+            ModelInfo<Project> info = available.getModelInfo(resolved);
+            isTemporary = available.isTempInfo(info);
+        }
         // aim at resolving the specific scope
-        if (null != resolved && null != interfaceName) {
+        if (null != resolved && null != interfaceName && !isTemporary) { 
+            // exclude temporary models from this restriction to support constraint editor
             try {
                 this.scope = (IResolutionScope) ModelQuery.findElementByName(
                     resolved, interfaceName, ProjectInterface.class);

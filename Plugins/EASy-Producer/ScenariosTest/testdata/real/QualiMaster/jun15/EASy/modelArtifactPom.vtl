@@ -1,0 +1,91 @@
+template modelArtifactPom(Configuration config, FileArtifact target, String modelArtifact) {
+	def appendPlugins(Text text) {		
+//	            text.append("        <plugin>
+//	        <groupId>org.apache.maven.plugins</groupId>
+//	        <artifactId>maven-compiler-plugin</artifactId>
+//	        <version>3.0</version>
+//	        <configuration>
+//	            <source>1.7</source>
+//	            <target>1.7</target>
+//	        </configuration>              
+//	     </plugin>\n");	
+	            text.append("         <plugin>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>2.3.1</version>
+                <configuration>
+                    <createChecksum>true</createChecksum>
+                </configuration>
+            </plugin>\n");  
+//	            text.append("        <plugin>
+//                <groupId>org.apache.maven.plugins</groupId>
+//                <artifactId>maven-resources-plugin</artifactId>
+//                <version>2.6</version>              
+//                <executions>
+//                    <execution>
+//                        <id>copy-resources</id>
+//                        <phase>validate</phase>
+//                        <goals>
+//                            <goal>copy-resources</goal>
+//                        </goals>
+//					    <configuration>
+//                        	<outputDirectory>"+"$"+"{basedir}/target</outputDirectory>
+//                    		<includeEmptyDirs>false</includeEmptyDirs>
+//                   			<resources>
+//                        		<resource>
+//                            		<directory>"+"$"+"{basedir}/adaptation</directory>
+//									<filtering>false</filtering>
+//                        		</resource>
+//								<resource>
+//                            		<directory>"+"$"+"{basedir}/infrastructure</directory>
+//									<filtering>false</filtering>
+//                        		</resource>
+//								<resource>
+//                            		<directory>"+"$"+"{basedir}/meta</directory>
+//								<filtering>false</filtering>
+//                        		</resource>
+//                    		</resources>                   
+//                		</configuration>
+//                    </execution>
+//                </executions>
+//            </plugin>\n");         	
+		}
+		
+	def appendResources(Text text) {
+		text.append("        <resource>
+            <directory>"+"$" + "{basedir}"+"</directory>
+            <filtering>false</filtering>
+                <includes>
+                    <include>EASy/**/*.*</include>
+
+                </includes>
+				<excludes>
+                    <exclude>pom.xml</exclude>
+                </excludes>
+        </resource>\n");
+	}
+		
+	def main(Configuration config, FileArtifact target, String modelArtifact) {
+		Text text = target.getText();
+		text.append("<project xmlns=\"http://maven.apache.org/POM/4.0.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\">\n");		
+		text.append("  <modelVersion>4.0.0</modelVersion>\n");
+		sequenceOf(String) artList = modelArtifact.split(":");
+		if(artList.size() == 3) {
+		    text.append("  <groupId>${artList[0]}</groupId>\n");
+			text.append("  <artifactId>${artList[1]}</artifactId>\n");
+			text.append("  <version>${artList[2]}</version>\n");	
+		}		
+		text.append("  <packaging>jar</packaging>\n");
+		text.append("\n");
+		text.append("  <build>\n");
+//		text.append("    <sourceDirectory>"+"$"+"{basedir}/meta</sourceDirectory>\n");
+		text.append("    <plugins>\n");
+		appendPlugins(text);
+		text.append("    </plugins>\n");
+		text.append("    <resources>\n");
+		appendResources(text);
+		text.append("    </resources>\n");
+		text.append("  </build>\n");
+		text.append("</project>");
+		target.rename("pom.xml");
+	}
+}

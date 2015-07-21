@@ -1,0 +1,28 @@
+-> status(LifecycleEvent) with (<LifecycleEvent>) = END
+-> ==(String, String) with (END, START) = false
+-> status(LifecycleEvent) with (<LifecycleEvent>) = END
+-> ==(String, String) with (END, START) = false
+-> status(LifecycleEvent) with (<LifecycleEvent>) = END
+-> ==(String, String) with (END, START) = false
+-> status(LifecycleEvent) with (<LifecycleEvent>) = END
+-> ==(String, String) with (END, END) = true
+-> status(LifecycleEvent) with (<LifecycleEvent>) = END
+-> ==(String, String) with (END, END) = true
+-> status(LifecycleEvent) with (<LifecycleEvent>) = END
+-> ==(String, String) with (END, START) = false
+-> status(LifecycleEvent) with (<LifecycleEvent>) = END
+-> ==(String, String) with (END, START) = false
+-> status(LifecycleEvent) with (<LifecycleEvent>) = END
+-> ==(String, String) with (END, START) = false
+-> startup(Project, Configuration, Project, LifecycleEvent) with (<project>, <config>, <project>, <LifecycleEvent>)
+-> status(LifecycleEvent) with (<LifecycleEvent>) = END
+-> ==(String, String) with (END, END) = true
+-> status(LifecycleEvent) with (<LifecycleEvent>) = END
+-> ==(String, String) with (END, END) = true
+-> shutdown(Project, Configuration, Project, LifecycleEvent) with (<project>, <config>, <project>, <LifecycleEvent>)
+    -> status(LifecycleEvent) with (<LifecycleEvent>) = END
+    -> ==(String, String) with (END, END) = true
+    -> status(LifecycleEvent) with (<LifecycleEvent>) = END
+    -> ==(String, String) with (END, END) = true
+    -> shutdownTactic()
+    -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)

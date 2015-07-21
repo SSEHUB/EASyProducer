@@ -10,19 +10,24 @@ import java.util.Map;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
-import test.de.uni_hildesheim.sse.vil.buildlang.AbstractExecutionTest;
 import de.uni_hildesheim.sse.easy.java.artifacts.DefaultJavaFileArtifactCreator;
 import de.uni_hildesheim.sse.easy.java.artifacts.JavaAttribute;
+import de.uni_hildesheim.sse.easy.java.artifacts.JavaCall;
 import de.uni_hildesheim.sse.easy.java.artifacts.JavaClass;
 import de.uni_hildesheim.sse.easy.java.artifacts.JavaFileArtifact;
 import de.uni_hildesheim.sse.easy.java.artifacts.JavaMethod;
 import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
+import test.de.uni_hildesheim.sse.vil.buildlang.AbstractExecutionTest;
+import test.de.uni_hildesheim.sse.vil.buildlang.BuildLangTestConfigurer;
+import test.de.uni_hildesheim.sse.vil.buildlang.ITestConfigurer;
 
 /**
  * Test the Java Artifacts.
@@ -30,11 +35,12 @@ import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
  * @author Sass
  * 
  */
-public class JavaFileArtifactTest extends AbstractExecutionTest {
+public class JavaFileArtifactTest extends AbstractExecutionTest<Script> {
 
     private static EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(JavaFileArtifactTest.class, Bundle.ID);
 
-    // TODO ok for now as the JavaFileArtifact was not registered with the ArtifactFactory,
+    // TODO ok for now as the JavaFileArtifact was not registered with the
+    // ArtifactFactory,
     // shall work via ArtifactFactory
     private static final DefaultJavaFileArtifactCreator CREATOR = new DefaultJavaFileArtifactCreator();
 
@@ -50,36 +56,15 @@ public class JavaFileArtifactTest extends AbstractExecutionTest {
     private static File qualifiedNames;
     private static File renamedQualifiedNames;
     private static File organizedCopyFile;
+    private static File methodFile;
+    private static File modifiedMethodFile;
 
     private static File temp;
     private static File tempFile;
 
     @Override
-    protected String getSystemPropertyName() {
-        return "instantiator.java.testdata.home";
-    }
-
-    /**
-     * Formats a specific file with eclipse code formatter.
-     * 
-     * @param file
-     *            the file to be formatted
-     */
-    public static void formatFile(File file) {
-        /*
-         * TODO DIRTY! TODO REFACTOR! Needs to be done because the changes are formatted by the Eclipse CodeFormatter.
-         * The formatter inserts tabs instead of spaces.
-         */
-        try {
-            JavaFileArtifact javaFileArtefact = (JavaFileArtifact) CREATOR.createArtifactInstance(file, null);
-            Set<JavaClass> classes = javaFileArtefact.classes();
-            for (JavaClass javaClass : classes) {
-                javaClass.notifyChildChanged(javaClass);
-                javaClass.store();
-            }
-        } catch (ArtifactException e) {
-            logger.exception(e);
-        }
+    protected ITestConfigurer<Script> createTestConfigurer() {
+        return new BuildLangTestConfigurer("instantiator.java.testdata.home");
     }
 
     /**
@@ -89,7 +74,7 @@ public class JavaFileArtifactTest extends AbstractExecutionTest {
      *             shall not occur
      */
     @Before
-    public void init() throws IOException {
+    public void setUpBeforeClass() throws IOException {
         temp = createTempDir("javaArtifacts");
         tempFile = new File(temp, "Tmp.java");
 
@@ -103,20 +88,46 @@ public class JavaFileArtifactTest extends AbstractExecutionTest {
 
         organizedCopyFile = copyOriginal("OrganizedCopyFile.java");
 
+        modifiedMethodFile = copyOriginal("ModifiedMethodFile.java");
         originalFile = new File(getArtifactsFolder() + "/src2/test/MainOrg.java");
         importFile = new File(getArtifactsFolder() + "/src2/test/Imports.java");
         packageFile = new File(getArtifactsFolder() + "/src2/test/Packages.java");
         qualifiedNames = new File(getArtifactsFolder() + "/src2/test/QualifiedNames.java");
         copyFile = new File(getArtifactsFolder() + "/src2/test/Copy.java");
+        methodFile = new File(getArtifactsFolder() + "/src2/test/MethodFile.java");
+    }
 
-        // ensure same formatting
-        formatFile(constantAttributes);
-        formatFile(variableAttributes);
-        formatFile(mainWithNoMethods);
-        formatFile(organizedImports);
-        formatFile(renamedPackage);
-        formatFile(renamedQualifiedNames);
-        formatFile(organizedCopyFile);
+    /**
+     * Cleans up this test.
+     */
+    @After
+    public void tearDownAfter() {
+        deleteQuietly(temp);
+    }
+    
+    /**
+     * Formats a specific file with eclipse code formatter.
+     * 
+     * @param file
+     *            the file to be formatted
+     */
+    public static void formatFile(File file) {
+        /*
+         * TODO DIRTY! TODO REFACTOR! Needs to be done because the changes are
+         * formatted by the Eclipse CodeFormatter. The formatter inserts tabs
+         * instead of spaces.
+         */
+        try {
+            System.out.println(file);
+            JavaFileArtifact javaFileArtefact = (JavaFileArtifact) CREATOR.createArtifactInstance(file, null);
+            Set<JavaClass> classes = javaFileArtefact.classes();
+            for (JavaClass javaClass : classes) {
+                javaClass.notifyChildChanged(javaClass);
+                javaClass.store();
+            }
+        } catch (VilException e) {
+            logger.exception(e);
+        }
     }
 
     /**
@@ -135,13 +146,6 @@ public class JavaFileArtifactTest extends AbstractExecutionTest {
         return tmp;
     }
 
-    /**
-     * Cleans up this test.
-     */
-    @After
-    public void clean() {
-        deleteQuietly(temp);
-    }
 
     /**
      * Test if attributes are made constant.
@@ -151,6 +155,7 @@ public class JavaFileArtifactTest extends AbstractExecutionTest {
      */
     @Test
     public void testMakeAttributeConstant() throws IOException {
+        formatFile(constantAttributes);
         copyFile(originalFile, tempFile);
         try {
             JavaFileArtifact javaFileArtefact = (JavaFileArtifact) CREATOR.createArtifactInstance(tempFile, null);
@@ -169,7 +174,7 @@ public class JavaFileArtifactTest extends AbstractExecutionTest {
             javaFileArtefact.store();
             // Test if attributes were made constant
             assertFileEqualitySafe(tempFile, constantAttributes);
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             logger.exception(e);
         }
     }
@@ -182,6 +187,7 @@ public class JavaFileArtifactTest extends AbstractExecutionTest {
      */
     @Test
     public void testMakeAttributeVariable() throws IOException {
+        formatFile(variableAttributes);
         copyFile(originalFile, tempFile);
         try {
             JavaFileArtifact javaFileArtefact = (JavaFileArtifact) CREATOR.createArtifactInstance(tempFile, null);
@@ -199,7 +205,7 @@ public class JavaFileArtifactTest extends AbstractExecutionTest {
             javaFileArtefact.store();
             // Test whether attributes were made constant
             assertFileEqualitySafe(tempFile, variableAttributes);
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             logger.exception(e);
         }
     }
@@ -218,7 +224,7 @@ public class JavaFileArtifactTest extends AbstractExecutionTest {
             Assert.assertEquals(true, javaFileArtefact.hasAnnotation("VariationPoint", null, "A"));
             Assert.assertEquals(true, javaFileArtefact.hasAnnotation("VariationPoint", null, "B"));
             Assert.assertEquals(false, javaFileArtefact.hasAnnotation("VariationPoint", null, "5"));
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             logger.exception(e);
         }
     }
@@ -231,6 +237,7 @@ public class JavaFileArtifactTest extends AbstractExecutionTest {
      */
     @Test
     public void testDeleteMethods() throws IOException {
+        formatFile(mainWithNoMethods);
         copyFile(originalFile, tempFile);
         try {
             JavaFileArtifact javaFileArtefact = (JavaFileArtifact) CREATOR.createArtifactInstance(tempFile, null);
@@ -244,7 +251,7 @@ public class JavaFileArtifactTest extends AbstractExecutionTest {
             }
             javaFileArtefact.store();
             assertFileEqualitySafe(tempFile, mainWithNoMethods);
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             logger.exception(e);
         }
 
@@ -258,6 +265,7 @@ public class JavaFileArtifactTest extends AbstractExecutionTest {
      */
     @Test
     public void testRenameImports() throws IOException {
+        formatFile(organizedImports);
         copyFile(importFile, tempFile);
         String oldName = "java.io";
         String newName = "java.io.test";
@@ -267,7 +275,7 @@ public class JavaFileArtifactTest extends AbstractExecutionTest {
             javaFileArtefact.store();
             // Test if import declarations were renamed
             assertFileEqualitySafe(tempFile, organizedImports);
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             logger.exception(e);
         }
     }
@@ -280,6 +288,7 @@ public class JavaFileArtifactTest extends AbstractExecutionTest {
      */
     @Test
     public void testRenamePackage() throws IOException {
+        formatFile(renamedPackage);
         copyFile(packageFile, tempFile);
         String oldName = "look";
         String newName = "look.at.me";
@@ -289,7 +298,7 @@ public class JavaFileArtifactTest extends AbstractExecutionTest {
             javaFileArtefact.store();
             // Test if package declaration was renamed
             assertFileEqualitySafe(tempFile, renamedPackage);
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             logger.exception(e);
         }
     }
@@ -302,6 +311,7 @@ public class JavaFileArtifactTest extends AbstractExecutionTest {
      */
     @Test
     public void testRenameQualifiedNames() throws IOException {
+        formatFile(renamedQualifiedNames);
         copyFile(qualifiedNames, tempFile);
         String oldName = "com.foobar";
         String newName = "com.foobar.test";
@@ -311,19 +321,21 @@ public class JavaFileArtifactTest extends AbstractExecutionTest {
             javaFileArtefact.store();
             // Test if qualified name was renamed
             assertFileEqualitySafe(tempFile, renamedQualifiedNames);
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             logger.exception(e);
         }
     }
 
     /**
-     * Test if a java file artifact can be copied to a new destination while the folder structure changes.
+     * Test if a java file artifact can be copied to a new destination while the
+     * folder structure changes.
      * 
      * @throws IOException
      *             shall not occur
      */
     @Test
     public void testCopyJavaFileArtifact() throws IOException {
+        formatFile(organizedCopyFile);
         copyFile(copyFile, tempFile);
         String oldName = "the.old.folder.destination";
         String newName = "the.created.folder.destination.which.has.a.different.path";
@@ -335,19 +347,21 @@ public class JavaFileArtifactTest extends AbstractExecutionTest {
             javaFileArtefact.store();
             // Test if all imports, packages and qualified names were renamed
             assertFileEqualitySafe(tempFile, organizedCopyFile);
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             logger.exception(e);
         }
     }
 
     /**
-     * Test if a java file artifact can be copied to a new destination while the folder structure changes.
+     * Test if a java file artifact can be copied to a new destination while the
+     * folder structure changes.
      * 
      * @throws IOException
      *             shall not occur
      */
     @Test
     public void testOrganizeJavaFileArtifact() throws IOException {
+        formatFile(organizedCopyFile);
         copyFile(copyFile, tempFile);
         String oldName = "the.old.folder.destination";
         String newName = "the.created.folder.destination.which.has.a.different.path";
@@ -356,20 +370,21 @@ public class JavaFileArtifactTest extends AbstractExecutionTest {
             javaFileArtefact.modifyNamespace(oldName, newName);
             // Test if all imports, packages and qualified names were renamed
             assertFileEqualitySafe(tempFile, organizedCopyFile);
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             logger.exception(e);
         }
     }
 
     /**
-     * Test if a java file artifact can be copied to a new destination while the folder structure changes. Test if the
-     * name mapping is applied.
+     * Test if a java file artifact can be copied to a new destination while the
+     * folder structure changes. Test if the name mapping is applied.
      * 
      * @throws IOException
      *             shall not occur
      */
     @Test
     public void testOrganizeJavaFileArtifactWithMap() throws IOException {
+        formatFile(organizedCopyFile);
         copyFile(copyFile, tempFile);
         String oldName = "the.old.folder.destination";
         String newName = "the.created.folder.destination.which.has.a.different.path";
@@ -380,7 +395,69 @@ public class JavaFileArtifactTest extends AbstractExecutionTest {
             javaFileArtefact.modifiyNamespace(nameMapping);
             // Test if all imports, packages and qualified names were renamed
             assertFileEqualitySafe(tempFile, organizedCopyFile);
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
+            logger.exception(e);
+        }
+    }
+
+    /**
+     * Test if a method can be modified by removing java calls.
+     * 
+     * @throws IOException
+     *             shall not occur
+     */
+    @Ignore
+    @Test
+    public void testModifyMethod() throws IOException {
+        formatFile(modifiedMethodFile);
+        copyFile(methodFile, tempFile);
+        try {
+            JavaFileArtifact javaFileArtefact = (JavaFileArtifact) CREATOR.createArtifactInstance(tempFile, null);
+            Set<JavaClass> classes = javaFileArtefact.classes();
+            for (JavaClass javaClass : classes) {
+                Set<JavaMethod> methods = javaClass.methods();
+                // for (JavaMethod javaMethod : methods) {
+                // javaMethod.deleteJavaCall(evaluator);
+                // for (JavaCall javaCall : javaMethod.statements()) {
+                // if (javaCall.getName().equals("exception") &&
+                // javaCall.getType().equals("EASyLogger")) {
+                // javaCall.delete();
+                // }
+                // }
+                // }
+            }
+            javaFileArtefact.store();
+            assertFileEqualitySafe(tempFile, modifiedMethodFile);
+        } catch (VilException e) {
+            logger.exception(e);
+        }
+    }
+
+    /**
+     * Test if a method can be modified by removing java calls.
+     * 
+     * @throws IOException
+     *             shall not occur
+     */
+    @Test
+    public void testDeleteJavaCall() throws IOException {
+        formatFile(modifiedMethodFile);
+        copyFile(methodFile, tempFile);
+        String attributeName = "exception";
+        String binding = "EASyLogger";
+        JavaCall call = new JavaCall(attributeName, binding);
+        try {
+            JavaFileArtifact javaFileArtefact = (JavaFileArtifact) CREATOR.createArtifactInstance(tempFile, null);
+            Set<JavaClass> classes = javaFileArtefact.classes();
+            for (JavaClass javaClass : classes) {
+                Set<JavaMethod> methods = javaClass.methods();
+                for (JavaMethod javaMethod : methods) {
+                    javaMethod.deleteJavaCall(call);
+                }
+            }
+            javaFileArtefact.store();
+            assertFileEqualitySafe(tempFile, modifiedMethodFile);
+        } catch (VilException e) {
             logger.exception(e);
         }
     }

@@ -67,8 +67,8 @@ abstract class VariableConfigProvider {
      * Causes to freeze the current value.
      */
     protected final void freeze() {
-        // freeze shall also work on partially configured elements!
-        if (null != getValue() /*&& getValue().isConfigured()*/ && isStateChangeAllowed()) {
+        // freeze shall also work on partially configured elements! If not configured, then VIL has to handle that.
+        if (/*null != getValue() && getValue().isConfigured() && */isStateChangeAllowed()) {
             setState(AssignmentState.FROZEN);
         }
     }

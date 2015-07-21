@@ -1,0 +1,81 @@
+@advice(QM1)
+rtVilScript startup (Project source, Configuration config, Project target, IAdaptationEvent event) {
+
+    strategy main(Project source, Configuration config, Project target, IAdaptationEvent event) = {
+        objective true;
+        breakdown {
+            tactic defaultTactic();
+        }
+    }
+
+    strategy startup(Project source, Configuration config, Project target, LifecycleEvent event) = : event.status() == LifecycleEventStatus.START {
+        objective true;
+        breakdown {
+            tactic startupTakeFirst(config, event.getPipeline());
+        }
+    }
+
+    tactic defaultTactic() = {
+    }
+
+    tactic startupTakeFirst(Configuration config, String pipName) = {
+        QM1 qm = config;
+        map(Pipeline pip:qm.pipelines) {
+            if (pip.name == pipName) {
+                map(Source src:pip.sources) {
+                    assignFirst(src);
+                };
+            }
+        };
+    }
+
+    assignFirst(Node node) = : {
+    }
+
+    assignFirst(Source src) = : {
+        map(Node n:src.next) {
+            assignFirst(n);
+        };
+    }
+
+    assignFirst(FamilyElement elt) = : {
+        Family fam = elt.family;
+        if (!isConfigured(elt.actual)) {
+            elt.actual = fam.members.toSequence().first();
+        }
+        map(Node n:elt.next) {
+            assignFirst(n);
+        };
+    }
+
+    enact(Project source, Configuration config, Project target) = : {
+        QM1 qm = config.selectChangedWithContext();
+        map(Pipeline p:qm.pipelines) {
+            map(Source s:p.sources) {
+                enact(p, s);
+            };
+        };
+    }
+
+    enact(Pipeline pipeline, Node node) = : {
+    }
+
+    enact(Pipeline pipeline, Source source) = : {
+        map(Node n:source.next) {
+            enact(pipeline, n);
+        };
+    }
+
+    enact(Pipeline pipeline, FamilyElement elt) = : {
+        Family family = elt.family;
+        CommandSequence cmd = new CommandSequence();
+        if (elt.actual != null) {
+            cmd.add(new AlgorithmChangeCommand(pipeline.name, elt.name, elt.actual.name));
+        }
+        map(Node n:elt.next) {
+            enact(pipeline, n);
+        };
+        cmd.exec();
+    }
+
+}

@@ -24,6 +24,7 @@ public class BuiltIn {
             TypeRegistry.DEFAULT.register(RandomDouble.class);
             TypeRegistry.DEFAULT.register(RandomInteger.class);
             TypeRegistry.DEFAULT.register(IntegerSequenceConstructors.class);
+            TypeRegistry.DEFAULT.register(Println.class);
             
             TemplateLangExecution.registerDefaultExtension(DefaultVtlJavaExtension.class);
         }

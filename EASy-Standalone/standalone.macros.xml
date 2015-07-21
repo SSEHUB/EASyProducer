@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Standalone.Macros">
+
+    <!-- use path with
+      taskdef name="antgenerator" classname="de.uni_hildesheim.sse.easy.ant.AntGenerator" classpathref="easyTaskDef.lib"
+     -->
+    <path id="easyTaskDef.lib" >
+        <fileset dir="${home.base.dir}/${projects.standalone.dir}/antLibs">
+            <include name="**/*.jar" />
+        </fileset>
+    </path>
+    
+    <!-- Prepare distribution in target directory -->
+    <macrodef name="dist">
+        <attribute name="target" default="NOT_SET" />
+        <attribute name="exclude" default="" />
+        <sequential>
+          <mkdir dir="@{target}/dist"/>
+          <copy todir="@{target}/dist">
+            <fileset dir="@{target}/unbundled">
+                <include name="**/*.jar" />
+                <exclude name="@{exclude}" />
+            </fileset>
+            <fileset dir="${home.standalone.executer.dir}/lib">
+                <include name="drools-*.jar" />
+                <exclude name="@{exclude}" />
+            </fileset>            
+            <fileset dir="${home.standalone.executer.dir}/lib">
+                <include name="org.eclipse.osgi*.jar" />
+                <exclude name="@{exclude}" />
+            </fileset>            
+            <fileset dir="${home.standalone.executer.dir}/build/jar">
+                <include name="*.jar" />
+                <exclude name="@{exclude}" />
+            </fileset>            
+          </copy>
+        </sequential>
+    </macrodef>
+    
+    <!-- cannot be bundled due to various conflicts, rans anyway in own process; use maven integration
+         standalone, copy libs, ... -->
+    <macrodef name="withMaven">
+        <attribute name="target" default="NOT_SET" />
+        <sequential>
+        <!-- <copy todir="@{target}/dist">
+            <fileset dir="${home.instantiator.maven.dir}/${build.jar.dir}">
+                <include name="de.uni_hildesheim.sse.easy.instantiator.maven-standalone.jar" />
+            </fileset>
+        </copy>-->
+        <copy todir="@{target}/dist/lib">
+            <fileset dir="${home.instantiator.maven.dir}/lib">
+                <include name="**/*.*" />
+            </fileset>
+        </copy>
+        <!-- <unzip src="@{target}/dist/easy-headless.jar" dest="@{target}/dist">
+            <patternset>
+                <include name=".easyStartup"/>
+            </patternset>
+        </unzip>
+<local name="easyStartup.before"/>
+<loadfile property="easyStartup.before" srcFile="@{target}/dist/.easyStartup"/>
+<echo message="${easyStartup.before}"/>
+        <concat append="yes" destfile="@{target}/dist/.easyStartup">ACTIVATOR:de.uni_hildesheim.sse.easy.maven.Activator
+DS:de.uni_hildesheim.sse.easy.maven.Registration</concat>
+<local name="easyStartup.after"/>
+<loadfile property="easyStartup.after" srcFile="@{target}/dist/.easyStartup"/>
+<echo message="${easyStartup.after}"/>
+        <jar update="true" destfile="@{target}/dist/easy-headless.jar">
+            <fileset dir="@{target}/dist">
+                <include name=".easyStartup" />
+            </fileset>
+        </jar>
+        <delete file="@{target}/dist/.easyStartup"/>-->
+      </sequential>
+    </macrodef>
+    
+</project>

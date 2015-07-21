@@ -4,6 +4,7 @@ import java.io.Writer;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IFileSystemArtifact;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.Path;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.FieldDescriptor;
 
 /**
  * Implements a simple stream-based execution tracer. Produces normalized sequences of collections
@@ -32,9 +33,9 @@ public abstract class StreamTracer
     }
 
     @Override
-    public void valueDefined(VariableDeclaration var, Object value) {
+    public void valueDefined(VariableDeclaration var, FieldDescriptor field, Object value) {
         printIndentation();
-        printValueDefined(var, value);
+        printValueDefined(var, field, value);
         println();
     }
 
@@ -42,9 +43,10 @@ public abstract class StreamTracer
      * Is prints a value definition.
      * 
      * @param var the modified variable
+     * @param field the field in <code>var</code>, may be <b>null</b>
      * @param value the actual value
      */
-    protected void printValueDefined(VariableDeclaration var, Object value) {
+    protected void printValueDefined(VariableDeclaration var, FieldDescriptor field, Object value) {
         boolean tmp = false;
         if (value instanceof Path) {
             tmp = ((Path) value).isTemporary();
@@ -57,11 +59,15 @@ public abstract class StreamTracer
         } else {
             valueString = makeRelative(value);
         }
-        print(var.getName() + " <- " + valueString);
+        String name = var.getName();
+        if (null != field) {
+            name += "." + field.getName();
+        }
+        print(name + " <- " + valueString);
     }
     
     @Override
-    public void traceExecutionException(VilLanguageException exception) {
+    public void traceExecutionException(VilException exception) {
         // not needed in testing, covered from outside
     }
 

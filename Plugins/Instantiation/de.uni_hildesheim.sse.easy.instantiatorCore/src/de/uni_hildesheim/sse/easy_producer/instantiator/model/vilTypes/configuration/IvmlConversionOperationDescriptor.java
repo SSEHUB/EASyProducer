@@ -1,9 +1,8 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.VilException;
 
 /**
  * Defines an operation descriptor which enables comfortable access to an individual decision variables
@@ -20,7 +19,7 @@ class IvmlConversionOperationDescriptor extends IvmlOperationDescriptor {
      * 
      * @param declaringType the declaring type
      */
-    IvmlConversionOperationDescriptor(TypeDescriptor<? extends IVilType> declaringType) {
+    IvmlConversionOperationDescriptor(TypeDescriptor<?> declaringType) {
         this(declaringType, IvmlTypes.decisionVariableType());
     }
     
@@ -30,8 +29,8 @@ class IvmlConversionOperationDescriptor extends IvmlOperationDescriptor {
      * @param declaringType the declaring type
      * @param returnType the return type
      */
-    IvmlConversionOperationDescriptor(TypeDescriptor<? extends IVilType> declaringType, 
-        TypeDescriptor<? extends IVilType> returnType) {
+    IvmlConversionOperationDescriptor(TypeDescriptor<?> declaringType, 
+        TypeDescriptor<?> returnType) {
         super(declaringType, NAME, false);
         setReturnType(returnType);
         setParameters(createParameterList(declaringType), false, false);
@@ -40,7 +39,7 @@ class IvmlConversionOperationDescriptor extends IvmlOperationDescriptor {
 
     @Override
     public CompatibilityResult isCompatible(Class<?> retType, Object... params) {
-        return isCompatible(params, DecisionVariable.class);
+        return Utils.isCompatible(params, DecisionVariable.class);
     }
 
     @Override

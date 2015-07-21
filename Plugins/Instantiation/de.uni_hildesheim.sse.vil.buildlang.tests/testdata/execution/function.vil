@@ -1,0 +1,11 @@
+vilScript function () {
+
+    main() = : {
+        Integer i = myFunc();
+    }
+
+    Integer myFunc() = : {
+        1;
+    }
+
+}

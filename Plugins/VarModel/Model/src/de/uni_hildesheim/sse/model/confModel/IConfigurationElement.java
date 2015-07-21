@@ -70,8 +70,10 @@ public interface IConfigurationElement {
     
     /**
      * Causes to freeze the current value.
+     * 
+     * @param selector determines which parts shall be frozen
      */
-    public void freeze();
+    public void freeze(IFreezeSelector selector);
 
     /**
      * Causes to unfreeze the current value.

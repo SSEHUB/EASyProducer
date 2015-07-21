@@ -1,0 +1,15 @@
+rtVilScript tactic2 (Project source, Configuration config, Project target) {
+
+    tactic t1() = {
+        Integer i1 = r(5);
+    }
+
+    tactic t2() = {
+        Integer i2 = r(10);
+    }
+
+    Integer r(Integer v) = : {
+        v * 10;
+    }
+
+}

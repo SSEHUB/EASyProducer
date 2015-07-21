@@ -83,17 +83,22 @@ public abstract class AbstractVarModelWriter extends AbstractVisitor
      */
     private static boolean useWhitespace = true;
     
+    private String myIndentStep = indentStep;
+    private boolean myUseWhitespace = useWhitespace;
+    
     /**
      * Stores the all parents of the currently visited element.<br/>
      * Can be an empty list in case of root elements.
      */
-    private List<ModelElement> parents;
+    private List<IModelElement> parents;
     
     /**
      * This attribute should be used for storing the output.
      */
     private Writer out;
-    
+
+    private IModelElement expressionContext;
+
     /**
      * Defines default space locations.
      * 
@@ -112,8 +117,26 @@ public abstract class AbstractVarModelWriter extends AbstractVisitor
      * @param writer Writer which should be used for writing the output.
      */
     protected AbstractVarModelWriter(Writer writer) {
-        parents = new ArrayList<ModelElement>();
+        parents = new ArrayList<IModelElement>();
         out = new BufferedWriter(writer);
+    }
+
+    /**
+     * Changes the expression context.
+     * 
+     * @param expressionContext the expression context
+     */
+    protected void setExpressionContext(IModelElement expressionContext) {
+        this.expressionContext = expressionContext;
+    }
+    
+    /**
+     * Returns the expression context.
+     * 
+     * @return the expression context
+     */
+    protected IModelElement getExpressionContext() {
+        return expressionContext;
     }
 
     /**
@@ -122,12 +145,42 @@ public abstract class AbstractVarModelWriter extends AbstractVisitor
      * @param count the number of spaces (negative values are ignored)
      */
     public static void setIndentStep(int count) {
+        indentStep = deriveIndentStep(count);
+    }
+
+    /**
+     * Defines the number of spaces used in one indentation step if {@link #useWhitespace} for this writer.
+     * 
+     * @param count the number of spaces (negative values are ignored)
+     */
+    public void setIndentationStep(int count) {
+        if (count != myIndentStep.length()) {
+            myIndentStep = deriveIndentStep(count);
+        }
+    }
+    
+    /**
+     * Defines whether whitespaces or tabs shall be used for indentation in this editor.
+     * 
+     * @param useWhitespaces if <code>true</code> whitespaces, tabs if <code>false</code>
+     */
+    public void setUseWhitespaces(boolean useWhitespaces) {
+        this.myUseWhitespace = useWhitespaces;
+    }
+
+    /**
+     * Creates the indentation step in terms of numbers of spaces to be used.
+     * 
+     * @param count the number of spaces (negative values are ignored)
+     * @return the indentation step
+     */
+    private static String deriveIndentStep(int count) {
         count = Math.max(0, count);
         StringBuilder tmp = new StringBuilder();
         for (int i = 0; i < count; i++) {
             tmp.append(" ");
         }
-        indentStep = tmp.toString();
+        return tmp.toString();
     }
     
     /**
@@ -164,6 +217,15 @@ public abstract class AbstractVarModelWriter extends AbstractVisitor
      */
     public void setWriter(Writer writer) {
         out = writer;
+    }
+    
+    /**
+     * Returns the actual writer.
+     * 
+     * @return the actual writer
+     */
+    public Writer getWriter() {
+        return out;
     }
     
 //    /**
@@ -225,8 +287,8 @@ public abstract class AbstractVarModelWriter extends AbstractVisitor
         int depth = parents.size();
         StringBuffer indent = new StringBuffer();
         for (int i = 0; i < depth; i++) {
-            if (useWhitespace) {
-                indent.append(indentStep);
+            if (myUseWhitespace) {
+                indent.append(myIndentStep);
             } else {
                 indent.append("\t");
             }
@@ -238,8 +300,8 @@ public abstract class AbstractVarModelWriter extends AbstractVisitor
      * Returns the direct parent of the current visited object. Ignors {@link #DUMMY_PARENT}.
      * @return The direct parent or <b>null</b> in case of an element from the top layer.
      */
-    protected ModelElement getParent() {
-        ModelElement parent = null;
+    protected IModelElement getParent() {
+        IModelElement parent = null;
         if (parents.size() > 0) {
             int lastPosition = parents.size() - 1;
             while (lastPosition >= 0 && DUMMY_PARENT == parents.get(lastPosition)) {
@@ -258,10 +320,10 @@ public abstract class AbstractVarModelWriter extends AbstractVisitor
      * @param type the type to search for
      * @return the latest parent with given <code>type</code> or {@link #getParent()} if <code>type==<b>null</b></code>
      */
-    protected <T extends ModelElement> T getParent(Class<T> type) {
+    protected <T extends IModelElement> T getParent(Class<T> type) {
         T result = null;
         for (int p = parents.size() - 1; null == result && p >= 0; p--) {
-            ModelElement tmp = parents.get(p);
+            IModelElement tmp = parents.get(p);
             if (type.isInstance(tmp)) {
                 result = type.cast(tmp);
             }
@@ -285,7 +347,7 @@ public abstract class AbstractVarModelWriter extends AbstractVisitor
      * 
      * @param parent the parent to be added
      */
-    protected void addParent(ModelElement parent) {
+    protected void addParent(IModelElement parent) {
         parents.add(parent);
     }
 
@@ -457,7 +519,7 @@ public abstract class AbstractVarModelWriter extends AbstractVisitor
     public void visitConstraintValue(ConstraintValue value) {
         ConstraintSyntaxTree val = value.getValue();
         if (null != val) {
-            val.accept(this);
+            emitConstraintExpression(expressionContext, val);
         }
     }
     
@@ -465,8 +527,20 @@ public abstract class AbstractVarModelWriter extends AbstractVisitor
     public void visitConstraint(Constraint constraint) {
         ConstraintSyntaxTree cst = constraint.getConsSyntax();
         if (null != cst) {
-            constraint.getConsSyntax().accept(this);
+            emitConstraintExpression(constraint, constraint.getConsSyntax());
         }
+    }
+    
+    /**
+     * Visits the expression of a constraint (for extension).
+     * 
+     * @param context the visiting context
+     * @param constraint the (specified) constraint;
+     */
+    protected void emitConstraintExpression(IModelElement context, ConstraintSyntaxTree constraint) {
+        expressionContext = context;
+        constraint.accept(this);
+        expressionContext = null;
     }
 
     @Override

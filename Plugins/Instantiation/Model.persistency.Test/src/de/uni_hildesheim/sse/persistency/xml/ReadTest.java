@@ -1,7 +1,7 @@
 package de.uni_hildesheim.sse.persistency.xml;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
 import org.junit.Assert;
@@ -33,20 +33,18 @@ public class ReadTest extends AbstractTest {
      */
     @Test
     public void testRead() {
-        FileInputStream in;
         try {
-            in = new FileInputStream(WriteTest.FILE);
-            List<IModel> models = XmlIo.read(in);
+            List<IModel> models = XmlIo.read(WriteTest.FILE, true);
             Project p1 = (Project) models.get(0);
             DecisionVariableDeclaration decVar = (DecisionVariableDeclaration) 
                 ModelQuery.findElementByName(p1, "intVar", DecisionVariableDeclaration.class);
             boolean ok = true;
             if (null == decVar) {
-                logger.error("intVar not found");
+                Assert.fail("intVar not found");
                 ok = false;
             } else {
                 if (IntegerType.TYPE != decVar.getType()) {
-                    logger.error("type identity problem");
+                    Assert.fail("type identity problem");
                     ok = false;
                 }
             }
@@ -62,21 +60,23 @@ public class ReadTest extends AbstractTest {
                 if (cst instanceof OCLFeatureCall) {
                     OCLFeatureCall call = (OCLFeatureCall) cst;
                     if (WriteTest.FIRST_CONSTRAINT_OPERATION != call.getResolvedOperation()) {
-                        logger.error("operation identity problem");
+                        Assert.fail("operation identity problem");
                     } else {
-                        logger.error("constraint is not a feature call");
+                        Assert.fail("constraint is not a feature call");
                         ok = false;
                     }
                 } else {
-                    logger.error("constraint not found");
+                    Assert.fail("constraint not found");
                     ok = false;
                 }
                 Assert.assertEquals(true, ok);
             }
         } catch (FileNotFoundException e) {
-            logger.exception(e);
+            Assert.fail(e.getMessage());
         } catch (ModelQueryException e) {
-            logger.exception(e);
+            Assert.fail(e.getMessage());
+        } catch (IOException e) {
+            Assert.fail(e.getMessage());
         }
     }
 }

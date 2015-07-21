@@ -1,0 +1,72 @@
+project BasicsCfg {
+	
+	import Basics;
+	
+	// follow the old mapping style
+	Type IntegerType = {
+		name = "INTEGER",
+		class = "Integer"
+	};
+
+	// follow the old mapping style
+	Type LongType = {
+		name = "LONG",
+		class = "Long"
+	};
+
+	// follow the old mapping style
+	Type StringType = {
+		name = "STRING",
+		class = "String"
+	};
+
+	// follow the old mapping style
+	Type BooleanType = {
+		name = "BOOLEAN",
+		class = "Boolean"
+	};
+
+	Type FloatType = {
+		name = "Float",
+		class = "Float"
+	};
+
+	Type DoubleType = {
+		name = "Double",
+		class = "Double"
+	};
+
+    // old mapping style - preliminary, to be removed
+	Type RealType = {
+		name = "REAL",
+		class = "Double"
+	};
+
+    // old mapping style
+	Type ObjectType = {
+		name = "OBJECT",
+		class = "Object"
+	};
+
+    // old mapping style
+	Type StringListType = {
+		name = "STRINGLIST",
+		class = "java.util.List<String>"
+	};
+	
+	types = {refBy(IntegerType), refBy(LongType), refBy(StringType), refBy(BooleanType), refBy(FloatType), refBy(DoubleType), refBy(RealType), refBy(ObjectType), refBy(StringListType)};
+
+    freeze {
+    	IntegerType;
+    	LongType;
+    	StringType;
+    	BooleanType;
+    	FloatType;
+    	DoubleType;
+    	RealType;
+    	ObjectType;
+    	StringListType;
+    	types;
+    } but (f|f.bindingTime == BindingTime.runtime)
+    
+}

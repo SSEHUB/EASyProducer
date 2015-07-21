@@ -1,0 +1,5 @@
+project TypedefConstraintSequence {
+    typedef PosInteger Integer with (PosInteger >= 0);
+    sequenceOf(PosInteger) seq;
+    seq = {5, -3};
+}

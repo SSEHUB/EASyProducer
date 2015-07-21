@@ -5,6 +5,7 @@ import java.util.List;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IArtifact;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ListSet;
@@ -12,7 +13,6 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Operation
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.VilException;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 
 /**
@@ -42,10 +42,28 @@ public class RuleExecutionResult implements IVilType {
         /**
          * Preconditions are not met. Rule is not applicable.
          */
-        NOT_APPLICABLE
+        NOT_APPLICABLE;
+        
+        /**
+         * Turns a rule body execution result into a status. Either it is anyway a status or it was successful if object
+         * is not <b>null</b>.
+         * 
+         * @param object the object to be converted
+         * @return the status
+         */
+        public static Status toStatus(Object object) {
+            Status result;
+            if (object instanceof Status) {
+                result = (Status) object; 
+            } else {
+                result = object != null ? Status.SUCCESS : Status.FAIL; 
+            }
+            return result;
+        }
+
     }
     
-    public static final TypeDescriptor<? extends IVilType> TYPE;
+    public static final TypeDescriptor<?> TYPE;
     private Status status;
     private List<IArtifact> result;
     private List<IArtifact> allResults;
@@ -79,7 +97,7 @@ public class RuleExecutionResult implements IVilType {
      * Registers itself and defines the value of the constant.
      */
     static {
-        TypeDescriptor<? extends IVilType> type;
+        TypeDescriptor<?> type;
         try {
             type = TypeRegistry.DEFAULT.registerType(RuleExecutionResult.class);
         } catch (VilException e) {
@@ -135,6 +153,14 @@ public class RuleExecutionResult implements IVilType {
     @Invisible
     public Status getStatus() {
         return status;
+    }
+    
+    /**
+     * Changes the status to {@link Status#FAIL}.
+     */
+    @Invisible
+    public void fail() {
+        status = Status.FAIL;
     }
     
 }

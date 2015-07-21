@@ -1,7 +1,6 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 
 /**
@@ -23,9 +22,9 @@ public interface IRuntimeEnvironment {
      * 
      * @param resolvable the resolvable 
      * @return the value of <code>resolvable</code>
-     * @throws ExpressionException in case that <code>resolvable</code> was not defined
+     * @throws VilException in case that <code>resolvable</code> was not defined
      */
-    public Object getValue(IResolvable resolvable) throws ExpressionException;
+    public Object getValue(IResolvable resolvable) throws VilException;
     
     /**
      * Returns the value of the IVML element denoted by <code>name</code> in the closest scope defining
@@ -33,9 +32,9 @@ public interface IRuntimeEnvironment {
      * 
      * @param name the name
      * @return the value
-     * @throws ExpressionException in case that <code>name</code> was not defined
+     * @throws VilException in case that <code>name</code> was not defined
      */
-    public Object getIvmlValue(String name) throws ExpressionException;
+    public Object getIvmlValue(String name) throws VilException;
 
     /**
      * Returns the resolvable of name <code>name</code> if defined.
@@ -50,9 +49,9 @@ public interface IRuntimeEnvironment {
      * 
      * @param var the variable to be modified
      * @param object the value of <code>var</code>
-     * @throws VilLanguageException in case of an attempt of modifying a constant
+     * @throws VilException in case of an attempt of modifying a constant
      */
-    public void setValue(IResolvable var, Object object) throws VilLanguageException;
+    public void setValue(IResolvable var, Object object) throws VilException;
 
     /**
      * Returns the search paths of the current context.
@@ -64,8 +63,8 @@ public interface IRuntimeEnvironment {
     /**
      * Stores the artifacts in the current context.
      * 
-     * @throws ArtifactException in case that storing artifacts fails
+     * @throws VilException in case that storing artifacts fails
      */
-    public void storeArtifacts() throws ArtifactException;
+    public void storeArtifacts() throws VilException;
 
 }

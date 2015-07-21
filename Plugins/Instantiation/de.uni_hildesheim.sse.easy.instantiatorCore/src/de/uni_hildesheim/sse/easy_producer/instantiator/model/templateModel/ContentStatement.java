@@ -1,9 +1,8 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CompositeExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 
@@ -14,7 +13,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegis
  */
 public class ContentStatement implements ITemplateElement {
 
-    private String content;
+    private CompositeExpression content;
     private String terminal;
     private Expression indentExpression;
     private boolean printLineEnd;
@@ -27,22 +26,19 @@ public class ContentStatement implements ITemplateElement {
      * @param indentExpression an optional integer expression determining the additional 
      *     indentation, e.g., in loops or recursions
      * @param printLineEnd whether a line end shall be emitted
-     * @throws VilLanguageException in case that the expression cannot be resolved or does not evaluate to an integer
+     * @throws VilException in case that the expression cannot be resolved or does not evaluate to an integer
      */
-    public ContentStatement(String content, String terminal, Expression indentExpression, boolean printLineEnd) 
-        throws VilLanguageException {
+    public ContentStatement(CompositeExpression content, String terminal, Expression indentExpression, 
+        boolean printLineEnd) 
+        throws VilException {
         this.printLineEnd = printLineEnd;
         this.content = content;
         this.terminal = terminal;
         this.indentExpression = indentExpression;
         if (null != this.indentExpression) {
-            try {
-                if (this.indentExpression.inferType() != TypeRegistry.integerType()) {
-                    throw new VilLanguageException("indent expression must result in an Integer", 
-                        VilLanguageException.ID_SEMANTIC);
-                }
-            } catch (ExpressionException e) {
-                throw new VilLanguageException(e);
+            if (this.indentExpression.inferType() != TypeRegistry.integerType()) {
+                throw new VilException("indent expression must result in an Integer", 
+                    VilException.ID_SEMANTIC);
             }
         }
     }
@@ -61,7 +57,7 @@ public class ContentStatement implements ITemplateElement {
      * 
      * @return the content
      */
-    public String getContent() {
+    public CompositeExpression getContent() {
         return content;
     }
     
@@ -75,7 +71,7 @@ public class ContentStatement implements ITemplateElement {
     }
     
     @Override
-    public Object accept(IVisitor visitor) throws VilLanguageException {
+    public Object accept(IVisitor visitor) throws VilException {
         return visitor.visitContentStatement(this);
     }
     
@@ -85,7 +81,7 @@ public class ContentStatement implements ITemplateElement {
     }
 
     @Override
-    public TypeDescriptor<? extends IVilType> inferType() throws VilLanguageException {
+    public TypeDescriptor<?> inferType() throws VilException {
         return TypeRegistry.stringType();
     }
     

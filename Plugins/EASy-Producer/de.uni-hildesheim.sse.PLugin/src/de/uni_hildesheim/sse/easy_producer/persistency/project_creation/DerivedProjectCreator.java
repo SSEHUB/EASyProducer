@@ -15,11 +15,14 @@
  */
 package de.uni_hildesheim.sse.easy_producer.persistency.project_creation;
 
+import org.eclipse.core.resources.IProject;
+
 import de.uni_hildesheim.sse.easy_producer.EASyUtils;
 import de.uni_hildesheim.sse.easy_producer.core.mgmt.PLPInfo;
 import de.uni_hildesheim.sse.easy_producer.core.mgmt.SPLsManager;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceUtils;
 import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
+import de.uni_hildesheim.sse.easy_producer.persistency.ResourcesMgmt;
 
 /**
  * Creates a derived EASy project, which will have one predecessor.
@@ -29,7 +32,8 @@ import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
 class DerivedProjectCreator extends AbstractProjectCreator {
     
     private String predecessorID;
-    
+    private ProductLineProject parentPLP;
+    private IProject predecessorPoject;
     
     /**
      * Creates a new derived {@link ProductLineProject}.
@@ -44,6 +48,8 @@ class DerivedProjectCreator extends AbstractProjectCreator {
         
         super(projectName, lazy, configurators);
         this.predecessorID = predecessorID;
+        parentPLP = (ProductLineProject) SPLsManager.INSTANCE.getPLP(predecessorID);
+        predecessorPoject = (null != parentPLP) ? ResourcesMgmt.INSTANCE.getProject(parentPLP.getProjectName()) : null;
     }
 
     /**
@@ -53,7 +59,6 @@ class DerivedProjectCreator extends AbstractProjectCreator {
     @Override
     ProductLineProject createEASyProject() {
         super.createProject();
-        ProductLineProject parentPLP = (ProductLineProject) SPLsManager.INSTANCE.getPLP(predecessorID);
 
         // Set Predecessors
         getCreatedProject().getMemberController().addPredecessor(predecessorID);
@@ -87,5 +92,16 @@ class DerivedProjectCreator extends AbstractProjectCreator {
         PLPInfo parentPLP = SPLsManager.INSTANCE.getPLP(predecessorID);
 
         PersistenceUtils.createInstantiatePredecessorScript(plp, parentPLP);
+    }
+
+    @Override
+    protected void configureProject(IProject project, IEASyProjectConfigurator configurator) {
+        if (null != predecessorPoject) {
+            // Try to take over settings from parent project.
+            configurator.configure(project, predecessorPoject);
+        } else {
+            // Use default settings if parent could not be found
+            configurator.configure(project);
+        }
     }
 }

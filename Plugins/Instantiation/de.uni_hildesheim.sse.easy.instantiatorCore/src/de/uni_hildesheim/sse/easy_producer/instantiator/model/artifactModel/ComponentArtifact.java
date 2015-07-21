@@ -1,6 +1,6 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 
 
 /**
@@ -14,24 +14,24 @@ public abstract class ComponentArtifact implements IRuntimeArtifact {
     /**
      * Activates this component.
      * 
-     * @throws ArtifactException in case of serious problems
+     * @throws VilException in case of serious problems
      */
-    public abstract void acticate() throws ArtifactException;
+    public abstract void acticate() throws VilException;
 
     /**
      * Deactivates this component.
      * 
-     * @throws ArtifactException in case of serious problems
+     * @throws VilException in case of serious problems
      */
-    public abstract void deactivate() throws ArtifactException;
+    public abstract void deactivate() throws VilException;
 
     /**
      * Updates this component.
      * 
      * @param artifact the component to update this component with
      * 
-     * @throws ArtifactException in case of serious problems
+     * @throws VilException in case of serious problems
      */
-    public abstract void update(ComponentArtifact artifact) throws ArtifactException;
+    public abstract void update(ComponentArtifact artifact) throws VilException;
     
 }

@@ -42,7 +42,7 @@
 	<!-- Compile all files without test classes -->
 	<target name="compile" depends="init">
 	    <!-- <echo> message="${toString:includes}" </echo> -->
-		<javac srcdir="${src.dir}" debug="on" destdir="${build.classes.dir}" includeAntRuntime="no" failonerror="true" source="${javacSource}" target="${javacTarget}" encoding="${javac.encoding}">
+		<javac srcdir="${src.dir}" debug="true" destdir="${build.classes.dir}" includeAntRuntime="no" failonerror="true" source="${javacSource}" target="${javacTarget}" encoding="${javac.encoding}">
 			<classpath refid="includes" />	
 		</javac>
     </target>

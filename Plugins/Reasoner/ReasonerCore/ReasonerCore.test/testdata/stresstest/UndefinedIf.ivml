@@ -1,0 +1,13 @@
+project UndefinedIf {
+
+    Integer a;
+    Integer b;
+    
+    if a == 2
+        then b == 4
+        else b == 3
+    endif;
+    
+    a == 2;
+    b == 4;
+}

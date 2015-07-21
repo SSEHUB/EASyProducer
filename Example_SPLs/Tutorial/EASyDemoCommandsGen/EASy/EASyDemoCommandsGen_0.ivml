@@ -1,0 +1,14 @@
+project EASyDemoCommandsGen {
+
+	version v0;
+	import EASyDemoCommandsPlatform;
+	compound Command {
+		String name;
+		String help;
+		String class;
+		not (matches(name, ".* .*") or size(name) == 0);
+		size(class) > 0;
+	}
+
+	setOf(Command) commands;
+}

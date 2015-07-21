@@ -1,7 +1,6 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.Advice;

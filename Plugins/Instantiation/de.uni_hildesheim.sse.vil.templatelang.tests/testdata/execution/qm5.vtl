@@ -3,10 +3,10 @@ template qm5(Configuration config, FileArtifact target) {
 
     def main(Configuration config, FileArtifact target) {
         Family fm = config.byName("fNormalize");
-        for (Algorithm alg : fm.members()) {
-            '${alg.name()} ${alg.hwNode().isNull()} ${alg.hwNode().isConfigured()}'
-            if (alg.hwNode().isConfigured() and !alg.hwNode().isNull()) {
-                'HARDWARE ${alg.name()}'
+        for (Algorithm alg : fm.members) {
+            '${alg.name} ${alg.hwNode.isNull()} ${alg.hwNode.isConfigured()}'
+            if (alg.hwNode.isConfigured() and !alg.hwNode.isNull()) {
+                'HARDWARE ${alg.name}'
             }
         }
     }

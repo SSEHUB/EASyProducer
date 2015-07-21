@@ -20,6 +20,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.uni_hildesheim.sse.dslCore.TopLevelModelAccessor;
+import de.uni_hildesheim.sse.dslCore.TopLevelModelAccessor.IModelAccessor;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.Configuration.PathKind;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceException;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceUtils;
@@ -31,13 +33,10 @@ import de.uni_hildesheim.sse.easy_producer.core.persistence.standard.Persistence
 import de.uni_hildesheim.sse.easy_producer.core.varMod.container.ProjectContainer;
 import de.uni_hildesheim.sse.easy_producer.core.varMod.container.ScriptContainer;
 import de.uni_hildesheim.sse.easy_producer.core.varMod.container.SemanticErrorDescription;
-import de.uni_hildesheim.sse.easy_producer.instantiator.TranformatorNotificationDelegate;
-import de.uni_hildesheim.sse.easy_producer.instantiator.Transformator;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.FileInstantiator;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.IInstantiatorProject;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.Executor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IProjectDescriptor;
@@ -86,7 +85,6 @@ public class PLPInfo implements IInstantiatorProject, IModelListener<Script> {
     
     // Further information needed for reasoning, instantiation, ...
     private MemberController memberController;
-    private InstantiatorController instantiatorController;
     private List<IProductLineProjectListener> plpListeners;
     private ReasonerConfiguration reasonerConfig;
     
@@ -309,21 +307,7 @@ public class PLPInfo implements IInstantiatorProject, IModelListener<Script> {
      */
     private void initModels() {
         memberController = new MemberController(getProjectID());
-        instantiatorController = new InstantiatorController();
         reasonerConfig = new ReasonerConfiguration();
-    }
-    
-    /**
-     * Resets the {@link InstantiatorController} of the {@link PLPInfo}.
-     * @param transformatorController The new {@link InstantiatorController} which should replace the old one.
-     */
-    public void setTransformatorController(InstantiatorController transformatorController) {
-        this.instantiatorController = transformatorController;
-    }
-
-    @Override
-    public InstantiatorController getInstantiatorController() {
-        return instantiatorController;
     }
     
     /**
@@ -443,28 +427,18 @@ public class PLPInfo implements IInstantiatorProject, IModelListener<Script> {
     
     /**
      * Instantiates the whole project.
-     * @param instantiationMonitor A monitor notifying the user about the instantiation progress.
-     * @throws VilLanguageException In case that artifact operations or script execution fails
+     * @throws VilException In case that artifact operations or script execution fails
      */
-    public void instantiate(TranformatorNotificationDelegate instantiationMonitor) throws VilLanguageException {
-        // Each instantiator will now produce its own messages and send it to the console
-        Transformator transformator = new Transformator(getProjectID(), instantiationMonitor, SPLsManager.INSTANCE);
-       
+    public void instantiate() throws VilException {
         // >> VIL addition
-        if (!transformator.execute()) {
-            // currently: give old transformators a chance - if nothing happens, try VIL
-            // VIL output is handled via the TracerFactory configured in UI.Startup
-            if (null != getBuildScript()) { // just to be sure for now
-                try {
-                    createExecutor().execute(); // TODO replace observer
-                } catch (VilLanguageException vilExc) {
-                    throw vilExc;
-                } finally {
-                    refresh();
-                }
+        // VIL output is handled via the TracerFactory configured in UI.Startup
+        if (null != getBuildScript()) { // just to be sure for now
+            try {
+                createExecutor().execute(); // TODO replace observer
+            } finally {
+                refresh();
             }
         }
-        // << VIL addition
     }
     
     /**
@@ -547,32 +521,44 @@ public class PLPInfo implements IInstantiatorProject, IModelListener<Script> {
         
         PersistenceUtils.closeProject(getProjectLocation());
         
+        ProgressObserver observer = ProgressObserver.NO_OBSERVER;
         /*
          * To avoid potential project reloads during the unload process,
          * first remove location for loading models and than unload the project
          */
         try {
-            VarModel.INSTANCE.locations().removeLocation(getConfigLocation(), ProgressObserver.NO_OBSERVER);
+            VarModel.INSTANCE.locations().removeLocation(getConfigLocation(), observer);
         } catch (ModelManagementException e) {
             LOGGER.exception(e);
         }
         try {
-            BuildModel.INSTANCE.locations().removeLocation(getScriptLocation(), ProgressObserver.NO_OBSERVER);
+            BuildModel.INSTANCE.locations().removeLocation(getScriptLocation(), observer);
         } catch (ModelManagementException e) {
             LOGGER.exception(e);
         }
         try {
-            TemplateModel.INSTANCE.locations().removeLocation(getTemplateLocation(), ProgressObserver.NO_OBSERVER);
+            TemplateModel.INSTANCE.locations().removeLocation(getTemplateLocation(), observer);
+        } catch (ModelManagementException e) {
+            LOGGER.exception(e);
+        }
+        for (IModelAccessor<?> accessor : TopLevelModelAccessor.registered()) {
+            PathKind kind = PathKind.valueOf(accessor.getPathKindHint());
+            if (null == kind) {
+                kind = PathKind.IVML;
+            }
+            try {
+                accessor.removeLocation(PersistenceUtils.getLocationFile(getProjectLocation(), kind), observer);
+            } catch (ModelManagementException e) {
+                LOGGER.exception(e);
+            }            
+        }
+        try {
+            VarModel.INSTANCE.unload(getProject(), observer);
         } catch (ModelManagementException e) {
             LOGGER.exception(e);
         }
         try {
-            VarModel.INSTANCE.unload(getProject(), ProgressObserver.NO_OBSERVER);
-        } catch (ModelManagementException e) {
-            LOGGER.exception(e);
-        }
-        try {
-            BuildModel.INSTANCE.unload(getBuildScript(), ProgressObserver.NO_OBSERVER);
+            BuildModel.INSTANCE.unload(getBuildScript(), observer);
         } catch (ModelManagementException e) {
             LOGGER.exception(e);
         }
@@ -705,14 +691,10 @@ public class PLPInfo implements IInstantiatorProject, IModelListener<Script> {
     public void pullConfigFromPredecessors() {
         EASyConfigFileImporter importer = new EASyConfigFileImporter(this);
         // These list temporarily save the instantiators from all predecessors
-        List<FileInstantiator> compareTransformators = new ArrayList<FileInstantiator>();
         
         MemberIterator predecessors = getMemberController().predecessors();
         while (predecessors.hasNext()) {
             PLPInfo predecessorPLP = predecessors.next();
-            
-            // Copy Instantiator settings
-            compareTransformators.addAll(predecessorPLP.getInstantiatorController().getTransformators());
             
             //Copy (imported) ivml files
             // Insert a dot to hide imported folders

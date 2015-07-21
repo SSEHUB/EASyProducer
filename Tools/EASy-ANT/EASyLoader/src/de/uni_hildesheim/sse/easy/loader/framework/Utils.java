@@ -11,11 +11,11 @@ import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -128,44 +128,117 @@ public class Utils {
     }
     
     /**
-     * Compares bundle information objects according to the containment of their
-     * bundles to initialize.
-     * 
-     * @author Holger Eichelberger
-     */
-    private static class ContainmentComparator implements Comparator<BundleInfo> {
-
-        @Override
-        public int compare(BundleInfo bundle1, BundleInfo bundle2) {
-            int result;
-            List<BundleInfo> init1 = bundle1.getBundlesToInitialize();
-            List<BundleInfo> init2 = bundle2.getBundlesToInitialize();
-            if (init2.containsAll(init1)) {
-                result = -1;
-            } else if (init1.containsAll(init2)) {
-                result = 1;
-            } else {
-                result = 0;
-            }
-            return result;
-        }
-        
-    }
-
-    /**
      * Sorts the given bundle informations according to the containment of their bundles to initialize.
+     * This method aims at simulating a startup process and tries putting those bundles with less/few bundles
+     * at the beginning.
      * 
      * @param infos the information objects to be sorted
+     * @return the sorted information objects
      */
-    public static void sortByContainment(List<BundleInfo> infos) {
-        try {
-            Collections.sort(infos, new ContainmentComparator());
-        } catch (IllegalArgumentException e) {
-            Log.error("Error in Sorting: " + e.getMessage());
-            throw e;
+    public static List<BundleInfo> sortByContainment(List<BundleInfo> infos) {
+        List<BundleInfo> result = new ArrayList<BundleInfo>();
+        // use resolved bundles here, not the required ones which may not be resolved
+        Map<String, BundleInfo> mapping = new HashMap<String, BundleInfo>();
+        for (int i = infos.size() - 1; i >= 0; i--) {
+            BundleInfo info = infos.get(i);
+            if (null != info) {
+                mapping.put(info.getName(), info);
+            }            
+        }
+        Map<BundleInfo, List<BundleInfo>> cache = new HashMap<BundleInfo, List<BundleInfo>>();
+        Set<BundleInfo> done = new HashSet<BundleInfo>();
+        int lastDoneSize = -1;
+        while (done.size() < infos.size() && done.size() != lastDoneSize) {
+            lastDoneSize = done.size();
+            for (int i = infos.size() - 1; i >= 0; i--) {
+                BundleInfo info = infos.get(i);
+                if (null != info && !done.contains(info)) {
+                    boolean allDone = true;
+                    List<BundleInfo> toInit = getBundlesToInitialize(cache, info, mapping);
+                    for (int j = 0; allDone && j < toInit.size(); j++) {
+                        BundleInfo init = toInit.get(j);
+                        allDone &= info == init || done.contains(init) 
+                            || init.getName().startsWith("org.eclipse.core.") // consider as done
+                            || init.getName().startsWith("org.eclipse.xtext."); // consider as done 
+                    }
+                    if (allDone) {
+                        result.add(info);
+                        done.add(info);
+                    }
+                }
+            }
+        }
+        for (int i = infos.size() - 1; i >= 0; i--) {
+            BundleInfo info = infos.get(i);
+            if (null != info && !done.contains(info)) {
+                result.add(info);
+            }
+        }
+        // rtVil is optional, ensure position around Ivml
+        int rtVil = -1;
+        int ivml = -1;
+        for (int i = 0; (ivml < 0 || rtVil < 0) && i < result.size(); i++) {
+            BundleInfo info = result.get(i);
+            if ("de.uni_hildesheim.sse.ivml".equals(info.getName())) {
+                ivml = i;
+            } else if ("de.uni_hildesheim.sse.vil.rt".equals(info.getName())) {
+                rtVil = i;
+            }
+        }
+        if (rtVil > 0 && ivml > 0) {
+            if (rtVil > ivml) {
+                BundleInfo info = result.remove(rtVil);
+                result.add(ivml, info);
+            }
+        }
+        
+        return result;
+    }
+    
+    /**
+     * Returns the bundles to initialize.
+     * 
+     * @param cache the initialization set cache (may be modified as a side effect)
+     * @param info the information object to return the initialization for
+     * @param mapping the name/version-bundle mapping
+     * @return the bundles to initialize
+     */
+    private static List<BundleInfo> getBundlesToInitialize(Map<BundleInfo, List<BundleInfo>> cache, BundleInfo info, 
+        Map<String, BundleInfo> mapping) {
+        List<BundleInfo> result = cache.get(info);
+        if (null == result) {
+            result = new ArrayList<BundleInfo>();
+            collectBundlesToInitialize(info, result, true, mapping); // recursive!
+            cache.put(info, result);
+        }
+        return result;
+    }
+    
+    /**
+     * Collects those bundles (including the given one and dependent bundles), which shall be initialized explicitly.
+     * 
+     * @param info the bundle info to collect information for
+     * @param result the bundle information objects to be initialized (modified as a side effect)
+     * @param topLevel whether this is a top-level call
+     * @param mapping the name/version-bundle mapping
+     */
+    private static void collectBundlesToInitialize(BundleInfo info, List<BundleInfo> result, boolean topLevel, 
+        Map<String, BundleInfo> mapping) {
+        if (!topLevel) {
+            if (null != info.getActivatorClassName() || info.getDsClassesCount() > 0) {
+                if (!result.contains(info)) {
+                    result.add(info);
+                }
+            }
+        }
+        for (int r = 0; r < info.getRequiredBundlesCount(); r++) {
+            BundleInfo tmp = mapping.get(info.getRequiredBundle(r).getName());
+            if (null != tmp) {
+                collectBundlesToInitialize(tmp, result, false, mapping);
+            }
         }
     }
-
+    
     /**
      * Activates a DS class / instance.
      * 
@@ -382,7 +455,7 @@ public class Utils {
                 }
             }
         }
-        System.out.println("JARS found: " + result.toString());
+        //System.out.println("JARS found: " + result.toString());
         return result;
     }
 

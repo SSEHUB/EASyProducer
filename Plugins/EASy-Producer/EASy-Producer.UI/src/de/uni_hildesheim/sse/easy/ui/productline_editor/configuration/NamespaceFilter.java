@@ -29,6 +29,7 @@ class NamespaceFilter extends AbstractConfigurationFilter {
             showVariable = true;
         }
         
+        // Make parent visible, if a nested variable shall be visible
         for (int i = 0; i < variable.getNestedElementsCount() && !showVariable; i++) {
             showVariable = checkVariable(variable.getNestedElement(i));
         }

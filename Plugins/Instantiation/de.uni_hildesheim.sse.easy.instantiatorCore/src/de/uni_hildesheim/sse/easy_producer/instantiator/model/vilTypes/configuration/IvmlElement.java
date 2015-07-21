@@ -219,7 +219,11 @@ public abstract class IvmlElement implements IVilType, IResolvable, IStringValue
         if (i1 != null && i2 == TypeRegistry.NULL) {
             result = i1.isNull();
         } else {
-            result = (i1 == null && i2 == null) || (i1 != null && i1.equals(i2));
+            Object o1 = i1;
+            if (null != i1 && !(i2 instanceof IvmlElement)) {
+                o1 = i1.getValue(); // otherwise it will never match
+            }
+            result = (o1 == null && i2 == null) || (o1 != null && o1.equals(i2));
         }
         return result;
     }

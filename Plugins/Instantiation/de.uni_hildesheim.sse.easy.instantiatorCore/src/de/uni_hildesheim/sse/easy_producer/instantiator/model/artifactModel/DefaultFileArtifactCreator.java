@@ -8,7 +8,7 @@ import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.utils.messages.Message;
 import de.uni_hildesheim.sse.utils.messages.Status;
 
@@ -81,7 +81,7 @@ public class DefaultFileArtifactCreator implements IArtifactCreator {
     }
 
     @Override
-    public FileArtifact createArtifactInstance(Object real, ArtifactModel model) throws ArtifactException {
+    public FileArtifact createArtifactInstance(Object real, ArtifactModel model) throws VilException {
         return new FileArtifact((File) real, model);
     }
 

@@ -215,13 +215,22 @@ public interface RtVilPackage extends EPackage
   int RT_CONTENTS = 2;
 
   /**
+   * The feature id for the '<em><b>Elements</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int RT_CONTENTS__ELEMENTS = 0;
+
+  /**
    * The number of structural features of the '<em>rt Contents</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int RT_CONTENTS_FEATURE_COUNT = 0;
+  int RT_CONTENTS_FEATURE_COUNT = 1;
 
   /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.vil.rt.rtVil.impl.GlobalVariableDeclarationImpl <em>Global Variable Declaration</em>}' class.
@@ -316,13 +325,22 @@ public interface RtVilPackage extends EPackage
   int STRATEGY_DECLARATION__OBJECTIVE = 4;
 
   /**
+   * The feature id for the '<em><b>Weighting</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int STRATEGY_DECLARATION__WEIGHTING = 5;
+
+  /**
    * The feature id for the '<em><b>Breakdown</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int STRATEGY_DECLARATION__BREAKDOWN = 5;
+  int STRATEGY_DECLARATION__BREAKDOWN = 6;
 
   /**
    * The feature id for the '<em><b>Post</b></em>' containment reference list.
@@ -331,7 +349,7 @@ public interface RtVilPackage extends EPackage
    * @generated
    * @ordered
    */
-  int STRATEGY_DECLARATION__POST = 6;
+  int STRATEGY_DECLARATION__POST = 7;
 
   /**
    * The number of structural features of the '<em>Strategy Declaration</em>' class.
@@ -340,7 +358,7 @@ public interface RtVilPackage extends EPackage
    * @generated
    * @ordered
    */
-  int STRATEGY_DECLARATION_FEATURE_COUNT = 7;
+  int STRATEGY_DECLARATION_FEATURE_COUNT = 8;
 
   /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.vil.rt.rtVil.impl.BreakdownElementImpl <em>Breakdown Element</em>}' class.
@@ -389,6 +407,43 @@ public interface RtVilPackage extends EPackage
   int BREAKDOWN_ELEMENT_FEATURE_COUNT = 3;
 
   /**
+   * The meta object id for the '{@link de.uni_hildesheim.sse.vil.rt.rtVil.impl.WeightingStatementImpl <em>Weighting Statement</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see de.uni_hildesheim.sse.vil.rt.rtVil.impl.WeightingStatementImpl
+   * @see de.uni_hildesheim.sse.vil.rt.rtVil.impl.RtVilPackageImpl#getWeightingStatement()
+   * @generated
+   */
+  int WEIGHTING_STATEMENT = 6;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int WEIGHTING_STATEMENT__NAME = 0;
+
+  /**
+   * The feature id for the '<em><b>Expr</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int WEIGHTING_STATEMENT__EXPR = 1;
+
+  /**
+   * The number of structural features of the '<em>Weighting Statement</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int WEIGHTING_STATEMENT_FEATURE_COUNT = 2;
+
+  /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.vil.rt.rtVil.impl.BreakdownStatementImpl <em>Breakdown Statement</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -396,7 +451,7 @@ public interface RtVilPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.rt.rtVil.impl.RtVilPackageImpl#getBreakdownStatement()
    * @generated
    */
-  int BREAKDOWN_STATEMENT = 6;
+  int BREAKDOWN_STATEMENT = 7;
 
   /**
    * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -469,7 +524,7 @@ public interface RtVilPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.rt.rtVil.impl.RtVilPackageImpl#getBreakdownWithPart()
    * @generated
    */
-  int BREAKDOWN_WITH_PART = 7;
+  int BREAKDOWN_WITH_PART = 8;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -506,7 +561,7 @@ public interface RtVilPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.rt.rtVil.impl.RtVilPackageImpl#getTacticDeclaration()
    * @generated
    */
-  int TACTIC_DECLARATION = 8;
+  int TACTIC_DECLARATION = 9;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -553,34 +608,6 @@ public interface RtVilPackage extends EPackage
    */
   int TACTIC_DECLARATION_FEATURE_COUNT = 4;
 
-  /**
-   * The meta object id for the '{@link de.uni_hildesheim.sse.vil.rt.rtVil.impl.ScriptContentsImpl <em>Script Contents</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see de.uni_hildesheim.sse.vil.rt.rtVil.impl.ScriptContentsImpl
-   * @see de.uni_hildesheim.sse.vil.rt.rtVil.impl.RtVilPackageImpl#getScriptContents()
-   * @generated
-   */
-  int SCRIPT_CONTENTS = 9;
-
-  /**
-   * The feature id for the '<em><b>Elements</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int SCRIPT_CONTENTS__ELEMENTS = RT_CONTENTS_FEATURE_COUNT + 0;
-
-  /**
-   * The number of structural features of the '<em>Script Contents</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int SCRIPT_CONTENTS_FEATURE_COUNT = RT_CONTENTS_FEATURE_COUNT + 1;
-
 
   /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.vil.rt.rtVil.ImplementationUnit <em>Implementation Unit</em>}'.
@@ -622,6 +649,17 @@ public interface RtVilPackage extends EPackage
    * @generated
    */
   EClass getrtContents();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link de.uni_hildesheim.sse.vil.rt.rtVil.rtContents#getElements <em>Elements</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Elements</em>'.
+   * @see de.uni_hildesheim.sse.vil.rt.rtVil.rtContents#getElements()
+   * @see #getrtContents()
+   * @generated
+   */
+  EReference getrtContents_Elements();
 
   /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.vil.rt.rtVil.GlobalVariableDeclaration <em>Global Variable Declaration</em>}'.
@@ -721,6 +759,17 @@ public interface RtVilPackage extends EPackage
   EReference getStrategyDeclaration_Objective();
 
   /**
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vil.rt.rtVil.StrategyDeclaration#getWeighting <em>Weighting</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Weighting</em>'.
+   * @see de.uni_hildesheim.sse.vil.rt.rtVil.StrategyDeclaration#getWeighting()
+   * @see #getStrategyDeclaration()
+   * @generated
+   */
+  EReference getStrategyDeclaration_Weighting();
+
+  /**
    * Returns the meta object for the containment reference list '{@link de.uni_hildesheim.sse.vil.rt.rtVil.StrategyDeclaration#getBreakdown <em>Breakdown</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -784,6 +833,38 @@ public interface RtVilPackage extends EPackage
    * @generated
    */
   EReference getBreakdownElement_BreakdownStmt();
+
+  /**
+   * Returns the meta object for class '{@link de.uni_hildesheim.sse.vil.rt.rtVil.WeightingStatement <em>Weighting Statement</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Weighting Statement</em>'.
+   * @see de.uni_hildesheim.sse.vil.rt.rtVil.WeightingStatement
+   * @generated
+   */
+  EClass getWeightingStatement();
+
+  /**
+   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.vil.rt.rtVil.WeightingStatement#getName <em>Name</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Name</em>'.
+   * @see de.uni_hildesheim.sse.vil.rt.rtVil.WeightingStatement#getName()
+   * @see #getWeightingStatement()
+   * @generated
+   */
+  EAttribute getWeightingStatement_Name();
+
+  /**
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vil.rt.rtVil.WeightingStatement#getExpr <em>Expr</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Expr</em>'.
+   * @see de.uni_hildesheim.sse.vil.rt.rtVil.WeightingStatement#getExpr()
+   * @see #getWeightingStatement()
+   * @generated
+   */
+  EReference getWeightingStatement_Expr();
 
   /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.vil.rt.rtVil.BreakdownStatement <em>Breakdown Statement</em>}'.
@@ -948,27 +1029,6 @@ public interface RtVilPackage extends EPackage
   EReference getTacticDeclaration_Block();
 
   /**
-   * Returns the meta object for class '{@link de.uni_hildesheim.sse.vil.rt.rtVil.ScriptContents <em>Script Contents</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Script Contents</em>'.
-   * @see de.uni_hildesheim.sse.vil.rt.rtVil.ScriptContents
-   * @generated
-   */
-  EClass getScriptContents();
-
-  /**
-   * Returns the meta object for the containment reference list '{@link de.uni_hildesheim.sse.vil.rt.rtVil.ScriptContents#getElements <em>Elements</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Elements</em>'.
-   * @see de.uni_hildesheim.sse.vil.rt.rtVil.ScriptContents#getElements()
-   * @see #getScriptContents()
-   * @generated
-   */
-  EReference getScriptContents_Elements();
-
-  /**
    * Returns the factory that creates the instances of the model.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1028,6 +1088,14 @@ public interface RtVilPackage extends EPackage
      * @generated
      */
     EClass RT_CONTENTS = eINSTANCE.getrtContents();
+
+    /**
+     * The meta object literal for the '<em><b>Elements</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference RT_CONTENTS__ELEMENTS = eINSTANCE.getrtContents_Elements();
 
     /**
      * The meta object literal for the '{@link de.uni_hildesheim.sse.vil.rt.rtVil.impl.GlobalVariableDeclarationImpl <em>Global Variable Declaration</em>}' class.
@@ -1106,6 +1174,14 @@ public interface RtVilPackage extends EPackage
     EReference STRATEGY_DECLARATION__OBJECTIVE = eINSTANCE.getStrategyDeclaration_Objective();
 
     /**
+     * The meta object literal for the '<em><b>Weighting</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference STRATEGY_DECLARATION__WEIGHTING = eINSTANCE.getStrategyDeclaration_Weighting();
+
+    /**
      * The meta object literal for the '<em><b>Breakdown</b></em>' containment reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1154,6 +1230,32 @@ public interface RtVilPackage extends EPackage
      * @generated
      */
     EReference BREAKDOWN_ELEMENT__BREAKDOWN_STMT = eINSTANCE.getBreakdownElement_BreakdownStmt();
+
+    /**
+     * The meta object literal for the '{@link de.uni_hildesheim.sse.vil.rt.rtVil.impl.WeightingStatementImpl <em>Weighting Statement</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see de.uni_hildesheim.sse.vil.rt.rtVil.impl.WeightingStatementImpl
+     * @see de.uni_hildesheim.sse.vil.rt.rtVil.impl.RtVilPackageImpl#getWeightingStatement()
+     * @generated
+     */
+    EClass WEIGHTING_STATEMENT = eINSTANCE.getWeightingStatement();
+
+    /**
+     * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute WEIGHTING_STATEMENT__NAME = eINSTANCE.getWeightingStatement_Name();
+
+    /**
+     * The meta object literal for the '<em><b>Expr</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference WEIGHTING_STATEMENT__EXPR = eINSTANCE.getWeightingStatement_Expr();
 
     /**
      * The meta object literal for the '{@link de.uni_hildesheim.sse.vil.rt.rtVil.impl.BreakdownStatementImpl <em>Breakdown Statement</em>}' class.
@@ -1280,24 +1382,6 @@ public interface RtVilPackage extends EPackage
      * @generated
      */
     EReference TACTIC_DECLARATION__BLOCK = eINSTANCE.getTacticDeclaration_Block();
-
-    /**
-     * The meta object literal for the '{@link de.uni_hildesheim.sse.vil.rt.rtVil.impl.ScriptContentsImpl <em>Script Contents</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see de.uni_hildesheim.sse.vil.rt.rtVil.impl.ScriptContentsImpl
-     * @see de.uni_hildesheim.sse.vil.rt.rtVil.impl.RtVilPackageImpl#getScriptContents()
-     * @generated
-     */
-    EClass SCRIPT_CONTENTS = eINSTANCE.getScriptContents();
-
-    /**
-     * The meta object literal for the '<em><b>Elements</b></em>' containment reference list feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference SCRIPT_CONTENTS__ELEMENTS = eINSTANCE.getScriptContents_Elements();
 
   }
 

@@ -77,4 +77,9 @@ public class Parenthesis extends ConstraintSyntaxTree {
     public String toString() {
         return "(" + expr.toString() + ")";
     }
+    
+    @Override
+    public boolean isSemanticallyEqual(ConstraintSyntaxTree otherTree) {
+        return expr.isSemanticallyEqual(otherTree);
+    }
 }

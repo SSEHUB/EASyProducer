@@ -1,6 +1,7 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.StringValueHelper;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 
@@ -17,28 +18,28 @@ public class StringReplacer {
      * @author Holger Eichelberger
      */
     private enum State {
-        
+
         /**
          * Plain text.
          */
         TEXT,
-        
+
         /**
          * Starting of a variable, i.e., $.
          */
         VARIABLE_START,
-        
+
         /**
          * In a variable.
          */
         VARIABLE,
-        
+
         /**
          * In an expression.
          */
         EXPRESSION
     }
-    
+
     private StringBuilder text;
     private IRuntimeEnvironment environment;
     private IExpressionVisitor expressionEvaluator;
@@ -49,15 +50,19 @@ public class StringReplacer {
     /**
      * Creates a replacer instance.
      * 
-     * @param text the text to be analyzed
-     * @param environment the runtime environment containing the variables
-     * @param expressionParser an instance for parsing strings into expression (may be <b>null</b> but then
-     *   expression replacement will not work)
-     * @param expressionEvaluator the expression visitor for evaluating expressions (may be <b>null</b> but then
-     *   expression replacement will not work)
+     * @param text
+     *            the text to be analyzed
+     * @param environment
+     *            the runtime environment containing the variables
+     * @param expressionParser
+     *            an instance for parsing strings into expression (may be <b>null</b> but then expression replacement
+     *            will not work)
+     * @param expressionEvaluator
+     *            the expression visitor for evaluating expressions (may be <b>null</b> but then expression replacement
+     *            will not work)
      */
-    private StringReplacer(String text, IRuntimeEnvironment environment, IExpressionParser expressionParser, 
-        IExpressionVisitor expressionEvaluator) {
+    private StringReplacer(String text, IRuntimeEnvironment environment, IExpressionParser expressionParser,
+            IExpressionVisitor expressionEvaluator) {
         this.environment = environment;
         this.expressionEvaluator = expressionEvaluator;
         this.expressionParser = expressionParser;
@@ -71,24 +76,29 @@ public class StringReplacer {
     /**
      * Substitutes the variable and expression placeholders in <code>text</code>.
      * 
-     * @param text the text to be analyzed
-     * @param environment the runtime environment containing the variables
-     * @param expressionParser an instance for parsing strings into expression (may be <b>null</b> but then
-     *   expression replacement will not work)
-     * @param expressionEvaluator the expression visitor for evaluating expressions (may be <b>null</b> but then
-     *   expression replacement will not work)
+     * @param text
+     *            the text to be analyzed
+     * @param environment
+     *            the runtime environment containing the variables
+     * @param expressionParser
+     *            an instance for parsing strings into expression (may be <b>null</b> but then expression replacement
+     *            will not work)
+     * @param expressionEvaluator
+     *            the expression visitor for evaluating expressions (may be <b>null</b> but then expression replacement
+     *            will not work)
      * @return the modified <code>text</code>
-     * @throws ExpressionException in case that something goes wrong while resolving variables
+     * @throws VilException
+     *             in case that something goes wrong while resolving variables
      */
-    public static String substitute(String text, IRuntimeEnvironment environment, IExpressionParser expressionParser, 
-        IExpressionVisitor expressionEvaluator) throws ExpressionException {
+    public static String substitute(String text, IRuntimeEnvironment environment, IExpressionParser expressionParser,
+            IExpressionVisitor expressionEvaluator) throws VilException {
         String result;
         if (null != text) {
             try {
                 StringReplacer replacer = new StringReplacer(text, environment, expressionParser, expressionEvaluator);
                 result = replacer.substitute();
-            } catch (ExpressionException e) {
-                if (ExpressionException.ID_NULL_VALUE == e.getId()) {
+            } catch (VilException e) {
+                if (VilException.ID_NULL_VALUE == e.getId()) {
                     result = null;
                 } else {
                     throw e;
@@ -99,14 +109,15 @@ public class StringReplacer {
         }
         return result;
     }
-    
+
     /**
      * Substitutes the variables in <code>text</code>.
      * 
      * @return the modified <code>text</code>
-     * @throws ExpressionException in case that something goes wrong while resolving variables
+     * @throws VilException
+     *             in case that something goes wrong while resolving variables
      */
-    public String substitute() throws ExpressionException {
+    public String substitute() throws VilException {
         pos = 0;
         curStart = 0;
         State state = State.TEXT;
@@ -130,9 +141,9 @@ public class StringReplacer {
                 }
                 break;
             case VARIABLE:
-                if (!Character.isJavaIdentifierPart(c) || c == '$' ) {
+                if (!Character.isJavaIdentifierPart(c) || c == '$') {
                     handleVariable();
-                    state = State.TEXT;  
+                    state = State.TEXT;
                     pos--;
                 }
                 break;
@@ -166,20 +177,20 @@ public class StringReplacer {
     }
 
     /**
-     * Handle variable placeholder from {@link #curStart} until {@link #pos}.
-     * {@link #curStart} points to "$", {@link #pos} to the end position of the variable
-     * name.
+     * Handle variable placeholder from {@link #curStart} until {@link #pos}. {@link #curStart} points to "$",
+     * {@link #pos} to the end position of the variable name.
      * 
-     * @throws ExpressionException in case of evaluation problems
+     * @throws VilException
+     *             in case of evaluation problems
      */
-    private void handleVariable() throws ExpressionException {
+    private void handleVariable() throws VilException {
         String variableName = text.substring(curStart, pos);
         IResolvable var = environment.get(variableName);
         if (null != var) {
             Object oValue = environment.getValue(var);
             if (null == oValue) {
                 // stop replacement
-                throw new ExpressionException("", ExpressionException.ID_NULL_VALUE);
+                throw new VilException("", VilException.ID_NULL_VALUE);
             }
             String value = StringValueHelper.getStringValueInReplacement(oValue, null);
             if (null != value) {
@@ -190,30 +201,30 @@ public class StringReplacer {
     }
 
     /**
-     * Handle expression placeholder from {@link #curStart} until {@link #pos}.
-     * {@link #curStart} points to "${", {@link #pos} to "}".
-     * name.
+     * Handle expression placeholder from {@link #curStart} until {@link #pos}. {@link #curStart} points to "${",
+     * {@link #pos} to "}". name.
      * 
-     * @throws ExpressionException in case of evaluation problems
+     * @throws VilException
+     *             in case of evaluation problems
      */
-    private void handleExpression() throws ExpressionException {
+    private void handleExpression() throws VilException {
         if (null == expressionParser) {
             EASyLoggerFactory.INSTANCE.getLogger(StringReplacer.class, Bundle.ID).warn(
-                "no expression parser registered");
+                    "no expression parser registered");
         } else if (null == expressionEvaluator) {
             EASyLoggerFactory.INSTANCE.getLogger(StringReplacer.class, Bundle.ID).warn(
-                "no expression evaluator registered");
+                    "no expression evaluator registered");
         } else {
             String expressionString = text.substring(curStart, pos);
             Expression expr = expressionParser.parse(expressionString, environment);
             if (null == expr) {
-                throw new ExpressionException("illegal expression '" + expressionString + "'", 
-                    ExpressionException.ID_RUNTIME);
+                throw new VilException("illegal expression '" + expressionString + "'",
+                        VilException.ID_RUNTIME);
             }
             Object oValue = expr.accept(expressionEvaluator);
             if (null == oValue) {
                 // stop replacement
-                throw new ExpressionException("", ExpressionException.ID_NULL_VALUE);
+                throw new VilException("", VilException.ID_NULL_VALUE);
             }
             String value = StringValueHelper.getStringValueInReplacement(oValue, null);
             if (null != value) {
@@ -222,14 +233,18 @@ public class StringReplacer {
             }
         }
     }
-    
+
     /**
      * Replaces text and adjusts the position.
      * 
-     * @param text the text buffer to perform an in-text replacement on
-     * @param start the start position for the replacement in <code>text</code>
-     * @param end the end position for the replacement in <code>text</code> (inclusive)
-     * @param value the replacement for the specified fragment
+     * @param text
+     *            the text buffer to perform an in-text replacement on
+     * @param start
+     *            the start position for the replacement in <code>text</code>
+     * @param end
+     *            the end position for the replacement in <code>text</code> (inclusive)
+     * @param value
+     *            the replacement for the specified fragment
      * @return end, but adjusted to the replacement
      */
     private static final int replace(StringBuilder text, int start, int end, String value) {

@@ -1,0 +1,11 @@
+project nestedAttribute {
+
+    version v0;
+    annotate Integer at to nestedAttribute;
+    compound cmp {
+        Integer nest;
+    }
+
+    cmp C;
+    C.nest.at = 5;
+}

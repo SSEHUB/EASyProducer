@@ -34,9 +34,13 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.Arti
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FileArtifact;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FragmentArtifact;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IFileSystemArtifact;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.Path;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Text;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArraySet;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Conversion;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationMeta;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
@@ -72,9 +76,9 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
      * 
      * @param file the file to read the artifact contents from
      * @param model the artifact model to create this folder artifact within
-     * @throws ArtifactException if artifact could not be created.
+     * @throws VilException if artifact could not be created.
      */
-    XmlFileArtifact(File file, ArtifactModel model) throws ArtifactException {
+    XmlFileArtifact(File file, ArtifactModel model) throws VilException {
         super(file, model);
         
         this.file = file;
@@ -84,9 +88,9 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
     /**
      * (Re)initializes this artifact.
      * 
-     * @throws ArtifactException if artifact could not be created.
+     * @throws VilException if artifact could not be created.
      */
-    private void initialize() throws ArtifactException {
+    private void initialize() throws VilException {
         readDtd();
         load(file);
         if (null != doc) {
@@ -101,25 +105,33 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
      * Creates a temporary file artifact.
      * 
      * @return the created file artifact
-     * @throws ArtifactException in case that the creation fails
+     * @throws VilException in case that the creation fails
      */
-    public static FileArtifact create() throws ArtifactException {
+    public static FileArtifact create() throws VilException {
         try {
             File file = File.createTempFile("xmlFileArtifact", "vil");
             file.deleteOnExit();
             return ArtifactFactory.createArtifact(XmlFileArtifact.class, file, null);
         } catch (IOException e) {
-            throw new ArtifactException(e, ArtifactException.ID_IO);
+            throw new VilException(e, VilException.ID_IO);
         }
     }
     
     @Override
-    public void artifactChanged(Object cause) throws ArtifactException {
+    @OperationMeta(storeArtifactsBefore = true)
+    public void delete() throws VilException {
+        super.delete();
+        doc = null;
+        rootElement = null;
+    }
+    
+    @Override
+    public void artifactChanged(Object cause) throws VilException {
         initialize();
     }
 
     @Override
-    public void store() throws ArtifactException {
+    public void store() throws VilException {
         this.writeToFile();     
     }
     
@@ -148,9 +160,9 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
      * 
      * @param name the name of the root element
      * @return the actual root element
-     * @throws ArtifactException in case that creating the root element fails
+     * @throws VilException in case that creating the root element fails
      */
-    public XmlElement createRootElement(String name) throws ArtifactException {
+    public XmlElement createRootElement(String name) throws VilException {
         if (null == rootElement) {
             if (null == doc) {
                 try {
@@ -158,8 +170,8 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
                     doc = builder.newDocument();
                 } catch (ParserConfigurationException exc) {
                     EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).exception(exc);
-                    throw new ArtifactException(file.getAbsolutePath() + ":" + exc.getMessage(), 
-                        ArtifactException.ID_RUNTIME_RESOURCE);
+                    throw new VilException(file.getAbsolutePath() + ":" + exc.getMessage(), 
+                        VilException.ID_RUNTIME_RESOURCE);
                 }
             }
             Element elt = doc.createElement(name);
@@ -173,10 +185,10 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
      * Returns a set of all childs of the root element.
      * 
      * @return Set of all childs of the root element.
-     * @throws ArtifactException 
+     * @throws VilException 
      */
     @OperationMeta(returnGenerics = XmlElement.class)
-    public Set<? extends XmlElement> selectChilds() throws ArtifactException {
+    public Set<? extends XmlElement> selectChilds() throws VilException {
         XmlElement[] elements = null;
         if (this.rootElement != null) {
             elements = new XmlElement[this.rootElement.selectAll().size()];
@@ -192,9 +204,9 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
      * Loads and builds the jdom-tree.
      * 
      * @param file the file that is to be parsed.
-     * @throws ArtifactException in case domTree could not be built.
+     * @throws VilException in case domTree could not be built.
      */
-    private void load(File file) throws ArtifactException {
+    private void load(File file) throws VilException {
         
         if (file != null && file.length() > 0) {
         
@@ -204,16 +216,16 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
                 doc = builder.parse(file);
             } catch (ParserConfigurationException exc) {
                 EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).exception(exc);
-                throw new ArtifactException(file.getAbsolutePath() + ":" + exc.getMessage(), 
-                    ArtifactException.ID_RUNTIME_RESOURCE);
+                throw new VilException(file.getAbsolutePath() + ":" + exc.getMessage(), 
+                    VilException.ID_RUNTIME_RESOURCE);
             } catch (SAXException exc) {
                 EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).exception(exc);
-                throw new ArtifactException(file.getAbsolutePath() + ":" + exc.getMessage(), 
-                    ArtifactException.ID_RUNTIME_RESOURCE);
+                throw new VilException(file.getAbsolutePath() + ":" + exc.getMessage(), 
+                    VilException.ID_RUNTIME_RESOURCE);
             } catch (IOException exc) {
                 EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).exception(exc);
-                throw new ArtifactException(file.getAbsolutePath() + ":" + exc.getMessage(), 
-                    ArtifactException.ID_RUNTIME_RESOURCE);
+                throw new VilException(file.getAbsolutePath() + ":" + exc.getMessage(), 
+                    VilException.ID_RUNTIME_RESOURCE);
             }
         
         }
@@ -261,7 +273,7 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
                     element.getText().setText(text);
                 }
             }
-        } catch (ArtifactException e1) {
+        } catch (VilException e1) {
             EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).exception(e1);
         } catch (DOMException e1) {
             EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).exception(e1);
@@ -271,7 +283,7 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
         
         try {
             iter = element.attributes().iterator();
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).exception(e);
         }
         
@@ -379,16 +391,16 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
     
     /**
      * Writes the Dom tree back to the file.
-     * @exception ArtifactException If a new file (which no {@link #doc} should be created out of {@link #getText()}
+     * @exception VilException If a new file (which no {@link #doc} should be created out of {@link #getText()}
      *     and {@link #getText()} is not parseable.
      */
-    private void writeToFile() throws ArtifactException {
+    private void writeToFile() throws VilException {
         // No doc, but maybe there was a valid text added via getText(), e.g. a new file was created
         Text text = null;
         boolean initializationNeeded = false;
         try {
             text = getText();
-        } catch (ArtifactException exc) {
+        } catch (VilException exc) {
             // Don't care, text can be null
             EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).exception(exc);
         }
@@ -399,16 +411,16 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
                 initializationNeeded = true;
             } catch (ParserConfigurationException exc) {
                 EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).exception(exc);
-                throw new ArtifactException(file.getAbsolutePath() + ":" + exc.getMessage(), 
-                    ArtifactException.ID_RUNTIME_RESOURCE);
+                throw new VilException(file.getAbsolutePath() + ":" + exc.getMessage(), 
+                    VilException.ID_RUNTIME_RESOURCE);
             } catch (SAXException exc) {
                 EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).exception(exc);
-                throw new ArtifactException(file.getAbsolutePath() + ":" + exc.getMessage(), 
-                    ArtifactException.ID_RUNTIME_RESOURCE);
+                throw new VilException(file.getAbsolutePath() + ":" + exc.getMessage(), 
+                    VilException.ID_RUNTIME_RESOURCE);
             } catch (IOException exc) {
                 EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).exception(exc);
-                throw new ArtifactException(file.getAbsolutePath() + ":" + exc.getMessage(), 
-                    ArtifactException.ID_RUNTIME_RESOURCE);
+                throw new VilException(file.getAbsolutePath() + ":" + exc.getMessage(), 
+                    VilException.ID_RUNTIME_RESOURCE);
             }
         }
         
@@ -480,14 +492,20 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
 
     @Override
     @OperationMeta(returnGenerics = XmlElement.class)
-    public Set<XmlElement> selectByName(String name) throws ArtifactException {
+    public Set<XmlElement> selectByName(String name) throws VilException {
         return this.rootElement.selectByName(name);
     }
 
     @Override
     @OperationMeta(returnGenerics = XmlElement.class)
-    public Set<XmlElement> selectByPath(String path) throws ArtifactException {
+    public Set<XmlElement> selectByPath(String path) throws VilException {
         return PathUtils.selectByPath(this, PathUtils.normalize(path));
+    }
+
+    @Override
+    @OperationMeta(returnGenerics = XmlElement.class)
+    public Set<XmlElement> selectByXPath(String path) throws VilException {
+        return PathUtils.selectByXPath(path, doc, this);
     }
     
     /**
@@ -497,18 +515,18 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
      * 
      * @param regEx a regular expression specifying the elements to be selected.
      * @return Set of XmlElements matching the regEx.
-     * @throws ArtifactException in case that invalid Elements are used.
+     * @throws VilException in case that invalid Elements are used.
      */
     @OperationMeta(returnGenerics = XmlElement.class)
-    public Set<XmlElement> selectByRegEx(String regEx) throws ArtifactException {
+    public Set<XmlElement> selectByRegEx(String regEx) throws VilException {
         if (this.rootElement == null) {
-            throw new ArtifactException("Root Element does not exist", 30003);
+            throw new VilException("Root Element does not exist", 30003);
         }
         return this.rootElement.selectByRegEx(regEx);
     }
 
     @Override
-    public void update() throws ArtifactException {
+    public void update() throws VilException {
         initialize();
     }
     
@@ -533,19 +551,49 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
     
     /**
      * Checks the base file for embedded DTDs.
-     * @throws ArtifactException If File not found.
+     * @throws VilException If File not found.
      */
-    private void readDtd() throws ArtifactException {
+    private void readDtd() throws VilException {
         
         if (null != file && file.length() > 0) {
             try {
                 this.dtd = dtdParser.extractDTD(file);
             } catch (FileNotFoundException e) {
-                throw new ArtifactException("File not found: " + file.getAbsolutePath(), 
-                        ArtifactException.ID_RUNTIME_RESOURCE);
+                throw new VilException("File not found: " + file.getAbsolutePath(), 
+                    VilException.ID_RUNTIME_RESOURCE);
             }
         }
         
+    }
+    
+    /**
+     * Conversion operation.
+     * 
+     * @param val the value to be converted
+     * @return the converted value
+     * @throws VilException in case that creating the artifact fails
+     */
+    @Invisible
+    @Conversion
+    public static FileArtifact convert(String val) throws VilException {
+        Path path = Path.convert(val);
+        return convert(path);
+    }
+    
+    /**
+     * Conversion operation.
+     * 
+     * @param val the value to be converted
+     * @return the converted value
+     */
+    @Invisible
+    @Conversion
+    public static XmlFileArtifact convert(IFileSystemArtifact val) {
+        XmlFileArtifact convertedValue = null;
+        if (val instanceof XmlFileArtifact) {
+            convertedValue = (XmlFileArtifact) val;
+        }
+        return convertedValue;
     }
 
 }

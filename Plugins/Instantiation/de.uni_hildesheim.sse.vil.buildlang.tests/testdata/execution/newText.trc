@@ -1,0 +1,4 @@
+-> main(Project, Project, Configuration) with (<project>, <project>, <config>)
+    textF <- newText.txt
+    -> getText(FileArtifact) with (newText.txt) = <text>
+    -> setText(Text, String) with (<text>, newText)

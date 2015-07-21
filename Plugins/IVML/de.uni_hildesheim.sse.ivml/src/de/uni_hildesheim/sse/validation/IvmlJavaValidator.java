@@ -63,55 +63,6 @@ public class IvmlJavaValidator extends AbstractIvmlJavaValidator {
     @Check
     public void checkModel(VariabilityUnit unit) {
         ValidationUtils.checkModel(unit, callback, Config.isDebuggingEnabled());
-/*        java.net.URI uri = null;
-        if (null != unit.eResource() && null != unit.eResource().getURI() && unit.eResource().getURI().isFile()) {
-            try {
-                uri = ModelUtility.toNetUri(unit.eResource().getURI());
-            } catch (URISyntaxException e) {
-                EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(getClass(), IvmlBundleId.ID);
-                logger.error("error translating '" + unit.eResource().getURI() 
-                    + "' during validation" + e.getMessage());
-            }
-        }
-        try {
-            TranslationResult<Project> result = ModelUtility.INSTANCE.createVarModel(
-                    unit, uri, false); // false = checkOnly!
-            for (int m = 0; m < result.getMessageCount(); m++) {
-                Message message = result.getMessage(m);
-                switch (message.getStatus()) {
-                case ERROR:
-                case UNSUPPORTED:
-                    error(message.getDescription(), message.getCause(),
-                            message.getCausingFeature(), message.getCode());
-                    break;
-                case WARNING:
-                    warning(message.getDescription(), message.getCause(),
-                            message.getCausingFeature(), message.getCode());
-                    break;
-                default:
-                    info(message.getDescription(), message.getCause(),
-                            message.getCausingFeature(), message.getCode());
-                    break;
-                }
-            }
-            if (Config.isDebuggingEnabled() && 0 == result.getMessageCount()) {
-                EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(getClass(), IvmlBundleId.ID);
-                ByteArrayOutputStream out = new ByteArrayOutputStream();
-                PrintWriter pOut = new PrintWriter(out);
-                pOut.println(">TRANSLATED MODEL");
-                ModelUtility.INSTANCE.print(result, pOut, true, false);
-                pOut.println("<TRANSLATED MODEL");
-                logger.info(out.toString());
-            }
-        } catch (Exception e) {
-e.printStackTrace();            
-            String uriText = "";
-            if (null != unit.eResource() && null != unit.eResource().getURI()) {
-                uriText = " " + unit.eResource().getURI().toString();
-            }
-            EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(getClass(), IvmlBundleId.ID);
-            logger.error("while validating IVML:" + e.getMessage() + uriText);
-        }*/
     }
     
 }

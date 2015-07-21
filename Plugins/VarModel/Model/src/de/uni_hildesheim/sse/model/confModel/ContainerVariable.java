@@ -95,7 +95,8 @@ public abstract class ContainerVariable extends StructuredVariable {
 
         nestedElements.clear();
         ContainerValue conValue = (ContainerValue) value;
-        IDatatype type = ((Container) getDeclaration().getType()).getContainedType();
+        IDatatype type = DerivedDatatype.resolveToBasis(getDeclaration().getType());
+        type = ((Container) type).getContainedType();
         for (int i = 0; null != conValue && i < conValue.getElementSize(); i++) {
             String name = getElementName(i);
             DecisionVariableDeclaration decl = new DecisionVariableDeclaration(name, type, getDeclaration());
@@ -121,7 +122,7 @@ public abstract class ContainerVariable extends StructuredVariable {
             if (conValue != null) {
                 for (int i = 0; i < conValue.getElementSize(); i++) {
                     String name = getElementName(i);
-                    IDatatype eltType = conValue.getElement(i).getType(); // eanble heterogenous polymorphic coll.
+                    IDatatype eltType = conValue.getElement(i).getType(); // enable heterogenous polymorphic coll.
                     DecisionVariableDeclaration decl = new DecisionVariableDeclaration(name, eltType, getDeclaration());
                     VariableCreator creator = new VariableCreator(decl, this, isVisible());
                     try {
@@ -189,7 +190,7 @@ public abstract class ContainerVariable extends StructuredVariable {
             }
         }
         IDecisionVariable result = null;
-        IDatatype type = ((Container) getDeclaration().getType()).getContainedType();
+        IDatatype type = ((Container) DerivedDatatype.resolveToBasis(getDeclaration().getType())).getContainedType();
         int elementPos = nestedElements.size();
         try {
             String name = getElementName(elementPos);

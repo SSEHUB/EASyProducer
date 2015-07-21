@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="if-gen"/>
-	<classpathentry kind="src" path="src-gen"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="src" path="resources"/>
-	<classpathentry kind="lib" path="lib/storm/storm-core-0.9.1-incubating.jar"/>
-	<classpathentry kind="lib" path="lib/storm/zookeeper-3.3.3.jar"/>
-	<classpathentry kind="lib" path="lib/storm/curator-framework-1.0.1.jar"/>
-	<classpathentry kind="lib" path="lib/storm/curator-client-1.0.1.jar"/>
-	<classpathentry kind="lib" path="lib/storm/log4j-1.2.17.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

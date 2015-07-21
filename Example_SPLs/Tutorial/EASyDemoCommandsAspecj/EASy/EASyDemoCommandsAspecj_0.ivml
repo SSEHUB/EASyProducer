@@ -1,0 +1,6 @@
+project EASyDemoCommandsAspecj {
+
+	version v0;
+	import EASyDemoCommandsPlatform;
+	appName = "";
+}

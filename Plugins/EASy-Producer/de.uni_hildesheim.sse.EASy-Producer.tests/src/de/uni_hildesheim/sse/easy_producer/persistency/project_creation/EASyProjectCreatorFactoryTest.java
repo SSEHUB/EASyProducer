@@ -21,14 +21,14 @@ import de.uni_hildesheim.sse.easy_producer.core.mgmt.PLPInfo;
 import de.uni_hildesheim.sse.easy_producer.core.mgmt.SPLsManager;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceUtils;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ExpressionStatement;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.IRuleElement;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.InstantiateExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.MapExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Rule;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
 import de.uni_hildesheim.sse.easy_producer.persistency.ResourcesMgmt;
+import de.uni_hildesheim.sse.model.confModel.AllFreezeSelector;
 import de.uni_hildesheim.sse.model.varModel.Project;
 
 /**
@@ -326,11 +326,11 @@ public class EASyProjectCreatorFactoryTest {
     public void testDerivationAndInstantiation() {
         PLPInfo plpPre = getPLPInfoByName("PL_SimElevator2");
         ProductLineProject plpSuc = createProject("New_derived_project2", plpPre.getProjectID());
-        plpSuc.getConfiguration().freeze();
+        plpSuc.getConfiguration().freeze(AllFreezeSelector.INSTANCE);
         plpSuc.save();
         try {
-            plpSuc.instantiate(null);
-        } catch (VilLanguageException e) {
+            plpSuc.instantiate();
+        } catch (VilException e) {
             Assert.fail("Error in instantiation: " + e.getLocalizedMessage());
         }
     }

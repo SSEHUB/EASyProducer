@@ -1,0 +1,89 @@
+project QM1 {
+
+    enum BindingTime {compile, runtime};
+    annotate BindingTime bindingTime = BindingTime.compile to QM1;
+
+    compound Node {
+        String name;
+    }
+    
+    compound Source refines Node {
+        setOf(refTo(Node)) next;
+    }
+    
+    compound FamilyElement refines Node {
+        setOf(refTo(Node)) next;
+        refTo(Family) family;
+
+        assign (bindingTime = BindingTime.runtime) to {
+          refTo(Algorithm) actual;
+          Integer capacity;
+        }
+    }
+    
+    compound Family {
+        String name;
+        setOf(refTo(Algorithm)) members;
+        assign (bindingTime = BindingTime.runtime) to {
+          Real capacity;
+        }
+    }
+    
+    compound Algorithm {
+        String name;
+    }
+
+    compound Pipeline {
+        String name;
+        setOf(refTo(Source)) sources;
+        assign (bindingTime = BindingTime.runtime) to {
+          Real capacity;
+        }
+        setOf(Constraint) constraints;
+    }
+    
+    setOf(refTo(Pipeline)) pipelines;
+    
+    // ---------------------- instances ---------------------
+    
+    Algorithm alg1 = {
+        name = "alg1"
+    };
+
+    Algorithm alg2 = {
+        name = "alg2"
+    };
+    
+    Family fam1 = {
+        name = "fam1",
+        members = {refBy(alg1), refBy(alg2)}
+    };
+    
+    FamilyElement famElt1 = {
+        name = "famelt1",
+        family = refBy(fam1)
+    };
+    
+    Source src = {
+        name = "src", 
+        next = {refBy(famElt1)}
+    };
+    
+    Pipeline pip = {
+        name = "pip",
+        sources = {refBy(src)},
+        constraints = {capacity < 0.1}
+    };
+    
+    pipelines = {refBy(pip)};
+    
+    freeze {
+        alg1;
+        alg2;
+        fam1;
+        famElt1;
+        src;
+        pip;
+        pipelines;
+    } but (v | v.bindingTime == BindingTime.runtime);
+}

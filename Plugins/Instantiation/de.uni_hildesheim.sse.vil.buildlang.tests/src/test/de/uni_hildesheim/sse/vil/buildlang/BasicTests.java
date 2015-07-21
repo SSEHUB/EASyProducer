@@ -8,16 +8,22 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.dslCore.translation.ErrorCodes;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 
 /**
  * Tests for the basic language.
  * 
  * @author Holger Eichelberger
  */
-public class BasicTests extends AbstractTest {
+public class BasicTests extends AbstractBasicTest<Script> {
 
     private static BasicTests tests;
+
+    @Override
+    protected ITestConfigurer<Script> createTestConfigurer() {
+        return new BuildLangTestConfigurer("vil.buildlang.testdata.home");
+    }
     
     /**
      * Starts up the test.
@@ -331,7 +337,7 @@ public class BasicTests extends AbstractTest {
      */
     @Test
     public void testRulesMissing() throws IOException {
-        assertEqual("rulesMissing", ExpressionException.ID_CANNOT_RESOLVE);
+        assertEqual("rulesMissing", VilException.ID_CANNOT_RESOLVE);
     }
 
     /**
@@ -361,7 +367,7 @@ public class BasicTests extends AbstractTest {
      */
     @Test
     public void testConstructorFail() throws IOException {
-        assertEqual("constructorFail", ExpressionException.ID_CANNOT_INSTANTIATE);
+        assertEqual("constructorFail", VilException.ID_CANNOT_INSTANTIATE);
     }
 
     /**
@@ -442,6 +448,36 @@ public class BasicTests extends AbstractTest {
     @Test
     public void testNestedTypes() throws IOException {
         assertEqual("nestedTypes");
+    }
+
+    /**
+     * Tests typed rules.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testTypedRule() throws IOException {
+        assertEqual("typedRule");
+    }
+
+    /**
+     * Tests typed rules failing due to an incompatible return type.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testTypedRuleFail1() throws IOException {
+        assertEqual("typedRuleFail1", ErrorCodes.TYPE_CONSISTENCY);
+    }
+
+    /**
+     * Tests typed rules failing due to a missing return expression.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testTypedRuleFail2() throws IOException {
+        assertEqual("typedRuleFail2", ErrorCodes.MISSING);
     }
 
 }

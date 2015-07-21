@@ -4,20 +4,26 @@ import java.util.HashSet;
 import java.util.Set;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ruleMatch.ArtifactMatchExpression;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ruleMatch.BooleanMatchExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ruleMatch.CollectionMatchExpression;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ruleMatch.CompoundMatchExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ruleMatch.PathMatchExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ruleMatch.StringMatchExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.Advice;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.ExpressionStatement;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.Typedef;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VariableDeclaration;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CompositeExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ConstantExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ContainerInitializerExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionEvaluator;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.FieldAccessExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ParenthesisExpression;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ResolvableOperationCallExpression;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ResolvableOperationExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ValueAssignmentExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VarModelIdentifierExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VariableExpression;
@@ -81,7 +87,7 @@ class VariableFinder implements IBuildlangVisitor {
     }
     
     @Override
-    public Object visitScript(Script script) throws VilLanguageException {
+    public Object visitScript(Script script) throws VilException {
         for (int p = 0; !found && p < script.getParameterCount(); p++) {
             found = searchFor.contains(script.getParameter(p));
         }
@@ -92,12 +98,12 @@ class VariableFinder implements IBuildlangVisitor {
     }
 
     @Override
-    public Object visitLoadProperties(LoadProperties properties) throws VilLanguageException {
+    public Object visitLoadProperties(LoadProperties properties) throws VilException {
         return null;
     }
 
     @Override
-    public Object visitStrategyCallExpression(StrategyCallExpression call) throws ExpressionException {
+    public Object visitStrategyCallExpression(StrategyCallExpression call) throws VilException {
         for (int a = 0; !found && a < call.getArgumentsCount(); a++) {
             call.getArgument(a).accept(this);
         }
@@ -105,7 +111,7 @@ class VariableFinder implements IBuildlangVisitor {
     }
 
     @Override
-    public Object visitRuleCallExpression(RuleCallExpression ex) throws ExpressionException {
+    public Object visitRuleCallExpression(RuleCallExpression ex) throws VilException {
         for (int a = 0; !found && a < ex.getArgumentsCount(); a++) {
             ex.getArgument(a).accept(this);
         }
@@ -113,25 +119,17 @@ class VariableFinder implements IBuildlangVisitor {
     }
 
     @Override
-    public Object visitJoinExpression(JoinExpression ex) throws ExpressionException {
+    public Object visitJoinExpression(JoinExpression ex) throws VilException {
         for (int v = 0; !found && v < ex.getVariablesCount(); v++) {
-            try {
-                ex.getVariable(v).accept(this);
-            } catch (VilLanguageException e) {
-                throw new ExpressionException(e);
-            }
+            ex.getVariable(v).accept(this);
         }
         return null;
     }
 
     @Override
-    public Object visitJoinVariableDeclaration(JoinVariableDeclaration decl) throws VilLanguageException {
+    public Object visitJoinVariableDeclaration(JoinVariableDeclaration decl) throws VilException {
         if (!found && null != decl.getExpression()) {
-            try {
-                decl.getExpression().accept(this);
-            } catch (ExpressionException e) {
-                throw new VilLanguageException(e);
-            }
+            decl.getExpression().accept(this);
         }
         return null;
     }
@@ -140,16 +138,16 @@ class VariableFinder implements IBuildlangVisitor {
      * Visits and searches in a given rule block.
      * 
      * @param block the block to search in
-     * @throws VilLanguageException if visiting fails
+     * @throws VilException if visiting fails
      */
-    private void visitRuleBlock(IRuleBlock block) throws VilLanguageException {
+    private void visitRuleBlock(IRuleBlock block) throws VilException {
         for (int b = 0; !found && b < block.getBodyElementCount(); b++) {
             block.getBodyElement(b).accept(this);
         }
     }
 
     @Override
-    public Object visitRule(Rule rule) throws VilLanguageException {
+    public Object visitRule(Rule rule) throws VilException {
         for (int p = 0; !found && p < rule.getParameterCount(); p++) {
             found = searchFor.contains(rule.getParameter(p));
         }
@@ -158,73 +156,66 @@ class VariableFinder implements IBuildlangVisitor {
     }
 
     @Override
-    public Object visitMapExpression(MapExpression map) throws ExpressionException {
+    public Object visitMapExpression(MapExpression map) throws VilException {
         map.getExpression().accept(this);
-        try {
-            visitRuleBlock(map);
-        } catch (VilLanguageException e) {
-            throw new ExpressionException(e);
-        }
+        visitRuleBlock(map);
         return null;
     }
 
     @Override
-    public Object visitVariableDeclaration(VariableDeclaration var) throws VilLanguageException {
+    public Object visitVariableDeclaration(VariableDeclaration var) throws VilException {
         if (!found && null != var.getExpression()) {
-            try {
-                var.getExpression().accept(this);
-            } catch (ExpressionException e) {
-                throw new VilLanguageException(e);
-            }
+            var.getExpression().accept(this);
         }
         return null;
     }
 
     @Override
-    public Object visitAdvice(Advice advice) throws VilLanguageException {
+    public Object visitAdvice(Advice advice) throws VilException {
         return null;
     }
 
     @Override
-    public Object visitExpressionStatement(ExpressionStatement statement) throws VilLanguageException {
+    public Object visitExpressionStatement(ExpressionStatement statement) throws VilException {
         if (!found && null != statement.getExpression()) {
-            try {
-                statement.getExpression().accept(this);
-            } catch (ExpressionException e) {
-                throw new VilLanguageException(e);
-            }
+            statement.getExpression().accept(this);
         }
         return null;
     }
 
     @Override
-    public Object visitPathMatchExpression(PathMatchExpression expression) throws ExpressionException {
+    public Object visitPathMatchExpression(PathMatchExpression expression) throws VilException {
         return null;
     }
 
     @Override
-    public Object visitStringMatchExpression(StringMatchExpression expression) throws ExpressionException {
+    public Object visitBooleanMatchExpression(BooleanMatchExpression expression) throws VilException {
         return null;
     }
 
     @Override
-    public Object visitArtifactMatchExpression(ArtifactMatchExpression expression) throws ExpressionException {
+    public Object visitStringMatchExpression(StringMatchExpression expression) throws VilException {
         return null;
     }
 
     @Override
-    public Object visitCollectionMatchExpression(CollectionMatchExpression expression) throws ExpressionException {
+    public Object visitArtifactMatchExpression(ArtifactMatchExpression expression) throws VilException {
         return null;
     }
 
     @Override
-    public Object visitParenthesisExpression(ParenthesisExpression par) throws ExpressionException {
+    public Object visitCollectionMatchExpression(CollectionMatchExpression expression) throws VilException {
+        return null;
+    }
+
+    @Override
+    public Object visitParenthesisExpression(ParenthesisExpression par) throws VilException {
         par.getExpr().accept(this);
         return null;
     }
 
     @Override
-    public Object visitCallExpression(CallExpression call) throws ExpressionException {
+    public Object visitCallExpression(CallExpression call) throws VilException {
         for (int a = 0; !found && a < call.getArgumentsCount(); a++) {
             call.getArgument(a).accept(this);
         }
@@ -232,34 +223,44 @@ class VariableFinder implements IBuildlangVisitor {
     }
 
     @Override
-    public Object visitConstantExpression(ConstantExpression cst) throws ExpressionException {
+    public Object visitConstantExpression(ConstantExpression cst) throws VilException {
         return null;
     }
 
     @Override
     public Object visitVarModelIdentifierExpression(VarModelIdentifierExpression identifier) 
-        throws ExpressionException {
+        throws VilException {
         return null;
     }
 
     @Override
-    public Object visitVilTypeExpression(VilTypeExpression typeExpression) throws ExpressionException {
+    public Object visitVilTypeExpression(VilTypeExpression typeExpression) throws VilException {
         return null;
     }
 
     @Override
-    public Object visitVariableExpression(VariableExpression cst) throws ExpressionException {
+    public Object visitVariableExpression(VariableExpression cst) throws VilException {
         found = searchFor.contains(cst.getDeclaration());
         return null;
     }
+    
+    @Override
+    public Object visitFieldAccessExpression(FieldAccessExpression ex) throws VilException {
+        if (null != ex.getNested()) {
+            ex.getNested().accept(this);
+        } else {
+            found = searchFor.contains(ex.getVariable());
+        }
+        return null;
+    }
 
     @Override
-    public Object visitExpression(Expression ex) throws ExpressionException {
+    public Object visitExpression(Expression ex) throws VilException {
         return null; // general visit statement
     }
 
     @Override
-    public Object visitValueAssignmentExpression(ValueAssignmentExpression ex) throws ExpressionException {
+    public Object visitValueAssignmentExpression(ValueAssignmentExpression ex) throws VilException {
         if (!found && null != ex.getValueExpression()) {
             ex.getValueExpression().accept(this);
         }
@@ -267,32 +268,54 @@ class VariableFinder implements IBuildlangVisitor {
     }
 
     @Override
-    public Object visitExpressionEvaluator(ExpressionEvaluator ex) throws ExpressionException {
+    public Object visitExpressionEvaluator(ExpressionEvaluator ex) throws VilException {
         return null;
     }
 
     @Override
-    public Object visitContainerInitializerExpression(ContainerInitializerExpression ex) throws ExpressionException {
+    public Object visitContainerInitializerExpression(ContainerInitializerExpression ex) throws VilException {
         return null;
     }
 
     @Override
-    public Object visitInstantiateExpression(InstantiateExpression inst) throws ExpressionException {
+    public Object visitInstantiateExpression(InstantiateExpression inst) throws VilException {
         return null;
     }
 
     @Override
-    public Object visitAlternativeExpression(AlternativeExpression alt) throws ExpressionException {
+    public Object visitAlternativeExpression(AlternativeExpression alt) throws VilException {
         alt.getCondition().accept(this);
-        try {
-            visitRuleBlock(alt.getIfPart());
-            if (null != alt.getElsePart()) {
-                visitRuleBlock(alt.getElsePart());
-            }
-        } catch (VilLanguageException e) {
-            throw new ExpressionException(e);
+        visitRuleBlock(alt.getIfPart());
+        if (null != alt.getElsePart()) {
+            visitRuleBlock(alt.getElsePart());
         }
         return null;
+    }
+
+    @Override
+    public Object visitCompositeExpression(CompositeExpression ex) throws VilException {
+        return null;
+    }
+
+    @Override
+    public Object visitCompoundMatchExpression(CompoundMatchExpression expression) throws VilException {
+        return null;
+    }
+
+    @Override
+    public Object visitResolvableOperationExpression(ResolvableOperationExpression ex) throws VilException {
+        return null;
+    }
+
+    @Override
+    public Object visitResolvableOperationCallExpression(ResolvableOperationCallExpression ex) throws VilException {
+        ex.getVariable().accept(this);
+        return null;
+    }
+
+    @Override
+    public Object visitTypedef(Typedef typedef) throws VilException {
+        return null; // no variables involved
     }
 
 }

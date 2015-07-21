@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Properties;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.utils.messages.Message;
 
 /**
@@ -26,7 +26,7 @@ public class DefaultFolderArtifactCreator implements IArtifactCreator {
     }
 
     @Override
-    public FolderArtifact createArtifactInstance(Object real, ArtifactModel model) throws ArtifactException {
+    public FolderArtifact createArtifactInstance(Object real, ArtifactModel model) throws VilException {
         return new FolderArtifact((File) real, model);
     }
     

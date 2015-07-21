@@ -17,7 +17,7 @@ import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
  */
 public class PerformanceStatistics {
     
-    private static final Map<String, List<Double>> PERFORMANCE = new HashMap<String, List<Double>>();
+    private static final Map<String, List<Long>> PERFORMANCE = new HashMap<String, List<Long>>();
     private static final Map<String, String> DESCRIPTION = new HashMap<String, String>();
     private static final Map<String, String> PROJECT = new HashMap<String, String>();
     
@@ -53,17 +53,16 @@ public class PerformanceStatistics {
      * @param reasoningID ID of the unique reasoning process.
      */
     public static void createPerformanceMeasurement(String reasoningID) {
-        PERFORMANCE.put(reasoningID, new ArrayList<Double>());        
+        PERFORMANCE.put(reasoningID, new ArrayList<Long>());        
     }
     
     /**
      * Method to add a timestamp to the measurements.
      * @param reasoningID ID of the unique reasoning process.
-     * @param timestamp Time in milliseconds of a point in the reasoning that needs to be recorded.
      */
-    public static void addTimestamp(String reasoningID, double timestamp) {
-        List<Double> timeStamps = PERFORMANCE.get(reasoningID);        
-        timeStamps.add(timestamp);
+    public static void addTimestamp(String reasoningID) {
+        List<Long> timeStamps = PERFORMANCE.get(reasoningID);        
+        timeStamps.add(System.currentTimeMillis());
     }
     
     /**
@@ -71,7 +70,7 @@ public class PerformanceStatistics {
      * @param reasoningID ID of the unique reasoning process.
      */
     public static void getStats(String reasoningID) {
-        List<Double> timeStamps = PERFORMANCE.get(reasoningID);
+        List<Long> timeStamps = PERFORMANCE.get(reasoningID);
         if (timeStamps.size() > 0) {            
 //            String fileName = FOLDER_PATH + PROJECT.get(reasoningID) 
 //                    + "_" + DESCRIPTION.get(reasoningID) + ".txt";
@@ -79,11 +78,11 @@ public class PerformanceStatistics {
             FileWriter writer = null;
             try {
                 writer = new FileWriter(fileName, true);
-                Double generalTime = timeStamps.get(timeStamps.size() - 1) - timeStamps.get(0);
+                Long generalTime = timeStamps.get(timeStamps.size() - 1) - timeStamps.get(0);
                 writer.write(reasoningID + ";" + DESCRIPTION.get(reasoningID) + ";" 
                         + generalTime + ";");                
                 for (int i = 1; i < timeStamps.size(); i++) {
-                    Double calculatedTime = timeStamps.get(i) - timeStamps.get(i - 1);
+                    Long calculatedTime = timeStamps.get(i) - timeStamps.get(i - 1);
                     writer.write(calculatedTime + ";");
                 }
                 writer.write(LINEBREAK);

@@ -1,6 +1,6 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
 
 /**
@@ -16,9 +16,9 @@ public interface IArtifactChangedListener {
      * 
      * @param cause the cause for the change, e.g., an artifact representation
      * 
-     * @throws ArtifactException in case that the required operations fail for some reason
+     * @throws VilException in case that the required operations fail for some reason
      */
     @Invisible(inherit = true)
-    public void artifactChanged(Object cause) throws ArtifactException;
+    public void artifactChanged(Object cause) throws VilException;
     
 }

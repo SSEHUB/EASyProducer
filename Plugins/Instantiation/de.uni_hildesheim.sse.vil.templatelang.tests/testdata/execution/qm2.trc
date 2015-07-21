@@ -2,12 +2,9 @@
     -> byName(Configuration, String) with (<config>, fNormalize) = qm1::fNormalize
     fm <- qm1::fNormalize
     name <- xxx
-    -> members(Family) with (qm1::fNormalize) = {qm1::Family::members {0}}
     for alg {
         alg <- qm1::Family::members {0}
-        -> algTopologyClass(Algorithm) with (qm1::Family::members {0}) = qm1::Algorithm::algTopologyClass
         -> !=(IvmlElement, Any) with (qm1::Algorithm::algTopologyClass, null) = true
         visit if-branch
-        -> algTopologyClass(Algorithm) with (qm1::Family::members {0}) = qm1::Algorithm::algTopologyClass
         topologyCls <- TSITopology
     }

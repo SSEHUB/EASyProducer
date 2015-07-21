@@ -17,15 +17,7 @@ public interface PersistenceConstants {
     /**
      * Name of the non ivml configuration file.
      */
-    static final String CONFIG_FILE = ".EASyConfig";    
-    
-    /*
-     * CopyMechanisms
-     */
-    /**
-     * <b>CopyMechanism Configuration:</b> The ID of the chosen mechanism.
-     */
-    static final String COPY_ID = "copyID";
+    static final String CONFIG_FILE = ".EASyConfig";
     
     /*
      * Reasoner Values

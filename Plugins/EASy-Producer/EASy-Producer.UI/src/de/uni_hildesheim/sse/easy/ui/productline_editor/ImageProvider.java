@@ -45,7 +45,7 @@ public class ImageProvider {
     }
 
     /**
-     * Returns the image provider with lazy instantiation of the {@link DefaultImageProvider}
+     * Returns the image provider with lazy instantiation of this {@link ImageProvider}
      * in case no other was specified before.
      * 
      * @return the image provider

@@ -2,7 +2,7 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel;
 
 import java.io.File;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Conversion;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
 
@@ -29,11 +29,11 @@ public class VtlFileArtifact extends FileArtifact {
      * 
      * @param path the path to be converted
      * @return the converted value
-     * @throws ArtifactException in case that creating the artifact fails
+     * @throws VilException in case that creating the artifact fails
      */
     @Invisible
     @Conversion
-    public static FileArtifact convert(Path path) throws ArtifactException {
+    public static FileArtifact convert(Path path) throws VilException {
         // conversion to parent type required!!!
         return ArtifactFactory.createArtifact(VtlFileArtifact.class, path.getAbsolutePath(), path.getArtifactModel());
     }
@@ -43,11 +43,11 @@ public class VtlFileArtifact extends FileArtifact {
      * 
      * @param val the value to be converted
      * @return the converted value
-     * @throws ArtifactException in case that creating the artifact fails
+     * @throws VilException in case that creating the artifact fails
      */
     @Invisible
     @Conversion
-    public static FileArtifact convert(String val) throws ArtifactException {
+    public static FileArtifact convert(String val) throws VilException {
         Path path = Path.convert(val);
         return convert(path);
     }

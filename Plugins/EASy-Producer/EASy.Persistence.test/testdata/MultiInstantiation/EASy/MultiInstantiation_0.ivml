@@ -1,0 +1,9 @@
+project MultiInstantiation {
+
+	version v0;
+	String strVar = "Hallo Welt";
+	strVar = "Hallo Welt";
+	freeze {
+		strVar;
+	}
+}

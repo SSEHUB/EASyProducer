@@ -1,0 +1,31 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>eu.qualimaster</groupId>
+  <artifactId>PriorityPipelineInterfaces</artifactId>
+  <version>0.0.5-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <build>
+    <sourceDirectory>${basedir}/</sourceDirectory>
+  </build>
+  <repositories>
+    <repository>
+      <id>qm.eu</id>
+      <name>qm.eu</name>
+      <url>https://projects.sse.uni-hildesheim.de/qm/maven/</url>
+    </repository>
+  </repositories>
+
+  <dependencies>
+   <dependency>
+     <groupId>eu.qualimaster</groupId>
+     <artifactId>StormCommons</artifactId>
+     <version>0.0.5-SNAPSHOT</version>
+   </dependency>
+   <dependency>
+     <groupId>eu.qualimaster</groupId>
+     <artifactId>QualiMaster.Events</artifactId>
+     <version>0.0.5-SNAPSHOT</version>
+   </dependency>
+  </dependencies>
+</project>

@@ -12,10 +12,10 @@ template qm1(Configuration config, FileArtifact target) {
 
     def main(Configuration config, FileArtifact target) {
         Family fm = config.byName("fNormalize");
-        for (Tuple t : fm.output()) {
-            for (Field f : t.fields()) {
-                String name = f.name();
-                String type = f.type();
+        for (Tuple t : fm.output) {
+            for (Field f : t.fields) {
+                String name = f.name;
+                String type = f.type.stringValue();
                 String fType = fieldTypeName(f);
                 '$name $type $fType'
             }

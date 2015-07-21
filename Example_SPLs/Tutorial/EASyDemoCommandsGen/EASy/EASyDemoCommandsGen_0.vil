@@ -1,0 +1,25 @@
+import EASyDemoCommandsPlatform;
+
+@advice(EASyDemoCommandsGen)
+vilScript EASyDemoCommandsGen (Project source, Configuration config, Project target) {
+
+    version v0;
+
+    main(Project source, Configuration config, Project target) = : {
+    	map(Project p : source.predecessors()) {
+    		instantiate p (p, config, target);
+    	};
+		copySRCFiles(source, target);
+    	EASyDemoCommandsGen cfg = config;
+    	String additional = "";
+    	map(Command c : cfg.commands) {
+    		String n = "${c.name.firstToUpperCase()}Command";
+    		String qn = "io/ssehub/easy/demo/command/additional/${n}";
+    		additional = additional + qn.replace("/", ".");
+    		vilTemplateProcessor("compound", config, "$target/src/$qn.java", cmd=c, name=n);
+    	};
+    	vilTemplateProcessor("programConfig", config, "$target/program.properties", further=additional);
+    	javac("$target/src/**/*.java", "$target/bin");
+    }
+
+}

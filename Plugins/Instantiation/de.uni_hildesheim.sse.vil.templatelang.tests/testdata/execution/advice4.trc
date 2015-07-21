@@ -1,20 +1,14 @@
 -> main(Configuration, FileArtifact) with (<config>, test.texts)
     -> selectByProject(Configuration, String) with (<config>, adviceTestVM1) = <config>
     prj <- <config>
-    -> c1(adviceTestVM1) with (<config>) = adviceTestVM1::c1
     cmp <- adviceTestVM1::c1
-    -> $variable(TestCompoundType) with (adviceTestVM1::c1) = adviceTestVM1::c1
-    -> name(DecisionVariable) with (adviceTestVM1::c1) = c1
+    -> name(TestCompoundType) with (adviceTestVM1::c1) = c1
     varName <- c1
-    -> $declaration(TestCompoundType) with (adviceTestVM1::c1) = adviceTestVM1::c1
-    -> type(IvmlDeclaration) with (adviceTestVM1::c1) = TestCompoundType
+    -> type(TestCompoundType) with (adviceTestVM1::c1) = TestCompoundType
     typeName <- TestCompoundType
     prj4 <- <config>
-    -> c1(adviceTestVM4) with (<config>) = adviceTestVM1::c1
     cmp <- adviceTestVM1::c1
-    -> $variable(TestCompoundType) with (adviceTestVM1::c1) = adviceTestVM1::c1
-    -> name(DecisionVariable) with (adviceTestVM1::c1) = c1
+    -> name(TestCompoundType) with (adviceTestVM1::c1) = c1
     varName <- c1
-    -> $declaration(TestCompoundType) with (adviceTestVM1::c1) = adviceTestVM1::c1
-    -> type(IvmlDeclaration) with (adviceTestVM1::c1) = TestCompoundType
+    -> type(TestCompoundType) with (adviceTestVM1::c1) = TestCompoundType
     typeName <- TestCompoundType

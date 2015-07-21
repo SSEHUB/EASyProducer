@@ -14,11 +14,11 @@ import test.de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.test
 import test.de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.testArtifacts.InstanceInstantiator;
 import test.de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.testArtifacts.StaticInstantiator;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.xml.XmlFileArtifact;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.VilException;
 
 /**
  * Tests the type registry.
@@ -42,7 +42,7 @@ public class TypeRegistryTest extends AbstractTest {
         expected.add("Project");
         expected.add("Attribute");
         for (String name : expected) {
-            TypeDescriptor<? extends IVilType> desc = TypeRegistry.DEFAULT.getType(name);
+            TypeDescriptor<?> desc = TypeRegistry.DEFAULT.getType(name);
             Assert.assertNotNull("default type descriptor shall exist", desc);
             Assert.assertEquals("at least the name shall match - no access to actual class", name, desc.getName());
         }        
@@ -97,7 +97,7 @@ public class TypeRegistryTest extends AbstractTest {
         testDefaultTypes();
 
         String expectedName = myArtifactClass.getSimpleName();
-        TypeDescriptor<? extends IVilType> desc = TypeRegistry.DEFAULT.getType(expectedName);
+        TypeDescriptor<?> desc = TypeRegistry.DEFAULT.getType(expectedName);
         Assert.assertNotNull("new type shall exist", desc);
         Assert.assertEquals("at least the name shall be the same", desc.getName(), expectedName);
         assertOperationDeclaringTypes(desc);
@@ -114,7 +114,7 @@ public class TypeRegistryTest extends AbstractTest {
      * 
      * @param descriptor the type descriptor to be checked
      */
-    private void assertOperationDeclaringTypes(TypeDescriptor<? extends IVilType> descriptor) {
+    private void assertOperationDeclaringTypes(TypeDescriptor<?> descriptor) {
         for (OperationDescriptor operation : descriptor.getOperations()) {
             Assert.assertNotNull("declaring type of operation " + operation.getJavaSignature() + "is null", 
                 operation.getDeclaringType());

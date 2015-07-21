@@ -1,7 +1,7 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.matchLoop;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Rule;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 
 /**
  * Applies the result of the matches determined by the 
@@ -40,9 +40,9 @@ public abstract class Applicator {
      * @param rhsValue the value determined for the right side as part of a match
      * @param index the 0-based index of the RHS match condition in the specifying rule ({@link #getElementCount()}
      * @throws IndexOutOfBoundsException if <code>index</code> is invalid
-     * @throws VilLanguageException in case that executing parts of a rule or setting variable values fails
+     * @throws VilException in case that executing parts of a rule or setting variable values fails
      */
-    public abstract void apply(Object expectedLhsValue, Object rhsValue, int index) throws VilLanguageException;
+    public abstract void apply(Object expectedLhsValue, Object rhsValue, int index) throws VilException;
 
     /**
      * Returns the value of the elements handles by this applicator, i.e., the maximum index + 1.
@@ -76,17 +76,17 @@ public abstract class Applicator {
     /**
      * Notifies when the match loop terminated.
      * 
-     * @throws VilLanguageException in case that executing parts of a rule fails
+     * @throws VilException in case that executing parts of a rule fails
      */
-    protected void matchLoopFinished() throws VilLanguageException {
+    protected void matchLoopFinished() throws VilException {
     }
 
     /**
      * Notifies when the condition loop terminated.
      * 
-     * @throws VilLanguageException in case that executing parts of a rule fails
+     * @throws VilException in case that executing parts of a rule fails
      */
-    protected void conditionLoopFinished() throws VilLanguageException {
+    protected void conditionLoopFinished() throws VilException {
     }
 
 }

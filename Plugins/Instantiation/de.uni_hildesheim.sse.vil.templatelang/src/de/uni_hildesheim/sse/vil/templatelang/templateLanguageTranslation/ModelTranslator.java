@@ -19,10 +19,9 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import de.uni_hildesheim.sse.dslCore.translation.ErrorCodes;
 import de.uni_hildesheim.sse.dslCore.translation.TranslatorException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.Imports;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CompositeExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ValueAssignmentExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.AlternativeStatement;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.ContentStatement;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Def;
@@ -39,7 +38,6 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Temp
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.VariableDeclaration;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaType;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
@@ -49,6 +47,7 @@ import de.uni_hildesheim.sse.utils.modelManagement.ModelManagement;
 import de.uni_hildesheim.sse.vil.expressions.ResourceRegistry;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.PrimaryExpression;
+import de.uni_hildesheim.sse.vil.expressions.translation.StringResolver;
 import de.uni_hildesheim.sse.vil.templatelang.TemplateLangModelUtility;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.Extension;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.IndentationHint;
@@ -68,7 +67,7 @@ import de.uni_hildesheim.sse.vil.templatelang.templateLang.VilDef;
  * @author Holger Eichelberger
  */
 public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.translation.ModelTranslator
-    <Template, VariableDeclaration, Resolver, ExpressionTranslator> {
+    <Template, VariableDeclaration, Resolver, ExpressionStatement, ExpressionTranslator> {
     
     private ExpressionTranslator expressionTranslator;
     private Resolver resolver;
@@ -114,6 +113,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
             result = new Template(tpl.getName(), extension, desc, resolver.getTypeRegistry());
             resolver.pushModel(result);
             pushed = true;
+            processTypedefs(tpl.getTypeDefs(), result);
             if (null != tpl.getVars()) {
                 List<de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration> decls = select(
                     tpl.getVars(), de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration.class);
@@ -127,11 +127,12 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
             if (null != tpl.getDefs()) {
                 processDefs(tpl, result);
             }
+            reProcessGlobalVariableDeclarations(result);
             if (registerSuccessful && errorCount == getErrorCount()) {
                 // required if models in the same file refer to each other
                 TemplateModel.INSTANCE.updateModel(result, uri, TemplateLangModelUtility.INSTANCE);
             }
-        } catch (VilLanguageException e) {
+        } catch (VilException e) {
             error(e, tpl, ExpressionDslPackage.Literals.LANGUAGE_UNIT__NAME);
         } catch (TranslatorException e) {
             error(e);
@@ -140,6 +141,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
                 resolver.popModel();
             }
         }
+        getExpressionTranslator().enactIvmlWarnings();
         return result;
     }
     
@@ -192,6 +194,21 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
     }
      
     /**
+     * Re-processes global variable declarations to get rid of temporary "function pointer" expressions.
+     * 
+     * @param model the model to be processed
+     */
+    protected void reProcessGlobalVariableDeclarations(Template model) {
+        for (int v = 0; v < model.getVariableDeclarationCount(); v++) {
+            try {
+                getExpressionTranslator().reProcessVariableDeclaration(model.getVariableDeclaration(v), resolver);
+            } catch (TranslatorException e) {
+                error(e);
+            }
+        }
+    }
+    
+    /**
      * Processes the Java extensions.
      * 
      * @param tpl the template to be processed
@@ -205,7 +222,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
         if (extCount > 0 || null != exts) {
             Set<String> knownTypes = new HashSet<String>();
             Set<String> knownSignatures = new HashSet<String>();
-            Iterator<TypeDescriptor<? extends IVilType>> iter = resolver.getTypeRegistry().allTypes().iterator();
+            Iterator<TypeDescriptor<?>> iter = resolver.getTypeRegistry().allTypes().iterator();
             while (iter.hasNext()) {
                 knownTypes.add(iter.next().getName());
             }
@@ -241,7 +258,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
             javaExt = new JavaExtension(getJavaQualifiedNameString(ext.getName()), resolver.getTypeRegistry());
             processJavaExtension(javaExt, knownTypes, knownSignatures, ext, 
                 TemplateLangPackage.Literals.EXTENSION__NAME);
-        } catch (VilLanguageException e) {
+        } catch (VilException e) {
             throw new TranslatorException(e, ext, TemplateLangPackage.Literals.EXTENSION__NAME);
         }
         return javaExt;
@@ -354,7 +371,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
      */
     private Def processDef(VilDef def, Template template) throws TranslatorException {
         VariableDeclaration[] param = resolveParameters(def.getParam());
-        TypeDescriptor<? extends IVilType> specifiedType = null;
+        TypeDescriptor<?> specifiedType = null;
         if (null != def.getType()) {
             specifiedType = getExpressionTranslator().processType(def.getType(), resolver);
         }
@@ -377,7 +394,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
         def.setBody(processBlock(vilDef.getStmts()));
         try {
             def.inferType();
-        } catch (VilLanguageException e) {
+        } catch (VilException e) {
             throw new TranslatorException(e, vilDef, TemplateLangPackage.Literals.VIL_DEF__STMTS);
         } finally {
             resolver.popLevel();
@@ -390,12 +407,16 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
      * @return the resolved elements
      * @throws TranslatorException in case that the translation fails due to semantic reasons
      */
-    private ITemplateElement[] processBlock(StmtBlock block) throws TranslatorException {
+    private ITemplateElement[] processBlock(StmtBlock block) {
         ITemplateElement[] result = null;
         if (null != block && null != block.getStmts() && !block.getStmts().isEmpty()) {
             List<ITemplateElement> tmp = new ArrayList<ITemplateElement>();
             for (Stmt stmt : block.getStmts()) {
-                tmp.add(processStatement(stmt));
+                try {
+                    tmp.add(processStatement(stmt));
+                } catch (TranslatorException e) {
+                    error(e);
+                }
             }
             if (!tmp.isEmpty()) {
                 result = new ITemplateElement[tmp.size()];
@@ -419,17 +440,12 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
                 result = processAlternative(stmt.getAlt());
             } else if (null != stmt.getBlock()) {
                 resolver.pushLevel();
-                try {
-                    result = new TemplateBlock(processBlock(stmt.getBlock()));
-                } catch (TranslatorException e) {
-                    throw e;
-                } finally {
-                    resolver.popLevel();
-                }
+                result = new TemplateBlock(processBlock(stmt.getBlock()));
+                resolver.popLevel();
             } else if (null != stmt.getCtn()) {
                 result = processContent(stmt.getCtn(), resolver);
             } else if (null != stmt.getExprStmt()) {
-                result = processExpressionStatement(stmt.getExprStmt());
+                result = expressionTranslator.processExpressionStatement(stmt.getExprStmt(), resolver);
             } else if (null != stmt.getLoop()) {
                 result = processLoop(stmt.getLoop());
             } else if (null != stmt.getMulti()) {
@@ -463,7 +479,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
         }
         try {
             return new AlternativeStatement(condition, ifElt, elseElt);
-        } catch (VilLanguageException e) {
+        } catch (VilException e) {
             throw new TranslatorException(e, alt, TemplateLangPackage.Literals.ALTERNATIVE__EXPR);
         }
     }
@@ -488,10 +504,10 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
     private LoopStatement processLoop(de.uni_hildesheim.sse.vil.templatelang.templateLang.Loop loop) 
         throws TranslatorException {
         Expression loopExpression = expressionTranslator.processExpression(loop.getExpr(), resolver);
-        TypeDescriptor<? extends IVilType> exprType = null;
+        TypeDescriptor<?> exprType = null;
         try {
             exprType = loopExpression.inferType();
-        } catch (ExpressionException e) {
+        } catch (VilException e) {
             throw new TranslatorException(e, loop, TemplateLangPackage.Literals.LOOP__EXPR);
         }
         if (!exprType.isCollection()) {
@@ -503,12 +519,13 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
                 exprType = conversion.getReturnType();
             }
         }
-        if (0 == exprType.getParameterCount()) {
+        if (0 == exprType.getGenericParameterCount()) {
             throw new TranslatorException("loop expression is not generic", loop, 
                 TemplateLangPackage.Literals.LOOP__EXPR, ErrorCodes.TYPE_CONSISTENCY);
         }
-        TypeDescriptor<? extends IVilType> type = expressionTranslator.processType(loop.getType(), resolver);
-        if (!type.isAssignableFrom(exprType.getParameterType(0))) {
+        TypeDescriptor<?> type = expressionTranslator.processType(loop.getType(), resolver);
+        TypeDescriptor<?> p0Type = exprType.getGenericParameterType(0);
+        if (!type.isAssignableFrom(p0Type) && null == p0Type.findConversion(p0Type, type)) {
             throw new TranslatorException("loop variable type " + type.getVilName() 
                 + " must match the element type of the collection " + exprType.getVilName(), loop, 
                 TemplateLangPackage.Literals.LOOP__EXPR, ErrorCodes.TYPE_CONSISTENCY);
@@ -528,7 +545,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
         }
         try {
             return new LoopStatement(iteratorVar, loopExpression, stmt, separatorEx, finalSeparatorEx);
-        } catch (VilLanguageException e) {
+        } catch (VilException e) {
             throw new TranslatorException(e, loop, TemplateLangPackage.Literals.LOOP__ID);
         }
     }
@@ -543,10 +560,10 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
     private SwitchStatement processSwitch(de.uni_hildesheim.sse.vil.templatelang.templateLang.Switch swtch) 
         throws TranslatorException {
         Expression switchExpression = expressionTranslator.processExpression(swtch.getExpr(), resolver);
-        TypeDescriptor<? extends IVilType> type;
+        TypeDescriptor<?> type;
         try {
             type = switchExpression.inferType();
-        } catch (ExpressionException e) {
+        } catch (VilException e) {
             throw new TranslatorException(e, swtch, TemplateLangPackage.Literals.SWITCH__EXPR);
         }
         VariableDeclaration switchVar = new VariableDeclaration("VALUE", type);
@@ -557,14 +574,14 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
             Expression condition = expressionTranslator.processExpression(part.getLeft(), resolver);
             try {
                 condition.inferType();
-            } catch (ExpressionException e) {
+            } catch (VilException e) {
                 resolver.popLevel();
                 throw new TranslatorException(e, part, TemplateLangPackage.Literals.SWITCH_PART__LEFT);
             }
             Expression value = expressionTranslator.processExpression(part.getRight(), resolver);
             try {
                 condition.inferType();
-            } catch (ExpressionException e) {
+            } catch (VilException e) {
                 resolver.popLevel();
                 throw new TranslatorException(e, part, TemplateLangPackage.Literals.SWITCH_PART__RIGHT);
             }
@@ -574,7 +591,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
             Expression expr = expressionTranslator.processExpression(swtch.getDflt(), resolver);
             try {
                 expr.inferType();
-            } catch (ExpressionException e) {
+            } catch (VilException e) {
                 resolver.popLevel();
                 throw new TranslatorException(e, swtch, TemplateLangPackage.Literals.SWITCH__DFLT);
             }
@@ -582,7 +599,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
         }
         try {
             return new SwitchStatement(switchExpression, switchVar, alternatives);
-        } catch (VilLanguageException e) {
+        } catch (VilException e) {
             throw new TranslatorException(e, swtch, TemplateLangPackage.Literals.SWITCH__EXPR);
         }  finally {
             resolver.popLevel();
@@ -608,41 +625,16 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
             String text = content.getCtn();
             String terminal = text.substring(0, 1);
             text = ExpressionTranslator.convertString(text);
-            return new ContentStatement(text, terminal, indentExpr, content.getPrint() == null);
-        } catch (VilLanguageException e) {
+            StringBuilder warnings = new StringBuilder();
+            CompositeExpression tmp = (CompositeExpression) StringResolver.substitute(text, resolver, 
+                expressionTranslator, warnings);
+            if (warnings.length() > 0) {
+                warning(warnings.toString(), content, TemplateLangPackage.Literals.CONTENT__CTN, 0);
+            }
+            return new ContentStatement(tmp, terminal, indentExpr, content.getPrint() == null);
+        } catch (VilException e) {
             throw new TranslatorException(e, content, TemplateLangPackage.Literals.CONTENT__INDENT);
         }
-    }
-    
-    /**
-     * Processes an expression statement.
-     * 
-     * @param expr the expression to be processed
-     * @return the expression statement
-     * @throws TranslatorException in case that the translation fails due to semantic reasons
-     */
-    protected ExpressionStatement processExpressionStatement(de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionStatement expr) 
-        throws TranslatorException {
-        Expression result = getExpressionTranslator().processExpression(expr.getExpr(), resolver);
-        try {
-            result.inferType();
-        } catch (ExpressionException e) {
-            throw new TranslatorException(e, expr, ExpressionDslPackage.Literals.EXPRESSION_STATEMENT__EXPR);
-        }
-        if (null != expr.getVar()) {
-            VariableDeclaration decl = resolver.resolve(expr.getVar(), false);
-            if (null == decl) {
-                throw new TranslatorException("cannot resolve variable '" + expr.getVar() + "'", expr, 
-                    ExpressionDslPackage.Literals.EXPRESSION_STATEMENT__VAR, ErrorCodes.UNKNOWN_ELEMENT);
-            }
-            try {
-                result = new ValueAssignmentExpression(decl, result);
-                result.inferType();
-            } catch (ExpressionException e) {
-                throw new TranslatorException(e, expr, ExpressionDslPackage.Literals.EXPRESSION_STATEMENT__VAR);
-            }
-        }
-        return new ExpressionStatement(result);
     }
     
     /**
@@ -652,7 +644,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
      * @param cause the cause (as instance of the EMF grammar model)
      * @param causeFeature the causing feature (as part of <code>cause</code>)
      */
-    void error(VilLanguageException exception, EObject cause,
+    void error(VilException exception, EObject cause,
             EStructuralFeature causeFeature) {
         expressionTranslator.error(exception, cause, causeFeature);
     }
@@ -664,7 +656,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
      * @param cause the cause (as instance of the EMF grammar model)
      * @param causeFeature the causing feature (as part of <code>cause</code>)
      */
-    void warning(VilLanguageException exception, EObject cause,
+    void warning(VilException exception, EObject cause,
             EStructuralFeature causeFeature) {
         expressionTranslator.warning(exception, cause, causeFeature);
     }
@@ -673,5 +665,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
     protected VariableDeclaration[] createArray(int len) {
         return new VariableDeclaration[len];
     }
+    
+    
 
 }

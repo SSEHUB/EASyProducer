@@ -20,6 +20,7 @@ import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Container;
+import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 import de.uni_hildesheim.sse.model.varModel.values.CompoundValue;
 import de.uni_hildesheim.sse.model.varModel.values.ContainerValue;
@@ -190,7 +191,7 @@ class ToplevelVarConfigProvider extends VariableConfigProvider {
                 LOGGER.exception(exc);
             }
         }
-        Compound cmpType = (Compound) relatedVariable.getDeclaration().getType();
+        Compound cmpType = (Compound) DerivedDatatype.resolveToBasis(getDeclaration().getType());
         for (int i = 0; i < cmpType.getInheritedElementCount(); i++) {
             String slotName = cmpType.getInheritedElement(i).getName();
             CompoundVariable cmpVar = (CompoundVariable) relatedVariable;
@@ -231,7 +232,8 @@ class ToplevelVarConfigProvider extends VariableConfigProvider {
         this.value = value;
         for (int i = 0; i < conValue.getElementSize(); i++) {
             String nestedName = container.getElementName(i);
-            IDatatype type = ((Container) relatedVariable.getDeclaration().getType()).getContainedType();
+            IDatatype containerType = DerivedDatatype.resolveToBasis(relatedVariable.getDeclaration().getType());
+            IDatatype type = ((Container) containerType).getContainedType();
             DecisionVariableDeclaration nestedDecl = new DecisionVariableDeclaration(nestedName,
                 type, relatedVariable.getDeclaration());
             VariableCreator creator = new VariableCreator(nestedDecl, relatedVariable,

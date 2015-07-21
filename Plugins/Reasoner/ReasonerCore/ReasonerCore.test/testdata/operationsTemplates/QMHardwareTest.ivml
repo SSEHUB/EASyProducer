@@ -8,8 +8,11 @@ project HardwareTest {
         String name;        
         setOf(Integer) ports;
         MachineRole role;
-        // Manager should not have any used ports
-        role == MachineRole.Manager implies ports.isEmpty() == true;
+        Constraint managerRole = role == MachineRole.Manager implies ports.isEmpty();
+        // role == MachineRole.Manager implies ports.isEmpty();
+        // workers without configured ports receive the default Storm ports
+        Constraint workerRole = role == MachineRole.Worker and ports.isEmpty() implies ports == {6700, 6701, 6702, 6703};
+    
     }
     
     setOf(Machine) machines;
@@ -29,7 +32,7 @@ project HardwareTest {
             role = MachineRole.Worker
         },
         Machine{
-            name="worker5",
+            name="worker3",
             ports={6700,6701,6702,6703},
             role = MachineRole.Worker
         },

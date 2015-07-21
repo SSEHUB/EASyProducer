@@ -9,6 +9,7 @@ import java.io.LineNumberReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.uni_hildesheim.sse.easy.loader.framework.Log;
 import de.uni_hildesheim.sse.easy.loader.framework.Utils;
 
 /**
@@ -20,6 +21,7 @@ public class ListLoader {
 
     public static final String EASY_STARTUP_FILE_NAME = ".easyStartup";
     private List<StartupInfo> startupSequence = new ArrayList<StartupInfo>();
+    private boolean verbose = false;
 
     /**
      * Defines the initialization types supported by this loader.
@@ -44,7 +46,7 @@ public class ListLoader {
      * 
      * @author Holger Eichelberger
      */
-    private static class StartupInfo {
+    private class StartupInfo {
         private InitType type;
         private String className;
         
@@ -68,9 +70,15 @@ public class ListLoader {
             boolean result;
             switch(type) {
             case ACTIVATOR:
+                if (verbose) {
+                    Log.info("START activator " + className);
+                }
                 result = Utils.startBundle(getClass().getClassLoader(), className);
                 break;
             case DS:
+                if (verbose) {
+                    Log.info("START DS " + className);
+                }
                 result = Utils.activateDsInstance(getClass().getClassLoader(), className);
                 break;
             default:
@@ -89,9 +97,15 @@ public class ListLoader {
             boolean result;
             switch(type) {
             case ACTIVATOR:
+                if (verbose) {
+                    Log.info("STOP activator " + className);
+                }
                 result = Utils.stopBundle(getClass().getClassLoader(), className);
                 break;
             case DS:
+                if (verbose) {
+                    Log.info("STOP DS " + className);
+                }
                 result = Utils.deactivateDsInstance(getClass().getClassLoader(), className);
                 break;
             default:
@@ -172,5 +186,13 @@ public class ListLoader {
         }
     }
     
+    /**
+     * Changes the verbosity mode.
+     * 
+     * @param verbose shall we be verbose?
+     */
+    public void setVerbose(boolean verbose) {
+        this.verbose = verbose;
+    }
 
 }

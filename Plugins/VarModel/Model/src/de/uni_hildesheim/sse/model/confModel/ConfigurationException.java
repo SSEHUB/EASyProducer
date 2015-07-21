@@ -28,6 +28,7 @@ public class ConfigurationException extends IvmlException {
     public static final int ALREADY_FROZEN = 19001;
     public static final int TYPE_MISMATCH = 19002;
     public static final int INTERNAL = 19003;
+    public static final int DUPLICATES_IN_SET = 19004;
     
     private Configuration configuration;
     

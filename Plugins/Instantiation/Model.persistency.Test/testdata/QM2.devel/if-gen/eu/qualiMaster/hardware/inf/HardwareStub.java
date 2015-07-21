@@ -1,4 +1,4 @@
-package eu.qualiMaster.hardware.inf;
+package eu.qualimaster.hardware.inf;
 
 /**
 * A basic hardware connection interface.

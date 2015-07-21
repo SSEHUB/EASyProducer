@@ -1,6 +1,6 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 
@@ -11,20 +11,20 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescr
  */
 public class ConstructorCallExpression extends CallExpression {
 
-    private TypeDescriptor<? extends IVilType> type;
+    private TypeDescriptor<?> type;
 
     /**
      * Creates a constructor call.
      * 
      * @param type the type to obtain the constructor from
      * @param arguments the arguments
-     * @throws ExpressionException in case that determining the type fails
+     * @throws VilException in case that determining the type fails
      */
-    public ConstructorCallExpression(TypeDescriptor<? extends IVilType> type, Expression... arguments) 
-        throws ExpressionException {
+    public ConstructorCallExpression(TypeDescriptor<?> type, Expression... arguments) 
+        throws VilException {
         super(null, OperationDescriptor.CONSTRUCTOR_NAME, arguments);
         if (null == type) {
-            throw new ExpressionException("cannot resolve type", ExpressionException.ID_SEMANTIC);
+            throw new VilException("cannot resolve type", VilException.ID_SEMANTIC);
         }
         this.type = type;
     }
@@ -34,17 +34,17 @@ public class ConstructorCallExpression extends CallExpression {
      * 
      * @param type the type to obtain the constructor from
      * @param arguments the arguments
-     * @throws ExpressionException in case that determining the type fails
+     * @throws VilException in case that determining the type fails
      */
-    public ConstructorCallExpression(TypeDescriptor<? extends IVilType> type, CallArgument... arguments) 
-        throws ExpressionException {
+    public ConstructorCallExpression(TypeDescriptor<?> type, CallArgument... arguments) 
+        throws VilException {
         super(null, OperationDescriptor.CONSTRUCTOR_NAME, arguments);
         if (null == type) {
-            throw new ExpressionException("cannot resolve type", ExpressionException.ID_SEMANTIC);
+            throw new VilException("cannot resolve type", VilException.ID_SEMANTIC);
         }
         if (!type.canBeInstantiated()) {
-            throw new ExpressionException("'" + type.getVilName() + "' cannot be instantiated", 
-                ExpressionException.ID_CANNOT_INSTANTIATE);
+            throw new VilException("'" + type.getVilName() + "' cannot be instantiated", 
+                VilException.ID_CANNOT_INSTANTIATE);
         }
         this.type = type;
     }
@@ -58,10 +58,15 @@ public class ConstructorCallExpression extends CallExpression {
      * Determines the operand for searching operations on. Is called by {@link #inferType()}.
      * 
      * @return the operand
-     * @throws ExpressionException in case that determining the operand fails
+     * @throws VilException in case that determining the operand fails
      */
-    protected TypeDescriptor<? extends IVilType> determineOperand() throws ExpressionException {
+    protected TypeDescriptor<?> determineOperand() throws VilException {
         return type;
+    }
+    
+    @Override
+    protected boolean checkMetaForFirstArgField() {
+        return false; // react on type instead, see determineOperand()
     }
 
 }

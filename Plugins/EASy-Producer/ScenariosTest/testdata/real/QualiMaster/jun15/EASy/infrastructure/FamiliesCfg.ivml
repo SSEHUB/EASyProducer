@@ -1,0 +1,225 @@
+project FamiliesCfg {
+ 
+    import ReconfigurableHardware;
+	import Families;
+	import AlgorithmsCfg;	
+    import BasicsCfg;
+	  
+	//priority pipeline TSI
+	Family fPreprocessor;
+	fPreprocessor = {
+		name = "fPreprocessor",
+		members = {refBy(swPreprocessor)},
+    	input = {    		
+    		{
+    			name = "springStream",
+    			fields={Field{name="symbolTuple", type=refBy(StringType)}}
+    		}
+    	},
+    	output = {
+    		{
+    			name = "preprocessedStream",
+    			fields={
+	    			Field{name="symbolId", type=refBy(StringType)},
+	    			Field{name="timestamp", type=refBy(LongType)},
+	    			Field{name="value", type=refBy(RealType)},
+	    			Field{name="volume", type=refBy(IntegerType)}
+    		}}
+    	}		
+	};
+	
+    Family fCorrelationFinancial;
+    fCorrelationFinancial = {
+    	name = "fCorrelationFinancial",
+    	members = {refBy(SWTopoCorrelationFinancial), refBy(HWTopoCorrelationFinancial)},
+    	input = {
+    		{
+    			name = "preprocessedStream",
+    			fields={
+	    			Field{name="symbolId", type=refBy(StringType)},
+	    			Field{name="timestamp", type=refBy(LongType)},
+	    			Field{name="value", type=refBy(RealType)},
+	    			Field{name="volume", type=refBy(IntegerType)}
+    		}},
+    		{
+    			name = "symbolList",
+    			fields={Field{name="allSymbols", type=refBy(StringListType)}}
+    		}
+
+    	},
+    	output = {
+    		{
+    			name = "pairwiseFinancial",
+    			fields={Field{name="pairwiseCorrelationFinancial", type=refBy(StringType)}}
+    		}
+    	},
+		parameters={
+			IntegerParameter{name="windowSize", value=30}
+		}    	    	
+    };	
+	
+	//priority pipeline L3S
+	Family fSentimentAnalysis;
+	fSentimentAnalysis = {
+		name = "fSentimentAnalysis",
+		members = {refBy(topoSentiWord), refBy(topoSVM)},
+		input = {
+			{
+				name = "twitterStream",
+				fields={Field{name="status", type=refBy(ObjectType)}}
+			}
+		},
+		output = {
+    		{
+    			name = "analyzedStream",
+    			fields={
+	    			Field{name="symbolId", type=refBy(StringType)},
+	    			Field{name="timestamp", type=refBy(LongType)},
+	    			Field{name="value", type=refBy(RealType)},
+	    			Field{name="volume", type=refBy(IntegerType)}
+    		}}
+		},
+		parameters={
+			IntegerParameter{name="timeSeriesGranularity"},
+			IntegerParameter{name="sentimentClass"},
+			RealParameter{name="classificationThreshold"}
+		}
+	};
+
+    Family fCorrelationTwitter;
+    fCorrelationTwitter = {
+    	name = "fCorrelationTwitter",
+    	members = {refBy(SWTopoCorrelationTwitter), refBy(HWTopoCorrelationTwitter)},
+    	input = {
+    		{
+    			name = "analyzedStream",
+    			fields={
+    				Field{name="symbolId", type=refBy(StringType)},
+	    			Field{name="timestamp", type=refBy(LongType)},
+	    			Field{name="value", type=refBy(RealType)},
+	    			Field{name="volume", type=refBy(IntegerType)}
+    		}},
+    		{
+    			name = "symbolList",
+    			fields={Field{name="allSymbols", type=refBy(StringListType)}}
+    		}
+
+    	},
+    	output = {
+    		{
+    			name = "pairwiseTwitter",
+    			fields={Field{name="pairwiseCorrelationTwitter", type=refBy(StringType)}}
+    		}
+    	},
+		parameters={
+			IntegerParameter{name="windowSize", value=30}
+		}    	    	
+    };	
+	// For example pipeline
+	/* 	
+	Family fNormalize;
+    fNormalize = {  
+		name = "fNormalize",
+		members = {refBy(aNormalize)},
+		actual = refBy(aNormalize),
+		output={
+			{
+			    fields={
+			      Field{name="streamID", type=FieldType.STRING},
+			      Field{name="timestamp", type=FieldType.STRING},
+			      Field{name="quote", type=FieldType.REAL},
+			      Field{name="volume", type=FieldType.INTEGER}
+		        }
+		    }
+		}, 
+		input={
+			{
+				fields={Field{name="symbolTuple", type=FieldType.STRING}}
+			}
+		}
+	}; 	  
+     */
+    Family fMismatchedFamily;
+    fMismatchedFamily = {
+    	name = "fMismatchedFamily",
+    	members = {refBy(mismatchedAlg)},
+		output={
+			{
+				name = "misString",
+			    fields={
+			      Field{name="streamID1", type=refBy(StringType)},
+			      Field{name="timestamp", type=refBy(IntegerType)},
+			      Field{name="quote", type=refBy(RealType)}
+		        }
+		    }
+		}, 
+		input={
+			{
+				name = "misString",
+				fields={
+					Field{name="symbolTuple1", type=refBy(StringType)},
+					Field{name="volume", type=refBy(IntegerType)}
+				}
+			}
+		}    	
+    };
+
+	Family randomFamily;
+	randomFamily = {
+		name="randomFamily",
+		members = {refBy(randomAlg1), refBy(randomAlg2)},
+		input = {
+			{
+				name = "randomData",
+				fields={Field{name="randomInteger", type=refBy(IntegerType)}}
+			}
+		},
+		output = {
+    		{
+    			name = "proccessedData",
+    			fields={
+    				Field{name="randomInteger", type=refBy(IntegerType)}
+    		}}
+		},
+		parameters = {
+			IntegerParameter{name="delay"},
+			BooleanParameter{name="flag"}
+		} 			
+	};
+	
+	Family switchFamily;
+	switchFamily = {
+		name="switchFamily",
+		members = {refBy(switchAlg1), refBy(switchAlg2)}, 
+		input = {
+			{
+				name = "randomData",
+				fields={Field{name="randomInteger", type=refBy(IntegerType)}}
+			}
+		},
+		output = {
+    		{
+    			name = "proccessedData",
+    			fields={
+    				Field{name="randomInteger", type=refBy(IntegerType)}
+    		}}
+		},
+		parameters = {
+			IntegerParameter{name="delay"},
+			BooleanParameter{name="flag"}
+		} 			
+	};
+	
+	families = {refBy(fPreprocessor), refBy(fCorrelationFinancial), refBy(fSentimentAnalysis), refBy(fCorrelationTwitter), refBy(fMismatchedFamily), refBy(randomFamily), refBy(switchFamily)};
+	freeze {
+		fPreprocessor;
+		fCorrelationFinancial;
+		fCorrelationTwitter;
+		fSentimentAnalysis;
+		fMismatchedFamily;
+		randomFamily;
+		switchFamily;
+		families;
+    } but (f|f.bindingTime == BindingTime.runtime)
+     
+} 

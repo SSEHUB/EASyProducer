@@ -11,14 +11,12 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallAr
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ConstantExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.EvaluationVisitor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.NoTracer;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.RuntimeEnvironment;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.VilException;
 
 /**
  * Tests {@link CallExpression}.
@@ -37,9 +35,9 @@ public class CallExpressionTest extends AbstractTest {
      */
     @Test
     public void testTransparentConversion() {
-        TypeDescriptor<? extends IVilType> iDesc = TypeRegistry.integerType();
+        TypeDescriptor<?> iDesc = TypeRegistry.integerType();
         Assert.assertNotNull("integer type descriptor must exist", iDesc);
-        TypeDescriptor<? extends IVilType> rDesc = TypeRegistry.realType();
+        TypeDescriptor<?> rDesc = TypeRegistry.realType();
         Assert.assertNotNull("double/real type descriptor must exist", rDesc);
         OperationDescriptor op = iDesc.findConversion(iDesc, rDesc);
         Assert.assertNotNull("int->double conversion operation must exist", op);
@@ -51,7 +49,7 @@ public class CallExpressionTest extends AbstractTest {
             Assert.assertNotNull("result must not be null", result);
             Assert.assertTrue("result must be of type Double", result instanceof Double);
             Assert.assertEquals("result is incorrect", 1, ((Double) result).doubleValue(), REAL_COMPARISON_EPSILON);
-        } catch (ExpressionException e) {
+        } catch (VilException e) {
             Assert.fail("unexpected exception: " + e);
         }
     }
@@ -61,7 +59,7 @@ public class CallExpressionTest extends AbstractTest {
      */
     @Test
     public void testStaticExpression() {
-        TypeDescriptor<? extends IVilType> iDesc = TypeRegistry.integerType();
+        TypeDescriptor<?> iDesc = TypeRegistry.integerType();
         Assert.assertNotNull("integer type descriptor must exist", iDesc);
         try {
             CallArgument param1 = new CallArgument(
@@ -69,14 +67,14 @@ public class CallExpressionTest extends AbstractTest {
             CallArgument param2 = new CallArgument(
                 new ConstantExpression(iDesc, Integer.valueOf(2), getRegistry()));
             CallExpression ex = new CallExpression(null, "+", param1, param2);
-            TypeDescriptor<? extends IVilType> eDesc = ex.inferType();
+            TypeDescriptor<?> eDesc = ex.inferType();
             Assert.assertNotNull("result type must not be null", eDesc);
             Assert.assertTrue("result must be of type Integer", eDesc == iDesc);
             Object result = ex.accept(new EvaluationVisitor(new RuntimeEnvironment(), NoTracer.INSTANCE));
             Assert.assertNotNull("result must not be null", result);
             Assert.assertTrue("result must be of type Integer", result instanceof Integer);
             Assert.assertEquals("result is incorrect", 3, ((Integer) result).intValue());
-        } catch (ExpressionException e) {
+        } catch (VilException e) {
             Assert.fail("unexpected exception: " + e);
         }
     }
@@ -86,7 +84,7 @@ public class CallExpressionTest extends AbstractTest {
      */
     @Test
     public void testNonStaticExpression() {
-        TypeDescriptor<? extends IVilType> pDesc = ArtifactTypes.pathType();
+        TypeDescriptor<?> pDesc = ArtifactTypes.pathType();
         Assert.assertNotNull("path type descriptor must exist", pDesc);
         try {
             String filePath = "java/lang/test";
@@ -107,15 +105,13 @@ public class CallExpressionTest extends AbstractTest {
             Assert.assertTrue("toJavaPath operation in Path must not be static. Refactored?", !oDesc.isStatic());
             CallExpression ex = new CallExpression(null, opName, 
                 new CallArgument(new ConstantExpression(pDesc, path, getRegistry())));
-            TypeDescriptor<? extends IVilType> eDesc = ex.inferType();
+            TypeDescriptor<?> eDesc = ex.inferType();
             Assert.assertNotNull("result type must not be null", eDesc);
             Assert.assertEquals("result must be of type JavaPath", oDesc.getReturnType().getName(), eDesc.getName());
             Object result = ex.accept(new EvaluationVisitor(new RuntimeEnvironment(), NoTracer.INSTANCE));
             Assert.assertNotNull("result must not be null", result);
             Assert.assertTrue("result must be of type JavaPath", result instanceof JavaPath);
             Assert.assertEquals("result must be " + expectedJavaPath, expectedJavaPath, ((JavaPath) result).getPath());
-        } catch (ExpressionException e) {
-            Assert.fail("unexpected exception: " + e);            
         } catch (VilException e) {
             Assert.fail("unexpected exception: " + e);            
         }
@@ -126,9 +122,9 @@ public class CallExpressionTest extends AbstractTest {
      */
     @Test
     public void testParameterConversion() {
-        TypeDescriptor<? extends IVilType> iDesc = TypeRegistry.integerType();
+        TypeDescriptor<?> iDesc = TypeRegistry.integerType();
         Assert.assertNotNull("integer type descriptor must exist", iDesc);
-        TypeDescriptor<? extends IVilType> rDesc = TypeRegistry.realType();
+        TypeDescriptor<?> rDesc = TypeRegistry.realType();
         Assert.assertNotNull("double/real type descriptor must exist", rDesc);
         try {
             CallArgument param1 = new CallArgument(
@@ -136,13 +132,13 @@ public class CallExpressionTest extends AbstractTest {
             CallArgument param2 = new CallArgument(
                  new ConstantExpression(iDesc, Integer.valueOf(2), getRegistry()));
             CallExpression ex = new CallExpression(null, "+", param1, param2);
-            TypeDescriptor<? extends IVilType> eDesc = ex.inferType();
+            TypeDescriptor<?> eDesc = ex.inferType();
             Assert.assertNotNull("result type must not be null", eDesc);
             Object result = ex.accept(new EvaluationVisitor(new RuntimeEnvironment(), NoTracer.INSTANCE));
             Assert.assertNotNull("result must not be null", result);
             Assert.assertTrue("result must be of type Double", result instanceof Double);
             Assert.assertEquals("result is incorrect", 3.5, ((Double) result).doubleValue(), REAL_COMPARISON_EPSILON);
-        } catch (ExpressionException e) {
+        } catch (VilException e) {
             Assert.fail("unexpected exception: " + e);
         }        
     }

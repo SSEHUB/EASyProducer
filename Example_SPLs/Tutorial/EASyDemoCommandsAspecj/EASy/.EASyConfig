@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProductLineProject id="1012f006-ea1d-428b-89b0-1d0947ed90c3" name="EASyDemoCommandsAspecj" version="0" location="EASyDemoCommandsAspecj">
+	<predecessors>
+		<entity id="fe903347-a993-45c9-bda2-35181f8aff05" name="EASyDemoCommandsPlatform" version="0" location="EASyDemoCommandsPlatform" />
+	</predecessors>
+	<successors>
+		<entity id="3706ab15-5b9c-4d19-9152-347367677097" name="New_Product4" location="New_Product4" />
+		<entity id="03161fda-702f-4861-96ec-67b8c753f8d4" name="New_Product" location="New_Product" />
+		<entity id="af49d8dc-defc-466d-83de-1fb811df5eb4" name="New_Product_Test" location="New_Product_Test" />
+		<entity id="359e3a02-57e6-4eab-bf02-3493a7479d58" name="New_Product" location="New_Product" />
+		<entity id="a47ccd7f-822c-4c8a-aeaa-81d5074efb5e" name="New_Product" version="0" location="New_Product" />
+		<entity id="6662a273-ba70-4175-9b7c-75b7074353e2" name="New_Product1" version="0" location="New_Product1" />
+		<entity id="0bd35b0a-7a73-4c32-bc3f-977583030064" name="New_Product_3" version="0" location="New_Product_3" />
+		<entity id="d3ba792a-a99d-4284-807b-5e73ff519d1b" name="Test2" version="0" location="Test2" />
+		<entity id="22ebb68f-47ce-4742-9e9d-4e2f747709aa" name="New_Product_1" version="0" location="New_Product_1" />
+	</successors>
+	<settings>
+		<entity debug="false" />
+	</settings>
+	<reasoners>
+		<entity timeout="0" />
+	</reasoners>
+	<instantiators>
+	</instantiators>
+</ProductLineProject>

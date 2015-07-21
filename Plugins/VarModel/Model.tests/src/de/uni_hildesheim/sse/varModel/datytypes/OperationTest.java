@@ -297,10 +297,12 @@ public class OperationTest {
         //calls the following methods for all operations
         for (int i = 0; i < operationsCount; i++) {
             IDatatype type = Operation.getOperation(i).getOperand();
-            Assert.assertTrue(hasOperation(type, Operation.getOperation(i)));
-            testBasisOperation(Operation.getOperation(i));
-            testTooManyParametersInOperation(Operation.getOperation(i));
-            testWrongParametersInOperation(Operation.getOperation(i));
+            Operation op = Operation.getOperation(i);
+            Assert.assertTrue("Error: " + op.getName() + " not available for " + type.getName(),
+                hasOperation(type, op));
+            testBasisOperation(op);
+            testTooManyParametersInOperation(op);
+            testWrongParametersInOperation(op);
         }
     }
     

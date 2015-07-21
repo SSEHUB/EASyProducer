@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.TreeMap;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
+
 /**
  * Defines the VIL type "Map".
  *
@@ -12,17 +14,18 @@ import java.util.TreeMap;
  * 
  * @author Holger Eichelberger
  */
-public class Map<K, V> implements IVilType, IStringValueProvider {
+public class Map<K, V> implements IVilGenericType, IStringValueProvider {
 
     private java.util.Map<Object, Object> map = new HashMap<Object, Object>();
-    private TypeDescriptor<? extends IVilType>[] types;
+    private TypeDescriptor<?>[] generics;
+    private TypeDescriptor<?> type;
     
     /**
      * Creates a new map.
      * 
      * @param types the parameter types of this map
      */
-    Map(TypeDescriptor<? extends IVilType>[] types) {
+    Map(TypeDescriptor<?>[] types) {
         this(types, 0);
     }
 
@@ -32,9 +35,14 @@ public class Map<K, V> implements IVilType, IStringValueProvider {
      * @param types the parameter types of this map
      * @param size the initial size of this map
      */
-    Map(TypeDescriptor<? extends IVilType>[] types, int size) {
+    Map(TypeDescriptor<?>[] types, int size) {
         assert null != types && 2 == types.length;
-        this.types = types;
+        this.generics = types;
+        try {
+            this.type = TypeRegistry.getMapType(types);
+        } catch (VilException e) {
+            this.type = TypeRegistry.DEFAULT.findType(Map.class);
+        }
         map = new HashMap<Object, Object>(size <= 0 ? 10 : size);
     }
     
@@ -44,10 +52,15 @@ public class Map<K, V> implements IVilType, IStringValueProvider {
      * @param map the map to be wrapped
      * @param types the types in <code>map</code>
      */
-    public Map(java.util.Map<Object, Object> map, TypeDescriptor<? extends IVilType>[] types) {
+    public Map(java.util.Map<Object, Object> map, TypeDescriptor<?>[] types) {
         assert null != types && 2 == types.length;
-        this.types = types;
+        this.generics = types;
         this.map = map;
+        try {
+            this.type = TypeRegistry.getMapType(types);
+        } catch (VilException e) {
+            this.type = TypeRegistry.DEFAULT.findType(Map.class);
+        }
     }
     
     /**
@@ -99,22 +112,52 @@ public class Map<K, V> implements IVilType, IStringValueProvider {
      * @param key the key for the mapping (<b>null</b> is ignored)
      * @param value the value of the mapping
      */
+    @OperationMeta(genericArgument = {0, 1 })
     public void add(Object key, V value) {
         Object val = value;
         if (null != key) {
-            if (2 == types.length) {
-                if (types[1].isMap() && value instanceof Collection<?>) {
+            if (2 == generics.length) {
+                if (generics[1].isMap() && value instanceof Collection<?>) {
                     Collection<?> coll = (Collection<?>) value;
                     if (0 == coll.size()) {
-                        TypeDescriptor<? extends IVilType>[] params = TypeDescriptor.createArray(2);
-                        params[0] = types[0];
-                        params[1] = types[1];
+                        TypeDescriptor<?>[] params = TypeDescriptor.createArray(2);
+                        params[0] = generics[0];
+                        params[1] = generics[1];
+                        val = new Map<Object, Object>(params);
+                    }
+                }
+                if (generics[1].isMap() && value instanceof Map<?, ?>) {
+                    Map<?, ?> map = (Map<?, ?>) value;
+                    if (0 == map.getSize() && isAnyMap(map) && !isAnyMap(this)) {
+                        TypeDescriptor<?>[] params = TypeDescriptor.createArray(2);
+                        params[0] = generics[1].getGenericParameterType(0);
+                        params[1] = generics[1].getGenericParameterType(1);
                         val = new Map<Object, Object>(params);
                     }
                 }
             }
             map.put(key, val);
         }
+    }
+
+    /**
+     * Returns whether <code>map</code> is an <Any,Any> map.
+     * 
+     * @param map the map to test
+     * @return <code>true</code> if it is an <Any,Any> map, <code>false</code> else
+     */
+    private static final boolean isAnyMap(Map<?, ?> map) {
+        return isAny(map.generics[0]) && isAny(map.generics[1]);
+    }
+    
+    /**
+     * Returns whether <code>type</code> is Any.
+     * 
+     * @param type the type to test
+     * @return <code>true</code> if <code>type</code> is Any, <code>false</code> else
+     */
+    private static final boolean isAny(TypeDescriptor<?> type) {
+        return TypeRegistry.equals(TypeRegistry.anyType(), type);        
     }
     
     /**
@@ -135,7 +178,13 @@ public class Map<K, V> implements IVilType, IStringValueProvider {
      */
     @Invisible(inherit = true)
     public int getDimensionCount() {
-        return types.length;
+        return generics.length;
+    }
+    
+
+    @Override
+    public TypeDescriptor<?> getType() {
+        return type;
     }
     
     /**
@@ -155,8 +204,8 @@ public class Map<K, V> implements IVilType, IStringValueProvider {
      * @return the actual type of the dimension
      */
     @Invisible(inherit = true)
-    public TypeDescriptor<? extends IVilType> getDimensionType(int index) {
-        return types[index];
+    public TypeDescriptor<?> getDimensionType(int index) {
+        return generics[index];
     }
        
     /**
@@ -164,19 +213,19 @@ public class Map<K, V> implements IVilType, IStringValueProvider {
      * 
      * @param sequence the sequence to be converted
      * @return the resulting map
-     * @throws ArtifactException in case that types or dimensions cannot be converted
+     * @throws VilException in case that types or dimensions cannot be converted
      */
     @Conversion
-    public static Map<?, ?> convert(Sequence<?> sequence) throws ArtifactException {
+    public static Map<?, ?> convert(Sequence<?> sequence) throws VilException {
         int seqSize = sequence.size();
-        if (seqSize > 0 && sequence.getDimensionCount() != 2) {
-            throw new ArtifactException("sequence of dimension " + sequence.getDimensionCount() 
-                + " cannot be converted into a map of dimension 2", ArtifactException.ID_INVALID_TYPE);
+        if (seqSize > 0 && sequence.getGenericParameterCount() != 2) {
+            throw new VilException("sequence of dimension " + sequence.getGenericParameterCount() 
+                + " cannot be converted into a map of dimension 2", VilException.ID_INVALID_TYPE);
         }
-        TypeDescriptor<? extends IVilType>[] types = TypeDescriptor.createArray(2);
+        TypeDescriptor<?>[] types = TypeDescriptor.createArray(2);
         if (seqSize > 0) {
-            types[0] = sequence.getDimensionType(0);
-            types[1] = sequence.getDimensionType(1);
+            types[0] = sequence.getGenericParameterType(0);
+            types[1] = sequence.getGenericParameterType(1);
         } else {
             types[0] = TypeRegistry.anyType();
             types[1] = types[0];
@@ -187,12 +236,13 @@ public class Map<K, V> implements IVilType, IStringValueProvider {
             if (elt instanceof Sequence) {
                 Sequence<?> seq = (Sequence<?>) elt;
                 if (2 != seq.size()) {
-                    throw new ArtifactException("sequence in element " + e + "is not of size 2", 
-                        ArtifactException.ID_INVALID_TYPE);
+                    throw new VilException("sequence in element " + e + "is not of size 2", 
+                        VilException.ID_INVALID_TYPE);
                 }
                 result.map.put(seq.get(0), seq.get(1));
             } else {
-                throw new ArtifactException("element " + e + "is not a sequence", ArtifactException.ID_INVALID_TYPE);
+                throw new VilException("element " + e + "is not a sequence", 
+                    VilException.ID_INVALID_TYPE);
             }
         }
         return result;
@@ -261,15 +311,15 @@ public class Map<K, V> implements IVilType, IStringValueProvider {
      * @return <code>value</code> or an empty map of the given types
      */
     @Invisible
-    public static Object checkConvertEmpty(TypeDescriptor<? extends IVilType> type, Object value) {
-        if (type.isMap() && value instanceof Map<?, ?> && 2 == type.getParameterCount()) {
+    public static Object checkConvertEmpty(TypeDescriptor<?> type, Object value) {
+        if (type.isMap() && value instanceof Map<?, ?> && 2 == type.getGenericParameterCount()) {
             Map<?, ?> map = (Map<?, ?>) value;
-            final TypeDescriptor<? extends IVilType> any = TypeRegistry.anyType();
+            final TypeDescriptor<?> any = TypeRegistry.anyType();
             if (0 == map.getSize() && 2 == map.getDimensionCount() 
                 && any == map.getDimensionType(0) && any == map.getDimensionType(1)) {
-                TypeDescriptor<? extends IVilType>[] params = TypeDescriptor.createArray(2);
-                params[0] = type.getParameterType(0);
-                params[1] = type.getParameterType(1);
+                TypeDescriptor<?>[] params = TypeDescriptor.createArray(2);
+                params[0] = type.getGenericParameterType(0);
+                params[1] = type.getGenericParameterType(1);
                 value = new Map<Object, Object>(params);
             }
         }
@@ -284,6 +334,23 @@ public class Map<K, V> implements IVilType, IStringValueProvider {
     @Override
     public int hashCode() {
         return map.hashCode();
+    }
+    
+    /**
+     * Converts back to a map for utilizing this with external classes.
+     * 
+     * @return the internal map
+     */
+    @Invisible
+    public java.util.Map<Object, Object> toMap() {
+        java.util.Map<Object, Object> result;
+        if (null != map) {
+            result = new HashMap<Object, Object>();
+            result.putAll(map);
+        } else {
+            result = null;
+        }
+        return result;
     }
 
 }

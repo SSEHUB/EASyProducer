@@ -11,7 +11,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.xtext.nodemodel.INode;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.vil.expressions.ResourceRegistry;
@@ -271,9 +270,9 @@ public class TemplateLangProposalProviderUtility {
         List<String> allTypes = null;
         TypeRegistry typeRegistry = ResourceRegistry.getTypeRegistry(node);
         if (typeRegistry != null) {
-            Iterable<TypeDescriptor<? extends IVilType>> types = typeRegistry.allTypes();
+            Iterable<TypeDescriptor<?>> types = typeRegistry.allTypes();
             if (types != null) {
-                Iterator<TypeDescriptor<? extends IVilType>> typeIterator = types.iterator();
+                Iterator<TypeDescriptor<?>> typeIterator = types.iterator();
                 if (typeIterator != null) {
                     allTypes = new ArrayList<String>();
                     while (typeIterator.hasNext()) {

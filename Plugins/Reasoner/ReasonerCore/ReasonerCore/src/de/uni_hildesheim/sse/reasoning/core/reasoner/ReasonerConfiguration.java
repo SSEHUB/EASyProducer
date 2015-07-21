@@ -14,6 +14,31 @@ public class ReasonerConfiguration {
     private int timeout;
     private ReasonerDescriptor defaultReasoner;
     private boolean customMessages;
+    private boolean incremental;
+    private IAdditionalInformationLogger logger = new IAdditionalInformationLogger() {
+
+        @Override
+        public void info(String text) {
+            System.out.println(text); // the legacy behavior
+        }
+        
+    };
+
+    /**
+     * Describes an information logger.
+     * 
+     * @author Holger Eichelberger
+     */
+    public interface IAdditionalInformationLogger {
+
+        /**
+         * Emits some information.
+         * 
+         * @param text the text to be printed
+         */
+        public void info(String text);
+        
+    }
     
     /**
      * Creates a new instance and initializes it with default values, i.e.
@@ -146,4 +171,49 @@ public class ReasonerConfiguration {
     public boolean getCustomMessages() {
         return customMessages;
     }
+    
+    /**
+     * Returns the additional information logger.
+     * 
+     * @return the information logger
+     */
+    public IAdditionalInformationLogger getLogger() {
+        return logger;
+    }
+
+    /**
+     * Defines the additional information logger.
+     * 
+     * @param logger the logger
+     */
+    public void setAdditionalInformationLogger(IAdditionalInformationLogger logger) {
+        if (null != logger) {
+            this.logger = logger;
+        }
+    }
+    
+    /**
+     * Defines whether reasoning shall happen incrementally. Currently, incremental reasoning assumes
+     * that all required defaults and assignments have already been processed. In particular, the caller
+     * is responsible for passing a "clean" configuration to the reasoner that leads to the expected
+     * results.
+     * 
+     * @param incremental if reasoning shall happen incrementally
+     */
+    public void setIncremental(boolean incremental) {
+        this.incremental = incremental;
+    }
+    
+    /**
+     * Returns whether reasoning shall be done incrementally. Currently, incremental reasoning assumes
+     * that all required defaults and assignments have already been processed. In particular, the caller
+     * is responsible for passing a "clean" configuration to the reasoner that leads to the expected
+     * results.
+     * 
+     * @return <code>true</code> if reasoning shall happen incrementally, <code>false</code> else
+     */
+    public boolean reasonIncrementally() {
+        return incremental;
+    }
+    
 }

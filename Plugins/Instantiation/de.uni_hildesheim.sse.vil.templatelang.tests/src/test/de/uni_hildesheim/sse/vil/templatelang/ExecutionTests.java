@@ -14,9 +14,9 @@ import de.uni_hildesheim.sse.dslCore.translation.Message;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactFactory;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IArtifact;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IFileSystemArtifact;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.defaultInstantiators.RandomDouble;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateLangExecution;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.Configuration;
 import de.uni_hildesheim.sse.model.confModel.ConfigurationException;
 import de.uni_hildesheim.sse.model.management.VarModel;
@@ -83,8 +83,10 @@ public class ExecutionTests extends AbstractTest {
         }
         if (null == target) {
             try {
-                target = ArtifactFactory.createFileSystemArtifact(new File("test.texts")); // shall be FileArtifact!!!
-            } catch (ArtifactException e) {
+                File f = new File("test.texts"); // TODO -> temp??
+                f.deleteOnExit();
+                target = ArtifactFactory.createFileSystemArtifact(f); // shall be FileArtifact!!!
+            } catch (VilException e) {
                 Assert.fail("unexpected exception: " + e.getMessage());
             }
         }
@@ -170,6 +172,26 @@ public class ExecutionTests extends AbstractTest {
         return assertEqual(vtlModelName, "main", cfg, expectedExceptions);
     }
 
+    /**
+     * Tests VTL function pointers.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testApply() throws IOException {
+        assertEqual("apply");
+    }
+    
+    /**
+     * Tests VTL function pointers with typedefs.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testApply2() throws IOException {
+        assertEqual("apply2");
+    }
+    
     /**
      * Tests simple content.
      * 
@@ -516,11 +538,11 @@ public class ExecutionTests extends AbstractTest {
      * Tests a template about storing the IVML configuration (inspired by K. Schmid).
      * 
      * @throws IOException should not occur
-     * @throws ArtifactException should not occur
+     * @throws VilException should not occur
      * @throws ConfigurationException should not occur
      */
     @Test
-    public void testIvml6() throws IOException, ArtifactException, ConfigurationException {
+    public void testIvml6() throws IOException, VilException, ConfigurationException {
         String name = "ivml6";
         Configuration cfg = new Configuration(DefaultConfiguration.createDefaultConfiguration());
         Map<String, Object> param = createParameterMap(cfg, null);
@@ -656,6 +678,16 @@ public class ExecutionTests extends AbstractTest {
     @Test
     public void testMaps() throws IOException {
         assertEqual("maps");
+    }
+    
+    /**
+     * Tests the map sequence operation.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testMapSequence() throws IOException {
+        assertEqual("mapSequence");
     }
     
     /**
@@ -854,6 +886,36 @@ public class ExecutionTests extends AbstractTest {
     }
 
     /**
+     * Tests {@link #testQm2()} but with field access.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testQm2o1() throws IOException {
+        assertEqualWithIvml("qm2.1", "qm1");
+    }
+    
+    /**
+     * Tests field access.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testQm0() throws IOException {
+        assertEqualWithIvml("qm0", "qm0");
+    }
+    
+    /**
+     * Tests field access + size.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testQm0o1() throws IOException {
+        assertEqualWithIvml("qm0.1", "qm0");
+    }    
+    
+    /**
      * Tests an a switch problem in VTL (contributed by C. Qin, QualiMaster).
      * 
      * @throws IOException should not occur
@@ -901,6 +963,36 @@ public class ExecutionTests extends AbstractTest {
     @Test
     public void testQm7() throws IOException {
         assertEqualWithIvml("qm7", "qm7");
+    }
+
+    /**
+     * Tests an nested maps in VTL (contributed by C. Qin, QualiMaster).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testQm7o1() throws IOException {
+        assertEqualWithIvml("qm7.1", "qm7");
+    }
+
+    /**
+     * Tests sorting IVML elements via expression.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testSort() throws IOException {
+        assertEqualWithIvml("sort", "SortModel");
+    }
+
+    /**
+     * Tests a dispatch on a supertype.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testDispatch3() throws IOException {
+        assertEqualWithIvml("dispatch3", "dispatch3");
     }
 
 }

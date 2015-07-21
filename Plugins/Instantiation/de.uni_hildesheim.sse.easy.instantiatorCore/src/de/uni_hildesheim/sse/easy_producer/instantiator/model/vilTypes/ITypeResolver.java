@@ -25,7 +25,7 @@ public interface ITypeResolver {
      *     allowed through this call
      * @return the resolved type (or <b>null</b> if <code>name</code> cannot be resolved)
      */
-    public TypeDescriptor<? extends IVilType> resolveType(String name, boolean addIfMissing);
+    public TypeDescriptor<?> resolveType(String name, boolean addIfMissing);
 
     /**
      * Resolves a type by its IVML type.
@@ -33,7 +33,7 @@ public interface ITypeResolver {
      * @param type the type to be resolved
      * @return the resolved type (or <b>null</b> if <code>name</code> cannot be resolved)
      */
-    public TypeDescriptor<? extends IVilType> resolveType(IDatatype type);
+    public TypeDescriptor<?> resolveType(IDatatype type);
     
     /**
      * Resolves an instantiator by its name.

@@ -14,11 +14,14 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import de.uni_hildesheim.sse.dslCore.translation.ErrorCodes;
 import de.uni_hildesheim.sse.dslCore.translation.TranslatorException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.Advice;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.ExpressionStatement;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.ITypedefReceiver;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.IVariableDeclarationReceiver;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.Imports;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.Typedef;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VariableDeclaration;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Resolver;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypeResolver;
@@ -49,8 +52,8 @@ import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VersionStmt;
  * @param <E> the expression translator type
  */
 public abstract class ModelTranslator 
-    <M extends IModel, I extends VariableDeclaration, R extends Resolver<I>, E extends ExpressionTranslator<I, R>> 
-    extends de.uni_hildesheim.sse.dslCore.translation.ModelTranslator<E> {
+    <M extends IModel, I extends VariableDeclaration, R extends Resolver<I>, S extends ExpressionStatement, 
+    E extends ExpressionTranslator<I, R, S>> extends de.uni_hildesheim.sse.dslCore.translation.ModelTranslator<E> {
 
     private R resolver;
     
@@ -127,6 +130,55 @@ public abstract class ModelTranslator
         return result;
     }
     
+    protected void processTypedefContents(List<EObject> elts, ITypedefReceiver receiver) {
+        List<de.uni_hildesheim.sse.vil.expressions.expressionDsl.TypeDef> defs = select(
+            elts, de.uni_hildesheim.sse.vil.expressions.expressionDsl.TypeDef.class);
+        processTypedefs(defs, receiver);
+    }
+
+    protected void processTypedefs(List<de.uni_hildesheim.sse.vil.expressions.expressionDsl.TypeDef> defs, 
+        ITypedefReceiver receiver) {
+        int count;
+        do {
+            count = defs.size();
+            processTypedefs(defs, receiver, false);
+            if (count == defs.size()) {
+                break;
+            }
+        } while (count > 0);
+        if (defs.size() > 0) {
+            processTypedefs(defs, receiver, true);
+        }
+    }
+    
+    private void processTypedefs(List<de.uni_hildesheim.sse.vil.expressions.expressionDsl.TypeDef> defs, 
+        ITypedefReceiver receiver, boolean force) {
+        Iterator<de.uni_hildesheim.sse.vil.expressions.expressionDsl.TypeDef> iter = defs.iterator();
+        while (iter.hasNext()) {
+            de.uni_hildesheim.sse.vil.expressions.expressionDsl.TypeDef def = iter.next();
+            try {
+                String name = def.getName();
+                TypeDescriptor<?> type = getExpressionTranslator().processType(def.getType(), resolver);
+                if (!resolver.getTypeRegistry().addTypeAlias(name, type)) {
+                    error("Type name '" + name + "' already exists", def, 
+                        ExpressionDslPackage.Literals.TYPE_DEF__NAME, ErrorCodes.NAME_CLASH);
+                }
+                Typedef typedef = new Typedef(name, type);
+                receiver.addTypedef(typedef);
+                iter.remove();
+            } catch (VilException e) {
+                if (force) {
+                    error(e.getMessage(), def, ExpressionDslPackage.Literals.TYPE_DEF__NAME, e.getId());
+                }
+            } catch (TranslatorException e) {
+                if (force) {
+                    error(e);
+                }
+            }
+        }        
+        
+    }
+
     /**
      * Processes all variable declarations considering dependencies and terminates with
      * an error if not all can be resolved.
@@ -219,7 +271,7 @@ public abstract class ModelTranslator
         Project varModel = advice.getResolved();
         if (null != varModel) {
             TypeRegistry registry = resolver.getTypeRegistry();
-            registry.addTypeResolver(new IvmlTypeResolver(varModel, registry, advice.getName()));
+            registry.addTypeResolver(new IvmlTypeResolver(varModel, registry));
         }
     }
     
@@ -262,7 +314,7 @@ public abstract class ModelTranslator
         if (null != parameters) {
             List<I> tmp = new ArrayList<I>();
             for (de.uni_hildesheim.sse.vil.expressions.expressionDsl.Parameter p : parameters) {
-                TypeDescriptor<? extends IVilType> type = getExpressionTranslator().processType(p.getType(), resolver);
+                TypeDescriptor<?> type = getExpressionTranslator().processType(p.getType(), resolver);
                 if (null != type) {
                     for (int t = 0; t < tmp.size(); t++) {
                         if (tmp.get(t).getName().equals(p.getName())) {
@@ -352,6 +404,9 @@ public abstract class ModelTranslator
             }
         }
         List<IMessage> resolutionMessages = getManagementInstance().resolveImports(model, uri, infoInProgress);
+        if (resolutionMessages.size() > 0) {
+            resolutionMessages = postResolveImports(model, uri, resolutionMessages);
+        }        
         for (int i = 0; i < resolutionMessages.size(); i++) {
             IMessage msg = resolutionMessages.get(i);
             switch (msg.getStatus()) {
@@ -367,4 +422,16 @@ public abstract class ModelTranslator
         }
     }
     
+    /**
+     * Is called in case of resolution problems.
+     * 
+     * @param model the model to be resolved
+     * @param uri the physical URI of the project
+     * @param resolutionMessages the messages collected so far
+     * @return the new resolution messages
+     */
+    protected List<IMessage> postResolveImports(M model, URI uri, List<IMessage> resolutionMessages) {
+        return resolutionMessages;
+    }
+
 }

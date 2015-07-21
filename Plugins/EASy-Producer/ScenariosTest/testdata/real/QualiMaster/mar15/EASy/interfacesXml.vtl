@@ -1,0 +1,42 @@
+template interfacesXml(Configuration config, FileArtifact target, String interfaceArtifact) {
+	def appendRepositories(Text text) {
+		text.append("    <repository>\n      <id>qm.eu</id>\n      <name>qm.eu</name>\n      <url>https://projects.sse.uni-hildesheim.de/qm/maven/</url>\n    </repository>\n");
+	}
+
+	def appendDependencies(Text text) {
+   		text.append("   <dependency>
+     <groupId>eu.qualimaster</groupId>
+     <artifactId>StormCommons</artifactId>
+     <version>0.0.5-SNAPSHOT</version>
+   </dependency>\n");
+   		text.append("   <dependency>
+     <groupId>eu.qualimaster</groupId>
+     <artifactId>QualiMaster.Events</artifactId>
+     <version>0.0.5-SNAPSHOT</version>
+   </dependency>\n");   		
+	}
+	
+	def main(Configuration config, FileArtifact target, String interfaceArtifact) {
+		Text text = target.getText();
+		text.append("<project xmlns=\"http://maven.apache.org/POM/4.0.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\">\n");		
+		text.append("  <modelVersion>4.0.0</modelVersion>\n");
+		sequenceOf(String) artList = interfaceArtifact.split(":");
+		if(artList.size() == 3) {
+		    text.append("  <groupId>${artList[0]}</groupId>\n");
+			text.append("  <artifactId>${artList[1]}</artifactId>\n");
+			text.append("  <version>${artList[2]}</version>\n");	
+		}		
+		text.append("  <packaging>jar</packaging>\n");
+		text.append("\n");
+		text.append("  <repositories>\n");
+		//text.append("    <repository>\n      <id>clojars.org</id>\n      <url>http://clojars.org/repo</url>\n    </repository>\n");
+		appendRepositories(text);
+		text.append("  </repositories>\n");
+		text.append("\n");
+		text.append("  <dependencies>\n");
+		appendDependencies(text);
+		text.append("  </dependencies>\n");		
+		text.append("</project>\n");
+		target.rename("pom.xml");
+	}
+}

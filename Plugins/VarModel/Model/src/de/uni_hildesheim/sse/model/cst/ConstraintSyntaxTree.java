@@ -93,4 +93,13 @@ public abstract class ConstraintSyntaxTree implements IAttributeAccess {
         return null;
     }
 
+    /**
+     * Checks whether this {@link ConstraintSyntaxTree} is semantically equal to another {@link ConstraintSyntaxTree}.
+     * <b>Attention:</b>This method is not fully supported by all operations and sub classes.
+     * @param otherTree Another cst to check whether it is semantically equal to this cst.
+     * @return <tt>true</tt> if both trees are semantically equal, <tt>false</tt> otherwise.
+     */
+    public boolean isSemanticallyEqual(ConstraintSyntaxTree otherTree) {
+        return this.equals(otherTree);
+    }
 }

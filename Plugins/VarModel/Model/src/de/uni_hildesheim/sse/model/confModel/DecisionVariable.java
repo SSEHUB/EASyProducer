@@ -240,10 +240,12 @@ abstract class DecisionVariable implements IDecisionVariable {
     }
     
     @Override
-    public void freeze() {
-        configProvider.freeze();
-        for (int a = 0; a < getAttributesCount(); a++) {
-            getAttribute(a).freeze();
+    public void freeze(IFreezeSelector selector) {
+        if (null == selector || selector.shallFreeze(this)) {
+            configProvider.freeze();
+            for (int a = 0; a < getAttributesCount(); a++) {
+                getAttribute(a).freeze(selector);
+            }
         }
     }
 

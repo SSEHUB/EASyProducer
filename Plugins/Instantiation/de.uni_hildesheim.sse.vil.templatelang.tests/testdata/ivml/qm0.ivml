@@ -1,0 +1,39 @@
+project qm0 {
+
+    enum CardType {MAX, MAX2};
+
+    compound Algorithm {
+        String name;
+        CardType hwType;
+    }
+
+    Algorithm alg_c1;
+    alg_c1 = {
+        name = "L3S causality",
+        hwType = null
+    };
+
+    Algorithm alg_c3;
+    alg_c3 = {
+        name = "TSI HW causality",
+        hwType = CardType.MAX2 // just preliminary link to HW
+    };
+    
+    compound Family {
+        String name;
+        setOf(refTo(Algorithm)) members; 
+    }
+    
+    Family fNormalize;
+    fNormalize = {  
+        name = "normalize",
+        members = {refBy(alg_c1), refBy(alg_c3)}
+    };  
+    
+    freeze {
+        alg_c1;
+        alg_c3;
+        fNormalize;
+    }
+    
+}

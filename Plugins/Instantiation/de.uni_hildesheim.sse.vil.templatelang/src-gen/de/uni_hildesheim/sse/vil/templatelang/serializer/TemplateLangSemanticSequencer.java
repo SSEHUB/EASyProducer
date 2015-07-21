@@ -37,6 +37,7 @@ import de.uni_hildesheim.sse.vil.expressions.expressionDsl.RelationalExpressionP
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.SubCall;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.SuperExecution;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Type;
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.TypeDef;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.TypeParameters;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.UnaryExpression;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.UnqualifiedExecution;
@@ -286,6 +287,12 @@ public class TemplateLangSemanticSequencer extends ExpressionDslSemanticSequence
 					return; 
 				}
 				else break;
+			case ExpressionDslPackage.TYPE_DEF:
+				if(context == grammarAccess.getTypeDefRule()) {
+					sequence_TypeDef(context, (TypeDef) semanticObject); 
+					return; 
+				}
+				else break;
 			case ExpressionDslPackage.TYPE_PARAMETERS:
 				if(context == grammarAccess.getTypeParametersRule()) {
 					sequence_TypeParameters(context, (TypeParameters) semanticObject); 
@@ -512,6 +519,7 @@ public class TemplateLangSemanticSequencer extends ExpressionDslSemanticSequence
 	 *         param=ParameterList? 
 	 *         ext=Identifier? 
 	 *         version=VersionStmt? 
+	 *         typeDefs+=TypeDef* 
 	 *         vars+=VariableDeclaration* 
 	 *         defs+=VilDef*
 	 *     )

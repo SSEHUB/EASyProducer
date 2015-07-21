@@ -1,8 +1,7 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 
@@ -30,11 +29,11 @@ public class LoopStatement implements ITemplateElement {
      * @param separatorExpression an optional separator expression to be emitted between elements (may be <b>null</b>)
      * @param finalSeparatorExpression an optional separator expression to be emitted after the last element 
      *   (may be <b>null</b>)
-     * @throws VilLanguageException in case of semantic problems while creating this loop object
+     * @throws VilException in case of semantic problems while creating this loop object
      */
     public LoopStatement(VariableDeclaration iteratorVar, Expression containerExpression, ITemplateElement statement, 
         Expression separatorExpression, Expression finalSeparatorExpression) 
-        throws VilLanguageException {
+        throws VilException {
         this.iteratorVar = iteratorVar;
         this.containerExpression = containerExpression;
         this.statement = statement;
@@ -91,7 +90,7 @@ public class LoopStatement implements ITemplateElement {
     }
 
     @Override
-    public Object accept(IVisitor visitor) throws VilLanguageException {
+    public Object accept(IVisitor visitor) throws VilException {
         return visitor.visitLoop(this);
     }
 
@@ -101,7 +100,7 @@ public class LoopStatement implements ITemplateElement {
     }
 
     @Override
-    public TypeDescriptor<? extends IVilType> inferType() throws VilLanguageException {
+    public TypeDescriptor<?> inferType() throws VilException {
         return TypeRegistry.voidType();
     }
 

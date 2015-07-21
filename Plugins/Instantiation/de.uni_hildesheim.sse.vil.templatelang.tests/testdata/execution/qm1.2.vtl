@@ -3,7 +3,7 @@ template qm1_2(Configuration config, FileArtifact target) {
 
     def main(Configuration config, FileArtifact target) {
         Family fm = config.byName("fNormalize");
-        for (Parameter p : fm.parameters()->select(p | p.name().length() > 0)) {
+        for (Parameter p : fm.parameters->select(p | p.name.length() > 0)) {
             DecisionVariable tmp = p;
             'System.out.print("${tmp.type()}");'
         }

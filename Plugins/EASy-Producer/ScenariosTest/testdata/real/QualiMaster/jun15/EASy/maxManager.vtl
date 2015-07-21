@@ -1,0 +1,25 @@
+template maxManager(Configuration config, FileArtifact target, DecisionVariable pipeline) {
+
+    def main(Configuration config, FileArtifact target, DecisionVariable pipeline) {
+    	'package qm;'
+        ''
+        'import com.maxeler.maxcompiler.v2.build.EngineParameters;'
+        'import com.maxeler.maxcompiler.v2.kernelcompiler.Kernel;'
+        'import com.maxeler.maxcompiler.v2.managers.standard.Manager;'
+        'import com.maxeler.maxcompiler.v2.managers.standard.Manager.IOType;'
+        ''
+		'class PipelineManager {'
+		''
+		'    public static void main(String[] args) {'
+		'        Manager manager = new Manager(new EngineParameters(args));'
+		'        Kernel kernel = new PipelineKernel(manager.makeKernelParameters());'
+		'        // sorry, I have to ask MAX how to link Kernels'
+		'        manager.setKernel(kernel);'
+		'        manager.setIO(IOType.ALL_CPU);'
+		'        manager.createSLiCinterface();'
+		'        manager.build();'
+	    '    }'
+        '}'
+    }
+    
+}

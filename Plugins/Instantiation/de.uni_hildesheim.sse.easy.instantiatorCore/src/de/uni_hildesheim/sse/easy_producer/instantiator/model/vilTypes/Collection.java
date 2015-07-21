@@ -14,26 +14,26 @@ import java.util.Iterator;
  * @author Holger Eichelberger
  */
 @ClassMeta(furtherOperations = CollectionOperations.class)
-public interface Collection<T> extends Iterable<T>, IVilType, IStringValueProvider {
-    
-    /**
-     * Returns the number of dimensions of <code>T</code>.
-     * 
-     * @return the number of dimensions
-     */
-    @Invisible(inherit = true)
-    public int getDimensionCount();
-    
-    /**
-     * Returns the type of the specified dimension of <code>T</code>.
-     * 
-     * @param index the 0-based index of the dimension
-     * 
-     * @return the actual type of the dimension
-     */
-    @Invisible(inherit = true)
-    public TypeDescriptor<? extends IVilType> getDimensionType(int index);
+public interface Collection<T> extends Iterable<T>, IVilGenericType, IStringValueProvider {
 
+    /**
+     * Returns the number of generic parameters of <code>T</code>.
+     * 
+     * @return the number of generic parameter
+     */
+    @Invisible(inherit = true)
+    public int getGenericParameterCount();
+    
+    /**
+     * Returns the type of the specified generic parameter of <code>T</code>.
+     * 
+     * @param index the 0-based index of the generic parameter
+     * 
+     * @return the actual type of the generic parameter
+     */
+    @Invisible(inherit = true)
+    public TypeDescriptor<?> getGenericParameterType(int index);
+    
     /**
      * Returns the number of elements in the underlying collection.
      * 

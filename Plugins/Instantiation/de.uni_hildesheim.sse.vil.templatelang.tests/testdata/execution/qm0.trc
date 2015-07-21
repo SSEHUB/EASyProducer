@@ -1,0 +1,11 @@
+-> main(Configuration, FileArtifact) with (<config>, test.texts)
+    -> byName(Configuration, String) with (<config>, fNormalize) = qm0::fNormalize
+    fm <- qm0::fNormalize
+    for alg {
+        alg <- qm0::Family::members {0}
+        -> <>(IvmlElement, Any) with (qm0::Algorithm::hwType, null) = false
+        alg <- qm0::Family::members {1}
+        -> <>(IvmlElement, Any) with (qm0::Algorithm::hwType, null) = true
+        visit if-branch
+        algName <- TSI HW causality
+    }

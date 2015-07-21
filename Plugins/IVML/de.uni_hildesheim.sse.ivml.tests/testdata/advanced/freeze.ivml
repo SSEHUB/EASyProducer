@@ -15,5 +15,5 @@ project freezes {
     freeze {
         c0.j;
         freezes;
-    } but (c*)
+    } but (f|matches(name(f), "c*"))
 }

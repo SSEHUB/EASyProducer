@@ -4,7 +4,7 @@ project adviceTestVM6 {
   enum BindingTime {compile, runtime};
   enum LevelType {high, medium, low};
   
-  attribute BindingTime bindingTime = BindingTime.compile to adviceTestVM6;
+  annotate BindingTime bindingTime = BindingTime.compile to adviceTestVM6;
   
   compound TestCompoundType {
       Integer iVal;

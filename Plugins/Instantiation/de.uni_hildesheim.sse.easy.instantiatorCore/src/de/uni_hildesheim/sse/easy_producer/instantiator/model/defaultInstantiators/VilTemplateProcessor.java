@@ -20,10 +20,9 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.Path
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.VtlFileArtifact;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilLanguageException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.TracerFactory;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.EvaluationVisitor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionParserRegistry;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IExpressionParser;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IResolvable;
@@ -33,7 +32,6 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.ITra
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Template;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateLangExecution;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateModel;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArtifactException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Collection;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Constants;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
@@ -86,11 +84,11 @@ public class VilTemplateProcessor implements IVilType {
      * @param targets the target artifacts (may be modified)
      * @param other named optional parameter
      * @return the created artifacts
-     * @throws ArtifactException in case that execution fails
+     * @throws VilException in case that execution fails
      */
-    @OperationMeta(returnGenerics = IArtifact.class)
+    @OperationMeta(returnGenerics = IArtifact.class, requiresDynamicExpressionProcessing = true)
     public static Set<IArtifact> vilTemplateProcessor(FileArtifact template, Configuration config, 
-        Collection<IArtifact> targets, Map<String, Object> other) throws ArtifactException {
+        Collection<IArtifact> targets, Map<String, Object> other) throws VilException {
         List<IArtifact> result = new ArrayList<IArtifact>();
         for (IArtifact target : targets) {
             process(template, config, target, other, result);
@@ -106,11 +104,11 @@ public class VilTemplateProcessor implements IVilType {
      * @param target the target artifact (may be modified)
      * @param other named optional parameter
      * @return the created artifacts
-     * @throws ArtifactException in case that execution fails
+     * @throws VilException in case that execution fails
      */
-    @OperationMeta(returnGenerics = IArtifact.class)
+    @OperationMeta(returnGenerics = IArtifact.class, requiresDynamicExpressionProcessing = true)
     public static Set<IArtifact> vilTemplateProcessor(FileArtifact template, Configuration config, IArtifact target, 
-        Map<String, Object> other) throws ArtifactException {
+        Map<String, Object> other) throws VilException {
         List<IArtifact> result = new ArrayList<IArtifact>();
         process(template, config, target, other, result);
         return new ListSet<IArtifact>(result, IArtifact.class);
@@ -124,15 +122,15 @@ public class VilTemplateProcessor implements IVilType {
      * @param target the target artifact (may be modified)
      * @param other named optional parameter
      * @param result the created artifacts (modified as a side effect)
-     * @throws ArtifactException in case that execution fails
+     * @throws VilException in case that execution fails
      */
     private static void process(FileArtifact template, Configuration config, IArtifact target, 
-        Map<String, Object> other, List<IArtifact> result) throws ArtifactException {
+        Map<String, Object> other, List<IArtifact> result) throws VilException {
         // obtaining the expression parser for instantiation
         IExpressionParser expressionParser = ExpressionParserRegistry.getExpressionParser(
             TemplateLangExecution.LANGUAGE);
         if (null == expressionParser) {
-            throw new ArtifactException("no expression parser registered", ArtifactException.ID_INTERNAL);
+            throw new VilException("no expression parser registered", VilException.ID_INTERNAL);
         }
         // obtaining the file contents for instantiation
         File inAbsFile = template.getPath().getAbsolutePath();
@@ -140,26 +138,25 @@ public class VilTemplateProcessor implements IVilType {
         try {
             templateContents = FileUtils.readFileToString(inAbsFile);
         } catch (IOException e) {
-            throw new ArtifactException(e.getMessage(), ArtifactException.ID_IO);
+            throw new VilException(e.getMessage(), VilException.ID_IO);
         }
         // instantiate the file template
-        try  {
-            RuntimeEnvironment runtimeEnvironment = new RuntimeEnvironment(config);
-            ITracer tracer = TracerFactory.createTemplateLanguageTracer();
-            EvaluationVisitor evaluationVisitor = new EvaluationVisitor(runtimeEnvironment, tracer);
-            String instantiatedContent = StringReplacer.substitute(templateContents, runtimeEnvironment, 
-                expressionParser, evaluationVisitor);
+        RuntimeEnvironment runtimeEnvironment = new RuntimeEnvironment(config);
+        ITracer tracer = TracerFactory.createTemplateLanguageTracer();
+        EvaluationVisitor evaluationVisitor = new EvaluationVisitor(runtimeEnvironment, tracer);
+        // TODO this operation cannot just be removed as it is the functionality of a template processor
+        // TODO However, without xtext this cannot be executed at runtime :(
+        String instantiatedContent = StringReplacer.substitute(templateContents, runtimeEnvironment, 
+            expressionParser, evaluationVisitor);
+        //String instantiatedContent = templateContents;
             
-            StringWriter out = new StringWriter();
-            out.append(instantiatedContent);
-            out.flush();
-            String tmp = out.toString();
-            if (tmp.length() > 0) {
-                target.getText().setText(tmp);
-                target.store(); // just to be sure for the moment
-            }
-        } catch (ExpressionException e) {
-            throw new ArtifactException(e.getMessage(), ArtifactException.ID_IO);
+        StringWriter out = new StringWriter();
+        out.append(instantiatedContent);
+        out.flush();
+        String tmp = out.toString();
+        if (tmp.length() > 0) {
+            target.getText().setText(tmp);
+            target.store(); // just to be sure for the moment
         }
         // returning the affected file(s)
         result.add(target);
@@ -173,11 +170,11 @@ public class VilTemplateProcessor implements IVilType {
      * @param targets the target artifacts (may be modified)
      * @param other named optional parameter
      * @return the created artifacts
-     * @throws ArtifactException in case that execution fails
+     * @throws VilException in case that execution fails
      */
     @OperationMeta(returnGenerics = IArtifact.class)
     public static Set<IArtifact> vilTemplateProcessor(VtlFileArtifact template, Configuration config, 
-        Collection<IArtifact> targets, Map<String, Object> other) throws ArtifactException {
+        Collection<IArtifact> targets, Map<String, Object> other) throws VilException {
         List<IArtifact> result = new ArrayList<IArtifact>();
         for (IArtifact target : targets) {
             process(template, config, target, other, result);
@@ -193,11 +190,11 @@ public class VilTemplateProcessor implements IVilType {
      * @param target the target artifact (may be modified)
      * @param other named optional parameter
      * @return the created artifacts
-     * @throws ArtifactException in case that execution fails
+     * @throws VilException in case that execution fails
      */
     @OperationMeta(returnGenerics = IArtifact.class)
     public static Set<IArtifact> vilTemplateProcessor(VtlFileArtifact template, Configuration config, 
-        IArtifact target, Map<String, Object> other) throws ArtifactException {
+        IArtifact target, Map<String, Object> other) throws VilException {
         List<IArtifact> result = new ArrayList<IArtifact>();
         process(template, config, target, other, result);
         return new ListSet<IArtifact>(result, IArtifact.class);
@@ -211,34 +208,34 @@ public class VilTemplateProcessor implements IVilType {
      * @param target the target artifact (may be modified)
      * @param other named optional parameter
      * @param result the created artifacts (modified as a side effect)
-     * @throws ArtifactException in case that execution fails
+     * @throws VilException in case that execution fails
      */
     @OperationMeta(returnGenerics = IArtifact.class)
     private static void process(VtlFileArtifact template, Configuration config, 
-        IArtifact target, Map<String, Object> other, List<IArtifact> result) throws ArtifactException {
+        IArtifact target, Map<String, Object> other, List<IArtifact> result) throws VilException {
         // obtaining the model info
         Path path = template.getPath();
         if (path.isPattern()) {
-            throw new ArtifactException("template '" + path.getPath() + "' is a pattern and cannot be instantiated", 
-                ArtifactException.ID_IO);
+            throw new VilException("template '" + path.getPath() + "' is a pattern and cannot be instantiated", 
+                VilException.ID_IO);
         } 
         File absPath = template.getPath().getAbsolutePath();
         if (!path.exists()) {
-            throw new ArtifactException("template '" + path.getPath() + "' (" + absPath + ") does not exist", 
-                ArtifactException.ID_IO);
+            throw new VilException("template '" + path.getPath() + "' (" + absPath + ") does not exist", 
+                VilException.ID_IO);
         }
         URI uri = template.getPath().getAbsolutePath().toURI();
         ModelInfo<Template> info = TemplateModel.INSTANCE.availableModels().getInfo(uri);
         if (null == info) {
-            throw new ArtifactException("template '" + path.getPath() + "' does not contain a valid template model", 
-                ArtifactException.ID_IO);
+            throw new VilException("template '" + path.getPath() + "' does not contain a valid template model", 
+                VilException.ID_IO);
         }
         // obtaining/loading the model
         try {
             Template model = TemplateModel.INSTANCE.load(info);
             process(model, config, target, other, result);
         } catch (ModelManagementException e) {
-            throw new ArtifactException(e.getMessage(), ArtifactException.ID_IO);
+            throw new VilException(e.getMessage(), VilException.ID_IO);
         }
     }
     
@@ -306,11 +303,11 @@ public class VilTemplateProcessor implements IVilType {
      * @param targets the target artifacts (may be modified)
      * @param other named optional parameter
      * @return the created artifacts
-     * @throws ArtifactException in case that execution fails
+     * @throws VilException in case that execution fails
      */
     @OperationMeta(returnGenerics = IArtifact.class)
     public static Set<IArtifact> vilTemplateProcessor(String templateName, Configuration config, 
-        Collection<IArtifact> targets, Map<String, Object> other) throws ArtifactException {
+        Collection<IArtifact> targets, Map<String, Object> other) throws VilException {
         Set<IArtifact> result = null;
         try {
             // ugly manual dispatch but String as first parameter without further parameters does not lead 
@@ -323,7 +320,7 @@ public class VilTemplateProcessor implements IVilType {
             } else {
                 result = vilTemplateProcessor(art, config, targets, other);
             }
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             // don't care
         }
         if (null == result) {
@@ -348,11 +345,11 @@ public class VilTemplateProcessor implements IVilType {
      * @param target the target artifact (may be modified)
      * @param other named optional parameter
      * @return the created artifacts
-     * @throws ArtifactException in case that execution fails
+     * @throws VilException in case that execution fails
      */
     @OperationMeta(returnGenerics = IArtifact.class)
     public static Set<IArtifact> vilTemplateProcessor(String templateName, Configuration config, 
-        IArtifact target, Map<String, Object> other) throws ArtifactException {
+        IArtifact target, Map<String, Object> other) throws VilException {
         Set<IArtifact> result = null;
         try {
             // ugly manual dispatch but String as first parameter without further parameters does not lead 
@@ -365,7 +362,7 @@ public class VilTemplateProcessor implements IVilType {
             } else {
                 result = vilTemplateProcessor(art, config, target, other);
             }
-        } catch (ArtifactException e) {
+        } catch (VilException e) {
             // don't care
         }
         if (null == result) {
@@ -415,10 +412,10 @@ public class VilTemplateProcessor implements IVilType {
      * @param vtlPaths the VTL path(s) of the source project(s) (may be <b>null</b>)
      * @param caller the root executing script for URI-based model resolution
      * @return the template model
-     * @throws ArtifactException in case that execution fails
+     * @throws VilException in case that execution fails
      */
     private static Template obtainTemplate(String templateName, ModelImport<Template> restrictions, String[] vtlPaths, 
-        Script caller) throws ArtifactException {
+        Script caller) throws VilException {
         Template model = null;
         try {
             URI baseURI = null;
@@ -433,12 +430,12 @@ public class VilTemplateProcessor implements IVilType {
                     (Version) null);
                 pruneByPaths(infos, vtlPaths);
                 if (null == infos || infos.isEmpty()) {
-                    throw new ArtifactException(templateName + " cannot be found", 
-                        ArtifactException.ID_IO);
+                    throw new VilException(templateName + " cannot be found", 
+                        VilException.ID_IO);
                 }
                 if (infos.size() > 1) {
-                    throw new ArtifactException(templateName + " is ambigous (" + infos.size() 
-                        + " models found)", ArtifactException.ID_IO);
+                    throw new VilException(templateName + " is ambigous (" + infos.size() 
+                        + " models found)", VilException.ID_IO);
                 }
                 ModelInfo<Template> info = infos.get(0);
                 baseURI = info.getLocation();
@@ -463,11 +460,10 @@ public class VilTemplateProcessor implements IVilType {
                     + (old != model)); // for Cui
             }
         } catch (ModelManagementException e) {
-            throw new ArtifactException(e.getMessage(), e.getId());
+            throw new VilException(e.getMessage(), e.getId());
         } catch (RuntimeException e) {
             // checkstyle: runtime errors in the implementation are otherwise not shown
-            EASyLoggerFactory.INSTANCE.getLogger(VilTemplateProcessor.class, Bundle.ID).exception(e);
-            throw new ArtifactException(e, ArtifactException.ID_RUNTIME_EXECUTION);
+            throw new VilException(e, VilException.ID_RUNTIME_EXECUTION);
         }
         return model;
     }
@@ -482,11 +478,11 @@ public class VilTemplateProcessor implements IVilType {
      * @param target the target artifact (may be modified)
      * @param other named optional parameter
      * @param result the created artifacts (modified as a side effect)
-     * @throws ArtifactException in case that execution fails
+     * @throws VilException in case that execution fails
      */
     @OperationMeta(returnGenerics = IArtifact.class)
     private static void process(Template template, Configuration config, 
-        IArtifact target, Map<String, Object> other, List<IArtifact> result) throws ArtifactException {
+        IArtifact target, Map<String, Object> other, List<IArtifact> result) throws VilException {
         // executing the model
         try {
             StringWriter out = new StringWriter();
@@ -507,8 +503,9 @@ public class VilTemplateProcessor implements IVilType {
                 target.getText().setText(tmp);
                 target.store(); // just to be sure for the moment
             }
-        } catch (VilLanguageException e) {
-            throw new ArtifactException(e.getMessage(), ArtifactException.ID_WHILE_INSTANTIATION);
+        } catch (VilException e) {
+            EASyLoggerFactory.INSTANCE.getLogger(VilTemplateProcessor.class, Bundle.ID).exception(e);
+            throw new VilException(e.getMessage(), VilException.ID_WHILE_INSTANTIATION);
         }
         result.add(target);
     }
@@ -558,7 +555,7 @@ public class VilTemplateProcessor implements IVilType {
         }
         
         @Override
-        public Object getValue(IResolvable resolvable) throws ExpressionException {
+        public Object getValue(IResolvable resolvable) throws VilException {
             Object result;
             if (resolvable instanceof IvmlElement) {
                 result = ((IvmlElement) resolvable).getValue();
@@ -566,8 +563,8 @@ public class VilTemplateProcessor implements IVilType {
                 if (values.containsKey(resolvable)) {
                     result = values.get(resolvable);
                 } else {
-                    throw new ExpressionException(resolvable.getName() + " is not defined", 
-                        ExpressionException.ID_RUNTIME);
+                    throw new VilException(resolvable.getName() + " is not defined", 
+                        VilException.ID_RUNTIME);
                 }
             }
             return result;
@@ -579,16 +576,16 @@ public class VilTemplateProcessor implements IVilType {
         }
 
         @Override
-        public void setValue(IResolvable var, Object object) throws VilLanguageException {
+        public void setValue(IResolvable var, Object object) throws VilException {
             if (var instanceof IvmlElement) {
-                throw new VilLanguageException("cannot change configuration", VilLanguageException.ID_SEMANTIC);
+                throw new VilException("cannot change configuration", VilException.ID_SEMANTIC);
             } else {
                 values.put(var, object);
             }
         }
 
         @Override
-        public Object getIvmlValue(String name) throws ExpressionException {
+        public Object getIvmlValue(String name) throws VilException {
             return nameMap.get(name);
         }
 
@@ -603,7 +600,7 @@ public class VilTemplateProcessor implements IVilType {
         }
 
         @Override
-        public void storeArtifacts() throws ArtifactException {
+        public void storeArtifacts() throws VilException {
         }
         
     }
