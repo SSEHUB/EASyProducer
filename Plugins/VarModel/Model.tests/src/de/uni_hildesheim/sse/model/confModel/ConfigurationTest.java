@@ -68,7 +68,8 @@ public class ConfigurationTest {
         // This call overwrites old instances of projects with same name and version number
         URI fictiveLocation = new URI("path/" + project.getName());
         VarModel.INSTANCE.updateModel(project, fictiveLocation);
-        configuration = new Configuration(project);        
+        // Configuration must be started with AssignmentResolver, since Reasoner is not available in this project.
+        configuration = new Configuration(project, true);        
     }
 
     /**

@@ -591,7 +591,9 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
                 Value value = var.getValue();
                 if (null != value && value != NullValue.INSTANCE) {
                     AbstractVariable refDecl = ((ReferenceValue) var.getValue()).getValue();
-                    var = var.getConfiguration().getDecision(refDecl);
+                    if (null != refDecl) {
+                        var = var.getConfiguration().getDecision(refDecl);
+                    } // TODO valueEx
                 } else {
                     break;
                 }

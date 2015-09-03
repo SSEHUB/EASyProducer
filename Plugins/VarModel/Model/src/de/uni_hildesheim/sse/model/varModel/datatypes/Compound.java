@@ -125,6 +125,15 @@ public class Compound extends StructuredDatatype implements IResolutionScope, ID
         this.isAbstract = isAbstract;
         this.refines = refines;
     }
+    
+    /**
+     * Setter for the parent/ super compound of a refinement.
+     * This method is for incremental build during parsing a ivml file.
+     * @param refines The super/parent compound of this compound.
+     */
+    public void setRefines(Compound refines) {
+        this.refines = refines;
+    }
 
     @Override
     public int getImportsCount() {

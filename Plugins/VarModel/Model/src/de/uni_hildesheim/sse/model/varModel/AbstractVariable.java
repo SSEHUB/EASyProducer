@@ -99,7 +99,8 @@ public abstract class AbstractVariable extends ContainableModelElement implement
         IDatatype valueType = value.inferDatatype();
         if (!type.isAssignableFrom(valueType)) {
             throw new ValueDoesNotMatchTypeException("value is of type '"
-                + valueType.getName() + "' but required is '" + type.getName() + "'", 
+                + IvmlDatatypeVisitor.getUnqualifiedType(valueType) + "' but required is '" 
+                + IvmlDatatypeVisitor.getUnqualifiedType(type) + "'", 
                 ValueDoesNotMatchTypeException.TYPE_MISMATCH);
         }
         defaultValue = value;
@@ -185,14 +186,16 @@ public abstract class AbstractVariable extends ContainableModelElement implement
     @Override
     public void constraintsChanged() {
         //TODO SE: Remove old constraints if necessary
-        try {
-            InternalConstraint[] constraints = type.createConstraints(this);
-            if (null != constraints) {
-                Project project = (Project) getTopLevelParent();
-                project.addInternalConstraints(constraints);
+        if (null != type) { // just preventing a NPE in some cases - constraints shall be removed here anyway
+            try {
+                InternalConstraint[] constraints = type.createConstraints(this);
+                if (null != constraints) {
+                    Project project = (Project) getTopLevelParent();
+                    project.addInternalConstraints(constraints);
+                }
+            } catch (CSTSemanticException e) {
+                EASyLoggerFactory.INSTANCE.getLogger(AbstractVariable.class, Bundle.ID).exception(e);
             }
-        } catch (CSTSemanticException e) {
-            EASyLoggerFactory.INSTANCE.getLogger(AbstractVariable.class, Bundle.ID).exception(e);
         }
     }
     

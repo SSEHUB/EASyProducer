@@ -23,7 +23,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.jface.dialogs.IDialogPage;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
@@ -77,7 +76,7 @@ public class AbstractFiletypeWizardPage extends WizardPage {
      * the created control can be accessed via <code>getControl</code>
      * </p>
      * @param parent the parent composite
-     * @see IDialogPage#createControl(Composite)
+     * @see org.eclipse.jface.dialogs.IDialogPage#createControl(Composite)
      */
     public void createControl(Composite parent) {
         Composite container = new Composite(parent, SWT.NULL);
@@ -182,7 +181,6 @@ public class AbstractFiletypeWizardPage extends WizardPage {
     /**
      * Ensures that both text fields are set.
      */
-
     private void dialogChanged() {
         IResource container = ResourcesPlugin.getWorkspace().getRoot().findMember(new Path(getContainerName()));
         String fileName = getFileName();

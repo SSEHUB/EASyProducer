@@ -83,7 +83,8 @@ public class AssignmentResolverTest {
         // re-assigns a
         createProjectE();
         
-        Configuration config = new Configuration(projectE);
+        // Configuration must be started with AssignmentResolver, since Reasoner is not available in this project.
+        Configuration config = new Configuration(projectE, true);
         assertVariable(config, declA, 13, AssignmentState.ASSIGNED);
         assertVariable(config, declB, 3, AssignmentState.ASSIGNED);
         assertVariable(config, declC, 2, AssignmentState.DEFAULT);
@@ -318,7 +319,8 @@ public class AssignmentResolverTest {
     public void testResolveOfCompounds() {
         createCompoundProject();
         
-        Configuration config = new Configuration(cmpProject);
+        // Configuration must be started with AssignmentResolver, since Reasoner is not available in this project.
+        Configuration config = new Configuration(cmpProject, true);
         assertCompoundValue(config, cmp1, new Object[] {5, 7, 2, 3});
         assertCompoundValue(config, cmp2, new Object[] {11, 13, 17, 19});
         assertCompoundValue(config, cmp3, new Object[] {31, 7, 23, 29});
@@ -474,7 +476,8 @@ public class AssignmentResolverTest {
         }
         ProjectTestUtilities.validateProject(project);
         
-        Configuration config = new Configuration(project);
+        // Configuration must be started with AssignmentResolver, since Reasoner is not available in this project.
+        Configuration config = new Configuration(project, true);
         IDecisionVariable var1 = config.getDecision(decl1);
         IDecisionVariable var2 = config.getDecision(decl2);
         Assert.assertNotNull(var1.getValue());
@@ -531,7 +534,8 @@ public class AssignmentResolverTest {
         
         
         // Create Configuration (will also start AssignmentResolver)
-        Configuration config = new Configuration(project);
+        // Configuration must be started with AssignmentResolver, since Reasoner is not available in this project.
+        Configuration config = new Configuration(project, true);
         IDecisionVariable iVarA = config.getDecision(declA);
         IDecisionVariable iVarB = config.getDecision(declB);
         IDecisionVariable iVarC = config.getDecision(declC);

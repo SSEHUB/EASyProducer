@@ -744,7 +744,9 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
     
     @Override
     public void visitConstantValue(ConstantValue value) {
-        result = ConstantAccessor.POOL.getInstance().bind(value.getConstantValue(), context);
+        // constants must not be changed, at least original constants :o
+        Value cVal = value.getConstantValue().clone();
+        result = ConstantAccessor.POOL.getInstance().bind(cVal, context);
     }
 
     @Override
@@ -1505,8 +1507,18 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
             clearResult();
             if (value instanceof ReferenceValue) {
                 // dereference first
-                AbstractVariable decl = ((ReferenceValue) value).getValue(); 
-                variable = context.getDecision(decl);
+                ReferenceValue refVal = (ReferenceValue) value;
+                AbstractVariable decl = refVal.getValue(); 
+                if (null == decl) {
+                    ConstraintSyntaxTree ex = refVal.getValueEx();
+                    if (null != ex) {
+                        // determines result
+                        ex.accept(this);
+                    }
+                    variable = null;
+                } else {
+                    variable = context.getDecision(decl);
+                }
             }
             if (variable instanceof CompoundVariable) {
                 result = CompoundSlotAccessor.POOL.getInstance().bind(variable, slotName, context);
@@ -1531,7 +1543,9 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
                     }
                 }
             } else {
-                error("cannot evaluate compound");
+                if (null == result) {
+                    error("cannot evaluate compound");
+                }
             }
             if (null != resolutionListener && null != result) {
                 IDecisionVariable resVar = result.getVariable();

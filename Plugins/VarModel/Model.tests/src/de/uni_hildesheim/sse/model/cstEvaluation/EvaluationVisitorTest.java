@@ -223,7 +223,8 @@ public class EvaluationVisitorTest {
         ProjectTestUtilities.validateProject(project);
         
         // Create Configuration
-        Configuration config = new Configuration(project);
+        // Configuration must be started with AssignmentResolver, since Reasoner is not available in this project.
+        Configuration config = new Configuration(project, true);
         final IDecisionVariable var = config.getDecision(decl);
         Assert.assertSame(NullValue.INSTANCE, var.getValue());
         
@@ -267,7 +268,8 @@ public class EvaluationVisitorTest {
         ProjectTestUtilities.validateProject(project, true);
         
         // Create Configuration
-        Configuration config = new Configuration(project);
+        // Configuration must be started with AssignmentResolver, since Reasoner is not available in this project.
+        Configuration config = new Configuration(project, true);
         final IDecisionVariable var = config.getDecision(decl);
         Assert.assertSame(NullValue.INSTANCE, var.getValue());
         

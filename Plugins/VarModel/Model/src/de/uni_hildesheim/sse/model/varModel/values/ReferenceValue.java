@@ -15,6 +15,7 @@
  */
 package de.uni_hildesheim.sse.model.varModel.values;
 
+import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 
@@ -26,6 +27,7 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 public class ReferenceValue extends Value {
     
     private AbstractVariable value; // the declaration the reference goes to
+    private ConstraintSyntaxTree valueEx; // a more complex expression that cannot be evaluated now
 
     /**
      * Constructor for a new ReferenceValue.
@@ -47,6 +49,16 @@ public class ReferenceValue extends Value {
     public AbstractVariable getValue() {
         return value;
     }
+    
+    /**
+     * If {@link #getValue()} is <b>null</b>, the actual value is determined by an expression that needs to be 
+     * evaluated.
+     * 
+     * @return the value expression
+     */
+    public ConstraintSyntaxTree getValueEx() {
+        return valueEx;
+    }
 
     @Override
     public void accept(IValueVisitor visitor) {
@@ -58,8 +70,19 @@ public class ReferenceValue extends Value {
         if (value instanceof AbstractVariable) {
             AbstractVariable decl = (AbstractVariable) value;
             this.value = decl;
+        } else if (value instanceof ConstraintSyntaxTree) {
+            this.valueEx = ((ConstraintSyntaxTree) value);
         } else if (NullValue.INSTANCE == value) {
             this.value = null;
+        } else if (value instanceof ReferenceValue) {
+            ReferenceValue other = (ReferenceValue) value;
+            if (getType().isAssignableFrom(other.getType())) {
+                this.value = other.value;
+            } else {
+                throw new ValueDoesNotMatchTypeException("given reference value of type '" + other.getType() 
+                    + "' does not match expected reference type " + getType(), 
+                    ValueDoesNotMatchTypeException.TYPE_MISMATCH);
+            }
         } else if (value == null) {
             // TODO check - IVML has an explicit null value!!!
             throw new ValueDoesNotMatchTypeException("null is not a valid reference", 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 University of Hildesheim, Software Systems Engineering
+ * Copyright 2009-2015 University of Hildesheim, Software Systems Engineering
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -71,6 +71,118 @@ public class EASyLoggerFactory {
         }
         
         /**
+         * Log an DEBUG message.
+         * <p>
+         * If the logger is currently enabled for the DEBUG message
+         * level then the given message is forwarded to all the
+         * registered output Handler objects.
+         * <p>
+         * @param   msg     The string message (or a key in the message catalog)
+         */
+        public void debug(String msg) {
+            if (level == LoggingLevel.DEBUG) {
+                logger.debug(msg, clazz, bundleName);
+            }
+        }
+        
+        /**
+         * Log an DEBUG message.
+         * <p>
+         * If the logger is currently enabled for the DEBUG message
+         * level then the given message is forwarded to all the
+         * registered output Handler objects.
+         * <p>
+         * @param msg The message (<tt>msg.toString()</tt> will be used for logging)
+         * Should not be <tt>null</tt>.
+         */
+        public void debug(Object msg) {
+            if (level == LoggingLevel.DEBUG && null != msg) {
+                logger.debug(msg.toString(), clazz, bundleName);
+            }
+        }
+        
+        /**
+         * Log an DEBUG message.
+         * <p>
+         * If the logger is currently enabled for the DEBUG message
+         * level then the given message is forwarded to all the
+         * registered output Handler objects.
+         * <p>
+         * @param msg1 The message (<tt>msg1.toString()</tt> will be used for logging)
+         * Should not be <tt>null</tt>.
+         * @param msg2 The message (<tt>msg2.toString()</tt> will be used for logging)
+         */
+        public void debug(Object msg1, Object msg2) {
+            if (level == LoggingLevel.DEBUG && null != msg1) {
+                logger.debug(msg1.toString() + msg2, clazz, bundleName);
+            }
+        }
+        
+        /**
+         * Log an DEBUG message.
+         * <p>
+         * If the logger is currently enabled for the DEBUG message
+         * level then the given message is forwarded to all the
+         * registered output Handler objects.
+         * <p>
+         * @param msg1 The message (<tt>msg1.toString()</tt> will be used for logging)
+         * Should not be <tt>null</tt>.
+         * @param msg2 The message (<tt>msg2.toString()</tt> will be used for logging)
+         * @param msg3 The message (<tt>msg3.toString()</tt> will be used for logging)
+         */
+        public void debug(Object msg1, Object msg2, Object msg3) {
+            if (level == LoggingLevel.DEBUG && null != msg1) {
+                logger.debug(msg1.toString() + msg2 + msg3, clazz, bundleName);
+            }
+        }
+        
+        /**
+         * Log an DEBUG message.
+         * <p>
+         * If the logger is currently enabled for the DEBUG message
+         * level then the given message is forwarded to all the
+         * registered output Handler objects.
+         * <p>
+         * @param msg1 The message (<tt>msg1.toString()</tt> will be used for logging)
+         * Should not be <tt>null</tt>.
+         * @param msg2 The message (<tt>msg2.toString()</tt> will be used for logging)
+         * @param msg3 The message (<tt>msg3.toString()</tt> will be used for logging)
+         * @param msg4 The message (<tt>msg4.toString()</tt> will be used for logging)
+         */
+        public void debug(Object msg1, Object msg2, Object msg3, Object msg4) {
+            if (level == LoggingLevel.DEBUG && null != msg1) {
+                logger.debug(msg1.toString() + msg2 + msg3 + msg4, clazz, bundleName);
+            }
+        }
+        
+        /**
+         * Log an DEBUG message.
+         * <p>
+         * If the logger is currently enabled for the DEBUG message
+         * level then the given message is forwarded to all the
+         * registered output Handler objects.
+         * <p>
+         * @param msg1 The message (<tt>msg1.toString()</tt> will be used for logging)
+         * @param msg2 The message (<tt>msg2.toString()</tt> will be used for logging)
+         * @param msg3 The message (<tt>msg3.toString()</tt> will be used for logging)
+         * @param msg4 The message (<tt>msg4.toString()</tt> will be used for logging)
+         * @param msg5 The message (<tt>msg5.toString()</tt> will be used for logging)
+         */
+        public void debug(Object msg1, Object msg2, Object msg3, Object msg4, Object... msg5) {
+            if (level == LoggingLevel.DEBUG) {
+                StringBuffer message = new StringBuffer();
+                message.append(msg1.toString());
+                message.append(msg2.toString());
+                message.append(msg3.toString());
+                message.append(msg4.toString());
+                for (int i = 0; i < msg5.length; i++) {
+                    message.append(msg5[i].toString());                    
+                }
+                logger.debug(message.toString(), clazz, bundleName);
+            }
+        }
+        
+        /**
          * Log an INFO message.
          * <p>
          * If the logger is currently enabled for the INFO message
@@ -84,22 +196,7 @@ public class EASyLoggerFactory {
                 logger.info(msg, clazz, bundleName);
             }
         }
-        
-        /**
-         * Log an ERROR message.
-         * <p>
-         * If the logger is currently enabled for the ERROR message
-         * level then the given message is forwarded to all the
-         * registered output Handler objects.
-         * <p>
-         * @param   msg     The string message (or a key in the message catalog)
-         */
-        public void error(String msg) {
-            if (level.ordinal() <= LoggingLevel.ERROR.ordinal()) {
-                logger.error(msg, clazz, bundleName);
-            }
-        }
-        
+
         /**
          * Log an WARN message.
          * <p>
@@ -116,17 +213,17 @@ public class EASyLoggerFactory {
         }
         
         /**
-         * Log an DEBUG message.
+         * Log an ERROR message.
          * <p>
-         * If the logger is currently enabled for the DEBUG message
+         * If the logger is currently enabled for the ERROR message
          * level then the given message is forwarded to all the
          * registered output Handler objects.
          * <p>
          * @param   msg     The string message (or a key in the message catalog)
          */
-        public void debug(String msg) {
-            if (level == LoggingLevel.DEBUG) {
-                logger.debug(msg, clazz, bundleName);
+        public void error(String msg) {
+            if (level.ordinal() <= LoggingLevel.ERROR.ordinal()) {
+                logger.error(msg, clazz, bundleName);
             }
         }
         

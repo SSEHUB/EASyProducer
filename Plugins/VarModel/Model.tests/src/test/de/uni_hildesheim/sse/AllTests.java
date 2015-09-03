@@ -11,13 +11,7 @@ import de.uni_hildesheim.sse.cst.OCLFeatureCallTest;
 import de.uni_hildesheim.sse.cst.ParenthesisTest;
 import de.uni_hildesheim.sse.logger.EASyLoggerFactoryTest;
 import de.uni_hildesheim.sse.logger.JavaLoggerTest;
-import de.uni_hildesheim.sse.model.confModel.AssignmentResolverTest;
-import de.uni_hildesheim.sse.model.confModel.CompoundVariableTest;
-import de.uni_hildesheim.sse.model.confModel.ConfigurationTest;
-import de.uni_hildesheim.sse.model.confModel.ConfigurationTest2;
-import de.uni_hildesheim.sse.model.confModel.DecisionVariableTest;
-import de.uni_hildesheim.sse.model.confModel.DerivedVeriableTest;
-import de.uni_hildesheim.sse.model.confModel.SetVariableTest;
+import de.uni_hildesheim.sse.model.confModel.AllTestsForConfModel;
 import de.uni_hildesheim.sse.model.cstEvaluation.CstEvaluationTests;
 import de.uni_hildesheim.sse.model.validation.IvmlIdentifierCheckTest;
 import de.uni_hildesheim.sse.model.validation.IvmlValidationVisitorTest;
@@ -71,7 +65,6 @@ import de.uni_hildesheim.sse.varModel.versioning.ImportValidationTest;
     ConstraintReplacerTest.class,
     ContainerOperationCallTest.class,
     OCLFeatureCallTest.class,
-    DecisionVariableTest.class,
     IVMLWriterTest.class,
     ContainableModelElementListTest.class,
     AttributeTest.class,
@@ -101,8 +94,6 @@ import de.uni_hildesheim.sse.varModel.versioning.ImportValidationTest;
     // VarModelTest must be executed before VarModelListenerTest
     VarModelTest.class,
     VarModelListenerTest.class,
-    //CompoundVariableTest must be executed after VarModelTest
-    CompoundVariableTest.class,
     VersionTest.class,
     VersionedProjectInfosTest.class,
     ReferenceValueTest.class,
@@ -111,11 +102,9 @@ import de.uni_hildesheim.sse.varModel.versioning.ImportValidationTest;
     ProjectInterfaceTest.class,
     ConstraintSeparatorTest.class,
     ParenthesisTest.class,
-    ConfigurationTest.class,
-    ConfigurationTest2.class,
+    //CompoundVariableTest (part of AllTestsForConfModel) must be executed after VarModelTest
+    AllTestsForConfModel.class,
     CommentTest.class,
-    DerivedVeriableTest.class,
-    SetVariableTest.class,
     ImportValidationTest.class,
 //    IVMLValidationVisitorTest.class,
     EASyLoggerFactoryTest.class,
@@ -123,8 +112,7 @@ import de.uni_hildesheim.sse.varModel.versioning.ImportValidationTest;
     IvmlIdentifierCheckTest.class,
     IvmlValidationVisitorTest.class,
     TypeMapperTests.class,
-    CstEvaluationTests.class,
-    AssignmentResolverTest.class
+    CstEvaluationTests.class
     })
 public class AllTests {
 

@@ -852,6 +852,11 @@ public class IVMLWriter extends AbstractVarModelWriter {
         AbstractVariable referenced = referenceValue.getValue();
         if (null != referenced) {
             appendOutput(referenced.getName());
+        } else {
+            ConstraintSyntaxTree ex = referenceValue.getValueEx();
+            if (null != ex) {
+                ex.accept(this);
+            }
         }
         appendOutput(ENDING_PARENTHESIS);
     }

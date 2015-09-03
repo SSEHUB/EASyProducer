@@ -161,8 +161,10 @@ public class CompoundVariable extends StructuredVariable {
                 String slotName = cmpType.getInheritedElement(i).getName();
                 if (null != slotName && null != cmpValue.getNestedValue(slotName)) {
                     DecisionVariable nestedVar = (DecisionVariable) nestedElements.get(slotName);
+                    Value nestedValue = cmpValue.getNestedValue(slotName);
                     if (null != nestedVar) {
-                        nestedVar.setState(state);
+//                        nestedVar.setState(state);
+                        nestedVar.setValue(nestedValue, state);
                     }
                 }
             }

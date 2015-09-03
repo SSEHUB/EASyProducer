@@ -92,7 +92,7 @@ public class BooleanValue extends BasisDatatypeValue {
     
     @Override
     public Value clone() {
-        return new BooleanValue(value);
+        return this; // due to constants
     }
 
     /**

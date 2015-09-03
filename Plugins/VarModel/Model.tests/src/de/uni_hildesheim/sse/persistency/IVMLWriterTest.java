@@ -842,7 +842,8 @@ public class IVMLWriterTest {
         ProjectTestUtilities.validateProject(pro);
         
         // Create configuration and check whether the attributes are configured correctly
-        Configuration config = new Configuration(pro);
+        // Configuration must be started with AssignmentResolver, since Reasoner is not available in this project.
+        Configuration config = new Configuration(pro, true);
         IDecisionVariable var = config.getDecision(intA);
         Assert.assertEquals(2, var.getAttributesCount());
         IDecisionVariable firstAttribute = var.getAttribute(0);
