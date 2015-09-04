@@ -28,12 +28,20 @@ public class TranslationResult <R> {
     private List<R> results;
     
     /**
+     * Creates an empty instance of this class, e.g., to be used as a dummy translation result without real 
+     * messages / results.
+     */
+    public TranslationResult() {
+        this(null, null);
+    }
+    
+    /**
      * Creates an instance of this class.
      * 
      * @param results the resulting language units (pass in only instances created for
      *        this result)
      * @param receiver the message receiver providing access to translation
-     *        messages
+     *        messages (may be <b>null</b>)
      */
     public TranslationResult(List<R> results, MessageReceiver receiver) {
         this.receiver = receiver;
@@ -46,7 +54,7 @@ public class TranslationResult <R> {
      * @return the number of messages
      */
     public int getMessageCount() {
-        return receiver.getMessageCount();
+        return null == receiver ? 0 : receiver.getMessageCount();
     }
     
     /**
@@ -55,7 +63,7 @@ public class TranslationResult <R> {
      * @return the number of errors
      */
     public int getErrorCount() {
-        return receiver.getErrorCount();
+        return null == receiver ? 0 : receiver.getErrorCount();
     }
 
     /**
@@ -64,11 +72,12 @@ public class TranslationResult <R> {
      * @param index
      *            the position of the message to be returned
      * @return the specified message
-     * @throws IndexOutOfBoundsException
-     *             if
-     *             <code>index&lt;0 || index&gt;={@link #getMessageCount()}</code>
+     * @throws IndexOutOfBoundsException if <code>index&lt;0 || index&gt;={@link #getMessageCount()}</code>
      */
     public Message getMessage(int index) {
+        if (null == receiver) {
+            throw new IndexOutOfBoundsException();
+        }
         return receiver.getMessage(index);
     }
 

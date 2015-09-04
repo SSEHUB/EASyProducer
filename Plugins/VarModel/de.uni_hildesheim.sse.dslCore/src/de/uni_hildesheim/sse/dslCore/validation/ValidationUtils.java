@@ -136,6 +136,16 @@ public class ValidationUtils {
     public interface IModelValidationCallback<R, T> {
         
         /**
+         * Returns whether (interactive) validation is enabled. Typically, all model files in a project are considered.
+         * However, some build processes such as Maven may copy a model for packaging it. Then the copy of the model may
+         * not be valid, as it is not in a model location.
+         * 
+         * @param uri the URI
+         * @return <code>true</code> if validation is enabled, <code>false</code> else
+         */
+        public boolean isValidationEnabled(java.net.URI uri);
+        
+        /**
          * Creates a model for validation.
          * 
          * @param root the model root 
@@ -200,7 +210,7 @@ public class ValidationUtils {
                     + "' during validation" + e.getMessage());
             }
         }
-        if (null != uri) {
+        if (null != uri && callback.isValidationEnabled(uri)) {
             try {
                 TranslationResult<T> result = callback.createModel(unit, uri);
                 for (int m = 0; m < result.getMessageCount(); m++) {
