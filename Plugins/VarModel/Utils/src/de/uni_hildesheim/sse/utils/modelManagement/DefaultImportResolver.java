@@ -285,22 +285,24 @@ public abstract class DefaultImportResolver<M extends IModel> extends ImportReso
         if (IMPORT_WITH_VERSION) {
             List<ModelInfo<M>> candidates = new ArrayList<ModelInfo<M>>();
             boolean hasConflicts = false;
-            for (int v = 0, n = versions.size(); v < n; v++) {
-                VersionedModelInfos<M> vInfos = versions.get(v);
-                for (int i = 0, vn = vInfos.size();  i < vn; i++) {
-                    ModelInfo<M> info = vInfos.get(i);
-                    try {
-                        boolean isOk = null == restriction 
-                            || restriction.evaluate(context.getEvaluationContext(), info.getVersion());
-                        if (isOk) {
-                            if (context.isConflict(info)) {
-                                hasConflicts = true;
-                            } else {
-                                candidates.add(info);
+            if (null != versions) {
+                for (int v = 0, n = versions.size(); v < n; v++) {
+                    VersionedModelInfos<M> vInfos = versions.get(v);
+                    for (int i = 0, vn = vInfos.size();  i < vn; i++) {
+                        ModelInfo<M> info = vInfos.get(i);
+                        try {
+                            boolean isOk = null == restriction 
+                                || restriction.evaluate(context.getEvaluationContext(), info.getVersion());
+                            if (isOk) {
+                                if (context.isConflict(info)) {
+                                    hasConflicts = true;
+                                } else {
+                                    candidates.add(info);
+                                }
                             }
+                        } catch (RestrictionEvaluationException e) {
+                            throw new ModelManagementException(e.getMessage(), e.getId());
                         }
-                    } catch (RestrictionEvaluationException e) {
-                        throw new ModelManagementException(e.getMessage(), e.getId());
                     }
                 }
             }
@@ -336,7 +338,7 @@ public abstract class DefaultImportResolver<M extends IModel> extends ImportReso
                 result = VersionedModelInfos.getByClosestUri(tmp, context.getModelURI(), context.getModelPaths());
             }
         } else {
-            if (!versions.isEmpty()) {
+            if (null != versions && !versions.isEmpty()) {
                 result = versions.get(0).getByClosestUri(context.getModelURI(), context.getModelPaths());
             }
         }
