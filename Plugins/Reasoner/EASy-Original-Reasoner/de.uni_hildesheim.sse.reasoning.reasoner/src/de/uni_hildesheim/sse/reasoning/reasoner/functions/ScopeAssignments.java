@@ -12,15 +12,21 @@ import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
  */
 public class ScopeAssignments {
     
-    private static final Set<IDecisionVariable> SCOPE_ASSIGNMENTS = new HashSet<IDecisionVariable>(); 
+    private Set<IDecisionVariable> scopeAssignments; 
     
+    /**
+     * Sole constructor.
+     */
+    public ScopeAssignments() {
+        scopeAssignments = new HashSet<IDecisionVariable>();
+    }
     /**
      * Method for registering a variable that was assigned.
      * @param variable Assigned variable.
      */
-    public static void addAssignedVariable(IDecisionVariable variable) {
+    public void addAssignedVariable(IDecisionVariable variable) {
         if (variable.getState() == AssignmentState.DERIVED) {
-            SCOPE_ASSIGNMENTS.add(variable);            
+            scopeAssignments.add(variable);            
         }
     }
     
@@ -29,17 +35,17 @@ public class ScopeAssignments {
      * @param variable Variable under question.
      * @return True if variable already was assigned in this scope.
      */
-    public static boolean wasAssignedInThisScope(IDecisionVariable variable) {
+    public boolean wasAssignedInThisScope(IDecisionVariable variable) {
         boolean result = false;
-        result = SCOPE_ASSIGNMENTS.contains(variable);
+        result = scopeAssignments.contains(variable);
         return result;
     }
     
     /**
      * Method for clearing all scope assignments.
      */
-    public static void clearScopeAssignments() {
-        SCOPE_ASSIGNMENTS.clear();
+    public void clearScopeAssignments() {
+        scopeAssignments.clear();
     }
 
 }

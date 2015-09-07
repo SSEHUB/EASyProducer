@@ -118,6 +118,51 @@ public class ConfigurationTableEditorFactory implements IConfigurationEditorCrea
         public void valueChanged(IDecisionVariable variable);
         
     }
+    
+    /**
+     * Defines a simple UI parameter with name and default value.
+     * 
+     * @author Holger Eichelberger
+     */
+    public static class UIParameter {
+        
+        private String name;
+        private Object defaultValue;
+        
+        /**
+         * Creates a UI parameter.
+         * 
+         * @param name the name of the parameter
+         * @param defaultValue the optional default value (may be <b>null</b> for none)
+         */
+        public UIParameter(String name, Object defaultValue) {
+            this.name = name;
+            this.defaultValue = defaultValue;
+        }
+        
+        /**
+         * Returns the default value.
+         * 
+         * @return the default value (may be <b>null</b> for none)
+         */
+        public Object getDefaultValue() {
+            return defaultValue;
+        }
+        
+        /**
+         * Returns the name of the parameter.
+         * 
+         * @return the name
+         */
+        public String getName() {
+            return name;
+        }
+        
+        @Override
+        public String toString() {
+            return name + "(default:" + defaultValue + ")";
+        }
+    }
 
     /**
      * A UI configuration class wrapping the internally used configuration instance.
@@ -130,16 +175,24 @@ public class ConfigurationTableEditorFactory implements IConfigurationEditorCrea
         private GUIConfiguration config;
         private IEASyEditorPage parent;
         private Map<GUIVariable, GUIEditor> map = new HashMap<GUIVariable, GUIEditor>();
+        private Map<UIParameter, Object> parameter;
 
         /**
          * Creates a configuration instance.
          * 
          * @param config the IVML configuration
          * @param parent the editor parent instance
+         * @param parameter optional parameter (may be <b>null</b>)
          */
-        UIConfiguration(Configuration config, IEASyEditorPage parent) {
+        UIConfiguration(Configuration config, IEASyEditorPage parent, Map<UIParameter, Object> parameter) {
             this.config = new GUIConfiguration(config, parent.getContentPane());
             this.parent = parent;
+            if (null != parameter) {
+                this.parameter = new HashMap<UIParameter, Object>();
+                this.parameter.putAll(parameter);
+            } else {
+                this.parameter = null;
+            }
             VarModel.INSTANCE.events().addModelListener(config.getProject(), this);
         }
 
@@ -159,6 +212,43 @@ public class ConfigurationTableEditorFactory implements IConfigurationEditorCrea
          */
         public IEASyEditorPage getParent() {
             return parent;
+        }
+        
+        /**
+         * Returns a configuration parameter.
+         * 
+         * @param key the key to return the parameter for
+         * @return the parameter or its default value, may be <b>null</b> if no parameters are specified, 
+         *   <code>key</code> is null or the key does not exist
+         */
+        public Object getParameter(UIParameter key) {
+            Object result;
+            if (null == parameter || null == key) {
+                result = null;
+            } else {
+                if (!parameter.containsKey(key)) {
+                    result = key.getDefaultValue();
+                } else {
+                    result = parameter.get(key);
+                }
+            }
+            return result;
+        }
+        
+        /**
+         * Returns (a copy) of the configuration parameters.
+         * 
+         * @return the parameters (may be <b>null</b>
+         */
+        public Map<UIParameter, Object> getParameters() {
+            Map<UIParameter, Object> result;
+            if (null == parameter) {
+                result = null;
+            } else {
+                result = new HashMap<UIParameter, Object>();
+                result.putAll(parameter);
+            }
+            return result;
         }
         
         /**
@@ -356,9 +446,9 @@ public class ConfigurationTableEditorFactory implements IConfigurationEditorCrea
         }
         
     }
-    
+
     /**
-     * Creates a configuration instance holding UI configuration elements. The returned instance may
+     * Creates a configuration instance holding UI configuration elements without parameters. The returned instance may
      * be used to create multiple editors.
      * 
      * @param config the IVML configuration
@@ -366,7 +456,21 @@ public class ConfigurationTableEditorFactory implements IConfigurationEditorCrea
      * @return the UI configuration
      */
     public static final UIConfiguration createConfiguration(Configuration config, IEASyEditorPage parent) {
-        return new UIConfiguration(config, parent);
+        return new UIConfiguration(config, parent, null);
+    }
+    
+    /**
+     * Creates a configuration instance holding UI configuration elements. The returned instance may
+     * be used to create multiple editors.
+     * 
+     * @param config the IVML configuration
+     * @param parent the editor parent instance
+     * @param parameter optional parameter (may be <b>null</b>)
+     * @return the UI configuration
+     */
+    public static final UIConfiguration createConfiguration(Configuration config, IEASyEditorPage parent, 
+        Map<UIParameter, Object> parameter) {
+        return new UIConfiguration(config, parent, parameter);
     }
 
     /**

@@ -1,5 +1,6 @@
 package de.uni_hildesheim.sse.translation;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -96,6 +97,7 @@ public class TypeContext implements IResolutionScope {
     private ContainableElementsMapAndComparator sortMap = new ContainableElementsMapAndComparator();
     private Map<IContainableElementsSorter, ContainableElementsMapAndComparator> elementSortMaps 
         = new HashMap<IContainableElementsSorter, ContainableElementsMapAndComparator>();
+    private Map<String, List<Compound>> unresolvedCompoundRefinements = new HashMap<String, List<Compound>>();
 
     /**
      * Creates a type context for a given project.
@@ -121,7 +123,7 @@ public class TypeContext implements IResolutionScope {
     /**
      * Push a resolution layer in case that intermediary variables shell be considered, e.g.
      * within a compound. Please note that the parent itself is not added to the layer/context
-     * and neeeds a specific subsequent add call.
+     * and needs a specific subsequent add call.
      * 
      * @param parent the parent (scope, may be <b>null</b> - in this case the parent scope of the previous 
      *   layer is considered)
@@ -171,6 +173,39 @@ public class TypeContext implements IResolutionScope {
         for (int a = 0; a < assignment.getAssignmentCount(); a++) {
             addToContext(assignment.getAssignment(a));
         }
+    }
+    
+    /**
+     * Stores a refined compound where the parent/super compound could not be loaded at the current time. 
+     * @param compound A refined compound where the super compound was not set so far (i.e. is set to <tt>null</tt>).
+     * @param unresolvedParentCompound The name of the super/parent compound, which was not found so far.
+     */
+    void addToContext(Compound compound, String unresolvedParentCompound) {
+        List<Compound> uncompletedCompounds = unresolvedCompoundRefinements.get(unresolvedParentCompound);
+        if (null == uncompletedCompounds) {
+            uncompletedCompounds = new ArrayList<Compound>();
+            unresolvedCompoundRefinements.put(unresolvedParentCompound, uncompletedCompounds);
+        }
+        uncompletedCompounds.add(compound);
+    }
+    
+    /**
+     * Returns a list of compounds where the given compound was specified as a super/parent compound, but could not be
+     * set, as it was not available during parsing the child compound.
+     * @param parentCompound The parent/super compound of a refinement.
+     * @return <tt>null</tt> or a list of incomplete compounds.
+     */
+    List<Compound> getUnresolvedCompoundRefinments(String parentCompound) {
+        return unresolvedCompoundRefinements.get(parentCompound);
+    }
+    
+    /**
+     * Clears the list of incomplete compounds, where the parent/super compound of a refinement was missing.
+     * Should be done after the refinements where resolved.
+     * @param parentCompound The name of the super/parent compound.
+     */
+    void clearUnresolvedCompounds(String parentCompound) {
+        unresolvedCompoundRefinements.remove(parentCompound);
     }
     
     /**

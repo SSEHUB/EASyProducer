@@ -43,6 +43,11 @@ public class ErrorCodes extends de.uni_hildesheim.sse.dslCore.translation.ErrorC
     public static final int WARNING_USAGE = 20211;
     
     /**
+     * In case that dereferences are not possible.
+     */
+    public static final int DEREFERENCE = 20212;
+    
+    /**
      * Prevents creating instances of this class.
      */
     private ErrorCodes() {

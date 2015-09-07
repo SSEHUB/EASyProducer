@@ -164,19 +164,21 @@ public class CopyVisitor implements IConstraintTreeVisitor {
 
     @Override
     public void visitOclFeatureCall(OCLFeatureCall call) {
-        call.getOperand().accept(this);
-        ConstraintSyntaxTree operand = result;
-        ConstraintSyntaxTree[] args = new ConstraintSyntaxTree[call.getParameterCount()];
-        for (int p = 0; p < args.length; p++) {
-            call.getParameter(p).accept(this);
-            args[p] = result;
-        }
-        result = new OCLFeatureCall(operand, call.getOperation(), call.getAccessor(), args);
-        try {
-            result.inferDatatype();
-        } catch (CSTSemanticException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        if (call.getOperand() != null) {
+            call.getOperand().accept(this);
+            ConstraintSyntaxTree operand = result;
+            ConstraintSyntaxTree[] args = new ConstraintSyntaxTree[call.getParameterCount()];
+            for (int p = 0; p < args.length; p++) {
+                call.getParameter(p).accept(this);
+                args[p] = result;
+            }
+            result = new OCLFeatureCall(operand, call.getOperation(), call.getAccessor(), args);
+            try {
+                result.inferDatatype();
+            } catch (CSTSemanticException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }            
         }
     }
 

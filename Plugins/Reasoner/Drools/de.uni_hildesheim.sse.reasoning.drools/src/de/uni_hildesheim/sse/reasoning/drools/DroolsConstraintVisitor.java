@@ -1267,7 +1267,7 @@ public class DroolsConstraintVisitor implements
 
     @Override
     public void visitReferenceValue(ReferenceValue referenceValue) {
-        String name = referenceValue.getValue().getName();
+        String name = referenceValue.getValue().getName(); // may be null -> getValueEx
         Boolean isRefToCompound = referenceValue.getType().getTypeClass().equals(Compound.class);
         if (modificationConstraint) {
             if (isRefToCompound && !currentSlot.equals("")) {

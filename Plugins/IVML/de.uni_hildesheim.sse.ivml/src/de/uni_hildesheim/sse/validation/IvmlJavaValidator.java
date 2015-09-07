@@ -14,6 +14,7 @@ import de.uni_hildesheim.sse.dslCore.validation.ValidationUtils;
 import de.uni_hildesheim.sse.dslCore.validation.ValidationUtils.IModelValidationCallback;
 import de.uni_hildesheim.sse.dslCore.validation.ValidationUtils.MessageType;
 import de.uni_hildesheim.sse.ivml.VariabilityUnit;
+import de.uni_hildesheim.sse.model.management.VarModel;
 import de.uni_hildesheim.sse.model.varModel.Project;
 
 /**
@@ -50,6 +51,11 @@ public class IvmlJavaValidator extends AbstractIvmlJavaValidator {
         @Override
         public void print(TranslationResult<Project> result, Writer out) {
             ModelUtility.INSTANCE.print(result, out, true, false);
+        }
+
+        @Override
+        public boolean isValidationEnabled(URI uri) {
+            return null != VarModel.INSTANCE.locations().getLocationFor(uri);
         }
         
     };

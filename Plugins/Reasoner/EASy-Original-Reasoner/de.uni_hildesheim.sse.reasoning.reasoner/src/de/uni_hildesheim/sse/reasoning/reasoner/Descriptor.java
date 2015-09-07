@@ -22,9 +22,9 @@ public class Descriptor extends ReasonerDescriptor {
 
     public static final boolean LOGGING = false; 
     
-    static final String NAME = "EASy-Producer reasoner v1";
+    static final String NAME = "EASy-Producer IVML Reasoner";
 
-    static final String VERSION = "0.1";
+    static final String VERSION = "1.0";
     
     
     private static final String LICENSE = "Apache License" 

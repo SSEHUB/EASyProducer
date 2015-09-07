@@ -1,0 +1,10 @@
+project DefaultConstraintReevaluationTest {
+
+    Integer a = 1 + b;
+    Integer b = 2;
+    
+    a != 3;
+    
+   
+    
+}

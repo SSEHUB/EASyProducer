@@ -104,7 +104,7 @@ public class ReasonerModelTest extends AbstractTest<Project> {
     @Test    
     public void simpleTranslationTest() {
         Project project = loadProject("SimpleTranslationTest.ivml");
-        Configuration config = new Configuration(project);
+        Configuration config = new Configuration(project, true);
         ReasonerModel rModel = new ReasonerModel(config, null);
         
         for (IDecisionVariable originVariable : config) {
@@ -124,7 +124,7 @@ public class ReasonerModelTest extends AbstractTest<Project> {
     public void reasoningStateAssignmentTest() {
         // Check imported project
         Project projectImported = loadProject("StateCheckProjectImported.ivml");
-        Configuration configImported = new Configuration(projectImported);
+        Configuration configImported = new Configuration(projectImported, true);
         ReasonerModel rModelImported = new ReasonerModel(configImported, null);
         
         Map<String, ReasoningState> expectedStates = new HashMap<String, ReasoningState>();
@@ -136,7 +136,7 @@ public class ReasonerModelTest extends AbstractTest<Project> {
         
         // Check main project
         Project project = loadProject("StateCheckProject.ivml");
-        Configuration config = new Configuration(project);
+        Configuration config = new Configuration(project, true);
         ReasonerModel rModel = new ReasonerModel(config, null);
         
         expectedStates.clear();
@@ -178,7 +178,7 @@ public class ReasonerModelTest extends AbstractTest<Project> {
     @Test
     public void constraintRetrievalTest() {     
         Project project = loadProject("ConstraintRetrievalCheck.ivml");
-        Configuration config = new Configuration(project);
+        Configuration config = new Configuration(project, true);
         ReasonerModel rModel = new ReasonerModel(config, null);
        
         // Normal Constraints
@@ -262,7 +262,7 @@ public class ReasonerModelTest extends AbstractTest<Project> {
     public void variablesUsedInConstraintsTest() {
         
         Project project = loadProject("ConstraintRetrievalCheck.ivml");
-        Configuration config = new Configuration(project);
+        Configuration config = new Configuration(project, true);
         ReasonerModel rModel = new ReasonerModel(config, null);        
         Set<ReasonerVariable> usedVariables = rModel.getVariablesUsedInConstraints();
         
@@ -283,7 +283,7 @@ public class ReasonerModelTest extends AbstractTest<Project> {
     public void fullyConfiguredTestNoAttributes() {
         // Fully configured project, without attributes.
         Project project = loadProject("FullyConfiguredProject_1.ivml");
-        Configuration config = new Configuration(project);
+        Configuration config = new Configuration(project, true);
         ReasonerModel rModel = new ReasonerModel(config, null);
         
         Assert.assertFalse(rModel.hasAttributes());
@@ -306,7 +306,7 @@ public class ReasonerModelTest extends AbstractTest<Project> {
     public void fullyConfiguredTestWithAttributes() {
         // Fully configured project, with attributes.
         Project project = loadProject("FullyConfiguredProject_3.ivml");
-        Configuration config = new Configuration(project);
+        Configuration config = new Configuration(project, true);
         ReasonerConfiguration settings = new ReasonerConfiguration();
         AttributeValues attrValues = new AttributeValues();
         settings.setAttributeValues(attrValues);

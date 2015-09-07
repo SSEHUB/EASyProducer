@@ -83,7 +83,7 @@ public class IntegrityTests extends AbstractTest<Project> {
         
         
         // Create Configuration (will also start AssignmentResolver)
-        Configuration config = new Configuration(project);
+        Configuration config = new Configuration(project, true);
         IDecisionVariable iVarA = config.getDecision(declA);
         IDecisionVariable iVarB = config.getDecision(declB);
         IDecisionVariable iVarC = config.getDecision(declC);

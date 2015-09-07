@@ -352,7 +352,8 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="ifEx" eType="#//IfExpression"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="refName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="refEx" eType="#//Expression"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="calls" upperBound="-1"
         eType="#//Call" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="access" eType="#//ExpressionAccess"

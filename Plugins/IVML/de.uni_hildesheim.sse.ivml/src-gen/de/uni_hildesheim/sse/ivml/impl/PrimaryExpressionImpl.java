@@ -36,7 +36,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.PrimaryExpressionImpl#getLit <em>Lit</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.PrimaryExpressionImpl#getEx <em>Ex</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.PrimaryExpressionImpl#getIfEx <em>If Ex</em>}</li>
- *   <li>{@link de.uni_hildesheim.sse.ivml.impl.PrimaryExpressionImpl#getRefName <em>Ref Name</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.ivml.impl.PrimaryExpressionImpl#getRefEx <em>Ref Ex</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.PrimaryExpressionImpl#getCalls <em>Calls</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.PrimaryExpressionImpl#getAccess <em>Access</em>}</li>
  * </ul>
@@ -77,24 +77,14 @@ public class PrimaryExpressionImpl extends MinimalEObjectImpl.Container implemen
   protected IfExpression ifEx;
 
   /**
-   * The default value of the '{@link #getRefName() <em>Ref Name</em>}' attribute.
+   * The cached value of the '{@link #getRefEx() <em>Ref Ex</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getRefName()
+   * @see #getRefEx()
    * @generated
    * @ordered
    */
-  protected static final String REF_NAME_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getRefName() <em>Ref Name</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getRefName()
-   * @generated
-   * @ordered
-   */
-  protected String refName = REF_NAME_EDEFAULT;
+  protected Expression refEx;
 
   /**
    * The cached value of the '{@link #getCalls() <em>Calls</em>}' containment reference list.
@@ -286,9 +276,9 @@ public class PrimaryExpressionImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getRefName()
+  public Expression getRefEx()
   {
-    return refName;
+    return refEx;
   }
 
   /**
@@ -296,12 +286,37 @@ public class PrimaryExpressionImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setRefName(String newRefName)
+  public NotificationChain basicSetRefEx(Expression newRefEx, NotificationChain msgs)
   {
-    String oldRefName = refName;
-    refName = newRefName;
+    Expression oldRefEx = refEx;
+    refEx = newRefEx;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, IvmlPackage.PRIMARY_EXPRESSION__REF_NAME, oldRefName, refName));
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, IvmlPackage.PRIMARY_EXPRESSION__REF_EX, oldRefEx, newRefEx);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setRefEx(Expression newRefEx)
+  {
+    if (newRefEx != refEx)
+    {
+      NotificationChain msgs = null;
+      if (refEx != null)
+        msgs = ((InternalEObject)refEx).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - IvmlPackage.PRIMARY_EXPRESSION__REF_EX, null, msgs);
+      if (newRefEx != null)
+        msgs = ((InternalEObject)newRefEx).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - IvmlPackage.PRIMARY_EXPRESSION__REF_EX, null, msgs);
+      msgs = basicSetRefEx(newRefEx, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, IvmlPackage.PRIMARY_EXPRESSION__REF_EX, newRefEx, newRefEx));
   }
 
   /**
@@ -382,6 +397,8 @@ public class PrimaryExpressionImpl extends MinimalEObjectImpl.Container implemen
         return basicSetEx(null, msgs);
       case IvmlPackage.PRIMARY_EXPRESSION__IF_EX:
         return basicSetIfEx(null, msgs);
+      case IvmlPackage.PRIMARY_EXPRESSION__REF_EX:
+        return basicSetRefEx(null, msgs);
       case IvmlPackage.PRIMARY_EXPRESSION__CALLS:
         return ((InternalEList<?>)getCalls()).basicRemove(otherEnd, msgs);
       case IvmlPackage.PRIMARY_EXPRESSION__ACCESS:
@@ -406,8 +423,8 @@ public class PrimaryExpressionImpl extends MinimalEObjectImpl.Container implemen
         return getEx();
       case IvmlPackage.PRIMARY_EXPRESSION__IF_EX:
         return getIfEx();
-      case IvmlPackage.PRIMARY_EXPRESSION__REF_NAME:
-        return getRefName();
+      case IvmlPackage.PRIMARY_EXPRESSION__REF_EX:
+        return getRefEx();
       case IvmlPackage.PRIMARY_EXPRESSION__CALLS:
         return getCalls();
       case IvmlPackage.PRIMARY_EXPRESSION__ACCESS:
@@ -436,8 +453,8 @@ public class PrimaryExpressionImpl extends MinimalEObjectImpl.Container implemen
       case IvmlPackage.PRIMARY_EXPRESSION__IF_EX:
         setIfEx((IfExpression)newValue);
         return;
-      case IvmlPackage.PRIMARY_EXPRESSION__REF_NAME:
-        setRefName((String)newValue);
+      case IvmlPackage.PRIMARY_EXPRESSION__REF_EX:
+        setRefEx((Expression)newValue);
         return;
       case IvmlPackage.PRIMARY_EXPRESSION__CALLS:
         getCalls().clear();
@@ -469,8 +486,8 @@ public class PrimaryExpressionImpl extends MinimalEObjectImpl.Container implemen
       case IvmlPackage.PRIMARY_EXPRESSION__IF_EX:
         setIfEx((IfExpression)null);
         return;
-      case IvmlPackage.PRIMARY_EXPRESSION__REF_NAME:
-        setRefName(REF_NAME_EDEFAULT);
+      case IvmlPackage.PRIMARY_EXPRESSION__REF_EX:
+        setRefEx((Expression)null);
         return;
       case IvmlPackage.PRIMARY_EXPRESSION__CALLS:
         getCalls().clear();
@@ -498,31 +515,14 @@ public class PrimaryExpressionImpl extends MinimalEObjectImpl.Container implemen
         return ex != null;
       case IvmlPackage.PRIMARY_EXPRESSION__IF_EX:
         return ifEx != null;
-      case IvmlPackage.PRIMARY_EXPRESSION__REF_NAME:
-        return REF_NAME_EDEFAULT == null ? refName != null : !REF_NAME_EDEFAULT.equals(refName);
+      case IvmlPackage.PRIMARY_EXPRESSION__REF_EX:
+        return refEx != null;
       case IvmlPackage.PRIMARY_EXPRESSION__CALLS:
         return calls != null && !calls.isEmpty();
       case IvmlPackage.PRIMARY_EXPRESSION__ACCESS:
         return access != null;
     }
     return super.eIsSet(featureID);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public String toString()
-  {
-    if (eIsProxy()) return super.toString();
-
-    StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (refName: ");
-    result.append(refName);
-    result.append(')');
-    return result.toString();
   }
 
 } //PrimaryExpressionImpl

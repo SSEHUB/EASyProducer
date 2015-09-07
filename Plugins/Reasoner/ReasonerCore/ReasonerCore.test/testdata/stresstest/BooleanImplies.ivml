@@ -1,0 +1,10 @@
+project BooleanImplies {
+    
+    Integer intA = 6;
+    Boolean boolA = true;
+    
+    //boolA = false;
+    
+    boolA implies intA == 5;
+    
+}

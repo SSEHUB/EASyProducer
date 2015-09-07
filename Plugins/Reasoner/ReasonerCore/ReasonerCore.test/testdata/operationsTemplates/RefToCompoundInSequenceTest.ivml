@@ -1,0 +1,19 @@
+project RefToCompoundInSequenceTest {
+
+    version v0;
+    
+    compound Seat {
+        String name;
+    }
+
+    Seat s1 = {name = "s1"};
+    Seat s2 = {name = "s2"};
+
+    sequenceOf(Seat) seq = {s1, s2};
+   
+    refTo(Seat) driverSeat = refBy(seq[1]);
+    //Seat passengerSeat = refBy(seq[1]);
+    //Seat backSeat = seq[1];
+   
+    
+}

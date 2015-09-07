@@ -11,30 +11,35 @@ import java.util.Set;
 import de.uni_hildesheim.sse.model.confModel.AssignmentState;
 import de.uni_hildesheim.sse.model.confModel.CompoundVariable;
 import de.uni_hildesheim.sse.model.confModel.Configuration;
+import de.uni_hildesheim.sse.model.confModel.ConfigurationException;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.model.cst.AttributeVariable;
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
 import de.uni_hildesheim.sse.model.cst.CompoundAccess;
 import de.uni_hildesheim.sse.model.cst.CompoundInitializer;
+import de.uni_hildesheim.sse.model.cst.ConstraintReplacer;
 import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
 import de.uni_hildesheim.sse.model.cst.ContainerInitializer;
 import de.uni_hildesheim.sse.model.cst.ContainerOperationCall;
 import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
 import de.uni_hildesheim.sse.model.cst.Variable;
 import de.uni_hildesheim.sse.model.cstEvaluation.EvaluationVisitor;
+import de.uni_hildesheim.sse.model.cstEvaluation.IResolutionListener;
 import de.uni_hildesheim.sse.model.cstEvaluation.IValueChangeListener;
+import de.uni_hildesheim.sse.model.cstEvaluation.LocalDecisionVariable;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.Attribute;
 import de.uni_hildesheim.sse.model.varModel.AttributeAssignment;
 import de.uni_hildesheim.sse.model.varModel.AttributeAssignment.Assignment;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
-import de.uni_hildesheim.sse.model.varModel.ModelElement;
+import de.uni_hildesheim.sse.model.varModel.InternalConstraint;
 import de.uni_hildesheim.sse.model.varModel.OperationDefinition;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.datatypes.BooleanType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
 import de.uni_hildesheim.sse.model.varModel.datatypes.ConstraintType;
+import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Operation;
@@ -43,10 +48,13 @@ import de.uni_hildesheim.sse.model.varModel.filter.ConstraintFinder;
 import de.uni_hildesheim.sse.model.varModel.filter.DeclarationFinder;
 import de.uni_hildesheim.sse.model.varModel.filter.DeclarationFinder.VisibilityType;
 import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
+import de.uni_hildesheim.sse.model.varModel.values.Value;
 import de.uni_hildesheim.sse.persistency.StringProvider;
 import de.uni_hildesheim.sse.reasoning.core.model.PerformanceStatistics;
+import de.uni_hildesheim.sse.reasoning.core.model.variables.ConstraintVariable;
+import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerConfiguration;
+import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerConfiguration.IAdditionalInformationLogger;
 import de.uni_hildesheim.sse.reasoning.reasoner.functions.FailedElements;
-import de.uni_hildesheim.sse.reasoning.reasoner.functions.FailedRules;
 import de.uni_hildesheim.sse.reasoning.reasoner.functions.ScopeAssignments;
 import de.uni_hildesheim.sse.reasoning.reasoner.model.AssignmentConstraintFinder;
 import de.uni_hildesheim.sse.reasoning.reasoner.model.CollectionConstraintsFinder;
@@ -64,20 +72,22 @@ public class Resolver {
 
     private static final EASyLogger LOGGER
         = EASyLoggerFactory.INSTANCE.getLogger(Resolver.class, Descriptor.BUNDLE_NAME);
-    
-//    private static final boolean ENABLE_LOGGING = false;
+    private IAdditionalInformationLogger infoLogger;
     
     private String reasoningID; 
     
     private Project project;
     private Configuration config;
-    private EvaluationVisitor evaluator;   
+//    private EvaluationVisitor evaluator;   
+    private EvalVisitor evaluator;   
+    private FailedElements failedElements;
+    private ScopeAssignments scopeAssignments;
     
     private List<IDecisionVariable> allVariables;
     
     private Map<AbstractVariable, Set<Constraint>> constraintMap;
     private Map<Compound, List<Constraint>> compoundConstraintsMap;
-    private Map<Constraint, AbstractVariable> constraintVariableMap;
+    private Map<Constraint, IDecisionVariable> constraintVariableMap;
     private List<Constraint> constraintBase;   
     private List<Constraint> constraintVariables;
     private List<Constraint> compoundConstraints;
@@ -86,12 +96,14 @@ public class Resolver {
     private List<Constraint> assignedAttributeConstraints;
     private List<Constraint> collectionConstraints;
     private List<Constraint> defaultConstraints;
+    private List<Constraint> internalConstraints;
     
     private int constraintBaseSize = 0;
     
     private Map<AbstractVariable, CompoundAccess> varMap;
     
     private List<Constraint> collectionCompoundConstraints;
+    private Set<IDecisionVariable> problemVariables;
     
     // Stats
     private int constraintCounter = 0;
@@ -113,7 +125,7 @@ public class Resolver {
                 LOGGER.debug("Value changed: " + variable.getDeclaration().getName() + " " + variable.getValue()
                     + " Parent: " + (null == variable.getParent() ? null : variable.getParent()));                 
             }
-            ScopeAssignments.addAssignedVariable(variable);
+            scopeAssignments.addAssignedVariable(variable);
             Set<Constraint> varConstraints = constraintMap.get(variable.getDeclaration());
             if (varConstraints != null) {
                 for (Constraint varConstraint : varConstraints) {
@@ -124,7 +136,27 @@ public class Resolver {
                             + StringProvider.toIvmlString(varConstraint.getConsSyntax()));                        
                     }
                 }                     
+            }            
+        }
+    };
+    
+    private IResolutionListener resolutionListener = new IResolutionListener() {
+        
+        @Override
+        public void notifyResolved(IDecisionVariable compound, String slotName, IDecisionVariable resolved) {
+            if (!(resolved instanceof LocalDecisionVariable)) {
+                problemVariables.add(resolved);                
             }
+//            infoLogger.info("Decision: " + resolved);
+        }
+        
+        @Override
+        public void notifyResolved(AbstractVariable declaration, IDecisionVariable resolved) {
+            if (!(resolved instanceof LocalDecisionVariable)) {
+                problemVariables.add(resolved);                
+            }
+//            infoLogger.info("Declaration: " + declaration);            
+//            infoLogger.info("Decision: " + resolved);            
         }
     };
     
@@ -132,16 +164,21 @@ public class Resolver {
      * Main constructor that activates Resolver constructor.
      * @param project Project for evaluation.
      * @param config Configuration to reason on.
-     * @param reasoningID ID of a reasoning (for multithreading).
+     * @param reasonerConfig the reasoner configuration to be used for reasoning (e.g. taken from the UI, 
+     *        may be <b>null</b>)
      */
-    public Resolver(Project project, Configuration config, String reasoningID) {
+    public Resolver(Project project, Configuration config, ReasonerConfiguration reasonerConfig) {
+        this.infoLogger = reasonerConfig.getLogger();
         this.config = config;
-        evaluator = createEvaluationVisitor();
+//        evaluator = createEvaluationVisitor();
+        evaluator = new EvalVisitor();
         this.allVariables = new ArrayList<IDecisionVariable>();
-        this.reasoningID = reasoningID;
+        this.reasoningID = PerformanceStatistics.createReasoningID(project.getName(), "Model validation");
+        this.failedElements = new FailedElements();
+        this.scopeAssignments = new ScopeAssignments();
         this.constraintMap = new HashMap<AbstractVariable, Set<Constraint>>();
         this.compoundConstraintsMap = new HashMap<Compound, List<Constraint>>();
-        this.constraintVariableMap = new HashMap<Constraint, AbstractVariable>();
+        this.constraintVariableMap = new HashMap<Constraint, IDecisionVariable>();
         this.constraintBase = new ArrayList<Constraint>();
         this.constraintVariables = new ArrayList<Constraint>();
         this.compoundConstraints = new ArrayList<Constraint>();
@@ -152,40 +189,28 @@ public class Resolver {
         this.collectionCompoundConstraints = new ArrayList<Constraint>();
         this.defaultConstraints = new ArrayList<Constraint>();
         this.incremental = false;
+        this.problemVariables = new HashSet<IDecisionVariable>();
+        this.internalConstraints = new ArrayList<Constraint>();
     } 
     
     /**
-     * Main constructor that activates Resolver constructor.
+     * Main constructor that activates Resolver constructor with clean {@link Configuration}.
      * @param project Project for evaluation.
-     * @param reasoningID ID of a reasoning (for multithreading).
+     * @param reasonerConfig the reasoner configuration to be used for reasoning (e.g. taken from the UI, 
+     *        may be <b>null</b>)
      */
-    public Resolver(Project project, String reasoningID) {
-        this.config = createCleanConfiguration(project);
-        evaluator = createEvaluationVisitor();
-        this.allVariables = new ArrayList<IDecisionVariable>();
-        this.reasoningID = reasoningID;
-        this.constraintMap = new HashMap<AbstractVariable, Set<Constraint>>();
-        this.compoundConstraintsMap = new HashMap<Compound, List<Constraint>>();
-        this.constraintVariableMap = new HashMap<Constraint, AbstractVariable>();
-        this.constraintBase = new ArrayList<Constraint>();
-        this.constraintVariables = new ArrayList<Constraint>();
-        this.defaultAttributeConstraints = new ArrayList<Constraint>();
-        this.assignedAttributeConstraints = new ArrayList<Constraint>();
-        this.collectionConstraints = new ArrayList<Constraint>();
-        this.compoundConstraints = new ArrayList<Constraint>();
-        this.unresolvedConstraints = new ArrayList<Constraint>();
-        this.collectionCompoundConstraints = new ArrayList<Constraint>();
-        this.defaultConstraints = new ArrayList<Constraint>();
-        this.incremental = false;
+    public Resolver(Project project, ReasonerConfiguration reasonerConfig) {
+        new Resolver(project, createCleanConfiguration(project), reasonerConfig);        
     } 
     
     /**
      * Main constructor that activates Resolver constructor.
      * @param config Configuration to reason on.
-     * @param reasoningID ID of a reasoning (for multithreading).
+     * @param reasonerConfig the reasoner configuration to be used for reasoning (e.g. taken from the UI, 
+     *        may be <b>null</b>)
      */
-    public Resolver(Configuration config, String reasoningID) {
-        new Resolver(config.getProject(), config, reasoningID);
+    public Resolver(Configuration config, ReasonerConfiguration reasonerConfig) {
+        new Resolver(config.getProject(), config, reasonerConfig);
     }  
     
     /**
@@ -229,7 +254,7 @@ public class Resolver {
                 LOGGER.debug("Project:" + project.getName());                
             }
             evaluator.setDispatchScope(project);
-            ScopeAssignments.clearScopeAssignments();
+            scopeAssignments.clearScopeAssignments();
             resolveDefaultValues();
             fillConstraintMapKeys();
 //            if (ENABLE_LOGGING) {
@@ -245,11 +270,11 @@ public class Resolver {
             }
         }
         variableCounter = constraintMap.size();
-//        System.out.println("Constraint reevaluation count: " + reevaluationCounter);
+//        infoLogger.info("Constraint reevaluation count: " + reevaluationCounter);
         if (Descriptor.LOGGING) {
             printModelElements(config, "Reasoning done");
         }
-    }    
+    }   
     
     /**
      * Part of the {@link #resolve()} method.
@@ -275,6 +300,14 @@ public class Resolver {
         CompoundAccess compound) {
         allVariables.add(variable);
         IDatatype type = decl.getType();
+        if (type instanceof DerivedDatatype) {
+            InternalConstraint[] typeConstraints = createInternalConstraints(decl, type);
+            if (typeConstraints != null) {
+                for (InternalConstraint internalConstraint : typeConstraints) {
+                    internalConstraints.add(internalConstraint);                    
+                }
+            } 
+        }
         ConstraintSyntaxTree defaultValue = decl.getDefaultValue();
         // Attribute handling
         if (variable.getAttributesCount() > 0) {
@@ -283,28 +316,24 @@ public class Resolver {
         if (Compound.TYPE.isAssignableFrom(type)) {
             resolveCompoundDefaultValueForDeclaration(decl, variable, compound, type); 
             if (null != defaultValue) {
-                CopyVisitor visitor = new CopyVisitor(null, varMap);
-                visitor.setSelf(decl);
-                defaultValue.accept(visitor);
-                defaultValue = visitor.getResult();                
+                defaultValue = copyVisitor(defaultValue, decl);
             }
         }  
         collectionCompoundConstraints.addAll(collectionCompoundConstraints(decl, null));        
         if (null != defaultValue) {
-            //Comment out BOOLEAN
-            if (ConstraintType.TYPE.isAssignableFrom(type) /*&& !(BooleanType.TYPE.isAssignableFrom(type))*/) {
+            if (ConstraintType.TYPE.isAssignableFrom(type) 
+                && !(type.getType() == BooleanType.TYPE.getType())) {
                 if (compound == null) {
-                    Constraint constraint = new Constraint(project);
-                    try {
-                        constraint.setConsSyntax(defaultValue);
+                    try {                        
+                        Constraint constraint = new Constraint(defaultValue, project);
                         constraintVariables.add(constraint);
-                        constraintVariableMap.put(constraint, decl);
+                        constraintVariableMap.put(constraint, variable);
+                        if (Descriptor.LOGGING) {
+                            LOGGER.debug(variable.getDeclaration().getName() + " project constraint variable " 
+                                + StringProvider.toIvmlString(defaultValue));
+                        }
                     } catch (CSTSemanticException e) {
-                        e.printStackTrace();
-                    }
-                    if (Descriptor.LOGGING) {
-                        LOGGER.debug(variable.getDeclaration().getName() + " project constraint variable " 
-                            + StringProvider.toIvmlString(defaultValue));
+                        LOGGER.exception(e);
                     }
                 } 
             } else {
@@ -318,25 +347,42 @@ public class Resolver {
                     constraint.setConsSyntax(cst);
                     defaultConstraints.add(constraint);
                 } catch (CSTSemanticException e) {
-                    // TODO Auto-generated catch block
                     LOGGER.exception(e);
-                }
-//                evaluator.init(config, AssignmentState.DEFAULT, false, null);
-//                evaluator.visit(defaultValue);
-//                if (evaluator.constraintFailed() && !(BooleanType.TYPE.isAssignableFrom(type))) {
-//                    conflictingDefault(decl);
-//                } else {
-//                    Value value = evaluator.getResult();
-//                    try {
-//                        variable.setValue(value, AssignmentState.DEFAULT);
-//                        ScopeAssignments.addAssignedVariable(variable);
-//                    } catch (ConfigurationException e) {
-//                        LOGGER.exception(e);
-//                    }
-//                }
-//                evaluator.clear();                
+                }            
             }                
         }
+    }
+    
+    /**
+     * Creates constraints related to variable declaration. This method is needed for <code>DerivedDatatypes</code>. 
+     * @param declaration VariableDeclaration of <code>DerivedDatatype</code>
+     * @param type type of <code>DerivedDatatype</code>
+     * @return <code>null</code> if this datatype is not <code>DerivedDatatype</code> or if this 
+     * <code>DerivedDatatype</code> has no constraints, otherwise the adapted constraints of the 
+     * <code>DerivedDatatype</code> for this VariableDeclaration
+     */
+    private InternalConstraint[] createInternalConstraints(AbstractVariable declaration, IDatatype type) {
+        InternalConstraint[] constraintInstances = null;
+        DerivedDatatype dType = (DerivedDatatype) type;
+        if (dType.getConstraintCount() > 0 && dType.getTypeDeclaration() != declaration) {
+            constraintInstances = new InternalConstraint[dType.getConstraintCount()];
+            
+            //Copy and replace each instance of the internal declaration with the given instance
+            for (int i = 0; i < dType.getConstraintCount(); i++) {
+                ConstraintSyntaxTree oneConstraint = dType.getConstraint(i).getConsSyntax();
+                ConstraintReplacer replacer = new ConstraintReplacer(oneConstraint);
+                Variable origin = new Variable(dType.getTypeDeclaration());
+                Variable replacement = new Variable(declaration);
+                ConstraintSyntaxTree copiedCST = replacer.replaceVariable(origin, replacement);
+                // Should be in same project as the declaration belongs to
+                try {
+                    constraintInstances[i] = new InternalConstraint(dType, copiedCST, declaration.getTopLevelParent());
+                } catch (CSTSemanticException e) {
+                    LOGGER.exception(e);
+                }
+            }
+        }
+        return constraintInstances;
     }
 
     /**
@@ -346,10 +392,10 @@ public class Resolver {
      * @param compound false if variable is not nested.
      */
     private void checkCompoundInitializer(ConstraintSyntaxTree exp, Boolean compound) {
-//        System.out.println("CompoundInitializer: " + StringProvider.toIvmlString(exp));
+//        infoLogger.info("CompoundInitializer: " + StringProvider.toIvmlString(exp));
         CompoundInitializer compoundInit = (CompoundInitializer) exp;
         for (int i = 0; i < compoundInit.getExpressionCount(); i++) {
-//            System.out.println("Exp: " + StringProvider.toIvmlString(compoundInit.getExpression(i)));
+//            infoLogger.info("Exp: " + StringProvider.toIvmlString(compoundInit.getExpression(i)));
             if (compoundInit.getExpression(i) instanceof ContainerInitializer) {
                 checkContainerInitializer(compoundInit.getExpression(i), compound);
             }
@@ -365,9 +411,9 @@ public class Resolver {
      * @param compound false if variable is not nested.
      */
     private void checkContainerInitializer(ConstraintSyntaxTree exp, Boolean compound) {
-//        System.out.println("ContainerInitializer: " + StringProvider.toIvmlString(exp));
+//        infoLogger.info("ContainerInitializer: " + StringProvider.toIvmlString(exp));
         ContainerInitializer containerInit = (ContainerInitializer) exp;
-//        System.out.println("Type: " + containerInit.getType().getContainedType());
+//        infoLogger.info("Type: " + containerInit.getType().getContainedType());
         if (ConstraintType.TYPE.isAssignableFrom(containerInit.getType().getContainedType())) {
             extractCollectionConstraints(containerInit, compound);                    
         }
@@ -380,14 +426,12 @@ public class Resolver {
      */
     private void extractCollectionConstraints(ContainerInitializer containerInit, Boolean compound) {
         for (int i = 0; i < containerInit.getExpressionCount(); i++) {
-//            System.out.println("Container expression: " 
+//            infoLogger.info("Container expression: " 
 //                + StringProvider.toIvmlString(containerInit.getExpression(i)));
             Constraint constraint = new Constraint(project);
             ConstraintSyntaxTree cst = containerInit.getExpression(i);
             if (compound) {
-                CopyVisitor visitor = new CopyVisitor(null, varMap);
-                cst.accept(visitor);
-                cst = visitor.getResult();                
+                cst = copyVisitor(cst, null);
             }
             try {
                 constraint.setConsSyntax(cst);
@@ -412,7 +456,7 @@ public class Resolver {
                 Constraint constraint = new Constraint(project);
                 constraint.makeDefaultConstraint();
                 try {
-//                    System.out.println("Attribute constraint before: " + StringProvider.toIvmlString(defaultValue));
+//                    infoLogger.info("Attribute constraint before: " + StringProvider.toIvmlString(defaultValue));
                     if (compound == null) {
                         defaultValue = new OCLFeatureCall(new AttributeVariable(new Variable(decl),
                             (Attribute) variable.getAttribute(i).getDeclaration()),
@@ -424,7 +468,7 @@ public class Resolver {
                     }
                     defaultValue.inferDatatype();
                     constraint.setConsSyntax(defaultValue);
-//                    System.out.println("Attribute constraint after: " 
+//                    infoLogger.info("Attribute constraint after: " 
 //                        + StringProvider.toIvmlString(constraint.getConsSyntax()));
                     defaultAttributeConstraints.add(constraint);
                 } catch (CSTSemanticException e) {
@@ -449,8 +493,10 @@ public class Resolver {
         getAllCompoundConstraints(cmpType, thisCompoundConstraints, false); 
 //        compoundConstraintsMap.put(cmpType, thisCompoundConstraints);
         CompoundVariable cmpVar = (CompoundVariable) variable;        
-        for (int i = 0, n = cmpType.getInheritedElementCount(); i < n; i++) {
-            AbstractVariable nestedDecl = cmpType.getInheritedElement(i);
+        for (int i = 0, n = cmpVar.getNestedElementsCount(); i < n; i++) {
+            IDecisionVariable nestedVariable = cmpVar.getNestedElement(i);
+            AbstractVariable nestedDecl = nestedVariable.getDeclaration();
+//            infoLogger.info(i + ": " + cmpType.getInheritedElement(i) + " " + cmpVar.getNestedElement(i));
             IDatatype nestedType = nestedDecl.getType();
             cmpAccess = null;
             if (compound == null) {
@@ -465,36 +511,32 @@ public class Resolver {
             }
             compoundConstraints.addAll(collectionCompoundConstraints(nestedDecl, cmpAccess));
             varMap.put(nestedDecl, cmpAccess);
-            if (ConstraintType.TYPE.isAssignableFrom(nestedType)) {
+            if (ConstraintType.TYPE.isAssignableFrom(nestedType) 
+                && !(nestedType.getType() == BooleanType.TYPE.getType())) {
                 ConstraintSyntaxTree defaultValue = nestedDecl.getDefaultValue();
                 if (defaultValue != null) {
-                    CopyVisitor visitor = new CopyVisitor(null, varMap);
-                    visitor.setSelf(decl);
-                    defaultValue.accept(visitor);
-                    ConstraintSyntaxTree copiedCST = visitor.getResult();
+                    defaultValue = copyVisitor(defaultValue, decl);
                     try {
-                        Constraint constraint = new Constraint(copiedCST, project);
+                        Constraint constraint = new Constraint(defaultValue, project);
                         constraintVariables.add(constraint);
-                        constraintVariableMap.put(constraint, nestedDecl);
+                        constraintVariableMap.put(constraint, nestedVariable);
+                        if (Descriptor.LOGGING) {
+                            LOGGER.debug(variable.getDeclaration().getName() + " compound constraint variable " 
+                                + StringProvider.toIvmlString(defaultValue));
+                        }                    
                     } catch (CSTSemanticException e) {
                         LOGGER.exception(e);
                     }
-                    if (Descriptor.LOGGING) {
-                        LOGGER.debug(variable.getDeclaration().getName() + " compound constraint variable " 
-                            + StringProvider.toIvmlString(copiedCST));
-                    }                    
                 }
             }
             resolveDefaultValueForDeclaration(nestedDecl, cmpVar.getNestedVariable(nestedDecl.getName()),
                 cmpAccess);
         }
         for (int i = 0; i < thisCompoundConstraints.size(); i++) {
-            ConstraintSyntaxTree oneConstraint = thisCompoundConstraints.get(i).getConsSyntax();             
-            CopyVisitor visitor = new CopyVisitor(null, varMap);
-            oneConstraint.accept(visitor);
-            ConstraintSyntaxTree copiedCST = visitor.getResult();
+            ConstraintSyntaxTree oneConstraint = thisCompoundConstraints.get(i).getConsSyntax();
+            oneConstraint = copyVisitor(oneConstraint, null);
             try {
-                Constraint constraint = new Constraint(copiedCST, project);
+                Constraint constraint = new Constraint(oneConstraint, project);
                 compoundConstraints.add(constraint);            
             } catch (CSTSemanticException e) {
                 LOGGER.exception(e);
@@ -593,24 +635,15 @@ public class Resolver {
         
         for (int i = 0; i < thisCompoundConstraints.size(); i++) {
             ConstraintSyntaxTree itExpression = thisCompoundConstraints.get(i).getConsSyntax();
-            ConstraintSyntaxTree copiedCST = null;
-            try {
-                itExpression.inferDatatype();
-                CopyVisitor visitor = new CopyVisitor(null, varMap);
-                itExpression.accept(visitor);
-                copiedCST = visitor.getResult();
-                copiedCST.inferDatatype();
-                if (Descriptor.LOGGING) {
-                    LOGGER.debug("New loop constraint " + StringProvider.toIvmlString(copiedCST));                    
-                }
-            } catch (CSTSemanticException e) {
-                LOGGER.exception(e);
-            }
+            itExpression = copyVisitor(itExpression, null);
+            if (Descriptor.LOGGING) {
+                LOGGER.debug("New loop constraint " + StringProvider.toIvmlString(itExpression));
+            }           
             ConstraintSyntaxTree containerOp = null;
             if (topcmpAccess == null) {
-                containerOp = createContainerCall(new Variable(decl), op, copiedCST, localDecl);
+                containerOp = createContainerCall(new Variable(decl), op, itExpression, localDecl);
             } else {
-                containerOp = createContainerCall(topcmpAccess, op, copiedCST, localDecl);
+                containerOp = createContainerCall(topcmpAccess, op, itExpression, localDecl);
             }            
             try {
                 if (containerOp != null) {
@@ -647,12 +680,16 @@ public class Resolver {
         List<Constraint> scopeConstraints = new ArrayList<Constraint>();
         if (!incremental) {
             if (defaultConstraints.size() > 0) {
-                refineDefaultConstraints();
+                defaultConstraints = transformConstraints(defaultConstraints, true);
                 scopeConstraints.addAll(defaultConstraints);
             }            
         }
-        for (int i = 0; i < project.getInternalConstraintCount(); i++) {
-            scopeConstraints.add(project.getInternalConstraint(i));
+//        for (int i = 0; i < project.getInternalConstraintCount(); i++) {
+//            scopeConstraints.add(project.getInternalConstraint(i));
+//        }
+        if (internalConstraints.size() > 0) {
+            internalConstraints = transformConstraints(internalConstraints, false);
+            scopeConstraints.addAll(internalConstraints);
         }
         ConstraintFinder finder = new ConstraintFinder(project, false);
         scopeConstraints.addAll(finder.getConstraints());
@@ -680,8 +717,8 @@ public class Resolver {
         if (collectionConstraints.size() > 0) {
             scopeConstraints.addAll(collectionConstraints);
         }
-        fillVariableConstraintPool(scopeConstraints);
         if (scopeConstraints.size() > 0) {
+            fillVariableConstraintPool(scopeConstraints);
             if (incremental) {
                 AssignmentConstraintFinder assignmentFinder = new AssignmentConstraintFinder(scopeConstraints);
                 scopeConstraints = assignmentFinder.getValidationConstraints();                
@@ -702,14 +739,12 @@ public class Resolver {
             constraintBase.addAll(unresolvedConstraints);
         }
         clearConstraintLists();
-        if (Descriptor.LOGGING) {
-            printConstraints(constraintBase);            
-        }
         constraintBaseSize = constraintBase.size();
         resolveConstraints(constraintBase);
         filterOutSimpleAssignments();
         constraintBase.clear(); 
     }
+    
 
     /**
      * Method for processing scope attribute assignments.
@@ -719,7 +754,7 @@ public class Resolver {
      */
     private void processAttributeAssignments(AttributeAssignment hostAssignment, AttributeAssignment nestAssignment, 
         CompoundAccess compound) {
-        System.out.println("Attribute assignment: " + StringProvider.toIvmlString(hostAssignment));
+//        infoLogger.info("Attribute assignment: " + StringProvider.toIvmlString(hostAssignment));
         for (int i = 0; i < hostAssignment.getAssignmentDataCount(); i++) { 
             if (nestAssignment == null) {
                 nestAssignment = hostAssignment;              
@@ -730,7 +765,7 @@ public class Resolver {
                 if (Compound.TYPE.isAssignableFrom(nestAssignment.getElement(y).getType())) {                    
                     Compound cmp = (Compound) nestAssignment.getElement(y).getType();
                     for (int j = 0; j < cmp.getDeclarationCount(); j++) {
-                        System.out.println("Nested: " + cmp.getDeclaration(j));
+//                        infoLogger.info("Nested: " + cmp.getDeclaration(j));
                         CompoundAccess cmpAccess;
                         if (compound == null) {
                             cmpAccess = new CompoundAccess(new Variable(nestAssignment.getElement(y)), 
@@ -749,7 +784,7 @@ public class Resolver {
                 }
             }
             for (int z = 0; z < nestAssignment.getAssignmentCount(); z++) {
-//                    System.out.println("Nested attribute assignment: " 
+//                    infoLogger.info("Nested attribute assignment: " 
 //                        + StringProvider.toIvmlString(hostAssignment.getAssignment(i)));
                 processAttributeAssignments(hostAssignment, nestAssignment.getAssignment(z), compound);
             }
@@ -765,16 +800,16 @@ public class Resolver {
     private void processElement(Assignment assignment, DecisionVariableDeclaration element,
         CompoundAccess compound) {
         String attributeName = assignment.getName();
-//        System.out.println("Element: " 
+//        infoLogger.info("Element: " 
 //              + StringProvider.toIvmlString(element));
-//        System.out.println(element.getAttribute(attributeName));
+//        infoLogger.info(element.getAttribute(attributeName));
         ConstraintSyntaxTree cst = null;
         if (compound == null) {                      
             cst = new OCLFeatureCall(
                 new AttributeVariable(new Variable(element), (Attribute) element.getAttribute(attributeName)),
                     OclKeyWords.ASSIGNMENT, assignment.getExpression());
         } else {
-//            System.out.println("Compound: " + StringProvider.toIvmlString(compound));
+//            infoLogger.info("Compound: " + StringProvider.toIvmlString(compound));
             cst = new OCLFeatureCall(new AttributeVariable(compound, (Attribute) element.getAttribute(attributeName)),
                 OclKeyWords.ASSIGNMENT, assignment.getExpression());
         }
@@ -787,7 +822,7 @@ public class Resolver {
         try {
             constraint.setConsSyntax(cst);
             assignedAttributeConstraints.add(constraint);
-            System.out.println("Attribute constraint: " + StringProvider.toIvmlString(cst));
+//            infoLogger.info("Attribute constraint: " + StringProvider.toIvmlString(cst));
         } catch (CSTSemanticException e) {
             LOGGER.exception(e);
         }        
@@ -800,7 +835,11 @@ public class Resolver {
      */
     private void resolveConstraints(List<Constraint> constraints) {
 //        PerformanceStatistics.addTimestamp(reasoningID);
+        if (Descriptor.LOGGING) {
+            printConstraints(constraintBase);            
+        }
         for (int i = 0; i < constraints.size(); i++) { 
+            problemVariables.clear();
             AssignmentState state = null;
             if (constraints.get(i).isDefaultConstraint()) {
                 state = AssignmentState.DEFAULT;
@@ -814,6 +853,8 @@ public class Resolver {
                         + " : " + constraints.get(i).getTopLevelParent());                    
                 }
                 evaluator.init(config, state, false, listener);
+                evaluator.setResolutionListener(resolutionListener);
+                evaluator.setScopeAssignmnets(scopeAssignments);
                 evaluator.visit(cst);    
                 reevaluationCounter++;
                 if (evaluator.constraintFailed()) {
@@ -825,12 +866,24 @@ public class Resolver {
                     if (evaluator.getMessage(j).getVariable() != null) {
                         if (!(evaluator.getMessage(j).getVariable().getParent() instanceof OperationDefinition)
                             && !(evaluator.getMessage(j).getVariable().getParent() instanceof Constraint)) {
-                            FailedRules.addFailedVariable(reasoningID, evaluator.getMessage(j).getVariable());
+                            problemVariables.clear();
+                            problemVariables.add(evaluator.getMessage(j).getDecision());
+                            failedElements.addProblemVariable(evaluator.getMessage(j).getVariable(), 
+                                new HashSet<IDecisionVariable>(problemVariables));
                             if (Descriptor.LOGGING) {
                                 LOGGER.debug("Assigment error: " + evaluator.getMessage(j).getVariable());
+                                printProblemPoints();
                             }
                         }
                     } 
+                }
+                if (null != constraintVariableMap.get(constraints.get(i))) {
+                    Value value = evaluator.getResult();
+                    try {
+                        constraintVariableMap.get(constraints.get(i)).setValue(value, AssignmentState.DEFAULT);
+                    } catch (ConfigurationException e) {
+                        LOGGER.exception(e);
+                    }     
                 }
                 if (Descriptor.LOGGING) {
                     LOGGER.debug("Result: " + evaluator.getResult());
@@ -841,35 +894,6 @@ public class Resolver {
         }
     }
     
-    /**
-     * Method for refining default constraints.
-     */
-    private void refineDefaultConstraints() {
-        List<Constraint> tmpConstraints = new ArrayList<Constraint>();
-        for (Constraint constraint : defaultConstraints) {
-            ConstraintSyntaxTree cst = constraint.getConsSyntax();
-            CopyVisitor visitor = new CopyVisitor(null, varMap);
-            cst.accept(visitor);
-            cst = visitor.getResult();
-            Constraint newConstraint = new Constraint(project);
-            newConstraint.makeDefaultConstraint();
-            try {
-                cst.inferDatatype();
-                if (Descriptor.LOGGING) {
-                    LOGGER.debug("Default constraint: " + StringProvider.toIvmlString(cst));                    
-                }
-                if (cst != null) {
-                    newConstraint.setConsSyntax(cst);
-                    tmpConstraints.add(newConstraint);                    
-                }
-            } catch (CSTSemanticException e) {
-                // TODO Auto-generated catch block
-                LOGGER.exception(e);
-            }
-        }
-        defaultConstraints.clear();
-        defaultConstraints.addAll(tmpConstraints);
-    }
     
     /**
      * Method for retrieving constraints from collections.
@@ -948,14 +972,16 @@ public class Resolver {
      */
     private void conflictingConstraint(Constraint constraint) {
         if (constraint != null) {
-            FailedRules.addFailedConstraint(reasoningID, constraint);
+            failedElements.addProblemConstraint(constraint, new HashSet<IDecisionVariable>(problemVariables));
             if (Descriptor.LOGGING) {
                 LOGGER.debug("Failed constraint: " 
                     + StringProvider.toIvmlString(constraint.getConsSyntax()));
-                printModelElements(config, "constraint resolved");                
+                printModelElements(config, "constraint resolved");
+                printProblemPoints();
             }
         }
     }
+
     
     /**
      * Will be called after a failure was detected in a default constraint of an {@link AbstractVariable}.
@@ -972,7 +998,7 @@ public class Resolver {
      */
     private void fulfilledConstraint(Constraint constraint) {
         if (constraint != null) {
-            FailedRules.removeValidConstraint(reasoningID, constraint);
+            failedElements.removeProblemConstraint(constraint);
             if (Descriptor.LOGGING) {
                 LOGGER.debug("Constraint fulfilled: " 
                     + StringProvider.toIvmlString(constraint.getConsSyntax()));                
@@ -1055,27 +1081,27 @@ public class Resolver {
         LOGGER.debug("-------------------");
         LOGGER.debug(comment);
         for (IDecisionVariable variable : config) {
-            LOGGER.debug(variable.getDeclaration() 
-                    + " : "
-                    + variable.getState().toString()
-                    + " : " 
-                    + variable.getValue()
-                    + " | "
-                    + printAttributes(variable));
-            if (variable.getNestedElementsCount() > 0) {
-                for (int i = 0; i < variable.getNestedElementsCount(); i++) {
-                    LOGGER.debug("Nested: " 
-                        + variable.getNestedElement(i).getDeclaration() 
-                        + " : "
-                        + variable.getNestedElement(i).getState().toString()
-                        + " : " 
-                        + variable.getNestedElement(i).getValue()
-                        + " | "
-                        + printAttributes(variable.getNestedElement(i)));
-                }
-            }
-            LOGGER.debug("");
+            printModelElement(variable); 
         }     
+    }
+    
+    /**
+     * Method for printing info about {@link IDecisionVariable}.
+     * @param variable Variable to be printed out.
+     */
+    private void printModelElement(IDecisionVariable variable) {
+        LOGGER.debug(variable.getDeclaration() 
+            + " : "
+            + variable.getState().toString()
+            + " : " 
+            + variable.getValue()
+            + " | "
+            + printAttributes(variable));
+        if (variable.getNestedElementsCount() > 0) {
+            for (int i = 0; i < variable.getNestedElementsCount(); i++) {
+                printModelElement(variable.getNestedElement(i));
+            }
+        }
     }
     
     /**
@@ -1148,35 +1174,76 @@ public class Resolver {
         Set<Constraint> relevantConstraints = constraintMap.get(variable);
         relevantConstraints.add(constraint);
         constraintMap.put(variable, relevantConstraints);
+    } 
+    
+    /**
+     * Method for transforming constraints with CopyVisitor.
+     * @param constraints Constraints to be transformed.
+     * @param makeDefaultConstraint True if constraints should be deault.
+     * @return List of transformed constraints.
+     */
+    private List<Constraint> transformConstraints(List<Constraint> constraints, boolean makeDefaultConstraint) {
+        for (int i = 0; i < constraints.size(); i++) {
+            ConstraintSyntaxTree cst = constraints.get(i).getConsSyntax();
+            cst = copyVisitor(cst, null);
+            if (makeDefaultConstraint) {
+                constraints.get(i).makeDefaultConstraint();                
+            }
+            if (cst != null) {
+                try {
+                    constraints.get(i).setConsSyntax(cst);
+                } catch (CSTSemanticException e) {
+                    LOGGER.exception(e);
+                }                            
+                if (Descriptor.LOGGING) {
+                    LOGGER.debug("Default constraint: " + StringProvider.toIvmlString(cst));                    
+                }
+            }            
+        }
+        return constraints;
+    }
+    
+    /**
+     * Method for using CopyVisitor for constraint transformation.
+     * @param cst Constraint to be transformed.
+     * @param decl If Self needs to be set.
+     * @return Transformed constraint.
+     */
+    private ConstraintSyntaxTree copyVisitor(ConstraintSyntaxTree cst, AbstractVariable decl) {
+        CopyVisitor visitor = new CopyVisitor(null, varMap);
+        if (decl != null) {
+            visitor.setSelf(decl);            
+        }
+        cst.accept(visitor);
+        cst = visitor.getResult();
+        try {
+            cst.inferDatatype();
+        } catch (CSTSemanticException e) {
+            LOGGER.exception(e);
+        }
+        return cst;
     }
     
     /**
      * Method for displying failed constraints and assignments.
      */
     private void displayFailedElements() {
-        List<ModelElement> failedModelElements;
-        FailedElements failedElements = FailedRules.getFailedElements(reasoningID);
-        if (failedElements.hasErrors()) {
-            if (failedElements.failedConstraintCount() > 0) {
-                failedModelElements = new ArrayList<ModelElement>(failedElements.failedConstraintCount());
-                Iterator<Constraint> failedConstraints = failedElements.getFailedConstraints();
+//        FailedElements failedElements = FailedRules.getFailedElements(reasoningID);
+        if (failedElements.hasProblems()) {
+            if (failedElements.problemConstraintCount() > 0) {
+                Iterator<Constraint> failedConstraints = failedElements.getProblemConstraints();
                 while (failedConstraints.hasNext()) {
                     Constraint failedRule = failedConstraints.next();
-                    failedModelElements.add(failedRule);
                     LOGGER.debug("Failed constraint: " + StringProvider.toIvmlString(failedRule.getConsSyntax()));
                 }
-                failedModelElements = null;
-            }        
-            if (failedElements.failedVariablesCount() > 0) {
-                failedModelElements = new ArrayList<ModelElement>(failedElements.failedVariablesCount());
-                Iterator<AbstractVariable> failedVariables = failedElements.getFailedVariables();
+            }
+            if (failedElements.problemVariabletCount() > 0) {
+                Iterator<AbstractVariable> failedVariables = failedElements.getProblemVariables();
                 while (failedVariables.hasNext()) {
                     AbstractVariable failedVariable = failedVariables.next();
-                    failedModelElements.add(failedVariable);
                     LOGGER.debug("Failed variable: " + failedVariable.toString());
                 } 
-                failedModelElements = null;
-            }                        
+            }           
         } 
     }
     
@@ -1184,8 +1251,20 @@ public class Resolver {
      * Getter for the map of all {@link ConstraintVariable} and their {@link Constraint}s.
      * @return Map of constraint variables and their constraints.
      */
-    public Map<Constraint, AbstractVariable> getConstraintVariableMap() {
+    public Map<Constraint, IDecisionVariable> getConstraintVariableMap() {
         return constraintVariableMap;
+    }
+    
+    /**
+     * Method for printing all problem points.
+     */
+    private void printProblemPoints() {
+        if (problemVariables.size() > 0) {
+            LOGGER.info("Problem points: ");
+            for (IDecisionVariable problem : problemVariables) {
+                LOGGER.info(problem + "; ");
+            }                 
+        }
     }
     
     /**
@@ -1210,6 +1289,14 @@ public class Resolver {
      */
     public int reevaluationCount() {
         return reevaluationCounter;
+    }
+    
+    /**
+     * Method for retrieving {@link FailedElements} with failed {@link Constraint}s and {@link IDecisionVariable}s.
+     * @return {@link FailedElements}
+     */
+    public FailedElements getFailedElements() {
+        return failedElements;
     }
 
 

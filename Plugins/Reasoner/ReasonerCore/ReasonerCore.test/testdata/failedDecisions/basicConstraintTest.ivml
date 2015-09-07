@@ -1,0 +1,11 @@
+project basicConstraintTest {
+
+	version v0;
+	
+	Integer a = 5;
+	Integer b = 10;
+	Integer c = 5;
+	
+	a > b and c == 5;
+	
+}

@@ -263,7 +263,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//PrimaryExpression/lit"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//PrimaryExpression/ex"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//PrimaryExpression/ifEx"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//PrimaryExpression/refName"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//PrimaryExpression/refEx"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//PrimaryExpression/calls"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//PrimaryExpression/access"/>
     </genClasses>

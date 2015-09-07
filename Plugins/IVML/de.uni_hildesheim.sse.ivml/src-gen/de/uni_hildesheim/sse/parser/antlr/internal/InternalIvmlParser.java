@@ -24,85 +24,85 @@ public class InternalIvmlParser extends AbstractInternalAntlrParser {
     public static final String[] tokenNames = new String[] {
         "<invalid>", "<EOR>", "<DOWN>", "<UP>", "RULE_NUMBER", "RULE_STRING", "RULE_VERSION", "RULE_ID", "RULE_EXPONENT", "RULE_ML_COMMENT", "RULE_SL_COMMENT", "RULE_WS", "RULE_ANY_OTHER", "'project'", "'{'", "'}'", "';'", "'enum'", "','", "'='", "'abstract'", "'compound'", "'refines'", "'assign'", "'('", "')'", "'to'", "'typedef'", "'with'", "'Integer'", "'Real'", "'Boolean'", "'String'", "'Constraint'", "'::'", "'.'", "'true'", "'false'", "'self'", "'null'", "'setOf'", "'sequenceOf'", "'refTo'", "'attribute'", "'annotate'", "'freeze'", "'but'", "'|'", "'eval'", "'interface'", "'export'", "'import'", "'conflicts'", "'version'", "'def'", "'let'", "'in'", "'implies'", "'iff'", "'and'", "'or'", "'xor'", "'=='", "'<>'", "'!='", "'>'", "'<'", "'>='", "'<='", "'+'", "'-'", "'*'", "'/'", "'not'", "'->'", "'['", "']'", "'refBy'", "'if'", "'then'", "'else'", "'endif'"
     };
-    public static final int T__68=68;
-    public static final int T__69=69;
-    public static final int RULE_ID=7;
-    public static final int T__66=66;
-    public static final int T__67=67;
-    public static final int T__64=64;
-    public static final int T__29=29;
-    public static final int T__65=65;
-    public static final int T__28=28;
-    public static final int T__62=62;
-    public static final int T__27=27;
-    public static final int T__63=63;
-    public static final int T__26=26;
-    public static final int T__25=25;
-    public static final int T__24=24;
-    public static final int T__23=23;
-    public static final int T__22=22;
-    public static final int RULE_ANY_OTHER=12;
-    public static final int T__21=21;
-    public static final int T__20=20;
-    public static final int T__61=61;
-    public static final int T__60=60;
-    public static final int EOF=-1;
-    public static final int T__55=55;
-    public static final int T__56=56;
+    public static final int T__50=50;
     public static final int T__19=19;
     public static final int RULE_VERSION=6;
-    public static final int T__57=57;
-    public static final int T__58=58;
+    public static final int T__15=15;
+    public static final int T__59=59;
     public static final int T__16=16;
+    public static final int T__17=17;
+    public static final int T__18=18;
+    public static final int T__55=55;
+    public static final int T__56=56;
+    public static final int T__13=13;
+    public static final int T__57=57;
+    public static final int T__14=14;
+    public static final int T__58=58;
     public static final int T__51=51;
     public static final int T__52=52;
-    public static final int T__15=15;
     public static final int T__53=53;
-    public static final int T__18=18;
     public static final int T__54=54;
-    public static final int T__17=17;
-    public static final int RULE_NUMBER=4;
-    public static final int T__14=14;
-    public static final int T__13=13;
-    public static final int T__59=59;
-    public static final int T__50=50;
-    public static final int T__42=42;
-    public static final int T__43=43;
-    public static final int T__40=40;
-    public static final int T__41=41;
-    public static final int T__80=80;
-    public static final int T__46=46;
-    public static final int T__81=81;
-    public static final int T__47=47;
-    public static final int T__44=44;
-    public static final int T__45=45;
-    public static final int T__48=48;
-    public static final int T__49=49;
-    public static final int RULE_SL_COMMENT=10;
+    public static final int T__60=60;
+    public static final int T__61=61;
+    public static final int RULE_ID=7;
+    public static final int T__26=26;
+    public static final int T__27=27;
+    public static final int T__28=28;
+    public static final int T__29=29;
+    public static final int T__22=22;
+    public static final int T__66=66;
     public static final int RULE_ML_COMMENT=9;
-    public static final int T__30=30;
-    public static final int T__31=31;
-    public static final int RULE_STRING=5;
-    public static final int T__32=32;
-    public static final int T__71=71;
-    public static final int T__33=33;
-    public static final int T__72=72;
-    public static final int T__34=34;
-    public static final int T__35=35;
+    public static final int T__23=23;
+    public static final int T__67=67;
+    public static final int T__24=24;
+    public static final int T__68=68;
+    public static final int T__25=25;
+    public static final int T__69=69;
+    public static final int T__62=62;
+    public static final int T__63=63;
+    public static final int T__20=20;
+    public static final int T__64=64;
+    public static final int T__21=21;
+    public static final int T__65=65;
     public static final int T__70=70;
-    public static final int T__36=36;
+    public static final int T__71=71;
+    public static final int T__72=72;
+    public static final int RULE_STRING=5;
+    public static final int RULE_SL_COMMENT=10;
     public static final int T__37=37;
     public static final int T__38=38;
-    public static final int RULE_EXPONENT=8;
     public static final int T__39=39;
-    public static final int RULE_WS=11;
-    public static final int T__76=76;
-    public static final int T__75=75;
-    public static final int T__74=74;
-    public static final int T__73=73;
-    public static final int T__79=79;
-    public static final int T__78=78;
+    public static final int T__33=33;
     public static final int T__77=77;
+    public static final int T__34=34;
+    public static final int T__78=78;
+    public static final int T__35=35;
+    public static final int T__79=79;
+    public static final int T__36=36;
+    public static final int T__73=73;
+    public static final int EOF=-1;
+    public static final int T__30=30;
+    public static final int T__74=74;
+    public static final int T__31=31;
+    public static final int T__75=75;
+    public static final int T__32=32;
+    public static final int T__76=76;
+    public static final int T__80=80;
+    public static final int T__81=81;
+    public static final int RULE_WS=11;
+    public static final int RULE_ANY_OTHER=12;
+    public static final int RULE_NUMBER=4;
+    public static final int RULE_EXPONENT=8;
+    public static final int T__48=48;
+    public static final int T__49=49;
+    public static final int T__44=44;
+    public static final int T__45=45;
+    public static final int T__46=46;
+    public static final int T__47=47;
+    public static final int T__40=40;
+    public static final int T__41=41;
+    public static final int T__42=42;
+    public static final int T__43=43;
 
     // delegates
     // delegators
@@ -12337,11 +12337,11 @@ public class InternalIvmlParser extends AbstractInternalAntlrParser {
                 {
                 int LA69_2 = input.LA(2);
 
-                if ( (LA69_2==EOF||(LA69_2>=15 && LA69_2<=16)||(LA69_2>=18 && LA69_2<=19)||(LA69_2>=25 && LA69_2<=26)||(LA69_2>=34 && LA69_2<=35)||LA69_2==47||(LA69_2>=56 && LA69_2<=72)||(LA69_2>=74 && LA69_2<=76)||(LA69_2>=79 && LA69_2<=81)) ) {
-                    alt69=2;
-                }
-                else if ( (LA69_2==24) ) {
+                if ( (LA69_2==24) ) {
                     alt69=1;
+                }
+                else if ( (LA69_2==EOF||(LA69_2>=15 && LA69_2<=16)||(LA69_2>=18 && LA69_2<=19)||(LA69_2>=25 && LA69_2<=26)||(LA69_2>=34 && LA69_2<=35)||LA69_2==47||(LA69_2>=56 && LA69_2<=72)||(LA69_2>=74 && LA69_2<=76)||(LA69_2>=79 && LA69_2<=81)) ) {
+                    alt69=2;
                 }
                 else {
                     if (state.backtracking>0) {state.failed=true; return current;}
@@ -12375,11 +12375,11 @@ public class InternalIvmlParser extends AbstractInternalAntlrParser {
                 {
                 int LA69_4 = input.LA(2);
 
-                if ( (LA69_4==EOF||(LA69_4>=15 && LA69_4<=16)||(LA69_4>=18 && LA69_4<=19)||(LA69_4>=25 && LA69_4<=26)||(LA69_4>=34 && LA69_4<=35)||LA69_4==47||(LA69_4>=56 && LA69_4<=72)||(LA69_4>=74 && LA69_4<=76)||(LA69_4>=79 && LA69_4<=81)) ) {
-                    alt69=2;
-                }
-                else if ( (LA69_4==24) ) {
+                if ( (LA69_4==24) ) {
                     alt69=1;
+                }
+                else if ( (LA69_4==EOF||(LA69_4>=15 && LA69_4<=16)||(LA69_4>=18 && LA69_4<=19)||(LA69_4>=25 && LA69_4<=26)||(LA69_4>=34 && LA69_4<=35)||LA69_4==47||(LA69_4>=56 && LA69_4<=72)||(LA69_4>=74 && LA69_4<=76)||(LA69_4>=79 && LA69_4<=81)) ) {
+                    alt69=2;
                 }
                 else {
                     if (state.backtracking>0) {state.failed=true; return current;}
@@ -14359,7 +14359,7 @@ public class InternalIvmlParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "rulePrimaryExpression"
-    // ../de.uni_hildesheim.sse.ivml/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalIvml.g:5033:1: rulePrimaryExpression returns [EObject current=null] : ( ( ( (lv_lit_0_0= ruleLiteral ) ) | (otherlv_1= '(' ( (lv_ex_2_0= ruleExpression ) ) otherlv_3= ')' ) | ( (lv_ifEx_4_0= ruleIfExpression ) ) | (otherlv_5= 'refBy' otherlv_6= '(' ( (lv_refName_7_0= ruleIdentifier ) ) otherlv_8= ')' ) ) ( (lv_calls_9_0= ruleCall ) )* ( (lv_access_10_0= ruleExpressionAccess ) )? ) ;
+    // ../de.uni_hildesheim.sse.ivml/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalIvml.g:5033:1: rulePrimaryExpression returns [EObject current=null] : ( ( ( (lv_lit_0_0= ruleLiteral ) ) | (otherlv_1= '(' ( (lv_ex_2_0= ruleExpression ) ) otherlv_3= ')' ) | ( (lv_ifEx_4_0= ruleIfExpression ) ) | (otherlv_5= 'refBy' otherlv_6= '(' ( (lv_refEx_7_0= ruleExpression ) ) otherlv_8= ')' ) ) ( (lv_calls_9_0= ruleCall ) )* ( (lv_access_10_0= ruleExpressionAccess ) )? ) ;
     public final EObject rulePrimaryExpression() throws RecognitionException {
         EObject current = null;
 
@@ -14374,7 +14374,7 @@ public class InternalIvmlParser extends AbstractInternalAntlrParser {
 
         EObject lv_ifEx_4_0 = null;
 
-        AntlrDatatypeRuleToken lv_refName_7_0 = null;
+        EObject lv_refEx_7_0 = null;
 
         EObject lv_calls_9_0 = null;
 
@@ -14384,13 +14384,13 @@ public class InternalIvmlParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../de.uni_hildesheim.sse.ivml/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalIvml.g:5036:28: ( ( ( ( (lv_lit_0_0= ruleLiteral ) ) | (otherlv_1= '(' ( (lv_ex_2_0= ruleExpression ) ) otherlv_3= ')' ) | ( (lv_ifEx_4_0= ruleIfExpression ) ) | (otherlv_5= 'refBy' otherlv_6= '(' ( (lv_refName_7_0= ruleIdentifier ) ) otherlv_8= ')' ) ) ( (lv_calls_9_0= ruleCall ) )* ( (lv_access_10_0= ruleExpressionAccess ) )? ) )
-            // ../de.uni_hildesheim.sse.ivml/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalIvml.g:5037:1: ( ( ( (lv_lit_0_0= ruleLiteral ) ) | (otherlv_1= '(' ( (lv_ex_2_0= ruleExpression ) ) otherlv_3= ')' ) | ( (lv_ifEx_4_0= ruleIfExpression ) ) | (otherlv_5= 'refBy' otherlv_6= '(' ( (lv_refName_7_0= ruleIdentifier ) ) otherlv_8= ')' ) ) ( (lv_calls_9_0= ruleCall ) )* ( (lv_access_10_0= ruleExpressionAccess ) )? )
+            // ../de.uni_hildesheim.sse.ivml/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalIvml.g:5036:28: ( ( ( ( (lv_lit_0_0= ruleLiteral ) ) | (otherlv_1= '(' ( (lv_ex_2_0= ruleExpression ) ) otherlv_3= ')' ) | ( (lv_ifEx_4_0= ruleIfExpression ) ) | (otherlv_5= 'refBy' otherlv_6= '(' ( (lv_refEx_7_0= ruleExpression ) ) otherlv_8= ')' ) ) ( (lv_calls_9_0= ruleCall ) )* ( (lv_access_10_0= ruleExpressionAccess ) )? ) )
+            // ../de.uni_hildesheim.sse.ivml/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalIvml.g:5037:1: ( ( ( (lv_lit_0_0= ruleLiteral ) ) | (otherlv_1= '(' ( (lv_ex_2_0= ruleExpression ) ) otherlv_3= ')' ) | ( (lv_ifEx_4_0= ruleIfExpression ) ) | (otherlv_5= 'refBy' otherlv_6= '(' ( (lv_refEx_7_0= ruleExpression ) ) otherlv_8= ')' ) ) ( (lv_calls_9_0= ruleCall ) )* ( (lv_access_10_0= ruleExpressionAccess ) )? )
             {
-            // ../de.uni_hildesheim.sse.ivml/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalIvml.g:5037:1: ( ( ( (lv_lit_0_0= ruleLiteral ) ) | (otherlv_1= '(' ( (lv_ex_2_0= ruleExpression ) ) otherlv_3= ')' ) | ( (lv_ifEx_4_0= ruleIfExpression ) ) | (otherlv_5= 'refBy' otherlv_6= '(' ( (lv_refName_7_0= ruleIdentifier ) ) otherlv_8= ')' ) ) ( (lv_calls_9_0= ruleCall ) )* ( (lv_access_10_0= ruleExpressionAccess ) )? )
-            // ../de.uni_hildesheim.sse.ivml/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalIvml.g:5037:2: ( ( (lv_lit_0_0= ruleLiteral ) ) | (otherlv_1= '(' ( (lv_ex_2_0= ruleExpression ) ) otherlv_3= ')' ) | ( (lv_ifEx_4_0= ruleIfExpression ) ) | (otherlv_5= 'refBy' otherlv_6= '(' ( (lv_refName_7_0= ruleIdentifier ) ) otherlv_8= ')' ) ) ( (lv_calls_9_0= ruleCall ) )* ( (lv_access_10_0= ruleExpressionAccess ) )?
+            // ../de.uni_hildesheim.sse.ivml/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalIvml.g:5037:1: ( ( ( (lv_lit_0_0= ruleLiteral ) ) | (otherlv_1= '(' ( (lv_ex_2_0= ruleExpression ) ) otherlv_3= ')' ) | ( (lv_ifEx_4_0= ruleIfExpression ) ) | (otherlv_5= 'refBy' otherlv_6= '(' ( (lv_refEx_7_0= ruleExpression ) ) otherlv_8= ')' ) ) ( (lv_calls_9_0= ruleCall ) )* ( (lv_access_10_0= ruleExpressionAccess ) )? )
+            // ../de.uni_hildesheim.sse.ivml/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalIvml.g:5037:2: ( ( (lv_lit_0_0= ruleLiteral ) ) | (otherlv_1= '(' ( (lv_ex_2_0= ruleExpression ) ) otherlv_3= ')' ) | ( (lv_ifEx_4_0= ruleIfExpression ) ) | (otherlv_5= 'refBy' otherlv_6= '(' ( (lv_refEx_7_0= ruleExpression ) ) otherlv_8= ')' ) ) ( (lv_calls_9_0= ruleCall ) )* ( (lv_access_10_0= ruleExpressionAccess ) )?
             {
-            // ../de.uni_hildesheim.sse.ivml/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalIvml.g:5037:2: ( ( (lv_lit_0_0= ruleLiteral ) ) | (otherlv_1= '(' ( (lv_ex_2_0= ruleExpression ) ) otherlv_3= ')' ) | ( (lv_ifEx_4_0= ruleIfExpression ) ) | (otherlv_5= 'refBy' otherlv_6= '(' ( (lv_refName_7_0= ruleIdentifier ) ) otherlv_8= ')' ) )
+            // ../de.uni_hildesheim.sse.ivml/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalIvml.g:5037:2: ( ( (lv_lit_0_0= ruleLiteral ) ) | (otherlv_1= '(' ( (lv_ex_2_0= ruleExpression ) ) otherlv_3= ')' ) | ( (lv_ifEx_4_0= ruleIfExpression ) ) | (otherlv_5= 'refBy' otherlv_6= '(' ( (lv_refEx_7_0= ruleExpression ) ) otherlv_8= ')' ) )
             int alt80=4;
             switch ( input.LA(1) ) {
             case RULE_NUMBER:
@@ -14573,10 +14573,10 @@ public class InternalIvmlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 4 :
-                    // ../de.uni_hildesheim.sse.ivml/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalIvml.g:5102:6: (otherlv_5= 'refBy' otherlv_6= '(' ( (lv_refName_7_0= ruleIdentifier ) ) otherlv_8= ')' )
+                    // ../de.uni_hildesheim.sse.ivml/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalIvml.g:5102:6: (otherlv_5= 'refBy' otherlv_6= '(' ( (lv_refEx_7_0= ruleExpression ) ) otherlv_8= ')' )
                     {
-                    // ../de.uni_hildesheim.sse.ivml/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalIvml.g:5102:6: (otherlv_5= 'refBy' otherlv_6= '(' ( (lv_refName_7_0= ruleIdentifier ) ) otherlv_8= ')' )
-                    // ../de.uni_hildesheim.sse.ivml/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalIvml.g:5102:8: otherlv_5= 'refBy' otherlv_6= '(' ( (lv_refName_7_0= ruleIdentifier ) ) otherlv_8= ')'
+                    // ../de.uni_hildesheim.sse.ivml/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalIvml.g:5102:6: (otherlv_5= 'refBy' otherlv_6= '(' ( (lv_refEx_7_0= ruleExpression ) ) otherlv_8= ')' )
+                    // ../de.uni_hildesheim.sse.ivml/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalIvml.g:5102:8: otherlv_5= 'refBy' otherlv_6= '(' ( (lv_refEx_7_0= ruleExpression ) ) otherlv_8= ')'
                     {
                     otherlv_5=(Token)match(input,77,FOLLOW_77_in_rulePrimaryExpression10531); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -14590,19 +14590,19 @@ public class InternalIvmlParser extends AbstractInternalAntlrParser {
                           	newLeafNode(otherlv_6, grammarAccess.getPrimaryExpressionAccess().getLeftParenthesisKeyword_0_3_1());
                           
                     }
-                    // ../de.uni_hildesheim.sse.ivml/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalIvml.g:5110:1: ( (lv_refName_7_0= ruleIdentifier ) )
-                    // ../de.uni_hildesheim.sse.ivml/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalIvml.g:5111:1: (lv_refName_7_0= ruleIdentifier )
+                    // ../de.uni_hildesheim.sse.ivml/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalIvml.g:5110:1: ( (lv_refEx_7_0= ruleExpression ) )
+                    // ../de.uni_hildesheim.sse.ivml/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalIvml.g:5111:1: (lv_refEx_7_0= ruleExpression )
                     {
-                    // ../de.uni_hildesheim.sse.ivml/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalIvml.g:5111:1: (lv_refName_7_0= ruleIdentifier )
-                    // ../de.uni_hildesheim.sse.ivml/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalIvml.g:5112:3: lv_refName_7_0= ruleIdentifier
+                    // ../de.uni_hildesheim.sse.ivml/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalIvml.g:5111:1: (lv_refEx_7_0= ruleExpression )
+                    // ../de.uni_hildesheim.sse.ivml/src-gen/de/uni_hildesheim/sse/parser/antlr/internal/InternalIvml.g:5112:3: lv_refEx_7_0= ruleExpression
                     {
                     if ( state.backtracking==0 ) {
                        
-                      	        newCompositeNode(grammarAccess.getPrimaryExpressionAccess().getRefNameIdentifierParserRuleCall_0_3_2_0()); 
+                      	        newCompositeNode(grammarAccess.getPrimaryExpressionAccess().getRefExExpressionParserRuleCall_0_3_2_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleIdentifier_in_rulePrimaryExpression10564);
-                    lv_refName_7_0=ruleIdentifier();
+                    pushFollow(FOLLOW_ruleExpression_in_rulePrimaryExpression10564);
+                    lv_refEx_7_0=ruleExpression();
 
                     state._fsp--;
                     if (state.failed) return current;
@@ -14613,9 +14613,9 @@ public class InternalIvmlParser extends AbstractInternalAntlrParser {
                       	        }
                              		set(
                              			current, 
-                             			"refName",
-                              		lv_refName_7_0, 
-                              		"Identifier");
+                             			"refEx",
+                              		lv_refEx_7_0, 
+                              		"Expression");
                       	        afterParserOrEnumRuleCall();
                       	    
                     }
@@ -16080,11 +16080,11 @@ public class InternalIvmlParser extends AbstractInternalAntlrParser {
         state.failed=false;
         return success;
     }
-    public final boolean synpred51_InternalIvml() {
+    public final boolean synpred46_InternalIvml() {
         state.backtracking++;
         int start = input.mark();
         try {
-            synpred51_InternalIvml_fragment(); // can never throw exception
+            synpred46_InternalIvml_fragment(); // can never throw exception
         } catch (RecognitionException re) {
             System.err.println("impossible: "+re);
         }
@@ -16094,11 +16094,11 @@ public class InternalIvmlParser extends AbstractInternalAntlrParser {
         state.failed=false;
         return success;
     }
-    public final boolean synpred46_InternalIvml() {
+    public final boolean synpred51_InternalIvml() {
         state.backtracking++;
         int start = input.mark();
         try {
-            synpred46_InternalIvml_fragment(); // can never throw exception
+            synpred51_InternalIvml_fragment(); // can never throw exception
         } catch (RecognitionException re) {
             System.err.println("impossible: "+re);
         }
@@ -17116,8 +17116,8 @@ public class InternalIvmlParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_25_in_rulePrimaryExpression10484 = new BitSet(new long[]{0x0000000800000002L,0x0000000000000C00L});
     public static final BitSet FOLLOW_ruleIfExpression_in_rulePrimaryExpression10512 = new BitSet(new long[]{0x0000000800000002L,0x0000000000000C00L});
     public static final BitSet FOLLOW_77_in_rulePrimaryExpression10531 = new BitSet(new long[]{0x0000000001000000L});
-    public static final BitSet FOLLOW_24_in_rulePrimaryExpression10543 = new BitSet(new long[]{0x00200000000001C0L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_rulePrimaryExpression10564 = new BitSet(new long[]{0x0000000002000000L});
+    public static final BitSet FOLLOW_24_in_rulePrimaryExpression10543 = new BitSet(new long[]{0x00A000F0010041F0L,0x0000000000006240L});
+    public static final BitSet FOLLOW_ruleExpression_in_rulePrimaryExpression10564 = new BitSet(new long[]{0x0000000002000000L});
     public static final BitSet FOLLOW_25_in_rulePrimaryExpression10576 = new BitSet(new long[]{0x0000000800000002L,0x0000000000000C00L});
     public static final BitSet FOLLOW_ruleCall_in_rulePrimaryExpression10599 = new BitSet(new long[]{0x0000000800000002L,0x0000000000000C00L});
     public static final BitSet FOLLOW_ruleExpressionAccess_in_rulePrimaryExpression10621 = new BitSet(new long[]{0x0000000000000002L});

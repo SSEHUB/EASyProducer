@@ -1,0 +1,9 @@
+project personCar {
+
+    version v0;
+    compound Seat {
+    }
+
+    sequenceOf(Seat) seq;
+    refTo(Seat) driverSeat = refBy(seq[1]);
+}

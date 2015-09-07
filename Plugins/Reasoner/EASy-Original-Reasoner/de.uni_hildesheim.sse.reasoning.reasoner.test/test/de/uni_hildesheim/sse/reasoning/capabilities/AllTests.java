@@ -12,7 +12,8 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses({    
     AttributeTests.class,  
     CollectionConstraintsTests.class,
-    IncrementalReasoningTests.class
+    FailedDecisionsTests.class,
+    RuntimeReasoningTests.class
     })
 public class AllTests {
 

@@ -2420,13 +2420,13 @@ public interface IvmlPackage extends EPackage
   int PRIMARY_EXPRESSION__IF_EX = 2;
 
   /**
-   * The feature id for the '<em><b>Ref Name</b></em>' attribute.
+   * The feature id for the '<em><b>Ref Ex</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int PRIMARY_EXPRESSION__REF_NAME = 3;
+  int PRIMARY_EXPRESSION__REF_EX = 3;
 
   /**
    * The feature id for the '<em><b>Calls</b></em>' containment reference list.
@@ -4770,15 +4770,15 @@ public interface IvmlPackage extends EPackage
   EReference getPrimaryExpression_IfEx();
 
   /**
-   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.ivml.PrimaryExpression#getRefName <em>Ref Name</em>}'.
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.ivml.PrimaryExpression#getRefEx <em>Ref Ex</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Ref Name</em>'.
-   * @see de.uni_hildesheim.sse.ivml.PrimaryExpression#getRefName()
+   * @return the meta object for the containment reference '<em>Ref Ex</em>'.
+   * @see de.uni_hildesheim.sse.ivml.PrimaryExpression#getRefEx()
    * @see #getPrimaryExpression()
    * @generated
    */
-  EAttribute getPrimaryExpression_RefName();
+  EReference getPrimaryExpression_RefEx();
 
   /**
    * Returns the meta object for the containment reference list '{@link de.uni_hildesheim.sse.ivml.PrimaryExpression#getCalls <em>Calls</em>}'.
@@ -6699,12 +6699,12 @@ public interface IvmlPackage extends EPackage
     EReference PRIMARY_EXPRESSION__IF_EX = eINSTANCE.getPrimaryExpression_IfEx();
 
     /**
-     * The meta object literal for the '<em><b>Ref Name</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>Ref Ex</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute PRIMARY_EXPRESSION__REF_NAME = eINSTANCE.getPrimaryExpression_RefName();
+    EReference PRIMARY_EXPRESSION__REF_EX = eINSTANCE.getPrimaryExpression_RefEx();
 
     /**
      * The meta object literal for the '<em><b>Calls</b></em>' containment reference list feature.

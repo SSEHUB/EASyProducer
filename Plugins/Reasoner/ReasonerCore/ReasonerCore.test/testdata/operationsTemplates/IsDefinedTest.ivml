@@ -1,0 +1,46 @@
+project IsDefinedTest {
+
+    // Integer
+    Integer intA = 1;
+    Integer intB;
+    Integer intC = null;
+    intA.isDefined();
+    intB.isDefined();
+    intC.isDefined();
+    
+    // Real    
+    Real realA = 1;
+    Real realB;
+    Real realC = null;
+    realA.isDefined();
+    realB.isDefined();
+    realC.isDefined();
+    
+    // Boolean
+    Boolean boolAt = true;
+    Boolean boolAf = false;
+    Boolean boolB;
+    Boolean boolC = null;
+    boolAt.isDefined();
+    boolAf.isDefined();
+    boolB.isDefined();
+    boolC.isDefined();
+    
+    // String
+    String strA = "";
+    String strB;
+    String strC = null;
+    strA.isDefined();
+    strB.isDefined();
+    strC.isDefined();
+    
+    // Enum
+    enum Colour {red, blue, green};
+    Colour colourA = Colour.red;
+    Colour colourB;
+    Colour colourC = null;
+    colourA.isDefined();
+    colourB.isDefined();
+    colourC.isDefined();
+    
+}

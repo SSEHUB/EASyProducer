@@ -1263,7 +1263,7 @@ public class DroolsAssignmentsVisitor implements IConstraintTreeVisitor, IValueV
     @Override
     public void visitReferenceValue(ReferenceValue referenceValue) {
         if (ruleItr == 0) {
-            String adder = referenceValue.getValue().getName(); 
+            String adder = referenceValue.getValue().getName();  // may be null -> getValueEx
             if (!currentSlot.equals("")) {
                 adder += currentSlot;
             }

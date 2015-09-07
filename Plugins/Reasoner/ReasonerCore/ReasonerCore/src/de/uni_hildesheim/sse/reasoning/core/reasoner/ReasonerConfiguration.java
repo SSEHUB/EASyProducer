@@ -1,5 +1,6 @@
 package de.uni_hildesheim.sse.reasoning.core.reasoner;
 
+import de.uni_hildesheim.sse.model.confModel.Configuration;
 import de.uni_hildesheim.sse.reasoning.core.frontend.ReasonerFrontend;
 
 /**
@@ -14,7 +15,8 @@ public class ReasonerConfiguration {
     private int timeout;
     private ReasonerDescriptor defaultReasoner;
     private boolean customMessages;
-    private boolean incremental;
+    private boolean runtime;
+    private boolean freshConfig;
     private IAdditionalInformationLogger logger = new IAdditionalInformationLogger() {
 
         @Override
@@ -48,6 +50,7 @@ public class ReasonerConfiguration {
      */
     public ReasonerConfiguration() {
         this(false);
+        this.freshConfig = true;
     }
     
     /**
@@ -55,11 +58,11 @@ public class ReasonerConfiguration {
      * the global timeout from {@link ReasonerFrontend#getTimeout()}, an
      * unspecified attributes values set (<b>null</b>), custom messaging and an unspecified
      * default reasoner (<b>null</b>).
-     * @param customMessages Enables custom messages (comments instead of constraints).
+     * @param defParamValue Enables custom messages (comments instead of constraints).
      */
-    public ReasonerConfiguration(boolean customMessages) {
+    public ReasonerConfiguration(boolean defParamValue) {
         this.timeout = ReasonerFrontend.getInstance().getTimeout();
-        this.customMessages = customMessages;
+        this.customMessages = defParamValue;
     }
     
     /**
@@ -193,27 +196,38 @@ public class ReasonerConfiguration {
     }
     
     /**
-     * Defines whether reasoning shall happen incrementally. Currently, incremental reasoning assumes
+     * Defines whether runtime reasoning reasoning shall be activated. Currently, runtime reasoning assumes
      * that all required defaults and assignments have already been processed. In particular, the caller
      * is responsible for passing a "clean" configuration to the reasoner that leads to the expected
      * results.
      * 
-     * @param incremental if reasoning shall happen incrementally
+     * @param runtime if reasoning shall happen for runtime
      */
-    public void setIncremental(boolean incremental) {
-        this.incremental = incremental;
+    public void setRuntimeMode(boolean runtime) {
+        this.runtime = runtime;
     }
     
     /**
-     * Returns whether reasoning shall be done incrementally. Currently, incremental reasoning assumes
-     * that all required defaults and assignments have already been processed. In particular, the caller
-     * is responsible for passing a "clean" configuration to the reasoner that leads to the expected
-     * results.
+     * Returns whether runtime reasoning shall be done (see {@link #setRuntimeMode(boolean)}.
      * 
-     * @return <code>true</code> if reasoning shall happen incrementally, <code>false</code> else
+     * @return <code>true</code> if reasoning shall happen for runtime, <code>false</code> else
      */
-    public boolean reasonIncrementally() {
-        return incremental;
+    public boolean isRuntimeMode() {
+        return runtime;
     }
     
+    /**
+     * Defines whether the reasoner should create a fresh {@link Configuration}.
+     */
+    public void createFreshConfiguration() {
+        freshConfig = true;
+    }
+    
+    /**
+     * Returns whether a fresh {@link Configuration} should be created.
+     * @return <code>true</code> if Fresh {@link Configuration} is created.
+     */
+    public boolean isFreshConfiguration() {
+        return freshConfig;
+    }
 }

@@ -1,0 +1,11 @@
+project BooleanImpliesTest {
+
+    Boolean t = true;
+    Boolean f = false;
+    
+    t implies f == true;
+    
+    
+   
+    
+}

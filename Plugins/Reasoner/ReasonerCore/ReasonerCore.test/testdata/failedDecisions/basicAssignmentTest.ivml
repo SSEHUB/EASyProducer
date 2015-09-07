@@ -1,0 +1,13 @@
+project basicAssignmentTest {
+
+	version v0;
+	
+	Integer a;
+	Integer b;
+	
+	a = 1;
+	a = 10;
+	b = 1;
+	b = 10;
+	
+}

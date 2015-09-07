@@ -14,7 +14,9 @@ import org.junit.runners.Suite.SuiteClasses;
     EvaluationIntegrityTest.class,
     IntegrityTests.class,  
     ReasoningScenarioTests.class,
-    StressTest.class
+    StressTest.class,
+    CodedTests.class,
+    BooleanProblemTests.class
     })
 public class AllTests {
 

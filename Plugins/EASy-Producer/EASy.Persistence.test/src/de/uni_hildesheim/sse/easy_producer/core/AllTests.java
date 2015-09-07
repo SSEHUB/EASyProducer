@@ -34,7 +34,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.BuiltIn;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.easy_producer.instantiator.velocity.VelocityInstantiator;
 import de.uni_hildesheim.sse.reasoning.core.frontend.ReasonerFrontend;
-import de.uni_hildesheim.sse.reasoning.drools2.DroolsReasoner;
+import de.uni_hildesheim.sse.reasoning.reasoner.Reasoner;
 import de.uni_hildesheim.sse.utils.Environment;
 
 /**
@@ -99,7 +99,7 @@ public class AllTests {
         if (!Environment.runsInEclipse() && !initialized) {
             initialized = true;
             EASyInitializer.setInitializer();
-            ReasonerFrontend.getInstance().getRegistry().register(new DroolsReasoner());
+            ReasonerFrontend.getInstance().getRegistry().register(new Reasoner());
             BuiltIn.initialize();
             TypeRegistry.DEFAULT.register(VelocityInstantiator.class);
         }

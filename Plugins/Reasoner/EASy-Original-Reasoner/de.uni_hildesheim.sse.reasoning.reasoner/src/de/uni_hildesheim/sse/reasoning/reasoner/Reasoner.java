@@ -70,7 +70,7 @@ public class Reasoner implements IReasoner {
     @Override
     public EvaluationResult evaluate(Project project, Configuration cfg, List<Constraint> constraints,
             ReasonerConfiguration reasonerConfig, ProgressObserver observer) {        
-        EvaluationResult notSupportedResult = new EvaluationResult("EASy-Producer Reasoner");
+        EvaluationResult notSupportedResult = new EvaluationResult("EASy-Producer IVML Reasoner");
         return notSupportedResult;        
 
     }
@@ -82,7 +82,7 @@ public class Reasoner implements IReasoner {
     protected void activate(ComponentContext context) {
         // this is not the official way of using DS but the official way is instable
         ReasonerFrontend.getInstance().getRegistry().register(this);
-        LOGGER.info("EASy-Producer Reasoner started ");
+        LOGGER.info("EASy-Producer IVML Reasoner started ");
     }
 
     /**
@@ -109,7 +109,8 @@ public class Reasoner implements IReasoner {
      */
     private Configuration createConfiguration(Project project, Configuration cfg, ReasonerConfiguration rConfig) {
         Configuration result;
-        if (rConfig.reasonIncrementally()) {
+        if (rConfig.isRuntimeMode() || !rConfig.isFreshConfiguration()) {
+//        if (rConfig.isRuntimeMode()) {
             result = cfg;
         } else {
             result = null;

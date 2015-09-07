@@ -994,7 +994,7 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	
 	/**
 	 * Constraint:
-	 *     ((lit=Literal | ex=Expression | ifEx=IfExpression | refName=Identifier) calls+=Call* access=ExpressionAccess?)
+	 *     ((lit=Literal | ex=Expression | ifEx=IfExpression | refEx=Expression) calls+=Call* access=ExpressionAccess?)
 	 */
 	protected void sequence_PrimaryExpression(EObject context, PrimaryExpression semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);

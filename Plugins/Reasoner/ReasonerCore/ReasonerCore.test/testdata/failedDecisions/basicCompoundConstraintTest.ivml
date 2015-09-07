@@ -1,0 +1,15 @@
+project basicCompoundConstraintTest {
+
+	version v0;
+	
+	compound C {
+	   Integer a = 5;
+	   Integer b = 10;
+	   Integer c = 5;
+	
+	   a > b and c == 5;	
+	}
+	
+	C cmp;
+	
+}

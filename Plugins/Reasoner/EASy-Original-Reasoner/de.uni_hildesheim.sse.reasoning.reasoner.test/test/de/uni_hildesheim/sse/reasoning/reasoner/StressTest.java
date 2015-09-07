@@ -177,6 +177,15 @@ public class StressTest extends AbstractTest<Project> {
     }
     
     /**
+     * Tests whether boolean implies values are handled correctly.
+     */
+    @Test
+    @Ignore
+    public void testBooleanImplies() {
+        reasoningTest("BooleanImplies.ivml", 1);
+    }
+    
+    /**
      * Tests whether constraint variables are evaluated correctly.
      */
     @Test

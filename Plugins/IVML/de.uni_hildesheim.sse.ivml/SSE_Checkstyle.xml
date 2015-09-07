@@ -188,9 +188,6 @@
     <module name="PackageDeclaration">
       <property name="severity" value="warning"/>
     </module>
-    <module name="JUnitTestCase">
-      <property name="severity" value="error"/>
-    </module>
     <module name="ReturnCount">
       <property name="max" value="1"/>
     </module>
@@ -223,10 +220,6 @@
       <property name="severity" value="error"/>
       <property name="caseIndent" value="0"/>
     </module>
-  </module>
-  <module name="StrictDuplicateCode">
-    <property name="severity" value="warning"/>
-    <property name="min" value="40"/>
   </module>
   <module name="SuppressionCommentFilter">
     <property name="offCommentFormat" value="checkstyle: stop method name check"/>

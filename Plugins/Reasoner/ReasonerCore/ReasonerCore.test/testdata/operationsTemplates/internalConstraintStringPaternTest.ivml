@@ -1,0 +1,15 @@
+project internalConstraintStringPaternTest {
+
+    typedef ArtifactString String with ((ArtifactString.size() > 0) and (ArtifactString.matches(".+:[\\w]*:.+")));
+    
+    ArtifactString interfaceArtifact;
+    ArtifactString modelArtifact;
+    
+    interfaceArtifact = "eu.qualimaster:PriorityPipelineInterfaces:0.0.5-SNAPSHOT";
+    modelArtifact = "eu.qualimasterinfrastructureModel:0.0.1-SNAPSHOT";  
+    
+    // interfaceArtifact = "eu.qualimaster:bbb:ccc";
+    // modelArtifact = "aaa:bbb:ccc";  
+   
+    
+}

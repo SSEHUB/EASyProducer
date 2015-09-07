@@ -140,7 +140,11 @@ public abstract class AbstractTest extends de.uni_hildesheim.sse.dslCore.test.Ab
                 java.io.CharArrayWriter writer = new CharArrayWriter();
                 ModelUtility.INSTANCE.print(result, writer, false, false);
                 String errorMsg = checkEqualsAndPrepareMessage(fileAsString, writer);
-                Assert.assertNull(errorMsg, errorMsg);
+                if (null != errorMsg) {
+                    Assert.assertEquals(fileAsString.trim(), writer.toString().trim());
+                    // Fallback
+                    Assert.fail(errorMsg);
+                }
             }
             
             loaded = assertProjectInfo(expectedName, expectedVersion, uri, result, expectedErrorCodes);
@@ -271,7 +275,7 @@ public abstract class AbstractTest extends de.uni_hildesheim.sse.dslCore.test.Ab
                 Assert.assertEquals(0, valVis.getErrorCount());
             }
             Assert.assertTrue(map.isEmpty());
-            Assert.assertTrue(null == expectedKey); // otherwise wrong expectation
+            Assert.assertNull(expectedKey); // otherwise wrong expectation
             
             // required for further processing
             pRes = new ArrayList<Project>();

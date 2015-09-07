@@ -1,9 +1,12 @@
 package de.uni_hildesheim.sse.reasoning.reasoner.functions;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
+import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
 
@@ -13,97 +16,116 @@ import de.uni_hildesheim.sse.model.varModel.Constraint;
  * @author Sizonenko
  *
  */
-public class FailedElements {
-
-    /**
-     * List of violated constraints.
-     */
-    private Set<Constraint> failedConstraints;
+public class FailedElements {    
     
     /**
-     * List of all variables that had an error in assignments.
+     * Map of failed {@link Constraint}s and {@link IDecisionVariable}s that might cause the problem.
      */
-    private Set<AbstractVariable> failedVariables; 
+    private Map<Constraint, Set<IDecisionVariable>> problemConstraints;
+    
+    /**
+     * Map of failed {@link AbstractVariable}s and {@link IDecisionVariable} behind it.
+     */
+    private Map<AbstractVariable, Set<IDecisionVariable>> problemVariables;
+    
     
     /**
      * Creates a new {@link FailedElements} instance, which can be used for exact one reasoning process.
      * This constructor is only package visible, as it should only be used inside of the {@link FailedElements} class.
      */
-    FailedElements() {
-        failedConstraints = new HashSet<Constraint>();
-        failedVariables = new HashSet<AbstractVariable>();
+    public FailedElements() {
+        problemConstraints = new HashMap<Constraint, Set<IDecisionVariable>>();
+        problemVariables = new HashMap<AbstractVariable, Set<IDecisionVariable>>();
     }
     
     /**
-     * Adds the {@link Constraint} to this instance.
-     * @param constraint The failed constraint.    
+     * Method for adding failed constraints and associated problem variables.
+     * @param constraint Failed constraint.
+     * @param variables Associated variables.
      */
-    void addConstraint(Constraint constraint) {
-        failedConstraints.add(constraint);
+    public void addProblemConstraint(Constraint constraint, Set<IDecisionVariable> variables) {
+        problemConstraints.put(constraint, variables);       
     }
     
     /**
-     * Removes the {@link Constraint} from this instance.
-     * @param constraint The valid constraint.    
+     * Method for removing a problem point.
+     * @param constraint Constraint that is valid.
      */
-    void removeConstraint(Constraint constraint) {
-        failedConstraints.remove(constraint);
-    }    
+    public void removeProblemConstraint(Constraint constraint) {
+        problemConstraints.remove(constraint);
+    }
     
     /**
-     * Adds the {@link AbstractVariable} with a failed assignment.
+     * Method for adding failed variable and associated {@link IDecisionVariable}.
      * @param variable Failed variable.
+     * @param variables Associated variables.
      */
-    void addVariable(AbstractVariable variable) {
-        failedVariables.add(variable);
-    }    
+    public void addProblemVariable(AbstractVariable variable, Set<IDecisionVariable> variables) {
+        problemVariables.put(variable, variables);
+    } 
     
     /**
      * Returns whether constraint violations or variable assignment were detected during the related reasoning process.
      * @return <tt>true</tt> if at least one errors was reported to this instance, <tt>false</tt> otherwise.
      */
-    public boolean hasErrors() {
-        return !(failedConstraints.isEmpty() && failedVariables.isEmpty());
+    public boolean hasProblems() {
+        return !(problemConstraints.isEmpty() && problemVariables.isEmpty());
     }
     
     /**
      * Returns the total number of failed elements ( {@link Constraint} and {@link AbstractVariable} ).
-     * @return The number of failed elements, 0 if {@link #hasErrors()} was <tt>false</tt>.
+     * @return The number of failed elements, 0 if {@link #hasProblems()} was <tt>false</tt>.
      */
-    public int failedElementsCount() {
-        return failedConstraints.size() + failedVariables.size();
+    public int problemCount() {
+        return problemConstraintCount() + problemVariabletCount();
     }
     
     /**
-     * Returns the number of failed constraints.
-     * @return The number of failed constraints.
+     * Returns the number of problem constraints.
+     * @return the number of problem constraints.
      */
-    public int failedConstraintCount() {
-        return failedConstraints.size();
-    }    
-    
-    /**
-     * Return the number of failed variables.
-     * @return the number of failed variables.
-     */
-    public int failedVariablesCount() {
-        return failedVariables.size();
+    public int problemConstraintCount() {
+        return problemConstraints.size();
     }
     
     /**
-     * Returns a {@link Iterator} for traversing all failed constraints.
-     * @return The failed {@link Constraint}.
+     * Returns the number of problem variables.
+     * @return the number of problem variables.
      */
-    public Iterator<Constraint> getFailedConstraints() {
-        return failedConstraints.iterator();
+    public int problemVariabletCount() {
+        return problemVariables.size();
     } 
     
     /**
-     * Returns a {@link Iterator} for traversing all failed variables.
-     * @return Failed {@link AbstractVariable}.
+     * Returns a {@link Iterator} - problem {@link Constraint}s.
+     * @return The failed constraints.
      */
-    public Iterator<AbstractVariable> getFailedVariables() {
-        return failedVariables.iterator();
-    }     
+    public Iterator<Constraint> getProblemConstraints() {
+        return problemConstraints.keySet().iterator();
+    }
+    
+    /**
+     * Returns a map of failed {@link Constraint}s and associated {@link IDecisionVariable}s.
+     * @return Map of problem constraints.
+     */
+    public Map<Constraint, Set<IDecisionVariable>> getProblemConstraintMap() {
+        return problemConstraints;
+    }
+    
+    /**
+     * Returns a {@link Iterator} - problem {@link AbstractVariable}s.
+     * @return Problem variables.
+     */
+    public Iterator<AbstractVariable> getProblemVariables() {
+        return problemVariables.keySet().iterator();
+    }
+    
+    /**
+     * Returns a map of problem {@link AbstractVariable}s and associated {@link IDecisionVariable}s.
+     * @return Map of problem variables.
+     */
+    public Map<AbstractVariable, Set<IDecisionVariable>> getProblemVariableMap() {
+        return problemVariables;
+    }
    
 }

@@ -2855,8 +2855,8 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Group cGroup_0_3 = (Group)cAlternatives_0.eContents().get(3);
 		private final Keyword cRefByKeyword_0_3_0 = (Keyword)cGroup_0_3.eContents().get(0);
 		private final Keyword cLeftParenthesisKeyword_0_3_1 = (Keyword)cGroup_0_3.eContents().get(1);
-		private final Assignment cRefNameAssignment_0_3_2 = (Assignment)cGroup_0_3.eContents().get(2);
-		private final RuleCall cRefNameIdentifierParserRuleCall_0_3_2_0 = (RuleCall)cRefNameAssignment_0_3_2.eContents().get(0);
+		private final Assignment cRefExAssignment_0_3_2 = (Assignment)cGroup_0_3.eContents().get(2);
+		private final RuleCall cRefExExpressionParserRuleCall_0_3_2_0 = (RuleCall)cRefExAssignment_0_3_2.eContents().get(0);
 		private final Keyword cRightParenthesisKeyword_0_3_3 = (Keyword)cGroup_0_3.eContents().get(3);
 		private final Assignment cCallsAssignment_1 = (Assignment)cGroup.eContents().get(1);
 		private final RuleCall cCallsCallParserRuleCall_1_0 = (RuleCall)cCallsAssignment_1.eContents().get(0);
@@ -2866,17 +2866,17 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		//PrimaryExpression:
 		//	(lit=Literal //	|	call=FeatureCall // unclear on what to execute (in OCL this is the context)
 		// | "(" ex=Expression
-		//	")" | ifEx=IfExpression | "refBy" "(" refName=Identifier ")") calls+=Call* access=ExpressionAccess?;
+		//	")" | ifEx=IfExpression | "refBy" "(" refEx=Expression ")") calls+=Call* access=ExpressionAccess?;
 		public ParserRule getRule() { return rule; }
 
 		//(lit=Literal //	|	call=FeatureCall // unclear on what to execute (in OCL this is the context)
 		// | "(" ex=Expression ")" |
-		//ifEx=IfExpression | "refBy" "(" refName=Identifier ")") calls+=Call* access=ExpressionAccess?
+		//ifEx=IfExpression | "refBy" "(" refEx=Expression ")") calls+=Call* access=ExpressionAccess?
 		public Group getGroup() { return cGroup; }
 
 		//lit=Literal //	|	call=FeatureCall // unclear on what to execute (in OCL this is the context)
 		// | "(" ex=Expression ")" |
-		//ifEx=IfExpression | "refBy" "(" refName=Identifier ")"
+		//ifEx=IfExpression | "refBy" "(" refEx=Expression ")"
 		public Alternatives getAlternatives_0() { return cAlternatives_0; }
 
 		//lit=Literal
@@ -2906,7 +2906,7 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		//IfExpression
 		public RuleCall getIfExIfExpressionParserRuleCall_0_2_0() { return cIfExIfExpressionParserRuleCall_0_2_0; }
 
-		//"refBy" "(" refName=Identifier ")"
+		//"refBy" "(" refEx=Expression ")"
 		public Group getGroup_0_3() { return cGroup_0_3; }
 
 		//"refBy"
@@ -2915,11 +2915,11 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		//"("
 		public Keyword getLeftParenthesisKeyword_0_3_1() { return cLeftParenthesisKeyword_0_3_1; }
 
-		//refName=Identifier
-		public Assignment getRefNameAssignment_0_3_2() { return cRefNameAssignment_0_3_2; }
+		//refEx=Expression
+		public Assignment getRefExAssignment_0_3_2() { return cRefExAssignment_0_3_2; }
 
-		//Identifier
-		public RuleCall getRefNameIdentifierParserRuleCall_0_3_2_0() { return cRefNameIdentifierParserRuleCall_0_3_2_0; }
+		//Expression
+		public RuleCall getRefExExpressionParserRuleCall_0_3_2_0() { return cRefExExpressionParserRuleCall_0_3_2_0; }
 
 		//")"
 		public Keyword getRightParenthesisKeyword_0_3_3() { return cRightParenthesisKeyword_0_3_3; }
@@ -4009,7 +4009,7 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 	//PrimaryExpression:
 	//	(lit=Literal //	|	call=FeatureCall // unclear on what to execute (in OCL this is the context)
 	// | "(" ex=Expression
-	//	")" | ifEx=IfExpression | "refBy" "(" refName=Identifier ")") calls+=Call* access=ExpressionAccess?;
+	//	")" | ifEx=IfExpression | "refBy" "(" refEx=Expression ")") calls+=Call* access=ExpressionAccess?;
 	public PrimaryExpressionElements getPrimaryExpressionAccess() {
 		return (pPrimaryExpression != null) ? pPrimaryExpression : (pPrimaryExpression = new PrimaryExpressionElements());
 	}

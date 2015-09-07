@@ -486,7 +486,7 @@ PrimaryExpression:
 //	|	call=FeatureCall // unclear on what to execute (in OCL this is the context)
 	|	'(' ex=Expression ')'
 	|	ifEx=IfExpression
-	|   'refBy' '(' refName=Identifier ')')
+	|   'refBy' '(' refEx=Expression ')')
 	calls+=Call*
 	access=ExpressionAccess?
 	;

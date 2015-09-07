@@ -934,7 +934,7 @@ public class DroolsEqualityEvaluator implements IConstraintTreeVisitor, IValueVi
 
     @Override
     public void visitReferenceValue(ReferenceValue referenceValue) {
-        String name = referenceValue.getValue().getName();
+        String name = referenceValue.getValue().getName(); // may be null -> getValueEx
         Boolean isRefToCompound = referenceValue.getType().getTypeClass().equals(Compound.class);
         if (isRefToCompound) {
             currentCompound = name;

@@ -5110,17 +5110,17 @@ rulePrimaryExpression returns [EObject current=null]
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getPrimaryExpressionAccess().getRefNameIdentifierParserRuleCall_0_3_2_0()); 
+	        newCompositeNode(grammarAccess.getPrimaryExpressionAccess().getRefExExpressionParserRuleCall_0_3_2_0()); 
 	    }
-		lv_refName_7_0=ruleIdentifier		{
+		lv_refEx_7_0=ruleExpression		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getPrimaryExpressionRule());
 	        }
        		set(
        			$current, 
-       			"refName",
-        		lv_refName_7_0, 
-        		"Identifier");
+       			"refEx",
+        		lv_refEx_7_0, 
+        		"Expression");
 	        afterParserOrEnumRuleCall();
 	    }
 

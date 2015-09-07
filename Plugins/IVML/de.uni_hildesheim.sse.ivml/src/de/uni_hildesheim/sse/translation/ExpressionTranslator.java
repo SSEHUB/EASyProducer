@@ -57,6 +57,7 @@ import de.uni_hildesheim.sse.model.cst.IfThen;
 import de.uni_hildesheim.sse.model.cst.Let;
 import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
 import de.uni_hildesheim.sse.model.cst.Parenthesis;
+import de.uni_hildesheim.sse.model.cst.Variable;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.Attribute;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
@@ -96,7 +97,8 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
 
     private AssignmentDetector assignmentDetector = new AssignmentDetector();
     private int level;
-    private boolean hasTopLevelWarning; 
+    private boolean hasTopLevelWarning;
+    private RefByCheckVisitor refByChecker = new RefByCheckVisitor();
     
     /**
      * Creates an expression translator (to be used within this package only).
@@ -816,6 +818,25 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
         level--;
         return result;
     }
+    
+    /**
+     * Obtains the reference type.
+     * 
+     * @param varType the variable type
+     * @param context the type context
+     * @return the reference type
+     */
+    private static IDatatype refType(IDatatype varType, TypeContext context) {
+        IDatatype refType;
+        if (Reference.TYPE.isAssignableFrom(varType)) {
+            // just take the referece
+            refType = varType;
+        } else {
+            // provide reference to variable
+            refType = context.findRefType(varType);
+        }
+        return refType;
+    }
 
     /**
      * Process a primary expression.
@@ -836,30 +857,29 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
         throws TranslatorException {
         level++;
         ConstraintSyntaxTree result = null;
-        if (null != expr.getRefName()) { // (refby)
+        if (null != expr.getRefEx()) { // (refby)
+            ConstraintSyntaxTree refEx = processExpression(null, expr.getRefEx(), context, parent);
             try {
-                AbstractVariable var = context.findVariable(expr.getRefName(), null);
-                if (null != var) {
+                if (refEx instanceof Variable) {
+                    AbstractVariable var = ((Variable) refEx).getVariable();
                     IDatatype varType = var.getType();
-                    IDatatype refType;
-                    if (Reference.TYPE.isAssignableFrom(varType)) {
-                        // dereference
-                        refType = varType;
-                    } else {
-                        // provide reference to variable
-                        refType = context.findRefType(var.getType());
-                    }
+                    IDatatype refType = refType(varType, context);
                     result = new ConstantValue(ValueFactory.createValue(refType, var));
-                } else {
-                    throw new TranslatorException("reference '"
-                            + expr.getRefName() + "' is undefined", expr,
-                            IvmlPackage.Literals.PRIMARY_EXPRESSION__REF_NAME,
-                            ErrorCodes.UNKNOWN_ELEMENT);
+                } else { // more complex expression
+                    IDatatype varType = refEx.inferDatatype();
+                    refByChecker.reset();
+                    refEx.accept(refByChecker);
+                    if (refByChecker.canBeDereferenced()) {
+                        IDatatype refType = refType(varType, context);
+                        result = new ConstantValue(ValueFactory.createValue(refType, refEx));
+                    } else {
+                        throw new TranslatorException("Expression cannot be dereferenced", expr, 
+                            IvmlPackage.Literals.PRIMARY_EXPRESSION__REF_EX, ErrorCodes.DEREFERENCE);        
+                    }
                 }
             } catch (IvmlException e) {
-                throw new TranslatorException(e, expr,
-                        IvmlPackage.Literals.PRIMARY_EXPRESSION__REF_NAME);
-            }
+                throw new TranslatorException(e, expr, IvmlPackage.Literals.PRIMARY_EXPRESSION__REF_EX);
+            } 
         } else if (null != expr.getEx()) {
             // process "( expr )"
             result = new Parenthesis(processExpression(null, expr.getEx(), context, parent));

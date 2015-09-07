@@ -2580,9 +2580,9 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getPrimaryExpression_RefName()
+  public EReference getPrimaryExpression_RefEx()
   {
-    return (EAttribute)primaryExpressionEClass.getEStructuralFeatures().get(3);
+    return (EReference)primaryExpressionEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -3051,7 +3051,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     createEReference(primaryExpressionEClass, PRIMARY_EXPRESSION__LIT);
     createEReference(primaryExpressionEClass, PRIMARY_EXPRESSION__EX);
     createEReference(primaryExpressionEClass, PRIMARY_EXPRESSION__IF_EX);
-    createEAttribute(primaryExpressionEClass, PRIMARY_EXPRESSION__REF_NAME);
+    createEReference(primaryExpressionEClass, PRIMARY_EXPRESSION__REF_EX);
     createEReference(primaryExpressionEClass, PRIMARY_EXPRESSION__CALLS);
     createEReference(primaryExpressionEClass, PRIMARY_EXPRESSION__ACCESS);
 
@@ -3364,7 +3364,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     initEReference(getPrimaryExpression_Lit(), this.getLiteral(), null, "lit", null, 0, 1, PrimaryExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getPrimaryExpression_Ex(), this.getExpression(), null, "ex", null, 0, 1, PrimaryExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getPrimaryExpression_IfEx(), this.getIfExpression(), null, "ifEx", null, 0, 1, PrimaryExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getPrimaryExpression_RefName(), ecorePackage.getEString(), "refName", null, 0, 1, PrimaryExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getPrimaryExpression_RefEx(), this.getExpression(), null, "refEx", null, 0, 1, PrimaryExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getPrimaryExpression_Calls(), this.getCall(), null, "calls", null, 0, -1, PrimaryExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getPrimaryExpression_Access(), this.getExpressionAccess(), null, "access", null, 0, 1, PrimaryExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 

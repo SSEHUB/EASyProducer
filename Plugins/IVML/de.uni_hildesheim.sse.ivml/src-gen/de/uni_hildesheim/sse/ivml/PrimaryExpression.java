@@ -17,7 +17,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link de.uni_hildesheim.sse.ivml.PrimaryExpression#getLit <em>Lit</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.PrimaryExpression#getEx <em>Ex</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.PrimaryExpression#getIfEx <em>If Ex</em>}</li>
- *   <li>{@link de.uni_hildesheim.sse.ivml.PrimaryExpression#getRefName <em>Ref Name</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.ivml.PrimaryExpression#getRefEx <em>Ref Ex</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.PrimaryExpression#getCalls <em>Calls</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.PrimaryExpression#getAccess <em>Access</em>}</li>
  * </ul>
@@ -108,30 +108,30 @@ public interface PrimaryExpression extends EObject
   void setIfEx(IfExpression value);
 
   /**
-   * Returns the value of the '<em><b>Ref Name</b></em>' attribute.
+   * Returns the value of the '<em><b>Ref Ex</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Ref Name</em>' attribute isn't clear,
+   * If the meaning of the '<em>Ref Ex</em>' containment reference isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Ref Name</em>' attribute.
-   * @see #setRefName(String)
-   * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getPrimaryExpression_RefName()
-   * @model
+   * @return the value of the '<em>Ref Ex</em>' containment reference.
+   * @see #setRefEx(Expression)
+   * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getPrimaryExpression_RefEx()
+   * @model containment="true"
    * @generated
    */
-  String getRefName();
+  Expression getRefEx();
 
   /**
-   * Sets the value of the '{@link de.uni_hildesheim.sse.ivml.PrimaryExpression#getRefName <em>Ref Name</em>}' attribute.
+   * Sets the value of the '{@link de.uni_hildesheim.sse.ivml.PrimaryExpression#getRefEx <em>Ref Ex</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Ref Name</em>' attribute.
-   * @see #getRefName()
+   * @param value the new value of the '<em>Ref Ex</em>' containment reference.
+   * @see #getRefEx()
    * @generated
    */
-  void setRefName(String value);
+  void setRefEx(Expression value);
 
   /**
    * Returns the value of the '<em><b>Calls</b></em>' containment reference list.

@@ -1,0 +1,17 @@
+project refinedCompoundReverseOrder {
+
+    version v0;
+    compound refined refines base {
+        Integer z = 1;
+    }
+
+    compound base {
+        Integer x = 1;
+        Integer y = 2;
+        String s = "a";
+    }
+
+    refined var;
+    var.z = 2;
+    var.y = 3;
+}

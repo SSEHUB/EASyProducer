@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.ModelElement;
 import de.uni_hildesheim.sse.model.varModel.Project;
@@ -19,10 +20,12 @@ public class Message extends de.uni_hildesheim.sse.utils.messages.Message {
 
     private List<ModelElement> conflictingElements;
     private List<String> conflictingElementLabels;
-    private List<Set<AbstractVariable>> constraintVariables;
+    private List<Set<AbstractVariable>> variablesInConstraints;
+    private List<Set<IDecisionVariable>> problemVariables;
     private List<String> conflictingElementComments;
     private List<Project> conflictingElementProjects;
     private List<String> conflictingElementSuggestions;
+    private List<IDecisionVariable> constraintVariables;
     
 
     /**
@@ -64,6 +67,14 @@ public class Message extends de.uni_hildesheim.sse.utils.messages.Message {
      */
     public List<ModelElement> getConflicts() {
         return conflictingElements;
+    }
+    
+    /**
+     * Returns the number of conflicting elements.
+     * @return Number of conflicting elements.
+     */
+    public int getConflictsCount() {
+        return conflictingElements.size();
     }
     
     /**
@@ -144,21 +155,59 @@ public class Message extends de.uni_hildesheim.sse.utils.messages.Message {
 
     
     /**
-     * Method for adding a a list of variables that are involved in each failed constraint.
+     * Method for adding a list of {@link AbstractVariable}s that are involved in each failed constraint.
      * @param variables List of variables.
      */
     public void addConstraintVariables(List<Set<AbstractVariable>> variables) {
-        this.constraintVariables = new ArrayList<Set<AbstractVariable>>();
-        if (null != constraintVariables) {
-            this.constraintVariables.addAll(variables);
+        this.variablesInConstraints = new ArrayList<Set<AbstractVariable>>();
+        if (null != variablesInConstraints) {
+            this.variablesInConstraints.addAll(variables);
         }
     }
     
     /**
-     * Method for returning a a list of variables that are involved in each failed constraint.
+     * Method for returning a list of {@link AbstractVariable}s that are involved in each failed constraint.
      * @return List of variables.
      */
     public List<Set<AbstractVariable>> getConstraintVariables() {
+        return variablesInConstraints;
+    }
+    
+    /**
+     * Method for adding a list of {@link IDecisionVariable}s that are involved in each failed constraint.
+     * @param variables List of variables.
+     */
+    public void addProblemVariables(List<Set<IDecisionVariable>> variables) {
+        this.problemVariables = new ArrayList<Set<IDecisionVariable>>();
+        if (null != problemVariables) {
+            this.problemVariables.addAll(variables);
+        }
+    }
+    
+    /**
+     * Method for returning a list of {@link IDecisionVariable}s that are involved in each failed constraint.
+     * @return List of variables.
+     */
+    public List<Set<IDecisionVariable>> getProblemVariables() {
+        return problemVariables;
+    }
+    
+    /**
+     * Method for adding a list of ConstraintVariables of a failed constraint. Null if non.
+     * @param constraintVariables ConstraintVariable or null.
+     */
+    public void addNamedConstraintVariables(List<IDecisionVariable> constraintVariables) {
+        this.constraintVariables = new ArrayList<IDecisionVariable>();
+        if (null != constraintVariables) {
+            this.constraintVariables.addAll(constraintVariables);
+        }
+    }
+    
+    /**
+     * Method for returning a list of ConstraintVariables of a failed constraint. Null if none.
+     * @return List of ConstraintVariable or null.
+     */
+    public List<IDecisionVariable> getNamedConstraintVariables() {
         return constraintVariables;
     }
 }

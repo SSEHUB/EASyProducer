@@ -2,18 +2,17 @@
 <?eclipse version="3.4"?>
 <plugin>
 <extension
-         point="org.eclipse.ui.newWizards">
-      <!--category
-            id="de.uni_hildesheim.sse.EASy_Producer"
-            name="EASy-Producer">
-      </category-->
-      <wizard
-            category="de.uni_hildesheim.sse.EASy_Producer"
-            class="de.uni_hildesheim.sse.easy.examples.internal.ExamplesWizard"
-            icon="icons/logo_icon.gif"
-            id="de.uni_hildesheim.sse.easy.examples.internal.ExamplesWizard"
-            name="Import EASy-Producer Examples"
-            project="true">
-      </wizard>
-   </extension>
+      point="org.eclipse.ui.importWizards">
+   <category
+         id="de.uni_hildesheim.sse.easy.examples.importWizards"
+         name="EASy-Producer">
+   </category>
+   <wizard
+         category="de.uni_hildesheim.sse.easy.examples.importWizards"
+         class="de.uni_hildesheim.sse.easy.examples.internal.ExamplesWizard"
+         icon="icons/logo_icon.gif"
+         id="de.uni_hildesheim.sse.easy.examples.internal.ExamplesWizard"
+         name="Import EASy-Producer Examples">
+   </wizard>
+</extension>
 </plugin>

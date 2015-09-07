@@ -16,6 +16,8 @@ import de.uni_hildesheim.sse.reasoning.reasoner.functions.ScopeAssignments;
  */
 public class EvalVisitor extends EvaluationVisitor {    
     
+    private ScopeAssignments scopeAssignments;
+    
     /**
      * Creates an evaluation visitor.
      */
@@ -32,6 +34,14 @@ public class EvalVisitor extends EvaluationVisitor {
     public EvalVisitor(IConfiguration config, IAssignmentState assignmentState, boolean assignmentsOnly, 
         IValueChangeListener listener) {
         super(config, assignmentState, assignmentsOnly, listener);
+    }
+    
+    /**
+     * Method for setting ScopeAssignments register to check if variable was already assigned in this scope.
+     * @param scopeAssignments register.
+     */
+    public void setScopeAssignmnets(ScopeAssignments scopeAssignments) {
+        this.scopeAssignments = scopeAssignments;
     }
     
     @Override
@@ -82,10 +92,10 @@ public class EvalVisitor extends EvaluationVisitor {
     private boolean wasAssignedInThisScope(IDecisionVariable var, IDecisionVariable compound) {
         boolean wasAssigned = false;
         if (compound == null) {
-            wasAssigned = ScopeAssignments.wasAssignedInThisScope(var);
+            wasAssigned = scopeAssignments.wasAssignedInThisScope(var);
         } else {
             wasAssigned =
-                ScopeAssignments.wasAssignedInThisScope(var) && ScopeAssignments.wasAssignedInThisScope(compound);
+                scopeAssignments.wasAssignedInThisScope(var) && scopeAssignments.wasAssignedInThisScope(compound);
         }
         return wasAssigned;        
     }

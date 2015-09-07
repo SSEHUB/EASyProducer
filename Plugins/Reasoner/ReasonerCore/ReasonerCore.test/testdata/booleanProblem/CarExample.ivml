@@ -1,0 +1,35 @@
+project CarExample {
+
+    version v0;
+    
+    typedef HPType Integer with (HPType >= 45 and HPType <= 500);
+    
+    enum transmission {manual, automatic};
+    
+    compound Seat {
+        Boolean reclining;
+        Boolean heightcontrol;
+    }
+
+    compound ComfortSeat refines Seat {
+        Boolean automaticControl;
+        Boolean remoteControl;
+    }
+
+    sequenceOf(Seat) seats;
+    
+    Boolean airconditioning = true;
+    
+    HPType horsePower = 100;
+    
+    airconditioning implies horsePower > 100;
+    
+    size(seats) > 4 implies horsePower > 100;
+    
+    horsePower = 80;
+    
+    seats = {{reclining = true, heightcontrol = true}, {reclining = true, heightcontrol = true}, {reclining = false, heightcontrol = false}, {reclining = false, heightcontrol = false}};
+    
+     
+    
+}

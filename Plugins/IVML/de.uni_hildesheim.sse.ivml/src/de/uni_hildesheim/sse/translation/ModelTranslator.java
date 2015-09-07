@@ -1200,6 +1200,24 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
             resolveDeclarations(split.getVarDecls(), context, compound, force);
             // constraints are resolved afterwards
         }
+        // Handle refinments where the refined compound is written before the super compound.
+        if (null != compound) {
+            // Keep compounds into mind, where the parent could not be found until yet
+            if (null != tcomp.getSuper() && null == superCompound) {
+                context.addToContext(compound, tcomp.getSuper());
+            }
+            // Set refined compounds if the super compound was found at a later time
+            List<Compound> childs = context.getUnresolvedCompoundRefinments(compound.getName());
+            if (null != childs) {
+                for (int i = 0; i < childs.size(); i++) {
+                    Compound child = childs.get(i);
+                    if (null == child.getRefines()) {
+                        child.setRefines(compound);
+                    }
+                }
+            }
+            context.clearUnresolvedCompounds(compound.getName());
+        }
         return resolvable;
     }
 

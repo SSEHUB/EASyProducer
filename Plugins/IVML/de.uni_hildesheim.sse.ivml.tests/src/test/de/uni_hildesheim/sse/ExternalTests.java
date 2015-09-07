@@ -96,6 +96,17 @@ public class ExternalTests extends AbstractTest {
     public void testReferences() throws IOException {
         assertEqual(createFile("references"), null, null);
     }
+    
+    /**
+     * refBy over operation test case. 
+     * Simplified version contributed by K. Schmid.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testReferences2() throws IOException {
+        assertEqual(createFile("references2"), null, null);
+    }
 
     /**
      * Failing Topology test case as variable is not dereferenced (omitting refBy).

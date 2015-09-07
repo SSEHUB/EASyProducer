@@ -115,7 +115,7 @@ public class AbstractConstraintTranslator extends AbstractModelTranslator implem
             ReferenceValue refValue = (ReferenceValue) value;
             append("\"");
             //TODO SE: Check whether getName or QualifiedName should be used.
-            append(refValue.getValue().getName());
+            append(refValue.getValue().getName()); // may be null -> getValueEx
             append("\"");
         }
         

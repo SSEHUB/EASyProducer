@@ -1,0 +1,14 @@
+project BooleanInCompoundImpliesTest {
+
+
+    compound C {
+        Boolean t = true;
+        Boolean f = false;
+    
+        t implies f == true;    
+    }
+    
+    C cmp;
+   
+    
+}

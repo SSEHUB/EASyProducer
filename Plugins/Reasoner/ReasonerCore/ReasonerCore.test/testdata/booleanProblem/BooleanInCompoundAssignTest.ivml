@@ -1,0 +1,19 @@
+project BooleanAssignTest {
+
+    compound C {
+        Boolean t;
+        Boolean f;
+    
+        t = true;
+        f = false;
+    
+        Boolean check;
+        check = true;
+    
+        t == true implies check == false;
+        f == false implies check == false;    
+    }
+    
+    C cmp;   
+    
+}

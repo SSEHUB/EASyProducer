@@ -23,7 +23,7 @@
         <pathelement path="${libs.template.core}"/>
 		<!-- Reasoning -->
 		<pathelement path="${libs.reasonerCore}"/>
-		<pathelement path="${libs.drools2}"/>
+		<pathelement path="${libs.sseReasoner}"/>
         <!-- EASy-Producer -->
         <pathelement path="${libs.easy.persistence}"/>
 		<!-- Eclipse-Plugins -->

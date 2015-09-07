@@ -1,0 +1,16 @@
+project BooleanInCompoundDefaultsTest {
+
+    compound C {
+        Boolean t = true;
+        Boolean f = false;
+    
+        Boolean check;
+        check = true;
+        
+        t == true implies check == false;
+        f == false implies check == false;
+    }
+    
+    C cmp; 
+    
+}

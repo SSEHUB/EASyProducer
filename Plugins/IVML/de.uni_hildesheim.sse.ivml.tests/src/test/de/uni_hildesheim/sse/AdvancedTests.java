@@ -307,6 +307,17 @@ public class AdvancedTests extends AbstractTest {
     public void testRefinedCompound() throws IOException {
         assertEqual(createFile("refinedCompound"), "testRefinedCompound", "0");
     }
+    
+    /**
+     * Tests refined compounds, the refined compounds is written before the super/parent compound.
+     * 
+     * @throws IOException
+     *             should not occur
+     */
+    @Test
+    public void testRefinedCompoundReverseOrder() throws IOException {
+        assertEqual(createFile("refinedCompoundReverseOrder"), "refinedCompoundReverseOrder", "0");
+    }
 
     /**
      * Tests references.

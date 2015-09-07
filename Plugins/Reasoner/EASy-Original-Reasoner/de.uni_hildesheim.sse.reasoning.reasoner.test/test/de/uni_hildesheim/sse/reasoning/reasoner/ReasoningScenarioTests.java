@@ -128,11 +128,10 @@ public class ReasoningScenarioTests extends AbstractTest<Project> {
      * into rules and reasoned on without any errors. 
      * @param ivmlFile IVML file to translate and reason on.
      * @param expectedFailedConstraints Number of constraints that are expected to fail.
-     * @param customMsg Enable custom messages.
      */        
-    public void reasoningTest(String ivmlFile, int expectedFailedConstraints, boolean customMsg) {
+    public void reasoningTest(String ivmlFile, int expectedFailedConstraints) {
         Project project = loadProject(ivmlFile);
-        resultHandler(expectedFailedConstraints, project, customMsg);
+        resultHandler(expectedFailedConstraints, project);
     }   
     
     /**
@@ -141,14 +140,13 @@ public class ReasoningScenarioTests extends AbstractTest<Project> {
      * @param p0 IVML file to translate and reason on.
      * @param p1 IVML file to translate and reason on.
      * @param expectedFailedConstraints Number of constraints that are expected to fail.
-     * @param customMsg Enable custom messages.
      */        
-    public void reasoningTest(String p0, String p1, int expectedFailedConstraints, boolean customMsg) {
+    public void reasoningTest(String p0, String p1, int expectedFailedConstraints) {
         Project projectP0 = loadProject(p0);
         Project projectP1 = loadProject(p1);
         ProjectImport importP0 = new ProjectImport(projectP0.getName(), null);
         projectP1.addImport(importP0);
-        resultHandler(expectedFailedConstraints, projectP1, customMsg);
+        resultHandler(expectedFailedConstraints, projectP1);
     }
     
     /**
@@ -158,9 +156,8 @@ public class ReasoningScenarioTests extends AbstractTest<Project> {
      * @param p1 IVML file to translate and reason on.
      * @param p2 IVML file to translate and reason on.
      * @param expectedFailedConstraints Number of constraints that are expected to fail.
-     * @param customMsg Enable custom messages.
      */        
-    public void reasoningTest(String p0, String p1, String p2, int expectedFailedConstraints, boolean customMsg) {
+    public void reasoningTest(String p0, String p1, String p2, int expectedFailedConstraints) {
         Project projectP0 = loadProject(p0);
         Project projectP1 = loadProject(p1);
         Project projectP2 = loadProject(p2);
@@ -168,42 +165,30 @@ public class ReasoningScenarioTests extends AbstractTest<Project> {
         projectP1.addImport(importP0);
         ProjectImport importP1 = new ProjectImport(projectP1.getName(), null);
         projectP2.addImport(importP1);
-        resultHandler(expectedFailedConstraints, projectP2, customMsg);
+        resultHandler(expectedFailedConstraints, projectP2);
     }
 
     /**
      * Method for handling reasoning result.
      * @param expectedFailedConstraints Number of constraints that are expected to fa
      * @param projectP1 Project to reason on.
-     * @param customMsg Enable custom messages.
      */
-    private void resultHandler(int expectedFailedConstraints, Project projectP1, boolean customMsg) {
+    private void resultHandler(int expectedFailedConstraints, Project projectP1) {
         Configuration config = new Configuration(projectP1, false);        
         ReasonerConfiguration rConfig = new ReasonerConfiguration();
-        if (customMsg) {
-            rConfig.enableCustomMessages();
-        }
+
         // Perform reasoning
         Engine engine = new Engine(projectP1, config, rConfig, ProgressObserver.NO_OBSERVER);
         ReasoningResult result = engine.reason();
         
         // Test whether reasoning detected correct result  
         int failedConstraints = 0;
-//        if (result.getMessageCount() > 0 && result.getMessage(0).getStatus() == Status.ERROR) {            
-//            de.uni_hildesheim.sse.reasoning.core.reasoner.Message cause = result.getMessage(0);            
-//            failedConstraints = Math.max(cause.getConflicts().size(), result.getMessageCount());
-//        }
         for (int i = 0; i < result.getMessageCount(); i++) {
             if (result.getMessage(i).getStatus() == Status.ERROR) {
-                if (customMsg) {
-                    failedConstraints = failedConstraints + result.getMessage(i).getConflictLabels().size();
-                } else {
-                    failedConstraints = failedConstraints + result.getMessage(i).getConflicts().size(); 
-                }
+                failedConstraints = failedConstraints + result.getMessage(i).getConflicts().size();
             }
         }
         Assert.assertEquals("Failed constraints: ", expectedFailedConstraints, failedConstraints);
-//        Assert.assertEquals("Failed constraints: ", expectedFailedConstraints, 0);
     }   
     
     /**
@@ -211,7 +196,7 @@ public class ReasoningScenarioTests extends AbstractTest<Project> {
      */
     @Test    
     public void initialTest() {
-        reasoningTest("InitialTest.ivml", 2, false);
+        reasoningTest("InitialTest.ivml", 2);
     } 
     
     /**
@@ -219,7 +204,7 @@ public class ReasoningScenarioTests extends AbstractTest<Project> {
      */
     @Test    
     public void preCollectionTest() {
-        reasoningTest("PreCollectionTest.ivml", 1, false);
+        reasoningTest("PreCollectionTest.ivml", 1);
     }
     
     /**
@@ -228,7 +213,7 @@ public class ReasoningScenarioTests extends AbstractTest<Project> {
     @Ignore
     @Test    
     public void hasDuplicatesTestTest() {
-        reasoningTest("HasDuplicatesTest.ivml", 0, false);
+        reasoningTest("HasDuplicatesTest.ivml", 0);
     }
     
     /**
@@ -236,7 +221,7 @@ public class ReasoningScenarioTests extends AbstractTest<Project> {
      */
     @Test    
     public void qmHardwareTest() {
-        reasoningTest("QMHardwareTest.ivml", 1, false);
+        reasoningTest("QMHardwareTest.ivml", 1);
     } 
     
     /**
@@ -244,7 +229,7 @@ public class ReasoningScenarioTests extends AbstractTest<Project> {
      */
     @Test    
     public void nestedHardwareTest() {
-        reasoningTest("nestedHardwareTest.ivml", 1, false);
+        reasoningTest("nestedHardwareTest.ivml", 1);
     } 
     
     /**
@@ -252,7 +237,7 @@ public class ReasoningScenarioTests extends AbstractTest<Project> {
      */
     @Test    
     public void freezeTest() {
-        reasoningTest("FreezeTest.ivml", 0, false);
+        reasoningTest("FreezeTest.ivml", 0);
     } 
     
     /**
@@ -260,7 +245,7 @@ public class ReasoningScenarioTests extends AbstractTest<Project> {
      */
     @Test    
     public void freezeImportTest() {
-        reasoningTest("FreezeTest.ivml", "FreezeImportTest.ivml", 1, false);
+        reasoningTest("FreezeTest.ivml", "FreezeImportTest.ivml", 1);
     } 
     
     /**
@@ -269,7 +254,7 @@ public class ReasoningScenarioTests extends AbstractTest<Project> {
     @Test 
     @Ignore
     public void nullTest() {
-        reasoningTest("NullTest.ivml", 3, false);
+        reasoningTest("NullTest.ivml", 3);
     } 
     
     /**
@@ -278,7 +263,7 @@ public class ReasoningScenarioTests extends AbstractTest<Project> {
     @Test  
     @Ignore
     public void nullImportTest() {
-        reasoningTest("NullTest.ivml", "NullImportTest.ivml", 4, false);
+        reasoningTest("NullTest.ivml", "NullImportTest.ivml", 4);
     } 
     
     /**
@@ -286,7 +271,7 @@ public class ReasoningScenarioTests extends AbstractTest<Project> {
      */
     @Test    
     public void importChildTest() {
-        reasoningTest("ImportChild.ivml", 1, false);
+        reasoningTest("ImportChild.ivml", 1);
     } 
     
     /**
@@ -294,7 +279,7 @@ public class ReasoningScenarioTests extends AbstractTest<Project> {
      */
     @Test    
     public void importCoreTest() {
-        reasoningTest("ImportChild.ivml", "ImportCore.ivml", 0, false);
+        reasoningTest("ImportChild.ivml", "ImportCore.ivml", 0);
     } 
     
     /**
@@ -303,7 +288,7 @@ public class ReasoningScenarioTests extends AbstractTest<Project> {
     @Test
     @Ignore
     public void internalConstraintTest() {
-        reasoningTest("InternalConstraintTest.ivml", 1, false);
+        reasoningTest("InternalConstraintTest.ivml", 1);
     }
     
     /**
@@ -311,7 +296,7 @@ public class ReasoningScenarioTests extends AbstractTest<Project> {
      */ 
     @Test    
     public void constraintVariablesTest() {
-        reasoningTest("ConstraintVariableTest.ivml", 2, true);
+        reasoningTest("ConstraintVariableTest.ivml", 2);
     }
     
     /**
@@ -319,7 +304,7 @@ public class ReasoningScenarioTests extends AbstractTest<Project> {
      */ 
     @Test    
     public void variableAssignmentFailTest() {
-        reasoningTest("VariableAssignmentFailTest.ivml", 1, false);
+        reasoningTest("VariableAssignmentFailTest.ivml", 1);
     }
     
     /**
@@ -327,7 +312,7 @@ public class ReasoningScenarioTests extends AbstractTest<Project> {
      */ 
     @Test    
     public void compoundEqualityTest() {
-        reasoningTest("CompoundEqualityTest.ivml", 0, false);
+        reasoningTest("CompoundEqualityTest.ivml", 0);
     }
     
     /**
@@ -335,7 +320,7 @@ public class ReasoningScenarioTests extends AbstractTest<Project> {
      */
     @Test    
     public void constrainedCompoundTest() {
-        reasoningTest("ConstrainedCompoundTest.ivml", 3, false);
+        reasoningTest("ConstrainedCompoundTest.ivml", 3);
     }
     
     /**
@@ -343,7 +328,7 @@ public class ReasoningScenarioTests extends AbstractTest<Project> {
      */
     @Test    
     public void attributeTest() {
-        reasoningTest("AttributeTest.ivml", 0, false);
+        reasoningTest("AttributeTest.ivml", 0);
     }
     
     /**
@@ -352,7 +337,7 @@ public class ReasoningScenarioTests extends AbstractTest<Project> {
     @Test    
     @Ignore
     public void refinedCompoundTest() {
-        reasoningTest("RefinedCompoundTest.ivml", 0, false);
+        reasoningTest("RefinedCompoundTest.ivml", 0);
     }
     
     /**
@@ -360,7 +345,7 @@ public class ReasoningScenarioTests extends AbstractTest<Project> {
      */
     @Test
     public void traceTest() {
-        reasoningTest("TraceTest.ivml", 1, false);
+        reasoningTest("TraceTest.ivml", 1);
     }
     
     /**
@@ -368,9 +353,49 @@ public class ReasoningScenarioTests extends AbstractTest<Project> {
      */
     @Test
     public void nestedVariableReplaceTest() {
-        reasoningTest("nestedVariableReplaceTest.ivml", 1, false);
+        reasoningTest("nestedVariableReplaceTest.ivml", 1);
     }
-
+    
+    /**
+     * String patern test with internal constraint.
+     */
+    @Test
+    public void internalConstraintStringPaternTest() {
+        reasoningTest("internalConstraintStringPaternTest.ivml", 1);
+    }
+    
+    /**
+     * String pattern test with internal constraint.
+     */
+    @Test
+    public void refToCompoundInSequenceTest() {
+        reasoningTest("RefToCompoundInSequenceTest.ivml", 0);
+    }
+    
+    /**
+     * Default constraint reevaluation.
+     */
+    @Test
+    public void defaultConstraintReevaluationTest() {
+        reasoningTest("DefaultConstraintReevaluationTest.ivml", 1);
+    }
+    
+    /**
+     * isDefined test.
+     */
+    @Test
+    public void isDefinedTest() {
+        reasoningTest("IsDefinedTest.ivml", 10);
+    }  
+    
+    /**
+     * isDefined Compound test.
+     */
+    @Test
+    public void isDefinedCompoundTest() {
+        reasoningTest("IsDefinedCompoundTest.ivml", 1);
+    }  
+    
     
 //    /**
 //     * Tests basic arithmetical operations on Integer and Real numbers.

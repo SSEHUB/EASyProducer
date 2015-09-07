@@ -319,7 +319,7 @@ public class IvmlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getPrimaryExpressionAccess().getLitAssignment_0_0(), "rule__PrimaryExpression__LitAssignment_0_0");
 					put(grammarAccess.getPrimaryExpressionAccess().getExAssignment_0_1_1(), "rule__PrimaryExpression__ExAssignment_0_1_1");
 					put(grammarAccess.getPrimaryExpressionAccess().getIfExAssignment_0_2(), "rule__PrimaryExpression__IfExAssignment_0_2");
-					put(grammarAccess.getPrimaryExpressionAccess().getRefNameAssignment_0_3_2(), "rule__PrimaryExpression__RefNameAssignment_0_3_2");
+					put(grammarAccess.getPrimaryExpressionAccess().getRefExAssignment_0_3_2(), "rule__PrimaryExpression__RefExAssignment_0_3_2");
 					put(grammarAccess.getPrimaryExpressionAccess().getCallsAssignment_1(), "rule__PrimaryExpression__CallsAssignment_1");
 					put(grammarAccess.getPrimaryExpressionAccess().getAccessAssignment_2(), "rule__PrimaryExpression__AccessAssignment_2");
 					put(grammarAccess.getCollectionInitializerAccess().getTypeAssignment_1(), "rule__CollectionInitializer__TypeAssignment_1");
