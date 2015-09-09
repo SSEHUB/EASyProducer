@@ -4,39 +4,39 @@
     for t {
         t <- qm1::Family::output [0]
         for f {
-            f <- qm1::Tuple::
+            f <- qm1::Tuple::fields [0]
             name <- streamID
             -> stringValue(DecisionVariable) with (qm1::Field::type) = STRING
             type <- STRING
-            -> fieldTypeName(DecisionVariable) with (qm1::Tuple::)
-                -> byName(DecisionVariable, String) with (qm1::Tuple::, type) = qm1::Field::type
+            -> fieldTypeName(DecisionVariable) with (qm1::Tuple::fields [0])
+                -> byName(DecisionVariable, String) with (qm1::Tuple::fields [0], type) = qm1::Field::type
                 switch(qm1::Field::type)
                     3 : String
             fType <- String
-            f <- qm1::Tuple::
+            f <- qm1::Tuple::fields [1]
             name <- timestamp
             -> stringValue(DecisionVariable) with (qm1::Field::type) = STRING
             type <- STRING
-            -> fieldTypeName(DecisionVariable) with (qm1::Tuple::)
-                -> byName(DecisionVariable, String) with (qm1::Tuple::, type) = qm1::Field::type
+            -> fieldTypeName(DecisionVariable) with (qm1::Tuple::fields [1])
+                -> byName(DecisionVariable, String) with (qm1::Tuple::fields [1], type) = qm1::Field::type
                 switch(qm1::Field::type)
                     3 : String
             fType <- String
-            f <- qm1::Tuple::
+            f <- qm1::Tuple::fields [2]
             name <- quote
             -> stringValue(DecisionVariable) with (qm1::Field::type) = REAL
             type <- REAL
-            -> fieldTypeName(DecisionVariable) with (qm1::Tuple::)
-                -> byName(DecisionVariable, String) with (qm1::Tuple::, type) = qm1::Field::type
+            -> fieldTypeName(DecisionVariable) with (qm1::Tuple::fields [2])
+                -> byName(DecisionVariable, String) with (qm1::Tuple::fields [2], type) = qm1::Field::type
                 switch(qm1::Field::type)
                     2 : double
             fType <- double
-            f <- qm1::Tuple::
+            f <- qm1::Tuple::fields [3]
             name <- volume
             -> stringValue(DecisionVariable) with (qm1::Field::type) = INTEGER
             type <- INTEGER
-            -> fieldTypeName(DecisionVariable) with (qm1::Tuple::)
-                -> byName(DecisionVariable, String) with (qm1::Tuple::, type) = qm1::Field::type
+            -> fieldTypeName(DecisionVariable) with (qm1::Tuple::fields [3])
+                -> byName(DecisionVariable, String) with (qm1::Tuple::fields [3], type) = qm1::Field::type
                 switch(qm1::Field::type)
                     0 : int
             fType <- int

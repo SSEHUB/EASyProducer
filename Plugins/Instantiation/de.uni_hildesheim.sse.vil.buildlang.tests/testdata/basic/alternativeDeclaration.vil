@@ -1,0 +1,11 @@
+vilScript alternativeDeclaration (Project source, Project target, Configuration config) {
+
+    main() = : {
+        if (true) {
+            FileArtifact fa = new FileArtifact();
+        } else {
+            FileArtifact fa = new FileArtifact();
+        }
+    }
+
+}

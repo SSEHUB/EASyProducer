@@ -2,6 +2,7 @@ package de.uni_hildesheim.sse.easy.java.artifacts;
 
 import org.eclipse.jdt.core.dom.ImportDeclaration;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IArtifactVisitor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Binary;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Text;
@@ -59,6 +60,12 @@ public class JavaImport extends JavaParentFragmentArtifact {
     @Override
     public String getStringValue(StringComparator comparator) {
         return "import '" + getNameSafe() + "'";
+    }
+
+    @Invisible
+    @Override
+    public ArtifactModel getArtifactModel() {
+        return getParent().getArtifactModel();
     }
 
 }

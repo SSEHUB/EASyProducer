@@ -38,7 +38,7 @@ public @interface OperationMeta {
     int useGenericParameter() default -1;
 
     /**
-     * Whether a parameter (index) be used as return type. 
+     * Whether a parameter (index) shall be used as return type. 
      * Unused by default.
      */
     int useParameter() default -1;
@@ -64,5 +64,11 @@ public @interface OperationMeta {
      * indicate that the given argument types shall be used. May be required to force / enable automatic conversion.
      */
     int[] genericArgument() default { };
+    
+    /**
+     * Whether iterator aggregation (first declarator with default value denotes result value and type) is supported
+     * or not. Default is not supported.
+     */
+    boolean allowsAggregation() default false;
     
 }

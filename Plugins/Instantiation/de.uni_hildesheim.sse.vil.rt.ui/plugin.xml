@@ -105,6 +105,7 @@
     <extension
             point="org.eclipse.ui.propertyPages">
         <page
+            category="de.uni_hildesheim.sse.EASy"
             class="de.uni_hildesheim.sse.vil.rt.ui.RtVilExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
             id="de.uni_hildesheim.sse.vil.rt.RtVil"
             name="Runtime Variability Instantiation Language (rt-VIL)">

@@ -85,7 +85,6 @@ public class Executor extends de.uni_hildesheim.sse.easy_producer.instantiator.m
     @Override
     protected de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildlangExecution 
         createExecutionEnvironment(ITracer tracer, File base, String startRuleName, 
-        
         Map<String, Object> parameter) {
         return new RtVilExecution(tracer, base, parameter, stopAfterBindValues, useReasoner);
     }

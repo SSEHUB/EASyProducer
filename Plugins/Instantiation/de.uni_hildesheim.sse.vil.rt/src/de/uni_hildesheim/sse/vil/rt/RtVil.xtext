@@ -29,6 +29,7 @@ rtContents:
         | elements += RuleDeclaration
         | elements += StrategyDeclaration
         | elements += TacticDeclaration
+        | elements+=TypeDef
     )*
 ;
 

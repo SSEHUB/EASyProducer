@@ -21,6 +21,7 @@ import java.lang.reflect.Method;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IClassNameMapper;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IRegisteredStringValueProvider;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 
 /**
  * Allows to change the default VIL behavior of creating type descriptors.
@@ -128,5 +129,16 @@ public interface ITypeAnalyzer extends IClassNameMapper {
      * @return the type generics or <b>null</b> if there are none
      */
     public Class<?>[] getReturnGenerics(Method method);
+    
+    /**
+     * Called if a type cannot be resolved by the {@link RtVilTypeRegistry}, in particular during
+     * reflective analysis. The domain/application specific type analyzer may now react on this, before
+     * lower level VIL mechanisms finally determine the actual type, which is for <code>java.lang.Object</code>
+     * typically "Any" and for others "Void" (disable unknown types from being called).
+     * 
+     * @param name the name of the type to be resolved
+     * @return the fallback type, may be <b>null</b> if now fallback type is known
+     */
+    public TypeDescriptor<?> resolveTypeFallback(String name);
     
 }

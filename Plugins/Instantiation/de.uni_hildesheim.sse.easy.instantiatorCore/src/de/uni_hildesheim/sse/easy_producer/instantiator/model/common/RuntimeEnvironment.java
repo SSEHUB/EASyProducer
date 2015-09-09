@@ -14,13 +14,17 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IRunti
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Collection;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IActualValueProvider;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ITypedModel;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilGenericType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ListSequence;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ListSet;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.Configuration;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.DecisionVariable;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlElement;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypes;
+import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
+import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
 import de.uni_hildesheim.sse.model.varModel.values.NullValue;
 import de.uni_hildesheim.sse.utils.modelManagement.IModel;
 import de.uni_hildesheim.sse.utils.modelManagement.IRestrictionEvaluationContext;
@@ -556,17 +560,34 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
         if (NullValue.INSTANCE == object || NullValue.VALUE == object) {
             object = null;
         }
-        if (null != object && !var.getType().isInstance(object)) {
-            String oTypeName;
-            TypeDescriptor<?> oType = typeRegistry.findType(object.getClass());
-            if (null == oType) {
-                oTypeName = "?";
-            } else {
-                oTypeName = oType.getVilName();
+        if (null != object) {
+            boolean compatible = var.getType().isInstance(object);
+            if (!compatible) {
+                if (object instanceof DecisionVariable) {
+                    IDatatype dType = Reference.dereference(
+                        ((DecisionVariable) object).getVariable().getDeclaration().getType());
+                    TypeDescriptor<?> td = getTypeRegistry().getType(dType);
+                    if (null != td) {
+                        compatible = var.getType().isAssignableFrom(td);
+                    }
+                }
             }
-            throw new VilException("cannot assign value of type " + oTypeName 
-                + " to " + var.getName() + " of type " + var.getType().getVilName(), 
-                VilException.ID_RUNTIME_TYPE);
+            if (!compatible) {
+                String oTypeName;
+                TypeDescriptor<?> oType = typeRegistry.findType(object.getClass());
+                if (null == oType && object instanceof IVilGenericType) {
+                    // unmodifiable wrapper types
+                    oType = ((IVilGenericType) object).getType();
+                }
+                if (null == oType) {
+                    oTypeName = "?";
+                } else {
+                    oTypeName = oType.getVilName();
+                }
+                throw new VilException("cannot assign value of type " + oTypeName 
+                    + " to " + var.getName() + " of type " + var.getType().getVilName(), 
+                    VilException.ID_RUNTIME_TYPE);
+            }
         }
         return object;
     }

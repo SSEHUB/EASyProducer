@@ -10,12 +10,10 @@ import java.util.Map;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.easy.java.artifacts.DefaultJavaFileArtifactCreator;
 import de.uni_hildesheim.sse.easy.java.artifacts.JavaAttribute;
-import de.uni_hildesheim.sse.easy.java.artifacts.JavaCall;
 import de.uni_hildesheim.sse.easy.java.artifacts.JavaClass;
 import de.uni_hildesheim.sse.easy.java.artifacts.JavaFileArtifact;
 import de.uni_hildesheim.sse.easy.java.artifacts.JavaMethod;
@@ -56,8 +54,6 @@ public class JavaFileArtifactTest extends AbstractExecutionTest<Script> {
     private static File qualifiedNames;
     private static File renamedQualifiedNames;
     private static File organizedCopyFile;
-    private static File methodFile;
-    private static File modifiedMethodFile;
 
     private static File temp;
     private static File tempFile;
@@ -88,13 +84,11 @@ public class JavaFileArtifactTest extends AbstractExecutionTest<Script> {
 
         organizedCopyFile = copyOriginal("OrganizedCopyFile.java");
 
-        modifiedMethodFile = copyOriginal("ModifiedMethodFile.java");
         originalFile = new File(getArtifactsFolder() + "/src2/test/MainOrg.java");
         importFile = new File(getArtifactsFolder() + "/src2/test/Imports.java");
         packageFile = new File(getArtifactsFolder() + "/src2/test/Packages.java");
         qualifiedNames = new File(getArtifactsFolder() + "/src2/test/QualifiedNames.java");
         copyFile = new File(getArtifactsFolder() + "/src2/test/Copy.java");
-        methodFile = new File(getArtifactsFolder() + "/src2/test/MethodFile.java");
     }
 
     /**
@@ -118,7 +112,6 @@ public class JavaFileArtifactTest extends AbstractExecutionTest<Script> {
          * instead of spaces.
          */
         try {
-            System.out.println(file);
             JavaFileArtifact javaFileArtefact = (JavaFileArtifact) CREATOR.createArtifactInstance(file, null);
             Set<JavaClass> classes = javaFileArtefact.classes();
             for (JavaClass javaClass : classes) {
@@ -395,68 +388,6 @@ public class JavaFileArtifactTest extends AbstractExecutionTest<Script> {
             javaFileArtefact.modifiyNamespace(nameMapping);
             // Test if all imports, packages and qualified names were renamed
             assertFileEqualitySafe(tempFile, organizedCopyFile);
-        } catch (VilException e) {
-            logger.exception(e);
-        }
-    }
-
-    /**
-     * Test if a method can be modified by removing java calls.
-     * 
-     * @throws IOException
-     *             shall not occur
-     */
-    @Ignore
-    @Test
-    public void testModifyMethod() throws IOException {
-        formatFile(modifiedMethodFile);
-        copyFile(methodFile, tempFile);
-        try {
-            JavaFileArtifact javaFileArtefact = (JavaFileArtifact) CREATOR.createArtifactInstance(tempFile, null);
-            Set<JavaClass> classes = javaFileArtefact.classes();
-            for (JavaClass javaClass : classes) {
-                Set<JavaMethod> methods = javaClass.methods();
-                // for (JavaMethod javaMethod : methods) {
-                // javaMethod.deleteJavaCall(evaluator);
-                // for (JavaCall javaCall : javaMethod.statements()) {
-                // if (javaCall.getName().equals("exception") &&
-                // javaCall.getType().equals("EASyLogger")) {
-                // javaCall.delete();
-                // }
-                // }
-                // }
-            }
-            javaFileArtefact.store();
-            assertFileEqualitySafe(tempFile, modifiedMethodFile);
-        } catch (VilException e) {
-            logger.exception(e);
-        }
-    }
-
-    /**
-     * Test if a method can be modified by removing java calls.
-     * 
-     * @throws IOException
-     *             shall not occur
-     */
-    @Test
-    public void testDeleteJavaCall() throws IOException {
-        formatFile(modifiedMethodFile);
-        copyFile(methodFile, tempFile);
-        String attributeName = "exception";
-        String binding = "EASyLogger";
-        JavaCall call = new JavaCall(attributeName, binding);
-        try {
-            JavaFileArtifact javaFileArtefact = (JavaFileArtifact) CREATOR.createArtifactInstance(tempFile, null);
-            Set<JavaClass> classes = javaFileArtefact.classes();
-            for (JavaClass javaClass : classes) {
-                Set<JavaMethod> methods = javaClass.methods();
-                for (JavaMethod javaMethod : methods) {
-                    javaMethod.deleteJavaCall(call);
-                }
-            }
-            javaFileArtefact.store();
-            assertFileEqualitySafe(tempFile, modifiedMethodFile);
         } catch (VilException e) {
             logger.exception(e);
         }

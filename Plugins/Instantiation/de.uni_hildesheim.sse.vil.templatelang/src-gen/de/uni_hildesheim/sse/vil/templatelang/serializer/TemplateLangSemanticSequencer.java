@@ -12,6 +12,7 @@ import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ConstructorExecution;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ContainerInitializer;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ContainerInitializerExpression;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Declaration;
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.DeclarationUnit;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Declarator;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.EqualityExpression;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.EqualityExpressionPart;
@@ -140,6 +141,12 @@ public class TemplateLangSemanticSequencer extends ExpressionDslSemanticSequence
 			case ExpressionDslPackage.DECLARATION:
 				if(context == grammarAccess.getDeclarationRule()) {
 					sequence_Declaration(context, (Declaration) semanticObject); 
+					return; 
+				}
+				else break;
+			case ExpressionDslPackage.DECLARATION_UNIT:
+				if(context == grammarAccess.getDeclarationUnitRule()) {
+					sequence_DeclarationUnit(context, (DeclarationUnit) semanticObject); 
 					return; 
 				}
 				else break;

@@ -1,2 +1,2 @@
-null true
+{tuplesPerSecond=null, input=null, name=Spring Financial Data : String, host=147.172.177.22 : String, storageLocation=input/spring : String, bytesPerSecond=null, timeLine=0 : Integer, strategy=LeastRecentlyUsed : DataManagementStrategy, constraints=null, parameters=null} true
 Spring Financial Data

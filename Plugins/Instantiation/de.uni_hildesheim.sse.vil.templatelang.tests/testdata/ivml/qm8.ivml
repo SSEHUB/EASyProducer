@@ -1,0 +1,39 @@
+project qm8 {
+
+    compound FieldType {
+        String name;
+        String class;
+    }
+    
+    FieldType IntegerType;
+    FieldType LongType;
+    FieldType FieldTypeVar_12;
+    setOf(refTo(FieldType)) types = {};
+    
+    IntegerType = FieldType {
+        name = "INTEGER", 
+        class = "int"
+    };
+    
+    LongType = FieldType {
+        name = "LONG", 
+        class = "long"
+    };
+    
+    FieldTypeVar_12 = FieldType {
+        name = "STATUS", 
+        class = "twitter4j.Status" 
+    };
+    
+    types = {
+        refBy(IntegerType), refBy(LongType), refBy(FieldTypeVar_12)
+    };
+
+    freeze {
+        types;
+        IntegerType;
+        LongType;
+        FieldTypeVar_12;
+    }    
+
+}

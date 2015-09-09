@@ -15,6 +15,10 @@
  */
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 
 /**
@@ -41,6 +45,25 @@ class AliasTypeDescriptor <T> extends TypeDescriptor<T> {
         setName(name);
         this.type = type;
         this.registry = registry;
+        setConversions(toCollection(type.getConversions()));
+        setFields(toCollection(type.getFields()));
+        setOperations(toCollection(type.getOperations()));
+    }
+    
+    /**
+     * Turns an iterable into a collection.
+     * 
+     * @param <T> the element type
+     * @param src the source iterable
+     * @return the collection containing all elements from <code>src</code>
+     */
+    private static <T> java.util.Collection<T> toCollection(Iterable<T> src) {
+        List<T> result = new ArrayList<T>();
+        Iterator<T> iter = src.iterator();
+        while (iter.hasNext()) {
+            result.add(iter.next());
+        }
+        return result;
     }
     
     /**

@@ -44,14 +44,14 @@
         visit if-branch
         var <- test::pComp
         -> name(DecisionVariable) with (test::pComp) = pComp
-        -> getValue(DecisionVariable) with (test::pComp) = null
+        -> getValue(DecisionVariable) with (test::pComp) = {pcString=inst1 : String, pcInt=10 : Integer}
         -> getAttribute(IvmlElement, IvmlElement) with (test::pComp, test::bindingTime) = test::bindingTime
         -> getIntegerValue(IvmlElement) with (test::bindingTime) = 100
         -> ==(Integer, Integer) with (100, 100) = true
         visit if-branch
         var <- test::pCompSeq
         -> name(DecisionVariable) with (test::pCompSeq) = pCompSeq
-        -> getValue(DecisionVariable) with (test::pCompSeq) = null
+        -> getValue(DecisionVariable) with (test::pCompSeq) = {{pcString=inst1 : String, pcInt=10 : Integer}, {pcString=inst2 : String, pcInt=11 : Integer}} : pCompoundSequence
         -> getAttribute(IvmlElement, IvmlElement) with (test::pCompSeq, test::bindingTime) = test::bindingTime
         -> getIntegerValue(IvmlElement) with (test::bindingTime) = 100
         -> ==(Integer, Integer) with (100, 100) = true

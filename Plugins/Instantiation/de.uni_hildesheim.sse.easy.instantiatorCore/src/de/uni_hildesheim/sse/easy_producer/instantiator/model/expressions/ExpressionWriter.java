@@ -75,17 +75,29 @@ public class ExpressionWriter extends AbstractWriter implements IExpressionVisit
      * Prints the iterator declarators if appropriate.
      * 
      * @param call the call expression to print the declarators for
+     * @throws VilException if visiting fails
      */
-    private void printIteratorDeclarators(CallExpression call) {
+    private void printIteratorDeclarators(CallExpression call) throws VilException {
         if (call.isIteratorCall()) {
             ExpressionEvaluator eval = (ExpressionEvaluator) call.getArgument(1).getExpression();
-            VariableDeclaration iter = eval.getIteratorVariable();
-            if (iter.hasExplicitType()) {
-                printType(iter.getType());
+            for (int d = 0; d < eval.getDeclaratorsCount(); d++) {
+                if (d > 0) {
+                    print(",");
+                    printWhitespace();
+                }
+                VariableDeclaration decl = eval.getDeclarator(d);
+                if (decl.hasExplicitType()) {
+                    printType(decl.getType());
+                    printWhitespace();
+                }
+                print(decl.getName());
                 printWhitespace();
+                if (null != decl.getExpression()) {
+                    print("=");
+                    printWhitespace();
+                    decl.getExpression().accept(this);
+                }
             }
-            print(iter.getName());
-            printWhitespace();
             print(Constants.DECLARATOR_SEPARATOR);
             printWhitespace();
         }        

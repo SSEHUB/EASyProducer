@@ -59,6 +59,7 @@ import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Constant;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ConstructorExecution;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ContainerInitializer;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Declaration;
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.DeclarationUnit;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Declarator;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.EqualityExpression;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.EqualityExpressionPart;
@@ -406,57 +407,91 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                     } catch (VilException e) {
                         throw new TranslatorException(e, call, ExpressionDslPackage.Literals.CALL__PARAM);
                     }
-                    if (null != arg0Type && arg0Type.isCollection() && arg0Type.getGenericParameterCount() > 0) {
-                        result = new ArrayList<I>();
-                        for (Declaration d : decl.getDecl()) {
-                            // currently we consider only 1 dimension, see exception below
-                            TypeDescriptor<?> dimensionType = arg0Type.getGenericParameterType(0); 
-                            TypeDescriptor<?> t;
-                            if (null != d.getType()) {
-                                t = processType(d.getType(), resolver);
-                                if (!t.isAssignableFrom(dimensionType)) {
-                                    throw new TranslatorException("type '" + t.getVilName() + "' of iterator '" 
-                                        + toString(d.getId()) + "' does not match type '" + dimensionType.getVilName() + 
-                                        "' of the expression", call, ExpressionDslPackage.Literals.CALL__PARAM, 
-                                        ErrorCodes.CANNOT_RESOLVE_ITER);
-                                }
+                    if (null != arg0Type) {
+                        if (arg0Type.isCollection()) {
+                            if (arg0Type.getGenericParameterCount() > 0) {
+                                result = processDeclarators(call, arg0Type.getGenericParameterType(0), resolver);
                             } else {
-                                t = dimensionType; // not explicitly given, take over
+                                throw new TranslatorException("cannot apply iterator as collection does not declare "
+                                    + "generic types", call, ExpressionDslPackage.Literals.CALL__DECL, 
+                                    ErrorCodes.CANNOT_RESOLVE_ITER);
                             }
-                            for (String name : d.getId()) {
-                                I var = createVariableDeclaration(name, t, false, null);
-                                var.setHasExplicitType(null != d.getType());
-                                result.add(var);
+                        } else {
+                            result = processDeclarators(call, null, resolver);
+                        }
+                    }
+
+                    if (null == result) { 
+                        throw new TranslatorException("at least one declarator / iterator must be given", 
+                            call, ExpressionDslPackage.Literals.CALL__DECL, ErrorCodes.CANNOT_RESOLVE_ITER);
+                    } else {
+                        int freeCount = 0;
+                        for (int i = 0; i < result.size(); i++) {
+                            I declarator = result.get(i);
+                            if (null == declarator.getExpression()) {
+                                freeCount++;
                             }
                         }
+                        if (freeCount != 1) { // currently we consider only 1 dimension 
+                            throw new TranslatorException("currently an iterator call accepts exactly one unbound / "
+                                + "auto-bound iterator variable", call, ExpressionDslPackage.Literals.CALL__DECL, 
+                                ErrorCodes.CANNOT_RESOLVE_ITER);
+                        }
                         
-                    }
-                    if (result.size() != 1) {
-                        throw new TranslatorException("currently an iterator call accepts exactly one iterator variable", 
-                            call, ExpressionDslPackage.Literals.CALL__DECL, ErrorCodes.CANNOT_RESOLVE_ITER);
                     }
                 }
             }
         }
         return result;
     }
-    
+
     /**
-     * Turns a list of names into its string representation.
+     * Processes a declarator.
      * 
-     * @param names the list of names
-     * @return the string representation
+     * @param call the actual call
+     * @param implicitType the implicit type of the declarator to check against or to use if no explicit type is given,
+     *   may be <b>null</b> if the underlying type declares the collection implicitly (see deleteJavaCall). In the 
+     *   latter case, the type must be explicitly given by the declarator.
+     * @param resolver the resolver
+     * @return a list of resolved declarators (at the moment at maximum 1)
+     * @throws TranslatorException in case that the translation fails
      */
-    private static String toString(List<String> names) {
-        StringBuilder tmp = new StringBuilder();
-        for (String name : names) {
-            if (tmp.length() > 0) {
-                tmp.append(", ");
+    private ArrayList<I> processDeclarators(Call call, TypeDescriptor<?> implicitType, R resolver) throws TranslatorException {
+        ArrayList<I> result = new ArrayList<I>();
+        Declarator decl = call.getDecl();
+        for (Declaration d : decl.getDecl()) {
+            // currently we consider only 1 dimension, see exception below
+            //TypeDescriptor<?> dimensionType = arg0Type.getGenericParameterType(0); 
+            TypeDescriptor<?> t;
+            if (null != d.getType()) {
+                t = processType(d.getType(), resolver);
+                if (null != implicitType && !t.isAssignableFrom(implicitType)) {
+                    throw new TranslatorException("type '" + t.getVilName() + "' of iterator does not match type '" 
+                        + implicitType.getVilName() + 
+                        "' of the expression", call, ExpressionDslPackage.Literals.CALL__PARAM, 
+                        ErrorCodes.CANNOT_RESOLVE_ITER);
+                }
+            } else {
+                if (null == implicitType) {
+                    throw new TranslatorException("on non-collection iterators the declarator must given with type", 
+                        call, ExpressionDslPackage.Literals.CALL__PARAM, ErrorCodes.CANNOT_RESOLVE_ITER);
+                }
+                t = implicitType; // not explicitly given, take over
             }
-            tmp.append(name);
+            boolean first = true;
+            for (DeclarationUnit unit : d.getUnits()) {
+                Expression deflt = null;
+                if (null != unit.getDeflt()) {
+                    deflt = processExpression(unit.getDeflt(), resolver);
+                }
+                I var = createVariableDeclaration(unit.getId(), t, false, deflt);
+                var.setHasExplicitType(first && null != d.getType());
+                result.add(var);
+                first = false;
+            }
         }
-        return tmp.toString();
-    }
+        return result;
+    }        
     
     /**
      * Resolves call arguments.
@@ -473,17 +508,38 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
         String name;
         // arguments already contains implicit parameter and in case of iteration its type
         if (null != call) {
+            
             if (null != call.getParam()) {
                 if (null != iterators) {
                     resolver.pushLevel();
                     resolver.add(iterators);
                 }
+                int count = 0;
                 for (de.uni_hildesheim.sse.vil.expressions.expressionDsl.NamedArgument param : call.getParam().getParam()) {
+                    String paramName = param.getName();
                     Expression ex;
                     try {
                         ex = processExpression(param.getEx(), resolver);
-                        if (null != iterators) {
-                            ex = new ExpressionEvaluator(ex, iterators.get(0)); // currently only 1 iterator        
+                        if (0 == count && null != iterators) { // just on the first "parameter"
+                            if (null != paramName) {
+                                // if "named", turn into assignment -> grammar
+                                I var = resolver.resolve(paramName, false);
+                                if (null == var) {
+                                    throw new TranslatorException("Cannot resolve '" + paramName + "'", param, 
+                                        ExpressionDslPackage.Literals.PARAMETER__NAME, ErrorCodes.CANNOT_RESOLVE_ITER);
+                                }
+                                ex = new ValueAssignmentExpression(var, ex);
+                                paramName = null;
+                            }
+                            // find actual iterator (the one without default)
+                            I iterator = null;
+                            for (int i = 0; null == iterator && i < iterators.size(); i++) {
+                                I iter = iterators.get(i);
+                                if (null == iter.getExpression()) {
+                                    iterator = iter;
+                                }
+                            }
+                            ex = new ExpressionEvaluator(ex, iterator, iterators);        
                         }
                     } catch (TranslatorException e) {
                         if (ErrorCodes.CANNOT_RESOLVE_ITER == e.getId()) {
@@ -492,7 +548,8 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                             throw new TranslatorException(e, param, ExpressionDslPackage.Literals.NAMED_ARGUMENT__EX);
                         }
                     }
-                    arguments.add(new CallArgument(param.getName(), ex));
+                    arguments.add(new CallArgument(paramName, ex));
+                    count++;
                 }
                 if (null != iterators) {
                     resolver.popLevel();
@@ -527,7 +584,7 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                     resolver.pushLevel();
                     I iterVar = createVariableDeclaration("ITER", arg0Type.getGenericParameterType(0), false, null);
                     resolver.add(iterVar); // iterVar shall be strictly local!
-                    ex = new ExpressionEvaluator(processExpression(param.getEx(), resolver), iterVar);
+                    ex = new ExpressionEvaluator(processExpression(param.getEx(), resolver), iterVar, null);
                     resolver.popLevel();
                 }
             } catch (VilException e) {

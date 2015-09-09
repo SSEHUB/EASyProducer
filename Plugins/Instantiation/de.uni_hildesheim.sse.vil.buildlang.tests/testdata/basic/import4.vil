@@ -1,0 +1,10 @@
+import generics;
+
+vilScript importTest3 () {
+
+    main() = : {
+        Integer impVal = test;
+        test = 7;
+    }
+
+}

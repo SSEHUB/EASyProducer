@@ -1,0 +1,16 @@
+project alternative5 {
+  version v0;
+  
+  compound Node {
+      Boolean fast = false;
+  }
+  
+  Node node = {fast = true};
+  refTo(Node) nodeRef = refBy(node);
+  
+  freeze {
+      node;
+      nodeRef;
+  };
+  
+}

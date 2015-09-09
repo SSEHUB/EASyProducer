@@ -173,10 +173,13 @@ public class RuleDescriptor {
         VariableDeclaration[] result;
         VariableDeclaration[] matchResult;
         String predefined;
+        String predefinedAlias;
         if (Side.LHS == side) {
             predefined = "LHS";
+            predefinedAlias = "TO";
         } else {
             predefined = "RHS";
+            predefinedAlias = "FROM";
         }
         List<VariableDeclaration> vars = null;
         List<VariableDeclaration> matchVars = null; // match vars only in front if needed
@@ -188,20 +191,22 @@ public class RuleDescriptor {
             }
             for (int m = 0; m < matches.length; m++) {
                 String name = predefined;
+                String nameAlias = predefinedAlias;
                 if (m > 0) {
                     name += m;
+                    nameAlias += m;
                 }
-                // register the match expression itself (for instantiators which work e.g. with path matches)
-                if (Side.RHS == side) {
+                if (Side.RHS == side) { // register the match expression itself
                     VariableDeclaration matchDecl 
                         = new VariableDeclaration(name + MATCH_VAR_POSTFIX, matches[m].inferType());
                     matchVars.add(matchDecl);
                     resolver.add(matchDecl);
-                }
-                // register the iterator expression
+                    resolver.addAlias(nameAlias + "_" + MATCH_VAR_POSTFIX, matchDecl);
+                } // register the iterator expression
                 VariableDeclaration varDecl = new VariableDeclaration(name, matches[m].getEntryType());
                 vars.add(varDecl);
                 resolver.add(varDecl);
+                resolver.addAlias(nameAlias, varDecl);
             }
         }
         RuleCallExpression[] calls = getRuleCalls(side);

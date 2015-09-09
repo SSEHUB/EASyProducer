@@ -195,6 +195,47 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
         }
         return result;
     }
+    
+    /**
+     * Processes elements in this set by applying to given expression.
+     * 
+     * @param <T> the element type
+     * @param collection the collection to iterate over
+     * @param evaluator the evaluator holding the iterator / expression to apply
+     * @return the aggregated result, <b>null</b> in case of a non-aggregating evaluation
+     * @throws VilException in case that selection fails
+     */
+    public static <T> Object apply(Collection<T> collection, ExpressionEvaluator evaluator) throws VilException {
+        Iterator<T> iter = collection.iterator();
+        evaluator.initializeDeclarators();
+        while (iter.hasNext()) {
+            evaluator.evaluate(iter.next());
+        }
+        return evaluator.getResultValue();
+    }
+    
+    /**
+     * Collects the application of <code>evaluator</code> to <code>collection</code>.
+     *
+     * @param <T> the element type
+     * @param collection the collection to select from
+     * @param evaluator the evaluator instance
+     * @return the application results
+     * @throws VilException in case that evaluation or selection fails
+     */
+    public static <T> List<Object> collect(Collection<T> collection, ExpressionEvaluator evaluator) 
+        throws VilException {
+        List<Object> result = new ArrayList<Object>();
+        Iterator<T> iter = collection.iterator();
+        while (iter.hasNext()) {
+            T value = iter.next();
+            Object eval = evaluator.evaluate(value);
+            if (null != eval) {
+                result.add(eval);
+            }
+        }
+        return result;
+    }
 
     @Override
     public boolean isEmpty() {

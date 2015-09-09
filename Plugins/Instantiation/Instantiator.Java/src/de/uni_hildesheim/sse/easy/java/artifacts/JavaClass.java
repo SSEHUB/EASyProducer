@@ -10,10 +10,13 @@ import org.eclipse.jdt.core.dom.QualifiedName;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactModel;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FileArtifact;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IArtifactVisitor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Binary;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Text;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionEvaluator;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArraySet;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationMeta;
@@ -104,6 +107,60 @@ public class JavaClass extends JavaParentFragmentArtifact {
     }
 
     /**
+     * Deletes a statement within a method. Right now only JavaCall can be
+     * deleted.
+     * 
+     * @param evaluator
+     *            A wrapper type to pass and evaluate
+     * @throws VilException
+     *             in case something goes wrong
+     */
+    public void deleteStatement(ExpressionEvaluator evaluator) throws VilException {
+        for (JavaMethod method : methods()) {
+            method.deleteStatement(evaluator);
+        }
+    }
+
+    /**
+     * Deletes a method and all java calls assigned to this method.
+     * 
+     * @param evaluator
+     *            A wrapper type to pass and evaluate
+     * @throws VilException
+     *             in case something goes wrong
+     */
+    public void deleteMethodWithCalls(ExpressionEvaluator evaluator) throws VilException {
+        for (JavaMethod method : methods()) {
+            Object object = evaluator.evaluate(method);
+            if (null != object && object instanceof Boolean && Boolean.TRUE == ((Boolean) object).booleanValue()) {
+                System.out.println(object);
+                Set<FileArtifact> allFileArtifacts = getArtifactModel().selectByType(JavaFileArtifact.class);
+                for (FileArtifact fileArtifact : allFileArtifacts) {
+                    System.out.println(fileArtifact.getPath().getPath());
+                }
+                for (FileArtifact fileArtifact : allFileArtifacts) {
+                    JavaFileArtifact javaFileArtifact = (JavaFileArtifact) fileArtifact;
+                    for (JavaClass javaClass : javaFileArtifact.classes()) {
+                        for (JavaMethod javaMethod : javaClass.methods()) {
+                            InvocationRemovalVisitor visitor = new InvocationRemovalVisitor(
+                                method.getMethodDeclaration());
+                            javaMethod.getMethodDeclaration().accept(visitor);
+                            if (visitor.hasBeenDeleted()) {
+                                javaMethod.notifyChanged();
+                                javaMethod.getParent().store();
+                            }
+                        }
+                        System.out.println("end of method for");
+                    }
+                    System.out.println("end of class for");
+                }
+                System.out.println("end of fileartifact for");
+                method.delete();
+            }
+        }
+    }
+
+    /**
      * Returns the inner classes of this class.
      * 
      * @return Set with inner classes
@@ -112,7 +169,8 @@ public class JavaClass extends JavaParentFragmentArtifact {
         final List<JavaClass> list = new ArrayList<JavaClass>();
         typeDeclaration.accept(new ASTVisitor() {
             public boolean visit(TypeDeclaration typeDeclaration) {
-                // The below code is used to check if it is not a top-level class
+                // The below code is used to check if it is not a top-level
+                // class
                 if (!typeDeclaration.isPackageMemberTypeDeclaration()) {
                     list.add(new JavaClass(typeDeclaration, JavaClass.this));
                 }
@@ -146,11 +204,12 @@ public class JavaClass extends JavaParentFragmentArtifact {
         });
         return new ArraySet<JavaAttribute>(list.toArray(new JavaAttribute[list.size()]), JavaAttribute.class);
     }
-    
+
     /**
      * Returns the specified Java attribute.
      * 
-     * @param name the name of the attribute
+     * @param name
+     *            the name of the attribute
      * @return the attribute or <b>null</b> if there is no such attribute
      */
     public JavaAttribute getAttributeByName(final String name) {
@@ -188,11 +247,17 @@ public class JavaClass extends JavaParentFragmentArtifact {
         return new ArraySet<JavaQualifiedName>(list.toArray(new JavaQualifiedName[list.size()]),
                 JavaQualifiedName.class);
     }
-    
+
     @Invisible
     @Override
     public String getStringValue(StringComparator comparator) {
         return "class '" + getNameSafe() + "'";
+    }
+
+    @Invisible
+    @Override
+    public ArtifactModel getArtifactModel() {
+        return getParent().getArtifactModel();
     }
 
 }

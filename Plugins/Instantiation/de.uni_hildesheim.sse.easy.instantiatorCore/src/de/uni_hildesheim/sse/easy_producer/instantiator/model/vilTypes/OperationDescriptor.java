@@ -596,5 +596,14 @@ public abstract class OperationDescriptor implements IMetaOperation {
     public OperationDescriptor specializeFor(TypeDescriptor<?> declaringType) {
         return this;
     }
+    
+    /**
+     * Returns whether this operation allows iterator aggregation.
+     * 
+     * @return <code>true</code> if allowed, <code>false</code>
+     */
+    public boolean allowsAggregation() {
+        return false;
+    }
 
 }

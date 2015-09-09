@@ -187,9 +187,20 @@ public class CopyVisitor implements IExpressionVisitor {
 
     @Override
     public Object visitExpressionEvaluator(ExpressionEvaluator ex) throws VilException {
-        VariableDeclaration iter = map(ex.getIteratorVariable(), false);
+        VariableDeclaration origIter = ex.getIteratorVariable();
+        VariableDeclaration iter = map(origIter, false);
         Expression expr = (Expression) ex.getExpression().accept(this);
-        Expression result = new ExpressionEvaluator(expr, iter);
+        List<VariableDeclaration> decl = new ArrayList<VariableDeclaration>();
+        for (int d = 0; d < ex.getDeclaratorsCount(); d++) {
+            VariableDeclaration declarator = ex.getDeclarator(d);
+            if (declarator == origIter) {
+                declarator = iter;
+            } else {
+                declarator = map(declarator, false);
+            }
+            decl.add(declarator);
+        }
+        Expression result = new ExpressionEvaluator(expr, iter, decl);
         result.inferType();
         return result;
     }

@@ -61,13 +61,14 @@ public class RtVilTypeRegistry extends TypeRegistry implements IClassNameMapperP
     public static final RtVilTypeRegistry INSTANCE = new RtVilTypeRegistry();
     private static ITypeAnalyzer typeAnalyzer;
     
+    
     /**
      * Prevents external creation.
      */
     private RtVilTypeRegistry() {
         super(TypeRegistry.DEFAULT);
     }
-    
+
     /**
      * Returns the type descriptor for the built-in type 'RtVilConcept'.
      * 
@@ -242,24 +243,24 @@ public class RtVilTypeRegistry extends TypeRegistry implements IClassNameMapperP
         
         @Override
         protected RtTypeDescriptor<T> resolve() throws VilException {
-            if (!isInitialized()) {
-                Field[] fields = getTypeClass().getFields();
-                List<FieldDescriptor> fd = new ArrayList<FieldDescriptor>();
-                for (int f = 0; f < fields.length; f++) {
-                    Field field = fields[f];
-                    boolean isVisible = Modifier.isPublic(field.getModifiers());
-                    String name = null;
-                    if (isVisible && null != typeAnalyzer) {
-                        name = typeAnalyzer.getVilName(field);
-                        isVisible &= typeAnalyzer.isVisible(fields[f]);
-                    }
-                    if (isVisible) {
-                        fd.add(new RtReflectionFieldDescriptor(this, fields[f], name, 
-                            typeAnalyzer.getFieldGenerics(fields[f])));
-                    }
-                }
-                setFields(fd);
-            }
+//            if (!isInitialized()) {
+//                Field[] fields = getTypeClass().getFields();
+//                List<FieldDescriptor> fd = new ArrayList<FieldDescriptor>();
+//                for (int f = 0; f < fields.length; f++) {
+//                    Field field = fields[f];
+//                    boolean isVisible = Modifier.isPublic(field.getModifiers());
+//                    String name = null;
+//                    if (isVisible && null != typeAnalyzer) {
+//                        name = typeAnalyzer.getVilName(field);
+//                        isVisible &= typeAnalyzer.isVisible(fields[f]);
+//                    }
+//                    if (isVisible) {
+//                        fd.add(new RtReflectionFieldDescriptor(this, fields[f], name, 
+//                            typeAnalyzer.getFieldGenerics(fields[f])));
+//                    }
+//                }
+//                setFields(fd);
+//            }
             super.resolve();
             for (int o = 0; o < getOperationsCount(); o++) {
                 OperationDescriptor op = getOperation(o);
@@ -268,6 +269,26 @@ public class RtVilTypeRegistry extends TypeRegistry implements IClassNameMapperP
                 }
             }
             return this;
+        }
+        
+        @Override
+        protected void resolveFields() {
+            Field[] fields = getTypeClass().getFields();
+            List<FieldDescriptor> fd = new ArrayList<FieldDescriptor>();
+            for (int f = 0; f < fields.length; f++) {
+                Field field = fields[f];
+                boolean isVisible = Modifier.isPublic(field.getModifiers());
+                String name = null;
+                if (isVisible && null != typeAnalyzer) {
+                    name = typeAnalyzer.getVilName(field);
+                    isVisible &= typeAnalyzer.isVisible(fields[f]);
+                }
+                if (isVisible) {
+                    fd.add(new RtReflectionFieldDescriptor(this, fields[f], name, 
+                        typeAnalyzer.getFieldGenerics(fields[f])));
+                }
+            }
+            setFields(fd);
         }
         
         @Override
@@ -483,6 +504,12 @@ public class RtVilTypeRegistry extends TypeRegistry implements IClassNameMapperP
                             done(cls);
                         }
                     }
+                }
+            }
+            if (null == result) {
+                ITypeAnalyzer analyzer = RtVilTypeRegistry.getTypeAnalyzer();
+                if (null != analyzer) {
+                    result = analyzer.resolveTypeFallback(name);
                 }
             }
             return result;

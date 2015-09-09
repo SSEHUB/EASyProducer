@@ -1,0 +1,27 @@
+-> main(Project, Configuration, Project) with (<project>, <config>, <project>)
+    f <- classpathTest/src/MethodFile.java
+    -> defaultClass(JavaFileArtifact) with (classpathTest/src/MethodFile.java) = class 'MethodFile'
+    cls <- class 'MethodFile'
+    -> getType(JavaCall) with (call 'info') = Logger
+    -> ==(String, String) with (Logger, Logger) = true
+    -> getName(JavaCall) with (call 'info') = info
+    -> ==(String, String) with (info, warning) = false
+    -> and(Boolean, Boolean) with (true, false) = false
+    -> getType(JavaCall) with (call 'printToConsole') = TestClass
+    -> ==(String, String) with (TestClass, Logger) = false
+    -> getName(JavaCall) with (call 'printToConsole') = printToConsole
+    -> ==(String, String) with (printToConsole, warning) = false
+    -> and(Boolean, Boolean) with (false, false) = false
+    -> getType(JavaCall) with (call 'println') = PrintStream
+    -> ==(String, String) with (PrintStream, Logger) = false
+    -> getName(JavaCall) with (call 'println') = println
+    -> ==(String, String) with (println, warning) = false
+    -> and(Boolean, Boolean) with (false, false) = false
+    -> deleteStatement(JavaClass, ExpressionEvaluator) with (class 'MethodFile', <evaluator>)
+    -> getQualifiedName(JavaCall) with (call 'info') = java.util.logging.Logger
+    -> ==(String, String) with (java.util.logging.Logger, java.io.PrintStream) = false
+    -> getQualifiedName(JavaCall) with (call 'printToConsole') = MethodFile.TestClass
+    -> ==(String, String) with (MethodFile.TestClass, java.io.PrintStream) = false
+    -> getQualifiedName(JavaCall) with (call 'println') = java.io.PrintStream
+    -> ==(String, String) with (java.io.PrintStream, java.io.PrintStream) = true
+    -> deleteStatement(JavaClass, ExpressionEvaluator) with (class 'MethodFile', <evaluator>)

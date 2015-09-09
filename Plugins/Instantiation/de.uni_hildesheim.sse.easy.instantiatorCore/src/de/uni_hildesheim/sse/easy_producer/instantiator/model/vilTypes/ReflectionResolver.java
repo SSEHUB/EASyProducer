@@ -110,7 +110,7 @@ public class ReflectionResolver {
                 if (Object.class == cls) {
                     result = ReflectionTypeDescriptor.ANY;
                 } else {
-                    result = ReflectionTypeDescriptor.VOID;
+                    result = ReflectionTypeDescriptor.VOID; // "disable" unknown types / methods
                 }
             }
         }

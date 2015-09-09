@@ -14,6 +14,8 @@
     <property name="test.suite.instantiation.ant" value="test.de.uni_hildesheim.sse.ant.AllTests"/>
     <property name="test.plugin.instantiation.aspectj" value="de.uni_hildesheim.sse.easy.instantiator.aspectj.test"/>
     <property name="test.suite.instantiation.aspectj" value="test.de.uni_hildesheim.sse.aspectj.AllTests"/>
+    <property name="test.plugin.instantiation.rtVil" value="de.uni_hildesheim.sse.vil.rt.tests"/>
+    <property name="test.suite.instantiation.rtVil" value="de.uni_hildesheim.sse.vil.rt.tests.AllTests"/>
     <property name="test.plugin.vil" value="de.uni_hildesheim.sse.vil.buildlang.tests"/>
     <property name="test.suite.vil" value="test.de.uni_hildesheim.sse.vil.buildlang.AllTests"/>
     <property name="test.plugin.template" value="de.uni_hildesheim.sse.vil.templatelang.tests"/>
@@ -288,6 +290,17 @@
           <property name="arch" value="x86"/>
           <property name="timeout" value="240000"/>
         </ant>
+        <!-- rt-VIL test -->
+        <ant target="core-test" antfile="plugins/${test.eclipse.testFW.dir}/library.xml" dir="${test.eclipse.path}">
+          <property name="data-dir" value="${test.eclipse.workspace.dir}"/>
+          <property name="plugin-name" value="${test.plugin.instantiation.rtVil}"/>
+          <property name="classname" value="${test.suite.instantiation.rtVil}"/>
+          <property name="extraVMargs" value="-Dvil.rt.testdata.home=${home.vil.rt.tests.dir}/testdata -javaagent:${jacoco.path}/jacocoagent.jar=append=true,destfile=${basedir}/${coverage.results.dir}/${ant.project.name}.exec" />
+          <property name="os" value="win32"/>
+          <property name="ws" value="win32"/>
+          <property name="arch" value="x86"/>
+          <property name="timeout" value="240000"/>
+        </ant>        
       </target>
 	
 	<target name="report">

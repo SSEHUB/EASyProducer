@@ -221,7 +221,12 @@ public class VilException extends AbstractException {
     /**
      * Defines an identifier if access to a field fails due to read/write restrictions.
      */
-    public static final int ID_RUNTIME_READ_WRITE = 30015;
+    public static final int ID_RUNTIME_READ_WRITE = 30016;
+    
+    /**
+     * Use of an invalid iterator combination.
+     */
+    public static final int ID_INVALID_ITERATOR = 30017;
 
     /**
      * For serialization.

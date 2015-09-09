@@ -12,6 +12,7 @@ import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ConstructorExecution;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ContainerInitializer;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ContainerInitializerExpression;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Declaration;
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.DeclarationUnit;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Declarator;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.EqualityExpression;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.EqualityExpressionPart;
@@ -123,6 +124,12 @@ public class ExpressionDslSemanticSequencer extends AbstractDelegatingSemanticSe
 			case ExpressionDslPackage.DECLARATION:
 				if(context == grammarAccess.getDeclarationRule()) {
 					sequence_Declaration(context, (Declaration) semanticObject); 
+					return; 
+				}
+				else break;
+			case ExpressionDslPackage.DECLARATION_UNIT:
+				if(context == grammarAccess.getDeclarationUnitRule()) {
+					sequence_DeclarationUnit(context, (DeclarationUnit) semanticObject); 
 					return; 
 				}
 				else break;
@@ -423,7 +430,16 @@ public class ExpressionDslSemanticSequencer extends AbstractDelegatingSemanticSe
 	
 	/**
 	 * Constraint:
-	 *     (type=Type? id+=Identifier id+=Identifier*)
+	 *     (id=Identifier deflt=Expression?)
+	 */
+	protected void sequence_DeclarationUnit(EObject context, DeclarationUnit semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (type=Type? units+=DeclarationUnit units+=DeclarationUnit*)
 	 */
 	protected void sequence_Declaration(EObject context, Declaration semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);

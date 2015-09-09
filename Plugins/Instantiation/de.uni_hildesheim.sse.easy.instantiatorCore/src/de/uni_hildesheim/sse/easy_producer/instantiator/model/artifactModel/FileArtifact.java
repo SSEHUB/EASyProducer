@@ -95,6 +95,16 @@ public class FileArtifact extends CompositeArtifact implements IFileSystemArtifa
     public void delete() throws VilException {
         path.delete();
     }
+    
+    /**
+     * Returns the artifact model.
+     * 
+     * @return the artifact model
+     */
+    @Invisible
+    public ArtifactModel getArtifactModel() {
+        return path.getArtifactModel();
+    }
 
     /**
      * Returns the simple name of this artifact. 

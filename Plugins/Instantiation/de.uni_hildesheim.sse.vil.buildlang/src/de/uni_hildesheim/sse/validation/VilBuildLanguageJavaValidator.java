@@ -13,6 +13,7 @@ import de.uni_hildesheim.sse.dslCore.TranslationResult;
 import de.uni_hildesheim.sse.dslCore.validation.ValidationUtils;
 import de.uni_hildesheim.sse.dslCore.validation.ValidationUtils.IModelValidationCallback;
 import de.uni_hildesheim.sse.dslCore.validation.ValidationUtils.MessageType;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
 import de.uni_hildesheim.sse.vilBuildLanguage.ImplementationUnit;
  
@@ -47,6 +48,11 @@ public class VilBuildLanguageJavaValidator extends AbstractVilBuildLanguageJavaV
         @Override
         public void print(TranslationResult<Script> result, Writer out) {
             BuildLangModelUtility.INSTANCE.print(result, out, true, false);
+        }
+        
+        @Override
+        public boolean isValidationEnabled(URI uri) {
+            return null != BuildModel.INSTANCE.locations().getLocationFor(uri);
         }
         
     };

@@ -204,7 +204,7 @@ public abstract class ModelTranslator
 
     /**
      * Processes a set of variable declarations and adds successfully processed
-     * ones to the current resolver level..
+     * ones to the current resolver level.
      * 
      * @param decls the declarations to be processed (successfully processed declarations will be removed, may be 
      *   modified as a side effect)
@@ -420,7 +420,42 @@ public abstract class ModelTranslator
                 break;
             }
         }
+        addImportedVariablesToResolver(model, false, new HashSet<M>());
     }
+    
+    /**
+     * Adds (transitively) imported variables to the actual resolver.
+     * 
+     * @param model the model to consider
+     * @param addModel whether the variables of <code>model</code> shall be added (<code>true</code>)
+     *   or whether only its imports shall be traversed
+     * @param done collects models that are already processed
+     * @see #addVisibleDeclarationsToResolver(IModel, Resolver)
+     */
+    private void addImportedVariablesToResolver(M model, boolean addModel, Set<M> done) {
+        if (!done.contains(model)) {
+            if (addModel) {
+                addVisibleDeclarationsToResolver(model, resolver);
+            }
+            done.add(model);
+            for (int i = 0; i < model.getImportsCount(); i++) {
+                @SuppressWarnings("unchecked")
+                M resolved = (M) model.getImport(i).getResolved();
+                if (null != resolved) {
+                    addImportedVariablesToResolver(resolved, true, done);
+                }
+            }
+        }
+    }
+    
+    /**
+     * Adds visible declarations of <code>model</code> to <code>resolver</code>. This method 
+     * shall not consider imports as it is called by {@link #addImportedVariablesToResolver(IModel, boolean, Set)}.
+     * 
+     * @param model the model to consider
+     * @param resolver the resolver to add variables to
+     */
+    protected abstract void addVisibleDeclarationsToResolver(M model, R resolver);
     
     /**
      * Is called in case of resolution problems.

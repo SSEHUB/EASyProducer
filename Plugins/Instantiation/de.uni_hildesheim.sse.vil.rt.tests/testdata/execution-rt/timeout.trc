@@ -1,5 +1,8 @@
 -> s0(Project, Configuration, Project) with (<project>, <config>, <project>)
     -> s2()
         -> t1()
+            Reasoner execution: true
+        Reasoner execution: true
         -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)
+    Reasoner execution: true
     -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)

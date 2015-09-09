@@ -191,6 +191,36 @@ public class ExecutionTests extends AbstractTest {
     public void testApply2() throws IOException {
         assertEqual("apply2");
     }
+
+    /**
+     * Tests an apply iterator without result.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testApply3() throws IOException {
+        assertEqual("apply3");
+    }
+    
+    /**
+     * Tests an apply iterator with result.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testApply4() throws IOException {
+        assertEqual("apply4");
+    }
+    
+    /**
+     * Tests a select operation with an aggregating iterator (failing).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testApply4Fail() throws IOException {
+        assertEqual("apply4fail", VilException.ID_INVALID_ITERATOR);
+    }
     
     /**
      * Tests simple content.
@@ -291,6 +321,16 @@ public class ExecutionTests extends AbstractTest {
     @Test
     public void testAlternative4() throws IOException {
         assertEqual("alternative4");
+    }
+    
+    /**
+     * Tests an alternative on an IVML compound access.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testAlternative5() throws IOException {
+        assertEqualWithIvml("alternative5", "alternative5");
     }
     
     /**
@@ -467,6 +507,27 @@ public class ExecutionTests extends AbstractTest {
     @Test
     public void testContent10() throws IOException {
         assertEqual("content10");
+    }
+    
+    /**
+     * Tests the collect operation on set.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testCollect1() throws IOException {
+        assertEqual("collect1");
+    }
+
+    /**
+     * Tests the collect operation on sequence. The trace shows alpha-num sorted collections while
+     * the output file the correct sequence.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testCollect2() throws IOException {
+        assertEqual("collect2");
     }
         
     /**
@@ -974,6 +1035,16 @@ public class ExecutionTests extends AbstractTest {
     public void testQm7o1() throws IOException {
         assertEqualWithIvml("qm7.1", "qm7");
     }
+    
+    /**
+     * Tests switch-defaults (contributed by C. Qin, QualiMaster).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testQm8() throws IOException {
+        assertEqualWithIvml("qm8", "qm8");
+    }
 
     /**
      * Tests sorting IVML elements via expression.
@@ -993,6 +1064,16 @@ public class ExecutionTests extends AbstractTest {
     @Test
     public void testDispatch3() throws IOException {
         assertEqualWithIvml("dispatch3", "dispatch3");
+    }
+
+    /**
+     * Tests nested fields on references.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testReferences1() throws IOException {
+        assertEqualWithIvml("references1", "references1");
     }
 
 }

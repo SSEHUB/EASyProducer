@@ -783,5 +783,15 @@ public abstract class AbstractModelTranslator<M extends Script, L extends Langua
             EStructuralFeature causeFeature) {
         expressionTranslator.warning(exception, cause, causeFeature);
     }
+    
+    @Override
+    protected void addVisibleDeclarationsToResolver(M model, Resolver resolver) {
+        for (int v = 0; v < model.getVariableDeclarationCount(); v++) {
+            VariableDeclaration decl = model.getVariableDeclaration(v);
+            if (!resolver.contains(decl)) { // don't overwrite existing ones, they have priority
+                resolver.add(decl);
+            }
+        }
+    }
 
 }

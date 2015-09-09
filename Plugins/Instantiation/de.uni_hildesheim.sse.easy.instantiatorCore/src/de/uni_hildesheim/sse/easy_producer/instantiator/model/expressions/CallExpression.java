@@ -281,7 +281,7 @@ public class CallExpression extends AbstractCallExpression implements IArgumentP
                         VilException.ID_CANNOT_RESOLVE);
                 }
             }
-            TypeDescriptor<?> result = resolved.getReturnType();
+            TypeDescriptor<?> result = considerIteratorResult(resolved.getReturnType());
             TypeDescriptor<?>[] returnGenerics = null;
             if (resolved.isTypeSelect() && arguments[1].getExpression() instanceof VilTypeExpression) {
                 // 2 param are ensured by isTypeSelect, determine actual return type
@@ -341,6 +341,7 @@ public class CallExpression extends AbstractCallExpression implements IArgumentP
         return type;
     }
     
+    
     /**
      * Returns the number of arguments.
      * 
@@ -388,6 +389,33 @@ public class CallExpression extends AbstractCallExpression implements IArgumentP
     public boolean isIteratorCall() {
         return null != resolved && getArgumentsCount() == 2 
             && getArgument(1).getExpression() instanceof ExpressionEvaluator;
+    }
+
+    /**
+     * Considers the potential explicit result type of an iterator.
+     * 
+     * @param result the result type so far
+     * @return the result type
+     * @throws VilException if aggregation shall be applied to a non-aggregating iterator operation
+     */
+    private TypeDescriptor<?> considerIteratorResult(TypeDescriptor<?> result) throws VilException {
+        if (isIteratorCall()) {
+            ExpressionEvaluator eval = ((ExpressionEvaluator) getArgument(1).getExpression());
+            TypeDescriptor<?> evalType = eval.getResultType();
+            boolean allowsAggregation = resolved.allowsAggregation();
+            if (null != evalType) {
+                result = evalType;
+                if (!allowsAggregation) {
+                    throw new VilException("operation " + resolved.getSignature() + " does not support "
+                        + "aggregating iterators", VilException.ID_INVALID_ITERATOR);
+                }
+            } else {
+                if (allowsAggregation) { // no agregation, no result
+                    result = TypeRegistry.voidType();
+                }
+            }
+        }
+        return result;
     }
 
 }

@@ -1,0 +1,3 @@
+-> main(Configuration, Artifact) with (<config>, test.texts)
+    cfg <- <config>
+    a <- references1::Element::alg

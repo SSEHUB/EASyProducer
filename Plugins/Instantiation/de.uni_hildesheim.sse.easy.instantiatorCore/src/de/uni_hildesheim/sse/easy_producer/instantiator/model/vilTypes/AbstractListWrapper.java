@@ -172,4 +172,10 @@ public abstract class AbstractListWrapper<T> extends AbstractCollectionWrapper<T
         return result;
     }
 
+    @Override
+    @Invisible
+    public String toString() {
+        return list.toString();
+    }
+
 }

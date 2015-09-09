@@ -199,8 +199,13 @@ Declarator:
     ;
 
 Declaration:    
-    type=Type? id+=Identifier (',' id+=Identifier)*
+    type=Type? units+=DeclarationUnit (',' units+=DeclarationUnit)*
     ;
+    
+DeclarationUnit:
+    id=Identifier
+    ('=' deflt=Expression)?
+;    
     
 Call:    
     name=QualifiedPrefix 

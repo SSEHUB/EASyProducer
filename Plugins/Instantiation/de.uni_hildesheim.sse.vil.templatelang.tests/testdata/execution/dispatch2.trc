@@ -11,12 +11,12 @@
         -> createValueAssignment(DecisionVariable, Boolean) with (test::pBoolean, true)
             -> name(DecisionVariable) with (test::pBoolean) = pBoolean
         dv <- test::pComp
-        -> value(DecisionVariable) with (test::pComp) = null
-        -> createValueAssignment(DecisionVariable, Any) with (test::pComp, null)
+        -> value(DecisionVariable) with (test::pComp) = {pcString=inst1 : String, pcInt=10 : Integer}
+        -> createValueAssignment(DecisionVariable, Any) with (test::pComp, {pcString=inst1 : String, pcInt=10 : Integer})
             -> name(DecisionVariable) with (test::pComp) = pComp
         dv <- test::pCompSeq
-        -> value(DecisionVariable) with (test::pCompSeq) = null
-        -> createValueAssignment(DecisionVariable, Any) with (test::pCompSeq, null)
+        -> value(DecisionVariable) with (test::pCompSeq) = {{pcString=inst1 : String, pcInt=10 : Integer}, {pcString=inst2 : String, pcInt=11 : Integer}} : pCompoundSequence
+        -> createValueAssignment(DecisionVariable, Any) with (test::pCompSeq, {{pcString=inst1 : String, pcInt=10 : Integer}, {pcString=inst2 : String, pcInt=11 : Integer}} : pCompoundSequence)
             -> name(DecisionVariable) with (test::pCompSeq) = pCompSeq
         dv <- test::pEnum
         -> value(DecisionVariable) with (test::pEnum) = val2

@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.dslCore.translation.ErrorCodes;
@@ -218,6 +219,27 @@ public class BasicTests extends AbstractBasicTest<Script> {
     @Test
     public void testImport2() throws IOException {
         assertEqual("import2", "importTest2");
+    }
+    
+    /**
+     * Tests accessing and modifying imported variables.
+     * 
+     * @throws IOException should not occur
+     */
+    @Ignore("xText generation issue, see github #2")
+    @Test
+    public void testImport3() throws IOException {
+        assertEqual("import3", "importTest3");
+    }
+    
+    /**
+     * Tests accessing and modifying imported variables.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testImport4() throws IOException {
+        assertEqual("import4", "importTest4");
     }
     
     /**
@@ -478,6 +500,16 @@ public class BasicTests extends AbstractBasicTest<Script> {
     @Test
     public void testTypedRuleFail2() throws IOException {
         assertEqual("typedRuleFail2", ErrorCodes.MISSING);
+    }
+
+    /**
+     * Tests whether declarations in alternatives occur in different scopes.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testAlternativeDeclaration() throws IOException {
+        assertEqual("alternativeDeclaration");
     }
 
 }

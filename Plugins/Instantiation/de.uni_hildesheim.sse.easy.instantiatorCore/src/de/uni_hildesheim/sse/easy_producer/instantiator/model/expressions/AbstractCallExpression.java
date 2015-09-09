@@ -697,7 +697,12 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
                 while (!failure && a < operation.getParameterCount()) {
                     // consider just parameter not named arguments
                     if (null == args[a]) {
-                        failure = true;
+                        if (a - offset < 0) {
+                            failure = true;
+                        } else {
+                            types[a - offset] = new CallArgument((TypeDescriptor<?>) operation.getParameterType(a));
+                            a++;
+                        }
                     } else {
                         IMetaType tmp;
                         if (args[a] instanceof EnumValue) {

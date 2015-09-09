@@ -72,7 +72,8 @@ public class JavaUtilities {
                         jdkPath = jdkInstallationDir.getAbsolutePath();
                     }
                 } else {
-                    String response = getCommandOutput("whereis javac");
+                    // whereis may return more than one result separated by a whitespace
+                    String response = getCommandOutput("which javac");
                     if (response != null) {
                         //The response will be "javac:  /usr ... "
                         //so parse from the "/" - if no "/" then there was an error with the command

@@ -7,7 +7,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.channels.NetworkChannel;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +17,7 @@ import java.util.Map;
 import org.apache.commons.io.FilenameUtils;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.ToolFactory;
+import org.eclipse.jdt.core.compiler.IProblem;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.ASTVisitor;
@@ -22,12 +25,15 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.formatter.CodeFormatter;
+import org.eclipse.jdt.internal.compiler.batch.FileSystem.Classpath;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.text.edits.MalformedTreeException;
 import org.eclipse.text.edits.TextEdit;
 
+import de.uni_hildesheim.sse.easy.java.JavaSettings;
+import de.uni_hildesheim.sse.easy.java.JavaSettingsInitializer;
 import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
 import de.uni_hildesheim.sse.easy_producer.instantiator.JavaUtilities;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactCreator;
@@ -93,16 +99,19 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
     }
 
     /**
-     * Return whether one of the classes, the methods or attributes has this annotation.
+     * Return whether one of the classes, the methods or attributes has this
+     * annotation.
      * 
      * @param annotation
      *            the (qualified) name of the annotation
      * @param field
-     *            the name of the annotation field (if <b>null</b> or empty the {@link JavaAnnotation#DEFAULT_FIELD
-     *            default name "value"} is used
+     *            the name of the annotation field (if <b>null</b> or empty the
+     *            {@link JavaAnnotation#DEFAULT_FIELD default name "value"} is
+     *            used
      * @param value
      *            the name of the annotation value
-     * @return <code>true</code> if this annotation is present, <code>false</code> else
+     * @return <code>true</code> if this annotation is present,
+     *         <code>false</code> else
      */
     public boolean hasAnnotation(String annotation, String field, String value) {
         Set<JavaClass> classes = this.classes();
@@ -110,7 +119,8 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
         if (null == field || 0 == field.length()) {
             field = JavaAnnotation.DEFAULT_FIELD;
         }
-        // TODO efficiency: directly rely on classList and cached structures in JavaAttribute and JavaMethod
+        // TODO efficiency: directly rely on classList and cached structures in
+        // JavaAttribute and JavaMethod
         for (JavaClass javaClass : classes) {
             // Check the classes
             hasAnnotation = checkAnnotation(annotation, field, value, hasAnnotation, javaClass.annotations());
@@ -157,11 +167,16 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
      */
     private boolean checkAnnotation(String annotation, String field, String value, boolean hasAnnotation,
             Set<JavaAnnotation> annotations) {
-        String simpleName = JavaAnnotation.toSimpleName(annotation); // as we do not resolve, we must be lazy
+        String simpleName = JavaAnnotation.toSimpleName(annotation); // as we do
+                                                                     // not
+                                                                     // resolve,
+                                                                     // we must
+                                                                     // be lazy
         for (JavaAnnotation javaAnnotation : annotations) {
             try {
-                if ((javaAnnotation.getQualifiedName().equals(annotation) || javaAnnotation.getName()
-                        .equals(simpleName)) && javaAnnotation.getAnnotationValue(field).equals(value)) {
+                if ((javaAnnotation.getQualifiedName().equals(annotation)
+                        || javaAnnotation.getName().equals(simpleName))
+                        && javaAnnotation.getAnnotationValue(field).equals(value)) {
                     hasAnnotation = true;
                     break;
                 }
@@ -185,7 +200,8 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
 
     @Override
     public void store() throws VilException {
-        // store changes in the representation if there are some, store tree afterwards
+        // store changes in the representation if there are some, store tree
+        // afterwards
         // both changes shall not overlap...
         super.store();
         if (changed) {
@@ -202,8 +218,8 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
                 writer = new BufferedWriter(new FileWriter(file));
                 String code = unitNode.toString();
                 CodeFormatter codeFormatter = ToolFactory.createCodeFormatter(null);
-                TextEdit textEdit = codeFormatter.format(CodeFormatter.K_COMPILATION_UNIT, code, 0, 
-                    code.length(), 0, null);
+                TextEdit textEdit = codeFormatter.format(CodeFormatter.K_COMPILATION_UNIT, code, 0, code.length(), 0,
+                        null);
                 IDocument doc = new Document(code);
                 try {
                     if (null != textEdit) {
@@ -247,11 +263,12 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
         }
         return new ArraySet<JavaClass>(classList.toArray(new JavaClass[classList.size()]), JavaClass.class);
     }
-    
+
     /**
      * Returns the specified classes of this java file.
      * 
-     * @param name the name of the class
+     * @param name
+     *            the name of the class
      * @return the specified class or <b>null</b>
      */
     public JavaClass getClassByName(String name) {
@@ -259,7 +276,7 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
         if (null == classList) {
             initialize();
         }
-        
+
         for (int c = 0; null == result && c < classList.size(); c++) {
             JavaClass cls = classList.get(c);
             try {
@@ -272,10 +289,10 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
         }
         return result;
     }
-    
+
     /**
-     * Returns the default class of this Java File artifact, i.e., the class corresponding to the name 
-     * of this artifact.
+     * Returns the default class of this Java File artifact, i.e., the class
+     * corresponding to the name of this artifact.
      * 
      * @return the default class or <b>null</b> if there is none
      */
@@ -308,7 +325,7 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
      *            the data to initialize from (source code as characters)
      */
     private void initialize(char[] data) {
-        // TODO seperate inner classes
+        // TODO separate inner classes
         classList = new ArrayList<JavaClass>();
         ASTParser parser = ASTParser.newParser(AST.JLS4);
         parser.setSource(data);
@@ -316,19 +333,45 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
         // Set options to resolve bindings
         parser.setBindingsRecovery(true);
         parser.setResolveBindings(true);
-        Map<?, ?> options = JavaCore.getOptions();
+        Map<String, String> options = JavaCore.getOptions();
+        options.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_1_7);
         parser.setCompilerOptions(options);
         String unitName = FilenameUtils.getBaseName(file.getName());
         parser.setUnitName(unitName);
-//        String[] sources = {file.getParent()}; 
         String[] classpath = JavaUtilities.JRE_CLASS_PATH;
-//        parser.setEnvironment(classpath, sources, new String[] {"UTF-8"}, true);
-        parser.setEnvironment(classpath, classpath, new String[] {"UTF-8"}, true);
+        String sourcePath;
+        if (null != getArtifactModel()) {
+            Object classPathFromScript = getArtifactModel().getSettings(JavaSettings.CLASSPATH);
+            if (null != classPathFromScript) {
+                sourcePath = String.valueOf(classPathFromScript);
+            } else {
+                sourcePath = getArtifactModel().getBasePath();
+            }
+        } else {
+            // TODO: better way?
+            sourcePath = classpath[0];
+        }
+        // WORKAROUND! FIX IT!
+        if (sourcePath.contains("//")) {
+//            logger.warn(sourcePath  + " contains //");
+            sourcePath = sourcePath.replaceAll("//", "/");
+        }
+        String[] sources = {sourcePath};
+        parser.setEnvironment(classpath, sources, new String[] {"UTF-8" }, true);
         // Create AST
         unitNode = (CompilationUnit) parser.createAST(null);
+        // Check for problems
+        IProblem[] problems = unitNode.getProblems();
+        if (problems != null && problems.length > 0) {
+            logger.warn("Got " + problems.length + " problems compiling the source file: " + file.getAbsolutePath());
+            for (IProblem problem : problems) {
+                logger.warn(problem.getMessage());
+            }
+        }
         unitNode.accept(new ASTVisitor() {
             public boolean visit(TypeDeclaration typeDeclaration) {
-                // The below code is used to check if it is not a top-level class
+                // The below code is used to check if it is not a top-level
+                // class
                 if (typeDeclaration.isPackageMemberTypeDeclaration()) {
                     classList.add(new JavaClass(typeDeclaration, JavaFileArtifact.this));
                 }
@@ -347,7 +390,8 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
      */
     @Invisible
     public static String readFileToString(File filePath) {
-        // TODO check whether this can be replaced by related apache.commons method
+        // TODO check whether this can be replaced by related apache.commons
+        // method
         StringBuilder fileData = new StringBuilder(1000);
         BufferedReader reader;
         try {
@@ -430,9 +474,11 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
     }
 
     /**
-     * Renames all (qualified) package names, imports and packages in this Java artifact from <code>oldName</code> to
-     * <code>newName</code>. Nothing happens, if <code>oldName</code> cannot be found. However, the caller is
-     * responsible for potential name clashes due to the execution of this operation.
+     * Renames all (qualified) package names, imports and packages in this Java
+     * artifact from <code>oldName</code> to <code>newName</code>. Nothing
+     * happens, if <code>oldName</code> cannot be found. However, the caller is
+     * responsible for potential name clashes due to the execution of this
+     * operation.
      * 
      * @param oldName
      *            the old package name
@@ -451,9 +497,10 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
     }
 
     /**
-     * Renames all (qualified) package names, imports and packages in this Java artifact as stated by
-     * <code>nameMapping</code>. Nothing happens, if <code>oldName</code> cannot be found. However, the caller is
-     * responsible for potential name clashes due to the execution of this operation.
+     * Renames all (qualified) package names, imports and packages in this Java
+     * artifact as stated by <code>nameMapping</code>. Nothing happens, if
+     * <code>oldName</code> cannot be found. However, the caller is responsible
+     * for potential name clashes due to the execution of this operation.
      * 
      * @param nameMapping
      *            pairs of old and new package names (key = old, value = new)
@@ -470,16 +517,18 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
     }
 
     /**
-     * Renames all (qualified) package names in this Java artifact from <code>oldName</code> to <code>newName</code>.
-     * Nothing happens, if <code>oldName</code> cannot be found. However, the caller is responsible for potential name
-     * clashes due to the execution of this operation.
+     * Renames all (qualified) package names in this Java artifact from
+     * <code>oldName</code> to <code>newName</code>. Nothing happens, if
+     * <code>oldName</code> cannot be found. However, the caller is responsible
+     * for potential name clashes due to the execution of this operation.
      * 
      * @param oldName
      *            the old package name
      * @param newName
      *            the new package name
      * @throws VilException
-     *             in case that the operation cannot be executed due to syntax or I/O problems
+     *             in case that the operation cannot be executed due to syntax
+     *             or I/O problems
      */
     public void renamePackages(String oldName, String newName) throws VilException {
         Map<String, String> tmp = new HashMap<String, String>();
@@ -488,14 +537,16 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
     }
 
     /**
-     * Renames all (qualified) package names in this Java artifact as stated by <code>nameMapping</code>. Nothing
-     * happens, if package names cannot be found. However, the caller is responsible for potential name clashes due to
-     * the execution of this operation.
+     * Renames all (qualified) package names in this Java artifact as stated by
+     * <code>nameMapping</code>. Nothing happens, if package names cannot be
+     * found. However, the caller is responsible for potential name clashes due
+     * to the execution of this operation.
      * 
      * @param nameMapping
      *            pairs of old and new package names (key = old, value = new)
      * @throws VilException
-     *             in case that the operation cannot be executed due to syntax or I/O problems
+     *             in case that the operation cannot be executed due to syntax
+     *             or I/O problems
      */
     public void renamePackages(Map<String, String> nameMapping) throws VilException {
         JavaPackage javaPackage = this.javaPackage();
@@ -506,16 +557,18 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
     }
 
     /**
-     * Renames all imports in this Java artifact from <code>oldName</code> to <code>newName</code>. Nothing happens, if
-     * <code>oldName</code> cannot be found. However, the caller is responsible for potential name clashes due to the
-     * execution of this operation.
+     * Renames all imports in this Java artifact from <code>oldName</code> to
+     * <code>newName</code>. Nothing happens, if <code>oldName</code> cannot be
+     * found. However, the caller is responsible for potential name clashes due
+     * to the execution of this operation.
      * 
      * @param oldName
      *            the old import name
      * @param newName
      *            the new import name
      * @throws VilException
-     *             in case that the operation cannot be executed due to syntax or I/O problems
+     *             in case that the operation cannot be executed due to syntax
+     *             or I/O problems
      */
     public void renameImports(String oldName, String newName) throws VilException {
         Map<String, String> tmp = new HashMap<String, String>();
@@ -524,14 +577,16 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
     }
 
     /**
-     * Renames all imports in this Java artifact as stated by <code>nameMapping</code>. Nothing happens, if package
-     * names cannot be found. However, the caller is responsible for potential name clashes due to the execution of this
-     * operation.
+     * Renames all imports in this Java artifact as stated by
+     * <code>nameMapping</code>. Nothing happens, if package names cannot be
+     * found. However, the caller is responsible for potential name clashes due
+     * to the execution of this operation.
      * 
      * @param nameMapping
      *            pairs of old and new import names (key = old, value = new)
      * @throws VilException
-     *             in case that the operation cannot be executed due to syntax or I/O problems
+     *             in case that the operation cannot be executed due to syntax
+     *             or I/O problems
      */
     public void renameImports(Map<String, String> nameMapping) throws VilException {
         Set<JavaImport> imports = this.imports();
@@ -545,16 +600,18 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
     }
 
     /**
-     * Renames all qualified names in this Java artifact from <code>oldName</code> to <code>newName</code>. Nothing
-     * happens, if <code>oldName</code> cannot be found. However, the caller is responsible for potential name clashes
-     * due to the execution of this operation.
+     * Renames all qualified names in this Java artifact from
+     * <code>oldName</code> to <code>newName</code>. Nothing happens, if
+     * <code>oldName</code> cannot be found. However, the caller is responsible
+     * for potential name clashes due to the execution of this operation.
      * 
      * @param oldName
      *            the old qualified name
      * @param newName
      *            the new qualified name
      * @throws VilException
-     *             in case that the operation cannot be executed due to syntax or I/O problems
+     *             in case that the operation cannot be executed due to syntax
+     *             or I/O problems
      */
     public void renameQualifiedNames(String oldName, String newName) throws VilException {
         Map<String, String> tmp = new HashMap<String, String>();
@@ -563,14 +620,16 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
     }
 
     /**
-     * Renames all qualified names in this Java artifact as stated by <code>nameMapping</code>. Nothing happens, if
-     * package names cannot be found. However, the caller is responsible for potential name clashes due to the execution
-     * of this operation.
+     * Renames all qualified names in this Java artifact as stated by
+     * <code>nameMapping</code>. Nothing happens, if package names cannot be
+     * found. However, the caller is responsible for potential name clashes due
+     * to the execution of this operation.
      * 
      * @param nameMapping
      *            pairs of old and new qualified names (key = old, value = new)
      * @throws VilException
-     *             in case that the operation cannot be executed due to syntax or I/O problems
+     *             in case that the operation cannot be executed due to syntax
+     *             or I/O problems
      */
     public void renameQualifiedNames(Map<String, String> nameMapping) throws VilException {
         Set<JavaClass> classes = this.classes();
@@ -583,11 +642,12 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
             }
         }
     }
-    
+
     /**
      * Conversion operation.
      * 
-     * @param val the value to be converted
+     * @param val
+     *            the value to be converted
      * @return the converted value or null
      */
     @Invisible
@@ -599,13 +659,15 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
         }
         return convertedValue;
     }
-    
+
     /**
      * Conversion operation.
      * 
-     * @param val the value to be converted
+     * @param val
+     *            the value to be converted
      * @return the converted value
-     * @throws VilException in case that creating the artifact fails
+     * @throws VilException
+     *             in case that creating the artifact fails
      */
     @Invisible
     @Conversion
@@ -613,13 +675,15 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
         Path path = Path.convert(val);
         return convert(path);
     }
-    
+
     /**
      * Conversion operation.
      * 
-     * @param path the path to be converted
+     * @param path
+     *            the path to be converted
      * @return the converted value
-     * @throws VilException in case that creating the artifact fails
+     * @throws VilException
+     *             in case that creating the artifact fails
      */
     @Invisible
     @Conversion

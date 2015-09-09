@@ -12,6 +12,9 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IProjectD
 import de.uni_hildesheim.sse.model.confModel.Configuration;
 import de.uni_hildesheim.sse.model.management.VarModel;
 import de.uni_hildesheim.sse.model.varModel.Project;
+import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerConfiguration;
+import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasoningResult;
+import de.uni_hildesheim.sse.reasoning.reasoner.Reasoner;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
 import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
@@ -154,8 +157,11 @@ public class ProjectDescriptor implements IProjectDescriptor {
             if (null == model) {
                 model = new Project(modelName);
             }
-            result = new Configuration(model);
-            CONFIG_CACHE.put(modelName, result);
+            result = new Configuration(model, true);
+//            Reasoner reasoner = new Reasoner();
+//            ReasoningResult rresult = reasoner.propagate(model, result, new ReasonerConfiguration(), ProgressObserver.NO_OBSERVER);
+//            System.out.println("Reasoning Result is: " + rresult.getMessageCount());
+//            CONFIG_CACHE.put(modelName, result);
         }
         return result;
     }

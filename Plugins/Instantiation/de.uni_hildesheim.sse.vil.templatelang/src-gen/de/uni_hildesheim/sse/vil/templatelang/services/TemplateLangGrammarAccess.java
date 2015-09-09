@@ -1545,13 +1545,23 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//Declaration:
-	//	type=Type? id+=Identifier ("," id+=Identifier)*;
+	//	type=Type? units+=DeclarationUnit ("," units+=DeclarationUnit)*;
 	public ExpressionDslGrammarAccess.DeclarationElements getDeclarationAccess() {
 		return gaExpressionDsl.getDeclarationAccess();
 	}
 	
 	public ParserRule getDeclarationRule() {
 		return getDeclarationAccess().getRule();
+	}
+
+	//DeclarationUnit:
+	//	id=Identifier ("=" deflt=Expression)?;
+	public ExpressionDslGrammarAccess.DeclarationUnitElements getDeclarationUnitAccess() {
+		return gaExpressionDsl.getDeclarationUnitAccess();
+	}
+	
+	public ParserRule getDeclarationUnitRule() {
+		return getDeclarationUnitAccess().getRule();
 	}
 
 	//Call:

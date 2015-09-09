@@ -135,7 +135,11 @@
     </genClasses>
     <genClasses ecoreClass="ExpressionDsl.ecore#//Declaration">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ExpressionDsl.ecore#//Declaration/type"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ExpressionDsl.ecore#//Declaration/id"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ExpressionDsl.ecore#//Declaration/units"/>
+    </genClasses>
+    <genClasses ecoreClass="ExpressionDsl.ecore#//DeclarationUnit">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ExpressionDsl.ecore#//DeclarationUnit/id"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ExpressionDsl.ecore#//DeclarationUnit/deflt"/>
     </genClasses>
     <genClasses ecoreClass="ExpressionDsl.ecore#//Call">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ExpressionDsl.ecore#//Call/name"/>

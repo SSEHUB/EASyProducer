@@ -979,7 +979,7 @@ public class TypeRegistry {
             throw new IllegalArgumentException("this function cannot be applied to the default type registry");
         }
         boolean success = false;
-        TypeDescriptor<?> existing = getType(name);
+        TypeDescriptor<?> existing = getType(name, false);
         if (null == existing || equals(type, existing)) {
             types.put(name, new AliasTypeDescriptor<T>(this, name, type));
             success = true;

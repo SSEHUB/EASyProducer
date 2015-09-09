@@ -40,6 +40,7 @@ import de.uni_hildesheim.sse.model.varModel.values.Value;
 public class ChangeHistory implements IVilType, IStringValueProvider {
 
     private Configuration configuration;
+    private CSet originalValues = new CSet();
     private CSet committed = new CSet();
     private Stack<CSet> changeSetStack = new Stack<CSet>();
     private IConfigurationChangeListener changeListener = new ChangeListener();
@@ -180,6 +181,22 @@ public class ChangeHistory implements IVilType, IStringValueProvider {
             rollback();
         }
     }
+    
+    /**
+     * Returns the original value of a variable before any explicit change. This method
+     * is made accessible through <code>variable</code> itself.
+     * 
+     * @param variable the 
+     * @return the original value
+     */
+    @Invisible
+    public Value getOriginalValue(AbstractIvmlVariable variable) {
+        Value value = originalValues.get(variable);
+        if (null == value) {
+            value = variable.getVariable().getValue();
+        }
+        return value;
+    }
 
     /**
      * Rolls back all all changes.
@@ -190,7 +207,7 @@ public class ChangeHistory implements IVilType, IStringValueProvider {
         for (Map.Entry<AbstractIvmlVariable, Value> entry : committed.entrySet()) {
             entry.getKey().setValue(entry.getValue());
         }
-        clear();
+        clear(true);
     }
 
     /**
@@ -202,6 +219,9 @@ public class ChangeHistory implements IVilType, IStringValueProvider {
     @Invisible
     void notifyChanged(AbstractIvmlVariable variable, Value value) {
         CSet changeSet;
+        if (!originalValues.containsKey(variable)) {
+            originalValues.put(variable, variable.getVariable().getValue());
+        }
         if (!changeSetStack.isEmpty()) {
             changeSet = changeSetStack.peek();
         } else {
@@ -253,11 +273,16 @@ public class ChangeHistory implements IVilType, IStringValueProvider {
 
     /**
      * Clears the history.
+     * 
+     * @param resetOriginalValues also reset original values
      */
     @Invisible
-    public void clear() {
+    public void clear(boolean resetOriginalValues) {
         changeSetStack.clear();
         committed.clear();
+        if (resetOriginalValues) {
+            originalValues.clear();
+        }
     }
     
 }

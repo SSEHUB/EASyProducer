@@ -31,11 +31,11 @@
             -> getPipelineObservation(FrozenSystemState, String, IObservable) with (<FrozenSystemState>, pipeline, EXECUTORS) = 5.0
             pipeline.executors <- 5.0
             map {
-                map: s <- ALtest::Pipeline::
-                -> bindValues(Source, Pipeline, FrozenSystemState) with (ALtest::Pipeline::, ALtest::pipelines {0}, <FrozenSystemState>)
+                map: s <- ALtest::Pipeline::sources {0}
+                -> bindValues(Source, Pipeline, FrozenSystemState) with (ALtest::Pipeline::sources {0}, ALtest::pipelines {0}, <FrozenSystemState>)
                     map {
-                        map: n <- ALtest::Source::
-                        -> bindValues(FamilyElement, Pipeline, FrozenSystemState) with (ALtest::Source::, ALtest::pipelines {0}, <FrozenSystemState>)
+                        map: n <- ALtest::Source::next {0}
+                        -> bindValues(FamilyElement, Pipeline, FrozenSystemState) with (ALtest::Source::next {0}, ALtest::pipelines {0}, <FrozenSystemState>)
                             pipName <- pipeline
                             eltName <- process
                             -> getPipelineElementObservation(FrozenSystemState, String, String, IObservable) with (<FrozenSystemState>, pipeline, process, CAPACITY) = 1.0
@@ -43,8 +43,8 @@
                             -> getPipelineElementObservation(FrozenSystemState, String, String, IObservable) with (<FrozenSystemState>, pipeline, process, EXECUTORS) = 1.0
                             elt.executors <- 1.0
                             map {
-                                map: n <- ALtest::FamilyElement::
-                                -> bindValues(Node, Pipeline, FrozenSystemState) with (ALtest::FamilyElement::, ALtest::pipelines {0}, <FrozenSystemState>)
+                                map: n <- ALtest::FamilyElement::next {0}
+                                -> bindValues(Node, Pipeline, FrozenSystemState) with (ALtest::FamilyElement::next {0}, ALtest::pipelines {0}, <FrozenSystemState>)
                             }
                     }
             }
@@ -58,22 +58,24 @@
             -> ==(IvmlElement, Any) with (ALtest::Pipeline::name, pipeline) = true
             visit if-branch
             map {
-                map: src <- ALtest::Pipeline::
-                -> assignFirst(Source) with (ALtest::Pipeline::)
+                map: src <- ALtest::Pipeline::sources {0}
+                -> assignFirst(Source) with (ALtest::Pipeline::sources {0})
                     map {
-                        map: n <- ALtest::Source::
-                        -> assignFirst(FamilyElement) with (ALtest::Source::)
+                        map: n <- ALtest::Source::next {0}
+                        -> assignFirst(FamilyElement) with (ALtest::Source::next {0})
                             fam <- ALtest::FamilyElement::family
                             -> isConfigured(DecisionVariable) with (ALtest::FamilyElement::actual) = true
                             -> !(Boolean) with (true) = false
                             visit else-branch
                             map {
-                                map: n <- ALtest::FamilyElement::
-                                -> assignFirst(Node) with (ALtest::FamilyElement::)
+                                map: n <- ALtest::FamilyElement::next {0}
+                                -> assignFirst(Node) with (ALtest::FamilyElement::next {0})
                             }
                     }
             }
         }
+        Reasoner execution: true
+    Reasoner execution: true
     -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)
         -> selectChangedWithContext(Configuration) with (<config>) = <config>
         qm <- <config>

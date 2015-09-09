@@ -19,34 +19,36 @@
             -> ==(IvmlElement, Any) with (QM1::Pipeline::name, pip) = true
             visit if-branch
             map {
-                map: src <- QM1::Pipeline::
-                -> assignFirst(Source) with (QM1::Pipeline::)
+                map: src <- QM1::Pipeline::sources {0}
+                -> assignFirst(Source) with (QM1::Pipeline::sources {0})
                     map {
-                        map: n <- QM1::Source::
-                        -> assignFirst(FamilyElement) with (QM1::Source::)
+                        map: n <- QM1::Source::next {0}
+                        -> assignFirst(FamilyElement) with (QM1::Source::next {0})
                             fam <- QM1::FamilyElement::family
                             -> isConfigured(DecisionVariable) with (QM1::FamilyElement::actual) = false
                             -> !(Boolean) with (false) = true
                             visit if-branch
-                            -> toSequence(Set) with ({QM1::Family::, QM1::Family::}) = {QM1::Family::, QM1::Family::}
-                            -> first(Sequence) with ({QM1::Family::, QM1::Family::}) = QM1::Family::
-                            elt.actual <- QM1::Family::
+                            -> toSequence(Set) with ({QM1::Family::members {0}, QM1::Family::members {1}}) = {QM1::Family::members {0}, QM1::Family::members {1}}
+                            -> first(Sequence) with ({QM1::Family::members {0}, QM1::Family::members {1}}) = QM1::Family::members {0}
+                            elt.actual <- QM1::Family::members {0}
                             map {
                             }
                     }
             }
         }
+        Reasoner execution: true
+    Reasoner execution: true
     -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)
         -> selectChangedWithContext(Configuration) with (<config>) = <config>
         qm <- <config>
         map {
             map: p <- QM1::pipelines {0}
             map {
-                map: s <- QM1::Pipeline::
-                -> enact(Pipeline, Source) with (QM1::pipelines {0}, QM1::Pipeline::)
+                map: s <- QM1::Pipeline::sources {0}
+                -> enact(Pipeline, Source) with (QM1::pipelines {0}, QM1::Pipeline::sources {0})
                     map {
-                        map: n <- QM1::Source::
-                        -> enact(Pipeline, FamilyElement) with (QM1::pipelines {0}, QM1::Source::)
+                        map: n <- QM1::Source::next {0}
+                        -> enact(Pipeline, FamilyElement) with (QM1::pipelines {0}, QM1::Source::next {0})
                             family <- QM1::FamilyElement::family
                             -> create() with () = <CommandSequence>
                             cmd <- <CommandSequence>

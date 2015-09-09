@@ -12,6 +12,7 @@ import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ConstructorExecution;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ContainerInitializer;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ContainerInitializerExpression;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Declaration;
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.DeclarationUnit;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Declarator;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.EqualityExpression;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.EqualityExpressionPart;
@@ -278,6 +279,13 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * @generated
    */
   private EClass declarationEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass declarationUnitEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -1394,9 +1402,39 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getDeclaration_Id()
+  public EReference getDeclaration_Units()
   {
-    return (EAttribute)declarationEClass.getEStructuralFeatures().get(1);
+    return (EReference)declarationEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getDeclarationUnit()
+  {
+    return declarationUnitEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getDeclarationUnit_Id()
+  {
+    return (EAttribute)declarationUnitEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getDeclarationUnit_Deflt()
+  {
+    return (EReference)declarationUnitEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1936,7 +1974,11 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
 
     declarationEClass = createEClass(DECLARATION);
     createEReference(declarationEClass, DECLARATION__TYPE);
-    createEAttribute(declarationEClass, DECLARATION__ID);
+    createEReference(declarationEClass, DECLARATION__UNITS);
+
+    declarationUnitEClass = createEClass(DECLARATION_UNIT);
+    createEAttribute(declarationUnitEClass, DECLARATION_UNIT__ID);
+    createEReference(declarationUnitEClass, DECLARATION_UNIT__DEFLT);
 
     callEClass = createEClass(CALL);
     createEReference(callEClass, CALL__NAME);
@@ -2146,7 +2188,11 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
 
     initEClass(declarationEClass, Declaration.class, "Declaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getDeclaration_Type(), this.getType(), null, "type", null, 0, 1, Declaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getDeclaration_Id(), ecorePackage.getEString(), "id", null, 0, -1, Declaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getDeclaration_Units(), this.getDeclarationUnit(), null, "units", null, 0, -1, Declaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(declarationUnitEClass, DeclarationUnit.class, "DeclarationUnit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getDeclarationUnit_Id(), ecorePackage.getEString(), "id", null, 0, 1, DeclarationUnit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getDeclarationUnit_Deflt(), this.getExpression(), null, "deflt", null, 0, 1, DeclarationUnit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(callEClass, Call.class, "Call", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getCall_Name(), this.getQualifiedPrefix(), null, "name", null, 0, 1, Call.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

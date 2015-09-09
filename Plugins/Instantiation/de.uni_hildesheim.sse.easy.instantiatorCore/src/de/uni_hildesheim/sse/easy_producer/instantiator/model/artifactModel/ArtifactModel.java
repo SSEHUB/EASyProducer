@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -13,6 +14,7 @@ import org.apache.tools.ant.types.selectors.SelectorUtils;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ListSet;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.SettingsInitializerRegistry;
 import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
 import de.uni_hildesheim.sse.utils.progress.ProgressObserver.ITask;
 
@@ -30,6 +32,7 @@ public class ArtifactModel {
     private String basePath;
     private TreeMap<String, IFileSystemArtifact> fileArtifacts = new TreeMap<String, IFileSystemArtifact>();
     private TreeMap<Object, IArtifact> otherArtifacts = new TreeMap<Object, IArtifact>();
+    private Map<ProjectSettings, Object> settings;
     
     /**
      * Creates an artifact model instance as instantiation environment.
@@ -43,6 +46,7 @@ public class ArtifactModel {
         if (!basePath.endsWith(Path.SEPARATOR)) {
             basePath += Path.SEPARATOR;
         }
+        settings = SettingsInitializerRegistry.initializeSettings(base);
     }
     
     /**
@@ -449,6 +453,26 @@ public class ArtifactModel {
     void clear() {
         fileArtifacts.clear();
         otherArtifacts.clear();
+    }
+    
+    /**
+     * Sets the settings for the artifact model.
+     * 
+     * @param key ID for the settings object
+     * @param object the settings
+     */
+    public void setSettings(ProjectSettings key, Object object) {
+        settings.put(key, object);
+    }
+    
+    /**
+     * Returns the settings object for the specified key.
+     * 
+     * @param key the key assigned to the settings object
+     * @return the settings object
+     */
+    public Object getSettings(ProjectSettings key) {
+        return settings.get(key);
     }
     
 }

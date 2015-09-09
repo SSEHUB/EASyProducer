@@ -9,7 +9,9 @@ pBoolean = true
 compile at 100
 pEnum = val2
 compile at 100
+pComp = {pcString=inst1 : String, pcInt=10 : Integer}
 compile at 100
+pCompSeq = {{pcString=inst1 : String, pcInt=10 : Integer}, {pcString=inst2 : String, pcInt=11 : Integer}} : pCompoundSequence
 compile at 100
 1.23
 1.23

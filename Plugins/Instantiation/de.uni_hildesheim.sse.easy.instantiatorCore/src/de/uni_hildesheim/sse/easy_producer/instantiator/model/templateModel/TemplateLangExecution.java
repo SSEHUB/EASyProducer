@@ -358,9 +358,13 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
         // currently no indentation as content is not allowe in switch
         for (int a = 0; found < 0 && a < swtch.getAlternativeCount(); a++) {
             SwitchStatement.Alternative alt = swtch.getAlternative(a);
-            Expression cond = alt.getCondition();
-            Object condValue = cond.accept(this);
-            if (alt.isDefault() || equals(condValue, select)) {
+            boolean take = alt.isDefault();
+            if (!take) {
+                Expression cond = alt.getCondition();
+                Object condValue = cond.accept(this);
+                take = equals(condValue, select);
+            }
+            if (take) {
                 value = alt.getValue().accept(this);
                 found = a;
             }

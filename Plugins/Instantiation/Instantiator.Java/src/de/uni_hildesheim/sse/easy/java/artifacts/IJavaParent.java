@@ -1,7 +1,9 @@
 package de.uni_hildesheim.sse.easy.java.artifacts;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FragmentArtifact;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
 
 /**
  * The interface of an artifact / fragment which may act as the parent of a Java element.
@@ -34,4 +36,10 @@ interface IJavaParent {
      */
     public void store() throws VilException;
     
+    /**
+     * Returns the {@link ArtifactModel}.
+     * @return artifactmodel
+     */
+    @Invisible
+    public ArtifactModel getArtifactModel();
 }

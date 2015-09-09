@@ -30,7 +30,6 @@ import de.uni_hildesheim.sse.vil.templatelang.TemplateLangModelUtility;
  * A specific expression translator for the template language.
  * 
  * @author Holger Eichelberger
- *
  */
 public class ExpressionTranslator 
     extends de.uni_hildesheim.sse.vil.expressions.translation.ExpressionTranslator<VariableDeclaration, Resolver, 

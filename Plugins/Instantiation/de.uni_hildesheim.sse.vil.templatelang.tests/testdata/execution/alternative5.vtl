@@ -1,0 +1,17 @@
+@advice(alternative5)
+template alternative5(Configuration config, FileArtifact target) {
+
+    def main(Configuration config, FileArtifact target) {
+        if (node.fast) {
+            'fast'
+        } else {
+            'slow'
+        }
+        if (nodeRef.fast) {
+            'fastRef'
+        } else {
+            'slowRef'
+        }
+    }
+
+}

@@ -116,12 +116,12 @@ class ValueVisitor implements IValueVisitor {
 
     @Override
     public void visitCompoundValue(CompoundValue value) {
-        // via variables()
+        this.value = value;
     }
 
     @Override
     public void visitContainerValue(ContainerValue value) {
-        // via variables()
+        this.value = value;
     }
 
     @Override
@@ -144,10 +144,12 @@ class ValueVisitor implements IValueVisitor {
 
     @Override
     public void visitReferenceValue(ReferenceValue referenceValue) {
+        // shall be dereferenced
     }
 
     @Override
     public void visitMetaTypeValue(MetaTypeValue value) {
+        // shall not occur
     }
 
     @Override

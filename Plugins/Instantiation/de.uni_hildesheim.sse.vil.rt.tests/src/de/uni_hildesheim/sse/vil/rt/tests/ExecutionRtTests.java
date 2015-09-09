@@ -17,7 +17,6 @@ package de.uni_hildesheim.sse.vil.rt.tests;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +24,6 @@ import org.eclipse.emf.common.util.URI;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.dslCore.TranslationResult;
@@ -37,17 +35,11 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Script;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.Configuration;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IVariableFilter;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.NoVariableFilter;
-import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.model.management.VarModel;
 import de.uni_hildesheim.sse.model.varModel.Project;
-import de.uni_hildesheim.sse.reasoning.core.frontend.ReasonerFrontend;
-import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerConfiguration;
-import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasoningResult;
-import de.uni_hildesheim.sse.reasoning.reasoner.Reasoner;
 import de.uni_hildesheim.sse.utils.messages.AbstractException;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
-import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
 import de.uni_hildesheim.sse.vil.rt.tests.types.AlgorithmChangeCommand;
 import de.uni_hildesheim.sse.vil.rt.tests.types.CommandCollector;
 import de.uni_hildesheim.sse.vil.rt.tests.types.CommandSequence;
@@ -236,13 +228,13 @@ public class ExecutionRtTests extends AbstractExecutionTest<Script> {
      * 
      * @throws IOException should not occur
      */
-    @Ignore("Reasoner incremental mode is not working by now")
     @Test
     public void testStartup4() throws IOException {
         final String name = "startup4";
         File modelFile = createFile(name);
         CommandCollector.clear();
         Configuration cfg = getIvmlConfiguration("QM1", NoVariableFilter.INSTANCE);
+        
         URI uri = URI.createFileURI(modelFile.getAbsolutePath());
         TranslationResult<Script> result = getTestConfigurer().parse(uri);
         if (DEBUG) {
@@ -268,29 +260,8 @@ public class ExecutionRtTests extends AbstractExecutionTest<Script> {
         exec.addCustomArgument("values", null);
         exec.stopAfterBindValues();
         
-        ReasonerFrontend.getInstance().getRegistry().register(new Reasoner());
-        ReasonerConfiguration configuration = new ReasonerConfiguration();
-        configuration.setIncremental(true);
-        if (DEBUG) {
-            System.out.println(cfg.getConfiguration());
-        }
         try {
             exec.execute();
-            if (DEBUG) {
-                Iterator<IDecisionVariable> iter = cfg.getConfiguration().iterator();
-                while (iter.hasNext()) {
-                    IDecisionVariable var = iter.next();
-                    System.out.println(var.getDeclaration().getName() + " = " + var.getValue());
-                }
-            }
-            ReasoningResult res = ReasonerFrontend.getInstance().check(cfg.getConfiguration().getProject(), 
-                cfg.getConfiguration(), configuration, ProgressObserver.NO_OBSERVER);
-            if (DEBUG) {
-                System.out.println("RRESULT " + res.getMessageCount() + " " + res.hasConflict());
-                for (int r = 0; r < res.getMessageCount(); r++) {
-                    System.out.println(res.getMessage(r).getDescription());
-                }
-            }
         } catch (VilException e) {
             Assert.fail("unexpected exception " + e.getMessage());
         }
@@ -308,7 +279,6 @@ public class ExecutionRtTests extends AbstractExecutionTest<Script> {
         Assert.assertEquals("famelt1", algC.getElement());
         Assert.assertEquals("alg1", algC.getAlgorithm()); // see rtvil + ivml
     }
-
 
     /**
      * Returns the default configuration for the given variability model.
@@ -330,7 +300,9 @@ public class ExecutionRtTests extends AbstractExecutionTest<Script> {
             Assert.fail("unexpected exception: " + e.getMessage());
         }
         Assert.assertNotNull("IVML model '" + varModelName + "' not loaded", varModel);
-        return new Configuration(new de.uni_hildesheim.sse.model.confModel.Configuration(varModel), filter);
+        de.uni_hildesheim.sse.model.confModel.Configuration cfg 
+            = new de.uni_hildesheim.sse.model.confModel.Configuration(varModel);
+        return new Configuration(cfg , filter);
     }
 
     /**

@@ -171,9 +171,12 @@ public class ExpressionTranslator
             } catch (VilException e) {
                 throw new TranslatorException(e, alt, VilBuildLanguagePackage.Literals.ALTERNATIVE__EXPR);
             }
-            
+            resolver.pushLevel();
             IRuleBlock ifBlock = resolveStatementOrBlock(alt.getIf(), resolver);
+            resolver.popLevel();
+            resolver.pushLevel();
             IRuleBlock elseBlock = resolveStatementOrBlock(alt.getElse(), resolver);
+            resolver.popLevel();
             return new AlternativeExpression(cond, ifBlock, elseBlock);
         } catch (VilException e) {
             throw new TranslatorException(e, alt, VilBuildLanguagePackage.Literals.ALTERNATIVE__IF);

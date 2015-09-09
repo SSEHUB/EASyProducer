@@ -1,5 +1,8 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VariableDeclaration;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IStringValueProvider;
@@ -9,7 +12,9 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegis
 
 /**
  * A wrapper type to pass and evaluate expressions in VIL languages. This is helpful to realize
- * expression-based collection selection and projection operators.
+ * expression-based collection selection and projection operators. In case of aggregating expressions,
+ * consider multiple declarators, in particular {@link #getResultType()}
+ * and for evaluation {@link #initializeDeclarators()} and {@link #getResultValue()}.
  * 
  * @author Holger Eichelberger
  */
@@ -18,16 +23,97 @@ public class ExpressionEvaluator extends Expression implements IVilType, IString
     private EvaluationVisitor evaluationVisitor;
     private Expression expression;
     private VariableDeclaration iterator;
+    private List<VariableDeclaration> declarators;
 
     /**
      * Creates an expression evaluator.
      * 
      * @param expression the expression to evaluate on
-     * @param iterator the iterator variable
+     * @param iterator the iterator variable, one of <code>declarators</code>
+     * @param declarators all declarators of this expression in source sequence, if <b>null</b> a
+     *   list consisting of <code>iterator</code> will be created
      */
-    public ExpressionEvaluator(Expression expression, VariableDeclaration iterator) {
+    public ExpressionEvaluator(Expression expression, VariableDeclaration iterator, 
+        List<? extends VariableDeclaration> declarators) {
         this.expression = expression;
         this.iterator = iterator;
+        this.declarators = new ArrayList<VariableDeclaration>();
+        if (null == declarators) {
+            this.declarators.add(iterator);
+        } else {
+            for (int d = 0; d < declarators.size(); d++) {
+                this.declarators.add(declarators.get(d));
+            }
+        }
+    }
+    
+    /**
+     * Returns the number of declarators.
+     * 
+     * @return the number of declarators
+     */
+    public int getDeclaratorsCount() {
+        return declarators.size();
+    }
+    
+    /**
+     * Returns the specified declarator.
+     * 
+     * @param index the 0-based index
+     * @return the declarator
+     * @throws IndexOutOfBoundsException if <code>index &lt; 0 || index &gt;= {@link #getDeclaratorsCount()}</code>
+     */
+    public VariableDeclaration getDeclarator(int index) {
+        return declarators.get(index);
+    }
+    
+    /**
+     * Returns the explicit result type of an aggregating iterator.
+     * 
+     * @return the explicit result type (if there are multiple declarators than it's the first one
+     *   if it has a default value), <b>null</b> else
+     */
+    public TypeDescriptor<?> getResultType() {
+        TypeDescriptor<?> result = null;
+        VariableDeclaration resDecl = getResultDeclarator();
+        if (null != resDecl) {
+            result = resDecl.getType();
+        }
+        return result;
+    }
+
+    /**
+     * Returns the explicit result declarator of an aggregating iterator.
+     * 
+     * @return the explicit declarator (if there are multiple declarators than it's the first one
+     *   if it has a default value), <b>null</b> else
+     */
+    private VariableDeclaration getResultDeclarator() {
+        VariableDeclaration result = null;
+        if (declarators.size() > 1) {
+            VariableDeclaration decl = declarators.get(0);
+            if (null != decl.getExpression()) {
+                result = decl;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Returns the explicit result value of an aggregating iterator.
+     * 
+     * @return the explicit value, <b>null</b> else
+     * @throws VilException in case that obtaining the result value fails
+     */
+    public Object getResultValue() throws VilException {
+        Object result;
+        VariableDeclaration resDecl = getResultDeclarator();
+        if (null != resDecl) {
+            result = evaluationVisitor.getRuntimeEnvironment().getValue(resDecl);
+        } else {
+            result = null;
+        }
+        return result;
     }
     
     /**
@@ -96,6 +182,22 @@ public class ExpressionEvaluator extends Expression implements IVilType, IString
     @Override
     public String getStringValue(StringComparator comparator) {
         return "<evaluator>";
+    }
+    
+    /**
+     * Initializes the declarators in case of default values given and changes the 
+     * runtime environment accordingly.
+     * 
+     * @throws VilException if evaluating or setting the evaluated value fails
+     */
+    public void initializeDeclarators() throws VilException {
+        for (int d = 0; d < declarators.size(); d++) {
+            VariableDeclaration decl = declarators.get(d);
+            if (null != decl.getExpression()) {
+                evaluationVisitor.getRuntimeEnvironment().setValue(decl, 
+                    decl.getExpression().accept(evaluationVisitor));
+            }
+        }
     }
     
 }

@@ -15,6 +15,7 @@ import de.uni_hildesheim.sse.dslCore.TranslationResult;
 import de.uni_hildesheim.sse.dslCore.validation.ValidationUtils;
 import de.uni_hildesheim.sse.dslCore.validation.ValidationUtils.IModelValidationCallback;
 import de.uni_hildesheim.sse.dslCore.validation.ValidationUtils.MessageType;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.RtVilModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Script;
 import de.uni_hildesheim.sse.vil.rt.RtVilModelUtility;
 import de.uni_hildesheim.sse.vil.rt.rtVil.ImplementationUnit;
@@ -56,6 +57,11 @@ public class RtVilJavaValidator extends de.uni_hildesheim.sse.vil.rt.validation.
         @Override
         public void print(TranslationResult<Script> result, Writer out) {
             RtVilModelUtility.INSTANCE.print(result, out, true, false);
+        }
+        
+        @Override
+        public boolean isValidationEnabled(URI uri) {
+            return null != RtVilModel.INSTANCE.locations().getLocationFor(uri);
         }
         
     };

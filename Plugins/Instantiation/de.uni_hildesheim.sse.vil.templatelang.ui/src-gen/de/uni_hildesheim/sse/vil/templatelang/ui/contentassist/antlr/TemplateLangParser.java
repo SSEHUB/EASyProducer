@@ -115,6 +115,8 @@ public class TemplateLangParser extends AbstractContentAssistParser {
 					put(grammarAccess.getDeclaratorAccess().getGroup_1(), "rule__Declarator__Group_1__0");
 					put(grammarAccess.getDeclarationAccess().getGroup(), "rule__Declaration__Group__0");
 					put(grammarAccess.getDeclarationAccess().getGroup_2(), "rule__Declaration__Group_2__0");
+					put(grammarAccess.getDeclarationUnitAccess().getGroup(), "rule__DeclarationUnit__Group__0");
+					put(grammarAccess.getDeclarationUnitAccess().getGroup_1(), "rule__DeclarationUnit__Group_1__0");
 					put(grammarAccess.getCallAccess().getGroup(), "rule__Call__Group__0");
 					put(grammarAccess.getArgumentListAccess().getGroup(), "rule__ArgumentList__Group__0");
 					put(grammarAccess.getArgumentListAccess().getGroup_1(), "rule__ArgumentList__Group_1__0");
@@ -258,8 +260,10 @@ public class TemplateLangParser extends AbstractContentAssistParser {
 					put(grammarAccess.getDeclaratorAccess().getDeclAssignment_0(), "rule__Declarator__DeclAssignment_0");
 					put(grammarAccess.getDeclaratorAccess().getDeclAssignment_1_1(), "rule__Declarator__DeclAssignment_1_1");
 					put(grammarAccess.getDeclarationAccess().getTypeAssignment_0(), "rule__Declaration__TypeAssignment_0");
-					put(grammarAccess.getDeclarationAccess().getIdAssignment_1(), "rule__Declaration__IdAssignment_1");
-					put(grammarAccess.getDeclarationAccess().getIdAssignment_2_1(), "rule__Declaration__IdAssignment_2_1");
+					put(grammarAccess.getDeclarationAccess().getUnitsAssignment_1(), "rule__Declaration__UnitsAssignment_1");
+					put(grammarAccess.getDeclarationAccess().getUnitsAssignment_2_1(), "rule__Declaration__UnitsAssignment_2_1");
+					put(grammarAccess.getDeclarationUnitAccess().getIdAssignment_0(), "rule__DeclarationUnit__IdAssignment_0");
+					put(grammarAccess.getDeclarationUnitAccess().getDefltAssignment_1_1(), "rule__DeclarationUnit__DefltAssignment_1_1");
 					put(grammarAccess.getCallAccess().getNameAssignment_0(), "rule__Call__NameAssignment_0");
 					put(grammarAccess.getCallAccess().getDeclAssignment_2(), "rule__Call__DeclAssignment_2");
 					put(grammarAccess.getCallAccess().getParamAssignment_3(), "rule__Call__ParamAssignment_3");

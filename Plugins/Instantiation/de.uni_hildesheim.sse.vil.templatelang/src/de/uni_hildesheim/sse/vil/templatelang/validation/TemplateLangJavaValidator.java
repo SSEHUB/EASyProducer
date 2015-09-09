@@ -12,6 +12,7 @@ import de.uni_hildesheim.sse.dslCore.validation.ValidationUtils;
 import de.uni_hildesheim.sse.dslCore.validation.ValidationUtils.IModelValidationCallback;
 import de.uni_hildesheim.sse.dslCore.validation.ValidationUtils.MessageType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Template;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateModel;
 import de.uni_hildesheim.sse.vil.templatelang.TemplateLangConfig;
 import de.uni_hildesheim.sse.vil.templatelang.TemplateLangModelUtility;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit;
@@ -47,6 +48,11 @@ public class TemplateLangJavaValidator extends AbstractTemplateLangJavaValidator
         @Override
         public void print(TranslationResult<Template> result, Writer out) {
             TemplateLangModelUtility.INSTANCE.print(result, out, true, false);
+        }
+
+        @Override
+        public boolean isValidationEnabled(URI uri) {
+            return null != TemplateModel.INSTANCE.locations().getLocationFor(uri);
         }
         
     };

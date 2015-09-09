@@ -208,7 +208,7 @@ public class SimulationSettingsDialog extends Dialog {
             }
             ChangeHistory history = config.getChangeHistory();
             history.commitAll();
-            history.clear();
+            history.clear(false);
             super.okPressed();
         }
     }
@@ -217,7 +217,7 @@ public class SimulationSettingsDialog extends Dialog {
     protected void cancelPressed() {
         ChangeHistory history = config.getChangeHistory();
         history.rollbackAll();
-        history.clear();
+        history.clear(true);
         super.cancelPressed();
     }
 

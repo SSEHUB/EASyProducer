@@ -371,7 +371,7 @@ public class Maven extends AbstractFileInstantiator {
         } else {
             m2Conf = null; // enable fallback
         }
-        if (null == m2Conf) { // fallback for standalone
+        if (null == m2Conf) { // fallback for standalone (does not work in linux so far)
             params.add("org.apache.maven.cli.MavenCli");
             manipulator = new CliMessageManipulator();
         }
@@ -382,6 +382,13 @@ public class Maven extends AbstractFileInstantiator {
             params.add(target);
         } 
         ProcessBuilder builder = new ProcessBuilder(params);
+        if (null == System.getenv("JAVA_HOME") && null != JavaUtilities.JDK_PATH) {
+            File jdkFolder = new File(JavaUtilities.JDK_PATH);
+            if (jdkFolder.exists()) {
+                builder.environment().put("JAVA_HOME", JavaUtilities.JDK_PATH);
+            }
+        }        
+        
         builder.directory(new File(buildFilePath));
         Process proc = builder.start();
         StreamGobbler.gobble(proc, manipulator);

@@ -9,8 +9,8 @@ vilScript PL_New (Project source, Configuration config, Project target) {
     }
 
     doCopy(String nsName, Path destination) = "$destination/$nsName/**/*.java" : "$source/$folder/**/*.java" {
-        RHS.copy(LHS);
-        postCopy(LHS, nsName);
+        FROM.copy(TO);
+        postCopy(TO, nsName);
     }
 
     main(Project source, Configuration config, Project target) = : {

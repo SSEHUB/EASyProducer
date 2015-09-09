@@ -630,17 +630,13 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
      */
     @Test
     public void testNewText() throws IOException {
-        assertSelfInstantiate("newText", "main", new SelfInstantiationAsserter() {
+        assertSelfInstantiate("newText", "main", new SelfInstantiationAsserterAdapter() {
 
             @Override
             public void assertIn(File base) {
                 File file = new File(base, "newText.txt");
                 File expected = new File(base, "newText.txt.expected");
                 assertFileEqualitySafe(file, expected);
-            }
-
-            @Override
-            public void deleteBetween(File base) {
             }
             
         });
@@ -675,7 +671,7 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
      */
     @Test
     public void testXML2() throws IOException {
-        assertSelfInstantiate("xml2", "main", new SelfInstantiationAsserter() {
+        assertSelfInstantiate("xml2", "main", new SelfInstantiationAsserterAdapter() {
 
             @Override
             public void assertIn(File base) {
@@ -704,7 +700,7 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
      */
     @Test
     public void testRename() throws IOException {
-        assertSelfInstantiate("rename", "main", new SelfInstantiationAsserter() {
+        assertSelfInstantiate("rename", "main", new SelfInstantiationAsserterAdapter() {
 
             @Override
             public void assertIn(File base) {

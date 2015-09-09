@@ -16,6 +16,7 @@ import de.uni_hildesheim.sse.model.confModel.AssignmentState;
 import de.uni_hildesheim.sse.model.confModel.ConfigurationException;
 import de.uni_hildesheim.sse.model.confModel.ContainerVariable;
 import de.uni_hildesheim.sse.model.confModel.IAssignmentState;
+import de.uni_hildesheim.sse.model.confModel.IConfiguration;
 import de.uni_hildesheim.sse.model.confModel.IConfigurationElement;
 import de.uni_hildesheim.sse.model.confModel.IConfigurationVisitor;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
@@ -66,7 +67,13 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
         if (val instanceof ReferenceValue) {
             // dereference
             AbstractVariable referenced = ((ReferenceValue) val).getValue();
-            this.variable = variable.getConfiguration().getDecision(referenced);
+            if (null != referenced) {
+                IConfiguration config = variable.getConfiguration();
+                this.variable = config.getDecision(referenced);
+                if (null == this.variable) {
+                    this.variable = origVariable; // search for??
+                }
+            } // TODO valueEx?
         } else {
             this.variable = variable;
         }
@@ -357,7 +364,7 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
      * @return <code>true</code> if the variable is configured, <code>false</code> else
      */
     public boolean isConfigured() {
-        return AssignmentState.UNDEFINED != variable.getState() && null != variable.getValue();
+        return AssignmentState.UNDEFINED != origVariable.getState() && null != origVariable.getValue();
     }
     
     /**
@@ -367,7 +374,7 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
      */
     public boolean isFrozen() {
         // TODO check parent state - as variable from above!
-        return AssignmentState.FROZEN == variable.getState();
+        return AssignmentState.FROZEN == origVariable.getState();
     }
 
     /**
@@ -378,38 +385,79 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
      */
     public void setValue(Object value) {
         if (!isFrozen()) {
+            IDecisionVariable toChange = variable;
             // if I'm a reference, I expect a variable declaration
-            if (value instanceof AbstractIvmlVariable 
-                && Reference.TYPE.isAssignableFrom(variable.getDeclaration().getType())) {
-                value = ((AbstractIvmlVariable) value).variable.getDeclaration(); // the dereferenced one
+            boolean refVar = Reference.TYPE.isAssignableFrom(variable.getDeclaration().getType());
+            if (value instanceof AbstractIvmlVariable && refVar) {
+                IDecisionVariable newVar = ((AbstractIvmlVariable) value).variable; 
+                toChange = null;
+                changeValue(origVariable, newVar.getDeclaration()); // the dereferenced one
+                nested = null; // TODO reset attributes
+                variable = newVar;
+            } else if (null == value && refVar) {
+                toChange = null;
+                changeValue(origVariable, null);
+                nested = null; // TODO reset attributes
+                variable = origVariable;
             } else if (value instanceof IvmlElement) {
                 value = ((IvmlElement) value).getValue();
             }
-            if (null == value) { // VIL null / undefined is handled while evaluating the field value expression
-                value = NullValue.INSTANCE;
-            }
-            IDatatype varType = variable.getDeclaration().getType();
-            if (TypeQueries.sameTypes(IntegerType.TYPE, varType) && value instanceof Double) {
-                value = ((Double) value).intValue();
-            }
-            try {
-                Value oldValue = variable.getValue();
-                Value val = ValueFactory.createValue(varType, value);
-                IAssignmentState varState = variable.getState();
-                if (AssignmentState.UNDEFINED == varState) {
-                    varState = AssignmentState.ASSIGNED;
-                }
-                variable.setValue(val, varState);
-                parent.notifyValueChanged(this, oldValue);
-            } catch (ConfigurationException e) {
-                EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).error(e.getMessage());
-            } catch (ValueDoesNotMatchTypeException e) {
-                EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).error(e.getMessage());
+            if (null != toChange) {
+                changeValue(toChange, value);
             }
         } else {
             EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).error(
                 "setting a new value is not possible as variable " + getName() + " is frozen");
         }
+    }
+
+    /**
+     * Changes the value of the given variable.
+     * 
+     * @param toChange the variable to change
+     * @param value the new value
+     */
+    private void changeValue(IDecisionVariable toChange, Object value) {
+        if (null == value) { // VIL null / undefined is handled while evaluating the field value expression
+            value = NullValue.INSTANCE;
+        }
+        IDatatype varType = variable.getDeclaration().getType();
+        if (TypeQueries.sameTypes(IntegerType.TYPE, varType) && value instanceof Double) {
+            value = ((Double) value).intValue();
+        }
+        try {
+            Value oldValue = toChange.getValue();
+            Value val = ValueFactory.createValue(varType, value);
+            IAssignmentState varState = toChange.getState();
+            if (AssignmentState.UNDEFINED == varState) {
+                varState = AssignmentState.ASSIGNED;
+            }
+            toChange.setValue(val, varState);
+            parent.notifyValueChanged(this, oldValue);
+        } catch (ConfigurationException e) {
+            EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).error(e.getMessage());
+        } catch (ValueDoesNotMatchTypeException e) {
+            EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).error(e.getMessage());
+        }
+    }
+    
+    /**
+     * Returns the original value before any change. Intended for runtime reconfiguration.
+     * In VIL, this always returns the value of {@link #getValue()}
+     * 
+     * @return the original value
+     */
+    public Object getOriginalValue() {
+        Object result = null;
+        Value val = parent.getChangeHistory().getOriginalValue(this);
+        if (null != val) {
+            synchronized (VALUE_VISITOR) { // just to be sure
+                VALUE_VISITOR.clear();
+                val.accept(VALUE_VISITOR);
+                result = VALUE_VISITOR.getValue();
+            }
+        }
+        return result;
     }
 
     @Override

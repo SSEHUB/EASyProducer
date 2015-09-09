@@ -4,7 +4,9 @@ import org.osgi.service.component.ComponentContext;
 
 import de.uni_hildesheim.sse.easy.java.artifacts.ClassFileArtifact;
 import de.uni_hildesheim.sse.easy.java.artifacts.JavaAnnotation;
+import de.uni_hildesheim.sse.easy.java.artifacts.JavaAssignment;
 import de.uni_hildesheim.sse.easy.java.artifacts.JavaAttribute;
+import de.uni_hildesheim.sse.easy.java.artifacts.JavaCall;
 import de.uni_hildesheim.sse.easy.java.artifacts.JavaClass;
 import de.uni_hildesheim.sse.easy.java.artifacts.JavaFileArtifact;
 import de.uni_hildesheim.sse.easy.java.artifacts.JavaMethod;
@@ -13,6 +15,7 @@ import de.uni_hildesheim.sse.easy.java.instantiators.Jar;
 import de.uni_hildesheim.sse.easy.java.instantiators.Javac;
 import de.uni_hildesheim.sse.easy.java.instantiators.Unjar;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IRegistration;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.SettingsInitializerRegistry;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 
 /**
@@ -42,6 +45,10 @@ public class Registration implements IRegistration {
             TypeRegistry.DEFAULT.register(JavaMethod.class);
             TypeRegistry.DEFAULT.register(JavaAttribute.class);
             TypeRegistry.DEFAULT.register(JavaAnnotation.class);
+            TypeRegistry.DEFAULT.register(JavaCall.class);
+            TypeRegistry.DEFAULT.register(JavaAssignment.class);
+            SettingsInitializerRegistry.register(new JavaSettingsInitializer());
+            TypeRegistry.DEFAULT.register(JavaSettings.class);
         }
     }
     

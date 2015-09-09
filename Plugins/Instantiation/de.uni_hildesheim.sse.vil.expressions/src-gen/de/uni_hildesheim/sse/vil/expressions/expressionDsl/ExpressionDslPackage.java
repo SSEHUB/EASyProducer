@@ -1231,13 +1231,13 @@ public interface ExpressionDslPackage extends EPackage
   int DECLARATION__TYPE = 0;
 
   /**
-   * The feature id for the '<em><b>Id</b></em>' attribute list.
+   * The feature id for the '<em><b>Units</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int DECLARATION__ID = 1;
+  int DECLARATION__UNITS = 1;
 
   /**
    * The number of structural features of the '<em>Declaration</em>' class.
@@ -1249,6 +1249,43 @@ public interface ExpressionDslPackage extends EPackage
   int DECLARATION_FEATURE_COUNT = 2;
 
   /**
+   * The meta object id for the '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.DeclarationUnitImpl <em>Declaration Unit</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.DeclarationUnitImpl
+   * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getDeclarationUnit()
+   * @generated
+   */
+  int DECLARATION_UNIT = 31;
+
+  /**
+   * The feature id for the '<em><b>Id</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DECLARATION_UNIT__ID = 0;
+
+  /**
+   * The feature id for the '<em><b>Deflt</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DECLARATION_UNIT__DEFLT = 1;
+
+  /**
+   * The number of structural features of the '<em>Declaration Unit</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DECLARATION_UNIT_FEATURE_COUNT = 2;
+
+  /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.CallImpl <em>Call</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1256,7 +1293,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getCall()
    * @generated
    */
-  int CALL = 31;
+  int CALL = 32;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' containment reference.
@@ -1302,7 +1339,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getArgumentList()
    * @generated
    */
-  int ARGUMENT_LIST = 32;
+  int ARGUMENT_LIST = 33;
 
   /**
    * The feature id for the '<em><b>Param</b></em>' containment reference list.
@@ -1330,7 +1367,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getNamedArgument()
    * @generated
    */
-  int NAMED_ARGUMENT = 33;
+  int NAMED_ARGUMENT = 34;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1367,7 +1404,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getQualifiedPrefix()
    * @generated
    */
-  int QUALIFIED_PREFIX = 34;
+  int QUALIFIED_PREFIX = 35;
 
   /**
    * The feature id for the '<em><b>Qname</b></em>' attribute list.
@@ -1395,7 +1432,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getQualifiedName()
    * @generated
    */
-  int QUALIFIED_NAME = 35;
+  int QUALIFIED_NAME = 36;
 
   /**
    * The feature id for the '<em><b>Prefix</b></em>' containment reference.
@@ -1432,7 +1469,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getConstant()
    * @generated
    */
-  int CONSTANT = 36;
+  int CONSTANT = 37;
 
   /**
    * The feature id for the '<em><b>NValue</b></em>' containment reference.
@@ -1505,7 +1542,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getNumValue()
    * @generated
    */
-  int NUM_VALUE = 37;
+  int NUM_VALUE = 38;
 
   /**
    * The feature id for the '<em><b>Val</b></em>' attribute.
@@ -1533,7 +1570,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getType()
    * @generated
    */
-  int TYPE = 38;
+  int TYPE = 39;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' containment reference.
@@ -1615,7 +1652,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getTypeParameters()
    * @generated
    */
-  int TYPE_PARAMETERS = 39;
+  int TYPE_PARAMETERS = 40;
 
   /**
    * The feature id for the '<em><b>Param</b></em>' containment reference list.
@@ -1643,7 +1680,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getContainerInitializer()
    * @generated
    */
-  int CONTAINER_INITIALIZER = 40;
+  int CONTAINER_INITIALIZER = 41;
 
   /**
    * The feature id for the '<em><b>Exprs</b></em>' containment reference list.
@@ -1671,7 +1708,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getContainerInitializerExpression()
    * @generated
    */
-  int CONTAINER_INITIALIZER_EXPRESSION = 41;
+  int CONTAINER_INITIALIZER_EXPRESSION = 42;
 
   /**
    * The feature id for the '<em><b>Logical</b></em>' containment reference.
@@ -2738,15 +2775,47 @@ public interface ExpressionDslPackage extends EPackage
   EReference getDeclaration_Type();
 
   /**
-   * Returns the meta object for the attribute list '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.Declaration#getId <em>Id</em>}'.
+   * Returns the meta object for the containment reference list '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.Declaration#getUnits <em>Units</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute list '<em>Id</em>'.
-   * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.Declaration#getId()
+   * @return the meta object for the containment reference list '<em>Units</em>'.
+   * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.Declaration#getUnits()
    * @see #getDeclaration()
    * @generated
    */
-  EAttribute getDeclaration_Id();
+  EReference getDeclaration_Units();
+
+  /**
+   * Returns the meta object for class '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.DeclarationUnit <em>Declaration Unit</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Declaration Unit</em>'.
+   * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.DeclarationUnit
+   * @generated
+   */
+  EClass getDeclarationUnit();
+
+  /**
+   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.DeclarationUnit#getId <em>Id</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Id</em>'.
+   * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.DeclarationUnit#getId()
+   * @see #getDeclarationUnit()
+   * @generated
+   */
+  EAttribute getDeclarationUnit_Id();
+
+  /**
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.DeclarationUnit#getDeflt <em>Deflt</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Deflt</em>'.
+   * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.DeclarationUnit#getDeflt()
+   * @see #getDeclarationUnit()
+   * @generated
+   */
+  EReference getDeclarationUnit_Deflt();
 
   /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.Call <em>Call</em>}'.
@@ -4017,12 +4086,38 @@ public interface ExpressionDslPackage extends EPackage
     EReference DECLARATION__TYPE = eINSTANCE.getDeclaration_Type();
 
     /**
-     * The meta object literal for the '<em><b>Id</b></em>' attribute list feature.
+     * The meta object literal for the '<em><b>Units</b></em>' containment reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute DECLARATION__ID = eINSTANCE.getDeclaration_Id();
+    EReference DECLARATION__UNITS = eINSTANCE.getDeclaration_Units();
+
+    /**
+     * The meta object literal for the '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.DeclarationUnitImpl <em>Declaration Unit</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.DeclarationUnitImpl
+     * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getDeclarationUnit()
+     * @generated
+     */
+    EClass DECLARATION_UNIT = eINSTANCE.getDeclarationUnit();
+
+    /**
+     * The meta object literal for the '<em><b>Id</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute DECLARATION_UNIT__ID = eINSTANCE.getDeclarationUnit_Id();
+
+    /**
+     * The meta object literal for the '<em><b>Deflt</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference DECLARATION_UNIT__DEFLT = eINSTANCE.getDeclarationUnit_Deflt();
 
     /**
      * The meta object literal for the '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.CallImpl <em>Call</em>}' class.

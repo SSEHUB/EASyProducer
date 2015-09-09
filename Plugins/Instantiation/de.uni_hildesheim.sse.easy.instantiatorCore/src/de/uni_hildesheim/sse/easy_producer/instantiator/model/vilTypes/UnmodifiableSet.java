@@ -115,6 +115,17 @@ public class UnmodifiableSet<T> implements Set<T> {
     public Set<T> select(ExpressionEvaluator evaluator) throws VilException {
         return set.select(evaluator);
     }
+    
+    @OperationMeta(useParameter = 0)
+    @Override
+    public Set<?> collect(ExpressionEvaluator evaluator) throws VilException {
+        return set.collect(evaluator);
+    }
+    
+    @Override
+    public Object apply(ExpressionEvaluator evaluator) throws VilException {
+        return set.apply(evaluator);
+    }
 
     @Override
     public Sequence<T> toSequence() {

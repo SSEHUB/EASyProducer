@@ -1,5 +1,6 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -181,6 +182,7 @@ public class ReflectionTypeDescriptor <T> extends TypeDescriptor <T> {
      */
     protected ReflectionTypeDescriptor<T> resolve() throws VilException {
         if (!isInitialized()) {
+            resolveFields();
             processInner(cls);
             ClassMeta meta = cls.getAnnotation(ClassMeta.class);
             Instantiator inst = cls.getAnnotation(Instantiator.class);
@@ -203,6 +205,23 @@ public class ReflectionTypeDescriptor <T> extends TypeDescriptor <T> {
             superType = getTypeRegistry().findType(cls.getSuperclass());
         }
         return this;
+    }
+    
+    /**
+     * Resolves the fields.
+     */
+    protected void resolveFields() {
+        Class<?> cls = getTypeClass();
+        if (cls.isEnum()) {
+            Field[] fields = cls.getFields();
+            List<FieldDescriptor> fd = new ArrayList<FieldDescriptor>();
+            for (int f = 0; f < fields.length; f++) {
+                Field field = fields[f];
+                String name = field.getName();
+                fd.add(new ReflectionFieldDescriptor(this, fields[f], name, null));
+            }
+            setFields(fd);
+        }
     }
     
     /**

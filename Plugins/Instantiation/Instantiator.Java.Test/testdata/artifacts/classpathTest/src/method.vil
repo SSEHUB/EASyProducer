@@ -1,0 +1,21 @@
+vilScript PL_Test (Project source, Configuration config, Project target) {
+
+    version v0;
+    
+    String folder = "src";
+    
+    doCopy(String nsName, Path destination) = "$destination/$nsName/**/*.java" : "$source/$folder/**/*.java" {
+        RHS.copy(LHS);
+    }
+
+    main(Project source, Configuration config, Project target) = : {
+        String name = "tmp";
+        Path destination = "$target/$folder/dest";
+        doCopy(name, destination);
+        JavaFileArtifact f = "$destination/$name/MethodFile.java";
+        JavaClass cls = f.defaultClass();
+        cls->deleteStatement(JavaCall c | c.getType() == "Logger" and c.getName() == "warning");
+        cls->deleteStatement(JavaCall c | c.getQualifiedName() == "java.io.PrintStream");
+    }
+
+}

@@ -3,7 +3,7 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 
 /**
- * Represents an actual VIL type, its meta information and operations.
+ * Represents an actual VIL type, its meta information, fields and operations.
  * 
  * @author Holger Eichelberger
  *
@@ -19,6 +19,7 @@ public abstract class TypeDescriptor <T> implements IMetaType {
     private FieldDescriptor[] fields;
     private OperationDescriptor[] conversions;
     private TypeDescriptor<?>[] parameter;
+    // reminder: AliasTypeDescriptor must take over / mock some values
 
     /**
      * Creates a new type descriptor. Overridden constructors shall call {@link #setOperations(java.util.Collection)}, 
@@ -167,6 +168,15 @@ public abstract class TypeDescriptor <T> implements IMetaType {
      * @throws VilException in case that the creation does not work
      */
     public abstract T create(Object...params) throws VilException;
+
+    /**
+     * Returns the available fields.
+     * 
+     * @return the available fields
+     */
+    public Iterable<FieldDescriptor> getFields() {
+        return new ArrayIterable<FieldDescriptor>(fields);
+    }
     
     /**
      * Returns the available operations.

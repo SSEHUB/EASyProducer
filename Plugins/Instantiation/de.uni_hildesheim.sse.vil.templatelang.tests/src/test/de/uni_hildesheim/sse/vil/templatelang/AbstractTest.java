@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.URI;
-import org.junit.Assert;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 
 import de.uni_hildesheim.sse.ModelUtility;
@@ -32,8 +32,8 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegis
 import de.uni_hildesheim.sse.model.management.VarModel;
 import de.uni_hildesheim.sse.utils.messages.Status;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
-import de.uni_hildesheim.sse.vil.templatelang.VtlExpressionParser;
 import de.uni_hildesheim.sse.vil.templatelang.TemplateLangModelUtility;
+import de.uni_hildesheim.sse.vil.templatelang.VtlExpressionParser;
 
 /**
  * Provides an abstract test for all tests of the template language.
@@ -181,7 +181,10 @@ public abstract class AbstractTest extends de.uni_hildesheim.sse.dslCore.test.Ab
                     //String traceAsString = writer.toString().trim();
                     //Assert.assertTrue(checkEqualsAndPrint(fileAsString, traceAsString));
                     String errorMsg = checkEqualsAndPrepareMessage(fileAsString, trace);
-                    Assert.assertNull(errorMsg, errorMsg);
+                    if (null != errorMsg) {
+                        Assert.assertEquals(fileAsString.trim(), trace.toString().trim());
+                        Assert.fail(errorMsg);
+                    }
                     
                     if (null != data.getExpectedOutputFile()) {
                         fileAsString = file2String(data.getExpectedOutputFile());

@@ -13,6 +13,7 @@ import org.eclipse.jdt.core.dom.StringLiteral;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IArtifactVisitor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Binary;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Text;
@@ -236,6 +237,12 @@ public class JavaAttribute extends JavaParentFragmentArtifact {
     @Override
     public String getStringValue(StringComparator comparator) {
         return "attribute '" + getNameSafe() + "'";
+    }
+
+    @Invisible
+    @Override
+    public ArtifactModel getArtifactModel() {
+        return getParent().getArtifactModel();
     }
 
     // override deleteChild in case of stored attributes or other substructures

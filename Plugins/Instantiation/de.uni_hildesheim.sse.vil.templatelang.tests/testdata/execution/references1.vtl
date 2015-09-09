@@ -1,0 +1,11 @@
+@advice(references1)
+template references1(Configuration config, Artifact target) {
+
+    def main(Configuration config, Artifact target) {
+        references1 cfg = config;
+        Alg a = cfg.elt.alg;
+        '${a}'
+        '${a.name}'
+    }
+
+}

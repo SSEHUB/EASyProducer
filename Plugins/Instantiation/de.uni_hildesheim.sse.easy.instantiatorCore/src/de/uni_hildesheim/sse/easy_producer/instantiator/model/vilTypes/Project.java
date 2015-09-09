@@ -8,6 +8,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.Arti
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FileArtifact;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FolderArtifact;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IFileSystemArtifact;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ProjectSettings;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.Path;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
@@ -345,6 +346,28 @@ public class Project implements IVilType, IStringValueProvider {
         }
         return result;
     }
+    
+    /**
+     * Sets the settings for the artifact model.
+     * 
+     * @param key ID for the settings object
+     * @param object the settings
+     */
+    public void setSettings(ProjectSettings key, Object object) {
+        artifactModel.setSettings(key, object);
+    }
+    
+    /**
+     * Returns the settings object for the specified key.
+     * 
+     * @param key the key assigned to the settings object
+     * @return the settings object
+     */
+    public Object getSettings(ProjectSettings key) {
+        return artifactModel.getSettings(key);
+    }
+    
+    
 
  
 }

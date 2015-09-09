@@ -57,6 +57,16 @@ public abstract class Resolver<V extends IResolvable> implements IResolver<V> {
         }
         
         /**
+         * Returns whether this level contains a variable with the given <code>name</code>.
+         * 
+         * @param name the name to search for
+         * @return <code>true</code> if the variable is registered, <code>false</code> else
+         */
+        public boolean contains(String name) {
+            return variables.containsKey(name);
+        }
+        
+        /**
          * Returns the variable for a given name.
          * 
          * @param name the name to return the variable for
@@ -161,6 +171,20 @@ public abstract class Resolver<V extends IResolvable> implements IResolver<V> {
     public void add(V decl) {
         add(decl, "");
     }
+    
+    /**
+     * Adds a <code>name</code> alias for <code>decl</code>, only if <code>name</code>
+     * has not been defined before. This method helps to migrate from old to new implicit name conventions.
+     * 
+     * @param name the alias name
+     * @param decl the variable declaration
+     */
+    public void addAlias(String name, V decl) {
+        Level<V> level = levels.peek();
+        if (null == level.get(name)) {
+            level.put(name, decl);
+        }
+    }
 
     /**
      * Adds a variable declaration to the actual level.
@@ -171,6 +195,31 @@ public abstract class Resolver<V extends IResolvable> implements IResolver<V> {
     protected void add(V decl, String qualification) {
         Level<V> level = levels.peek();
         level.put(qualification + decl.getName(), decl);
+    }
+
+    /**
+     * Returns whether a variable with the same name as <code>decl</code> is already known.
+     * 
+     * @param decl the declaration to search for
+     * @return <code>true</code> if there is a variable, <code>false</code> else
+     * @see #contains(IResolvable)
+     */
+    public boolean contains(V decl) {
+        return contains(decl.getName());
+    }
+     
+    /**
+     * Returns whether a variable with <code>name</code> is already known.
+     * 
+     * @param name the variable name to search for
+     * @return <code>true</code> if there is a variable, <code>false</code> else
+     */    
+    public boolean contains(String name) {
+        boolean contains = false;
+        for (int l = levels.size() - 1; !contains && l >= 0; l--) {
+            contains = levels.get(l).contains(name);
+        }
+        return contains;
     }
     
     /**

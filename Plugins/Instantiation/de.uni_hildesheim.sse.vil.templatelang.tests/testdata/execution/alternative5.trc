@@ -1,0 +1,3 @@
+-> main(Configuration, FileArtifact) with (<config>, test.texts)
+    visit if-branch
+    visit if-branch

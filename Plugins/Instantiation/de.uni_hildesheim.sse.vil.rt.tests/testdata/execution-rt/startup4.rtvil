@@ -103,7 +103,7 @@ rtVilScript startup4 (Project source, Configuration config, Project target, IAda
     }
 
     bindValues(FamilyElement elt, Pipeline pipeline, mapOf(String, Real) bindings) = : {
-        elt.capacity = 0;
+        elt.capacity = 0.2;
         map(Node n:elt.next) {
             bindValues(n, pipeline, bindings);
         };

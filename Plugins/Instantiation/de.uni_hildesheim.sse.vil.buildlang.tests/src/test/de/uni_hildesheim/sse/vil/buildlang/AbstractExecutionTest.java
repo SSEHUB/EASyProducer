@@ -160,6 +160,14 @@ public abstract class AbstractExecutionTest <M extends Script> extends AbstractT
      * @author Holger Eichelberger
      */
     protected interface SelfInstantiationAsserter {
+        
+        /**
+         * Determines the test directory which should be used for the test.
+         * 
+         * @param file directory for the test
+         * @return File containing the directory
+         */
+        public File determineTestDirectory(File file);
 
         /**
          * Asserts validity for files in <code>base</code>.
@@ -190,6 +198,11 @@ public abstract class AbstractExecutionTest <M extends Script> extends AbstractT
 
         @Override
         public void deleteBetween(File base) {
+        }
+
+        @Override
+        public File determineTestDirectory(File file) {
+            return file;
         }
         
     }
@@ -228,6 +241,10 @@ public abstract class AbstractExecutionTest <M extends Script> extends AbstractT
         ArtifactFactory.clear();
         File temp = createTempDir("artifacts");
         FileUtils.copyDirectory(getArtifactsFolder(), temp);
+        if (null != asserter) {
+            temp = asserter.determineTestDirectory(temp);
+        }
+        System.out.println(temp);
         try {
             TemplateModel.INSTANCE.locations().addLocation(temp, ProgressObserver.NO_OBSERVER);
         } catch (ModelManagementException e) {

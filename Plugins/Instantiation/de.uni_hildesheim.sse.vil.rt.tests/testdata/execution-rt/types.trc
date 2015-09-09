@@ -1,5 +1,7 @@
 -> main(Project, Configuration, Project) with (<project>, <config>, <project>)
     -> t1()
+        Reasoner execution: true
+    Reasoner execution: true
     -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)
         -> create(String, String, String) with (a, b, c) = <AlgorithmChangeCommand>
         cmd <- <AlgorithmChangeCommand>

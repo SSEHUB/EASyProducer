@@ -226,7 +226,7 @@ public class ReflectionOperationDescriptor extends OperationDescriptor implement
                     if (e.getCause() instanceof NullPointerException) {
                         result = null; // fail-termination-semantics
                     } else {
-                        throw new VilException("while executing " + getSignature() + ": " + e.getCause(), 
+                        throw new VilException("while executing " + getSignature() + ": " + e.getCause().getMessage(), 
                             VilException.ID_EXECUTION_ERROR);
                     }
                 }
@@ -413,4 +413,14 @@ public class ReflectionOperationDescriptor extends OperationDescriptor implement
         return trace && super.trace();
     }
 
+    @Override
+    public boolean allowsAggregation() {
+        boolean result = false;
+        OperationMeta opMeta = method.getAnnotation(OperationMeta.class);
+        if (null != opMeta) {
+            result = opMeta.allowsAggregation();
+        }
+        return result;
+    }
+    
 }

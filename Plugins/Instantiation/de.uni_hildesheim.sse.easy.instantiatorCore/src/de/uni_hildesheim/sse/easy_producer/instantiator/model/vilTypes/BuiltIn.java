@@ -1,5 +1,6 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ProjectSettings;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.Attribute;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.ChangeHistory;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.Configuration;
@@ -42,6 +43,7 @@ public class BuiltIn {
             TypeRegistry.DEFAULT.register(IvmlDeclaration.class);
             TypeRegistry.DEFAULT.register(ChangeHistory.class);
             TypeRegistry.DEFAULT.register(Configuration.class);
+            TypeRegistry.DEFAULT.register(ProjectSettings.class);
         }
     }
 

@@ -15,7 +15,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.Declaration#getType <em>Type</em>}</li>
- *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.Declaration#getId <em>Id</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.Declaration#getUnits <em>Units</em>}</li>
  * </ul>
  * </p>
  *
@@ -52,19 +52,19 @@ public interface Declaration extends EObject
   void setType(Type value);
 
   /**
-   * Returns the value of the '<em><b>Id</b></em>' attribute list.
-   * The list contents are of type {@link java.lang.String}.
+   * Returns the value of the '<em><b>Units</b></em>' containment reference list.
+   * The list contents are of type {@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.DeclarationUnit}.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Id</em>' attribute list isn't clear,
+   * If the meaning of the '<em>Units</em>' containment reference list isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Id</em>' attribute list.
-   * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage#getDeclaration_Id()
-   * @model unique="false"
+   * @return the value of the '<em>Units</em>' containment reference list.
+   * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage#getDeclaration_Units()
+   * @model containment="true"
    * @generated
    */
-  EList<String> getId();
+  EList<DeclarationUnit> getUnits();
 
 } // Declaration

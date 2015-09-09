@@ -302,6 +302,15 @@ public interface ExpressionDslFactory extends EFactory
   Declaration createDeclaration();
 
   /**
+   * Returns a new object of class '<em>Declaration Unit</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Declaration Unit</em>'.
+   * @generated
+   */
+  DeclarationUnit createDeclarationUnit();
+
+  /**
    * Returns a new object of class '<em>Call</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

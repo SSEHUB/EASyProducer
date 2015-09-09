@@ -1,0 +1,9 @@
+template collect2(Configuration config, Artifact target) {
+
+    def main(Configuration config, Artifact target) {
+        sequenceOf(Integer) s = {1, 2, 3, 4, 5};
+        sequenceOf(Integer) r = s->collect(i | i * 5);
+        '${r}'
+    }
+
+}

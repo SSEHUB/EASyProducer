@@ -13,11 +13,16 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.uni_hildesheim.sse.easy.java.Registration;
+import de.uni_hildesheim.sse.easy.java.artifacts.DefaultJavaFileArtifactCreator;
+import de.uni_hildesheim.sse.easy.java.artifacts.JavaClass;
+import de.uni_hildesheim.sse.easy.java.artifacts.JavaFileArtifact;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
 import test.de.uni_hildesheim.sse.vil.buildlang.AbstractExecutionTest;
 import test.de.uni_hildesheim.sse.vil.buildlang.BuildLangTestConfigurer;
 import test.de.uni_hildesheim.sse.vil.buildlang.ITestConfigurer;
-import de.uni_hildesheim.sse.easy.java.Registration;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
 
 /**
  * Tests for the basic language.
@@ -118,7 +123,7 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
      */
     @Test
     public void testJarWithManifest() throws IOException {
-        assertSelfInstantiate("jar2", "main", new SelfInstantiationAsserter() {
+        assertSelfInstantiate("jar2", "main", new SelfInstantiationAsserterAdapter() {
 
             @Override
             public void assertIn(File base) {
@@ -133,10 +138,6 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
                 assertFileEqualitySafe(expected, generated);
             }
 
-            @Override
-            public void deleteBetween(File base) {
-            }
-            
         });
     }
     
@@ -147,7 +148,7 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
      */
     @Test
     public void testJavaCopy() throws IOException {
-        assertSelfInstantiate("copy", "main", new SelfInstantiationAsserter() {
+        assertSelfInstantiate("copy", "main", new SelfInstantiationAsserterAdapter() {
             
             @Override
             public void assertIn(File base) {
@@ -160,10 +161,65 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
                 assertFileEqualitySafe(tempFile, copyBla);
             }
 
+        });
+    }
+    
+    /**
+     * Test the modification of methods by deleting java calls within a vil script.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testModifyMethod() throws IOException {
+        final File expected = new File(getArtifactsFolder(), "classpathTest/src/ModifiedMethodFile.java");
+        try {
+            DefaultJavaFileArtifactCreator creator = new DefaultJavaFileArtifactCreator();
+            JavaFileArtifact javaFileArtefact = (JavaFileArtifact) creator.createArtifactInstance(expected, null);
+            Set<JavaClass> classes = javaFileArtefact.classes();
+            for (JavaClass javaClass : classes) {
+                javaClass.notifyChildChanged(javaClass);
+                javaClass.store();
+            }
+        } catch (VilException e) {
+            e.printStackTrace();
+        }
+        assertSelfInstantiate("method", "main", new SelfInstantiationAsserterAdapter() {
+            
             @Override
-            public void deleteBetween(File base) {
+            public void assertIn(File base) {
+                File tempFile = new File(base, "classpathTest/src/MethodFile.java");
+                assertFileEqualitySafe(tempFile, expected);
+            }
+
+        });
+    }
+    
+    /**
+     * Test the modification of methods by deleting java calls within a VIL script. All references to the deleted
+     * method should be removed.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testDeleteWithCalls() throws IOException {
+        assertSelfInstantiate("deleteWithCalls", "main", new SelfInstantiationAsserterAdapter() {
+            
+            @Override
+            public File determineTestDirectory(File file) {
+                return new File(file, "deleteMethod");
             }
             
+            @Override
+            public void assertIn(File base) {
+                File expectedMethodClass2 = new File(getArtifactsFolder(), "deleteMethodExpected/MethodClass2.java");
+                File tempFileMethodClass2 = new File(base, "MethodClass2.java");
+                assertFileEqualitySafe(tempFileMethodClass2, expectedMethodClass2);
+
+                File expectedMethodClass = new File(getArtifactsFolder(), "deleteMethodExpected/MethodClass.java");
+                File tempFileMethodClass = new File(base, "MethodClass.java");
+                assertFileEqualitySafe(tempFileMethodClass, expectedMethodClass);
+            }
+
         });
     }
 

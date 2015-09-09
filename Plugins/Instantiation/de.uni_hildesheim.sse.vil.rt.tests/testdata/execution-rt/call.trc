@@ -3,4 +3,6 @@
         -> test()
         qm1 <- <config>
         -> initCapacity(QM1, Integer) with (<config>, 4)
+        Reasoner execution: true
+    Reasoner execution: true
     -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)

@@ -1,0 +1,8 @@
+template apply3(Configuration config, Artifact target) {
+
+    def main(Configuration config, Artifact target) {
+        sequenceOf(Integer) s = {1, 2, 3, 4, 5, 6};
+        s->apply(i | println(i));
+    }
+
+}

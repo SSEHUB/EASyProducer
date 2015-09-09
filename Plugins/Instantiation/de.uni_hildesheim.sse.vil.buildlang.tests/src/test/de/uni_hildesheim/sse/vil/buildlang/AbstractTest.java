@@ -227,26 +227,24 @@ public abstract class AbstractTest<M extends Script> extends de.uni_hildesheim.s
      *   multiple times need to be listed multiple times here)
      * @throws IOException problems finding or reading the model file
      */
-    protected void assertEqual(EqualitySetup data, Cleaner cleaner, int... expectedErrorCodes)
-        throws IOException {
+    protected void assertEqual(EqualitySetup data, Cleaner cleaner, int... expectedErrorCodes) throws IOException {
         File file = data.getFile();
         if (file.exists()) {
             URI uri = URI.createFileURI(file.getAbsolutePath());
-            // parse the model
-            TranslationResult<M> result = configurer.parse(uri);
+            TranslationResult<M> result = configurer.parse(uri); // parse the model
             List<Message> messages = result.getMessageListSpecific();
             Assert.assertTrue("no result produced: " + toString(messages), result.getResultCount() > 0);
             if (0 == result.getErrorCount()) {
-                // read model file into memory
-                String fileAsString = file2String(file);
+                String fileAsString = file2String(file); // read model file into memory
                 Assert.assertTrue("not found: " + file, null != fileAsString);
-
-                // read model into String
-                java.io.CharArrayWriter expected = new CharArrayWriter();
+                java.io.CharArrayWriter expected = new CharArrayWriter(); // read model into String
                 configurer.print(result, expected, false, false);
                 if (data.enableEquals()) {
                     String errorMsg = checkEqualsAndPrepareMessage(fileAsString, expected);
-                    Assert.assertTrue(errorMsg, null == errorMsg);
+                    if (null != errorMsg) {
+                        Assert.assertEquals(fileAsString.trim(), expected.toString().trim());
+                        Assert.fail(errorMsg);
+                    }
                     assertNamingAndVersion(data, result);
                 }
             }
@@ -254,8 +252,7 @@ public abstract class AbstractTest<M extends Script> extends de.uni_hildesheim.s
             File expectedTrace = data.getExpectedTrace();
             if (null != expectedTrace && 0 == result.getErrorCount()) {
                 Writer trace = new CharArrayWriter();
-                // for debugging insert DelegatingSysoutWriter here
-                try {
+                try { // for debugging insert DelegatingSysoutWriter here
                     String fileAsString = file2String(expectedTrace);
                     Assert.assertTrue(null != fileAsString);
                     Script script = result.getResult(0);
@@ -278,12 +275,14 @@ public abstract class AbstractTest<M extends Script> extends de.uni_hildesheim.s
                         }
                         System.out.println(tmp.toString());                        
                     }
-                    Assert.assertNull(errorMsg, errorMsg);
+                    if (null != errorMsg) {
+                        Assert.assertEquals(fileAsString.trim(), trace.toString().trim());
+                        Assert.fail(errorMsg);
+                    }
                     if (null != cleaner) {
                         cleaner.deleteBetween();
                     }
-                    // do the same via the executor
-                    testExecutor(result.getResult(0), data);
+                    testExecutor(result.getResult(0), data); // do the same via the executor
                 } catch (VilException e) {
                     //e.printStackTrace(System.out); // for debugging
                     if (null == messages) {

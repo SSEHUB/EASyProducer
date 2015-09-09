@@ -470,10 +470,14 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
     private AlternativeStatement processAlternative(de.uni_hildesheim.sse.vil.templatelang.templateLang.Alternative alt) 
         throws TranslatorException {
         Expression condition = expressionTranslator.processExpression(alt.getExpr(), resolver);
+        resolver.pushLevel();
         ITemplateElement ifElt = processStatement(alt.getIf());
+        resolver.popLevel();
         ITemplateElement elseElt;
         if (null != alt.getElse()) {
+            resolver.pushLevel();
             elseElt = processStatement(alt.getElse());
+            resolver.popLevel();
         } else {
             elseElt = null;
         }
@@ -666,6 +670,14 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
         return new VariableDeclaration[len];
     }
     
+    @Override
+    protected void addVisibleDeclarationsToResolver(Template model, Resolver resolver) {
+        for (int v = 0; v < model.getVariableDeclarationCount(); v++) {
+            VariableDeclaration decl = model.getVariableDeclaration(v);
+            if (!resolver.contains(decl)) { // don't overwrite existing ones, they have priority
+                resolver.add(decl);
+            }
+        }
+    }
     
-
 }

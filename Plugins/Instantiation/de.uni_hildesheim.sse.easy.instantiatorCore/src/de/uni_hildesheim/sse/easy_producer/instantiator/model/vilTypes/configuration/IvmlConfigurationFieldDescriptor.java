@@ -81,7 +81,7 @@ public class IvmlConfigurationFieldDescriptor extends AbstractIvmlFieldDescripto
                     }
                 }
             }
-        } 
+        }
         return result;
     }
     

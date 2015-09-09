@@ -61,7 +61,7 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
     public static final ReasonerConfiguration REASONER_CONFIGURATION = new ReasonerConfiguration();
     
     static {
-        REASONER_CONFIGURATION.setIncremental(true);
+        REASONER_CONFIGURATION.setRuntimeMode(true);
     }
     
     /**
@@ -118,6 +118,7 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
                         }
                     }
                 }
+                evaluator.getTracer().trace("Reasoner execution: " + ok);
                 result = ok;
             }
             return result;
@@ -131,6 +132,7 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
 
         @Override
         public Object call(RtVilExecution evaluator, CallArgument... args) throws VilException {
+            evaluator.getTracer().trace("Reasoner execution: " + true); // keep testing stable although disabled
             return true;
         }
     };
@@ -304,8 +306,7 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
             if (getRuntimeEnvironment().isDefined(param)) {
                 Configuration cfg = (Configuration) getRuntimeEnvironment().getValue(param);
                 if (null != cfg) {
-                    cfg.getChangeHistory().rollbackSimulation();
-                    cfg.getChangeHistory().clear();
+                    cfg.getChangeHistory().rollbackSimulation(); // calls clear(true)
                 }
             }
             found = true;
@@ -859,7 +860,7 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
             boolean enabled = setEnableRuleElementFailed(false);
             dynamicCall("bindValues", BIND_VALUES_FALLBACK, args);
             // clear the change history 
-            ((Configuration) args[0].accept(this)).getChangeHistory().clear();
+            ((Configuration) args[0].accept(this)).getChangeHistory().clear(true);
             setEnableRuleElementFailed(enabled);
         } else {
             LOGGER.info("bindValues not found - map declaration missing?");

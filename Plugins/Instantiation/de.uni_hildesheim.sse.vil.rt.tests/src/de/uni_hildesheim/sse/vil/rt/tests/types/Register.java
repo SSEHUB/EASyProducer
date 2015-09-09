@@ -28,6 +28,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IRegister
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IStringValueProvider.StringComparator;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationMeta;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionResolver;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeHelper;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 
@@ -132,6 +133,11 @@ public class Register {
             Generics annotation = TypeHelper.getParameterAnnotation(constructor.getParameterAnnotations(), 
                 index, Generics.class);
             return null == annotation ? null : annotation.types();
+        }
+
+        @Override
+        public TypeDescriptor<?> resolveTypeFallback(String name) {
+            return null; // so far not needed for the tests
         }
         
     }

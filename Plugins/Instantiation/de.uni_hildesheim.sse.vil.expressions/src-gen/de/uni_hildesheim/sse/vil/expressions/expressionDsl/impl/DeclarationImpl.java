@@ -3,6 +3,7 @@
 package de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl;
 
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Declaration;
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.DeclarationUnit;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Type;
 
@@ -19,7 +20,8 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
-import org.eclipse.emf.ecore.util.EDataTypeEList;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -29,7 +31,7 @@ import org.eclipse.emf.ecore.util.EDataTypeEList;
  * The following features are implemented:
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.DeclarationImpl#getType <em>Type</em>}</li>
- *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.DeclarationImpl#getId <em>Id</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.DeclarationImpl#getUnits <em>Units</em>}</li>
  * </ul>
  * </p>
  *
@@ -48,14 +50,14 @@ public class DeclarationImpl extends MinimalEObjectImpl.Container implements Dec
   protected Type type;
 
   /**
-   * The cached value of the '{@link #getId() <em>Id</em>}' attribute list.
+   * The cached value of the '{@link #getUnits() <em>Units</em>}' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getId()
+   * @see #getUnits()
    * @generated
    * @ordered
    */
-  protected EList<String> id;
+  protected EList<DeclarationUnit> units;
 
   /**
    * <!-- begin-user-doc -->
@@ -131,13 +133,13 @@ public class DeclarationImpl extends MinimalEObjectImpl.Container implements Dec
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<String> getId()
+  public EList<DeclarationUnit> getUnits()
   {
-    if (id == null)
+    if (units == null)
     {
-      id = new EDataTypeEList<String>(String.class, this, ExpressionDslPackage.DECLARATION__ID);
+      units = new EObjectContainmentEList<DeclarationUnit>(DeclarationUnit.class, this, ExpressionDslPackage.DECLARATION__UNITS);
     }
-    return id;
+    return units;
   }
 
   /**
@@ -152,6 +154,8 @@ public class DeclarationImpl extends MinimalEObjectImpl.Container implements Dec
     {
       case ExpressionDslPackage.DECLARATION__TYPE:
         return basicSetType(null, msgs);
+      case ExpressionDslPackage.DECLARATION__UNITS:
+        return ((InternalEList<?>)getUnits()).basicRemove(otherEnd, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -168,8 +172,8 @@ public class DeclarationImpl extends MinimalEObjectImpl.Container implements Dec
     {
       case ExpressionDslPackage.DECLARATION__TYPE:
         return getType();
-      case ExpressionDslPackage.DECLARATION__ID:
-        return getId();
+      case ExpressionDslPackage.DECLARATION__UNITS:
+        return getUnits();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -188,9 +192,9 @@ public class DeclarationImpl extends MinimalEObjectImpl.Container implements Dec
       case ExpressionDslPackage.DECLARATION__TYPE:
         setType((Type)newValue);
         return;
-      case ExpressionDslPackage.DECLARATION__ID:
-        getId().clear();
-        getId().addAll((Collection<? extends String>)newValue);
+      case ExpressionDslPackage.DECLARATION__UNITS:
+        getUnits().clear();
+        getUnits().addAll((Collection<? extends DeclarationUnit>)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -209,8 +213,8 @@ public class DeclarationImpl extends MinimalEObjectImpl.Container implements Dec
       case ExpressionDslPackage.DECLARATION__TYPE:
         setType((Type)null);
         return;
-      case ExpressionDslPackage.DECLARATION__ID:
-        getId().clear();
+      case ExpressionDslPackage.DECLARATION__UNITS:
+        getUnits().clear();
         return;
     }
     super.eUnset(featureID);
@@ -228,27 +232,10 @@ public class DeclarationImpl extends MinimalEObjectImpl.Container implements Dec
     {
       case ExpressionDslPackage.DECLARATION__TYPE:
         return type != null;
-      case ExpressionDslPackage.DECLARATION__ID:
-        return id != null && !id.isEmpty();
+      case ExpressionDslPackage.DECLARATION__UNITS:
+        return units != null && !units.isEmpty();
     }
     return super.eIsSet(featureID);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public String toString()
-  {
-    if (eIsProxy()) return super.toString();
-
-    StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (id: ");
-    result.append(id);
-    result.append(')');
-    return result.toString();
   }
 
 } //DeclarationImpl

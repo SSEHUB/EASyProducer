@@ -10,6 +10,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.xtext.nodemodel.ICompositeNode;
+import org.eclipse.xtext.nodemodel.ILeafNode;
 import org.eclipse.xtext.nodemodel.INode;
 
 import de.uni_hildesheim.sse.BuildLangModelUtility;
@@ -20,16 +21,11 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescr
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 import de.uni_hildesheim.sse.vil.expressions.ResourceRegistry;
-import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Constant;
-import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionOrQualifiedExecution;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.LogicalExpression;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Parameter;
-import de.uni_hildesheim.sse.vil.expressions.expressionDsl.SubCall;
-import de.uni_hildesheim.sse.vil.expressions.expressionDsl.UnqualifiedExecution;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.CallImpl;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionOrQualifiedExecutionImpl;
-import de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.UnqualifiedExecutionImpl;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.VariableDeclarationImpl;
 import de.uni_hildesheim.sse.vil.expressions.translation.Utils;
 import de.uni_hildesheim.sse.vilBuildLanguage.ImplementationUnit;
@@ -781,106 +777,66 @@ public class VilBuildLangProposalProviderUtility {
      * Returns the prefix of a sub-call (the identifier at the left-hand side of the "." for which the call is defined).
      * 
      * @param node the <code>INode</code> object (last complete node) in the VIL file. Typically, this is the ".", which 
-     * is used here as the starting point for determining the prefix (the identifier left to the ".")
+     * is used here as the starting point for determining the prefix (the identifier left to the "."). Should never be 
+     * <code>null</code>.
      * @return the prefix as a <code>String</code> or an empty <code>String</code> if no prefix is available.
      */
     private String getSubCallPrefix(INode node) {
         String prefix = "";
-        INode parent = node.getParent();
-        if (parent != null) {
-            EObject parentSemanticElement = parent.getSemanticElement();
-            if (parentSemanticElement != null) {
-                // Check whether left from "." is another SubCall or a simple prefix (identifier)
-                if (parentSemanticElement instanceof ExpressionOrQualifiedExecutionImpl) {
-                    ExpressionOrQualifiedExecution qExecution = (ExpressionOrQualifiedExecution) parentSemanticElement;
-                    // As the left-handed part of "." might be a SubCall again, try to find a SubCall first
-                    prefix = getSubCallName(qExecution, getSiblingCount(node));
-                    // If no SubCall or instantiator call is found, there should be a simple prefix (identifier)
-                    if (prefix == null || prefix.length() <= 0) {
-                        Constant constantElement = qExecution.getVal();
-                        prefix = getQualifiedName(constantElement);                     
-                    }                    
-                // Check whether left from "." is an instantiator call
-                } else if (parentSemanticElement instanceof UnqualifiedExecutionImpl) {
-                    UnqualifiedExecution uExecution = (UnqualifiedExecution) parentSemanticElement;
-                    prefix = uExecution.getCall().getName().getQname().get(0);
-                } else {
-                    prefix = getSubCallPrefix(parent);
-                }
-            }            
-        }
-        return prefix;
-    }
-    
-    /**
-     * Returns the qualified name (identifier) of a constant (typically a variable).
-     * 
-     * @param constantElement an <code>Constant</code> object for which the qualified name will be determined.
-     * @return the qualified name of the given element as a <code>String</code> or an empty <code>String</code> if 
-     * no qualified name could be determined.
-     */
-    private String getQualifiedName(Constant constantElement) {
-        String qName = "";
-        if (hasQName(constantElement)) {
-            List<String> constantQNameList = constantElement.getQValue().getPrefix().getQname();
-            qName = constantQNameList.get(constantQNameList.size() - 1);
-        }
-        return qName;
-    }
-    
-    /**
-     * Returns the sub-call (name of the operation) on the left-handed side of a ".". This method assumes that
-     * the <code>INode</code> object representing the "." is already parsed and the operation on the left-handed
-     * side of the "." is identified and casted into an <code>ExpressionOrQualifiedExecution</code> object.
-     * 
-     * @param qExecution an <code>ExpressionOrQualifiedExecution</code> object as the basis for determining the name 
-     * of the sub-call operation represented by this object.
-     * @param nodeSiblingCount the number of sub-calls after the "." for exact determination of the right
-     * sub-call left to the current position (".")  
-     * @return the name of the sub-call (name of the operation) of the passed <code>ExpressionOrQualifiedExecution</code>
-     * object as a <code>String</code> or an empty <code>String</code> if no name could be determined.
-     */
-    private String getSubCallName(ExpressionOrQualifiedExecution qExecution, int nodeSiblingCount) {
-        String subCallName = "";
-        if (qExecution != null && hasElements(qExecution.eContents())) {
-            List<SubCall> subCallList = new ArrayList<SubCall>();
-            for (EObject contentElement : qExecution.eContents()) {
-                if (contentElement instanceof SubCall) {
-                    subCallList.add((SubCall) contentElement);
-                }
-            }
-            /*
-             *  In case that there are further SubCalls at the right-handed side of the ".", determine
-             *  the exact SubCall at the left-handed side of the "."
-             */
-            if (hasElements(subCallList)) {
-                if (subCallList.size() > nodeSiblingCount) {
-                    SubCall previousSubCall = subCallList.get(subCallList.size() - nodeSiblingCount - 1);
-                    if (hasQName(previousSubCall)) {
-                        EList<String> qNameList = previousSubCall.getCall().getName().getQname();
-                        subCallName = qNameList.get(qNameList.size() - 1);
+        /*
+         * The following two values are used to identify the "." represented
+         * by the given node in the VIL file. As multiple "." can be found in a VIL file
+         * this is the only way to ensure that we found the right ".".
+         */
+        int nodeEndLine = node.getEndLine();
+        int nodeEndOffset = node.getEndOffset();
+        
+        INode rootNode = node.getRootNode();
+        Iterator<ILeafNode> nodeIter = rootNode.getLeafNodes().iterator();
+        boolean prefixNodeFound = false;
+        INode lastNode = null;
+        while (!prefixNodeFound && nodeIter.hasNext()) {
+            INode currentNode = nodeIter.next();
+            if (currentNode.getText().equals(".") && lastNode != null) {
+                // Ensure that we found the "." we are searching the prefix for
+                if (nodeEndLine == currentNode.getEndLine() && nodeEndOffset == currentNode.getEndOffset()) {
+                    /*
+                     * If it is that ".", we need to distinguish what is actually
+                     * the prefix: a variable name or another sub call
+                     * (identified by closing bracket ")")
+                     */
+                    if (lastNode.getText().equals(")")) {
+                        // Should be another sub call; get the name
+                        int bracketCounter = 1;                        
+                        INode previousSibling = lastNode.getPreviousSibling();
+                        while (!prefixNodeFound && previousSibling != null) {
+                            /*
+                             * Not nice, but it works: ensure that we found the last
+                             * opening bracket relative to the "."
+                             */
+                            if (previousSibling.getText().equals(")")) bracketCounter++;
+                            if (previousSibling.getText().equals("(")) bracketCounter--;
+                            
+                            if (previousSibling.getText().equals("(") && bracketCounter == 0) {
+                                INode targetSibling = previousSibling.getPreviousSibling();
+                                if (targetSibling != null) {
+                                    prefixNodeFound = true;
+                                    prefix = targetSibling.getText();
+                                }
+                            }
+                            previousSibling = previousSibling.getPreviousSibling();
+                        }
+                    } else {
+                        // Should be a variable; return it's name
+                        prefixNodeFound = true;
+                        prefix = lastNode.getText();
                     }
                 }
             }
+            lastNode = currentNode;
         }
-        return subCallName;
-    }
-    
-    /**
-     * Returns the number of sub-calls right to the ".".
-     * 
-     * @param node the <code>INode</code> object (last complete node) which is the starting point for counting the ascending
-     * sub-calls. Typically, this node represents the ".". 
-     * @return the number of sub-calls right to the ".". Maybe 0.
-     */
-    private int getSiblingCount(INode node) {
-        int siblingCount = 0;
-        INode currentNode = node;
-        while (currentNode != null && currentNode.hasSiblings()) {
-            siblingCount++;
-            currentNode = currentNode.getNextSibling();
-        }
-        return siblingCount;
+        System.err.println("found prefix: " + prefix);
+        return prefix;
     }
     
     /**
@@ -1208,31 +1164,6 @@ public class VilBuildLangProposalProviderUtility {
     }
     
     /**
-     * Checks if the <code>Constant</code> parameter has a qualified name or not.
-     * 
-     * @param constant
-     * @return <b>true</b> if it has a qualified name, <b>false</b> otherwise. Never <b>null</b>.
-     */
-    private boolean hasQName(Constant constant) {
-        return constant != null
-                && constant.getQValue() != null
-                && constant.getQValue().getPrefix() != null
-                && hasElements(constant.getQValue().getPrefix().getQname());
-    }
-    
-    /**
-     * Checks if the <code>SubCall</code> parameter has a qualified name or not.
-     * @param SubCall
-     * @return <b>true</b> if it has a qualified name, <b>false</b> otherwise. Never <b>null</b>.
-     */
-    private boolean hasQName(SubCall subCall) {
-        return subCall != null
-                && subCall.getCall() != null
-                && subCall.getCall().getName() != null
-                && hasElements(subCall.getCall().getName().getQname());
-    }
-    
-    /**
      * Checks if the <code>RuleElementBlock</code> has at least one element or not.
      * 
      * @param ruleElBlock
@@ -1446,7 +1377,7 @@ public class VilBuildLangProposalProviderUtility {
     private List<StyledString> getRuleVariables(INode node, boolean completeDefsOnly, boolean addLRHS) {
         List<StyledString> result = new ArrayList<StyledString>();
         // First, add the two implicit VIL rule variables
-        if (addLRHS) {
+        if (addLRHS) {// TODO: multiple conditions!
             StyledString lhs = new StyledString();
             lhs.append("LHS");
             // TODO: the type of LHS is the return type of the first precondition
@@ -1455,7 +1386,17 @@ public class VilBuildLangProposalProviderUtility {
             StyledString rhs = new StyledString();
             rhs.append("RHS");
             rhs.append(" : <Type?>", StyledString.QUALIFIER_STYLER);
-            result.add(rhs);         
+            result.add(rhs);
+
+            StyledString lhsNew = new StyledString();
+            lhsNew.append("FROM");
+            // TODO: the type of LHS is the return type of the first precondition
+            lhsNew.append(" : <Type?>", StyledString.QUALIFIER_STYLER);
+            result.add(lhsNew);
+            StyledString rhsNew = new StyledString();
+            rhsNew.append("TO");
+            rhsNew.append(" : <Type?>", StyledString.QUALIFIER_STYLER);
+            result.add(rhsNew);         
         }
         // Second, add all declared rule variables 
         if (node != null) {

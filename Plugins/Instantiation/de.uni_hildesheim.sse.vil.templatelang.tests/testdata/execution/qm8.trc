@@ -1,0 +1,16 @@
+-> main(Configuration, FileArtifact) with (<config>, test.texts)
+    -> byName(Configuration, String) with (<config>, types) = qm8::types
+    for f {
+        f <- qm8::types {0}
+        -> obtainDefaultValue(FieldType) with (qm8::types {0})
+            switch(int)
+                0 : 0
+        f <- qm8::types {1}
+        -> obtainDefaultValue(FieldType) with (qm8::types {1})
+            switch(long)
+                3 : 0
+        f <- qm8::types {2}
+        -> obtainDefaultValue(FieldType) with (qm8::types {2})
+            switch(twitter4j.Status)
+                7 : null
+    }

@@ -289,6 +289,13 @@ public class ExpressionDslSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case ExpressionDslPackage.DECLARATION_UNIT:
+      {
+        DeclarationUnit declarationUnit = (DeclarationUnit)theEObject;
+        T result = caseDeclarationUnit(declarationUnit);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case ExpressionDslPackage.CALL:
       {
         Call call = (Call)theEObject;
@@ -862,6 +869,22 @@ public class ExpressionDslSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseDeclaration(Declaration object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Declaration Unit</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Declaration Unit</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseDeclarationUnit(DeclarationUnit object)
   {
     return null;
   }

@@ -1,0 +1,23 @@
+@advice(qm8)
+template qm8(Configuration config, FileArtifact target) {
+
+    def main(Configuration config, FileArtifact target) {
+        for (FieldType f : config.byName("types")) {
+            '${obtainDefaultValue(f)}'
+        }
+    }
+
+    def obtainDefaultValue(FieldType type) {
+        switch(type.class) {
+            "int" : 0,
+            "String" : null,
+            "boolean" : false,
+            "long" : 0,
+            "float" : 0.0,
+            "double" : 0.0,
+            "Object" : null,
+            default : null
+        }
+    }
+
+}

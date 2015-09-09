@@ -86,6 +86,25 @@ public interface Set<T> extends Collection<T> {
     public Set<T> select(ExpressionEvaluator evaluator) throws VilException;
 
     /**
+     * Collects the application of <code>evaluator</code> to each individual element.
+     * 
+     * @param evaluator the evaluator (results must evaluate to Boolean results)
+     * @return the application results
+     * @throws VilException in case that application fails
+     */
+    public Set<?> collect(ExpressionEvaluator evaluator) throws VilException;
+    
+    /**
+     * Processes elements in this set by applying to given expression.
+     * 
+     * @param evaluator the evaluator holding the iterator / expression to apply
+     * @return the aggregated value, <b>null</b> in case of no aggregation
+     * @throws VilException in case that selection fails
+     */
+    @OperationMeta(allowsAggregation = true)
+    public Object apply(ExpressionEvaluator evaluator) throws VilException;
+    
+    /**
      * Turns this set into a sequence.
      * 
      * @return the set containing the elements of this set

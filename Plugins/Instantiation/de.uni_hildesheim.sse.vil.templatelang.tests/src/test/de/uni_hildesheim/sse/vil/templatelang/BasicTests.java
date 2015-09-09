@@ -3,7 +3,6 @@ package test.de.uni_hildesheim.sse.vil.templatelang;
 import java.io.File;
 import java.io.IOException;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.dslCore.translation.ErrorCodes;
@@ -273,7 +272,17 @@ public class BasicTests extends AbstractTest {
     public void testAlternative8() throws IOException {
         assertEqual("alternative8");
     }
-    
+
+    /**
+     * Tests a two-sided alternative with repeated declarations in individual scopes.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testAlternative9() throws IOException {
+        assertEqual("alternative9");
+    }
+
     /**
      * Tests a loop alternative with block.
      * 

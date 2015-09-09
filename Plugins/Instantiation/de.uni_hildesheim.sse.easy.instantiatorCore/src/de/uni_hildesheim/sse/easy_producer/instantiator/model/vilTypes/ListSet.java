@@ -87,6 +87,19 @@ public class ListSet<T> extends AbstractListWrapper<T> implements Set<T> {
         return new ListSet<T>(select(this, evaluator), param);
     }
 
+    @OperationMeta(useParameter = 0)
+    @Override
+    public Set<?> collect(ExpressionEvaluator evaluator) throws VilException {
+        TypeDescriptor<?>[] param = TypeDescriptor.createArray(1);
+        param[0] = evaluator.inferType();
+        return new ListSet<Object>(collect(this, evaluator), param);
+    }
+    
+    @Override
+    public Object apply(ExpressionEvaluator evaluator) throws VilException {
+        return AbstractCollectionWrapper.apply(this, evaluator);
+    }
+
     @Override
     @OperationMeta(name = "equals")
     public boolean isEquals(Collection<?> elements) {

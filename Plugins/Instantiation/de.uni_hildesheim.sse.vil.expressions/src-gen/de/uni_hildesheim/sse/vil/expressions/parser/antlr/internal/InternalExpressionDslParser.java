@@ -24,58 +24,58 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
     public static final String[] tokenNames = new String[] {
         "<invalid>", "<EOR>", "<DOWN>", "<UP>", "RULE_VERSION", "RULE_STRING", "RULE_NUMBER", "RULE_ID", "RULE_EXPONENT", "RULE_ML_COMMENT", "RULE_SL_COMMENT", "RULE_WS", "RULE_ANY_OTHER", "'@advice'", "'('", "')'", "'with'", "'version'", "';'", "'import'", "'and'", "'or'", "'xor'", "'=='", "'<>'", "'!='", "'>'", "'<'", "'>='", "'<='", "'+'", "'-'", "'*'", "'/'", "'not'", "'!'", "'super'", "'.'", "'new'", "'->'", "'['", "']'", "'|'", "','", "'='", "'::'", "'true'", "'false'", "'null'", "'setOf'", "'sequenceOf'", "'mapOf'", "'callOf'", "'{'", "'}'"
     };
-    public static final int RULE_ID=7;
-    public static final int T__29=29;
-    public static final int T__28=28;
-    public static final int T__27=27;
-    public static final int T__26=26;
-    public static final int T__25=25;
-    public static final int T__24=24;
-    public static final int T__23=23;
-    public static final int T__22=22;
-    public static final int RULE_ANY_OTHER=12;
-    public static final int T__21=21;
-    public static final int T__20=20;
-    public static final int EOF=-1;
+    public static final int T__50=50;
     public static final int T__19=19;
     public static final int RULE_VERSION=4;
+    public static final int T__15=15;
     public static final int T__16=16;
+    public static final int T__17=17;
+    public static final int T__18=18;
+    public static final int T__13=13;
+    public static final int T__14=14;
     public static final int T__51=51;
     public static final int T__52=52;
-    public static final int T__15=15;
     public static final int T__53=53;
-    public static final int T__18=18;
     public static final int T__54=54;
-    public static final int T__17=17;
-    public static final int RULE_NUMBER=6;
-    public static final int T__14=14;
-    public static final int T__13=13;
-    public static final int T__50=50;
-    public static final int T__42=42;
-    public static final int T__43=43;
-    public static final int T__40=40;
-    public static final int T__41=41;
-    public static final int T__46=46;
-    public static final int T__47=47;
-    public static final int T__44=44;
-    public static final int T__45=45;
-    public static final int T__48=48;
-    public static final int T__49=49;
-    public static final int RULE_SL_COMMENT=10;
+    public static final int RULE_ID=7;
+    public static final int T__26=26;
+    public static final int T__27=27;
+    public static final int T__28=28;
+    public static final int T__29=29;
+    public static final int T__22=22;
     public static final int RULE_ML_COMMENT=9;
-    public static final int T__30=30;
-    public static final int T__31=31;
+    public static final int T__23=23;
+    public static final int T__24=24;
+    public static final int T__25=25;
+    public static final int T__20=20;
+    public static final int T__21=21;
     public static final int RULE_STRING=5;
-    public static final int T__32=32;
+    public static final int RULE_SL_COMMENT=10;
+    public static final int T__37=37;
+    public static final int T__38=38;
+    public static final int T__39=39;
     public static final int T__33=33;
     public static final int T__34=34;
     public static final int T__35=35;
     public static final int T__36=36;
-    public static final int T__37=37;
-    public static final int T__38=38;
-    public static final int RULE_EXPONENT=8;
-    public static final int T__39=39;
+    public static final int EOF=-1;
+    public static final int T__30=30;
+    public static final int T__31=31;
+    public static final int T__32=32;
     public static final int RULE_WS=11;
+    public static final int RULE_ANY_OTHER=12;
+    public static final int RULE_NUMBER=6;
+    public static final int RULE_EXPONENT=8;
+    public static final int T__48=48;
+    public static final int T__49=49;
+    public static final int T__44=44;
+    public static final int T__45=45;
+    public static final int T__46=46;
+    public static final int T__47=47;
+    public static final int T__40=40;
+    public static final int T__41=41;
+    public static final int T__42=42;
+    public static final int T__43=43;
 
     // delegates
     // delegators
@@ -5600,26 +5600,26 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleDeclaration"
-    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:1977:1: ruleDeclaration returns [EObject current=null] : ( ( (lv_type_0_0= ruleType ) )? ( (lv_id_1_0= ruleIdentifier ) ) (otherlv_2= ',' ( (lv_id_3_0= ruleIdentifier ) ) )* ) ;
+    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:1977:1: ruleDeclaration returns [EObject current=null] : ( ( (lv_type_0_0= ruleType ) )? ( (lv_units_1_0= ruleDeclarationUnit ) ) (otherlv_2= ',' ( (lv_units_3_0= ruleDeclarationUnit ) ) )* ) ;
     public final EObject ruleDeclaration() throws RecognitionException {
         EObject current = null;
 
         Token otherlv_2=null;
         EObject lv_type_0_0 = null;
 
-        AntlrDatatypeRuleToken lv_id_1_0 = null;
+        EObject lv_units_1_0 = null;
 
-        AntlrDatatypeRuleToken lv_id_3_0 = null;
+        EObject lv_units_3_0 = null;
 
 
          enterRule(); 
             
         try {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:1980:28: ( ( ( (lv_type_0_0= ruleType ) )? ( (lv_id_1_0= ruleIdentifier ) ) (otherlv_2= ',' ( (lv_id_3_0= ruleIdentifier ) ) )* ) )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:1981:1: ( ( (lv_type_0_0= ruleType ) )? ( (lv_id_1_0= ruleIdentifier ) ) (otherlv_2= ',' ( (lv_id_3_0= ruleIdentifier ) ) )* )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:1980:28: ( ( ( (lv_type_0_0= ruleType ) )? ( (lv_units_1_0= ruleDeclarationUnit ) ) (otherlv_2= ',' ( (lv_units_3_0= ruleDeclarationUnit ) ) )* ) )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:1981:1: ( ( (lv_type_0_0= ruleType ) )? ( (lv_units_1_0= ruleDeclarationUnit ) ) (otherlv_2= ',' ( (lv_units_3_0= ruleDeclarationUnit ) ) )* )
             {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:1981:1: ( ( (lv_type_0_0= ruleType ) )? ( (lv_id_1_0= ruleIdentifier ) ) (otherlv_2= ',' ( (lv_id_3_0= ruleIdentifier ) ) )* )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:1981:2: ( (lv_type_0_0= ruleType ) )? ( (lv_id_1_0= ruleIdentifier ) ) (otherlv_2= ',' ( (lv_id_3_0= ruleIdentifier ) ) )*
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:1981:1: ( ( (lv_type_0_0= ruleType ) )? ( (lv_units_1_0= ruleDeclarationUnit ) ) (otherlv_2= ',' ( (lv_units_3_0= ruleDeclarationUnit ) ) )* )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:1981:2: ( (lv_type_0_0= ruleType ) )? ( (lv_units_1_0= ruleDeclarationUnit ) ) (otherlv_2= ',' ( (lv_units_3_0= ruleDeclarationUnit ) ) )*
             {
             // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:1981:2: ( (lv_type_0_0= ruleType ) )?
             int alt29=2;
@@ -5709,19 +5709,19 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
             }
 
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:1999:3: ( (lv_id_1_0= ruleIdentifier ) )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2000:1: (lv_id_1_0= ruleIdentifier )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:1999:3: ( (lv_units_1_0= ruleDeclarationUnit ) )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2000:1: (lv_units_1_0= ruleDeclarationUnit )
             {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2000:1: (lv_id_1_0= ruleIdentifier )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2001:3: lv_id_1_0= ruleIdentifier
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2000:1: (lv_units_1_0= ruleDeclarationUnit )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2001:3: lv_units_1_0= ruleDeclarationUnit
             {
             if ( state.backtracking==0 ) {
                
-              	        newCompositeNode(grammarAccess.getDeclarationAccess().getIdIdentifierParserRuleCall_1_0()); 
+              	        newCompositeNode(grammarAccess.getDeclarationAccess().getUnitsDeclarationUnitParserRuleCall_1_0()); 
               	    
             }
-            pushFollow(FOLLOW_ruleIdentifier_in_ruleDeclaration4272);
-            lv_id_1_0=ruleIdentifier();
+            pushFollow(FOLLOW_ruleDeclarationUnit_in_ruleDeclaration4272);
+            lv_units_1_0=ruleDeclarationUnit();
 
             state._fsp--;
             if (state.failed) return current;
@@ -5732,9 +5732,9 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
               	        }
                      		add(
                      			current, 
-                     			"id",
-                      		lv_id_1_0, 
-                      		"Identifier");
+                     			"units",
+                      		lv_units_1_0, 
+                      		"DeclarationUnit");
               	        afterParserOrEnumRuleCall();
               	    
             }
@@ -5744,7 +5744,7 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
             }
 
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2017:2: (otherlv_2= ',' ( (lv_id_3_0= ruleIdentifier ) ) )*
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2017:2: (otherlv_2= ',' ( (lv_units_3_0= ruleDeclarationUnit ) ) )*
             loop30:
             do {
                 int alt30=2;
@@ -5757,7 +5757,7 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
                 switch (alt30) {
             	case 1 :
-            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2017:4: otherlv_2= ',' ( (lv_id_3_0= ruleIdentifier ) )
+            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2017:4: otherlv_2= ',' ( (lv_units_3_0= ruleDeclarationUnit ) )
             	    {
             	    otherlv_2=(Token)match(input,43,FOLLOW_43_in_ruleDeclaration4285); if (state.failed) return current;
             	    if ( state.backtracking==0 ) {
@@ -5765,19 +5765,19 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
             	          	newLeafNode(otherlv_2, grammarAccess.getDeclarationAccess().getCommaKeyword_2_0());
             	          
             	    }
-            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2021:1: ( (lv_id_3_0= ruleIdentifier ) )
-            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2022:1: (lv_id_3_0= ruleIdentifier )
+            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2021:1: ( (lv_units_3_0= ruleDeclarationUnit ) )
+            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2022:1: (lv_units_3_0= ruleDeclarationUnit )
             	    {
-            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2022:1: (lv_id_3_0= ruleIdentifier )
-            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2023:3: lv_id_3_0= ruleIdentifier
+            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2022:1: (lv_units_3_0= ruleDeclarationUnit )
+            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2023:3: lv_units_3_0= ruleDeclarationUnit
             	    {
             	    if ( state.backtracking==0 ) {
             	       
-            	      	        newCompositeNode(grammarAccess.getDeclarationAccess().getIdIdentifierParserRuleCall_2_1_0()); 
+            	      	        newCompositeNode(grammarAccess.getDeclarationAccess().getUnitsDeclarationUnitParserRuleCall_2_1_0()); 
             	      	    
             	    }
-            	    pushFollow(FOLLOW_ruleIdentifier_in_ruleDeclaration4306);
-            	    lv_id_3_0=ruleIdentifier();
+            	    pushFollow(FOLLOW_ruleDeclarationUnit_in_ruleDeclaration4306);
+            	    lv_units_3_0=ruleDeclarationUnit();
 
             	    state._fsp--;
             	    if (state.failed) return current;
@@ -5788,9 +5788,9 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
             	      	        }
             	             		add(
             	             			current, 
-            	             			"id",
-            	              		lv_id_3_0, 
-            	              		"Identifier");
+            	             			"units",
+            	              		lv_units_3_0, 
+            	              		"DeclarationUnit");
             	      	        afterParserOrEnumRuleCall();
             	      	    
             	    }
@@ -5831,8 +5831,183 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
     // $ANTLR end "ruleDeclaration"
 
 
+    // $ANTLR start "entryRuleDeclarationUnit"
+    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2047:1: entryRuleDeclarationUnit returns [EObject current=null] : iv_ruleDeclarationUnit= ruleDeclarationUnit EOF ;
+    public final EObject entryRuleDeclarationUnit() throws RecognitionException {
+        EObject current = null;
+
+        EObject iv_ruleDeclarationUnit = null;
+
+
+        try {
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2048:2: (iv_ruleDeclarationUnit= ruleDeclarationUnit EOF )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2049:2: iv_ruleDeclarationUnit= ruleDeclarationUnit EOF
+            {
+            if ( state.backtracking==0 ) {
+               newCompositeNode(grammarAccess.getDeclarationUnitRule()); 
+            }
+            pushFollow(FOLLOW_ruleDeclarationUnit_in_entryRuleDeclarationUnit4344);
+            iv_ruleDeclarationUnit=ruleDeclarationUnit();
+
+            state._fsp--;
+            if (state.failed) return current;
+            if ( state.backtracking==0 ) {
+               current =iv_ruleDeclarationUnit; 
+            }
+            match(input,EOF,FOLLOW_EOF_in_entryRuleDeclarationUnit4354); if (state.failed) return current;
+
+            }
+
+        }
+         
+            catch (RecognitionException re) { 
+                recover(input,re); 
+                appendSkippedTokens();
+            } 
+        finally {
+        }
+        return current;
+    }
+    // $ANTLR end "entryRuleDeclarationUnit"
+
+
+    // $ANTLR start "ruleDeclarationUnit"
+    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2056:1: ruleDeclarationUnit returns [EObject current=null] : ( ( (lv_id_0_0= ruleIdentifier ) ) (otherlv_1= '=' ( (lv_deflt_2_0= ruleExpression ) ) )? ) ;
+    public final EObject ruleDeclarationUnit() throws RecognitionException {
+        EObject current = null;
+
+        Token otherlv_1=null;
+        AntlrDatatypeRuleToken lv_id_0_0 = null;
+
+        EObject lv_deflt_2_0 = null;
+
+
+         enterRule(); 
+            
+        try {
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2059:28: ( ( ( (lv_id_0_0= ruleIdentifier ) ) (otherlv_1= '=' ( (lv_deflt_2_0= ruleExpression ) ) )? ) )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2060:1: ( ( (lv_id_0_0= ruleIdentifier ) ) (otherlv_1= '=' ( (lv_deflt_2_0= ruleExpression ) ) )? )
+            {
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2060:1: ( ( (lv_id_0_0= ruleIdentifier ) ) (otherlv_1= '=' ( (lv_deflt_2_0= ruleExpression ) ) )? )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2060:2: ( (lv_id_0_0= ruleIdentifier ) ) (otherlv_1= '=' ( (lv_deflt_2_0= ruleExpression ) ) )?
+            {
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2060:2: ( (lv_id_0_0= ruleIdentifier ) )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2061:1: (lv_id_0_0= ruleIdentifier )
+            {
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2061:1: (lv_id_0_0= ruleIdentifier )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2062:3: lv_id_0_0= ruleIdentifier
+            {
+            if ( state.backtracking==0 ) {
+               
+              	        newCompositeNode(grammarAccess.getDeclarationUnitAccess().getIdIdentifierParserRuleCall_0_0()); 
+              	    
+            }
+            pushFollow(FOLLOW_ruleIdentifier_in_ruleDeclarationUnit4400);
+            lv_id_0_0=ruleIdentifier();
+
+            state._fsp--;
+            if (state.failed) return current;
+            if ( state.backtracking==0 ) {
+
+              	        if (current==null) {
+              	            current = createModelElementForParent(grammarAccess.getDeclarationUnitRule());
+              	        }
+                     		set(
+                     			current, 
+                     			"id",
+                      		lv_id_0_0, 
+                      		"Identifier");
+              	        afterParserOrEnumRuleCall();
+              	    
+            }
+
+            }
+
+
+            }
+
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2078:2: (otherlv_1= '=' ( (lv_deflt_2_0= ruleExpression ) ) )?
+            int alt31=2;
+            int LA31_0 = input.LA(1);
+
+            if ( (LA31_0==44) ) {
+                alt31=1;
+            }
+            switch (alt31) {
+                case 1 :
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2078:4: otherlv_1= '=' ( (lv_deflt_2_0= ruleExpression ) )
+                    {
+                    otherlv_1=(Token)match(input,44,FOLLOW_44_in_ruleDeclarationUnit4413); if (state.failed) return current;
+                    if ( state.backtracking==0 ) {
+
+                          	newLeafNode(otherlv_1, grammarAccess.getDeclarationUnitAccess().getEqualsSignKeyword_1_0());
+                          
+                    }
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2082:1: ( (lv_deflt_2_0= ruleExpression ) )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2083:1: (lv_deflt_2_0= ruleExpression )
+                    {
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2083:1: (lv_deflt_2_0= ruleExpression )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2084:3: lv_deflt_2_0= ruleExpression
+                    {
+                    if ( state.backtracking==0 ) {
+                       
+                      	        newCompositeNode(grammarAccess.getDeclarationUnitAccess().getDefltExpressionParserRuleCall_1_1_0()); 
+                      	    
+                    }
+                    pushFollow(FOLLOW_ruleExpression_in_ruleDeclarationUnit4434);
+                    lv_deflt_2_0=ruleExpression();
+
+                    state._fsp--;
+                    if (state.failed) return current;
+                    if ( state.backtracking==0 ) {
+
+                      	        if (current==null) {
+                      	            current = createModelElementForParent(grammarAccess.getDeclarationUnitRule());
+                      	        }
+                             		set(
+                             			current, 
+                             			"deflt",
+                              		lv_deflt_2_0, 
+                              		"Expression");
+                      	        afterParserOrEnumRuleCall();
+                      	    
+                    }
+
+                    }
+
+
+                    }
+
+
+                    }
+                    break;
+
+            }
+
+
+            }
+
+
+            }
+
+            if ( state.backtracking==0 ) {
+               leaveRule(); 
+            }
+        }
+         
+            catch (RecognitionException re) { 
+                recover(input,re); 
+                appendSkippedTokens();
+            } 
+        finally {
+        }
+        return current;
+    }
+    // $ANTLR end "ruleDeclarationUnit"
+
+
     // $ANTLR start "entryRuleCall"
-    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2047:1: entryRuleCall returns [EObject current=null] : iv_ruleCall= ruleCall EOF ;
+    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2108:1: entryRuleCall returns [EObject current=null] : iv_ruleCall= ruleCall EOF ;
     public final EObject entryRuleCall() throws RecognitionException {
         EObject current = null;
 
@@ -5840,13 +6015,13 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2048:2: (iv_ruleCall= ruleCall EOF )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2049:2: iv_ruleCall= ruleCall EOF
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2109:2: (iv_ruleCall= ruleCall EOF )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2110:2: iv_ruleCall= ruleCall EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getCallRule()); 
             }
-            pushFollow(FOLLOW_ruleCall_in_entryRuleCall4344);
+            pushFollow(FOLLOW_ruleCall_in_entryRuleCall4472);
             iv_ruleCall=ruleCall();
 
             state._fsp--;
@@ -5854,7 +6029,7 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                current =iv_ruleCall; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleCall4354); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleCall4482); if (state.failed) return current;
 
             }
 
@@ -5872,7 +6047,7 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleCall"
-    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2056:1: ruleCall returns [EObject current=null] : ( ( (lv_name_0_0= ruleQualifiedPrefix ) ) otherlv_1= '(' ( (lv_decl_2_0= ruleDeclarator ) )? ( (lv_param_3_0= ruleArgumentList ) )? otherlv_4= ')' ) ;
+    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2117:1: ruleCall returns [EObject current=null] : ( ( (lv_name_0_0= ruleQualifiedPrefix ) ) otherlv_1= '(' ( (lv_decl_2_0= ruleDeclarator ) )? ( (lv_param_3_0= ruleArgumentList ) )? otherlv_4= ')' ) ;
     public final EObject ruleCall() throws RecognitionException {
         EObject current = null;
 
@@ -5888,24 +6063,24 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2059:28: ( ( ( (lv_name_0_0= ruleQualifiedPrefix ) ) otherlv_1= '(' ( (lv_decl_2_0= ruleDeclarator ) )? ( (lv_param_3_0= ruleArgumentList ) )? otherlv_4= ')' ) )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2060:1: ( ( (lv_name_0_0= ruleQualifiedPrefix ) ) otherlv_1= '(' ( (lv_decl_2_0= ruleDeclarator ) )? ( (lv_param_3_0= ruleArgumentList ) )? otherlv_4= ')' )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2120:28: ( ( ( (lv_name_0_0= ruleQualifiedPrefix ) ) otherlv_1= '(' ( (lv_decl_2_0= ruleDeclarator ) )? ( (lv_param_3_0= ruleArgumentList ) )? otherlv_4= ')' ) )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2121:1: ( ( (lv_name_0_0= ruleQualifiedPrefix ) ) otherlv_1= '(' ( (lv_decl_2_0= ruleDeclarator ) )? ( (lv_param_3_0= ruleArgumentList ) )? otherlv_4= ')' )
             {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2060:1: ( ( (lv_name_0_0= ruleQualifiedPrefix ) ) otherlv_1= '(' ( (lv_decl_2_0= ruleDeclarator ) )? ( (lv_param_3_0= ruleArgumentList ) )? otherlv_4= ')' )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2060:2: ( (lv_name_0_0= ruleQualifiedPrefix ) ) otherlv_1= '(' ( (lv_decl_2_0= ruleDeclarator ) )? ( (lv_param_3_0= ruleArgumentList ) )? otherlv_4= ')'
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2121:1: ( ( (lv_name_0_0= ruleQualifiedPrefix ) ) otherlv_1= '(' ( (lv_decl_2_0= ruleDeclarator ) )? ( (lv_param_3_0= ruleArgumentList ) )? otherlv_4= ')' )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2121:2: ( (lv_name_0_0= ruleQualifiedPrefix ) ) otherlv_1= '(' ( (lv_decl_2_0= ruleDeclarator ) )? ( (lv_param_3_0= ruleArgumentList ) )? otherlv_4= ')'
             {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2060:2: ( (lv_name_0_0= ruleQualifiedPrefix ) )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2061:1: (lv_name_0_0= ruleQualifiedPrefix )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2121:2: ( (lv_name_0_0= ruleQualifiedPrefix ) )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2122:1: (lv_name_0_0= ruleQualifiedPrefix )
             {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2061:1: (lv_name_0_0= ruleQualifiedPrefix )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2062:3: lv_name_0_0= ruleQualifiedPrefix
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2122:1: (lv_name_0_0= ruleQualifiedPrefix )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2123:3: lv_name_0_0= ruleQualifiedPrefix
             {
             if ( state.backtracking==0 ) {
                
               	        newCompositeNode(grammarAccess.getCallAccess().getNameQualifiedPrefixParserRuleCall_0_0()); 
               	    
             }
-            pushFollow(FOLLOW_ruleQualifiedPrefix_in_ruleCall4400);
+            pushFollow(FOLLOW_ruleQualifiedPrefix_in_ruleCall4528);
             lv_name_0_0=ruleQualifiedPrefix();
 
             state._fsp--;
@@ -5929,28 +6104,28 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
             }
 
-            otherlv_1=(Token)match(input,14,FOLLOW_14_in_ruleCall4412); if (state.failed) return current;
+            otherlv_1=(Token)match(input,14,FOLLOW_14_in_ruleCall4540); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_1, grammarAccess.getCallAccess().getLeftParenthesisKeyword_1());
                   
             }
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2082:1: ( (lv_decl_2_0= ruleDeclarator ) )?
-            int alt31=2;
-            alt31 = dfa31.predict(input);
-            switch (alt31) {
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2143:1: ( (lv_decl_2_0= ruleDeclarator ) )?
+            int alt32=2;
+            alt32 = dfa32.predict(input);
+            switch (alt32) {
                 case 1 :
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2083:1: (lv_decl_2_0= ruleDeclarator )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2144:1: (lv_decl_2_0= ruleDeclarator )
                     {
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2083:1: (lv_decl_2_0= ruleDeclarator )
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2084:3: lv_decl_2_0= ruleDeclarator
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2144:1: (lv_decl_2_0= ruleDeclarator )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2145:3: lv_decl_2_0= ruleDeclarator
                     {
                     if ( state.backtracking==0 ) {
                        
                       	        newCompositeNode(grammarAccess.getCallAccess().getDeclDeclaratorParserRuleCall_2_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleDeclarator_in_ruleCall4433);
+                    pushFollow(FOLLOW_ruleDeclarator_in_ruleCall4561);
                     lv_decl_2_0=ruleDeclarator();
 
                     state._fsp--;
@@ -5977,26 +6152,26 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
             }
 
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2100:3: ( (lv_param_3_0= ruleArgumentList ) )?
-            int alt32=2;
-            int LA32_0 = input.LA(1);
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2161:3: ( (lv_param_3_0= ruleArgumentList ) )?
+            int alt33=2;
+            int LA33_0 = input.LA(1);
 
-            if ( ((LA32_0>=RULE_VERSION && LA32_0<=RULE_EXPONENT)||LA32_0==14||LA32_0==17||LA32_0==31||(LA32_0>=34 && LA32_0<=36)||LA32_0==38||(LA32_0>=46 && LA32_0<=48)||LA32_0==53) ) {
-                alt32=1;
+            if ( ((LA33_0>=RULE_VERSION && LA33_0<=RULE_EXPONENT)||LA33_0==14||LA33_0==17||LA33_0==31||(LA33_0>=34 && LA33_0<=36)||LA33_0==38||(LA33_0>=46 && LA33_0<=48)||LA33_0==53) ) {
+                alt33=1;
             }
-            switch (alt32) {
+            switch (alt33) {
                 case 1 :
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2101:1: (lv_param_3_0= ruleArgumentList )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2162:1: (lv_param_3_0= ruleArgumentList )
                     {
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2101:1: (lv_param_3_0= ruleArgumentList )
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2102:3: lv_param_3_0= ruleArgumentList
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2162:1: (lv_param_3_0= ruleArgumentList )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2163:3: lv_param_3_0= ruleArgumentList
                     {
                     if ( state.backtracking==0 ) {
                        
                       	        newCompositeNode(grammarAccess.getCallAccess().getParamArgumentListParserRuleCall_3_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleArgumentList_in_ruleCall4455);
+                    pushFollow(FOLLOW_ruleArgumentList_in_ruleCall4583);
                     lv_param_3_0=ruleArgumentList();
 
                     state._fsp--;
@@ -6023,7 +6198,7 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
             }
 
-            otherlv_4=(Token)match(input,15,FOLLOW_15_in_ruleCall4468); if (state.failed) return current;
+            otherlv_4=(Token)match(input,15,FOLLOW_15_in_ruleCall4596); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_4, grammarAccess.getCallAccess().getRightParenthesisKeyword_4());
@@ -6052,7 +6227,7 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleArgumentList"
-    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2130:1: entryRuleArgumentList returns [EObject current=null] : iv_ruleArgumentList= ruleArgumentList EOF ;
+    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2191:1: entryRuleArgumentList returns [EObject current=null] : iv_ruleArgumentList= ruleArgumentList EOF ;
     public final EObject entryRuleArgumentList() throws RecognitionException {
         EObject current = null;
 
@@ -6060,13 +6235,13 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2131:2: (iv_ruleArgumentList= ruleArgumentList EOF )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2132:2: iv_ruleArgumentList= ruleArgumentList EOF
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2192:2: (iv_ruleArgumentList= ruleArgumentList EOF )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2193:2: iv_ruleArgumentList= ruleArgumentList EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getArgumentListRule()); 
             }
-            pushFollow(FOLLOW_ruleArgumentList_in_entryRuleArgumentList4504);
+            pushFollow(FOLLOW_ruleArgumentList_in_entryRuleArgumentList4632);
             iv_ruleArgumentList=ruleArgumentList();
 
             state._fsp--;
@@ -6074,7 +6249,7 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                current =iv_ruleArgumentList; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleArgumentList4514); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleArgumentList4642); if (state.failed) return current;
 
             }
 
@@ -6092,7 +6267,7 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleArgumentList"
-    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2139:1: ruleArgumentList returns [EObject current=null] : ( ( (lv_param_0_0= ruleNamedArgument ) ) (otherlv_1= ',' ( (lv_param_2_0= ruleNamedArgument ) ) )* ) ;
+    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2200:1: ruleArgumentList returns [EObject current=null] : ( ( (lv_param_0_0= ruleNamedArgument ) ) (otherlv_1= ',' ( (lv_param_2_0= ruleNamedArgument ) ) )* ) ;
     public final EObject ruleArgumentList() throws RecognitionException {
         EObject current = null;
 
@@ -6105,24 +6280,24 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2142:28: ( ( ( (lv_param_0_0= ruleNamedArgument ) ) (otherlv_1= ',' ( (lv_param_2_0= ruleNamedArgument ) ) )* ) )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2143:1: ( ( (lv_param_0_0= ruleNamedArgument ) ) (otherlv_1= ',' ( (lv_param_2_0= ruleNamedArgument ) ) )* )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2203:28: ( ( ( (lv_param_0_0= ruleNamedArgument ) ) (otherlv_1= ',' ( (lv_param_2_0= ruleNamedArgument ) ) )* ) )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2204:1: ( ( (lv_param_0_0= ruleNamedArgument ) ) (otherlv_1= ',' ( (lv_param_2_0= ruleNamedArgument ) ) )* )
             {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2143:1: ( ( (lv_param_0_0= ruleNamedArgument ) ) (otherlv_1= ',' ( (lv_param_2_0= ruleNamedArgument ) ) )* )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2143:2: ( (lv_param_0_0= ruleNamedArgument ) ) (otherlv_1= ',' ( (lv_param_2_0= ruleNamedArgument ) ) )*
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2204:1: ( ( (lv_param_0_0= ruleNamedArgument ) ) (otherlv_1= ',' ( (lv_param_2_0= ruleNamedArgument ) ) )* )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2204:2: ( (lv_param_0_0= ruleNamedArgument ) ) (otherlv_1= ',' ( (lv_param_2_0= ruleNamedArgument ) ) )*
             {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2143:2: ( (lv_param_0_0= ruleNamedArgument ) )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2144:1: (lv_param_0_0= ruleNamedArgument )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2204:2: ( (lv_param_0_0= ruleNamedArgument ) )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2205:1: (lv_param_0_0= ruleNamedArgument )
             {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2144:1: (lv_param_0_0= ruleNamedArgument )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2145:3: lv_param_0_0= ruleNamedArgument
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2205:1: (lv_param_0_0= ruleNamedArgument )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2206:3: lv_param_0_0= ruleNamedArgument
             {
             if ( state.backtracking==0 ) {
                
               	        newCompositeNode(grammarAccess.getArgumentListAccess().getParamNamedArgumentParserRuleCall_0_0()); 
               	    
             }
-            pushFollow(FOLLOW_ruleNamedArgument_in_ruleArgumentList4560);
+            pushFollow(FOLLOW_ruleNamedArgument_in_ruleArgumentList4688);
             lv_param_0_0=ruleNamedArgument();
 
             state._fsp--;
@@ -6146,39 +6321,39 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
             }
 
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2161:2: (otherlv_1= ',' ( (lv_param_2_0= ruleNamedArgument ) ) )*
-            loop33:
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2222:2: (otherlv_1= ',' ( (lv_param_2_0= ruleNamedArgument ) ) )*
+            loop34:
             do {
-                int alt33=2;
-                int LA33_0 = input.LA(1);
+                int alt34=2;
+                int LA34_0 = input.LA(1);
 
-                if ( (LA33_0==43) ) {
-                    alt33=1;
+                if ( (LA34_0==43) ) {
+                    alt34=1;
                 }
 
 
-                switch (alt33) {
+                switch (alt34) {
             	case 1 :
-            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2161:4: otherlv_1= ',' ( (lv_param_2_0= ruleNamedArgument ) )
+            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2222:4: otherlv_1= ',' ( (lv_param_2_0= ruleNamedArgument ) )
             	    {
-            	    otherlv_1=(Token)match(input,43,FOLLOW_43_in_ruleArgumentList4573); if (state.failed) return current;
+            	    otherlv_1=(Token)match(input,43,FOLLOW_43_in_ruleArgumentList4701); if (state.failed) return current;
             	    if ( state.backtracking==0 ) {
 
             	          	newLeafNode(otherlv_1, grammarAccess.getArgumentListAccess().getCommaKeyword_1_0());
             	          
             	    }
-            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2165:1: ( (lv_param_2_0= ruleNamedArgument ) )
-            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2166:1: (lv_param_2_0= ruleNamedArgument )
+            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2226:1: ( (lv_param_2_0= ruleNamedArgument ) )
+            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2227:1: (lv_param_2_0= ruleNamedArgument )
             	    {
-            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2166:1: (lv_param_2_0= ruleNamedArgument )
-            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2167:3: lv_param_2_0= ruleNamedArgument
+            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2227:1: (lv_param_2_0= ruleNamedArgument )
+            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2228:3: lv_param_2_0= ruleNamedArgument
             	    {
             	    if ( state.backtracking==0 ) {
             	       
             	      	        newCompositeNode(grammarAccess.getArgumentListAccess().getParamNamedArgumentParserRuleCall_1_1_0()); 
             	      	    
             	    }
-            	    pushFollow(FOLLOW_ruleNamedArgument_in_ruleArgumentList4594);
+            	    pushFollow(FOLLOW_ruleNamedArgument_in_ruleArgumentList4722);
             	    lv_param_2_0=ruleNamedArgument();
 
             	    state._fsp--;
@@ -6207,7 +6382,7 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
             	    break;
 
             	default :
-            	    break loop33;
+            	    break loop34;
                 }
             } while (true);
 
@@ -6234,7 +6409,7 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleNamedArgument"
-    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2191:1: entryRuleNamedArgument returns [EObject current=null] : iv_ruleNamedArgument= ruleNamedArgument EOF ;
+    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2252:1: entryRuleNamedArgument returns [EObject current=null] : iv_ruleNamedArgument= ruleNamedArgument EOF ;
     public final EObject entryRuleNamedArgument() throws RecognitionException {
         EObject current = null;
 
@@ -6242,13 +6417,13 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2192:2: (iv_ruleNamedArgument= ruleNamedArgument EOF )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2193:2: iv_ruleNamedArgument= ruleNamedArgument EOF
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2253:2: (iv_ruleNamedArgument= ruleNamedArgument EOF )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2254:2: iv_ruleNamedArgument= ruleNamedArgument EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getNamedArgumentRule()); 
             }
-            pushFollow(FOLLOW_ruleNamedArgument_in_entryRuleNamedArgument4632);
+            pushFollow(FOLLOW_ruleNamedArgument_in_entryRuleNamedArgument4760);
             iv_ruleNamedArgument=ruleNamedArgument();
 
             state._fsp--;
@@ -6256,7 +6431,7 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                current =iv_ruleNamedArgument; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleNamedArgument4642); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleNamedArgument4770); if (state.failed) return current;
 
             }
 
@@ -6274,7 +6449,7 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleNamedArgument"
-    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2200:1: ruleNamedArgument returns [EObject current=null] : ( ( ( (lv_name_0_0= ruleIdentifier ) ) otherlv_1= '=' )? ( (lv_ex_2_0= ruleExpression ) ) ) ;
+    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2261:1: ruleNamedArgument returns [EObject current=null] : ( ( ( (lv_name_0_0= ruleIdentifier ) ) otherlv_1= '=' )? ( (lv_ex_2_0= ruleExpression ) ) ) ;
     public final EObject ruleNamedArgument() throws RecognitionException {
         EObject current = null;
 
@@ -6287,69 +6462,69 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2203:28: ( ( ( ( (lv_name_0_0= ruleIdentifier ) ) otherlv_1= '=' )? ( (lv_ex_2_0= ruleExpression ) ) ) )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2204:1: ( ( ( (lv_name_0_0= ruleIdentifier ) ) otherlv_1= '=' )? ( (lv_ex_2_0= ruleExpression ) ) )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2264:28: ( ( ( ( (lv_name_0_0= ruleIdentifier ) ) otherlv_1= '=' )? ( (lv_ex_2_0= ruleExpression ) ) ) )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2265:1: ( ( ( (lv_name_0_0= ruleIdentifier ) ) otherlv_1= '=' )? ( (lv_ex_2_0= ruleExpression ) ) )
             {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2204:1: ( ( ( (lv_name_0_0= ruleIdentifier ) ) otherlv_1= '=' )? ( (lv_ex_2_0= ruleExpression ) ) )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2204:2: ( ( (lv_name_0_0= ruleIdentifier ) ) otherlv_1= '=' )? ( (lv_ex_2_0= ruleExpression ) )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2265:1: ( ( ( (lv_name_0_0= ruleIdentifier ) ) otherlv_1= '=' )? ( (lv_ex_2_0= ruleExpression ) ) )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2265:2: ( ( (lv_name_0_0= ruleIdentifier ) ) otherlv_1= '=' )? ( (lv_ex_2_0= ruleExpression ) )
             {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2204:2: ( ( (lv_name_0_0= ruleIdentifier ) ) otherlv_1= '=' )?
-            int alt34=2;
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2265:2: ( ( (lv_name_0_0= ruleIdentifier ) ) otherlv_1= '=' )?
+            int alt35=2;
             switch ( input.LA(1) ) {
                 case RULE_ID:
                     {
-                    int LA34_1 = input.LA(2);
+                    int LA35_1 = input.LA(2);
 
-                    if ( (LA34_1==44) ) {
-                        alt34=1;
+                    if ( (LA35_1==44) ) {
+                        alt35=1;
                     }
                     }
                     break;
                 case RULE_VERSION:
                     {
-                    int LA34_2 = input.LA(2);
+                    int LA35_2 = input.LA(2);
 
-                    if ( (LA34_2==44) ) {
-                        alt34=1;
+                    if ( (LA35_2==44) ) {
+                        alt35=1;
                     }
                     }
                     break;
                 case RULE_EXPONENT:
                     {
-                    int LA34_3 = input.LA(2);
+                    int LA35_3 = input.LA(2);
 
-                    if ( (LA34_3==44) ) {
-                        alt34=1;
+                    if ( (LA35_3==44) ) {
+                        alt35=1;
                     }
                     }
                     break;
                 case 17:
                     {
-                    int LA34_4 = input.LA(2);
+                    int LA35_4 = input.LA(2);
 
-                    if ( (LA34_4==44) ) {
-                        alt34=1;
+                    if ( (LA35_4==44) ) {
+                        alt35=1;
                     }
                     }
                     break;
             }
 
-            switch (alt34) {
+            switch (alt35) {
                 case 1 :
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2204:3: ( (lv_name_0_0= ruleIdentifier ) ) otherlv_1= '='
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2265:3: ( (lv_name_0_0= ruleIdentifier ) ) otherlv_1= '='
                     {
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2204:3: ( (lv_name_0_0= ruleIdentifier ) )
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2205:1: (lv_name_0_0= ruleIdentifier )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2265:3: ( (lv_name_0_0= ruleIdentifier ) )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2266:1: (lv_name_0_0= ruleIdentifier )
                     {
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2205:1: (lv_name_0_0= ruleIdentifier )
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2206:3: lv_name_0_0= ruleIdentifier
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2266:1: (lv_name_0_0= ruleIdentifier )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2267:3: lv_name_0_0= ruleIdentifier
                     {
                     if ( state.backtracking==0 ) {
                        
                       	        newCompositeNode(grammarAccess.getNamedArgumentAccess().getNameIdentifierParserRuleCall_0_0_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleIdentifier_in_ruleNamedArgument4689);
+                    pushFollow(FOLLOW_ruleIdentifier_in_ruleNamedArgument4817);
                     lv_name_0_0=ruleIdentifier();
 
                     state._fsp--;
@@ -6373,7 +6548,7 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
                     }
 
-                    otherlv_1=(Token)match(input,44,FOLLOW_44_in_ruleNamedArgument4701); if (state.failed) return current;
+                    otherlv_1=(Token)match(input,44,FOLLOW_44_in_ruleNamedArgument4829); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                           	newLeafNode(otherlv_1, grammarAccess.getNamedArgumentAccess().getEqualsSignKeyword_0_1());
@@ -6385,18 +6560,18 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
             }
 
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2226:3: ( (lv_ex_2_0= ruleExpression ) )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2227:1: (lv_ex_2_0= ruleExpression )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2287:3: ( (lv_ex_2_0= ruleExpression ) )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2288:1: (lv_ex_2_0= ruleExpression )
             {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2227:1: (lv_ex_2_0= ruleExpression )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2228:3: lv_ex_2_0= ruleExpression
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2288:1: (lv_ex_2_0= ruleExpression )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2289:3: lv_ex_2_0= ruleExpression
             {
             if ( state.backtracking==0 ) {
                
               	        newCompositeNode(grammarAccess.getNamedArgumentAccess().getExExpressionParserRuleCall_1_0()); 
               	    
             }
-            pushFollow(FOLLOW_ruleExpression_in_ruleNamedArgument4724);
+            pushFollow(FOLLOW_ruleExpression_in_ruleNamedArgument4852);
             lv_ex_2_0=ruleExpression();
 
             state._fsp--;
@@ -6443,7 +6618,7 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleQualifiedPrefix"
-    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2252:1: entryRuleQualifiedPrefix returns [EObject current=null] : iv_ruleQualifiedPrefix= ruleQualifiedPrefix EOF ;
+    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2313:1: entryRuleQualifiedPrefix returns [EObject current=null] : iv_ruleQualifiedPrefix= ruleQualifiedPrefix EOF ;
     public final EObject entryRuleQualifiedPrefix() throws RecognitionException {
         EObject current = null;
 
@@ -6451,13 +6626,13 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2253:2: (iv_ruleQualifiedPrefix= ruleQualifiedPrefix EOF )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2254:2: iv_ruleQualifiedPrefix= ruleQualifiedPrefix EOF
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2314:2: (iv_ruleQualifiedPrefix= ruleQualifiedPrefix EOF )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2315:2: iv_ruleQualifiedPrefix= ruleQualifiedPrefix EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getQualifiedPrefixRule()); 
             }
-            pushFollow(FOLLOW_ruleQualifiedPrefix_in_entryRuleQualifiedPrefix4760);
+            pushFollow(FOLLOW_ruleQualifiedPrefix_in_entryRuleQualifiedPrefix4888);
             iv_ruleQualifiedPrefix=ruleQualifiedPrefix();
 
             state._fsp--;
@@ -6465,7 +6640,7 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                current =iv_ruleQualifiedPrefix; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleQualifiedPrefix4770); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleQualifiedPrefix4898); if (state.failed) return current;
 
             }
 
@@ -6483,7 +6658,7 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleQualifiedPrefix"
-    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2261:1: ruleQualifiedPrefix returns [EObject current=null] : ( ( (lv_qname_0_0= ruleIdentifier ) ) ( ( (lv_qname_1_0= '::' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )* ) ;
+    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2322:1: ruleQualifiedPrefix returns [EObject current=null] : ( ( (lv_qname_0_0= ruleIdentifier ) ) ( ( (lv_qname_1_0= '::' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )* ) ;
     public final EObject ruleQualifiedPrefix() throws RecognitionException {
         EObject current = null;
 
@@ -6496,24 +6671,24 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2264:28: ( ( ( (lv_qname_0_0= ruleIdentifier ) ) ( ( (lv_qname_1_0= '::' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )* ) )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2265:1: ( ( (lv_qname_0_0= ruleIdentifier ) ) ( ( (lv_qname_1_0= '::' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )* )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2325:28: ( ( ( (lv_qname_0_0= ruleIdentifier ) ) ( ( (lv_qname_1_0= '::' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )* ) )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2326:1: ( ( (lv_qname_0_0= ruleIdentifier ) ) ( ( (lv_qname_1_0= '::' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )* )
             {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2265:1: ( ( (lv_qname_0_0= ruleIdentifier ) ) ( ( (lv_qname_1_0= '::' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )* )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2265:2: ( (lv_qname_0_0= ruleIdentifier ) ) ( ( (lv_qname_1_0= '::' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )*
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2326:1: ( ( (lv_qname_0_0= ruleIdentifier ) ) ( ( (lv_qname_1_0= '::' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )* )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2326:2: ( (lv_qname_0_0= ruleIdentifier ) ) ( ( (lv_qname_1_0= '::' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )*
             {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2265:2: ( (lv_qname_0_0= ruleIdentifier ) )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2266:1: (lv_qname_0_0= ruleIdentifier )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2326:2: ( (lv_qname_0_0= ruleIdentifier ) )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2327:1: (lv_qname_0_0= ruleIdentifier )
             {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2266:1: (lv_qname_0_0= ruleIdentifier )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2267:3: lv_qname_0_0= ruleIdentifier
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2327:1: (lv_qname_0_0= ruleIdentifier )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2328:3: lv_qname_0_0= ruleIdentifier
             {
             if ( state.backtracking==0 ) {
                
               	        newCompositeNode(grammarAccess.getQualifiedPrefixAccess().getQnameIdentifierParserRuleCall_0_0()); 
               	    
             }
-            pushFollow(FOLLOW_ruleIdentifier_in_ruleQualifiedPrefix4816);
+            pushFollow(FOLLOW_ruleIdentifier_in_ruleQualifiedPrefix4944);
             lv_qname_0_0=ruleIdentifier();
 
             state._fsp--;
@@ -6537,28 +6712,28 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
             }
 
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2283:2: ( ( (lv_qname_1_0= '::' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )*
-            loop35:
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2344:2: ( ( (lv_qname_1_0= '::' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )*
+            loop36:
             do {
-                int alt35=2;
-                int LA35_0 = input.LA(1);
+                int alt36=2;
+                int LA36_0 = input.LA(1);
 
-                if ( (LA35_0==45) ) {
-                    alt35=1;
+                if ( (LA36_0==45) ) {
+                    alt36=1;
                 }
 
 
-                switch (alt35) {
+                switch (alt36) {
             	case 1 :
-            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2283:3: ( (lv_qname_1_0= '::' ) ) ( (lv_qname_2_0= ruleIdentifier ) )
+            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2344:3: ( (lv_qname_1_0= '::' ) ) ( (lv_qname_2_0= ruleIdentifier ) )
             	    {
-            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2283:3: ( (lv_qname_1_0= '::' ) )
-            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2284:1: (lv_qname_1_0= '::' )
+            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2344:3: ( (lv_qname_1_0= '::' ) )
+            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2345:1: (lv_qname_1_0= '::' )
             	    {
-            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2284:1: (lv_qname_1_0= '::' )
-            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2285:3: lv_qname_1_0= '::'
+            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2345:1: (lv_qname_1_0= '::' )
+            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2346:3: lv_qname_1_0= '::'
             	    {
-            	    lv_qname_1_0=(Token)match(input,45,FOLLOW_45_in_ruleQualifiedPrefix4835); if (state.failed) return current;
+            	    lv_qname_1_0=(Token)match(input,45,FOLLOW_45_in_ruleQualifiedPrefix4963); if (state.failed) return current;
             	    if ( state.backtracking==0 ) {
 
             	              newLeafNode(lv_qname_1_0, grammarAccess.getQualifiedPrefixAccess().getQnameColonColonKeyword_1_0_0());
@@ -6578,18 +6753,18 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
             	    }
 
-            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2298:2: ( (lv_qname_2_0= ruleIdentifier ) )
-            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2299:1: (lv_qname_2_0= ruleIdentifier )
+            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2359:2: ( (lv_qname_2_0= ruleIdentifier ) )
+            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2360:1: (lv_qname_2_0= ruleIdentifier )
             	    {
-            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2299:1: (lv_qname_2_0= ruleIdentifier )
-            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2300:3: lv_qname_2_0= ruleIdentifier
+            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2360:1: (lv_qname_2_0= ruleIdentifier )
+            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2361:3: lv_qname_2_0= ruleIdentifier
             	    {
             	    if ( state.backtracking==0 ) {
             	       
             	      	        newCompositeNode(grammarAccess.getQualifiedPrefixAccess().getQnameIdentifierParserRuleCall_1_1_0()); 
             	      	    
             	    }
-            	    pushFollow(FOLLOW_ruleIdentifier_in_ruleQualifiedPrefix4869);
+            	    pushFollow(FOLLOW_ruleIdentifier_in_ruleQualifiedPrefix4997);
             	    lv_qname_2_0=ruleIdentifier();
 
             	    state._fsp--;
@@ -6598,255 +6773,6 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
             	      	        if (current==null) {
             	      	            current = createModelElementForParent(grammarAccess.getQualifiedPrefixRule());
-            	      	        }
-            	             		add(
-            	             			current, 
-            	             			"qname",
-            	              		lv_qname_2_0, 
-            	              		"Identifier");
-            	      	        afterParserOrEnumRuleCall();
-            	      	    
-            	    }
-
-            	    }
-
-
-            	    }
-
-
-            	    }
-            	    break;
-
-            	default :
-            	    break loop35;
-                }
-            } while (true);
-
-
-            }
-
-
-            }
-
-            if ( state.backtracking==0 ) {
-               leaveRule(); 
-            }
-        }
-         
-            catch (RecognitionException re) { 
-                recover(input,re); 
-                appendSkippedTokens();
-            } 
-        finally {
-        }
-        return current;
-    }
-    // $ANTLR end "ruleQualifiedPrefix"
-
-
-    // $ANTLR start "entryRuleQualifiedName"
-    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2324:1: entryRuleQualifiedName returns [EObject current=null] : iv_ruleQualifiedName= ruleQualifiedName EOF ;
-    public final EObject entryRuleQualifiedName() throws RecognitionException {
-        EObject current = null;
-
-        EObject iv_ruleQualifiedName = null;
-
-
-        try {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2325:2: (iv_ruleQualifiedName= ruleQualifiedName EOF )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2326:2: iv_ruleQualifiedName= ruleQualifiedName EOF
-            {
-            if ( state.backtracking==0 ) {
-               newCompositeNode(grammarAccess.getQualifiedNameRule()); 
-            }
-            pushFollow(FOLLOW_ruleQualifiedName_in_entryRuleQualifiedName4907);
-            iv_ruleQualifiedName=ruleQualifiedName();
-
-            state._fsp--;
-            if (state.failed) return current;
-            if ( state.backtracking==0 ) {
-               current =iv_ruleQualifiedName; 
-            }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleQualifiedName4917); if (state.failed) return current;
-
-            }
-
-        }
-         
-            catch (RecognitionException re) { 
-                recover(input,re); 
-                appendSkippedTokens();
-            } 
-        finally {
-        }
-        return current;
-    }
-    // $ANTLR end "entryRuleQualifiedName"
-
-
-    // $ANTLR start "ruleQualifiedName"
-    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2333:1: ruleQualifiedName returns [EObject current=null] : ( ( (lv_prefix_0_0= ruleQualifiedPrefix ) ) ( ( (lv_qname_1_0= '.' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )* ) ;
-    public final EObject ruleQualifiedName() throws RecognitionException {
-        EObject current = null;
-
-        Token lv_qname_1_0=null;
-        EObject lv_prefix_0_0 = null;
-
-        AntlrDatatypeRuleToken lv_qname_2_0 = null;
-
-
-         enterRule(); 
-            
-        try {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2336:28: ( ( ( (lv_prefix_0_0= ruleQualifiedPrefix ) ) ( ( (lv_qname_1_0= '.' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )* ) )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2337:1: ( ( (lv_prefix_0_0= ruleQualifiedPrefix ) ) ( ( (lv_qname_1_0= '.' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )* )
-            {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2337:1: ( ( (lv_prefix_0_0= ruleQualifiedPrefix ) ) ( ( (lv_qname_1_0= '.' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )* )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2337:2: ( (lv_prefix_0_0= ruleQualifiedPrefix ) ) ( ( (lv_qname_1_0= '.' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )*
-            {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2337:2: ( (lv_prefix_0_0= ruleQualifiedPrefix ) )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2338:1: (lv_prefix_0_0= ruleQualifiedPrefix )
-            {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2338:1: (lv_prefix_0_0= ruleQualifiedPrefix )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2339:3: lv_prefix_0_0= ruleQualifiedPrefix
-            {
-            if ( state.backtracking==0 ) {
-               
-              	        newCompositeNode(grammarAccess.getQualifiedNameAccess().getPrefixQualifiedPrefixParserRuleCall_0_0()); 
-              	    
-            }
-            pushFollow(FOLLOW_ruleQualifiedPrefix_in_ruleQualifiedName4963);
-            lv_prefix_0_0=ruleQualifiedPrefix();
-
-            state._fsp--;
-            if (state.failed) return current;
-            if ( state.backtracking==0 ) {
-
-              	        if (current==null) {
-              	            current = createModelElementForParent(grammarAccess.getQualifiedNameRule());
-              	        }
-                     		set(
-                     			current, 
-                     			"prefix",
-                      		lv_prefix_0_0, 
-                      		"QualifiedPrefix");
-              	        afterParserOrEnumRuleCall();
-              	    
-            }
-
-            }
-
-
-            }
-
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2355:2: ( ( (lv_qname_1_0= '.' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )*
-            loop36:
-            do {
-                int alt36=2;
-                int LA36_0 = input.LA(1);
-
-                if ( (LA36_0==37) ) {
-                    switch ( input.LA(2) ) {
-                    case RULE_ID:
-                        {
-                        int LA36_3 = input.LA(3);
-
-                        if ( (LA36_3==EOF||LA36_3==RULE_VERSION||(LA36_3>=RULE_ID && LA36_3<=RULE_EXPONENT)||LA36_3==13||LA36_3==15||(LA36_3>=17 && LA36_3<=18)||(LA36_3>=20 && LA36_3<=33)||LA36_3==37||(LA36_3>=39 && LA36_3<=41)||LA36_3==43||LA36_3==54) ) {
-                            alt36=1;
-                        }
-
-
-                        }
-                        break;
-                    case RULE_VERSION:
-                        {
-                        int LA36_4 = input.LA(3);
-
-                        if ( (LA36_4==EOF||LA36_4==RULE_VERSION||(LA36_4>=RULE_ID && LA36_4<=RULE_EXPONENT)||LA36_4==13||LA36_4==15||(LA36_4>=17 && LA36_4<=18)||(LA36_4>=20 && LA36_4<=33)||LA36_4==37||(LA36_4>=39 && LA36_4<=41)||LA36_4==43||LA36_4==54) ) {
-                            alt36=1;
-                        }
-
-
-                        }
-                        break;
-                    case RULE_EXPONENT:
-                        {
-                        int LA36_5 = input.LA(3);
-
-                        if ( (LA36_5==EOF||LA36_5==RULE_VERSION||(LA36_5>=RULE_ID && LA36_5<=RULE_EXPONENT)||LA36_5==13||LA36_5==15||(LA36_5>=17 && LA36_5<=18)||(LA36_5>=20 && LA36_5<=33)||LA36_5==37||(LA36_5>=39 && LA36_5<=41)||LA36_5==43||LA36_5==54) ) {
-                            alt36=1;
-                        }
-
-
-                        }
-                        break;
-                    case 17:
-                        {
-                        int LA36_6 = input.LA(3);
-
-                        if ( (LA36_6==EOF||LA36_6==RULE_VERSION||(LA36_6>=RULE_ID && LA36_6<=RULE_EXPONENT)||LA36_6==13||LA36_6==15||(LA36_6>=17 && LA36_6<=18)||(LA36_6>=20 && LA36_6<=33)||LA36_6==37||(LA36_6>=39 && LA36_6<=41)||LA36_6==43||LA36_6==54) ) {
-                            alt36=1;
-                        }
-
-
-                        }
-                        break;
-
-                    }
-
-                }
-
-
-                switch (alt36) {
-            	case 1 :
-            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2355:3: ( (lv_qname_1_0= '.' ) ) ( (lv_qname_2_0= ruleIdentifier ) )
-            	    {
-            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2355:3: ( (lv_qname_1_0= '.' ) )
-            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2356:1: (lv_qname_1_0= '.' )
-            	    {
-            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2356:1: (lv_qname_1_0= '.' )
-            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2357:3: lv_qname_1_0= '.'
-            	    {
-            	    lv_qname_1_0=(Token)match(input,37,FOLLOW_37_in_ruleQualifiedName4982); if (state.failed) return current;
-            	    if ( state.backtracking==0 ) {
-
-            	              newLeafNode(lv_qname_1_0, grammarAccess.getQualifiedNameAccess().getQnameFullStopKeyword_1_0_0());
-            	          
-            	    }
-            	    if ( state.backtracking==0 ) {
-
-            	      	        if (current==null) {
-            	      	            current = createModelElement(grammarAccess.getQualifiedNameRule());
-            	      	        }
-            	             		addWithLastConsumed(current, "qname", lv_qname_1_0, ".");
-            	      	    
-            	    }
-
-            	    }
-
-
-            	    }
-
-            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2370:2: ( (lv_qname_2_0= ruleIdentifier ) )
-            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2371:1: (lv_qname_2_0= ruleIdentifier )
-            	    {
-            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2371:1: (lv_qname_2_0= ruleIdentifier )
-            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2372:3: lv_qname_2_0= ruleIdentifier
-            	    {
-            	    if ( state.backtracking==0 ) {
-            	       
-            	      	        newCompositeNode(grammarAccess.getQualifiedNameAccess().getQnameIdentifierParserRuleCall_1_1_0()); 
-            	      	    
-            	    }
-            	    pushFollow(FOLLOW_ruleIdentifier_in_ruleQualifiedName5016);
-            	    lv_qname_2_0=ruleIdentifier();
-
-            	    state._fsp--;
-            	    if (state.failed) return current;
-            	    if ( state.backtracking==0 ) {
-
-            	      	        if (current==null) {
-            	      	            current = createModelElementForParent(grammarAccess.getQualifiedNameRule());
             	      	        }
             	             		add(
             	             			current, 
@@ -6890,11 +6816,260 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
         }
         return current;
     }
+    // $ANTLR end "ruleQualifiedPrefix"
+
+
+    // $ANTLR start "entryRuleQualifiedName"
+    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2385:1: entryRuleQualifiedName returns [EObject current=null] : iv_ruleQualifiedName= ruleQualifiedName EOF ;
+    public final EObject entryRuleQualifiedName() throws RecognitionException {
+        EObject current = null;
+
+        EObject iv_ruleQualifiedName = null;
+
+
+        try {
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2386:2: (iv_ruleQualifiedName= ruleQualifiedName EOF )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2387:2: iv_ruleQualifiedName= ruleQualifiedName EOF
+            {
+            if ( state.backtracking==0 ) {
+               newCompositeNode(grammarAccess.getQualifiedNameRule()); 
+            }
+            pushFollow(FOLLOW_ruleQualifiedName_in_entryRuleQualifiedName5035);
+            iv_ruleQualifiedName=ruleQualifiedName();
+
+            state._fsp--;
+            if (state.failed) return current;
+            if ( state.backtracking==0 ) {
+               current =iv_ruleQualifiedName; 
+            }
+            match(input,EOF,FOLLOW_EOF_in_entryRuleQualifiedName5045); if (state.failed) return current;
+
+            }
+
+        }
+         
+            catch (RecognitionException re) { 
+                recover(input,re); 
+                appendSkippedTokens();
+            } 
+        finally {
+        }
+        return current;
+    }
+    // $ANTLR end "entryRuleQualifiedName"
+
+
+    // $ANTLR start "ruleQualifiedName"
+    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2394:1: ruleQualifiedName returns [EObject current=null] : ( ( (lv_prefix_0_0= ruleQualifiedPrefix ) ) ( ( (lv_qname_1_0= '.' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )* ) ;
+    public final EObject ruleQualifiedName() throws RecognitionException {
+        EObject current = null;
+
+        Token lv_qname_1_0=null;
+        EObject lv_prefix_0_0 = null;
+
+        AntlrDatatypeRuleToken lv_qname_2_0 = null;
+
+
+         enterRule(); 
+            
+        try {
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2397:28: ( ( ( (lv_prefix_0_0= ruleQualifiedPrefix ) ) ( ( (lv_qname_1_0= '.' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )* ) )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2398:1: ( ( (lv_prefix_0_0= ruleQualifiedPrefix ) ) ( ( (lv_qname_1_0= '.' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )* )
+            {
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2398:1: ( ( (lv_prefix_0_0= ruleQualifiedPrefix ) ) ( ( (lv_qname_1_0= '.' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )* )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2398:2: ( (lv_prefix_0_0= ruleQualifiedPrefix ) ) ( ( (lv_qname_1_0= '.' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )*
+            {
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2398:2: ( (lv_prefix_0_0= ruleQualifiedPrefix ) )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2399:1: (lv_prefix_0_0= ruleQualifiedPrefix )
+            {
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2399:1: (lv_prefix_0_0= ruleQualifiedPrefix )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2400:3: lv_prefix_0_0= ruleQualifiedPrefix
+            {
+            if ( state.backtracking==0 ) {
+               
+              	        newCompositeNode(grammarAccess.getQualifiedNameAccess().getPrefixQualifiedPrefixParserRuleCall_0_0()); 
+              	    
+            }
+            pushFollow(FOLLOW_ruleQualifiedPrefix_in_ruleQualifiedName5091);
+            lv_prefix_0_0=ruleQualifiedPrefix();
+
+            state._fsp--;
+            if (state.failed) return current;
+            if ( state.backtracking==0 ) {
+
+              	        if (current==null) {
+              	            current = createModelElementForParent(grammarAccess.getQualifiedNameRule());
+              	        }
+                     		set(
+                     			current, 
+                     			"prefix",
+                      		lv_prefix_0_0, 
+                      		"QualifiedPrefix");
+              	        afterParserOrEnumRuleCall();
+              	    
+            }
+
+            }
+
+
+            }
+
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2416:2: ( ( (lv_qname_1_0= '.' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )*
+            loop37:
+            do {
+                int alt37=2;
+                int LA37_0 = input.LA(1);
+
+                if ( (LA37_0==37) ) {
+                    switch ( input.LA(2) ) {
+                    case RULE_ID:
+                        {
+                        int LA37_3 = input.LA(3);
+
+                        if ( (LA37_3==EOF||LA37_3==RULE_VERSION||(LA37_3>=RULE_ID && LA37_3<=RULE_EXPONENT)||LA37_3==13||LA37_3==15||(LA37_3>=17 && LA37_3<=18)||(LA37_3>=20 && LA37_3<=33)||LA37_3==37||(LA37_3>=39 && LA37_3<=43)||LA37_3==54) ) {
+                            alt37=1;
+                        }
+
+
+                        }
+                        break;
+                    case RULE_VERSION:
+                        {
+                        int LA37_4 = input.LA(3);
+
+                        if ( (LA37_4==EOF||LA37_4==RULE_VERSION||(LA37_4>=RULE_ID && LA37_4<=RULE_EXPONENT)||LA37_4==13||LA37_4==15||(LA37_4>=17 && LA37_4<=18)||(LA37_4>=20 && LA37_4<=33)||LA37_4==37||(LA37_4>=39 && LA37_4<=43)||LA37_4==54) ) {
+                            alt37=1;
+                        }
+
+
+                        }
+                        break;
+                    case RULE_EXPONENT:
+                        {
+                        int LA37_5 = input.LA(3);
+
+                        if ( (LA37_5==EOF||LA37_5==RULE_VERSION||(LA37_5>=RULE_ID && LA37_5<=RULE_EXPONENT)||LA37_5==13||LA37_5==15||(LA37_5>=17 && LA37_5<=18)||(LA37_5>=20 && LA37_5<=33)||LA37_5==37||(LA37_5>=39 && LA37_5<=43)||LA37_5==54) ) {
+                            alt37=1;
+                        }
+
+
+                        }
+                        break;
+                    case 17:
+                        {
+                        int LA37_6 = input.LA(3);
+
+                        if ( (LA37_6==EOF||LA37_6==RULE_VERSION||(LA37_6>=RULE_ID && LA37_6<=RULE_EXPONENT)||LA37_6==13||LA37_6==15||(LA37_6>=17 && LA37_6<=18)||(LA37_6>=20 && LA37_6<=33)||LA37_6==37||(LA37_6>=39 && LA37_6<=43)||LA37_6==54) ) {
+                            alt37=1;
+                        }
+
+
+                        }
+                        break;
+
+                    }
+
+                }
+
+
+                switch (alt37) {
+            	case 1 :
+            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2416:3: ( (lv_qname_1_0= '.' ) ) ( (lv_qname_2_0= ruleIdentifier ) )
+            	    {
+            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2416:3: ( (lv_qname_1_0= '.' ) )
+            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2417:1: (lv_qname_1_0= '.' )
+            	    {
+            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2417:1: (lv_qname_1_0= '.' )
+            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2418:3: lv_qname_1_0= '.'
+            	    {
+            	    lv_qname_1_0=(Token)match(input,37,FOLLOW_37_in_ruleQualifiedName5110); if (state.failed) return current;
+            	    if ( state.backtracking==0 ) {
+
+            	              newLeafNode(lv_qname_1_0, grammarAccess.getQualifiedNameAccess().getQnameFullStopKeyword_1_0_0());
+            	          
+            	    }
+            	    if ( state.backtracking==0 ) {
+
+            	      	        if (current==null) {
+            	      	            current = createModelElement(grammarAccess.getQualifiedNameRule());
+            	      	        }
+            	             		addWithLastConsumed(current, "qname", lv_qname_1_0, ".");
+            	      	    
+            	    }
+
+            	    }
+
+
+            	    }
+
+            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2431:2: ( (lv_qname_2_0= ruleIdentifier ) )
+            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2432:1: (lv_qname_2_0= ruleIdentifier )
+            	    {
+            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2432:1: (lv_qname_2_0= ruleIdentifier )
+            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2433:3: lv_qname_2_0= ruleIdentifier
+            	    {
+            	    if ( state.backtracking==0 ) {
+            	       
+            	      	        newCompositeNode(grammarAccess.getQualifiedNameAccess().getQnameIdentifierParserRuleCall_1_1_0()); 
+            	      	    
+            	    }
+            	    pushFollow(FOLLOW_ruleIdentifier_in_ruleQualifiedName5144);
+            	    lv_qname_2_0=ruleIdentifier();
+
+            	    state._fsp--;
+            	    if (state.failed) return current;
+            	    if ( state.backtracking==0 ) {
+
+            	      	        if (current==null) {
+            	      	            current = createModelElementForParent(grammarAccess.getQualifiedNameRule());
+            	      	        }
+            	             		add(
+            	             			current, 
+            	             			"qname",
+            	              		lv_qname_2_0, 
+            	              		"Identifier");
+            	      	        afterParserOrEnumRuleCall();
+            	      	    
+            	    }
+
+            	    }
+
+
+            	    }
+
+
+            	    }
+            	    break;
+
+            	default :
+            	    break loop37;
+                }
+            } while (true);
+
+
+            }
+
+
+            }
+
+            if ( state.backtracking==0 ) {
+               leaveRule(); 
+            }
+        }
+         
+            catch (RecognitionException re) { 
+                recover(input,re); 
+                appendSkippedTokens();
+            } 
+        finally {
+        }
+        return current;
+    }
     // $ANTLR end "ruleQualifiedName"
 
 
     // $ANTLR start "entryRuleConstant"
-    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2396:1: entryRuleConstant returns [EObject current=null] : iv_ruleConstant= ruleConstant EOF ;
+    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2457:1: entryRuleConstant returns [EObject current=null] : iv_ruleConstant= ruleConstant EOF ;
     public final EObject entryRuleConstant() throws RecognitionException {
         EObject current = null;
 
@@ -6902,13 +7077,13 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2397:2: (iv_ruleConstant= ruleConstant EOF )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2398:2: iv_ruleConstant= ruleConstant EOF
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2458:2: (iv_ruleConstant= ruleConstant EOF )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2459:2: iv_ruleConstant= ruleConstant EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getConstantRule()); 
             }
-            pushFollow(FOLLOW_ruleConstant_in_entryRuleConstant5054);
+            pushFollow(FOLLOW_ruleConstant_in_entryRuleConstant5182);
             iv_ruleConstant=ruleConstant();
 
             state._fsp--;
@@ -6916,7 +7091,7 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                current =iv_ruleConstant; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleConstant5064); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleConstant5192); if (state.failed) return current;
 
             }
 
@@ -6934,7 +7109,7 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleConstant"
-    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2405:1: ruleConstant returns [EObject current=null] : ( ( (lv_nValue_0_0= ruleNumValue ) ) | ( (lv_sValue_1_0= RULE_STRING ) ) | ( (lv_qValue_2_0= ruleQualifiedName ) ) | ( ( (lv_bValue_3_1= 'true' | lv_bValue_3_2= 'false' ) ) ) | ( (lv_null_4_0= 'null' ) ) | ( ( ( RULE_VERSION ) )=> (lv_version_5_0= RULE_VERSION ) ) ) ;
+    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2466:1: ruleConstant returns [EObject current=null] : ( ( (lv_nValue_0_0= ruleNumValue ) ) | ( (lv_sValue_1_0= RULE_STRING ) ) | ( (lv_qValue_2_0= ruleQualifiedName ) ) | ( ( (lv_bValue_3_1= 'true' | lv_bValue_3_2= 'false' ) ) ) | ( (lv_null_4_0= 'null' ) ) | ( ( ( RULE_VERSION ) )=> (lv_version_5_0= RULE_VERSION ) ) ) ;
     public final EObject ruleConstant() throws RecognitionException {
         EObject current = null;
 
@@ -6951,43 +7126,43 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2408:28: ( ( ( (lv_nValue_0_0= ruleNumValue ) ) | ( (lv_sValue_1_0= RULE_STRING ) ) | ( (lv_qValue_2_0= ruleQualifiedName ) ) | ( ( (lv_bValue_3_1= 'true' | lv_bValue_3_2= 'false' ) ) ) | ( (lv_null_4_0= 'null' ) ) | ( ( ( RULE_VERSION ) )=> (lv_version_5_0= RULE_VERSION ) ) ) )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2409:1: ( ( (lv_nValue_0_0= ruleNumValue ) ) | ( (lv_sValue_1_0= RULE_STRING ) ) | ( (lv_qValue_2_0= ruleQualifiedName ) ) | ( ( (lv_bValue_3_1= 'true' | lv_bValue_3_2= 'false' ) ) ) | ( (lv_null_4_0= 'null' ) ) | ( ( ( RULE_VERSION ) )=> (lv_version_5_0= RULE_VERSION ) ) )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2469:28: ( ( ( (lv_nValue_0_0= ruleNumValue ) ) | ( (lv_sValue_1_0= RULE_STRING ) ) | ( (lv_qValue_2_0= ruleQualifiedName ) ) | ( ( (lv_bValue_3_1= 'true' | lv_bValue_3_2= 'false' ) ) ) | ( (lv_null_4_0= 'null' ) ) | ( ( ( RULE_VERSION ) )=> (lv_version_5_0= RULE_VERSION ) ) ) )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2470:1: ( ( (lv_nValue_0_0= ruleNumValue ) ) | ( (lv_sValue_1_0= RULE_STRING ) ) | ( (lv_qValue_2_0= ruleQualifiedName ) ) | ( ( (lv_bValue_3_1= 'true' | lv_bValue_3_2= 'false' ) ) ) | ( (lv_null_4_0= 'null' ) ) | ( ( ( RULE_VERSION ) )=> (lv_version_5_0= RULE_VERSION ) ) )
             {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2409:1: ( ( (lv_nValue_0_0= ruleNumValue ) ) | ( (lv_sValue_1_0= RULE_STRING ) ) | ( (lv_qValue_2_0= ruleQualifiedName ) ) | ( ( (lv_bValue_3_1= 'true' | lv_bValue_3_2= 'false' ) ) ) | ( (lv_null_4_0= 'null' ) ) | ( ( ( RULE_VERSION ) )=> (lv_version_5_0= RULE_VERSION ) ) )
-            int alt38=6;
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2470:1: ( ( (lv_nValue_0_0= ruleNumValue ) ) | ( (lv_sValue_1_0= RULE_STRING ) ) | ( (lv_qValue_2_0= ruleQualifiedName ) ) | ( ( (lv_bValue_3_1= 'true' | lv_bValue_3_2= 'false' ) ) ) | ( (lv_null_4_0= 'null' ) ) | ( ( ( RULE_VERSION ) )=> (lv_version_5_0= RULE_VERSION ) ) )
+            int alt39=6;
             switch ( input.LA(1) ) {
             case RULE_NUMBER:
                 {
-                alt38=1;
+                alt39=1;
                 }
                 break;
             case RULE_STRING:
                 {
-                alt38=2;
+                alt39=2;
                 }
                 break;
             case RULE_ID:
             case RULE_EXPONENT:
             case 17:
                 {
-                alt38=3;
+                alt39=3;
                 }
                 break;
             case RULE_VERSION:
                 {
-                int LA38_4 = input.LA(2);
+                int LA39_4 = input.LA(2);
 
-                if ( (synpred46_InternalExpressionDsl()) ) {
-                    alt38=3;
+                if ( (synpred47_InternalExpressionDsl()) ) {
+                    alt39=3;
                 }
-                else if ( (synpred50_InternalExpressionDsl()) ) {
-                    alt38=6;
+                else if ( (synpred51_InternalExpressionDsl()) ) {
+                    alt39=6;
                 }
                 else {
                     if (state.backtracking>0) {state.failed=true; return current;}
                     NoViableAltException nvae =
-                        new NoViableAltException("", 38, 4, input);
+                        new NoViableAltException("", 39, 4, input);
 
                     throw nvae;
                 }
@@ -6996,38 +7171,38 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
             case 46:
             case 47:
                 {
-                alt38=4;
+                alt39=4;
                 }
                 break;
             case 48:
                 {
-                alt38=5;
+                alt39=5;
                 }
                 break;
             default:
                 if (state.backtracking>0) {state.failed=true; return current;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 38, 0, input);
+                    new NoViableAltException("", 39, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt38) {
+            switch (alt39) {
                 case 1 :
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2409:2: ( (lv_nValue_0_0= ruleNumValue ) )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2470:2: ( (lv_nValue_0_0= ruleNumValue ) )
                     {
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2409:2: ( (lv_nValue_0_0= ruleNumValue ) )
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2410:1: (lv_nValue_0_0= ruleNumValue )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2470:2: ( (lv_nValue_0_0= ruleNumValue ) )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2471:1: (lv_nValue_0_0= ruleNumValue )
                     {
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2410:1: (lv_nValue_0_0= ruleNumValue )
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2411:3: lv_nValue_0_0= ruleNumValue
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2471:1: (lv_nValue_0_0= ruleNumValue )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2472:3: lv_nValue_0_0= ruleNumValue
                     {
                     if ( state.backtracking==0 ) {
                        
                       	        newCompositeNode(grammarAccess.getConstantAccess().getNValueNumValueParserRuleCall_0_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleNumValue_in_ruleConstant5110);
+                    pushFollow(FOLLOW_ruleNumValue_in_ruleConstant5238);
                     lv_nValue_0_0=ruleNumValue();
 
                     state._fsp--;
@@ -7055,15 +7230,15 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2428:6: ( (lv_sValue_1_0= RULE_STRING ) )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2489:6: ( (lv_sValue_1_0= RULE_STRING ) )
                     {
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2428:6: ( (lv_sValue_1_0= RULE_STRING ) )
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2429:1: (lv_sValue_1_0= RULE_STRING )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2489:6: ( (lv_sValue_1_0= RULE_STRING ) )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2490:1: (lv_sValue_1_0= RULE_STRING )
                     {
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2429:1: (lv_sValue_1_0= RULE_STRING )
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2430:3: lv_sValue_1_0= RULE_STRING
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2490:1: (lv_sValue_1_0= RULE_STRING )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2491:3: lv_sValue_1_0= RULE_STRING
                     {
-                    lv_sValue_1_0=(Token)match(input,RULE_STRING,FOLLOW_RULE_STRING_in_ruleConstant5133); if (state.failed) return current;
+                    lv_sValue_1_0=(Token)match(input,RULE_STRING,FOLLOW_RULE_STRING_in_ruleConstant5261); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       			newLeafNode(lv_sValue_1_0, grammarAccess.getConstantAccess().getSValueSTRINGTerminalRuleCall_1_0()); 
@@ -7091,20 +7266,20 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 3 :
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2447:6: ( (lv_qValue_2_0= ruleQualifiedName ) )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2508:6: ( (lv_qValue_2_0= ruleQualifiedName ) )
                     {
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2447:6: ( (lv_qValue_2_0= ruleQualifiedName ) )
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2448:1: (lv_qValue_2_0= ruleQualifiedName )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2508:6: ( (lv_qValue_2_0= ruleQualifiedName ) )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2509:1: (lv_qValue_2_0= ruleQualifiedName )
                     {
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2448:1: (lv_qValue_2_0= ruleQualifiedName )
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2449:3: lv_qValue_2_0= ruleQualifiedName
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2509:1: (lv_qValue_2_0= ruleQualifiedName )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2510:3: lv_qValue_2_0= ruleQualifiedName
                     {
                     if ( state.backtracking==0 ) {
                        
                       	        newCompositeNode(grammarAccess.getConstantAccess().getQValueQualifiedNameParserRuleCall_2_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleQualifiedName_in_ruleConstant5165);
+                    pushFollow(FOLLOW_ruleQualifiedName_in_ruleConstant5293);
                     lv_qValue_2_0=ruleQualifiedName();
 
                     state._fsp--;
@@ -7132,36 +7307,36 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 4 :
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2466:6: ( ( (lv_bValue_3_1= 'true' | lv_bValue_3_2= 'false' ) ) )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2527:6: ( ( (lv_bValue_3_1= 'true' | lv_bValue_3_2= 'false' ) ) )
                     {
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2466:6: ( ( (lv_bValue_3_1= 'true' | lv_bValue_3_2= 'false' ) ) )
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2467:1: ( (lv_bValue_3_1= 'true' | lv_bValue_3_2= 'false' ) )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2527:6: ( ( (lv_bValue_3_1= 'true' | lv_bValue_3_2= 'false' ) ) )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2528:1: ( (lv_bValue_3_1= 'true' | lv_bValue_3_2= 'false' ) )
                     {
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2467:1: ( (lv_bValue_3_1= 'true' | lv_bValue_3_2= 'false' ) )
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2468:1: (lv_bValue_3_1= 'true' | lv_bValue_3_2= 'false' )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2528:1: ( (lv_bValue_3_1= 'true' | lv_bValue_3_2= 'false' ) )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2529:1: (lv_bValue_3_1= 'true' | lv_bValue_3_2= 'false' )
                     {
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2468:1: (lv_bValue_3_1= 'true' | lv_bValue_3_2= 'false' )
-                    int alt37=2;
-                    int LA37_0 = input.LA(1);
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2529:1: (lv_bValue_3_1= 'true' | lv_bValue_3_2= 'false' )
+                    int alt38=2;
+                    int LA38_0 = input.LA(1);
 
-                    if ( (LA37_0==46) ) {
-                        alt37=1;
+                    if ( (LA38_0==46) ) {
+                        alt38=1;
                     }
-                    else if ( (LA37_0==47) ) {
-                        alt37=2;
+                    else if ( (LA38_0==47) ) {
+                        alt38=2;
                     }
                     else {
                         if (state.backtracking>0) {state.failed=true; return current;}
                         NoViableAltException nvae =
-                            new NoViableAltException("", 37, 0, input);
+                            new NoViableAltException("", 38, 0, input);
 
                         throw nvae;
                     }
-                    switch (alt37) {
+                    switch (alt38) {
                         case 1 :
-                            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2469:3: lv_bValue_3_1= 'true'
+                            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2530:3: lv_bValue_3_1= 'true'
                             {
-                            lv_bValue_3_1=(Token)match(input,46,FOLLOW_46_in_ruleConstant5191); if (state.failed) return current;
+                            lv_bValue_3_1=(Token)match(input,46,FOLLOW_46_in_ruleConstant5319); if (state.failed) return current;
                             if ( state.backtracking==0 ) {
 
                                       newLeafNode(lv_bValue_3_1, grammarAccess.getConstantAccess().getBValueTrueKeyword_3_0_0());
@@ -7179,9 +7354,9 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
                             }
                             break;
                         case 2 :
-                            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2481:8: lv_bValue_3_2= 'false'
+                            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2542:8: lv_bValue_3_2= 'false'
                             {
-                            lv_bValue_3_2=(Token)match(input,47,FOLLOW_47_in_ruleConstant5220); if (state.failed) return current;
+                            lv_bValue_3_2=(Token)match(input,47,FOLLOW_47_in_ruleConstant5348); if (state.failed) return current;
                             if ( state.backtracking==0 ) {
 
                                       newLeafNode(lv_bValue_3_2, grammarAccess.getConstantAccess().getBValueFalseKeyword_3_0_1());
@@ -7211,15 +7386,15 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 5 :
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2497:6: ( (lv_null_4_0= 'null' ) )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2558:6: ( (lv_null_4_0= 'null' ) )
                     {
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2497:6: ( (lv_null_4_0= 'null' ) )
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2498:1: (lv_null_4_0= 'null' )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2558:6: ( (lv_null_4_0= 'null' ) )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2559:1: (lv_null_4_0= 'null' )
                     {
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2498:1: (lv_null_4_0= 'null' )
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2499:3: lv_null_4_0= 'null'
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2559:1: (lv_null_4_0= 'null' )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2560:3: lv_null_4_0= 'null'
                     {
-                    lv_null_4_0=(Token)match(input,48,FOLLOW_48_in_ruleConstant5260); if (state.failed) return current;
+                    lv_null_4_0=(Token)match(input,48,FOLLOW_48_in_ruleConstant5388); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                               newLeafNode(lv_null_4_0, grammarAccess.getConstantAccess().getNullNullKeyword_4_0());
@@ -7243,15 +7418,15 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 6 :
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2513:6: ( ( ( RULE_VERSION ) )=> (lv_version_5_0= RULE_VERSION ) )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2574:6: ( ( ( RULE_VERSION ) )=> (lv_version_5_0= RULE_VERSION ) )
                     {
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2513:6: ( ( ( RULE_VERSION ) )=> (lv_version_5_0= RULE_VERSION ) )
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2513:7: ( ( RULE_VERSION ) )=> (lv_version_5_0= RULE_VERSION )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2574:6: ( ( ( RULE_VERSION ) )=> (lv_version_5_0= RULE_VERSION ) )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2574:7: ( ( RULE_VERSION ) )=> (lv_version_5_0= RULE_VERSION )
                     {
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2519:1: (lv_version_5_0= RULE_VERSION )
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2520:3: lv_version_5_0= RULE_VERSION
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2580:1: (lv_version_5_0= RULE_VERSION )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2581:3: lv_version_5_0= RULE_VERSION
                     {
-                    lv_version_5_0=(Token)match(input,RULE_VERSION,FOLLOW_RULE_VERSION_in_ruleConstant5307); if (state.failed) return current;
+                    lv_version_5_0=(Token)match(input,RULE_VERSION,FOLLOW_RULE_VERSION_in_ruleConstant5435); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       			newLeafNode(lv_version_5_0, grammarAccess.getConstantAccess().getVersionVERSIONTerminalRuleCall_5_0()); 
@@ -7301,7 +7476,7 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleNumValue"
-    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2544:1: entryRuleNumValue returns [EObject current=null] : iv_ruleNumValue= ruleNumValue EOF ;
+    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2605:1: entryRuleNumValue returns [EObject current=null] : iv_ruleNumValue= ruleNumValue EOF ;
     public final EObject entryRuleNumValue() throws RecognitionException {
         EObject current = null;
 
@@ -7309,13 +7484,13 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2545:2: (iv_ruleNumValue= ruleNumValue EOF )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2546:2: iv_ruleNumValue= ruleNumValue EOF
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2606:2: (iv_ruleNumValue= ruleNumValue EOF )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2607:2: iv_ruleNumValue= ruleNumValue EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getNumValueRule()); 
             }
-            pushFollow(FOLLOW_ruleNumValue_in_entryRuleNumValue5348);
+            pushFollow(FOLLOW_ruleNumValue_in_entryRuleNumValue5476);
             iv_ruleNumValue=ruleNumValue();
 
             state._fsp--;
@@ -7323,7 +7498,7 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                current =iv_ruleNumValue; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleNumValue5358); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleNumValue5486); if (state.failed) return current;
 
             }
 
@@ -7341,7 +7516,7 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleNumValue"
-    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2553:1: ruleNumValue returns [EObject current=null] : ( (lv_val_0_0= RULE_NUMBER ) ) ;
+    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2614:1: ruleNumValue returns [EObject current=null] : ( (lv_val_0_0= RULE_NUMBER ) ) ;
     public final EObject ruleNumValue() throws RecognitionException {
         EObject current = null;
 
@@ -7350,16 +7525,16 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2556:28: ( ( (lv_val_0_0= RULE_NUMBER ) ) )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2557:1: ( (lv_val_0_0= RULE_NUMBER ) )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2617:28: ( ( (lv_val_0_0= RULE_NUMBER ) ) )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2618:1: ( (lv_val_0_0= RULE_NUMBER ) )
             {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2557:1: ( (lv_val_0_0= RULE_NUMBER ) )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2558:1: (lv_val_0_0= RULE_NUMBER )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2618:1: ( (lv_val_0_0= RULE_NUMBER ) )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2619:1: (lv_val_0_0= RULE_NUMBER )
             {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2558:1: (lv_val_0_0= RULE_NUMBER )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2559:3: lv_val_0_0= RULE_NUMBER
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2619:1: (lv_val_0_0= RULE_NUMBER )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2620:3: lv_val_0_0= RULE_NUMBER
             {
-            lv_val_0_0=(Token)match(input,RULE_NUMBER,FOLLOW_RULE_NUMBER_in_ruleNumValue5399); if (state.failed) return current;
+            lv_val_0_0=(Token)match(input,RULE_NUMBER,FOLLOW_RULE_NUMBER_in_ruleNumValue5527); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			newLeafNode(lv_val_0_0, grammarAccess.getNumValueAccess().getValNUMBERTerminalRuleCall_0()); 
@@ -7403,7 +7578,7 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleIdentifier"
-    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2583:1: entryRuleIdentifier returns [String current=null] : iv_ruleIdentifier= ruleIdentifier EOF ;
+    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2644:1: entryRuleIdentifier returns [String current=null] : iv_ruleIdentifier= ruleIdentifier EOF ;
     public final String entryRuleIdentifier() throws RecognitionException {
         String current = null;
 
@@ -7411,13 +7586,13 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2584:2: (iv_ruleIdentifier= ruleIdentifier EOF )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2585:2: iv_ruleIdentifier= ruleIdentifier EOF
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2645:2: (iv_ruleIdentifier= ruleIdentifier EOF )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2646:2: iv_ruleIdentifier= ruleIdentifier EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getIdentifierRule()); 
             }
-            pushFollow(FOLLOW_ruleIdentifier_in_entryRuleIdentifier5440);
+            pushFollow(FOLLOW_ruleIdentifier_in_entryRuleIdentifier5568);
             iv_ruleIdentifier=ruleIdentifier();
 
             state._fsp--;
@@ -7425,7 +7600,7 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                current =iv_ruleIdentifier.getText(); 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleIdentifier5451); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleIdentifier5579); if (state.failed) return current;
 
             }
 
@@ -7443,7 +7618,7 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleIdentifier"
-    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2592:1: ruleIdentifier returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : (this_ID_0= RULE_ID | this_VERSION_1= RULE_VERSION | this_EXPONENT_2= RULE_EXPONENT | kw= 'version' ) ;
+    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2653:1: ruleIdentifier returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : (this_ID_0= RULE_ID | this_VERSION_1= RULE_VERSION | this_EXPONENT_2= RULE_EXPONENT | kw= 'version' ) ;
     public final AntlrDatatypeRuleToken ruleIdentifier() throws RecognitionException {
         AntlrDatatypeRuleToken current = new AntlrDatatypeRuleToken();
 
@@ -7455,45 +7630,45 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2595:28: ( (this_ID_0= RULE_ID | this_VERSION_1= RULE_VERSION | this_EXPONENT_2= RULE_EXPONENT | kw= 'version' ) )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2596:1: (this_ID_0= RULE_ID | this_VERSION_1= RULE_VERSION | this_EXPONENT_2= RULE_EXPONENT | kw= 'version' )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2656:28: ( (this_ID_0= RULE_ID | this_VERSION_1= RULE_VERSION | this_EXPONENT_2= RULE_EXPONENT | kw= 'version' ) )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2657:1: (this_ID_0= RULE_ID | this_VERSION_1= RULE_VERSION | this_EXPONENT_2= RULE_EXPONENT | kw= 'version' )
             {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2596:1: (this_ID_0= RULE_ID | this_VERSION_1= RULE_VERSION | this_EXPONENT_2= RULE_EXPONENT | kw= 'version' )
-            int alt39=4;
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2657:1: (this_ID_0= RULE_ID | this_VERSION_1= RULE_VERSION | this_EXPONENT_2= RULE_EXPONENT | kw= 'version' )
+            int alt40=4;
             switch ( input.LA(1) ) {
             case RULE_ID:
                 {
-                alt39=1;
+                alt40=1;
                 }
                 break;
             case RULE_VERSION:
                 {
-                alt39=2;
+                alt40=2;
                 }
                 break;
             case RULE_EXPONENT:
                 {
-                alt39=3;
+                alt40=3;
                 }
                 break;
             case 17:
                 {
-                alt39=4;
+                alt40=4;
                 }
                 break;
             default:
                 if (state.backtracking>0) {state.failed=true; return current;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 39, 0, input);
+                    new NoViableAltException("", 40, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt39) {
+            switch (alt40) {
                 case 1 :
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2596:6: this_ID_0= RULE_ID
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2657:6: this_ID_0= RULE_ID
                     {
-                    this_ID_0=(Token)match(input,RULE_ID,FOLLOW_RULE_ID_in_ruleIdentifier5491); if (state.failed) return current;
+                    this_ID_0=(Token)match(input,RULE_ID,FOLLOW_RULE_ID_in_ruleIdentifier5619); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       		current.merge(this_ID_0);
@@ -7508,9 +7683,9 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2604:10: this_VERSION_1= RULE_VERSION
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2665:10: this_VERSION_1= RULE_VERSION
                     {
-                    this_VERSION_1=(Token)match(input,RULE_VERSION,FOLLOW_RULE_VERSION_in_ruleIdentifier5517); if (state.failed) return current;
+                    this_VERSION_1=(Token)match(input,RULE_VERSION,FOLLOW_RULE_VERSION_in_ruleIdentifier5645); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       		current.merge(this_VERSION_1);
@@ -7525,9 +7700,9 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 3 :
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2612:10: this_EXPONENT_2= RULE_EXPONENT
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2673:10: this_EXPONENT_2= RULE_EXPONENT
                     {
-                    this_EXPONENT_2=(Token)match(input,RULE_EXPONENT,FOLLOW_RULE_EXPONENT_in_ruleIdentifier5543); if (state.failed) return current;
+                    this_EXPONENT_2=(Token)match(input,RULE_EXPONENT,FOLLOW_RULE_EXPONENT_in_ruleIdentifier5671); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       		current.merge(this_EXPONENT_2);
@@ -7542,9 +7717,9 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 4 :
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2621:2: kw= 'version'
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2682:2: kw= 'version'
                     {
-                    kw=(Token)match(input,17,FOLLOW_17_in_ruleIdentifier5567); if (state.failed) return current;
+                    kw=(Token)match(input,17,FOLLOW_17_in_ruleIdentifier5695); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                               current.merge(kw);
@@ -7577,7 +7752,7 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleType"
-    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2634:1: entryRuleType returns [EObject current=null] : iv_ruleType= ruleType EOF ;
+    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2695:1: entryRuleType returns [EObject current=null] : iv_ruleType= ruleType EOF ;
     public final EObject entryRuleType() throws RecognitionException {
         EObject current = null;
 
@@ -7585,13 +7760,13 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2635:2: (iv_ruleType= ruleType EOF )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2636:2: iv_ruleType= ruleType EOF
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2696:2: (iv_ruleType= ruleType EOF )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2697:2: iv_ruleType= ruleType EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getTypeRule()); 
             }
-            pushFollow(FOLLOW_ruleType_in_entryRuleType5607);
+            pushFollow(FOLLOW_ruleType_in_entryRuleType5735);
             iv_ruleType=ruleType();
 
             state._fsp--;
@@ -7599,7 +7774,7 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                current =iv_ruleType; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleType5617); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleType5745); if (state.failed) return current;
 
             }
 
@@ -7617,7 +7792,7 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleType"
-    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2643:1: ruleType returns [EObject current=null] : ( ( (lv_name_0_0= ruleQualifiedPrefix ) ) | ( ( (lv_set_1_0= 'setOf' ) ) ( (lv_param_2_0= ruleTypeParameters ) ) ) | ( ( (lv_seq_3_0= 'sequenceOf' ) ) ( (lv_param_4_0= ruleTypeParameters ) ) ) | ( ( (lv_map_5_0= 'mapOf' ) ) ( (lv_param_6_0= ruleTypeParameters ) ) ) | ( ( (lv_call_7_0= 'callOf' ) ) ( (lv_return_8_0= ruleType ) )? ( (lv_param_9_0= ruleTypeParameters ) ) ) ) ;
+    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2704:1: ruleType returns [EObject current=null] : ( ( (lv_name_0_0= ruleQualifiedPrefix ) ) | ( ( (lv_set_1_0= 'setOf' ) ) ( (lv_param_2_0= ruleTypeParameters ) ) ) | ( ( (lv_seq_3_0= 'sequenceOf' ) ) ( (lv_param_4_0= ruleTypeParameters ) ) ) | ( ( (lv_map_5_0= 'mapOf' ) ) ( (lv_param_6_0= ruleTypeParameters ) ) ) | ( ( (lv_call_7_0= 'callOf' ) ) ( (lv_return_8_0= ruleType ) )? ( (lv_param_9_0= ruleTypeParameters ) ) ) ) ;
     public final EObject ruleType() throws RecognitionException {
         EObject current = null;
 
@@ -7641,64 +7816,64 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2646:28: ( ( ( (lv_name_0_0= ruleQualifiedPrefix ) ) | ( ( (lv_set_1_0= 'setOf' ) ) ( (lv_param_2_0= ruleTypeParameters ) ) ) | ( ( (lv_seq_3_0= 'sequenceOf' ) ) ( (lv_param_4_0= ruleTypeParameters ) ) ) | ( ( (lv_map_5_0= 'mapOf' ) ) ( (lv_param_6_0= ruleTypeParameters ) ) ) | ( ( (lv_call_7_0= 'callOf' ) ) ( (lv_return_8_0= ruleType ) )? ( (lv_param_9_0= ruleTypeParameters ) ) ) ) )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2647:1: ( ( (lv_name_0_0= ruleQualifiedPrefix ) ) | ( ( (lv_set_1_0= 'setOf' ) ) ( (lv_param_2_0= ruleTypeParameters ) ) ) | ( ( (lv_seq_3_0= 'sequenceOf' ) ) ( (lv_param_4_0= ruleTypeParameters ) ) ) | ( ( (lv_map_5_0= 'mapOf' ) ) ( (lv_param_6_0= ruleTypeParameters ) ) ) | ( ( (lv_call_7_0= 'callOf' ) ) ( (lv_return_8_0= ruleType ) )? ( (lv_param_9_0= ruleTypeParameters ) ) ) )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2707:28: ( ( ( (lv_name_0_0= ruleQualifiedPrefix ) ) | ( ( (lv_set_1_0= 'setOf' ) ) ( (lv_param_2_0= ruleTypeParameters ) ) ) | ( ( (lv_seq_3_0= 'sequenceOf' ) ) ( (lv_param_4_0= ruleTypeParameters ) ) ) | ( ( (lv_map_5_0= 'mapOf' ) ) ( (lv_param_6_0= ruleTypeParameters ) ) ) | ( ( (lv_call_7_0= 'callOf' ) ) ( (lv_return_8_0= ruleType ) )? ( (lv_param_9_0= ruleTypeParameters ) ) ) ) )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2708:1: ( ( (lv_name_0_0= ruleQualifiedPrefix ) ) | ( ( (lv_set_1_0= 'setOf' ) ) ( (lv_param_2_0= ruleTypeParameters ) ) ) | ( ( (lv_seq_3_0= 'sequenceOf' ) ) ( (lv_param_4_0= ruleTypeParameters ) ) ) | ( ( (lv_map_5_0= 'mapOf' ) ) ( (lv_param_6_0= ruleTypeParameters ) ) ) | ( ( (lv_call_7_0= 'callOf' ) ) ( (lv_return_8_0= ruleType ) )? ( (lv_param_9_0= ruleTypeParameters ) ) ) )
             {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2647:1: ( ( (lv_name_0_0= ruleQualifiedPrefix ) ) | ( ( (lv_set_1_0= 'setOf' ) ) ( (lv_param_2_0= ruleTypeParameters ) ) ) | ( ( (lv_seq_3_0= 'sequenceOf' ) ) ( (lv_param_4_0= ruleTypeParameters ) ) ) | ( ( (lv_map_5_0= 'mapOf' ) ) ( (lv_param_6_0= ruleTypeParameters ) ) ) | ( ( (lv_call_7_0= 'callOf' ) ) ( (lv_return_8_0= ruleType ) )? ( (lv_param_9_0= ruleTypeParameters ) ) ) )
-            int alt41=5;
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2708:1: ( ( (lv_name_0_0= ruleQualifiedPrefix ) ) | ( ( (lv_set_1_0= 'setOf' ) ) ( (lv_param_2_0= ruleTypeParameters ) ) ) | ( ( (lv_seq_3_0= 'sequenceOf' ) ) ( (lv_param_4_0= ruleTypeParameters ) ) ) | ( ( (lv_map_5_0= 'mapOf' ) ) ( (lv_param_6_0= ruleTypeParameters ) ) ) | ( ( (lv_call_7_0= 'callOf' ) ) ( (lv_return_8_0= ruleType ) )? ( (lv_param_9_0= ruleTypeParameters ) ) ) )
+            int alt42=5;
             switch ( input.LA(1) ) {
             case RULE_VERSION:
             case RULE_ID:
             case RULE_EXPONENT:
             case 17:
                 {
-                alt41=1;
+                alt42=1;
                 }
                 break;
             case 49:
                 {
-                alt41=2;
+                alt42=2;
                 }
                 break;
             case 50:
                 {
-                alt41=3;
+                alt42=3;
                 }
                 break;
             case 51:
                 {
-                alt41=4;
+                alt42=4;
                 }
                 break;
             case 52:
                 {
-                alt41=5;
+                alt42=5;
                 }
                 break;
             default:
                 if (state.backtracking>0) {state.failed=true; return current;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 41, 0, input);
+                    new NoViableAltException("", 42, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt41) {
+            switch (alt42) {
                 case 1 :
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2647:2: ( (lv_name_0_0= ruleQualifiedPrefix ) )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2708:2: ( (lv_name_0_0= ruleQualifiedPrefix ) )
                     {
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2647:2: ( (lv_name_0_0= ruleQualifiedPrefix ) )
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2648:1: (lv_name_0_0= ruleQualifiedPrefix )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2708:2: ( (lv_name_0_0= ruleQualifiedPrefix ) )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2709:1: (lv_name_0_0= ruleQualifiedPrefix )
                     {
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2648:1: (lv_name_0_0= ruleQualifiedPrefix )
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2649:3: lv_name_0_0= ruleQualifiedPrefix
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2709:1: (lv_name_0_0= ruleQualifiedPrefix )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2710:3: lv_name_0_0= ruleQualifiedPrefix
                     {
                     if ( state.backtracking==0 ) {
                        
                       	        newCompositeNode(grammarAccess.getTypeAccess().getNameQualifiedPrefixParserRuleCall_0_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleQualifiedPrefix_in_ruleType5663);
+                    pushFollow(FOLLOW_ruleQualifiedPrefix_in_ruleType5791);
                     lv_name_0_0=ruleQualifiedPrefix();
 
                     state._fsp--;
@@ -7726,18 +7901,18 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2666:6: ( ( (lv_set_1_0= 'setOf' ) ) ( (lv_param_2_0= ruleTypeParameters ) ) )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2727:6: ( ( (lv_set_1_0= 'setOf' ) ) ( (lv_param_2_0= ruleTypeParameters ) ) )
                     {
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2666:6: ( ( (lv_set_1_0= 'setOf' ) ) ( (lv_param_2_0= ruleTypeParameters ) ) )
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2666:7: ( (lv_set_1_0= 'setOf' ) ) ( (lv_param_2_0= ruleTypeParameters ) )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2727:6: ( ( (lv_set_1_0= 'setOf' ) ) ( (lv_param_2_0= ruleTypeParameters ) ) )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2727:7: ( (lv_set_1_0= 'setOf' ) ) ( (lv_param_2_0= ruleTypeParameters ) )
                     {
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2666:7: ( (lv_set_1_0= 'setOf' ) )
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2667:1: (lv_set_1_0= 'setOf' )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2727:7: ( (lv_set_1_0= 'setOf' ) )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2728:1: (lv_set_1_0= 'setOf' )
                     {
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2667:1: (lv_set_1_0= 'setOf' )
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2668:3: lv_set_1_0= 'setOf'
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2728:1: (lv_set_1_0= 'setOf' )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2729:3: lv_set_1_0= 'setOf'
                     {
-                    lv_set_1_0=(Token)match(input,49,FOLLOW_49_in_ruleType5688); if (state.failed) return current;
+                    lv_set_1_0=(Token)match(input,49,FOLLOW_49_in_ruleType5816); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                               newLeafNode(lv_set_1_0, grammarAccess.getTypeAccess().getSetSetOfKeyword_1_0_0());
@@ -7757,18 +7932,18 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
                     }
 
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2681:2: ( (lv_param_2_0= ruleTypeParameters ) )
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2682:1: (lv_param_2_0= ruleTypeParameters )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2742:2: ( (lv_param_2_0= ruleTypeParameters ) )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2743:1: (lv_param_2_0= ruleTypeParameters )
                     {
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2682:1: (lv_param_2_0= ruleTypeParameters )
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2683:3: lv_param_2_0= ruleTypeParameters
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2743:1: (lv_param_2_0= ruleTypeParameters )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2744:3: lv_param_2_0= ruleTypeParameters
                     {
                     if ( state.backtracking==0 ) {
                        
                       	        newCompositeNode(grammarAccess.getTypeAccess().getParamTypeParametersParserRuleCall_1_1_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleTypeParameters_in_ruleType5722);
+                    pushFollow(FOLLOW_ruleTypeParameters_in_ruleType5850);
                     lv_param_2_0=ruleTypeParameters();
 
                     state._fsp--;
@@ -7799,18 +7974,18 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 3 :
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2700:6: ( ( (lv_seq_3_0= 'sequenceOf' ) ) ( (lv_param_4_0= ruleTypeParameters ) ) )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2761:6: ( ( (lv_seq_3_0= 'sequenceOf' ) ) ( (lv_param_4_0= ruleTypeParameters ) ) )
                     {
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2700:6: ( ( (lv_seq_3_0= 'sequenceOf' ) ) ( (lv_param_4_0= ruleTypeParameters ) ) )
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2700:7: ( (lv_seq_3_0= 'sequenceOf' ) ) ( (lv_param_4_0= ruleTypeParameters ) )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2761:6: ( ( (lv_seq_3_0= 'sequenceOf' ) ) ( (lv_param_4_0= ruleTypeParameters ) ) )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2761:7: ( (lv_seq_3_0= 'sequenceOf' ) ) ( (lv_param_4_0= ruleTypeParameters ) )
                     {
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2700:7: ( (lv_seq_3_0= 'sequenceOf' ) )
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2701:1: (lv_seq_3_0= 'sequenceOf' )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2761:7: ( (lv_seq_3_0= 'sequenceOf' ) )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2762:1: (lv_seq_3_0= 'sequenceOf' )
                     {
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2701:1: (lv_seq_3_0= 'sequenceOf' )
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2702:3: lv_seq_3_0= 'sequenceOf'
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2762:1: (lv_seq_3_0= 'sequenceOf' )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2763:3: lv_seq_3_0= 'sequenceOf'
                     {
-                    lv_seq_3_0=(Token)match(input,50,FOLLOW_50_in_ruleType5748); if (state.failed) return current;
+                    lv_seq_3_0=(Token)match(input,50,FOLLOW_50_in_ruleType5876); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                               newLeafNode(lv_seq_3_0, grammarAccess.getTypeAccess().getSeqSequenceOfKeyword_2_0_0());
@@ -7830,18 +8005,18 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
                     }
 
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2715:2: ( (lv_param_4_0= ruleTypeParameters ) )
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2716:1: (lv_param_4_0= ruleTypeParameters )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2776:2: ( (lv_param_4_0= ruleTypeParameters ) )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2777:1: (lv_param_4_0= ruleTypeParameters )
                     {
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2716:1: (lv_param_4_0= ruleTypeParameters )
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2717:3: lv_param_4_0= ruleTypeParameters
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2777:1: (lv_param_4_0= ruleTypeParameters )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2778:3: lv_param_4_0= ruleTypeParameters
                     {
                     if ( state.backtracking==0 ) {
                        
                       	        newCompositeNode(grammarAccess.getTypeAccess().getParamTypeParametersParserRuleCall_2_1_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleTypeParameters_in_ruleType5782);
+                    pushFollow(FOLLOW_ruleTypeParameters_in_ruleType5910);
                     lv_param_4_0=ruleTypeParameters();
 
                     state._fsp--;
@@ -7872,18 +8047,18 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 4 :
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2734:6: ( ( (lv_map_5_0= 'mapOf' ) ) ( (lv_param_6_0= ruleTypeParameters ) ) )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2795:6: ( ( (lv_map_5_0= 'mapOf' ) ) ( (lv_param_6_0= ruleTypeParameters ) ) )
                     {
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2734:6: ( ( (lv_map_5_0= 'mapOf' ) ) ( (lv_param_6_0= ruleTypeParameters ) ) )
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2734:7: ( (lv_map_5_0= 'mapOf' ) ) ( (lv_param_6_0= ruleTypeParameters ) )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2795:6: ( ( (lv_map_5_0= 'mapOf' ) ) ( (lv_param_6_0= ruleTypeParameters ) ) )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2795:7: ( (lv_map_5_0= 'mapOf' ) ) ( (lv_param_6_0= ruleTypeParameters ) )
                     {
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2734:7: ( (lv_map_5_0= 'mapOf' ) )
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2735:1: (lv_map_5_0= 'mapOf' )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2795:7: ( (lv_map_5_0= 'mapOf' ) )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2796:1: (lv_map_5_0= 'mapOf' )
                     {
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2735:1: (lv_map_5_0= 'mapOf' )
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2736:3: lv_map_5_0= 'mapOf'
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2796:1: (lv_map_5_0= 'mapOf' )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2797:3: lv_map_5_0= 'mapOf'
                     {
-                    lv_map_5_0=(Token)match(input,51,FOLLOW_51_in_ruleType5808); if (state.failed) return current;
+                    lv_map_5_0=(Token)match(input,51,FOLLOW_51_in_ruleType5936); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                               newLeafNode(lv_map_5_0, grammarAccess.getTypeAccess().getMapMapOfKeyword_3_0_0());
@@ -7903,18 +8078,18 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
                     }
 
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2749:2: ( (lv_param_6_0= ruleTypeParameters ) )
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2750:1: (lv_param_6_0= ruleTypeParameters )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2810:2: ( (lv_param_6_0= ruleTypeParameters ) )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2811:1: (lv_param_6_0= ruleTypeParameters )
                     {
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2750:1: (lv_param_6_0= ruleTypeParameters )
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2751:3: lv_param_6_0= ruleTypeParameters
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2811:1: (lv_param_6_0= ruleTypeParameters )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2812:3: lv_param_6_0= ruleTypeParameters
                     {
                     if ( state.backtracking==0 ) {
                        
                       	        newCompositeNode(grammarAccess.getTypeAccess().getParamTypeParametersParserRuleCall_3_1_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleTypeParameters_in_ruleType5842);
+                    pushFollow(FOLLOW_ruleTypeParameters_in_ruleType5970);
                     lv_param_6_0=ruleTypeParameters();
 
                     state._fsp--;
@@ -7945,18 +8120,18 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 5 :
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2768:6: ( ( (lv_call_7_0= 'callOf' ) ) ( (lv_return_8_0= ruleType ) )? ( (lv_param_9_0= ruleTypeParameters ) ) )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2829:6: ( ( (lv_call_7_0= 'callOf' ) ) ( (lv_return_8_0= ruleType ) )? ( (lv_param_9_0= ruleTypeParameters ) ) )
                     {
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2768:6: ( ( (lv_call_7_0= 'callOf' ) ) ( (lv_return_8_0= ruleType ) )? ( (lv_param_9_0= ruleTypeParameters ) ) )
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2768:7: ( (lv_call_7_0= 'callOf' ) ) ( (lv_return_8_0= ruleType ) )? ( (lv_param_9_0= ruleTypeParameters ) )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2829:6: ( ( (lv_call_7_0= 'callOf' ) ) ( (lv_return_8_0= ruleType ) )? ( (lv_param_9_0= ruleTypeParameters ) ) )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2829:7: ( (lv_call_7_0= 'callOf' ) ) ( (lv_return_8_0= ruleType ) )? ( (lv_param_9_0= ruleTypeParameters ) )
                     {
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2768:7: ( (lv_call_7_0= 'callOf' ) )
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2769:1: (lv_call_7_0= 'callOf' )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2829:7: ( (lv_call_7_0= 'callOf' ) )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2830:1: (lv_call_7_0= 'callOf' )
                     {
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2769:1: (lv_call_7_0= 'callOf' )
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2770:3: lv_call_7_0= 'callOf'
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2830:1: (lv_call_7_0= 'callOf' )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2831:3: lv_call_7_0= 'callOf'
                     {
-                    lv_call_7_0=(Token)match(input,52,FOLLOW_52_in_ruleType5868); if (state.failed) return current;
+                    lv_call_7_0=(Token)match(input,52,FOLLOW_52_in_ruleType5996); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                               newLeafNode(lv_call_7_0, grammarAccess.getTypeAccess().getCallCallOfKeyword_4_0_0());
@@ -7976,26 +8151,26 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
                     }
 
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2783:2: ( (lv_return_8_0= ruleType ) )?
-                    int alt40=2;
-                    int LA40_0 = input.LA(1);
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2844:2: ( (lv_return_8_0= ruleType ) )?
+                    int alt41=2;
+                    int LA41_0 = input.LA(1);
 
-                    if ( (LA40_0==RULE_VERSION||(LA40_0>=RULE_ID && LA40_0<=RULE_EXPONENT)||LA40_0==17||(LA40_0>=49 && LA40_0<=52)) ) {
-                        alt40=1;
+                    if ( (LA41_0==RULE_VERSION||(LA41_0>=RULE_ID && LA41_0<=RULE_EXPONENT)||LA41_0==17||(LA41_0>=49 && LA41_0<=52)) ) {
+                        alt41=1;
                     }
-                    switch (alt40) {
+                    switch (alt41) {
                         case 1 :
-                            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2784:1: (lv_return_8_0= ruleType )
+                            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2845:1: (lv_return_8_0= ruleType )
                             {
-                            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2784:1: (lv_return_8_0= ruleType )
-                            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2785:3: lv_return_8_0= ruleType
+                            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2845:1: (lv_return_8_0= ruleType )
+                            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2846:3: lv_return_8_0= ruleType
                             {
                             if ( state.backtracking==0 ) {
                                
                               	        newCompositeNode(grammarAccess.getTypeAccess().getReturnTypeParserRuleCall_4_1_0()); 
                               	    
                             }
-                            pushFollow(FOLLOW_ruleType_in_ruleType5902);
+                            pushFollow(FOLLOW_ruleType_in_ruleType6030);
                             lv_return_8_0=ruleType();
 
                             state._fsp--;
@@ -8022,18 +8197,18 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
                     }
 
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2801:3: ( (lv_param_9_0= ruleTypeParameters ) )
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2802:1: (lv_param_9_0= ruleTypeParameters )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2862:3: ( (lv_param_9_0= ruleTypeParameters ) )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2863:1: (lv_param_9_0= ruleTypeParameters )
                     {
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2802:1: (lv_param_9_0= ruleTypeParameters )
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2803:3: lv_param_9_0= ruleTypeParameters
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2863:1: (lv_param_9_0= ruleTypeParameters )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2864:3: lv_param_9_0= ruleTypeParameters
                     {
                     if ( state.backtracking==0 ) {
                        
                       	        newCompositeNode(grammarAccess.getTypeAccess().getParamTypeParametersParserRuleCall_4_2_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleTypeParameters_in_ruleType5924);
+                    pushFollow(FOLLOW_ruleTypeParameters_in_ruleType6052);
                     lv_param_9_0=ruleTypeParameters();
 
                     state._fsp--;
@@ -8086,7 +8261,7 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleTypeParameters"
-    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2827:1: entryRuleTypeParameters returns [EObject current=null] : iv_ruleTypeParameters= ruleTypeParameters EOF ;
+    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2888:1: entryRuleTypeParameters returns [EObject current=null] : iv_ruleTypeParameters= ruleTypeParameters EOF ;
     public final EObject entryRuleTypeParameters() throws RecognitionException {
         EObject current = null;
 
@@ -8094,13 +8269,13 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2828:2: (iv_ruleTypeParameters= ruleTypeParameters EOF )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2829:2: iv_ruleTypeParameters= ruleTypeParameters EOF
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2889:2: (iv_ruleTypeParameters= ruleTypeParameters EOF )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2890:2: iv_ruleTypeParameters= ruleTypeParameters EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getTypeParametersRule()); 
             }
-            pushFollow(FOLLOW_ruleTypeParameters_in_entryRuleTypeParameters5961);
+            pushFollow(FOLLOW_ruleTypeParameters_in_entryRuleTypeParameters6089);
             iv_ruleTypeParameters=ruleTypeParameters();
 
             state._fsp--;
@@ -8108,7 +8283,7 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                current =iv_ruleTypeParameters; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleTypeParameters5971); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleTypeParameters6099); if (state.failed) return current;
 
             }
 
@@ -8126,7 +8301,7 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleTypeParameters"
-    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2836:1: ruleTypeParameters returns [EObject current=null] : (otherlv_0= '(' ( (lv_param_1_0= ruleType ) ) (otherlv_2= ',' ( (lv_param_3_0= ruleType ) ) )* otherlv_4= ')' ) ;
+    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2897:1: ruleTypeParameters returns [EObject current=null] : (otherlv_0= '(' ( (lv_param_1_0= ruleType ) ) (otherlv_2= ',' ( (lv_param_3_0= ruleType ) ) )* otherlv_4= ')' ) ;
     public final EObject ruleTypeParameters() throws RecognitionException {
         EObject current = null;
 
@@ -8141,30 +8316,30 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2839:28: ( (otherlv_0= '(' ( (lv_param_1_0= ruleType ) ) (otherlv_2= ',' ( (lv_param_3_0= ruleType ) ) )* otherlv_4= ')' ) )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2840:1: (otherlv_0= '(' ( (lv_param_1_0= ruleType ) ) (otherlv_2= ',' ( (lv_param_3_0= ruleType ) ) )* otherlv_4= ')' )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2900:28: ( (otherlv_0= '(' ( (lv_param_1_0= ruleType ) ) (otherlv_2= ',' ( (lv_param_3_0= ruleType ) ) )* otherlv_4= ')' ) )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2901:1: (otherlv_0= '(' ( (lv_param_1_0= ruleType ) ) (otherlv_2= ',' ( (lv_param_3_0= ruleType ) ) )* otherlv_4= ')' )
             {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2840:1: (otherlv_0= '(' ( (lv_param_1_0= ruleType ) ) (otherlv_2= ',' ( (lv_param_3_0= ruleType ) ) )* otherlv_4= ')' )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2840:3: otherlv_0= '(' ( (lv_param_1_0= ruleType ) ) (otherlv_2= ',' ( (lv_param_3_0= ruleType ) ) )* otherlv_4= ')'
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2901:1: (otherlv_0= '(' ( (lv_param_1_0= ruleType ) ) (otherlv_2= ',' ( (lv_param_3_0= ruleType ) ) )* otherlv_4= ')' )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2901:3: otherlv_0= '(' ( (lv_param_1_0= ruleType ) ) (otherlv_2= ',' ( (lv_param_3_0= ruleType ) ) )* otherlv_4= ')'
             {
-            otherlv_0=(Token)match(input,14,FOLLOW_14_in_ruleTypeParameters6008); if (state.failed) return current;
+            otherlv_0=(Token)match(input,14,FOLLOW_14_in_ruleTypeParameters6136); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_0, grammarAccess.getTypeParametersAccess().getLeftParenthesisKeyword_0());
                   
             }
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2844:1: ( (lv_param_1_0= ruleType ) )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2845:1: (lv_param_1_0= ruleType )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2905:1: ( (lv_param_1_0= ruleType ) )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2906:1: (lv_param_1_0= ruleType )
             {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2845:1: (lv_param_1_0= ruleType )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2846:3: lv_param_1_0= ruleType
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2906:1: (lv_param_1_0= ruleType )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2907:3: lv_param_1_0= ruleType
             {
             if ( state.backtracking==0 ) {
                
               	        newCompositeNode(grammarAccess.getTypeParametersAccess().getParamTypeParserRuleCall_1_0()); 
               	    
             }
-            pushFollow(FOLLOW_ruleType_in_ruleTypeParameters6029);
+            pushFollow(FOLLOW_ruleType_in_ruleTypeParameters6157);
             lv_param_1_0=ruleType();
 
             state._fsp--;
@@ -8188,39 +8363,39 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
             }
 
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2862:2: (otherlv_2= ',' ( (lv_param_3_0= ruleType ) ) )*
-            loop42:
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2923:2: (otherlv_2= ',' ( (lv_param_3_0= ruleType ) ) )*
+            loop43:
             do {
-                int alt42=2;
-                int LA42_0 = input.LA(1);
+                int alt43=2;
+                int LA43_0 = input.LA(1);
 
-                if ( (LA42_0==43) ) {
-                    alt42=1;
+                if ( (LA43_0==43) ) {
+                    alt43=1;
                 }
 
 
-                switch (alt42) {
+                switch (alt43) {
             	case 1 :
-            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2862:4: otherlv_2= ',' ( (lv_param_3_0= ruleType ) )
+            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2923:4: otherlv_2= ',' ( (lv_param_3_0= ruleType ) )
             	    {
-            	    otherlv_2=(Token)match(input,43,FOLLOW_43_in_ruleTypeParameters6042); if (state.failed) return current;
+            	    otherlv_2=(Token)match(input,43,FOLLOW_43_in_ruleTypeParameters6170); if (state.failed) return current;
             	    if ( state.backtracking==0 ) {
 
             	          	newLeafNode(otherlv_2, grammarAccess.getTypeParametersAccess().getCommaKeyword_2_0());
             	          
             	    }
-            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2866:1: ( (lv_param_3_0= ruleType ) )
-            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2867:1: (lv_param_3_0= ruleType )
+            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2927:1: ( (lv_param_3_0= ruleType ) )
+            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2928:1: (lv_param_3_0= ruleType )
             	    {
-            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2867:1: (lv_param_3_0= ruleType )
-            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2868:3: lv_param_3_0= ruleType
+            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2928:1: (lv_param_3_0= ruleType )
+            	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2929:3: lv_param_3_0= ruleType
             	    {
             	    if ( state.backtracking==0 ) {
             	       
             	      	        newCompositeNode(grammarAccess.getTypeParametersAccess().getParamTypeParserRuleCall_2_1_0()); 
             	      	    
             	    }
-            	    pushFollow(FOLLOW_ruleType_in_ruleTypeParameters6063);
+            	    pushFollow(FOLLOW_ruleType_in_ruleTypeParameters6191);
             	    lv_param_3_0=ruleType();
 
             	    state._fsp--;
@@ -8249,11 +8424,11 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
             	    break;
 
             	default :
-            	    break loop42;
+            	    break loop43;
                 }
             } while (true);
 
-            otherlv_4=(Token)match(input,15,FOLLOW_15_in_ruleTypeParameters6077); if (state.failed) return current;
+            otherlv_4=(Token)match(input,15,FOLLOW_15_in_ruleTypeParameters6205); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_4, grammarAccess.getTypeParametersAccess().getRightParenthesisKeyword_3());
@@ -8282,7 +8457,7 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleContainerInitializer"
-    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2896:1: entryRuleContainerInitializer returns [EObject current=null] : iv_ruleContainerInitializer= ruleContainerInitializer EOF ;
+    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2957:1: entryRuleContainerInitializer returns [EObject current=null] : iv_ruleContainerInitializer= ruleContainerInitializer EOF ;
     public final EObject entryRuleContainerInitializer() throws RecognitionException {
         EObject current = null;
 
@@ -8290,13 +8465,13 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2897:2: (iv_ruleContainerInitializer= ruleContainerInitializer EOF )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2898:2: iv_ruleContainerInitializer= ruleContainerInitializer EOF
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2958:2: (iv_ruleContainerInitializer= ruleContainerInitializer EOF )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2959:2: iv_ruleContainerInitializer= ruleContainerInitializer EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getContainerInitializerRule()); 
             }
-            pushFollow(FOLLOW_ruleContainerInitializer_in_entryRuleContainerInitializer6113);
+            pushFollow(FOLLOW_ruleContainerInitializer_in_entryRuleContainerInitializer6241);
             iv_ruleContainerInitializer=ruleContainerInitializer();
 
             state._fsp--;
@@ -8304,7 +8479,7 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                current =iv_ruleContainerInitializer; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleContainerInitializer6123); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleContainerInitializer6251); if (state.failed) return current;
 
             }
 
@@ -8322,7 +8497,7 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleContainerInitializer"
-    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2905:1: ruleContainerInitializer returns [EObject current=null] : ( () otherlv_1= '{' ( ( (lv_exprs_2_0= ruleContainerInitializerExpression ) ) (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )* )? otherlv_5= '}' ) ;
+    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2966:1: ruleContainerInitializer returns [EObject current=null] : ( () otherlv_1= '{' ( ( (lv_exprs_2_0= ruleContainerInitializerExpression ) ) (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )* )? otherlv_5= '}' ) ;
     public final EObject ruleContainerInitializer() throws RecognitionException {
         EObject current = null;
 
@@ -8337,14 +8512,14 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2908:28: ( ( () otherlv_1= '{' ( ( (lv_exprs_2_0= ruleContainerInitializerExpression ) ) (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )* )? otherlv_5= '}' ) )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2909:1: ( () otherlv_1= '{' ( ( (lv_exprs_2_0= ruleContainerInitializerExpression ) ) (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )* )? otherlv_5= '}' )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2969:28: ( ( () otherlv_1= '{' ( ( (lv_exprs_2_0= ruleContainerInitializerExpression ) ) (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )* )? otherlv_5= '}' ) )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2970:1: ( () otherlv_1= '{' ( ( (lv_exprs_2_0= ruleContainerInitializerExpression ) ) (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )* )? otherlv_5= '}' )
             {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2909:1: ( () otherlv_1= '{' ( ( (lv_exprs_2_0= ruleContainerInitializerExpression ) ) (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )* )? otherlv_5= '}' )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2909:2: () otherlv_1= '{' ( ( (lv_exprs_2_0= ruleContainerInitializerExpression ) ) (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )* )? otherlv_5= '}'
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2970:1: ( () otherlv_1= '{' ( ( (lv_exprs_2_0= ruleContainerInitializerExpression ) ) (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )* )? otherlv_5= '}' )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2970:2: () otherlv_1= '{' ( ( (lv_exprs_2_0= ruleContainerInitializerExpression ) ) (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )* )? otherlv_5= '}'
             {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2909:2: ()
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2910:2: 
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2970:2: ()
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2971:2: 
             {
             if ( state.backtracking==0 ) {
                
@@ -8361,35 +8536,35 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
             }
 
-            otherlv_1=(Token)match(input,53,FOLLOW_53_in_ruleContainerInitializer6172); if (state.failed) return current;
+            otherlv_1=(Token)match(input,53,FOLLOW_53_in_ruleContainerInitializer6300); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_1, grammarAccess.getContainerInitializerAccess().getLeftCurlyBracketKeyword_1());
                   
             }
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2922:1: ( ( (lv_exprs_2_0= ruleContainerInitializerExpression ) ) (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )* )?
-            int alt44=2;
-            int LA44_0 = input.LA(1);
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2983:1: ( ( (lv_exprs_2_0= ruleContainerInitializerExpression ) ) (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )* )?
+            int alt45=2;
+            int LA45_0 = input.LA(1);
 
-            if ( ((LA44_0>=RULE_VERSION && LA44_0<=RULE_EXPONENT)||LA44_0==14||LA44_0==17||LA44_0==31||(LA44_0>=34 && LA44_0<=36)||LA44_0==38||(LA44_0>=46 && LA44_0<=48)||LA44_0==53) ) {
-                alt44=1;
+            if ( ((LA45_0>=RULE_VERSION && LA45_0<=RULE_EXPONENT)||LA45_0==14||LA45_0==17||LA45_0==31||(LA45_0>=34 && LA45_0<=36)||LA45_0==38||(LA45_0>=46 && LA45_0<=48)||LA45_0==53) ) {
+                alt45=1;
             }
-            switch (alt44) {
+            switch (alt45) {
                 case 1 :
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2922:2: ( (lv_exprs_2_0= ruleContainerInitializerExpression ) ) (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )*
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2983:2: ( (lv_exprs_2_0= ruleContainerInitializerExpression ) ) (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )*
                     {
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2922:2: ( (lv_exprs_2_0= ruleContainerInitializerExpression ) )
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2923:1: (lv_exprs_2_0= ruleContainerInitializerExpression )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2983:2: ( (lv_exprs_2_0= ruleContainerInitializerExpression ) )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2984:1: (lv_exprs_2_0= ruleContainerInitializerExpression )
                     {
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2923:1: (lv_exprs_2_0= ruleContainerInitializerExpression )
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2924:3: lv_exprs_2_0= ruleContainerInitializerExpression
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2984:1: (lv_exprs_2_0= ruleContainerInitializerExpression )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2985:3: lv_exprs_2_0= ruleContainerInitializerExpression
                     {
                     if ( state.backtracking==0 ) {
                        
                       	        newCompositeNode(grammarAccess.getContainerInitializerAccess().getExprsContainerInitializerExpressionParserRuleCall_2_0_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleContainerInitializerExpression_in_ruleContainerInitializer6194);
+                    pushFollow(FOLLOW_ruleContainerInitializerExpression_in_ruleContainerInitializer6322);
                     lv_exprs_2_0=ruleContainerInitializerExpression();
 
                     state._fsp--;
@@ -8413,39 +8588,39 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
                     }
 
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2940:2: (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )*
-                    loop43:
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:3001:2: (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )*
+                    loop44:
                     do {
-                        int alt43=2;
-                        int LA43_0 = input.LA(1);
+                        int alt44=2;
+                        int LA44_0 = input.LA(1);
 
-                        if ( (LA43_0==43) ) {
-                            alt43=1;
+                        if ( (LA44_0==43) ) {
+                            alt44=1;
                         }
 
 
-                        switch (alt43) {
+                        switch (alt44) {
                     	case 1 :
-                    	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2940:4: otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) )
+                    	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:3001:4: otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) )
                     	    {
-                    	    otherlv_3=(Token)match(input,43,FOLLOW_43_in_ruleContainerInitializer6207); if (state.failed) return current;
+                    	    otherlv_3=(Token)match(input,43,FOLLOW_43_in_ruleContainerInitializer6335); if (state.failed) return current;
                     	    if ( state.backtracking==0 ) {
 
                     	          	newLeafNode(otherlv_3, grammarAccess.getContainerInitializerAccess().getCommaKeyword_2_1_0());
                     	          
                     	    }
-                    	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2944:1: ( (lv_exprs_4_0= ruleContainerInitializerExpression ) )
-                    	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2945:1: (lv_exprs_4_0= ruleContainerInitializerExpression )
+                    	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:3005:1: ( (lv_exprs_4_0= ruleContainerInitializerExpression ) )
+                    	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:3006:1: (lv_exprs_4_0= ruleContainerInitializerExpression )
                     	    {
-                    	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2945:1: (lv_exprs_4_0= ruleContainerInitializerExpression )
-                    	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2946:3: lv_exprs_4_0= ruleContainerInitializerExpression
+                    	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:3006:1: (lv_exprs_4_0= ruleContainerInitializerExpression )
+                    	    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:3007:3: lv_exprs_4_0= ruleContainerInitializerExpression
                     	    {
                     	    if ( state.backtracking==0 ) {
                     	       
                     	      	        newCompositeNode(grammarAccess.getContainerInitializerAccess().getExprsContainerInitializerExpressionParserRuleCall_2_1_1_0()); 
                     	      	    
                     	    }
-                    	    pushFollow(FOLLOW_ruleContainerInitializerExpression_in_ruleContainerInitializer6228);
+                    	    pushFollow(FOLLOW_ruleContainerInitializerExpression_in_ruleContainerInitializer6356);
                     	    lv_exprs_4_0=ruleContainerInitializerExpression();
 
                     	    state._fsp--;
@@ -8474,7 +8649,7 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
                     	    break;
 
                     	default :
-                    	    break loop43;
+                    	    break loop44;
                         }
                     } while (true);
 
@@ -8484,7 +8659,7 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
             }
 
-            otherlv_5=(Token)match(input,54,FOLLOW_54_in_ruleContainerInitializer6244); if (state.failed) return current;
+            otherlv_5=(Token)match(input,54,FOLLOW_54_in_ruleContainerInitializer6372); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_5, grammarAccess.getContainerInitializerAccess().getRightCurlyBracketKeyword_3());
@@ -8513,7 +8688,7 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleContainerInitializerExpression"
-    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2974:1: entryRuleContainerInitializerExpression returns [EObject current=null] : iv_ruleContainerInitializerExpression= ruleContainerInitializerExpression EOF ;
+    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:3035:1: entryRuleContainerInitializerExpression returns [EObject current=null] : iv_ruleContainerInitializerExpression= ruleContainerInitializerExpression EOF ;
     public final EObject entryRuleContainerInitializerExpression() throws RecognitionException {
         EObject current = null;
 
@@ -8521,13 +8696,13 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2975:2: (iv_ruleContainerInitializerExpression= ruleContainerInitializerExpression EOF )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2976:2: iv_ruleContainerInitializerExpression= ruleContainerInitializerExpression EOF
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:3036:2: (iv_ruleContainerInitializerExpression= ruleContainerInitializerExpression EOF )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:3037:2: iv_ruleContainerInitializerExpression= ruleContainerInitializerExpression EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getContainerInitializerExpressionRule()); 
             }
-            pushFollow(FOLLOW_ruleContainerInitializerExpression_in_entryRuleContainerInitializerExpression6280);
+            pushFollow(FOLLOW_ruleContainerInitializerExpression_in_entryRuleContainerInitializerExpression6408);
             iv_ruleContainerInitializerExpression=ruleContainerInitializerExpression();
 
             state._fsp--;
@@ -8535,7 +8710,7 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                current =iv_ruleContainerInitializerExpression; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleContainerInitializerExpression6290); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleContainerInitializerExpression6418); if (state.failed) return current;
 
             }
 
@@ -8553,7 +8728,7 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleContainerInitializerExpression"
-    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2983:1: ruleContainerInitializerExpression returns [EObject current=null] : ( ( (lv_logical_0_0= ruleLogicalExpression ) ) | ( (lv_container_1_0= ruleContainerInitializer ) ) ) ;
+    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:3044:1: ruleContainerInitializerExpression returns [EObject current=null] : ( ( (lv_logical_0_0= ruleLogicalExpression ) ) | ( (lv_container_1_0= ruleContainerInitializer ) ) ) ;
     public final EObject ruleContainerInitializerExpression() throws RecognitionException {
         EObject current = null;
 
@@ -8565,42 +8740,42 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2986:28: ( ( ( (lv_logical_0_0= ruleLogicalExpression ) ) | ( (lv_container_1_0= ruleContainerInitializer ) ) ) )
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2987:1: ( ( (lv_logical_0_0= ruleLogicalExpression ) ) | ( (lv_container_1_0= ruleContainerInitializer ) ) )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:3047:28: ( ( ( (lv_logical_0_0= ruleLogicalExpression ) ) | ( (lv_container_1_0= ruleContainerInitializer ) ) ) )
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:3048:1: ( ( (lv_logical_0_0= ruleLogicalExpression ) ) | ( (lv_container_1_0= ruleContainerInitializer ) ) )
             {
-            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2987:1: ( ( (lv_logical_0_0= ruleLogicalExpression ) ) | ( (lv_container_1_0= ruleContainerInitializer ) ) )
-            int alt45=2;
-            int LA45_0 = input.LA(1);
+            // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:3048:1: ( ( (lv_logical_0_0= ruleLogicalExpression ) ) | ( (lv_container_1_0= ruleContainerInitializer ) ) )
+            int alt46=2;
+            int LA46_0 = input.LA(1);
 
-            if ( ((LA45_0>=RULE_VERSION && LA45_0<=RULE_EXPONENT)||LA45_0==14||LA45_0==17||LA45_0==31||(LA45_0>=34 && LA45_0<=36)||LA45_0==38||(LA45_0>=46 && LA45_0<=48)) ) {
-                alt45=1;
+            if ( ((LA46_0>=RULE_VERSION && LA46_0<=RULE_EXPONENT)||LA46_0==14||LA46_0==17||LA46_0==31||(LA46_0>=34 && LA46_0<=36)||LA46_0==38||(LA46_0>=46 && LA46_0<=48)) ) {
+                alt46=1;
             }
-            else if ( (LA45_0==53) ) {
-                alt45=2;
+            else if ( (LA46_0==53) ) {
+                alt46=2;
             }
             else {
                 if (state.backtracking>0) {state.failed=true; return current;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 45, 0, input);
+                    new NoViableAltException("", 46, 0, input);
 
                 throw nvae;
             }
-            switch (alt45) {
+            switch (alt46) {
                 case 1 :
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2987:2: ( (lv_logical_0_0= ruleLogicalExpression ) )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:3048:2: ( (lv_logical_0_0= ruleLogicalExpression ) )
                     {
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2987:2: ( (lv_logical_0_0= ruleLogicalExpression ) )
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2988:1: (lv_logical_0_0= ruleLogicalExpression )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:3048:2: ( (lv_logical_0_0= ruleLogicalExpression ) )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:3049:1: (lv_logical_0_0= ruleLogicalExpression )
                     {
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2988:1: (lv_logical_0_0= ruleLogicalExpression )
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2989:3: lv_logical_0_0= ruleLogicalExpression
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:3049:1: (lv_logical_0_0= ruleLogicalExpression )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:3050:3: lv_logical_0_0= ruleLogicalExpression
                     {
                     if ( state.backtracking==0 ) {
                        
                       	        newCompositeNode(grammarAccess.getContainerInitializerExpressionAccess().getLogicalLogicalExpressionParserRuleCall_0_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleLogicalExpression_in_ruleContainerInitializerExpression6336);
+                    pushFollow(FOLLOW_ruleLogicalExpression_in_ruleContainerInitializerExpression6464);
                     lv_logical_0_0=ruleLogicalExpression();
 
                     state._fsp--;
@@ -8628,20 +8803,20 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:3006:6: ( (lv_container_1_0= ruleContainerInitializer ) )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:3067:6: ( (lv_container_1_0= ruleContainerInitializer ) )
                     {
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:3006:6: ( (lv_container_1_0= ruleContainerInitializer ) )
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:3007:1: (lv_container_1_0= ruleContainerInitializer )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:3067:6: ( (lv_container_1_0= ruleContainerInitializer ) )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:3068:1: (lv_container_1_0= ruleContainerInitializer )
                     {
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:3007:1: (lv_container_1_0= ruleContainerInitializer )
-                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:3008:3: lv_container_1_0= ruleContainerInitializer
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:3068:1: (lv_container_1_0= ruleContainerInitializer )
+                    // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:3069:3: lv_container_1_0= ruleContainerInitializer
                     {
                     if ( state.backtracking==0 ) {
                        
                       	        newCompositeNode(grammarAccess.getContainerInitializerExpressionAccess().getContainerContainerInitializerParserRuleCall_1_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleContainerInitializer_in_ruleContainerInitializerExpression6363);
+                    pushFollow(FOLLOW_ruleContainerInitializer_in_ruleContainerInitializerExpression6491);
                     lv_container_1_0=ruleContainerInitializer();
 
                     state._fsp--;
@@ -8689,26 +8864,55 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
     }
     // $ANTLR end "ruleContainerInitializerExpression"
 
-    // $ANTLR start synpred46_InternalExpressionDsl
-    public final void synpred46_InternalExpressionDsl_fragment() throws RecognitionException {   
+    // $ANTLR start synpred39_InternalExpressionDsl
+    public final void synpred39_InternalExpressionDsl_fragment() throws RecognitionException {   
+        EObject lv_decl_2_0 = null;
+
+
+        // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2144:1: ( (lv_decl_2_0= ruleDeclarator ) )
+        // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2144:1: (lv_decl_2_0= ruleDeclarator )
+        {
+        // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2144:1: (lv_decl_2_0= ruleDeclarator )
+        // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2145:3: lv_decl_2_0= ruleDeclarator
+        {
+        if ( state.backtracking==0 ) {
+           
+          	        newCompositeNode(grammarAccess.getCallAccess().getDeclDeclaratorParserRuleCall_2_0()); 
+          	    
+        }
+        pushFollow(FOLLOW_ruleDeclarator_in_synpred39_InternalExpressionDsl4561);
+        lv_decl_2_0=ruleDeclarator();
+
+        state._fsp--;
+        if (state.failed) return ;
+
+        }
+
+
+        }
+    }
+    // $ANTLR end synpred39_InternalExpressionDsl
+
+    // $ANTLR start synpred47_InternalExpressionDsl
+    public final void synpred47_InternalExpressionDsl_fragment() throws RecognitionException {   
         EObject lv_qValue_2_0 = null;
 
 
-        // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2447:6: ( ( (lv_qValue_2_0= ruleQualifiedName ) ) )
-        // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2447:6: ( (lv_qValue_2_0= ruleQualifiedName ) )
+        // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2508:6: ( ( (lv_qValue_2_0= ruleQualifiedName ) ) )
+        // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2508:6: ( (lv_qValue_2_0= ruleQualifiedName ) )
         {
-        // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2447:6: ( (lv_qValue_2_0= ruleQualifiedName ) )
-        // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2448:1: (lv_qValue_2_0= ruleQualifiedName )
+        // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2508:6: ( (lv_qValue_2_0= ruleQualifiedName ) )
+        // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2509:1: (lv_qValue_2_0= ruleQualifiedName )
         {
-        // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2448:1: (lv_qValue_2_0= ruleQualifiedName )
-        // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2449:3: lv_qValue_2_0= ruleQualifiedName
+        // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2509:1: (lv_qValue_2_0= ruleQualifiedName )
+        // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2510:3: lv_qValue_2_0= ruleQualifiedName
         {
         if ( state.backtracking==0 ) {
            
           	        newCompositeNode(grammarAccess.getConstantAccess().getQValueQualifiedNameParserRuleCall_2_0()); 
           	    
         }
-        pushFollow(FOLLOW_ruleQualifiedName_in_synpred46_InternalExpressionDsl5165);
+        pushFollow(FOLLOW_ruleQualifiedName_in_synpred47_InternalExpressionDsl5293);
         lv_qValue_2_0=ruleQualifiedName();
 
         state._fsp--;
@@ -8722,32 +8926,32 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
         }
     }
-    // $ANTLR end synpred46_InternalExpressionDsl
+    // $ANTLR end synpred47_InternalExpressionDsl
 
-    // $ANTLR start synpred50_InternalExpressionDsl
-    public final void synpred50_InternalExpressionDsl_fragment() throws RecognitionException {   
-        // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2513:7: ( ( RULE_VERSION ) )
-        // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2514:1: ( RULE_VERSION )
+    // $ANTLR start synpred51_InternalExpressionDsl
+    public final void synpred51_InternalExpressionDsl_fragment() throws RecognitionException {   
+        // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2574:7: ( ( RULE_VERSION ) )
+        // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2575:1: ( RULE_VERSION )
         {
-        // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2514:1: ( RULE_VERSION )
-        // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2515:1: RULE_VERSION
+        // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2575:1: ( RULE_VERSION )
+        // ../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/parser/antlr/internal/InternalExpressionDsl.g:2576:1: RULE_VERSION
         {
-        match(input,RULE_VERSION,FOLLOW_RULE_VERSION_in_synpred50_InternalExpressionDsl5293); if (state.failed) return ;
+        match(input,RULE_VERSION,FOLLOW_RULE_VERSION_in_synpred51_InternalExpressionDsl5421); if (state.failed) return ;
 
         }
 
 
         }
     }
-    // $ANTLR end synpred50_InternalExpressionDsl
+    // $ANTLR end synpred51_InternalExpressionDsl
 
     // Delegated rules
 
-    public final boolean synpred50_InternalExpressionDsl() {
+    public final boolean synpred39_InternalExpressionDsl() {
         state.backtracking++;
         int start = input.mark();
         try {
-            synpred50_InternalExpressionDsl_fragment(); // can never throw exception
+            synpred39_InternalExpressionDsl_fragment(); // can never throw exception
         } catch (RecognitionException re) {
             System.err.println("impossible: "+re);
         }
@@ -8757,11 +8961,25 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
         state.failed=false;
         return success;
     }
-    public final boolean synpred46_InternalExpressionDsl() {
+    public final boolean synpred51_InternalExpressionDsl() {
         state.backtracking++;
         int start = input.mark();
         try {
-            synpred46_InternalExpressionDsl_fragment(); // can never throw exception
+            synpred51_InternalExpressionDsl_fragment(); // can never throw exception
+        } catch (RecognitionException re) {
+            System.err.println("impossible: "+re);
+        }
+        boolean success = !state.failed;
+        input.rewind(start);
+        state.backtracking--;
+        state.failed=false;
+        return success;
+    }
+    public final boolean synpred47_InternalExpressionDsl() {
+        state.backtracking++;
+        int start = input.mark();
+        try {
+            synpred47_InternalExpressionDsl_fragment(); // can never throw exception
         } catch (RecognitionException re) {
             System.err.println("impossible: "+re);
         }
@@ -8774,7 +8992,7 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
 
 
     protected DFA19 dfa19 = new DFA19(this);
-    protected DFA31 dfa31 = new DFA31(this);
+    protected DFA32 dfa32 = new DFA32(this);
     static final String DFA19_eotS =
         "\16\uffff";
     static final String DFA19_eofS =
@@ -8792,33 +9010,25 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
             "\1\7\7\uffff\3\1",
             "",
             "\1\1\2\uffff\2\1\4\uffff\1\1\1\11\1\1\1\uffff\2\1\1\uffff"+
-            "\16\1\3\uffff\1\1\1\uffff\3\1\1\uffff\1\1\1\uffff\1\10\10\uffff"+
-            "\1\1",
+            "\16\1\3\uffff\1\1\1\uffff\5\1\1\uffff\1\10\10\uffff\1\1",
             "\1\1\2\uffff\2\1\4\uffff\1\1\1\11\1\1\1\uffff\2\1\1\uffff"+
-            "\16\1\3\uffff\1\1\1\uffff\3\1\1\uffff\1\1\1\uffff\1\10\10\uffff"+
-            "\1\1",
+            "\16\1\3\uffff\1\1\1\uffff\5\1\1\uffff\1\10\10\uffff\1\1",
             "\1\1\2\uffff\2\1\4\uffff\1\1\1\11\1\1\1\uffff\2\1\1\uffff"+
-            "\16\1\3\uffff\1\1\1\uffff\3\1\1\uffff\1\1\1\uffff\1\10\10\uffff"+
-            "\1\1",
+            "\16\1\3\uffff\1\1\1\uffff\5\1\1\uffff\1\10\10\uffff\1\1",
             "\1\1\2\uffff\2\1\4\uffff\1\1\1\11\1\1\1\uffff\2\1\1\uffff"+
-            "\16\1\3\uffff\1\1\1\uffff\3\1\1\uffff\1\1\1\uffff\1\10\10\uffff"+
-            "\1\1",
+            "\16\1\3\uffff\1\1\1\uffff\5\1\1\uffff\1\10\10\uffff\1\1",
             "",
             "",
             "\1\13\2\uffff\1\12\1\14\10\uffff\1\15",
             "",
             "\1\1\2\uffff\2\1\4\uffff\1\1\1\11\1\1\1\uffff\2\1\1\uffff"+
-            "\16\1\3\uffff\1\1\1\uffff\3\1\1\uffff\1\1\1\uffff\1\10\10\uffff"+
-            "\1\1",
+            "\16\1\3\uffff\1\1\1\uffff\5\1\1\uffff\1\10\10\uffff\1\1",
             "\1\1\2\uffff\2\1\4\uffff\1\1\1\11\1\1\1\uffff\2\1\1\uffff"+
-            "\16\1\3\uffff\1\1\1\uffff\3\1\1\uffff\1\1\1\uffff\1\10\10\uffff"+
-            "\1\1",
+            "\16\1\3\uffff\1\1\1\uffff\5\1\1\uffff\1\10\10\uffff\1\1",
             "\1\1\2\uffff\2\1\4\uffff\1\1\1\11\1\1\1\uffff\2\1\1\uffff"+
-            "\16\1\3\uffff\1\1\1\uffff\3\1\1\uffff\1\1\1\uffff\1\10\10\uffff"+
-            "\1\1",
+            "\16\1\3\uffff\1\1\1\uffff\5\1\1\uffff\1\10\10\uffff\1\1",
             "\1\1\2\uffff\2\1\4\uffff\1\1\1\11\1\1\1\uffff\2\1\1\uffff"+
-            "\16\1\3\uffff\1\1\1\uffff\3\1\1\uffff\1\1\1\uffff\1\10\10\uffff"+
-            "\1\1"
+            "\16\1\3\uffff\1\1\1\uffff\5\1\1\uffff\1\10\10\uffff\1\1"
     };
 
     static final short[] DFA19_eot = DFA.unpackEncodedString(DFA19_eotS);
@@ -8854,83 +9064,146 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
             return "1431:1: ( ( (lv_otherEx_0_0= ruleExpressionOrQualifiedExecution ) ) | ( (lv_unqEx_1_0= ruleUnqualifiedExecution ) ) | ( (lv_superEx_2_0= ruleSuperExecution ) ) | ( (lv_newEx_3_0= ruleConstructorExecution ) ) )";
         }
     }
-    static final String DFA31_eotS =
-        "\21\uffff";
-    static final String DFA31_eofS =
-        "\21\uffff";
-    static final String DFA31_minS =
-        "\5\4\2\uffff\6\4\4\16";
-    static final String DFA31_maxS =
-        "\1\65\4\55\2\uffff\1\21\1\65\10\55";
-    static final String DFA31_acceptS =
-        "\5\uffff\1\1\1\2\12\uffff";
-    static final String DFA31_specialS =
-        "\21\uffff}>";
-    static final String[] DFA31_transitionS = {
-            "\1\2\2\6\1\1\1\3\5\uffff\2\6\1\uffff\1\4\15\uffff\1\6\2\uffff"+
-            "\3\6\1\uffff\1\6\7\uffff\3\6\4\5\1\6",
-            "\1\5\2\uffff\2\5\5\uffff\2\6\1\uffff\2\5\1\uffff\16\6\3\uffff"+
-            "\1\6\1\uffff\2\6\1\uffff\1\5\1\10\1\6\1\7",
-            "\1\5\2\uffff\2\5\5\uffff\2\6\1\uffff\2\5\1\uffff\16\6\3\uffff"+
-            "\1\6\1\uffff\2\6\1\uffff\1\5\1\10\1\6\1\7",
-            "\1\5\2\uffff\2\5\5\uffff\2\6\1\uffff\2\5\1\uffff\16\6\3\uffff"+
-            "\1\6\1\uffff\2\6\1\uffff\1\5\1\10\1\6\1\7",
-            "\1\5\2\uffff\2\5\5\uffff\2\6\1\uffff\2\5\1\uffff\16\6\3\uffff"+
-            "\1\6\1\uffff\2\6\1\uffff\1\5\1\10\1\6\1\7",
+    static final String DFA32_eotS =
+        "\26\uffff";
+    static final String DFA32_eofS =
+        "\26\uffff";
+    static final String DFA32_minS =
+        "\1\4\4\0\21\uffff";
+    static final String DFA32_maxS =
+        "\1\65\4\0\21\uffff";
+    static final String DFA32_acceptS =
+        "\5\uffff\1\1\3\uffff\1\2\14\uffff";
+    static final String DFA32_specialS =
+        "\1\uffff\1\0\1\1\1\2\1\3\21\uffff}>";
+    static final String[] DFA32_transitionS = {
+            "\1\2\2\11\1\1\1\3\5\uffff\2\11\1\uffff\1\4\15\uffff\1\11\2"+
+            "\uffff\3\11\1\uffff\1\11\7\uffff\3\11\4\5\1\11",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
             "",
             "",
-            "\1\12\2\uffff\1\11\1\13\10\uffff\1\14",
-            "\1\16\2\6\1\15\1\17\5\uffff\1\6\2\uffff\1\20\15\uffff\1\6"+
-            "\2\uffff\3\6\1\uffff\1\6\7\uffff\3\6\4\uffff\1\6",
-            "\1\5\2\uffff\2\5\5\uffff\2\6\1\uffff\1\5\2\uffff\16\6\3\uffff"+
-            "\1\6\1\uffff\2\6\2\uffff\1\6\1\uffff\1\7",
-            "\1\5\2\uffff\2\5\5\uffff\2\6\1\uffff\1\5\2\uffff\16\6\3\uffff"+
-            "\1\6\1\uffff\2\6\2\uffff\1\6\1\uffff\1\7",
-            "\1\5\2\uffff\2\5\5\uffff\2\6\1\uffff\1\5\2\uffff\16\6\3\uffff"+
-            "\1\6\1\uffff\2\6\2\uffff\1\6\1\uffff\1\7",
-            "\1\5\2\uffff\2\5\5\uffff\2\6\1\uffff\1\5\2\uffff\16\6\3\uffff"+
-            "\1\6\1\uffff\2\6\2\uffff\1\6\1\uffff\1\7",
-            "\2\6\2\uffff\1\5\1\uffff\16\6\3\uffff\1\6\1\uffff\2\6\1\uffff"+
-            "\1\5\1\10\2\6",
-            "\2\6\2\uffff\1\5\1\uffff\16\6\3\uffff\1\6\1\uffff\2\6\1\uffff"+
-            "\1\5\1\10\2\6",
-            "\2\6\2\uffff\1\5\1\uffff\16\6\3\uffff\1\6\1\uffff\2\6\1\uffff"+
-            "\1\5\1\10\2\6",
-            "\2\6\2\uffff\1\5\1\uffff\16\6\3\uffff\1\6\1\uffff\2\6\1\uffff"+
-            "\1\5\1\10\2\6"
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
     };
 
-    static final short[] DFA31_eot = DFA.unpackEncodedString(DFA31_eotS);
-    static final short[] DFA31_eof = DFA.unpackEncodedString(DFA31_eofS);
-    static final char[] DFA31_min = DFA.unpackEncodedStringToUnsignedChars(DFA31_minS);
-    static final char[] DFA31_max = DFA.unpackEncodedStringToUnsignedChars(DFA31_maxS);
-    static final short[] DFA31_accept = DFA.unpackEncodedString(DFA31_acceptS);
-    static final short[] DFA31_special = DFA.unpackEncodedString(DFA31_specialS);
-    static final short[][] DFA31_transition;
+    static final short[] DFA32_eot = DFA.unpackEncodedString(DFA32_eotS);
+    static final short[] DFA32_eof = DFA.unpackEncodedString(DFA32_eofS);
+    static final char[] DFA32_min = DFA.unpackEncodedStringToUnsignedChars(DFA32_minS);
+    static final char[] DFA32_max = DFA.unpackEncodedStringToUnsignedChars(DFA32_maxS);
+    static final short[] DFA32_accept = DFA.unpackEncodedString(DFA32_acceptS);
+    static final short[] DFA32_special = DFA.unpackEncodedString(DFA32_specialS);
+    static final short[][] DFA32_transition;
 
     static {
-        int numStates = DFA31_transitionS.length;
-        DFA31_transition = new short[numStates][];
+        int numStates = DFA32_transitionS.length;
+        DFA32_transition = new short[numStates][];
         for (int i=0; i<numStates; i++) {
-            DFA31_transition[i] = DFA.unpackEncodedString(DFA31_transitionS[i]);
+            DFA32_transition[i] = DFA.unpackEncodedString(DFA32_transitionS[i]);
         }
     }
 
-    class DFA31 extends DFA {
+    class DFA32 extends DFA {
 
-        public DFA31(BaseRecognizer recognizer) {
+        public DFA32(BaseRecognizer recognizer) {
             this.recognizer = recognizer;
-            this.decisionNumber = 31;
-            this.eot = DFA31_eot;
-            this.eof = DFA31_eof;
-            this.min = DFA31_min;
-            this.max = DFA31_max;
-            this.accept = DFA31_accept;
-            this.special = DFA31_special;
-            this.transition = DFA31_transition;
+            this.decisionNumber = 32;
+            this.eot = DFA32_eot;
+            this.eof = DFA32_eof;
+            this.min = DFA32_min;
+            this.max = DFA32_max;
+            this.accept = DFA32_accept;
+            this.special = DFA32_special;
+            this.transition = DFA32_transition;
         }
         public String getDescription() {
-            return "2082:1: ( (lv_decl_2_0= ruleDeclarator ) )?";
+            return "2143:1: ( (lv_decl_2_0= ruleDeclarator ) )?";
+        }
+        public int specialStateTransition(int s, IntStream _input) throws NoViableAltException {
+            TokenStream input = (TokenStream)_input;
+        	int _s = s;
+            switch ( s ) {
+                    case 0 : 
+                        int LA32_1 = input.LA(1);
+
+                         
+                        int index32_1 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred39_InternalExpressionDsl()) ) {s = 5;}
+
+                        else if ( (true) ) {s = 9;}
+
+                         
+                        input.seek(index32_1);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 1 : 
+                        int LA32_2 = input.LA(1);
+
+                         
+                        int index32_2 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred39_InternalExpressionDsl()) ) {s = 5;}
+
+                        else if ( (true) ) {s = 9;}
+
+                         
+                        input.seek(index32_2);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 2 : 
+                        int LA32_3 = input.LA(1);
+
+                         
+                        int index32_3 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred39_InternalExpressionDsl()) ) {s = 5;}
+
+                        else if ( (true) ) {s = 9;}
+
+                         
+                        input.seek(index32_3);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 3 : 
+                        int LA32_4 = input.LA(1);
+
+                         
+                        int index32_4 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred39_InternalExpressionDsl()) ) {s = 5;}
+
+                        else if ( (true) ) {s = 9;}
+
+                         
+                        input.seek(index32_4);
+                        if ( s>=0 ) return s;
+                        break;
+            }
+            if (state.backtracking>0) {state.failed=true; return -1;}
+            NoViableAltException nvae =
+                new NoViableAltException(getDescription(), 32, _s, input);
+            error(nvae);
+            throw nvae;
         }
     }
  
@@ -9094,86 +9367,92 @@ public class InternalExpressionDslParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_42_in_ruleDeclarator4158 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleDeclaration_in_entryRuleDeclaration4194 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleDeclaration4204 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleType_in_ruleDeclaration4250 = new BitSet(new long[]{0x0000000000020190L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_ruleDeclaration4272 = new BitSet(new long[]{0x0000080000000002L});
-    public static final BitSet FOLLOW_43_in_ruleDeclaration4285 = new BitSet(new long[]{0x0000000000020190L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_ruleDeclaration4306 = new BitSet(new long[]{0x0000080000000002L});
-    public static final BitSet FOLLOW_ruleCall_in_entryRuleCall4344 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleCall4354 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleQualifiedPrefix_in_ruleCall4400 = new BitSet(new long[]{0x0000000000004000L});
-    public static final BitSet FOLLOW_14_in_ruleCall4412 = new BitSet(new long[]{0x003FC05C8002C1F0L});
-    public static final BitSet FOLLOW_ruleDeclarator_in_ruleCall4433 = new BitSet(new long[]{0x0021C05C8002C1F0L});
-    public static final BitSet FOLLOW_ruleArgumentList_in_ruleCall4455 = new BitSet(new long[]{0x0000000000008000L});
-    public static final BitSet FOLLOW_15_in_ruleCall4468 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleArgumentList_in_entryRuleArgumentList4504 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleArgumentList4514 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleNamedArgument_in_ruleArgumentList4560 = new BitSet(new long[]{0x0000080000000002L});
-    public static final BitSet FOLLOW_43_in_ruleArgumentList4573 = new BitSet(new long[]{0x0021C05C800241F0L});
-    public static final BitSet FOLLOW_ruleNamedArgument_in_ruleArgumentList4594 = new BitSet(new long[]{0x0000080000000002L});
-    public static final BitSet FOLLOW_ruleNamedArgument_in_entryRuleNamedArgument4632 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleNamedArgument4642 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_ruleNamedArgument4689 = new BitSet(new long[]{0x0000100000000000L});
-    public static final BitSet FOLLOW_44_in_ruleNamedArgument4701 = new BitSet(new long[]{0x0021C05C800241F0L});
-    public static final BitSet FOLLOW_ruleExpression_in_ruleNamedArgument4724 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleQualifiedPrefix_in_entryRuleQualifiedPrefix4760 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleQualifiedPrefix4770 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_ruleQualifiedPrefix4816 = new BitSet(new long[]{0x0000200000000002L});
-    public static final BitSet FOLLOW_45_in_ruleQualifiedPrefix4835 = new BitSet(new long[]{0x0000000000020190L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_ruleQualifiedPrefix4869 = new BitSet(new long[]{0x0000200000000002L});
-    public static final BitSet FOLLOW_ruleQualifiedName_in_entryRuleQualifiedName4907 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleQualifiedName4917 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleQualifiedPrefix_in_ruleQualifiedName4963 = new BitSet(new long[]{0x0000002000000002L});
-    public static final BitSet FOLLOW_37_in_ruleQualifiedName4982 = new BitSet(new long[]{0x0000000000020190L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_ruleQualifiedName5016 = new BitSet(new long[]{0x0000002000000002L});
-    public static final BitSet FOLLOW_ruleConstant_in_entryRuleConstant5054 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleConstant5064 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleNumValue_in_ruleConstant5110 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_STRING_in_ruleConstant5133 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleQualifiedName_in_ruleConstant5165 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_46_in_ruleConstant5191 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_47_in_ruleConstant5220 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_48_in_ruleConstant5260 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_VERSION_in_ruleConstant5307 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleNumValue_in_entryRuleNumValue5348 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleNumValue5358 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_NUMBER_in_ruleNumValue5399 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleIdentifier_in_entryRuleIdentifier5440 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleIdentifier5451 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_ID_in_ruleIdentifier5491 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_VERSION_in_ruleIdentifier5517 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_EXPONENT_in_ruleIdentifier5543 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_17_in_ruleIdentifier5567 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleType_in_entryRuleType5607 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleType5617 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleQualifiedPrefix_in_ruleType5663 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_49_in_ruleType5688 = new BitSet(new long[]{0x0000000000004000L});
-    public static final BitSet FOLLOW_ruleTypeParameters_in_ruleType5722 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_50_in_ruleType5748 = new BitSet(new long[]{0x0000000000004000L});
-    public static final BitSet FOLLOW_ruleTypeParameters_in_ruleType5782 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_51_in_ruleType5808 = new BitSet(new long[]{0x0000000000004000L});
-    public static final BitSet FOLLOW_ruleTypeParameters_in_ruleType5842 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_52_in_ruleType5868 = new BitSet(new long[]{0x001E000000024190L});
-    public static final BitSet FOLLOW_ruleType_in_ruleType5902 = new BitSet(new long[]{0x0000000000004000L});
-    public static final BitSet FOLLOW_ruleTypeParameters_in_ruleType5924 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleTypeParameters_in_entryRuleTypeParameters5961 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleTypeParameters5971 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_14_in_ruleTypeParameters6008 = new BitSet(new long[]{0x001E000000020190L});
-    public static final BitSet FOLLOW_ruleType_in_ruleTypeParameters6029 = new BitSet(new long[]{0x0000080000008000L});
-    public static final BitSet FOLLOW_43_in_ruleTypeParameters6042 = new BitSet(new long[]{0x001E000000020190L});
-    public static final BitSet FOLLOW_ruleType_in_ruleTypeParameters6063 = new BitSet(new long[]{0x0000080000008000L});
-    public static final BitSet FOLLOW_15_in_ruleTypeParameters6077 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleContainerInitializer_in_entryRuleContainerInitializer6113 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleContainerInitializer6123 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_53_in_ruleContainerInitializer6172 = new BitSet(new long[]{0x0061C05C800241F0L});
-    public static final BitSet FOLLOW_ruleContainerInitializerExpression_in_ruleContainerInitializer6194 = new BitSet(new long[]{0x0040080000000000L});
-    public static final BitSet FOLLOW_43_in_ruleContainerInitializer6207 = new BitSet(new long[]{0x0021C05C800241F0L});
-    public static final BitSet FOLLOW_ruleContainerInitializerExpression_in_ruleContainerInitializer6228 = new BitSet(new long[]{0x0040080000000000L});
-    public static final BitSet FOLLOW_54_in_ruleContainerInitializer6244 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleContainerInitializerExpression_in_entryRuleContainerInitializerExpression6280 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleContainerInitializerExpression6290 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleLogicalExpression_in_ruleContainerInitializerExpression6336 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleContainerInitializer_in_ruleContainerInitializerExpression6363 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleQualifiedName_in_synpred46_InternalExpressionDsl5165 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_VERSION_in_synpred50_InternalExpressionDsl5293 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleType_in_ruleDeclaration4250 = new BitSet(new long[]{0x001E000000020190L});
+    public static final BitSet FOLLOW_ruleDeclarationUnit_in_ruleDeclaration4272 = new BitSet(new long[]{0x0000080000000002L});
+    public static final BitSet FOLLOW_43_in_ruleDeclaration4285 = new BitSet(new long[]{0x001E000000020190L});
+    public static final BitSet FOLLOW_ruleDeclarationUnit_in_ruleDeclaration4306 = new BitSet(new long[]{0x0000080000000002L});
+    public static final BitSet FOLLOW_ruleDeclarationUnit_in_entryRuleDeclarationUnit4344 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleDeclarationUnit4354 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleIdentifier_in_ruleDeclarationUnit4400 = new BitSet(new long[]{0x0000100000000002L});
+    public static final BitSet FOLLOW_44_in_ruleDeclarationUnit4413 = new BitSet(new long[]{0x0021C05C800241F0L});
+    public static final BitSet FOLLOW_ruleExpression_in_ruleDeclarationUnit4434 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleCall_in_entryRuleCall4472 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleCall4482 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleQualifiedPrefix_in_ruleCall4528 = new BitSet(new long[]{0x0000000000004000L});
+    public static final BitSet FOLLOW_14_in_ruleCall4540 = new BitSet(new long[]{0x003FC05C8002C1F0L});
+    public static final BitSet FOLLOW_ruleDeclarator_in_ruleCall4561 = new BitSet(new long[]{0x0021C05C8002C1F0L});
+    public static final BitSet FOLLOW_ruleArgumentList_in_ruleCall4583 = new BitSet(new long[]{0x0000000000008000L});
+    public static final BitSet FOLLOW_15_in_ruleCall4596 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleArgumentList_in_entryRuleArgumentList4632 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleArgumentList4642 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleNamedArgument_in_ruleArgumentList4688 = new BitSet(new long[]{0x0000080000000002L});
+    public static final BitSet FOLLOW_43_in_ruleArgumentList4701 = new BitSet(new long[]{0x0021C05C800241F0L});
+    public static final BitSet FOLLOW_ruleNamedArgument_in_ruleArgumentList4722 = new BitSet(new long[]{0x0000080000000002L});
+    public static final BitSet FOLLOW_ruleNamedArgument_in_entryRuleNamedArgument4760 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleNamedArgument4770 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleIdentifier_in_ruleNamedArgument4817 = new BitSet(new long[]{0x0000100000000000L});
+    public static final BitSet FOLLOW_44_in_ruleNamedArgument4829 = new BitSet(new long[]{0x0021C05C800241F0L});
+    public static final BitSet FOLLOW_ruleExpression_in_ruleNamedArgument4852 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleQualifiedPrefix_in_entryRuleQualifiedPrefix4888 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleQualifiedPrefix4898 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleIdentifier_in_ruleQualifiedPrefix4944 = new BitSet(new long[]{0x0000200000000002L});
+    public static final BitSet FOLLOW_45_in_ruleQualifiedPrefix4963 = new BitSet(new long[]{0x0000000000020190L});
+    public static final BitSet FOLLOW_ruleIdentifier_in_ruleQualifiedPrefix4997 = new BitSet(new long[]{0x0000200000000002L});
+    public static final BitSet FOLLOW_ruleQualifiedName_in_entryRuleQualifiedName5035 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleQualifiedName5045 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleQualifiedPrefix_in_ruleQualifiedName5091 = new BitSet(new long[]{0x0000002000000002L});
+    public static final BitSet FOLLOW_37_in_ruleQualifiedName5110 = new BitSet(new long[]{0x0000000000020190L});
+    public static final BitSet FOLLOW_ruleIdentifier_in_ruleQualifiedName5144 = new BitSet(new long[]{0x0000002000000002L});
+    public static final BitSet FOLLOW_ruleConstant_in_entryRuleConstant5182 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleConstant5192 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleNumValue_in_ruleConstant5238 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_STRING_in_ruleConstant5261 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleQualifiedName_in_ruleConstant5293 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_46_in_ruleConstant5319 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_47_in_ruleConstant5348 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_48_in_ruleConstant5388 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_VERSION_in_ruleConstant5435 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleNumValue_in_entryRuleNumValue5476 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleNumValue5486 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_NUMBER_in_ruleNumValue5527 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleIdentifier_in_entryRuleIdentifier5568 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleIdentifier5579 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_ID_in_ruleIdentifier5619 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_VERSION_in_ruleIdentifier5645 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_EXPONENT_in_ruleIdentifier5671 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_17_in_ruleIdentifier5695 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleType_in_entryRuleType5735 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleType5745 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleQualifiedPrefix_in_ruleType5791 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_49_in_ruleType5816 = new BitSet(new long[]{0x0000000000004000L});
+    public static final BitSet FOLLOW_ruleTypeParameters_in_ruleType5850 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_50_in_ruleType5876 = new BitSet(new long[]{0x0000000000004000L});
+    public static final BitSet FOLLOW_ruleTypeParameters_in_ruleType5910 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_51_in_ruleType5936 = new BitSet(new long[]{0x0000000000004000L});
+    public static final BitSet FOLLOW_ruleTypeParameters_in_ruleType5970 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_52_in_ruleType5996 = new BitSet(new long[]{0x001E000000024190L});
+    public static final BitSet FOLLOW_ruleType_in_ruleType6030 = new BitSet(new long[]{0x0000000000004000L});
+    public static final BitSet FOLLOW_ruleTypeParameters_in_ruleType6052 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleTypeParameters_in_entryRuleTypeParameters6089 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleTypeParameters6099 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_14_in_ruleTypeParameters6136 = new BitSet(new long[]{0x001E000000020190L});
+    public static final BitSet FOLLOW_ruleType_in_ruleTypeParameters6157 = new BitSet(new long[]{0x0000080000008000L});
+    public static final BitSet FOLLOW_43_in_ruleTypeParameters6170 = new BitSet(new long[]{0x001E000000020190L});
+    public static final BitSet FOLLOW_ruleType_in_ruleTypeParameters6191 = new BitSet(new long[]{0x0000080000008000L});
+    public static final BitSet FOLLOW_15_in_ruleTypeParameters6205 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleContainerInitializer_in_entryRuleContainerInitializer6241 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleContainerInitializer6251 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_53_in_ruleContainerInitializer6300 = new BitSet(new long[]{0x0061C05C800241F0L});
+    public static final BitSet FOLLOW_ruleContainerInitializerExpression_in_ruleContainerInitializer6322 = new BitSet(new long[]{0x0040080000000000L});
+    public static final BitSet FOLLOW_43_in_ruleContainerInitializer6335 = new BitSet(new long[]{0x0021C05C800241F0L});
+    public static final BitSet FOLLOW_ruleContainerInitializerExpression_in_ruleContainerInitializer6356 = new BitSet(new long[]{0x0040080000000000L});
+    public static final BitSet FOLLOW_54_in_ruleContainerInitializer6372 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleContainerInitializerExpression_in_entryRuleContainerInitializerExpression6408 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleContainerInitializerExpression6418 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleLogicalExpression_in_ruleContainerInitializerExpression6464 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleContainerInitializer_in_ruleContainerInitializerExpression6491 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleDeclarator_in_synpred39_InternalExpressionDsl4561 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleQualifiedName_in_synpred47_InternalExpressionDsl5293 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_VERSION_in_synpred51_InternalExpressionDsl5421 = new BitSet(new long[]{0x0000000000000002L});
 
 }

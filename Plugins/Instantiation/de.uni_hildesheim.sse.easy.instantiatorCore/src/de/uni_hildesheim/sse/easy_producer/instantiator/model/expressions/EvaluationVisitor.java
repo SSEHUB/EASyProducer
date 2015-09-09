@@ -15,6 +15,8 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ListSet;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.StringValueHelper;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
+import de.uni_hildesheim.sse.model.varModel.values.NullValue;
 
 /**
  * A basic visitor for evaluating expressions.
@@ -53,46 +55,6 @@ public class EvaluationVisitor implements IExpressionVisitor {
 
     @Override
     public Object visitCallExpression(CallExpression call) throws VilException {
-        /*OperationDescriptor resolved = call.getResolved();
-        java.util.Map<String, Object> named = null;
-        boolean acceptsNamed = resolved.acceptsNamedParameters();
-        if (acceptsNamed) {
-            named = new HashMap<String, Object>();
-            for (int p = 0; p < call.getArgumentsCount(); p++) {
-                CallArgument arg = call.getArgument(p);
-                if (arg.hasName()) {
-                    named.put(arg.getName(), arg.accept(this));
-                }
-            }
-            if (null != call.getParent() && resolved.acceptsImplicitParameters()) {
-                named.put(Constants.IMPLICIT_PARENT_PARAMETER_NAME, call.getParent());
-                named.put(Constants.IMPLICIT_PATHS_PARAMETER_NAME, environment.getContextPaths());
-            }
-        }
-        int pCount = resolved.getParameterCount();
-        if (acceptsNamed) {
-            pCount++;
-        }
-        Object[] args = new Object[pCount];
-        int aCount = 0;
-        for (int p = 0; p < call.getArgumentsCount(); p++) {
-            CallArgument arg = call.getArgument(p);
-            if (!arg.hasName()) {
-                args[aCount++] = arg.accept(this);
-            }
-        }
-        if (acceptsNamed) {
-            args[pCount - 1] = named;
-        }
-        resolved = AbstractCallExpression.dynamicDispatch(resolved, args, OperationDescriptor.class, 
-            environment.getTypeRegistry());
-        tracer.visitingCallExpression(resolved, call.getCallType(), args);
-        if (resolved.storeArtifactsBeforeExecution()) {
-            environment.storeArtifacts();
-        }
-        Object result = resolved.invoke(args);
-        tracer.visitedCallExpression(resolved, call.getCallType(), args, result);
-        return result;*/
         return visitCall(call, call.getParent(), call.getResolved(), call.getCallType());
     }
 
@@ -145,6 +107,10 @@ public class EvaluationVisitor implements IExpressionVisitor {
             environment.storeArtifacts();
         }
         Object result = resolved.invoke(args);
+        if (null == result && call.inferType() == TypeRegistry.voidType()) {
+            // happens with aggregating iterators 
+            result = NullValue.VALUE; // void methods otherwise cause failing of the calling rule / template
+        }        
         tracer.visitedCallExpression(resolved, type, args, result);
         return result;        
     }

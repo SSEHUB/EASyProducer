@@ -1,0 +1,9 @@
+-> main(Configuration, Artifact) with (<config>, test.texts)
+    s <- {1, 2, 3, 4, 5}
+    -> *(Integer, Integer) with (1, 5) = 5
+    -> *(Integer, Integer) with (2, 5) = 10
+    -> *(Integer, Integer) with (3, 5) = 15
+    -> *(Integer, Integer) with (4, 5) = 20
+    -> *(Integer, Integer) with (5, 5) = 25
+    -> collect(Sequence, ExpressionEvaluator) with ({1, 2, 3, 4, 5}, <evaluator>) = {10, 15, 20, 25, 5}
+    r <- {10, 15, 20, 25, 5}

@@ -13,6 +13,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.AbstractC
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Collection;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ListSequence;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ListSet;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationMeta;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Sequence;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
@@ -117,9 +118,21 @@ class OtherProjects implements Set<IArtifact> {
         return new ListSet<IArtifact>(AbstractCollectionWrapper.including(this, set), parameter);
     }
 
+    @OperationMeta(useParameter = 0)
     @Override
     public Set<IArtifact> select(ExpressionEvaluator evaluator) throws VilException {
         return new ListSet<IArtifact>(AbstractCollectionWrapper.select(this, evaluator), parameter);
+    }
+
+    @Override
+    public Set<?> collect(ExpressionEvaluator evaluator) throws VilException {
+        return new ListSet<Object>(AbstractCollectionWrapper.collect(this, evaluator), parameter);
+    }
+
+    @OperationMeta(allowsAggregation = true)
+    @Override
+    public Object apply(ExpressionEvaluator evaluator) throws VilException {
+        return AbstractCollectionWrapper.apply(this, evaluator);
     }
 
     @Override
