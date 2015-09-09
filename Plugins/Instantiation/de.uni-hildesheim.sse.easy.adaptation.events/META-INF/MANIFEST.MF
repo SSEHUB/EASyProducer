@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-Bundle-ManifestVersion: 2
-Bundle-Name: Events
-Bundle-SymbolicName: de.uni-hildesheim.sse.easy.adaptation.events;singleton:=true
-Bundle-Version: 0.0.1
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Bundle-ActivationPolicy: lazy
-Export-Package: de.uni_hildesheim.sse.easy.adaptation.events
-Standalone-Jar: adaptation_events.jar
