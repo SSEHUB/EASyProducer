@@ -56,7 +56,7 @@
             <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.easy_producer.core.no_eclipse_feature"/>
             <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.ivml.core_feature"/>
             <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.vil.core_feature"/>
-            <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.reasoning.drools2_feature"/>
+            <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.reasoning.reasoner_feature"/>
             <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.apache.commons.io.feature"/>
             <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.easy.instantiator.java.feature"/>
             <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.easy_producer.instantiation.velocity_feature"/>
@@ -68,6 +68,7 @@
         <copy todir="${basedir}/build/generatedLibs/unbundled" failonerror="true" overwrite="true" flatten="true">
             <fileset dir="${easy.bundles.dir}">
                 <include name="org.eclipse.equinox.common_3.6.200.jar" />
+                <include name="org.eclipse.equinox.preferences_3.5.100.jar" />
             </fileset>
         </copy>
         
@@ -126,7 +127,7 @@
                 <include name="org.eclipse.osgi*.jar" />
             </fileset>
         </copy>
-        <dist target="build/generatedLibs.ex" exclude="drools-*.jar"/>
+        <dist target="build/generatedLibs.ex" />
         <!-- cannot be bundled due to various conflicts, rans anyway in own process -->
         <withMaven target="build/generatedLibs.ex"/>
     </target>
@@ -171,7 +172,7 @@
                 <include name="org.eclipse.osgi*.jar" />
             </fileset>
         </copy>
-        <dist target="build/generatedLibs.rt.noXtext" exclude="drools-*.jar"/>
+        <dist target="build/generatedLibs.rt.noXtext" />
         <!-- cannot be bundled due to various conflicts, rans anyway in own process -->
         <withMaven target="build/generatedLibs.rt.noXtext"/>
     </target>
