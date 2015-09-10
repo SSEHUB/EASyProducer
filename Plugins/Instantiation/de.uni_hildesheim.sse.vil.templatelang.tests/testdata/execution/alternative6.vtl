@@ -1,0 +1,17 @@
+template alternative6(Configuration config, FileArtifact target) {
+
+    def main(Configuration config, FileArtifact target) {
+        sequenceOf(Integer) i;
+        if (true) {
+            i = {1};
+        } else {
+            i = {2};
+        }
+        out(i);
+    }
+
+    def out(sequenceOf(Integer) i) {
+        '$i'
+    }
+
+}

@@ -167,6 +167,16 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
     public void testAlternative1() throws IOException {
         assertEqual("alternative1");
     }
+
+    /**
+     * Tests alternative expressions with undefined variable.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testAlternative2() throws IOException {
+        assertEqual("alternative2");
+    }
     
     /**
      * Tests the random "instantiators" (inspired by K. Schmid).

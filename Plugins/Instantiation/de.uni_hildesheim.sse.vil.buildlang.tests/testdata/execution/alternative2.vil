@@ -1,0 +1,13 @@
+vilScript alternatives2 () {
+
+    main() = : {
+        Integer i;
+        if (true) {
+            i = 1;
+        } else {
+            i = 2;
+        }
+        println(i);
+    }
+
+}

@@ -125,6 +125,11 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends
             }
             environment.setValue(var, value);
             tracer.valueDefined(var, null, value);
+        } else {
+            // add as undefined to current level in runtime environment. otherwise variable may be assigned implicitly 
+            // to wrong level upon first assignment, which may be removed (e.g., inner levels of alternatives 
+            // containing initial assignment), and thus not be valid outside on correct level
+            environment.addValue(var, null); 
         }
         return value;
     }

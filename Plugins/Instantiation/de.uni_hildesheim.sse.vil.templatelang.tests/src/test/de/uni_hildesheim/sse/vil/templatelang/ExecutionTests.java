@@ -332,7 +332,17 @@ public class ExecutionTests extends AbstractTest {
     public void testAlternative5() throws IOException {
         assertEqualWithIvml("alternative5", "alternative5");
     }
-    
+
+    /**
+     * Tests a constant alternative with undefined variable, initially defined in alternative.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testAlternative6() throws IOException {
+        assertEqual("alternative6");
+    }
+
     /**
      * Tests a simple loop with empty body.
      * 

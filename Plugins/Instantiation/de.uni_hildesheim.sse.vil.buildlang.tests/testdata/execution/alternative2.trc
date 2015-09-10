@@ -1,0 +1,4 @@
+-> main()
+    visit if-branch
+    i <- 1
+    -> println(Any) with (1)

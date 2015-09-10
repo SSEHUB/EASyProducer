@@ -138,10 +138,10 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
             for (int l = levels.size() - 1; !found && l >= 0; l--) {
                 Level level = levels.get(l);
                 if (level.values.containsKey(var)) {
-                    found = true;
+                    found = null != level.values.get(var);
                 }
             }
-            return found; // is defined, may have value null
+            return found;
         }
         
         /**

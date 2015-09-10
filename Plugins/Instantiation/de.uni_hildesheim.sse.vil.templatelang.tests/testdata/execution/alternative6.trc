@@ -1,0 +1,4 @@
+-> main(Configuration, FileArtifact) with (<config>, test.texts)
+    visit if-branch
+    i <- {1}
+    -> out(sequenceOf(Integer)) with ({1})
