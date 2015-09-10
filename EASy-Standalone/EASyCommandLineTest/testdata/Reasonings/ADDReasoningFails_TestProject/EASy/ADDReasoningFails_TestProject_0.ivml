@@ -5,6 +5,6 @@ project ADDReasoningFails_TestProject {
     Real b = 3.0;
     Real c = 4.0;
     
-    a + b = c;
+    a + b == c;
     
 }
