@@ -244,7 +244,6 @@ public abstract class AbstractExecutionTest <M extends Script> extends AbstractT
         if (null != asserter) {
             temp = asserter.determineTestDirectory(temp);
         }
-        System.out.println(temp);
         try {
             TemplateModel.INSTANCE.locations().addLocation(temp, ProgressObserver.NO_OBSERVER);
         } catch (ModelManagementException e) {
