@@ -428,4 +428,18 @@ public class ExecutionRtTests extends AbstractExecutionTest<Script> {
         assertEqual(setup);
     }
 
+    /**
+     * Tests default output on fields.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testDefault() throws IOException {
+        final String name = "default";
+        Configuration cfg = getIvmlConfiguration("Add", NoVariableFilter.INSTANCE);
+        Map<String, Object> param = createParameterMap(null, null, cfg);
+        EqualitySetup setup = new EqualitySetup(createFile(name), name, null, createTraceFile(name), param);
+        assertEqual(setup);
+    }
+
 }

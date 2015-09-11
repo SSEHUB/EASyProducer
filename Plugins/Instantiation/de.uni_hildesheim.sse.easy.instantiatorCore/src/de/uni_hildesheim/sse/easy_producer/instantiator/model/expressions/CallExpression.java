@@ -216,7 +216,7 @@ public class CallExpression extends AbstractCallExpression implements IArgumentP
      * @return the resolved operation or <b>null</b>
      * @throws VilException in case that resolution fails
      */
-    private IMetaOperation resolveOperation() throws VilException {
+    /*private IMetaOperation resolveOperation() throws VilException {
         IMetaOperation op = null;
         if (arguments.length > 0 && checkMetaForFirstArgField() 
             && arguments[0].getExpression() instanceof FieldAccessExpression) {
@@ -245,7 +245,7 @@ public class CallExpression extends AbstractCallExpression implements IArgumentP
             op = resolveOperation(operand, getName(), arguments);
         }
         return op;
-    }
+    }*/
     
     /**
      * Checks whether one of the parameter / argument types shall be used.
@@ -273,7 +273,7 @@ public class CallExpression extends AbstractCallExpression implements IArgumentP
     public TypeDescriptor<?> inferType() throws VilException {
         if (null == type) {
             if (null == resolved) {
-                IMetaOperation op = resolveOperation();
+                IMetaOperation op = resolveOperation(determineOperand(), true, getName(), arguments);
                 if (op instanceof OperationDescriptor) {
                     resolved = (OperationDescriptor) op;
                 } else {

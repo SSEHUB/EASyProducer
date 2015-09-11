@@ -128,7 +128,7 @@ public abstract class ModelCallExpression<V extends IResolvable, M extends IReso
     @Override
     public TypeDescriptor<?> inferType() throws VilException {
         if (null == resolved) {
-            IMetaOperation op = resolveOperation(model, getName(), arguments);
+            IMetaOperation op = resolveOperation(model, true, getName(), arguments);
             Class<? extends O> opClass = getOperationClass();
             if (opClass.isInstance(op)) {
                 resolved = opClass.cast(op);

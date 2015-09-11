@@ -1,0 +1,28 @@
+@advice(Add)
+rtVilScript default (Project source, Configuration config, Project target) {
+
+    strategy main(Project source, Configuration config, Project target) = {
+        objective true;
+        breakdown {
+            tactic t(config);
+        }
+    }
+
+    tactic t(Configuration config) = {
+        Add a = config;
+        Node node = a.node;
+        String test = defaulted(node.capacity, 0);
+    }
+
+    String defaulted(DecisionVariable dv, Any dflt) = : {
+        if (dv.isConfigured()) {
+            "${dv}";
+        } else {
+            "${dflt}";
+        }
+    }
+
+    enact(Project source, Configuration config, Project target) = : {
+    }
+
+}

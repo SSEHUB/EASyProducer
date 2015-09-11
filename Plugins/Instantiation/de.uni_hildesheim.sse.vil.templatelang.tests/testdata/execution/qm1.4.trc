@@ -1,7 +1,7 @@
 -> main(Configuration, FileArtifact) with (<config>, test.texts)
     -> byName(Configuration, String) with (<config>, fNormalize) = qm1::fNormalize
     fm <- qm1::fNormalize
-    -> filterTuples(Tuples, Tuples) with ({qm1::Family::output [0]}, {qm1::Family::input [0]})
+    -> filterTuples(Tuples, Tuples) with (qm1::Family::output, {qm1::Family::input [0]})
         -> mapSequence(Sequence, Sequence) with ({qm1::Family::output [0]}, {qm1::Family::input [0]}) = {}
         m <- {}
         -> size(Map) with ({}) = 0

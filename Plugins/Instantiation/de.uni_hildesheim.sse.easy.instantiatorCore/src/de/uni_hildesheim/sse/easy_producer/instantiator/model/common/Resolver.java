@@ -347,7 +347,7 @@ public abstract class Resolver<M extends IResolvableModel<V>, O extends IResolva
             for (int t = 0; null == result && t < model.getExtensionTypesCount(); t++) {
                 IMetaType type = model.getExtensionType(t);
                 try {
-                    IMetaOperation op = AbstractCallExpression.resolveOperation(type, name, arguments);
+                    IMetaOperation op = AbstractCallExpression.resolveOperation(type, name, arguments); // no meta arg
                     if (null != op) {
                         result = new CallExpression(op, arguments);
                         result.inferType();

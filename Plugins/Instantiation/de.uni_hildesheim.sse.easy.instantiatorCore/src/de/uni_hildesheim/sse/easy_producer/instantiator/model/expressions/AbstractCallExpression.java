@@ -472,7 +472,7 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
     }
 
     /**
-     * Actually aims at resolving the operation.
+     * Resolves the given operation on <code>operand</code>.
      * 
      * @param operand the operand, i.e., the type to be searched for operations
      * @param name the name of the operation to be resolved
@@ -519,6 +519,57 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
             }
         }
         return op;
+    }
+
+    /**
+     * Resolves the given operation on <code>operand</code>, but allows checking the first field for a meta type 
+     * (e.g., DecisionVariable instead of the actual field type).
+     * 
+     * @param operand the operand, i.e., the type to be searched for operations
+     * @param checkMetaForFirstArgField whether the check for the meta type shall be enabled on the first field 
+     *   (replacing operand) or not. In case that this is enabled and there is a compliant operation for meta type,
+     *   the found operation is returned.
+     * @param name the name of the operation to be resolved
+     * @param arguments the (named) arguments of the call
+     * @return the resolved operation
+     * @throws VilException in case that no resolution can be found for various (typically type compliance) 
+     *   reasons
+     */
+    public static IMetaOperation resolveOperation(IMetaType operand, boolean checkMetaForFirstArgField, String name, 
+        CallArgument[] arguments) throws VilException {
+        IMetaOperation op = null;
+        if (arguments.length > 0 && checkMetaForFirstArgField 
+            && arguments[0].getExpression() instanceof FieldAccessExpression) {
+            FieldAccessExpression fae = (FieldAccessExpression) arguments[0].getExpression();
+            TypeDescriptor<?> fOperand = fae.getField().getMetaType();
+            if (null != fOperand) {
+                CallArgument[] args = new CallArgument[arguments.length];
+                args[0] = new CallArgument(fOperand);
+                for (int a = 1; a < arguments.length; a++) {
+                    args[a] = arguments[a];
+                }
+                try {
+                    try {
+                        op = resolveOperation(fOperand, name, args);
+                    } catch (VilException e) {
+                        if (operand instanceof IModel) {
+                            op = resolveOperation(operand, name, args);
+                        }
+                    }
+                    if (null != op && null == args[0].getExpression() /*&& op instanceof OperationDescriptor*/) {
+                        fae.enableMetaAccess();
+                    } else {
+                        op = null; // args[0] indicates that a conversion was inserted; no conversions here!
+                    }
+                } catch (VilException e) {
+                    // ignore as this was just a trial
+                }
+            }
+        }
+        if (null == op) {
+            op = resolveOperation(operand, name, arguments);
+        }
+        return op;        
     }
 
     /**

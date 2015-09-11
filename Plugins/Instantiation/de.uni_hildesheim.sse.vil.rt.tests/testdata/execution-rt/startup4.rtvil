@@ -40,7 +40,7 @@ rtVilScript startup4 (Project source, Configuration config, Project target, IAda
 
     assignFirst(FamilyElement elt) = : {
         Family fam = elt.family;
-        if (!isConfigured(elt.actual)) {
+        if (!elt.actual.isConfigured()) {
             elt.actual = fam.members.toSequence().first();
         }
         map(Node n:elt.next) {

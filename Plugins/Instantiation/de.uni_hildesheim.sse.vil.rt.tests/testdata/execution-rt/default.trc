@@ -1,0 +1,11 @@
+-> main(Project, Configuration, Project) with (<project>, <config>, <project>)
+    -> t(Configuration) with (<config>)
+        a <- <config>
+        node <- Add::node
+        -> defaulted(DecisionVariable, Any) with (Add::Node::capacity, 0)
+            -> isConfigured(DecisionVariable) with (Add::Node::capacity) = false
+            visit else-branch
+        test <- 0
+        Reasoner execution: true
+    Reasoner execution: true
+    -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)
