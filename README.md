@@ -9,7 +9,21 @@ Watch out for more!
 
 News
 ----
-Currently, we migrate the development of EASy-Producer from our internal repository to github, i.e., instead of using github as a relase repository as we did so far, we will do the full development here.
+September, 10 2015: EASy-Producer completely moved to GitHub including issues and development continues here (rather than just release commits).
+
+Upcoming Release
+----------------
+
+- EASy-examples are now available through project imports
+- Improvements for IVML (refBy on expression)
+- Improvements for VIL (switch expression, undefined variables, typedef)
+- Improvement of Maven-VIL integration (Linux fix, JAVA_HOME detection)
+- VIL allows deleting Java calls and methods (in progress)
+- VIL detects Java classpath settings (in progress)
+
+Release History
+---------------
+http://projects.sse.uni-hildesheim.de/easy/
 
 Documentation
 -------------
