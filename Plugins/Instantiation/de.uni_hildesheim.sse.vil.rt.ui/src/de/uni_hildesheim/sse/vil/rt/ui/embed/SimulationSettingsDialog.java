@@ -85,6 +85,7 @@ public class SimulationSettingsDialog extends Dialog {
             layoutData = new GridData();
             layoutData.horizontalAlignment = SWT.FILL;
             layoutData.grabExcessHorizontalSpace = true;
+            layoutData.widthHint = 300;
             arguments[a].setLayoutData(layoutData);
         }
         //TODO <turn this part into table (until here)

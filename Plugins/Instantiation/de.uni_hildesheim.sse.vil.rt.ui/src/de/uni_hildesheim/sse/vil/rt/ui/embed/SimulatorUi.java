@@ -16,26 +16,33 @@
 package de.uni_hildesheim.sse.vil.rt.ui.embed;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 import de.uni_hildesheim.sse.dslcore.ui.ConfigurationEditorFactory;
-import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Bundle;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.VariableDeclaration;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Executor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.RtVILMemoryStorage;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Script;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.NoVariableFilter;
 import de.uni_hildesheim.sse.model.confModel.Configuration;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
+import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 import de.uni_hildesheim.sse.vil.rt.ui.embed.SimulationSettingsDialog.TempArgument;
 
@@ -183,26 +190,123 @@ public class SimulatorUi {
             VariableDeclaration param = model.getParameter(baseArgCount  + a);
             openArguments[a] = new Argument(param.getName(), param.getType());
         }
-        // just for now and for QM
-        if (openArguments.length > 0 && "event".equals(openArguments[0].getName())) {
+        readOpenArgumentsFromSettings();
+    }
+
+    /**
+     * Returns the simulator properties file.
+     * 
+     * @return the simulator properties file
+     */
+    private static File getSimulatorPropertiesFile() {
+        IWorkspace workspace = ResourcesPlugin.getWorkspace();
+        File workspaceDirectory = workspace.getRoot().getLocation().toFile();
+        File metadataDir = new File(workspaceDirectory, ".metadata");
+        File metadataPluginsDir = new File(metadataDir, ".plugins");
+        File metadataBundleDir = new File(metadataPluginsDir, Bundle.ID);
+        return new File(metadataBundleDir, "rtVilSimulator.properties");        
+    }
+    
+    /**
+     * Reads the open arguments from the {@link #getSimulatorPropertiesFile() settings file}. 
+     */
+    private void readOpenArgumentsFromSettings() {
+        File settingsFile = getSimulatorPropertiesFile();
+        if (settingsFile.exists()) {
+            Properties settings = new Properties();
             try {
-                TempArgument tmp = SimulationSettingsDialog.analyze(
-                    "new StartupAdaptationEvent(\"PriorityPip\")", null);
-                openArguments[0].setValue(tmp.getValueExpression(), tmp.getValue());
-            } catch (VilException e) {
-                EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).error(
-                    "While initializing QM dialog: " + e.getMessage());
+                settings.load(new FileInputStream(settingsFile));
+                for (int o = 0; o < openArguments.length; o++) {
+                    Argument arg = openArguments[o];
+                    String argName = arg.getName();
+                    if (argName.equals("bindings")) {
+                        readBindingsArgument(settings, arg, settingsFile);
+                    } else {
+                        readOtherArgument(settings, arg, settingsFile);
+                    }
+                }
+            } catch (IOException e) {
+                getLogger().error("While reading simulator settings from '" + settingsFile + "': " + e.getMessage());
             }
         }
-        if (openArguments.length > 1 && "bindings".equals(openArguments[1].getName())) {
+    }
+
+    /**
+     * Reads the value bindings argument from the settings file.
+     * 
+     * @param settings the parsed setting properties
+     * @param argument the argument to be read / modified
+     * @param settingsFile the settings file (for logging messages)
+     */
+    private void readBindingsArgument(Properties settings, Argument bindings, File settingsFile) {
+        try {
+            TempArgument tmp = SimulationSettingsDialog.analyze("null", null); // {} <-> primary expression
+            int b = 0;
+            Map<Object, Object> map = new HashMap<Object, Object>();
+            while (true) {
+                String key = "argument.bindings." + b;
+                String binding = settings.getProperty(key, null);
+                if (null != binding) {
+                    int pos = binding.indexOf("->");
+                    if (pos > 0 && pos + 2 < binding.length()) { // it's within
+                        String name = binding.substring(0, pos).trim();
+                        String value = binding.substring(pos + 2, binding.length()).trim();
+                        try {
+                            map.put(name, Double.valueOf(value));
+                        } catch (NumberFormatException nfe) {
+                            getLogger().error("While reading simulator bindings for '" + name + " from '" 
+                                + settingsFile + "'': " + nfe.getMessage());
+                        }
+                    } else {
+                        getLogger().error("While reading simulator bindings '" + binding + " from '" 
+                            + settingsFile + "'': unrecognized format, missing '->'");
+                    }
+                } else {
+                    break;
+                }
+                b++;
+            }
+            TypeDescriptor<?>[] types = new TypeDescriptor<?>[2];
+            types[0] = TypeRegistry.stringType();
+            types[1] = TypeRegistry.realType();
+            de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Map<String, Double> values 
+                = new de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Map<String, Double>(map, types);
+            bindings.setValue(tmp.getValueExpression(), values);
+        } catch (VilException e) {
+            getLogger().error("While setting simulator bindings from '" + settingsFile + "': " 
+                + e.getMessage());
+        }
+    }
+
+    /**
+     * Reads an other argument from the settings file.
+     * 
+     * @param settings the parsed setting properties
+     * @param argument the argument to be read / modified
+     * @param settingsFile the settings file (for logging messages)
+     */
+    private void readOtherArgument(Properties settings, Argument argument, File settingsFile) {
+        String argName = argument.getName();
+        String key = "argument." + argName;
+        String value = settings.getProperty(key, null);
+        if (null != value) {
             try {
-                TempArgument tmp = SimulationSettingsDialog.analyze("null", null); // {} <-> primary expression
-                openArguments[1].setValue(tmp.getValueExpression(), tmp.getValue());
-            } catch (VilException e) {
-                EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).error(
-                    "While initializing QM dialog: " + e.getMessage());
+                TempArgument tmp = SimulationSettingsDialog.analyze(value, null);
+                argument.setValue(tmp.getValueExpression(), tmp.getValue());
+            } catch (VilException ve) {
+                getLogger().error("While parsing expression for '" + argName + "' from '" + settingsFile + "': " 
+                    + ve.getMessage());
             }
         }
+    }
+    
+    /**
+     * Returns the logger for this class.
+     * 
+     * @return the logger
+     */
+    private static EASyLogger getLogger() {
+        return EASyLoggerFactory.INSTANCE.getLogger(EASyLogger.class, Bundle.ID);
     }
 
 }

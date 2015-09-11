@@ -20,6 +20,7 @@ import java.io.StringWriter;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.RtVilWriter;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.StringValueHelper;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 
 /**
@@ -126,6 +127,9 @@ public class Argument {
             } catch (VilException e) {
                 // result -> ""
             }
+        }
+        if ("null".equals(result) && null != value) {
+            result = StringValueHelper.getStringValue(value, null);
         }
         return result;
     }
