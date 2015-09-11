@@ -17,6 +17,7 @@ package de.uni_hildesheim.sse.vil.rt.ui.embed;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.HashMap;
@@ -37,6 +38,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilExceptio
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Executor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.RtVILMemoryStorage;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Script;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Sequence;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.NoVariableFilter;
@@ -160,7 +162,11 @@ public class SimulatorUi {
      */
     public int openSettingsDialog() {
         SimulationSettingsDialog dlg = new SimulationSettingsDialog(shell, config, openArguments, filters);
-        return dlg.open();
+        int result = dlg.open();
+        if (Window.OK == result) {
+            writeOpenArgumentsToSettings();
+        }
+        return result;
     }
     
     /**
@@ -215,7 +221,9 @@ public class SimulatorUi {
         if (settingsFile.exists()) {
             Properties settings = new Properties();
             try {
-                settings.load(new FileInputStream(settingsFile));
+                FileInputStream in = new FileInputStream(settingsFile);
+                settings.load(in);
+                in.close();
                 for (int o = 0; o < openArguments.length; o++) {
                     Argument arg = openArguments[o];
                     String argName = arg.getName();
@@ -230,7 +238,80 @@ public class SimulatorUi {
             }
         }
     }
-
+    
+    /**
+     * Writes the open arguments to the settings file.
+     */
+    private void writeOpenArgumentsToSettings() {
+        File settingsFile = getSimulatorPropertiesFile();
+        if (!settingsFile.exists()) {
+            settingsFile.getParentFile().mkdirs();
+        }
+        Properties settings = new Properties();
+        for (int o = 0; o < openArguments.length; o++) {
+            Argument arg = openArguments[o];
+            String argName = arg.getName();
+            Object value = arg.getValue();
+            if (argName.equals("bindings")) {
+                if (value instanceof Sequence<?>) {
+                    try {
+                        // default type if VIL does not know of which left hand side an initializer is
+                        value = de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Map.convert(
+                           (Sequence<?>) value);
+                    } catch (VilException e) {
+                        getLogger().exception(e);
+                    }
+                }
+                Map<?, ?> map = null;
+                if (value instanceof de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Map) {
+                    de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Map<?, ?> tmp 
+                        = (de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Map<?, ?>) value;
+                    map = tmp.toMap();
+                } else if (value instanceof Map<?, ?>) {
+                    map = (Map<?, ?>) value;
+                }
+                if (null != map) {
+                    int count = 0;
+                    for (Map.Entry<?, ?> entry : map.entrySet()) {
+                        settings.put(getBindingsArgumentKey(count++), 
+                            unquote(entry.getKey()) + " -> " + entry.getValue());
+                    }
+                }
+            } else {
+                String key = getOtherArgumentKey(arg);
+                if (null != value) {
+                    settings.put(key, arg.getValueExpressionText());
+                }
+            }
+        }
+        try {
+            FileOutputStream out = new FileOutputStream(settingsFile);
+            settings.store(out, "auto saved");
+            out.close();
+        } catch (IOException e) {
+            getLogger().error("While writing simulator settings from '" + settingsFile + "': " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Removes leading / trailing quotes from the string representation of <code>object</code>.
+     * 
+     * @param object the object to be unquoted
+     * @return the unquoted representation
+     */
+    private static String unquote(Object object) {
+        String string;
+        if (null == object) {
+            string = null;
+        } else {
+            string = object.toString();
+            if (string.length() > 1 && string.startsWith("\"") && string.endsWith("\"")) {
+                string = string.substring(1, string.length() - 1);
+            }
+        }
+        return string;
+    }
+    
     /**
      * Reads the value bindings argument from the settings file.
      * 
@@ -240,11 +321,11 @@ public class SimulatorUi {
      */
     private void readBindingsArgument(Properties settings, Argument bindings, File settingsFile) {
         try {
-            TempArgument tmp = SimulationSettingsDialog.analyze("null", null); // {} <-> primary expression
             int b = 0;
             Map<Object, Object> map = new HashMap<Object, Object>();
+            String expr = "{";
             while (true) {
-                String key = "argument.bindings." + b;
+                String key = getBindingsArgumentKey(b);
                 String binding = settings.getProperty(key, null);
                 if (null != binding) {
                     int pos = binding.indexOf("->");
@@ -253,6 +334,10 @@ public class SimulatorUi {
                         String value = binding.substring(pos + 2, binding.length()).trim();
                         try {
                             map.put(name, Double.valueOf(value));
+                            if (expr.length() > 1) {
+                                expr += ", ";
+                            }
+                            expr += "{\"" + name + "\", " + value + "}";
                         } catch (NumberFormatException nfe) {
                             getLogger().error("While reading simulator bindings for '" + name + " from '" 
                                 + settingsFile + "'': " + nfe.getMessage());
@@ -266,6 +351,8 @@ public class SimulatorUi {
                 }
                 b++;
             }
+            expr += "}";
+            TempArgument tmp = SimulationSettingsDialog.analyze(expr, null); // {} <-> primary expression
             TypeDescriptor<?>[] types = new TypeDescriptor<?>[2];
             types[0] = TypeRegistry.stringType();
             types[1] = TypeRegistry.realType();
@@ -277,6 +364,16 @@ public class SimulatorUi {
                 + e.getMessage());
         }
     }
+    
+    /**
+     * Returns a binding argument key for the specified <code>index</code>.
+     * 
+     * @param index the index of the argument in the properties file
+     * @return the key
+     */
+    private static String getBindingsArgumentKey(int index) {
+        return "argument.bindings." + index;
+    }
 
     /**
      * Reads an other argument from the settings file.
@@ -286,18 +383,27 @@ public class SimulatorUi {
      * @param settingsFile the settings file (for logging messages)
      */
     private void readOtherArgument(Properties settings, Argument argument, File settingsFile) {
-        String argName = argument.getName();
-        String key = "argument." + argName;
+        String key = getOtherArgumentKey(argument);
         String value = settings.getProperty(key, null);
         if (null != value) {
             try {
                 TempArgument tmp = SimulationSettingsDialog.analyze(value, null);
                 argument.setValue(tmp.getValueExpression(), tmp.getValue());
             } catch (VilException ve) {
-                getLogger().error("While parsing expression for '" + argName + "' from '" + settingsFile + "': " 
-                    + ve.getMessage());
+                getLogger().error("While parsing expression for '" + argument.getName() + "' from '" + settingsFile 
+                    + "': " + ve.getMessage());
             }
         }
+    }
+    
+    /**
+     * Returns the properties file argument key for the given other <code>argument</code>.
+     *  
+     * @param argument the argument to return the key for
+     * @return the key
+     */
+    private String getOtherArgumentKey(Argument argument) {
+        return "argument." + argument.getName();
     }
     
     /**

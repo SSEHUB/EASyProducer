@@ -182,7 +182,7 @@ public class SimulationSettingsDialog extends Dialog {
         if (null == executor) {
             executor = new RtVilExecution();
         }
-        Expression valueExpression = RtVilModelUtility.INSTANCE.createPrimaryExpression(
+        Expression valueExpression = RtVilModelUtility.INSTANCE.createExpression(
             expressionText, executor.getRuntimeEnvironment());
         Object value = null;
         if (null != valueExpression) {
