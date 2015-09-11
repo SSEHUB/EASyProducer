@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Bundle;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Script;
 import de.uni_hildesheim.sse.persistency.xml.XmlIo;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;

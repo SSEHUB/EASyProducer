@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Bundle;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.RtVilModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Script;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Strategy;
