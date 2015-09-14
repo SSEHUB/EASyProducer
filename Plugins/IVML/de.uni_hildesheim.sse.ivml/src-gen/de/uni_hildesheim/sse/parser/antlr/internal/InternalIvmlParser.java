@@ -3128,7 +3128,7 @@ public class InternalIvmlParser extends AbstractInternalAntlrParser {
               	        if (current==null) {
               	            current = createModelElementForParent(grammarAccess.getTypedefConstraintRule());
               	        }
-                     		add(
+                     		set(
                      			current, 
                      			"expressions",
                       		lv_expressions_2_0, 

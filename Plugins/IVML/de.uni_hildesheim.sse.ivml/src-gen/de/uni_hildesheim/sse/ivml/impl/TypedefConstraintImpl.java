@@ -6,19 +6,14 @@ import de.uni_hildesheim.sse.ivml.Expression;
 import de.uni_hildesheim.sse.ivml.IvmlPackage;
 import de.uni_hildesheim.sse.ivml.TypedefConstraint;
 
-import java.util.Collection;
-
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
-import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -36,14 +31,14 @@ import org.eclipse.emf.ecore.util.InternalEList;
 public class TypedefConstraintImpl extends MinimalEObjectImpl.Container implements TypedefConstraint
 {
   /**
-   * The cached value of the '{@link #getExpressions() <em>Expressions</em>}' containment reference list.
+   * The cached value of the '{@link #getExpressions() <em>Expressions</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getExpressions()
    * @generated
    * @ordered
    */
-  protected EList<Expression> expressions;
+  protected Expression expressions;
 
   /**
    * <!-- begin-user-doc -->
@@ -71,13 +66,47 @@ public class TypedefConstraintImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<Expression> getExpressions()
+  public Expression getExpressions()
   {
-    if (expressions == null)
-    {
-      expressions = new EObjectContainmentEList<Expression>(Expression.class, this, IvmlPackage.TYPEDEF_CONSTRAINT__EXPRESSIONS);
-    }
     return expressions;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetExpressions(Expression newExpressions, NotificationChain msgs)
+  {
+    Expression oldExpressions = expressions;
+    expressions = newExpressions;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, IvmlPackage.TYPEDEF_CONSTRAINT__EXPRESSIONS, oldExpressions, newExpressions);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setExpressions(Expression newExpressions)
+  {
+    if (newExpressions != expressions)
+    {
+      NotificationChain msgs = null;
+      if (expressions != null)
+        msgs = ((InternalEObject)expressions).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - IvmlPackage.TYPEDEF_CONSTRAINT__EXPRESSIONS, null, msgs);
+      if (newExpressions != null)
+        msgs = ((InternalEObject)newExpressions).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - IvmlPackage.TYPEDEF_CONSTRAINT__EXPRESSIONS, null, msgs);
+      msgs = basicSetExpressions(newExpressions, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, IvmlPackage.TYPEDEF_CONSTRAINT__EXPRESSIONS, newExpressions, newExpressions));
   }
 
   /**
@@ -91,7 +120,7 @@ public class TypedefConstraintImpl extends MinimalEObjectImpl.Container implemen
     switch (featureID)
     {
       case IvmlPackage.TYPEDEF_CONSTRAINT__EXPRESSIONS:
-        return ((InternalEList<?>)getExpressions()).basicRemove(otherEnd, msgs);
+        return basicSetExpressions(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -117,15 +146,13 @@ public class TypedefConstraintImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
-  @SuppressWarnings("unchecked")
   @Override
   public void eSet(int featureID, Object newValue)
   {
     switch (featureID)
     {
       case IvmlPackage.TYPEDEF_CONSTRAINT__EXPRESSIONS:
-        getExpressions().clear();
-        getExpressions().addAll((Collection<? extends Expression>)newValue);
+        setExpressions((Expression)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -142,7 +169,7 @@ public class TypedefConstraintImpl extends MinimalEObjectImpl.Container implemen
     switch (featureID)
     {
       case IvmlPackage.TYPEDEF_CONSTRAINT__EXPRESSIONS:
-        getExpressions().clear();
+        setExpressions((Expression)null);
         return;
     }
     super.eUnset(featureID);
@@ -159,7 +186,7 @@ public class TypedefConstraintImpl extends MinimalEObjectImpl.Container implemen
     switch (featureID)
     {
       case IvmlPackage.TYPEDEF_CONSTRAINT__EXPRESSIONS:
-        return expressions != null && !expressions.isEmpty();
+        return expressions != null;
     }
     return super.eIsSet(featureID);
   }

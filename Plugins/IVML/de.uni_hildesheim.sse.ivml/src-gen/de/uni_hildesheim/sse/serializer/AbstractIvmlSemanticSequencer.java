@@ -1108,10 +1108,17 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	
 	/**
 	 * Constraint:
-	 *     expressions+=Expression
+	 *     expressions=Expression
 	 */
 	protected void sequence_TypedefConstraint(EObject context, TypedefConstraint semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
+		if(errorAcceptor != null) {
+			if(transientValues.isValueTransient(semanticObject, IvmlPackage.Literals.TYPEDEF_CONSTRAINT__EXPRESSIONS) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, IvmlPackage.Literals.TYPEDEF_CONSTRAINT__EXPRESSIONS));
+		}
+		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
+		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
+		feeder.accept(grammarAccess.getTypedefConstraintAccess().getExpressionsExpressionParserRuleCall_2_0(), semanticObject.getExpressions());
+		feeder.finish();
 	}
 	
 	

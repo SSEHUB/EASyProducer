@@ -500,7 +500,7 @@ public interface IvmlPackage extends EPackage
   int TYPEDEF_CONSTRAINT = 10;
 
   /**
-   * The feature id for the '<em><b>Expressions</b></em>' containment reference list.
+   * The feature id for the '<em><b>Expressions</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -3058,10 +3058,10 @@ public interface IvmlPackage extends EPackage
   EClass getTypedefConstraint();
 
   /**
-   * Returns the meta object for the containment reference list '{@link de.uni_hildesheim.sse.ivml.TypedefConstraint#getExpressions <em>Expressions</em>}'.
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.ivml.TypedefConstraint#getExpressions <em>Expressions</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Expressions</em>'.
+   * @return the meta object for the containment reference '<em>Expressions</em>'.
    * @see de.uni_hildesheim.sse.ivml.TypedefConstraint#getExpressions()
    * @see #getTypedefConstraint()
    * @generated
@@ -5323,7 +5323,7 @@ public interface IvmlPackage extends EPackage
     EClass TYPEDEF_CONSTRAINT = eINSTANCE.getTypedefConstraint();
 
     /**
-     * The meta object literal for the '<em><b>Expressions</b></em>' containment reference list feature.
+     * The meta object literal for the '<em><b>Expressions</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated

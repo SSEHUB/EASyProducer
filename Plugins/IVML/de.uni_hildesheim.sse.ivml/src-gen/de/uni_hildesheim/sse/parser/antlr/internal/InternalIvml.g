@@ -1162,7 +1162,7 @@ ruleTypedefConstraint returns [EObject current=null]
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getTypedefConstraintRule());
 	        }
-       		add(
+       		set(
        			$current, 
        			"expressions",
         		lv_expressions_2_0, 

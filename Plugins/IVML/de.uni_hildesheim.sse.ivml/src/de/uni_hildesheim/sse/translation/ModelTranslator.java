@@ -394,14 +394,14 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
             context.pushLayer(null);
             try {
                 context.addToContext(type.getTypeDeclaration());
-                EList<Expression> expressions = mapping.getConstraint().getExpressions();
-                Constraint[] constraints = new Constraint[expressions.size()];
-                for (int e = 0; e < constraints.length; e++) {
-                    constraints[e] = new Constraint(type);
-                    constraints[e].setConsSyntax(expressionTranslator.processExpression(expressions.get(e), context,
-                        constraints[e]));
+                Expression expression = mapping.getConstraint().getExpressions();
+                if (null != expression) {
+                    Constraint[] constraints = new Constraint[1];
+                    constraints[0] = new Constraint(type);
+                    constraints[0].setConsSyntax(expressionTranslator.processExpression(expression, context,
+                        constraints[0]));
+                    type.setConstraints(constraints);
                 }
-                type.setConstraints(constraints);
             } catch (IvmlException e) {
                 error(e, mapping, IvmlPackage.Literals.TYPEDEF_MAPPING__CONSTRAINT);
             } catch (TranslatorException e) {

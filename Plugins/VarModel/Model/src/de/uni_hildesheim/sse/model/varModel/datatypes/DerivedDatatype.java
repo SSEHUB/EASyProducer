@@ -108,6 +108,8 @@ public class DerivedDatatype extends CustomDatatype {
         // remove old internal constraint instances from project
         if (null != this.constraints) {
             Project project = (Project) getTopLevelParent();
+            // TODO when this is removed, also Constraint [] constraints; can become Constraint constraint;
+            // multiple ones are not needed anymore; Check whether ConstraintSyntaxTree would also be ok
             project.removeInternalConstraints(this);
         }
   

@@ -652,10 +652,10 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cRightParenthesisKeyword_3 = (Keyword)cGroup.eContents().get(3);
 		
 		//TypedefConstraint:
-		//	"with" "(" expressions+=Expression ")";
+		//	"with" "(" expressions=Expression ")";
 		public ParserRule getRule() { return rule; }
 
-		//"with" "(" expressions+=Expression ")"
+		//"with" "(" expressions=Expression ")"
 		public Group getGroup() { return cGroup; }
 
 		//"with"
@@ -664,7 +664,7 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		//"("
 		public Keyword getLeftParenthesisKeyword_1() { return cLeftParenthesisKeyword_1; }
 
-		//expressions+=Expression
+		//expressions=Expression
 		public Assignment getExpressionsAssignment_2() { return cExpressionsAssignment_2; }
 
 		//Expression
@@ -3403,7 +3403,7 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//TypedefConstraint:
-	//	"with" "(" expressions+=Expression ")";
+	//	"with" "(" expressions=Expression ")";
 	public TypedefConstraintElements getTypedefConstraintAccess() {
 		return (pTypedefConstraint != null) ? pTypedefConstraint : (pTypedefConstraint = new TypedefConstraintElements());
 	}
