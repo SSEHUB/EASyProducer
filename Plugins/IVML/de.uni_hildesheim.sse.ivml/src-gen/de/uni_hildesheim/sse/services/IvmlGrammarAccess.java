@@ -649,17 +649,13 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cLeftParenthesisKeyword_1 = (Keyword)cGroup.eContents().get(1);
 		private final Assignment cExpressionsAssignment_2 = (Assignment)cGroup.eContents().get(2);
 		private final RuleCall cExpressionsExpressionParserRuleCall_2_0 = (RuleCall)cExpressionsAssignment_2.eContents().get(0);
-		private final Group cGroup_3 = (Group)cGroup.eContents().get(3);
-		private final Keyword cCommaKeyword_3_0 = (Keyword)cGroup_3.eContents().get(0);
-		private final Assignment cExpressionsAssignment_3_1 = (Assignment)cGroup_3.eContents().get(1);
-		private final RuleCall cExpressionsExpressionParserRuleCall_3_1_0 = (RuleCall)cExpressionsAssignment_3_1.eContents().get(0);
-		private final Keyword cRightParenthesisKeyword_4 = (Keyword)cGroup.eContents().get(4);
+		private final Keyword cRightParenthesisKeyword_3 = (Keyword)cGroup.eContents().get(3);
 		
 		//TypedefConstraint:
-		//	"with" "(" expressions+=Expression ("," expressions+=Expression)* ")";
+		//	"with" "(" expressions+=Expression ")";
 		public ParserRule getRule() { return rule; }
 
-		//"with" "(" expressions+=Expression ("," expressions+=Expression)* ")"
+		//"with" "(" expressions+=Expression ")"
 		public Group getGroup() { return cGroup; }
 
 		//"with"
@@ -674,20 +670,8 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		//Expression
 		public RuleCall getExpressionsExpressionParserRuleCall_2_0() { return cExpressionsExpressionParserRuleCall_2_0; }
 
-		//("," expressions+=Expression)*
-		public Group getGroup_3() { return cGroup_3; }
-
-		//","
-		public Keyword getCommaKeyword_3_0() { return cCommaKeyword_3_0; }
-
-		//expressions+=Expression
-		public Assignment getExpressionsAssignment_3_1() { return cExpressionsAssignment_3_1; }
-
-		//Expression
-		public RuleCall getExpressionsExpressionParserRuleCall_3_1_0() { return cExpressionsExpressionParserRuleCall_3_1_0; }
-
 		//")"
-		public Keyword getRightParenthesisKeyword_4() { return cRightParenthesisKeyword_4; }
+		public Keyword getRightParenthesisKeyword_3() { return cRightParenthesisKeyword_3; }
 	}
 
 	public class VariableDeclarationElements extends AbstractParserRuleElementFinder {
@@ -3419,7 +3403,7 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//TypedefConstraint:
-	//	"with" "(" expressions+=Expression ("," expressions+=Expression)* ")";
+	//	"with" "(" expressions+=Expression ")";
 	public TypedefConstraintElements getTypedefConstraintAccess() {
 		return (pTypedefConstraint != null) ? pTypedefConstraint : (pTypedefConstraint = new TypedefConstraintElements());
 	}

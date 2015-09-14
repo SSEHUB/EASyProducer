@@ -76,7 +76,6 @@ public class IvmlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getAttrAssignmentPartAccess().getGroup(), "rule__AttrAssignmentPart__Group__0");
 					put(grammarAccess.getTypedefMappingAccess().getGroup(), "rule__TypedefMapping__Group__0");
 					put(grammarAccess.getTypedefConstraintAccess().getGroup(), "rule__TypedefConstraint__Group__0");
-					put(grammarAccess.getTypedefConstraintAccess().getGroup_3(), "rule__TypedefConstraint__Group_3__0");
 					put(grammarAccess.getVariableDeclarationAccess().getGroup(), "rule__VariableDeclaration__Group__0");
 					put(grammarAccess.getVariableDeclarationAccess().getGroup_2(), "rule__VariableDeclaration__Group_2__0");
 					put(grammarAccess.getVariableDeclarationPartAccess().getGroup(), "rule__VariableDeclarationPart__Group__0");
@@ -189,7 +188,6 @@ public class IvmlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getTypedefMappingAccess().getTypeAssignment_2(), "rule__TypedefMapping__TypeAssignment_2");
 					put(grammarAccess.getTypedefMappingAccess().getConstraintAssignment_3(), "rule__TypedefMapping__ConstraintAssignment_3");
 					put(grammarAccess.getTypedefConstraintAccess().getExpressionsAssignment_2(), "rule__TypedefConstraint__ExpressionsAssignment_2");
-					put(grammarAccess.getTypedefConstraintAccess().getExpressionsAssignment_3_1(), "rule__TypedefConstraint__ExpressionsAssignment_3_1");
 					put(grammarAccess.getVariableDeclarationAccess().getTypeAssignment_0(), "rule__VariableDeclaration__TypeAssignment_0");
 					put(grammarAccess.getVariableDeclarationAccess().getDeclsAssignment_1(), "rule__VariableDeclaration__DeclsAssignment_1");
 					put(grammarAccess.getVariableDeclarationAccess().getDeclsAssignment_2_1(), "rule__VariableDeclaration__DeclsAssignment_2_1");

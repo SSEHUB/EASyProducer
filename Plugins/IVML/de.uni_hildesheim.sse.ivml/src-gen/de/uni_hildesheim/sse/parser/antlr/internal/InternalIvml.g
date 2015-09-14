@@ -1171,31 +1171,9 @@ ruleTypedefConstraint returns [EObject current=null]
 	    }
 
 )
-)(	otherlv_3=',' 
+)	otherlv_3=')' 
     {
-    	newLeafNode(otherlv_3, grammarAccess.getTypedefConstraintAccess().getCommaKeyword_3_0());
-    }
-(
-(
-		{ 
-	        newCompositeNode(grammarAccess.getTypedefConstraintAccess().getExpressionsExpressionParserRuleCall_3_1_0()); 
-	    }
-		lv_expressions_4_0=ruleExpression		{
-	        if ($current==null) {
-	            $current = createModelElementForParent(grammarAccess.getTypedefConstraintRule());
-	        }
-       		add(
-       			$current, 
-       			"expressions",
-        		lv_expressions_4_0, 
-        		"Expression");
-	        afterParserOrEnumRuleCall();
-	    }
-
-)
-))*	otherlv_5=')' 
-    {
-    	newLeafNode(otherlv_5, grammarAccess.getTypedefConstraintAccess().getRightParenthesisKeyword_4());
+    	newLeafNode(otherlv_3, grammarAccess.getTypedefConstraintAccess().getRightParenthesisKeyword_3());
     }
 )
 ;

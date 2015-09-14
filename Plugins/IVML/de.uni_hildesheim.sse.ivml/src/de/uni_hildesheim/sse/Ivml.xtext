@@ -106,10 +106,6 @@ TypedefConstraint:
 	'with' 
 	'('
 		expressions += Expression 
-		(
-			',' 
-			expressions += Expression
-		)*
 	')'
 	;
 

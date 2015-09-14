@@ -3,7 +3,7 @@ project testTypedef {
     version v0;
     typedef myInt Integer;
     typedef mySeq sequenceOf(String);
-    typedef cInt Integer with (cInt < 100, cInt > 1000);
+    typedef cInt Integer with (cInt < 100 or cInt > 1000);
     typedef cInt2 cInt with (cInt2 > 200);
     cInt2 test = 300;
 }

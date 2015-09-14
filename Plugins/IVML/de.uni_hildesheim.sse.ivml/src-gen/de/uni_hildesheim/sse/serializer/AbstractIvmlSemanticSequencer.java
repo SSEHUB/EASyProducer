@@ -1108,7 +1108,7 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	
 	/**
 	 * Constraint:
-	 *     (expressions+=Expression expressions+=Expression*)
+	 *     expressions+=Expression
 	 */
 	protected void sequence_TypedefConstraint(EObject context, TypedefConstraint semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
