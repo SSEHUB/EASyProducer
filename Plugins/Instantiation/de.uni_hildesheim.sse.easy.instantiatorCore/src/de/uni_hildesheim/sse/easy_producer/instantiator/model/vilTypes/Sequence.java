@@ -131,6 +131,13 @@ public interface Sequence<T> extends Collection<T> {
     public Set<T> toSet();
     
     /**
+     * Turns this sequence into a set.
+     * 
+     * @return the set containing the elements of this sequence (excluding duplicates)
+     */
+    public Set<T> asSet();
+    
+    /**
      * Returns an alphabetically sorted sequence. Elements are considered using their
      * (internal) string representations and sorted.
      * 

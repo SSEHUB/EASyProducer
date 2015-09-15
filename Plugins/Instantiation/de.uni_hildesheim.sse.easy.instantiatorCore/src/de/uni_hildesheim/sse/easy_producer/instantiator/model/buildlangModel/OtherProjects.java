@@ -141,6 +141,11 @@ class OtherProjects implements Set<IArtifact> {
         result.addAll(data);
         return new ListSequence<IArtifact>(result, parameter);
     }
+    
+    @Override
+    public Sequence<IArtifact> asSequence() {
+        return toSequence();
+    }
 
     @Override
     public IArtifact add(IArtifact artifact) {

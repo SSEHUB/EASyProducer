@@ -139,6 +139,11 @@ public class ListSequence<T> extends AbstractListWrapper<T> implements Sequence<
     public Set<T> toSet() {
         return new ListSet<T>(getList(), getGenericParameter());
     }
+    
+    @Override
+    public Set<T> asSet() {
+        return toSet();
+    }
 
     @Override
     @OperationMeta(returnGenerics = IVilType.class)

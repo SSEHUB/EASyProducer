@@ -112,6 +112,11 @@ public class ListSet<T> extends AbstractListWrapper<T> implements Set<T> {
     }
     
     @Override
+    public Sequence<T> asSequence() {
+        return toSequence();
+    }
+    
+    @Override
     public T projectSingle() {
         return 1 == size() ? getList().get(0) : null;
     }

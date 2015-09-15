@@ -147,6 +147,11 @@ public class UnmodifiableSequence<T> implements Sequence<T> {
         }
         return result;
     }
+    
+    @Override
+    public Set<T> asSet() {
+        return toSet();
+    }
 
     @Override
     public Sequence<T> sortAlpha() {

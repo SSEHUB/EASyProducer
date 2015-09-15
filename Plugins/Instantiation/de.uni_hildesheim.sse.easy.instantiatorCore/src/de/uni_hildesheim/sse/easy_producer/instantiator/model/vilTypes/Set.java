@@ -110,6 +110,13 @@ public interface Set<T> extends Collection<T> {
      * @return the set containing the elements of this set
      */
     public Sequence<T> toSequence();
+    
+    /**
+     * Turns this set into a sequence.
+     * 
+     * @return the set containing the elements of this set
+     */
+    public Sequence<T> asSequence();
 
     /**
      * In case that the sequence has exactly one element, this will be returned.
