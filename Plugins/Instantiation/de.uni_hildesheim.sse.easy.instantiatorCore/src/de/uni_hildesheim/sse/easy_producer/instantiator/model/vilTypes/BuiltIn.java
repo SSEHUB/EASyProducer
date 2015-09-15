@@ -38,12 +38,18 @@ public class BuiltIn {
 
             TypeRegistry.DEFAULT.register(IvmlElement.class);
             TypeRegistry.DEFAULT.register(Attribute.class);
+            
             TypeRegistry.DEFAULT.register(DecisionVariable.class);
             TypeRegistry.DEFAULT.register(EnumValue.class);
             TypeRegistry.DEFAULT.register(IvmlDeclaration.class);
             TypeRegistry.DEFAULT.register(ChangeHistory.class);
             TypeRegistry.DEFAULT.register(Configuration.class);
             TypeRegistry.DEFAULT.register(ProjectSettings.class);
+
+            // TODO preliminary, attribute -> annotation
+            @SuppressWarnings("unchecked")
+            TypeDescriptor<Attribute> desc = (TypeDescriptor<Attribute>) TypeRegistry.DEFAULT.getType(Attribute.class);
+            TypeRegistry.addTypeMapping("Annotation", desc);
         }
     }
 

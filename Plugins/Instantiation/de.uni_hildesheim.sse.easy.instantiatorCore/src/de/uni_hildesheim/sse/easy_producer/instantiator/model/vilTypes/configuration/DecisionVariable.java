@@ -56,6 +56,12 @@ public class DecisionVariable extends AbstractIvmlVariable implements IActualTyp
         return new UnmodifiableSet<Attribute>(new ArraySet<Attribute>(attributes, Attribute.class));
     }
     
+    @Override
+    @OperationMeta(returnGenerics = { Attribute.class } )
+    public Set<Attribute> annotations() {
+        return attributes();
+    }
+    
     /**
      * Returns the specified attribute.
      * 

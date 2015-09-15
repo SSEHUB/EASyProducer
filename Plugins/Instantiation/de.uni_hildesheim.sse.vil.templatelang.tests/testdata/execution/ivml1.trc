@@ -4,55 +4,55 @@
         var <- import::iInt
         -> name(DecisionVariable) with (import::iInt) = iInt
         -> getValue(DecisionVariable) with (import::iInt) = -1
-        -> getAttribute(IvmlElement, IvmlElement) with (import::iInt, test::bindingTime) = null
+        -> getAnnotation(IvmlElement, IvmlElement) with (import::iInt, test::bindingTime) = null
         -> getIntegerValue(IvmlElement) with (null) = null
         -> ==(Integer, Integer) with (null, 100) = null
         var <- test::pInt
         -> name(DecisionVariable) with (test::pInt) = pInt
         -> getValue(DecisionVariable) with (test::pInt) = 0
-        -> getAttribute(IvmlElement, IvmlElement) with (test::pInt, test::bindingTime) = test::bindingTime
+        -> getAnnotation(IvmlElement, IvmlElement) with (test::pInt, test::bindingTime) = test::bindingTime
         -> getIntegerValue(IvmlElement) with (test::bindingTime) = 100
         -> ==(Integer, Integer) with (100, 100) = true
         visit if-branch
         var <- test::pString
         -> name(DecisionVariable) with (test::pString) = pString
         -> getValue(DecisionVariable) with (test::pString) = Hello
-        -> getAttribute(IvmlElement, IvmlElement) with (test::pString, test::bindingTime) = test::bindingTime
+        -> getAnnotation(IvmlElement, IvmlElement) with (test::pString, test::bindingTime) = test::bindingTime
         -> getIntegerValue(IvmlElement) with (test::bindingTime) = 100
         -> ==(Integer, Integer) with (100, 100) = true
         visit if-branch
         var <- test::pReal
         -> name(DecisionVariable) with (test::pReal) = pReal
         -> getValue(DecisionVariable) with (test::pReal) = 1.23
-        -> getAttribute(IvmlElement, IvmlElement) with (test::pReal, test::bindingTime) = test::bindingTime
+        -> getAnnotation(IvmlElement, IvmlElement) with (test::pReal, test::bindingTime) = test::bindingTime
         -> getIntegerValue(IvmlElement) with (test::bindingTime) = 100
         -> ==(Integer, Integer) with (100, 100) = true
         visit if-branch
         var <- test::pBoolean
         -> name(DecisionVariable) with (test::pBoolean) = pBoolean
         -> getValue(DecisionVariable) with (test::pBoolean) = true
-        -> getAttribute(IvmlElement, IvmlElement) with (test::pBoolean, test::bindingTime) = test::bindingTime
+        -> getAnnotation(IvmlElement, IvmlElement) with (test::pBoolean, test::bindingTime) = test::bindingTime
         -> getIntegerValue(IvmlElement) with (test::bindingTime) = 100
         -> ==(Integer, Integer) with (100, 100) = true
         visit if-branch
         var <- test::pEnum
         -> name(DecisionVariable) with (test::pEnum) = pEnum
         -> getValue(DecisionVariable) with (test::pEnum) = val2
-        -> getAttribute(IvmlElement, IvmlElement) with (test::pEnum, test::bindingTime) = test::bindingTime
+        -> getAnnotation(IvmlElement, IvmlElement) with (test::pEnum, test::bindingTime) = test::bindingTime
         -> getIntegerValue(IvmlElement) with (test::bindingTime) = 100
         -> ==(Integer, Integer) with (100, 100) = true
         visit if-branch
         var <- test::pComp
         -> name(DecisionVariable) with (test::pComp) = pComp
         -> getValue(DecisionVariable) with (test::pComp) = {pcString=inst1 : String, pcInt=10 : Integer}
-        -> getAttribute(IvmlElement, IvmlElement) with (test::pComp, test::bindingTime) = test::bindingTime
+        -> getAnnotation(IvmlElement, IvmlElement) with (test::pComp, test::bindingTime) = test::bindingTime
         -> getIntegerValue(IvmlElement) with (test::bindingTime) = 100
         -> ==(Integer, Integer) with (100, 100) = true
         visit if-branch
         var <- test::pCompSeq
         -> name(DecisionVariable) with (test::pCompSeq) = pCompSeq
         -> getValue(DecisionVariable) with (test::pCompSeq) = {{pcString=inst1 : String, pcInt=10 : Integer}, {pcString=inst2 : String, pcInt=11 : Integer}} : pCompoundSequence
-        -> getAttribute(IvmlElement, IvmlElement) with (test::pCompSeq, test::bindingTime) = test::bindingTime
+        -> getAnnotation(IvmlElement, IvmlElement) with (test::pCompSeq, test::bindingTime) = test::bindingTime
         -> getIntegerValue(IvmlElement) with (test::bindingTime) = 100
         -> ==(Integer, Integer) with (100, 100) = true
         visit if-branch

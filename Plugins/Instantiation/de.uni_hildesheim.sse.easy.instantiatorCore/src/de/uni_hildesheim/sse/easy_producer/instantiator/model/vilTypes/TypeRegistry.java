@@ -920,7 +920,7 @@ public class TypeRegistry {
      * @param name the name of the type
      * @param type the actual type
      */
-    static void addTypeMapping(String name, TypeDescriptor<? extends IVilType> type) {
+    public static void addTypeMapping(String name, TypeDescriptor<? extends IVilType> type) {
         DEFAULT.types.put(name, type);
     }
 

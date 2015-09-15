@@ -266,20 +266,33 @@ public class Configuration extends IvmlElement implements IStringValueProvider {
         initializeNested();
         return new Configuration(this, new NameRegExFilter(typePattern, DataType.TYPE), filter);
     }
+    
+    /**
+     * Returns a projected version of this configuration according to the applied
+     * annotations.
+     * 
+     * @param namePattern a regular name pattern (or just the full name) all applied
+     *   annotations of all variables in the resulting configuration must match
+     * @return the projected configuration
+     * @throws VilException in case of an illformed name pattern
+     */
+    public Configuration selectByAnnotation(String namePattern) throws VilException {
+        initializeAttributes();
+        return new Configuration(this, new NameRegExFilter(namePattern, DataType.ATTRIBUTE), filter);
+    }
 
     /**
      * Returns a projected version of this configuration according to the applied
-     * attributes.
+     * annotations.
      * 
      * @param namePattern a regular name pattern (or just the full name) all applied
-     *   attributes of all variables in the resulting configuration must match
+     *   annotations of all variables in the resulting configuration must match
      * @return the projected configuration
      * @throws VilException in case of an illformed name pattern
      */
     public Configuration selectByAttribute(String namePattern) throws VilException {
-        initializeAttributes();
-        return new Configuration(this, new NameRegExFilter(namePattern, DataType.ATTRIBUTE), filter);
-    }
+        return selectByAnnotation(namePattern);
+    } // TODO cleanup -> annotation
 
     /**
      * Returns a projected version of this configuration according to variables defined for 
@@ -310,14 +323,14 @@ public class Configuration extends IvmlElement implements IStringValueProvider {
     
     /**
      * Returns a projected version of this configuration according to the applied
-     * attributes.
+     * annotations.
      * 
-     * @param name the name of the attribute (may be <b>null</b>)
+     * @param name the name of the annotation (may be <b>null</b>)
      * @param value the value as an IVML identifier (may be <b>null</b>)
      * @return the projected configuration
      * @throws VilException in case of an illformed name pattern
      */
-    public Configuration selectByAttribute(String name, Object value) throws VilException {
+    public Configuration selectByAnnotation(String name, Object value) throws VilException {
         initializeAttributes();
         Configuration result;
         if (null == name) {
@@ -328,6 +341,19 @@ public class Configuration extends IvmlElement implements IStringValueProvider {
                     new ValueFilter(value, Attribute.class)), filter);
         }
         return result;
+    }
+    
+    /**
+     * Returns a projected version of this configuration according to the applied
+     * annotations.
+     * 
+     * @param name the name of the annotation (may be <b>null</b>)
+     * @param value the value as an IVML identifier (may be <b>null</b>)
+     * @return the projected configuration
+     * @throws VilException in case of an illformed name pattern
+     */
+    public Configuration selectByAttribute(String name, Object value) throws VilException {
+        return selectByAnnotation(name, value);
     }
     
     /**

@@ -63,6 +63,12 @@ public class Attribute extends AbstractIvmlVariable {
     @Invisible
     @Override
     public Set<Attribute> attributes() {
+        return annotations();
+    } // TODO remove attributes() -> annotations()
+    
+    @Invisible
+    @Override
+    public Set<Attribute> annotations() {
         return new UnmodifiableSet<Attribute>(ArraySet.empty(Attribute.class));
     }
 

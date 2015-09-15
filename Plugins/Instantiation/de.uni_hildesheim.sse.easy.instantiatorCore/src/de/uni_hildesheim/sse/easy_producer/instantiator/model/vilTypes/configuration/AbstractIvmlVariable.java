@@ -582,12 +582,21 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
     }
 
     /**
-     * Returns the decision variables contained in this variable.
+     * Returns the annotations for this variable.
      * 
      * @return the decision variables
      */
     @OperationMeta(returnGenerics = { Attribute.class } )
     public abstract Set<Attribute> attributes();
+    // TODO remove -> annotations
+    
+    /**
+     * Returns the annotations for this variable.
+     * 
+     * @return the decision variables
+     */
+    @OperationMeta(returnGenerics = { Attribute.class } )
+    public abstract Set<Attribute> annotations();
 
     @Override
     public int hashCode() {

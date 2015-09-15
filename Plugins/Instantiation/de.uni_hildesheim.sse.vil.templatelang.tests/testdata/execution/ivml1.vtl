@@ -3,7 +3,7 @@ template ivml1(Configuration config, Artifact target) {
     def main(Configuration config, Artifact target) {
         for (DecisionVariable var : config.variables()) {
             '${var.name()} = ${var.getValue()}'
-            if (var.getAttribute(test::bindingTime).getIntegerValue() == 100) {
+            if (var.getAnnotation(test::bindingTime).getIntegerValue() == 100) {
                 'compile at 100'
             }
         }

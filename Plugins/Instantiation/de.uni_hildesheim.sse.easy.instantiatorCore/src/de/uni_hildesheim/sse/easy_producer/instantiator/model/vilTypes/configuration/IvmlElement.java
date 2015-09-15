@@ -87,7 +87,7 @@ public abstract class IvmlElement implements IVilType, IResolvable, IStringValue
             }
         }
         return result;
-    }
+    } // TODO remove, switch to getAnnotation
     
     /**
      * Returns the attribute specified by <b>element</b> (matches qualified and unqualified names).
@@ -96,6 +96,26 @@ public abstract class IvmlElement implements IVilType, IResolvable, IStringValue
      * @return the matching attribute or <b>null</b>
      */
     public IvmlElement getAttribute(IvmlElement element) {
+        return getAttribute(element.getQualifiedName());
+    } // TODO remove, switch to getAnnotation
+    
+    /**
+     * Returns the attribute specified by <b>name</b> (matches qualified and unqualified names).
+     * 
+     * @param name the name of the element (no regex)
+     * @return the matching attribute or <b>null</b>
+     */
+    public IvmlElement getAnnotation(String name) {
+        return getAttribute(name);
+    }
+    
+    /**
+     * Returns the attribute specified by <b>element</b> (matches qualified and unqualified names).
+     * 
+     * @param element the IvmlElement denoting the attribute
+     * @return the matching attribute or <b>null</b>
+     */
+    public IvmlElement getAnnotation(IvmlElement element) {
         return getAttribute(element.getQualifiedName());
     }
 
