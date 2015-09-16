@@ -91,33 +91,40 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
         @Override
         public Object call(RtVilExecution evaluator, CallArgument... args) throws VilException {
             Object result = null;
+            IRtVilConcept concept = obtainConcept(evaluator, 0, args);
             Configuration cfg = obtainConfiguration(evaluator, 1, args);
             if (null != cfg) {
+                Script currentScript = evaluator.currentScript;
+                IRtValueAccess valueAccess = evaluator.valueAccess;
+                evaluator.reasoningHook.preReasoning(currentScript, concept, valueAccess, cfg);
                 de.uni_hildesheim.sse.model.confModel.Configuration easyConfig = cfg.getConfiguration();
                 ReasoningResult rResult = ReasonerFrontend.getInstance().propagate(easyConfig.getProject(), 
                     easyConfig, REASONER_CONFIGURATION, ProgressObserver.NO_OBSERVER);
-                boolean ok = !rResult.hasConflict();
-                if (!ok) {
+                evaluator.reasoningHook.postReasoning(currentScript, concept, valueAccess, cfg);
+                int errorCount = 0;
+                for (int m = 0; m < rResult.getMessageCount(); m++) {
+                    Message msg = rResult.getMessage(m);
                     EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(RtVilExecution.class, Bundle.ID);
-                    for (int m = 0; m < rResult.getMessageCount(); m++) {
-                        Message msg = rResult.getMessage(m);
-                        switch (msg.getStatus()) {
-                        case UNSUPPORTED:
-                        case ERROR:
-                            logger.error(msg.getDescription());
-                            break;
-                        case INFO:
-                            logger.info(msg.getDescription());
-                            break;
-                        case WARNING:
-                            logger.warn(msg.getDescription());
-                            break;
-                        default:
-                            logger.info(msg.getDescription());
-                            break;
-                        }
+                    de.uni_hildesheim.sse.utils.messages.Status status = evaluator.reasoningHook.analyze(
+                        currentScript, concept, valueAccess, msg);
+                    switch (status) {
+                    case UNSUPPORTED:
+                    case ERROR:
+                        errorCount++;
+                        logger.error(msg.getDescription());
+                        break;
+                    case INFO:
+                        logger.info(msg.getDescription());
+                        break;
+                    case WARNING:
+                        logger.warn(msg.getDescription());
+                        break;
+                    default:
+                        logger.info(msg.getDescription());
+                        break;
                     }
                 }
+                boolean ok = (0 == errorCount);
                 evaluator.getTracer().trace("Reasoner execution: " + ok);
                 result = ok;
             }
@@ -210,6 +217,9 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
     private List<IRtVilConcept> successful = new LinkedList<IRtVilConcept>();
     private boolean stopAfterBindValues = false;
     private boolean useReasoner = true;
+    private Script currentScript;
+    private IRtValueAccess valueAccess;
+    private IReasoningHook reasoningHook = DefaultReasoningHook.INSTANCE;
     
     /**
      * Creates a new execution environment for evaluating local expressions.
@@ -233,26 +243,70 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
         super(tracer, base, parameter);
         this.stopAfterBindValues = stopAfterBindValues;
         this.useReasoner = useReasoner;
+        this.valueAccess = new IRtValueAccess() {
+            
+            @Override
+            public Object getValue(de.uni_hildesheim.sse.easy_producer.instantiator.model.common.
+                VariableDeclaration var) throws VilException {
+                return getRuntimeEnvironment().getValue(var);
+            }
+        };
     }
 
     /**
-     * Obtains the configuration from the given dynamic call fallback argument. [helper]
+     * Obtains a typed argument instance from the given dynamic call fallback argument. [helper]
      * 
+     * @param <T> the argument type
      * @param evaluator the evaluator
-     * @param argument the 0-based argument index pointing to the configuration argument in <code>args</code>
+     * @param argument the 0-based argument index pointing to the argument in <code>args</code> to be returned
+     * @param type the argument type class
      * @param args the actual arguments
-     * @return the configuration (may be <b>null</b>)
+     * @return the typed argument instance (may be <b>null</b> if it does not exist or it is of a different type)
      * @throws VilException in case that evaluating the specified argument in <code>evaluator</code> fails
      */
-    private static Configuration obtainConfiguration(RtVilExecution evaluator, int argument, CallArgument... args) 
+    private static <T> T obtainArgument(RtVilExecution evaluator, int argument, Class<T> type, CallArgument... args) 
         throws VilException {
-        Configuration result;
+        T result;
         if (0 <= argument && argument < args.length) {
-            result = (Configuration) args[argument].accept(evaluator);
+            Object tmp = args[argument].accept(evaluator);
+            if (type.isInstance(tmp)) {
+                result = type.cast(tmp);
+            } else {
+                result = null;
+            }
         } else {
             result = null;
         }
         return result;
+    }
+
+    /**
+     * Obtains a concept argument instance from the given dynamic call fallback argument. [helper]
+     * 
+     * @param evaluator the evaluator
+     * @param argument the 0-based argument index pointing to the concept argument in <code>args</code> to be returned
+     * @param args the actual arguments
+     * @return the concept instance (may be <b>null</b> if it does not exist or it is of a different type)
+     * @throws VilException in case that evaluating the specified argument in <code>evaluator</code> fails
+     */
+    private static IRtVilConcept obtainConcept(RtVilExecution evaluator, int argument, CallArgument... args) 
+        throws VilException {
+        return obtainArgument(evaluator, argument, IRtVilConcept.class, args);
+    }
+
+    /**
+     * Obtains a configuration argument instance from the given dynamic call fallback argument. [helper]
+     * 
+     * @param evaluator the evaluator
+     * @param argument the 0-based argument index pointing to the configuration argument in <code>args</code> to 
+     *     be returned
+     * @param args the actual arguments
+     * @return the configuration instance (may be <b>null</b> if it does not exist or it is of a different type)
+     * @throws VilException in case that evaluating the specified argument in <code>evaluator</code> fails
+     */
+    private static Configuration obtainConfiguration(RtVilExecution evaluator, int argument, CallArgument... args) 
+        throws VilException {
+        return obtainArgument(evaluator, argument, Configuration.class, args);
     }
 
     @Override
@@ -532,7 +586,11 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
 
     @Override
     public Object visitScript(Script script) throws VilException {
-        return super.visitScript(script); // just pass through, handled in executeDefault
+        Script tmp = currentScript;
+        currentScript = script;
+        Object result = super.visitScript(script); // just pass through, handled in executeDefault
+        currentScript = tmp;
+        return result;
     }
 
     @Override
