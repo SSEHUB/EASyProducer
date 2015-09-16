@@ -978,7 +978,11 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
      */
     public TypeDescriptor<?> processType(Type type, R resolver) throws TranslatorException {
         TypeDescriptor<?> result;
-        if (null != type && null != type.getSeq()) {
+        if (null == type) {
+            throw new TranslatorException("no type given", type, 
+                ExpressionDslPackage.Literals.TYPE__NAME, VilException.ID_INVALID);
+        }
+        if (null != type.getSeq()) {
             TypeDescriptor<?>[] param = processTypeParameter(type.getParam(), type, resolver);
             try {
                 result = TypeRegistry.getSequenceType(param);
