@@ -76,6 +76,60 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
     }
     
     /**
+     * Compute the union of <code>c1</code> and <code>c2</code> (without duplicates).
+     * 
+     * @param <T> the element type
+     * @param c1 the first collection to be considered
+     * @param c2 the second collection to be considered
+     * @return the union of <code>c1</code> and <code>c2</code>
+     */
+    @OperationMeta(returnGenerics = IVilType.class)
+    public static <T> List<T> union(Collection<T> c1, Collection<T> c2) {
+        List<T> result = new ArrayList<T>();
+        java.util.Set<T> s1 = new HashSet<T>();
+        Iterator<T> iter = c1.iterator();
+        while (iter.hasNext()) {
+            T elt = iter.next();
+            s1.add(elt);
+            result.add(elt);
+        }
+        iter = c2.iterator();
+        while (iter.hasNext()) {
+            T elt = iter.next();
+            if (!s1.contains(elt)) {
+                result.add(elt);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Returns the intersection of <code>c1</code> and <code>c2</code>.
+     * 
+     * @param <T> the element type
+     * @param c1 the first collection to be considered
+     * @param c2 the second collection to be considered
+     * @return the intersection of <code>c1</code> and <code>c2</code>
+     */
+    @OperationMeta(returnGenerics = IVilType.class)
+    public static <T> List<T> intersection(Collection<T> c1, Collection<T> c2) {
+        List<T> result = new ArrayList<T>();
+        java.util.Set<T> s1 = new HashSet<T>();
+        Iterator<T> iter = c1.iterator();
+        while (iter.hasNext()) {
+            s1.add(iter.next());
+        }
+        iter = c2.iterator();
+        while (iter.hasNext()) {
+            T elt = iter.next();
+            if (s1.contains(elt)) {
+                result.add(elt);
+            }
+        }
+        return result;
+    }
+    
+    /**
      * Returns all elements from <code>base</code> not containing those in <code>elements</code>.
      * 
      * @param <T> the element type

@@ -166,4 +166,26 @@ public class UnmodifiableSet<T> implements Set<T> {
         return set.getType();
     }
 
+    /**
+     * Compute the union of this set and <code>set</code> (without duplicates).
+     * 
+     * @param set the elements to be unified with this set
+     * @return the union of this set and <code>set</code>
+     */
+    @Override
+    public Set<T> union(Set<T> set) {
+        return this.set.union(set);
+    }
+
+    /**
+     * Returns the intersection of this set with <code>set</code>.
+     * 
+     * @param set the elements to be unified with this set
+     * @return the union of this set and <code>set</code>
+     */
+    @Override
+    public Set<T> intersection(Set<T> set) {
+        return this.set.intersection(set);
+    }
+
 }

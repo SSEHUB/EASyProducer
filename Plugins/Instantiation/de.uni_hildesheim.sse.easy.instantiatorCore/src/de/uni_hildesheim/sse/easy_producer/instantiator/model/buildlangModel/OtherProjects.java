@@ -173,4 +173,14 @@ class OtherProjects implements Set<IArtifact> {
         return type;
     }
 
+    @Override
+    public Set<IArtifact> union(Set<IArtifact> set) {
+        return new ListSet<IArtifact>(AbstractCollectionWrapper.union(this, set), parameter);
+    }
+
+    @Override
+    public Set<IArtifact> intersection(Set<IArtifact> set) {
+        return new ListSet<IArtifact>(AbstractCollectionWrapper.intersection(this, set), parameter);
+    }
+
 }

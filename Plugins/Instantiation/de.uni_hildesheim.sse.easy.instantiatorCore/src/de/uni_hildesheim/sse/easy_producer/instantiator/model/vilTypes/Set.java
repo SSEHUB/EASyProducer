@@ -53,11 +53,30 @@ public interface Set<T> extends Collection<T> {
 
     /**
      * Include the elements in <code>set</code>. Duplicates will not be included.
+     * 
      * @param set the elements to be excluded
      * @return this set without the elements in <code>set</code>
      */
     @OperationMeta(returnGenerics = IVilType.class)
     public Set<T> including(Collection<T> set);
+
+    /**
+     * Compute the union of this set and <code>set</code> (without duplicates).
+     * 
+     * @param set the elements to be unified with this set
+     * @return the union of this set and <code>set</code>
+     */
+    @OperationMeta(returnGenerics = IVilType.class)
+    public Set<T> union(Set<T> set);
+
+    /**
+     * Returns the intersection of this set with <code>set</code>.
+     * 
+     * @param set the elements to be unified with this set
+     * @return the intersection of this set and <code>set</code>
+     */
+    @OperationMeta(returnGenerics = IVilType.class)
+    public Set<T> intersection(Set<T> set);
     
     /**
      * Adds an element to this set.

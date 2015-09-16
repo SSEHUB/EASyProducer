@@ -165,4 +165,28 @@ public class ArraySet<T> extends AbstractArrayWrapper<T> implements Set<T> {
         return element;
     }
 
+    /**
+     * Compute the union of this set and <code>set</code> (without duplicates).
+     * 
+     * @param set the elements to be unified with this set
+     * @return the union of this set and <code>set</code>
+     */
+    @Override
+    @OperationMeta(returnGenerics = IVilType.class)
+    public Set<T> union(Set<T> set) {
+        return new ListSet<T>(union(this, set), getGenericParameter());
+    }
+
+    /**
+     * Returns the intersection of this set with <code>set</code>.
+     * 
+     * @param set the elements to be unified with this set
+     * @return the union of this set and <code>set</code>
+     */
+    @Override
+    @OperationMeta(returnGenerics = IVilType.class)
+    public Set<T> intersection(Set<T> set) {
+        return new ListSet<T>(intersection(this, set), getGenericParameter());
+    }
+
 }
