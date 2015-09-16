@@ -104,7 +104,8 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
      * @return <code>true</code> if <code>desc</code> is a candidate, <code>false</code> else
      */
     protected static boolean isCandidate(IMetaOperation op, String name, CallArgument[] arguments) {
-        return null != arguments && op.getName().equals(name) && op.getParameterCount() == arguments.length;
+        return null != op && null != arguments && op.getName().equals(name) 
+            && op.getParameterCount() == arguments.length;
     }
 
     
@@ -231,7 +232,7 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
      * @return the related type descriptors according sequence of generic types
      */
     private static CallArgument[] toTypeDescriptors(IMetaType type, int exclude) {
-        CallArgument[] result = new CallArgument[type.getGenericParameterCount() - exclude];
+        CallArgument[] result = new CallArgument[Math.max(0, type.getGenericParameterCount() - exclude)];
         for (int a = 0; a < result.length; a++) {
             result[a] = new CallArgument(type.getGenericParameterType(a));
         }
