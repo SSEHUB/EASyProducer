@@ -1,0 +1,11 @@
+-> main(Configuration, Artifact) with (<config>, test.texts)
+    s1 <- {1, 2, 3, 4}
+    s2 <- {3, 4, 5, 6}
+    -> union(Set, Set) with ({1, 2, 3, 4}, {3, 4, 5, 6}) = {1, 2, 3, 4, 5, 6}
+    -> intersection(Set, Set) with ({1, 2, 3, 4}, {3, 4, 5, 6}) = {3, 4}
+    s1 <- {}
+    -> union(Set, Set) with ({}, {3, 4, 5, 6}) = {3, 4, 5, 6}
+    -> intersection(Set, Set) with ({}, {3, 4, 5, 6}) = {}
+    s2 <- {}
+    -> union(Set, Set) with ({}, {}) = {}
+    -> intersection(Set, Set) with ({}, {}) = {}

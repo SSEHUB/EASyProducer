@@ -231,6 +231,16 @@ public class ExecutionTests extends AbstractTest {
     public void testSimple() throws IOException {
         assertEqual("simple");
     }
+
+    /**
+     * Tests set operations.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testSet() throws IOException {
+        assertEqual("set");
+    }
     
     /**
      * Tests enumerating sequences.

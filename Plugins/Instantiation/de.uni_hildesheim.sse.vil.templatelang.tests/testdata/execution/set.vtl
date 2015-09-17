@@ -1,0 +1,16 @@
+template set(Configuration config, Artifact target) {
+
+    def main(Configuration config, Artifact target) {
+        setOf(Integer) s1 = {1, 2, 3, 4};
+        setOf(Integer) s2 = {3, 4, 5, 6};
+        '${s1.union(s2)}'
+        '${s1.intersection(s2)}'
+        s1 = {};
+        '${s1.union(s2)}'
+        '${s1.intersection(s2)}'
+        s2 = {};
+        '${s1.union(s2)}'
+        '${s1.intersection(s2)}'
+    }
+
+}

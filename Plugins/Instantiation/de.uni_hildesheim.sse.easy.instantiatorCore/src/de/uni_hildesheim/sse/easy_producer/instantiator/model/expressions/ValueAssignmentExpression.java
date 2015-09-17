@@ -74,7 +74,9 @@ public class ValueAssignmentExpression extends Expression {
     public TypeDescriptor<?> inferType() throws VilException {
         TypeDescriptor<?> varType = this.varDecl.getType();
         TypeDescriptor<?> valType = this.valueExpression.inferType();
-        if (!varType.isAssignableFrom(valType)) {
+        boolean assignable = varType.isSet() && valType.isSequence(); // as done in ExpressionTranslator ;(
+        assignable |= varType.isAssignableFrom(valType);
+        if (!assignable) {
             OperationDescriptor operation = valType.findConversion(valType, varType);
             if (null == operation) {
                 operation = varType.findConversion(valType, varType);
