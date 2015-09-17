@@ -37,6 +37,8 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configura
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.NoVariableFilter;
 import de.uni_hildesheim.sse.model.management.VarModel;
 import de.uni_hildesheim.sse.model.varModel.Project;
+import de.uni_hildesheim.sse.reasoning.core.frontend.ReasonerFrontend;
+import de.uni_hildesheim.sse.reasoning.reasoner.Reasoner;
 import de.uni_hildesheim.sse.utils.messages.AbstractException;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
@@ -74,6 +76,7 @@ public class ExecutionRtTests extends AbstractExecutionTest<Script> {
     @BeforeClass
     public static void startUp() {
         test.de.uni_hildesheim.sse.vil.buildlang.ExecutionTests.startUp();
+        ReasonerFrontend.getInstance().getRegistry().register(new Reasoner());
     }
 
     /**
