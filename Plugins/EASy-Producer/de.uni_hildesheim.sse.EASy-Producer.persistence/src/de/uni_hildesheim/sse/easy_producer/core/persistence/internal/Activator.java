@@ -4,8 +4,8 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
 import de.uni_hildesheim.sse.easy_producer.core.persistence.standard.EASyInitializer;
-import de.uni_hildesheim.sse.easy_producer.core.varMod.tracing.ConsoleTracerFactory;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.TracerFactory;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.tracing.ConsoleTracerFactory;
 
 
 

@@ -21,7 +21,6 @@ Export-Package: de.uni_hildesheim.sse.easy_producer.core.contributions,
  de.uni_hildesheim.sse.easy_producer.core.persistence,
  de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes,
  de.uni_hildesheim.sse.easy_producer.core.persistence.standard,
- de.uni_hildesheim.sse.easy_producer.core.varMod.tracing,
  de.uni_hildesheim.sse.easy_producer.core.varMod.container
 Bundle-ClassPath: lib/,
  .

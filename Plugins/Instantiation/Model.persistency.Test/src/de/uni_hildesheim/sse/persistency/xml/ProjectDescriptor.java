@@ -5,16 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.uni_hildesheim.sse.easy_producer.core.persistence.standard.PersistenceConstants;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IProjectDescriptor;
 import de.uni_hildesheim.sse.model.confModel.Configuration;
 import de.uni_hildesheim.sse.model.management.VarModel;
 import de.uni_hildesheim.sse.model.varModel.Project;
-import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerConfiguration;
-import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasoningResult;
-import de.uni_hildesheim.sse.reasoning.reasoner.Reasoner;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
 import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
@@ -35,6 +31,7 @@ public class ProjectDescriptor implements IProjectDescriptor {
     private ProjectDescriptor parent;
     private File base;
     private Script vilScript;
+    private final String easy = "EASy";
 
     /**
      * Creates the default project descriptor for the QM model to be instantiated.
@@ -110,13 +107,13 @@ public class ProjectDescriptor implements IProjectDescriptor {
         String result;
         switch (kind) {
         case IVML:
-            result = PersistenceConstants.EASY_FILES_DEFAULT;
+            result = easy;
             break;
         case VIL:
-            result = PersistenceConstants.EASY_FILES_DEFAULT;
+            result = easy;
             break;
         case VTL:
-            result = PersistenceConstants.EASY_FILES_DEFAULT;
+            result = easy;
             break;
         default:
             result = null;
