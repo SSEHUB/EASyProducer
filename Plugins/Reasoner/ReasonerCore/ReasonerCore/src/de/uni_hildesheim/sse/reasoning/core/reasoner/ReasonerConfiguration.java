@@ -1,6 +1,5 @@
 package de.uni_hildesheim.sse.reasoning.core.reasoner;
 
-import de.uni_hildesheim.sse.model.confModel.Configuration;
 import de.uni_hildesheim.sse.reasoning.core.frontend.ReasonerFrontend;
 
 /**
