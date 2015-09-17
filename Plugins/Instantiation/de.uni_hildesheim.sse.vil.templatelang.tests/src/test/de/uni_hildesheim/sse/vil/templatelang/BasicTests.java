@@ -6,6 +6,7 @@ import java.io.IOException;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.dslCore.translation.ErrorCodes;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 
 /**
  * Performs basic (syntactic) tests.
@@ -414,7 +415,7 @@ public class BasicTests extends AbstractTest {
     }
 
     /**
-     * Tests a derived script.
+     * Tests an imported script.
      * 
      * @throws IOException should not occur
      */
@@ -423,6 +424,16 @@ public class BasicTests extends AbstractTest {
         assertEqual("import", "importTest");
     }
 
+    /**
+     * Tests an imported script (failing due to protected).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testImport1() throws IOException {
+        assertEqual("import1", "importTest1", VilException.ID_NOT_VISIBLE);
+    }
+    
     /**
      * Tests a recursive sub-template.
      * 

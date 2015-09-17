@@ -8,4 +8,8 @@ vilScript generics () {
         x.copy(y);
     }
 
+	protected produceContent() = {
+	    new FileArtifact();
+	}
+
 }

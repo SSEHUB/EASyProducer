@@ -234,61 +234,69 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	public class VilDefElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "VilDef");
 		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Keyword cDefKeyword_0 = (Keyword)cGroup.eContents().get(0);
-		private final Assignment cTypeAssignment_1 = (Assignment)cGroup.eContents().get(1);
-		private final RuleCall cTypeTypeParserRuleCall_1_0 = (RuleCall)cTypeAssignment_1.eContents().get(0);
-		private final Assignment cIdAssignment_2 = (Assignment)cGroup.eContents().get(2);
-		private final RuleCall cIdIdentifierParserRuleCall_2_0 = (RuleCall)cIdAssignment_2.eContents().get(0);
-		private final Keyword cLeftParenthesisKeyword_3 = (Keyword)cGroup.eContents().get(3);
-		private final Assignment cParamAssignment_4 = (Assignment)cGroup.eContents().get(4);
-		private final RuleCall cParamParameterListParserRuleCall_4_0 = (RuleCall)cParamAssignment_4.eContents().get(0);
-		private final Keyword cRightParenthesisKeyword_5 = (Keyword)cGroup.eContents().get(5);
-		private final Assignment cStmtsAssignment_6 = (Assignment)cGroup.eContents().get(6);
-		private final RuleCall cStmtsStmtBlockParserRuleCall_6_0 = (RuleCall)cStmtsAssignment_6.eContents().get(0);
-		private final Keyword cSemicolonKeyword_7 = (Keyword)cGroup.eContents().get(7);
+		private final Assignment cProtectedAssignment_0 = (Assignment)cGroup.eContents().get(0);
+		private final Keyword cProtectedProtectedKeyword_0_0 = (Keyword)cProtectedAssignment_0.eContents().get(0);
+		private final Keyword cDefKeyword_1 = (Keyword)cGroup.eContents().get(1);
+		private final Assignment cTypeAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final RuleCall cTypeTypeParserRuleCall_2_0 = (RuleCall)cTypeAssignment_2.eContents().get(0);
+		private final Assignment cIdAssignment_3 = (Assignment)cGroup.eContents().get(3);
+		private final RuleCall cIdIdentifierParserRuleCall_3_0 = (RuleCall)cIdAssignment_3.eContents().get(0);
+		private final Keyword cLeftParenthesisKeyword_4 = (Keyword)cGroup.eContents().get(4);
+		private final Assignment cParamAssignment_5 = (Assignment)cGroup.eContents().get(5);
+		private final RuleCall cParamParameterListParserRuleCall_5_0 = (RuleCall)cParamAssignment_5.eContents().get(0);
+		private final Keyword cRightParenthesisKeyword_6 = (Keyword)cGroup.eContents().get(6);
+		private final Assignment cStmtsAssignment_7 = (Assignment)cGroup.eContents().get(7);
+		private final RuleCall cStmtsStmtBlockParserRuleCall_7_0 = (RuleCall)cStmtsAssignment_7.eContents().get(0);
+		private final Keyword cSemicolonKeyword_8 = (Keyword)cGroup.eContents().get(8);
 		
 		//VilDef:
-		//	"def" type=Type? id=Identifier "(" param=ParameterList? ")" stmts=StmtBlock ";"?;
+		//	protected="protected"? "def" type=Type? id=Identifier "(" param=ParameterList? ")" stmts=StmtBlock ";"?;
 		public ParserRule getRule() { return rule; }
 
-		//"def" type=Type? id=Identifier "(" param=ParameterList? ")" stmts=StmtBlock ";"?
+		//protected="protected"? "def" type=Type? id=Identifier "(" param=ParameterList? ")" stmts=StmtBlock ";"?
 		public Group getGroup() { return cGroup; }
 
+		//protected="protected"?
+		public Assignment getProtectedAssignment_0() { return cProtectedAssignment_0; }
+
+		//"protected"
+		public Keyword getProtectedProtectedKeyword_0_0() { return cProtectedProtectedKeyword_0_0; }
+
 		//"def"
-		public Keyword getDefKeyword_0() { return cDefKeyword_0; }
+		public Keyword getDefKeyword_1() { return cDefKeyword_1; }
 
 		//type=Type?
-		public Assignment getTypeAssignment_1() { return cTypeAssignment_1; }
+		public Assignment getTypeAssignment_2() { return cTypeAssignment_2; }
 
 		//Type
-		public RuleCall getTypeTypeParserRuleCall_1_0() { return cTypeTypeParserRuleCall_1_0; }
+		public RuleCall getTypeTypeParserRuleCall_2_0() { return cTypeTypeParserRuleCall_2_0; }
 
 		//id=Identifier
-		public Assignment getIdAssignment_2() { return cIdAssignment_2; }
+		public Assignment getIdAssignment_3() { return cIdAssignment_3; }
 
 		//Identifier
-		public RuleCall getIdIdentifierParserRuleCall_2_0() { return cIdIdentifierParserRuleCall_2_0; }
+		public RuleCall getIdIdentifierParserRuleCall_3_0() { return cIdIdentifierParserRuleCall_3_0; }
 
 		//"("
-		public Keyword getLeftParenthesisKeyword_3() { return cLeftParenthesisKeyword_3; }
+		public Keyword getLeftParenthesisKeyword_4() { return cLeftParenthesisKeyword_4; }
 
 		//param=ParameterList?
-		public Assignment getParamAssignment_4() { return cParamAssignment_4; }
+		public Assignment getParamAssignment_5() { return cParamAssignment_5; }
 
 		//ParameterList
-		public RuleCall getParamParameterListParserRuleCall_4_0() { return cParamParameterListParserRuleCall_4_0; }
+		public RuleCall getParamParameterListParserRuleCall_5_0() { return cParamParameterListParserRuleCall_5_0; }
 
 		//")"
-		public Keyword getRightParenthesisKeyword_5() { return cRightParenthesisKeyword_5; }
+		public Keyword getRightParenthesisKeyword_6() { return cRightParenthesisKeyword_6; }
 
 		//stmts=StmtBlock
-		public Assignment getStmtsAssignment_6() { return cStmtsAssignment_6; }
+		public Assignment getStmtsAssignment_7() { return cStmtsAssignment_7; }
 
 		//StmtBlock
-		public RuleCall getStmtsStmtBlockParserRuleCall_6_0() { return cStmtsStmtBlockParserRuleCall_6_0; }
+		public RuleCall getStmtsStmtBlockParserRuleCall_7_0() { return cStmtsStmtBlockParserRuleCall_7_0; }
 
 		//";"?
-		public Keyword getSemicolonKeyword_7() { return cSemicolonKeyword_7; }
+		public Keyword getSemicolonKeyword_8() { return cSemicolonKeyword_8; }
 	}
 
 	public class StmtBlockElements extends AbstractParserRuleElementFinder {
@@ -1043,7 +1051,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//VilDef:
-	//	"def" type=Type? id=Identifier "(" param=ParameterList? ")" stmts=StmtBlock ";"?;
+	//	protected="protected"? "def" type=Type? id=Identifier "(" param=ParameterList? ")" stmts=StmtBlock ";"?;
 	public VilDefElements getVilDefAccess() {
 		return (pVilDef != null) ? pVilDef : (pVilDef = new VilDefElements());
 	}

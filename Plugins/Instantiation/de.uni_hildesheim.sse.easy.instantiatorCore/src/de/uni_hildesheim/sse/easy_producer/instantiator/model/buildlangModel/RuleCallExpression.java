@@ -59,5 +59,15 @@ public class RuleCallExpression extends ModelCallExpression<VariableDeclaration,
     protected String getInvalidOperationMessage(IMetaOperation op) {
         return op.getJavaSignature() + " is not a valid rule";
     }
+
+    @Override
+    public boolean isVisible(Script fromModel) {
+        boolean isVisible = true;
+        Rule resolved = getResolved();
+        if (resolved.isProtected()) {
+            isVisible = resolved.getDeclaringType().equals(fromModel);
+        }
+        return isVisible;
+    }
     
 }

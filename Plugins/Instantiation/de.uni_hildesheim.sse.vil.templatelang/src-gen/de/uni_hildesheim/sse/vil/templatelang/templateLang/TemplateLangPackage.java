@@ -252,13 +252,22 @@ public interface TemplateLangPackage extends EPackage
   int VIL_DEF = 3;
 
   /**
+   * The feature id for the '<em><b>Protected</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int VIL_DEF__PROTECTED = 0;
+
+  /**
    * The feature id for the '<em><b>Type</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int VIL_DEF__TYPE = 0;
+  int VIL_DEF__TYPE = 1;
 
   /**
    * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -267,7 +276,7 @@ public interface TemplateLangPackage extends EPackage
    * @generated
    * @ordered
    */
-  int VIL_DEF__ID = 1;
+  int VIL_DEF__ID = 2;
 
   /**
    * The feature id for the '<em><b>Param</b></em>' containment reference.
@@ -276,7 +285,7 @@ public interface TemplateLangPackage extends EPackage
    * @generated
    * @ordered
    */
-  int VIL_DEF__PARAM = 2;
+  int VIL_DEF__PARAM = 3;
 
   /**
    * The feature id for the '<em><b>Stmts</b></em>' containment reference.
@@ -285,7 +294,7 @@ public interface TemplateLangPackage extends EPackage
    * @generated
    * @ordered
    */
-  int VIL_DEF__STMTS = 3;
+  int VIL_DEF__STMTS = 4;
 
   /**
    * The number of structural features of the '<em>Vil Def</em>' class.
@@ -294,7 +303,7 @@ public interface TemplateLangPackage extends EPackage
    * @generated
    * @ordered
    */
-  int VIL_DEF_FEATURE_COUNT = 4;
+  int VIL_DEF_FEATURE_COUNT = 5;
 
   /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.StmtBlockImpl <em>Stmt Block</em>}' class.
@@ -1046,6 +1055,17 @@ public interface TemplateLangPackage extends EPackage
   EClass getVilDef();
 
   /**
+   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.VilDef#getProtected <em>Protected</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Protected</em>'.
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.VilDef#getProtected()
+   * @see #getVilDef()
+   * @generated
+   */
+  EAttribute getVilDef_Protected();
+
+  /**
    * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.VilDef#getType <em>Type</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1790,6 +1810,14 @@ public interface TemplateLangPackage extends EPackage
      * @generated
      */
     EClass VIL_DEF = eINSTANCE.getVilDef();
+
+    /**
+     * The meta object literal for the '<em><b>Protected</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute VIL_DEF__PROTECTED = eINSTANCE.getVilDef_Protected();
 
     /**
      * The meta object literal for the '<em><b>Type</b></em>' containment reference feature.

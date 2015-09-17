@@ -1,0 +1,9 @@
+import generics;
+
+vilScript importTest5 () {
+
+    main() = : {
+        produceContent();
+    }
+
+}

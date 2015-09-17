@@ -1,6 +1,6 @@
 import generics;
 
-vilScript importTest3 () {
+vilScript importTest4 () {
 
     main() = : {
         Integer impVal = test;

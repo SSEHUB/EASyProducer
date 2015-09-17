@@ -85,5 +85,10 @@ public class InstantiateExpression extends ModelCallExpression<VariableDeclarati
         }
         return result;
     }
+
+    @Override
+    public boolean isVisible(Script fromModel) {
+        return true;
+    }
         
 }

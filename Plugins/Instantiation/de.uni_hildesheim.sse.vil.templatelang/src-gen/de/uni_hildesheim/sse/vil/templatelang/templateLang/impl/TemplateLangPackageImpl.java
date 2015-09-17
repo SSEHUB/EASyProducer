@@ -369,9 +369,19 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getVilDef_Protected()
+  {
+    return (EAttribute)vilDefEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EReference getVilDef_Type()
   {
-    return (EReference)vilDefEClass.getEStructuralFeatures().get(0);
+    return (EReference)vilDefEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -381,7 +391,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    */
   public EAttribute getVilDef_Id()
   {
-    return (EAttribute)vilDefEClass.getEStructuralFeatures().get(1);
+    return (EAttribute)vilDefEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -391,7 +401,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    */
   public EReference getVilDef_Param()
   {
-    return (EReference)vilDefEClass.getEStructuralFeatures().get(2);
+    return (EReference)vilDefEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -401,7 +411,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    */
   public EReference getVilDef_Stmts()
   {
-    return (EReference)vilDefEClass.getEStructuralFeatures().get(3);
+    return (EReference)vilDefEClass.getEStructuralFeatures().get(4);
   }
 
   /**
@@ -971,6 +981,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
     createEAttribute(indentationHintPartEClass, INDENTATION_HINT_PART__VALUE);
 
     vilDefEClass = createEClass(VIL_DEF);
+    createEAttribute(vilDefEClass, VIL_DEF__PROTECTED);
     createEReference(vilDefEClass, VIL_DEF__TYPE);
     createEAttribute(vilDefEClass, VIL_DEF__ID);
     createEReference(vilDefEClass, VIL_DEF__PARAM);
@@ -1094,6 +1105,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
     initEAttribute(getIndentationHintPart_Value(), ecorePackage.getEString(), "value", null, 0, 1, IndentationHintPart.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(vilDefEClass, VilDef.class, "VilDef", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getVilDef_Protected(), ecorePackage.getEString(), "protected", null, 0, 1, VilDef.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getVilDef_Type(), theExpressionDslPackage.getType(), null, "type", null, 0, 1, VilDef.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getVilDef_Id(), ecorePackage.getEString(), "id", null, 0, 1, VilDef.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getVilDef_Param(), theExpressionDslPackage.getParameterList(), null, "param", null, 0, 1, VilDef.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

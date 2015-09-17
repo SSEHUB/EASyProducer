@@ -173,14 +173,20 @@ public abstract class Resolver<M extends IResolvableModel<V>, O extends IResolva
          * 
          * @param model the model to resolve on
          * @param isSuper whether it is a super call
+         * @param fromModel the model which issues the call
          * @return the created call expression in case of success, <b>null</b> else
          */
-        E createAndCheckCall(M model, boolean isSuper) {
+        E createAndCheckCall(M model, boolean isSuper, M fromModel) {
             E result = null;
             try {
                 E tmp = createCallExpression(model, isSuper, name, arguments);
                 tmp.inferType();
-                result = tmp;
+                if (!tmp.isVisible(fromModel)) {
+                    lastException = new VilException(tmp.getResolved().getSignature() + " is not visible from " 
+                        + fromModel.getName(), VilException.ID_NOT_VISIBLE);
+                } else {
+                    result = tmp;
+                }
             } catch (VilException e) {
                 lastException = e;
             }
@@ -284,11 +290,11 @@ public abstract class Resolver<M extends IResolvableModel<V>, O extends IResolva
             M qModel = determineQualifiedModel(model, isSuper, name);
             if (null != qModel) {
                 // if qualified and not found -> exception thrown, else null==N/A or qModel exists
-                result = tester.createAndCheckCall(qModel, false); // qualified cannot be super
+                result = tester.createAndCheckCall(qModel, false, model); // qualified cannot be super
             }
             if (null == result) {
                 if (!isSuper) { // in case of super, do not start with this but with parent model
-                    result = tester.createAndCheckCall(model, isSuper);
+                    result = tester.createAndCheckCall(model, isSuper, model);
                 } else {
                     if (null == model.getParent()) { // if it is super and no parent -> error!
                         throw new VilException("model is not extended, no super possible", 
@@ -299,18 +305,18 @@ public abstract class Resolver<M extends IResolvableModel<V>, O extends IResolva
                     do { // check the parents
                         model = (M) model.getParent();
                         if (null != model) {
-                            result = tester.createAndCheckCall(model, isSuper);
+                            result = tester.createAndCheckCall(model, isSuper, model);
                         }
                     } while (null != model && null == result);
                 }
             }
             for (int s = models.size() - 1; null == result && s >= 0; s--) {
                 M importedModel = models.get(s);
-                result = tester.createAndCheckCall(importedModel, false);
+                result = tester.createAndCheckCall(importedModel, false, model);
                 for (int i = 0; null == result && i < importedModel.getImportsCount(); i++) {
                     M imported = (M) importedModel.getImport(i).getResolved();
                     if (null != imported) {
-                        result = tester.createAndCheckCall(imported, false);
+                        result = tester.createAndCheckCall(imported, false, importedModel);
                     }
                 }
             }

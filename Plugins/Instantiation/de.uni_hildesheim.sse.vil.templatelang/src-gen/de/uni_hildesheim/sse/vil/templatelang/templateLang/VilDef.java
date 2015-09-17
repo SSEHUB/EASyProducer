@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.EObject;
  * <p>
  * The following features are supported:
  * <ul>
+ *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.VilDef#getProtected <em>Protected</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.VilDef#getType <em>Type</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.VilDef#getId <em>Id</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.VilDef#getParam <em>Param</em>}</li>
@@ -28,6 +29,32 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface VilDef extends EObject
 {
+  /**
+   * Returns the value of the '<em><b>Protected</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Protected</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Protected</em>' attribute.
+   * @see #setProtected(String)
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.TemplateLangPackage#getVilDef_Protected()
+   * @model
+   * @generated
+   */
+  String getProtected();
+
+  /**
+   * Sets the value of the '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.VilDef#getProtected <em>Protected</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Protected</em>' attribute.
+   * @see #getProtected()
+   * @generated
+   */
+  void setProtected(String value);
+
   /**
    * Returns the value of the '<em><b>Type</b></em>' containment reference.
    * <!-- begin-user-doc -->

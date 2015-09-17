@@ -17,13 +17,13 @@ import org.eclipse.xtext.serializer.sequencer.AbstractSyntacticSequencer;
 public class TemplateLangSyntacticSequencer extends AbstractSyntacticSequencer {
 
 	protected TemplateLangGrammarAccess grammarAccess;
-	protected AbstractElementAlias match_VilDef_SemicolonKeyword_7_q;
+	protected AbstractElementAlias match_VilDef_SemicolonKeyword_8_q;
 	protected AbstractElementAlias match_userMultiselect_SemicolonKeyword_4_q;
 	
 	@Inject
 	protected void init(IGrammarAccess access) {
 		grammarAccess = (TemplateLangGrammarAccess) access;
-		match_VilDef_SemicolonKeyword_7_q = new TokenAlias(false, true, grammarAccess.getVilDefAccess().getSemicolonKeyword_7());
+		match_VilDef_SemicolonKeyword_8_q = new TokenAlias(false, true, grammarAccess.getVilDefAccess().getSemicolonKeyword_8());
 		match_userMultiselect_SemicolonKeyword_4_q = new TokenAlias(false, true, grammarAccess.getUserMultiselectAccess().getSemicolonKeyword_4());
 	}
 	
@@ -39,8 +39,8 @@ public class TemplateLangSyntacticSequencer extends AbstractSyntacticSequencer {
 		List<INode> transitionNodes = collectNodes(fromNode, toNode);
 		for (AbstractElementAlias syntax : transition.getAmbiguousSyntaxes()) {
 			List<INode> syntaxNodes = getNodesFor(transitionNodes, syntax);
-			if(match_VilDef_SemicolonKeyword_7_q.equals(syntax))
-				emit_VilDef_SemicolonKeyword_7_q(semanticObject, getLastNavigableState(), syntaxNodes);
+			if(match_VilDef_SemicolonKeyword_8_q.equals(syntax))
+				emit_VilDef_SemicolonKeyword_8_q(semanticObject, getLastNavigableState(), syntaxNodes);
 			else if(match_userMultiselect_SemicolonKeyword_4_q.equals(syntax))
 				emit_userMultiselect_SemicolonKeyword_4_q(semanticObject, getLastNavigableState(), syntaxNodes);
 			else acceptNodes(getLastNavigableState(), syntaxNodes);
@@ -51,7 +51,7 @@ public class TemplateLangSyntacticSequencer extends AbstractSyntacticSequencer {
 	 * Syntax:
 	 *     ';'?
 	 */
-	protected void emit_VilDef_SemicolonKeyword_7_q(EObject semanticObject, ISynNavigable transition, List<INode> nodes) {
+	protected void emit_VilDef_SemicolonKeyword_8_q(EObject semanticObject, ISynNavigable transition, List<INode> nodes) {
 		acceptNodes(transition, nodes);
 	}
 	

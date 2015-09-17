@@ -160,4 +160,12 @@ public abstract class ModelCallExpression<V extends IResolvable, M extends IReso
         return getVilSignature(resolved);
     }
     
+    /**
+     * Returns whether the resolved model operation is visible.
+     *  
+     * @param fromModel the model issuing the call
+     * @return <code>true</code> if the operation is visible, <code>false</code> else
+     */
+    public abstract boolean isVisible(M fromModel);
+    
 }

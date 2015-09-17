@@ -29,7 +29,7 @@ IndentationHintPart:
 ;
 
 VilDef:
-  'def' (type=Type)? id=Identifier '(' param=ParameterList? ')' stmts=StmtBlock ';'?
+  (protected = 'protected')? 'def' (type=Type)? id=Identifier '(' param=ParameterList? ')' stmts=StmtBlock ';'?
   ;
   
 StmtBlock: 

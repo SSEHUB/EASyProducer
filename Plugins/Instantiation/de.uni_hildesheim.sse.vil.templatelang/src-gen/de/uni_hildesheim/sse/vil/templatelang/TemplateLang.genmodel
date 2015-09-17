@@ -26,6 +26,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TemplateLang.ecore#//IndentationHintPart/value"/>
     </genClasses>
     <genClasses ecoreClass="TemplateLang.ecore#//VilDef">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TemplateLang.ecore#//VilDef/protected"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//VilDef/type"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TemplateLang.ecore#//VilDef/id"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//VilDef/param"/>

@@ -64,6 +64,7 @@ public class InternalTemplateLangLexer extends Lexer {
     public static final int T__34=34;
     public static final int T__35=35;
     public static final int T__36=36;
+    public static final int T__73=73;
     public static final int EOF=-1;
     public static final int T__30=30;
     public static final int T__31=31;
@@ -1174,10 +1175,10 @@ public class InternalTemplateLangLexer extends Lexer {
         try {
             int _type = T__65;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:63:7: ( 'print' )
-            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:63:9: 'print'
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:63:7: ( 'protected' )
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:63:9: 'protected'
             {
-            match("print"); 
+            match("protected"); 
 
 
             }
@@ -1195,10 +1196,10 @@ public class InternalTemplateLangLexer extends Lexer {
         try {
             int _type = T__66;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:64:7: ( 'const' )
-            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:64:9: 'const'
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:64:7: ( 'print' )
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:64:9: 'print'
             {
-            match("const"); 
+            match("print"); 
 
 
             }
@@ -1216,10 +1217,10 @@ public class InternalTemplateLangLexer extends Lexer {
         try {
             int _type = T__67;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:65:7: ( '::' )
-            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:65:9: '::'
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:65:7: ( 'const' )
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:65:9: 'const'
             {
-            match("::"); 
+            match("const"); 
 
 
             }
@@ -1237,10 +1238,10 @@ public class InternalTemplateLangLexer extends Lexer {
         try {
             int _type = T__68;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:66:7: ( 'null' )
-            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:66:9: 'null'
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:66:7: ( '::' )
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:66:9: '::'
             {
-            match("null"); 
+            match("::"); 
 
 
             }
@@ -1258,10 +1259,10 @@ public class InternalTemplateLangLexer extends Lexer {
         try {
             int _type = T__69;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:67:7: ( 'setOf' )
-            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:67:9: 'setOf'
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:67:7: ( 'null' )
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:67:9: 'null'
             {
-            match("setOf"); 
+            match("null"); 
 
 
             }
@@ -1279,10 +1280,10 @@ public class InternalTemplateLangLexer extends Lexer {
         try {
             int _type = T__70;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:68:7: ( 'sequenceOf' )
-            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:68:9: 'sequenceOf'
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:68:7: ( 'setOf' )
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:68:9: 'setOf'
             {
-            match("sequenceOf"); 
+            match("setOf"); 
 
 
             }
@@ -1300,10 +1301,10 @@ public class InternalTemplateLangLexer extends Lexer {
         try {
             int _type = T__71;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:69:7: ( 'mapOf' )
-            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:69:9: 'mapOf'
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:69:7: ( 'sequenceOf' )
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:69:9: 'sequenceOf'
             {
-            match("mapOf"); 
+            match("sequenceOf"); 
 
 
             }
@@ -1321,10 +1322,10 @@ public class InternalTemplateLangLexer extends Lexer {
         try {
             int _type = T__72;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:70:7: ( 'callOf' )
-            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:70:9: 'callOf'
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:70:7: ( 'mapOf' )
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:70:9: 'mapOf'
             {
-            match("callOf"); 
+            match("mapOf"); 
 
 
             }
@@ -1337,16 +1338,37 @@ public class InternalTemplateLangLexer extends Lexer {
     }
     // $ANTLR end "T__72"
 
+    // $ANTLR start "T__73"
+    public final void mT__73() throws RecognitionException {
+        try {
+            int _type = T__73;
+            int _channel = DEFAULT_TOKEN_CHANNEL;
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:71:7: ( 'callOf' )
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:71:9: 'callOf'
+            {
+            match("callOf"); 
+
+
+            }
+
+            state.type = _type;
+            state.channel = _channel;
+        }
+        finally {
+        }
+    }
+    // $ANTLR end "T__73"
+
     // $ANTLR start "RULE_VERSION"
     public final void mRULE_VERSION() throws RecognitionException {
         try {
             int _type = RULE_VERSION;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12862:14: ( 'v' ( '0' .. '9' )+ ( '.' ( '0' .. '9' )+ )* )
-            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12862:16: 'v' ( '0' .. '9' )+ ( '.' ( '0' .. '9' )+ )*
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12916:14: ( 'v' ( '0' .. '9' )+ ( '.' ( '0' .. '9' )+ )* )
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12916:16: 'v' ( '0' .. '9' )+ ( '.' ( '0' .. '9' )+ )*
             {
             match('v'); 
-            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12862:20: ( '0' .. '9' )+
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12916:20: ( '0' .. '9' )+
             int cnt1=0;
             loop1:
             do {
@@ -1360,7 +1382,7 @@ public class InternalTemplateLangLexer extends Lexer {
 
                 switch (alt1) {
             	case 1 :
-            	    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12862:21: '0' .. '9'
+            	    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12916:21: '0' .. '9'
             	    {
             	    matchRange('0','9'); 
 
@@ -1376,7 +1398,7 @@ public class InternalTemplateLangLexer extends Lexer {
                 cnt1++;
             } while (true);
 
-            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12862:32: ( '.' ( '0' .. '9' )+ )*
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12916:32: ( '.' ( '0' .. '9' )+ )*
             loop3:
             do {
                 int alt3=2;
@@ -1389,10 +1411,10 @@ public class InternalTemplateLangLexer extends Lexer {
 
                 switch (alt3) {
             	case 1 :
-            	    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12862:33: '.' ( '0' .. '9' )+
+            	    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12916:33: '.' ( '0' .. '9' )+
             	    {
             	    match('.'); 
-            	    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12862:37: ( '0' .. '9' )+
+            	    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12916:37: ( '0' .. '9' )+
             	    int cnt2=0;
             	    loop2:
             	    do {
@@ -1406,7 +1428,7 @@ public class InternalTemplateLangLexer extends Lexer {
 
             	        switch (alt2) {
             	    	case 1 :
-            	    	    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12862:38: '0' .. '9'
+            	    	    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12916:38: '0' .. '9'
             	    	    {
             	    	    matchRange('0','9'); 
 
@@ -1447,8 +1469,8 @@ public class InternalTemplateLangLexer extends Lexer {
         try {
             int _type = RULE_ID;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12864:9: ( ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '$' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )* )
-            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12864:11: ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '$' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12918:9: ( ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '$' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )* )
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12918:11: ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '$' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
             {
             if ( input.LA(1)=='$'||(input.LA(1)>='A' && input.LA(1)<='Z')||input.LA(1)=='_'||(input.LA(1)>='a' && input.LA(1)<='z') ) {
                 input.consume();
@@ -1459,7 +1481,7 @@ public class InternalTemplateLangLexer extends Lexer {
                 recover(mse);
                 throw mse;}
 
-            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12864:39: ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12918:39: ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
             loop4:
             do {
                 int alt4=2;
@@ -1508,10 +1530,10 @@ public class InternalTemplateLangLexer extends Lexer {
         try {
             int _type = RULE_NUMBER;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12866:13: ( ( '-' )? ( ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT ) )
-            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12866:15: ( '-' )? ( ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT )
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12920:13: ( ( '-' )? ( ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT ) )
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12920:15: ( '-' )? ( ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT )
             {
-            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12866:15: ( '-' )?
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12920:15: ( '-' )?
             int alt5=2;
             int LA5_0 = input.LA(1);
 
@@ -1520,7 +1542,7 @@ public class InternalTemplateLangLexer extends Lexer {
             }
             switch (alt5) {
                 case 1 :
-                    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12866:15: '-'
+                    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12920:15: '-'
                     {
                     match('-'); 
 
@@ -1529,14 +1551,14 @@ public class InternalTemplateLangLexer extends Lexer {
 
             }
 
-            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12866:20: ( ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT )
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12920:20: ( ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT )
             int alt13=3;
             alt13 = dfa13.predict(input);
             switch (alt13) {
                 case 1 :
-                    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12866:21: ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )?
+                    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12920:21: ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )?
                     {
-                    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12866:21: ( '0' .. '9' )+
+                    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12920:21: ( '0' .. '9' )+
                     int cnt6=0;
                     loop6:
                     do {
@@ -1550,7 +1572,7 @@ public class InternalTemplateLangLexer extends Lexer {
 
                         switch (alt6) {
                     	case 1 :
-                    	    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12866:22: '0' .. '9'
+                    	    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12920:22: '0' .. '9'
                     	    {
                     	    matchRange('0','9'); 
 
@@ -1566,7 +1588,7 @@ public class InternalTemplateLangLexer extends Lexer {
                         cnt6++;
                     } while (true);
 
-                    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12866:33: ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )?
+                    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12920:33: ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )?
                     int alt9=2;
                     int LA9_0 = input.LA(1);
 
@@ -1575,10 +1597,10 @@ public class InternalTemplateLangLexer extends Lexer {
                     }
                     switch (alt9) {
                         case 1 :
-                            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12866:34: '.' ( '0' .. '9' )* ( RULE_EXPONENT )?
+                            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12920:34: '.' ( '0' .. '9' )* ( RULE_EXPONENT )?
                             {
                             match('.'); 
-                            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12866:38: ( '0' .. '9' )*
+                            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12920:38: ( '0' .. '9' )*
                             loop7:
                             do {
                                 int alt7=2;
@@ -1591,7 +1613,7 @@ public class InternalTemplateLangLexer extends Lexer {
 
                                 switch (alt7) {
                             	case 1 :
-                            	    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12866:39: '0' .. '9'
+                            	    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12920:39: '0' .. '9'
                             	    {
                             	    matchRange('0','9'); 
 
@@ -1603,7 +1625,7 @@ public class InternalTemplateLangLexer extends Lexer {
                                 }
                             } while (true);
 
-                            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12866:50: ( RULE_EXPONENT )?
+                            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12920:50: ( RULE_EXPONENT )?
                             int alt8=2;
                             int LA8_0 = input.LA(1);
 
@@ -1612,7 +1634,7 @@ public class InternalTemplateLangLexer extends Lexer {
                             }
                             switch (alt8) {
                                 case 1 :
-                                    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12866:50: RULE_EXPONENT
+                                    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12920:50: RULE_EXPONENT
                                     {
                                     mRULE_EXPONENT(); 
 
@@ -1631,10 +1653,10 @@ public class InternalTemplateLangLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12866:67: '.' ( '0' .. '9' )+ ( RULE_EXPONENT )?
+                    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12920:67: '.' ( '0' .. '9' )+ ( RULE_EXPONENT )?
                     {
                     match('.'); 
-                    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12866:71: ( '0' .. '9' )+
+                    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12920:71: ( '0' .. '9' )+
                     int cnt10=0;
                     loop10:
                     do {
@@ -1648,7 +1670,7 @@ public class InternalTemplateLangLexer extends Lexer {
 
                         switch (alt10) {
                     	case 1 :
-                    	    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12866:72: '0' .. '9'
+                    	    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12920:72: '0' .. '9'
                     	    {
                     	    matchRange('0','9'); 
 
@@ -1664,7 +1686,7 @@ public class InternalTemplateLangLexer extends Lexer {
                         cnt10++;
                     } while (true);
 
-                    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12866:83: ( RULE_EXPONENT )?
+                    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12920:83: ( RULE_EXPONENT )?
                     int alt11=2;
                     int LA11_0 = input.LA(1);
 
@@ -1673,7 +1695,7 @@ public class InternalTemplateLangLexer extends Lexer {
                     }
                     switch (alt11) {
                         case 1 :
-                            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12866:83: RULE_EXPONENT
+                            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12920:83: RULE_EXPONENT
                             {
                             mRULE_EXPONENT(); 
 
@@ -1686,9 +1708,9 @@ public class InternalTemplateLangLexer extends Lexer {
                     }
                     break;
                 case 3 :
-                    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12866:98: ( '0' .. '9' )+ RULE_EXPONENT
+                    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12920:98: ( '0' .. '9' )+ RULE_EXPONENT
                     {
-                    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12866:98: ( '0' .. '9' )+
+                    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12920:98: ( '0' .. '9' )+
                     int cnt12=0;
                     loop12:
                     do {
@@ -1702,7 +1724,7 @@ public class InternalTemplateLangLexer extends Lexer {
 
                         switch (alt12) {
                     	case 1 :
-                    	    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12866:99: '0' .. '9'
+                    	    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12920:99: '0' .. '9'
                     	    {
                     	    matchRange('0','9'); 
 
@@ -1741,8 +1763,8 @@ public class InternalTemplateLangLexer extends Lexer {
         try {
             int _type = RULE_EXPONENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12868:15: ( ( 'e' | 'E' ) ( '+' | '-' )? ( '0' .. '9' )+ )
-            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12868:17: ( 'e' | 'E' ) ( '+' | '-' )? ( '0' .. '9' )+
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12922:15: ( ( 'e' | 'E' ) ( '+' | '-' )? ( '0' .. '9' )+ )
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12922:17: ( 'e' | 'E' ) ( '+' | '-' )? ( '0' .. '9' )+
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -1753,7 +1775,7 @@ public class InternalTemplateLangLexer extends Lexer {
                 recover(mse);
                 throw mse;}
 
-            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12868:27: ( '+' | '-' )?
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12922:27: ( '+' | '-' )?
             int alt14=2;
             int LA14_0 = input.LA(1);
 
@@ -1779,7 +1801,7 @@ public class InternalTemplateLangLexer extends Lexer {
 
             }
 
-            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12868:38: ( '0' .. '9' )+
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12922:38: ( '0' .. '9' )+
             int cnt15=0;
             loop15:
             do {
@@ -1793,7 +1815,7 @@ public class InternalTemplateLangLexer extends Lexer {
 
                 switch (alt15) {
             	case 1 :
-            	    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12868:39: '0' .. '9'
+            	    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12922:39: '0' .. '9'
             	    {
             	    matchRange('0','9'); 
 
@@ -1825,10 +1847,10 @@ public class InternalTemplateLangLexer extends Lexer {
         try {
             int _type = RULE_STRING;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12870:13: ( ( '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"' | '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\'' ) )
-            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12870:15: ( '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"' | '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\'' )
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12924:13: ( ( '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"' | '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\'' ) )
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12924:15: ( '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"' | '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\'' )
             {
-            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12870:15: ( '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"' | '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\'' )
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12924:15: ( '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"' | '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\'' )
             int alt18=2;
             int LA18_0 = input.LA(1);
 
@@ -1846,10 +1868,10 @@ public class InternalTemplateLangLexer extends Lexer {
             }
             switch (alt18) {
                 case 1 :
-                    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12870:16: '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"'
+                    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12924:16: '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"'
                     {
                     match('\"'); 
-                    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12870:20: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )*
+                    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12924:20: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )*
                     loop16:
                     do {
                         int alt16=3;
@@ -1865,7 +1887,7 @@ public class InternalTemplateLangLexer extends Lexer {
 
                         switch (alt16) {
                     	case 1 :
-                    	    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12870:21: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' )
+                    	    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12924:21: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' )
                     	    {
                     	    match('\\'); 
                     	    if ( input.LA(1)=='\"'||input.LA(1)=='\''||input.LA(1)=='\\'||input.LA(1)=='b'||input.LA(1)=='f'||input.LA(1)=='n'||input.LA(1)=='r'||(input.LA(1)>='t' && input.LA(1)<='u') ) {
@@ -1881,7 +1903,7 @@ public class InternalTemplateLangLexer extends Lexer {
                     	    }
                     	    break;
                     	case 2 :
-                    	    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12870:66: ~ ( ( '\\\\' | '\"' ) )
+                    	    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12924:66: ~ ( ( '\\\\' | '\"' ) )
                     	    {
                     	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='!')||(input.LA(1)>='#' && input.LA(1)<='[')||(input.LA(1)>=']' && input.LA(1)<='\uFFFF') ) {
                     	        input.consume();
@@ -1906,10 +1928,10 @@ public class InternalTemplateLangLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12870:86: '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\''
+                    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12924:86: '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\''
                     {
                     match('\''); 
-                    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12870:91: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )*
+                    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12924:91: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )*
                     loop17:
                     do {
                         int alt17=3;
@@ -1925,7 +1947,7 @@ public class InternalTemplateLangLexer extends Lexer {
 
                         switch (alt17) {
                     	case 1 :
-                    	    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12870:92: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' )
+                    	    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12924:92: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' )
                     	    {
                     	    match('\\'); 
                     	    if ( input.LA(1)=='\"'||input.LA(1)=='\''||input.LA(1)=='\\'||input.LA(1)=='b'||input.LA(1)=='f'||input.LA(1)=='n'||input.LA(1)=='r'||(input.LA(1)>='t' && input.LA(1)<='u') ) {
@@ -1941,7 +1963,7 @@ public class InternalTemplateLangLexer extends Lexer {
                     	    }
                     	    break;
                     	case 2 :
-                    	    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12870:137: ~ ( ( '\\\\' | '\\'' ) )
+                    	    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12924:137: ~ ( ( '\\\\' | '\\'' ) )
                     	    {
                     	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='&')||(input.LA(1)>='(' && input.LA(1)<='[')||(input.LA(1)>=']' && input.LA(1)<='\uFFFF') ) {
                     	        input.consume();
@@ -1984,12 +2006,12 @@ public class InternalTemplateLangLexer extends Lexer {
         try {
             int _type = RULE_ML_COMMENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12872:17: ( '/*' ( options {greedy=false; } : . )* '*/' )
-            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12872:19: '/*' ( options {greedy=false; } : . )* '*/'
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12926:17: ( '/*' ( options {greedy=false; } : . )* '*/' )
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12926:19: '/*' ( options {greedy=false; } : . )* '*/'
             {
             match("/*"); 
 
-            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12872:24: ( options {greedy=false; } : . )*
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12926:24: ( options {greedy=false; } : . )*
             loop19:
             do {
                 int alt19=2;
@@ -2014,7 +2036,7 @@ public class InternalTemplateLangLexer extends Lexer {
 
                 switch (alt19) {
             	case 1 :
-            	    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12872:52: .
+            	    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12926:52: .
             	    {
             	    matchAny(); 
 
@@ -2044,12 +2066,12 @@ public class InternalTemplateLangLexer extends Lexer {
         try {
             int _type = RULE_SL_COMMENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12874:17: ( '//' (~ ( ( '\\n' | '\\r' ) ) )* ( ( '\\r' )? '\\n' )? )
-            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12874:19: '//' (~ ( ( '\\n' | '\\r' ) ) )* ( ( '\\r' )? '\\n' )?
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12928:17: ( '//' (~ ( ( '\\n' | '\\r' ) ) )* ( ( '\\r' )? '\\n' )? )
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12928:19: '//' (~ ( ( '\\n' | '\\r' ) ) )* ( ( '\\r' )? '\\n' )?
             {
             match("//"); 
 
-            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12874:24: (~ ( ( '\\n' | '\\r' ) ) )*
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12928:24: (~ ( ( '\\n' | '\\r' ) ) )*
             loop20:
             do {
                 int alt20=2;
@@ -2062,7 +2084,7 @@ public class InternalTemplateLangLexer extends Lexer {
 
                 switch (alt20) {
             	case 1 :
-            	    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12874:24: ~ ( ( '\\n' | '\\r' ) )
+            	    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12928:24: ~ ( ( '\\n' | '\\r' ) )
             	    {
             	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='\t')||(input.LA(1)>='\u000B' && input.LA(1)<='\f')||(input.LA(1)>='\u000E' && input.LA(1)<='\uFFFF') ) {
             	        input.consume();
@@ -2082,7 +2104,7 @@ public class InternalTemplateLangLexer extends Lexer {
                 }
             } while (true);
 
-            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12874:40: ( ( '\\r' )? '\\n' )?
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12928:40: ( ( '\\r' )? '\\n' )?
             int alt22=2;
             int LA22_0 = input.LA(1);
 
@@ -2091,9 +2113,9 @@ public class InternalTemplateLangLexer extends Lexer {
             }
             switch (alt22) {
                 case 1 :
-                    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12874:41: ( '\\r' )? '\\n'
+                    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12928:41: ( '\\r' )? '\\n'
                     {
-                    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12874:41: ( '\\r' )?
+                    // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12928:41: ( '\\r' )?
                     int alt21=2;
                     int LA21_0 = input.LA(1);
 
@@ -2102,7 +2124,7 @@ public class InternalTemplateLangLexer extends Lexer {
                     }
                     switch (alt21) {
                         case 1 :
-                            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12874:41: '\\r'
+                            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12928:41: '\\r'
                             {
                             match('\r'); 
 
@@ -2134,10 +2156,10 @@ public class InternalTemplateLangLexer extends Lexer {
         try {
             int _type = RULE_WS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12876:9: ( ( ' ' | '\\t' | '\\r' | '\\n' )+ )
-            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12876:11: ( ' ' | '\\t' | '\\r' | '\\n' )+
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12930:9: ( ( ' ' | '\\t' | '\\r' | '\\n' )+ )
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12930:11: ( ' ' | '\\t' | '\\r' | '\\n' )+
             {
-            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12876:11: ( ' ' | '\\t' | '\\r' | '\\n' )+
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12930:11: ( ' ' | '\\t' | '\\r' | '\\n' )+
             int cnt23=0;
             loop23:
             do {
@@ -2191,8 +2213,8 @@ public class InternalTemplateLangLexer extends Lexer {
         try {
             int _type = RULE_ANY_OTHER;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12878:16: ( . )
-            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12878:18: .
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12932:16: ( . )
+            // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:12932:18: .
             {
             matchAny(); 
 
@@ -2207,8 +2229,8 @@ public class InternalTemplateLangLexer extends Lexer {
     // $ANTLR end "RULE_ANY_OTHER"
 
     public void mTokens() throws RecognitionException {
-        // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:1:8: ( T__13 | T__14 | T__15 | T__16 | T__17 | T__18 | T__19 | T__20 | T__21 | T__22 | T__23 | T__24 | T__25 | T__26 | T__27 | T__28 | T__29 | T__30 | T__31 | T__32 | T__33 | T__34 | T__35 | T__36 | T__37 | T__38 | T__39 | T__40 | T__41 | T__42 | T__43 | T__44 | T__45 | T__46 | T__47 | T__48 | T__49 | T__50 | T__51 | T__52 | T__53 | T__54 | T__55 | T__56 | T__57 | T__58 | T__59 | T__60 | T__61 | T__62 | T__63 | T__64 | T__65 | T__66 | T__67 | T__68 | T__69 | T__70 | T__71 | T__72 | RULE_VERSION | RULE_ID | RULE_NUMBER | RULE_EXPONENT | RULE_STRING | RULE_ML_COMMENT | RULE_SL_COMMENT | RULE_WS | RULE_ANY_OTHER )
-        int alt24=69;
+        // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:1:8: ( T__13 | T__14 | T__15 | T__16 | T__17 | T__18 | T__19 | T__20 | T__21 | T__22 | T__23 | T__24 | T__25 | T__26 | T__27 | T__28 | T__29 | T__30 | T__31 | T__32 | T__33 | T__34 | T__35 | T__36 | T__37 | T__38 | T__39 | T__40 | T__41 | T__42 | T__43 | T__44 | T__45 | T__46 | T__47 | T__48 | T__49 | T__50 | T__51 | T__52 | T__53 | T__54 | T__55 | T__56 | T__57 | T__58 | T__59 | T__60 | T__61 | T__62 | T__63 | T__64 | T__65 | T__66 | T__67 | T__68 | T__69 | T__70 | T__71 | T__72 | T__73 | RULE_VERSION | RULE_ID | RULE_NUMBER | RULE_EXPONENT | RULE_STRING | RULE_ML_COMMENT | RULE_SL_COMMENT | RULE_WS | RULE_ANY_OTHER )
+        int alt24=70;
         alt24 = dfa24.predict(input);
         switch (alt24) {
             case 1 :
@@ -2632,63 +2654,70 @@ public class InternalTemplateLangLexer extends Lexer {
                 }
                 break;
             case 61 :
-                // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:1:370: RULE_VERSION
+                // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:1:370: T__73
+                {
+                mT__73(); 
+
+                }
+                break;
+            case 62 :
+                // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:1:376: RULE_VERSION
                 {
                 mRULE_VERSION(); 
 
                 }
                 break;
-            case 62 :
-                // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:1:383: RULE_ID
+            case 63 :
+                // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:1:389: RULE_ID
                 {
                 mRULE_ID(); 
 
                 }
                 break;
-            case 63 :
-                // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:1:391: RULE_NUMBER
+            case 64 :
+                // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:1:397: RULE_NUMBER
                 {
                 mRULE_NUMBER(); 
 
                 }
                 break;
-            case 64 :
-                // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:1:403: RULE_EXPONENT
+            case 65 :
+                // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:1:409: RULE_EXPONENT
                 {
                 mRULE_EXPONENT(); 
 
                 }
                 break;
-            case 65 :
-                // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:1:417: RULE_STRING
+            case 66 :
+                // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:1:423: RULE_STRING
                 {
                 mRULE_STRING(); 
 
                 }
                 break;
-            case 66 :
-                // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:1:429: RULE_ML_COMMENT
+            case 67 :
+                // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:1:435: RULE_ML_COMMENT
                 {
                 mRULE_ML_COMMENT(); 
 
                 }
                 break;
-            case 67 :
-                // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:1:445: RULE_SL_COMMENT
+            case 68 :
+                // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:1:451: RULE_SL_COMMENT
                 {
                 mRULE_SL_COMMENT(); 
 
                 }
                 break;
-            case 68 :
-                // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:1:461: RULE_WS
+            case 69 :
+                // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:1:467: RULE_WS
                 {
                 mRULE_WS(); 
 
                 }
                 break;
-            case 69 :
-                // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:1:469: RULE_ANY_OTHER
+            case 70 :
+                // ../de.uni_hildesheim.sse.vil.templatelang.ui/src-gen/de/uni_hildesheim/sse/vil/templatelang/ui/contentassist/antlr/internal/InternalTemplateLang.g:1:475: RULE_ANY_OTHER
                 {
                 mRULE_ANY_OTHER(); 
 
@@ -2752,7 +2781,7 @@ public class InternalTemplateLangLexer extends Lexer {
             this.transition = DFA13_transition;
         }
         public String getDescription() {
-            return "12866:20: ( ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT )";
+            return "12920:20: ( ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT )";
         }
     }
     static final String DFA24_eotS =
@@ -2761,17 +2790,17 @@ public class InternalTemplateLangLexer extends Lexer {
         "\1\55\1\141\4\55\2\uffff\2\55\2\uffff\2\53\2\uffff\1\55\1\uffff"+
         "\1\156\1\55\21\uffff\3\55\1\uffff\6\55\1\171\4\uffff\3\55\4\uffff"+
         "\1\55\1\uffff\1\175\1\55\1\uffff\3\55\3\uffff\6\55\2\uffff\1\55"+
-        "\2\uffff\1\u008b\1\uffff\1\u008c\1\u008d\1\u008e\5\55\1\u0094\1"+
-        "\55\1\uffff\2\55\1\u0099\1\uffff\15\55\4\uffff\1\u00a7\1\u00a8\3"+
-        "\55\1\uffff\2\55\1\u00ae\1\55\1\uffff\7\55\1\u00b7\3\55\1\u00bb"+
-        "\1\55\2\uffff\2\55\1\u00bf\2\55\1\uffff\3\55\1\u00c6\1\u00c7\2\55"+
-        "\1\u00ca\1\uffff\1\55\1\u00cc\1\55\1\uffff\1\u00ce\2\55\1\uffff"+
-        "\4\55\1\u00d5\1\u00d6\2\uffff\2\55\1\uffff\1\u00d9\1\uffff\1\55"+
-        "\1\uffff\1\55\1\u00dc\1\u00dd\1\u00de\1\55\1\u00e0\2\uffff\2\55"+
-        "\1\uffff\1\55\1\u00e4\3\uffff\1\55\1\uffff\2\55\2\uffff\1\u00e8"+
-        "\2\55\1\uffff\1\u00eb\1\55\1\uffff\1\u00ed\1\uffff";
+        "\2\uffff\1\u008c\1\uffff\1\u008d\1\u008e\1\u008f\5\55\1\u0095\1"+
+        "\55\1\uffff\2\55\1\u009a\1\uffff\16\55\4\uffff\1\u00a9\1\u00aa\3"+
+        "\55\1\uffff\2\55\1\u00b0\1\55\1\uffff\7\55\1\u00b9\3\55\1\u00bd"+
+        "\2\55\2\uffff\2\55\1\u00c2\2\55\1\uffff\3\55\1\u00c9\1\u00ca\2\55"+
+        "\1\u00cd\1\uffff\1\55\1\u00cf\1\55\1\uffff\1\55\1\u00d2\2\55\1\uffff"+
+        "\4\55\1\u00d9\1\u00da\2\uffff\2\55\1\uffff\1\u00dd\1\uffff\2\55"+
+        "\1\uffff\1\55\1\u00e1\1\u00e2\1\u00e3\1\55\1\u00e5\2\uffff\2\55"+
+        "\1\uffff\2\55\1\u00ea\3\uffff\1\55\1\uffff\2\55\1\uffff\1\55\1\uffff"+
+        "\1\u00ef\2\55\1\u00f2\1\uffff\1\u00f3\1\55\2\uffff\1\u00f5\1\uffff";
     static final String DFA24_eofS =
-        "\u00ee\uffff";
+        "\u00f6\uffff";
     static final String DFA24_minS =
         "\1\0\1\156\1\162\1\157\4\75\1\uffff\1\56\1\uffff\1\52\1\145\1\60"+
         "\1\145\1\141\1\60\4\uffff\1\53\1\141\1\uffff\1\145\1\uffff\1\146"+
@@ -2782,15 +2811,16 @@ public class InternalTemplateLangLexer extends Lexer {
         "\3\uffff\1\154\1\160\1\154\2\156\1\164\2\uffff\1\151\2\uffff\1\60"+
         "\1\uffff\3\60\1\154\1\145\1\160\1\145\1\163\1\60\1\163\1\uffff\2"+
         "\145\1\60\1\uffff\1\157\1\164\1\145\1\117\1\165\1\164\1\117\1\145"+
-        "\1\154\1\163\1\145\1\150\1\156\4\uffff\2\60\1\154\1\144\1\145\1"+
-        "\uffff\1\151\1\156\1\60\1\165\1\uffff\1\162\1\143\1\162\1\146\1"+
-        "\145\1\151\1\146\1\60\1\117\1\164\1\162\1\60\1\164\2\uffff\1\141"+
-        "\1\145\1\60\1\157\1\144\1\uffff\1\154\1\164\1\150\2\60\1\156\1\123"+
-        "\1\60\1\uffff\1\146\1\60\1\151\1\uffff\1\60\1\164\1\146\1\uffff"+
-        "\1\156\1\163\1\151\1\164\2\60\2\uffff\1\143\1\145\1\uffff\1\60\1"+
-        "\uffff\1\143\1\uffff\1\145\3\60\1\157\1\60\2\uffff\1\145\1\154\1"+
-        "\uffff\1\55\1\60\3\uffff\1\156\1\uffff\1\117\1\145\2\uffff\1\60"+
-        "\1\146\1\143\1\uffff\1\60\1\164\1\uffff\1\60\1\uffff";
+        "\1\154\1\163\1\145\1\150\1\164\1\156\4\uffff\2\60\1\154\1\144\1"+
+        "\145\1\uffff\1\151\1\156\1\60\1\165\1\uffff\1\162\1\143\1\162\1"+
+        "\146\1\145\1\151\1\146\1\60\1\117\1\164\1\162\1\60\1\145\1\164\2"+
+        "\uffff\1\141\1\145\1\60\1\157\1\144\1\uffff\1\154\1\164\1\150\2"+
+        "\60\1\156\1\123\1\60\1\uffff\1\146\1\60\1\151\1\uffff\1\143\1\60"+
+        "\1\164\1\146\1\uffff\1\156\1\163\1\151\1\164\2\60\2\uffff\1\143"+
+        "\1\145\1\uffff\1\60\1\uffff\1\143\1\164\1\uffff\1\145\3\60\1\157"+
+        "\1\60\2\uffff\1\145\1\154\1\uffff\1\55\1\145\1\60\3\uffff\1\156"+
+        "\1\uffff\1\117\1\145\1\uffff\1\144\1\uffff\1\60\1\146\1\143\1\60"+
+        "\1\uffff\1\60\1\164\2\uffff\1\60\1\uffff";
     static final String DFA24_maxS =
         "\1\uffff\1\156\1\162\1\157\1\75\1\76\2\75\1\uffff\1\76\1\uffff"+
         "\1\57\1\165\1\71\1\171\1\157\1\145\4\uffff\1\170\1\151\1\uffff\1"+
@@ -2799,33 +2829,34 @@ public class InternalTemplateLangLexer extends Lexer {
         "\162\21\uffff\1\164\1\167\1\154\1\uffff\1\165\1\155\1\160\1\154"+
         "\2\162\1\172\4\uffff\1\164\1\163\1\71\4\uffff\1\146\1\uffff\1\172"+
         "\1\160\1\uffff\1\151\1\160\1\164\3\uffff\1\154\1\160\1\163\2\156"+
-        "\1\164\2\uffff\1\151\2\uffff\1\172\1\uffff\3\172\1\154\1\145\1\160"+
+        "\1\164\2\uffff\1\157\2\uffff\1\172\1\uffff\3\172\1\154\1\145\1\160"+
         "\1\145\1\163\1\172\1\163\1\uffff\2\145\1\172\1\uffff\1\157\1\164"+
-        "\1\145\1\117\1\165\1\164\1\117\1\145\1\154\1\163\1\145\1\150\1\156"+
-        "\4\uffff\2\172\1\154\1\144\1\145\1\uffff\1\151\1\156\1\172\1\165"+
-        "\1\uffff\1\162\1\143\1\162\1\146\1\145\1\151\1\146\1\172\1\117\1"+
-        "\164\1\162\1\172\1\164\2\uffff\1\141\1\145\1\172\1\157\1\163\1\uffff"+
-        "\1\154\1\164\1\150\2\172\1\156\1\123\1\172\1\uffff\1\146\1\172\1"+
-        "\151\1\uffff\1\172\1\164\1\146\1\uffff\1\156\1\163\1\151\1\164\2"+
-        "\172\2\uffff\1\143\1\145\1\uffff\1\172\1\uffff\1\143\1\uffff\1\145"+
-        "\3\172\1\157\1\172\2\uffff\1\145\1\154\1\uffff\1\55\1\172\3\uffff"+
-        "\1\156\1\uffff\1\117\1\145\2\uffff\1\172\1\146\1\143\1\uffff\1\172"+
-        "\1\164\1\uffff\1\172\1\uffff";
+        "\1\145\1\117\1\165\1\164\1\117\1\145\1\154\1\163\1\145\1\150\1\164"+
+        "\1\156\4\uffff\2\172\1\154\1\144\1\145\1\uffff\1\151\1\156\1\172"+
+        "\1\165\1\uffff\1\162\1\143\1\162\1\146\1\145\1\151\1\146\1\172\1"+
+        "\117\1\164\1\162\1\172\1\145\1\164\2\uffff\1\141\1\145\1\172\1\157"+
+        "\1\163\1\uffff\1\154\1\164\1\150\2\172\1\156\1\123\1\172\1\uffff"+
+        "\1\146\1\172\1\151\1\uffff\1\143\1\172\1\164\1\146\1\uffff\1\156"+
+        "\1\163\1\151\1\164\2\172\2\uffff\1\143\1\145\1\uffff\1\172\1\uffff"+
+        "\1\143\1\164\1\uffff\1\145\3\172\1\157\1\172\2\uffff\1\145\1\154"+
+        "\1\uffff\1\55\1\145\1\172\3\uffff\1\156\1\uffff\1\117\1\145\1\uffff"+
+        "\1\144\1\uffff\1\172\1\146\1\143\1\172\1\uffff\1\172\1\164\2\uffff"+
+        "\1\172\1\uffff";
     static final String DFA24_acceptS =
         "\10\uffff\1\13\1\uffff\1\15\6\uffff\1\27\1\30\1\31\1\32\2\uffff"+
-        "\1\35\1\uffff\1\40\1\uffff\1\43\6\uffff\1\63\1\64\2\uffff\1\77\1"+
-        "\76\2\uffff\1\104\1\105\1\uffff\1\76\2\uffff\1\4\1\36\1\5\1\12\1"+
-        "\10\1\6\1\20\1\11\1\7\1\13\1\22\1\14\1\77\1\15\1\102\1\103\1\16"+
-        "\3\uffff\1\21\7\uffff\1\27\1\30\1\31\1\32\3\uffff\1\100\1\34\1\56"+
-        "\1\35\1\uffff\1\40\2\uffff\1\43\3\uffff\1\52\1\67\1\46\6\uffff\1"+
-        "\63\1\64\1\uffff\1\101\1\104\1\uffff\1\2\12\uffff\1\75\3\uffff\1"+
-        "\41\15\uffff\1\1\1\3\1\17\1\62\5\uffff\1\47\4\uffff\1\37\15\uffff"+
-        "\1\70\1\23\5\uffff\1\42\10\uffff\1\51\3\uffff\1\57\3\uffff\1\24"+
-        "\6\uffff\1\61\1\71\2\uffff\1\73\1\uffff\1\66\1\uffff\1\65\6\uffff"+
-        "\1\60\1\44\2\uffff\1\74\2\uffff\1\55\1\25\1\33\1\uffff\1\45\2\uffff"+
-        "\1\53\1\26\3\uffff\1\54\2\uffff\1\72\1\uffff\1\50";
+        "\1\35\1\uffff\1\40\1\uffff\1\43\6\uffff\1\63\1\64\2\uffff\1\100"+
+        "\1\77\2\uffff\1\105\1\106\1\uffff\1\77\2\uffff\1\4\1\36\1\5\1\12"+
+        "\1\10\1\6\1\20\1\11\1\7\1\13\1\22\1\14\1\100\1\15\1\103\1\104\1"+
+        "\16\3\uffff\1\21\7\uffff\1\27\1\30\1\31\1\32\3\uffff\1\101\1\34"+
+        "\1\56\1\35\1\uffff\1\40\2\uffff\1\43\3\uffff\1\52\1\70\1\46\6\uffff"+
+        "\1\63\1\64\1\uffff\1\102\1\105\1\uffff\1\2\12\uffff\1\76\3\uffff"+
+        "\1\41\16\uffff\1\1\1\3\1\17\1\62\5\uffff\1\47\4\uffff\1\37\16\uffff"+
+        "\1\71\1\23\5\uffff\1\42\10\uffff\1\51\3\uffff\1\57\4\uffff\1\24"+
+        "\6\uffff\1\61\1\72\2\uffff\1\74\1\uffff\1\67\2\uffff\1\66\6\uffff"+
+        "\1\60\1\44\2\uffff\1\75\3\uffff\1\55\1\25\1\33\1\uffff\1\45\2\uffff"+
+        "\1\53\1\uffff\1\26\4\uffff\1\54\2\uffff\1\65\1\73\1\uffff\1\50";
     static final String DFA24_specialS =
-        "\1\1\47\uffff\1\2\1\0\u00c4\uffff}>";
+        "\1\2\47\uffff\1\0\1\1\u00cc\uffff}>";
     static final String[] DFA24_transitionS = {
             "\11\53\2\52\2\53\1\52\22\53\1\52\1\6\1\50\1\53\1\47\2\53\1"+
             "\51\1\21\1\22\1\12\1\10\1\27\1\11\1\15\1\13\12\46\1\35\1\31"+
@@ -2939,7 +2970,7 @@ public class InternalTemplateLangLexer extends Lexer {
             "\1\u0089",
             "",
             "",
-            "\1\u008a",
+            "\1\u008b\5\uffff\1\u008a",
             "",
             "",
             "\12\55\7\uffff\32\55\4\uffff\1\55\1\uffff\32\55",
@@ -2947,19 +2978,18 @@ public class InternalTemplateLangLexer extends Lexer {
             "\12\55\7\uffff\32\55\4\uffff\1\55\1\uffff\32\55",
             "\12\55\7\uffff\32\55\4\uffff\1\55\1\uffff\32\55",
             "\12\55\7\uffff\32\55\4\uffff\1\55\1\uffff\32\55",
-            "\1\u008f",
             "\1\u0090",
             "\1\u0091",
             "\1\u0092",
             "\1\u0093",
+            "\1\u0094",
             "\12\55\7\uffff\32\55\4\uffff\1\55\1\uffff\32\55",
-            "\1\u0095",
-            "",
             "\1\u0096",
-            "\1\u0097",
-            "\12\55\7\uffff\32\55\4\uffff\1\55\1\uffff\1\u0098\31\55",
             "",
-            "\1\u009a",
+            "\1\u0097",
+            "\1\u0098",
+            "\12\55\7\uffff\32\55\4\uffff\1\55\1\uffff\1\u0099\31\55",
+            "",
             "\1\u009b",
             "\1\u009c",
             "\1\u009d",
@@ -2972,102 +3002,111 @@ public class InternalTemplateLangLexer extends Lexer {
             "\1\u00a4",
             "\1\u00a5",
             "\1\u00a6",
+            "\1\u00a7",
+            "\1\u00a8",
             "",
             "",
             "",
             "",
             "\12\55\7\uffff\32\55\4\uffff\1\55\1\uffff\32\55",
             "\12\55\7\uffff\32\55\4\uffff\1\55\1\uffff\32\55",
-            "\1\u00a9",
-            "\1\u00aa",
             "\1\u00ab",
-            "",
             "\1\u00ac",
             "\1\u00ad",
-            "\12\55\7\uffff\32\55\4\uffff\1\55\1\uffff\32\55",
-            "\1\u00af",
             "",
-            "\1\u00b0",
+            "\1\u00ae",
+            "\1\u00af",
+            "\12\55\7\uffff\32\55\4\uffff\1\55\1\uffff\32\55",
             "\1\u00b1",
+            "",
             "\1\u00b2",
             "\1\u00b3",
             "\1\u00b4",
             "\1\u00b5",
             "\1\u00b6",
-            "\12\55\7\uffff\32\55\4\uffff\1\55\1\uffff\32\55",
+            "\1\u00b7",
             "\1\u00b8",
-            "\1\u00b9",
+            "\12\55\7\uffff\32\55\4\uffff\1\55\1\uffff\32\55",
             "\1\u00ba",
-            "\12\55\7\uffff\32\55\4\uffff\1\55\1\uffff\32\55",
+            "\1\u00bb",
             "\1\u00bc",
-            "",
-            "",
-            "\1\u00bd",
+            "\12\55\7\uffff\32\55\4\uffff\1\55\1\uffff\32\55",
             "\1\u00be",
-            "\12\55\7\uffff\32\55\4\uffff\1\55\1\uffff\32\55",
+            "\1\u00bf",
+            "",
+            "",
             "\1\u00c0",
-            "\1\u00c1\16\uffff\1\u00c2",
-            "",
+            "\1\u00c1",
+            "\12\55\7\uffff\32\55\4\uffff\1\55\1\uffff\32\55",
             "\1\u00c3",
-            "\1\u00c4",
-            "\1\u00c5",
-            "\12\55\7\uffff\32\55\4\uffff\1\55\1\uffff\32\55",
-            "\12\55\7\uffff\32\55\4\uffff\1\55\1\uffff\32\55",
+            "\1\u00c4\16\uffff\1\u00c5",
+            "",
+            "\1\u00c6",
+            "\1\u00c7",
             "\1\u00c8",
-            "\1\u00c9",
             "\12\55\7\uffff\32\55\4\uffff\1\55\1\uffff\32\55",
-            "",
+            "\12\55\7\uffff\32\55\4\uffff\1\55\1\uffff\32\55",
             "\1\u00cb",
+            "\1\u00cc",
             "\12\55\7\uffff\32\55\4\uffff\1\55\1\uffff\32\55",
-            "\1\u00cd",
             "",
+            "\1\u00ce",
             "\12\55\7\uffff\32\55\4\uffff\1\55\1\uffff\32\55",
-            "\1\u00cf",
             "\1\u00d0",
             "",
             "\1\u00d1",
-            "\1\u00d2",
+            "\12\55\7\uffff\32\55\4\uffff\1\55\1\uffff\32\55",
             "\1\u00d3",
             "\1\u00d4",
-            "\12\55\7\uffff\32\55\4\uffff\1\55\1\uffff\32\55",
-            "\12\55\7\uffff\32\55\4\uffff\1\55\1\uffff\32\55",
             "",
-            "",
+            "\1\u00d5",
+            "\1\u00d6",
             "\1\u00d7",
             "\1\u00d8",
-            "",
+            "\12\55\7\uffff\32\55\4\uffff\1\55\1\uffff\32\55",
             "\12\55\7\uffff\32\55\4\uffff\1\55\1\uffff\32\55",
             "",
-            "\1\u00da",
             "",
             "\1\u00db",
+            "\1\u00dc",
+            "",
             "\12\55\7\uffff\32\55\4\uffff\1\55\1\uffff\32\55",
-            "\12\55\7\uffff\32\55\4\uffff\1\55\1\uffff\32\55",
-            "\12\55\7\uffff\32\55\4\uffff\1\55\1\uffff\32\55",
+            "",
+            "\1\u00de",
             "\1\u00df",
+            "",
+            "\1\u00e0",
+            "\12\55\7\uffff\32\55\4\uffff\1\55\1\uffff\32\55",
+            "\12\55\7\uffff\32\55\4\uffff\1\55\1\uffff\32\55",
+            "\12\55\7\uffff\32\55\4\uffff\1\55\1\uffff\32\55",
+            "\1\u00e4",
             "\12\55\7\uffff\32\55\4\uffff\1\55\1\uffff\32\55",
             "",
-            "",
-            "\1\u00e1",
-            "\1\u00e2",
-            "",
-            "\1\u00e3",
-            "\12\55\7\uffff\32\55\4\uffff\1\55\1\uffff\32\55",
-            "",
-            "",
-            "",
-            "\1\u00e5",
             "",
             "\1\u00e6",
             "\1\u00e7",
             "",
-            "",
-            "\12\55\7\uffff\32\55\4\uffff\1\55\1\uffff\32\55",
+            "\1\u00e8",
             "\1\u00e9",
-            "\1\u00ea",
+            "\12\55\7\uffff\32\55\4\uffff\1\55\1\uffff\32\55",
+            "",
+            "",
+            "",
+            "\1\u00eb",
+            "",
+            "\1\u00ec",
+            "\1\u00ed",
+            "",
+            "\1\u00ee",
             "",
             "\12\55\7\uffff\32\55\4\uffff\1\55\1\uffff\32\55",
-            "\1\u00ec",
+            "\1\u00f0",
+            "\1\u00f1",
+            "\12\55\7\uffff\32\55\4\uffff\1\55\1\uffff\32\55",
+            "",
+            "\12\55\7\uffff\32\55\4\uffff\1\55\1\uffff\32\55",
+            "\1\u00f4",
+            "",
             "",
             "\12\55\7\uffff\32\55\4\uffff\1\55\1\uffff\32\55",
             ""
@@ -3103,13 +3142,23 @@ public class InternalTemplateLangLexer extends Lexer {
             this.transition = DFA24_transition;
         }
         public String getDescription() {
-            return "1:1: Tokens : ( T__13 | T__14 | T__15 | T__16 | T__17 | T__18 | T__19 | T__20 | T__21 | T__22 | T__23 | T__24 | T__25 | T__26 | T__27 | T__28 | T__29 | T__30 | T__31 | T__32 | T__33 | T__34 | T__35 | T__36 | T__37 | T__38 | T__39 | T__40 | T__41 | T__42 | T__43 | T__44 | T__45 | T__46 | T__47 | T__48 | T__49 | T__50 | T__51 | T__52 | T__53 | T__54 | T__55 | T__56 | T__57 | T__58 | T__59 | T__60 | T__61 | T__62 | T__63 | T__64 | T__65 | T__66 | T__67 | T__68 | T__69 | T__70 | T__71 | T__72 | RULE_VERSION | RULE_ID | RULE_NUMBER | RULE_EXPONENT | RULE_STRING | RULE_ML_COMMENT | RULE_SL_COMMENT | RULE_WS | RULE_ANY_OTHER );";
+            return "1:1: Tokens : ( T__13 | T__14 | T__15 | T__16 | T__17 | T__18 | T__19 | T__20 | T__21 | T__22 | T__23 | T__24 | T__25 | T__26 | T__27 | T__28 | T__29 | T__30 | T__31 | T__32 | T__33 | T__34 | T__35 | T__36 | T__37 | T__38 | T__39 | T__40 | T__41 | T__42 | T__43 | T__44 | T__45 | T__46 | T__47 | T__48 | T__49 | T__50 | T__51 | T__52 | T__53 | T__54 | T__55 | T__56 | T__57 | T__58 | T__59 | T__60 | T__61 | T__62 | T__63 | T__64 | T__65 | T__66 | T__67 | T__68 | T__69 | T__70 | T__71 | T__72 | T__73 | RULE_VERSION | RULE_ID | RULE_NUMBER | RULE_EXPONENT | RULE_STRING | RULE_ML_COMMENT | RULE_SL_COMMENT | RULE_WS | RULE_ANY_OTHER );";
         }
         public int specialStateTransition(int s, IntStream _input) throws NoViableAltException {
             IntStream input = _input;
         	int _s = s;
             switch ( s ) {
                     case 0 : 
+                        int LA24_40 = input.LA(1);
+
+                        s = -1;
+                        if ( ((LA24_40>='\u0000' && LA24_40<='\uFFFF')) ) {s = 107;}
+
+                        else s = 43;
+
+                        if ( s>=0 ) return s;
+                        break;
+                    case 1 : 
                         int LA24_41 = input.LA(1);
 
                         s = -1;
@@ -3119,7 +3168,7 @@ public class InternalTemplateLangLexer extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
-                    case 1 : 
+                    case 2 : 
                         int LA24_0 = input.LA(1);
 
                         s = -1;
@@ -3208,16 +3257,6 @@ public class InternalTemplateLangLexer extends Lexer {
                         else if ( ((LA24_0>='\t' && LA24_0<='\n')||LA24_0=='\r'||LA24_0==' ') ) {s = 42;}
 
                         else if ( ((LA24_0>='\u0000' && LA24_0<='\b')||(LA24_0>='\u000B' && LA24_0<='\f')||(LA24_0>='\u000E' && LA24_0<='\u001F')||LA24_0=='#'||(LA24_0>='%' && LA24_0<='&')||LA24_0=='?'||LA24_0=='\\'||LA24_0=='^'||LA24_0=='`'||(LA24_0>='~' && LA24_0<='\uFFFF')) ) {s = 43;}
-
-                        if ( s>=0 ) return s;
-                        break;
-                    case 2 : 
-                        int LA24_40 = input.LA(1);
-
-                        s = -1;
-                        if ( ((LA24_40>='\u0000' && LA24_40<='\uFFFF')) ) {s = 107;}
-
-                        else s = 43;
 
                         if ( s>=0 ) return s;
                         break;

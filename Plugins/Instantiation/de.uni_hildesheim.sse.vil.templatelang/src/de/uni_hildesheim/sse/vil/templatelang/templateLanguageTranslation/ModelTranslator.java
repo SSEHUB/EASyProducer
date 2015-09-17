@@ -375,7 +375,11 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
         if (null != def.getType()) {
             specifiedType = getExpressionTranslator().processType(def.getType(), resolver);
         }
-        return new Def(def.getId(), param, null, specifiedType, template);
+        Def result = new Def(def.getId(), param, null, specifiedType, template);
+        if (null != def.getProtected()) {
+            result.setProtected(true);
+        }
+        return result;
     }
 
     /**

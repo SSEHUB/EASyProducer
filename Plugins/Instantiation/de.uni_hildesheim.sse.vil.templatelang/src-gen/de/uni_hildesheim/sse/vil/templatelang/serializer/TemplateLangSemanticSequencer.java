@@ -602,7 +602,7 @@ public class TemplateLangSemanticSequencer extends ExpressionDslSemanticSequence
 	
 	/**
 	 * Constraint:
-	 *     (type=Type? id=Identifier param=ParameterList? stmts=StmtBlock)
+	 *     (protected='protected'? type=Type? id=Identifier param=ParameterList? stmts=StmtBlock)
 	 */
 	protected void sequence_VilDef(EObject context, VilDef semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);

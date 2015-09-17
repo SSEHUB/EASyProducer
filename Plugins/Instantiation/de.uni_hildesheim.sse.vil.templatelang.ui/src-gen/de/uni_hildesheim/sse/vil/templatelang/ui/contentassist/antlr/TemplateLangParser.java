@@ -150,10 +150,11 @@ public class TemplateLangParser extends AbstractContentAssistParser {
 					put(grammarAccess.getIndentationHintAccess().getPartsAssignment_3_1(), "rule__IndentationHint__PartsAssignment_3_1");
 					put(grammarAccess.getIndentationHintPartAccess().getNameAssignment_0(), "rule__IndentationHintPart__NameAssignment_0");
 					put(grammarAccess.getIndentationHintPartAccess().getValueAssignment_2(), "rule__IndentationHintPart__ValueAssignment_2");
-					put(grammarAccess.getVilDefAccess().getTypeAssignment_1(), "rule__VilDef__TypeAssignment_1");
-					put(grammarAccess.getVilDefAccess().getIdAssignment_2(), "rule__VilDef__IdAssignment_2");
-					put(grammarAccess.getVilDefAccess().getParamAssignment_4(), "rule__VilDef__ParamAssignment_4");
-					put(grammarAccess.getVilDefAccess().getStmtsAssignment_6(), "rule__VilDef__StmtsAssignment_6");
+					put(grammarAccess.getVilDefAccess().getProtectedAssignment_0(), "rule__VilDef__ProtectedAssignment_0");
+					put(grammarAccess.getVilDefAccess().getTypeAssignment_2(), "rule__VilDef__TypeAssignment_2");
+					put(grammarAccess.getVilDefAccess().getIdAssignment_3(), "rule__VilDef__IdAssignment_3");
+					put(grammarAccess.getVilDefAccess().getParamAssignment_5(), "rule__VilDef__ParamAssignment_5");
+					put(grammarAccess.getVilDefAccess().getStmtsAssignment_7(), "rule__VilDef__StmtsAssignment_7");
 					put(grammarAccess.getStmtBlockAccess().getStmtsAssignment_2(), "rule__StmtBlock__StmtsAssignment_2");
 					put(grammarAccess.getStmtAccess().getVarAssignment_0(), "rule__Stmt__VarAssignment_0");
 					put(grammarAccess.getStmtAccess().getAltAssignment_1(), "rule__Stmt__AltAssignment_1");

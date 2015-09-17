@@ -25,6 +25,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <p>
  * The following features are implemented:
  * <ul>
+ *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.VilDefImpl#getProtected <em>Protected</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.VilDefImpl#getType <em>Type</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.VilDefImpl#getId <em>Id</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.VilDefImpl#getParam <em>Param</em>}</li>
@@ -36,6 +37,26 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  */
 public class VilDefImpl extends MinimalEObjectImpl.Container implements VilDef
 {
+  /**
+   * The default value of the '{@link #getProtected() <em>Protected</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getProtected()
+   * @generated
+   * @ordered
+   */
+  protected static final String PROTECTED_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getProtected() <em>Protected</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getProtected()
+   * @generated
+   * @ordered
+   */
+  protected String protected_ = PROTECTED_EDEFAULT;
+
   /**
    * The cached value of the '{@link #getType() <em>Type</em>}' containment reference.
    * <!-- begin-user-doc -->
@@ -105,6 +126,29 @@ public class VilDefImpl extends MinimalEObjectImpl.Container implements VilDef
   protected EClass eStaticClass()
   {
     return TemplateLangPackage.Literals.VIL_DEF;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String getProtected()
+  {
+    return protected_;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setProtected(String newProtected)
+  {
+    String oldProtected = protected_;
+    protected_ = newProtected;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, TemplateLangPackage.VIL_DEF__PROTECTED, oldProtected, protected_));
   }
 
   /**
@@ -304,6 +348,8 @@ public class VilDefImpl extends MinimalEObjectImpl.Container implements VilDef
   {
     switch (featureID)
     {
+      case TemplateLangPackage.VIL_DEF__PROTECTED:
+        return getProtected();
       case TemplateLangPackage.VIL_DEF__TYPE:
         return getType();
       case TemplateLangPackage.VIL_DEF__ID:
@@ -326,6 +372,9 @@ public class VilDefImpl extends MinimalEObjectImpl.Container implements VilDef
   {
     switch (featureID)
     {
+      case TemplateLangPackage.VIL_DEF__PROTECTED:
+        setProtected((String)newValue);
+        return;
       case TemplateLangPackage.VIL_DEF__TYPE:
         setType((Type)newValue);
         return;
@@ -352,6 +401,9 @@ public class VilDefImpl extends MinimalEObjectImpl.Container implements VilDef
   {
     switch (featureID)
     {
+      case TemplateLangPackage.VIL_DEF__PROTECTED:
+        setProtected(PROTECTED_EDEFAULT);
+        return;
       case TemplateLangPackage.VIL_DEF__TYPE:
         setType((Type)null);
         return;
@@ -378,6 +430,8 @@ public class VilDefImpl extends MinimalEObjectImpl.Container implements VilDef
   {
     switch (featureID)
     {
+      case TemplateLangPackage.VIL_DEF__PROTECTED:
+        return PROTECTED_EDEFAULT == null ? protected_ != null : !PROTECTED_EDEFAULT.equals(protected_);
       case TemplateLangPackage.VIL_DEF__TYPE:
         return type != null;
       case TemplateLangPackage.VIL_DEF__ID:
@@ -401,7 +455,9 @@ public class VilDefImpl extends MinimalEObjectImpl.Container implements VilDef
     if (eIsProxy()) return super.toString();
 
     StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (id: ");
+    result.append(" (protected: ");
+    result.append(protected_);
+    result.append(", id: ");
     result.append(id);
     result.append(')');
     return result.toString();

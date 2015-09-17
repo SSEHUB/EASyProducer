@@ -19,6 +19,7 @@ public class Def extends TemplateBlock implements ITemplateLangElement, IResolva
     private String name;
     private VariableDeclaration[] param;
     private TypeDescriptor<?> specifiedType;
+    private boolean isProtected = false;
     
     /**
      * Creates a new sub-template ('def').
@@ -36,6 +37,24 @@ public class Def extends TemplateBlock implements ITemplateLangElement, IResolva
         this.name = name;
         this.param = param;
         this.specifiedType = specifiedType;
+    }
+    
+    /**
+     * Returns whether this Def is protected in visibility.
+     * 
+     * @return <code>true</code> if it is protected, <code>false</code> else
+     */
+    public boolean isProtected() { // no IModifier for now
+        return isProtected;
+    }
+
+    /**
+     * Changes whether this Def is protected in visibility.
+     * 
+     * @param isProtected <code>true</code> if it is protected, <code>false</code> else
+     */
+    public void setProtected(boolean isProtected) {
+        this.isProtected = isProtected;
     }
         
     /**

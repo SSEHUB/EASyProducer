@@ -158,7 +158,12 @@ public class TemplateLangWriter extends WriterVisitor<VariableDeclaration> imple
     @Override
     public Object visitDef(Def def) throws VilException {
         printIndentation();
-        print("def ");
+        if (def.isProtected()) {
+            print("protected");
+            printWhitespace();
+        }
+        print("def");
+        printWhitespace();
         if (null != def.getSpecifiedType()) {
             printType(def.getSpecifiedType());
             print(" ");

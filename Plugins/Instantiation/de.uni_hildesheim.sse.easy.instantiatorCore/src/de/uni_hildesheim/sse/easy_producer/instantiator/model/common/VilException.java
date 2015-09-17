@@ -227,6 +227,11 @@ public class VilException extends AbstractException {
      * Use of an invalid iterator combination.
      */
     public static final int ID_INVALID_ITERATOR = 30017;
+    
+    /**
+     * If an element is not visible.
+     */
+    public static final int ID_NOT_VISIBLE = 30018;
 
     /**
      * For serialization.

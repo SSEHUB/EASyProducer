@@ -27,6 +27,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="VilDef">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="protected" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="ecore:EClass ../../../../../../../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/ExpressionDsl.ecore#//Type"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>

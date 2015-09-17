@@ -5,5 +5,9 @@ vilScript generics () {
     productionGenericCopy(FileArtifact x, FileArtifact y) = y : x {
         x.copy(y);
     }
+	
+	protected produceContent() = {
+	    new FileArtifact();
+	}
 
 }

@@ -59,5 +59,15 @@ public class TemplateCallExpression extends ModelCallExpression<VariableDeclarat
     protected String getInvalidOperationMessage(IMetaOperation op) {
         return op.getJavaSignature() + " is not a valid template";
     }
+    
+    @Override
+    public boolean isVisible(Template fromModel) {
+        boolean isVisible = true;
+        Def resolved = getResolved();
+        if (resolved.isProtected()) {
+            isVisible = resolved.getDeclaringType().equals(fromModel);
+        }
+        return isVisible;
+    }
 
 }
