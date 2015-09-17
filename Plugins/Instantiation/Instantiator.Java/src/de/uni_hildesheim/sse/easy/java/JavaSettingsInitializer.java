@@ -1,13 +1,13 @@
 package de.uni_hildesheim.sse.easy.java;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ProjectSettings;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ISettingsInitializer;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
 
 /**
  * Initializes the settings for java.
@@ -17,12 +17,19 @@ import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
  */
 public class JavaSettingsInitializer implements ISettingsInitializer {
 
-    private EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(JavaSettingsInitializer.class, Bundle.ID);
+    private static Set<String> classpathEntries;
 
     @Override
     public void initialize(File base, Map<ProjectSettings, Object> settings) {
-        // TODO Auto-generated method stub
-        
+//        String[] splitClasspath = System.getProperty("java.class.path").split(";");
+//        classpathEntries = new HashSet<String>(Arrays.asList(splitClasspath));
+//        File tmpFile = new File(base.getAbsolutePath(), "/src");
+//        classpathEntries.add(tmpFile.getAbsolutePath());
+//        String newClasspath = "";
+//        for (String string : classpathEntries) {
+//            newClasspath += string + ";";
+//        }
+//        System.setProperty("java.class.path", newClasspath);
     }
 
 //    @Override

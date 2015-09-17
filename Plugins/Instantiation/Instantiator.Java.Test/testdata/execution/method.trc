@@ -1,6 +1,6 @@
 -> main(Project, Configuration, Project) with (<project>, <config>, <project>)
-    f <- classpathTest/src/MethodFile.java
-    -> defaultClass(JavaFileArtifact) with (classpathTest/src/MethodFile.java) = class 'MethodFile'
+    f <- src/MethodFile.java
+    -> defaultClass(JavaFileArtifact) with (src/MethodFile.java) = class 'MethodFile'
     cls <- class 'MethodFile'
     -> getType(JavaCall) with (call 'info') = Logger
     -> ==(String, String) with (Logger, Logger) = true

@@ -1,0 +1,14 @@
+-> main(Project, Configuration, Project) with (<project>, <config>, <project>)
+    newClasspath <- C:/Users/punkid/git/EASyProducer/Plugins/Instantiation/Instantiator.Java.Test/testdata/temp/artifacts/
+    classpath <- {C:/Users/punkid/git/EASyProducer/Plugins/Instantiation/Instantiator.Java.Test/testdata/temp/artifacts/, , test}
+    -> setSettings(Project, ProjectSettings, Any) with (<project>, CLASSPATH, {C:/Users/punkid/git/EASyProducer/Plugins/Instantiation/Instantiator.Java.Test/testdata/temp/artifacts/, , test})
+    f <- MethodClass.java
+    -> defaultClass(JavaFileArtifact) with (MethodClass.java) = class 'MethodClass'
+    cls <- class 'MethodClass'
+    -> getName(JavaMethod) with (method 'method') = method
+    -> ==(String, String) with (method, method) = true
+    -> getName(JavaMethod) with (method 'methodCall') = methodCall
+    -> ==(String, String) with (methodCall, method) = false
+    -> getName(JavaMethod) with (method 'noMethodCall') = noMethodCall
+    -> ==(String, String) with (noMethodCall, method) = false
+    -> deleteMethodWithCalls(JavaClass, ExpressionEvaluator) with (class 'MethodClass', <evaluator>)

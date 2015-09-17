@@ -1,0 +1,10 @@
+-> main(Project, Configuration, Project) with (<project>, <config>, <project>)
+    message <- Method has been deleted
+    f <- MethodReturnType.java
+    -> defaultClass(JavaFileArtifact) with (MethodReturnType.java) = class 'MethodReturnType'
+    cls <- class 'MethodReturnType'
+    -> getName(JavaMethod) with (method 'returnString') = returnString
+    -> ==(String, String) with (returnString, returnString) = true
+    -> getName(JavaMethod) with (method 'method') = method
+    -> ==(String, String) with (method, returnString) = false
+    -> deleteMethodWithCalls(JavaClass, ExpressionEvaluator, Any) with (class 'MethodReturnType', <evaluator>, Method has been deleted)

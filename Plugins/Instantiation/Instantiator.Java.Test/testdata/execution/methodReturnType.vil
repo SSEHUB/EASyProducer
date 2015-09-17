@@ -1,0 +1,12 @@
+vilScript PL_Test (Project source, Configuration config, Project target) {
+
+    version v0;
+
+    main(Project source, Configuration config, Project target) = : {
+        String message = "Method has been deleted";
+        JavaFileArtifact f = "$target/MethodReturnType.java";
+        JavaClass cls = f.defaultClass();
+        cls->deleteMethodWithCalls(JavaMethod c | c.getName() == "returnString", message);
+    }
+
+}

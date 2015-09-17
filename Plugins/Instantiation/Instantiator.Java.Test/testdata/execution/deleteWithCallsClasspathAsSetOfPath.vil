@@ -1,0 +1,14 @@
+vilScript deleteWithCallsClasspathAsSetOfPath (Project source, Configuration config, Project target) {
+
+    version v0;
+
+    main(Project source, Configuration config, Project target) = : {
+        Path newClasspath = new Path("$target");
+        setOf(Path) classpath = {newClasspath, new Path("this is a test")};
+        target.setSettings(JavaSettings.CLASSPATH, classpath);
+        JavaFileArtifact f = "$target/MethodClass.java";
+        JavaClass cls = f.defaultClass();
+        cls->deleteMethodWithCalls(JavaMethod c | c.getName() == "method");
+    }
+
+}
