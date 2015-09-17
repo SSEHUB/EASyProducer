@@ -19,7 +19,7 @@ Upcoming Release
 - Improvements for VIL (switch expression, undefined variables, typedef)
 - Improvement of Maven-VIL integration (Linux fix, JAVA_HOME detection)
 - VIL allows deleting Java calls and methods (in progress)
-- VIL detects Java classpath settings (in progress)
+- Global VIL Java classpath settings (in progress)
 
 Release History
 ---------------
