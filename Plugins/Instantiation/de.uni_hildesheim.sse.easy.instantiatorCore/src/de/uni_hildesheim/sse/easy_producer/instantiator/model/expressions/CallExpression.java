@@ -387,7 +387,7 @@ public class CallExpression extends AbstractCallExpression implements IArgumentP
      * @return <code>true</code> if it is an iterator call, <code>false</code> else
      */
     public boolean isIteratorCall() {
-        return null != resolved && getArgumentsCount() == 2 
+        return null != resolved && getArgumentsCount() >= 2 
             && getArgument(1).getExpression() instanceof ExpressionEvaluator;
     }
 
