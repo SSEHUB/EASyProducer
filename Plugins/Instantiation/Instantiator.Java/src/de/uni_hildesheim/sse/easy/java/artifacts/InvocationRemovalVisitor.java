@@ -1,9 +1,23 @@
 package de.uni_hildesheim.sse.easy.java.artifacts;
 
+import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.Expression;
+import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
+import org.eclipse.jdt.core.dom.PrimitiveType;
+import org.eclipse.jdt.core.dom.PrimitiveType.Code;
+import org.eclipse.jdt.core.dom.SimpleType;
+import org.eclipse.jdt.core.dom.StringLiteral;
+import org.eclipse.jdt.core.dom.Type;
+import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
+
+import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.PseudoString;
+import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
+import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
 
 /**
  * Visitor to find all method invocations.
@@ -13,18 +27,23 @@ import org.eclipse.jdt.core.dom.MethodInvocation;
  */
 public class InvocationRemovalVisitor extends ASTVisitor {
     
+    private static EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(InvocationRemovalVisitor.class, Bundle.ID);
+
     private MethodDeclaration methodDeclaration;
     private IMethodBinding methodDeclarationBinding;
     private boolean hasBeenDeleted;
+    private Object replacement;
     
     /**
      * Default Constructor.
      * 
      * @param methodDeclaration the method declaration
+     * @param replacement 
      */
-    public InvocationRemovalVisitor(MethodDeclaration methodDeclaration) {
+    public InvocationRemovalVisitor(MethodDeclaration methodDeclaration, Object replacement) {
         this.methodDeclaration = methodDeclaration;
         this.methodDeclarationBinding = methodDeclaration.resolveBinding();
+        this.replacement = replacement;
         hasBeenDeleted = false;
     }
     
@@ -34,10 +53,89 @@ public class InvocationRemovalVisitor extends ASTVisitor {
         IMethodBinding iMethod = (IMethodBinding) node.resolveMethodBinding();
         IMethodBinding methodDeclarationCandidate = iMethod.getMethodDeclaration();
         if (check(methodDeclarationCandidate)) {
-            node.getParent().delete();
+            // Delete node with expression (i.e.: ClassName.methodname())
+            if (null != node.getExpression()) {
+                node.getParent().delete();
+            } else {
+                if (null != replacement) {
+                    if (node.getParent().getNodeType() == ASTNode.VARIABLE_DECLARATION_FRAGMENT) {
+                        VariableDeclarationFragment fragment = (VariableDeclarationFragment) node.getParent();
+                        Expression expression = null;
+                        Type type = methodDeclaration.getReturnType2();
+                        int exprType = determineType(type);
+                        switch (exprType) {
+                        case Expression.NUMBER_LITERAL:
+                            expression = fragment.getAST().newNumberLiteral(String.valueOf(replacement));
+                            break;
+                        case Expression.STRING_LITERAL:
+                            expression = fragment.getAST().newStringLiteral();
+                            ((StringLiteral) expression).setLiteralValue(String.valueOf(replacement));
+                            break;
+                        case Expression.BOOLEAN_LITERAL:
+                            expression = fragment.getAST().newBooleanLiteral(Boolean.valueOf(replacement.toString()));
+                            break;
+                        case Expression.CHARACTER_LITERAL:
+                            expression = fragment.getAST().newCharacterLiteral();
+                            ((StringLiteral) expression).setLiteralValue(String.valueOf(replacement));
+                            break;
+                        case Expression.NULL_LITERAL:
+                            expression = fragment.getAST().newNullLiteral();
+                            break;
+                        case Expression.TYPE_LITERAL:
+                            expression = fragment.getAST().newTypeLiteral();
+                            break;
+                        default:
+                            logger.error("Type '" + type + "' not supported yet...");
+                            break;
+                        }
+                        if (expression != null) {
+                            fragment.setInitializer(expression);
+                        }
+                    }
+                } else {
+                    node.delete();
+                }
+            }
             hasBeenDeleted = true;
         }
         return false;
+    }
+
+
+    /**
+     * Mapping between types.
+     * 
+     * @param type type
+     * @return code of the type
+     */
+    private int determineType(Type type) {
+        int expressionType = -1;
+        if (type.isPrimitiveType()) {
+            PrimitiveType prim = (PrimitiveType) type;
+            Code code = prim.getPrimitiveTypeCode();
+            if (code.equals(PrimitiveType.INT) | code.equals(PrimitiveType.DOUBLE) | code.equals(PrimitiveType.FLOAT) 
+                | code.equals(PrimitiveType.LONG)) {
+                expressionType = Expression.NUMBER_LITERAL;
+            } else if (code.equals(PrimitiveType.BOOLEAN)) {
+                expressionType = Expression.BOOLEAN_LITERAL;
+            } else if (code.equals(PrimitiveType.CHAR)) {
+                expressionType = Expression.CHARACTER_LITERAL;
+            }
+        }
+        if (type.isSimpleType()) {
+            // String, Double
+            SimpleType simple = (SimpleType) type;
+            String simpleTypeName = simple.getName().getFullyQualifiedName();
+            if (simpleTypeName.equals("String")) {
+                expressionType = Expression.STRING_LITERAL;
+            } else if (simpleTypeName.equals("Double") | simpleTypeName.equals("Long") 
+                | simpleTypeName.equals("Float")) {
+                expressionType = Expression.NUMBER_LITERAL;
+            } else if (simpleTypeName.equals("Boolean")) {
+                expressionType = Expression.BOOLEAN_LITERAL;
+            }
+        }
+        return expressionType;
     }
     
     /**

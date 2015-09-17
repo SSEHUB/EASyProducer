@@ -3,7 +3,7 @@ vilScript PL_Test (Project source, Configuration config, Project target) {
     version v0;
 
     main(Project source, Configuration config, Project target) = : {
-        JavaFileArtifact f = "$target/classpathTest/src/MethodFile.java";
+        JavaFileArtifact f = "$target/src/MethodFile.java";
         JavaClass cls = f.defaultClass();
         cls->deleteStatement(JavaCall c | c.getType() == "Logger" and c.getName() == "warning");
         cls->deleteStatement(JavaCall c | c.getQualifiedName() == "java.io.PrintStream");

@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +24,7 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.formatter.CodeFormatter;
+import org.eclipse.jdt.core.formatter.DefaultCodeFormatterConstants;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
@@ -46,6 +48,8 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Conversio
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationMeta;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
 
@@ -213,9 +217,11 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
             try {
                 writer = new BufferedWriter(new FileWriter(file));
                 String code = unitNode.toString();
-                CodeFormatter codeFormatter = ToolFactory.createCodeFormatter(null);
+                Map<String, String> options = JavaCore.getOptions();
+                options.put(DefaultCodeFormatterConstants.FORMATTER_TAB_CHAR, JavaCore.SPACE);
+                CodeFormatter codeFormatter = ToolFactory.createCodeFormatter(options);
                 TextEdit textEdit = codeFormatter.format(CodeFormatter.K_COMPILATION_UNIT, code, 0, code.length(), 0,
-                        null);
+                        System.getProperty("line.separator"));
                 IDocument doc = new Document(code);
                 try {
                     if (null != textEdit) {
@@ -339,13 +345,13 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
         if (null != getArtifactModel()) {
             Object classPathFromScript = getArtifactModel().getSettings(JavaSettings.CLASSPATH);
             if (null != classPathFromScript) {
-                sourcePath = String.valueOf(classPathFromScript);
+                sourcePath = determineClasspath(classPathFromScript);
             } else {
-                sourcePath = getArtifactModel().getBasePath();
+                // if no classpath is given via VIL
+                sourcePath = determineClasspath(null);
             }
         } else {
-            // TODO: better way?
-            sourcePath = classpath[0];
+            sourcePath = determineClasspath(null);
         }
         // WORKAROUND! FIX IT!
         if (sourcePath.contains("//")) {
@@ -375,6 +381,54 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
             }
         });
         unitNode.recordModifications();
+    }
+    
+    /**
+     * Determines the classpath. A given classpath via VIL will be parsed accordingly.
+     * 
+     * @param classpath classpath object
+     * @return classpath as string
+     */
+    private String determineClasspath(Object classpath) {
+        // In case the classpath is set via VIL
+        String result = null;
+        if (null != classpath) {
+            if (classpath instanceof String) {
+                result = String.valueOf(classpath);
+            } else if (classpath instanceof Set<?>) {
+                Set<?> classpathSet = (Set<?>) classpath;
+                String tmpClasspath = "";
+                int parameterCount = classpathSet.getGenericParameterCount();
+                TypeDescriptor<?> typeDescriptorSet = classpathSet.getGenericParameterType(parameterCount - 1);
+                TypeDescriptor<?> typeDescriptorParameter = typeDescriptorSet.getGenericParameterType(
+                    typeDescriptorSet.getGenericParameterCount() - 1);
+                for (Iterator<?> iterator = classpathSet.iterator(); iterator.hasNext();) {
+                    // Validate String; if file does not exists it won't be added to the classpath
+                    if (TypeRegistry.stringType().isSame(typeDescriptorParameter)) {
+                        String string = (String) iterator.next();
+                        File file = new File(string);
+                        if (file.exists()) {
+                            tmpClasspath += string + ";";
+                        }
+                    } else if (typeDescriptorParameter.isSame(TypeRegistry.DEFAULT.findType(Path.class))) {
+                        // Path
+                        Path path = (Path) iterator.next();
+                        if (path.exists()) {
+                            tmpClasspath += path.getAbsolutePath() + ";";
+                        }
+                    } else {
+                        // fallback: do nothing
+                        iterator.next();
+                    }
+                }
+                result = tmpClasspath;
+            }
+        } else {
+            // Get the classpath from eclipse
+            String systemClasspath = System.getProperty("java.class.path");
+            result = systemClasspath;
+        }
+        return result;
     }
 
     /**

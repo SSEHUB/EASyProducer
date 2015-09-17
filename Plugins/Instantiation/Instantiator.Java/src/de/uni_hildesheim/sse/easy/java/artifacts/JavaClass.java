@@ -120,7 +120,8 @@ public class JavaClass extends JavaParentFragmentArtifact {
             method.deleteStatement(evaluator);
         }
     }
-
+    
+    
     /**
      * Deletes a method and all java calls assigned to this method.
      * 
@@ -130,31 +131,38 @@ public class JavaClass extends JavaParentFragmentArtifact {
      *             in case something goes wrong
      */
     public void deleteMethodWithCalls(ExpressionEvaluator evaluator) throws VilException {
+        deleteMethodWithCalls(evaluator, null);
+    }
+
+    /**
+     * Deletes a method and all java calls assigned to this method.
+     * 
+     * @param evaluator
+     *            A wrapper type to pass and evaluate
+     * @param replacement
+     *            The replacement that should be inserted for when the method is called
+     * @throws VilException
+     *             in case something goes wrong
+     */
+    public void deleteMethodWithCalls(ExpressionEvaluator evaluator, Object replacement) throws VilException {
         for (JavaMethod method : methods()) {
             Object object = evaluator.evaluate(method);
             if (null != object && object instanceof Boolean && Boolean.TRUE == ((Boolean) object).booleanValue()) {
-                System.out.println(object);
                 Set<FileArtifact> allFileArtifacts = getArtifactModel().selectByType(JavaFileArtifact.class);
-                for (FileArtifact fileArtifact : allFileArtifacts) {
-                    System.out.println(fileArtifact.getPath().getPath());
-                }
                 for (FileArtifact fileArtifact : allFileArtifacts) {
                     JavaFileArtifact javaFileArtifact = (JavaFileArtifact) fileArtifact;
                     for (JavaClass javaClass : javaFileArtifact.classes()) {
                         for (JavaMethod javaMethod : javaClass.methods()) {
                             InvocationRemovalVisitor visitor = new InvocationRemovalVisitor(
-                                method.getMethodDeclaration());
+                                method.getMethodDeclaration(), replacement);
                             javaMethod.getMethodDeclaration().accept(visitor);
                             if (visitor.hasBeenDeleted()) {
                                 javaMethod.notifyChanged();
                                 javaMethod.getParent().store();
                             }
                         }
-                        System.out.println("end of method for");
                     }
-                    System.out.println("end of class for");
                 }
-                System.out.println("end of fileartifact for");
                 method.delete();
             }
         }

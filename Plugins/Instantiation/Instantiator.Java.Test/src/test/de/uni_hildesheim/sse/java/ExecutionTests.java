@@ -186,8 +186,13 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
         assertSelfInstantiate("method", "main", new SelfInstantiationAsserterAdapter() {
             
             @Override
+            public File determineTestDirectory(File file) {
+                return new File(file, "classpathTest");
+            }
+            
+            @Override
             public void assertIn(File base) {
-                File tempFile = new File(base, "classpathTest/src/MethodFile.java");
+                File tempFile = new File(base, "src/MethodFile.java");
                 assertFileEqualitySafe(tempFile, expected);
             }
 
@@ -218,6 +223,90 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
                 File expectedMethodClass = new File(getArtifactsFolder(), "deleteMethodExpected/MethodClass.java");
                 File tempFileMethodClass = new File(base, "MethodClass.java");
                 assertFileEqualitySafe(tempFileMethodClass, expectedMethodClass);
+            }
+
+        });
+    }
+    
+    /**
+     * Test the modification of methods by deleting java calls within a VIL script. All references to the deleted
+     * method should be removed.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testDeleteWithCallsClasspathAsSetOfString() throws IOException {
+        assertSelfInstantiate("deleteWithCallsClasspathAsSetOfString", "main", new SelfInstantiationAsserterAdapter() {
+            
+            @Override
+            public File determineTestDirectory(File file) {
+                return new File(file, "deleteMethod");
+            }
+            
+            @Override
+            public void assertIn(File base) {
+                File expectedMethodClass2 = new File(getArtifactsFolder(), "deleteMethodExpected/MethodClass2.java");
+                File tempFileMethodClass2 = new File(base, "MethodClass2.java");
+                assertFileEqualitySafe(tempFileMethodClass2, expectedMethodClass2);
+
+                File expectedMethodClass = new File(getArtifactsFolder(), "deleteMethodExpected/MethodClass.java");
+                File tempFileMethodClass = new File(base, "MethodClass.java");
+                assertFileEqualitySafe(tempFileMethodClass, expectedMethodClass);
+            }
+
+        });
+    }
+    
+    /**
+     * Test the modification of methods by deleting java calls within a VIL script. All references to the deleted
+     * method should be removed.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testDeleteWithCallsClasspathAsSetOfPath() throws IOException {
+        assertSelfInstantiate("deleteWithCallsClasspathAsSetOfPath", "main", new SelfInstantiationAsserterAdapter() {
+            
+            @Override
+            public File determineTestDirectory(File file) {
+                return new File(file, "deleteMethod");
+            }
+            
+            @Override
+            public void assertIn(File base) {
+                File expectedMethodClass2 = new File(getArtifactsFolder(), "deleteMethodExpected/MethodClass2.java");
+                File tempFileMethodClass2 = new File(base, "MethodClass2.java");
+                assertFileEqualitySafe(tempFileMethodClass2, expectedMethodClass2);
+
+                File expectedMethodClass = new File(getArtifactsFolder(), "deleteMethodExpected/MethodClass.java");
+                File tempFileMethodClass = new File(base, "MethodClass.java");
+                assertFileEqualitySafe(tempFileMethodClass, expectedMethodClass);
+            }
+
+        });
+    }
+    
+    /**
+     * Test the modification of methods by deleting java calls within a VIL script. All references to the deleted
+     * method should be removed.In this case test if a method can be deleted if the return type is not void.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testMethodReturnType() throws IOException {
+        assertSelfInstantiate("methodReturnType", "main", new SelfInstantiationAsserterAdapter() {
+            
+            @Override
+            public File determineTestDirectory(File file) {
+                return new File(file, "methodReturnType");
+            }
+            
+            @Override
+            public void assertIn(File base) {
+                File expectedMethodClass2 = new File(getArtifactsFolder(), 
+                    "deleteMethodExpected/MethodReturnType.java");
+                File tempFileMethodClass2 = new File(base, "MethodReturnType.java");
+                assertFileEqualitySafe(tempFileMethodClass2, expectedMethodClass2);
             }
 
         });
