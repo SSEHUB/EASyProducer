@@ -5,8 +5,6 @@ vilScript inst (Project source, Project target, Configuration config) {
         instantiate "inst::main" (source, target, config);
         instantiate source (source, target, config) with (version == v0);
         instantiate source (source, target, config) with (version == v0);
-        instantiate source rule "main" (source, target, config);
-        instantiate source rule "main" (source, target, config);
     }
 
 }

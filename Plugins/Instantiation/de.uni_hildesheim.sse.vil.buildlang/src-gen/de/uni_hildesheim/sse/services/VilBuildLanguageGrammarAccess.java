@@ -683,13 +683,8 @@ public class VilBuildLanguageGrammarAccess extends AbstractGrammarElementFinder 
 		private final Group cGroup = (Group)rule.eContents().get(1);
 		private final Keyword cInstantiateKeyword_0 = (Keyword)cGroup.eContents().get(0);
 		private final Alternatives cAlternatives_1 = (Alternatives)cGroup.eContents().get(1);
-		private final Group cGroup_1_0 = (Group)cAlternatives_1.eContents().get(0);
-		private final Assignment cProjectAssignment_1_0_0 = (Assignment)cGroup_1_0.eContents().get(0);
-		private final RuleCall cProjectIdentifierParserRuleCall_1_0_0_0 = (RuleCall)cProjectAssignment_1_0_0.eContents().get(0);
-		private final Group cGroup_1_0_1 = (Group)cGroup_1_0.eContents().get(1);
-		private final Keyword cRuleKeyword_1_0_1_0 = (Keyword)cGroup_1_0_1.eContents().get(0);
-		private final Assignment cRuleAssignment_1_0_1_1 = (Assignment)cGroup_1_0_1.eContents().get(1);
-		private final RuleCall cRuleSTRINGTerminalRuleCall_1_0_1_1_0 = (RuleCall)cRuleAssignment_1_0_1_1.eContents().get(0);
+		private final Assignment cProjectAssignment_1_0 = (Assignment)cAlternatives_1.eContents().get(0);
+		private final RuleCall cProjectIdentifierParserRuleCall_1_0_0 = (RuleCall)cProjectAssignment_1_0.eContents().get(0);
 		private final Assignment cRuleNameAssignment_1_1 = (Assignment)cAlternatives_1.eContents().get(1);
 		private final RuleCall cRuleNameSTRINGTerminalRuleCall_1_1_0 = (RuleCall)cRuleNameAssignment_1_1.eContents().get(0);
 		private final Keyword cLeftParenthesisKeyword_2 = (Keyword)cGroup.eContents().get(2);
@@ -700,40 +695,23 @@ public class VilBuildLanguageGrammarAccess extends AbstractGrammarElementFinder 
 		private final RuleCall cVersionSpecVersionSpecParserRuleCall_5_0 = (RuleCall)cVersionSpecAssignment_5.eContents().get(0);
 		
 		//Instantiate:
-		//	"instantiate" (project=Identifier ("rule" rule=STRING)? | ruleName=STRING) "(" param=ArgumentList? ")"
-		//	versionSpec=VersionSpec?;
+		//	"instantiate" (project=Identifier | ruleName=STRING) "(" param=ArgumentList? ")" versionSpec=VersionSpec?;
 		public ParserRule getRule() { return rule; }
 
-		//"instantiate" (project=Identifier ("rule" rule=STRING)? | ruleName=STRING) "(" param=ArgumentList? ")"
-		//versionSpec=VersionSpec?
+		//"instantiate" (project=Identifier | ruleName=STRING) "(" param=ArgumentList? ")" versionSpec=VersionSpec?
 		public Group getGroup() { return cGroup; }
 
 		//"instantiate"
 		public Keyword getInstantiateKeyword_0() { return cInstantiateKeyword_0; }
 
-		//project=Identifier ("rule" rule=STRING)? | ruleName=STRING
+		//project=Identifier | ruleName=STRING
 		public Alternatives getAlternatives_1() { return cAlternatives_1; }
 
-		//project=Identifier ("rule" rule=STRING)?
-		public Group getGroup_1_0() { return cGroup_1_0; }
-
 		//project=Identifier
-		public Assignment getProjectAssignment_1_0_0() { return cProjectAssignment_1_0_0; }
+		public Assignment getProjectAssignment_1_0() { return cProjectAssignment_1_0; }
 
 		//Identifier
-		public RuleCall getProjectIdentifierParserRuleCall_1_0_0_0() { return cProjectIdentifierParserRuleCall_1_0_0_0; }
-
-		//("rule" rule=STRING)?
-		public Group getGroup_1_0_1() { return cGroup_1_0_1; }
-
-		//"rule"
-		public Keyword getRuleKeyword_1_0_1_0() { return cRuleKeyword_1_0_1_0; }
-
-		//rule=STRING
-		public Assignment getRuleAssignment_1_0_1_1() { return cRuleAssignment_1_0_1_1; }
-
-		//STRING
-		public RuleCall getRuleSTRINGTerminalRuleCall_1_0_1_1_0() { return cRuleSTRINGTerminalRuleCall_1_0_1_1_0; }
+		public RuleCall getProjectIdentifierParserRuleCall_1_0_0() { return cProjectIdentifierParserRuleCall_1_0_0; }
 
 		//ruleName=STRING
 		public Assignment getRuleNameAssignment_1_1() { return cRuleNameAssignment_1_1; }
@@ -1294,8 +1272,7 @@ public class VilBuildLanguageGrammarAccess extends AbstractGrammarElementFinder 
 	}
 
 	//Instantiate:
-	//	"instantiate" (project=Identifier ("rule" rule=STRING)? | ruleName=STRING) "(" param=ArgumentList? ")"
-	//	versionSpec=VersionSpec?;
+	//	"instantiate" (project=Identifier | ruleName=STRING) "(" param=ArgumentList? ")" versionSpec=VersionSpec?;
 	public InstantiateElements getInstantiateAccess() {
 		return (pInstantiate != null) ? pInstantiate : (pInstantiate = new InstantiateElements());
 	}

@@ -25,7 +25,6 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * The following features are implemented:
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.InstantiateImpl#getProject <em>Project</em>}</li>
- *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.InstantiateImpl#getRule <em>Rule</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.InstantiateImpl#getRuleName <em>Rule Name</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.InstantiateImpl#getParam <em>Param</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.InstantiateImpl#getVersionSpec <em>Version Spec</em>}</li>
@@ -55,26 +54,6 @@ public class InstantiateImpl extends MinimalEObjectImpl.Container implements Ins
    * @ordered
    */
   protected String project = PROJECT_EDEFAULT;
-
-  /**
-   * The default value of the '{@link #getRule() <em>Rule</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getRule()
-   * @generated
-   * @ordered
-   */
-  protected static final String RULE_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getRule() <em>Rule</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getRule()
-   * @generated
-   * @ordered
-   */
-  protected String rule = RULE_EDEFAULT;
 
   /**
    * The default value of the '{@link #getRuleName() <em>Rule Name</em>}' attribute.
@@ -158,29 +137,6 @@ public class InstantiateImpl extends MinimalEObjectImpl.Container implements Ins
     project = newProject;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, VilBuildLanguagePackage.INSTANTIATE__PROJECT, oldProject, project));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public String getRule()
-  {
-    return rule;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setRule(String newRule)
-  {
-    String oldRule = rule;
-    rule = newRule;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, VilBuildLanguagePackage.INSTANTIATE__RULE, oldRule, rule));
   }
 
   /**
@@ -332,8 +288,6 @@ public class InstantiateImpl extends MinimalEObjectImpl.Container implements Ins
     {
       case VilBuildLanguagePackage.INSTANTIATE__PROJECT:
         return getProject();
-      case VilBuildLanguagePackage.INSTANTIATE__RULE:
-        return getRule();
       case VilBuildLanguagePackage.INSTANTIATE__RULE_NAME:
         return getRuleName();
       case VilBuildLanguagePackage.INSTANTIATE__PARAM:
@@ -356,9 +310,6 @@ public class InstantiateImpl extends MinimalEObjectImpl.Container implements Ins
     {
       case VilBuildLanguagePackage.INSTANTIATE__PROJECT:
         setProject((String)newValue);
-        return;
-      case VilBuildLanguagePackage.INSTANTIATE__RULE:
-        setRule((String)newValue);
         return;
       case VilBuildLanguagePackage.INSTANTIATE__RULE_NAME:
         setRuleName((String)newValue);
@@ -386,9 +337,6 @@ public class InstantiateImpl extends MinimalEObjectImpl.Container implements Ins
       case VilBuildLanguagePackage.INSTANTIATE__PROJECT:
         setProject(PROJECT_EDEFAULT);
         return;
-      case VilBuildLanguagePackage.INSTANTIATE__RULE:
-        setRule(RULE_EDEFAULT);
-        return;
       case VilBuildLanguagePackage.INSTANTIATE__RULE_NAME:
         setRuleName(RULE_NAME_EDEFAULT);
         return;
@@ -414,8 +362,6 @@ public class InstantiateImpl extends MinimalEObjectImpl.Container implements Ins
     {
       case VilBuildLanguagePackage.INSTANTIATE__PROJECT:
         return PROJECT_EDEFAULT == null ? project != null : !PROJECT_EDEFAULT.equals(project);
-      case VilBuildLanguagePackage.INSTANTIATE__RULE:
-        return RULE_EDEFAULT == null ? rule != null : !RULE_EDEFAULT.equals(rule);
       case VilBuildLanguagePackage.INSTANTIATE__RULE_NAME:
         return RULE_NAME_EDEFAULT == null ? ruleName != null : !RULE_NAME_EDEFAULT.equals(ruleName);
       case VilBuildLanguagePackage.INSTANTIATE__PARAM:
@@ -439,8 +385,6 @@ public class InstantiateImpl extends MinimalEObjectImpl.Container implements Ins
     StringBuffer result = new StringBuffer(super.toString());
     result.append(" (project: ");
     result.append(project);
-    result.append(", rule: ");
-    result.append(rule);
     result.append(", ruleName: ");
     result.append(ruleName);
     result.append(')');

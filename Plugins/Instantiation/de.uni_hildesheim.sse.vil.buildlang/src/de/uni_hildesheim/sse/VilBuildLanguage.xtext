@@ -109,7 +109,7 @@ PrimaryExpression:
     
 Instantiate:
     'instantiate' 
-    ((project=Identifier ('rule' rule=STRING)?) | ruleName=STRING)
+    (project=Identifier | ruleName=STRING)
     '(' param=ArgumentList? ')' (versionSpec=VersionSpec?)
 ;
 

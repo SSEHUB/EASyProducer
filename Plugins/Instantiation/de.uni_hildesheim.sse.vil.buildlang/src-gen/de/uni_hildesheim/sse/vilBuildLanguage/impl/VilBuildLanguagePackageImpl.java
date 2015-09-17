@@ -701,7 +701,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getInstantiate_Rule()
+  public EAttribute getInstantiate_RuleName()
   {
     return (EAttribute)instantiateEClass.getEStructuralFeatures().get(1);
   }
@@ -711,19 +711,9 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getInstantiate_RuleName()
-  {
-    return (EAttribute)instantiateEClass.getEStructuralFeatures().get(2);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public EReference getInstantiate_Param()
   {
-    return (EReference)instantiateEClass.getEStructuralFeatures().get(3);
+    return (EReference)instantiateEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -733,7 +723,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    */
   public EReference getInstantiate_VersionSpec()
   {
-    return (EReference)instantiateEClass.getEStructuralFeatures().get(4);
+    return (EReference)instantiateEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -1083,7 +1073,6 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
 
     instantiateEClass = createEClass(INSTANTIATE);
     createEAttribute(instantiateEClass, INSTANTIATE__PROJECT);
-    createEAttribute(instantiateEClass, INSTANTIATE__RULE);
     createEAttribute(instantiateEClass, INSTANTIATE__RULE_NAME);
     createEReference(instantiateEClass, INSTANTIATE__PARAM);
     createEReference(instantiateEClass, INSTANTIATE__VERSION_SPEC);
@@ -1216,7 +1205,6 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
 
     initEClass(instantiateEClass, Instantiate.class, "Instantiate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getInstantiate_Project(), ecorePackage.getEString(), "project", null, 0, 1, Instantiate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getInstantiate_Rule(), ecorePackage.getEString(), "rule", null, 0, 1, Instantiate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getInstantiate_RuleName(), ecorePackage.getEString(), "ruleName", null, 0, 1, Instantiate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getInstantiate_Param(), theExpressionDslPackage.getArgumentList(), null, "param", null, 0, 1, Instantiate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getInstantiate_VersionSpec(), theExpressionDslPackage.getVersionSpec(), null, "versionSpec", null, 0, 1, Instantiate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

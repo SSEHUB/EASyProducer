@@ -65,7 +65,6 @@
     </genClasses>
     <genClasses ecoreClass="VilBuildLanguage.ecore#//Instantiate">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute VilBuildLanguage.ecore#//Instantiate/project"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute VilBuildLanguage.ecore#//Instantiate/rule"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute VilBuildLanguage.ecore#//Instantiate/ruleName"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//Instantiate/param"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//Instantiate/versionSpec"/>

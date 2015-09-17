@@ -685,22 +685,13 @@ public interface VilBuildLanguagePackage extends EPackage
   int INSTANTIATE__PROJECT = 0;
 
   /**
-   * The feature id for the '<em><b>Rule</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int INSTANTIATE__RULE = 1;
-
-  /**
    * The feature id for the '<em><b>Rule Name</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int INSTANTIATE__RULE_NAME = 2;
+  int INSTANTIATE__RULE_NAME = 1;
 
   /**
    * The feature id for the '<em><b>Param</b></em>' containment reference.
@@ -709,7 +700,7 @@ public interface VilBuildLanguagePackage extends EPackage
    * @generated
    * @ordered
    */
-  int INSTANTIATE__PARAM = 3;
+  int INSTANTIATE__PARAM = 2;
 
   /**
    * The feature id for the '<em><b>Version Spec</b></em>' containment reference.
@@ -718,7 +709,7 @@ public interface VilBuildLanguagePackage extends EPackage
    * @generated
    * @ordered
    */
-  int INSTANTIATE__VERSION_SPEC = 4;
+  int INSTANTIATE__VERSION_SPEC = 3;
 
   /**
    * The number of structural features of the '<em>Instantiate</em>' class.
@@ -727,7 +718,7 @@ public interface VilBuildLanguagePackage extends EPackage
    * @generated
    * @ordered
    */
-  int INSTANTIATE_FEATURE_COUNT = 5;
+  int INSTANTIATE_FEATURE_COUNT = 4;
 
   /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.MapVariableImpl <em>Map Variable</em>}' class.
@@ -1505,17 +1496,6 @@ public interface VilBuildLanguagePackage extends EPackage
   EAttribute getInstantiate_Project();
 
   /**
-   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.vilBuildLanguage.Instantiate#getRule <em>Rule</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Rule</em>'.
-   * @see de.uni_hildesheim.sse.vilBuildLanguage.Instantiate#getRule()
-   * @see #getInstantiate()
-   * @generated
-   */
-  EAttribute getInstantiate_Rule();
-
-  /**
    * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.vilBuildLanguage.Instantiate#getRuleName <em>Rule Name</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -2229,14 +2209,6 @@ public interface VilBuildLanguagePackage extends EPackage
      * @generated
      */
     EAttribute INSTANTIATE__PROJECT = eINSTANCE.getInstantiate_Project();
-
-    /**
-     * The meta object literal for the '<em><b>Rule</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute INSTANTIATE__RULE = eINSTANCE.getInstantiate_Rule();
 
     /**
      * The meta object literal for the '<em><b>Rule Name</b></em>' attribute feature.

@@ -140,7 +140,7 @@ public class ExpressionTranslator
                     warnVersionRestrictions(inst.getVersionSpec());
                     vRestrict = processRestriction(inst.getProject(), inst.getVersionSpec(), resolver);
                 }
-                result = new InstantiateExpression(var, vRestrict, convertString(inst.getRule()), args);
+                result = new InstantiateExpression(var, vRestrict, null, args);
             } else {
                 result = new InstantiateExpression(convertString(inst.getRuleName()), args);
             }

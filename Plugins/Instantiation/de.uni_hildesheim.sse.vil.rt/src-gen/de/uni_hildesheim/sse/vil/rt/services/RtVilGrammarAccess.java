@@ -974,8 +974,7 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//Instantiate:
-	//	"instantiate" (project=Identifier ("rule" rule=STRING)? | ruleName=STRING) "(" param=ArgumentList? ")"
-	//	versionSpec=VersionSpec?;
+	//	"instantiate" (project=Identifier | ruleName=STRING) "(" param=ArgumentList? ")" versionSpec=VersionSpec?;
 	public VilBuildLanguageGrammarAccess.InstantiateElements getInstantiateAccess() {
 		return gaVilBuildLanguage.getInstantiateAccess();
 	}

@@ -16,7 +16,6 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.Instantiate#getProject <em>Project</em>}</li>
- *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.Instantiate#getRule <em>Rule</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.Instantiate#getRuleName <em>Rule Name</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.Instantiate#getParam <em>Param</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.Instantiate#getVersionSpec <em>Version Spec</em>}</li>
@@ -54,32 +53,6 @@ public interface Instantiate extends EObject
    * @generated
    */
   void setProject(String value);
-
-  /**
-   * Returns the value of the '<em><b>Rule</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Rule</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Rule</em>' attribute.
-   * @see #setRule(String)
-   * @see de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage#getInstantiate_Rule()
-   * @model
-   * @generated
-   */
-  String getRule();
-
-  /**
-   * Sets the value of the '{@link de.uni_hildesheim.sse.vilBuildLanguage.Instantiate#getRule <em>Rule</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Rule</em>' attribute.
-   * @see #getRule()
-   * @generated
-   */
-  void setRule(String value);
 
   /**
    * Returns the value of the '<em><b>Rule Name</b></em>' attribute.

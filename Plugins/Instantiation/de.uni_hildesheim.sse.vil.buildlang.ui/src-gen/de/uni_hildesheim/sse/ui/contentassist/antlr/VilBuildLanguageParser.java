@@ -76,8 +76,6 @@ public class VilBuildLanguageParser extends AbstractContentAssistParser {
 					put(grammarAccess.getExpressionStatementAccess().getGroup_0_0_1(), "rule__ExpressionStatement__Group_0_0_1__0");
 					put(grammarAccess.getExpressionStatementAccess().getGroup_1(), "rule__ExpressionStatement__Group_1__0");
 					put(grammarAccess.getInstantiateAccess().getGroup(), "rule__Instantiate__Group__0");
-					put(grammarAccess.getInstantiateAccess().getGroup_1_0(), "rule__Instantiate__Group_1_0__0");
-					put(grammarAccess.getInstantiateAccess().getGroup_1_0_1(), "rule__Instantiate__Group_1_0_1__0");
 					put(grammarAccess.getMapVariableAccess().getGroup(), "rule__MapVariable__Group__0");
 					put(grammarAccess.getMapAccess().getGroup(), "rule__Map__Group__0");
 					put(grammarAccess.getMapAccess().getGroup_3(), "rule__Map__Group_3__0");
@@ -181,8 +179,7 @@ public class VilBuildLanguageParser extends AbstractContentAssistParser {
 					put(grammarAccess.getPrimaryExpressionAccess().getJoinAssignment_5(), "rule__PrimaryExpression__JoinAssignment_5");
 					put(grammarAccess.getPrimaryExpressionAccess().getInstantiateAssignment_6(), "rule__PrimaryExpression__InstantiateAssignment_6");
 					put(grammarAccess.getPrimaryExpressionAccess().getNewExAssignment_7(), "rule__PrimaryExpression__NewExAssignment_7");
-					put(grammarAccess.getInstantiateAccess().getProjectAssignment_1_0_0(), "rule__Instantiate__ProjectAssignment_1_0_0");
-					put(grammarAccess.getInstantiateAccess().getRuleAssignment_1_0_1_1(), "rule__Instantiate__RuleAssignment_1_0_1_1");
+					put(grammarAccess.getInstantiateAccess().getProjectAssignment_1_0(), "rule__Instantiate__ProjectAssignment_1_0");
 					put(grammarAccess.getInstantiateAccess().getRuleNameAssignment_1_1(), "rule__Instantiate__RuleNameAssignment_1_1");
 					put(grammarAccess.getInstantiateAccess().getParamAssignment_3(), "rule__Instantiate__ParamAssignment_3");
 					put(grammarAccess.getInstantiateAccess().getVersionSpecAssignment_5(), "rule__Instantiate__VersionSpecAssignment_5");

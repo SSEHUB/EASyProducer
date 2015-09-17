@@ -5939,13 +5939,11 @@ protected class PrimaryExpression_NewExAssignment_7 extends AssignmentToken  {
 /************ begin Rule Instantiate ****************
  *
  * Instantiate:
- * 	"instantiate" (project=Identifier ("rule" rule=STRING)? | ruleName=STRING) "(" param=ArgumentList? ")"
- * 	versionSpec=VersionSpec?;
+ * 	"instantiate" (project=Identifier | ruleName=STRING) "(" param=ArgumentList? ")" versionSpec=VersionSpec?;
  *
  **/
 
-// "instantiate" (project=Identifier ("rule" rule=STRING)? | ruleName=STRING) "(" param=ArgumentList? ")"
-// versionSpec=VersionSpec?
+// "instantiate" (project=Identifier | ruleName=STRING) "(" param=ArgumentList? ")" versionSpec=VersionSpec?
 protected class Instantiate_Group extends GroupToken {
 	
 	public Instantiate_Group(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -5996,7 +5994,7 @@ protected class Instantiate_InstantiateKeyword_0 extends KeywordToken  {
 
 }
 
-// project=Identifier ("rule" rule=STRING)? | ruleName=STRING
+// project=Identifier | ruleName=STRING
 protected class Instantiate_Alternatives_1 extends AlternativesToken {
 
 	public Instantiate_Alternatives_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -6011,7 +6009,7 @@ protected class Instantiate_Alternatives_1 extends AlternativesToken {
     @Override
 	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
 		switch(index) {
-			case 0: return new Instantiate_Group_1_0(lastRuleCallOrigin, this, 0, inst);
+			case 0: return new Instantiate_ProjectAssignment_1_0(lastRuleCallOrigin, this, 0, inst);
 			case 1: return new Instantiate_RuleNameAssignment_1_1(lastRuleCallOrigin, this, 1, inst);
 			default: return null;
 		}	
@@ -6019,39 +6017,16 @@ protected class Instantiate_Alternatives_1 extends AlternativesToken {
 
 }
 
-// project=Identifier ("rule" rule=STRING)?
-protected class Instantiate_Group_1_0 extends GroupToken {
-	
-	public Instantiate_Group_1_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
-		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
-	}
-	
-	@Override
-	public Group getGrammarElement() {
-		return grammarAccess.getInstantiateAccess().getGroup_1_0();
-	}
-
-    @Override
-	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
-		switch(index) {
-			case 0: return new Instantiate_Group_1_0_1(lastRuleCallOrigin, this, 0, inst);
-			case 1: return new Instantiate_ProjectAssignment_1_0_0(lastRuleCallOrigin, this, 1, inst);
-			default: return null;
-		}	
-	}
-
-}
-
 // project=Identifier
-protected class Instantiate_ProjectAssignment_1_0_0 extends AssignmentToken  {
+protected class Instantiate_ProjectAssignment_1_0 extends AssignmentToken  {
 	
-	public Instantiate_ProjectAssignment_1_0_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+	public Instantiate_ProjectAssignment_1_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
 		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
 	}
 	
 	@Override
 	public Assignment getGrammarElement() {
-		return grammarAccess.getInstantiateAccess().getProjectAssignment_1_0_0();
+		return grammarAccess.getInstantiateAccess().getProjectAssignment_1_0();
 	}
 
     @Override
@@ -6066,95 +6041,15 @@ protected class Instantiate_ProjectAssignment_1_0_0 extends AssignmentToken  {
 	public IEObjectConsumer tryConsume() {
 		if((value = eObjectConsumer.getConsumable("project",true)) == null) return null;
 		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("project");
-		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getInstantiateAccess().getProjectIdentifierParserRuleCall_1_0_0_0(), value, null)) {
+		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getInstantiateAccess().getProjectIdentifierParserRuleCall_1_0_0(), value, null)) {
 			type = AssignmentType.DATATYPE_RULE_CALL;
-			element = grammarAccess.getInstantiateAccess().getProjectIdentifierParserRuleCall_1_0_0_0();
+			element = grammarAccess.getInstantiateAccess().getProjectIdentifierParserRuleCall_1_0_0();
 			return obj;
 		}
 		return null;
 	}
 
 }
-
-// ("rule" rule=STRING)?
-protected class Instantiate_Group_1_0_1 extends GroupToken {
-	
-	public Instantiate_Group_1_0_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
-		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
-	}
-	
-	@Override
-	public Group getGrammarElement() {
-		return grammarAccess.getInstantiateAccess().getGroup_1_0_1();
-	}
-
-    @Override
-	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
-		switch(index) {
-			case 0: return new Instantiate_RuleAssignment_1_0_1_1(lastRuleCallOrigin, this, 0, inst);
-			default: return null;
-		}	
-	}
-
-}
-
-// "rule"
-protected class Instantiate_RuleKeyword_1_0_1_0 extends KeywordToken  {
-	
-	public Instantiate_RuleKeyword_1_0_1_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
-		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
-	}
-	
-	@Override
-	public Keyword getGrammarElement() {
-		return grammarAccess.getInstantiateAccess().getRuleKeyword_1_0_1_0();
-	}
-
-    @Override
-	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
-		switch(index) {
-			case 0: return new Instantiate_ProjectAssignment_1_0_0(lastRuleCallOrigin, this, 0, inst);
-			default: return null;
-		}	
-	}
-
-}
-
-// rule=STRING
-protected class Instantiate_RuleAssignment_1_0_1_1 extends AssignmentToken  {
-	
-	public Instantiate_RuleAssignment_1_0_1_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
-		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
-	}
-	
-	@Override
-	public Assignment getGrammarElement() {
-		return grammarAccess.getInstantiateAccess().getRuleAssignment_1_0_1_1();
-	}
-
-    @Override
-	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
-		switch(index) {
-			case 0: return new Instantiate_RuleKeyword_1_0_1_0(lastRuleCallOrigin, this, 0, inst);
-			default: return null;
-		}	
-	}
-
-    @Override	
-	public IEObjectConsumer tryConsume() {
-		if((value = eObjectConsumer.getConsumable("rule",false)) == null) return null;
-		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("rule");
-		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getInstantiateAccess().getRuleSTRINGTerminalRuleCall_1_0_1_1_0(), value, null)) {
-			type = AssignmentType.TERMINAL_RULE_CALL;
-			element = grammarAccess.getInstantiateAccess().getRuleSTRINGTerminalRuleCall_1_0_1_1_0();
-			return obj;
-		}
-		return null;
-	}
-
-}
-
-
 
 // ruleName=STRING
 protected class Instantiate_RuleNameAssignment_1_1 extends AssignmentToken  {

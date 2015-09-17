@@ -467,10 +467,6 @@ public class BuildlangWriter extends WriterVisitor<VariableDeclaration> implemen
         print("instantiate ");
         if (null != inst.getProject()) {
             print(inst.getProject().getName());
-            if (null != inst.getName()) {
-                print(" rule ");
-                printString(inst.getName());
-            }
         } else {
             printString(inst.getQualifiedName());
         }
