@@ -26,6 +26,7 @@ Export-Package: de.uni_hildesheim.sse.easy_producer.instantiator,
  de.uni_hildesheim.sse.easy_producer.instantiator.model.execution,
  de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions,
  de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel,
+ de.uni_hildesheim.sse.easy_producer.instantiator.model.tracing,
  de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes,
  de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration
 Bundle-ClassPath: .

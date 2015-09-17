@@ -1,4 +1,4 @@
-package de.uni_hildesheim.sse.easy_producer.core.varMod.tracing;
+package de.uni_hildesheim.sse.easy_producer.instantiator.model.tracing;
 
 import java.util.HashSet;
 import java.util.Set;

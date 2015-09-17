@@ -3,7 +3,7 @@ package de.uni_hildesheim.sse.easy.ui.core.instantiation;
 import org.eclipse.swt.widgets.Display;
 
 import de.uni_hildesheim.sse.easy.ui.productline_editor.EclipseConsole;
-import de.uni_hildesheim.sse.easy_producer.core.varMod.tracing.AbstractVilTracer;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.tracing.AbstractVilTracer;
 
 /**
  * Implements a combined tracer for VIL and VTL with common indentation.

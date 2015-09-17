@@ -1,4 +1,4 @@
-package de.uni_hildesheim.sse.easy_producer.core.varMod.tracing;
+package de.uni_hildesheim.sse.easy_producer.instantiator.model.tracing;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.IInstantiatorTracer;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.TracerFactory;
