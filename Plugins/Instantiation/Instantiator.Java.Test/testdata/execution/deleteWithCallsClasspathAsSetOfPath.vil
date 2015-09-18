@@ -3,8 +3,9 @@ vilScript deleteWithCallsClasspathAsSetOfPath (Project source, Configuration con
     version v0;
 
     main(Project source, Configuration config, Project target) = : {
-        Path newClasspath = new Path("$target");
-        setOf(Path) classpath = {newClasspath, new Path("this is a test")};
+        Path newClasspath = target.path();
+        Path secondClasspath = target.path() + "/thisIsATest";
+        setOf(Path) classpath = {newClasspath, secondClasspath};
         target.setSettings(JavaSettings.CLASSPATH, classpath);
         JavaFileArtifact f = "$target/MethodClass.java";
         JavaClass cls = f.defaultClass();

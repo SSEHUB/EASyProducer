@@ -1,9 +1,11 @@
 -> main(Project, Configuration, Project) with (<project>, <config>, <project>)
-    -> create(String) with () = 
+    -> path(Project) with (<project>) = 
     newClasspath <- 
-    -> create(String) with (this is a test) = C:/Users/punkid/git/EASyProducer/Plugins/Instantiation/Instantiator.Java.Test/this is a test
-    classpath <- {, C:/Users/punkid/git/EASyProducer/Plugins/Instantiation/Instantiator.Java.Test/this is a test}
-    -> setSettings(Project, ProjectSettings, Any) with (<project>, CLASSPATH, {, C:/Users/punkid/git/EASyProducer/Plugins/Instantiation/Instantiator.Java.Test/this is a test})
+    -> path(Project) with (<project>) = 
+    -> +(Path, String) with (, /thisIsATest) = thisIsATest
+    secondClasspath <- thisIsATest
+    classpath <- {, thisIsATest}
+    -> setSettings(Project, ProjectSettings, Any) with (<project>, CLASSPATH, {, thisIsATest})
     f <- MethodClass.java
     -> defaultClass(JavaFileArtifact) with (MethodClass.java) = class 'MethodClass'
     cls <- class 'MethodClass'
