@@ -96,10 +96,11 @@ public class JavaAssignment extends AbstractJavaStatement {
     
     /**
      * Returns the assignment as String, for debugging only.
+     * @return Returns the assignment as String.
      */
     @Override
     public String toString() {
-        return "" + getType() + " " + getNameSafe() + " = " + fromType;
+        return "" + getType() + " " + getNameSafe() + " = " + fromType;        
     }
 
     @Invisible
