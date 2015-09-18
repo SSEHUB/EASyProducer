@@ -3,7 +3,7 @@ vilScript deleteWithCallsClasspathAsSetOfString (Project source, Configuration c
     version v0;
 
     main(Project source, Configuration config, Project target) = : {
-        String newClasspath = "C:/Users/punkid/git/EASyProducer/Plugins/Instantiation/Instantiator.Java.Test/testdata/temp/artifacts/";
+        String newClasspath = "$target" + "/noDir";
         setOf(String) classpath = {"$target", newClasspath, "test"};
         target.setSettings(JavaSettings.CLASSPATH, classpath);
         JavaFileArtifact f = "$target/MethodClass.java";

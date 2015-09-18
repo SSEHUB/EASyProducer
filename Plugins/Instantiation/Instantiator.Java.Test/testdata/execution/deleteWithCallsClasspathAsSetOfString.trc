@@ -1,7 +1,8 @@
 -> main(Project, Configuration, Project) with (<project>, <config>, <project>)
-    newClasspath <- C:/Users/punkid/git/EASyProducer/Plugins/Instantiation/Instantiator.Java.Test/testdata/temp/artifacts/
-    classpath <- {C:/Users/punkid/git/EASyProducer/Plugins/Instantiation/Instantiator.Java.Test/testdata/temp/artifacts/, , test}
-    -> setSettings(Project, ProjectSettings, Any) with (<project>, CLASSPATH, {C:/Users/punkid/git/EASyProducer/Plugins/Instantiation/Instantiator.Java.Test/testdata/temp/artifacts/, , test})
+    -> +(String, String) with (, /noDir) = /noDir
+    newClasspath <- /noDir
+    classpath <- {, /noDir, test}
+    -> setSettings(Project, ProjectSettings, Any) with (<project>, CLASSPATH, {, /noDir, test})
     f <- MethodClass.java
     -> defaultClass(JavaFileArtifact) with (MethodClass.java) = class 'MethodClass'
     cls <- class 'MethodClass'
