@@ -409,13 +409,13 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
                         String string = (String) iterator.next();
                         File file = new File(string);
                         if (file.exists()) {
-                            tmpClasspath += string + ";";
+                            tmpClasspath += string + File.pathSeparatorChar;
                         }
                     } else if (typeDescriptorParameter.isSame(TypeRegistry.DEFAULT.findType(Path.class))) {
                         // Path
                         Path path = (Path) iterator.next();
                         if (path.exists()) {
-                            tmpClasspath += path.getAbsolutePath() + ";";
+                            tmpClasspath += path.getAbsolutePath().getAbsolutePath() + File.pathSeparatorChar;
                         }
                     } else {
                         // fallback: do nothing
