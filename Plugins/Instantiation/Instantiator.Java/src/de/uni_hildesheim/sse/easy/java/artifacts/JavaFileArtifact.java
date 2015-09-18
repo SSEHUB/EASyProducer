@@ -359,6 +359,7 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
             sourcePath = sourcePath.replaceAll("//", "/");
         }
         String[] sources = {sourcePath};
+        logger.warn("CLASSPATH: " + sourcePath);
         parser.setEnvironment(classpath, sources, new String[] {"UTF-8" }, true);
         // Create AST
         unitNode = (CompilationUnit) parser.createAST(null);
@@ -366,9 +367,9 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
         IProblem[] problems = unitNode.getProblems();
         if (problems != null && problems.length > 0) {
             logger.warn("Got " + problems.length + " problems compiling the source file: " + file.getAbsolutePath());
-            for (IProblem problem : problems) {
-                logger.warn(problem.getMessage());
-            }
+//            for (IProblem problem : problems) {
+//                logger.warn(problem.getMessage());
+//            }
         }
         unitNode.accept(new ASTVisitor() {
             public boolean visit(TypeDeclaration typeDeclaration) {
