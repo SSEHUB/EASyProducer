@@ -218,6 +218,10 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
                 writer = new BufferedWriter(new FileWriter(file));
                 String code = unitNode.toString();
                 Map<String, String> options = JavaCore.getOptions();
+                options.put(DefaultCodeFormatterConstants.FORMATTER_INSERT_SPACE_BEFORE_ASSIGNMENT_OPERATOR, 
+                    JavaCore.INSERT);
+                options.put(DefaultCodeFormatterConstants.FORMATTER_INSERT_SPACE_AFTER_ASSIGNMENT_OPERATOR, 
+                    JavaCore.INSERT);
                 options.put(DefaultCodeFormatterConstants.FORMATTER_TAB_CHAR, JavaCore.SPACE);
                 CodeFormatter codeFormatter = ToolFactory.createCodeFormatter(options);
                 TextEdit textEdit = codeFormatter.format(CodeFormatter.K_COMPILATION_UNIT, code, 0, code.length(), 0,
@@ -359,7 +363,6 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
             sourcePath = sourcePath.replaceAll("//", "/");
         }
         String[] sources = {sourcePath};
-        logger.warn("CLASSPATH: " + sourcePath);
         parser.setEnvironment(classpath, sources, new String[] {"UTF-8" }, true);
         // Create AST
         unitNode = (CompilationUnit) parser.createAST(null);
@@ -367,9 +370,9 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
         IProblem[] problems = unitNode.getProblems();
         if (problems != null && problems.length > 0) {
             logger.warn("Got " + problems.length + " problems compiling the source file: " + file.getAbsolutePath());
-//            for (IProblem problem : problems) {
-//                logger.warn(problem.getMessage());
-//            }
+            for (IProblem problem : problems) {
+                logger.warn(problem.getMessage());
+            }
         }
         unitNode.accept(new ASTVisitor() {
             public boolean visit(TypeDeclaration typeDeclaration) {
