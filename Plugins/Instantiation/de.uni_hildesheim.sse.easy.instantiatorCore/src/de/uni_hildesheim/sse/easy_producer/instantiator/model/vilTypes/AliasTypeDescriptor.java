@@ -77,7 +77,7 @@ class AliasTypeDescriptor <T> extends TypeDescriptor<T> {
     
     @Override
     public boolean isAssignableFrom(IMetaType type) {
-        return type.isAssignableFrom(type);
+        return this.type.isAssignableFrom(type);
     }
 
     @Override
@@ -97,7 +97,7 @@ class AliasTypeDescriptor <T> extends TypeDescriptor<T> {
 
     @Override
     public boolean isActualTypeOf(IMetaType type) {
-        return type.isActualTypeOf(type);
+        return this.type.isActualTypeOf(type);
     }
 
     @Override
