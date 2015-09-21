@@ -15,6 +15,8 @@
  */
 package de.uni_hildesheim.sse.utils.messages;
 
+import java.util.List;
+
 
 /**
  * Defines a message to be emitted during runtime. 
@@ -52,6 +54,48 @@ public class Message implements IMessage {
      */
     public Status getStatus() {
         return status;
+    }
+    
+    /**
+     * Utility method returning whether there is an error message in the given <code>messages</code>.
+     * 
+     * @param messages the messages (may be <b>null</b>)
+     * @return <code>true</code> if there is an error, <code>false</code> else
+     */
+    public static boolean containsError(List<Message> messages) {
+        boolean hasError = false;
+        if (null != messages) {
+            for (int m = 0; !hasError && m < messages.size(); m++) {
+                hasError = Status.ERROR == messages.get(m).getStatus();
+            }
+        }
+        return hasError;
+    }
+
+    /**
+     * Utility method returning a string representation of a given set of <code>messages</code>.
+     * 
+     * @param messages the messages (may be <b>null</b>)
+     * @param filter just messages of the given status shall be returned (<b>null</b> for all)
+     * @return the string representation
+     */
+    public static String toString(List<Message> messages, Status filter) {
+        StringBuilder result = new StringBuilder();
+        if (null != messages) {
+            int count = 0;
+            for (int m = 0; m < messages.size(); m++) {
+                Message msg = messages.get(m);
+                if (null == filter || filter == msg.getStatus()) {
+                    if (count > 0) {
+                        result.append(", ");
+                    }
+                    result.append(msg.getStatus());
+                    result.append(":");
+                    result.append(msg.getDescription());
+                }
+            }
+        }
+        return result.toString();
     }
     
 }

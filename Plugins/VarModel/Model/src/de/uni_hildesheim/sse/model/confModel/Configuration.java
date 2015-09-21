@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.uni_hildesheim.sse.Bundle;
+import de.uni_hildesheim.sse.model.confModel.ConfigurationInitializerRegistry.IConfigurationInitializer;
 import de.uni_hildesheim.sse.model.cstEvaluation.FreezeEvaluator;
 import de.uni_hildesheim.sse.model.management.VarModel;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
@@ -50,6 +51,9 @@ import de.uni_hildesheim.sse.model.varModel.values.Value;
 import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
 import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
+import de.uni_hildesheim.sse.utils.messages.Message;
+import de.uni_hildesheim.sse.utils.messages.Status;
+import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
 
 /**
  * Represents a configuration, i.e. a set of decision variables.
@@ -60,6 +64,24 @@ import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
  */
 public class Configuration implements IConfigurationVisitable, IProjectListener, Iterable<IDecisionVariable>, 
     IConfigurationElement, IConfiguration {
+
+    /**
+     * Defines the default initializer for configurations. This is used as a default value by 
+     * {@link ConfigurationInitializerRegistry}. Shall be redefined by an appropriate reasoner.
+     */
+    static final IConfigurationInitializer DEFAULT_INITIALIZER = new IConfigurationInitializer() {
+        
+        @Override
+        public List<Message> initializeConfiguration(Configuration config, ProgressObserver observer) {
+            AssignmentResolver resolver = new AssignmentResolver(config);
+            resolver.resolve();
+            
+            // TODO freezing shall be done incrementally by the Reasoner, currently freeze-state would not work
+            // Assign frozen state to already frozen variables
+            config.freezeValues(config.project, FilterType.ALL);
+            return null; // no messages so far
+        }
+    };
 
     /**
      * The origin project, where this configuration belongs to.
@@ -176,12 +198,24 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
             createVariables();            
             
             if (assignValues) {
+                IConfigurationInitializer init = ConfigurationInitializerRegistry.getInitializer();
+                if (null == init) {
+                    EASyLoggerFactory.INSTANCE.getLogger(Configuration.class, Bundle.ID).error(
+                        "No configuration initializer available");
+                } else {
+                    String msg = Message.toString(
+                        init.initializeConfiguration(this, ProgressObserver.NO_OBSERVER), Status.ERROR);
+                    if (msg.length() > 0) {
+                        EASyLoggerFactory.INSTANCE.getLogger(Configuration.class, Bundle.ID).error(msg);
+                    }
+                }
+                /* -> DEFAULT_INITIALIZER
                 AssignmentResolver resolver = new AssignmentResolver(this);
                 resolver.resolve();
                 
                 // TODO freezing shall be done incrementally by the Reasoner, currently freeze-state would not work
                 // Assign frozen state to already frozen variables
-                freezeValues(project, FilterType.ALL);
+                freezeValues(project, FilterType.ALL);*/
             }
         }
     }

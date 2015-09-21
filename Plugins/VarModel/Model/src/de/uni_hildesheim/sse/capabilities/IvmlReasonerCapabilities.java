@@ -17,7 +17,9 @@ package de.uni_hildesheim.sse.capabilities;
 
 /**
  * Defines some differentiating reasoner capabilities to react in EASy on provided
- * capabilities in an abstract way.
+ * capabilities in an abstract way. The IVML editor may utilize these
+ * enum constants to display reasoner-specific warnings if capabilities for a utilized IVML
+ * concept are missing.
  * 
  * @author Holger Eichelberger
  */
@@ -46,7 +48,17 @@ public enum IvmlReasonerCapabilities implements IReasonerCapability {
     /**
      * Whether the reasoner works with user-defined functions.
      */
-    USER_DEF_FUNCTIONS;
+    USER_DEF_FUNCTIONS,
+
+    /**
+     * Whether the reasoner works with attributes.
+     */
+    ATTRIBUTES,
+
+    /**
+     * Whether the reasoner can work with "eval".
+     */
+    EVAL;
     
     // further may be added
 

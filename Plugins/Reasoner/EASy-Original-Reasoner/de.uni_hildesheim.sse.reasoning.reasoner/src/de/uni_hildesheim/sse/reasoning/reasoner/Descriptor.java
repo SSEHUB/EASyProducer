@@ -219,8 +219,15 @@ public class Descriptor extends ReasonerDescriptor {
     public Descriptor() {
         super(NAME, VERSION, LICENSE, null, null);
         addCapability(IvmlReasonerCapabilities.NULL_VALUE);
+        addCapability(IvmlReasonerCapabilities.ITERATORS);
+        addCapability(IvmlReasonerCapabilities.QUANTORS);
+        addCapability(IvmlReasonerCapabilities.USER_DEF_FUNCTIONS);
+        addCapability(IvmlReasonerCapabilities.ATTRIBUTES);
+        //addCapability(IvmlReasonerCapabilities.EVAL); // not really by now
         addCapability(IvmlReasonerCapabilities.QUALIFIED_COMPOUND_ACCESS);
-        addCapability(GeneralReasonerCapabilities.INCREMENTAL_REASONING);
+        //addCapability(GeneralReasonerCapabilities.INCREMENTAL_REASONING); // not really by now
+        addCapability(GeneralReasonerCapabilities.RUNTIME_REASONING); // at least basic capabilities
+        //addCapability(GeneralReasonerCapabilities.CONFIGURATION_INITIALIZATION); // TODO clarify with Roman
     }
     
     
