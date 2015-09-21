@@ -55,7 +55,7 @@ public class TextTestUtils {
             expected = normalizeXmlEncoding(expected);
         }
         Assert.assertEquals("expected file " + expectedFile + " is not the same as produced file " + producedFile, 
-            produced, expected);
+            expected, produced);
     }
     
     /**

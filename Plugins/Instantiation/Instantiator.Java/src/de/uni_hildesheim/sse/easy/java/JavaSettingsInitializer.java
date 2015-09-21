@@ -17,7 +17,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ISettings
  */
 public class JavaSettingsInitializer implements ISettingsInitializer {
 
-    private static Set<String> classpathEntries;
+//    private static Set<String> classpathEntries;
 
     @Override
     public void initialize(File base, Map<ProjectSettings, Object> settings) {

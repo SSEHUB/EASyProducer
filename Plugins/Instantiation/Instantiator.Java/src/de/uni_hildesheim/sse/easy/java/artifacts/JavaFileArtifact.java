@@ -218,6 +218,10 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
                 writer = new BufferedWriter(new FileWriter(file));
                 String code = unitNode.toString();
                 Map<String, String> options = JavaCore.getOptions();
+                options.put(DefaultCodeFormatterConstants.FORMATTER_INSERT_SPACE_BEFORE_ASSIGNMENT_OPERATOR, 
+                    JavaCore.INSERT);
+                options.put(DefaultCodeFormatterConstants.FORMATTER_INSERT_SPACE_AFTER_ASSIGNMENT_OPERATOR, 
+                    JavaCore.INSERT);
                 options.put(DefaultCodeFormatterConstants.FORMATTER_TAB_CHAR, JavaCore.SPACE);
                 CodeFormatter codeFormatter = ToolFactory.createCodeFormatter(options);
                 TextEdit textEdit = codeFormatter.format(CodeFormatter.K_COMPILATION_UNIT, code, 0, code.length(), 0,
@@ -408,13 +412,13 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
                         String string = (String) iterator.next();
                         File file = new File(string);
                         if (file.exists()) {
-                            tmpClasspath += string + ";";
+                            tmpClasspath += string + File.pathSeparatorChar;
                         }
                     } else if (typeDescriptorParameter.isSame(TypeRegistry.DEFAULT.findType(Path.class))) {
                         // Path
                         Path path = (Path) iterator.next();
                         if (path.exists()) {
-                            tmpClasspath += path.getAbsolutePath() + ";";
+                            tmpClasspath += path.getAbsolutePath().getAbsolutePath() + File.pathSeparatorChar;
                         }
                     } else {
                         // fallback: do nothing
