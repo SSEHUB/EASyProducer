@@ -95,7 +95,9 @@ public class ReasonerFrontend {
                             result.add(tmp.getMessage(m));
                         }
                     }
-                } 
+                } else {
+                    useFallback = true;
+                }
                 if (useFallback) {
                     result = fallback.initializeConfiguration(config, observer);
                 }
