@@ -22,7 +22,9 @@
         <!-- Instantiation -->
         <pathelement path="${libs.instantiator.core}"/>
         <pathelement path="${libs.instantiatorCore.rt.core}"/>
-        	    <!-- Eclipse-Plugins -->
+        <!-- required for testing -->
+        <pathelement path="${libs.sseReasoner}"/>
+        <!-- Eclipse-Plugins -->
 		<fileset dir="${eclipse.plugins.dir}">
 			<include name="**/*.jar" />
 		</fileset>
