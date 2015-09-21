@@ -24,6 +24,23 @@ import de.uni_hildesheim.sse.capabilities.IReasonerCapability;
  */
 public enum GeneralReasonerCapabilities implements IReasonerCapability {
     
-    INCREMENTAL_REASONING;
+    /**
+     * Support for incremental reasoning while configuring a product.
+     */
+    INCREMENTAL_REASONING,
+    
+    /**
+     * Support for runtime reasoning, i.e., can be applied for runtime reconfiguration, e.g., 
+     * in combination with rt-VIL.
+     */
+    RUNTIME_REASONING,
+    
+    /**
+     * Is suitable to perform the initialization of an IVML configuration instance as it provides
+     * comprehensive IVML reasoning capabilities. Currently, the reasoner developer declares this
+     * capability. However, it might also be derived from the presence of 
+     * {@link de.uni_hildesheim.sse.capabilities.IvmlReasonerCapabilities}.
+     */
+    CONFIGURATION_INITIALIZATION;
 
 }

@@ -8,12 +8,15 @@ import de.uni_hildesheim.sse.capabilities.DefaultReasonerAccess;
 import de.uni_hildesheim.sse.capabilities.IReasonerCapability;
 import de.uni_hildesheim.sse.capabilities.DefaultReasonerAccess.IDefaultReasonerProvider;
 import de.uni_hildesheim.sse.model.confModel.Configuration;
+import de.uni_hildesheim.sse.model.confModel.ConfigurationInitializerRegistry;
+import de.uni_hildesheim.sse.model.confModel.ConfigurationInitializerRegistry.IConfigurationInitializer;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.reasoning.core.impl.ReasonerRegistry;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.EvaluationResult;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.EvaluationResult.ConstraintEvaluationResult;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.EvaluationResult.EvaluationPair;
+import de.uni_hildesheim.sse.reasoning.core.reasoner.GeneralReasonerCapabilities;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.IReasoner;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.IReasonerRegistry;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.Message;
@@ -66,6 +69,59 @@ public class ReasonerFrontend {
     private ReasonerFrontend() {
         registry = ReasonerRegistry.getInstance();
         DefaultReasonerAccess.setProvider(new DefaultReasonerProvider()); // called when a reasoner is registered
+        ConfigurationInitializerRegistry.setInitializer(new IConfigurationInitializer() {
+            
+            private IConfigurationInitializer fallback = ConfigurationInitializerRegistry.getInitializer();
+            
+            @Override
+            public List<de.uni_hildesheim.sse.utils.messages.Message> initializeConfiguration(
+                Configuration config, ProgressObserver observer) {
+                List<de.uni_hildesheim.sse.utils.messages.Message> result = null;
+                IReasoner reasoner = canInitializeConfig(getActualReasoner(config.getProject(), config, null, null));
+                for (int r = 0; null == reasoner && r < registry.getReasonerCount(); r++) {
+                    IReasoner tmp = registry.getReasoner(r);
+                    if (isReadyForUse(tmp)) {
+                        reasoner = canInitializeConfig(tmp);
+                    }
+                }
+                boolean useFallback = false;
+                if (null != reasoner) {
+                    // default reasoner configuration
+                    ReasoningResult tmp = reasoner.propagate(config.getProject(), config, null, observer); 
+                    useFallback = tmp.reasoningUnsupported();
+                    if (tmp.getMessageCount() > 0) {
+                        result = new ArrayList<de.uni_hildesheim.sse.utils.messages.Message>();
+                        for (int m = 0; m < tmp.getMessageCount(); m++) {
+                            result.add(tmp.getMessage(m));
+                        }
+                    }
+                } 
+                if (useFallback) {
+                    result = fallback.initializeConfiguration(config, observer);
+                }
+                return result;
+            }
+        });
+    }
+    
+    /**
+     * Checks <code>reasoner</code> for {@link GeneralReasonerCapabilities#CONFIGURATION_INITIALIZATION}.
+     * @param reasoner the reasoner to check
+     * @return <code>reasoner</code> if <code>capability</code> is provided, <b>null</b> else
+     * @see #checkForCapabilitiy(IReasoner, IReasonerCapability)
+     */
+    private static IReasoner canInitializeConfig(IReasoner reasoner) {
+        return checkForCapabilitiy(reasoner, GeneralReasonerCapabilities.CONFIGURATION_INITIALIZATION);
+    }
+    
+    /**
+     * Checks <code>reasoner</code> for the given reasoner <code>capability</code>.
+     * @param reasoner the reasoner to check
+     * @param capability the capability to check for
+     * @return <code>reasoner</code> if <code>capability</code> is provided, <b>null</b> else
+     */
+    private static IReasoner checkForCapabilitiy(IReasoner reasoner, IReasonerCapability capability) {
+        return reasoner.getDescriptor().hasCapability(capability) ? reasoner : null;
     }
 
     /**
@@ -109,12 +165,10 @@ public class ReasonerFrontend {
                 result = reasonerHint;
             }
         }
-        if (null == result) {
-            for (int r = 0; r < registry.getReasonerCount(); r++) {
-                IReasoner reasoner = registry.getReasoner(r);
-                if (isReadyForUse(reasoner)) {
-                    result = reasoner;
-                }
+        for (int r = 0; null == result && r < registry.getReasonerCount(); r++) {
+            IReasoner reasoner = registry.getReasoner(r);
+            if (isReadyForUse(reasoner)) {
+                result = reasoner;
             }
         }
         return result;
