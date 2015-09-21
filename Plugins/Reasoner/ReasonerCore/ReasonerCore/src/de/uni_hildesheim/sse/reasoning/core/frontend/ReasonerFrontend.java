@@ -121,7 +121,16 @@ public class ReasonerFrontend {
      * @return <code>reasoner</code> if <code>capability</code> is provided, <b>null</b> else
      */
     private static IReasoner checkForCapabilitiy(IReasoner reasoner, IReasonerCapability capability) {
-        return reasoner.getDescriptor().hasCapability(capability) ? reasoner : null;
+        IReasoner result = null;
+        if (null != reasoner) {
+            ReasonerDescriptor desc = reasoner.getDescriptor();
+            if (null != desc) {
+                if (desc.hasCapability(capability)) {
+                    result = reasoner;
+                }
+            }
+        }
+        return result;
     }
 
     /**
