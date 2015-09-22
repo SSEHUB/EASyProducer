@@ -300,6 +300,7 @@ public class Resolver {
         CompoundAccess compound) {
         allVariables.add(variable);
         IDatatype type = decl.getType();
+        // Comment out if internal constraints come from the model
         if (type instanceof DerivedDatatype) {
             InternalConstraint[] typeConstraints = createInternalConstraints(decl, type);
             if (typeConstraints != null) {
@@ -687,10 +688,12 @@ public class Resolver {
 //        for (int i = 0; i < project.getInternalConstraintCount(); i++) {
 //            scopeConstraints.add(project.getInternalConstraint(i));
 //        }
+//        System.out.println(project.getName() + ";" + project.getInternalConstraintCount() + ";");
         if (internalConstraints.size() > 0) {
             internalConstraints = transformConstraints(internalConstraints, false);
             scopeConstraints.addAll(internalConstraints);
         }
+//        System.out.println(project.getName() + ";" + internalConstraints.size() + ";");
         ConstraintFinder finder = new ConstraintFinder(project, false);
         scopeConstraints.addAll(finder.getConstraints());
         if (!incremental) {
@@ -915,12 +918,14 @@ public class Resolver {
      */
     private void clearConstraintLists() {
         defaultConstraints.clear();
-        constraintVariables.clear();
+        internalConstraints.clear();
         compoundConstraints.clear();
-        collectionCompoundConstraints.clear();        
+        constraintVariables.clear();        
+        collectionCompoundConstraints.clear(); 
+        collectionConstraints.clear();      
         defaultAttributeConstraints.clear();
-        collectionConstraints.clear();
-        unresolvedConstraints.clear();        
+        assignedAttributeConstraints.clear();
+        unresolvedConstraints.clear();   
     }
 
     /**
