@@ -111,7 +111,6 @@ public interface IFCorrelationTwitter extends IFamily{
      */
     public void calculate(IIFCorrelationTwitterSymbolListInput input, IIFCorrelationTwitterPairwiseTwitterOutput result);
 
-    // algorithm parameters
 
     /**
      * Sets the algorithm parameter "windowSize".

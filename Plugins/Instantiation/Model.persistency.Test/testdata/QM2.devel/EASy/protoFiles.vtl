@@ -1,0 +1,53 @@
+import commonVTLMethods;
+@advice(QM)
+template protoFiles(Configuration config, FileArtifact target, Family family, String fName) {
+	def produceForTuples(Tuples tuples, Boolean output, String fName, Integer indent) {
+	    String type;
+	    String typeName;
+    	String tupleName;
+    	String ifName = "I" + fName;
+		Integer count = 1;		
+    	for (Tuple t : tuples) {
+    		Boolean flag1 = true;
+			Boolean flag2 = false;
+    		tupleName = t.name;
+    		tupleName = firstToUpperCase(tupleName);
+	        if (output) {
+    		    type = "${ifName}${tupleName}Output";
+    		    typeName = "output";
+    	    } else {
+    		    type = "${ifName}${tupleName}Input";
+    		    typeName = "input";   		
+    	    }  	    
+    	   	for (Field f : t.fields) {
+    	   		FieldType ftype = f.type;
+    			String fname = toIdentifier("${f.name}");    			
+    			String ptype = basicTypeForProto(ftype);
+    			if(ptype != "") {
+    				if(flag1) {
+    					'message S$type {' | indent; //only generate once for one tuple
+    					flag1 = false;
+    					flag2 = true;
+    				}
+	    			"required $ptype $fname = $count;" | indent+4;
+	    			count = count + 1;		    				
+    			}  			
+    		}
+    		if(flag2) {
+	    		'}' | indent;
+	    		flag2 = false;
+    		}
+    		''
+      }
+    }
+	def main(Configuration config, FileArtifact target, Family family, String fName) {
+		'package eu.qualimaster.families.protobuf;'
+
+		'option java_package = "eu.qualimaster.protos";'
+		'option java_outer_classname = "${fName}Protos";'
+		''
+		produceForTuples(family.input, false, fName, 0);
+		produceForTuples(family.output, true, fName, 0);
+	}
+	
+}

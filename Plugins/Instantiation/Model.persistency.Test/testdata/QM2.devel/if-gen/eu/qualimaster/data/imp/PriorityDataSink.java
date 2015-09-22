@@ -1,11 +1,14 @@
 package eu.qualimaster.data.imp;
 
+import eu.qualimaster.data.inf.IPriorityDataSink;
 import eu.qualimaster.data.inf.IPriorityDataSink.*;
+import eu.qualimaster.dataManagement.strategies.*;
+import eu.qualimaster.observables.*;
 
 /**
 * Define the data source class(GEN).
 **/
-public class PriorityDataSink {
+public class PriorityDataSink implements IPriorityDataSink{
 
     /**
     * Define the source data input interface.
@@ -56,17 +59,31 @@ public class PriorityDataSink {
 
 
     /**
-    * Returns a specific type of data sink.
-    * @return PriorityDataSinkPairwiseFinancialInput the sink data
+    * Posts a specific type of data sink.
+    * @param data the sink data PriorityDataSinkPairwiseFinancialInput
     **/
-    public PriorityDataSinkPairwiseFinancialInput getDataPairwiseFinancial() {
-        return null;
+    @Override
+    public void postDataPairwiseFinancial(IPriorityDataSinkPairwiseFinancialInput data) {
     }
     /**
-    * Returns a specific type of data sink.
-    * @return PriorityDataSinkPairwiseTwitterInput the sink data
+    * Posts a specific type of data sink.
+    * @param data the sink data PriorityDataSinkPairwiseTwitterInput
     **/
-    public PriorityDataSinkPairwiseTwitterInput getDataPairwiseTwitter() {
-        return null;
+    @Override
+    public void postDataPairwiseTwitter(IPriorityDataSinkPairwiseTwitterInput data) {
     }
+    @Override
+    public void connect() {}
+
+    @Override
+    public void disconnect(){}
+
+    @Override
+    public void setStrategy(IStorageStrategyDescriptor strategy) {}
+
+    @Override
+    public IStorageStrategyDescriptor getStrategy() { return NoStorageStrategyDescriptor.INSTANCE;}
+
+    @Override
+    public Double getMeasurement(IObservable observable) { return null;}
 }

@@ -1,0 +1,26 @@
+<mapping>
+  <pipeline name="AggregatePip" class="eu.qualimaster.AggregatePip.topology.Topology">
+      <node name="RandomSrc" type="source">
+          <component name="PipelineVar_4_Source0" container="AggregatePip" class="eu.qualimaster.AggregatePip.topology.PipelineVar_4_Source0Source" receiver="true"/>
+      </node>
+      <node name="AggreFm1" type="family">
+          <component name="PipelineVar_4_FamilyElement0" container="AggregatePip" class="eu.qualimaster.AggregatePip.topology.PipelineVar_4_FamilyElement0FamilyElement" receiver="true"/>
+      </node>
+      <node name="AggreFm2" type="family">
+          <component name="PipelineVar_4_FamilyElement1" container="AggregatePip" class="eu.qualimaster.AggregatePip.topology.PipelineVar_4_FamilyElement1FamilyElement" receiver="true"/>
+      </node>
+      <node name="AggreFm3" type="family">
+          <component name="PipelineVar_4_FamilyElement2" container="AggregatePip" class="eu.qualimaster.AggregatePip.topology.PipelineVar_4_FamilyElement2FamilyElement" receiver="true"/>
+      </node>
+      <node name="SwitchFm" type="family">
+          <component name="PipelineVar_4_FamilyElement3" container="AggregatePip" class="eu.qualimaster.AggregatePip.topology.PipelineVar_4_FamilyElement3FamilyElement" receiver="true"/>
+      </node>
+      <node name="RandomSink" type="sink">
+          <component name="PipelineVar_4_Sink0" container="AggregatePip" class="eu.qualimaster.AggregatePip.topology.PipelineVar_4_Sink0Sink" receiver="true"/>
+      </node>
+      <algorithm name="AggregationAlg" class="eu.qualimaster.algorithms.AggregationAlg"/>
+      <algorithm name="SwitchProcessor1" class="eu.qualimaster.algorithms.SwitchProcessor1"/>
+      <algorithm name="SwitchProcessor2" class="eu.qualimaster.algorithms.SwitchProcessor2"/>
+  </pipeline>
+
+</mapping>

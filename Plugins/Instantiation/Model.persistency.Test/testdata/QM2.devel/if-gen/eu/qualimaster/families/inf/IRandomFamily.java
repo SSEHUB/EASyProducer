@@ -52,4 +52,19 @@ public interface IRandomFamily extends IFamily{
      */
     public void calculate(IIRandomFamilyRandomDataInput input, IIRandomFamilyProccessedDataOutput result);
 
+
+    /**
+     * Sets the algorithm parameter "delay".
+     *
+     * @param value the new value of the algorithm parameter
+     */
+    public void setParameterDelay(int value);
+
+    /**
+     * Sets the algorithm parameter "flag".
+     *
+     * @param value the new value of the algorithm parameter
+     */
+    public void setParameterFlag(boolean value);
+
 }

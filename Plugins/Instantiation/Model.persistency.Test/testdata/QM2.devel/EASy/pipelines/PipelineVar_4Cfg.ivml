@@ -1,0 +1,46 @@
+project PipelineVar_4Cfg {
+
+	import Basics;
+	import Pipelines;
+	import FamiliesCfg;
+	import DataManagementCfg;
+	annotate BindingTime bindingTime = BindingTime.compile to PipelineVar_4Cfg;
+	Pipeline PipelineVar_4;
+	Source PipelineVar_4_Source0;
+	Flow PipelineVar_4_Flow0;
+	FamilyElement PipelineVar_4_FamilyElement0;
+	Flow PipelineVar_4_Flow1;
+	FamilyElement PipelineVar_4_FamilyElement1;
+	Flow PipelineVar_4_Flow2;
+	FamilyElement PipelineVar_4_FamilyElement2;
+	Flow PipelineVar_4_Flow3;
+	FamilyElement PipelineVar_4_FamilyElement3;
+	Flow PipelineVar_4_Flow4;
+	Sink PipelineVar_4_Sink0;
+	PipelineVar_4_Sink0 = {sink = refBy(randomSink), parallelism = 1, name = "RandomSink", constraints = {}};
+	PipelineVar_4_Flow4 = {destination = refBy(PipelineVar_4_Sink0), grouping = Grouping.shuffleGrouping, name = "f5", constraints = {}};
+	PipelineVar_4_FamilyElement3 = {family = refBy(switchFamily), output = {refBy(PipelineVar_4_Flow4)}, parallelism = 1, name = "SwitchFm", constraints = {}};
+	PipelineVar_4_Flow3 = {destination = refBy(PipelineVar_4_FamilyElement3), grouping = Grouping.shuffleGrouping, name = "f4", constraints = {}};
+	PipelineVar_4_FamilyElement2 = {family = refBy(aggregateFamily), output = {refBy(PipelineVar_4_Flow3)}, parallelism = 1, name = "AggreFm3", constraints = {}};
+	PipelineVar_4_Flow2 = {destination = refBy(PipelineVar_4_FamilyElement2), grouping = Grouping.shuffleGrouping, name = "f3", constraints = {}};
+	PipelineVar_4_FamilyElement1 = {family = refBy(aggregateFamily), output = {refBy(PipelineVar_4_Flow2)}, parallelism = 1, name = "AggreFm2", constraints = {}};
+	PipelineVar_4_Flow1 = {destination = refBy(PipelineVar_4_FamilyElement1), grouping = Grouping.shuffleGrouping, name = "f2", constraints = {}};
+	PipelineVar_4_FamilyElement0 = {family = refBy(aggregateFamily), output = {refBy(PipelineVar_4_Flow1)}, parallelism = 1, name = "AggreFm1", constraints = {}};
+	PipelineVar_4_Flow0 = {destination = refBy(PipelineVar_4_FamilyElement0), grouping = Grouping.shuffleGrouping, name = "f1", constraints = {}};
+	PipelineVar_4_Source0 = {output = {refBy(PipelineVar_4_Flow0)}, source = refBy(randomSource), parallelism = 1, name = "RandomSrc", constraints = {}};
+	PipelineVar_4 = {name = "AggregatePip", sources = {refBy(PipelineVar_4_Source0)}, numworkers = 1, artifact = "eu.qualimaster:AggregatePip:0.0.1-SNAPSHOT", debug = false, constraints = {}, fastSerialization = false};
+	freeze {
+		PipelineVar_4;
+		PipelineVar_4_Source0;
+		PipelineVar_4_Flow0;
+		PipelineVar_4_FamilyElement0;
+		PipelineVar_4_Flow1;
+		PipelineVar_4_FamilyElement1;
+		PipelineVar_4_Flow2;
+		PipelineVar_4_FamilyElement2;
+		PipelineVar_4_Flow3;
+		PipelineVar_4_FamilyElement3;
+		PipelineVar_4_Flow4;
+		PipelineVar_4_Sink0;
+	} but (f|f.bindingTime == BindingTime.runtime)
+}

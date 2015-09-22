@@ -2,6 +2,7 @@ package eu.qualimaster.families.imp;
 
 import eu.qualimaster.families.inf.*;
 import eu.qualimaster.observables.IObservable;
+import eu.qualimaster.dataManagement.serialization.SerializerRegistry;
 
 /**
  * The implementation for the algorithm family "IFCorrelationTwitter" (GEN).
@@ -55,6 +56,9 @@ public class FCorrelationTwitter implements IFCorrelationTwitter {
         public void setVolume(int volume){
             this.volume = volume;
         }
+        static {
+            SerializerRegistry.register("IFCorrelationTwitterAnalyzedStreamInput", FCorrelationTwitterSerializers.IFCorrelationTwitterAnalyzedStreamInputSerializer.class);
+        }
     }
 
     /**
@@ -74,6 +78,9 @@ public class FCorrelationTwitter implements IFCorrelationTwitter {
         public void setAllSymbols(java.util.List<String> allSymbols){
             this.allSymbols = allSymbols;
         }
+        static {
+            SerializerRegistry.register("IFCorrelationTwitterSymbolListInput", FCorrelationTwitterSerializers.IFCorrelationTwitterSymbolListInputSerializer.class);
+        }
     }
 
     /**
@@ -92,6 +99,9 @@ public class FCorrelationTwitter implements IFCorrelationTwitter {
         @Override
         public void setPairwiseCorrelationTwitter(String pairwiseCorrelationTwitter){
             this.pairwiseCorrelationTwitter = pairwiseCorrelationTwitter;
+        }
+        static {
+            SerializerRegistry.register("IFCorrelationTwitterPairwiseTwitterOutput", FCorrelationTwitterSerializers.IFCorrelationTwitterPairwiseTwitterOutputSerializer.class);
         }
     }
 
@@ -115,7 +125,6 @@ public class FCorrelationTwitter implements IFCorrelationTwitter {
     public void calculate(IIFCorrelationTwitterSymbolListInput input, IIFCorrelationTwitterPairwiseTwitterOutput result){
     }
 
-    // algorithm parameters
 
     /**
      * Sets the algorithm parameter "windowSize".

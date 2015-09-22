@@ -136,8 +136,8 @@ project PriorityPipCfg {
 			refBy(PriorityPip_Source0), refBy(PriorityPip_Source1)
 		}, 		
 		numworkers = 7,
-		artifact = "eu.qualimaster:PriorityPip:0.0.2-SNAPSHOT"
-		
+		artifact = "eu.qualimaster:PriorityPip:0.0.2-SNAPSHOT",
+		debug = false		
 	};
 	freeze {
 		PriorityPip;

@@ -2,6 +2,7 @@ package eu.qualimaster.families.imp;
 
 import eu.qualimaster.families.inf.*;
 import eu.qualimaster.observables.IObservable;
+import eu.qualimaster.dataManagement.serialization.SerializerRegistry;
 
 /**
  * The implementation for the algorithm family "IFPreprocessor" (GEN).
@@ -24,6 +25,9 @@ public class FPreprocessor implements IFPreprocessor {
         @Override
         public void setSymbolTuple(String symbolTuple){
             this.symbolTuple = symbolTuple;
+        }
+        static {
+            SerializerRegistry.register("IFPreprocessorSpringStreamInput", FPreprocessorSerializers.IFPreprocessorSpringStreamInputSerializer.class);
         }
     }
 
@@ -73,6 +77,9 @@ public class FPreprocessor implements IFPreprocessor {
         @Override
         public void setVolume(int volume){
             this.volume = volume;
+        }
+        static {
+            SerializerRegistry.register("IFPreprocessorPreprocessedStreamOutput", FPreprocessorSerializers.IFPreprocessorPreprocessedStreamOutputSerializer.class);
         }
     }
 

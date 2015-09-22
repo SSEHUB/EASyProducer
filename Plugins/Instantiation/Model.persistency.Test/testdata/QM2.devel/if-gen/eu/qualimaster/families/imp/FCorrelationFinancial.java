@@ -2,6 +2,7 @@ package eu.qualimaster.families.imp;
 
 import eu.qualimaster.families.inf.*;
 import eu.qualimaster.observables.IObservable;
+import eu.qualimaster.dataManagement.serialization.SerializerRegistry;
 
 /**
  * The implementation for the algorithm family "IFCorrelationFinancial" (GEN).
@@ -55,6 +56,9 @@ public class FCorrelationFinancial implements IFCorrelationFinancial {
         public void setVolume(int volume){
             this.volume = volume;
         }
+        static {
+            SerializerRegistry.register("IFCorrelationFinancialPreprocessedStreamInput", FCorrelationFinancialSerializers.IFCorrelationFinancialPreprocessedStreamInputSerializer.class);
+        }
     }
 
     /**
@@ -74,6 +78,9 @@ public class FCorrelationFinancial implements IFCorrelationFinancial {
         public void setAllSymbols(java.util.List<String> allSymbols){
             this.allSymbols = allSymbols;
         }
+        static {
+            SerializerRegistry.register("IFCorrelationFinancialSymbolListInput", FCorrelationFinancialSerializers.IFCorrelationFinancialSymbolListInputSerializer.class);
+        }
     }
 
     /**
@@ -92,6 +99,9 @@ public class FCorrelationFinancial implements IFCorrelationFinancial {
         @Override
         public void setPairwiseCorrelationFinancial(String pairwiseCorrelationFinancial){
             this.pairwiseCorrelationFinancial = pairwiseCorrelationFinancial;
+        }
+        static {
+            SerializerRegistry.register("IFCorrelationFinancialPairwiseFinancialOutput", FCorrelationFinancialSerializers.IFCorrelationFinancialPairwiseFinancialOutputSerializer.class);
         }
     }
 
@@ -115,7 +125,6 @@ public class FCorrelationFinancial implements IFCorrelationFinancial {
     public void calculate(IIFCorrelationFinancialSymbolListInput input, IIFCorrelationFinancialPairwiseFinancialOutput result){
     }
 
-    // algorithm parameters
 
     /**
      * Sets the algorithm parameter "windowSize".

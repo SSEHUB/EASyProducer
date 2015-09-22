@@ -1,0 +1,12 @@
+package eu.qualimaster.families.protobuf;
+option java_package = "eu.qualimaster.protos";
+option java_outer_classname = "RandomFamilyProtos";
+
+message SIRandomFamilyRandomDataInput {
+    required int32 randomInteger = 1;
+}
+
+message SIRandomFamilyProccessedDataOutput {
+    required int32 randomInteger = 1;
+}
+

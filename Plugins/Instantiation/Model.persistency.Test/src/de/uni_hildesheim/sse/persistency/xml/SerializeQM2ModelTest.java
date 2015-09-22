@@ -76,13 +76,7 @@ public class SerializeQM2ModelTest extends AbstractUtil {
      */
     @BeforeClass
     public static void setUpBeforeClass() {
-        if (TEMPDATA.exists()) {
-            try {
-                FileUtils.deleteDirectory(TEMPDATA);
-            } catch (IOException e) {
-                Assert.fail("Could not cleanup temp data directory: " + TEMPDATA.getAbsolutePath());
-            }
-        }
+        deleteTmpDir();
         TEMPDATA.mkdir();
         if (!Environment.runsInEclipse()) {
             Registration.register();
@@ -123,6 +117,16 @@ public class SerializeQM2ModelTest extends AbstractUtil {
                     registeredPluginsBackup.add(registeredPlugin);
                     registeredPluginsIterator.remove();
                 }
+            }
+        }
+    }
+
+    private static void deleteTmpDir() {
+        if (TEMPDATA.exists()) {
+            try {
+                FileUtils.deleteDirectory(TEMPDATA);
+            } catch (IOException e) {
+                Assert.fail("Could not cleanup temp data directory: " + TEMPDATA.getAbsolutePath());
             }
         }
     }
@@ -287,13 +291,7 @@ public class SerializeQM2ModelTest extends AbstractUtil {
     
     @Test
     public void testApplyVilScript() {
-        if (TEMPDATA.exists()) {
-            try {
-                FileUtils.deleteDirectory(TEMPDATA);
-            } catch (IOException e) {
-                Assert.fail("Could not cleanup temp data directory: " + TEMPDATA.getAbsolutePath());
-            }
-        }
+        deleteTmpDir();
         TEMPDATA.mkdir();
         // Write
         Assert.assertFalse("File does exist: " + APPLY_XML.getAbsolutePath(), APPLY_XML.exists());

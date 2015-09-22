@@ -1,11 +1,14 @@
 package eu.qualimaster.data.imp;
 
+import eu.qualimaster.data.inf.IRandomSource;
 import eu.qualimaster.data.inf.IRandomSource.*;
+import eu.qualimaster.dataManagement.strategies.*;
+import eu.qualimaster.observables.*;
 
 /**
 * Define the data source class(GEN).
 **/
-public class RandomSource {
+public class RandomSource implements IRandomSource{
 
     /**
     * Define the source data input interface.
@@ -36,7 +39,33 @@ public class RandomSource {
     * Returns a specific type of data source.
     * @return RandomSourceRandomDataOutput the source data
     **/
+    @Override
     public RandomSourceRandomDataOutput getRandomData() {
         return null;
     }
+    // data source parameters
+
+    /**
+     * Sets the data source parameter "delay".
+     *
+     * @param value the new value of the data source parameter
+     */
+    @Override
+    public void setParameterDelay(int value) {
+    }
+
+    @Override
+    public void connect() {}
+
+    @Override
+    public void disconnect(){}
+
+    @Override
+    public void setStrategy(IStorageStrategyDescriptor strategy) {}
+
+    @Override
+    public IStorageStrategyDescriptor getStrategy() { return NoStorageStrategyDescriptor.INSTANCE;}
+
+    @Override
+    public Double getMeasurement(IObservable observable) { return null;}
 }

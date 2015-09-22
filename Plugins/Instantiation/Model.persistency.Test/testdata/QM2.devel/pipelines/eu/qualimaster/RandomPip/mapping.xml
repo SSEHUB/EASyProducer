@@ -1,13 +1,13 @@
 <mapping>
-  <pipeline name="RandomPip" class="eu.qualimaster.topologies.RandomPip.Topology">
-      <node name="Random Source">
-          <component name="PipelineVar_1_Source0" container="RandomPip" class="eu.qualimaster.topologies.PipelineVar_1_Source0Source" receiver="true"/>
+  <pipeline name="RandomPip" class="eu.qualimaster.RandomPip.topology.Topology">
+      <node name="src" type="source">
+          <component name="PipelineVar_1_Source0" container="RandomPip" class="eu.qualimaster.RandomPip.topology.PipelineVar_1_Source0Source" receiver="true"/>
       </node>
-      <node name="randomFamily">
-          <component name="PipelineVar_1_FamilyElement0" container="RandomPip" class="eu.qualimaster.topologies.PipelineVar_1_FamilyElement0FamilyElement" receiver="true"/>
+      <node name="processor" type="family">
+          <component name="PipelineVar_1_FamilyElement0" container="RandomPip" class="eu.qualimaster.RandomPip.topology.PipelineVar_1_FamilyElement0FamilyElement" receiver="true"/>
       </node>
-      <node name="Random Sink">
-          <component name="PipelineVar_1_Sink0" container="RandomPip" class="eu.qualimaster.topologies.PipelineVar_1_Sink0Sink" receiver="true"/>
+      <node name="snk" type="sink">
+          <component name="PipelineVar_1_Sink0" container="RandomPip" class="eu.qualimaster.RandomPip.topology.PipelineVar_1_Sink0Sink" receiver="true"/>
       </node>
       <algorithm name="RandomProcessor1" class="eu.qualimaster.algorithms.RandomProcessor1"/>
       <algorithm name="RandomProcessor2" class="eu.qualimaster.algorithms.RandomProcessor2"/>

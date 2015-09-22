@@ -6,18 +6,22 @@ vilScript QM (Project source, Configuration config, Project target) {
     Path pipelines = "$target/pipelines/eu/qualimaster";
 	Path pipelinesXml = "$target/pipelines.xml";
     Path ifGen = "$target/if-gen";
-//    Path maxJ = "$hwGen/EngineCode/src/qm";
-//    Path maxC = "$hwGen/CPUCode"; 
+    Path modelPom = "$target/pom.xml";
+    Path serializers = "$target/serializers";
+    Path hwAlgorithms = "$target/hardwareAlgorithms";
 
-    mapOf(String, setOf(DecisionVariable)) lastElementMap = {};
+    mapOf(String, setOf(DecisionVariable)) lastElementMap = {}; //map<eltVarname, lastElements>
     mapOf(Tuple,Tuple) inputToOutputMap = {};
-    mapOf(Tuple,String) nameToOutputMap = {};
-    mapOf(String, mapOf(Tuple,Tuple)) globalMap = {};
-    mapOf(String, setOf(DecisionVariable)) familiesInPipeline = {};
+    mapOf(Tuple,String) nameToOutputMap = {}; //obtain the interface name of the output tuples. map<outputTuple, familyInterfaceName>
+    mapOf(String, mapOf(Tuple,Tuple)) globalMap = {}; //map<eltVarname, map<inputTuple, outputTuple>>
+    mapOf(String, setOf(DecisionVariable)) familiesInPipeline = {};    
 
     cleanup(Project target) = : {
 		pipelines.delete(); 
-		pipelinesXml.delete();      
+		pipelinesXml.delete();
+		modelPom.delete();   
+		serializers.delete();
+		hwAlgorithms.delete();   
     }
     
     // this needs to be done separately, please do not clear the interfaces in cleanup
@@ -25,14 +29,13 @@ vilScript QM (Project source, Configuration config, Project target) {
         ifGen.delete();
     }      
     
-    protected processElement(sequenceOf(DecisionVariable) output, DecisionVariable prevar, Configuration config, String topoName) = : {     	
+    protected processElement(sequenceOf(DecisionVariable) output, DecisionVariable prevar, Configuration config, String topoName, Boolean debug) = : {     	
         map(Flow v=output) { 
             DecisionVariable elt = v.destination;
-            String eltName = elt.varName().firstToUpperCase();
-            
+            String eltName = elt.varName().firstToUpperCase();            
             String name = elt.varName().firstToUpperCase() + elt.type();         
-            vilTemplateProcessor("storm" + elt.type(), config, "$pipelines/${toIdentifier(topoName)}/topology/$name.java", preElt = prevar, elt=elt, topoName=topoName, nameToOutputMap=nameToOutputMap, globalMap=globalMap, lastElementMap=lastElementMap);
-            processElement(elt.byName("output").variables(), elt, config, topoName);
+            vilTemplateProcessor("storm" + elt.type(), config, "$pipelines/${toIdentifier(topoName)}/topology/$name.java", preElt = prevar, elt=elt, topoName=topoName, nameToOutputMap=nameToOutputMap, globalMap=globalMap, lastElementMap=lastElementMap, debug=debug);
+            processElement(elt.byName("output").variables(), elt, config, topoName, debug);
         }; 
     }
     
@@ -45,22 +48,16 @@ vilScript QM (Project source, Configuration config, Project target) {
         vilTemplateProcessor("algorithmTopologyInterface", config, "$prefixPath/ITopologyCreate.java");  
         */
 		map(DecisionVariable f=topLevel.families) {
-			String ifName = "I" + f.varName().firstToUpperCase(); 
-			String fName = f.varName().firstToUpperCase();			
+			Family family = f;
+			String ifName = "I" + family.name.firstToUpperCase(); 
+			String fName = family.name.firstToUpperCase();			
 
 			//generate the family interfaces and implementations
-			createInterfacesFor(f, ifName, config, target);
-			createImpFor(f, fName, config, target);
-			/* 
-			//create the family hardware classes
-			Family fm = f;
-			map(Algorithm alg=fm.members) {
-				if(alg.hwNode.isConfigured() and !alg.hwNode.isNull()){			
-				createFamilyHardware(f, ifName, config, target);	// TODO select hardware-containing families only	
-				}		    
-			};
-			*/
+			createInterfacesFor(f, ifName, config, target);			
+			createProtosFor(f, fName, config, target);
+			createImpFor(f, fName, config, target);		
 		};
+		vilTemplateProcessor("serializationRegistry", config, "$ifGen/eu/qualimaster/families/imp/SerializationRegistry.java", families=topLevel.families);
 	}  
  
     /**
@@ -96,9 +93,10 @@ vilScript QM (Project source, Configuration config, Project target) {
 	    	   String name = lastElt.varName().firstToUpperCase();
 	    	   setOf(DecisionVariable) preLastEltSet = lastElementMap.get(name);
 	    	   checkedLastElementForOutputTuples(preLastEltSet, outputTuples);
-	    	}	    	    	 	 
+	    	}	   	    	 	 
 	    	   map(Tuple t = tmpTuples){
-	    	   outputTuples.add(t);
+	    	   	  outputTuples.add(t); //..TODO.. to avoid adding the duplicates
+	    	   
 	           };
 	    	    	     	    	 	
 	    };
@@ -132,7 +130,7 @@ vilScript QM (Project source, Configuration config, Project target) {
 	    	    //check last elements linked to the current elt in order to obtain the output Tuples from last element(lastElement only can be Source or Family)
 	    	    lastElementSet = lastElementMap.get(eltName);
 	    	    checkedLastElementForOutputTuples(lastElementSet, outputTuples); //get all output tuples from last elements	    
-	    	    tempMap = outputTuples.mapSequence(inputTuples);
+	    	    tempMap = inputTuples.mapAny(outputTuples);
 	    	    globalMap.add(eltName, tempMap);
 	    	    processForGlobalMap(elt.byName("output").variables(), elt, families); 
     	    } else { // if elt is DataManagementElement, just pass to next bolt
@@ -146,18 +144,10 @@ vilScript QM (Project source, Configuration config, Project target) {
      */
     protected obtainNameToOutputMap(Tuples tuples,  String elementName) = : {//nameToOutputMap --> <elementName, outputTuple>
     	String eName = "";
-//    	Integer size = tuples.size();
-//        Integer tupleCount = 1;
         map(Tuple t = tuples) {
-//            if(size > 1) {
-//            	eName = elementName + "$tupleCount";
-//            }else{
-//            	eName = elementName;
-//            }
 			eName = t.name;
             String name = elementName + firstToUpperCase(eName) + "Output";
             nameToOutputMap.add(t,name);    
-//            tupleCount = tupleCount +1;
         };
     }
     
@@ -196,6 +186,7 @@ vilScript QM (Project source, Configuration config, Project target) {
     protected createImpFor(Family family, String fName, Configuration config, Project target) = : {
     	String prefixImpPath = "$ifGen/eu/qualimaster/families/imp/${toIdentifier(fName)}";
     	vilTemplateProcessor("familyImplementationJava", config, "$prefixImpPath.java", family=family, fName=fName);
+    	vilTemplateProcessor("familySerialization", config, "${prefixImpPath}Serializers.java", family=family, fName=fName);
     }
     
     protected createInterfacesFor(Family family, String ifName, Configuration config, Project target) = : {
@@ -204,28 +195,31 @@ vilScript QM (Project source, Configuration config, Project target) {
     	//vilTemplateProcessor("familyInterfaceC", config, "$prefixPath.c", family=family, ifName=ifName);
     	
     }
-     	 
-    protected createFamilyHardware(Family family, String ifName, Configuration config, Project target) = :{
-    	Integer end = ifName.length();
-    	map(Algorithm alg : family.members) {
-    		if(alg.hwNode.isConfigured() and !alg.hwNode.isNull()) {
-    		    String algName = alg.name;
-    		    String prefixPath = "$ifGen/eu/qualimaster/hardware/imp/${toIdentifier(algName)}";
-    	        vilTemplateProcessor("hardwareConnection", config, "$prefixPath.java", family=family, ifName=ifName, hwName=algName, nameToOutputMap=nameToOutputMap, globalMap=globalMap);	
-    		}
-    	};    	
-    }
     
-    protected createHardwareConnector(DecisionVariable elt) = : {
-    	String eltName = elt.varName().firstToUpperCase();
-    	DecisionVariable f = elt.byName("family");
-    	String ifName = "I" + f.varName().firstToUpperCase(); 
-    	Family fm = f;
-    }
+	protected createProtosFor(Family family, String fName, Configuration config, Project target) = : {
+        String prefixPath = "$ifGen/protobuf/${toIdentifier(fName)}";
+    	vilTemplateProcessor("protoFiles", config, "$prefixPath.proto", family=family, fName=fName);
+    	
+    }	
+    
+    protected createHardwareAlgorithms(Family family, String pipelineName, Configuration config, Project target) = : {
+    	map(Algorithm alg : family.members) {
+    		String algName = alg.name;
+    		String artifact = alg.artifact;
+    		if(alg.hwNode.isConfigured() and !alg.hwNode.isNull()) {
+    			String prefixPath = "$hwAlgorithms/eu/qualimaster/algorithms/${firstToUpperCase(toIdentifier(algName))}";
+    			vilTemplateProcessor("hardwareAlgorithmSubTopology", config, "$prefixPath/HardwareAlgorithmSubTopology.java", family=family, pipelineName=pipelineName, algName=algName);
+    			vilTemplateProcessor("hardwareConnectionBolt", config, "$prefixPath/HardwareConnectionBolt.java", family=family, algName=algName);
+    			vilTemplateProcessor("hardwareConnectionSpout", config, "$prefixPath/HardwareConnectionSpout.java", family=family, algName=algName);
+    			vilTemplateProcessor("hardwareAlgorithmPom", config, "$prefixPath/pom.tmp", artifact=artifact);
+    			maven("$prefixPath");
+    		}
+    	};
+    } 
     
     package(String topoName) = : {
     	//jar("${target.getPath()}/bin", "${target.getPath()}/bin/**/*.class", "${target.getPath()}/Lib.jar");
-    	maven("$pipelines/${toIdentifier(topoName)}");
+    	maven("$pipelines/${toIdentifier(topoName)}",true);
     }
     
     main(Project source, Configuration config, Project target) = : cleanup(target) {  
@@ -234,7 +228,7 @@ vilScript QM (Project source, Configuration config, Project target) {
     	    	              
         interfaces(source, config, target);
         //generate a basic HardwareStub interface
-        vilTemplateProcessor("hardwareStub", config, "$ifGen/eu/qualimaster/hardware/inf/HardwareStub.java"); 
+//        vilTemplateProcessor("hardwareStub", config, "$ifGen/eu/qualimaster/hardware/inf/HardwareStub.java"); 
 
        // generate data source interfaces
 		sequenceOf(DataSource) sources = cfg.dataSources;
@@ -244,7 +238,6 @@ vilScript QM (Project source, Configuration config, Project target) {
             vilTemplateProcessor("dataSourceImplementation", config, "$ifGen/eu/qualimaster/data/imp/${toIdentifier(srcName)}.java", elt=dataSrc);
 	    };
 	    //generate data sink interfaces
-//	    sequenceOf(DecisionVariable) sinks = config.byName("dataSinks").variables();
 		sequenceOf(DataSink) sinks = cfg.dataSinks;
 	    map(DataSink dataSnk : sinks) {
             String snkName = dataSnk.name.firstToUpperCase();
@@ -254,35 +247,48 @@ vilScript QM (Project source, Configuration config, Project target) {
 	    	    
 	    sequenceOf(DecisionVariable) activePipelines = cfg.activePipelines.variables();
 		String interfaceArtifact = cfg.interfaceArtifact;
+		String repositoryURL = cfg.repositoryURL;
+		String modelArtifact = cfg.modelArtifact;
+		
+		setOf(FieldType) types = cfg.types;
+		
 	    //generate the interface pom
-	    vilTemplateProcessor("interfacesXml", config, "$ifGen/pom.tmp", interfaceArtifact=interfaceArtifact);
+	    vilTemplateProcessor("interfacesXml", config, "$ifGen/pom.tmp", interfaceArtifact=interfaceArtifact, types=types);
 	    //package interfaces --- should use maven install 
 	    maven("$ifGen"); 
-	     
-        vilTemplateProcessor("pipelinesXml", config, "$target/pipelines.tmp", pipelines=activePipelines, interfaceArtifact=interfaceArtifact);
+	    //generate the pom for the model artifact
+	    vilTemplateProcessor("modelArtifactPom", config, "$target/pom.tmp", modelArtifact=modelArtifact); 
+	    maven("$target");
+	    
+        vilTemplateProcessor("pipelinesXml", config, "$target/pipelines.tmp", pipelines=activePipelines, interfaceArtifact=interfaceArtifact, modelArtifact=modelArtifact);
         map(DecisionVariable vPip : activePipelines) {
         	Pipeline pip = vPip;        	
         	String topoName = pip.name;
+        	Boolean debug = pip.debug;
         	//generate a pom xml
-        	vilTemplateProcessor("pomXml", config, "$pipelines/${toIdentifier(topoName)}/pom.tmp", pipeline=pip);
+        	vilTemplateProcessor("pomXml", config, "$pipelines/${toIdentifier(topoName)}/pom.tmp", pipeline=pip, repoURL=repositoryURL);
             //deriving a mapping xml
             vilTemplateProcessor("mappingXml", config, "$pipelines/${toIdentifier(topoName)}/mapping.tmp", pipeline=pip);
-        	setOf(DecisionVariable) families = {};
+        	setOf(DecisionVariable) families = {}; //collect the families of the pipeline in order to manage the imports for the topology class
         	//test for map
         	obtainLastElementMap(pip);
         	obtainGlobalMapForTuples(pip, families);
+        	//generate the hardware algorithms
+        	map(Family family : families) {
+        		createHardwareAlgorithms(family, topoName, config, target);
+        	};
+        	
         	familiesInPipeline.add(topoName, families);
-        	//vilTemplateProcessor("test", config, "$srcGen/test.java", nameToOutputMap=nameToOutputMap, globalMap=globalMap,lastElementMap=lastElementMap,familiesInPipeline=familiesInPipeline);             
+        	//vilTemplateProcessor("pipelineMap", config, "$pipelines/${toIdentifier(topoName)}/pipelineMap.java",inputToOutputMap=inputToOutputMap, nameToOutputMap=nameToOutputMap, globalMap=globalMap, lastElementMap=lastElementMap);             
         	         
             vilTemplateProcessor("stormPipeline", config, "$pipelines/${toIdentifier(topoName)}/topology/Topology.java", pipeline=pip, familiesInPipeline=familiesInPipeline);
             map(DecisionVariable v=pip.sources) {
                 String name = v.varName().firstToUpperCase() + v.type();
-                vilTemplateProcessor("storm" + v.type(), config, "$pipelines/${toIdentifier(topoName)}/topology/$name.java", elt=v, topoName=topoName);
-                processElement(v.byName("output").variables(), v, config, topoName);
+                vilTemplateProcessor("storm" + v.type(), config, "$pipelines/${toIdentifier(topoName)}/topology/$name.java", elt=v, topoName=topoName, debug=debug);
+                processElement(v.byName("output").variables(), v, config, topoName, debug);
             };
-           // vilTemplateProcessor("maxKernel", config, "$maxJ/Pipeline.maxj", pipeline=pip);
-           // vilTemplateProcessor("maxManager", config, "$maxJ/PipelineManager.maxj", pipeline=pip);
-           // vilTemplateProcessor("maxHost", config, "$maxC/PipelineCpuCode.c", pipeline=pip);
+            
+            
            package(topoName);           
         };                        
                      

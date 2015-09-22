@@ -20,7 +20,7 @@ public class PriorityPip_DataManagementElement0DataManagementElement extends Bas
 
     final static Logger logger = Logger.getLogger(PriorityPip_DataManagementElement0DataManagementElement.class);
     transient OutputCollector _collector;
-    private static String streamId = "PriorityPip_DataManagementElement0Stream";
+    private static String streamId;
     private transient IStorageSupport support;
     transient IIFSentimentAnalysisAnalyzedStreamOutput iTuple = null;
 
@@ -40,9 +40,9 @@ public class PriorityPip_DataManagementElement0DataManagementElement extends Bas
 
     public void execute(Tuple tuple) {
         iTuple = (IIFSentimentAnalysisAnalyzedStreamOutput)tuple.getValue(0);
-        _collector.emit(streamId, tuple, new Values(iTuple));
-        support.write(iTuple);
-		_collector.ack(tuple);
+        streamId = "PriorityPip_DataManagementElement0StreamAnalyzedStream";
+        //support.write(iTuple);
+        //_collector.ack(tuple);
     }
 
     @Override
@@ -51,10 +51,7 @@ public class PriorityPip_DataManagementElement0DataManagementElement extends Bas
     }
 
     public void declareOutputFields(OutputFieldsDeclarer declarer) {
-        declarer.declareStream("PriorityPip_DataManagementElement0Stream", new Fields("IIHBaseDataManagementOutput"));
+        declarer.declareStream("PriorityPip_DataManagementElement0StreamAnalyzedStream", new Fields("IIHBaseDataManagementOutput"));
     }
 
-	@Override
-	public void onSignal(byte[] data) {
-	}
 }

@@ -1,11 +1,14 @@
 package eu.qualimaster.data.imp;
 
+import eu.qualimaster.data.inf.IRandomSink;
 import eu.qualimaster.data.inf.IRandomSink.*;
+import eu.qualimaster.dataManagement.strategies.*;
+import eu.qualimaster.observables.*;
 
 /**
 * Define the data source class(GEN).
 **/
-public class RandomSink {
+public class RandomSink implements IRandomSink{
 
     /**
     * Define the source data input interface.
@@ -33,10 +36,24 @@ public class RandomSink {
 
 
     /**
-    * Returns a specific type of data sink.
-    * @return RandomSinkProccessedDataInput the sink data
+    * Posts a specific type of data sink.
+    * @param data the sink data RandomSinkProccessedDataInput
     **/
-    public RandomSinkProccessedDataInput getDataProccessedData() {
-        return null;
+    @Override
+    public void postDataProccessedData(IRandomSinkProccessedDataInput data) {
     }
+    @Override
+    public void connect() {}
+
+    @Override
+    public void disconnect(){}
+
+    @Override
+    public void setStrategy(IStorageStrategyDescriptor strategy) {}
+
+    @Override
+    public IStorageStrategyDescriptor getStrategy() { return NoStorageStrategyDescriptor.INSTANCE;}
+
+    @Override
+    public Double getMeasurement(IObservable observable) { return null;}
 }

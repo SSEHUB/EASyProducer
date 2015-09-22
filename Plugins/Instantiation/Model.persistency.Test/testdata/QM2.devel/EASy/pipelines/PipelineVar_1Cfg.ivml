@@ -1,8 +1,10 @@
 project PipelineVar_1Cfg {
 
+	import Basics;
 	import Pipelines;
 	import FamiliesCfg;
 	import DataManagementCfg;
+	attribute BindingTime bindingTime = BindingTime.compile to PipelineVar_1Cfg;
 	Pipeline PipelineVar_1;
 	Source PipelineVar_1_Source0;
 	Flow PipelineVar_1_Flow0;
@@ -46,7 +48,8 @@ project PipelineVar_1Cfg {
 			refBy(PipelineVar_1_Source0)
 		}, 
 		numworkers = 1, 
-		artifact = "eu.qualimaster.test:RandomPip:0.0.1"
+		artifact = "eu.qualimaster.test:RandomPip:0.0.2-SNAPSHOT",
+		fastSerialization = false
 	};
 	freeze {
 		PipelineVar_1;
@@ -55,5 +58,5 @@ project PipelineVar_1Cfg {
 		PipelineVar_1_FamilyElement0;
 		PipelineVar_1_Flow1;
 		PipelineVar_1_Sink0;
-	}
+	} but (f|f.bindingTime == BindingTime.runtime)
 }

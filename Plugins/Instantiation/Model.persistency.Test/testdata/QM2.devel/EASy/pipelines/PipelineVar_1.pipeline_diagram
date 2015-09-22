@@ -5,7 +5,7 @@
       <layoutConstraint xmi:type="notation:Location" xmi:id="_SQb_YcfeEeSCGIvEn-RMYA" y="5"/>
     </children>
     <element xmi:type="pipeline:Source" href="PipelineVar_1.pipeline#//@nodes.0"/>
-    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_SQV4wcfeEeSCGIvEn-RMYA" x="104" y="299"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_SQV4wcfeEeSCGIvEn-RMYA" x="105" y="275"/>
   </children>
   <children xmi:type="notation:Shape" xmi:id="_TU00kMfeEeSCGIvEn-RMYA" type="2005" fontName="Segoe UI">
     <children xmi:type="notation:DecorationNode" xmi:id="_TU00ksfeEeSCGIvEn-RMYA" type="5005">

@@ -1,11 +1,14 @@
 package eu.qualimaster.data.imp;
 
+import eu.qualimaster.data.inf.ISpringFinancialData;
 import eu.qualimaster.data.inf.ISpringFinancialData.*;
+import eu.qualimaster.dataManagement.strategies.*;
+import eu.qualimaster.observables.*;
 
 /**
 * Define the data source class(GEN).
 **/
-public class SpringFinancialData {
+public class SpringFinancialData implements ISpringFinancialData{
 
     /**
     * Define the source data input interface.
@@ -59,6 +62,7 @@ public class SpringFinancialData {
     * Returns a specific type of data source.
     * @return SpringFinancialDataSymbolListOutput the source data
     **/
+    @Override
     public SpringFinancialDataSymbolListOutput getSymbolList() {
         return null;
     }
@@ -66,7 +70,22 @@ public class SpringFinancialData {
     * Returns a specific type of data source.
     * @return SpringFinancialDataSpringStreamOutput the source data
     **/
+    @Override
     public SpringFinancialDataSpringStreamOutput getSpringStream() {
         return null;
     }
+    @Override
+    public void connect() {}
+
+    @Override
+    public void disconnect(){}
+
+    @Override
+    public void setStrategy(IStorageStrategyDescriptor strategy) {}
+
+    @Override
+    public IStorageStrategyDescriptor getStrategy() { return NoStorageStrategyDescriptor.INSTANCE;}
+
+    @Override
+    public Double getMeasurement(IObservable observable) { return null;}
 }

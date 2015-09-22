@@ -13,6 +13,9 @@ import eu.qualimaster.families.imp.*;
 import eu.qualimaster.common.signal.*;
 import eu.qualimaster.base.algorithm.*;
 import eu.qualimaster.base.algorithm.IFamily.State;
+import eu.qualimaster.infrastructure.PipelineOptions;
+import eu.qualimaster.pipeline.DefaultModeException;
+import eu.qualimaster.pipeline.DefaultModeMonitoringEvent;
 import eu.qualimaster.algorithms.imp.correlation.softwaresubtopology.TopoSoftwareCorrelationFinancial;
 import eu.qualimaster.algorithms.imp.correlation.hardwaresubtopology.TopoHardwareCorrelationFinancial;
 import eu.qualimaster.families.inf.IFPreprocessor.*;
@@ -38,13 +41,21 @@ public class PriorityPip_FamilyElement1FamilyElement extends BaseSignalBolt {
         super(name, namespace);
     }
 
-    	    /**
+    /**
      * Sends an algorithm change event and considers whether the coordination layer shall be bypassed for direct
      * testing.
      * @param algorithm the new algorithm
      */
     private static void sendAlgorithmChangeEvent(String algorithm) {
-        EventManager.send(new AlgorithmChangedMonitoringEvent("PriorityPip", "fCorrelationFinancial", algorithm));
+        EventManager.send(new AlgorithmChangedMonitoringEvent("PriorityPip", "PriorityPip_FamilyElement1", algorithm));
+    }
+
+    /**
+     * Sends an a default mode monitoring event with a DefaultModeException case.
+     * @param exceptionCase the DefaultModeException case
+     */
+    private static void sendDefaultModeMonitoringEvent(DefaultModeException exceptionCase) {
+        EventManager.send(new DefaultModeMonitoringEvent("PriorityPip", "PriorityPip_FamilyElement1", exceptionCase));
     }
 
     public void prepare(Map map, TopologyContext topologyContext, OutputCollector collector) {
@@ -64,6 +75,7 @@ public class PriorityPip_FamilyElement1FamilyElement extends BaseSignalBolt {
            // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        alg.setParameterWindowSize(PipelineOptions.getExecutorIntArgument(map, getName(), "windowSize", 30));
         alg.switchState(State.ACTIVATE); //activate the current algorithm
 		sendAlgorithmChangeEvent("TopoSoftwareCorrelationFinancial");
         streamId = "PriorityPip_FamilyElement11TopoStream";
@@ -78,94 +90,102 @@ public class PriorityPip_FamilyElement1FamilyElement extends BaseSignalBolt {
             inputPreprocessedStream.setTimestamp(iTuplePreprocessedStream.getTimestamp());
             inputPreprocessedStream.setValue(iTuplePreprocessedStream.getValue());
             inputPreprocessedStream.setVolume(iTuplePreprocessedStream.getVolume());
-            alg.calculate(inputPreprocessedStream, result);
+            try {
+                alg.calculate(inputPreprocessedStream, result);
+            } catch(DefaultModeException e) {
+                result.setPairwiseCorrelationFinancial(null);
+                sendDefaultModeMonitoringEvent(e);
+            }
             if(alg instanceof ITopologyCreate) {
-                _collector.emit(streamId, tuple, new Values(inputPreprocessedStream));
+                _collector.emit(streamId, new Values(inputPreprocessedStream));
             }
         }
 
         if(tuple.getValue(0) instanceof ISpringFinancialDataSymbolListOutput) {
             iTupleSymbolList = (ISpringFinancialDataSymbolListOutput)tuple.getValue(0);
             inputSymbolList.setAllSymbols(iTupleSymbolList.getAllSymbols());
-            alg.calculate(inputSymbolList, result);
+            try {
+                alg.calculate(inputSymbolList, result);
+            } catch(DefaultModeException e) {
+                result.setPairwiseCorrelationFinancial(null);
+                sendDefaultModeMonitoringEvent(e);
+            }
             if(alg instanceof ITopologyCreate) {
-                _collector.emit(streamId, tuple, new Values(inputSymbolList));
+                _collector.emit(streamId, new Values(inputSymbolList));
             }
         }
 
         if(!(alg instanceof ITopologyCreate)) {
-            _collector.emit(streamId, tuple, new Values(result));
+            _collector.emit(streamId, new Values(result));
         }
-		 _collector.ack(tuple);
+//		 _collector.ack(tuple);
     }
 
-    /**
-    * Receives the signal data for FamilyElement adaptation.
-    * @param data the signal data
-    **/
-	public void onSignal(byte[] data) {
-        String signal=new String(data);
-        logger.info("Received signal: " + signal);
-        //handle the received signal and make related changes, e.g., switch algorithm from software to hardware
-        String[] parts = signal.split(":");
-        if (parts.length >= 2) {
-            if ("param".equals(parts[0]) && 3 == parts.length) {
-       	     switch (parts[1]) { // just for illustration, may need parameter conversion
- 	             case "windowSize" : 
-		         alg.setParameterWindowSize(Integer.parseInt(parts[2])); 
- 	             break;
-	          }
-       	     /*switch (parts[1]) { // just for illustration, may need parameter conversion
- 	             case "param1" : 
-		         alg.setParameterParam1(parts[2]); 
- 	             break;
-	          }*/
- 	         } else if ("alg".equals(parts[0])) {
-	             switch (parts[1]) {
-                    case "TopoSoftwareCorrelationFinancial":
-                        if(!(alg instanceof TopoSoftwareCorrelationFinancial)) {
-							alg.switchState(State.PASSIVATE); //passivate the previous algorithm
-                            try {
-                                Class cls = Class.forName("eu.qualimaster.algorithms.imp.correlation.softwaresubtopology.TopoSoftwareCorrelationFinancial");
-                                alg = (IFCorrelationFinancial) cls.newInstance();
-                            } catch (ClassNotFoundException e) {
-                                e.printStackTrace();
-                            } catch (InstantiationException e) {
-                                e.printStackTrace();
-                            } catch (IllegalAccessException e) {
-                                e.printStackTrace();
-                            }
-		 					sendAlgorithmChangeEvent("TopoSoftwareCorrelationFinancial");
-                            streamId = "PriorityPip_FamilyElement11TopoStream";
-						    alg.switchState(State.ACTIVATE); //activate the current algorithm
-                        }
-		                 break;
-                    case "TopoHardwareCorrelationFinancial":
-                        if(!(alg instanceof TopoHardwareCorrelationFinancial)) {
-							alg.switchState(State.PASSIVATE); //passivate the previous algorithm
-                            try {
-                                Class cls = Class.forName("eu.qualimaster.algorithms.imp.correlation.hardwaresubtopology.TopoHardwareCorrelationFinancial");
-                                alg = (IFCorrelationFinancial) cls.newInstance();
-                            } catch (ClassNotFoundException e) {
-                                e.printStackTrace();
-                            } catch (InstantiationException e) {
-                                e.printStackTrace();
-                            } catch (IllegalAccessException e) {
-                                e.printStackTrace();
-                            }
-		 					sendAlgorithmChangeEvent("TopoHardwareCorrelationFinancial");
-                            streamId = "PriorityPip_FamilyElement12TopoStream";
-						    alg.switchState(State.ACTIVATE); //activate the current algorithm
-                        }
-		                 break;
-	             }
-	         }
+    @Override
+    public void notifyParameterChange(ParameterChangeSignal signal) {
+        try {
+            for(int i = 0; i < signal.getChangeCount(); i++) {
+                ParameterChange para = signal.getChange(i);
+                switch (para.getName()) {
+                    case "windowSize" :
+                        System.out.println("Received parameter changing signal windowSize");
+                        alg.setParameterWindowSize(para.getIntValue()); 
+                        break;
+                }
+            }
+        } catch (ValueFormatException e) {
+            e.printStackTrace();
         }
-	}
+    }
+    @Override
+    public void notifyAlgorithmChange(AlgorithmChangeSignal signal) {
+        System.out.println("Received algorithm switching signal " + signal.getAlgorithm());
+        switch (signal.getAlgorithm()) {
+            case "TopoSoftwareCorrelationFinancial":
+                if(!(alg instanceof TopoSoftwareCorrelationFinancial)) {
+                    alg.switchState(State.PASSIVATE); //passivate the previous algorithm
+                    try {
+                        Class cls = Class.forName("eu.qualimaster.algorithms.imp.correlation.softwaresubtopology.TopoSoftwareCorrelationFinancial");
+                        alg = (IFCorrelationFinancial) cls.newInstance();
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (InstantiationException e) {
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+                    alg.setParameterWindowSize(30);
+                    sendAlgorithmChangeEvent("TopoSoftwareCorrelationFinancial");
+                    streamId = "PriorityPip_FamilyElement11TopoStream";
+                    alg.switchState(State.ACTIVATE); //activate the current algorithm
+                }
+                break;
+            case "TopoHardwareCorrelationFinancial":
+                if(!(alg instanceof TopoHardwareCorrelationFinancial)) {
+                    alg.switchState(State.PASSIVATE); //passivate the previous algorithm
+                    try {
+                        Class cls = Class.forName("eu.qualimaster.algorithms.imp.correlation.hardwaresubtopology.TopoHardwareCorrelationFinancial");
+                        alg = (IFCorrelationFinancial) cls.newInstance();
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (InstantiationException e) {
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+                    alg.setParameterWindowSize(30);
+                    sendAlgorithmChangeEvent("TopoHardwareCorrelationFinancial");
+                    streamId = "PriorityPip_FamilyElement12TopoStream";
+                    alg.switchState(State.ACTIVATE); //activate the current algorithm
+                }
+                break;
+        }
+    }
 
     @Override
     public void cleanup() {
         super.cleanup();
+        alg.switchState(State.TERMINATING);
     }
 
     public void declareOutputFields(OutputFieldsDeclarer declarer) {

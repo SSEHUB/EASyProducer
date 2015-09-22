@@ -13,6 +13,9 @@ import eu.qualimaster.families.imp.*;
 import eu.qualimaster.common.signal.*;
 import eu.qualimaster.base.algorithm.*;
 import eu.qualimaster.base.algorithm.IFamily.State;
+import eu.qualimaster.infrastructure.PipelineOptions;
+import eu.qualimaster.pipeline.DefaultModeException;
+import eu.qualimaster.pipeline.DefaultModeMonitoringEvent;
 import eu.qualimaster.algorithms.stream.sentiment.topology.impl.SentimentAnaylsisSentiWordNetTopology;
 import eu.qualimaster.algorithms.stream.sentiment.topology.impl.SentimentAnaylsisSVMTopology;
 import eu.qualimaster.data.inf.ITwitterStreamData.*;
@@ -35,13 +38,21 @@ public class PriorityPip_FamilyElement2FamilyElement extends BaseSignalBolt {
         super(name, namespace);
     }
 
-    	    /**
+    /**
      * Sends an algorithm change event and considers whether the coordination layer shall be bypassed for direct
      * testing.
      * @param algorithm the new algorithm
      */
     private static void sendAlgorithmChangeEvent(String algorithm) {
-        EventManager.send(new AlgorithmChangedMonitoringEvent("PriorityPip", "fSentimentAnalysis", algorithm));
+        EventManager.send(new AlgorithmChangedMonitoringEvent("PriorityPip", "PriorityPip_FamilyElement2", algorithm));
+    }
+
+    /**
+     * Sends an a default mode monitoring event with a DefaultModeException case.
+     * @param exceptionCase the DefaultModeException case
+     */
+    private static void sendDefaultModeMonitoringEvent(DefaultModeException exceptionCase) {
+        EventManager.send(new DefaultModeMonitoringEvent("PriorityPip", "PriorityPip_FamilyElement2", exceptionCase));
     }
 
     public void prepare(Map map, TopologyContext topologyContext, OutputCollector collector) {
@@ -60,6 +71,9 @@ public class PriorityPip_FamilyElement2FamilyElement extends BaseSignalBolt {
            // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        alg.setParameterTimeSeriesGranularity(PipelineOptions.getExecutorIntArgument(map, getName(), "timeSeriesGranularity", 60));
+        alg.setParameterSentimentClass(PipelineOptions.getExecutorIntArgument(map, getName(), "sentimentClass", 10));
+        alg.setParameterClassificationThreshold(PipelineOptions.getExecutorDoubleArgument(map, getName(), "classificationThreshold", 2.5));
         alg.switchState(State.ACTIVATE); //activate the current algorithm
 		sendAlgorithmChangeEvent("SentimentAnaylsisSentiWordNetTopology");
         streamId = "PriorityPip_FamilyElement21TopoStream";
@@ -70,94 +84,102 @@ public class PriorityPip_FamilyElement2FamilyElement extends BaseSignalBolt {
         // delegate to family "fSentimentAnalysis"
         iTupleTwitterStream = (ITwitterStreamDataTwitterStreamOutput)tuple.getValue(0);
         inputTwitterStream.setStatus(iTupleTwitterStream.getStatus());
-        alg.calculate(inputTwitterStream, result);
+        try {
+            alg.calculate(inputTwitterStream, result);
+        } catch(DefaultModeException e) {
+            result.setSymbolId(null);
+            result.setTimestamp(0);
+            result.setValue(0.0);
+            result.setVolume(0);
+            sendDefaultModeMonitoringEvent(e);
+        }
         if(alg instanceof ITopologyCreate) {
-            _collector.emit(streamId, tuple, new Values(inputTwitterStream));
+            _collector.emit(streamId, new Values(inputTwitterStream));
         }
 
         if(!(alg instanceof ITopologyCreate)) {
-            _collector.emit(streamId, tuple, new Values(result));
+            _collector.emit(streamId, new Values(result));
         }
-		 _collector.ack(tuple);
+//		 _collector.ack(tuple);
     }
 
-    /**
-    * Receives the signal data for FamilyElement adaptation.
-    * @param data the signal data
-    **/
-	public void onSignal(byte[] data) {
-        String signal=new String(data);
-        logger.info("Received signal: " + signal);
-        //handle the received signal and make related changes, e.g., switch algorithm from software to hardware
-        String[] parts = signal.split(":");
-        if (parts.length >= 2) {
-            if ("param".equals(parts[0]) && 3 == parts.length) {
-       	     switch (parts[1]) { // just for illustration, may need parameter conversion
- 	             case "timeSeriesGranularity" : 
-		         alg.setParameterTimeSeriesGranularity(Integer.parseInt(parts[2])); 
- 	             break;
-	          }
-       	     switch (parts[1]) { // just for illustration, may need parameter conversion
- 	             case "sentimentClass" : 
-		         alg.setParameterSentimentClass(Integer.parseInt(parts[2])); 
- 	             break;
-	          }
-       	     switch (parts[1]) { // just for illustration, may need parameter conversion
- 	             case "classificationThreshold" : 
-		         alg.setParameterClassificationThreshold(Double.parseDouble(parts[2])); 
- 	             break;
-	          }
-       	     /*switch (parts[1]) { // just for illustration, may need parameter conversion
- 	             case "param1" : 
-		         alg.setParameterParam1(parts[2]); 
- 	             break;
-	          }*/
- 	         } else if ("alg".equals(parts[0])) {
-	             switch (parts[1]) {
-                    case "SentimentAnaylsisSentiWordNetTopology":
-                        if(!(alg instanceof SentimentAnaylsisSentiWordNetTopology)) {
-							alg.switchState(State.PASSIVATE); //passivate the previous algorithm
-                            try {
-                                Class cls = Class.forName("eu.qualimaster.algorithms.stream.sentiment.topology.impl.SentimentAnaylsisSentiWordNetTopology");
-                                alg = (IFSentimentAnalysis) cls.newInstance();
-                            } catch (ClassNotFoundException e) {
-                                e.printStackTrace();
-                            } catch (InstantiationException e) {
-                                e.printStackTrace();
-                            } catch (IllegalAccessException e) {
-                                e.printStackTrace();
-                            }
-		 					sendAlgorithmChangeEvent("SentimentAnaylsisSentiWordNetTopology");
-                            streamId = "PriorityPip_FamilyElement21TopoStream";
-						    alg.switchState(State.ACTIVATE); //activate the current algorithm
-                        }
-		                 break;
-                    case "SentimentAnaylsisSVMTopology":
-                        if(!(alg instanceof SentimentAnaylsisSVMTopology)) {
-							alg.switchState(State.PASSIVATE); //passivate the previous algorithm
-                            try {
-                                Class cls = Class.forName("eu.qualimaster.algorithms.stream.sentiment.topology.impl.SentimentAnaylsisSVMTopology");
-                                alg = (IFSentimentAnalysis) cls.newInstance();
-                            } catch (ClassNotFoundException e) {
-                                e.printStackTrace();
-                            } catch (InstantiationException e) {
-                                e.printStackTrace();
-                            } catch (IllegalAccessException e) {
-                                e.printStackTrace();
-                            }
-		 					sendAlgorithmChangeEvent("SentimentAnaylsisSVMTopology");
-                            streamId = "PriorityPip_FamilyElement22TopoStream";
-						    alg.switchState(State.ACTIVATE); //activate the current algorithm
-                        }
-		                 break;
-	             }
-	         }
+    @Override
+    public void notifyParameterChange(ParameterChangeSignal signal) {
+        try {
+            for(int i = 0; i < signal.getChangeCount(); i++) {
+                ParameterChange para = signal.getChange(i);
+                switch (para.getName()) {
+                    case "timeSeriesGranularity" :
+                        System.out.println("Received parameter changing signal timeSeriesGranularity");
+                        alg.setParameterTimeSeriesGranularity(para.getIntValue()); 
+                        break;
+                    case "sentimentClass" :
+                        System.out.println("Received parameter changing signal sentimentClass");
+                        alg.setParameterSentimentClass(para.getIntValue()); 
+                        break;
+                    case "classificationThreshold" :
+                        System.out.println("Received parameter changing signal classificationThreshold");
+                        alg.setParameterClassificationThreshold(para.getDoubleValue()); 
+                        break;
+                }
+            }
+        } catch (ValueFormatException e) {
+            e.printStackTrace();
         }
-	}
+    }
+    @Override
+    public void notifyAlgorithmChange(AlgorithmChangeSignal signal) {
+        System.out.println("Received algorithm switching signal " + signal.getAlgorithm());
+        switch (signal.getAlgorithm()) {
+            case "SentimentAnaylsisSentiWordNetTopology":
+                if(!(alg instanceof SentimentAnaylsisSentiWordNetTopology)) {
+                    alg.switchState(State.PASSIVATE); //passivate the previous algorithm
+                    try {
+                        Class cls = Class.forName("eu.qualimaster.algorithms.stream.sentiment.topology.impl.SentimentAnaylsisSentiWordNetTopology");
+                        alg = (IFSentimentAnalysis) cls.newInstance();
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (InstantiationException e) {
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+                    alg.setParameterTimeSeriesGranularity(60);
+                    alg.setParameterSentimentClass(10);
+                    alg.setParameterClassificationThreshold(2.5);
+                    sendAlgorithmChangeEvent("SentimentAnaylsisSentiWordNetTopology");
+                    streamId = "PriorityPip_FamilyElement21TopoStream";
+                    alg.switchState(State.ACTIVATE); //activate the current algorithm
+                }
+                break;
+            case "SentimentAnaylsisSVMTopology":
+                if(!(alg instanceof SentimentAnaylsisSVMTopology)) {
+                    alg.switchState(State.PASSIVATE); //passivate the previous algorithm
+                    try {
+                        Class cls = Class.forName("eu.qualimaster.algorithms.stream.sentiment.topology.impl.SentimentAnaylsisSVMTopology");
+                        alg = (IFSentimentAnalysis) cls.newInstance();
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (InstantiationException e) {
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+                    alg.setParameterTimeSeriesGranularity(60);
+                    alg.setParameterSentimentClass(10);
+                    alg.setParameterClassificationThreshold(2.5);
+                    sendAlgorithmChangeEvent("SentimentAnaylsisSVMTopology");
+                    streamId = "PriorityPip_FamilyElement22TopoStream";
+                    alg.switchState(State.ACTIVATE); //activate the current algorithm
+                }
+                break;
+        }
+    }
 
     @Override
     public void cleanup() {
         super.cleanup();
+        alg.switchState(State.TERMINATING);
     }
 
     public void declareOutputFields(OutputFieldsDeclarer declarer) {

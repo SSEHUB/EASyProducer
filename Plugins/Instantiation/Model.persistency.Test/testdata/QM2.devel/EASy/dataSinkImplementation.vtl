@@ -1,28 +1,7 @@
+import commonVTLMethods;
 @advice(QM)
-template dataSinkImplementation(Configuration config, FileArtifact target, DataSink elt) {
+template dataSinkImplementation(Configuration config, FileArtifact target, DataSink elt) {  		
 
-    def String parameterTypeName(DecisionVariable var) {
-    	switch(var.type()) {
-    		"IntegerParameter" : "int",
-    		"BooleanParameter" : "boolean",
-    		"RealParameter" : "double",
-    		"StringParameter" : "String"
-    	}
-    }
-    	
-	def String fieldTypeName(DecisionVariable var) {
-    	String type = var.byName("type");
-    	switch(type) {
-    		"INTEGER" : "int",
-    		"BOOLEAN" : "boolean",
-    		"REAL" : "double",
-    		"STRING" : "String",
-    		"OBJECT": "Object",
-    		"LONG": "long",
-    		"STRINGLIST": "java.util.List<String>"
-    	}		
-	}
-	
 	/*
 	 * Produces the tuple type classes.
 	 */
@@ -49,7 +28,7 @@ template dataSinkImplementation(Configuration config, FileArtifact target, DataS
 		    //produce the variable instances.	
 		     for (Field f : t.fields) {
 	    	    String fname = toIdentifier("${f.name}");
-	    		String ftype = fieldTypeName(f);
+	    		String ftype = fieldTypeName(f);	  //previous type management 		
 	    		'private ${ftype} ${fname};' | indent + 4;
     		 }
     		   //generate the Getters and Setters. 		
@@ -84,15 +63,19 @@ template dataSinkImplementation(Configuration config, FileArtifact target, DataS
 	def main(Configuration config, FileArtifact target, DataSink dataSnk){
 		String snkName =dataSnk.name;
 		snkName = snkName.firstToUpperCase();
+		String inputName = "I" + snkName;
 		'package eu.qualimaster.data.imp;'
 		''
 		//'import java.io.Serializable;'
+		'import eu.qualimaster.data.inf.I${toIdentifier(snkName)};'
 		'import eu.qualimaster.data.inf.I${toIdentifier(snkName)}.*;'
+		'import eu.qualimaster.dataManagement.strategies.*;'
+		'import eu.qualimaster.observables.*;'
 		''
 		'/**'
 		'* Define the data source class(GEN).'
 		'**/'
-		'public class ${toIdentifier(snkName)} {'
+		'public class ${toIdentifier(snkName)} implements I${toIdentifier(snkName)}{'
 		''
 		//generate the tuple type classes.
 		 produceForTuples(dataSnk.output, snkName, false, 4);		
@@ -107,11 +90,12 @@ template dataSinkImplementation(Configuration config, FileArtifact target, DataS
 			}
 			
 		'/**' | 4;
-		'* Returns a specific type of data sink.' | 4;
-		'* @return ${toIdentifier(snkName)}${firstToUpperCase(tupleName)}Input the sink data' | 4;
+		'* Posts a specific type of data sink.' | 4;
+		'* @param data the sink data ${toIdentifier(snkName)}${firstToUpperCase(tupleName)}Input' | 4;
 		'**/' | 4;
-	    'public ${toIdentifier(snkName)}${firstToUpperCase(tupleName)}Input getData${firstToUpperCase(tupleName)}() {' | 4;
-	    'return null;' | 8;
+		'@Override' | 4;
+	    'public void postData${firstToUpperCase(tupleName)}(${toIdentifier(inputName)}${firstToUpperCase(tupleName)}Input data) {' | 4;
+	    
 	    '}' | 4;
 		}
 		
@@ -132,7 +116,23 @@ template dataSinkImplementation(Configuration config, FileArtifact target, DataS
 	        	'    }'
 	        	''
 	    	}
-    	}		
+    	}
+    	
+    	'@Override' | 4;
+    	'public void connect() {}' | 4;
+		''
+		'@Override' | 4;
+		'public void disconnect(){}' | 4;
+ 		''
+ 		'@Override' | 4;
+ 		'public void setStrategy(IStorageStrategyDescriptor strategy) {}' | 4;
+ 		''
+ 		'@Override' | 4;
+ 		'public IStorageStrategyDescriptor getStrategy() { return NoStorageStrategyDescriptor.INSTANCE;}' | 4;
+ 		''
+ 		'@Override' | 4;
+ 		'public Double getMeasurement(IObservable observable) { return null;}'	| 4;
+ 				
 		'}' 
 		}
 		

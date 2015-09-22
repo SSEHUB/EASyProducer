@@ -1,5 +1,5 @@
 @advice(QM)
-template pomXml(Configuration config, FileArtifact target, Pipeline pipeline) {
+template pomXml(Configuration config, FileArtifact target, Pipeline pipeline, String repoURL) {
 	
 	setOf(String) nodes = {};
 	setOf(Algorithm) algorithms = {};
@@ -78,6 +78,16 @@ template pomXml(Configuration config, FileArtifact target, Pipeline pipeline) {
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
+					<dependencySets>
+        				<dependencySet>
+            				<unpack>false</unpack>
+            				<scope>runtime</scope>
+        				</dependencySet>
+        				<dependencySet>
+            				<unpack>false</unpack>
+            				<scope>provided</scope>
+        				</dependencySet>
+    				</dependencySets>					
                     <archive>
                         <manifest>
                         </manifest>
@@ -143,6 +153,55 @@ template pomXml(Configuration config, FileArtifact target, Pipeline pipeline) {
           <mainClass>"+"$"+"{storm.topology}"+"</mainClass>
         </configuration>
       </plugin>\n");
+      text.append("<plugin>
+  <groupId>org.apache.maven.plugins</groupId>
+  <artifactId>maven-dependency-plugin</artifactId>
+  <version>2.6</version>
+  <executions>
+    <execution>
+      <id>copy-dependencies</id>
+      <phase>prepare-package</phase>
+      <goals>
+        <goal>copy-dependencies</goal>		
+      </goals>
+      <configuration>
+        <outputDirectory>"+"$"+"{basedir}/lib</outputDirectory>
+        <overWriteIfNewer>true</overWriteIfNewer>
+        <excludeGroupIds>
+          junit,org.hamcrest,org.mockito,org.powermock,"+"$"+"{project.groupId}
+        </excludeGroupIds>
+		<excludeArtifactIds>storm-core</excludeArtifactIds>
+      </configuration>
+    </execution>
+    <execution>
+      <phase>generate-sources</phase>
+      <goals>
+        <goal>sources</goal>
+      </goals>
+    </execution>
+<!--execution>
+      <id>unpack-dependencies</id>
+      <phase>package</phase>
+      <goals>
+        <goal>unpack-dependencies</goal>		
+      </goals>
+      <configuration>
+        <outputDirectory>target/classes/lib</outputDirectory>
+        <overWriteIfNewer>true</overWriteIfNewer>
+        <excludeGroupIds>
+          junit,org.hamcrest,org.mockito,org.powermock,"+"$"+"{project.groupId}
+        </excludeGroupIds>
+		<excludeArtifactIds>storm-core</excludeArtifactIds>
+		<includes>**/*.*</includes>
+      </configuration>
+    </execution-->
+  </executions>
+  <configuration>
+    <verbose>true</verbose>
+    <detail>true</detail>
+    <outputDirectory>"+"$"+"{project.build.directory}</outputDirectory>
+  </configuration>
+</plugin>");
 	}   
 	
 	def appendResources(Text text) {
@@ -161,32 +220,146 @@ template pomXml(Configuration config, FileArtifact target, Pipeline pipeline) {
         <dependency>
             <groupId>eu.qualimaster</groupId>
             <artifactId>InfrastructureDependencies</artifactId>
-            <version>0.0.1</version>
+            <version>0.0.1-SNAPSHOT</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>
         <dependency>
             <groupId>eu.qualimaster</groupId>
             <artifactId>PipelineDependencies</artifactId>
-            <version>0.0.1</version>
+            <version>0.0.1-SNAPSHOT</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>            
     </dependencies>
 </dependencyManagement>\n");
 	}
-	
-    def appendCommonDependencies(Text text) {
-    	text.append("    <dependency>      
+	//only for generating a fat jar
+	def appendBasicInfrastructureDependencies(Text text) {
+		text.append("<dependency>
       <groupId>org.apache.storm</groupId>
       <artifactId>storm-core</artifactId>
-    </dependency>\n");
-        text.append("    <dependency>
-     <groupId>eu.qualimaster</groupId>
-     <artifactId>TwitterSentimentAnalysisStream</artifactId>
-     <version>0.1.4</version>
-   </dependency>\n");
-   		text.append("   <dependency>
+      <version>0.9.3</version>  
+      <scope>provided</scope> 
+    </dependency>
+    <dependency>
+      <groupId>com.github.ptgoetz</groupId>
+      <artifactId>storm-hdfs</artifactId>
+      <version>0.1.2</version>
+       
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-log4j12</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>log4j</groupId>
+          <artifactId>log4j</artifactId>
+        </exclusion>        
+      </exclusions>          
+    </dependency>    
+    <!-- Hadoop Dependencies -->
+    <dependency>
+      <groupId>org.apache.hadoop</groupId>
+      <artifactId>hadoop-client</artifactId>
+      <version>2.4.0</version>
+      
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-log4j12</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>log4j</groupId>
+          <artifactId>log4j</artifactId>
+        </exclusion>        
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.hadoop</groupId>
+      <artifactId>hadoop-hdfs</artifactId>
+      <version>2.4.0</version>
+      
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-log4j12</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>log4j</groupId>
+          <artifactId>log4j</artifactId>
+        </exclusion>        
+      </exclusions>      
+    </dependency>
+    <dependency>
+      <groupId>org.apache.hadoop</groupId>
+      <artifactId>hadoop-common</artifactId>
+      <version>2.4.0</version> 
+            
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-log4j12</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>log4j</groupId>
+          <artifactId>log4j</artifactId>
+        </exclusion>        
+      </exclusions>               
+    </dependency>   
+    <!-- HBase Dependencies -->
+    <dependency>
+      <groupId>org.apache.hbase</groupId>
+      <artifactId>hbase-common</artifactId>
+      <version>0.98.6-hadoop2</version>
+      
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-log4j12</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>log4j</groupId>
+          <artifactId>log4j</artifactId>
+        </exclusion>        
+      </exclusions>      
+    </dependency>
+    <dependency>
+      <groupId>org.apache.hbase</groupId>
+      <artifactId>hbase-protocol</artifactId>
+      <version>0.98.6-hadoop2</version>
+      
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-log4j12</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>log4j</groupId>
+          <artifactId>log4j</artifactId>
+        </exclusion>        
+      </exclusions>      
+    </dependency>
+    <dependency>
+      <groupId>org.apache.hbase</groupId>
+      <artifactId>hbase-client</artifactId>
+      <version>0.98.6-hadoop2</version>
+      
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-log4j12</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>log4j</groupId>
+          <artifactId>log4j</artifactId>
+        </exclusion>        
+      </exclusions>      
+    </dependency>\n ");
+	}
+	
+	def appendQmInfrastructureDependencies(Text text) {
+		text.append("   <dependency>
      <groupId>eu.qualimaster</groupId>
      <artifactId>StormCommons</artifactId>
    </dependency>\n");
@@ -198,24 +371,95 @@ template pomXml(Configuration config, FileArtifact target, Pipeline pipeline) {
    		text.append("   <dependency>
      <groupId>eu.qualimaster</groupId>
      <artifactId>DataManagementLayer</artifactId>
-     <version>0.0.4</version>  
-   </dependency>\n");
+   </dependency>\n");        
    		text.append("   <dependency>
      <groupId>eu.qualimaster</groupId>
      <artifactId>QualiMaster.Events</artifactId>
    </dependency>\n");
-   		text.append("    <dependency>
-        <groupId>jdk.tools</groupId>
-        <artifactId>jdk.tools</artifactId>
-        <version>1.7</version>
-    </dependency>\n");
-    }
-	
-	def appendRepositories(Text text) {
-		text.append("    <repository>\n      <id>qm.eu</id>\n      <name>qm.eu</name>\n      <url>https://projects.sse.uni-hildesheim.de/qm/maven/</url>\n    </repository>\n");
 	}
 	
-	def main(Configuration config, FileArtifact target, Pipeline pipeline) {
+	 def appendCommonProvidedInfraDependencies(Text text) {
+    	text.append("    <dependency>      
+      <groupId>org.apache.storm</groupId>
+      <artifactId>storm-core</artifactId>
+    </dependency>\n");
+   text.append("   <dependency>
+     <groupId>com.github.ptgoetz</groupId>
+     <artifactId>storm-hdfs</artifactId>
+   </dependency>\n");
+   text.append("   <dependency>
+     <groupId>org.apache.hadoop</groupId>
+     <artifactId>hadoop-client</artifactId>
+   </dependency>\n");
+    text.append("   <dependency>
+     <groupId>org.apache.hadoop</groupId>
+     <artifactId>hadoop-hdfs</artifactId>
+   </dependency>\n");
+   text.append("   <dependency>
+     <groupId>org.apache.hadoop</groupId>
+     <artifactId>hadoop-common</artifactId>
+   </dependency>\n");
+   text.append("   <dependency>
+     <groupId>org.apache.hbase</groupId>
+     <artifactId>hbase-common</artifactId>
+   </dependency>\n");
+   text.append("   <dependency>
+     <groupId>org.apache.hbase</groupId>
+     <artifactId>hbase-protocol</artifactId>
+   </dependency>\n");
+   text.append("   <dependency>
+     <groupId>org.apache.hbase</groupId>
+     <artifactId>hbase-client</artifactId>
+   </dependency>\n");
+    }
+	
+    def appendCommonDependencies(Text text) {
+    	text.append("    <dependency>      
+      <groupId>org.apache.storm</groupId>
+      <artifactId>storm-core</artifactId>
+    </dependency>\n");   		
+   text.append("   <dependency>
+     <groupId>com.github.ptgoetz</groupId>
+     <artifactId>storm-hdfs</artifactId>
+	 <scope>compile</scope>
+   </dependency>\n");
+   text.append("   <dependency>
+     <groupId>org.apache.hadoop</groupId>
+     <artifactId>hadoop-client</artifactId>
+	 <scope>compile</scope>
+   </dependency>\n");
+    text.append("   <dependency>
+     <groupId>org.apache.hadoop</groupId>
+     <artifactId>hadoop-hdfs</artifactId>
+	 <scope>compile</scope>
+   </dependency>\n");
+   text.append("   <dependency>
+     <groupId>org.apache.hadoop</groupId>
+     <artifactId>hadoop-common</artifactId>
+	 <scope>compile</scope>
+   </dependency>\n");
+   text.append("   <dependency>
+     <groupId>org.apache.hbase</groupId>
+     <artifactId>hbase-common</artifactId>
+	 <scope>compile</scope>
+   </dependency>\n");
+   text.append("   <dependency>
+     <groupId>org.apache.hbase</groupId>
+     <artifactId>hbase-protocol</artifactId>
+	 <scope>compile</scope>
+   </dependency>\n");
+   text.append("   <dependency>
+     <groupId>org.apache.hbase</groupId>
+     <artifactId>hbase-client</artifactId>
+	 <scope>compile</scope>
+   </dependency>\n");
+    }
+	
+	def appendRepositories(Text text, String repoURL) {
+		text.append("    <repository>\n      <id>qm.eu</id>\n      <name>qm.eu</name>\n      <url>$repoURL</url>\n    </repository>\n");
+	}
+	
+	def main(Configuration config, FileArtifact target, Pipeline pipeline, String repoURL) {
 		//createPomTemplate(target);
 		Text text = target.getText();		
 		text.append("<project xmlns=\"http://maven.apache.org/POM/4.0.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\">\n");		
@@ -242,25 +486,23 @@ template pomXml(Configuration config, FileArtifact target, Pipeline pipeline) {
 		text.append("\n");
 		text.append("  <repositories>\n");
 		//text.append("    <repository>\n      <id>clojars.org</id>\n      <url>http://clojars.org/repo</url>\n    </repository>\n");
-		appendRepositories(text);
+		appendRepositories(text, repoURL);
 		text.append("  </repositories>\n");
 		text.append("\n");
 		appendDependencyManagement(text);
 		text.append("  <dependencies>\n");
+//		appendBasicInfrastructureDependencies(text); //for a fat jar
+		appendQmInfrastructureDependencies(text);
 		appendCommonDependencies(text);
-//		for(DecisionVariable vPip : activePipelines) {
-//			Pipeline pipeline = vPip;
-			for(DecisionVariable v : pipeline.sources) {
-				String nodeName = v.varName(); 				                      
-	            if(v.type() == "Source" and nodeNotExisted(nodeName)) {               	
-	                Source src =v;
-	                produceDependencies(src, text);
-	                nodes.add(nodeName);
-	            } 
-	            processElement(v.byName("output").variables(), text);
-	        }			
-			
-//		}
+		for(DecisionVariable v : pipeline.sources) {
+			String nodeName = v.varName(); 				                      
+	           if(v.type() == "Source" and nodeNotExisted(nodeName)) {               	
+	              Source src =v;
+	              produceDependencies(src, text);
+	              nodes.add(nodeName);
+	           } 
+	           processElement(v.byName("output").variables(), text);
+	    }						
 		text.append("  </dependencies>\n");
 		text.append("</project>\n");
 		target.rename("pom.xml");							

@@ -111,7 +111,6 @@ public interface IFCorrelationFinancial extends IFamily{
      */
     public void calculate(IIFCorrelationFinancialSymbolListInput input, IIFCorrelationFinancialPairwiseFinancialOutput result);
 
-    // algorithm parameters
 
     /**
      * Sets the algorithm parameter "windowSize".

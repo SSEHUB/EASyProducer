@@ -5,8 +5,8 @@ project Pipelines {
 	import DataManagement;
 	import Hardware;
 	   
-	attribute BindingTime bindingTime = BindingTime.compile to Pipelines;
-	attribute Boolean userVisible = true to Pipelines;
+	annotate BindingTime bindingTime = BindingTime.compile to Pipelines;
+	annotate Boolean userVisible = true to Pipelines;
 
     // TODO this is Storm stuff - find more abstract/adequate representation
 	enum Grouping {shuffleGrouping, fieldsGrouping, globalGrouping, directGrouping, allGrouping, customGrouping, noneGrouping}; // this is very storm specific - can we infer this from the element type?
@@ -31,7 +31,11 @@ project Pipelines {
 		    Tuples inputTypes; 
 		    Tuples outputTypes;
 		}
-	}
+		assign(bindingTime = BindingTime.runtime) to {
+            Capacity capacity;			
+            Executors executors;
+		}
+    }
 	
 	compound Source refines PipelineNode {
 		setOf(refTo(Flow)) output;
@@ -84,8 +88,6 @@ project Pipelines {
 		refTo(Family) family;
 		assign(bindingTime = BindingTime.runtime) to {
 			refTo(Algorithm) actual;
-            Capacity capacity;
-            Executors executors;
 
             // derived			
 			Latency latency;
@@ -116,6 +118,7 @@ project Pipelines {
 		}
 		Constraint tuplesInputTypeCheck = typeCheckTuplesInput(self, self.family);
 		Constraint tuplesOutputTypeCheck = typeCheckTuplesOutput(self, self.family);
+		Constraint actualAlgorithmCheck = family.members->exists(a | a == actual);
 	} 
 	
 	compound DataManagementElement refines ProcessingElement {
@@ -136,11 +139,13 @@ project Pipelines {
 */	
 	compound Pipeline {
 		NonEmptyString name;
-		String description;
+		Description description;
 		setOf(refTo(Source)) sources;
 		PositiveInteger numworkers;
 		PositiveInteger timeout = 100;
 		ArtifactString artifact;
+		Boolean debug;
+		Boolean fastSerialization = false;
 		assign(bindingTime = BindingTime.runtime) to {
 			Latency latency;
 			Throughput_Item throughputItem;

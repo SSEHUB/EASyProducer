@@ -1,30 +1,7 @@
+import commonVTLMethods;
 @advice(QM)
-template stormSource(Configuration config, FileArtifact target, DecisionVariable elt, String topoName) {
-
-    def String parameterTypeName(DecisionVariable var) {
-    	switch(var.type()) {
-    		"IntegerParameter" : "int",
-    		"BooleanParameter" : "boolean",
-    		"RealParameter" : "double",
-    		"StringParameter" : "String"
-    	}
-    }
-
-	def transferParameterValueType(DecisionVariable varParameter, String value) {
-		String paraType = varParameter.type();
-		Integer len = paraType.length();
-		String type;
-	    if(len>9){
-			type = paraType.substring(0, len - 9);
-		}	
-       	switch(type) {
-    		"Integer" : "Integer.parseInt($value)",
-    		"Boolean" : "Boolean.parseBoolean($value)",
-    		"Real" : "Double.parseDouble($value)",
-    		"String" : "$value"   	
-    	}					
-	}
-
+template stormSource(Configuration config, FileArtifact target, DecisionVariable elt, String topoName, Boolean debug) {
+    
 	/*
 	 * Produces the variables of the output tuples.
 	 */	
@@ -46,7 +23,7 @@ template stormSource(Configuration config, FileArtifact target, DecisionVariable
 		}
 	}
 	    
-    def main(Configuration config, FileArtifact target, DecisionVariable elt, String topoName) {
+    def main(Configuration config, FileArtifact target, DecisionVariable elt, String topoName, Boolean debug) {
     	//name for the Spout class name
         String name = elt.varName().firstToUpperCase() + elt.type();
         //ending for the streamId
@@ -55,7 +32,7 @@ template stormSource(Configuration config, FileArtifact target, DecisionVariable
         //casting the decisionVariable to Source
         Source src = elt;   
         DataSource dataSrc = src.source;
-        String srcName = dataSrc.name;
+        String srcName = dataSrc.name;        
         String qualifiedClsName = dataSrc.sourceCls; //dataSrc.sourceCls().firstToUpperCase() leads to a problem!! 
         JavaPath clsNamePath = qualifiedClsName;
         String srcClsName = clsNamePath.getName();
@@ -65,6 +42,9 @@ template stormSource(Configuration config, FileArtifact target, DecisionVariable
         String topoStreamId = elt.varName() + topoStream;
         'package eu.qualimaster.$topoName.topology;'
     	''
+    	/****************************/
+    	/*        Imports           */  
+    	/****************************/    	
     	'import java.util.*;'
     	'import org.apache.log4j.Logger;'
     	'import backtype.storm.topology.*;'
@@ -75,25 +55,41 @@ template stormSource(Configuration config, FileArtifact target, DecisionVariable
         'import eu.qualimaster.data.inf.I${toIdentifier(srcName)}.*;'
         'import $qualifiedClsName;'
         'import eu.qualimaster.common.signal.*;'
+        'import eu.qualimaster.events.EventManager;'
+    	'import eu.qualimaster.infrastructure.PipelineOptions;'
+        'import eu.qualimaster.pipeline.DefaultModeException;'
+    	'import eu.qualimaster.pipeline.DefaultModeMonitoringEvent;'
     	''
+    	/****************************/
+    	/*        Spout class        */  
+    	/****************************/    	
     	'/**'
     	'* Define the source Spout class(GEN).'
     	'**/'
     	'@SuppressWarnings({ "rawtypes", "serial" })'
     	'public class $name extends BaseSignalSpout {'
     	''
+		    	/****************************/
+		    	/*     Class variables      */  
+		    	/****************************/    	
+    	if(debug) {
     	'    final static Logger logger = Logger.getLogger($name.class);'
+    	}
     	'    transient SpoutOutputCollector _collector;'
-    	'    transient I${toIdentifier(srcName)} sourceData;'
-    	
+    	'    transient I${toIdentifier(srcName)} sourceData;'    	
     	//generates the variables of the output tuples
     	produceInOrOutputVariable(dataSrc.input, true, srcName);
-    	
+		    	/****************************/
+		    	/*    Class constructor     */  
+		    	/****************************/    	
 	    ''
 	    '    public $name(String name, String namespace) {'
     	'        super(name, namespace);'
     	'    }'
     	''
+		    	/****************************/
+		    	/*     open method          */  
+		    	/****************************/    	
     	'    @Override'
         '    public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) {'
         '		 super.open(conf, context, collector);'
@@ -101,6 +97,8 @@ template stormSource(Configuration config, FileArtifact target, DecisionVariable
         '        try {'
 		'            Class cls = Class.forName("$qualifiedClsName");'
 		'            sourceData = (I${toIdentifier(srcName)}) cls.newInstance();'
+		setDefaultParameterValue(dataSrc.parameters, "conf", "sourceData", 12);
+		'		    sourceData.connect();'		
 		'        } catch (ClassNotFoundException e) {'
 		'	         // TODO Auto-generated catch block'
 		'            e.printStackTrace();'
@@ -110,12 +108,26 @@ template stormSource(Configuration config, FileArtifact target, DecisionVariable
 		'        } catch (IllegalAccessException e) {'
 		'           // TODO Auto-generated catch block'
 		'            e.printStackTrace();'
-		'        }'
-//        '        sourceData = new ${toIdentifier(srcClsName)}();'      
+		'        }'     
         '    }'
         ''
+    			/*****************************************/
+		    	/* sendDefaultModeMonitoringEvent method */  
+		    	/*****************************************/
+		'    /**'
+		'     * Sends an a default mode monitoring event with a DefaultModeException case.' 
+		'     * @param exceptionCase the DefaultModeException case'
+		'     */'
+		'    private static void sendDefaultModeMonitoringEvent(DefaultModeException exceptionCase) {'
+		'        EventManager.send(new DefaultModeMonitoringEvent("$topoName", "${elt.varName()}", exceptionCase));'
+		'    }'        
+		    	/****************************/
+		    	/*     nextTuple method     */  
+		    	/****************************/        
         '    @Override'
         '    public void nextTuple() {'
+        '        long start = System.currentTimeMillis();'
+        '        boolean emitted = false;'
         String tupleName;
         for(Tuple t : dataSrc.input){
 			//get the tuple name
@@ -124,53 +136,67 @@ template stormSource(Configuration config, FileArtifact target, DecisionVariable
 			tupleName = firstToUpperCase(tupleName);
         	srcInfName = "I" + srcName.firstToUpperCase() + "${tupleName}Output";
         '        // Emitting stream "${streamId}${tupleName}".'
-	    '        dataItem${tupleName} = sourceData.get${tupleName}();'	
-	    '        if(dataItem${tupleName}!=null){'	   		  
-//		'            logger.info("Get data tuple for data source Spout:" + dataItem${tupleName});'
-		'            _collector.emit("${streamId}${tupleName}", new Values(dataItem${tupleName}),dataItem${tupleName});'		   
+        '        try {'
+	    '            dataItem${tupleName} = sourceData.get${tupleName}();'
+	    '        } catch(DefaultModeException e) {'	
+	        for(Field f : t.fields) {
+	        	String fieldName = toIdentifier("${f.name}"); 
+				String upFieldName = firstToUpperCase(fieldName);
+				FieldType fdType = f.type;				
+				'dataItem${tupleName}.set${upFieldName}(${obtainDefaultValue(fdType)});' | 12;	
+	        }
+	        'sendDefaultModeMonitoringEvent(e);' | 12;
+	    '        }'
+	    '        if(dataItem${tupleName}!=null){'	
+	        if(debug){   		  
+		'            logger.info("Get data tuple for data source Spout:" + dataItem${tupleName});'
+		    }		
+		'            _collector.emit("${streamId}${tupleName}", new Values(dataItem${tupleName}));' /*,dataItem${tupleName} */
+		'            emitted = true;'		   
 	    '        }'
 	    ''
         }
-
+        '        if (emitted) {'
+        '            aggregateExecutionTime(start);'
+        '        }'
+        '        '
         '    }'
         ''
-        '/**' | 4;
-	    '* Receives the signal data for Source adaptation.'| 4;
-	    '* @param data the signal data' | 4;
-	    '**/' | 4;
-	    '@Override' | 4;
-        'public void onSignal(byte[] data) {' | 4;
-        'String signal=new String(data);' | 8;
-        'logger.info("Received signal: " + signal);' | 8;
-        '//handle the received signal and make related changes, e.g., give a parameter to Source' | 8;
-		'String[] parts = signal.split(":");' | 8;
-		'if (parts.length >= 2) {' | 8;
-		'if ("param".equals(parts[0]) && 3 == parts.length) {' | 12;
-		setOf(Parameter) parameters = dataSrc.parameters;
-		for(Parameter p : parameters) {
-		    String paraName = p.name;
-		    String paraValue = transferParameterValueType(p, "parts[2]");
-		'switch (parts[1]) { // just for illustration, may need parameter conversion' | 16;
-		'case "$paraName" : ' | 16;
-		'sourceData.setParameter${paraName.firstToUpperCase()}($paraValue); ' | 16;
-		'break;' | 16;
-		'}'	| 16;		
-		}		    
-		'       	     /*switch (parts[1]) { // just for illustration, may need parameter conversion'
-		' 	             case "param1" : '
-		'		         sourceData.setParameterParam1(parts[2]); '
-		' 	             break;'
-		'	          }*/'
-				    
-		'}' | 12;
-		'}' | 8;
-        '}' | 4;  
-        ''     
+    			/********************************/
+		    	/* notifyParameterChange method */  
+		    	/********************************/               
+        if(dataSrc.parameters.isConfigured()) {
+			'@Override' | 4;
+			'public void notifyParameterChange(ParameterChangeSignal signal) {' | 4;
+			'try {' | 8;
+			'switch (signal.getParameter()) {' | 12;
+			setOf(Parameter) parameters = dataSrc.parameters;
+			for(Parameter p : parameters) {
+				String paraName = p.name;
+				String type = parameterTypeName(p);				
+				'case "$paraName" :' | 16;
+				'sourceData.setParameter${paraName.firstToUpperCase()}(signal.get${type.firstToUpperCase()}Value()); ' | 20;
+				'break;' | 20;
+				}
+			'}' | 12;
+			'} catch (ValueFormatException e) {' | 8;
+			'e.printStackTrace();' | 12;
+			'}' | 8;
+			'}' |4;		
+		}        
+        ''
+				/****************************/
+				/*       close method       */
+				/****************************/             
         '    @Override'
         '    public void close() {'
         '        super.close();'
+        '		 sourceData.disconnect();'
         '    }'
         ''
+				/************************************/
+				/*   declareOutputFields method     */
+				/************************************/        
         '	@Override'
 		'    public void declareOutputFields(OutputFieldsDeclarer declarer) {'
 		for(Tuple t : dataSrc.input){
@@ -180,9 +206,7 @@ template stormSource(Configuration config, FileArtifact target, DecisionVariable
 		tupleName = firstToUpperCase(tupleName);
 		'        declarer.declareStream("${streamId}${tupleName}", new Fields("datastream${tupleName}"));'        	     				
 		}
-
 		'    }'
     	'}'
-    }
-    
+    }    
 }

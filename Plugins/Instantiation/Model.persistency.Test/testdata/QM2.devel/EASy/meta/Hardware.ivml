@@ -3,7 +3,7 @@ project Hardware {
     import Basics;
     import Observables;
 	
-	attribute BindingTime bindingTime = BindingTime.compile to Hardware;
+	annotate BindingTime bindingTime = BindingTime.compile to Hardware;
 	
 	enum MachineRole {Manager, Worker};
 	

@@ -19,19 +19,18 @@ template mappingXml(Configuration config, FileArtifact target, Pipeline pipeline
             String nodeClsName = elt.varName().firstToUpperCase() + elt.type();                  	            
             if(elt.type() == "Sink" and nodeNotExisted(nodeName, nodes)) {
             	Sink snk = elt;
-            	DataSink dataSnk = snk.sink;
-            	String snkName = dataSnk.name;
-                text.append('      <node name="$snkName">\n');
-                text.append('          <component name="$nodeName" container="$pipName" class="eu.qualimaster.topologies.$nodeClsName" receiver="true"/>\n'); 
+            	String snkName = snk.name;
+                text.append('      <node name="$snkName" type="sink">\n');
+                text.append('          <component name="$nodeName" container="$pipName" class="eu.qualimaster.$pipName.topology.$nodeClsName" receiver="true"/>\n'); 
                 text.append('      </node>\n'); 
                 nodes.add(nodeName);           	
             } 
             if(elt.type() == "FamilyElement" and nodeNotExisted(nodeName, nodes)) {
             	FamilyElement fe = elt;
             	Family fm = fe.family;
-            	String fmName = fm.name;
-                text.append('      <node name="$fmName">\n');
-                text.append('          <component name="$nodeName" container="$pipName" class="eu.qualimaster.topologies.$nodeClsName" receiver="true"/>\n'); 
+            	String fmName = fe.name;
+                text.append('      <node name="$fmName" type="family">\n');
+                text.append('          <component name="$nodeName" container="$pipName" class="eu.qualimaster.$pipName.topology.$nodeClsName" receiver="true"/>\n'); 
                 text.append('      </node>\n'); 
                 nodes.add(nodeName);
                 for(Algorithm alg : fm.members) {
@@ -48,7 +47,7 @@ template mappingXml(Configuration config, FileArtifact target, Pipeline pipeline
 //		for(DecisionVariable vPip : activePipelines) {
 //			Pipeline pipeline = vPip;
 			String pipName = pipeline.name;
-			String topologyClsName = "eu.qualimaster.topologies.$pipName.Topology";
+			String topologyClsName = "eu.qualimaster.$pipName.topology.Topology";
 	        setOf(String) nodes = {};
 	        setOf(Algorithm) algorithms = {};
 			text.append('  <pipeline name="$pipName" class="$topologyClsName">\n');
@@ -58,9 +57,9 @@ template mappingXml(Configuration config, FileArtifact target, Pipeline pipeline
 	            if(v.type() == "Source" and nodeNotExisted(nodeName, nodes)) {               	
 	                Source src =v;
 	                DataSource dataSrc = src.source;
-	                String srcName = dataSrc.name;                         
-	                text.append('      <node name="$srcName">\n');
-	                text.append('          <component name="$nodeName" container="$pipName" class="eu.qualimaster.topologies.$nodeClsName" receiver="true"/>\n');                    
+	                String srcName = src.name;                         
+	                text.append('      <node name="$srcName" type="source">\n');
+	                text.append('          <component name="$nodeName" container="$pipName" class="eu.qualimaster.$pipName.topology.$nodeClsName" receiver="true"/>\n');                    
 	                text.append('      </node>\n');
 	            }
 	            nodes.add(nodeName);  

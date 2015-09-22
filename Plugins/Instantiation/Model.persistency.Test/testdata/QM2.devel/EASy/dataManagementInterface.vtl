@@ -1,3 +1,4 @@
+import commonVTLMethods;
 @advice(QM)
 template dataManagementInterface(Configuration config, FileArtifact target, DecisionVariable elt) {
 	def main(Configuration config, FileArtifact target, DecisionVariable elt) {
@@ -16,28 +17,6 @@ template dataManagementInterface(Configuration config, FileArtifact target, Deci
     	produceForTuples(elt.byName("input"), true, idName, 4);	
     	'}'	
 	}
-	
-    def String parameterTypeName(DecisionVariable var) {
-    	switch(var.type()) {
-    		"IntegerParameter" : "int",
-    		"BooleanParameter" : "boolean",
-    		"RealParameter" : "double",
-    		"StringParameter" : "String"
-    	}
-    }
-    
-    def String fieldTypeName(DecisionVariable var) {
-    	String type = var.byName("type");
-       	switch(type) {
-    		"INTEGER" : "int",
-    		"BOOLEAN" : "boolean",
-    		"REAL" : "double",
-    		"STRING" : "String",
-    		"OBJECT": "Object",
-    		"LONG": "long",
-    		"STRINGLIST": "java.util.List<String>"
-    	}  	    	
-    }
     
     def produceForTuples(DecisionVariable tuples, Boolean output, String fName, Integer indent) {
 	    String type;

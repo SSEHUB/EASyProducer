@@ -2,6 +2,7 @@ package eu.qualimaster.families.imp;
 
 import eu.qualimaster.families.inf.*;
 import eu.qualimaster.observables.IObservable;
+import eu.qualimaster.dataManagement.serialization.SerializerRegistry;
 
 /**
  * The implementation for the algorithm family "IFSentimentAnalysis" (GEN).
@@ -24,6 +25,9 @@ public class FSentimentAnalysis implements IFSentimentAnalysis {
         @Override
         public void setStatus(Object status){
             this.status = status;
+        }
+        static {
+            SerializerRegistry.register("IFSentimentAnalysisTwitterStreamInput", FSentimentAnalysisSerializers.IFSentimentAnalysisTwitterStreamInputSerializer.class);
         }
     }
 
@@ -74,6 +78,9 @@ public class FSentimentAnalysis implements IFSentimentAnalysis {
         public void setVolume(int volume){
             this.volume = volume;
         }
+        static {
+            SerializerRegistry.register("IFSentimentAnalysisAnalyzedStreamOutput", FSentimentAnalysisSerializers.IFSentimentAnalysisAnalyzedStreamOutputSerializer.class);
+        }
     }
 
     /**
@@ -86,7 +93,6 @@ public class FSentimentAnalysis implements IFSentimentAnalysis {
     public void calculate(IIFSentimentAnalysisTwitterStreamInput input, IIFSentimentAnalysisAnalyzedStreamOutput result){
     }
 
-    // algorithm parameters
 
     /**
      * Sets the algorithm parameter "timeSeriesGranularity".

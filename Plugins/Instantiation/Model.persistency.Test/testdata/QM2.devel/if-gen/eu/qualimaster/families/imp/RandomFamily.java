@@ -2,6 +2,7 @@ package eu.qualimaster.families.imp;
 
 import eu.qualimaster.families.inf.*;
 import eu.qualimaster.observables.IObservable;
+import eu.qualimaster.dataManagement.serialization.SerializerRegistry;
 
 /**
  * The implementation for the algorithm family "IRandomFamily" (GEN).
@@ -25,6 +26,9 @@ public class RandomFamily implements IRandomFamily {
         public void setRandomInteger(int randomInteger){
             this.randomInteger = randomInteger;
         }
+        static {
+            SerializerRegistry.register("IRandomFamilyRandomDataInput", RandomFamilySerializers.IRandomFamilyRandomDataInputSerializer.class);
+        }
     }
 
     /**
@@ -44,6 +48,9 @@ public class RandomFamily implements IRandomFamily {
         public void setRandomInteger(int randomInteger){
             this.randomInteger = randomInteger;
         }
+        static {
+            SerializerRegistry.register("IRandomFamilyProccessedDataOutput", RandomFamilySerializers.IRandomFamilyProccessedDataOutputSerializer.class);
+        }
     }
 
     /**
@@ -54,6 +61,23 @@ public class RandomFamily implements IRandomFamily {
      */
     @Override
     public void calculate(IIRandomFamilyRandomDataInput input, IIRandomFamilyProccessedDataOutput result){
+    }
+
+
+    /**
+     * Sets the algorithm parameter "delay".
+     *
+     * @param value the new value of the algorithm parameter
+     */
+    public void setParameterDelay(int value) {
+    }
+
+    /**
+     * Sets the algorithm parameter "flag".
+     *
+     * @param value the new value of the algorithm parameter
+     */
+    public void setParameterFlag(boolean value) {
     }
 
     @Override

@@ -24,7 +24,7 @@ template stormDataManagementElement(Configuration config, FileArtifact target, D
 	
 	}
 	
-	def produceInputForTuples(mapOf(Tuple,String) nameToOutputMap, setOf(DecisionVariable) lastElts) {
+	def produceInputForTuples(mapOf(Tuple,String) nameToOutputMap, setOf(DecisionVariable) lastElts, String prefixStreamId, setOf(String) streamListToDeclare) {
 		String outputInfName; //output interface name	
 		Boolean multiStream = false;
 		Integer indent = 4;
@@ -39,6 +39,7 @@ template stormDataManagementElement(Configuration config, FileArtifact target, D
 			String tupleId = "";
 			Integer tuplesSize = tuples.size();
 			Integer tupleCount =1;
+			String tupleName;
 			for(Tuple t : tuples) {
 			    if(tuplesSize > 1){	
 			    	tupleId = "$tupleCount";			
@@ -46,12 +47,16 @@ template stormDataManagementElement(Configuration config, FileArtifact target, D
 				    indent = 8;
 			    }				
 				outputInfName = nameToOutputMap.get(t);
+				tupleName = t.name;
+				streamListToDeclare.add(tupleName);
 				if(multiStream){
 				    'if(tuple instanceof $outputInfName) {' | indent;
 			    }
 			    'iTuple${tupleId} = ($outputInfName)tuple.getValue(0);' | indent+4;
-			    '_collector.emit(streamId, tuple, new Values(iTuple${tupleId}));' | indent+4;
-			    'support.write(iTuple${tupleId});' | indent+4;
+			    'streamId = "${prefixStreamId}${tupleName.firstToUpperCase()}";' | indent+4;
+			   // '_collector.emit(streamId, tuple, new Values(iTuple${tupleId}));' | indent+4;
+			   '//support.write(iTuple${tupleId});' | indent+4; //--problematic line
+			   '//_collector.ack(tuple);' | indent+4;			   
 			    if(multiStream){
 			 	    '}' | indent;
 			    }
@@ -81,6 +86,7 @@ template stormDataManagementElement(Configuration config, FileArtifact target, D
 	}
 	
     def main(Configuration config, FileArtifact target, DecisionVariable preElt, DecisionVariable elt, String topoName,mapOf(Tuple,String) nameToOutputMap, mapOf(String, mapOf(Tuple, Tuple)) globalMap,mapOf(String, setOf(DecisionVariable)) lastElementMap) {
+        setOf(String) streamListToDeclare = {};
         String name = elt.varName().firstToUpperCase() + elt.type();
         String nontopoStream = "Stream";
         String topoStream = "TopoStream";
@@ -118,7 +124,7 @@ template stormDataManagementElement(Configuration config, FileArtifact target, D
     	''
     	'    final static Logger logger = Logger.getLogger($name.class);'
     	'    transient OutputCollector _collector;'
-    	'    private static String streamId = "$streamId";'
+    	'    private static String streamId;'
     	'    private transient IStorageSupport support;'
     	produceOutputVariable(lastElts, nameToOutputMap);	    	
     	''
@@ -157,9 +163,7 @@ template stormDataManagementElement(Configuration config, FileArtifact target, D
 		'    public void execute(Tuple tuple) {'
 		
 		 //produce input -- output casting statement
-		 produceInputForTuples(nameToOutputMap, lastElts);		
-
-		'		_collector.ack(tuple);'
+		 produceInputForTuples(nameToOutputMap, lastElts, streamId, streamListToDeclare);				
 		'    }'
         ''
         	
@@ -168,13 +172,13 @@ template stormDataManagementElement(Configuration config, FileArtifact target, D
         '        super.cleanup();'
         '    }'
         ''       
-		'    public void declareOutputFields(OutputFieldsDeclarer declarer) {'				
-		'        declarer.declareStream("$streamId", new Fields("$ifOutputName"));'
+		'    public void declareOutputFields(OutputFieldsDeclarer declarer) {'	
+		for(String s : streamListToDeclare) {
+		'        declarer.declareStream("${streamId}${s.firstToUpperCase()}", new Fields("$ifOutputName"));'	
+		}			
+		
 		'    }'
     	''
-    	'	@Override'
-		'	public void onSignal(byte[] data) {'		
-		'	}'
     	'}'
     }	
 }
