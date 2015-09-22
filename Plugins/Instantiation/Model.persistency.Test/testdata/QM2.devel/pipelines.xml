@@ -1,0 +1,31 @@
+<project name="pipelines" default="deploy" basedir=".">
+
+    <property file="${user.home}/global-build.properties"/>
+    <property file="${user.home}/qualimaster-build.properties"/>
+    <include file="${user.home}/macros.xml"/>
+
+    <!--
+    <taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml"/>
+
+    <path id="easyTaskDef.lib">
+      <fileset dir="${home.base.dir}/${projects.standalone.dir}/build/generatedLibs.ex/dist">
+        <include name="*.jar"/>
+      </fileset>
+    </path>
+    -->
+    <target name="deploy">
+      <mvnDeploy folderName="eu/qualimaster/PriorityPip" pomFile="pipelines/eu/qualimaster/PriorityPip/pom.xml" 
+        jarFolder="pipelines/eu/qualimaster/PriorityPip/target" jarFile= "PriorityPip-0.0.2-SNAPSHOT-jar-with-dependencies.jar"/>
+      <mvnDeploy folderName="eu/qualimaster/RandomPip" pomFile="pipelines/eu/qualimaster/RandomPip/pom.xml" 
+        jarFolder="pipelines/eu/qualimaster/RandomPip/target" jarFile= "RandomPip-0.0.2-SNAPSHOT-jar-with-dependencies.jar"/>
+      <mvnDeploy folderName="eu/qualimaster/SwitchPip" pomFile="pipelines/eu/qualimaster/SwitchPip/pom.xml" 
+        jarFolder="pipelines/eu/qualimaster/SwitchPip/target" jarFile= "SwitchPip-0.0.2-SNAPSHOT-jar-with-dependencies.jar"/>
+      <mvnDeploy folderName="eu/qualimaster/testDMPip" pomFile="pipelines/eu/qualimaster/testDMPip/pom.xml" 
+        jarFolder="pipelines/eu/qualimaster/testDMPip/target" jarFile= "testDMPip-0.0.1-SNAPSHOT-jar-with-dependencies.jar"/>
+      <mvnDeploy folderName="eu/qualimaster/AggregatePip" pomFile="pipelines/eu/qualimaster/AggregatePip/pom.xml" 
+        jarFolder="pipelines/eu/qualimaster/AggregatePip/target" jarFile= "AggregatePip-0.0.1-SNAPSHOT-jar-with-dependencies.jar"/>
+      <mvnDeploy folderName="if-gen" pomFile="if-gen/pom.xml" 
+        jarFolder="if-gen/target" jarFile= "PriorityPipelineInterfaces-0.0.5-SNAPSHOT.jar"/>
+      <mvnDeploy folderName="InfrastructureModel" pomFile="pom.xml" jarFolder="target" jarFile="infrastructureModel-0.0.1-SNAPSHOT.jar" />
+    </target>
+</project>
