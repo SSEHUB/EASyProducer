@@ -159,12 +159,6 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
                 
                 File copyBla = new File(getArtifactsFolder(), "src2/test/CopyBla.java");
                 tempFile = new File(base, "javaCopy/dest/instantiated/test/Bla.java");
-                try {
-                    System.out.println("EXPECTED: " + file2String(copyBla));
-                    System.out.println("ACTUAL" + file2String(tempFile));
-                } catch (IOException e) {
-                    Assert.fail(e.getMessage());
-                }
                 assertFileEqualitySafe(tempFile, copyBla);
             }
 
