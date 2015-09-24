@@ -3,25 +3,14 @@ package de.uni_hildesheim.sse.easy.java.artifacts;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.Assignment;
 import org.eclipse.jdt.core.dom.ClassInstanceCreation;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.ExpressionStatement;
-import org.eclipse.jdt.core.dom.IAnnotationBinding;
-import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
-import org.eclipse.jdt.core.search.IJavaSearchConstants;
-import org.eclipse.jdt.core.search.IJavaSearchScope;
-import org.eclipse.jdt.core.search.SearchEngine;
-import org.eclipse.jdt.core.search.SearchMatch;
-import org.eclipse.jdt.core.search.SearchParticipant;
-import org.eclipse.jdt.core.search.SearchPattern;
-import org.eclipse.jdt.core.search.SearchRequestor;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IArtifactVisitor;
@@ -69,7 +58,6 @@ public class JavaMethod extends JavaParentFragmentArtifact {
             public boolean visit(ExpressionStatement node) {
                 if (node.getExpression() instanceof MethodInvocation) {
                     MethodInvocation methodInvocation = (MethodInvocation) node.getExpression();
-                    visitMethodIn(methodInvocation);
                     String methodName = methodInvocation.getName().toString();
                     if (null != methodInvocation.getExpression()) {
                         ITypeBinding typeBinding = methodInvocation.getExpression().resolveTypeBinding();
@@ -83,60 +71,6 @@ public class JavaMethod extends JavaParentFragmentArtifact {
             }
         });
         return new ArraySet<AbstractJavaStatement>(list.toArray(new JavaCall[list.size()]), JavaCall.class);
-    }
-
-    /**
-     * Visit the method and resolve the bindings.
-     * @param node The method that should be visited.
-     * @return true
-     */
-    public boolean visitMethodIn(MethodInvocation node) {
-        resolveMethodBinding(node);
-        resolveExpressionType(node.getExpression());
-        return true;
-    }
-
-    /**
-     * Resolves the method binding.
-     * @param node the method invocation that should be resolved
-     */
-    private void resolveMethodBinding(MethodInvocation node) {
-        IMethodBinding iMethod = (IMethodBinding) node.resolveMethodBinding();
-        if (iMethod != null) {
-//            System.out.println("Binding " + iMethod.getName());
-            IAnnotationBinding[] annos = iMethod.getAnnotations();
-//            for (IAnnotationBinding iAnnotationBinding : annos) {
-//                System.out.println("\t" + iAnnotationBinding.getName());
-//            }
-
-            // IBinding binding = md.resolveBinding();
-            // System.out.println((IMethod)binding.getJavaElement());
-            // ICompilationUnit unit = (ICompilationUnit)
-            // methodDeclaration.getRoot();
-            // if (unit != null) {
-            // ASTParser parser = ASTParser.newParser(AST.JLS4);
-            // parser.setKind(ASTParser.K_COMPILATION_UNIT);
-            // parser.setSource(methodDeclaration.getRoot().toString().toCharArray());
-            // parser.setResolveBindings(true);
-            // CompilationUnit cu = (CompilationUnit) parser.createAST(null);
-            // MethodDeclaration decl = (MethodDeclaration)
-            // cu.findDeclaringNode(iMethod.getKey());
-            // System.out.println(decl);
-            // JavaMethod method = new JavaMethod(decl, JavaMethod.this);
-            // }
-
-        }
-    }
-
-    /**
-     * DELETE?
-     * @param expression expression
-     */
-    private void resolveExpressionType(Expression expression) {
-        if (expression != null) {
-            ITypeBinding typeBinding = expression.resolveTypeBinding();
-            // System.out.println("type: " + typeBinding.getName());
-        }
     }
 
     /**

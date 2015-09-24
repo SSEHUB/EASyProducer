@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -217,11 +218,14 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
             try {
                 writer = new BufferedWriter(new FileWriter(file));
                 String code = unitNode.toString();
-                Map<String, String> options = JavaCore.getOptions();
+                Map<String, String> options = new HashMap<String, String>();
                 options.put(DefaultCodeFormatterConstants.FORMATTER_INSERT_SPACE_BEFORE_ASSIGNMENT_OPERATOR, 
                     JavaCore.INSERT);
                 options.put(DefaultCodeFormatterConstants.FORMATTER_INSERT_SPACE_AFTER_ASSIGNMENT_OPERATOR, 
                     JavaCore.INSERT);
+                options.put(JavaCore.COMPILER_COMPLIANCE, JavaCore.VERSION_1_7);
+                options.put(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, JavaCore.VERSION_1_7);
+                options.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_1_7);
                 options.put(DefaultCodeFormatterConstants.FORMATTER_TAB_CHAR, JavaCore.SPACE);
                 CodeFormatter codeFormatter = ToolFactory.createCodeFormatter(options);
                 TextEdit textEdit = codeFormatter.format(CodeFormatter.K_COMPILATION_UNIT, code, 0, code.length(), 0,
@@ -339,7 +343,7 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
         // Set options to resolve bindings
         parser.setBindingsRecovery(true);
         parser.setResolveBindings(true);
-        Map<String, String> options = JavaCore.getOptions();
+        Hashtable<String, String> options = JavaCore.getOptions();
         options.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_1_7);
         parser.setCompilerOptions(options);
         String unitName = FilenameUtils.getBaseName(file.getName());
@@ -359,7 +363,6 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
         }
         // WORKAROUND! FIX IT!
         if (sourcePath.contains("//")) {
-//            logger.warn(sourcePath  + " contains //");
             sourcePath = sourcePath.replaceAll("//", "/");
         }
         String[] sources = {sourcePath};
