@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pipeline:Pipeline xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pipeline="pipeline" name="AggregatePip" artifact="eu.qualimaster:AggregatePip:0.0.1-SNAPSHOT">
+  <nodes xsi:type="pipeline:Source" name="RandomSrc" source="2"/>
+  <nodes xsi:type="pipeline:FamilyElement" name="AggreFm1" family="7"/>
+  <nodes xsi:type="pipeline:FamilyElement" name="AggreFm2" family="7"/>
+  <nodes xsi:type="pipeline:FamilyElement" name="AggreFm3" family="7"/>
+  <nodes xsi:type="pipeline:FamilyElement" name="SwitchFm" family="6"/>
+  <nodes xsi:type="pipeline:Sink" name="RandomSink" sink="1"/>
+  <flows name="f1" source="//@nodes.0" destination="//@nodes.1"/>
+  <flows name="f2" source="//@nodes.1" destination="//@nodes.2"/>
+  <flows name="f3" source="//@nodes.2" destination="//@nodes.3"/>
+  <flows name="f4" source="//@nodes.3" destination="//@nodes.4"/>
+  <flows name="f5" source="//@nodes.4" destination="//@nodes.5"/>
+</pipeline:Pipeline>

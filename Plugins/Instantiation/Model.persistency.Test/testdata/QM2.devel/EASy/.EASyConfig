@@ -12,7 +12,4 @@
 	</reasoners>
 	<instantiators>
 	</instantiators>
-	<copy>
-		<entity copyID="de.uni_hildesheim.sse.easy.instantiator.copy.core.normal" />
-	</copy>
 </ProductLineProject>

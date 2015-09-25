@@ -1,0 +1,15 @@
+package eu.qualimaster.families.protobuf;
+option java_package = "eu.qualimaster.protos";
+option java_outer_classname = "FMismatchedFamilyProtos";
+
+message SIFMismatchedFamilyMisStringInput {
+    required string symbolTuple1 = 1;
+    required int32 volume = 2;
+}
+
+message SIFMismatchedFamilyMisStringOutput {
+    required string streamID1 = 1;
+    required int32 timestamp = 2;
+    required double quote = 3;
+}
+

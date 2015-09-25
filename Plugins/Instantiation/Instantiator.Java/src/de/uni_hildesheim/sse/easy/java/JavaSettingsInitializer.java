@@ -1,10 +1,7 @@
 package de.uni_hildesheim.sse.easy.java;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ProjectSettings;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ISettingsInitializer;
@@ -16,25 +13,28 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ISettings
  *
  */
 public class JavaSettingsInitializer implements ISettingsInitializer {
-
+    
 //    private static Set<String> classpathEntries;
 
     @Override
     public void initialize(File base, Map<ProjectSettings, Object> settings) {
-//        String[] splitClasspath = System.getProperty("java.class.path").split(";");
+//        // Default fallback: Add the path of base to the classpath
+//        String seperator = String.valueOf(File.pathSeparatorChar);
+//        String[] splitClasspath = System.getProperty("java.class.path").split(seperator);
 //        classpathEntries = new HashSet<String>(Arrays.asList(splitClasspath));
-//        File tmpFile = new File(base.getAbsolutePath(), "/src");
-//        classpathEntries.add(tmpFile.getAbsolutePath());
+//        System.out.println("BASE: " +  base.getAbsolutePath());
+//        classpathEntries.add(base.getAbsolutePath());
 //        String newClasspath = "";
 //        for (String string : classpathEntries) {
-//            newClasspath += string + ";";
+//            newClasspath += string + seperator;
 //        }
+//        System.out.println("CP: " + newClasspath);
 //        System.setProperty("java.class.path", newClasspath);
     }
 
 //    @Override
 //    public void initialize(File base, Map<ProjectSettings, Object> settings) {
-//        // TODO: this is experimental and does currently not work due to how eclipse handles the workspace.
+//        // TODO: THIS IS EXPERIMENTAL AND DOES CURRENTLY NOT WORK DUE TO HOW ECLIPSE HANDLES THE WORKSPACE.
 //        // Catch every exception in case something goes wrong. Prevents the plugin from crashing.
 //        try {
 //            // Outside of eclipse environment

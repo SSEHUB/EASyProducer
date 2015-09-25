@@ -1,11 +1,14 @@
 package eu.qualimaster.data.imp;
 
+import eu.qualimaster.data.inf.ITwitterStreamData;
 import eu.qualimaster.data.inf.ITwitterStreamData.*;
+import eu.qualimaster.dataManagement.strategies.*;
+import eu.qualimaster.observables.*;
 
 /**
 * Define the data source class(GEN).
 **/
-public class TwitterStreamData {
+public class TwitterStreamData implements ITwitterStreamData{
 
     /**
     * Define the source data input interface.
@@ -59,6 +62,7 @@ public class TwitterStreamData {
     * Returns a specific type of data source.
     * @return TwitterStreamDataSymbolListOutput the source data
     **/
+    @Override
     public TwitterStreamDataSymbolListOutput getSymbolList() {
         return null;
     }
@@ -66,6 +70,7 @@ public class TwitterStreamData {
     * Returns a specific type of data source.
     * @return TwitterStreamDataTwitterStreamOutput the source data
     **/
+    @Override
     public TwitterStreamDataTwitterStreamOutput getTwitterStream() {
         return null;
     }
@@ -76,6 +81,7 @@ public class TwitterStreamData {
      *
      * @param value the new value of the data source parameter
      */
+    @Override
     public void setParameterConsumerKey(String value) {
     }
 
@@ -84,6 +90,7 @@ public class TwitterStreamData {
      *
      * @param value the new value of the data source parameter
      */
+    @Override
     public void setParameterConsumerSecret(String value) {
     }
 
@@ -92,6 +99,7 @@ public class TwitterStreamData {
      *
      * @param value the new value of the data source parameter
      */
+    @Override
     public void setParameterAccessToken(String value) {
     }
 
@@ -100,6 +108,7 @@ public class TwitterStreamData {
      *
      * @param value the new value of the data source parameter
      */
+    @Override
     public void setParameterAccessTokenSecret(String value) {
     }
 
@@ -108,6 +117,7 @@ public class TwitterStreamData {
      *
      * @param value the new value of the data source parameter
      */
+    @Override
     public void setParameterQueueSize(int value) {
     }
 
@@ -116,6 +126,7 @@ public class TwitterStreamData {
      *
      * @param value the new value of the data source parameter
      */
+    @Override
     public void setParameterTweetDirectory(String value) {
     }
 
@@ -124,6 +135,7 @@ public class TwitterStreamData {
      *
      * @param value the new value of the data source parameter
      */
+    @Override
     public void setParameterSpeedFactor(double value) {
     }
 
@@ -132,6 +144,7 @@ public class TwitterStreamData {
      *
      * @param value the new value of the data source parameter
      */
+    @Override
     public void setParameterRunLocally(boolean value) {
     }
 
@@ -140,6 +153,7 @@ public class TwitterStreamData {
      *
      * @param value the new value of the data source parameter
      */
+    @Override
     public void setParameterAdjustTimeToNow(boolean value) {
     }
 
@@ -148,7 +162,22 @@ public class TwitterStreamData {
      *
      * @param value the new value of the data source parameter
      */
+    @Override
     public void setParameterRealLoops(boolean value) {
     }
 
+    @Override
+    public void connect() {}
+
+    @Override
+    public void disconnect(){}
+
+    @Override
+    public void setStrategy(IStorageStrategyDescriptor strategy) {}
+
+    @Override
+    public IStorageStrategyDescriptor getStrategy() { return NoStorageStrategyDescriptor.INSTANCE;}
+
+    @Override
+    public Double getMeasurement(IObservable observable) { return null;}
 }

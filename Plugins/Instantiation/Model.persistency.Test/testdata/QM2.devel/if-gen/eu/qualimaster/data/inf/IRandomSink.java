@@ -1,11 +1,12 @@
 package eu.qualimaster.data.inf;
 
 import java.io.Serializable;
+import eu.qualimaster.dataManagement.sinks.IDataSink;
 
 /**
 * Define the data sink interface(GEN).
 **/
-public interface IRandomSink {
+public interface IRandomSink extends IDataSink {
 
     /**
     * Define the sink data input interface.
@@ -26,8 +27,8 @@ public interface IRandomSink {
 
 
     /**
-    * Returns a specific type of data sink.
-    * @return IRandomSinkProccessedDataInput the sink data
+    * Posts a specific type of data sink.
+    * @param data the sink data IRandomSinkProccessedDataInput 
     **/
     public void postDataProccessedData(IRandomSinkProccessedDataInput data);
 }

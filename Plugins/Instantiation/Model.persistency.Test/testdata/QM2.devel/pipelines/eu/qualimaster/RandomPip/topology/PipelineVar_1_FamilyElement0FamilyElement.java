@@ -13,6 +13,9 @@ import eu.qualimaster.families.imp.*;
 import eu.qualimaster.common.signal.*;
 import eu.qualimaster.base.algorithm.*;
 import eu.qualimaster.base.algorithm.IFamily.State;
+import eu.qualimaster.infrastructure.PipelineOptions;
+import eu.qualimaster.pipeline.DefaultModeException;
+import eu.qualimaster.pipeline.DefaultModeMonitoringEvent;
 import eu.qualimaster.algorithms.RandomProcessor1;
 import eu.qualimaster.algorithms.RandomProcessor2;
 import eu.qualimaster.data.inf.IRandomSource.*;
@@ -35,13 +38,21 @@ public class PipelineVar_1_FamilyElement0FamilyElement extends BaseSignalBolt {
         super(name, namespace);
     }
 
-    	    /**
+    /**
      * Sends an algorithm change event and considers whether the coordination layer shall be bypassed for direct
      * testing.
      * @param algorithm the new algorithm
      */
     private static void sendAlgorithmChangeEvent(String algorithm) {
-        EventManager.send(new AlgorithmChangedMonitoringEvent("RandomPip", "randomFamily", algorithm));
+        EventManager.send(new AlgorithmChangedMonitoringEvent("RandomPip", "PipelineVar_1_FamilyElement0", algorithm));
+    }
+
+    /**
+     * Sends an a default mode monitoring event with a DefaultModeException case.
+     * @param exceptionCase the DefaultModeException case
+     */
+    private static void sendDefaultModeMonitoringEvent(DefaultModeException exceptionCase) {
+        EventManager.send(new DefaultModeMonitoringEvent("RandomPip", "PipelineVar_1_FamilyElement0", exceptionCase));
     }
 
     public void prepare(Map map, TopologyContext topologyContext, OutputCollector collector) {
@@ -60,6 +71,8 @@ public class PipelineVar_1_FamilyElement0FamilyElement extends BaseSignalBolt {
            // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        alg.setParameterDelay(PipelineOptions.getExecutorIntArgument(map, getName(), "delay", 0));
+        alg.setParameterFlag(PipelineOptions.getExecutorBooleanArgument(map, getName(), "flag", false));
         alg.switchState(State.ACTIVATE); //activate the current algorithm
 		sendAlgorithmChangeEvent("RandomProcessor1");
         streamId = "PipelineVar_1_FamilyElement01TopoStream";
@@ -70,79 +83,93 @@ public class PipelineVar_1_FamilyElement0FamilyElement extends BaseSignalBolt {
         // delegate to family "randomFamily"
         iTupleRandomData = (IRandomSourceRandomDataOutput)tuple.getValue(0);
         inputRandomData.setRandomInteger(iTupleRandomData.getRandomInteger());
-        alg.calculate(inputRandomData, result);
+        try {
+            alg.calculate(inputRandomData, result);
+        } catch(DefaultModeException e) {
+            result.setRandomInteger(0);
+            sendDefaultModeMonitoringEvent(e);
+        }
         if(alg instanceof ITopologyCreate) {
-            _collector.emit(streamId, tuple, new Values(inputRandomData));
+            _collector.emit(streamId, new Values(inputRandomData));
         }
 
         if(!(alg instanceof ITopologyCreate)) {
-            _collector.emit(streamId, tuple, new Values(result));
+            _collector.emit(streamId, new Values(result));
         }
-		 _collector.ack(tuple);
+//		 _collector.ack(tuple);
     }
 
-    /**
-    * Receives the signal data for FamilyElement adaptation.
-    * @param data the signal data
-    **/
-	public void onSignal(byte[] data) {
-        String signal=new String(data);
-        logger.info("Received signal: " + signal);
-        //handle the received signal and make related changes, e.g., switch algorithm from software to hardware
-        String[] parts = signal.split(":");
-        if (parts.length >= 2) {
-            if ("param".equals(parts[0]) && 3 == parts.length) {
-       	     /*switch (parts[1]) { // just for illustration, may need parameter conversion
- 	             case "param1" : 
-		         alg.setParameterParam1(parts[2]); 
- 	             break;
-	          }*/
- 	         } else if ("alg".equals(parts[0])) {
-	             switch (parts[1]) {
-                    case "RandomProcessor1":
-                        if(!(alg instanceof RandomProcessor1)) {
-							alg.switchState(State.PASSIVATE); //passivate the previous algorithm
-                            try {
-                                Class cls = Class.forName("eu.qualimaster.algorithms.RandomProcessor1");
-                                alg = (IRandomFamily) cls.newInstance();
-                            } catch (ClassNotFoundException e) {
-                                e.printStackTrace();
-                            } catch (InstantiationException e) {
-                                e.printStackTrace();
-                            } catch (IllegalAccessException e) {
-                                e.printStackTrace();
-                            }
-		 					sendAlgorithmChangeEvent("RandomProcessor1");
-                            streamId = "PipelineVar_1_FamilyElement01TopoStream";
-						    alg.switchState(State.ACTIVATE); //activate the current algorithm
-                        }
-		                 break;
-                    case "RandomProcessor2":
-                        if(!(alg instanceof RandomProcessor2)) {
-							alg.switchState(State.PASSIVATE); //passivate the previous algorithm
-                            try {
-                                Class cls = Class.forName("eu.qualimaster.algorithms.RandomProcessor2");
-                                alg = (IRandomFamily) cls.newInstance();
-                            } catch (ClassNotFoundException e) {
-                                e.printStackTrace();
-                            } catch (InstantiationException e) {
-                                e.printStackTrace();
-                            } catch (IllegalAccessException e) {
-                                e.printStackTrace();
-                            }
-		 					sendAlgorithmChangeEvent("RandomProcessor2");
-                            streamId = "PipelineVar_1_FamilyElement02TopoStream";
-						    alg.switchState(State.ACTIVATE); //activate the current algorithm
-                        }
-		                 break;
-	             }
-	         }
+    @Override
+    public void notifyParameterChange(ParameterChangeSignal signal) {
+        try {
+            for(int i = 0; i < signal.getChangeCount(); i++) {
+                ParameterChange para = signal.getChange(i);
+                switch (para.getName()) {
+                    case "delay" :
+                        System.out.println("Received parameter changing signal delay");
+                        alg.setParameterDelay(para.getIntValue()); 
+                        break;
+                    case "flag" :
+                        System.out.println("Received parameter changing signal flag");
+                        alg.setParameterFlag(para.getBooleanValue()); 
+                        break;
+                }
+            }
+        } catch (ValueFormatException e) {
+            e.printStackTrace();
         }
-	}
+    }
+    @Override
+    public void notifyAlgorithmChange(AlgorithmChangeSignal signal) {
+        System.out.println("Received algorithm switching signal " + signal.getAlgorithm());
+        switch (signal.getAlgorithm()) {
+            case "RandomProcessor1":
+                if(!(alg instanceof RandomProcessor1)) {
+                    alg.switchState(State.PASSIVATE); //passivate the previous algorithm
+                    try {
+                        Class cls = Class.forName("eu.qualimaster.algorithms.RandomProcessor1");
+                        alg = (IRandomFamily) cls.newInstance();
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (InstantiationException e) {
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+                    alg.setParameterDelay(0);
+                    alg.setParameterFlag(false);
+                    sendAlgorithmChangeEvent("RandomProcessor1");
+                    streamId = "PipelineVar_1_FamilyElement01TopoStream";
+                    alg.switchState(State.ACTIVATE); //activate the current algorithm
+                }
+                break;
+            case "RandomProcessor2":
+                if(!(alg instanceof RandomProcessor2)) {
+                    alg.switchState(State.PASSIVATE); //passivate the previous algorithm
+                    try {
+                        Class cls = Class.forName("eu.qualimaster.algorithms.RandomProcessor2");
+                        alg = (IRandomFamily) cls.newInstance();
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (InstantiationException e) {
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+                    alg.setParameterDelay(0);
+                    alg.setParameterFlag(false);
+                    sendAlgorithmChangeEvent("RandomProcessor2");
+                    streamId = "PipelineVar_1_FamilyElement02TopoStream";
+                    alg.switchState(State.ACTIVATE); //activate the current algorithm
+                }
+                break;
+        }
+    }
 
     @Override
     public void cleanup() {
         super.cleanup();
+        alg.switchState(State.TERMINATING);
     }
 
     public void declareOutputFields(OutputFieldsDeclarer declarer) {

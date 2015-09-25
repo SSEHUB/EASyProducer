@@ -8,10 +8,12 @@ project Infrastructure {
 	import Adaptivity;
 	import Pipelines; 
 
-	attribute BindingTime bindingTime = BindingTime.compile to Infrastructure;
+	annotate BindingTime bindingTime = BindingTime.compile to Infrastructure;
 	
 	setOf(refTo(Pipeline)) activePipelines;
 	ArtifactString interfaceArtifact;
+	ArtifactString modelArtifact;
+	String repositoryURL;
 
     // function calculating the workers of the active pipelines	
 	def Integer activePipelinesNumWorkers() = 

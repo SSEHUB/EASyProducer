@@ -1,26 +1,6 @@
+import commonVTLMethods;
 @advice(QM)
 template dataSinkInterface(Configuration config, FileArtifact target, DataSink elt) {
-    def String parameterTypeName(DecisionVariable var) {
-    	switch(var.type()) {
-    		"IntegerParameter" : "int",
-    		"BooleanParameter" : "boolean",
-    		"RealParameter" : "double",
-    		"StringParameter" : "String"
-    	}
-    }
-    	
-	def String fieldTypeName(DecisionVariable var) {
-    	String type = var.byName("type");
-    	switch(type) {
-    		"INTEGER" : "int",
-    		"BOOLEAN" : "boolean",
-    		"REAL" : "double",
-    		"STRING" : "String",
-    		"OBJECT": "Object",
-    		"LONG": "long",
-    		"STRINGLIST": "java.util.List<String>"
-    	}		
-	}
 
     /*
      * Produces the tuple type interfaces.
@@ -60,15 +40,17 @@ template dataSinkInterface(Configuration config, FileArtifact target, DataSink e
 	
 	def main(Configuration config, FileArtifact target, DataSink dataSnk){
 		String snkName =dataSnk.name;
-		String inputName = "I" + snkName.firstToUpperCase();
+		snkName = snkName.firstToUpperCase();
+		String inputName = "I" + snkName;
 		'package eu.qualimaster.data.inf;'
 		''
 		'import java.io.Serializable;'
+		'import eu.qualimaster.dataManagement.sinks.IDataSink;'
 		''
 		'/**'
 		'* Define the data sink interface(GEN).'
 		'**/'
-		'public interface I${toIdentifier(snkName)} {'
+		'public interface I${toIdentifier(snkName)} extends IDataSink {'
 		''
 		//generate the tuple type interfaces.
 		 produceForTuples(dataSnk.output, snkName, 4);		
@@ -77,8 +59,8 @@ template dataSinkInterface(Configuration config, FileArtifact target, DataSink e
 		for(Tuple t : dataSnk.output){
 			tupleName = t.name;
 			'/**' | 4;
-			'* Returns a specific type of data sink.' | 4;
-			'* @return ${toIdentifier(inputName)}${firstToUpperCase(tupleName)}Input the sink data' | 4;
+			'* Posts a specific type of data sink.' | 4;
+			'* @param data the sink data ${toIdentifier(inputName)}${firstToUpperCase(tupleName)}Input ' | 4;
 			'**/' | 4;
 	   	    'public void postData${firstToUpperCase(tupleName)}(${toIdentifier(inputName)}${firstToUpperCase(tupleName)}Input data);' | 4;
 		}

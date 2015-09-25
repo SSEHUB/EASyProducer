@@ -3,19 +3,20 @@ project DataManagement {
     import Basics;
     import Observables;
 
-	attribute BindingTime bindingTime = BindingTime.compile to DataManagement;
+	annotate BindingTime bindingTime = BindingTime.compile to DataManagement;
 
     enum DataManagementStrategy {None, FirstInFirstOut, LeastFrequentlyUsed, LeastRecentlyUsed, LeastFrequentlyRecentlyUsed};
     
 	compound DataElement {
 	    NonEmptyString name;
+	    Description description;
 	    NonEmptyString artifact;
 		String storageLocation;
 		DataManagementStrategy strategy;
 		NaturalNumber timeLine;
 		NaturalNumber cutoffCapacity;
         
-		Constraint strategyAssigned = strategy <> null; 
+		Constraint strategyAssigned = strategy.isDefined(); 
 		Constraint strategyC1 = strategy == DataManagementStrategy.LeastFrequentlyUsed or strategy == DataManagementStrategy.LeastFrequentlyRecentlyUsed implies cutoffCapacity > 0;
 		Constraint strategyC2 = strategy == DataManagementStrategy.LeastRecentlyUsed or strategy == DataManagementStrategy.LeastFrequentlyRecentlyUsed implies timeLine > 0;
 		Constraint strategyC3 = strategy == DataManagementStrategy.None or strategy == DataManagementStrategy.FirstInFirstOut implies timeLine == 0 and cutoffCapacity == 0;

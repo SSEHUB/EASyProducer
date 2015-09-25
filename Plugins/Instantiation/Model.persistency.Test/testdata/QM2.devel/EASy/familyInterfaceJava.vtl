@@ -1,34 +1,10 @@
+import commonVTLMethods;
 @advice(QM)
-template familyInterfaceJava(Configuration config, FileArtifact target, DecisionVariable family, String ifName) {
-
-    // needs to be translated into new advice-style of writing
-
-    def String parameterTypeName(DecisionVariable var) {
-    	switch(var.type()) {
-    		"IntegerParameter" : "int",
-    		"BooleanParameter" : "boolean",
-    		"RealParameter" : "double",
-    		"StringParameter" : "String"
-    	}
-    }
-    
-    def String fieldTypeName(DecisionVariable var) {
-    	String type = var.byName("type");
-       	switch(type) {
-    		"INTEGER" : "int",
-    		"BOOLEAN" : "boolean",
-    		"REAL" : "double",
-    		"STRING" : "String",
-    		"OBJECT": "Object",
-    		"LONG": "long",
-    		"STRINGLIST": "java.util.List<String>"
-    	}  	    	
-    }
-    
+template familyInterfaceJava(Configuration config, FileArtifact target, Family family, String ifName) {   
     /*
      * Produces the tuple type classes.
      */
-    def produceForTuples(DecisionVariable tuples, Boolean output, String fName, Integer indent) {
+    def produceForTuples(Tuples tuples, Boolean output, String fName, Integer indent) {
 	    String type;
 	    String typeName;
     	String tupleName;  	
@@ -73,7 +49,7 @@ template familyInterfaceJava(Configuration config, FileArtifact target, Decision
  	/*
  	 * Produces the calculate methods based on input-output tuples.
  	 */
-    def produceForCalculate(DecisionVariable inputTuples, DecisionVariable outputTuples) {   	 
+    def produceForCalculate(Tuples inputTuples, Tuples outputTuples) {   	 
     	 String inputTupleName;
     	 String outputTupleName;
    	   	 
@@ -98,7 +74,7 @@ template familyInterfaceJava(Configuration config, FileArtifact target, Decision
        }
     } 	
 
-    def main(Configuration config, FileArtifact target, DecisionVariable family, String ifName) {
+    def main(Configuration config, FileArtifact target, Family family, String ifName) {
     	/* think about the family interface name is better from varName or name field
     	Family fm = family;
     	String familyName = fm.name;
@@ -115,14 +91,13 @@ template familyInterfaceJava(Configuration config, FileArtifact target, Decision
     	' */'
     	'public interface ${toIdentifier(ifName)} extends IFamily{'
     	''
-    	 produceForTuples(family.byName("input"), false, ifName, 4);
-    	 produceForTuples(family.byName("output"), true, ifName, 4);
+    	 produceForTuples(family.input, false, ifName, 4);
+    	 produceForTuples(family.output, true, ifName, 4);
     	 
     	 //produce the calculate method based on multiple input and output string
-         produceForCalculate(family.byName("input"), family.byName("output"));        
+         produceForCalculate(family.input, family.output);        
         
         if (family.byName("parameters").variables().size()>0) {
-	        '    // algorithm parameters'
 	        ''
 	        for (Parameter p : family.byName("parameters")) {
 	        	String paramName = p.name;

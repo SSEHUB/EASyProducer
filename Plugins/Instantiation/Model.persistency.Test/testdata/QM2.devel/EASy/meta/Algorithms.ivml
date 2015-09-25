@@ -4,13 +4,13 @@ project Algorithms {
     import Observables;
 	import ReconfigurableHardware;
 	
-	attribute BindingTime bindingTime = BindingTime.compile to Algorithms;
+	annotate BindingTime bindingTime = BindingTime.compile to Algorithms;
 	 
 	compound Algorithm {
 		NonEmptyString name; 
 		ArtifactString artifact;
 		NonEmptyString class;
-		String description;
+		Description description;
 		Tuples input;    
 		Tuples output;
 		Parameters parameters;
@@ -32,11 +32,10 @@ project Algorithms {
             Velocity velocity;
             Variety variety;
 		} 
-		Constraint inputGivenCheck = input != null;
-		Constraint outputGivenCheck = output != null;
+		Constraint inputGivenCheck = input.isDefined(); //untested
+		Constraint outputGivenCheck = output.isDefined(); //untested
 	} 
 	
 	setOf(refTo(Algorithm)) algorithms;
-	Constraint algNamesUnique = algorithms->collect(a|a.name).size() == algorithms.size();
-	
+	Constraint algNamesUnique = algorithms->collect(a|a.name.substitutes(" ", "")).size() == algorithms.size();	
 }

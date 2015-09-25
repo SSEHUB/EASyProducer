@@ -1,11 +1,12 @@
 package eu.qualimaster.data.inf;
 
 import java.io.Serializable;
+import eu.qualimaster.dataManagement.sinks.IDataSink;
 
 /**
 * Define the data sink interface(GEN).
 **/
-public interface IPriorityDataSink {
+public interface IPriorityDataSink extends IDataSink {
 
     /**
     * Define the sink data input interface.
@@ -42,13 +43,13 @@ public interface IPriorityDataSink {
 
 
     /**
-    * Returns a specific type of data sink.
-    * @return IPriorityDataSinkPairwiseFinancialInput the sink data
+    * Posts a specific type of data sink.
+    * @param data the sink data IPriorityDataSinkPairwiseFinancialInput 
     **/
     public void postDataPairwiseFinancial(IPriorityDataSinkPairwiseFinancialInput data);
     /**
-    * Returns a specific type of data sink.
-    * @return IPriorityDataSinkPairwiseTwitterInput the sink data
+    * Posts a specific type of data sink.
+    * @param data the sink data IPriorityDataSinkPairwiseTwitterInput 
     **/
     public void postDataPairwiseTwitter(IPriorityDataSinkPairwiseTwitterInput data);
 }

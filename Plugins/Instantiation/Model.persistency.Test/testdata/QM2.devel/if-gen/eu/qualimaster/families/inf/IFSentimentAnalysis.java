@@ -85,7 +85,6 @@ public interface IFSentimentAnalysis extends IFamily{
      */
     public void calculate(IIFSentimentAnalysisTwitterStreamInput input, IIFSentimentAnalysisAnalyzedStreamOutput result);
 
-    // algorithm parameters
 
     /**
      * Sets the algorithm parameter "timeSeriesGranularity".

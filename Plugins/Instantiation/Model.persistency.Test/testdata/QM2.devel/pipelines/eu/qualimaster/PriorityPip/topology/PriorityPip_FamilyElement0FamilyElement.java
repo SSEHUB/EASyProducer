@@ -13,6 +13,9 @@ import eu.qualimaster.families.imp.*;
 import eu.qualimaster.common.signal.*;
 import eu.qualimaster.base.algorithm.*;
 import eu.qualimaster.base.algorithm.IFamily.State;
+import eu.qualimaster.infrastructure.PipelineOptions;
+import eu.qualimaster.pipeline.DefaultModeException;
+import eu.qualimaster.pipeline.DefaultModeMonitoringEvent;
 import eu.qualimaster.algorithms.imp.correlation.Preprocessor;
 import eu.qualimaster.data.inf.ISpringFinancialData.*;
 
@@ -34,13 +37,21 @@ public class PriorityPip_FamilyElement0FamilyElement extends BaseSignalBolt {
         super(name, namespace);
     }
 
-    	    /**
+    /**
      * Sends an algorithm change event and considers whether the coordination layer shall be bypassed for direct
      * testing.
      * @param algorithm the new algorithm
      */
     private static void sendAlgorithmChangeEvent(String algorithm) {
-        EventManager.send(new AlgorithmChangedMonitoringEvent("PriorityPip", "fPreprocessor", algorithm));
+        EventManager.send(new AlgorithmChangedMonitoringEvent("PriorityPip", "PriorityPip_FamilyElement0", algorithm));
+    }
+
+    /**
+     * Sends an a default mode monitoring event with a DefaultModeException case.
+     * @param exceptionCase the DefaultModeException case
+     */
+    private static void sendDefaultModeMonitoringEvent(DefaultModeException exceptionCase) {
+        EventManager.send(new DefaultModeMonitoringEvent("PriorityPip", "PriorityPip_FamilyElement0", exceptionCase));
     }
 
     public void prepare(Map map, TopologyContext topologyContext, OutputCollector collector) {
@@ -69,59 +80,30 @@ public class PriorityPip_FamilyElement0FamilyElement extends BaseSignalBolt {
         // delegate to family "fPreprocessor"
         iTupleSpringStream = (ISpringFinancialDataSpringStreamOutput)tuple.getValue(0);
         inputSpringStream.setSymbolTuple(iTupleSpringStream.getSymbolTuple());
-        alg.calculate(inputSpringStream, result);
+        try {
+            alg.calculate(inputSpringStream, result);
+        } catch(DefaultModeException e) {
+            result.setSymbolId(null);
+            result.setTimestamp(0);
+            result.setValue(0.0);
+            result.setVolume(0);
+            sendDefaultModeMonitoringEvent(e);
+        }
         if(alg instanceof ITopologyCreate) {
-            _collector.emit(streamId, tuple, new Values(inputSpringStream));
+            _collector.emit(streamId, new Values(inputSpringStream));
         }
 
         if(!(alg instanceof ITopologyCreate)) {
-            _collector.emit(streamId, tuple, new Values(result));
+            _collector.emit(streamId, new Values(result));
         }
-		 _collector.ack(tuple);
+//		 _collector.ack(tuple);
     }
 
-    /**
-    * Receives the signal data for FamilyElement adaptation.
-    * @param data the signal data
-    **/
-	public void onSignal(byte[] data) {
-        String signal=new String(data);
-        logger.info("Received signal: " + signal);
-        //handle the received signal and make related changes, e.g., switch algorithm from software to hardware
-        String[] parts = signal.split(":");
-        if (parts.length >= 2) {
-            if ("param".equals(parts[0]) && 3 == parts.length) {
-       	     /*switch (parts[1]) { // just for illustration, may need parameter conversion
- 	             case "param1" : 
-		         alg.setParameterParam1(parts[2]); 
- 	             break;
-	          }*/
- 	         } else if ("alg".equals(parts[0])) {
-	             switch (parts[1]) {
-	                  case "Preprocessor":
-		                 if (!(alg instanceof Preprocessor)) {
-                           try {
-                               Class cls = Class.forName("eu.qualimaster.algorithms.imp.correlation.Preprocessor");
-                               alg = (IFPreprocessor) cls.newInstance();
-                           } catch (ClassNotFoundException e) {
-                               e.printStackTrace();
-                           } catch (InstantiationException e) {
-                               e.printStackTrace();
-                           } catch (IllegalAccessException e) {
-                               e.printStackTrace();
-                           }
-		 				 sendAlgorithmChangeEvent("Preprocessor");
-                         streamId = "PriorityPip_FamilyElement0StreamPreprocessedStream";
-			             }
-		                break;
-	             }
-	         }
-        }
-	}
 
     @Override
     public void cleanup() {
         super.cleanup();
+        alg.switchState(State.TERMINATING);
     }
 
     public void declareOutputFields(OutputFieldsDeclarer declarer) {

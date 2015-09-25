@@ -2,6 +2,7 @@ package eu.qualimaster.families.imp;
 
 import eu.qualimaster.families.inf.*;
 import eu.qualimaster.observables.IObservable;
+import eu.qualimaster.dataManagement.serialization.SerializerRegistry;
 
 /**
  * The implementation for the algorithm family "IFMismatchedFamily" (GEN).
@@ -34,6 +35,9 @@ public class FMismatchedFamily implements IFMismatchedFamily {
         @Override
         public void setVolume(int volume){
             this.volume = volume;
+        }
+        static {
+            SerializerRegistry.register("IFMismatchedFamilyMisStringInput", FMismatchedFamilySerializers.IFMismatchedFamilyMisStringInputSerializer.class);
         }
     }
 
@@ -73,6 +77,9 @@ public class FMismatchedFamily implements IFMismatchedFamily {
         @Override
         public void setQuote(double quote){
             this.quote = quote;
+        }
+        static {
+            SerializerRegistry.register("IFMismatchedFamilyMisStringOutput", FMismatchedFamilySerializers.IFMismatchedFamilyMisStringOutputSerializer.class);
         }
     }
 

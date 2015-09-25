@@ -10,6 +10,10 @@ import eu.qualimaster.data.inf.IRandomSource;
 import eu.qualimaster.data.inf.IRandomSource.*;
 import eu.qualimaster.algorithms.RandomSourceAlg;
 import eu.qualimaster.common.signal.*;
+import eu.qualimaster.events.EventManager;
+import eu.qualimaster.infrastructure.PipelineOptions;
+import eu.qualimaster.pipeline.DefaultModeException;
+import eu.qualimaster.pipeline.DefaultModeMonitoringEvent;
 
 /**
 * Define the source Spout class(GEN).
@@ -17,7 +21,6 @@ import eu.qualimaster.common.signal.*;
 @SuppressWarnings({ "rawtypes", "serial" })
 public class PipelineVar_1_Source0Source extends BaseSignalSpout {
 
-    final static Logger logger = Logger.getLogger(PipelineVar_1_Source0Source.class);
     transient SpoutOutputCollector _collector;
     transient IRandomSource sourceData;
     transient IRandomSourceRandomDataOutput dataItemRandomData = null;
@@ -33,6 +36,8 @@ public class PipelineVar_1_Source0Source extends BaseSignalSpout {
         try {
             Class cls = Class.forName("eu.qualimaster.algorithms.RandomSourceAlg");
             sourceData = (IRandomSource) cls.newInstance();
+            sourceData.setParameterDelay(PipelineOptions.getExecutorIntArgument(conf, getName(), "delay", 0));
+		    sourceData.connect();
         } catch (ClassNotFoundException e) {
 	         // TODO Auto-generated catch block
             e.printStackTrace();
@@ -45,40 +50,52 @@ public class PipelineVar_1_Source0Source extends BaseSignalSpout {
         }
     }
 
+    /**
+     * Sends an a default mode monitoring event with a DefaultModeException case.
+     * @param exceptionCase the DefaultModeException case
+     */
+    private static void sendDefaultModeMonitoringEvent(DefaultModeException exceptionCase) {
+        EventManager.send(new DefaultModeMonitoringEvent("RandomPip", "PipelineVar_1_Source0", exceptionCase));
+    }
     @Override
     public void nextTuple() {
+        long start = System.currentTimeMillis();
+        boolean emitted = false;
         // Emitting stream "PipelineVar_1_Source0StreamRandomData".
-        dataItemRandomData = sourceData.getRandomData();
+        try {
+            dataItemRandomData = sourceData.getRandomData();
+        } catch(DefaultModeException e) {
+            dataItemRandomData.setRandomInteger(0);
+            sendDefaultModeMonitoringEvent(e);
+        }
         if(dataItemRandomData!=null){
-            _collector.emit("PipelineVar_1_Source0StreamRandomData", new Values(dataItemRandomData),dataItemRandomData);
+            _collector.emit("PipelineVar_1_Source0StreamRandomData", new Values(dataItemRandomData));
+            emitted = true;
         }
 
+        if (emitted) {
+            aggregateExecutionTime(start);
+        }
+        
     }
 
-    /**
-    * Receives the signal data for Source adaptation.
-    * @param data the signal data
-    **/
     @Override
-    public void onSignal(byte[] data) {
-        String signal=new String(data);
-        logger.info("Received signal: " + signal);
-        //handle the received signal and make related changes, e.g., give a parameter to Source
-        String[] parts = signal.split(":");
-        if (parts.length >= 2) {
-            if ("param".equals(parts[0]) && 3 == parts.length) {
-       	     /*switch (parts[1]) { // just for illustration, may need parameter conversion
- 	             case "param1" : 
-		         sourceData.setParameterParam1(parts[2]); 
- 	             break;
-	          }*/
+    public void notifyParameterChange(ParameterChangeSignal signal) {
+        try {
+            switch (signal.getParameter()) {
+                case "delay" :
+                    sourceData.setParameterDelay(signal.getIntValue()); 
+                    break;
             }
+        } catch (ValueFormatException e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void close() {
         super.close();
+		 sourceData.disconnect();
     }
 
 	@Override

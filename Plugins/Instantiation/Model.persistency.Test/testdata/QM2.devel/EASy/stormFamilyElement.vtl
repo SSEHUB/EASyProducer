@@ -1,28 +1,11 @@
+import commonVTLMethods;
 @advice(QM)
-template stormFamilyElement(Configuration config, FileArtifact target, DecisionVariable preElt, DecisionVariable elt, String topoName, mapOf(Tuple,String) nameToOutputMap, mapOf(String, mapOf(Tuple, Tuple)) globalMap,mapOf(String, setOf(DecisionVariable)) lastElementMap) {
-
-	def isTopology(DecisionVariable elt) {
-		FamilyElement fe = elt;
-		Family fm = fe.family;
-		false;
-	}
-	
-	def produceImportsForTuples(DecisionVariable preElt) {
-		String preIfName = "I" + preElt.byName("family").varName().firstToUpperCase();
-		DecisionVariable tuples = preElt.byName("outputTypes");
-		String tupleName;
-		for(Tuple t : tuples) {
-			tupleName = t.name;
-			String preOutputName = "I" + preIfName + firstToUpperCase(tupleName) + "Output";
-			'import eu.qualimaster.families.inf.$preIfName.$preOutputName;'
-		}
-	}
+template stormFamilyElement(Configuration config, FileArtifact target, DecisionVariable preElt, DecisionVariable elt, String topoName, mapOf(Tuple,String) nameToOutputMap, mapOf(String, mapOf(Tuple, Tuple)) globalMap,mapOf(String, setOf(DecisionVariable)) lastElementMap, Boolean debug) {
 	
 	def produceInputVariable(sequenceOf(Tuple) tuples, Boolean variable, String fName) {
 		String ifName = "I" + fName;
 		String ifInputName = "I" + ifName;
 		String tupleName;
-
 		for(Tuple t : tuples) {
 			tupleName = t.name;
 			String inputInfName = ifInputName + "${firstToUpperCase(tupleName)}Input";
@@ -38,8 +21,7 @@ template stormFamilyElement(Configuration config, FileArtifact target, DecisionV
 	def produceOutputVariable(sequenceOf(Tuple) tuples, mapOf(Tuple, Tuple) inputToOutputMapping, mapOf(Tuple,String) nameToOutputMap, String fName) {
 		String ifName = "I" + fName;
 		String ifInputName = "I" + ifName;
-		String outputInfName; //output interface name
-		
+		String outputInfName; //output interface name		
 		String tupleName;	
 		for(Tuple t : tuples) {
 			tupleName = t.name;
@@ -67,7 +49,6 @@ template stormFamilyElement(Configuration config, FileArtifact target, DecisionV
         Family eltFamily = elt.byName("family");
         String fImpName = familyName.firstToUpperCase();
 		String fImpInputName;
-
 		
 		String tupleName;
 		Boolean multiStream = false;
@@ -100,10 +81,25 @@ template stormFamilyElement(Configuration config, FileArtifact target, DecisionV
     			 String mname = firstToUpperCase(fname);
     	         'input${firstToUpperCase(tupleName)}.set${mname}(iTuple${firstToUpperCase(tupleName)}.get${mname}());' | indent+4;
 			 }
-			'alg.calculate(input${firstToUpperCase(tupleName)}, result);'| indent+4;
+			 'try {' | indent+4;
+			'alg.calculate(input${firstToUpperCase(tupleName)}, result);'| indent+8;
+			'} catch(DefaultModeException e) {' | indent+4;
+			sequenceOf(Tuple) outputTuples = eltFamily.output;
+			for(Tuple ot : outputTuples) {
+				for(Field fd : ot.fields) {
+				String fieldName = toIdentifier("${fd.name}"); 
+				String upFieldName = firstToUpperCase(fieldName);
+				FieldType fdType = fd.type;
+				'result.set${upFieldName}(${obtainDefaultValue(fdType)});' | indent+8;	
+				}
+			}
+			'sendDefaultModeMonitoringEvent(e);' | indent+8;
+			'}' | indent+4;
 		    'if(alg instanceof ITopologyCreate) {' | indent+4;
-//		    'logger.info("Emitting data with streamId: "+ streamId + ", data:" + input${firstToUpperCase(tupleName)});'| indent+8;
-		    '_collector.emit(streamId, tuple, new Values(input${firstToUpperCase(tupleName)}));'| indent+8;
+		    if(debug) {
+		    'logger.info("Emitting data with streamId: "+ streamId + ", data:");'| indent+8;		    
+		    }
+		    '_collector.emit(streamId, new Values(input${firstToUpperCase(tupleName)}));'| indent+8;
 		    '}' | indent+4;
 			 if(multiStream){
 			 	'}' | indent;
@@ -135,33 +131,19 @@ template stormFamilyElement(Configuration config, FileArtifact target, DecisionV
     	}
 	}
 	
-	def transferParameterValueType(DecisionVariable varParameter, String value) {
-		String paraType = varParameter.type();
-		Integer len = paraType.length();
-		String type;
-	    if(len>9){
-			type = paraType.substring(0, len - 9);
-		}	
-       	switch(type) {
-    		"Integer" : "Integer.parseInt($value)",
-    		"Boolean" : "Boolean.parseBoolean($value)",
-    		"Real" : "Double.parseDouble($value)",
-    		"String" : "$value"   	
-    	}					
-	}
-	
 	def produceAlgorithmImports(Family family) {
 		for(Algorithm alg : family.members) {
 			'import ${alg.class};'
 		}
 	}
 	
-    def main(Configuration config, FileArtifact target, DecisionVariable preElt, DecisionVariable elt, String topoName,mapOf(Tuple,String) nameToOutputMap, mapOf(String, mapOf(Tuple, Tuple)) globalMap,mapOf(String, setOf(DecisionVariable)) lastElementMap) {
+    def main(Configuration config, FileArtifact target, DecisionVariable preElt, DecisionVariable elt, String topoName,mapOf(Tuple,String) nameToOutputMap, mapOf(String, mapOf(Tuple, Tuple)) globalMap,mapOf(String, setOf(DecisionVariable)) lastElementMap, Boolean debug) {
+        Boolean parameterSetting = true; //use for commenting the parameterSetting
         //name for FamilyElement class
         String name = elt.varName().firstToUpperCase() + elt.type();
         //streamId endings
         String nontopoStream = "Stream";
-        String topoStream = "TopoStream";
+        String topoStream = "TopoStream";        
         
         String familyName = elt.byName("family").varName();
         String ifName = "I" + familyName.firstToUpperCase();      	
@@ -182,7 +164,8 @@ template stormFamilyElement(Configuration config, FileArtifact target, DecisionV
 		
 		//get family variable
 		Family eltFamily = elt.byName("family");
-		String fName = elt.byName("family").varName().firstToUpperCase();	
+		String fName = elt.byName("family").varName().firstToUpperCase();
+		String fmNameInCapital = fEltName.firstToUpperCase();
 		
 		//get the inputToOutputMapping of this family element
 		String eltName = elt.varName().firstToUpperCase();
@@ -191,7 +174,7 @@ template stormFamilyElement(Configuration config, FileArtifact target, DecisionV
 			inputToOutputMapping = globalMap.get(eltName);
 		}
 		
-		//get the tuple name of the first output tuple to obtain the output interface/class name				
+		//get the tuple name of the first output tuple to obtain the output interface/class name (assume that there is only one output from the family node)				
 		Tuples outputTuples = eltFamily.output;
 		Integer first = 1;
 		for(Tuple t : outputTuples) {
@@ -205,7 +188,10 @@ template stormFamilyElement(Configuration config, FileArtifact target, DecisionV
 		}
 		
 		'package eu.qualimaster.$topoName.topology;'
-    	''    	
+    	'' 
+    	/****************************/
+    	/*        Imports           */  
+    	/****************************/ 	
     	'import java.util.*;'
     	'import org.apache.log4j.Logger;'
     	'import backtype.storm.tuple.*;'
@@ -220,49 +206,79 @@ template stormFamilyElement(Configuration config, FileArtifact target, DecisionV
     	'import eu.qualimaster.common.signal.*;'
     	'import eu.qualimaster.base.algorithm.*;'
     	'import eu.qualimaster.base.algorithm.IFamily.State;'
+    	'import eu.qualimaster.infrastructure.PipelineOptions;'
+    	'import eu.qualimaster.pipeline.DefaultModeException;'
+    	'import eu.qualimaster.pipeline.DefaultModeMonitoringEvent;'
     	produceAlgorithmImports(fe.family); 
     	produceImportsFromLastElements(lastElt);
+    	
+    	/****************************/
+    	/*        Bolt class        */  
+    	/****************************/
     	''
     	'/**'
     	'* Defines the FamilyElment in the pipeline(GEN).'
     	'**/'
     	'@SuppressWarnings({ "rawtypes", "serial" })'
     	'public class $name extends BaseSignalBolt {'
-    	''
+		    	/****************************/
+		    	/*     Class variables      */  
+		    	/****************************/
+    	''    
     	'    final static Logger logger = Logger.getLogger($name.class);'
     	'    transient OutputCollector _collector;'
     	'    private static String streamId = "$streamId";'
     	'    private static transient $ifOutputName result = new $fImpName.$fImpOutputName();'
     	'    private transient $ifName alg = null; '
-    	produceOutputVariable(eltFamily.input, inputToOutputMapping, nameToOutputMap, fName);
-    	produceInputVariable(eltFamily.input, true, fName);
+    	produceOutputVariable(eltFamily.input, inputToOutputMapping, nameToOutputMap, fmNameInCapital);
+    	produceInputVariable(eltFamily.input, true, fmNameInCapital);
+    	
+		    	/****************************/
+		    	/*    Class constructor     */  
+		    	/****************************/
     	''
     	'    public $name(String name, String namespace) {'
     	'        super(name, namespace);'
     	'    }'
+    	
+    			/***********************************/
+		    	/* sendAlgorithmChangeEvent method */  
+		    	/***********************************/
     	''
-		'    	    /**'
+		'    /**'
 		'     * Sends an algorithm change event and considers whether the coordination layer shall be bypassed for direct' 
 		'     * testing.'
 		'     * @param algorithm the new algorithm'
 		'     */'
 		'    private static void sendAlgorithmChangeEvent(String algorithm) {'
-		'        EventManager.send(new AlgorithmChangedMonitoringEvent("$topoName", "$fEltName", algorithm));'
+		'        EventManager.send(new AlgorithmChangedMonitoringEvent("$topoName", "${elt.varName()}", algorithm));'
 		'    }' 
+    			/*****************************************/
+		    	/* sendDefaultModeMonitoringEvent method */  
+		    	/*****************************************/
+    	''
+		'    /**'
+		'     * Sends an a default mode monitoring event with a DefaultModeException case.' 
+		'     * @param exceptionCase the DefaultModeException case'
+		'     */'
+		'    private static void sendDefaultModeMonitoringEvent(DefaultModeException exceptionCase) {'
+		'        EventManager.send(new DefaultModeMonitoringEvent("$topoName", "${elt.varName()}", exceptionCase));'
+		'    }' 		
+    			/****************************/
+		    	/*      prepare method      */  
+		    	/****************************/		
 		'' 	      
 		'    public void prepare(Map map, TopologyContext topologyContext, OutputCollector collector) {'
 		'        super.prepare(map, topologyContext, collector);'
-		produceInputVariable(eltFamily.input, false, fName);
-//		Family fm = fe.family;
+	//	if(topoName == "PriorityPip") {
+		produceInputVariable(eltFamily.input, false, fmNameInCapital);
 		String swAlgName = "";
 		for(Algorithm alg : fm.members) { //choose the first algorithm in Family
 			if(0 == swAlgName.length()) {
 				String algNamePath = alg.class;
 				
 				JavaPath algPath = algNamePath;			
-				swAlgName = algPath.getName();
-			
-//		'        alg = ($ifName) (new ${swAlgName}());'
+				swAlgName = algPath.getName();		
         '        try {'
 		'            Class cls = Class.forName("$algNamePath");'
 		'            alg = ($ifName) cls.newInstance();'
@@ -275,71 +291,79 @@ template stormFamilyElement(Configuration config, FileArtifact target, DecisionV
 		'        } catch (IllegalAccessException e) {'
 		'           // TODO Auto-generated catch block'
 		'            e.printStackTrace();'
-		'        }'
+		'        }'				
+				setDefaultParameterValue(alg.parameters, "map", "alg", 8);
 		'        alg.switchState(State.ACTIVATE); //activate the current algorithm'
 		'		sendAlgorithmChangeEvent("${swAlgName}");'
-//		'       logger.info("Storm config:" + map);'
 		         if (alg.algTopologyClass.isNull()) {
 		'streamId = "$streamId";' | 8;
 		         } else {
-		         topoStreamId = topoStreamId + "1" + topoStream; //.........have to adjust, for now hardcode to initial the first topo streamId			         	
+		         topoStreamId = topoStreamId + "1" + topoStream; //.........have to adjust, for now hardcode to initial the first topo streamId			         			        
 		'streamId = "$topoStreamId";' | 8;
 		         }
 			}
-		}
+		}		
+//		}
 		//Algorithm alg = fm.members.toSequence().get(0);
 		'        _collector = collector;'
 		'    }'
 	    ''
+    			/****************************/
+		    	/*      execute method      */  
+		    	/****************************/	    
 		'    public void execute(Tuple tuple) {'
 		'        // delegate to family "$familyName"'
 		
 		 //produce input -- output casting statement
 		produceInputForTuples(inputToOutputMapping, nameToOutputMap, elt);		
 
-		'if(!(alg instanceof ITopologyCreate)) {' | 8;
-//		'logger.info("Emitting data with streamId: " + streamId + ", data:" + result);' | 12;
-		'_collector.emit(streamId, tuple, new Values(result));'	| 12;	
+		'if(!(alg instanceof ITopologyCreate)) {' | 8; //TODO check result!=null ?
+		if(debug) {
+		'logger.info("Emitting data with streamId: " + streamId + ", data:" + result);' | 12;		
+		}
+		'_collector.emit(streamId, new Values(result));'	| 12;	
 		'}' | 8;
 
-		'		 _collector.ack(tuple);'
+		'//		 _collector.ack(tuple);'
 		'    }'
 	    ''
-
-	    '/**' | 4;
-	    '* Receives the signal data for FamilyElement adaptation.'| 4;
-	    '* @param data the signal data' | 4;
-	    '**/' | 4;
-        '	public void onSignal(byte[] data) {'
-        '        String signal=new String(data);'
-        '        logger.info("Received signal: " + signal);'
-        '        //handle the received signal and make related changes, e.g., switch algorithm from software to hardware'
-		'        String[] parts = signal.split(":");'
-		'        if (parts.length >= 2) {'
-		'            if ("param".equals(parts[0]) && 3 == parts.length) {'		
-		setOf(Parameter) parameters = fm.parameters;
-		for(Parameter p : parameters) {
-			String paraName = p.name;
-			String paraValue = transferParameterValueType(p, "parts[2]");
-				
-		'       	     switch (parts[1]) { // just for illustration, may need parameter conversion'
-		' 	             case "$paraName" : '
-		'		         alg.setParameter${paraName.firstToUpperCase()}($paraValue); '
-		' 	             break;'
-		'	          }'			
+    			/********************************/
+		    	/* notifyParameterChange method */  
+		    	/********************************/	    
+		setOf(Parameter) parameters = fm.parameters;	           
+        if(fm.parameters.isConfigured()) {
+			'@Override' | 4;
+			'public void notifyParameterChange(ParameterChangeSignal signal) {' | 4;
+			'try {' | 8;
+			'for(int i = 0; i < signal.getChangeCount(); i++) {' | 12;
+			'ParameterChange para = signal.getChange(i);' | 16;			
+			'switch (para.getName()) {' | 16;			
+			for(Parameter p : parameters) {
+				String paraName = p.name;
+				String type = parameterTypeName(p);				
+				'case "$paraName" :' | 20;
+				'System.out.println("Received parameter changing signal $paraName");' | 24;
+				'alg.setParameter${paraName.firstToUpperCase()}(para.get${type.firstToUpperCase()}Value()); ' | 24;
+				'break;' | 24;
+				}
+			'}' | 16;
+			'}' | 12;
+			'} catch (ValueFormatException e) {' | 8;
+			'e.printStackTrace();' | 12;
+			'}' | 8;
+			'}' |4;		
 		}
 
-		'       	     /*switch (parts[1]) { // just for illustration, may need parameter conversion'
-		' 	             case "param1" : '
-		'		         alg.setParameterParam1(parts[2]); '
-		' 	             break;'
-		'	          }*/'
-		' 	         } else if ("alg".equals(parts[0])) {'
-		'	             switch (parts[1]) {'
-		Boolean hasHW = false;
-		setOf(String) topoAlgsStreamId = {};
-		Integer algTopoCount = 1;
-		for(Algorithm alg : fm.members){							
+				/********************************/
+				/* notifyAlgorithmChange method */
+				/********************************/	
+	Integer algTopoCount = 1;
+	if(fm.members.size() > 1) {
+		'@Override' | 4;
+		'public void notifyAlgorithmChange(AlgorithmChangeSignal signal) {' | 4;
+		'System.out.println("Received algorithm switching signal " + signal.getAlgorithm());' | 8;	
+		'switch (signal.getAlgorithm()) {' | 8;	
+		for(Algorithm alg : fm.members) {							
 		    String n = alg.class;
 		    JavaPath algPath = n;
 		    String algClsName = algPath.getName();	
@@ -361,59 +385,63 @@ template stormFamilyElement(Configuration config, FileArtifact target, DecisionV
 		'			                 }'
 		'		                 break;'		    	
 		    } else 
-	*/	    
-		    if(!alg.algTopologyClass.isNull()) {
+	*/
+		
+	     /* generated for subtopology algorithms */    
+		    if(!alg.algTopologyClass.isNull()) { 
 		    	topoStreamId = elt.varName();
 		    	topoStreamId = topoStreamId + "$algTopoCount" + topoStream;
-		    	topoAlgsStreamId.add(topoStreamId);
-		'                    case "$algClsName":'
-		'                        if(!(alg instanceof $algClsName)) {'
-		'							alg.switchState(State.PASSIVATE); //passivate the previous algorithm'
-//		'                            alg = ($ifName) (new $algClsName());' 
-        '                            try {'
-		'                                Class cls = Class.forName("$n");'
-		'                                alg = ($ifName) cls.newInstance();'
-		'                            } catch (ClassNotFoundException e) {'
-		'                                e.printStackTrace();'
-		'                            } catch (InstantiationException e) {'
-		'                                e.printStackTrace();'
-		'                            } catch (IllegalAccessException e) {'
-		'                                e.printStackTrace();'
-		'                            }'
-		'		 					sendAlgorithmChangeEvent("$algClsName");'
-		'                            streamId = "$topoStreamId";'
-		'						    alg.switchState(State.ACTIVATE); //activate the current algorithm' 	
-		'                        }'
-	    '		                 break;'
+		'case "$algClsName":' | 12;
+		'if(!(alg instanceof $algClsName)) {' | 16;
+		'alg.switchState(State.PASSIVATE); //passivate the previous algorithm' | 20;
+        'try {' | 20;
+		'Class cls = Class.forName("$n");' | 24;
+		'alg = ($ifName) cls.newInstance();' | 24;
+		'} catch (ClassNotFoundException e) {' | 20;
+		'e.printStackTrace();' | 24;
+		'} catch (InstantiationException e) {' | 20;
+		'e.printStackTrace();' | 24;
+		'} catch (IllegalAccessException e) {' | 20;
+		'e.printStackTrace();' | 24;
+		'}' | 20;
+		setDefaultParameterValue(alg.parameters, "", "alg", 20);
+		'sendAlgorithmChangeEvent("$algClsName");' | 20;
+		'streamId = "$topoStreamId";' | 20;
+		'alg.switchState(State.ACTIVATE); //activate the current algorithm' | 20;	
+		'}' | 16;
+	    'break;' | 16;
 	    	    algTopoCount = algTopoCount + 1;
-	    } else {
-	    '	                  case "$algClsName":'
-		'		                 if (!(alg instanceof $algClsName)) {'
-//		'		                 alg = ($ifName) (new $algClsName()); '
-        '                           try {'
-		'                               Class cls = Class.forName("$n");'
-		'                               alg = ($ifName) cls.newInstance();'
-		'                           } catch (ClassNotFoundException e) {'
-		'                               e.printStackTrace();'
-		'                           } catch (InstantiationException e) {'
-		'                               e.printStackTrace();'
-		'                           } catch (IllegalAccessException e) {'
-		'                               e.printStackTrace();'
-		'                           }'
-		'		 				 sendAlgorithmChangeEvent("$algClsName");'
-		'                         streamId = "$streamId";' 
-		'			             }'
-		'		                break;'
-	    }
-						
-		}
-		'	             }'
-		'	         }'
-		'        }'        
-       // '        SignalHandler.handle(signal);'	
-        '	}'
+	        } else { 
+	    /* generated for normal Java algorithms */
+	    'case "$algClsName":' | 12;
+		'if (!(alg instanceof $algClsName)) {' | 16;
+		'alg.switchState(State.PASSIVATE); //passivate the previous algorithm' | 20;
+        'try {' | 20;
+		'Class cls = Class.forName("$n");' | 24;
+		'alg = ($ifName) cls.newInstance();' | 24;
+		'} catch (ClassNotFoundException e) {' | 20;
+		'e.printStackTrace();' | 24;
+		'} catch (InstantiationException e) {' | 20;
+		'e.printStackTrace();' | 24;
+		'} catch (IllegalAccessException e) {' | 20;
+		'e.printStackTrace();' | 24;
+		'}' | 20;
+		setDefaultParameterValue(alg.parameters, "", "alg", 20);
+		'streamId = "$streamId";'  | 20;		
+		'sendAlgorithmChangeEvent("$algClsName");' | 20;
+		'alg.switchState(State.ACTIVATE); //activate the current algorithm' | 20;	
+		'}' | 16;
+		'break;' | 16;
+	        }						
+		}		
+		'}' | 8;		
+		'}' | 4;
+	}				      
         ''
-        	
+				/************************************/
+				/* checkDisconnect method --not used*/
+				/************************************/    	
+	   	Boolean hasHW = false;
 	    if(hasHW){ // only generate when there is hardware algorithm
 	    '/**' | 4;
 	    '* Checks if the FamilyElement connects to hardware.' | 4;
@@ -426,19 +454,32 @@ template stormFamilyElement(Configuration config, FileArtifact target, DecisionV
 	    '    }'
 	    ''	    	
 	    }
+				/****************************/
+				/*     cleanup method       */
+				/****************************/
 	    '    @Override'
         '    public void cleanup() {'
         '        super.cleanup();'
+        '        alg.switchState(State.TERMINATING);'
         '    }'
-        ''       
+        '' 
+				/************************************/
+				/*   declareOutputFields method     */
+				/************************************/              
 		'    public void declareOutputFields(OutputFieldsDeclarer declarer) {'				
-		'        declarer.declareStream("$streamId", new Fields("$ifOutputName"));'
-		for(String s : topoAlgsStreamId){
-	    '        declarer.declareStream("$s", new Fields("$ifOutputName"));'			
-		}
+		'        declarer.declareStream("$streamId", new Fields("$ifOutputName"));'		
+		Integer algCount = 1;	
+		for(Algorithm alg : fm.members) {
+		    //declare all streamId of the topo-based algorithm
+		    if(!alg.algTopologyClass.isNull()) { 
+		    	String algStreamId = elt.varName();
+		    	algStreamId = algStreamId + "$algCount" + topoStream;
+		    	'        declarer.declareStream("$algStreamId", new Fields("$ifOutputName"));'
+		    	algCount = algCount + 1;
+		    }  
+		}	
 		'    }'
     	''
     	'}'
-    }
-        
+    }       
 }

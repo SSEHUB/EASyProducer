@@ -1,28 +1,7 @@
+import commonVTLMethods;
 @advice(QM)
 template dataSourceInterface(Configuration config, FileArtifact target, DataSource elt) {
 
-    def String parameterTypeName(DecisionVariable var) {
-    	switch(var.type()) {
-    		"IntegerParameter" : "int",
-    		"BooleanParameter" : "boolean",
-    		"RealParameter" : "double",
-    		"StringParameter" : "String"
-    	}
-    }
-    	
-	def String fieldTypeName(DecisionVariable var) {
-    	String type = var.byName("type");
-    	switch(type) {
-    		"INTEGER" : "int",
-    		"BOOLEAN" : "boolean",
-    		"REAL" : "double",
-    		"STRING" : "String",
-    		"OBJECT": "Object",
-    		"LONG": "long",
-    		"STRINGLIST": "java.util.List<String>"
-    	}		
-	}
-	
 	/**
 	 * Produces the tuple type classes.
 	 */
@@ -61,15 +40,17 @@ template dataSourceInterface(Configuration config, FileArtifact target, DataSour
 	
 	def main(Configuration config, FileArtifact target, DataSource dataSrc){
 		String srcName =dataSrc.name;
-		String inputName = "I" + srcName.firstToUpperCase();
+		srcName = srcName.firstToUpperCase();
+		String inputName = "I" + srcName;
 		'package eu.qualimaster.data.inf;'
 		''
 		'import java.io.Serializable;'
+		'import eu.qualimaster.dataManagement.sources.IDataSource;'
 		''
 		'/**'
 		'* Define the data source interface(GEN).'
 		'**/'
-		'public interface I${toIdentifier(srcName)} {'
+		'public interface I${toIdentifier(srcName)} extends IDataSource {'
 		''
 		//generate the tuple type interfaces
 		 produceForTuples(dataSrc.input, srcName, 4);		

@@ -11,7 +11,6 @@ import javax.tools.ToolProvider;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.easy.java.Registration;
@@ -21,6 +20,7 @@ import de.uni_hildesheim.sse.easy.java.artifacts.JavaFileArtifact;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
+import junit.framework.AssertionFailedError;
 import test.de.uni_hildesheim.sse.vil.buildlang.AbstractExecutionTest;
 import test.de.uni_hildesheim.sse.vil.buildlang.BuildLangTestConfigurer;
 import test.de.uni_hildesheim.sse.vil.buildlang.ITestConfigurer;
@@ -148,7 +148,6 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
      * @throws IOException should not occur
      */
     @Test
-    @Ignore
     public void testJavaCopy() throws IOException {
         assertSelfInstantiate("copy", "main", new SelfInstantiationAsserterAdapter() {
             

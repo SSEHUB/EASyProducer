@@ -1,11 +1,12 @@
 package eu.qualimaster.data.inf;
 
 import java.io.Serializable;
+import eu.qualimaster.dataManagement.sources.IDataSource;
 
 /**
 * Define the data source interface(GEN).
 **/
-public interface ITwitterStreamData {
+public interface ITwitterStreamData extends IDataSource {
 
     /**
     * Define the source data input interface.

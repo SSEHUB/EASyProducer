@@ -16,6 +16,16 @@
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
+					<dependencySets>
+        				<dependencySet>
+            				<unpack>false</unpack>
+            				<scope>runtime</scope>
+        				</dependencySet>
+        				<dependencySet>
+            				<unpack>false</unpack>
+            				<scope>provided</scope>
+        				</dependencySet>
+    				</dependencySets>					
                     <archive>
                         <manifest>
                         </manifest>
@@ -81,7 +91,55 @@
           <mainClass>${storm.topology}</mainClass>
         </configuration>
       </plugin>
-    </plugins>
+<plugin>
+  <groupId>org.apache.maven.plugins</groupId>
+  <artifactId>maven-dependency-plugin</artifactId>
+  <version>2.6</version>
+  <executions>
+    <execution>
+      <id>copy-dependencies</id>
+      <phase>prepare-package</phase>
+      <goals>
+        <goal>copy-dependencies</goal>		
+      </goals>
+      <configuration>
+        <outputDirectory>${basedir}/lib</outputDirectory>
+        <overWriteIfNewer>true</overWriteIfNewer>
+        <excludeGroupIds>
+          junit,org.hamcrest,org.mockito,org.powermock,${project.groupId}
+        </excludeGroupIds>
+		<excludeArtifactIds>storm-core</excludeArtifactIds>
+      </configuration>
+    </execution>
+    <execution>
+      <phase>generate-sources</phase>
+      <goals>
+        <goal>sources</goal>
+      </goals>
+    </execution>
+<!--execution>
+      <id>unpack-dependencies</id>
+      <phase>package</phase>
+      <goals>
+        <goal>unpack-dependencies</goal>		
+      </goals>
+      <configuration>
+        <outputDirectory>target/classes/lib</outputDirectory>
+        <overWriteIfNewer>true</overWriteIfNewer>
+        <excludeGroupIds>
+          junit,org.hamcrest,org.mockito,org.powermock,${project.groupId}
+        </excludeGroupIds>
+		<excludeArtifactIds>storm-core</excludeArtifactIds>
+		<includes>**/*.*</includes>
+      </configuration>
+    </execution-->
+  </executions>
+  <configuration>
+    <verbose>true</verbose>
+    <detail>true</detail>
+    <outputDirectory>${project.build.directory}</outputDirectory>
+  </configuration>
+</plugin>    </plugins>
     <resources>
         <resource>
             <directory>${basedir}/</directory>
@@ -106,29 +164,20 @@
         <dependency>
             <groupId>eu.qualimaster</groupId>
             <artifactId>InfrastructureDependencies</artifactId>
-            <version>0.0.1</version>
+            <version>0.0.1-SNAPSHOT</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>
         <dependency>
             <groupId>eu.qualimaster</groupId>
             <artifactId>PipelineDependencies</artifactId>
-            <version>0.0.1</version>
+            <version>0.0.1-SNAPSHOT</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>            
     </dependencies>
 </dependencyManagement>
   <dependencies>
-    <dependency>      
-      <groupId>org.apache.storm</groupId>
-      <artifactId>storm-core</artifactId>
-    </dependency>
-    <dependency>
-     <groupId>eu.qualimaster</groupId>
-     <artifactId>TwitterSentimentAnalysisStream</artifactId>
-     <version>0.1.4</version>
-   </dependency>
    <dependency>
      <groupId>eu.qualimaster</groupId>
      <artifactId>StormCommons</artifactId>
@@ -141,66 +190,99 @@
    <dependency>
      <groupId>eu.qualimaster</groupId>
      <artifactId>DataManagementLayer</artifactId>
-     <version>0.0.4</version>  
    </dependency>
    <dependency>
      <groupId>eu.qualimaster</groupId>
      <artifactId>QualiMaster.Events</artifactId>
    </dependency>
-    <dependency>
-        <groupId>jdk.tools</groupId>
-        <artifactId>jdk.tools</artifactId>
-        <version>1.7</version>
+    <dependency>      
+      <groupId>org.apache.storm</groupId>
+      <artifactId>storm-core</artifactId>
     </dependency>
+   <dependency>
+     <groupId>com.github.ptgoetz</groupId>
+     <artifactId>storm-hdfs</artifactId>
+	 <scope>compile</scope>
+   </dependency>
+   <dependency>
+     <groupId>org.apache.hadoop</groupId>
+     <artifactId>hadoop-client</artifactId>
+	 <scope>compile</scope>
+   </dependency>
+   <dependency>
+     <groupId>org.apache.hadoop</groupId>
+     <artifactId>hadoop-hdfs</artifactId>
+	 <scope>compile</scope>
+   </dependency>
+   <dependency>
+     <groupId>org.apache.hadoop</groupId>
+     <artifactId>hadoop-common</artifactId>
+	 <scope>compile</scope>
+   </dependency>
+   <dependency>
+     <groupId>org.apache.hbase</groupId>
+     <artifactId>hbase-common</artifactId>
+	 <scope>compile</scope>
+   </dependency>
+   <dependency>
+     <groupId>org.apache.hbase</groupId>
+     <artifactId>hbase-protocol</artifactId>
+	 <scope>compile</scope>
+   </dependency>
+   <dependency>
+     <groupId>org.apache.hbase</groupId>
+     <artifactId>hbase-client</artifactId>
+	 <scope>compile</scope>
+   </dependency>
     <dependency>
       <groupId>eu.qualimaster</groupId>
       <artifactId>spring-client-simulator</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <version>3.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>eu.qualimaster</groupId>
-      <artifactId>Preprocessor</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <artifactId>hy-preprocessor</artifactId>
+      <version>3.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>eu.qualimaster</groupId>
-      <artifactId>topo-software-correlation-financial</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <artifactId>hy-correlation-financial-software</artifactId>
+      <version>3.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>eu.qualimaster</groupId>
-      <artifactId>topo-hardware-correlation-financial</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <artifactId>hy-correlation-financial-hardware</artifactId>
+      <version>3.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>eu.qualimaster</groupId>
-      <artifactId>priority-data-sink</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <artifactId>hy-priority-data-sink</artifactId>
+      <version>3.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>eu.qualimaster</groupId>
       <artifactId>TwitterStreamDataSource</artifactId>
-      <version>0.0.4</version>
+      <version>0.0.5-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>eu.qualimaster</groupId>
       <artifactId>SentiWordnetSubTopology</artifactId>
-      <version>0.0.4</version>
+      <version>0.0.5-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>eu.qualimaster</groupId>
       <artifactId>SVMSubTopology</artifactId>
-      <version>0.0.4</version>
+      <version>0.0.5-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>eu.qualimaster</groupId>
-      <artifactId>topo-software-correlation-twitter</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <artifactId>hy-correlation-twitter-software</artifactId>
+      <version>3.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>eu.qualimaster</groupId>
-      <artifactId>topo-hardware-correlation-twitter</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <artifactId>hy-correlation-twitter-hardware</artifactId>
+      <version>3.0-SNAPSHOT</version>
     </dependency>
   </dependencies>
 </project>

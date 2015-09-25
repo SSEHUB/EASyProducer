@@ -1,11 +1,12 @@
 package eu.qualimaster.data.inf;
 
 import java.io.Serializable;
+import eu.qualimaster.dataManagement.sources.IDataSource;
 
 /**
 * Define the data source interface(GEN).
 **/
-public interface IRandomSource {
+public interface IRandomSource extends IDataSource {
 
     /**
     * Define the source data input interface.
@@ -30,4 +31,13 @@ public interface IRandomSource {
     * @return IRandomSourceRandomDataOutput the source data
     **/
     public IRandomSourceRandomDataOutput getRandomData();
+    // data source parameters
+
+    /**
+     * Sets the data source parameter "delay".
+     *
+     * @param value the new value of the data source parameter
+     */
+    public void setParameterDelay(int value);
+
 }

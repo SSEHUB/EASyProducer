@@ -2,7 +2,7 @@ project Observables {
 	
     import Basics;
 	
-	attribute BindingTime bindingTime = BindingTime.compile to Observables;
+	annotate BindingTime bindingTime = BindingTime.compile to Observables;
 
     // don't move these alias definitions!
     // define each category of observable / quality property as an own type

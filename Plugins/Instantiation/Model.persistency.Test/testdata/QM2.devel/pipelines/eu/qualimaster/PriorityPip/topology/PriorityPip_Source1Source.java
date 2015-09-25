@@ -10,6 +10,10 @@ import eu.qualimaster.data.inf.ITwitterStreamData;
 import eu.qualimaster.data.inf.ITwitterStreamData.*;
 import eu.qualimaster.data.stream.source.TwitterFileStreaming;
 import eu.qualimaster.common.signal.*;
+import eu.qualimaster.events.EventManager;
+import eu.qualimaster.infrastructure.PipelineOptions;
+import eu.qualimaster.pipeline.DefaultModeException;
+import eu.qualimaster.pipeline.DefaultModeMonitoringEvent;
 
 /**
 * Define the source Spout class(GEN).
@@ -17,7 +21,6 @@ import eu.qualimaster.common.signal.*;
 @SuppressWarnings({ "rawtypes", "serial" })
 public class PriorityPip_Source1Source extends BaseSignalSpout {
 
-    final static Logger logger = Logger.getLogger(PriorityPip_Source1Source.class);
     transient SpoutOutputCollector _collector;
     transient ITwitterStreamData sourceData;
     transient ITwitterStreamDataSymbolListOutput dataItemSymbolList = null;
@@ -34,6 +37,17 @@ public class PriorityPip_Source1Source extends BaseSignalSpout {
         try {
             Class cls = Class.forName("eu.qualimaster.data.stream.source.TwitterFileStreaming");
             sourceData = (ITwitterStreamData) cls.newInstance();
+            sourceData.setParameterConsumerKey(PipelineOptions.getExecutorStringArgument(conf, getName(), "consumerKey", "default"));
+            sourceData.setParameterConsumerSecret(PipelineOptions.getExecutorStringArgument(conf, getName(), "consumerSecret", "default"));
+            sourceData.setParameterAccessToken(PipelineOptions.getExecutorStringArgument(conf, getName(), "accessToken", "default"));
+            sourceData.setParameterAccessTokenSecret(PipelineOptions.getExecutorStringArgument(conf, getName(), "accessTokenSecret", "default"));
+            sourceData.setParameterQueueSize(PipelineOptions.getExecutorIntArgument(conf, getName(), "queueSize", 0));
+            sourceData.setParameterTweetDirectory(PipelineOptions.getExecutorStringArgument(conf, getName(), "tweetDirectory", "default"));
+            sourceData.setParameterSpeedFactor(PipelineOptions.getExecutorDoubleArgument(conf, getName(), "speedFactor", 0.0));
+            sourceData.setParameterRunLocally(PipelineOptions.getExecutorBooleanArgument(conf, getName(), "runLocally", false));
+            sourceData.setParameterAdjustTimeToNow(PipelineOptions.getExecutorBooleanArgument(conf, getName(), "adjustTimeToNow", false));
+            sourceData.setParameterRealLoops(PipelineOptions.getExecutorBooleanArgument(conf, getName(), "realLoops", false));
+		    sourceData.connect();
         } catch (ClassNotFoundException e) {
 	         // TODO Auto-generated catch block
             e.printStackTrace();
@@ -46,96 +60,91 @@ public class PriorityPip_Source1Source extends BaseSignalSpout {
         }
     }
 
+    /**
+     * Sends an a default mode monitoring event with a DefaultModeException case.
+     * @param exceptionCase the DefaultModeException case
+     */
+    private static void sendDefaultModeMonitoringEvent(DefaultModeException exceptionCase) {
+        EventManager.send(new DefaultModeMonitoringEvent("PriorityPip", "PriorityPip_Source1", exceptionCase));
+    }
     @Override
     public void nextTuple() {
+        long start = System.currentTimeMillis();
+        boolean emitted = false;
         // Emitting stream "PriorityPip_Source1StreamSymbolList".
-        dataItemSymbolList = sourceData.getSymbolList();
+        try {
+            dataItemSymbolList = sourceData.getSymbolList();
+        } catch(DefaultModeException e) {
+            dataItemSymbolList.setAllSymbols(null);
+            sendDefaultModeMonitoringEvent(e);
+        }
         if(dataItemSymbolList!=null){
-            _collector.emit("PriorityPip_Source1StreamSymbolList", new Values(dataItemSymbolList),dataItemSymbolList);
+            _collector.emit("PriorityPip_Source1StreamSymbolList", new Values(dataItemSymbolList));
+            emitted = true;
         }
 
         // Emitting stream "PriorityPip_Source1StreamTwitterStream".
-        dataItemTwitterStream = sourceData.getTwitterStream();
+        try {
+            dataItemTwitterStream = sourceData.getTwitterStream();
+        } catch(DefaultModeException e) {
+            dataItemTwitterStream.setStatus(null);
+            sendDefaultModeMonitoringEvent(e);
+        }
         if(dataItemTwitterStream!=null){
-            _collector.emit("PriorityPip_Source1StreamTwitterStream", new Values(dataItemTwitterStream),dataItemTwitterStream);
+            _collector.emit("PriorityPip_Source1StreamTwitterStream", new Values(dataItemTwitterStream));
+            emitted = true;
         }
 
+        if (emitted) {
+            aggregateExecutionTime(start);
+        }
+        
     }
 
-    /**
-    * Receives the signal data for Source adaptation.
-    * @param data the signal data
-    **/
     @Override
-    public void onSignal(byte[] data) {
-        String signal=new String(data);
-        logger.info("Received signal: " + signal);
-        //handle the received signal and make related changes, e.g., give a parameter to Source
-        String[] parts = signal.split(":");
-        if (parts.length >= 2) {
-            if ("param".equals(parts[0]) && 3 == parts.length) {
-                switch (parts[1]) { // just for illustration, may need parameter conversion
-                case "consumerKey" : 
-                sourceData.setParameterConsumerKey(parts[2]); 
-                break;
-                }
-                switch (parts[1]) { // just for illustration, may need parameter conversion
-                case "consumerSecret" : 
-                sourceData.setParameterConsumerSecret(parts[2]); 
-                break;
-                }
-                switch (parts[1]) { // just for illustration, may need parameter conversion
-                case "accessToken" : 
-                sourceData.setParameterAccessToken(parts[2]); 
-                break;
-                }
-                switch (parts[1]) { // just for illustration, may need parameter conversion
-                case "accessTokenSecret" : 
-                sourceData.setParameterAccessTokenSecret(parts[2]); 
-                break;
-                }
-                switch (parts[1]) { // just for illustration, may need parameter conversion
-                case "queueSize" : 
-                sourceData.setParameterQueueSize(Integer.parseInt(parts[2])); 
-                break;
-                }
-                switch (parts[1]) { // just for illustration, may need parameter conversion
-                case "tweetDirectory" : 
-                sourceData.setParameterTweetDirectory(parts[2]); 
-                break;
-                }
-                switch (parts[1]) { // just for illustration, may need parameter conversion
-                case "speedFactor" : 
-                sourceData.setParameterSpeedFactor(Double.parseDouble(parts[2])); 
-                break;
-                }
-                switch (parts[1]) { // just for illustration, may need parameter conversion
-                case "runLocally" : 
-                sourceData.setParameterRunLocally(Boolean.parseBoolean(parts[2])); 
-                break;
-                }
-                switch (parts[1]) { // just for illustration, may need parameter conversion
-                case "adjustTimeToNow" : 
-                sourceData.setParameterAdjustTimeToNow(Boolean.parseBoolean(parts[2])); 
-                break;
-                }
-                switch (parts[1]) { // just for illustration, may need parameter conversion
-                case "realLoops" : 
-                sourceData.setParameterRealLoops(Boolean.parseBoolean(parts[2])); 
-                break;
-                }
-       	     /*switch (parts[1]) { // just for illustration, may need parameter conversion
- 	             case "param1" : 
-		         sourceData.setParameterParam1(parts[2]); 
- 	             break;
-	          }*/
+    public void notifyParameterChange(ParameterChangeSignal signal) {
+        try {
+            switch (signal.getParameter()) {
+                case "consumerKey" :
+                    sourceData.setParameterConsumerKey(signal.getStringValue()); 
+                    break;
+                case "consumerSecret" :
+                    sourceData.setParameterConsumerSecret(signal.getStringValue()); 
+                    break;
+                case "accessToken" :
+                    sourceData.setParameterAccessToken(signal.getStringValue()); 
+                    break;
+                case "accessTokenSecret" :
+                    sourceData.setParameterAccessTokenSecret(signal.getStringValue()); 
+                    break;
+                case "queueSize" :
+                    sourceData.setParameterQueueSize(signal.getIntValue()); 
+                    break;
+                case "tweetDirectory" :
+                    sourceData.setParameterTweetDirectory(signal.getStringValue()); 
+                    break;
+                case "speedFactor" :
+                    sourceData.setParameterSpeedFactor(signal.getDoubleValue()); 
+                    break;
+                case "runLocally" :
+                    sourceData.setParameterRunLocally(signal.getBooleanValue()); 
+                    break;
+                case "adjustTimeToNow" :
+                    sourceData.setParameterAdjustTimeToNow(signal.getBooleanValue()); 
+                    break;
+                case "realLoops" :
+                    sourceData.setParameterRealLoops(signal.getBooleanValue()); 
+                    break;
             }
+        } catch (ValueFormatException e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void close() {
         super.close();
+		 sourceData.disconnect();
     }
 
 	@Override

@@ -1,28 +1,7 @@
+import commonVTLMethods;
 @advice(QM)
 template dataSourceImplementation(Configuration config, FileArtifact target, DataSource elt) {
 
-    def String parameterTypeName(DecisionVariable var) {
-    	switch(var.type()) {
-    		"IntegerParameter" : "int",
-    		"BooleanParameter" : "boolean",
-    		"RealParameter" : "double",
-    		"StringParameter" : "String"
-    	}
-    }
-    	
-	def String fieldTypeName(DecisionVariable var) {
-    	String type = var.byName("type");
-    	switch(type) {
-    		"INTEGER" : "int",
-    		"BOOLEAN" : "boolean",
-    		"REAL" : "double",
-    		"STRING" : "String",
-    		"OBJECT": "Object",
-    		"LONG": "long",
-    		"STRINGLIST": "java.util.List<String>"
-    	}		
-	}
-	
 	/**
 	 * Produces the tuple type classes.
 	 */
@@ -84,15 +63,19 @@ template dataSourceImplementation(Configuration config, FileArtifact target, Dat
 	def main(Configuration config, FileArtifact target, DataSource dataSrc){
 		String srcName =dataSrc.name;
 		srcName = srcName.firstToUpperCase();
+	
 		'package eu.qualimaster.data.imp;'
 		''
 		//'import java.io.Serializable;'
+		'import eu.qualimaster.data.inf.I${toIdentifier(srcName)};'
 		'import eu.qualimaster.data.inf.I${toIdentifier(srcName)}.*;'
+		'import eu.qualimaster.dataManagement.strategies.*;'
+		'import eu.qualimaster.observables.*;'
 		''
 		'/**'
 		'* Define the data source class(GEN).'
 		'**/'
-		'public class ${toIdentifier(srcName)} {'
+		'public class ${toIdentifier(srcName)} implements I${toIdentifier(srcName)}{'
 		''
 		//generate tuple type classes.
 		 produceForTuples(dataSrc.input, srcName, true, 4);		
@@ -110,6 +93,7 @@ template dataSourceImplementation(Configuration config, FileArtifact target, Dat
 		'* Returns a specific type of data source.' | 4;
 		'* @return ${toIdentifier(srcName)}${firstToUpperCase(tupleName)}Output the source data' | 4;
 		'**/' | 4;
+		'@Override' | 4;
 	    'public ${toIdentifier(srcName)}${firstToUpperCase(tupleName)}Output get${firstToUpperCase(tupleName)}() {' | 4;
 	    'return null;' | 8;
 	    '}' | 4;
@@ -127,12 +111,27 @@ template dataSourceImplementation(Configuration config, FileArtifact target, Dat
 	        	'     *'
 	        	'     * @param value the new value of the data source parameter'
 	        	'     */'
-	        	
+	        	'@Override' | 4;
 	        	'    public void setParameter${mname}(${parameterTypeName(p)} value) {'
 	        	'    }'
 	        	''
 	    	}
-    	}		
+    	}
+    	
+    	'@Override' | 4;
+    	'public void connect() {}' | 4;
+		''
+		'@Override' | 4;
+		'public void disconnect(){}' | 4;
+ 		''
+ 		'@Override' | 4;
+ 		'public void setStrategy(IStorageStrategyDescriptor strategy) {}' | 4;
+ 		''
+ 		'@Override' | 4;
+ 		'public IStorageStrategyDescriptor getStrategy() { return NoStorageStrategyDescriptor.INSTANCE;}' | 4;
+ 		''
+ 		'@Override' | 4;
+ 		'public Double getMeasurement(IObservable observable) { return null;}' | 4;	
 		'}' 
 		}
 		

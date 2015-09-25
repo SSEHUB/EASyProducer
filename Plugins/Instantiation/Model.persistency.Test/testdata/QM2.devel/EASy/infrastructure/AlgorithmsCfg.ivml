@@ -1,371 +1,875 @@
 project AlgorithmsCfg {
-    
-    import ReconfigurableHardware;
-    import ReconfigurableHardwareCfg;
-    import Algorithms;
-    import BasicsCfg;
 
-    //for TSI priority pipeline
-    Algorithm swPreprocessor;
-    swPreprocessor = {
-    	name = "preprocessor",
-    	artifact = "eu.qualimaster:Preprocessor:0.0.1-SNAPSHOT",
-    	class = "eu.qualimaster.algorithms.imp.correlation.Preprocessor",
-    	input = {
-    		{
-    			name = "springStream",
-    			fields={Field{name="symbolTuple", type=FieldType.STRING}}
-    		}
-    	},
-    	output = {
-    		{
-    			name = "preprocessedStream",
-    			fields={
-    			Field{name="symbolId", type=FieldType.STRING},
-    			Field{name="timestamp", type=FieldType.LONG},
-    			Field{name="value", type=FieldType.REAL},
-    			Field{name="volume", type=FieldType.INTEGER}
-    		}}
-    	}
-    };
-	
-	/* 
-	Algorithm hwCorrelationFinancial;
-    hwCorrelationFinancial = {
-    	name = "hwCorrelationFinancial",
-    	artifact = "eu.qualimaster:HWCorrelatioFinancialn:0.0.1",
-    	class = "eu.qualimaster.algorithms.imp.HWCorrelationFinancial",
-    	algTopologyClass = "HWCorrelationFinancial",
-    	hwNode = clusters[0],
-    	input = {
-    		{fields={
-    			Field{name="symbolId", type=FieldType.STRING},
-    			Field{name="timestamp", type=FieldType.LONG},
-    			Field{name="value", type=FieldType.REAL},
-    			Field{name="volume", type=FieldType.INTEGER}
-    		}},
-    		{fields={Field{name="allSymbols", type=FieldType.STRINGLIST}}}
-
-    	},
-    	output = {
-    		{fields={Field{name="pairwiseCorrelation", type=FieldType.STRING}}}
-    	},
-		parameters={
-			IntegerParameter{name="windowSize"}
-		}      	
-    };
-    */
-    Algorithm SWTopoCorrelationFinancial;
-    SWTopoCorrelationFinancial = {
-    	name = "TopoSoftwareCorrelationFinancial",
-    	artifact = "eu.qualimaster:topo-software-correlation-financial:0.0.1-SNAPSHOT",
-    	class = "eu.qualimaster.algorithms.imp.correlation.softwaresubtopology.TopoSoftwareCorrelationFinancial",
-    	algTopologyClass = "TopoSoftwareCorrelationFinancial",
-    	input = {
-    		{
-    			name = "preprocessedStream",
-    			fields={
-    				Field{name="symbolId", type=FieldType.STRING},
-    				Field{name="timestamp", type=FieldType.LONG},
-    				Field{name="value", type=FieldType.REAL},
-    				Field{name="volume", type=FieldType.INTEGER}
-    		}},
-    		{
-    			name = "symbolList",
-    			fields={Field{name="allSymbols", type=FieldType.STRINGLIST}}
-    		}
-
-    	},
-    	output = {
-    		{
-    			name = "pairwiseFinancial",
-    			fields={Field{name="pairwiseCorrelationFinancial", type=FieldType.STRING}}
-    		}
-    	}     	
-    };
-
-    Algorithm HWTopoCorrelationFinancial;
-    HWTopoCorrelationFinancial = {
-    	name = "TopoHardwareCorrelationFinancial",
-    	artifact = "eu.qualimaster:topo-hardware-correlation-financial:0.0.1-SNAPSHOT",
-    	class = "eu.qualimaster.algorithms.imp.correlation.hardwaresubtopology.TopoHardwareCorrelationFinancial",
-    	algTopologyClass = "TopoHardwareCorrelationFinancial",
-    	input = {
-    		{
-    			name = "preprocessedStream",
-    			fields={
-    				Field{name="symbolId", type=FieldType.STRING},
-    				Field{name="timestamp", type=FieldType.LONG},
-    				Field{name="value", type=FieldType.REAL},
-    				Field{name="volume", type=FieldType.INTEGER}
-    		}},
-    		{
-    			name = "symbolList",
-    			fields={Field{name="allSymbols", type=FieldType.STRINGLIST}}
-    		}
-
-    	},
-    	output = {
-    		{
-    			name = "pairwiseFinancial",
-    			fields={Field{name="pairwiseCorrelationFinancial", type=FieldType.STRING}}
-    		}
-    	}     	
-    };
-
-    Algorithm HWTopoCorrelationTwitter;
-    HWTopoCorrelationTwitter = {
-    	name = "TopoHardwareCorrelationTwitter",
-    	artifact = "eu.qualimaster:topo-hardware-correlation-twitter:0.0.1-SNAPSHOT",
-    	class = "eu.qualimaster.algorithms.imp.correlation.hardwaresubtopology.TopoHardwareCorrelationTwitter",
-    	algTopologyClass = "TopoHardwareCorrelationTwitter",
-    	input = {
-    		{
-    			name = "analyzedStream",
-    			fields={
-    				Field{name="symbolId", type=FieldType.STRING},
-    				Field{name="timestamp", type=FieldType.LONG},
-    				Field{name="value", type=FieldType.REAL},
-    				Field{name="volume", type=FieldType.INTEGER}
-    		}},
-    		{
-    			name = "symbolList",
-    			fields={Field{name="allSymbols", type=FieldType.STRINGLIST}}
-    		}
-
-    	},
-    	output = {
-    		{
-    			name = "pairwiseTwitter",
-    			fields={Field{name="pairwiseCorrelationTwitter", type=FieldType.STRING}}
-    		}
-    	}     	
-    };
-    
-    Algorithm SWTopoCorrelationTwitter;
-    SWTopoCorrelationTwitter = {
-    	name = "TopoSoftwareCorrelationTwitter",
-    	artifact = "eu.qualimaster:topo-software-correlation-twitter:0.0.1-SNAPSHOT",
-    	class = "eu.qualimaster.algorithms.imp.correlation.softwaresubtopology.TopoSoftwareCorrelationTwitter",
-    	algTopologyClass = "TopoSoftwareCorrelationTwitter",
-    	input = {
-    		{
-    			name = "analyzedStream",
-    			fields={
-    				Field{name="symbolId", type=FieldType.STRING},
-    				Field{name="timestamp", type=FieldType.LONG},
-    				Field{name="value", type=FieldType.REAL},
-    				Field{name="volume", type=FieldType.INTEGER}
-    		}},
-    		{
-    			name = "symbolList",
-    			fields={Field{name="allSymbols", type=FieldType.STRINGLIST}}
-    		}
-
-    	},
-    	output = {
-    		{
-    			name = "pairwiseTwitter",
-    			fields={Field{name="pairwiseCorrelationTwitter", type=FieldType.STRING}}
-    		}
-    	}     	
-    };    
-    
-    //Algorithms for L3s priority pipeline
-    Algorithm topoSentiWord;
-    topoSentiWord = {
-    	name = "sentiWord",
-    	artifact = "eu.qualimaster:SentiWordnetSubTopology:0.0.4",
-    	algTopologyClass = "SentimentAnaylsisSentiWordNetTopology",
-    	class = "eu.qualimaster.algorithms.stream.sentiment.topology.impl.SentimentAnaylsisSentiWordNetTopology",
+	import ReconfigurableHardware;
+	import ReconfigurableHardwareCfg;
+	import Algorithms;
+	import BasicsCfg;
+	Algorithm swPreprocessor;
+	Algorithm SWTopoCorrelationFinancial;
+	Algorithm HWTopoCorrelationFinancial;
+	Algorithm HWTopoCorrelationTwitter;
+	Algorithm SWTopoCorrelationTwitter;
+	Algorithm topoSentiWord;
+	Algorithm topoSVM;
+	Algorithm mismatchedAlg;
+	Algorithm randomAlg1;
+	Algorithm randomAlg2;
+	Algorithm switchAlg1;
+	Algorithm switchAlg2;
+	Algorithm aggregateAlg;
+	Algorithm preprocessorTest;
+	Algorithm financialCorrelationTest;
+	Algorithm sentimentAnalysisTest;
+	Algorithm twitterCorrelationTest;
+	algorithms = {
+		refBy(swPreprocessor), refBy(SWTopoCorrelationFinancial), refBy(HWTopoCorrelationFinancial), refBy(SWTopoCorrelationTwitter), refBy(HWTopoCorrelationTwitter), refBy(topoSentiWord), refBy(topoSVM), refBy(mismatchedAlg), refBy(randomAlg1), refBy(randomAlg2), refBy(switchAlg1), refBy(switchAlg2), refBy(aggregateAlg)
+	, refBy(preprocessorTest), refBy(financialCorrelationTest), refBy(sentimentAnalysisTest), refBy(twitterCorrelationTest)};
+	algorithms.bindingTime = BindingTime.compile;
+	swPreprocessor = Algorithm {
+		name = "preprocessor", 
+		artifact = "eu.qualimaster:hy-preprocessor:3.0-SNAPSHOT", 
+		class = "eu.qualimaster.algorithms.imp.correlation.Preprocessor", 
 		input = {
-			{
-				name = "twitterStream",
-				fields={Field{name="status", type=FieldType.OBJECT}}
-			}
-		},
-		output = {
-    		{
-    			name = "analyzedStream",
-    			fields={
-    				Field{name="symbolId", type=FieldType.STRING},
-    				Field{name="timestamp", type=FieldType.LONG},
-    				Field{name="value", type=FieldType.REAL},
-    				Field{name="volume", type=FieldType.INTEGER}
-    		}}
-		}    	
-    };
-    
-    Algorithm topoSVM;
-    topoSVM = {
-    	name = "SVM",
-    	artifact = "eu.qualimaster:SVMSubTopology:0.0.4",
-    	class = "eu.qualimaster.algorithms.stream.sentiment.topology.impl.SentimentAnaylsisSVMTopology",
-    	algTopologyClass = "SentimentAnaylsisSVMTopology",
-		input = {
-			{
-				name = "twitterStream",
-				fields={Field{name="status", type=FieldType.OBJECT}}
-			}
-		},
-		output = {
-    		{
-    			name = "analyzedStream",
-    			fields={
-    				Field{name="symbolId", type=FieldType.STRING},
-    				Field{name="timestamp", type=FieldType.LONG},
-    				Field{name="value", type=FieldType.REAL},
-    				Field{name="volume", type=FieldType.INTEGER}
-    		}}
-		}    	
-    };    
-    
-    Algorithm mismatchedAlg;
-    mismatchedAlg = {
-    	name = "mismatchedAlg",
-    	artifact = "eu.qualimaster:MismatchedAlg:0.0.1",
-    	class = "eu.qualimaster.algorithms.impl.MismatchedAlg",
-		output={
-			{
-				name = "misString",
-			    fields={
-			      Field{name="streamID1", type=FieldType.STRING},
-			      Field{name="timestamp", type=FieldType.INTEGER},
-			      Field{name="quote", type=FieldType.REAL}
-		        }
-		    }
-		}, 
-		input={
-			{
-				name = "misString",
-				fields={
-					Field{name="symbolTuple1", type=FieldType.STRING},
-					Field{name="volume", type=FieldType.INTEGER}
+			Tuple {
+				name = "springStream", 
+				fields = {
+					Field {
+						name = "symbolTuple", 
+						type = refBy(StringType),
+						keyPart = false
+					}
 				}
 			}
-		}     	
-    };
-    
-    Algorithm randomAlg1;
-    randomAlg1 = {
-    	name = "randomAlg1",
-    	artifact = "eu.qualimaster.test:RandomProcessor1:0.0.1",
-    	class = "eu.qualimaster.algorithms.RandomProcessor1",
-    	algTopologyClass = "RandomProcessor1",
-		input = {
-			{
-				name = "randomData",
-				fields={Field{name="randomInteger", type=FieldType.INTEGER}}
-			}
-		},
-		output = {
-    		{
-    			name = "proccessedData",
-    			fields={
-    				Field{name="randomInteger", type=FieldType.INTEGER}
-    		}}
-		}     	
-    };
-
-    Algorithm randomAlg2;
-    randomAlg2 = {
-    	name = "randomAlg2",
-    	artifact = "eu.qualimaster.test:RandomProcessor2:0.0.1",
-    	class = "eu.qualimaster.algorithms.RandomProcessor2",
-    	algTopologyClass = "RandomProcessor2",
-		input = {
-			{
-				name = "randomData",
-				fields={Field{name="randomInteger", type=FieldType.INTEGER}}
-			}
-		},
-		output = {
-    		{
-    			name = "proccessedData",
-    			fields={
-    				Field{name="randomInteger", type=FieldType.INTEGER}
-    		}}
-		}     	
-    };
-        
-   // For example pipeline 
-   /* 
-    Algorithm aNormalize;
-    aNormalize = {  
-    	name = "Normalize",
-    	artifact = "integration.algs.Normalize",
-    	class = "eu.qualimaster.algorithms.imp.Normalize",
-		output={
-			{
-			    fields={
-			      Field{name="streamID", type=FieldType.STRING},
-			      Field{name="timestamp", type=FieldType.STRING},
-			      Field{name="quote", type=FieldType.REAL},
-			      Field{name="volume", type=FieldType.INTEGER}
-		        }
-		    }
 		}, 
-		input={
-			{
-				fields={Field{name="symbolTuple", type=FieldType.STRING}}
+		output = {
+			Tuple {
+				name = "preprocessedStream", 
+				fields = {
+					Field {
+						name = "symbolId", 
+						type = refBy(StringType),
+						keyPart = false
+					}, Field {
+						name = "timestamp", 
+						type = refBy(LongType),
+						keyPart = false
+					}, Field {
+						name = "value", 
+						type = refBy(RealType),
+						keyPart = false
+					}, Field {
+						name = "volume", 
+						type = refBy(IntegerType),
+						keyPart = false
+					}
+				}
 			}
 		}
-    };     
-    // algorithms from TSI
-    * 
-    */
- 
-
-    
-
-    
-    
-    
-    /* 
-    Algorithm hNormalize;
-    hNormalize = {  
-    	name = "HwNormalize",
-		output={{fields={
-			Field{name="streamID", type=FieldType.STRING},
-			Field{name="timestamp", type=FieldType.STRING},
-			Field{name="quote", type=FieldType.REAL},
-			Field{name="volume", type=FieldType.INTEGER}
-		}}}, 
-		hwNode = clusters[0],
-		input={{fields={Field{name="springData", type=FieldType.STRING}}}}	
-    };
- 
-    Algorithm topoNormalize;
-    topoNormalize = {  
-    	name = "TopoNormalize",
-		output={{fields={
-			Field{name="streamID", type=FieldType.STRING},
-			Field{name="timestamp", type=FieldType.STRING},
-			Field{name="quote", type=FieldType.REAL},
-			Field{name="volume", type=FieldType.INTEGER}
-		}}}, 
-		input={{fields={Field{name="springData", type=FieldType.STRING}}}},
-		algTopologyClass = "TopoNormalize"		
-    };   
-    */
-    
-
-     algorithms = {refBy(swPreprocessor),refBy(SWTopoCorrelationFinancial), refBy(HWTopoCorrelationFinancial), refBy(SWTopoCorrelationTwitter), refBy(HWTopoCorrelationTwitter), refBy(topoSentiWord), refBy(topoSVM), refBy(mismatchedAlg), refBy(randomAlg1), refBy(randomAlg2)};
-    
-	freeze{
+	};
+	preprocessorTest = Algorithm {
+		name = "preprocessorTest", 
+		artifact = "eu.qualimaster.test:PreprocessorTSI:0.0.1-SNAPSHOT", 
+		class = "eu.qualimaster.test.algorithms.PreprocessorTSI", 
+		input = {
+			Tuple {
+				name = "springStream", 
+				fields = {
+					Field {
+						name = "symbolTuple", 
+						type = refBy(StringType),
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "preprocessedStream", 
+				fields = {
+					Field {
+						name = "symbolId", 
+						type = refBy(StringType),
+						keyPart = false
+					}, Field {
+						name = "timestamp", 
+						type = refBy(LongType),
+						keyPart = false
+					}, Field {
+						name = "value", 
+						type = refBy(RealType),
+						keyPart = false
+					}, Field {
+						name = "volume", 
+						type = refBy(IntegerType),
+						keyPart = false
+					}
+				}
+			}
+		}
+	};
+	SWTopoCorrelationFinancial = Algorithm {
+		name = "TopoSoftwareCorrelationFinancial", 
+		artifact = "eu.qualimaster:hy-correlation-financial-software:3.0-SNAPSHOT", 
+		class = "eu.qualimaster.algorithms.imp.correlation.softwaresubtopology.TopoSoftwareCorrelationFinancial", 
+		description = "", 
+		input = {
+			Tuple {
+				name = "preprocessedStream", 
+				fields = {
+					Field {
+						name = "symbolId", 
+						type = refBy(StringType),
+						keyPart = false
+					}, Field {
+						name = "timestamp", 
+						type = refBy(LongType),
+						keyPart = false
+					}, Field {
+						name = "value", 
+						type = refBy(RealType),
+						keyPart = false
+					}, Field {
+						name = "volume", 
+						type = refBy(IntegerType),
+						keyPart = false
+					}
+				}
+			}, Tuple {
+				name = "symbolList", 
+				fields = {
+					Field {
+						name = "allSymbols", 
+						type = refBy(StringListType),
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "pairwiseFinancial", 
+				fields = {
+					Field {
+						name = "pairwiseCorrelationFinancial", 
+						type = refBy(StringType),
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				defaultValue = 30, 
+				name = "windowSize"
+			}
+		}, 
+		algTopologyClass = "TopoSoftwareCorrelationFinancial"
+	};
+	
+	HWTopoCorrelationFinancial = Algorithm {
+		name = "TopoHardwareCorrelationFinancial", 
+		artifact = "eu.qualimaster:hy-correlation-financial-hardware:3.0-SNAPSHOT", 
+		class = "eu.qualimaster.algorithms.imp.correlation.hardwaresubtopology.TopoHardwareCorrelationFinancial", 
+		input = {
+			Tuple {
+				name = "preprocessedStream", 
+				fields = {
+					Field {
+						name = "symbolId", 
+						type = refBy(StringType),
+						keyPart = false
+					}, Field {
+						name = "timestamp", 
+						type = refBy(LongType),
+						keyPart = false
+					}, Field {
+						name = "value", 
+						type = refBy(RealType),
+						keyPart = false
+					}, Field {
+						name = "volume", 
+						type = refBy(IntegerType),
+						keyPart = false
+					}
+				}
+			}, Tuple {
+				name = "symbolList", 
+				fields = {
+					Field {
+						name = "allSymbols", 
+						type = refBy(StringListType),
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "pairwiseFinancial", 
+				fields = {
+					Field {
+						name = "pairwiseCorrelationFinancial", 
+						type = refBy(StringType),
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				defaultValue = 30, 
+				name = "windowSize"
+			}
+		}, 
+		algTopologyClass = "TopoHardwareCorrelationFinancial",
+		hwNode = refBy(cluster1)
+	};
+	
+	financialCorrelationTest = Algorithm {
+		name = "financialCorrelationTest", 
+		artifact = "eu.qualimaster.test:FinancialCorrelationTest:0.0.1-SNAPSHOT", 
+		class = "eu.qualimaster.test.algorithms.FinancialCorrelationTest", 
+		description = "", 
+		input = {
+			Tuple {
+				name = "preprocessedStream", 
+				fields = {
+					Field {
+						name = "symbolId", 
+						type = refBy(StringType),
+						keyPart = false
+					}, Field {
+						name = "timestamp", 
+						type = refBy(LongType),
+						keyPart = false
+					}, Field {
+						name = "value", 
+						type = refBy(RealType),
+						keyPart = false
+					}, Field {
+						name = "volume", 
+						type = refBy(IntegerType),
+						keyPart = false
+					}
+				}
+			}, Tuple {
+				name = "symbolList", 
+				fields = {
+					Field {
+						name = "allSymbols", 
+						type = refBy(StringListType),
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "pairwiseFinancial", 
+				fields = {
+					Field {
+						name = "pairwiseCorrelationFinancial", 
+						type = refBy(StringType),
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				defaultValue = 30, 
+				name = "windowSize"
+			}
+		}
+	};
+	
+	HWTopoCorrelationTwitter = Algorithm {
+		name = "TopoHardwareCorrelationTwitter", 
+		artifact = "eu.qualimaster:hy-correlation-twitter-hardware:3.0-SNAPSHOT", 
+		class = "eu.qualimaster.algorithms.imp.correlation.hardwaresubtopology.TopoHardwareCorrelationTwitter", 
+		input = {
+			Tuple {
+				name = "analyzedStream", 
+				fields = {
+					Field {
+						name = "symbolId", 
+						type = refBy(StringType),
+						keyPart = false
+					}, Field {
+						name = "timestamp", 
+						type = refBy(LongType),
+						keyPart = false
+					}, Field {
+						name = "value", 
+						type = refBy(RealType),
+						keyPart = false
+					}, Field {
+						name = "volume", 
+						type = refBy(IntegerType),
+						keyPart = false
+					}
+				}
+			}, Tuple {
+				name = "symbolList", 
+				fields = {
+					Field {
+						name = "allSymbols", 
+						type = refBy(StringListType),
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "pairwiseTwitter", 
+				fields = {
+					Field {
+						name = "pairwiseCorrelationTwitter", 
+						type = refBy(StringType),
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				defaultValue = 30, 
+				name = "windowSize"
+			}
+		}, 
+		algTopologyClass = "TopoHardwareCorrelationTwitter",
+		hwNode = refBy(cluster2)
+	};
+	SWTopoCorrelationTwitter = Algorithm {
+		name = "TopoSoftwareCorrelationTwitter", 
+		artifact = "eu.qualimaster:hy-correlation-twitter-software:3.0-SNAPSHOT", 
+		class = "eu.qualimaster.algorithms.imp.correlation.softwaresubtopology.TopoSoftwareCorrelationTwitter", 
+		input = {
+			Tuple {
+				name = "analyzedStream", 
+				fields = {
+					Field {
+						name = "symbolId", 
+						type = refBy(StringType),
+						keyPart = false
+					}, Field {
+						name = "timestamp", 
+						type = refBy(LongType),
+						keyPart = false
+					}, Field {
+						name = "value", 
+						type = refBy(RealType),
+						keyPart = false
+					}, Field {
+						name = "volume", 
+						type = refBy(IntegerType),
+						keyPart = false
+					}
+				}
+			}, Tuple {
+				name = "symbolList", 
+				fields = {
+					Field {
+						name = "allSymbols", 
+						type = refBy(StringListType),
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "pairwiseTwitter", 
+				fields = {
+					Field {
+						name = "pairwiseCorrelationTwitter", 
+						type = refBy(StringType),
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				defaultValue = 30, 
+				name = "windowSize"
+			}
+		}, 
+		algTopologyClass = "TopoSoftwareCorrelationTwitter"
+	};
+	
+	twitterCorrelationTest = Algorithm {
+		name = "twitterCorrelationTest", 
+		artifact = "eu.qualimaster.test:TwitterCorrelationTest:0.0.1-SNAPSHOT", 
+		class = "eu.qualimaster.test.algorithms.TwitterCorrelationTest", 
+		input = {
+			Tuple {
+				name = "analyzedStream", 
+				fields = {
+					Field {
+						name = "symbolId", 
+						type = refBy(StringType),
+						keyPart = false
+					}, Field {
+						name = "timestamp", 
+						type = refBy(LongType),
+						keyPart = false
+					}, Field {
+						name = "value", 
+						type = refBy(RealType),
+						keyPart = false
+					}, Field {
+						name = "volume", 
+						type = refBy(IntegerType),
+						keyPart = false
+					}
+				}
+			}, Tuple {
+				name = "symbolList", 
+				fields = {
+					Field {
+						name = "allSymbols", 
+						type = refBy(StringListType),
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "pairwiseTwitter", 
+				fields = {
+					Field {
+						name = "pairwiseCorrelationTwitter", 
+						type = refBy(StringType),
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				defaultValue = 30, 
+				name = "windowSize"
+			}
+		}
+	};
+	
+	topoSentiWord = Algorithm {
+		name = "sentiWord", 
+		artifact = "eu.qualimaster:SentiWordnetSubTopology:0.0.5-SNAPSHOT", 
+		class = "eu.qualimaster.algorithms.stream.sentiment.topology.impl.SentimentAnaylsisSentiWordNetTopology", 
+		input = {
+			Tuple {
+				name = "twitterStream", 
+				fields = {
+					Field {
+						name = "status", 
+						type = refBy(ObjectType),
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "analyzedStream", 
+				fields = {
+					Field {
+						name = "symbolId", 
+						type = refBy(StringType),
+						keyPart = false
+					}, Field {
+						name = "timestamp", 
+						type = refBy(LongType),
+						keyPart = false
+					}, Field {
+						name = "value", 
+						type = refBy(RealType),
+						keyPart = false
+					}, Field {
+						name = "volume", 
+						type = refBy(IntegerType),
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				defaultValue = 60, 
+				name = "timeSeriesGranularity"
+			}, IntegerParameter {
+				defaultValue = 10, 
+				name = "sentimentClass"
+			}, RealParameter {
+				defaultValue = 2.5, 
+				name = "classificationThreshold"
+			}
+		}, 
+		algTopologyClass = "SentimentAnaylsisSentiWordNetTopology"
+	};
+	topoSVM = Algorithm {
+		name = "SVM", 
+		artifact = "eu.qualimaster:SVMSubTopology:0.0.5-SNAPSHOT", 
+		class = "eu.qualimaster.algorithms.stream.sentiment.topology.impl.SentimentAnaylsisSVMTopology", 
+		input = {
+			Tuple {
+				name = "twitterStream", 
+				fields = {
+					Field {
+						name = "status", 
+						type = refBy(ObjectType),
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "analyzedStream", 
+				fields = {
+					Field {
+						name = "symbolId", 
+						type = refBy(StringType),
+						keyPart = false
+					}, Field {
+						name = "timestamp", 
+						type = refBy(LongType),
+						keyPart = false
+					}, Field {
+						name = "value", 
+						type = refBy(RealType),
+						keyPart = false
+					}, Field {
+						name = "volume", 
+						type = refBy(IntegerType),
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				defaultValue = 60, 
+				name = "timeSeriesGranularity"
+			}, IntegerParameter {
+				defaultValue = 10, 
+				name = "sentimentClass"
+			}, RealParameter {
+				defaultValue = 2.5, 
+				name = "classificationThreshold"
+			}
+		}, 
+		algTopologyClass = "SentimentAnaylsisSVMTopology"
+	};
+	
+	sentimentAnalysisTest = Algorithm {
+		name = "sentimentAnalysisTest", 
+		artifact = "eu.qualimaster.test:SentimentAnalysisTest:0.0.1-SNAPSHOT", 
+		class = "eu.qualimaster.test.algorithms.SentimentAnalysisTest", 
+		input = {
+			Tuple {
+				name = "twitterStream", 
+				fields = {
+					Field {
+						name = "status", 
+						type = refBy(ObjectType),
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "analyzedStream", 
+				fields = {
+					Field {
+						name = "symbolId", 
+						type = refBy(StringType),
+						keyPart = false
+					}, Field {
+						name = "timestamp", 
+						type = refBy(LongType),
+						keyPart = false
+					}, Field {
+						name = "value", 
+						type = refBy(RealType),
+						keyPart = false
+					}, Field {
+						name = "volume", 
+						type = refBy(IntegerType),
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				defaultValue = 60, 
+				name = "timeSeriesGranularity"
+			}, IntegerParameter {
+				defaultValue = 10, 
+				name = "sentimentClass"
+			}, RealParameter {
+				defaultValue = 2.5, 
+				name = "classificationThreshold"
+			}
+		}
+	};
+	
+	mismatchedAlg = Algorithm {
+		name = "mismatchedAlg", 
+		artifact = "eu.qualimaster:MismatchedAlg:0.0.1", 
+		class = "eu.qualimaster.algorithms.impl.MismatchedAlg", 
+		input = {
+			Tuple {
+				name = "misString", 
+				fields = {
+					Field {
+						name = "symbolTuple1", 
+						type = refBy(StringType),
+						keyPart = false
+					}, Field {
+						name = "volume", 
+						type = refBy(IntegerType),
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "misString", 
+				fields = {
+					Field {
+						name = "streamID1", 
+						type = refBy(StringType),
+						keyPart = false
+					}, Field {
+						name = "timestamp", 
+						type = refBy(IntegerType),
+						keyPart = false
+					}, Field {
+						name = "quote", 
+						type = refBy(RealType),
+						keyPart = false
+					}
+				}
+			}
+		}
+	};
+	randomAlg1 = Algorithm {
+		name = "randomAlg1", 
+		artifact = "eu.qualimaster.test:RandomProcessor1:0.0.2-SNAPSHOT", 
+		class = "eu.qualimaster.algorithms.RandomProcessor1", 
+		input = {
+			Tuple {
+				name = "randomData", 
+				fields = {
+					Field {
+						name = "randomInteger", 
+						type = refBy(IntegerType),
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "proccessedData", 
+				fields = {
+					Field {
+						name = "randomInteger", 
+						type = refBy(IntegerType),
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				defaultValue = 0, 
+				name = "delay"
+			}, BooleanParameter {
+				defaultValue = false,
+				name = "flag"
+			}
+		}, 
+		algTopologyClass = "RandomProcessor1"
+	};
+	randomAlg2 = Algorithm {
+		name = "randomAlg2", 
+		artifact = "eu.qualimaster.test:RandomProcessor2:0.0.2-SNAPSHOT", 
+		class = "eu.qualimaster.algorithms.RandomProcessor2", 
+		input = {
+			Tuple {
+				name = "randomData", 
+				fields = {
+					Field {
+						name = "randomInteger", 
+						type = refBy(IntegerType),
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "proccessedData", 
+				fields = {
+					Field {
+						name = "randomInteger", 
+						type = refBy(IntegerType),
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				defaultValue = 0, 
+				name = "delay"
+			}, BooleanParameter {
+				defaultValue = false,
+				name = "flag"
+			}
+		}, 
+		algTopologyClass = "RandomProcessor2"
+	};
+	switchAlg1 = Algorithm {
+		name = "switchAlg1", 
+		artifact = "eu.qualimaster.test:SwitchProcessor1:0.0.1-SNAPSHOT", 
+		class = "eu.qualimaster.algorithms.SwitchProcessor1", 
+		input = {
+			Tuple {
+				name = "randomData", 
+				fields = {
+					Field {
+						name = "randomInteger", 
+						type = refBy(IntegerType),
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "proccessedData", 
+				fields = {
+					Field {
+						name = "randomInteger", 
+						type = refBy(IntegerType),
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				defaultValue = 0, 
+				name = "delay"
+			}, BooleanParameter {
+				defaultValue = false,
+				name = "flag"
+			}
+		}
+	};
+	switchAlg2 = Algorithm {
+		name = "switchAlg2", 
+		artifact = "eu.qualimaster.test:SwitchProcessor2:0.0.1-SNAPSHOT", 
+		class = "eu.qualimaster.algorithms.SwitchProcessor2", 
+		input = {
+			Tuple {
+				name = "randomData", 
+				fields = {
+					Field {
+						name = "randomInteger", 
+						type = refBy(IntegerType),
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "proccessedData", 
+				fields = {
+					Field {
+						name = "randomInteger", 
+						type = refBy(IntegerType),
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				defaultValue = 0, 
+				name = "delay"
+			}, BooleanParameter {
+				defaultValue = false,
+				name = "flag"
+			}
+		}
+	};
+	aggregateAlg = Algorithm {
+		name = "aggregateAlg", 
+		artifact = "eu.qualimaster.test:AggregationAlg:0.0.1-SNAPSHOT", 
+		class = "eu.qualimaster.algorithms.AggregationAlg", 
+		input = {
+			Tuple {
+				name = "randomData", 
+				fields = {
+					Field {
+						name = "randomInteger", 
+						type = refBy(IntegerType),
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "randomData", 
+				fields = {
+					Field {
+						name = "randomInteger", 
+						type = refBy(IntegerType),
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				defaultValue = 1, 
+				name = "factor"
+			}, IntegerParameter {
+				defaultValue = 0, 
+				name = "delay"
+			}
+		}
+	};
+	freeze {
+		algorithms;
 		swPreprocessor;
 		SWTopoCorrelationFinancial;
 		HWTopoCorrelationFinancial;
-		SWTopoCorrelationTwitter;
 		HWTopoCorrelationTwitter;
+		SWTopoCorrelationTwitter;
 		topoSentiWord;
 		topoSVM;
 		mismatchedAlg;
 		randomAlg1;
 		randomAlg2;
-		algorithms;
-	} but (f|f.bindingTime == BindingTime.runtime)  
-    
-    
-	
+		switchAlg1;
+		switchAlg2;
+		aggregateAlg;
+		preprocessorTest;
+		financialCorrelationTest;
+		twitterCorrelationTest;
+		sentimentAnalysisTest;
+	} but (f|f.bindingTime == BindingTime.runtime)
 }

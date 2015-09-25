@@ -1,33 +1,7 @@
+import commonVTLMethods;
 @advice(QM)
-template familyImplementationJava(Configuration config, FileArtifact target, DecisionVariable family, String fName) {
-
-    // needs to be translated into new advice-style of writing
-
-    def String parameterTypeName(DecisionVariable var) { 
-    	switch(var.type()) {
-    		"IntegerParameter" : "int",
-    		"BooleanParameter" : "boolean",
-    		"RealParameter" : "double",
-    		"StringParameter" : "String"
-    	}
-    	 
-    }
-    
-    def String fieldTypeName(DecisionVariable var) {
-    	String type = var.byName("type");   	 
-    	switch(type) {
-    		"INTEGER" : "int",
-    		"BOOLEAN" : "boolean",
-    		"REAL" : "double",
-    		"STRING" : "String",
-    		"OBJECT": "Object",
-    		"LONG" : "long",
-    		"STRINGLIST" : "java.util.List<String>"
-    	}
-    	
-    }
-    
-    def produceForTuples(DecisionVariable tuples, Boolean output, Boolean implementation, String fName, Integer indent) {
+template familyImplementationJava(Configuration config, FileArtifact target, Family family, String fName) {   
+    def produceForTuples(Tuples tuples, Boolean output, Boolean implementation, String fName, Integer indent) {
 	    String type;
 	    String typeName;
     	String tupleName; 	    	   	   	
@@ -71,12 +45,16 @@ template familyImplementationJava(Configuration config, FileArtifact target, Dec
 	    			   'this.${fname} = ${fname};' | indent + 8;
 	    		'}' | indent + 4;
     		}
+    		String fserializer = fName.substring(1, fName.length()) + "Serializers";
+    		'static {' | indent + 4;    			
+        		'SerializerRegistry.register("$type", $fserializer.${type}Serializer.class);' | indent + 8;
+    		'}' | indent + 4;
     	'}' | indent;
     	''	   	       	
       }
     }
 
-    def produceForCalculate(DecisionVariable inputTuples, DecisionVariable outputTuples, String ifName) {   	 
+    def produceForCalculate(Tuples inputTuples, Tuples outputTuples, String ifName) {   	 
     	 String inputTupleName;
     	 String outputTupleName;
   	  
@@ -104,12 +82,13 @@ template familyImplementationJava(Configuration config, FileArtifact target, Dec
        }
     }
 
-    def main(Configuration config, FileArtifact target, DecisionVariable family, String fName) {
+    def main(Configuration config, FileArtifact target, Family family, String fName) {
     	'package eu.qualimaster.families.imp;'
     	''
     	//'import java.io.Serializable;'
     	'import eu.qualimaster.families.inf.*;'
     	'import eu.qualimaster.observables.IObservable;'
+    	'import eu.qualimaster.dataManagement.serialization.SerializerRegistry;'
     	''
     	String ifName = "I" + fName;
     	'/**'
@@ -117,14 +96,13 @@ template familyImplementationJava(Configuration config, FileArtifact target, Dec
     	' */'
     	'public class $fName implements $ifName {'
     	''
-    	produceForTuples(family.byName("input"), false, true, ifName, 4);
-    	produceForTuples(family.byName("output"), true, true, ifName, 4);
+    	produceForTuples(family.input, false, true, ifName, 4);
+    	produceForTuples(family.output, true, true, ifName, 4);
     	
     	//produce the calculate method based on multiple input and output string
-        produceForCalculate(family.byName("input"), family.byName("output"), ifName); 
+        produceForCalculate(family.input, family.output, ifName); 
              	
         if (family.byName("parameters").variables().size()>0) {
-	        '    // algorithm parameters'
 	        ''
 	        for (Parameter p : family.byName("parameters")) {
 	        	String paramName = p.name;

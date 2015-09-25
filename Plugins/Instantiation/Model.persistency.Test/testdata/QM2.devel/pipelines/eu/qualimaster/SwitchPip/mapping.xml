@@ -1,0 +1,16 @@
+<mapping>
+  <pipeline name="SwitchPip" class="eu.qualimaster.SwitchPip.topology.Topology">
+      <node name="src" type="source">
+          <component name="PipelineVar_2_Source0" container="SwitchPip" class="eu.qualimaster.SwitchPip.topology.PipelineVar_2_Source0Source" receiver="true"/>
+      </node>
+      <node name="processor" type="family">
+          <component name="PipelineVar_2_FamilyElement0" container="SwitchPip" class="eu.qualimaster.SwitchPip.topology.PipelineVar_2_FamilyElement0FamilyElement" receiver="true"/>
+      </node>
+      <node name="snk" type="sink">
+          <component name="PipelineVar_2_Sink0" container="SwitchPip" class="eu.qualimaster.SwitchPip.topology.PipelineVar_2_Sink0Sink" receiver="true"/>
+      </node>
+      <algorithm name="SwitchProcessor1" class="eu.qualimaster.algorithms.SwitchProcessor1"/>
+      <algorithm name="SwitchProcessor2" class="eu.qualimaster.algorithms.SwitchProcessor2"/>
+  </pipeline>
+
+</mapping>

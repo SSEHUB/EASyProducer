@@ -3,11 +3,11 @@ project Families {
     import Basics;
 	import Algorithms;
 	
-	attribute BindingTime bindingTime = BindingTime.compile to Families;
+	annotate BindingTime bindingTime = BindingTime.compile to Families;
 	
 	compound Family {
 		NonEmptyString name;
-		String description;
+		Description description;
 		Tuples input;
 		Tuples output;
 		Parameters parameters;
@@ -17,9 +17,9 @@ project Families {
 		Constraint inputCheck = members->forAll(refTo(Algorithm) algorithm | input == algorithm.input);
 		Constraint outputCheck = members->forAll(refTo(Algorithm) algorithm | output == algorithm.output);
 		Constraint parameterCheck = members->forAll(refTo(Algorithm) algorithm | contains(parameters, algorithm.parameters));
-		Constraint memberCount = members.size() > 0;
-		Constraint inputGivenCheck = input != null;
-		Constraint outputGivenCheck = output != null;
+//		Constraint memberCount = members.size() > 0;
+		Constraint inputGivenCheck = input.isDefined(); //untested
+		Constraint outputGivenCheck = output.isDefined(); //untested
 	}
 
     def Boolean contains(Parameters parameters1, Parameters parameters2) = 

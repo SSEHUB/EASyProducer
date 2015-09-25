@@ -10,6 +10,7 @@ template stormPipeline(Configuration config, FileArtifact target, Pipeline pipel
     def main(Configuration config, FileArtifact target, Pipeline pip, mapOf(String, setOf(DecisionVariable)) familiesInPipeline) {    	
     	String pipName = pip.name;
     	Integer numworkers=pip.numworkers;
+    	Boolean fastSerialization=pip.fastSerialization;
     	//Integer numworkers=1;
     	Integer timeout = pip.timeout;
     	//get all families used in this pipeline
@@ -24,12 +25,15 @@ template stormPipeline(Configuration config, FileArtifact target, Pipeline pipel
     	'import backtype.storm.topology.*;'
     	'import eu.qualimaster.Configuration;'
     	'import eu.qualimaster.base.algorithm.*;'
+    	'import eu.qualimaster.infrastructure.PipelineOptions;'
+    	'import eu.qualimaster.base.pipeline.RecordingTopologyBuilder;'
     	for(Family fm : families) {
     		for(Algorithm alg : fm.members) {
     			String qualifiedClsName = alg.class;
 				'import $qualifiedClsName;'
     		}
     	}
+    	
     	''
     	'/**'
     	'* Define the main topology class(GEN).'
@@ -58,19 +62,28 @@ template stormPipeline(Configuration config, FileArtifact target, Pipeline pipel
     	'            config.setDebug(false);'
     	'            config.put("windowSize", 1 * 30);  // Window size (in secs)'
         '            config.put("windowAdvance", 1);  // Advance of the window (in secs)'
+        '			//The settings to optimize the storm performance.'
+        '			config.put(Config.TOPOLOGY_RECEIVER_BUFFER_SIZE, 8);'
+		'			config.put(Config.TOPOLOGY_TRANSFER_BUFFER_SIZE, 32);'
+		'			config.put(Config.TOPOLOGY_EXECUTOR_RECEIVE_BUFFER_SIZE, 16384);'
+		'			config.put(Config.TOPOLOGY_EXECUTOR_SEND_BUFFER_SIZE, 16384);'
 //    	''
 //    	'        if (args != null && args.length > 0) {'
     	'            config.put(Configuration.HOST_EVENT, Configuration.getEventHost());'
         '            config.put(Configuration.PORT_EVENT, Configuration.getEventPort());'
 //    	'        }'
+        if (fastSerialization) {
+        	'            eu.qualimaster.families.imp.SerializationRegistry.registerKryoSerializers(config);'
+        }
     	''
-    	'            TopologyBuilder builder = new TopologyBuilder();'
+    	'            RecordingTopologyBuilder builder = new RecordingTopologyBuilder();'
     	for (DecisionVariable r : pip.sources) {
     		setOf(String) s1 = {};
     		setOf(String) s2 = {};
     		setOf(String) outputTupleNames = {};
-    		processElement(r, Grouping.shuffleGrouping, s1, true, outputTupleNames);
-    	}   
+    		processElement(r, Grouping.shuffleGrouping, s1, s2, true, outputTupleNames);
+    	} 
+    	'            builder.close(TOPOLOGY_NAME, config);'  
     	'            return new TopologyOutput(config, builder, numWorkers);'  	
     	'        }'
     	''
@@ -85,13 +98,18 @@ template stormPipeline(Configuration config, FileArtifact target, Pipeline pipel
  		'        //get the topology information'
  		'        Config config = topo.getConfig();'
  		'        TopologyBuilder builder = topo.getBuilder();'
- 		'        int numWorkers = topo.getNumWorkers();'
+ 		'        int defNumWorkers = topo.getNumWorkers();'
+ 		'        PipelineOptions options = new PipelineOptions(args);'
+ 		'        options.toConf(config);'
+        '        int numWorkers = options.getNumberOfWorkers(defNumWorkers);'
  		''
+ 		//'System.out.println("Calling the main class with" + java.util.Arrays.toString(args));'
     	'        //submit the topology in the real cluster' 
     	'        if (args != null && args.length > 0) {'  
     	'if(maxNumWorkers > numWorkers) {' |12;
     	'logger.error("ERROR: the number of workers in sub-topology is larger than in the main topology!");' | 16;
     	'}' | 12;
+    	//'System.out.println("Starting pipelines");'
     	'            config.setNumWorkers(numWorkers);'
         '            StormSubmitter.submitTopology(args[0], config, builder.createTopology());'
     	'        }'
@@ -104,11 +122,11 @@ template stormPipeline(Configuration config, FileArtifact target, Pipeline pipel
     	'}'
     }
      
-    def processElement(DecisionVariable elt, Grouping grouping, setOf(String) lastName, Boolean newFlow, setOf(String) lastOutputTupleNames) {
+    def processElement(DecisionVariable elt, Grouping grouping, setOf(String) preLastName, setOf(String) lastName, Boolean newFlow, Boolean isLastElementDM, setOf(String) lastOutputTupleNames) {
 		'// unhandled type ${elt.type()}' | 8;
     }
 
-	def processElement(DataManagementElement elt, Grouping grouping, setOf(String) lastName, Boolean newFlow, setOf(String) lastOutputTupleNames) {
+	def processElement(DataManagementElement elt, Grouping grouping, setOf(String) preLastName, setOf(String) lastName, Boolean newFlow, Boolean isLastElementDM, setOf(String) lastOutputTupleNames) {
         // currently the same as FamilyElement -> infer grouping to fieldsGrouping?
     	setOf(String) listName = {};        
     	String name = elt.varName();
@@ -118,7 +136,7 @@ template stormPipeline(Configuration config, FileArtifact target, Pipeline pipel
     	outputTupleNames = lastOutputTupleNames;
     	
     	if(newFlow){
-     	    produceStatement(elt, grouping, lastName, true, lastOutputTupleNames);    	
+     	    produceStatement(elt, grouping, preLastName, lastName, true, isLastElementDM, lastOutputTupleNames);    	
 		} 
 		if(isStringExisted(name, produced)){			
 		}else {
@@ -134,11 +152,11 @@ template stormPipeline(Configuration config, FileArtifact target, Pipeline pipel
 				nFlow = true;
 				flows.add(flowName);
 			}			
-			processElement(flow.destination, flow.grouping, listName, nFlow, outputTupleNames);
+			processElement(flow.destination, flow.grouping, lastName, listName, nFlow, true, outputTupleNames);
 		}
     }
 
-    def processElement(FamilyElement elt, Grouping grouping, setOf(String) lastName, Boolean newFlow, setOf(String) lastOutputTupleNames) {
+    def processElement(FamilyElement elt, Grouping grouping, setOf(String) preLastName, setOf(String) lastName, Boolean newFlow, Boolean isLastElementDM, setOf(String) lastOutputTupleNames) {
         // currently the same as DataManagementElement -> infer grouping to shuffleGrouping?
     	setOf(String) listName = {}; 
     	String nameVar = elt.varName();  
@@ -151,7 +169,7 @@ template stormPipeline(Configuration config, FileArtifact target, Pipeline pipel
     		outputTupleNames.add(tupleName);
     	}     
         if(newFlow){
-    	    produceStatement(elt, grouping, lastName, true, lastOutputTupleNames);
+    	    produceStatement(elt, grouping, preLastName, lastName, true, isLastElementDM, lastOutputTupleNames);
     	}
     	if(isStringExisted(nameVar, produced)){
     		//do nothing    		
@@ -169,8 +187,10 @@ template stormPipeline(Configuration config, FileArtifact target, Pipeline pipel
 					String streamId = nameVar + "${topoCount}TopoStream";	
 					
 			   		String topologyCls = alg.algTopologyClass;
+			   		'            builder.startRecording("$nameVar");'
 			    	'            //generate the Storm-based algorithm topology name:$algClsName'
 			    	'            SubTopologyOutput $snkBolt = new $topologyCls().createSubTopology(builder,config,"$algClsName", "$nameVar", "$streamId");'
+			    	'            builder.endRecording();'
 			    	'maxNumWorkers = Math.max(maxNumWorkers, $snkBolt.getNumWorkers());' | 12;
 			    	'maxTaskParallelism = Math.max(maxTaskParallelism, $snkBolt.getMaxTaskParallelism());' | 12;	
 			    	listName.add(snkBolt);
@@ -193,7 +213,7 @@ template stormPipeline(Configuration config, FileArtifact target, Pipeline pipel
 				nFlow = true;
 				flows.add(flowName);
 			}						
-			processElement(flow.destination, flow.grouping, listName, nFlow, outputTupleNames);
+			processElement(flow.destination, flow.grouping, lastName, listName, nFlow, false, outputTupleNames);
 		}
     }
     
@@ -203,7 +223,7 @@ template stormPipeline(Configuration config, FileArtifact target, Pipeline pipel
      * @param grouping the grouping type 
      * @param preNameForTopo  
      */
-    def processElement(Source elt, Grouping grouping, setOf(String) lastName, Boolean newFlow, setOf(String) lastOutputTupleNames) {
+    def processElement(Source elt, Grouping grouping, setOf(String) preLastName, setOf(String) lastName, Boolean newFlow, setOf(String) lastOutputTupleNames) {
     	setOf(String) listName = {};//collect the name of the current element as the last element that linked to the next element
     	String name = elt.varName(); 
 //    	Integer outputSize = elt.output.size();    	
@@ -217,7 +237,7 @@ template stormPipeline(Configuration config, FileArtifact target, Pipeline pipel
     	}
     	
     	if(newFlow){ //if the flow has not been passed (the flow is new), in Source it starts with true to produce the spout definition
-     		produceStatement(elt, grouping, lastName, false, lastOutputTupleNames);    	
+     		produceStatement(elt, grouping, preLastName, lastName, false, false, lastOutputTupleNames);    	
 		} 
 		if(isStringExisted(name, produced)){			
 		}else {//the elt is not produced
@@ -234,18 +254,18 @@ template stormPipeline(Configuration config, FileArtifact target, Pipeline pipel
 				nFlow = true; //the flow is new
 				flows.add(flowName); //added the current flow to the set flows
 			}
-			processElement(flow.destination, flow.grouping, listName, nFlow, outputTupleNames);
+			processElement(flow.destination, flow.grouping, lastName, listName, nFlow, false, outputTupleNames);
 		}
     }
     
-    def processElement(Sink elt, Grouping grouping, setOf(String) lastName, Boolean newFlow, setOf(String) lastOutputTupleNames) {   	
+    def processElement(Sink elt, Grouping grouping, setOf(String) preLastName, setOf(String) lastName, Boolean newFlow, Boolean isLastElementDM, setOf(String) lastOutputTupleNames) {   	
     	if(newFlow){
-    	    produceStatement(elt, grouping, lastName, true, lastOutputTupleNames);	
+    	    produceStatement(elt, grouping, preLastName, lastName, true, isLastElementDM, lastOutputTupleNames);	
     	}
     	
     }
     
-    def produceStatement(DecisionVariable elt, Grouping grouping, setOf(String) lastName, Boolean bolt, setOf(String) lastOutputTupleNames) {
+    def produceStatement(DecisionVariable elt, Grouping grouping, setOf(String) preLastName, setOf(String) lastName, Boolean bolt, Boolean isLastElementDM, setOf(String) lastOutputTupleNames) {
     	//name for Spout/Bolt
     	String name = elt.varName();
     	//Spout/Bolt class name
@@ -288,36 +308,36 @@ template stormPipeline(Configuration config, FileArtifact target, Pipeline pipel
     	} else if(eltType == "DataManagementElement") {
     		DataManagementElement dmElt = elt;
     		displayName = dmElt.name;
-    	}
-    	
-//    	setOf(String) tupleNames = getTupleNames(lastOutputTupleNames,inputTupleNames);
+    		inputTupleNames = lastOutputTupleNames;
+    	}    			   	
     	
         if (bolt) {    	    
     	    if(isStringExisted(name, bolts)){ 
  	    	} else {
  	    	  '// Declare a Bolt "$displayName"' | 12;
- 	          'BoltDeclarer $name = builder.setBolt("$name", new $clsName("$name", "$pipName"), $parallelism);' | 12;  
+ 	          'BoltDeclarer $name = builder.setBolt("$name", new $clsName("$name", "$pipName"), $parallelism).setNumTasks(1);' | 12;  
     	      bolts.add(name); 
  	    	}
- 	    	//String grouping = grouping(elt, grouping, preNameForTopo, lastName);
-    	    '$name' | 12;
-    	    grouping(elt, grouping, lastName, lastOutputTupleNames, inputTupleNames);
+ 	    		    	
+	    	'$name' | 12;   	    	    	    
+	    	if(isLastElementDM) { //if the last element is a DataManagementElement, then grouping to the element before the DME	        		
+			    grouping(elt, grouping, preLastName, lastOutputTupleNames, inputTupleNames);
+			} else {
+			    grouping(elt, grouping, lastName, lastOutputTupleNames, inputTupleNames);
+			}		        		               	  	    
         } else {
         	'// Declare a Spout "$displayName"' | 12;
-		    'builder.setSpout("$name", new $clsName("$name", "$pipName"), $parallelism);' | 12;
+		    'builder.setSpout("$name", new $clsName("$name", "$pipName"), $parallelism).setNumTasks(1);' | 12;
         }
     }
     
     def grouping(DecisionVariable elt, Grouping grouping, setOf(String) lastName, setOf(String) lastOutputTupleNames, setOf(String) inputTupleNames) {  	   	
-        String sname;
-//        String preStream = preLastName + "Stream";
-        
-    	if (elt.varName().length() > 0) {
+        String sname;       
+//    	if (elt.varName().length() > 0) {
     		for(String last : lastName) {   						
     		    if(containsEnding(last,"SubOutput")) { // for topo
     			    '.$grouping($last.getBoltName(), $last.getStreamId())' | 16; 			
-    		    }
-    		    else { // for non-topo 	   		    	
+    		    } else { // for non-topo 	   		    	
     		    	for(String input : inputTupleNames) {
     		           for(String output : lastOutputTupleNames) {
     					  if(input == output) {
@@ -330,7 +350,7 @@ template stormPipeline(Configuration config, FileArtifact target, Pipeline pipel
     		    }     			
     		}
     		';' | 16; 		  	 
-    	}    	   	
+//    	}    	   	
     }
     
     def className(DecisionVariable elt) {
@@ -360,21 +380,6 @@ template stormPipeline(Configuration config, FileArtifact target, Pipeline pipel
     			false;
     		}
     	}   	
-    }
-    
-    /*
-     * Get the matched tuple names.
-     */
-    def setOf(String) getTupleNames(setOf(String) lastOutputTupleNames, setOf(String) inutputTupleNames) {
-    	setOf(String) tmpSet = {};
-    	for(String input : inutputTupleNames) {
-    		for(String output : lastOutputTupleNames) {
-    			if(input == output) {
-    				tmpSet.add(input);
-    			}
-    		}
-    	}
-    	tmpSet;
     }
     
 }

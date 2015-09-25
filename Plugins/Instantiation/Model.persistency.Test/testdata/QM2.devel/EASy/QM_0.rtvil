@@ -1,6 +1,9 @@
 import enactment;
 import mapping;
 
+// InitExperiment
+import capacity;
+
 @advice(QM)
 rtVilScript QM (Project source, Configuration config, Project target, AdaptationEvent event, mapOf(String, Real) bindings) {
 
@@ -11,6 +14,11 @@ rtVilScript QM (Project source, Configuration config, Project target, Adaptation
         }
     }
 
+    tactic defaultTactic() = {
+    }
+
+    // --------------------------------------- startup ----------------------------------
+
     strategy startup(Project source, Configuration config, Project target, StartupAdaptationEvent event) = {
         objective true;
         breakdown {
@@ -18,37 +26,96 @@ rtVilScript QM (Project source, Configuration config, Project target, Adaptation
         }
     }
 
-    tactic defaultTactic() = {
-    }
-
+    // greedy assignment to the first algorithms in family and the first hardware algorithms in pipeline branches
     tactic startupTakeFirst(Configuration config, String pipName) = {
         QM qm = config;
+        // TODO compute real assignment to hardware and enact it (command change)
+        // TODO assign dfes on machine level
+        Integer dfes = 0; 
         map(Pipeline pip:qm.pipelines) {
             if (pip.name == pipName) {
                 map(Source src:pip.sources) {
-                    assignFirst(src);
+                    dfes = assignFirst(src, dfes);
                 };
             }
         };
     }
 
-    assignFirst(PipelineNode node) = : {
+    Integer assignFirst(PipelineNode node, Integer dfes) = : {
+    	dfes;
     }
 
-    assignFirst(Source src) = : {
+    Integer assignFirst(Source src, Integer dfes) = : {
         map(Flow f:src.output) {
-            assignFirst(f.destination);
+            dfes = assignFirst(f.destination, dfes);
         };
+        dfes;
     }
 
-    assignFirst(FamilyElement elt) = : {
+    // regarding dfes this prefers the first branch of the pipeline!
+    Integer assignFirst(FamilyElement elt, Integer dfes) = : {
         Family fam = elt.family;
         if (!elt.actual.isConfigured()) {
-            elt.actual = fam.members.toSequence().first();
+        	Boolean done = false;
+        	if (dfes > 0) {
+        	    // requires true hardware integration (!)
+                setOf(Algorithm) hwAlgs = fam.members->select(Algorithm a | a.hwNode <> null);
+                if (!hwAlgs.isEmpty()) {
+                	elt.actual = hwAlgs.projectSingle();
+                	dfes = dfes - 1;
+                }
+        	}
+        	if (!done) {
+                elt.actual = fam.members.toSequence().first();
+        	}
+        	Algorithm a = elt.actual;
+        	map(Parameter p : elt.actual.parameters) {
+        		setDefaultValue(p);
+        	};
         }
         map(Flow f:elt.output) {
-            assignFirst(f.destination);
+            dfes = assignFirst(f.destination, dfes);
         };
+        dfes;
+    }
+    
+    setDefaultValue(Parameter parameter) = : {
+    }
+
+    setDefaultValue(IntegerParameter parameter) = : {
+    	parameter.value = parameter.defaultValue;
+    }
+
+    setDefaultValue(StringParameter parameter) = : {
+    	parameter.value = parameter.defaultValue;
+    }
+    
+    setDefaultValue(RealParameter parameter) = : {
+    	parameter.value = parameter.defaultValue;
+    }
+
+    setDefaultValue(BooleanParameter parameter) = : {
+    	parameter.value = parameter.defaultValue;
+    }
+    
+    setDefaultValue(LongParameter parameter) = : {
+    	parameter.value = parameter.defaultValue;
+    }
+    
+    // --------------------------------------- InitExperiment ----------------------------------
+    
+    strategy initExperiment(Project source, Configuration config, Project target, InitExperimentEvent event) = {
+        objective true;
+        breakdown {
+            tactic execInitExperiment(config, event);
+        }
+    }
+
+    tactic execInitExperiment(Configuration config, InitExperimentEvent event) = {
+    	QM qm = config;
+    	inInitialization = true;
+    	FileArtifact out = "$target/capacities.txt";
+    	initCapacities(qm, event, out);
     }
     
 }
