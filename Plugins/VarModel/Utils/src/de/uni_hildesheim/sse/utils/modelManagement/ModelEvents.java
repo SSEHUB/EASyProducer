@@ -66,9 +66,6 @@ public class ModelEvents <M extends IModel> {
      * @param newModel the new model replacing <code>oldModel</code>
      */
     synchronized void notifyModelReplacement(M oldModel, M newModel) {
-        assert null != oldModel;
-        assert null != newModel;
-        
         if (oldModel != newModel) {
             List<IModelListener<M>> oldListeners = modelListeners.get(oldModel);
             if (null != oldListeners) {

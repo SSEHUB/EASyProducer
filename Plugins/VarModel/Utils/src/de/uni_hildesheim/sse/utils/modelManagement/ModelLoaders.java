@@ -103,5 +103,22 @@ public class ModelLoaders <M extends IModel> {
     public synchronized int getLoaderCount() {
         return loaders.size();
     }
+    
+    /**
+     * Returns the default loader. This shall be used in case that a model information (for some
+     * reason) does not declear a specific loader.
+     * 
+     * @return the default loader (may be <b>null</b> if there is none)
+     */
+    public IModelLoader<M> getDefaultLoader() {
+        IModelLoader<M> result = null;
+        if (loaders.size() > 0) {
+            result = loaders.get(0);
+        }
+        // if needed, we may add here an explicit default
+        return result;
+    }
+    
+    
 
 }

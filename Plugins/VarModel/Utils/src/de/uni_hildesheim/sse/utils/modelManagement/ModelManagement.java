@@ -425,8 +425,11 @@ public abstract class ModelManagement <M extends IModel> {
     M load(ModelInfo<M> info, List<IMessage> messages) {
         M result = null;
         IModelLoader<M> loader = info.getLoader();
+        if (null == loader) {
+            loader = loaders.getDefaultLoader();
+        }
         if (null != loader) { // do not use isActual here
-            LoadResult<M> loadResult = info.getLoader().load(info);
+            LoadResult<M> loadResult = loader.load(info);
             if (loadResult.getModelCount() > 0 && 0 == loadResult.getErrorCount()) {
                 for (int i = 0; i < loadResult.getModelCount(); i++) {
                     M model = loadResult.getModel(i);
@@ -447,8 +450,7 @@ public abstract class ModelManagement <M extends IModel> {
                 messages.add(loadResult.getMessage(m));
             }
         } else {
-            messages.add(new Message("loader for model '" 
-                + info.getName() + "' is undefined", Status.ERROR));
+            messages.add(new Message("loader for model '" + info.getName() + "' is undefined", Status.ERROR));
         }
         return result;
     }
