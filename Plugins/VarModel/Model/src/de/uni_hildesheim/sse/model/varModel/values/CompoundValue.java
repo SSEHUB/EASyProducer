@@ -64,8 +64,8 @@ public class CompoundValue extends StructuredValue implements Cloneable {
         super(compound);
         nestedElements = new HashMap<String, Value>();
         if (null != value && value.length % 2 != 0) {
-            throw new ValueDoesNotMatchTypeException("amount of slot names and values does not match", 
-                this, ValueDoesNotMatchTypeException.SLOT_MISMATCH);
+            throw new ValueDoesNotMatchTypeException("amount of slot names and values does not match for type" 
+                + compound.getType().getName(), ValueDoesNotMatchTypeException.SLOT_MISMATCH);
         }
         Map<String, Object> initialValues = new HashMap<String, Object>();
         if (null != value) {
