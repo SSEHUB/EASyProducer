@@ -362,32 +362,6 @@ public class ConfigurationTableEditorFactory implements IConfigurationEditorCrea
                 }
             }
         }
-        
-        /**
-         * Maps a variable to its configuration following nested elements up and down.
-         * 
-         * @param var the variable to be mapped
-         * @param cfg the configuration containing the top-level variables
-         * @return the mapped variable, <b>null</b> if there is no mapping
-         */
-        private IDecisionVariable mapVariable(IDecisionVariable var, Configuration cfg) {
-            IDecisionVariable result = null;
-            if (var.getParent() instanceof IDecisionVariable) {
-                IDecisionVariable par = mapVariable((IDecisionVariable) var.getParent(), cfg);
-                if (null != par) {
-                    AbstractVariable decl = var.getDeclaration();
-                    for (int p = 0; null == result && p < par.getNestedElementsCount(); p++) {
-                        IDecisionVariable nested = par.getNestedElement(p);
-                        if (nested.getDeclaration().equals(decl)) {
-                            result = nested;
-                        }
-                    }
-                }
-            } else { // assume top-level
-                result = cfg.getDecision(var.getDeclaration());
-            } 
-            return result;
-        }
 
         @Override
         public void notifyReplaced(Project oldModel, Project newModel) {
@@ -395,7 +369,7 @@ public class ConfigurationTableEditorFactory implements IConfigurationEditorCrea
             Configuration cfg = config.getConfig();
             for (Map.Entry<GUIVariable, GUIEditor> entry : map.entrySet()) {
                 GUIVariable guiVar = entry.getKey();
-                IDecisionVariable newVar = mapVariable(guiVar.getVariable(), cfg);
+                IDecisionVariable newVar = Configuration.mapVariable(guiVar.getVariable(), cfg);
                 if (null != newVar) {
                     guiVar.setVariable(newVar);
                 } else {
