@@ -129,8 +129,16 @@ public class QMValidTest extends AbstractTest<Project> {
             testdataFolder = testdataFolder.getParentFile().getParentFile();
             testdataFolder = new File(testdataFolder, "ReasonerCore.test");
             testdataFolder = new File(testdataFolder, "testdata");
+            System.out.println(testdataFolder);
         }
-            
+        if (!testdataFolder.exists()) {
+            String path = testdataFolder.getAbsolutePath();
+            testdataFolder = new File(path);
+            testdataFolder = testdataFolder.getParentFile().getParentFile().getParentFile();
+            testdataFolder = new File(testdataFolder, "ReasonerCore");
+            testdataFolder = new File(testdataFolder, "ReasonerCore.test");
+            testdataFolder = new File(testdataFolder, "testdata");
+        }            
         return testdataFolder;    
     }
     
@@ -311,7 +319,7 @@ public class QMValidTest extends AbstractTest<Project> {
      */
     @Test    
     public void coreTest() {
-        reasoningTest(0);
+//        reasoningTest(0);
         reasoningTest(0);
     } 
     
