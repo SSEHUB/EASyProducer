@@ -86,7 +86,14 @@ public class CollectionConstraintsTests extends AbstractTest<Project> {
             testdataFolder = new File(testdataFolder, "ReasonerCore.test");
             testdataFolder = new File(testdataFolder, "testdata");
         }
-            
+        if (!testdataFolder.exists()) {
+            String path = testdataFolder.getAbsolutePath();
+            testdataFolder = new File(path);
+            testdataFolder = testdataFolder.getParentFile().getParentFile().getParentFile();
+            testdataFolder = new File(testdataFolder, "ReasonerCore");
+            testdataFolder = new File(testdataFolder, "ReasonerCore.test");
+            testdataFolder = new File(testdataFolder, "testdata");
+        }
         return testdataFolder;    
     }
     
