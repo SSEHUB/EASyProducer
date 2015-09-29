@@ -33,6 +33,15 @@ public class ProjectImport extends ModelImport<Project> {
     private String interfaceName;
     private IResolutionScope scope;
     private boolean isCopied;
+
+    /**
+     * Simplified constructor for an unrestricted import of a project.
+     * 
+     * @param projectName the name of the project to be import
+     */
+    public ProjectImport(String projectName) {
+        this(projectName, null);
+    }
     
     /**
      * Simplified constructor for an unrestricted import.
