@@ -699,5 +699,62 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
         } 
         return result;
     }
+
+    /**
+     * Returns the instance name of a decision variable. This name is composed 
+     * from the names of the given variable and its parent variables. Please note
+     * that the instance name is typically different from the qualified name of 
+     * the declaration, which, in case of compound slots, leads to the variable
+     * in the compound definition.
+     * 
+     * @param var the variable to return the name for (may be <b>null</b>)
+     * @return the instance name (may be empty if <code>var == <b>null</b></code>
+     */
+    public static String getInstanceName(IDecisionVariable var) {
+        String result = "";
+        IConfigurationElement iter = var;
+        while (null != iter) {
+            if (iter instanceof IDecisionVariable) {
+                IDecisionVariable decVar = (IDecisionVariable) iter;
+                if (result.length() > 0) {
+                    result = "::" + result;
+                }
+                result = decVar.getDeclaration().getName() + result;
+            }
+            iter = iter.getParent();
+        }
+        return result;
+    }
     
+    /**
+     * Returns whether two decision variables are equal via their instance name.
+     * Please note that this method is faster and less resource consuming than comparing the respective results of 
+     * {@link #getInstanceName(IDecisionVariable)} as it compares the individual names
+     * rather than composing the full name and performing the comparison then.
+     * 
+     * @param var1 the first variable to be compared (may be <b>null</b>)
+     * @param var2 the second variable to be compared (may be <b>null</b>)
+     * @return <code>true</code> if the variables are equal by their instance name, <code>false</code>
+     *   if they are not equal, in particular if one is <b>null</b>
+     */
+    public static boolean equalsByInstanceName(IDecisionVariable var1, IDecisionVariable var2) {
+        boolean equals;
+        if (var1 != null && var2 != null) {
+            equals = true;
+            IConfigurationElement iter1 = var1;
+            IConfigurationElement iter2 = var2;
+            do {
+                if (!iter1.getDeclaration().getName().equals(iter2.getDeclaration().getName())) {
+                    equals = false;
+                    break;
+                }
+                iter1 = iter1.getParent();
+                iter2 = iter2.getParent();
+            } while (iter1 instanceof IDecisionVariable && iter2 instanceof IDecisionVariable);
+        } else {
+            equals = false;
+        }
+        return equals;
+    }
+
 }

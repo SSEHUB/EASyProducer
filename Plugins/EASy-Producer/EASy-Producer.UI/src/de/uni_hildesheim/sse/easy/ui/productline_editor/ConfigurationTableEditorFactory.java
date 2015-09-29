@@ -378,29 +378,6 @@ public class ConfigurationTableEditorFactory implements IConfigurationEditorCrea
                 }
             }
         }
-        
-        /**
-         * Returns the control (of the editor for) <code>var</code>.
-         * 
-         * @param var the variable to search for
-         * @return the control (may be <b>null</b> if not found)
-         */
-        public Control getEditorFor(AbstractVariable var) {
-            GUIEditor editor = null;
-            // currently not really efficient, let's see. Having a second map would increase the effort 
-            // in notifyReplaced.
-            for (Map.Entry<GUIVariable, GUIEditor> entry : map.entrySet()) {
-                if (var.equals(entry.getKey().getVariable().getDeclaration())) {
-                    editor = entry.getValue();
-                    break;
-                }
-            }
-            Control result = null;
-            if (null != editor) {
-                result = editor.getControl();
-            }
-            return result;
-        }
 
         /**
          * Returns the control (of the editor for) <code>var</code>.
@@ -413,7 +390,7 @@ public class ConfigurationTableEditorFactory implements IConfigurationEditorCrea
             // currently not really efficient, let's see. Having a second map would increase the effort 
             // in notifyReplaced.
             for (Map.Entry<GUIVariable, GUIEditor> entry : map.entrySet()) {
-                if (var.equals(entry.getKey().getVariable())) {
+                if (Configuration.equalsByInstanceName(var, entry.getKey().getVariable())) {
                     editor = entry.getValue();
                     break;
                 }
@@ -426,6 +403,7 @@ public class ConfigurationTableEditorFactory implements IConfigurationEditorCrea
         }
         
     }
+    
 
     /**
      * Creates a configuration instance holding UI configuration elements without parameters. The returned instance may
