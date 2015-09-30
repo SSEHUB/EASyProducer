@@ -404,154 +404,30 @@ public class ReasoningScenarioTests extends AbstractTest<Project> {
         reasoningTest("IsDefinedCompoundTest.ivml", 1);
     }  
     
+    /**
+     * Test for collections of compounds equality operation.
+     */
+    @Test
+    public void compoundCollectionEqualityTest() {
+        reasoningTest("compoundCollectionEqualityTest.ivml", 1);
+    }  
     
-//    /**
-//     * Tests basic arithmetical operations on Integer and Real numbers.
-//     */
-//    @Test    
-//    public void basicMathOpTest() {
-//        reasoningTest("BasicMathOpTest.ivml", 0);
-//    }
-//    
-//    /**
-//     * Tests basic comparison operations on Integer and Real numbers.
-//     */
-//    @Test    
-//    public void numberComparisonTest() {
-//        reasoningTest("NumberComparisonTest.ivml", 0);
-//    }
-//    
-//    /**
-//     * Tests basic comparison operations on Integer and Real numbers.
-//     */
-//    @Test    
-//    public void booleanAlgebraOpTest() {
-//        reasoningTest("BooleanAlgebraOpTest.ivml", 0);
-//    }
-//    
-//    /**
-//     * Tests advanced arithmetical operations on Integer and Real numbers.
-//     */
-//    @Test    
-//    public void advancedMathOpTest() {
-//        reasoningTest("AdvancedMathOpTest.ivml", 0);
-//    }
-//    
-//    /**
-//     * Tests string operations.
-//     */
-//    @Test    
-//    public void stringOpTest() {
-//        reasoningTest("StringOpTest.ivml", 0);
-//    }
-//    
-//    /**
-//     * Tests compound access.
-//     */
-//    @Test    
-//    public void compoundAccessTest() {
-//        reasoningTest("CompoundAccessTest.ivml", 0);
-//    }
-//    
-//    
-//    /**
-//     * Tests compound internal constraints.
-//     */ 
-//    @Ignore
-//    @Test    
-//    public void compoundInternalConstraintsTest() {
-//        reasoningTest("CompoundInternalConstraintsTest.ivml", 4);
-//    }
-//    
-//    /**
-//     * Tests enum access.
-//     */ 
-//    @Test    
-//    public void enumAccessTest() {
-//        reasoningTest("EnumAccessTest.ivml", 0);
-//    }
-//    
-//    /**
-//     * Tests value assignment.
-//     */ 
-//    @Test    
-//    public void valueAssignmentTest() {
-//        reasoningTest("ValueAssignmentTest.ivml", 0);
-//    }
-//    
-//    /**
-//     * Tests implies.
-//     */
-//    @Ignore
-//    @Test    
-//    public void impliesTest() {
-//        reasoningTest("ImpliesTest.ivml", 1);
-//    }
-//    
-//    /**
-//     * Tests state assignment.
-//     */ 
-//    @Test    
-//    public void stateAssignmentTest() {
-//        reasoningTest("StateAssignmentTest.ivml", 0);
-//    }
-//    
-//    
-//    /**
-//     * Tests setOf.
-//     */ 
-//    @Test    
-//    public void setTest() {
-//        reasoningTest("SetTest.ivml", 0);
-//    }
-//    
-//    
-//    
-//    /**
-//     * Tests setOf with compounds validation. CustomConstraintIgnoreTest.ivml
-//     */
-//    @Test
-//    public void setOfCompoundsPropagationTest() {
-//        reasoningTest("SetOfCompoundsPropagationTest.ivml", 0);
-//    }
-//    
-//    /**
-//     * Tests ignore of operand = {} constraints. ValuePropagationTest.ivml
-//     */
-//    @Test
-//    public void customConstraintIgnoreTest() {
-//        reasoningTest("CustomConstraintIgnoreTest.ivml", 0);
-//    }
-//    
-//    /**
-//     * Tests simple value propagation.
-//     */
-//    @Test
-//    public void valuePropagationTest() {
-//        reasoningTest("ValuePropagationTest.ivml", 0);
-//    }
-//    
-//    /**
-//     * Tests compound value propagation.
-//     */
-//    @Test
-//    public void valueInCompoundPropagationTest() {
-//        reasoningTest("ValueInCompoundPropagationTest.ivml", 0);
-//    }    
-//    
-//    /**
-//     * Tests Indenica YMS.
-//     */
-//    @Test
-//    public void validationOfYMSTest() {
-//        reasoningTest("ValidationOfYMSTest.ivml", 0);
-//    }
-//    
-//    /**
-//     * Tests correct value assignment.
-//     */
-//    @Test
-//    public void variablePropagationTest() {
-//        reasoningTest("VariablePropagationTest.ivml", 0);
-//    }
+    /**
+     * Test for collections of refTo(compounds) equality operation.
+     */
+    @Ignore
+    @Test
+    public void refToCompoundCollectionEqualityTest() {
+        reasoningTest("refToCompoundCollectionEqualityTest.ivml", 1);
+    }  
+    
+    /**
+     * Test for collections of string equality operation.
+     */
+    @Test
+    public void stringCollectionEqualityTest() {
+        reasoningTest("stringCollectionEqualityTest.ivml", 2);
+    }     
+    
+
 }
