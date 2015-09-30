@@ -16,6 +16,7 @@
 package de.uni_hildesheim.sse.model.cst;
 
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
+import de.uni_hildesheim.sse.model.varModel.values.NullValue;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
 
 /**
@@ -81,4 +82,15 @@ public class ConstantValue extends Leaf {
     public String toString() {
         return null != constant ? constant.toString() : super.toString();
     }
+    
+    /**
+     * Returns whether the given constraint is exactly the IVML null value.
+     * 
+     * @param cst the constraint syntax tree
+     * @return <code>true</code> if <code>cst</code> is <b>null</b>, <code>false</code> else
+     */
+    public static final boolean isNull(ConstraintSyntaxTree cst) {
+        return (cst instanceof ConstantValue && NullValue.INSTANCE == ((ConstantValue) cst).getConstantValue());
+    }
+    
 }

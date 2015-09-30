@@ -1,0 +1,9 @@
+project referencesFail1 {
+
+    version v0;
+    compound FieldType {
+        String name;        
+    }
+
+    refTo(FieldType) StringType = {name = "String"};
+}

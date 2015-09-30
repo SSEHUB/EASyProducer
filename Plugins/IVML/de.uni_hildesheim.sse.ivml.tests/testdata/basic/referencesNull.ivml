@@ -1,0 +1,9 @@
+project referencesNull {
+
+    version v0;
+    compound FieldType {
+        String name;
+    }
+
+    refTo(FieldType) StringType = null;
+}

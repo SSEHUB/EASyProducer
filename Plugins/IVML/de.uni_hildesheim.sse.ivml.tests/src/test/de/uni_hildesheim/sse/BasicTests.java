@@ -242,6 +242,26 @@ public class BasicTests extends AbstractTest {
     }
 
     /**
+     * Tests the assignment of null to a reference variable.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testReferencesNull() throws IOException {
+        assertEqual(createFile("referencesNull"), "referencesNull", "0");
+    }
+
+    /**
+     * Tests abuse of references.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testReferencesFail1() throws IOException {
+        assertEqual(createFile("referencesFail1"), "referencesFail1", "0", ErrorCodes.TYPE_CONSISTENCY);
+    }
+    
+    /**
      * Tests custom typedefs.
      * 
      * @throws IOException should not occur

@@ -42,6 +42,7 @@ import de.uni_hildesheim.sse.ivml.VariableDeclaration;
 import de.uni_hildesheim.sse.ivml.VariableDeclarationPart;
 import de.uni_hildesheim.sse.ivml.VersionStmt;
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
+import de.uni_hildesheim.sse.model.cst.ConstantValue;
 import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
 import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
 import de.uni_hildesheim.sse.model.management.VarModel;
@@ -68,6 +69,7 @@ import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.ProjectImport;
 import de.uni_hildesheim.sse.model.varModel.ProjectInterface;
 import de.uni_hildesheim.sse.model.varModel.StructuredComment;
+import de.uni_hildesheim.sse.model.varModel.datatypes.AnyType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.BooleanType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
 import de.uni_hildesheim.sse.model.varModel.datatypes.ConstraintType;
@@ -78,6 +80,7 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.FreezeVariableType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Operation;
 import de.uni_hildesheim.sse.model.varModel.datatypes.OrderedEnum;
+import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
 import de.uni_hildesheim.sse.translation.Utils.SplitResult;
 import de.uni_hildesheim.sse.utils.messages.IIdentifiable;
 import de.uni_hildesheim.sse.utils.messages.IMessage;
@@ -373,8 +376,25 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
             VariableDeclarationPart part = entry.getKey();
             try {
                 expressionTranslator.initLevel();
-                decVar.setValue(expressionTranslator.processExpression(decVar.getType(), part.getDefault(), context,
-                    decVar.getParent()));
+                ConstraintSyntaxTree dfltExpr = expressionTranslator.processExpression(decVar.getType(), 
+                    part.getDefault(), context, decVar.getParent());
+                IDatatype dfltExprType = dfltExpr.inferDatatype();
+                String rhsError = null;
+                if (Reference.TYPE.isAssignableFrom(decVar.getType()) && AnyType.TYPE == dfltExprType 
+                    && !ConstantValue.isNull(dfltExpr)) { 
+                    // some kind of compound may be used
+                    rhsError = "";
+                }
+                if (null != rhsError || !decVar.getType().isAssignableFrom(dfltExprType)) {
+                    if (null == rhsError) {
+                        rhsError = "of type '" + IvmlDatatypeVisitor.getUnqualifiedType(dfltExprType) + "' ";
+                    }
+                    throw new TranslatorException("cannot assign the expression " + rhsError  
+                        + "to a variable of type '" 
+                        + IvmlDatatypeVisitor.getUnqualifiedType(decVar.getType()) + "'", part, 
+                        IvmlPackage.Literals.VARIABLE_DECLARATION_PART__DEFAULT, ErrorCodes.TYPE_CONSISTENCY);
+                }
+                decVar.setValue(dfltExpr);
                 if (!ConstraintType.TYPE.isAssignableFrom(decVar.getType())) {
                     expressionTranslator.errorAboutTopLevelWarning(part, 
                         IvmlPackage.Literals.VARIABLE_DECLARATION_PART__DEFAULT);
