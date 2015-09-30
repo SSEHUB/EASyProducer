@@ -1,0 +1,15 @@
+project stringCollectionEqualityTest {
+
+   version v0;
+
+    sequenceOf(String) sqString1 = {"a", "b", "c"};
+    sequenceOf(String) sqString2 = {"a", "b", "d"};
+    
+    sqString1 == sqString2;
+    
+    setOf(String) stString1 = {"a", "b", "c"};
+    setOf(String) stString2 = {"a", "b", "d"};
+    
+    stString1 == stString2;    
+
+}

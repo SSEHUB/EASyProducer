@@ -1,0 +1,19 @@
+project compoundCollectionEqualityTest {
+
+    version v0;
+
+    compound FieldType {
+        String name;        
+    }
+    
+    FieldType StringType2 = {name = "String"};
+    FieldType IntegerType2 = {name = "Integer"};
+    FieldType BooleanType2 = {name = "Boolean"};   
+    
+    sequenceOf(FieldType) sqCompound1 = {StringType2, IntegerType2, BooleanType2};
+    sequenceOf(FieldType) sqCompound2 = {StringType2, IntegerType2, IntegerType2};
+    
+    sqCompound1 == sqCompound2;    
+    
+
+}
