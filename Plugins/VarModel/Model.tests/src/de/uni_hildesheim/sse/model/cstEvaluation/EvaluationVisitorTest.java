@@ -1650,5 +1650,66 @@ public class EvaluationVisitorTest {
         Assert.assertTrue(val instanceof IntValue);
         Assert.assertEquals(10, ((IntValue) val).getValue().intValue());
     }
-    
+ 
+    /**
+     * Tests reference equality of sequences.
+     * 
+     * @throws CSTSemanticException in case of constraint failures (shall not occur)
+     * @throws ValueDoesNotMatchTypeException if a value does not match the expected type (shall not occur)
+     * @throws ConfigurationException if a value cannot be configured (shall not occur)
+     */
+    @Test
+    public void testReferenceEquality() throws ValueDoesNotMatchTypeException, ConfigurationException, 
+        CSTSemanticException {
+        Project prj = new Project("test");
+        Compound fType = new Compound("FieldType", prj);
+        DecisionVariableDeclaration fName = new DecisionVariableDeclaration("name", StringType.TYPE, fType);
+        fType.add(fName);
+        prj.add(fType);
+        
+        DecisionVariableDeclaration stringType = new DecisionVariableDeclaration("StringType", fType, prj);
+        prj.add(stringType);
+        DecisionVariableDeclaration integerType = new DecisionVariableDeclaration("IntegerType", fType, prj);
+        prj.add(integerType);
+        
+        Reference refType = new Reference("", fType, null);
+        Sequence seqType = new Sequence("refSeq", refType, null);
+        
+        DecisionVariableDeclaration seq1 = new DecisionVariableDeclaration("seq1", seqType, prj);
+        prj.add(seq1);
+        DecisionVariableDeclaration seq2 = new DecisionVariableDeclaration("seq2", seqType, prj);
+        prj.add(seq2);
+        
+        ConstraintSyntaxTree cst = new OCLFeatureCall(new Variable(seq1), "==", new Variable(seq2));
+        cst.inferDatatype();
+
+        ConstraintSyntaxTree cst2 = new OCLFeatureCall(new Variable(seq1), "==", new Variable(seq1));
+        cst2.inferDatatype();
+
+        Configuration config = new Configuration(prj);
+        config.getDecision(stringType).setValue(ValueFactory.createValue(fType, 
+            new Object[] {"name", "String"}), AssignmentState.ASSIGNED);
+        config.getDecision(integerType).setValue(ValueFactory.createValue(fType, 
+            new Object[] {"name", "Integer"}), AssignmentState.ASSIGNED);
+        config.getDecision(seq1).setValue(ValueFactory.createValue(seqType, 
+            new Object[] {stringType, integerType}), AssignmentState.ASSIGNED);
+        config.getDecision(seq2).setValue(ValueFactory.createValue(seqType, 
+            new Object[] {integerType, stringType}), AssignmentState.ASSIGNED);
+
+        EvaluationVisitor visitor = new EvaluationVisitor();
+        visitor.init(config, AssignmentState.DEFAULT, false, null);
+        visitor.visit(cst);
+
+        Assert.assertTrue(visitor.getResult() instanceof BooleanValue);
+        Assert.assertEquals(false, ((BooleanValue) visitor.getResult()).getValue().booleanValue());
+
+        visitor.clearResult();
+        visitor.visit(cst2);
+
+        Assert.assertTrue(visitor.getResult() instanceof BooleanValue);
+        Assert.assertEquals(true, ((BooleanValue) visitor.getResult()).getValue().booleanValue());
+
+        visitor.clear();
+    }
+
 }
