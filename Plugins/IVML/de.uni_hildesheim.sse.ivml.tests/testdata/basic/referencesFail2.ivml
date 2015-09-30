@@ -1,0 +1,10 @@
+project referencesFail2 {
+
+    version v0;
+    compound FieldType {
+        String name;        
+    }
+
+    FieldType StringType = {name = "String"};
+    sequenceOf(refTo(FieldType)) sqRefToCompound1 = {StringType};
+}

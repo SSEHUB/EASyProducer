@@ -260,7 +260,17 @@ public class BasicTests extends AbstractTest {
     public void testReferencesFail1() throws IOException {
         assertEqual(createFile("referencesFail1"), "referencesFail1", "0", ErrorCodes.TYPE_CONSISTENCY);
     }
-    
+
+    /**
+     * Tests abuse of references.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testReferencesFail2() throws IOException {
+        assertEqual(createFile("referencesFail2"), "referencesFail2", "0", CSTSemanticException.TYPE_MISMATCH);
+    }
+
     /**
      * Tests custom typedefs.
      * 
