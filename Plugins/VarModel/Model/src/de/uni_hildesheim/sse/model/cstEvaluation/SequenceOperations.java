@@ -297,6 +297,7 @@ public class SequenceOperations {
         EvaluatorRegistry.registerEvaluator(ContainerOperations.ADD, Sequence.ADD);
         EvaluatorRegistry.registerEvaluator(SUBSEQUENCE, Sequence.SUBSEQUENCE);
         EvaluatorRegistry.registerEvaluator(OVERLAPS, Sequence.OVERLAPS);
+        EvaluatorRegistry.registerEvaluator(new ContainerOperations.FlattenOperationEvaluator(true), Sequence.FLATTEN);
     }
 
 }

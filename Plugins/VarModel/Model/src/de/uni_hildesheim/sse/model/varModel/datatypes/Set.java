@@ -55,10 +55,12 @@ public class Set extends Container {
         OclKeyWords.INCLUDING, TYPE, AnyType.TYPE);
     public static final Operation ADD = new Operation(AnyType.TYPE, ReturnTypeMode.GENERIC_PARAM_1, 
         OclKeyWords.ADD, TYPE, AnyType.TYPE);
+    public static final Operation FLATTEN = new Operation(TYPE, 
+        ReturnTypeMode.IMMEDIATE_OPERAND_COLLECTION_NESTED_GENERIC_1, OclKeyWords.FLATTEN, TYPE);
     
     // type specific 
     public static final Operation EQUALS = Operation.createInfixOperator(BooleanType.TYPE, 
-        OclKeyWords.EQUALS, TYPE, TYPE).markAsAssignableParameterOperation();
+         OclKeyWords.EQUALS, TYPE, TYPE).markAsAssignableParameterOperation();
     public static final Operation ASSIGNMENT = Operation.createInfixOperator(BooleanType.TYPE, 
          OclKeyWords.ASSIGNMENT, TYPE, TYPE);
     
@@ -75,6 +77,7 @@ public class Set extends Container {
         DTYPE.addOperation(EXCLUDING);
         DTYPE.addOperation(INCLUDING);
         DTYPE.addOperation(ADD);
+        DTYPE.addOperation(FLATTEN);
     }
     
     /**

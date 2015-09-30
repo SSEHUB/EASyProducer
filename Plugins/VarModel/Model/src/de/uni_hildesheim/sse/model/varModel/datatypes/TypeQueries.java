@@ -99,5 +99,42 @@ public class TypeQueries {
     public static boolean isEnum(IDatatype type) {
         return Enum.TYPE.isAssignableFrom(type);
     }
+    
+    /**
+     * Finds the deepest generic type in <code>type</code> always trying <code>pos</code> as position for the 
+     * generic type.
+     * 
+     * @param type the type
+     * @param pos the 0-based position of the generic type to follow
+     * @return the deepest generic type
+     */
+    public static IDatatype findDeepestGeneric(IDatatype type, int pos) {
+        IDatatype result;
+        if (0 <= pos && pos < type.getGenericTypeCount()) {
+            result = findDeepestGeneric(type.getGenericType(pos), pos);
+        } else {
+            if (Container.TYPE.isAssignableFrom(type)) {
+                result = AnyType.TYPE;
+            } else {
+                result = type;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Turns the generics of <code>type</code> into an array of types.
+     * 
+     * @param type the type
+     * @return the generics
+     */
+    public static IDatatype[] toGenerics(IDatatype type) {
+        int count = type.getGenericTypeCount();
+        IDatatype[] param = new IDatatype[count];
+        for (int g = 0; g < count; g++) {
+            param[g] = type.getGenericType(g);
+        }
+        return param;
+    }
 
 }

@@ -9,6 +9,9 @@ project testContainerConstraints {
     sequenceOf(comp) compSeq;
     sequenceOf(Integer) intSeq;
     sequenceOf(Integer) intSeq2;
+    setOf(setOf(Integer)) intSetSet;
+    sequenceOf(sequenceOf(Integer)) intSeqSeq;
+    setOf(sequenceOf(Integer)) intSetSeq;
     size(intSeq) > 0;
     intSeq[1] < 0;
     size(compSeq) > 0;
@@ -19,4 +22,7 @@ project testContainerConstraints {
     intSet->forAll(t|t > 20);
     intSet->apply(t,r = 0|max(t, r)) > 0;
     intSet->apply(t;r = 0|max(t, r)) > 0;
+    intSet = flatten(intSetSet);
+    intSeq = flatten(intSeqSeq);
+    intSet = flatten(intSetSeq);
 }

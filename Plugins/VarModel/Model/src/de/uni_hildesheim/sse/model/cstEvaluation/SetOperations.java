@@ -96,6 +96,7 @@ public class SetOperations {
         EvaluatorRegistry.registerEvaluator(GenericOperations.EQUALS, Set.EQUALS);
         EvaluatorRegistry.registerEvaluator(GenericOperations.ASSIGNMENT, Set.ASSIGNMENT);
         EvaluatorRegistry.registerEvaluator(ContainerOperations.ADD, Set.ADD);
+        EvaluatorRegistry.registerEvaluator(new ContainerOperations.FlattenOperationEvaluator(false), Set.FLATTEN);
     }
     
     /**

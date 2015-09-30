@@ -16,6 +16,7 @@
 package de.uni_hildesheim.sse.model.cstEvaluation;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
@@ -526,7 +527,58 @@ public class ContainerOperations {
             return result;
         }
     };
+    
+    /**
+     * Implements the "overlaps" operation.
+     */
+    static final class FlattenOperationEvaluator implements IOperationEvaluator {
 
+        private boolean allowDuplicates;
+        
+        /**
+         * Creates a flatten operation evaluator.
+         * 
+         * @param allowDuplicates allow duplicates (sequence, <code>true</code>) or not (set, <code>false</code>)
+         */
+        FlattenOperationEvaluator(boolean allowDuplicates) {
+            this.allowDuplicates = allowDuplicates;
+        }
+        
+        @Override
+        public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
+            EvaluationAccessor result = null;
+            Value oValue = operand.getValue();
+            if (oValue instanceof ContainerValue) {
+                ContainerValue cont = (ContainerValue) oValue;
+                Collection<Value> tmp; 
+                if (allowDuplicates) {
+                    tmp = new ArrayList<Value>();
+                } else {
+                    tmp = new HashSet<Value>();
+                }
+                for (int i = 0, size = cont.getElementSize(); i < size; i++) {
+                    flatten(cont.getElement(i), tmp);
+                }
+                
+                IDatatype resultType;
+                IDatatype containerType = cont.getType();
+                IDatatype deepest = TypeQueries.findDeepestGeneric(containerType, 0);
+                if (Set.TYPE.isAssignableFrom(containerType)) {
+                    resultType = new Set("", deepest, null);
+                } else {
+                    resultType = new Sequence("", deepest, null);
+                }
+                try {
+                    Value rValue = ValueFactory.createValue(resultType, tmp.toArray());
+                    result = ConstantAccessor.POOL.getInstance().bind(rValue, operand.getContext());
+                } catch (ValueDoesNotMatchTypeException e) {
+                    // result -> null
+                }
+            }
+            return result;
+        }
+
+    };
     
     /**
      * Prevent instance creation.
@@ -772,5 +824,22 @@ public class ContainerOperations {
         }
         return result;
     }
-    
+
+    /**
+     * (Recursively) Flattens the given value if needed.
+     * 
+     * @param value the value to be flattened
+     * @param result the flattened values (modified as a side effect)
+     */
+    static void flatten(Value value, Collection<Value> result) {
+        if (value instanceof ContainerValue) {
+            ContainerValue cont = (ContainerValue) value;
+            for (int i = 0, size = cont.getElementSize(); i < size; i++) {
+                flatten(cont.getElement(i), result);
+            }            
+        } else {
+            result.add(value);
+        }
+    }
+
 }

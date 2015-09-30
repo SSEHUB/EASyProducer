@@ -284,7 +284,7 @@ public class TypeContext implements IResolutionScope {
                 }
                 // search the implicit ones
                 try {
-                    String searchName = ModelUtility.stringValue(derived.getType(), true);
+                    String searchName = ModelUtility.stringValue(derived, true);
                     result = ModelQuery.findElementByTypeName(this, searchName, restriction);
                 } catch (ModelQueryException e) {
                     throw new TranslatorException(e, type, causingFeature);

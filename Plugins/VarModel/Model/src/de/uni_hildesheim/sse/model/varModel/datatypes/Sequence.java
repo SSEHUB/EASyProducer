@@ -67,9 +67,11 @@ public class Sequence extends Container {
     public static final Operation INDEX_OF = new Operation(IntegerType.TYPE, OclKeyWords.INDEX_OF, TYPE, AnyType.TYPE);
     public static final Operation HAS_DUPLICATES = new Operation(BooleanType.TYPE, OclKeyWords.HAS_DUPLICATES, TYPE);
     public static final Operation ADD = new Operation(AnyType.TYPE, ReturnTypeMode.GENERIC_PARAM_1, 
-            OclKeyWords.ADD, TYPE, AnyType.TYPE);
+        OclKeyWords.ADD, TYPE, AnyType.TYPE);
     public static final Operation SUBSEQUENCE = new Operation(BooleanType.TYPE, OclKeyWords.SUBSEQUENCE, TYPE, TYPE);
     public static final Operation OVERLAPS = new Operation(BooleanType.TYPE, OclKeyWords.OVERLAPS, TYPE, TYPE);
+    public static final Operation FLATTEN = new Operation(TYPE, 
+        ReturnTypeMode.IMMEDIATE_OPERAND_COLLECTION_NESTED_GENERIC_1, OclKeyWords.FLATTEN, TYPE);
 
     // type specific 
     public static final Operation EQUALS = Operation.createInfixOperator(
@@ -98,6 +100,7 @@ public class Sequence extends Container {
         DTYPE.addOperation(ADD);
         DTYPE.addOperation(SUBSEQUENCE);
         DTYPE.addOperation(OVERLAPS);
+        DTYPE.addOperation(FLATTEN);
     }
     
     /**

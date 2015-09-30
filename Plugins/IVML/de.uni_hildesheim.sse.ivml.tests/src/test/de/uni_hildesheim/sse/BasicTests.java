@@ -3,7 +3,6 @@ package test.de.uni_hildesheim.sse;
 import java.io.File;
 import java.io.IOException;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;

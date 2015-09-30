@@ -51,36 +51,36 @@ public class Operation {
         /**
          * Do not change the return type.
          */
-        UNCHANGED(-1, -1),
+        UNCHANGED(-1, -1, false),
         
         /**
          * Change it to the immediate type of the operand.
          */
-        IMMEDIATE_OPERAND(-1, -1),
+        IMMEDIATE_OPERAND(-1, -1, false),
         
         /**
          * Change it to the operand with generic parameter. If no generic
          * parameter is available, {@link #IMMEDIATE_OPERAND} is applied.
          */
-        TYPED_OPERAND_1(0, -1),
+        TYPED_OPERAND_1(0, -1, false),
 
         /**
          * Change it to the operand with generic parameter. If no generic
          * parameter is available, {@link #IMMEDIATE_OPERAND} is applied.
          */
-        TYPED_PARAM_1(-1, 0),
+        TYPED_PARAM_1(-1, 0, false),
 
         /**
          * Use the return value of the first operation parameter. If not
          * available, {@link #IMMEDIATE_OPERAND} is applied.
          */
-        PARAM_1(-1, 0),
+        PARAM_1(-1, 0, false),
         
         /**
          * Change it to the first generic parameter. If no generic
          * parameter is available, {@link #IMMEDIATE_OPERAND} is applied.
          */
-        GENERIC_PARAM_1(0, -1),
+        GENERIC_PARAM_1(0, -1, false),
         
         /**
          * Change it to the first generic operation parameter as generic type of the immediate 
@@ -88,7 +88,15 @@ public class Operation {
          * {@link #PARAM_1} will be applied. If no parameter
          * parameter is available, {@link #IMMEDIATE_OPERAND} is applied.
          */
-        IMMEDIATE_OPERAND_COLLECTION_PARAM_1(-1, 0);
+        IMMEDIATE_OPERAND_COLLECTION_PARAM_1(-1, 0, false),
+
+        /**
+         * Change it to the deepest nested first generic operation parameter as generic type of the immediate 
+         * operand in case that that is a collection. If the {@link #IMMEDIATE_OPERAND} is not a collection,
+         * {@link #PARAM_1} will be applied. If no parameter
+         * parameter is available, {@link #IMMEDIATE_OPERAND} is applied.
+         */
+        IMMEDIATE_OPERAND_COLLECTION_NESTED_GENERIC_1(-1, 0, true); // 0: using generic parameters as parameters here
         
         /**
          * Stores the index of the affected generic type. Negative if none
@@ -101,16 +109,23 @@ public class Operation {
          * is considered.
          */
         private int paramIndex;
+        
+        /**
+         * Whether searching for the result type shall be applied recursively / in a nested fashion if applicable.
+         */
+        private boolean recurse;
 
         /**
          * Creates a new constant based on the affected generic type (index).
          * 
          * @param typeIndex the affected generic type (negative if none is affected)
          * @param paramIndex the parameter type to be considered as return (none: relevant)
+         * @param recurse searching for the result type shall be applied recursively 
          */
-        private ReturnTypeMode(int typeIndex, int paramIndex) {
+        private ReturnTypeMode(int typeIndex, int paramIndex, boolean recurse) {
             this.typeIndex = typeIndex;
             this.paramIndex = paramIndex;
+            this.recurse = recurse;
         }
         
         /**
@@ -132,6 +147,16 @@ public class Operation {
         public int getParameterIndex() {
             return paramIndex;
         }
+        
+        /**
+         * Returns whether searching for the result shall be applied in a recursive fashion if applicable.
+         * 
+         * @return <code>true</code> do recursion, <code>false</code> no recursion
+         */
+        public boolean recurse() {
+            return recurse;
+        }
+        
     }
     
     /**
@@ -390,20 +415,10 @@ public class Operation {
             }
             break;
         case IMMEDIATE_OPERAND_COLLECTION_PARAM_1:
-            index = mode.getParameterIndex();
-            if (null != parameter && index >= 0 && index < parameter.length) {
-                if (Set.TYPE.isAssignableFrom(immediateOperand)) {
-                    Set set = (Set) immediateOperand;
-                    result = new Set("", parameter[index], set.getParent());
-                } else if (Sequence.TYPE.isAssignableFrom(immediateOperand)) {
-                    Sequence sequence = (Sequence) immediateOperand;
-                    result = new Sequence("", parameter[index], sequence.getParent());
-                } else {
-                    result = parameter[index];
-                }
-            } else {
-                result = immediateOperand;
-            }
+            result = immediateOperandCollection(mode, immediateOperand, parameter);
+            break;
+        case IMMEDIATE_OPERAND_COLLECTION_NESTED_GENERIC_1:
+            result = immediateOperandCollection(mode, immediateOperand, TypeQueries.toGenerics(immediateOperand));
             break;
         default:
             result = immediateOperand;
@@ -411,7 +426,47 @@ public class Operation {
         }
         return result;
     }
-        
+    
+    /**
+     * Determines the immediate operand for a collection.
+     * 
+     * @param mode the return type mode
+     * @param immediateOperand the actual immediate operand
+     * @param parameter the parameters
+     * @return the return type
+     */
+    private IDatatype immediateOperandCollection(ReturnTypeMode mode, IDatatype immediateOperand, 
+        IDatatype[] parameter) {
+        IDatatype result;
+        int index = mode.getParameterIndex();
+        if (null != parameter && index >= 0 && index < parameter.length) {
+            if (Set.TYPE.isAssignableFrom(immediateOperand)) {
+                Set set = (Set) immediateOperand;
+                IDatatype eltType; 
+                if (mode.recurse()) {
+                    eltType = TypeQueries.findDeepestGeneric(set, 0);
+                } else {
+                    eltType = parameter[index];
+                }
+                result = new Set("", eltType, set.getParent());
+            } else if (Sequence.TYPE.isAssignableFrom(immediateOperand)) {
+                Sequence sequence = (Sequence) immediateOperand;
+                IDatatype eltType; 
+                if (mode.recurse()) {
+                    eltType = TypeQueries.findDeepestGeneric(sequence, 0);
+                } else {
+                    eltType = parameter[index];
+                }
+                result = new Sequence("", eltType, sequence.getParent());
+            } else {
+                result = parameter[index];
+            }
+        } else {
+            result = immediateOperand;
+        }
+        return result;
+    }
+    
     /**
      * Returns whether this operation is a container operation, e.g. a quantor.
      * 

@@ -17,6 +17,7 @@ import de.uni_hildesheim.sse.dslCore.translation.Message;
 import de.uni_hildesheim.sse.dslCore.translation.MessageReceiver;
 import de.uni_hildesheim.sse.dslCore.translation.TranslatorException;
 import de.uni_hildesheim.sse.ivml.ConflictStmt;
+import de.uni_hildesheim.sse.ivml.DerivedType;
 import de.uni_hildesheim.sse.ivml.Expression;
 import de.uni_hildesheim.sse.ivml.ExpressionStatement;
 import de.uni_hildesheim.sse.ivml.ImportStmt;
@@ -223,7 +224,7 @@ public class ModelUtility extends de.uni_hildesheim.sse.dslCore.ModelUtility<Var
                         op = ModelQuery.MQ_SHORT_REFERENCE;
                     }
                 }
-                result = op + "(" + stringValue(type.getDerived().getType(), forSearch) + ")";
+                result = stringValue(type.getDerived(), forSearch);
             } else if (null != type.getType()) {
                 result = type.getType().getType();
             } else if (null != type.getId()) {
@@ -238,6 +239,27 @@ public class ModelUtility extends de.uni_hildesheim.sse.dslCore.ModelUtility<Var
         return result;
     }
 
+    /**
+     * Returns the string representation of <code>type</code>.
+     * 
+     * @param type the type to be converted into a string
+     * @param forSearch is the result intended for type searching
+     * @return the type representation
+     */
+    public static final String stringValue(DerivedType type, boolean forSearch) {
+        String op = type.getOp();
+        if (forSearch) {
+            if (op.equals(IvmlKeyWords.SETOF)) {
+                op = ModelQuery.MQ_SHORT_SET;
+            } else if (op.equals(IvmlKeyWords.SEQUENCEOF)) {
+                op = ModelQuery.MQ_SHORT_SEQUENCE;
+            } else if (op.equals(IvmlKeyWords.REFTO)) {
+                op = ModelQuery.MQ_SHORT_REFERENCE;
+            }
+        }
+        return op + "(" + stringValue(type.getType(), forSearch) + ")";
+    }
+    
     /**
      * Parses a text into a constraint in the context of <code>project</code>. Project is not modified!
      * 

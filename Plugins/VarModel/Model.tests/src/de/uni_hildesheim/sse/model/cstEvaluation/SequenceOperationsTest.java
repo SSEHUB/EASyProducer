@@ -30,7 +30,9 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.RealType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Sequence;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Set;
 import de.uni_hildesheim.sse.model.varModel.datatypes.StringType;
+import de.uni_hildesheim.sse.model.varModel.values.Value;
 import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
+import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
 
 /**
  * Tests the implemented sequence operations. Container iterators need to be tested on the level of the 
@@ -683,6 +685,33 @@ public class SequenceOperationsTest {
         Utils.assertEquals(0, Utils.evaluate(Sequence.COUNT, set, value));
         set.release();
         value.release();
+    }
+
+    /**
+     * Tests the "flatten" function.
+     * 
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     */
+    @Test
+    public void testFlatten() throws ValueDoesNotMatchTypeException {
+        TestEvaluationContext context = new TestEvaluationContext();
+        IDatatype seqIntType = new Sequence("intSeq", IntegerType.TYPE, null);
+        IDatatype seqSeqIntType = new Sequence("intSeqSeq", seqIntType, null);
+        Value inner1 = ValueFactory.createValue(seqIntType, new Object[] {1, 7, 9, 10, 4});
+        Value inner2 = ValueFactory.createValue(seqIntType, new Object[] {3, 8, 9, 11, 4});
+        EvaluationAccessor set = Utils.createValue(seqSeqIntType, context, new Object[] {inner1, inner2});
+        EvaluationAccessor result = Utils.evaluate(Sequence.FLATTEN, set);
+        Value resVal = ValueFactory.createValue(seqIntType, new Object[] {1, 7, 9, 10, 4, 3, 8, 9, 11, 4});
+        Assert.assertEquals(resVal, result.getValue());
+        result.release();
+        set.release();
+        
+        EvaluationAccessor set2 = Utils.createValue(seqSeqIntType, context, new Object[] {});
+        Value resVal2 = ValueFactory.createValue(seqIntType, new Object[] {});
+        result = Utils.evaluate(Sequence.FLATTEN, set2);
+        Assert.assertEquals(resVal2, result.getValue());
+        result.release();
+        set2.release();
     }
     
     // Container iterators need to be tested on the level of the EvaluationVisitor!

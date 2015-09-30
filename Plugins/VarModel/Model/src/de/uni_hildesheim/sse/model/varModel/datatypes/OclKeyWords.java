@@ -95,6 +95,7 @@ public class OclKeyWords {
     public static final String UNION = "union";
     public static final String FOR_ALL = "forAll";
     public static final String ADD = "add";
+    public static final String FLATTEN = "flatten";
     
     // e.g. Set
     public static final String INTERSECTION = "intersection";
