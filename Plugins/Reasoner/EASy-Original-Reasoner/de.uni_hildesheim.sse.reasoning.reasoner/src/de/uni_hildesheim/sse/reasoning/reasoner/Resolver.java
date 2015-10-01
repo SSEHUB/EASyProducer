@@ -874,7 +874,7 @@ public class Resolver {
                             problemVariables.add(evaluator.getMessage(j).getDecision());
                             FailedElementDetails failedelementDetails = new FailedElementDetails();
                             failedelementDetails.setProblemPoints(new HashSet<IDecisionVariable>(problemVariables));
-                            failedelementDetails.setProblemConstraintPart(evaluator.getFailedExpression()[0]);
+                            failedelementDetails.setProblemConstraintPart(getFailedConstraintPart());
                             failedElements.addProblemVariable(evaluator.getMessage(j).getVariable(), 
                                 failedelementDetails);
                             if (Descriptor.LOGGING) {
@@ -983,7 +983,7 @@ public class Resolver {
         if (constraint != null) {
             FailedElementDetails failedElementDetails = new FailedElementDetails();
             failedElementDetails.setProblemPoints(new HashSet<IDecisionVariable>(problemVariables));
-            failedElementDetails.setProblemConstraintPart(evaluator.getFailedExpression()[0]);
+            failedElementDetails.setProblemConstraintPart(getFailedConstraintPart());
             failedElements.addProblemConstraint(constraint, failedElementDetails);
             if (Descriptor.LOGGING) {
                 LOGGER.debug("Failed constraint: " 
@@ -1234,6 +1234,18 @@ public class Resolver {
             LOGGER.exception(e);
         }
         return cst;
+    }
+    
+    /**
+     * Method for checking part of a failed constraints against null.
+     * @return null or part of a failed constraint.
+     */
+    private ConstraintSyntaxTree getFailedConstraintPart() {
+        ConstraintSyntaxTree cstPart = null;
+        if (evaluator.getFailedExpression() != null) {
+            cstPart = evaluator.getFailedExpression()[0];
+        }
+        return cstPart;
     }
     
     /**
