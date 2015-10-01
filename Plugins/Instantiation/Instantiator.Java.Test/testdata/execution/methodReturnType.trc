@@ -1,10 +1,64 @@
 -> main(Project, Configuration, Project) with (<project>, <config>, <project>)
-    message <- Method has been deleted
     f <- MethodReturnType.java
     -> defaultClass(JavaFileArtifact) with (MethodReturnType.java) = class 'MethodReturnType'
     cls <- class 'MethodReturnType'
     -> getName(JavaMethod) with (method 'returnString') = returnString
     -> ==(String, String) with (returnString, returnString) = true
+    -> getName(JavaMethod) with (method 'returnInteger') = returnInteger
+    -> ==(String, String) with (returnInteger, returnString) = false
+    -> getName(JavaMethod) with (method 'returnBoolean') = returnBoolean
+    -> ==(String, String) with (returnBoolean, returnString) = false
+    -> getName(JavaMethod) with (method 'returnChar') = returnChar
+    -> ==(String, String) with (returnChar, returnString) = false
+    -> getName(JavaMethod) with (method 'returnNull') = returnNull
+    -> ==(String, String) with (returnNull, returnString) = false
+    -> getName(JavaMethod) with (method 'returnDouble') = returnDouble
+    -> ==(String, String) with (returnDouble, returnString) = false
     -> getName(JavaMethod) with (method 'method') = method
     -> ==(String, String) with (method, returnString) = false
     -> deleteMethodWithCalls(JavaClass, ExpressionEvaluator, Any) with (class 'MethodReturnType', <evaluator>, Method has been deleted)
+    -> getName(JavaMethod) with (method 'returnInteger') = returnInteger
+    -> ==(String, String) with (returnInteger, returnInteger) = true
+    -> getName(JavaMethod) with (method 'returnBoolean') = returnBoolean
+    -> ==(String, String) with (returnBoolean, returnInteger) = false
+    -> getName(JavaMethod) with (method 'returnChar') = returnChar
+    -> ==(String, String) with (returnChar, returnInteger) = false
+    -> getName(JavaMethod) with (method 'returnNull') = returnNull
+    -> ==(String, String) with (returnNull, returnInteger) = false
+    -> getName(JavaMethod) with (method 'returnDouble') = returnDouble
+    -> ==(String, String) with (returnDouble, returnInteger) = false
+    -> getName(JavaMethod) with (method 'method') = method
+    -> ==(String, String) with (method, returnInteger) = false
+    -> deleteMethodWithCalls(JavaClass, ExpressionEvaluator, Any) with (class 'MethodReturnType', <evaluator>, 0)
+    -> getName(JavaMethod) with (method 'returnBoolean') = returnBoolean
+    -> ==(String, String) with (returnBoolean, returnBoolean) = true
+    -> getName(JavaMethod) with (method 'returnChar') = returnChar
+    -> ==(String, String) with (returnChar, returnBoolean) = false
+    -> getName(JavaMethod) with (method 'returnNull') = returnNull
+    -> ==(String, String) with (returnNull, returnBoolean) = false
+    -> getName(JavaMethod) with (method 'returnDouble') = returnDouble
+    -> ==(String, String) with (returnDouble, returnBoolean) = false
+    -> getName(JavaMethod) with (method 'method') = method
+    -> ==(String, String) with (method, returnBoolean) = false
+    -> deleteMethodWithCalls(JavaClass, ExpressionEvaluator, Any) with (class 'MethodReturnType', <evaluator>, false)
+    -> getName(JavaMethod) with (method 'returnChar') = returnChar
+    -> ==(String, String) with (returnChar, returnChar) = true
+    -> getName(JavaMethod) with (method 'returnNull') = returnNull
+    -> ==(String, String) with (returnNull, returnChar) = false
+    -> getName(JavaMethod) with (method 'returnDouble') = returnDouble
+    -> ==(String, String) with (returnDouble, returnChar) = false
+    -> getName(JavaMethod) with (method 'method') = method
+    -> ==(String, String) with (method, returnChar) = false
+    -> deleteMethodWithCalls(JavaClass, ExpressionEvaluator, Any) with (class 'MethodReturnType', <evaluator>, a)
+    -> getName(JavaMethod) with (method 'returnNull') = returnNull
+    -> ==(String, String) with (returnNull, returnNull) = true
+    -> getName(JavaMethod) with (method 'returnDouble') = returnDouble
+    -> ==(String, String) with (returnDouble, returnNull) = false
+    -> getName(JavaMethod) with (method 'method') = method
+    -> ==(String, String) with (method, returnNull) = false
+    -> deleteMethodWithCalls(JavaClass, ExpressionEvaluator, Any) with (class 'MethodReturnType', <evaluator>, null)
+    -> getName(JavaMethod) with (method 'returnDouble') = returnDouble
+    -> ==(String, String) with (returnDouble, returnDouble) = true
+    -> getName(JavaMethod) with (method 'method') = method
+    -> ==(String, String) with (method, returnDouble) = false
+    -> deleteMethodWithCalls(JavaClass, ExpressionEvaluator, Any) with (class 'MethodReturnType', <evaluator>, 0.0)
