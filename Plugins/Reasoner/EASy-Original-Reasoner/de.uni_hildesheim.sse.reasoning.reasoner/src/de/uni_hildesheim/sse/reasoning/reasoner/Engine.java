@@ -10,6 +10,7 @@ import java.util.Set;
 import de.uni_hildesheim.sse.model.confModel.Configuration;
 import de.uni_hildesheim.sse.model.confModel.DisplayNameProvider;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
+import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.ModelElement;
@@ -20,6 +21,7 @@ import de.uni_hildesheim.sse.reasoning.core.reasoner.Message;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerConfiguration;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerConfiguration.IAdditionalInformationLogger;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasoningResult;
+import de.uni_hildesheim.sse.reasoning.reasoner.functions.FailedElementDetails;
 import de.uni_hildesheim.sse.reasoning.reasoner.functions.FailedElements;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
@@ -51,6 +53,7 @@ public class Engine {
     private List<String> failedElementLabels;
     private List<Set<AbstractVariable>> variablesInConstraints;
     private List<Set<IDecisionVariable>> problemDecisions;
+    private List<ConstraintSyntaxTree> problemConstraintParts;
     private List<String> failedElementComments;
     private List<Project> failedElementProjects;
     private List<String> failedElementSuggestions;  
@@ -123,12 +126,13 @@ public class Engine {
     private void analyzeProblemConstraints(FailedElements failedElements) {
         if (failedElements.problemConstraintCount() > 0) {
             initFailedLists();
-            Map<Constraint, Set<IDecisionVariable>> problemConstraintMap = failedElements.getProblemConstraintMap();
+            Map<Constraint, FailedElementDetails> problemConstraintMap = failedElements.getProblemConstraintMap();
             Iterator<Constraint> problemConstraints = failedElements.getProblemConstraints();
             while (problemConstraints.hasNext()) {   
                 this.failedConstraints++;
                 Constraint constraint = problemConstraints.next();
                 failedModelElements.add(constraint);
+                FailedElementDetails failedElementDetails = problemConstraintMap.get(constraint);                
                 if (constraint.getTopLevelParent() instanceof Project) {
                     failedElementProjects.add((Project) constraint.getTopLevelParent());                    
                 }                
@@ -145,7 +149,7 @@ public class Engine {
                     msgText = StringProvider.toIvmlString(constraint.getConsSyntax());
                 }
                 comment = msgText;
-                java.util.Set<IDecisionVariable> problemVars = problemConstraintMap.get(constraint); 
+                java.util.Set<IDecisionVariable> problemVars = failedElementDetails.getProblemPoints(); 
                 java.util.Set<AbstractVariable> vars = new HashSet<AbstractVariable>();
                 for (IDecisionVariable problemVar : problemVars) {
                     vars.add(problemVar.getDeclaration());
@@ -176,6 +180,7 @@ public class Engine {
                 msgText = msgText + problemPoints;
                 variablesInConstraints.add(vars);
                 problemDecisions.add(problemVars);
+                problemConstraintParts.add(failedElementDetails.getProblemConstraintPart());
                 failedElementLabels.add(msgText);
                 failedElementComments.add(comment);
                 failedElementSuggestions.add(suggestion);
@@ -195,16 +200,17 @@ public class Engine {
      */
     private void analyzeProblemVariables(FailedElements failedElements) {       
         if (failedElements.problemVariabletCount() > 0) {
+            Map<AbstractVariable, FailedElementDetails> problemVariableMap = failedElements.getProblemVariableMap();
             Iterator<AbstractVariable> problemVariables = failedElements.getProblemVariables();
-            Map<AbstractVariable, Set<IDecisionVariable>> problemVariableMap = failedElements.getProblemVariableMap();
             initFailedLists();
             while (problemVariables.hasNext()) {
                 this.failedAssignments++;
                 AbstractVariable problemVariable = problemVariables.next();
+                failedModelElements.add(problemVariable);
+                FailedElementDetails failedElementDetails = problemVariableMap.get(problemVariable);
                 if (problemVariable.getTopLevelParent() instanceof Project) {
                     failedElementProjects.add((Project) problemVariable.getTopLevelParent());                    
                 }
-                failedModelElements.add(problemVariable);
                 msgText = DisplayNameProvider.getInstance().getDisplayName(problemVariable) 
                     + " (" + traceToTop(problemVariable) + " )";
                 failedElementLabels.add(msgText);
@@ -212,7 +218,8 @@ public class Engine {
                 failedElementSuggestions.add("Check for variable reassignments in the same Project scope");
                 Set<AbstractVariable> vars = new HashSet<AbstractVariable>();
                 vars.add(problemVariable);
-                problemDecisions.add(problemVariableMap.get(problemVariable));
+                problemDecisions.add(failedElementDetails.getProblemPoints());
+                problemConstraintParts.add(failedElementDetails.getProblemConstraintPart());
                 variablesInConstraints.add(vars);
                 constraintVariables.add(null);
             } 
@@ -249,6 +256,7 @@ public class Engine {
         failedElementLabels = new ArrayList<String>(); 
         variablesInConstraints = new ArrayList<Set<AbstractVariable>>();
         problemDecisions = new ArrayList<Set<IDecisionVariable>>();
+        problemConstraintParts = new ArrayList<ConstraintSyntaxTree>();
         failedElementComments = new ArrayList<String>();
         failedElementProjects = new ArrayList<Project>();
         failedElementSuggestions = new ArrayList<String>();
@@ -266,6 +274,7 @@ public class Engine {
         failedElementLabels = null;
         variablesInConstraints = null;
         problemDecisions = null;
+        problemConstraintParts = null;
         failedElementComments = null;
         failedElementProjects = null;
         failedElementSuggestions = null;
@@ -285,6 +294,7 @@ public class Engine {
         msg.addConflictingElementLabels(failedElementLabels);
         msg.addConstraintVariables(variablesInConstraints);
         msg.addProblemVariables(problemDecisions);
+        msg.addProblemConstraintParts(problemConstraintParts);
         msg.addConflictingElementComments(failedElementComments);
         msg.addConflictingElementProjects(failedElementProjects);
         msg.addConflictingElementSuggestions(failedElementSuggestions);
@@ -312,6 +322,8 @@ public class Engine {
             infoLogger.info("Failed elements project: " + msg.getConflictProjects().get(i).getName());
             infoLogger.info("Failed elements suggestion: " + msg.getConflictSuggestions().get(i));
             infoLogger.info("Failed elements variables: " + msg.getProblemVariables().get(i));
+            infoLogger.info("Failed elements problem constraint parts: " 
+                + StringProvider.toIvmlString(msg.getProblemConstraintParts().get(i))); 
             infoLogger.info("Failed elements constraint variable: " 
                 + msg.getNamedConstraintVariables().get(i));            
         }
