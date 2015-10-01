@@ -1,0 +1,19 @@
+project refByCompoundCollectionEqualityTest {
+
+    version v0;
+
+    compound FieldType {
+        String name;        
+    }
+    
+    FieldType StringType = {name = "String"};
+    FieldType IntegerType = {name = "Integer"};
+    FieldType BooleanType = {name = "Boolean"};    
+    
+    sequenceOf(refTo(FieldType)) sqRefByCompound1 = {refBy(StringType), refBy(IntegerType), refBy(BooleanType)};
+    sequenceOf(refTo(FieldType)) sqRefByCompound2 = {refBy(StringType), refBy(IntegerType), refBy(IntegerType)};
+    
+    
+    sqRefByCompound1 == sqRefByCompound2;
+
+}
