@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
+import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.ModelElement;
 import de.uni_hildesheim.sse.model.varModel.Project;
@@ -22,6 +23,7 @@ public class Message extends de.uni_hildesheim.sse.utils.messages.Message {
     private List<String> conflictingElementLabels;
     private List<Set<AbstractVariable>> variablesInConstraints;
     private List<Set<IDecisionVariable>> problemVariables;
+    private List<ConstraintSyntaxTree> problemConstraintParts;
     private List<String> conflictingElementComments;
     private List<Project> conflictingElementProjects;
     private List<String> conflictingElementSuggestions;
@@ -190,6 +192,25 @@ public class Message extends de.uni_hildesheim.sse.utils.messages.Message {
      */
     public List<Set<IDecisionVariable>> getProblemVariables() {
         return problemVariables;
+    }
+    
+    /**
+     * Method for adding a list of partial {@link ConstraintSyntaxTree}s that are involved in each failed constraint.
+     * @param variables List of variables.
+     */
+    public void addProblemConstraintParts(List<ConstraintSyntaxTree> variables) {
+        this.problemConstraintParts = new ArrayList<ConstraintSyntaxTree>();
+        if (null != problemConstraintParts) {
+            this.problemConstraintParts.addAll(variables);
+        }
+    }
+    
+    /**
+     * Method for returning a list of partial {@link ConstraintSyntaxTree}s that are involved in each failed constraint.
+     * @return List of variables.
+     */
+    public List<ConstraintSyntaxTree> getProblemConstraintParts() {
+        return problemConstraintParts;
     }
     
     /**
