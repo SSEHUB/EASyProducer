@@ -323,7 +323,7 @@ public class Engine {
             infoLogger.info("Failed elements suggestion: " + msg.getConflictSuggestions().get(i));
             infoLogger.info("Failed elements variables: " + msg.getProblemVariables().get(i));
             infoLogger.info("Failed elements problem constraint parts: " 
-                + StringProvider.toIvmlString(msg.getProblemConstraintParts().get(i))); 
+                + StringProvider.toIvmlString(msg.getProblemConstraintParts().get(i)));
             infoLogger.info("Failed elements constraint variable: " 
                 + msg.getNamedConstraintVariables().get(i));            
         }
