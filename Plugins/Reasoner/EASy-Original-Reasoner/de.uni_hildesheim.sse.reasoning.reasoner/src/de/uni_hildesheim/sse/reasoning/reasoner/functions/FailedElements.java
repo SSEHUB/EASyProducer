@@ -19,14 +19,14 @@ import de.uni_hildesheim.sse.model.varModel.Constraint;
 public class FailedElements {    
     
     /**
-     * Map of failed {@link Constraint}s and {@link IDecisionVariable}s that might cause the problem.
+     * Map of failed {@link Constraint}s and {@link FailedElementDetails}s that might cause the problem.
      */
-    private Map<Constraint, Set<IDecisionVariable>> problemConstraints;
+    private Map<Constraint, FailedElementDetails> problemConstraints;
     
     /**
-     * Map of failed {@link AbstractVariable}s and {@link IDecisionVariable} behind it.
+     * Map of failed {@link AbstractVariable}s and {@link FailedElementDetails}s behind it.
      */
-    private Map<AbstractVariable, Set<IDecisionVariable>> problemVariables;
+    private Map<AbstractVariable, FailedElementDetails> problemVariables;
     
     
     /**
@@ -34,17 +34,17 @@ public class FailedElements {
      * This constructor is only package visible, as it should only be used inside of the {@link FailedElements} class.
      */
     public FailedElements() {
-        problemConstraints = new HashMap<Constraint, Set<IDecisionVariable>>();
-        problemVariables = new HashMap<AbstractVariable, Set<IDecisionVariable>>();
+        problemConstraints = new HashMap<Constraint, FailedElementDetails>();
+        problemVariables = new HashMap<AbstractVariable, FailedElementDetails>();
     }
     
     /**
-     * Method for adding failed constraints and associated problem variables.
+     * Method for adding failed constraints and associated details.
      * @param constraint Failed constraint.
-     * @param variables Associated variables.
+     * @param details Failed constraint details.
      */
-    public void addProblemConstraint(Constraint constraint, Set<IDecisionVariable> variables) {
-        problemConstraints.put(constraint, variables);       
+    public void addProblemConstraint(Constraint constraint, FailedElementDetails details) {
+        problemConstraints.put(constraint, details);       
     }
     
     /**
@@ -58,10 +58,10 @@ public class FailedElements {
     /**
      * Method for adding failed variable and associated {@link IDecisionVariable}.
      * @param variable Failed variable.
-     * @param variables Associated variables.
+     * @param details Associated details.
      */
-    public void addProblemVariable(AbstractVariable variable, Set<IDecisionVariable> variables) {
-        problemVariables.put(variable, variables);
+    public void addProblemVariable(AbstractVariable variable, FailedElementDetails details) {
+        problemVariables.put(variable, details);
     } 
     
     /**
@@ -105,10 +105,10 @@ public class FailedElements {
     }
     
     /**
-     * Returns a map of failed {@link Constraint}s and associated {@link IDecisionVariable}s.
+     * Returns a map of failed {@link Constraint}s and associated {@link FailedElementDetails}s.
      * @return Map of problem constraints.
      */
-    public Map<Constraint, Set<IDecisionVariable>> getProblemConstraintMap() {
+    public Map<Constraint, FailedElementDetails> getProblemConstraintMap() {
         return problemConstraints;
     }
     
@@ -121,10 +121,10 @@ public class FailedElements {
     }
     
     /**
-     * Returns a map of problem {@link AbstractVariable}s and associated {@link IDecisionVariable}s.
+     * Returns a map of problem {@link AbstractVariable}s and associated {@link FailedElementDetails}s.
      * @return Map of problem variables.
      */
-    public Map<AbstractVariable, Set<IDecisionVariable>> getProblemVariableMap() {
+    public Map<AbstractVariable, FailedElementDetails> getProblemVariableMap() {
         return problemVariables;
     }
    

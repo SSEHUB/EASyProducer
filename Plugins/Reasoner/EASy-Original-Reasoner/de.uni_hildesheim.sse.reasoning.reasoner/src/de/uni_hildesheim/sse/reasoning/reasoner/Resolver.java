@@ -54,6 +54,7 @@ import de.uni_hildesheim.sse.reasoning.core.model.PerformanceStatistics;
 import de.uni_hildesheim.sse.reasoning.core.model.variables.ConstraintVariable;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerConfiguration;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerConfiguration.IAdditionalInformationLogger;
+import de.uni_hildesheim.sse.reasoning.reasoner.functions.FailedElementDetails;
 import de.uni_hildesheim.sse.reasoning.reasoner.functions.FailedElements;
 import de.uni_hildesheim.sse.reasoning.reasoner.functions.ScopeAssignments;
 import de.uni_hildesheim.sse.reasoning.reasoner.model.AssignmentConstraintFinder;
@@ -871,8 +872,11 @@ public class Resolver {
                             && !(evaluator.getMessage(j).getVariable().getParent() instanceof Constraint)) {
                             problemVariables.clear();
                             problemVariables.add(evaluator.getMessage(j).getDecision());
+                            FailedElementDetails failedelementDetails = new FailedElementDetails();
+                            failedelementDetails.setProblemPoints(new HashSet<IDecisionVariable>(problemVariables));
+                            failedelementDetails.setProblemConstraintPart(evaluator.getFailedExpression()[0]);
                             failedElements.addProblemVariable(evaluator.getMessage(j).getVariable(), 
-                                new HashSet<IDecisionVariable>(problemVariables));
+                                failedelementDetails);
                             if (Descriptor.LOGGING) {
                                 LOGGER.debug("Assigment error: " + evaluator.getMessage(j).getVariable());
                                 printProblemPoints();
@@ -977,7 +981,10 @@ public class Resolver {
      */
     private void conflictingConstraint(Constraint constraint) {
         if (constraint != null) {
-            failedElements.addProblemConstraint(constraint, new HashSet<IDecisionVariable>(problemVariables));
+            FailedElementDetails failedElementDetails = new FailedElementDetails();
+            failedElementDetails.setProblemPoints(new HashSet<IDecisionVariable>(problemVariables));
+            failedElementDetails.setProblemConstraintPart(evaluator.getFailedExpression()[0]);
+            failedElements.addProblemConstraint(constraint, failedElementDetails);
             if (Descriptor.LOGGING) {
                 LOGGER.debug("Failed constraint: " 
                     + StringProvider.toIvmlString(constraint.getConsSyntax()));
