@@ -427,7 +427,12 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
         }
         try {
             Value oldValue = toChange.getValue();
-            Value val = ValueFactory.createValue(varType, value);
+            Value val;
+            if (value instanceof Value) {
+                val = (Value) value;
+            } else {
+                val = ValueFactory.createValue(varType, value);
+            }
             IAssignmentState varState = toChange.getState();
             if (AssignmentState.UNDEFINED == varState) {
                 varState = AssignmentState.ASSIGNED;
