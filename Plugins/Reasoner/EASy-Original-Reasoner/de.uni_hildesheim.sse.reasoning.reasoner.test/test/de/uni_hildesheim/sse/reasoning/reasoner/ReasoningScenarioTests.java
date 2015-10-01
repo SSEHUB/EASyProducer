@@ -415,10 +415,9 @@ public class ReasoningScenarioTests extends AbstractTest<Project> {
     /**
      * Test for collections of refTo(compounds) equality operation.
      */
-    @Ignore
     @Test
-    public void refToCompoundCollectionEqualityTest() {
-        reasoningTest("refToCompoundCollectionEqualityTest.ivml", 1);
+    public void refByCompoundCollectionEqualityTest() {
+        reasoningTest("refByCompoundCollectionEqualityTest.ivml", 1);
     }  
     
     /**
