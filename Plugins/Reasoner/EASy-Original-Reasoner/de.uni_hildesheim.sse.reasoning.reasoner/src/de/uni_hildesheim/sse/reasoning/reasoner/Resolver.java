@@ -874,7 +874,8 @@ public class Resolver {
                             problemVariables.add(evaluator.getMessage(j).getDecision());
                             FailedElementDetails failedelementDetails = new FailedElementDetails();
                             failedelementDetails.setProblemPoints(new HashSet<IDecisionVariable>(problemVariables));
-                            failedelementDetails.setProblemConstraintPart(getFailedConstraintPart());
+                            // due to NULL result if failed assignment
+                            failedelementDetails.setProblemConstraintPart(cst);
                             failedElements.addProblemVariable(evaluator.getMessage(j).getVariable(), 
                                 failedelementDetails);
                             if (Descriptor.LOGGING) {
@@ -983,6 +984,7 @@ public class Resolver {
         if (constraint != null) {
             FailedElementDetails failedElementDetails = new FailedElementDetails();
             failedElementDetails.setProblemPoints(new HashSet<IDecisionVariable>(problemVariables));
+            failedElementDetails.setProblemConstraintPart(getFailedConstraintPart());
             failedElementDetails.setProblemConstraintPart(getFailedConstraintPart());
             failedElements.addProblemConstraint(constraint, failedElementDetails);
             if (Descriptor.LOGGING) {
@@ -1244,7 +1246,7 @@ public class Resolver {
         ConstraintSyntaxTree cstPart = null;
         if (evaluator.getFailedExpression() != null) {
             cstPart = evaluator.getFailedExpression()[0];
-        }
+        }        
         return cstPart;
     }
     
