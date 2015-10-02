@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +35,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescr
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.Configuration;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypes;
+import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.reasoning.core.frontend.ReasonerFrontend;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.Message;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerConfiguration;
@@ -261,9 +263,26 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
      */
     private static String toText(Message msg) {
         String result = msg.getDescription();
-        List<?> info = msg.getProblemVariables();
+        List<Set<IDecisionVariable>> info = msg.getProblemVariables();
         if (null != info) {
-            result += info;
+            result += " ";
+            Iterator<Set<IDecisionVariable>> iter = info.iterator();
+            while (iter.hasNext()) {
+                Set<IDecisionVariable> set = iter.next();
+                result += "{";
+                Iterator<IDecisionVariable> iter2 = set.iterator();
+                while (iter2.hasNext()) {
+                    IDecisionVariable var = iter2.next();
+                    result += de.uni_hildesheim.sse.model.confModel.Configuration.getInstanceName(var);
+                    if (iter2.hasNext()) {
+                        result += ", ";
+                    }
+                }
+                result += "}";
+                if (iter.hasNext()) {
+                    result += ", ";
+                }
+            }
         }
         return result;
     }
