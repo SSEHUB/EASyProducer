@@ -28,6 +28,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ITr
 public class Executor extends de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.Executor {
 
     private boolean stopAfterBindValues = false;
+    private boolean enactment = true;
     private boolean useReasoner = true;
     
     /**
@@ -62,6 +63,16 @@ public class Executor extends de.uni_hildesheim.sse.easy_producer.instantiator.m
         this.stopAfterBindValues = true;
         return this;
     }
+
+    /**
+     * Does not perform enactment.
+     * 
+     * @return <b>this</b> (builder pattern)
+     */
+    public Executor noEnactment() {
+        this.enactment = false;
+        return this;
+    }
     
     /**
      * Disable the reasoner and falls back to default consistent models.
@@ -86,7 +97,11 @@ public class Executor extends de.uni_hildesheim.sse.easy_producer.instantiator.m
     protected de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildlangExecution 
         createExecutionEnvironment(ITracer tracer, File base, String startRuleName, 
         Map<String, Object> parameter) {
-        return new RtVilExecution(tracer, base, parameter, stopAfterBindValues, useReasoner);
+        RtVilExecution result = new RtVilExecution(tracer, base, parameter);
+        result.setStopAfterBindValues(stopAfterBindValues);
+        result.setUseReasoner(useReasoner);
+        result.setEnableEnactment(enactment);
+        return result;
     }
     
 }

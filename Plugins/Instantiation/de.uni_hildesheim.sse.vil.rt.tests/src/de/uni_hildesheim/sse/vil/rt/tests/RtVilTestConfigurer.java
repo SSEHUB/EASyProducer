@@ -110,7 +110,10 @@ public class RtVilTestConfigurer implements ITestConfigurer<Script> {
     @Override
     public BuildlangExecution createExecutionEnvironment(ITracer tracer, File base, String startRuleName,
         Map<String, Object> parameter) {
-        return new RtVilExecution(tracer, base, parameter, false, true); // TODO adjust tracer
+        RtVilExecution result = new RtVilExecution(tracer, base, parameter); // TODO adjust tracer
+        result.setStopAfterBindValues(false); // although default, fits to initial code
+        result.setUseReasoner(true);
+        return result;
     }
 
     @Override

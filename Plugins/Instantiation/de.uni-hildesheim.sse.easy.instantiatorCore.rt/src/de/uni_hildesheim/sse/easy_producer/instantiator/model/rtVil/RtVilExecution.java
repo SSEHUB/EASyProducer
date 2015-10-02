@@ -219,6 +219,7 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
     private List<IRtVilConcept> successful = new LinkedList<IRtVilConcept>();
     private boolean stopAfterBindValues = false;
     private boolean useReasoner = true;
+    private boolean enableEnactment = true;
     private Script currentScript;
     private IRtValueAccess valueAccess;
     private IReasoningHook reasoningHook = DefaultReasoningHook.INSTANCE;
@@ -236,15 +237,9 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
      * @param tracer the tracer
      * @param base the base directory for making files absolute
      * @param parameter the top-level parameter for the script to be executed
-     * @param stopAfterBindValues whether the full script shall be executed or only values shall be bound to initialize
-     *   the runtime configuration
-     * @param useReasoner make use of the reasoner or default to consistent model
      */
-    public RtVilExecution(ITracer tracer, File base, Map<String, Object> parameter, boolean stopAfterBindValues, 
-        boolean useReasoner) {
+    public RtVilExecution(ITracer tracer, File base, Map<String, Object> parameter) {
         super(tracer, base, parameter);
-        this.stopAfterBindValues = stopAfterBindValues;
-        this.useReasoner = useReasoner;
         this.valueAccess = new IRtValueAccess() {
             
             @Override
@@ -253,6 +248,34 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
                 return getRuntimeEnvironment().getValue(var);
             }
         };
+    }
+
+    /**
+     * Defines whether execution shall stop after binding monitoring values (default: false).
+     * 
+     * @param stopAfterBindValues whether the full script shall be executed or only values shall be bound to initialize
+     *   the runtime configuration
+     */
+    public void setStopAfterBindValues(boolean stopAfterBindValues) {
+        this.stopAfterBindValues = stopAfterBindValues;
+    }
+
+    /**
+     * Defines whether the reasoner shall be used (default: true).
+     * 
+     * @param useReasoner make use of the reasoner or default to consistent model
+     */
+    public void setUseReasoner(boolean useReasoner) {
+        this.useReasoner = useReasoner;        
+    }
+    
+    /**
+     * Enables or disables the enactment phase (default: enabled).
+     * 
+     * @param enableEnactment enables the enactment
+     */
+    public void setEnableEnactment(boolean enableEnactment) {
+        this.enableEnactment = enableEnactment;
     }
     
     /**
@@ -971,14 +994,16 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
      * @throws VilException in case that constructing, resolving or executing the corresponding VIL rule fails
      */
     private void callEnact() throws VilException {
-        Script script = getCurrentScript();
-        CallArgument[] args = new CallArgument[3];
-        for (int i = 0; i < Math.min(3,  script.getParameterCount()); i++) {
-            VariableDeclaration decl = script.getParameter(i);
-            Object value = getRuntimeEnvironment().getValue(decl);
-            args[i] = new CallArgument(decl.getType()).fixValue(value);
+        if (enableEnactment) {
+            Script script = getCurrentScript();
+            CallArgument[] args = new CallArgument[3];
+            for (int i = 0; i < Math.min(3,  script.getParameterCount()); i++) {
+                VariableDeclaration decl = script.getParameter(i);
+                Object value = getRuntimeEnvironment().getValue(decl);
+                args[i] = new CallArgument(decl.getType()).fixValue(value);
+            }
+            dynamicCall("enact", null, args);
         }
-        dynamicCall("enact", null, args);
     }
 
     /**
