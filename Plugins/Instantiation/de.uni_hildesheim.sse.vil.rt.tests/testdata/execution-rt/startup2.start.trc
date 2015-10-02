@@ -18,6 +18,4 @@
     -> status(LifecycleEvent) with (<LifecycleEvent>) = START
     -> ==(String, String) with (START, START) = true
     -> startupTactic()
-        Reasoner execution: true
-    Reasoner execution: true
     -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)

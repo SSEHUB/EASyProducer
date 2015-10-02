@@ -7,6 +7,4 @@ test <- 0
     -> +(Integer, Integer) with (7, 9) = 16
     -> +(Integer, Integer) with (8, 10) = 18
     -> t1()
-        Reasoner execution: true
-    Reasoner execution: true
     -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)

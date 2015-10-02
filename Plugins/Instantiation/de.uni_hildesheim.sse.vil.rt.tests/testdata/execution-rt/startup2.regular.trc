@@ -1,5 +1,3 @@
 -> main(Project, Configuration, Project, IAdaptationEvent) with (<project>, <config>, <project>, <RegularAdaptationEvent>)
     -> defaultTactic()
-        Reasoner execution: true
-    Reasoner execution: true
     -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)

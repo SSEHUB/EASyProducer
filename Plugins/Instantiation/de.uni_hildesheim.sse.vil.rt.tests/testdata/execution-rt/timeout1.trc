@@ -85,8 +85,5 @@
                 -> +(Integer, Integer) with (1064435712, 1549926400) = -1680605184
                 i1 <- -1680605184
             }
-            Reasoner execution: true
     -> t2()
-        Reasoner execution: true
-    Reasoner execution: true
     -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)

@@ -25,6 +25,4 @@
     -> status(LifecycleEvent) with (<LifecycleEvent>) = END
     -> ==(String, String) with (END, END) = true
     -> shutdownTactic()
-        Reasoner execution: true
-    Reasoner execution: true
     -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)

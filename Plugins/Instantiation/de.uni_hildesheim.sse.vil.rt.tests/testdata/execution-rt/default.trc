@@ -6,6 +6,4 @@
             -> isConfigured(DecisionVariable) with (Add::Node::capacity) = false
             visit else-branch
         test <- 0
-        Reasoner execution: true
-    Reasoner execution: true
     -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)
