@@ -110,17 +110,17 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
                     switch (status) {
                     case UNSUPPORTED:
                     case ERROR:
-                        errorCount++;
-                        logger.error(msg.getDescription());
+                        //errorCount++; // TODO enable again
+                        logger.error(toText(msg));
                         break;
                     case INFO:
-                        logger.info(msg.getDescription());
+                        logger.info(toText(msg));
                         break;
                     case WARNING:
-                        logger.warn(msg.getDescription());
+                        logger.warn(toText(msg));
                         break;
                     default:
-                        logger.info(msg.getDescription());
+                        logger.info(toText(msg));
                         break;
                     }
                 }
@@ -131,7 +131,7 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
             return result;
         }
     };
-
+    
     /**
      * A fallback to no reasoning.
      */
@@ -251,6 +251,21 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
                 return getRuntimeEnvironment().getValue(var);
             }
         };
+    }
+    
+    /**
+     * Compose the plain text of reasoner failures.
+     * 
+     * @param msg the message to be turned into text
+     * @return the description text
+     */
+    private static String toText(Message msg) {
+        String result = msg.getDescription();
+        List<?> info = msg.getProblemVariables();
+        if (null != info) {
+            result += info;
+        }
+        return result;
     }
 
     /**
@@ -798,7 +813,7 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
      * Returns the configuration object used in <code>script</code>, i.e., the top-level configuration object.
      * 
      * @return the configuration object
-     * @throws VilException in case that accessing the configuraiton object fails
+     * @throws VilException in case that accessing the configuration object fails
      */
     private CallArgument getCurrentConfiguration() throws VilException {
         Script script = getCurrentScript();
@@ -814,15 +829,21 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
     }
     
     /**
-     * Calls the VTL failed rule if it exists or the IVML reasoner instead.
+     * Calls the VTL failed rule if it exists or the IVML reasoner instead. Performs validation only if there are
+     * direct changes.
      * 
      * @param concept the concept to call on
      * @return the result of validation
      * @throws VilException in case that constructing, resolving or executing the corresponding VIL rule fails
      */
     private Object callValidate(IRtVilConcept concept) throws VilException {
-        return dfltRtVilConceptCall(concept, "validate", 
-            useReasoner ? VALIDATE_FALLBACK : VALIDATE_NO_REASONER_FALLBACK);
+        Configuration cfg = (Configuration) getCurrentConfiguration().accept(this);
+        Object result = Boolean.TRUE;
+        if (cfg.getChangeHistory().hasChanges()) {
+            result = dfltRtVilConceptCall(concept, "validate", 
+                useReasoner ? VALIDATE_FALLBACK : VALIDATE_NO_REASONER_FALLBACK);
+        }
+        return result;
     }
 
     /**
@@ -999,7 +1020,11 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
             expr.inferType();
             result = expr.accept(this);
         } catch (VilException e) {
-            failure = e;
+            if (VilException.ID_CANNOT_RESOLVE == e.getId()) {
+                failure = e; // go on trying
+            } else {
+                throw e;
+            }
         }
         if (failure != null) {
             boolean succeeded = false;
@@ -1021,5 +1046,14 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
         }
         return result;
     }
+
+    /*
+public Object visitRule(Rule rule) throws VilException {
+    System.out.println(">> " + rule.getName());
+    Object result = super.visitRule(rule);
+    System.out.println("<< " + rule.getName());
+    return result;
+}
+*/
 
 }

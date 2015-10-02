@@ -70,6 +70,8 @@ public class ChangeHistory implements IVilType, IStringValueProvider {
     @SuppressWarnings("serial")
     private static class CSet extends HashMap<AbstractIvmlVariable, Value> {
         
+        private int directChanges = 0;
+        
         /**
          * Adds all {@link IvmlElement elements} to <code>result</code>.
          * 
@@ -90,6 +92,26 @@ public class ChangeHistory implements IVilType, IStringValueProvider {
             for (AbstractIvmlVariable var : keySet()) {
                 result.add(var.getVariable());
             }
+        }
+        
+        /**
+         * Notifies this change set about a direct change within the scope of this change set.
+         * 
+         * @param variable the changed variable
+         * @param value the actual value
+         */
+        private void notifyChanged(AbstractIvmlVariable variable, Value value) {
+            put(variable, value);
+            directChanges++;
+        }
+        
+        /**
+         * Returns the number of direct changes in this change set (excluding indirectly commited ones).
+         * 
+         * @return the number of changes
+         */
+        private boolean hasChanges() {
+            return directChanges > 0;
         }
 
     }
@@ -120,6 +142,19 @@ public class ChangeHistory implements IVilType, IStringValueProvider {
         public void configurationRefreshed(de.uni_hildesheim.sse.model.confModel.Configuration config) {
         }
         
+    }
+
+    /**
+     * Returns whether the current change set has direct changes (i.e., no indirect commits from other change sets).
+     * 
+     * @return whether there were direct changes
+     */
+    public boolean hasChanges() {
+        boolean result = false;
+        if (!changeSetStack.isEmpty()) {
+            result = changeSetStack.peek().hasChanges();
+        }
+        return result;
     }
 
     /**
@@ -231,7 +266,7 @@ public class ChangeHistory implements IVilType, IStringValueProvider {
             if (null == value) { // cannot play back Java null, needs IVML null to unconfigure
                 value = NullValue.INSTANCE;
             }
-            changeSet.put(variable, value);
+            changeSet.notifyChanged(variable, value);
         }
     }
     

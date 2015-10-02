@@ -788,8 +788,7 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
                 if (!allSame && !failure) {
                     try {
                         // no additional conversion while dynamic dispatch
-                        IMetaOperation op = AbstractCallExpression.resolveOperation(
-                            operand, operation.getName(), types, false);
+                        IMetaOperation op = resolveOperation(operand, operation.getName(), types, false);
                         if (cls.isInstance(op)) {
                             result = cls.cast(op);
                         }
