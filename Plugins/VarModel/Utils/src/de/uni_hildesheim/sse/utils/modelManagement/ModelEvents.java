@@ -35,13 +35,13 @@ public class ModelEvents <M extends IModel> {
 
     private Map<M, List<IModelReloadListener<M>>> modelReloadListeners 
         = new HashMap<M, List<IModelReloadListener<M>>>();
-
+    
     /**
      * Prevents creation outside this package.
      */
     ModelEvents() {
     }
-
+    
     /**
      * Notifies registered listeners about a failed model reload. 
      * 
@@ -128,15 +128,7 @@ public class ModelEvents <M extends IModel> {
      * @param listener the listener
      */
     public synchronized void addModelListener(M model, IModelListener<M> listener) {
-        assert null != model;
-        assert null != listener;
-
-        List<IModelListener<M>> listeners = modelListeners.get(model);
-        if (null == listeners) {
-            listeners = new ArrayList<IModelListener<M>>();
-            modelListeners.put(model, listeners);
-        }
-        listeners.add(listener);
+        add(model, modelListeners, listener);
     }
 
     /**
@@ -148,17 +140,8 @@ public class ModelEvents <M extends IModel> {
      *   <code>false</code> if not (for any reason)
      */
     public synchronized boolean removeModelListener(M model, IModelListener<M> listener) {
-        assert null != model;
-        assert null != listener;
-        
-        boolean removed = false;
-        List<IModelListener<M>> listeners = modelListeners.get(model);
-        if (null != listeners) {
-            removed = listeners.remove(listener);
-        }
-        return removed;
+        return remove(model, modelListeners, listener);
     }
-
     
     /**
      * Adds a model reload listener for the specified model.
@@ -170,15 +153,7 @@ public class ModelEvents <M extends IModel> {
      * @param listener the listener
      */
     public synchronized void addReloadListener(M model, IModelReloadListener<M> listener) {
-        assert null != model;
-        assert null != listener;
-
-        List<IModelReloadListener<M>> listeners = modelReloadListeners.get(model);
-        if (null == listeners) {
-            listeners = new ArrayList<IModelReloadListener<M>>();
-            modelReloadListeners.put(model, listeners);
-        }
-        listeners.add(listener);
+        add(model, modelReloadListeners, listener);
     }
 
     /**
@@ -190,15 +165,53 @@ public class ModelEvents <M extends IModel> {
      *   <code>false</code> if not (for any reason)
      */
     public synchronized boolean removeModelReloadListener(M model, IModelReloadListener<M> listener) {
-        assert null != model;
+        return remove(model, modelReloadListeners, listener);
+    }
+
+    /**
+     * Adds the <code>listener</code> for <code>identifier</code> to <code>listeners</code>.
+     * 
+     * @param <T> the listener type
+     * @param <I> the identifier type
+     * 
+     * @param identifier the identifier
+     * @param listeners the listeners map
+     * @param listener the listener to be removed
+     */
+    private static <T, I> void add(I identifier, Map<I, List<T>> listeners, T listener) {
+        assert null != identifier;
+        assert null != listener;
+
+        List<T> tmp = listeners.get(identifier);
+        if (null == tmp) {
+            tmp = new ArrayList<T>();
+            listeners.put(identifier, tmp);
+        }
+        tmp.add(listener);        
+    }
+    
+    /**
+     * Removes the <code>listener</code> for <code>identifier</code> from <code>listeners</code>.
+     * 
+     * @param <T> the listener type
+     * @param <I> the identifier type
+     * 
+     * @param identifier the identifier
+     * @param listeners the listeners map
+     * @param listener the listener to be removed
+     * @return <code>true</code> if the <code>listener</code> was removed, 
+     *   <code>false</code> if not (for any reason)
+     */
+    private static <T, I> boolean remove(I identifier, Map<I, List<T>> listeners, T listener) {
+        assert null != identifier;
         assert null != listener;
         
         boolean removed = false;
-        List<IModelReloadListener<M>> listeners = modelReloadListeners.get(model);
-        if (null != listeners) {
-            removed = listeners.remove(listener);
+        List<T> tmp = listeners.get(identifier);
+        if (null != tmp) {
+            removed = tmp.remove(listener);
         }
-        return removed;
+        return removed;        
     }
 
 }
