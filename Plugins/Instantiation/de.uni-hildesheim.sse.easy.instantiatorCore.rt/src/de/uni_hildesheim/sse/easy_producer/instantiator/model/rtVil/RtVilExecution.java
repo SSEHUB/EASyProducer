@@ -1080,7 +1080,9 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
                         result = dynamicCall(tmp, name, args);
                         succeeded = true;
                     } catch (VilException e) {
-                        // ignore, we have failure
+                        if (VilException.ID_CANNOT_RESOLVE != e.getId()) {
+                            throw e;
+                        } // else: ignore, we have already and information in failure
                     }
                 }
             }

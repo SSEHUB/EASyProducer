@@ -584,6 +584,10 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
                 } else {
                     oTypeName = oType.getVilName();
                 }
+                if (object instanceof DecisionVariable) {
+                    DecisionVariable decVar = (DecisionVariable) object;
+                    oTypeName += " (" + decVar.getType() + ")";
+                }
                 throw new VilException("cannot assign value of type " + oTypeName 
                     + " to " + var.getName() + " of type " + var.getType().getVilName(), 
                     VilException.ID_RUNTIME_TYPE);
