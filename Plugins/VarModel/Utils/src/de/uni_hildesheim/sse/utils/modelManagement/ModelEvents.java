@@ -20,6 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.uni_hildesheim.sse.utils.modelManagement.IModelProcessingListener.Type;
+
 /**
  * Notifications on model contents changes.
  * Instances of this class cannot be created directly rather than being obtained from {@link ModelManagement}.
@@ -35,6 +37,9 @@ public class ModelEvents <M extends IModel> {
 
     private Map<M, List<IModelReloadListener<M>>> modelReloadListeners 
         = new HashMap<M, List<IModelReloadListener<M>>>();
+    
+    private Map<ModelInfo<M>, List<IModelProcessingListener<M>>> modelProcessingListeners
+        = new HashMap<ModelInfo<M>, List<IModelProcessingListener<M>>>();
     
     /**
      * Prevents creation outside this package.
@@ -53,6 +58,29 @@ public class ModelEvents <M extends IModel> {
             if (null != listeners) {
                 for (int l = 0; l < listeners.size(); l++) {
                     listeners.get(l).notifyReloadFailed(model);
+                }
+            }
+        }
+    }
+
+    /**
+     * Notifies about model processing events.
+     * 
+     * @param info the model information object
+     * @param start whether processing started or ended
+     * @param type the type of the processing
+     */
+    public synchronized void notifyModelProcessing(ModelInfo<M> info, boolean start, Type type) {
+        if (null != info) {
+            List<IModelProcessingListener<M>> listeners = modelProcessingListeners.get(info);
+            if (null != listeners) {
+                for (int l = 0; l < listeners.size(); l++) {
+                    IModelProcessingListener<M> listener = listeners.get(l); 
+                    if (start) {
+                        listener.notifyProcessingStarted(info, type);
+                    } else {
+                        listener.notifyProcessingEnded(info, type);
+                    }
                 }
             }
         }        
@@ -108,7 +136,7 @@ public class ModelEvents <M extends IModel> {
     } 
     
     /**
-     * Removes all listeners.
+     * Removes all listeners (no processing listeners).
      * 
      * @param model the model to remove all listeners for
      */
@@ -129,6 +157,16 @@ public class ModelEvents <M extends IModel> {
      */
     public synchronized void addModelListener(M model, IModelListener<M> listener) {
         add(model, modelListeners, listener);
+    }
+    
+    /**
+     * Adds a model processing listener for the specified model information object.
+     * 
+     * @param info the information object to be informed about
+     * @param listener the listener
+     */
+    public synchronized void addProcessingListener(ModelInfo<M> info, IModelProcessingListener<M> listener) {
+        add(info, modelProcessingListeners, listener);
     }
 
     /**
@@ -167,6 +205,18 @@ public class ModelEvents <M extends IModel> {
     public synchronized boolean removeModelReloadListener(M model, IModelReloadListener<M> listener) {
         return remove(model, modelReloadListeners, listener);
     }
+    
+    /**
+     * Removes a model processing listener for the specified model information object.
+     * 
+     * @param info the information object to be removed
+     * @param listener the listener
+     * @return <code>true</code> if the <code>listener</code> was removed, 
+     *   <code>false</code> if not (for any reason)
+     */
+    public synchronized boolean removeProcessingListener(ModelInfo<M> info, IModelProcessingListener<M> listener) {
+        return remove(info, modelProcessingListeners, listener);
+    }
 
     /**
      * Adds the <code>listener</code> for <code>identifier</code> to <code>listeners</code>.
@@ -187,7 +237,7 @@ public class ModelEvents <M extends IModel> {
             tmp = new ArrayList<T>();
             listeners.put(identifier, tmp);
         }
-        tmp.add(listener);        
+        tmp.add(listener);
     }
     
     /**

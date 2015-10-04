@@ -27,6 +27,7 @@ import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.ProjectImport;
 import de.uni_hildesheim.sse.model.varModel.ProjectInterface;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
+import de.uni_hildesheim.sse.model.varModel.datatypes.Container;
 import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Enum;
 import de.uni_hildesheim.sse.model.varModel.datatypes.EnumLiteral;
@@ -134,17 +135,18 @@ class TestVisitor implements IModelVisitor {
             Assert.assertNotNull(decVar.getValue()); // FROZEN!
             ValueTester tester = new ValueTester(var);
             decVar.getValue().accept(tester);
-
-            Map<String, IDecisionVariable> attrMap = new HashMap<String, IDecisionVariable>();
-            for (int a = 0; a < decVar.getAttributesCount(); a++) {
-                IDecisionVariable attrib = decVar.getAttribute(a);
-                attrMap.put(attrib.getDeclaration().getName(), attrib);
-            }
-            for (de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.Attribute attr
-                : var.attributes()) {
-                IDecisionVariable origAttrib = attrMap.get(attr.getName());
-                Assert.assertNotNull(origAttrib);
-                test(origAttrib, attr);
+            if (!Container.TYPE.isAssignableFrom(decVar.getDeclaration().getType())) {
+                Map<String, IDecisionVariable> attrMap = new HashMap<String, IDecisionVariable>();
+                for (int a = 0; a < decVar.getAttributesCount(); a++) {
+                    IDecisionVariable attrib = decVar.getAttribute(a);
+                    attrMap.put(attrib.getDeclaration().getName(), attrib);
+                }
+                for (de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.Attribute attr
+                    : var.attributes()) {
+                    IDecisionVariable origAttrib = attrMap.get(attr.getName());
+                    Assert.assertNotNull(origAttrib);
+                    test(origAttrib, attr);
+                }
             }
         }            
     }

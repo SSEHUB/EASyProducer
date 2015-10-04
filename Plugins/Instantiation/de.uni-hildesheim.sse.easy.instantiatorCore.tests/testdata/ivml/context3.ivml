@@ -1,0 +1,21 @@
+project context3 {
+
+    enum BindingTime {compile, startup, runtime};
+    annotate BindingTime bindingTime = BindingTime.compile to context3;
+
+    compound Cmp {
+        Integer i1 = 1;
+        assign (bindingTime = BindingTime.runtime) to {
+            Integer i2 = 0;
+        }
+    }
+    
+    Integer j = 0;
+    sequenceOf(Cmp) cmpSeq = {{i1 = 4}, {i1 = 5}};
+    
+    freeze {
+        j;
+        cmpSeq;
+    } but (f|f.bindingTime == BindingTime.runtime)
+
+}

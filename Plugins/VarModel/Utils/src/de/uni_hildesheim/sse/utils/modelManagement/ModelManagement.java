@@ -33,6 +33,7 @@ import de.uni_hildesheim.sse.utils.messages.IMessage;
 import de.uni_hildesheim.sse.utils.messages.Message;
 import de.uni_hildesheim.sse.utils.messages.Status;
 import de.uni_hildesheim.sse.utils.modelManagement.IModelLoader.LoadResult;
+import de.uni_hildesheim.sse.utils.modelManagement.IModelProcessingListener.Type;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelLocations.Location;
 import de.uni_hildesheim.sse.utils.progress.ObservableTask;
 import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
@@ -71,6 +72,7 @@ public abstract class ModelManagement <M extends IModel> {
     private ModelEvents<M> events = new ModelEvents<M>();
     private ModelLocations<M> locations;
     private ModelLoaders<M> loaders;
+    private transient Set<ModelInfo<M>> loading = new HashSet<ModelInfo<M>>();
     private transient boolean inUpdate = false;
 
     /**
@@ -429,7 +431,9 @@ public abstract class ModelManagement <M extends IModel> {
             loader = loaders.getDefaultLoader();
         }
         if (null != loader) { // do not use isActual here
+            notifyLoading(info, true);
             LoadResult<M> loadResult = loader.load(info);
+            notifyLoading(info, false);
             if (loadResult.getModelCount() > 0 && 0 == loadResult.getErrorCount()) {
                 for (int i = 0; i < loadResult.getModelCount(); i++) {
                     M model = loadResult.getModel(i);
@@ -451,6 +455,50 @@ public abstract class ModelManagement <M extends IModel> {
             }
         } else {
             messages.add(new Message("loader for model '" + info.getName() + "' is undefined", Status.ERROR));
+        }
+        return result;
+    }
+    
+    /**
+     * Handles the notification about model loading.
+     * 
+     * @param info the information object to notify about
+     * @param started <code>true</code> if loading started, <code>false</code> else
+     */
+    private void notifyLoading(ModelInfo<M> info, boolean started) {
+        if (started) {
+            loading.add(info);
+        } else {
+            loading.remove(info);
+        }
+        events().notifyModelProcessing(info, started, Type.LOADING);
+    }
+
+    /**
+     * Returns whether loading the model for <code>info</code>is currently happening.
+     * 
+     * @param info the information object to look for
+     * @return <code>true</code> if loading is currently in progress, <code>false</code> else 
+     * @see IModelProcessingListener
+     */
+    public boolean isLoading(ModelInfo<M> info) {
+        return loading.contains(info);
+    }
+    
+    /**
+     * Returns whether loading a model from <code>location</code> is currently happening.
+     * 
+     * @param location the location to look for
+     * @return <code>true</code> if loading is currently in progress, <code>false</code> else
+     * @see IModelProcessingListener
+     */
+    public boolean isLoading(URI location) {
+        boolean result = false;
+        if (null != location) {
+            ModelInfo<M> info = availableModels().getInfo(location);
+            if (null != info) {
+                result = isLoading(info);
+            }
         }
         return result;
     }

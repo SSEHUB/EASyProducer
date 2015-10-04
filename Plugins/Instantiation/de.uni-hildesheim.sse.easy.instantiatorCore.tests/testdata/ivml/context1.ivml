@@ -1,0 +1,10 @@
+project context1 {
+
+    Integer i1 = 1;
+    Integer i2 = 0;
+    
+    freeze {
+        i1;
+    }
+
+}

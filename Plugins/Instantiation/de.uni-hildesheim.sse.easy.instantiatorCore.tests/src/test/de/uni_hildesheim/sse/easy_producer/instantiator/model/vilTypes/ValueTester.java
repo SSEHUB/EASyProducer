@@ -64,7 +64,7 @@ class ValueTester implements IValueVisitor {
 
     @Override
     public void visitCompoundValue(CompoundValue value) {
-        Assert.assertNull(decl.getValue());
+        //Assert.assertNull(decl.getValue());
         Iterator<DecisionVariable> iter = decl.variables().iterator();
         while (iter.hasNext()) {
             DecisionVariable var = iter.next();
@@ -76,7 +76,7 @@ class ValueTester implements IValueVisitor {
 
     @Override
     public void visitContainerValue(ContainerValue value) {
-        Assert.assertNull(decl.getValue());
+        //Assert.assertNull(decl.getValue());
         Sequence<DecisionVariable> seq = decl.variables();
         for (int i = 0; i < value.getElementSize(); i++) {
             Value val = value.getElement(i);

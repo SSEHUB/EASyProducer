@@ -53,6 +53,8 @@ import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 import de.uni_hildesheim.sse.utils.messages.Message;
 import de.uni_hildesheim.sse.utils.messages.Status;
+import de.uni_hildesheim.sse.utils.modelManagement.IModelProcessingListener.Type;
+import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
 
 /**
@@ -186,12 +188,23 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
     }
     
     /**
+     * Returns the related model information instance.
+     * 
+     * @return the model information instance
+     */
+    private ModelInfo<Project> getModelInfo() {
+        return VarModel.INSTANCE.availableModels().getModelInfo(project);
+    }
+    
+    /**
      * This method creates the list of {@link IDecisionVariable}s
      * with initial value settings based on the given project. 
      */
     private void init() {     
         if (null != project) {
-        
+            ModelInfo<Project> info = getModelInfo();
+            VarModel.INSTANCE.events().notifyModelProcessing(info, true, Type.INITIALIZING);
+
             VarModel.INSTANCE.resolveImports(project, null, null);
             
             //Loop adding the declarations to a list
@@ -217,6 +230,8 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
                 // Assign frozen state to already frozen variables
                 freezeValues(project, FilterType.ALL);*/
             }
+            
+            VarModel.INSTANCE.events().notifyModelProcessing(info, false, Type.INITIALIZING);
         }
     }
 
@@ -346,6 +361,9 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
      * This method calls atm only the init() Method.
      */
     public void refresh() {
+        ModelInfo<Project> info = getModelInfo();
+        VarModel.INSTANCE.events().notifyModelProcessing(info, true, Type.REFRESHING);
+
         //clean list... bad implemented just for testing
         decisions.clear();
         allInstances = null;
@@ -355,6 +373,8 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
         for (int i = 0; i < listeners.size(); i++) {
             listeners.get(i).configurationRefreshed(this);
         }
+
+        VarModel.INSTANCE.events().notifyModelProcessing(info, false, Type.REFRESHING);
     }
     
     /**

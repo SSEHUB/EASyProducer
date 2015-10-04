@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Set;
 
 import de.uni_hildesheim.sse.model.confModel.AssignmentState;
+import de.uni_hildesheim.sse.model.confModel.IConfiguration;
 import de.uni_hildesheim.sse.model.confModel.IConfigurationElement;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
@@ -48,11 +49,24 @@ class ConfigurationContextResolver {
     private Set<AbstractIvmlVariable> changed;
     private List<DecisionVariable> variables = new ArrayList<DecisionVariable>();
     private List<Attribute> attributes = new ArrayList<Attribute>();
-    private IVariableFilter filter = NoVariableFilter.INSTANCE;
+    private HashFilter filter = new HashFilter();
     private ResolutionList resolve = new ResolutionList();
-    private Set<AbstractIvmlVariable> augmented = new HashSet<AbstractIvmlVariable>();
 
-    // TODO support attributes
+    /**
+     * Implements a hash-based filter.
+     * 
+     * @author Holger Eichelberger
+     */
+    private class HashFilter implements IVariableFilter {
+
+        private Set<IDecisionVariable> filterMap = new HashSet<IDecisionVariable>();
+
+        @Override
+        public boolean isEnabled(IDecisionVariable variable) {
+            return filterMap.contains(variable);
+        }
+        
+    }
 
     /**
      * Creates a context resolver.
@@ -72,7 +86,7 @@ class ConfigurationContextResolver {
         // augment with all parents and a filter which focuses just on those variables (for further projections)
         // take over the appropriate variables from configuration and augment missing
         for (AbstractIvmlVariable var : changed) {
-            augment(var.getVariable());
+            augment(var.getVariable(), false);
         }
         Map<AbstractVariable, List<IDecisionVariable>> referenced = collectReferences();
         for (int r = 0; r < resolve.size(); r++) {
@@ -80,28 +94,10 @@ class ConfigurationContextResolver {
             List<IDecisionVariable> dependent = referenced.get(var.getDeclaration());
             if (null != dependent) {
                 for (IDecisionVariable dVar : dependent) {
-                    augment(dVar);
+                    augment(dVar, false);
                 }
             }
         }
-        final Set<IDecisionVariable> filterMap = new HashSet<IDecisionVariable>();
-        // fill variables and attributes
-        for (AbstractIvmlVariable var : augmented) {
-            filterMap.add(var.getVariable());
-            if (var instanceof DecisionVariable) {
-                variables.add((DecisionVariable) var);
-            } else if (var instanceof Attribute) {
-                attributes.add((Attribute) var);
-            }
-        }
-    
-        /*this.filter = new IVariableFilter() {
-            
-            @Override
-            public boolean isEnabled(IDecisionVariable variable) {
-                return filterMap.contains(variable);
-            }
-        };*/
     }
 
     /**
@@ -159,14 +155,18 @@ class ConfigurationContextResolver {
      * Map the variable and its nested variables to the configuration and follows references.
      * 
      * @param var the variable to map
+     * @param viaParent was this called via a parent recursion?
      */
-    private void map(IDecisionVariable var) {
+    private void map(IDecisionVariable var, boolean viaParent) {
         if (!resolve.contains(var)) {
-            mapVar(var, true);
-            for (int n = 0; n < var.getNestedElementsCount(); n++) {
-                IDecisionVariable nested = var.getNestedElement(n);
-                mapVar(nested, false);
+            if (!viaParent || (viaParent && !Container.TYPE.isAssignableFrom(var.getDeclaration().getType()))) {
+                // follow collections only downstream, else through filter
+                for (int n = 0; n < var.getNestedElementsCount(); n++) {
+                    IDecisionVariable nested = var.getNestedElement(n);
+                    mapVar(nested, false, viaParent);
+                }
             }
+            mapVar(var, true, viaParent); // containing last!!
         }
     }
 
@@ -176,24 +176,35 @@ class ConfigurationContextResolver {
      * 
      * @param var the variable to map
      * @param resolve consider <code>decVar</code> for reverse reference resolution
+     * @param viaParent was called via parent recursion
      */
-    private void mapVar(IDecisionVariable var, boolean resolve) {
-        if (AssignmentState.FROZEN == var.getState()) { // changed come from outside
-            augmented.add(obtainOrCreate(var, configuration));
-            if (resolve) {
-                this.resolve.add(var);
+    private void mapVar(IDecisionVariable var, boolean resolve, boolean viaParent) {
+        boolean follow = false;
+        if (!filter.filterMap.contains(var)) {        
+            if (AssignmentState.FROZEN == var.getState()) { // changed come from outside
+                createVilInstance(var, configuration);
+                if (resolve) {
+                    this.resolve.add(var);
+                }
+                follow = true;
+            } else { // the changed one...
+                createVilInstance(var, configuration);
+                follow = true;
             }
-            if (Reference.TYPE.isAssignableFrom(var.getDeclaration().getType())) {
+            if (follow && Reference.TYPE.isAssignableFrom(var.getDeclaration().getType())) {
                 Value value = var.getValue();
                 if (value instanceof ReferenceValue) { // NULLVALUE
                     ReferenceValue val = (ReferenceValue) value;
                     if (null != val && null != val.getValue()) {
                         IDecisionVariable refVar = configuration.getConfiguration().getDecision(val.getValue());
-                        augment(refVar);
+                        augment(refVar, viaParent);
                     }
                 }
             }
-        }
+            for (int a = 0; a < var.getAttributesCount(); a++) {
+                mapVar(var.getAttribute(a), resolve, viaParent);
+            }
+        }        
     }
     
     /**
@@ -203,7 +214,7 @@ class ConfigurationContextResolver {
      * @param configuration the configuration for lookup
      * @return the mapper instance
      */
-    private AbstractIvmlVariable obtainOrCreate(IDecisionVariable decVar, Configuration configuration) {
+    private AbstractIvmlVariable createVilInstance(IDecisionVariable decVar, Configuration configuration) {
         AbstractIvmlVariable result;
         IvmlElement elt = configuration.get(decVar.getDeclaration().getQualifiedName());
         if (elt instanceof AbstractIvmlVariable) {
@@ -211,21 +222,32 @@ class ConfigurationContextResolver {
         } else {
             result = new DecisionVariable(configuration, decVar, filter);
         }
+        // mark as done and store all created in filter to enable them in configuration
+        filter.filterMap.add(decVar);
+        // store only top-level variables in configuration variables / attributes
+        if (decVar.getParent() instanceof IConfiguration) {
+            if (result instanceof DecisionVariable) {
+                variables.add((DecisionVariable) result);
+            } else if (result instanceof Attribute) {
+                attributes.add((Attribute) result);
+            }        
+        }
         return result;
     }
     
     /**
-     * Augments the <code>augmented</code> set by <code>dVar</code> and its transitive parents.
+     * Augments <code>dVar</code> and its transitive parents.
      * 
      * @param dVar the decision variable to augment
+     * @param viaParent was called via parent recursion
      */
-    private void augment(IDecisionVariable dVar) {
+    private void augment(IDecisionVariable dVar, boolean viaParent) {
         if (null != dVar && !resolve.contains(dVar)) {
-            map(dVar);
+            map(dVar, viaParent);
             IConfigurationElement par = dVar.getParent();
             while (par instanceof IDecisionVariable) {
                 IDecisionVariable pVar = (IDecisionVariable) par;
-                map(pVar);
+                map(pVar, true);
                 par = par.getParent();
             }
         }

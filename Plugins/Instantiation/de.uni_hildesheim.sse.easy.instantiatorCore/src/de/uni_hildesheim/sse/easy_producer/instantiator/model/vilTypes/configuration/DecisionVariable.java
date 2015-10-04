@@ -11,6 +11,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Operation
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Sequence;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.UnmodifiableSet;
+import de.uni_hildesheim.sse.model.confModel.ContainerVariable;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 
@@ -161,5 +162,20 @@ public class DecisionVariable extends AbstractIvmlVariable implements IActualTyp
     public IDatatype determineActualTypeName() {
         return getDecisionVariable().getDeclaration().getType();
     }
-    
+
+    /**
+     * Returns the simple name of the decision variable.
+     * 
+     * @return the simple name
+     */
+    public String getName() {
+        IDecisionVariable var = origVariable;
+        // somebody decided that it is cool to add the index to the name of a container variable 
+        // trying to access the container variable itself
+        while (var.getParent() instanceof ContainerVariable) {
+            var = (ContainerVariable) var.getParent();
+        }
+        return var.getDeclaration().getName();
+    }
+
 }

@@ -97,8 +97,6 @@
                             -> create(String, String, String) with (pipeline, process, alg1) = <AlgorithmChangeCommand>
                             -> add(CommandSequence, Command) with (<CommandSequence>, <AlgorithmChangeCommand>)
                             map {
-                                map: n <- ALtest::FamilyElement::next {0}
-                                -> enact(Pipeline, Node) with (ALtest::pipelines {0}, ALtest::FamilyElement::next {0})
                             }
                             -> exec(CommandSequence) with (<CommandSequence>)
                     }

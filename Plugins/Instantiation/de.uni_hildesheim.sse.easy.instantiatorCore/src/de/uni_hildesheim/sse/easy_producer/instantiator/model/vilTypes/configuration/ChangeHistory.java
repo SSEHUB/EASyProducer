@@ -25,6 +25,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IStringVa
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
 import de.uni_hildesheim.sse.model.confModel.IConfigurationChangeListener;
+import de.uni_hildesheim.sse.model.confModel.IConfigurationElement;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.model.varModel.values.NullValue;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
@@ -90,7 +91,11 @@ public class ChangeHistory implements IVilType, IStringValueProvider {
          */
         private void addAllDecisionVariables(Set<IDecisionVariable> result) {
             for (AbstractIvmlVariable var : keySet()) {
-                result.add(var.getVariable());
+                IConfigurationElement iter = var.getVariable();
+                while (iter instanceof IDecisionVariable) { // give also access to the parents
+                    result.add((IDecisionVariable) iter);
+                    iter = iter.getParent();
+                }
             }
         }
         
@@ -244,29 +249,49 @@ public class ChangeHistory implements IVilType, IStringValueProvider {
         }
         clear(true);
     }
+    
+    /**
+     * Returns whether <code>value1</code> and <code>value2</code> are the same.
+     * 
+     * @param value1 the first value (may be <b>null</b>)
+     * @param value2 the second value (may be <b>null</b>)
+     * @return <code>true</code> if <code>value1</code> is considered to be the same as <code>value2</code>, 
+     *     <code>false</code> else
+     */
+    private static boolean isSameValue(Value value1, Value value2) {
+        boolean isSame;
+        if (null == value1) {
+            isSame = (null == value2);
+        } else {
+            isSame = value1.equals(value2);
+        }
+        return isSame;
+    }
 
     /**
      * Notifies the change set about a changed variable.
      * 
      * @param variable the variable
-     * @param value the old value
+     * @param value the old value (clone assumed)
      */
     @Invisible
     void notifyChanged(AbstractIvmlVariable variable, Value value) {
-        CSet changeSet;
-        if (!originalValues.containsKey(variable)) {
-            originalValues.put(variable, variable.getVariable().getValue());
-        }
-        if (!changeSetStack.isEmpty()) {
-            changeSet = changeSetStack.peek();
-        } else {
-            changeSet = committed;
-        }
-        if (!changeSet.containsKey(variable)) { // keep the oldest value, not the intermediate updates
-            if (null == value) { // cannot play back Java null, needs IVML null to unconfigure
-                value = NullValue.INSTANCE;
+        if (!isSameValue(variable.getVariable().getValue(), value)) {
+            CSet changeSet;
+            if (!originalValues.containsKey(variable)) {
+                originalValues.put(variable, value);
             }
-            changeSet.notifyChanged(variable, value);
+            if (!changeSetStack.isEmpty()) {
+                changeSet = changeSetStack.peek();
+            } else {
+                changeSet = committed;
+            }
+            if (!changeSet.containsKey(variable)) { // keep the oldest value, not the intermediate updates
+                if (null == value) { // cannot play back Java null, needs IVML null to unconfigure
+                    value = NullValue.INSTANCE;
+                }
+                changeSet.notifyChanged(variable, value);
+            }
         }
     }
     

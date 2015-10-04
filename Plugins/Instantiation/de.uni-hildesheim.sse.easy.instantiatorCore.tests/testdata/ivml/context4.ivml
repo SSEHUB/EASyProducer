@@ -1,0 +1,25 @@
+project context4 {
+
+    enum BindingTime {compile, startup, runtime};
+    annotate BindingTime bindingTime = BindingTime.compile to context4;
+
+    compound Cmp {
+        Integer i1 = 1;
+        assign (bindingTime = BindingTime.runtime) to {
+            Integer i2 = 0;
+        }
+    }
+    
+    Integer j = 0;
+    Cmp cmp1 = {i1 = 4};
+    Cmp cmp2 = {i1 = 5};
+    sequenceOf(refTo(Cmp)) cmpSeq = {refBy(cmp1), refBy(cmp2)};
+    
+    freeze {
+        j;
+        cmp1;
+        cmp2;
+        cmpSeq;
+    } but (f|f.bindingTime == BindingTime.runtime)
+
+}

@@ -25,7 +25,14 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
 import de.uni_hildesheim.sse.dslcore.ui.editors.ModelEditorConfigurer.IHeader;
+import de.uni_hildesheim.sse.dslcore.ui.listeners.AggregatingModelLoadingListener;
+import de.uni_hildesheim.sse.dslcore.ui.listeners.ButtonUiControl;
+import de.uni_hildesheim.sse.dslcore.ui.listeners.BasicModelLoadingListener;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.RtVilModel;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Script;
 import de.uni_hildesheim.sse.model.confModel.Configuration;
+import de.uni_hildesheim.sse.model.management.VarModel;
+import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 
 /**
@@ -38,6 +45,7 @@ public class HeaderPanel extends Composite implements IHeader {
     private Button settings;
     private Button simulate;
     private SimulatorUi simulator;
+    private AggregatingModelLoadingListener listener;
     
     /**
      * Creates the header panel.
@@ -68,6 +76,17 @@ public class HeaderPanel extends Composite implements IHeader {
                 simulator.configureOrSimulate();
             }
         });
+        listener = new AggregatingModelLoadingListener(new ButtonUiControl(simulate));
+        listener.initialize();
+System.out.println(">OPENING HEADER PANEL");        
+        ModelInfo<Project> ivmlInfo = VarModel.INSTANCE.availableModels().getModelInfo(config.getProject());
+        BasicModelLoadingListener<Project> ivmlListener = new BasicModelLoadingListener<Project>(
+            ivmlInfo, VarModel.INSTANCE, listener);
+        @SuppressWarnings("unchecked")
+        BasicModelLoadingListener<Script> rtVilListener = new BasicModelLoadingListener<Script>(
+            (ModelInfo<Script>) info, RtVilModel.INSTANCE, listener); 
+        listener.addListeners(ivmlListener, rtVilListener);
+System.out.println("<OPENING HEADER PANEL");
     }
 
     @Override
@@ -77,6 +96,11 @@ public class HeaderPanel extends Composite implements IHeader {
 
     @Override
     public void close() {
+    }
+    
+    @Override
+    public void dispose() {
+        listener.dispose();
     }
 
 }

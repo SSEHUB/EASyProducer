@@ -17,7 +17,10 @@
 		<pathelement path="${libs.instantiator.core}"/>
         <!-- Reasoner Core -->
         <pathelement path="${libs.reasonerCore}"/>
-		<!-- Eclipse-Plugins -->
+        <!-- IVML Core -->
+        <pathelement path="${libs.dslCore}"/>       
+        <pathelement path="${libs.ivml}"/>
+        <!-- Eclipse-Plugins -->
 		<fileset dir="${eclipse.plugins.dir}">
 			<include name="**/*.jar" />
 		</fileset>

@@ -14,7 +14,6 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Unmodifia
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.UnmodifiableSet;
 import de.uni_hildesheim.sse.model.confModel.AssignmentState;
 import de.uni_hildesheim.sse.model.confModel.ConfigurationException;
-import de.uni_hildesheim.sse.model.confModel.ContainerVariable;
 import de.uni_hildesheim.sse.model.confModel.IAssignmentState;
 import de.uni_hildesheim.sse.model.confModel.IConfiguration;
 import de.uni_hildesheim.sse.model.confModel.IConfigurationElement;
@@ -73,7 +72,7 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
                 if (null == this.variable) {
                     this.variable = origVariable; // search for??
                 }
-            } // TODO valueEx?
+            }
         } else {
             this.variable = variable;
         }
@@ -299,13 +298,7 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
      * @return the simple name
      */
     public String getName() {
-        IDecisionVariable var = origVariable;
-        // somebody decided that it is cool to add the index to the name of a container variable 
-        // trying to access the container variable itself
-        while (var.getParent() instanceof ContainerVariable) {
-            var = (ContainerVariable) var.getParent();
-        }
-        return var.getDeclaration().getName();
+        return origVariable.getDeclaration().getName();
     }
 
     /**
@@ -427,6 +420,9 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
         }
         try {
             Value oldValue = toChange.getValue();
+            if (null != oldValue) {
+                oldValue = oldValue.clone();
+            }
             Value val;
             if (value instanceof Value) {
                 val = (Value) value;
@@ -464,18 +460,29 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
         }
         return result;
     }
-
-    @Override
-    public Object getValue() { 
+    
+    /**
+     * Returns value into the corresponding (VIL) object value.
+     * 
+     * @param value the value
+     * @return the object value
+     */
+    @Invisible
+    public static Object toObject(Value value) {
         Object result = null;
-        if (null != variable.getValue()) {
+        if (null != value) {
             synchronized (VALUE_VISITOR) { // just to be sure
                 VALUE_VISITOR.clear();
-                variable.getValue().accept(VALUE_VISITOR);
+                value.accept(VALUE_VISITOR);
                 result = VALUE_VISITOR.getValue();
             }
         }
         return result;
+    }
+
+    @Override
+    public Object getValue() { 
+        return toObject(variable.getValue());
     }
 
     @Override

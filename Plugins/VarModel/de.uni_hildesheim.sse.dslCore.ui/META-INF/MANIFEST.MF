@@ -16,4 +16,5 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: de.uni_hildesheim.sse.dslcore.ui,
  de.uni_hildesheim.sse.dslcore.ui.editors,
+ de.uni_hildesheim.sse.dslcore.ui.listeners,
  de.uni_hildesheim.sse.dslcore.ui.wizards

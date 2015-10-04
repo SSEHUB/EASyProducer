@@ -49,7 +49,7 @@ import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 import de.uni_hildesheim.sse.vil.rt.ui.embed.SimulationSettingsDialog.TempArgument;
 
 /**
- * Implements a UI for simulating rtVIL.
+ * Implements a UI for simulating rt-VIL.
  *  
  * @author Holger Eichelberger
  */
