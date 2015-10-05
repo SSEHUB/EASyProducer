@@ -421,7 +421,26 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
 
     @Override
     public Object getValue(IResolvable resolvable) throws VilException {
-        return currentContext.getValue(resolvable);
+        Object result = null;
+        try {
+            result = currentContext.getValue(resolvable);
+        } catch (VilException e) {
+            boolean found = false;
+            for (Context ctx : contexts.values()) {
+                if (ctx != currentContext) {
+                    try {
+                        result = ctx.getValue(resolvable);
+                        found = true;
+                    } catch (VilException e1) {
+                        // ignore, we have e
+                    }
+                }
+            }
+            if (!found) {
+                throw e;
+            }
+        }
+        return result;
     }
     
     /**

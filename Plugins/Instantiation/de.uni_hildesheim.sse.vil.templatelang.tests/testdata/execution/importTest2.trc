@@ -1,3 +1,4 @@
 switchVal <- true
 -> main()
+    visit if-branch
     -> produceContent()

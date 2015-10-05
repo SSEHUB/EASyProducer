@@ -432,6 +432,16 @@ public class ExecutionTests extends AbstractTest {
     public void testImport() throws IOException {
         assertEqual("importTest");
     }
+    
+    /**
+     * Tests a switch statement with an imported value.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testImport2() throws IOException {
+        assertEqual("importTest2");
+    }
 
     // TODO test additional params
     
