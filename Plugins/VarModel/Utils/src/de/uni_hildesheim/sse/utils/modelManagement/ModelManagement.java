@@ -847,5 +847,30 @@ public abstract class ModelManagement <M extends IModel> {
         }
         return result;
     }
+    
+    /**
+     * Clears <code>model</code> from the caches. Please handle with care.
+     * 
+     * @param model the model to be cleared
+     */
+    public void clearModel(M model) {
+        if (null != model) {
+            clearModel(availableModels.getModelInfo(model));
+        }
+    }
+    
+
+    /**
+     * Clears <code>info</code> (and the related model) from the caches. Please handle with care.
+     * 
+     * @param info the info to be cleared
+     */
+    public void clearModel(ModelInfo<M> info) {
+        M model = info.getResolved();
+        if (null != model) {
+            models.remove(model);
+        }
+        availableModels.removeAvailable(info);
+    }
 
 }

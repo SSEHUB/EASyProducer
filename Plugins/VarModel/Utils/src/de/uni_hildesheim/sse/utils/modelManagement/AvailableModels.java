@@ -490,6 +490,22 @@ public class AvailableModels<M extends IModel> {
     void removeAvailable(String name) {
         availableModels.remove(name);
     }
+
+    /**
+     * Removes a model information object for a given information object.
+     * 
+     * @param info the information object
+     */
+    void removeAvailable(ModelInfo<M> info) {
+        List<VersionedModelInfos<M>> infos = availableModels.get(info.getName());
+        VersionedModelInfos<M> vInfs = VersionedModelInfos.find(infos, info.getVersion());
+        if (null != vInfs) {
+            vInfs.remove(info);
+            if (0 == vInfs.size()) {
+                infos.remove(vInfs);
+            }
+        }
+    }
     
     /**
      * Creates a temporary resolved model information without model loader. <b>Do not use
