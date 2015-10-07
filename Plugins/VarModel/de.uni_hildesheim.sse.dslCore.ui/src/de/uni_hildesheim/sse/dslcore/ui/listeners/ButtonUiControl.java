@@ -39,20 +39,22 @@ public class ButtonUiControl implements IControl {
 
     @Override
     public void setEnabled(IAggregatableListener key, final boolean enabled) {
-        button.getDisplay().asyncExec(new Runnable() {
-
-            @Override
-            public void run() {
-                Button button = ButtonUiControl.this.button;
-                button.setEnabled(enabled);
-                if (enabled) {
-                    button.setText(ButtonUiControl.this.initialText);
-                } else {
-                    button.setText("Loading...");
+        if (!button.isDisposed()) {
+            button.getDisplay().asyncExec(new Runnable() {
+    
+                @Override
+                public void run() {
+                    Button button = ButtonUiControl.this.button;
+                    button.setEnabled(enabled);
+                    if (enabled) {
+                        button.setText(ButtonUiControl.this.initialText);
+                    } else {
+                        button.setText("Loading...");
+                    }
                 }
-            }
-            
-        });
+                
+            });
+        }
     }
 
 }
