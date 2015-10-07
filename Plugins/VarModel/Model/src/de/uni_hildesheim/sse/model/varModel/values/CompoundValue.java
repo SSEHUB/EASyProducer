@@ -280,7 +280,7 @@ public class CompoundValue extends StructuredValue implements Cloneable {
     public void copyValuesFrom(CompoundValue source) throws ValueDoesNotMatchTypeException {
         Compound sourceType = (Compound) source.getType();
         Compound myType = (Compound) getType();
-        if (sourceType.isAssignableFrom(myType)) {
+        if (myType.isAssignableFrom(sourceType)) {
             for (int i = 0; i < myType.getInheritedElementCount(); i++) {
                 DecisionVariableDeclaration decl = myType.getInheritedElement(i);
                 String name = decl.getName();
@@ -296,7 +296,7 @@ public class CompoundValue extends StructuredValue implements Cloneable {
                 }
             }
         } else {
-            throw new ValueDoesNotMatchTypeException("compounds '"
+            throw new ValueDoesNotMatchTypeException("compound '"
                 + sourceType.getName() + "' cannot be assigned to '" 
                 + myType.getName() + "'", this, ValueDoesNotMatchTypeException.TYPE_MISMATCH);
         }
