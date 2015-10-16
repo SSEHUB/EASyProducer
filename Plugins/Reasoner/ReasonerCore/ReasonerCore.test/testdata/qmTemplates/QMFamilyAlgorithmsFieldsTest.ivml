@@ -1,0 +1,185 @@
+project QMFamilyAlgorithmsFieldsTest {
+
+	version v0;
+
+	
+	typedef Tuples sequenceOf(Tuple);
+	typedef Fields sequenceOf(Field) with (Fields->collect(f|f.name).hasDuplicates() == false);
+	
+	compound Tuple { 
+		String name;
+		Fields fields;
+		Constraint fieldsCheck = fields.size() > 0; 
+	} 
+	
+	compound Field { 
+		String name;
+		refTo(FieldType) type;
+		Boolean keyPart = false;
+	}
+	
+	compound FieldType {
+   	    String name;
+   	    String class;
+   	    String artifact;
+   	    String serializer;
+   	    String serializerArtifact;
+    }
+    
+    compound Algorithm {
+		String name;
+		Tuples input;    
+		Tuples output;
+	} 
+	
+	compound Family {
+		String name;
+		Tuples input;
+		Tuples output;
+		setOf(refTo(Algorithm)) members;
+     
+		Constraint inputCheck = members->forAll(refTo(Algorithm) algorithm | fieldCheck(input, algorithm.input));
+		Constraint outputCheck = members->forAll(refTo(Algorithm) algorithm | fieldCheck(output, algorithm.output));
+	}
+            	  
+	setOf(refTo(Family)) families;
+	
+	FieldType IntegerType;
+	FieldType LongType;
+	FieldType StringType;
+	FieldType RealType;
+	
+	IntegerType = FieldType {
+		name = "INTEGER", 
+		class = "int"
+	};
+	LongType = FieldType {
+		name = "LONG", 
+		class = "long"
+	};
+	StringType = FieldType {
+		name = "STRING", 
+		class = "String"
+	};	
+	RealType = FieldType {
+		name = "REAL", 
+		class = "double"
+	};
+	
+	Algorithm swPreprocessor;
+	
+	swPreprocessor = Algorithm {
+		name = "preprocessor",
+		input = {
+			Tuple {
+				name = "springStream", 
+				fields = {
+					Field {
+						name = "symbolTuple111",   // Should be symbolTuple
+						type = refBy(LongType), // Should be StringType
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "preprocessedStream", 
+				fields = {
+					Field {
+						name = "symbolId", 
+						type = refBy(StringType), 
+						keyPart = false
+					}, Field {
+						name = "timestamp", 
+						type = refBy(LongType), 
+						keyPart = false
+					}, Field {
+						name = "value", 
+						type = refBy(RealType), 
+						keyPart = false
+					}, Field {
+						name = "volume", 
+						type = refBy(IntegerType), 
+						keyPart = false
+					}
+				}
+			}
+		}
+	};
+	
+	Family fPreprocessor;
+	
+	fPreprocessor = Family {
+		name = "fPreprocessor",
+		input = {
+			Tuple {
+				name = "springStream", 
+				fields = {
+					Field {
+						name = "symbolTuple", 
+						type = refBy(StringType), 
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "preprocessedStream", 
+				fields = {
+					Field {
+						name = "symbolId", 
+						type = refBy(StringType), 
+						keyPart = false
+					}, Field {
+						name = "timestamp", 
+						type = refBy(LongType), 
+						keyPart = false
+					}, Field {
+						name = "value", 
+						type = refBy(RealType), 
+						keyPart = false
+					}, Field {
+						name = "volume", 
+						type = refBy(IntegerType), 
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		members = {
+			refBy(swPreprocessor)
+		}
+	};
+	
+	families = {
+		refBy(fPreprocessor)
+		};	
+	
+//	sequenceOf(String) seqStringInputFamily = collectFieldNames(fPreprocessor.input);
+//	sequenceOf(String) seqStringInputAlg = collectFieldNames(swPreprocessor.input);
+	
+	sequenceOf(refTo(FieldType)) seqFieldTypeInputFamily = collectFieldTypes(fPreprocessor.input);
+//	sequenceOf(refTo(FieldType)) seqFieldTypeInputAlg = collectFieldTypes(fPreprocessor.input);
+	
+//	sequenceOf(String) seqStringOutputFamily = collectFieldNames(fPreprocessor.output);
+//	sequenceOf(String) seqStringOutputAlg = collectFieldNames(swPreprocessor.output);
+//	
+//	sequenceOf(refTo(FieldType)) seqFieldTypeOutputFamily = collectFieldTypes(fPreprocessor.output);
+//	sequenceOf(refTo(FieldType)) seqFieldTypeOutputAlg = collectFieldTypes(fPreprocessor.output);
+	
+	def Boolean fieldCheck(Tuples fTuples, Tuples aTuples) = 
+	    collectFieldNames(fTuples) ==  collectFieldNames(aTuples);
+//		collectFieldTypes(fTuples) == collectFieldTypes(aTuples);
+//		(collectFieldNames(fTuples) ==  collectFieldNames(aTuples)) and (collectFieldTypes(fTuples) == collectFieldTypes(aTuples));
+		
+	def sequenceOf(String) collectFieldNames(Tuples tuples) = 
+		tuples->collect(Tuple tuple | tuple.fields->collect(Field field | field.name)).flatten();
+		
+	def sequenceOf(refTo(FieldType)) collectFieldTypes(Tuples tuples) =
+		tuples->collect(Tuple tuple | tuple.fields->collect(Field field | field.type)).flatten();
+
+
+	
+}
