@@ -1,4 +1,4 @@
-package de.uni_hildesheim.sse.reasoning.reasoner;
+package de.uni_hildesheim.sse.reasoning.qm;
 
 
 import java.io.File;
@@ -22,6 +22,8 @@ import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.ProjectImport;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerConfiguration;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasoningResult;
+import de.uni_hildesheim.sse.reasoning.reasoner.Descriptor;
+import de.uni_hildesheim.sse.reasoning.reasoner.Engine;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
 import de.uni_hildesheim.sse.utils.messages.Status;
@@ -34,13 +36,13 @@ import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
  * @author Sizonenko
  * @author El-Sharkawy
  */
-public class ReasoningScenarioTests extends AbstractTest<Project> {
+public class QMScenarioTests extends AbstractTest<Project> {
 
     private static final EASyLogger LOGGER =
-            EASyLoggerFactory.INSTANCE.getLogger(ReasoningScenarioTests.class, Descriptor.BUNDLE_NAME);
+            EASyLoggerFactory.INSTANCE.getLogger(QMScenarioTests.class, Descriptor.BUNDLE_NAME);
     
     private static final File TESTDATA = determineTestDataFolder("reasonerCore.testdata.home");
-    private static final File FOLDER = new File(TESTDATA, "operationsTemplates");
+    private static final File FOLDER = new File(TESTDATA, "qmTemplates");
     
     /**
      * Initializes this Test class.
@@ -197,220 +199,34 @@ public class ReasoningScenarioTests extends AbstractTest<Project> {
             }
         }
         Assert.assertEquals("Failed constraints: ", expectedFailedConstraints, failedConstraints);
-    }   
+    }  
     
     /**
-     * Basic test.
+     * Tests QM Hardware collections.
      */
     @Test    
-    public void initialTest() {
-        reasoningTest("InitialTest.ivml", 2);
-    } 
+    public void qmHardwareTest() {
+        reasoningTest("QMHardwareTest.ivml", 1);
+    }
     
     /**
      * Tests collections.
      */
     @Test    
-    public void preCollectionTest() {
-        reasoningTest("PreCollectionTest.ivml", 1);
-    }
+    public void nestedHardwareTest() {
+        reasoningTest("nestedHardwareTest.ivml", 1);
+    } 
     
     /**
-     * Tests duplicates.
+     * Tests QM Family Algorithms fields test.
      */
     @Ignore
     @Test    
-    public void hasDuplicatesTestTest() {
-        reasoningTest("HasDuplicatesTest.ivml", 0);
-    }      
-    
-    /**
-     * Tests freeze.
-     */
-    @Test    
-    public void freezeTest() {
-        reasoningTest("FreezeTest.ivml", 0);
+    public void qmFamilyAlgorithmsFieldsTest() {
+        reasoningTest("QMFamilyAlgorithmsFieldsTest.ivml", 1);
     } 
     
-    /**
-     * Tests import freeze.
-     */
-    @Test    
-    public void freezeImportTest() {
-        reasoningTest("FreezeTest.ivml", "FreezeImportTest.ivml", 1);
-    } 
-    
-    /**
-     * Tests import freeze.
-     */
-    @Test 
-    @Ignore
-    public void nullTest() {
-        reasoningTest("NullTest.ivml", 3);
-    } 
-    
-    /**
-     * Tests null import.
-     */
-    @Test  
-    @Ignore
-    public void nullImportTest() {
-        reasoningTest("NullTest.ivml", "NullImportTest.ivml", 4);
-    } 
-    
-    /**
-     * Tests import child (1 failed constraint).
-     */
-    @Test    
-    public void importChildTest() {
-        reasoningTest("ImportChild.ivml", 1);
-    } 
-    
-    /**
-     * Tests import core (variable is reassigned and 0 constraints fail).
-     */
-    @Test    
-    public void importCoreTest() {
-        reasoningTest("ImportChild.ivml", "ImportCore.ivml", 0);
-    } 
-    
-    /**
-     * Tests internal constraints.
-     */ 
-    @Test
-    @Ignore
-    public void internalConstraintTest() {
-        reasoningTest("InternalConstraintTest.ivml", 1);
-    }
-    
-    /**
-     * Tests constraint variables. 
-     */ 
-    @Test    
-    public void constraintVariablesTest() {
-        reasoningTest("ConstraintVariableTest.ivml", 2);
-    }
-    
-    /**
-     * Tests failed variables assignments.
-     */ 
-    @Test    
-    public void variableAssignmentFailTest() {
-        reasoningTest("VariableAssignmentFailTest.ivml", 1);
-    }
-    
-    /**
-     * Tests constraint variables.
-     */ 
-    @Test    
-    public void compoundEqualityTest() {
-        reasoningTest("CompoundEqualityTest.ivml", 0);
-    }
-    
-    /**
-     * Tests compound internal constraints.
-     */
-    @Test    
-    public void constrainedCompoundTest() {
-        reasoningTest("ConstrainedCompoundTest.ivml", 3);
-    }
-    
-    /**
-     * Tests compound internal constraints.
-     */
-    @Test    
-    public void attributeTest() {
-        reasoningTest("AttributeTest.ivml", 0);
-    }
-    
-    /**
-     * Tests compound nested constraints.
-     */
-    @Test    
-    @Ignore
-    public void refinedCompoundTest() {
-        reasoningTest("RefinedCompoundTest.ivml", 0);
-    }
-    
-    /**
-     * Tests trace in failed elements.
-     */
-    @Test
-    public void traceTest() {
-        reasoningTest("TraceTest.ivml", 1);
-    }
-    
-    /**
-     * Tests trace in failed elements.
-     */
-    @Test
-    public void nestedVariableReplaceTest() {
-        reasoningTest("nestedVariableReplaceTest.ivml", 1);
-    }
-    
-    /**
-     * String patern test with internal constraint.
-     */
-    @Test
-    public void internalConstraintStringPaternTest() {
-        reasoningTest("internalConstraintStringPaternTest.ivml", 1);
-    }
-    
-    /**
-     * String pattern test with internal constraint.
-     */
-    @Test
-    public void refToCompoundInSequenceTest() {
-        reasoningTest("RefToCompoundInSequenceTest.ivml", 0);
-    }
-    
-    /**
-     * Default constraint reevaluation.
-     */
-    @Test
-    public void defaultConstraintReevaluationTest() {
-        reasoningTest("DefaultConstraintReevaluationTest.ivml", 1);
-    }
-    
-    /**
-     * isDefined test.
-     */
-    @Test
-    public void isDefinedTest() {
-        reasoningTest("IsDefinedTest.ivml", 10);
-    }  
-    
-    /**
-     * isDefined Compound test.
-     */
-    @Test
-    public void isDefinedCompoundTest() {
-        reasoningTest("IsDefinedCompoundTest.ivml", 1);
-    }  
-    
-    /**
-     * Test for collections of compounds equality operation.
-     */
-    @Test
-    public void compoundCollectionEqualityTest() {
-        reasoningTest("compoundCollectionEqualityTest.ivml", 1);
-    }  
-    
-    /**
-     * Test for collections of refTo(compounds) equality operation.
-     */
-    @Test
-    public void refByCompoundCollectionEqualityTest() {
-        reasoningTest("refByCompoundCollectionEqualityTest.ivml", 1);
-    }  
-    
-    /**
-     * Test for collections of string equality operation.
-     */
-    @Test
-    public void stringCollectionEqualityTest() {
-        reasoningTest("stringCollectionEqualityTest.ivml", 2);
-    }     
+   
     
 
 }
