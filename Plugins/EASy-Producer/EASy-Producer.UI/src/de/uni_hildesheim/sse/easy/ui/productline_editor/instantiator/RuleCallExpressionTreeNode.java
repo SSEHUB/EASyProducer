@@ -38,7 +38,7 @@ class RuleCallExpressionTreeNode extends ElementTreeNode<RuleCallExpression> {
     public String getText() {
         RuleCallExpression ex = getElement();
         String result = ex.getQualifiedName();
-        result += argumentsToString(ex, 1);
+        result += argumentsToString(ex, 0);
         return result;
     }
     
