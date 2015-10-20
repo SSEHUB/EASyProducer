@@ -41,9 +41,9 @@ public class VariablesInConstraintsFinder implements IConstraintTreeVisitor {
      */
     public VariablesInConstraintsFinder(Collection<ConstraintSyntaxTree> constraints) {
         variables = new HashSet<AbstractVariable>();
-        isSimpleAssignment = false;
         containsVariable = false;
         for (ConstraintSyntaxTree constraintSyntaxTree : constraints) {
+            isSimpleAssignment = false;
             constraintSyntaxTree.accept(this);            
         }
     }
@@ -133,11 +133,15 @@ public class VariablesInConstraintsFinder implements IConstraintTreeVisitor {
     public void visitOclFeatureCall(OCLFeatureCall call) {
         if (null != call.getOperand()) {    
             // user def function returns operand null!
-            if (call.getOperand() instanceof Variable
+            if ((call.getOperand() instanceof Variable
+                || call.getOperand() instanceof CompoundAccess)
                 && call.getParameterCount() == 1
-                && call.getParameter(0) instanceof ConstantValue
                 && call.getOperation().equals(OclKeyWords.ASSIGNMENT)) {
-                isSimpleAssignment = true;            
+                if (call.getParameter(0) instanceof ConstantValue
+                    || call.getParameter(0) instanceof ContainerInitializer
+                    || call.getParameter(0) instanceof CompoundInitializer) {
+                    isSimpleAssignment = true; 
+                }
             } 
             call.getOperand().accept(this);
             for (int i = 0; i < call.getParameterCount(); i++) {

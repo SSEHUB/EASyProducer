@@ -100,6 +100,7 @@ public class Resolver {
     private List<Constraint> internalConstraints;
     
     private int constraintBaseSize = 0;
+    private Set<Constraint> lastAdded = null;
     
     private Map<AbstractVariable, CompoundAccess> varMap;
     
@@ -128,7 +129,7 @@ public class Resolver {
             }
             scopeAssignments.addAssignedVariable(variable);
             Set<Constraint> varConstraints = constraintMap.get(variable.getDeclaration());
-            if (varConstraints != null) {
+            if (varConstraints != null && lastAdded != varConstraints) {
                 for (Constraint varConstraint : varConstraints) {
                     constraintBase.add(varConstraint);
                     constraintBaseSize++;
@@ -136,7 +137,10 @@ public class Resolver {
                         LOGGER.debug("Constraints added to current list: " 
                             + StringProvider.toIvmlString(varConstraint.getConsSyntax()));                        
                     }
-                }                     
+                }
+//                constraintBase.addAll(varConstraints);
+//                constraintBaseSize = constraintBaseSize + varConstraints.size();
+                lastAdded = varConstraints;
             }            
         }
     };
