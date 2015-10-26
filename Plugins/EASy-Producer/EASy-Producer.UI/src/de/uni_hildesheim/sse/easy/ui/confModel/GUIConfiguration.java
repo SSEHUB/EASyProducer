@@ -50,18 +50,23 @@ public class GUIConfiguration implements IGUIConfigurableElement {
      * 
      * @param scope the resolution scope (project or interface)
      * @param visible the visible variables (to be modified as a side effect)
+     * @param done already processed scopes
      */
-    private static void determineVisible(IResolutionScope scope, Set<AbstractVariable> visible) {
-        for (int e = 0; e < scope.getElementCount(); e++) {
-            ContainableModelElement elt = scope.getElement(e);
-            if (elt instanceof DecisionVariableDeclaration) {
-                visible.add((DecisionVariableDeclaration) elt);
+    private static void determineVisible(IResolutionScope scope, Set<AbstractVariable> visible, 
+        Set<IResolutionScope> done) {
+        if (!done.contains(scope)) {
+            done.add(scope);
+            for (int e = 0; e < scope.getElementCount(); e++) {
+                ContainableModelElement elt = scope.getElement(e);
+                if (elt instanceof DecisionVariableDeclaration) {
+                    visible.add((DecisionVariableDeclaration) elt);
+                }
             }
-        }
-        for (int i = 0; i < scope.getImportsCount(); i++) {
-            ProjectImport imp = scope.getImport(i);
-            if (null != imp.getScope()) {
-                determineVisible(imp.getScope(), visible);
+            for (int i = 0; i < scope.getImportsCount(); i++) {
+                ProjectImport imp = scope.getImport(i);
+                if (null != imp.getScope()) {
+                    determineVisible(imp.getScope(), visible, done);
+                }
             }
         }
     }
@@ -74,7 +79,7 @@ public class GUIConfiguration implements IGUIConfigurableElement {
         ArrayList<GUIVariable> variables = new ArrayList<GUIVariable>();
         if (null != config) {
             Set<AbstractVariable> visible = new HashSet<AbstractVariable>();
-            determineVisible(config.getProject(), visible);
+            determineVisible(config.getProject(), visible, new HashSet<IResolutionScope>());
             Iterator<IDecisionVariable> iterator = config.iterator();
             try {
                 while (iterator.hasNext()) {
