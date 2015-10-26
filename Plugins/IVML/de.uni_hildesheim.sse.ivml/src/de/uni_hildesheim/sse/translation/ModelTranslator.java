@@ -994,9 +994,11 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
         if (null != attribute.getNames()) { // incomplete parsing
             Attribute initial = null;
             for (String name : attribute.getNames()) {
-                Attribute tmp = processAttribute(attribute, name, context, initial);
-                if (null == initial) {
-                    initial = tmp;
+                if (null != name) {
+                    Attribute tmp = processAttribute(attribute, name, context, initial);
+                    if (null == initial) {
+                        initial = tmp;
+                    }
                 }
             }
         }
