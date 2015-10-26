@@ -40,7 +40,8 @@ import org.junit.runners.Suite.SuiteClasses;
     MetaOperationsTest.class,
     EnumOperationsTest.class,
     ReasonerCaseTests.class,
-    VersionOperationsTest.class
+    VersionOperationsTest.class,
+    CustomOpOnCustomDataTypesTest.class
     })
 public class CstEvaluationTests {
 

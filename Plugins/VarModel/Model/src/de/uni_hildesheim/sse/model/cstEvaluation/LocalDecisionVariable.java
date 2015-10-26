@@ -29,6 +29,7 @@ import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Container;
+import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
 import de.uni_hildesheim.sse.model.varModel.values.CompoundValue;
 import de.uni_hildesheim.sse.model.varModel.values.ContainerValue;
 import de.uni_hildesheim.sse.model.varModel.values.NullValue;
@@ -214,7 +215,9 @@ public class LocalDecisionVariable implements IDecisionVariable {
                 Compound type = (Compound) cValue.getType();
                 DecisionVariableDeclaration slotDecl = type.getElement(slotName);
                 Value slotValue = cValue.getNestedValue(slotName);
-                slotValue = dereference(conf, slotValue);
+                if (!Reference.TYPE.isAssignableFrom(slotDecl.getType())) { // don't dereference references
+                    slotValue = dereference(conf, slotValue);
+                }
                 LocalDecisionVariable var = new LocalDecisionVariable(slotDecl, conf, null);
                 if (null != slotValue) {
                     try {
