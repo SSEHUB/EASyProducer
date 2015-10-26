@@ -319,7 +319,7 @@ public class QMValidTest extends AbstractTest<Project> {
      */
     @Test    
     public void coreTest() {
-//        reasoningTest(0);
+        reasoningTest(0);
         reasoningTest(0);
     } 
     

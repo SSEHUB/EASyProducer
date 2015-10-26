@@ -223,7 +223,7 @@ public class QMScenarioTests extends AbstractTest<Project> {
     @Ignore
     @Test    
     public void qmFamilyAlgorithmsFieldsTest() {
-        reasoningTest("QMFamilyAlgorithmsFieldsTest.ivml", 1);
+        reasoningTest("QMFamilyAlgorithmsFieldsTest.ivml", 0);
     } 
     
    
