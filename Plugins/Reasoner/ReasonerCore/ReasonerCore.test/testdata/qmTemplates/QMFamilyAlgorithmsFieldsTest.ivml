@@ -37,9 +37,14 @@ project QMFamilyAlgorithmsFieldsTest {
 		Tuples input;
 		Tuples output;
 		setOf(refTo(Algorithm)) members;
-     
-		//Constraint inputCheck = members->forAll(refTo(Algorithm) algorithm | fieldCheck(input, algorithm.input));
-		//Constraint outputCheck = members->forAll(refTo(Algorithm) algorithm | fieldCheck(output, algorithm.output));
+		
+		// old constraints
+		Constraint inputCheck = members->forAll(refTo(Algorithm) algorithm | input == algorithm.input);
+        Constraint outputCheck = members->forAll(refTo(Algorithm) algorithm | output == algorithm.output);
+        
+        // new constraints     
+//		Constraint inputCheck = members->forAll(refTo(Algorithm) algorithm | fieldCheck(input, algorithm.input));
+//		Constraint outputCheck = members->forAll(refTo(Algorithm) algorithm | fieldCheck(output, algorithm.output));
 	}
             	  
 	setOf(refTo(Family)) families;
@@ -161,8 +166,8 @@ project QMFamilyAlgorithmsFieldsTest {
 //	seqStringInputFamily = collectFieldNames(fPreprocessor.input);
 //	sequenceOf(String) seqStringInputAlg = collectFieldNames(swPreprocessor.input);
 	
-	sequenceOf(refTo(FieldType)) seqFieldTypeInputFamily;
-	seqFieldTypeInputFamily = collectFieldTypes(fPreprocessor.input);
+//	sequenceOf(refTo(FieldType)) seqFieldTypeInputFamily;
+//	seqFieldTypeInputFamily = collectFieldTypes(fPreprocessor.input);
 //	sequenceOf(refTo(FieldType)) seqFieldTypeInputAlg = collectFieldTypes(fPreprocessor.input);
 	
 //	sequenceOf(String) seqStringOutputFamily = collectFieldNames(fPreprocessor.output);
