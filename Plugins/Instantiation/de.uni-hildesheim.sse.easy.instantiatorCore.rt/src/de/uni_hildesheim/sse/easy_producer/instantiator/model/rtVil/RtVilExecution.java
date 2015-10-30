@@ -279,6 +279,17 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
     }
     
     /**
+     * Defines the actual reasoning hook.
+     * 
+     * @param reasoningHook the reasoning hook (ignored if <b>null</b>)
+     */
+    public void setReasoningHook(IReasoningHook reasoningHook) {
+        if (null != reasoningHook) {
+            this.reasoningHook = reasoningHook;
+        }
+    }
+    
+    /**
      * Compose the plain text of reasoner failures.
      * 
      * @param msg the message to be turned into text

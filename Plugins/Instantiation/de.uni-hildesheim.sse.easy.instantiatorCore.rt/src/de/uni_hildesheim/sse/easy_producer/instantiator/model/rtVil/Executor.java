@@ -30,6 +30,7 @@ public class Executor extends de.uni_hildesheim.sse.easy_producer.instantiator.m
     private boolean stopAfterBindValues = false;
     private boolean enactment = true;
     private boolean useReasoner = true;
+    private IReasoningHook reasoningHook = null;
     
     /**
      * Creates an executor with default arguments.
@@ -83,6 +84,18 @@ public class Executor extends de.uni_hildesheim.sse.easy_producer.instantiator.m
         this.useReasoner = false;
         return this;
     }
+    
+    /**
+     * Defines the reasoning hook which may influence the reasoning result. By default, the 
+     * {@link DefaultReasoningHook} is set.
+     *     
+     * @param reasoningHook the new reasoning hook (<b>null</b> is ignored)
+     * @return <b>this</b> (builder pattern)
+     */
+    public Executor setReasoningHook(IReasoningHook reasoningHook) {
+        this.reasoningHook = reasoningHook;
+        return this;
+    }
 
     @Override
     protected de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script 
@@ -101,6 +114,7 @@ public class Executor extends de.uni_hildesheim.sse.easy_producer.instantiator.m
         result.setStopAfterBindValues(stopAfterBindValues);
         result.setUseReasoner(useReasoner);
         result.setEnableEnactment(enactment);
+        result.setReasoningHook(reasoningHook); // null is not a problem here
         return result;
     }
     
