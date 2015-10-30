@@ -412,6 +412,16 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
         }
         return result;
     }
+    
+    /**
+     * Just for internal purposes of derived classes - get the result accessor.
+     * If you use this method, you are anyway responsible for cleaning up the result properly. 
+     * 
+     * @return the result accessor
+     */
+    protected EvaluationAccessor getResultAccessor() {
+        return result;
+    }
 
     /**
      * Returns whether the {@link #getResult() result of a constraint evaluation}

@@ -166,12 +166,14 @@ public class TypeContext implements IResolutionScope {
      * @param assignment the assignment for which all contained variables shall be added
      */
     public void addToContext(AttributeAssignment assignment) {
-        int count = assignment.getElementCount();
-        for (int c = 0; c < count; c++) {
-            addToContext(assignment.getElement(c));
-        }
-        for (int a = 0; a < assignment.getAssignmentCount(); a++) {
-            addToContext(assignment.getAssignment(a));
+        if (null != assignment) {
+            int count = assignment.getElementCount();
+            for (int c = 0; c < count; c++) {
+                addToContext(assignment.getElement(c));
+            }
+            for (int a = 0; a < assignment.getAssignmentCount(); a++) {
+                addToContext(assignment.getAssignment(a));
+            }
         }
     }
     
