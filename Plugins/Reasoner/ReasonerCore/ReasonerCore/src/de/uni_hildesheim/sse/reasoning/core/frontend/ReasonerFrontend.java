@@ -87,7 +87,8 @@ public class ReasonerFrontend {
                 boolean useFallback = false;
                 if (null != reasoner) {
                     // default reasoner configuration
-                    ReasoningResult tmp = reasoner.propagate(config.getProject(), config, null, observer); 
+                    ReasonerConfiguration initCfg = new ReasonerConfiguration();
+                    ReasoningResult tmp = reasoner.propagate(config.getProject(), config, initCfg, observer); 
                     useFallback = tmp.reasoningUnsupported();
                     if (tmp.getMessageCount() > 0) {
                         result = new ArrayList<de.uni_hildesheim.sse.utils.messages.Message>();
