@@ -999,7 +999,6 @@ public class Resolver {
             FailedElementDetails failedElementDetails = new FailedElementDetails();
             failedElementDetails.setProblemPoints(new HashSet<IDecisionVariable>(problemVariables));
             failedElementDetails.setProblemConstraintPart(getFailedConstraintPart());
-            failedElementDetails.setProblemConstraintPart(getFailedConstraintPart());
             failedElements.addProblemConstraint(constraint, failedElementDetails);
             if (Descriptor.LOGGING) {
                 LOGGER.debug("Failed constraint: " 
