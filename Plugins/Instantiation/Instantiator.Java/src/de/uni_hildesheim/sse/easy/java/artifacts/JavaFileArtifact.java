@@ -350,9 +350,11 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
         parser.setUnitName(unitName);
         String[] classpath = JavaUtilities.JRE_CLASS_PATH;
         String sourcePath;
+        boolean isClasspathFromScript = false;
         if (null != getArtifactModel()) {
             Object classPathFromScript = getArtifactModel().getSettings(JavaSettings.CLASSPATH);
             if (null != classPathFromScript) {
+                isClasspathFromScript = true;
                 sourcePath = determineClasspath(classPathFromScript);
             } else {
                 // if no classpath is given via VIL
@@ -369,12 +371,15 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
         parser.setEnvironment(classpath, sources, new String[] {"UTF-8" }, true);
         // Create AST
         unitNode = (CompilationUnit) parser.createAST(null);
-        // Check for problems
-        IProblem[] problems = unitNode.getProblems();
-        if (problems != null && problems.length > 0) {
-            logger.warn("Got " + problems.length + " problems compiling the source file: " + file.getAbsolutePath());
-            for (IProblem problem : problems) {
-                logger.warn(problem.getMessage());
+        // Check for problems but only if the classpath was set via VIL
+        if (isClasspathFromScript) {
+            IProblem[] problems = unitNode.getProblems();
+            if (problems != null && problems.length > 0) {
+                logger.warn("Got " + problems.length + " problems compiling the source file: " 
+                    + file.getAbsolutePath());
+                for (IProblem problem : problems) {
+                    logger.warn(problem.getMessage());
+                }
             }
         }
         unitNode.accept(new ASTVisitor() {
