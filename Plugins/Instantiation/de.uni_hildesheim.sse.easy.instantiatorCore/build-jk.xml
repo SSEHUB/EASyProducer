@@ -12,6 +12,7 @@
 		<!-- Model -->
 		<pathelement path="${libs.utils}"/>
 		<pathelement path="${libs.model}"/>
+        <pathelement path="${libs.dslCore}"/>
 		<!-- Adaptation events -->
 		<pathelement path="${libs.adaptation.events.core}"/>
 		<!-- Reasoning -->
