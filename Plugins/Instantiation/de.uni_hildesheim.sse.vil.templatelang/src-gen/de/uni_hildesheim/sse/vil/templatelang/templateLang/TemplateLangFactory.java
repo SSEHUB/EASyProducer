@@ -50,6 +50,24 @@ public interface TemplateLangFactory extends EFactory
   IndentationHintPart createIndentationHintPart();
 
   /**
+   * Returns a new object of class '<em>Formatting Hint</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Formatting Hint</em>'.
+   * @generated
+   */
+  FormattingHint createFormattingHint();
+
+  /**
+   * Returns a new object of class '<em>Formatting Hint Part</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Formatting Hint Part</em>'.
+   * @generated
+   */
+  FormattingHintPart createFormattingHintPart();
+
+  /**
    * Returns a new object of class '<em>Vil Def</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

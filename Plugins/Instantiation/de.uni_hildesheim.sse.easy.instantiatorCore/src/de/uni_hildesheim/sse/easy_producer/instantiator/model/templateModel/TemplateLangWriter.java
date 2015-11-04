@@ -4,6 +4,7 @@ import static de.uni_hildesheim.sse.easy_producer.instantiator.model.templateMod
 
 import java.io.Writer;
 
+import de.uni_hildesheim.sse.dslCore.translation.StringUtils;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.IVisitor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.WriterVisitor;
@@ -67,6 +68,7 @@ public class TemplateLangWriter extends WriterVisitor<VariableDeclaration> imple
             template.getAdvice(a).accept(this);
         }
         printIndenationHint(template.getIndentationConfiguration());
+        printFormattingHint(template.getFormattingConfiguration());
         printIndentation();
         print("template ");
         print(template.getName());
@@ -131,6 +133,21 @@ public class TemplateLangWriter extends WriterVisitor<VariableDeclaration> imple
             println(")");
         }
     }
+    
+    /**
+     * Prints the formatting hint related to the given <code>config</code>.
+     * 
+     * @param config the configuration to be printed
+     */
+    private void printFormattingHint(FormattingConfiguration config) {
+        if (null != config) {
+            printIndentation();
+            print("@format(");
+            printFormattingHintEntry(FORMATTING_HINT_LINEEND, config.getLineEnding());
+            println(")");
+        }
+    }
+
 
     /**
      * Prints the an indentation hint entry.
@@ -142,6 +159,18 @@ public class TemplateLangWriter extends WriterVisitor<VariableDeclaration> imple
         print(name);
         print(" = ");
         print(value);
+    }
+    
+    /**
+     * Prints the an formatting hint entry.
+     * 
+     * @param name the name of the entry
+     * @param value the actual value
+     */
+    private void printFormattingHintEntry(String name, String value) {
+        print(name);
+        print(" = ");
+        print(StringUtils.convertToString(value));
     }
     
     @Override

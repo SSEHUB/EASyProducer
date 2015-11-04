@@ -20,6 +20,7 @@ public class TemplateDescriptor {
     private VariableDeclaration[] param;
     private Advice[] advices;
     private IndentationConfiguration indentationConfiguration;
+    private FormattingConfiguration formattingConfiguration;
 
     /**
      * Defines the parameter.
@@ -154,5 +155,24 @@ public class TemplateDescriptor {
     public IndentationConfiguration getIndentationConfiguration() {
         return indentationConfiguration;
     }
+    
+    /**
+     * Defines the formatting configuration.
+     * 
+     * @param config the formatting configuration
+     */
+    public void setFormattingConfiguration(FormattingConfiguration config) {
+        this.formattingConfiguration = config;
+    }
+    
+    /**
+     * Returns the formatting configuration.
+     * 
+     * @return the formatting configuration
+     */
+    public FormattingConfiguration getFormattingConfiguration() {
+        return formattingConfiguration;
+    }
+
 
 }

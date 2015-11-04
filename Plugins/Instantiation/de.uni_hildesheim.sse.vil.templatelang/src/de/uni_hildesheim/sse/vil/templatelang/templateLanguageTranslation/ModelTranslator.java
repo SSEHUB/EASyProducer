@@ -1,8 +1,6 @@
 package de.uni_hildesheim.sse.vil.templatelang.templateLanguageTranslation;
 
-import static de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Constants.INDENTATION_HINT_ADDITIONAL;
-import static de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Constants.INDENTATION_HINT_INDENTATION;
-import static de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Constants.INDENTATION_HINT_TAB_EMU;
+import static de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Constants.*;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -17,6 +15,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
 import de.uni_hildesheim.sse.dslCore.translation.ErrorCodes;
+import de.uni_hildesheim.sse.dslCore.translation.StringUtils;
 import de.uni_hildesheim.sse.dslCore.translation.TranslatorException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.Imports;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
@@ -26,6 +25,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Alte
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.ContentStatement;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Def;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.ExpressionStatement;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.FormattingConfiguration;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.ITemplateElement;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.JavaExtension;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.LoopStatement;
@@ -50,6 +50,8 @@ import de.uni_hildesheim.sse.vil.expressions.expressionDsl.PrimaryExpression;
 import de.uni_hildesheim.sse.vil.expressions.translation.StringResolver;
 import de.uni_hildesheim.sse.vil.templatelang.TemplateLangModelUtility;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.Extension;
+import de.uni_hildesheim.sse.vil.templatelang.templateLang.FormattingHint;
+import de.uni_hildesheim.sse.vil.templatelang.templateLang.FormattingHintPart;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.IndentationHint;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.IndentationHintPart;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.JavaQualifiedName;
@@ -110,6 +112,9 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
             if (null != tpl.getIndent()) {
                 desc.setIndentationConfiguration(processIndentHint(tpl.getIndent()));
             }
+            if (null != tpl.getFormatting()) {
+                desc.setFormattingConfiguration(processFormattingHint(tpl.getFormatting()));
+            }
             result = new Template(tpl.getName(), extension, desc, resolver.getTypeRegistry());
             resolver.pushModel(result);
             pushed = true;
@@ -149,7 +154,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
      * Processes an indentation hint and returns the indentation configuration.
      * 
      * @param hint the hint
-     * @return the indentation configuration
+     * @return the indentation configuration (may be <b>null</b> if there is no indentation hint)
      */
     private IndentationConfiguration processIndentHint(IndentationHint hint) {
         IndentationConfiguration result = null;
@@ -190,6 +195,26 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
             result = new IndentationConfiguration(values.get(INDENTATION_HINT_INDENTATION), 
                 values.get(INDENTATION_HINT_TAB_EMU), values.get(INDENTATION_HINT_ADDITIONAL));
         } 
+        return result;
+    }
+    
+    /**
+     * Processes the formatting hint.
+     * 
+     * @param hint the hint to be processed 
+     * @return the related formatting configuration (may be <b>null</b> if there is no formatting hint)
+     */
+    private FormattingConfiguration processFormattingHint(FormattingHint hint) {
+        FormattingConfiguration result = null;
+        if (null != hint) {
+            for (FormattingHintPart part : hint.getParts()) {
+                if (FORMATTING_HINT_LINEEND.equals(part.getName())) {
+                    result = new FormattingConfiguration();
+                    String value = StringUtils.convertString(part.getValue());
+                    result.setLineEnding(value);
+                }
+            }
+        }
         return result;
     }
      
@@ -632,7 +657,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
         try {
             String text = content.getCtn();
             String terminal = text.substring(0, 1);
-            text = ExpressionTranslator.convertString(text);
+            text = StringUtils.convertString(text);
             StringBuilder warnings = new StringBuilder();
             CompositeExpression tmp = (CompositeExpression) StringResolver.substitute(text, resolver, 
                 expressionTranslator, warnings);

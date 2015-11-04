@@ -29,37 +29,39 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cAdvicesAdviceParserRuleCall_2_0 = (RuleCall)cAdvicesAssignment_2.eContents().get(0);
 		private final Assignment cIndentAssignment_3 = (Assignment)cGroup.eContents().get(3);
 		private final RuleCall cIndentIndentationHintParserRuleCall_3_0 = (RuleCall)cIndentAssignment_3.eContents().get(0);
-		private final Keyword cTemplateKeyword_4 = (Keyword)cGroup.eContents().get(4);
-		private final Assignment cNameAssignment_5 = (Assignment)cGroup.eContents().get(5);
-		private final RuleCall cNameIdentifierParserRuleCall_5_0 = (RuleCall)cNameAssignment_5.eContents().get(0);
-		private final Keyword cLeftParenthesisKeyword_6 = (Keyword)cGroup.eContents().get(6);
-		private final Assignment cParamAssignment_7 = (Assignment)cGroup.eContents().get(7);
-		private final RuleCall cParamParameterListParserRuleCall_7_0 = (RuleCall)cParamAssignment_7.eContents().get(0);
-		private final Keyword cRightParenthesisKeyword_8 = (Keyword)cGroup.eContents().get(8);
-		private final Group cGroup_9 = (Group)cGroup.eContents().get(9);
-		private final Keyword cExtendsKeyword_9_0 = (Keyword)cGroup_9.eContents().get(0);
-		private final Assignment cExtAssignment_9_1 = (Assignment)cGroup_9.eContents().get(1);
-		private final RuleCall cExtIdentifierParserRuleCall_9_1_0 = (RuleCall)cExtAssignment_9_1.eContents().get(0);
-		private final Keyword cLeftCurlyBracketKeyword_10 = (Keyword)cGroup.eContents().get(10);
-		private final Assignment cVersionAssignment_11 = (Assignment)cGroup.eContents().get(11);
-		private final RuleCall cVersionVersionStmtParserRuleCall_11_0 = (RuleCall)cVersionAssignment_11.eContents().get(0);
-		private final Assignment cTypeDefsAssignment_12 = (Assignment)cGroup.eContents().get(12);
-		private final RuleCall cTypeDefsTypeDefParserRuleCall_12_0 = (RuleCall)cTypeDefsAssignment_12.eContents().get(0);
-		private final Assignment cVarsAssignment_13 = (Assignment)cGroup.eContents().get(13);
-		private final RuleCall cVarsVariableDeclarationParserRuleCall_13_0 = (RuleCall)cVarsAssignment_13.eContents().get(0);
-		private final Assignment cDefsAssignment_14 = (Assignment)cGroup.eContents().get(14);
-		private final RuleCall cDefsVilDefParserRuleCall_14_0 = (RuleCall)cDefsAssignment_14.eContents().get(0);
-		private final Keyword cRightCurlyBracketKeyword_15 = (Keyword)cGroup.eContents().get(15);
+		private final Assignment cFormattingAssignment_4 = (Assignment)cGroup.eContents().get(4);
+		private final RuleCall cFormattingFormattingHintParserRuleCall_4_0 = (RuleCall)cFormattingAssignment_4.eContents().get(0);
+		private final Keyword cTemplateKeyword_5 = (Keyword)cGroup.eContents().get(5);
+		private final Assignment cNameAssignment_6 = (Assignment)cGroup.eContents().get(6);
+		private final RuleCall cNameIdentifierParserRuleCall_6_0 = (RuleCall)cNameAssignment_6.eContents().get(0);
+		private final Keyword cLeftParenthesisKeyword_7 = (Keyword)cGroup.eContents().get(7);
+		private final Assignment cParamAssignment_8 = (Assignment)cGroup.eContents().get(8);
+		private final RuleCall cParamParameterListParserRuleCall_8_0 = (RuleCall)cParamAssignment_8.eContents().get(0);
+		private final Keyword cRightParenthesisKeyword_9 = (Keyword)cGroup.eContents().get(9);
+		private final Group cGroup_10 = (Group)cGroup.eContents().get(10);
+		private final Keyword cExtendsKeyword_10_0 = (Keyword)cGroup_10.eContents().get(0);
+		private final Assignment cExtAssignment_10_1 = (Assignment)cGroup_10.eContents().get(1);
+		private final RuleCall cExtIdentifierParserRuleCall_10_1_0 = (RuleCall)cExtAssignment_10_1.eContents().get(0);
+		private final Keyword cLeftCurlyBracketKeyword_11 = (Keyword)cGroup.eContents().get(11);
+		private final Assignment cVersionAssignment_12 = (Assignment)cGroup.eContents().get(12);
+		private final RuleCall cVersionVersionStmtParserRuleCall_12_0 = (RuleCall)cVersionAssignment_12.eContents().get(0);
+		private final Assignment cTypeDefsAssignment_13 = (Assignment)cGroup.eContents().get(13);
+		private final RuleCall cTypeDefsTypeDefParserRuleCall_13_0 = (RuleCall)cTypeDefsAssignment_13.eContents().get(0);
+		private final Assignment cVarsAssignment_14 = (Assignment)cGroup.eContents().get(14);
+		private final RuleCall cVarsVariableDeclarationParserRuleCall_14_0 = (RuleCall)cVarsAssignment_14.eContents().get(0);
+		private final Assignment cDefsAssignment_15 = (Assignment)cGroup.eContents().get(15);
+		private final RuleCall cDefsVilDefParserRuleCall_15_0 = (RuleCall)cDefsAssignment_15.eContents().get(0);
+		private final Keyword cRightCurlyBracketKeyword_16 = (Keyword)cGroup.eContents().get(16);
 		
 		//// do not rename - required for reuse
 		//LanguageUnit:
-		//	imports+=Import* javaExts+=Extension* advices+=Advice* indent=IndentationHint? "template" name=Identifier "("
-		//	param=ParameterList? ")" ("extends" ext=Identifier)? "{" version=VersionStmt? typeDefs+=TypeDef*
+		//	imports+=Import* javaExts+=Extension* advices+=Advice* indent=IndentationHint? formatting=FormattingHint? "template"
+		//	name=Identifier "(" param=ParameterList? ")" ("extends" ext=Identifier)? "{" version=VersionStmt? typeDefs+=TypeDef*
 		//	vars+=VariableDeclaration* defs+=VilDef* "}";
 		public ParserRule getRule() { return rule; }
 
-		//imports+=Import* javaExts+=Extension* advices+=Advice* indent=IndentationHint? "template" name=Identifier "("
-		//param=ParameterList? ")" ("extends" ext=Identifier)? "{" version=VersionStmt? typeDefs+=TypeDef*
+		//imports+=Import* javaExts+=Extension* advices+=Advice* indent=IndentationHint? formatting=FormattingHint? "template"
+		//name=Identifier "(" param=ParameterList? ")" ("extends" ext=Identifier)? "{" version=VersionStmt? typeDefs+=TypeDef*
 		//vars+=VariableDeclaration* defs+=VilDef* "}"
 		public Group getGroup() { return cGroup; }
 
@@ -87,68 +89,74 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 		//IndentationHint
 		public RuleCall getIndentIndentationHintParserRuleCall_3_0() { return cIndentIndentationHintParserRuleCall_3_0; }
 
+		//formatting=FormattingHint?
+		public Assignment getFormattingAssignment_4() { return cFormattingAssignment_4; }
+
+		//FormattingHint
+		public RuleCall getFormattingFormattingHintParserRuleCall_4_0() { return cFormattingFormattingHintParserRuleCall_4_0; }
+
 		//"template"
-		public Keyword getTemplateKeyword_4() { return cTemplateKeyword_4; }
+		public Keyword getTemplateKeyword_5() { return cTemplateKeyword_5; }
 
 		//name=Identifier
-		public Assignment getNameAssignment_5() { return cNameAssignment_5; }
+		public Assignment getNameAssignment_6() { return cNameAssignment_6; }
 
 		//Identifier
-		public RuleCall getNameIdentifierParserRuleCall_5_0() { return cNameIdentifierParserRuleCall_5_0; }
+		public RuleCall getNameIdentifierParserRuleCall_6_0() { return cNameIdentifierParserRuleCall_6_0; }
 
 		//"("
-		public Keyword getLeftParenthesisKeyword_6() { return cLeftParenthesisKeyword_6; }
+		public Keyword getLeftParenthesisKeyword_7() { return cLeftParenthesisKeyword_7; }
 
 		//param=ParameterList?
-		public Assignment getParamAssignment_7() { return cParamAssignment_7; }
+		public Assignment getParamAssignment_8() { return cParamAssignment_8; }
 
 		//ParameterList
-		public RuleCall getParamParameterListParserRuleCall_7_0() { return cParamParameterListParserRuleCall_7_0; }
+		public RuleCall getParamParameterListParserRuleCall_8_0() { return cParamParameterListParserRuleCall_8_0; }
 
 		//")"
-		public Keyword getRightParenthesisKeyword_8() { return cRightParenthesisKeyword_8; }
+		public Keyword getRightParenthesisKeyword_9() { return cRightParenthesisKeyword_9; }
 
 		//("extends" ext=Identifier)?
-		public Group getGroup_9() { return cGroup_9; }
+		public Group getGroup_10() { return cGroup_10; }
 
 		//"extends"
-		public Keyword getExtendsKeyword_9_0() { return cExtendsKeyword_9_0; }
+		public Keyword getExtendsKeyword_10_0() { return cExtendsKeyword_10_0; }
 
 		//ext=Identifier
-		public Assignment getExtAssignment_9_1() { return cExtAssignment_9_1; }
+		public Assignment getExtAssignment_10_1() { return cExtAssignment_10_1; }
 
 		//Identifier
-		public RuleCall getExtIdentifierParserRuleCall_9_1_0() { return cExtIdentifierParserRuleCall_9_1_0; }
+		public RuleCall getExtIdentifierParserRuleCall_10_1_0() { return cExtIdentifierParserRuleCall_10_1_0; }
 
 		//"{"
-		public Keyword getLeftCurlyBracketKeyword_10() { return cLeftCurlyBracketKeyword_10; }
+		public Keyword getLeftCurlyBracketKeyword_11() { return cLeftCurlyBracketKeyword_11; }
 
 		//version=VersionStmt?
-		public Assignment getVersionAssignment_11() { return cVersionAssignment_11; }
+		public Assignment getVersionAssignment_12() { return cVersionAssignment_12; }
 
 		//VersionStmt
-		public RuleCall getVersionVersionStmtParserRuleCall_11_0() { return cVersionVersionStmtParserRuleCall_11_0; }
+		public RuleCall getVersionVersionStmtParserRuleCall_12_0() { return cVersionVersionStmtParserRuleCall_12_0; }
 
 		//typeDefs+=TypeDef*
-		public Assignment getTypeDefsAssignment_12() { return cTypeDefsAssignment_12; }
+		public Assignment getTypeDefsAssignment_13() { return cTypeDefsAssignment_13; }
 
 		//TypeDef
-		public RuleCall getTypeDefsTypeDefParserRuleCall_12_0() { return cTypeDefsTypeDefParserRuleCall_12_0; }
+		public RuleCall getTypeDefsTypeDefParserRuleCall_13_0() { return cTypeDefsTypeDefParserRuleCall_13_0; }
 
 		//vars+=VariableDeclaration*
-		public Assignment getVarsAssignment_13() { return cVarsAssignment_13; }
+		public Assignment getVarsAssignment_14() { return cVarsAssignment_14; }
 
 		//VariableDeclaration
-		public RuleCall getVarsVariableDeclarationParserRuleCall_13_0() { return cVarsVariableDeclarationParserRuleCall_13_0; }
+		public RuleCall getVarsVariableDeclarationParserRuleCall_14_0() { return cVarsVariableDeclarationParserRuleCall_14_0; }
 
 		//defs+=VilDef*
-		public Assignment getDefsAssignment_14() { return cDefsAssignment_14; }
+		public Assignment getDefsAssignment_15() { return cDefsAssignment_15; }
 
 		//VilDef
-		public RuleCall getDefsVilDefParserRuleCall_14_0() { return cDefsVilDefParserRuleCall_14_0; }
+		public RuleCall getDefsVilDefParserRuleCall_15_0() { return cDefsVilDefParserRuleCall_15_0; }
 
 		//"}"
-		public Keyword getRightCurlyBracketKeyword_15() { return cRightCurlyBracketKeyword_15; }
+		public Keyword getRightCurlyBracketKeyword_16() { return cRightCurlyBracketKeyword_16; }
 	}
 
 	public class IndentationHintElements extends AbstractParserRuleElementFinder {
@@ -229,6 +237,86 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 
 		//NUMBER
 		public RuleCall getValueNUMBERTerminalRuleCall_2_0() { return cValueNUMBERTerminalRuleCall_2_0; }
+	}
+
+	public class FormattingHintElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "FormattingHint");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Keyword cFormatKeyword_0 = (Keyword)cGroup.eContents().get(0);
+		private final Keyword cLeftParenthesisKeyword_1 = (Keyword)cGroup.eContents().get(1);
+		private final Assignment cPartsAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final RuleCall cPartsFormattingHintPartParserRuleCall_2_0 = (RuleCall)cPartsAssignment_2.eContents().get(0);
+		private final Group cGroup_3 = (Group)cGroup.eContents().get(3);
+		private final Keyword cCommaKeyword_3_0 = (Keyword)cGroup_3.eContents().get(0);
+		private final Assignment cPartsAssignment_3_1 = (Assignment)cGroup_3.eContents().get(1);
+		private final RuleCall cPartsFormattingHintPartParserRuleCall_3_1_0 = (RuleCall)cPartsAssignment_3_1.eContents().get(0);
+		private final Keyword cRightParenthesisKeyword_4 = (Keyword)cGroup.eContents().get(4);
+		
+		//FormattingHint:
+		//	"@format" "(" parts+=FormattingHintPart ("," parts+=FormattingHintPart)* ")";
+		public ParserRule getRule() { return rule; }
+
+		//"@format" "(" parts+=FormattingHintPart ("," parts+=FormattingHintPart)* ")"
+		public Group getGroup() { return cGroup; }
+
+		//"@format"
+		public Keyword getFormatKeyword_0() { return cFormatKeyword_0; }
+
+		//"("
+		public Keyword getLeftParenthesisKeyword_1() { return cLeftParenthesisKeyword_1; }
+
+		//parts+=FormattingHintPart
+		public Assignment getPartsAssignment_2() { return cPartsAssignment_2; }
+
+		//FormattingHintPart
+		public RuleCall getPartsFormattingHintPartParserRuleCall_2_0() { return cPartsFormattingHintPartParserRuleCall_2_0; }
+
+		//("," parts+=FormattingHintPart)*
+		public Group getGroup_3() { return cGroup_3; }
+
+		//","
+		public Keyword getCommaKeyword_3_0() { return cCommaKeyword_3_0; }
+
+		//parts+=FormattingHintPart
+		public Assignment getPartsAssignment_3_1() { return cPartsAssignment_3_1; }
+
+		//FormattingHintPart
+		public RuleCall getPartsFormattingHintPartParserRuleCall_3_1_0() { return cPartsFormattingHintPartParserRuleCall_3_1_0; }
+
+		//")"
+		public Keyword getRightParenthesisKeyword_4() { return cRightParenthesisKeyword_4; }
+	}
+
+	public class FormattingHintPartElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "FormattingHintPart");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Assignment cNameAssignment_0 = (Assignment)cGroup.eContents().get(0);
+		private final RuleCall cNameIdentifierParserRuleCall_0_0 = (RuleCall)cNameAssignment_0.eContents().get(0);
+		private final Keyword cEqualsSignKeyword_1 = (Keyword)cGroup.eContents().get(1);
+		private final Assignment cValueAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final RuleCall cValueSTRINGTerminalRuleCall_2_0 = (RuleCall)cValueAssignment_2.eContents().get(0);
+		
+		//FormattingHintPart:
+		//	name=Identifier "=" value=STRING;
+		public ParserRule getRule() { return rule; }
+
+		//name=Identifier "=" value=STRING
+		public Group getGroup() { return cGroup; }
+
+		//name=Identifier
+		public Assignment getNameAssignment_0() { return cNameAssignment_0; }
+
+		//Identifier
+		public RuleCall getNameIdentifierParserRuleCall_0_0() { return cNameIdentifierParserRuleCall_0_0; }
+
+		//"="
+		public Keyword getEqualsSignKeyword_1() { return cEqualsSignKeyword_1; }
+
+		//value=STRING
+		public Assignment getValueAssignment_2() { return cValueAssignment_2; }
+
+		//STRING
+		public RuleCall getValueSTRINGTerminalRuleCall_2_0() { return cValueSTRINGTerminalRuleCall_2_0; }
 	}
 
 	public class VilDefElements extends AbstractParserRuleElementFinder {
@@ -964,6 +1052,8 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	private LanguageUnitElements pLanguageUnit;
 	private IndentationHintElements pIndentationHint;
 	private IndentationHintPartElements pIndentationHintPart;
+	private FormattingHintElements pFormattingHint;
+	private FormattingHintPartElements pFormattingHintPart;
 	private VilDefElements pVilDef;
 	private StmtBlockElements pStmtBlock;
 	private StmtElements pStmt;
@@ -1019,8 +1109,8 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	
 	//// do not rename - required for reuse
 	//LanguageUnit:
-	//	imports+=Import* javaExts+=Extension* advices+=Advice* indent=IndentationHint? "template" name=Identifier "("
-	//	param=ParameterList? ")" ("extends" ext=Identifier)? "{" version=VersionStmt? typeDefs+=TypeDef*
+	//	imports+=Import* javaExts+=Extension* advices+=Advice* indent=IndentationHint? formatting=FormattingHint? "template"
+	//	name=Identifier "(" param=ParameterList? ")" ("extends" ext=Identifier)? "{" version=VersionStmt? typeDefs+=TypeDef*
 	//	vars+=VariableDeclaration* defs+=VilDef* "}";
 	public LanguageUnitElements getLanguageUnitAccess() {
 		return (pLanguageUnit != null) ? pLanguageUnit : (pLanguageUnit = new LanguageUnitElements());
@@ -1048,6 +1138,26 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	
 	public ParserRule getIndentationHintPartRule() {
 		return getIndentationHintPartAccess().getRule();
+	}
+
+	//FormattingHint:
+	//	"@format" "(" parts+=FormattingHintPart ("," parts+=FormattingHintPart)* ")";
+	public FormattingHintElements getFormattingHintAccess() {
+		return (pFormattingHint != null) ? pFormattingHint : (pFormattingHint = new FormattingHintElements());
+	}
+	
+	public ParserRule getFormattingHintRule() {
+		return getFormattingHintAccess().getRule();
+	}
+
+	//FormattingHintPart:
+	//	name=Identifier "=" value=STRING;
+	public FormattingHintPartElements getFormattingHintPartAccess() {
+		return (pFormattingHintPart != null) ? pFormattingHintPart : (pFormattingHintPart = new FormattingHintPartElements());
+	}
+	
+	public ParserRule getFormattingHintPartRule() {
+		return getFormattingHintPartAccess().getRule();
 	}
 
 	//VilDef:

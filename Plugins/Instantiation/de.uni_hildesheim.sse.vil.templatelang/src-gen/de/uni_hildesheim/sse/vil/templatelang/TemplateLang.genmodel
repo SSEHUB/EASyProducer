@@ -12,6 +12,7 @@
     <genClasses ecoreClass="TemplateLang.ecore#//LanguageUnit">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//LanguageUnit/javaExts"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//LanguageUnit/indent"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//LanguageUnit/formatting"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//LanguageUnit/param"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TemplateLang.ecore#//LanguageUnit/ext"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//LanguageUnit/typeDefs"/>
@@ -24,6 +25,13 @@
     <genClasses ecoreClass="TemplateLang.ecore#//IndentationHintPart">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TemplateLang.ecore#//IndentationHintPart/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TemplateLang.ecore#//IndentationHintPart/value"/>
+    </genClasses>
+    <genClasses ecoreClass="TemplateLang.ecore#//FormattingHint">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//FormattingHint/parts"/>
+    </genClasses>
+    <genClasses ecoreClass="TemplateLang.ecore#//FormattingHintPart">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TemplateLang.ecore#//FormattingHintPart/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TemplateLang.ecore#//FormattingHintPart/value"/>
     </genClasses>
     <genClasses ecoreClass="TemplateLang.ecore#//VilDef">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TemplateLang.ecore#//VilDef/protected"/>

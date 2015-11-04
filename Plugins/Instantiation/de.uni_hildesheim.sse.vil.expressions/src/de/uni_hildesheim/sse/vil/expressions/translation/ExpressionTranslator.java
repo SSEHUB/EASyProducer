@@ -8,9 +8,9 @@ import java.util.Map;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.xtext.util.Strings;
 
 import de.uni_hildesheim.sse.dslCore.translation.ErrorCodes;
+import de.uni_hildesheim.sse.dslCore.translation.StringUtils;
 import de.uni_hildesheim.sse.dslCore.translation.TranslatorException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.ExpressionStatement;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VariableDeclaration;
@@ -775,7 +775,7 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                 ExpressionDslPackage.Literals.CONSTANT__NVALUE, resolver.getTypeRegistry());
             
         } else if (null != arg.getSValue()) {
-            String s = convertString(arg.getSValue());
+            String s = StringUtils.convertString(arg.getSValue());
             
             Expression ex;
             try {
@@ -1270,30 +1270,6 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
      */
     public void warning(AbstractException exception, EObject cause, EStructuralFeature causeFeature) {
         error(exception.getMessage(), cause, causeFeature, exception.getId());
-    }
-    
-    /**
-     * Convert a string by removing trailing and leading string terminal
-     * signs. This is required, as due to the nature of the VIL template 
-     * language we will not rely on automatic conversion by xText.
-     * 
-     * @param string the string to be converted (may be <b>null</b>)
-     * @return the same string but without the first and the last character (<b>null</b> 
-     *     if <code>string</code> is <b>null</b>)
-     */
-    public static String convertString(String string) {
-        String result;
-        if (null == string) {
-            result = null;
-        } else {
-            if ((string.startsWith("\"") && string.endsWith("\"")) 
-                || (string.startsWith("'") && string.endsWith("'"))) {
-                result = Strings.convertFromJavaString(string.substring(1, string.length() - 1), true);
-            } else {
-                result = string;
-            }
-        }
-        return result;
     }
     
     /**

@@ -7,6 +7,7 @@ import de.uni_hildesheim.sse.vil.expressions.expressionDsl.TypeDef;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration;
 
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.Extension;
+import de.uni_hildesheim.sse.vil.templatelang.templateLang.FormattingHint;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.IndentationHint;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.TemplateLangPackage;
@@ -36,6 +37,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.LanguageUnitImpl#getJavaExts <em>Java Exts</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.LanguageUnitImpl#getIndent <em>Indent</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.LanguageUnitImpl#getFormatting <em>Formatting</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.LanguageUnitImpl#getParam <em>Param</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.LanguageUnitImpl#getExt <em>Ext</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.LanguageUnitImpl#getTypeDefs <em>Type Defs</em>}</li>
@@ -67,6 +69,16 @@ public class LanguageUnitImpl extends de.uni_hildesheim.sse.vil.expressions.expr
    * @ordered
    */
   protected IndentationHint indent;
+
+  /**
+   * The cached value of the '{@link #getFormatting() <em>Formatting</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getFormatting()
+   * @generated
+   * @ordered
+   */
+  protected FormattingHint formatting;
 
   /**
    * The cached value of the '{@link #getParam() <em>Param</em>}' containment reference.
@@ -216,6 +228,54 @@ public class LanguageUnitImpl extends de.uni_hildesheim.sse.vil.expressions.expr
    * <!-- end-user-doc -->
    * @generated
    */
+  public FormattingHint getFormatting()
+  {
+    return formatting;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetFormatting(FormattingHint newFormatting, NotificationChain msgs)
+  {
+    FormattingHint oldFormatting = formatting;
+    formatting = newFormatting;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, TemplateLangPackage.LANGUAGE_UNIT__FORMATTING, oldFormatting, newFormatting);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setFormatting(FormattingHint newFormatting)
+  {
+    if (newFormatting != formatting)
+    {
+      NotificationChain msgs = null;
+      if (formatting != null)
+        msgs = ((InternalEObject)formatting).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - TemplateLangPackage.LANGUAGE_UNIT__FORMATTING, null, msgs);
+      if (newFormatting != null)
+        msgs = ((InternalEObject)newFormatting).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - TemplateLangPackage.LANGUAGE_UNIT__FORMATTING, null, msgs);
+      msgs = basicSetFormatting(newFormatting, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, TemplateLangPackage.LANGUAGE_UNIT__FORMATTING, newFormatting, newFormatting));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public ParameterList getParam()
   {
     return param;
@@ -338,6 +398,8 @@ public class LanguageUnitImpl extends de.uni_hildesheim.sse.vil.expressions.expr
         return ((InternalEList<?>)getJavaExts()).basicRemove(otherEnd, msgs);
       case TemplateLangPackage.LANGUAGE_UNIT__INDENT:
         return basicSetIndent(null, msgs);
+      case TemplateLangPackage.LANGUAGE_UNIT__FORMATTING:
+        return basicSetFormatting(null, msgs);
       case TemplateLangPackage.LANGUAGE_UNIT__PARAM:
         return basicSetParam(null, msgs);
       case TemplateLangPackage.LANGUAGE_UNIT__TYPE_DEFS:
@@ -364,6 +426,8 @@ public class LanguageUnitImpl extends de.uni_hildesheim.sse.vil.expressions.expr
         return getJavaExts();
       case TemplateLangPackage.LANGUAGE_UNIT__INDENT:
         return getIndent();
+      case TemplateLangPackage.LANGUAGE_UNIT__FORMATTING:
+        return getFormatting();
       case TemplateLangPackage.LANGUAGE_UNIT__PARAM:
         return getParam();
       case TemplateLangPackage.LANGUAGE_UNIT__EXT:
@@ -395,6 +459,9 @@ public class LanguageUnitImpl extends de.uni_hildesheim.sse.vil.expressions.expr
         return;
       case TemplateLangPackage.LANGUAGE_UNIT__INDENT:
         setIndent((IndentationHint)newValue);
+        return;
+      case TemplateLangPackage.LANGUAGE_UNIT__FORMATTING:
+        setFormatting((FormattingHint)newValue);
         return;
       case TemplateLangPackage.LANGUAGE_UNIT__PARAM:
         setParam((ParameterList)newValue);
@@ -434,6 +501,9 @@ public class LanguageUnitImpl extends de.uni_hildesheim.sse.vil.expressions.expr
       case TemplateLangPackage.LANGUAGE_UNIT__INDENT:
         setIndent((IndentationHint)null);
         return;
+      case TemplateLangPackage.LANGUAGE_UNIT__FORMATTING:
+        setFormatting((FormattingHint)null);
+        return;
       case TemplateLangPackage.LANGUAGE_UNIT__PARAM:
         setParam((ParameterList)null);
         return;
@@ -467,6 +537,8 @@ public class LanguageUnitImpl extends de.uni_hildesheim.sse.vil.expressions.expr
         return javaExts != null && !javaExts.isEmpty();
       case TemplateLangPackage.LANGUAGE_UNIT__INDENT:
         return indent != null;
+      case TemplateLangPackage.LANGUAGE_UNIT__FORMATTING:
+        return formatting != null;
       case TemplateLangPackage.LANGUAGE_UNIT__PARAM:
         return param != null;
       case TemplateLangPackage.LANGUAGE_UNIT__EXT:

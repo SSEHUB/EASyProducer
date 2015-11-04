@@ -26,6 +26,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
 import de.uni_hildesheim.sse.dslCore.translation.ErrorCodes;
+import de.uni_hildesheim.sse.dslCore.translation.StringUtils;
 import de.uni_hildesheim.sse.dslCore.translation.TranslatorException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.IRuleElement;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Imports;
@@ -131,7 +132,7 @@ public abstract class AbstractModelTranslator<M extends Script, L extends Langua
         }
         if (null != script.getLoadProperties()) {
             for (de.uni_hildesheim.sse.vilBuildLanguage.LoadProperties prop : script.getLoadProperties()) {
-                result.addLoadProperties(new LoadProperties(ExpressionTranslator.convertString(prop.getPath())));
+                result.addLoadProperties(new LoadProperties(StringUtils.convertString(prop.getPath())));
             }
         }
         resolveImports(script, ExpressionDslPackage.Literals.LANGUAGE_UNIT__IMPORTS, result, uri, inProgress);

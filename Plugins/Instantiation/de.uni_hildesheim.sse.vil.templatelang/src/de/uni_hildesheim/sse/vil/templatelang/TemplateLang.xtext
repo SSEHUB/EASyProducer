@@ -9,6 +9,7 @@ LanguageUnit: // do not rename - required for reuse
     javaExts+=Extension* 
     (advices+=Advice)*
     (indent=IndentationHint)?
+    (formatting=FormattingHint)?
     'template' name=Identifier 
     '(' param=ParameterList? ')'
     ('extends' ext=Identifier)? 
@@ -22,10 +23,18 @@ LanguageUnit: // do not rename - required for reuse
     
 IndentationHint:
     '@indent' '(' parts+=IndentationHintPart (',' parts+=IndentationHintPart)* ')' 
-    ;
+;
 
 IndentationHintPart:
     name=Identifier '=' value=NUMBER
+;
+
+FormattingHint:
+    '@format' '(' parts+=FormattingHintPart (',' parts+=FormattingHintPart)* ')'    
+;
+
+FormattingHintPart:
+    name=Identifier '=' value=STRING
 ;
 
 VilDef:
