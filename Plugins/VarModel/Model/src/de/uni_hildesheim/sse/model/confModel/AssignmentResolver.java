@@ -115,8 +115,24 @@ public class AssignmentResolver {
     protected void resolveDefaultValues(Project project) {
         DeclarationFinder finder = new DeclarationFinder(project, FilterType.NO_IMPORTS, null);
         List<AbstractVariable> variables = finder.getVariableDeclarations(VisibilityType.ALL);
-        for (AbstractVariable decl : variables) {
-            resolveDefaultValueForDeclaration(decl, config.getDecision(decl));
+        boolean variablesResolved = true;
+        int remainingSteps = iterationLoops > 0 ? iterationLoops : 1;
+        
+        while (variables.size() > 0 && variablesResolved && remainingSteps > 0) {
+            List<AbstractVariable> unresolvedVariables = new ArrayList<AbstractVariable>();
+            variablesResolved = false;
+            
+            for (AbstractVariable decl : variables) {
+                if (!resolveDefaultValueForDeclaration(decl, config.getDecision(decl))) {
+                    unresolvedVariables.add(decl);
+                    variablesResolved = true;
+                }
+            }
+            
+            // Swap
+            variables = unresolvedVariables;
+            unresolvedVariables = new ArrayList<AbstractVariable>();
+            remainingSteps--;
         }
     }
     
@@ -125,8 +141,12 @@ public class AssignmentResolver {
      * Resolves default values of a particular declaration.
      * @param decl The {@link AbstractVariable} for which the default value should be resolved.
      * @param variable the instance of <tt>decl</tt>.
+     * @return <tt>true</tt> if a default value could be resovled and assigned to <tt>variable</tt>, <tt>false</tt>
+     *     otherwise.
      */
-    protected void resolveDefaultValueForDeclaration(AbstractVariable decl, IDecisionVariable variable) {
+    protected boolean resolveDefaultValueForDeclaration(AbstractVariable decl, IDecisionVariable variable) {
+        boolean valueResolved = false;
+        
         IDatatype type = decl.getType();
         if (Compound.TYPE.isAssignableFrom(type)) {
             Compound cmpType = (Compound) type;
@@ -145,14 +165,19 @@ public class AssignmentResolver {
                 conflictingDefault(decl);
             } else {
                 Value value = evaluator.getResult();
-                try {
-                    variable.setValue(value, AssignmentState.DEFAULT);
-                } catch (ConfigurationException e) {
-                    EASyLoggerFactory.INSTANCE.getLogger(AssignmentResolver.class, Bundle.ID).exception(e);
+                if (null != value) {
+                    try {
+                        variable.setValue(value, AssignmentState.DEFAULT);
+                        valueResolved = true;
+                    } catch (ConfigurationException e) {
+                        EASyLoggerFactory.INSTANCE.getLogger(AssignmentResolver.class, Bundle.ID).exception(e);
+                    }
                 }
             }
             evaluator.clear();
         }
+        
+        return valueResolved;
     }
     
     /**

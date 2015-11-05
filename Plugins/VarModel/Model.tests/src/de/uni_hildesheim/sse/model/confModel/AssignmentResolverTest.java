@@ -488,6 +488,49 @@ public class AssignmentResolverTest {
     }
     
     /**
+     * Tests whether dependent default values will be resolved (in a loop).
+     * <pre><code>
+     * project loopingDefaultTest {
+     *
+     *    Integer intA = 1 + intB;
+     *    Integer intB = 2;
+     *}
+     * </code></pre>
+     */
+    @Test
+    public void testDependentDefaultValueResolving() {
+        Project project = new Project("loopingDefaultTest");
+        DecisionVariableDeclaration decl1 = new DecisionVariableDeclaration("intA", IntegerType.TYPE, project);
+        project.add(decl1);
+        DecisionVariableDeclaration decl2 = new DecisionVariableDeclaration("intB", IntegerType.TYPE, project);
+        project.add(decl2);
+        try {
+            ConstantValue value1 = new ConstantValue(ValueFactory.createValue(IntegerType.TYPE, "1"));            
+            OCLFeatureCall defaultValue1 = new OCLFeatureCall(value1, OclKeyWords.PLUS,
+                new Variable(decl2));
+            decl1.setValue(defaultValue1);
+            
+            ConstantValue value2 = new ConstantValue(ValueFactory.createValue(IntegerType.TYPE, "2"));
+            decl2.setValue(value2);
+        } catch (CSTSemanticException e) {
+            Assert.fail(e.getMessage());
+        } catch (ValueDoesNotMatchTypeException e) {
+            Assert.fail(e.getMessage());
+        }
+        ProjectTestUtilities.validateProject(project, true);
+        
+        // Configuration must be started with AssignmentResolver, since Reasoner is not available in this project.
+        Configuration config = new Configuration(project, true);
+        IDecisionVariable var1 = config.getDecision(decl1);
+        IDecisionVariable var2 = config.getDecision(decl2);
+        Assert.assertNotNull(var1.getValue());
+        Assert.assertEquals(3, var1.getValue().getValue());
+        Assert.assertNotNull(var2.getValue());
+        Assert.assertEquals(2, var2.getValue().getValue());
+        
+    }
+    
+    /**
      * Tests whether implies constraints will be handled correctly by the {@link AssignmentResolver}.
      * @throws ValueDoesNotMatchTypeException Must not occur otherwise there is a failure inside the
      * {@link ValueFactory}.
