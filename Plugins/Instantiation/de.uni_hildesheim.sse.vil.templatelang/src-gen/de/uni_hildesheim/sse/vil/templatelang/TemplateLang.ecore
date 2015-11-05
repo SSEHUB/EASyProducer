@@ -7,6 +7,8 @@
         eType="#//Extension" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="indent" eType="#//IndentationHint"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="formatting" eType="#//FormattingHint"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="param" eType="ecore:EClass ../../../../../../../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/ExpressionDsl.ecore#//ParameterList"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="ext" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -23,6 +25,14 @@
         eType="#//IndentationHintPart" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IndentationHintPart">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FormattingHint">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parts" upperBound="-1"
+        eType="#//FormattingHintPart" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FormattingHintPart">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>

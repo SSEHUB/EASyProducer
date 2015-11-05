@@ -70,12 +70,6 @@ public class ConfigurationTableEditorFactory implements IConfigurationEditorCrea
          */
         public Control createEditor(UIConfiguration config, IDecisionVariable variable, Composite parent);
 
-        /**
-         * Updates the display text of the value in the editor.
-         * 
-         * @param text the text to be displayed
-         */
-        public void updateText(String text);
     }
     
     /**

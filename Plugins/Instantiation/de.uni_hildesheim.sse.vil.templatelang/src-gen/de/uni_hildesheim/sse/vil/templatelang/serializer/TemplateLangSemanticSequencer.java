@@ -50,6 +50,8 @@ import de.uni_hildesheim.sse.vil.templatelang.services.TemplateLangGrammarAccess
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.Alternative;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.Content;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.Extension;
+import de.uni_hildesheim.sse.vil.templatelang.templateLang.FormattingHint;
+import de.uni_hildesheim.sse.vil.templatelang.templateLang.FormattingHintPart;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.IndentationHint;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.IndentationHintPart;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.JavaQualifiedName;
@@ -356,6 +358,18 @@ public class TemplateLangSemanticSequencer extends ExpressionDslSemanticSequence
 					return; 
 				}
 				else break;
+			case TemplateLangPackage.FORMATTING_HINT:
+				if(context == grammarAccess.getFormattingHintRule()) {
+					sequence_FormattingHint(context, (FormattingHint) semanticObject); 
+					return; 
+				}
+				else break;
+			case TemplateLangPackage.FORMATTING_HINT_PART:
+				if(context == grammarAccess.getFormattingHintPartRule()) {
+					sequence_FormattingHintPart(context, (FormattingHintPart) semanticObject); 
+					return; 
+				}
+				else break;
 			case TemplateLangPackage.INDENTATION_HINT:
 				if(context == grammarAccess.getIndentationHintRule()) {
 					sequence_IndentationHint(context, (IndentationHint) semanticObject); 
@@ -480,6 +494,34 @@ public class TemplateLangSemanticSequencer extends ExpressionDslSemanticSequence
 	
 	/**
 	 * Constraint:
+	 *     (name=Identifier value=STRING)
+	 */
+	protected void sequence_FormattingHintPart(EObject context, FormattingHintPart semanticObject) {
+		if(errorAcceptor != null) {
+			if(transientValues.isValueTransient(semanticObject, TemplateLangPackage.Literals.FORMATTING_HINT_PART__NAME) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, TemplateLangPackage.Literals.FORMATTING_HINT_PART__NAME));
+			if(transientValues.isValueTransient(semanticObject, TemplateLangPackage.Literals.FORMATTING_HINT_PART__VALUE) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, TemplateLangPackage.Literals.FORMATTING_HINT_PART__VALUE));
+		}
+		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
+		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
+		feeder.accept(grammarAccess.getFormattingHintPartAccess().getNameIdentifierParserRuleCall_0_0(), semanticObject.getName());
+		feeder.accept(grammarAccess.getFormattingHintPartAccess().getValueSTRINGTerminalRuleCall_2_0(), semanticObject.getValue());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (parts+=FormattingHintPart parts+=FormattingHintPart*)
+	 */
+	protected void sequence_FormattingHint(EObject context, FormattingHint semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
 	 *     (name=Identifier value=NUMBER)
 	 */
 	protected void sequence_IndentationHintPart(EObject context, IndentationHintPart semanticObject) {
@@ -522,6 +564,7 @@ public class TemplateLangSemanticSequencer extends ExpressionDslSemanticSequence
 	 *         javaExts+=Extension* 
 	 *         advices+=Advice* 
 	 *         indent=IndentationHint? 
+	 *         formatting=FormattingHint? 
 	 *         name=Identifier 
 	 *         param=ParameterList? 
 	 *         ext=Identifier? 

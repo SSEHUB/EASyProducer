@@ -1,7 +1,9 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
@@ -44,7 +46,7 @@ class IvmlProjectTypeDescriptor extends AbstractIvmlTypeDescriptor implements IA
         addDecisionVariableOperations(operations);
         // comparison operations is unclear
         //addAttributeOperations(operations, project); // attributes declare but do not have projects
-        addOperations(operations, fields, project);
+        addOperations(operations, fields, project, new HashSet<Project>());
         setOperations(operations.values());
         setFields(fields.values());
         setConversions(null);
@@ -92,22 +94,26 @@ class IvmlProjectTypeDescriptor extends AbstractIvmlTypeDescriptor implements IA
      * @param operations the name-operation mapping to be filled as a side effect
      * @param fields the name-field mapping to be filled as a side effect
      * @param project the project the operations shall be added for
+     * @param done already done projects
      */
     private void addOperations(Map<String, OperationDescriptor> operations, Map<String, FieldDescriptor> fields, 
-        Project project) {
-        int eCount = project.getElementCount();
-        for (int e = 0; e < eCount; e++) {
-            ContainableModelElement elt = project.getElement(e);
-            if (elt instanceof DecisionVariableDeclaration) {
-                addOperations((DecisionVariableDeclaration) elt, operations, fields);
-            } else if (elt instanceof AttributeAssignment) {
-                addOperations((AttributeAssignment) elt, operations, fields);
+        Project project, Set<Project> done) {
+        if (!done.contains(project)) {
+            done.add(project);
+            int eCount = project.getElementCount();
+            for (int e = 0; e < eCount; e++) {
+                ContainableModelElement elt = project.getElement(e);
+                if (elt instanceof DecisionVariableDeclaration) {
+                    addOperations((DecisionVariableDeclaration) elt, operations, fields);
+                } else if (elt instanceof AttributeAssignment) {
+                    addOperations((AttributeAssignment) elt, operations, fields);
+                }
             }
-        }
-        for (int i = 0; i < project.getImportsCount(); i++) {
-            Project imp = project.getImport(i).getResolved();
-            if (null != imp) {
-                addOperations(operations, fields, imp);
+            for (int i = 0; i < project.getImportsCount(); i++) {
+                Project imp = project.getImport(i).getResolved();
+                if (null != imp) {
+                    addOperations(operations, fields, imp, done);
+                }
             }
         }
     }

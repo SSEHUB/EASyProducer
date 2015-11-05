@@ -90,6 +90,16 @@ public class TemplateLangAdapterFactory extends AdapterFactoryImpl
         return createIndentationHintPartAdapter();
       }
       @Override
+      public Adapter caseFormattingHint(FormattingHint object)
+      {
+        return createFormattingHintAdapter();
+      }
+      @Override
+      public Adapter caseFormattingHintPart(FormattingHintPart object)
+      {
+        return createFormattingHintPartAdapter();
+      }
+      @Override
       public Adapter caseVilDef(VilDef object)
       {
         return createVilDefAdapter();
@@ -227,6 +237,36 @@ public class TemplateLangAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createIndentationHintPartAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.FormattingHint <em>Formatting Hint</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.FormattingHint
+   * @generated
+   */
+  public Adapter createFormattingHintAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.FormattingHintPart <em>Formatting Hint Part</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.FormattingHintPart
+   * @generated
+   */
+  public Adapter createFormattingHintPartAdapter()
   {
     return null;
   }

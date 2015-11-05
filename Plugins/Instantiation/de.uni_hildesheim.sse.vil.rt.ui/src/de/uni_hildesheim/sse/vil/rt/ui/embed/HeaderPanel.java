@@ -78,7 +78,6 @@ public class HeaderPanel extends Composite implements IHeader {
         });
         listener = new AggregatingModelLoadingListener(new ButtonUiControl(simulate));
         listener.initialize();
-System.out.println(">OPENING HEADER PANEL");        
         ModelInfo<Project> ivmlInfo = VarModel.INSTANCE.availableModels().getModelInfo(config.getProject());
         BasicModelLoadingListener<Project> ivmlListener = new BasicModelLoadingListener<Project>(
             ivmlInfo, VarModel.INSTANCE, listener);
@@ -86,7 +85,6 @@ System.out.println(">OPENING HEADER PANEL");
         BasicModelLoadingListener<Script> rtVilListener = new BasicModelLoadingListener<Script>(
             (ModelInfo<Script>) info, RtVilModel.INSTANCE, listener); 
         listener.addListeners(ivmlListener, rtVilListener);
-System.out.println("<OPENING HEADER PANEL");
     }
 
     @Override

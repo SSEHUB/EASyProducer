@@ -152,7 +152,7 @@ public class ModelQuery {
      * @return the found project or <b>null</b> if there is none
      */
     public static Project findProject(Project project, String name) {
-        return findProject(project, name, "");
+        return findProject(project, name, "", new HashSet<Project>());
     }
     
     /**
@@ -161,23 +161,27 @@ public class ModelQuery {
      * @param project the project to start the search at (including imports) 
      * @param name the name to search for
      * @param path the current qualified search path
+     * @param done already processed projects
      * @return the found project or <b>null</b> if there is none
      */
-    private static Project findProject(Project project, String name, String path) {
-        Project result;
-        String pName = project.getName();
-        if (path.length() > 0) {
-            path = path + IvmlKeyWords.NAMESPACE_SEPARATOR;
-        }
-        path += pName; 
-        if (pName.equals(name) || (path.length() > 0 && path.equals(name))) {
-            result = project;
-        } else {
-            result = null;
-            for (int i = 0; null == result && i < project.getImportsCount(); i++) {
-                Project imp = project.getImport(i).getResolved();
-                if (null != imp) {
-                    result = findProject(imp, name, path); 
+    private static Project findProject(Project project, String name, String path, Set<Project> done) {
+        Project result = null;
+        if (!done.contains(project)) {
+            done.add(project);
+            String pName = project.getName();
+            if (path.length() > 0) {
+                path = path + IvmlKeyWords.NAMESPACE_SEPARATOR;
+            }
+            path += pName; 
+            if (pName.equals(name) || (path.length() > 0 && path.equals(name))) {
+                result = project;
+            } else {
+                result = null;
+                for (int i = 0; null == result && i < project.getImportsCount(); i++) {
+                    Project imp = project.getImport(i).getResolved();
+                    if (null != imp) {
+                        result = findProject(imp, name, path, done); 
+                    }
                 }
             }
         }
@@ -198,7 +202,7 @@ public class ModelQuery {
      */
     public static IDatatype findType(IResolutionScope elements, String name, Class<? extends IDatatype> type) 
         throws ModelQueryException {
-        return findType(elements, name, false, type);
+        return findType(elements, name, false, type, new HashSet<IResolutionScope>());
     }
 
     /**
@@ -209,62 +213,67 @@ public class ModelQuery {
      * @param considerVariableDeclarations take the types of variable declarations into account
      * @param type the specific type of datatype to be returned, {@link IDatatype} 
      *   is used if <b>null</b>
+     * @param done already done resolution scopes
      * @return the corresponding type or <b>null</b>
      * @throws ModelQueryException in case of violated project access restrictions
      */
     private static IDatatype findType(IResolutionScope elements, String name, 
-        boolean considerVariableDeclarations, Class<? extends IDatatype> type) throws ModelQueryException {
-        // determine import scope
-        //IResolutionScope initialScope = elements;
-        IResolutionScope importedScope = getScope(elements, name);
-        if (null != importedScope) {
-            name = removeNamespace(name);
-            elements = importedScope;
-            considerVariableDeclarations = (/*elements != initialScope &&*/ elements.isInterface());
-        }
-        
-        if (null == type) {
-            type = IDatatype.class;
-        }
+        boolean considerVariableDeclarations, Class<? extends IDatatype> type, Set<IResolutionScope> done) 
+        throws ModelQueryException {
         IDatatype result = null;
-        if (BooleanType.TYPE.getName().equals(name)) {
-            result = BooleanType.TYPE;
-        } else if (IntegerType.TYPE.getName().equals(name)) {
-            result = IntegerType.TYPE;
-        } else if (RealType.TYPE.getName().equals(name)) {
-            result = RealType.TYPE;
-        } else if (StringType.TYPE.getName().equals(name)) {
-            result = StringType.TYPE;
-        } else if (ConstraintType.TYPE.getName().equals(name)) {
-            result = ConstraintType.TYPE;
-        }
-        // further checks happen inside the sub methods
-        if (null != result && !type.isAssignableFrom(result.getClass())) { 
-            result = null;
-        }
-        if (null == result) {
-            result = findElementByTypeName(elements, name, type);
-        }
-        if (null == result && considerVariableDeclarations) {
-            int size = elements.getElementCount();
-            for (int e = 0; null == result && e < size; e++) {
-                ContainableModelElement elt = elements.getElement(e);
-                if (elt instanceof DecisionVariableDeclaration) {
-                    DecisionVariableDeclaration varDecl = (DecisionVariableDeclaration) elt;
-                    if (varDecl.getType().getName().equals(name)) {
-                        result = varDecl.getType();
+        if (!done.contains(elements)) {
+            done.add(elements);
+            // determine import scope
+            //IResolutionScope initialScope = elements;
+            IResolutionScope importedScope = getScope(elements, name);
+            if (null != importedScope) {
+                name = removeNamespace(name);
+                elements = importedScope;
+                considerVariableDeclarations = (/*elements != initialScope &&*/ elements.isInterface());
+            }
+            
+            if (null == type) {
+                type = IDatatype.class;
+            }
+            if (BooleanType.TYPE.getName().equals(name)) {
+                result = BooleanType.TYPE;
+            } else if (IntegerType.TYPE.getName().equals(name)) {
+                result = IntegerType.TYPE;
+            } else if (RealType.TYPE.getName().equals(name)) {
+                result = RealType.TYPE;
+            } else if (StringType.TYPE.getName().equals(name)) {
+                result = StringType.TYPE;
+            } else if (ConstraintType.TYPE.getName().equals(name)) {
+                result = ConstraintType.TYPE;
+            }
+            // further checks happen inside the sub methods
+            if (null != result && !type.isAssignableFrom(result.getClass())) { 
+                result = null;
+            }
+            if (null == result) {
+                result = findElementByTypeName(elements, name, type);
+            }
+            if (null == result && considerVariableDeclarations) {
+                int size = elements.getElementCount();
+                for (int e = 0; null == result && e < size; e++) {
+                    ContainableModelElement elt = elements.getElement(e);
+                    if (elt instanceof DecisionVariableDeclaration) {
+                        DecisionVariableDeclaration varDecl = (DecisionVariableDeclaration) elt;
+                        if (varDecl.getType().getName().equals(name)) {
+                            result = varDecl.getType();
+                        }
                     }
                 }
             }
-        }
-        // search unqualified imported elements
-        if (null == result) {
-            for (int i = 0; null == result && i < elements.getImportsCount(); i++) {
-                ProjectImport imp = elements.getImport(i);
-                if (!imp.isConflict()) {
-                    IResolutionScope imported = imp.getScope();
-                    if (null != imported) {
-                        result = findType(imported, name, imported.isInterface(), type);
+            // search unqualified imported elements
+            if (null == result) {
+                for (int i = 0; null == result && i < elements.getImportsCount(); i++) {
+                    ProjectImport imp = elements.getImport(i);
+                    if (!imp.isConflict()) {
+                        IResolutionScope imported = imp.getScope();
+                        if (null != imported) {
+                            result = findType(imported, name, imported.isInterface(), type, done);
+                        }
                     }
                 }
             }
@@ -284,52 +293,71 @@ public class ModelQuery {
      */
     public static IDatatype findElementByTypeName(IResolutionScope elements, String typeName, 
         Class<? extends IDatatype> type) throws ModelQueryException {
-        // determine import scope
-        IResolutionScope importedScope = getScope(elements, typeName);
-        if (null != importedScope) {
-            typeName = removeNamespace(typeName);
-            elements = importedScope;
-        }
-        
-        if (null == type) {
-            type = IDatatype.class;
-        }
+        return findElementByTypeName(elements, typeName, type, new HashSet<IResolutionScope>());
+    }
+
+    /**
+     * Finds the specified data type definition in the given <code>elements</code>.
+     * 
+     * @param elements the elements to search for
+     * @param typeName the name of the type to search for (may be qualified)
+     * @param type the specific type of datatype to be returned, {@link IDatatype} 
+     *   is used if <b>null</b>
+     * @param done the already processed resolution scopes
+     * @return the corresponding type or <b>null</b>
+     * @throws ModelQueryException in case of violated project access restrictions
+     */
+    public static IDatatype findElementByTypeName(IResolutionScope elements, String typeName, 
+        Class<? extends IDatatype> type, Set<IResolutionScope> done) throws ModelQueryException {
         IDatatype result = null;
-        for (int c = 0; c < elements.getElementCount(); c++) {
-            ContainableModelElement element = elements.getElement(c);
-            if (type.isAssignableFrom(element.getClass())) {
-                String elName = getType(element, TYPE_SEARCH_MODE);
-                if (elName.equals(typeName)) {
-                    result = (IDatatype) element;
-                    break;
-                }
+        // determine import scope
+        if (!done.contains(elements)) {
+            done.add(elements);
+
+            IResolutionScope importedScope = getScope(elements, typeName);
+            if (null != importedScope) {
+                typeName = removeNamespace(typeName);
+                elements = importedScope;
             }
-            if (element instanceof AbstractVariable) { 
-                // in case of interface resolutions - consider dependent types of exports
-                AbstractVariable var = (AbstractVariable) element;
-                IDatatype varType = var.getType();
-                if (varType instanceof Compound) {
-                    result = findElementByTypeName((Compound) varType, typeName);
-                    if (null != result) {
+            
+            if (null == type) {
+                type = IDatatype.class;
+            }
+            for (int c = 0; c < elements.getElementCount(); c++) {
+                ContainableModelElement element = elements.getElement(c);
+                if (type.isAssignableFrom(element.getClass())) {
+                    String elName = getType(element, TYPE_SEARCH_MODE);
+                    if (elName.equals(typeName)) {
+                        result = (IDatatype) element;
                         break;
                     }
                 }
+                if (element instanceof AbstractVariable) { 
+                    // in case of interface resolutions - consider dependent types of exports
+                    AbstractVariable var = (AbstractVariable) element;
+                    IDatatype varType = var.getType();
+                    if (varType instanceof Compound) {
+                        result = findElementByTypeName((Compound) varType, typeName);
+                        if (null != result) {
+                            break;
+                        }
+                    }
+                }
             }
-        }
-        
-        // search unqualified imported elements
-        if (null == result) {
-            for (int i = 0; null == result && i < elements.getImportsCount(); i++) {
-                ProjectImport imp = elements.getImport(i);
-                if (!imp.isConflict()) {
-                    IResolutionScope imported = imp.getScope();
-                    if (null != imported) {
-                        result = findElementByTypeName(imported, typeName, type);
+            
+            // search unqualified imported elements
+            if (null == result) {
+                for (int i = 0; null == result && i < elements.getImportsCount(); i++) {
+                    ProjectImport imp = elements.getImport(i);
+                    if (!imp.isConflict()) {
+                        IResolutionScope imported = imp.getScope();
+                        if (null != imported) {
+                            result = findElementByTypeName(imported, typeName, type, done);
+                        }
                     }
                 }
             }
         }
-
         return result;
     }
 
@@ -659,52 +687,72 @@ public class ModelQuery {
      */
     public static IModelElement findVariableUse(IResolutionScope elements, String name, 
         Class<?> type) throws ModelQueryException {
+        return findVariableUse(elements, name, type, new HashSet<IResolutionScope>());
+    }        
+        
+    /**
+     * Searches for a specified variable or variable use.
+     * @param elements the elements to search for
+     * @param name the name of the variable to search for (may be qualified)
+     * @param type the specific variable of datatype to be returned, {@link AbstractVariable} 
+     *   is used if <b>null</b>
+     * @param done already processed scopes
+     * @return the corresponding variable or {@link CompoundAccessStatement}, <b>null</b> else
+     * @throws ModelQueryException in case of ambiguities
+     */
+    private static IModelElement findVariableUse(IResolutionScope elements, String name, 
+        Class<?> type, Set<IResolutionScope> done) throws ModelQueryException {
         IModelElement result = null;
-        String originalName = name;
-        Object directResult = findElementByName(elements, name, type);
-        // determine import scope
-        IResolutionScope importedScope = getScope(elements, name);
-        if (null != importedScope) {
-            name = removeNamespace(name);
-            elements = importedScope;
-        }
-        
-        // separate element name and compound access
-        String innerName = null;
-        int pos = name.indexOf(IvmlKeyWords.COMPOUND_ACCESS);
-        if (pos > 0) {
-            innerName = name.substring(pos + 1);
-            name = name.substring(0, pos);
-        }
-        result = findElementByName(elements, name, type);
-        result = findCompoundOrAttributeAccess(elements, name, innerName, result);
-        if (null != type && AbstractVariable.class.isAssignableFrom(type)) {
-            // support legacy results
-            if (result instanceof CompoundAccessStatement) {
-                CompoundAccessStatement acc = (CompoundAccessStatement) result;
-                result = acc.getSlotDeclaration();
+        if (!done.contains(elements)) {
+            done.add(elements);
+
+            String originalName = name;
+            Object directResult = findElementByName(elements, name, type);
+            // determine import scope
+            IResolutionScope importedScope = getScope(elements, name);
+            if (null != importedScope) {
+                name = removeNamespace(name);
+                elements = importedScope;
             }
-        }
-        
-        // search unqualified imported elements
-        if (null == result) {
-            for (int i = 0; null == result && i < elements.getImportsCount(); i++) {
-                ProjectImport imp = elements.getImport(i);
-                if (!imp.isConflict()) {
-                    IResolutionScope imported = imp.getScope();
-                    if (null != imported) {
-                        result = findVariableUse(imported, name, type);
+            
+            // separate element name and compound access
+            String innerName = null;
+            int pos = name.indexOf(IvmlKeyWords.COMPOUND_ACCESS);
+            if (pos > 0) {
+                innerName = name.substring(pos + 1);
+                name = name.substring(0, pos);
+            }
+            result = findElementByName(elements, name, type);
+            result = findCompoundOrAttributeAccess(elements, name, innerName, result);
+            if (null != type && AbstractVariable.class.isAssignableFrom(type)) {
+                // support legacy results
+                if (result instanceof CompoundAccessStatement) {
+                    CompoundAccessStatement acc = (CompoundAccessStatement) result;
+                    result = acc.getSlotDeclaration();
+                }
+            }
+            
+            // search unqualified imported elements
+            if (null == result) {
+                for (int i = 0; null == result && i < elements.getImportsCount(); i++) {
+                    ProjectImport imp = elements.getImport(i);
+                    if (!imp.isConflict()) {
+                        IResolutionScope imported = imp.getScope();
+                        if (null != imported) {
+                            result = findVariableUse(imported, name, type, done);
+                        }
                     }
                 }
             }
-        }
-        
-        if (null != type && null != result && !type.isAssignableFrom(result.getClass())) {
-            result = null;
-        }
-        if (null != directResult && !directResult.equals(result)) {
-            throw new ModelQueryException("name is ambiguous '" + originalName + "'", 
-                 ModelQueryException.AMBIGUITY);
+            
+            if (null != type && null != result && !type.isAssignableFrom(result.getClass())) {
+                result = null;
+            }
+            if (null != directResult && !directResult.equals(result)) {
+                throw new ModelQueryException("name is ambiguous '" + originalName + "'", 
+                     ModelQueryException.AMBIGUITY);
+            }
+
         }
         return result;
     }
@@ -831,44 +879,62 @@ public class ModelQuery {
      */
     public static ContainableModelElement findElementByName(IResolutionScope elements, String name, 
         Class<?> type) throws ModelQueryException {
+        return findElementByName(elements, name, type, new HashSet<IResolutionScope>());
+    }
+    
+    /**
+     * Finds an element by its given name in <code>elements</code>.
+     * 
+     * @param elements the elements to search for
+     * @param name the name of the element to search for
+     * @param type the specific type of element to be returned
+     * @param done already processed resolution scopes
+     * @return the found element or <b>null</b>
+     * @throws ModelQueryException in case of violated project access restrictions
+     */
+    private static ContainableModelElement findElementByName(IResolutionScope elements, String name, 
+        Class<?> type, Set<IResolutionScope> done) throws ModelQueryException {
         ContainableModelElement result = null;
-        // determine import scope
-        IResolutionScope importedScope = getScope(elements, name);
-        if (null != importedScope) {
-            name = removeNamespace(name);
-            elements = importedScope;
-        }
-        // TODO use visitor
-        result = checkElement(elements.getElement(name), name, type);
-        for (int c = 0; null == result && c < elements.getElementCount(); c++) {
-            ContainableModelElement element = elements.getElement(c);
-            result = checkElement(element, name, type);
-            if (null == result && element instanceof IDecisionVariableContainer) {
-                IDecisionVariableContainer cont = (IDecisionVariableContainer) element;
-                DecisionVariableDeclaration var = cont.getElement(name);
-                if (null != var) {
-                    result = checkElement(var, name, type);
+        if (!done.contains(elements)) {
+            done.add(elements);
+            // determine import scope
+            IResolutionScope importedScope = getScope(elements, name);
+            if (null != importedScope) {
+                name = removeNamespace(name);
+                elements = importedScope;
+            }
+            // TODO use visitor
+            result = checkElement(elements.getElement(name), name, type);
+            for (int c = 0; null == result && c < elements.getElementCount(); c++) {
+                ContainableModelElement element = elements.getElement(c);
+                result = checkElement(element, name, type);
+                if (null == result && element instanceof IDecisionVariableContainer) {
+                    IDecisionVariableContainer cont = (IDecisionVariableContainer) element;
+                    DecisionVariableDeclaration var = cont.getElement(name);
+                    if (null != var) {
+                        result = checkElement(var, name, type);
+                    }
+                    /*for (int e = 0; null == result && e < cont.getElementCount(); e++) {
+                        result = checkElement(cont.getElement(e), name, type);
+                    }*/
                 }
-                /*for (int e = 0; null == result && e < cont.getElementCount(); e++) {
-                    result = checkElement(cont.getElement(e), name, type);
-                }*/
             }
-        }
-        if (elements instanceof IAttributeAccess) {
-            IAttributeAccess attributes = (IAttributeAccess) elements;
-            for (int a = 0; null == result && a < attributes.getAttributesCount(); a++) {
-                result = checkElement(attributes.getAttribute(a), name, type);
+            if (elements instanceof IAttributeAccess) {
+                IAttributeAccess attributes = (IAttributeAccess) elements;
+                for (int a = 0; null == result && a < attributes.getAttributesCount(); a++) {
+                    result = checkElement(attributes.getAttribute(a), name, type);
+                }
             }
-        }
-        
-        // search unqualified imported elements
-        if (null == result) {
-            for (int i = 0; null == result && i < elements.getImportsCount(); i++) {
-                ProjectImport imp = elements.getImport(i);
-                if (!imp.isConflict()) {
-                    IResolutionScope imported = imp.getScope();
-                    if (null != imported) {
-                        result = findElementByName(imported, name, type);
+            
+            // search unqualified imported elements
+            if (null == result) {
+                for (int i = 0; null == result && i < elements.getImportsCount(); i++) {
+                    ProjectImport imp = elements.getImport(i);
+                    if (!imp.isConflict()) {
+                        IResolutionScope imported = imp.getScope();
+                        if (null != imported) {
+                            result = findElementByName(imported, name, type, done);
+                        }
                     }
                 }
             }
@@ -967,7 +1033,7 @@ public class ModelQuery {
      */
     public static List<Attribute> getAllAttributes(IResolutionScope scope) {
         List<Attribute> result = new ArrayList<Attribute>();
-        getAllAttributes(scope, result);
+        getAllAttributes(scope, result, new HashSet<IResolutionScope>());
         return result;
     }
 
@@ -976,25 +1042,30 @@ public class ModelQuery {
      * 
      * @param scope the scope to be considered for collecting
      * @param attributes the contained attributes (modified as a side effect)
+     * @param done already processed scopes
      */
-    private static void getAllAttributes(IResolutionScope scope, List<Attribute> attributes) {
-        int size = scope.getElementCount();
-        for (int e = 0; e < size; e++) {
-            ContainableModelElement elt = scope.getElement(e);
-            if (elt instanceof Attribute) {
-                Attribute attr = (Attribute) elt;
-                if (!attributes.contains(attr)) {
-                    attributes.add(attr);
+    private static void getAllAttributes(IResolutionScope scope, List<Attribute> attributes, 
+        Set<IResolutionScope> done) {
+        if (!done.contains(scope)) {
+            done.add(scope);
+            int size = scope.getElementCount();
+            for (int e = 0; e < size; e++) {
+                ContainableModelElement elt = scope.getElement(e);
+                if (elt instanceof Attribute) {
+                    Attribute attr = (Attribute) elt;
+                    if (!attributes.contains(attr)) {
+                        attributes.add(attr);
+                    }
                 }
             }
-        }
-        for (int i = 0; i < scope.getImportsCount(); i++) {
-            ProjectImport imp = scope.getImport(i);
-            if (!imp.isConflict()) {
-                // check: are interfaces properly considered!
-                IResolutionScope imported = imp.getScope();
-                if (null != imported) {
-                    getAllAttributes(imported, attributes);
+            for (int i = 0; i < scope.getImportsCount(); i++) {
+                ProjectImport imp = scope.getImport(i);
+                if (!imp.isConflict()) {
+                    // check: are interfaces properly considered!
+                    IResolutionScope imported = imp.getScope();
+                    if (null != imported) {
+                        getAllAttributes(imported, attributes, done);
+                    }
                 }
             }
         }

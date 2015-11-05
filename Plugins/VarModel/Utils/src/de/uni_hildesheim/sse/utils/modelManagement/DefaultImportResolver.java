@@ -76,10 +76,9 @@ public abstract class DefaultImportResolver<M extends IModel> extends ImportReso
         } catch (RestrictionEvaluationException e) {
             messages.add(new Message(e.getMessage(), Status.ERROR));
         }
-
         return messages;
     }
-
+    
     /**
      * Checks the import structure of <code>model</code> for cycles.
      * 

@@ -94,6 +94,20 @@ public class TemplateLangSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case TemplateLangPackage.FORMATTING_HINT:
+      {
+        FormattingHint formattingHint = (FormattingHint)theEObject;
+        T result = caseFormattingHint(formattingHint);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case TemplateLangPackage.FORMATTING_HINT_PART:
+      {
+        FormattingHintPart formattingHintPart = (FormattingHintPart)theEObject;
+        T result = caseFormattingHintPart(formattingHintPart);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case TemplateLangPackage.VIL_DEF:
       {
         VilDef vilDef = (VilDef)theEObject;
@@ -240,6 +254,38 @@ public class TemplateLangSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseIndentationHintPart(IndentationHintPart object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Formatting Hint</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Formatting Hint</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseFormattingHint(FormattingHint object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Formatting Hint Part</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Formatting Hint Part</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseFormattingHintPart(FormattingHintPart object)
   {
     return null;
   }

@@ -15,6 +15,9 @@
  */
 package de.uni_hildesheim.sse.model.varModel;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
 
 /**
@@ -33,6 +36,8 @@ public abstract class AbstractProjectVisitor implements IModelVisitor {
      * Specifies whether project imports shall be considered or not.
      */
     private FilterType filterType;
+    
+    private Set<Project> done = new HashSet<Project>();
     
     /**
      * Sole constructor for this visitor.
@@ -55,22 +60,25 @@ public abstract class AbstractProjectVisitor implements IModelVisitor {
     
     @Override
     public void visitProject(Project project) {
-        boolean importedProject = originProject != project;
-        
-        // Visit imports.
-        if (FilterType.ALL == filterType || FilterType.ONLY_IMPORTS == filterType) {
-            for (int i = 0; i < project.getImportsCount(); i++) {
-                project.getImport(i).accept(this);
+        if (!done.contains(project)) {
+            done.add(project);
+            boolean importedProject = originProject != project;
+            
+            // Visit imports.
+            if (FilterType.ALL == filterType || FilterType.ONLY_IMPORTS == filterType) {
+                for (int i = 0; i < project.getImportsCount(); i++) {
+                    project.getImport(i).accept(this);
+                }
             }
-        }
-        
-        // Visit current project.
-        boolean anyProject = FilterType.ALL == filterType;
-        boolean onlyImports = FilterType.ONLY_IMPORTS == filterType && importedProject;
-        boolean noImports = FilterType.NO_IMPORTS == filterType && !importedProject;
-        if (anyProject || onlyImports || noImports) {
-            for (int i = 0; i < project.getElementCount(); i++) {
-                project.getElement(i).accept(this);
+            
+            // Visit current project.
+            boolean anyProject = FilterType.ALL == filterType;
+            boolean onlyImports = FilterType.ONLY_IMPORTS == filterType && importedProject;
+            boolean noImports = FilterType.NO_IMPORTS == filterType && !importedProject;
+            if (anyProject || onlyImports || noImports) {
+                for (int i = 0; i < project.getElementCount(); i++) {
+                    project.getElement(i).accept(this);
+                }
             }
         }
     }

@@ -100,6 +100,8 @@ public class Resolver {
     private List<Constraint> internalConstraints;
     
     private int constraintBaseSize = 0;
+    private Set<Constraint> lastAdded = null;
+    private int constraintBaseIndex = 0;
     
     private Map<AbstractVariable, CompoundAccess> varMap;
     
@@ -129,15 +131,24 @@ public class Resolver {
             scopeAssignments.addAssignedVariable(variable);
             Set<Constraint> varConstraints = constraintMap.get(variable.getDeclaration());
             if (varConstraints != null) {
-                for (Constraint varConstraint : varConstraints) {
-                    constraintBase.add(varConstraint);
-                    constraintBaseSize++;
-                    if (Descriptor.LOGGING) {
-                        LOGGER.debug("Constraints added to current list: " 
-                            + StringProvider.toIvmlString(varConstraint.getConsSyntax()));                        
+                if (!varConstraints.isEmpty() && lastAdded != varConstraints) {
+//                    System.out.println("Add");
+                    for (Constraint varConstraint : varConstraints) {
+                        constraintBase.add(varConstraint);
+                        constraintBaseSize++;                        
+//                        System.out.println("Constraints added to current list: " 
+//                            + StringProvider.toIvmlString(varConstraint.getConsSyntax()));
+                        if (Descriptor.LOGGING) {
+                            LOGGER.debug("Constraints added to current list: " 
+                                + StringProvider.toIvmlString(varConstraint.getConsSyntax())); 
+                        }
+//                        if (constraintBase.lastIndexOf(varConstraint) <= constraintBaseIndex) {
+//                        }
                     }
-                }                     
-            }            
+                    lastAdded = varConstraints;
+//                    System.out.println("---");
+                }
+            }
         }
     };
     
@@ -842,7 +853,9 @@ public class Resolver {
         if (Descriptor.LOGGING) {
             printConstraints(constraintBase);            
         }
-        for (int i = 0; i < constraints.size(); i++) { 
+        constraintBaseIndex = 0;
+        for (int i = 0; i < constraints.size(); i++) {  
+            constraintBaseIndex = i;
             problemVariables.clear();
             AssignmentState state = null;
             if (constraints.get(i).isDefaultConstraint()) {
@@ -852,6 +865,7 @@ public class Resolver {
             }
             ConstraintSyntaxTree cst = constraints.get(i).getConsSyntax();
             if (cst != null) { 
+//                System.out.println(StringProvider.toIvmlString(cst));
                 if (Descriptor.LOGGING) {
                     LOGGER.debug("Resolving: " + StringProvider.toIvmlString(cst) 
                         + " : " + constraints.get(i).getTopLevelParent());                    
@@ -984,7 +998,6 @@ public class Resolver {
         if (constraint != null) {
             FailedElementDetails failedElementDetails = new FailedElementDetails();
             failedElementDetails.setProblemPoints(new HashSet<IDecisionVariable>(problemVariables));
-            failedElementDetails.setProblemConstraintPart(getFailedConstraintPart());
             failedElementDetails.setProblemConstraintPart(getFailedConstraintPart());
             failedElements.addProblemConstraint(constraint, failedElementDetails);
             if (Descriptor.LOGGING) {

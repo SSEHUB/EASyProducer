@@ -34,6 +34,7 @@ public class Template extends AbstractResolvableModel<VariableDeclaration, Templ
     private VariableDeclaration[] param;
     private List<Def> defs;
     private IndentationConfiguration indentationConfiguration;
+    private FormattingConfiguration formattingConfiguration;
     
     /**
      * Creates a VIL template instance.
@@ -55,6 +56,7 @@ public class Template extends AbstractResolvableModel<VariableDeclaration, Templ
         this.javaExtensions = descriptor.getJavaExtensions();
         this.param = descriptor.getParameter();
         this.indentationConfiguration = descriptor.getIndentationConfiguration();
+        this.formattingConfiguration = descriptor.getFormattingConfiguration();
     }
     
     /**
@@ -262,6 +264,15 @@ public class Template extends AbstractResolvableModel<VariableDeclaration, Templ
     @Override
     public IndentationConfiguration getIndentationConfiguration() {
         return indentationConfiguration;
+    }
+    
+    /**
+     * Returns the formatting configuration of this script.
+     * 
+     * @return the formatting configuration (may be <b>null</b> of there is none)
+     */
+    public FormattingConfiguration getFormattingConfiguration() {
+        return formattingConfiguration;
     }
 
     @Override

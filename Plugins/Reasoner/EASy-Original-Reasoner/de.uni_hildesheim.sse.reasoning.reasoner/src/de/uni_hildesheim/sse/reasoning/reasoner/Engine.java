@@ -187,9 +187,9 @@ public class Engine {
             }
             Message problemConstraintMsg = createMessage(VIOLATED_CONSTRAINTS);
             result.addMessage(problemConstraintMsg);
-            if (Descriptor.LOGGING) {
-                printMessage(problemConstraintMsg);                
-            }
+//            if (Descriptor.LOGGING) {
+//            }
+            printMessage(problemConstraintMsg);                
             nullFailedLists();
         }
     }
@@ -225,9 +225,9 @@ public class Engine {
             } 
             Message problemVarialbeMsg = createMessage(VIOLATED_VARIABLES);
             result.addMessage(problemVarialbeMsg);
-            if (Descriptor.LOGGING) {
-                printMessage(problemVarialbeMsg);                
-            }
+//            if (Descriptor.LOGGING) {
+//            }
+            printMessage(problemVarialbeMsg);                
             nullFailedLists();
         } 
     } 

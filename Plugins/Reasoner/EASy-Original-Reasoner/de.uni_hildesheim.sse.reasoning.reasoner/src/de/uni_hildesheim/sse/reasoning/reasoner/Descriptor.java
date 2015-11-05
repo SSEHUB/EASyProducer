@@ -227,7 +227,7 @@ public class Descriptor extends ReasonerDescriptor {
         addCapability(IvmlReasonerCapabilities.QUALIFIED_COMPOUND_ACCESS);
         //addCapability(GeneralReasonerCapabilities.INCREMENTAL_REASONING); // not really by now
         addCapability(GeneralReasonerCapabilities.RUNTIME_REASONING); // at least basic capabilities
-        //addCapability(GeneralReasonerCapabilities.CONFIGURATION_INITIALIZATION); // TODO clarify with Roman
+//        addCapability(GeneralReasonerCapabilities.CONFIGURATION_INITIALIZATION); // TODO clarify with Roman
     }
     
     

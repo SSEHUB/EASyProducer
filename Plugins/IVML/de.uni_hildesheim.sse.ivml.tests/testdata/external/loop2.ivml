@@ -1,0 +1,6 @@
+project loop2 {
+
+    import loop1;
+
+    Integer l2;
+}

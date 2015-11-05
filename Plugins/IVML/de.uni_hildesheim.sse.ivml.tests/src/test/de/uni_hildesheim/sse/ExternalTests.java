@@ -87,6 +87,16 @@ public class ExternalTests extends AbstractTest {
     }
 
     /**
+     * A basic test for cyclic imports.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testLoop() throws IOException {
+        assertEqual(createFile("loop"), null, null);
+    }
+    
+    /**
      * Topology test case. Use of ref and refBy in compounds and sequences.
      * Simplified version contributed by QualiMaster.
      * 

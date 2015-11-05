@@ -39,12 +39,14 @@ public class OrderedEnum extends Enum {
      */
     public static final IDatatype TYPE = DTYPE;
 
-    public static final Operation GREATER = new Operation(BooleanType.TYPE, OclKeyWords.GREATER, TYPE, TYPE);
-    public static final Operation LESS = new Operation(BooleanType.TYPE, OclKeyWords.LESS, TYPE, TYPE);
-    public static final Operation GREATER_EQUALS = new Operation(BooleanType.TYPE,
-            OclKeyWords.GREATER_EQUALS, TYPE, TYPE);
-    public static final Operation LESS_EQUALS = new Operation(BooleanType.TYPE,
-            OclKeyWords.LESS_EQUALS, TYPE, TYPE);
+    public static final Operation GREATER = Operation.createInfixOperator(
+        BooleanType.TYPE, OclKeyWords.GREATER, TYPE, TYPE);
+    public static final Operation LESS = Operation.createInfixOperator(
+        BooleanType.TYPE, OclKeyWords.LESS, TYPE, TYPE);
+    public static final Operation GREATER_EQUALS = Operation.createInfixOperator(
+        BooleanType.TYPE, OclKeyWords.GREATER_EQUALS, TYPE, TYPE);
+    public static final Operation LESS_EQUALS = Operation.createInfixOperator(
+        BooleanType.TYPE, OclKeyWords.LESS_EQUALS, TYPE, TYPE);
     
     // checkstyle: resume declaration order check
 

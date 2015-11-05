@@ -189,14 +189,16 @@ public class SimulatorUi {
      */
     private void initModel(ModelInfo<?> info) {
         model = (Script) info.getResolved(); // must exist, otherwise no panel!
-        final int baseArgCount = 3;
-        final int openArgCount = Math.max(0, model.getParameterCount() - baseArgCount);
-        openArguments = new Argument[openArgCount];
-        for (int a = 0; a < openArgCount; a++) {
-            VariableDeclaration param = model.getParameter(baseArgCount  + a);
-            openArguments[a] = new Argument(param.getName(), param.getType());
+        if (null != model) {
+            final int baseArgCount = 3;
+            final int openArgCount = Math.max(0, model.getParameterCount() - baseArgCount);
+            openArguments = new Argument[openArgCount];
+            for (int a = 0; a < openArgCount; a++) {
+                VariableDeclaration param = model.getParameter(baseArgCount  + a);
+                openArguments[a] = new Argument(param.getName(), param.getType());
+            }
+            readOpenArgumentsFromSettings();
         }
-        readOpenArgumentsFromSettings();
     }
 
     /**

@@ -1,0 +1,6 @@
+project loop {
+
+    import loop1;
+    l1 = 0;
+    l2 = 0;
+}

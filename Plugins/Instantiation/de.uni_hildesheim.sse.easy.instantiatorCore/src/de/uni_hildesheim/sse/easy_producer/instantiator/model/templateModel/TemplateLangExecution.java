@@ -27,6 +27,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expres
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ResolvableOperationCallExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.StringReplacer;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Collection;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ITypedModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.StringValueHelper;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.EnumValue;
@@ -430,12 +431,28 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
                 }
             }
             if (cnt.printLineEnd()) {
-                out.println(content);
+                out.print(content);
+                out.print(getLineEnd());
             } else {
                 out.print(content);
             }
         }
         return content;
+    }
+    
+    /**
+     * Returns the current line end based on the formatting configuration of the actual context model.
+     * 
+     * @return the actual line end (fallback is the Java line end)
+     */
+    private String getLineEnd() {
+        FormattingConfiguration cfg = null;
+        ITypedModel model = environment.getContextModel();
+        if (model instanceof Template) {
+            Template template = (Template) model;
+            cfg = template.getFormattingConfiguration();
+        }
+        return FormattingConfiguration.getLineEnding(cfg);
     }
     
     @Override

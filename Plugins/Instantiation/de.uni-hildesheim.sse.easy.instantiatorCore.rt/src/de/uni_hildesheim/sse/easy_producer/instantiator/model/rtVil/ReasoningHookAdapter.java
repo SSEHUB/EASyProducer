@@ -42,4 +42,15 @@ public class ReasoningHookAdapter implements IReasoningHook {
         // do nothing
     }
 
+    /**
+     * Turns a message into readable text. [convenience]
+     * 
+     * @param msg the message to be turned into text
+     * @return the description text
+     * @see RtVilExecution#toText(Message)
+     */
+    protected String toText(Message msg) {
+        return RtVilExecution.toText(msg);
+    }
+    
 }

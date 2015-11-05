@@ -123,13 +123,22 @@ public interface TemplateLangPackage extends EPackage
   int LANGUAGE_UNIT__INDENT = ExpressionDslPackage.LANGUAGE_UNIT_FEATURE_COUNT + 1;
 
   /**
+   * The feature id for the '<em><b>Formatting</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int LANGUAGE_UNIT__FORMATTING = ExpressionDslPackage.LANGUAGE_UNIT_FEATURE_COUNT + 2;
+
+  /**
    * The feature id for the '<em><b>Param</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int LANGUAGE_UNIT__PARAM = ExpressionDslPackage.LANGUAGE_UNIT_FEATURE_COUNT + 2;
+  int LANGUAGE_UNIT__PARAM = ExpressionDslPackage.LANGUAGE_UNIT_FEATURE_COUNT + 3;
 
   /**
    * The feature id for the '<em><b>Ext</b></em>' attribute.
@@ -138,7 +147,7 @@ public interface TemplateLangPackage extends EPackage
    * @generated
    * @ordered
    */
-  int LANGUAGE_UNIT__EXT = ExpressionDslPackage.LANGUAGE_UNIT_FEATURE_COUNT + 3;
+  int LANGUAGE_UNIT__EXT = ExpressionDslPackage.LANGUAGE_UNIT_FEATURE_COUNT + 4;
 
   /**
    * The feature id for the '<em><b>Type Defs</b></em>' containment reference list.
@@ -147,7 +156,7 @@ public interface TemplateLangPackage extends EPackage
    * @generated
    * @ordered
    */
-  int LANGUAGE_UNIT__TYPE_DEFS = ExpressionDslPackage.LANGUAGE_UNIT_FEATURE_COUNT + 4;
+  int LANGUAGE_UNIT__TYPE_DEFS = ExpressionDslPackage.LANGUAGE_UNIT_FEATURE_COUNT + 5;
 
   /**
    * The feature id for the '<em><b>Vars</b></em>' containment reference list.
@@ -156,7 +165,7 @@ public interface TemplateLangPackage extends EPackage
    * @generated
    * @ordered
    */
-  int LANGUAGE_UNIT__VARS = ExpressionDslPackage.LANGUAGE_UNIT_FEATURE_COUNT + 5;
+  int LANGUAGE_UNIT__VARS = ExpressionDslPackage.LANGUAGE_UNIT_FEATURE_COUNT + 6;
 
   /**
    * The feature id for the '<em><b>Defs</b></em>' containment reference list.
@@ -165,7 +174,7 @@ public interface TemplateLangPackage extends EPackage
    * @generated
    * @ordered
    */
-  int LANGUAGE_UNIT__DEFS = ExpressionDslPackage.LANGUAGE_UNIT_FEATURE_COUNT + 6;
+  int LANGUAGE_UNIT__DEFS = ExpressionDslPackage.LANGUAGE_UNIT_FEATURE_COUNT + 7;
 
   /**
    * The number of structural features of the '<em>Language Unit</em>' class.
@@ -174,7 +183,7 @@ public interface TemplateLangPackage extends EPackage
    * @generated
    * @ordered
    */
-  int LANGUAGE_UNIT_FEATURE_COUNT = ExpressionDslPackage.LANGUAGE_UNIT_FEATURE_COUNT + 7;
+  int LANGUAGE_UNIT_FEATURE_COUNT = ExpressionDslPackage.LANGUAGE_UNIT_FEATURE_COUNT + 8;
 
   /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.IndentationHintImpl <em>Indentation Hint</em>}' class.
@@ -242,6 +251,71 @@ public interface TemplateLangPackage extends EPackage
   int INDENTATION_HINT_PART_FEATURE_COUNT = 2;
 
   /**
+   * The meta object id for the '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.FormattingHintImpl <em>Formatting Hint</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.FormattingHintImpl
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getFormattingHint()
+   * @generated
+   */
+  int FORMATTING_HINT = 3;
+
+  /**
+   * The feature id for the '<em><b>Parts</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FORMATTING_HINT__PARTS = 0;
+
+  /**
+   * The number of structural features of the '<em>Formatting Hint</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FORMATTING_HINT_FEATURE_COUNT = 1;
+
+  /**
+   * The meta object id for the '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.FormattingHintPartImpl <em>Formatting Hint Part</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.FormattingHintPartImpl
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getFormattingHintPart()
+   * @generated
+   */
+  int FORMATTING_HINT_PART = 4;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FORMATTING_HINT_PART__NAME = 0;
+
+  /**
+   * The feature id for the '<em><b>Value</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FORMATTING_HINT_PART__VALUE = 1;
+
+  /**
+   * The number of structural features of the '<em>Formatting Hint Part</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FORMATTING_HINT_PART_FEATURE_COUNT = 2;
+
+  /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.VilDefImpl <em>Vil Def</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -249,7 +323,7 @@ public interface TemplateLangPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getVilDef()
    * @generated
    */
-  int VIL_DEF = 3;
+  int VIL_DEF = 5;
 
   /**
    * The feature id for the '<em><b>Protected</b></em>' attribute.
@@ -313,7 +387,7 @@ public interface TemplateLangPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getStmtBlock()
    * @generated
    */
-  int STMT_BLOCK = 4;
+  int STMT_BLOCK = 6;
 
   /**
    * The feature id for the '<em><b>Stmts</b></em>' containment reference list.
@@ -341,7 +415,7 @@ public interface TemplateLangPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getStmt()
    * @generated
    */
-  int STMT = 5;
+  int STMT = 7;
 
   /**
    * The feature id for the '<em><b>Var</b></em>' containment reference.
@@ -432,7 +506,7 @@ public interface TemplateLangPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getAlternative()
    * @generated
    */
-  int ALTERNATIVE = 6;
+  int ALTERNATIVE = 8;
 
   /**
    * The feature id for the '<em><b>Expr</b></em>' containment reference.
@@ -478,7 +552,7 @@ public interface TemplateLangPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getContent()
    * @generated
    */
-  int CONTENT = 7;
+  int CONTENT = 9;
 
   /**
    * The feature id for the '<em><b>Print</b></em>' attribute.
@@ -524,7 +598,7 @@ public interface TemplateLangPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getSwitch()
    * @generated
    */
-  int SWITCH = 8;
+  int SWITCH = 10;
 
   /**
    * The feature id for the '<em><b>Expr</b></em>' containment reference.
@@ -570,7 +644,7 @@ public interface TemplateLangPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getSwitchPart()
    * @generated
    */
-  int SWITCH_PART = 9;
+  int SWITCH_PART = 11;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -607,7 +681,7 @@ public interface TemplateLangPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getLoop()
    * @generated
    */
-  int LOOP = 10;
+  int LOOP = 12;
 
   /**
    * The feature id for the '<em><b>Type</b></em>' containment reference.
@@ -680,7 +754,7 @@ public interface TemplateLangPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getmultiselect()
    * @generated
    */
-  int MULTISELECT = 11;
+  int MULTISELECT = 13;
 
   /**
    * The feature id for the '<em><b>Gen</b></em>' containment reference.
@@ -717,7 +791,7 @@ public interface TemplateLangPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getgenericMultiselect()
    * @generated
    */
-  int GENERIC_MULTISELECT = 12;
+  int GENERIC_MULTISELECT = 14;
 
   /**
    * The feature id for the '<em><b>Preamble</b></em>' containment reference.
@@ -772,7 +846,7 @@ public interface TemplateLangPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getmultiSelectPart()
    * @generated
    */
-  int MULTI_SELECT_PART = 13;
+  int MULTI_SELECT_PART = 15;
 
   /**
    * The feature id for the '<em><b>Case</b></em>' containment reference.
@@ -818,7 +892,7 @@ public interface TemplateLangPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getuserMultiselect()
    * @generated
    */
-  int USER_MULTISELECT = 14;
+  int USER_MULTISELECT = 16;
 
   /**
    * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -855,7 +929,7 @@ public interface TemplateLangPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getExtension()
    * @generated
    */
-  int EXTENSION = 15;
+  int EXTENSION = 17;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' containment reference.
@@ -883,7 +957,7 @@ public interface TemplateLangPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getJavaQualifiedName()
    * @generated
    */
-  int JAVA_QUALIFIED_NAME = 16;
+  int JAVA_QUALIFIED_NAME = 18;
 
   /**
    * The feature id for the '<em><b>Qname</b></em>' attribute list.
@@ -935,6 +1009,17 @@ public interface TemplateLangPackage extends EPackage
    * @generated
    */
   EReference getLanguageUnit_Indent();
+
+  /**
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit#getFormatting <em>Formatting</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Formatting</em>'.
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit#getFormatting()
+   * @see #getLanguageUnit()
+   * @generated
+   */
+  EReference getLanguageUnit_Formatting();
 
   /**
    * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit#getParam <em>Param</em>}'.
@@ -1043,6 +1128,59 @@ public interface TemplateLangPackage extends EPackage
    * @generated
    */
   EAttribute getIndentationHintPart_Value();
+
+  /**
+   * Returns the meta object for class '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.FormattingHint <em>Formatting Hint</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Formatting Hint</em>'.
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.FormattingHint
+   * @generated
+   */
+  EClass getFormattingHint();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.FormattingHint#getParts <em>Parts</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Parts</em>'.
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.FormattingHint#getParts()
+   * @see #getFormattingHint()
+   * @generated
+   */
+  EReference getFormattingHint_Parts();
+
+  /**
+   * Returns the meta object for class '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.FormattingHintPart <em>Formatting Hint Part</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Formatting Hint Part</em>'.
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.FormattingHintPart
+   * @generated
+   */
+  EClass getFormattingHintPart();
+
+  /**
+   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.FormattingHintPart#getName <em>Name</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Name</em>'.
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.FormattingHintPart#getName()
+   * @see #getFormattingHintPart()
+   * @generated
+   */
+  EAttribute getFormattingHintPart_Name();
+
+  /**
+   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.FormattingHintPart#getValue <em>Value</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Value</em>'.
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.FormattingHintPart#getValue()
+   * @see #getFormattingHintPart()
+   * @generated
+   */
+  EAttribute getFormattingHintPart_Value();
 
   /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.VilDef <em>Vil Def</em>}'.
@@ -1718,6 +1856,14 @@ public interface TemplateLangPackage extends EPackage
     EReference LANGUAGE_UNIT__INDENT = eINSTANCE.getLanguageUnit_Indent();
 
     /**
+     * The meta object literal for the '<em><b>Formatting</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference LANGUAGE_UNIT__FORMATTING = eINSTANCE.getLanguageUnit_Formatting();
+
+    /**
      * The meta object literal for the '<em><b>Param</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1800,6 +1946,50 @@ public interface TemplateLangPackage extends EPackage
      * @generated
      */
     EAttribute INDENTATION_HINT_PART__VALUE = eINSTANCE.getIndentationHintPart_Value();
+
+    /**
+     * The meta object literal for the '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.FormattingHintImpl <em>Formatting Hint</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.FormattingHintImpl
+     * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getFormattingHint()
+     * @generated
+     */
+    EClass FORMATTING_HINT = eINSTANCE.getFormattingHint();
+
+    /**
+     * The meta object literal for the '<em><b>Parts</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference FORMATTING_HINT__PARTS = eINSTANCE.getFormattingHint_Parts();
+
+    /**
+     * The meta object literal for the '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.FormattingHintPartImpl <em>Formatting Hint Part</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.FormattingHintPartImpl
+     * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getFormattingHintPart()
+     * @generated
+     */
+    EClass FORMATTING_HINT_PART = eINSTANCE.getFormattingHintPart();
+
+    /**
+     * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute FORMATTING_HINT_PART__NAME = eINSTANCE.getFormattingHintPart_Name();
+
+    /**
+     * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute FORMATTING_HINT_PART__VALUE = eINSTANCE.getFormattingHintPart_Value();
 
     /**
      * The meta object literal for the '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.VilDefImpl <em>Vil Def</em>}' class.

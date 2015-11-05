@@ -7,6 +7,8 @@ import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.Alternative;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.Content;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.Extension;
+import de.uni_hildesheim.sse.vil.templatelang.templateLang.FormattingHint;
+import de.uni_hildesheim.sse.vil.templatelang.templateLang.FormattingHintPart;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.IndentationHint;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.IndentationHintPart;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.JavaQualifiedName;
@@ -59,6 +61,20 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * @generated
    */
   private EClass indentationHintPartEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass formattingHintEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass formattingHintPartEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -259,7 +275,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getLanguageUnit_Param()
+  public EReference getLanguageUnit_Formatting()
   {
     return (EReference)languageUnitEClass.getEStructuralFeatures().get(2);
   }
@@ -269,9 +285,19 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  public EReference getLanguageUnit_Param()
+  {
+    return (EReference)languageUnitEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EAttribute getLanguageUnit_Ext()
   {
-    return (EAttribute)languageUnitEClass.getEStructuralFeatures().get(3);
+    return (EAttribute)languageUnitEClass.getEStructuralFeatures().get(4);
   }
 
   /**
@@ -281,7 +307,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    */
   public EReference getLanguageUnit_TypeDefs()
   {
-    return (EReference)languageUnitEClass.getEStructuralFeatures().get(4);
+    return (EReference)languageUnitEClass.getEStructuralFeatures().get(5);
   }
 
   /**
@@ -291,7 +317,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    */
   public EReference getLanguageUnit_Vars()
   {
-    return (EReference)languageUnitEClass.getEStructuralFeatures().get(5);
+    return (EReference)languageUnitEClass.getEStructuralFeatures().get(6);
   }
 
   /**
@@ -301,7 +327,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    */
   public EReference getLanguageUnit_Defs()
   {
-    return (EReference)languageUnitEClass.getEStructuralFeatures().get(6);
+    return (EReference)languageUnitEClass.getEStructuralFeatures().get(7);
   }
 
   /**
@@ -352,6 +378,56 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
   public EAttribute getIndentationHintPart_Value()
   {
     return (EAttribute)indentationHintPartEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getFormattingHint()
+  {
+    return formattingHintEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getFormattingHint_Parts()
+  {
+    return (EReference)formattingHintEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getFormattingHintPart()
+  {
+    return formattingHintPartEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getFormattingHintPart_Name()
+  {
+    return (EAttribute)formattingHintPartEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getFormattingHintPart_Value()
+  {
+    return (EAttribute)formattingHintPartEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -967,6 +1043,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
     languageUnitEClass = createEClass(LANGUAGE_UNIT);
     createEReference(languageUnitEClass, LANGUAGE_UNIT__JAVA_EXTS);
     createEReference(languageUnitEClass, LANGUAGE_UNIT__INDENT);
+    createEReference(languageUnitEClass, LANGUAGE_UNIT__FORMATTING);
     createEReference(languageUnitEClass, LANGUAGE_UNIT__PARAM);
     createEAttribute(languageUnitEClass, LANGUAGE_UNIT__EXT);
     createEReference(languageUnitEClass, LANGUAGE_UNIT__TYPE_DEFS);
@@ -979,6 +1056,13 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
     indentationHintPartEClass = createEClass(INDENTATION_HINT_PART);
     createEAttribute(indentationHintPartEClass, INDENTATION_HINT_PART__NAME);
     createEAttribute(indentationHintPartEClass, INDENTATION_HINT_PART__VALUE);
+
+    formattingHintEClass = createEClass(FORMATTING_HINT);
+    createEReference(formattingHintEClass, FORMATTING_HINT__PARTS);
+
+    formattingHintPartEClass = createEClass(FORMATTING_HINT_PART);
+    createEAttribute(formattingHintPartEClass, FORMATTING_HINT_PART__NAME);
+    createEAttribute(formattingHintPartEClass, FORMATTING_HINT_PART__VALUE);
 
     vilDefEClass = createEClass(VIL_DEF);
     createEAttribute(vilDefEClass, VIL_DEF__PROTECTED);
@@ -1091,6 +1175,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
     initEClass(languageUnitEClass, LanguageUnit.class, "LanguageUnit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getLanguageUnit_JavaExts(), this.getExtension(), null, "javaExts", null, 0, -1, LanguageUnit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getLanguageUnit_Indent(), this.getIndentationHint(), null, "indent", null, 0, 1, LanguageUnit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getLanguageUnit_Formatting(), this.getFormattingHint(), null, "formatting", null, 0, 1, LanguageUnit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getLanguageUnit_Param(), theExpressionDslPackage.getParameterList(), null, "param", null, 0, 1, LanguageUnit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getLanguageUnit_Ext(), ecorePackage.getEString(), "ext", null, 0, 1, LanguageUnit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getLanguageUnit_TypeDefs(), theExpressionDslPackage.getTypeDef(), null, "typeDefs", null, 0, -1, LanguageUnit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1103,6 +1188,13 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
     initEClass(indentationHintPartEClass, IndentationHintPart.class, "IndentationHintPart", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getIndentationHintPart_Name(), ecorePackage.getEString(), "name", null, 0, 1, IndentationHintPart.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getIndentationHintPart_Value(), ecorePackage.getEString(), "value", null, 0, 1, IndentationHintPart.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(formattingHintEClass, FormattingHint.class, "FormattingHint", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getFormattingHint_Parts(), this.getFormattingHintPart(), null, "parts", null, 0, -1, FormattingHint.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(formattingHintPartEClass, FormattingHintPart.class, "FormattingHintPart", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getFormattingHintPart_Name(), ecorePackage.getEString(), "name", null, 0, 1, FormattingHintPart.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getFormattingHintPart_Value(), ecorePackage.getEString(), "value", null, 0, 1, FormattingHintPart.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(vilDefEClass, VilDef.class, "VilDef", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getVilDef_Protected(), ecorePackage.getEString(), "protected", null, 0, 1, VilDef.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

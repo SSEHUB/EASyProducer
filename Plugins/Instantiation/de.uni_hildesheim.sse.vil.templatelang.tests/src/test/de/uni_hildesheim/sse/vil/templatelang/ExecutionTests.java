@@ -794,6 +794,26 @@ public class ExecutionTests extends AbstractTest {
     }
     
     /**
+     * Tests a line end formatting hint.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testLineEnd() throws IOException {
+        assertEqual("lineEnd");
+    }
+    
+    /**
+     * Tests a line end formatting hint.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testLineEnd2() throws IOException {
+        assertEqual("lineEnd2");
+    }
+    
+    /**
      * Tests an advice with types taken over from the variability model, here dynamic dispatch.
      * 
      * @throws IOException should not occur

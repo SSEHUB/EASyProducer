@@ -10,6 +10,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import de.uni_hildesheim.sse.BuildLangModelUtility;
 import de.uni_hildesheim.sse.dslCore.translation.ErrorCodes;
 import de.uni_hildesheim.sse.dslCore.translation.MessageHandler;
+import de.uni_hildesheim.sse.dslCore.translation.StringUtils;
 import de.uni_hildesheim.sse.dslCore.translation.TranslatorException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.AlternativeExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ExpressionStatement;
@@ -127,7 +128,7 @@ public class ExpressionTranslator
                     VilBuildLanguagePackage.Literals.INSTANTIATE__PROJECT, VilException.ID_CANNOT_RESOLVE);
             }
         } else {
-            if (0 == convertString(inst.getRuleName()).length()) {
+            if (0 == StringUtils.convertString(inst.getRuleName()).length()) {
                 throw new TranslatorException("the rule name must not be empty", inst, 
                     VilBuildLanguagePackage.Literals.INSTANTIATE__PROJECT, ErrorCodes.UNKNOWN_ELEMENT);
             }
@@ -142,7 +143,7 @@ public class ExpressionTranslator
                 }
                 result = new InstantiateExpression(var, vRestrict, null, args);
             } else {
-                result = new InstantiateExpression(convertString(inst.getRuleName()), args);
+                result = new InstantiateExpression(StringUtils.convertString(inst.getRuleName()), args);
             }
         } catch (VilException e) {
             throw new TranslatorException(e, inst, VilBuildLanguagePackage.Literals.INSTANTIATE__PARAM);

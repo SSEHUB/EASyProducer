@@ -67,6 +67,8 @@ public class TemplateLangFactoryImpl extends EFactoryImpl implements TemplateLan
       case TemplateLangPackage.LANGUAGE_UNIT: return createLanguageUnit();
       case TemplateLangPackage.INDENTATION_HINT: return createIndentationHint();
       case TemplateLangPackage.INDENTATION_HINT_PART: return createIndentationHintPart();
+      case TemplateLangPackage.FORMATTING_HINT: return createFormattingHint();
+      case TemplateLangPackage.FORMATTING_HINT_PART: return createFormattingHintPart();
       case TemplateLangPackage.VIL_DEF: return createVilDef();
       case TemplateLangPackage.STMT_BLOCK: return createStmtBlock();
       case TemplateLangPackage.STMT: return createStmt();
@@ -117,6 +119,28 @@ public class TemplateLangFactoryImpl extends EFactoryImpl implements TemplateLan
   {
     IndentationHintPartImpl indentationHintPart = new IndentationHintPartImpl();
     return indentationHintPart;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public FormattingHint createFormattingHint()
+  {
+    FormattingHintImpl formattingHint = new FormattingHintImpl();
+    return formattingHint;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public FormattingHintPart createFormattingHintPart()
+  {
+    FormattingHintPartImpl formattingHintPart = new FormattingHintPartImpl();
+    return formattingHintPart;
   }
 
   /**

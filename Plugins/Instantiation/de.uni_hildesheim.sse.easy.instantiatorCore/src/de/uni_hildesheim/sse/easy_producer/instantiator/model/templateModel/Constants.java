@@ -21,5 +21,10 @@ public class Constants {
      * The name for the additional indentation entry in an indentation hint.
      */
     public static final String INDENTATION_HINT_ADDITIONAL = "additional";
+    
+    /**
+     * The name for the optional formatting hint to define the line end.
+     */
+    public static final String FORMATTING_HINT_LINEEND = "lineEnd";
 
 }

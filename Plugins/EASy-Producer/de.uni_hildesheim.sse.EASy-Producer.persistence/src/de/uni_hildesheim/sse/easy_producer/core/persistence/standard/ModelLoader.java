@@ -149,21 +149,27 @@ class ModelLoader<Model extends IModel> {
             try {
                 model = modelManagement.load(info);
                 modelContainer = ModelContainerFactory.createContainer(model, location);
-                LOGGER.debug("Info loaded: " + info.toString());
+                LOGGER.debug("Model loaded: " + info.toString());
             } catch (ModelManagementException e) {
                 if (e.getId() == ModelManagementException.INTERNAL) {
                     throw new PersistenceException(e);
                 } else {
-                    LOGGER.warn(info.getName() + " " + Version.toString(info.getVersion()) + " cannot be loaded: " 
-                        + e.getLocalizedMessage());
-                    /*
-                     * Load an empty Script, otherwise no PLP can be created
-                     * and thus the user won't be able to edit the project. 
-                     */
-                    model = createEmptyModel(projectName, projectVersion, modelType);
-                    SemanticErrorDescription description = new SemanticErrorDescription(file.getAbsolutePath(),
-                        e.getLocalizedMessage());
-                    modelContainer = ModelContainerFactory.createContainer(model, description, location);
+                    try { // do a second round for heavily dependent imports
+                        model = modelManagement.load(info);
+                        modelContainer = ModelContainerFactory.createContainer(model, location);
+                        LOGGER.debug("Model loaded: " + info.toString());
+                    } catch (ModelManagementException e1) { // if second round fails, standard output
+                        LOGGER.warn(info.getName() + " " + Version.toString(info.getVersion()) + " cannot be loaded: " 
+                            + e.getLocalizedMessage());
+                        /*
+                         * Load an empty Script, otherwise no PLP can be created
+                         * and thus the user won't be able to edit the project. 
+                         */
+                        model = createEmptyModel(projectName, projectVersion, modelType);
+                        SemanticErrorDescription description = new SemanticErrorDescription(file.getAbsolutePath(),
+                            e.getLocalizedMessage());
+                        modelContainer = ModelContainerFactory.createContainer(model, description, location);
+                    }
                 }
             }
         } else {

@@ -18,6 +18,7 @@ import org.eclipse.emf.common.util.EList;
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit#getJavaExts <em>Java Exts</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit#getIndent <em>Indent</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit#getFormatting <em>Formatting</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit#getParam <em>Param</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit#getExt <em>Ext</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit#getTypeDefs <em>Type Defs</em>}</li>
@@ -73,6 +74,32 @@ public interface LanguageUnit extends de.uni_hildesheim.sse.vil.expressions.expr
    * @generated
    */
   void setIndent(IndentationHint value);
+
+  /**
+   * Returns the value of the '<em><b>Formatting</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Formatting</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Formatting</em>' containment reference.
+   * @see #setFormatting(FormattingHint)
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.TemplateLangPackage#getLanguageUnit_Formatting()
+   * @model containment="true"
+   * @generated
+   */
+  FormattingHint getFormatting();
+
+  /**
+   * Sets the value of the '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit#getFormatting <em>Formatting</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Formatting</em>' containment reference.
+   * @see #getFormatting()
+   * @generated
+   */
+  void setFormatting(FormattingHint value);
 
   /**
    * Returns the value of the '<em><b>Param</b></em>' containment reference.
