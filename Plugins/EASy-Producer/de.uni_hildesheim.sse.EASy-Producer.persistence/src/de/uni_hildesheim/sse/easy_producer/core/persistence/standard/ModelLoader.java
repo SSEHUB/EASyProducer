@@ -16,6 +16,7 @@
 package de.uni_hildesheim.sse.easy_producer.core.persistence.standard;
 
 import java.io.File;
+import java.util.List;
 
 import de.uni_hildesheim.sse.easy_producer.core.persistence.Configuration;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.Configuration.PathKind;
@@ -128,6 +129,18 @@ class ModelLoader<Model extends IModel> {
         ModelContainer<?> modelContainer = null;
         try {
             info = modelManagement.availableModels().getModelInfo(projectName, projectVersion, file.toURI());
+            // Eclipse project specifies a version number, but that version number was not found in available models.
+            if (null == info) {
+                List<ModelInfo<Model>> alternatives
+                    = modelManagement.availableModels().getVisibleModelInfo(projectName, file.toURI());
+                // Load alternative, if exactly one alternative was found
+                if (null != alternatives && 1 == alternatives.size()) {
+                    info = alternatives.get(0);
+                    LOGGER.warn("No " + modelType.name() + "-model found with name =\"" + projectName
+                        + "\" and version =\"" + projectVersion + "\" at " + file.getAbsolutePath()
+                        + ", load single available alternative.");
+                }
+            }
         } catch (VersionFormatException e) {
             throw new PersistenceException(e);
         }
