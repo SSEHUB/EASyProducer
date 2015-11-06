@@ -1,8 +1,8 @@
-template loop4(Configuration config, Artifact target) {
+template loop5(Configuration config, Artifact target) {
 
     def main(Configuration config, Artifact target) {
         StringArtifact a = new StringArtifact();
-        for (String s : a.selectAll(), ", ", ";") {
+        for (String s : a.values(), ", ", ";") {
             print '$s'
         }
     }

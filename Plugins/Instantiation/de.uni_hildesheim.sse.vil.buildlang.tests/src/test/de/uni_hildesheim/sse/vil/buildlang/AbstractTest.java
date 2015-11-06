@@ -50,6 +50,7 @@ public abstract class AbstractTest<M extends Script> extends de.uni_hildesheim.s
         BuiltIn.initialize();
         furtherInitialization();
         registerTypeAnyway(TouchInstantiator.class);
+        registerTypeAnyway(StringCreator.class);
         registerTypeAnyway(VelocityInstantiator.class);
         ExpressionParserRegistry.setExpressionParser(BuildlangExecution.LANGUAGE, new VilExpressionParser());
         configurer.furtherInitialization();

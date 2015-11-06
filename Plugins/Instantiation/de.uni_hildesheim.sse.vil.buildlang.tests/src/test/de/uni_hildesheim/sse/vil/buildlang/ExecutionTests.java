@@ -383,6 +383,16 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
     }
 
     /**
+     * Tests the functionality of a map using an iterator.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testMapIterator() throws IOException {
+        assertSelfInstantiate("mapIterator");
+    }
+    
+    /**
      * Tests the functionality of a nested map.
      * 
      * @throws IOException should not occur

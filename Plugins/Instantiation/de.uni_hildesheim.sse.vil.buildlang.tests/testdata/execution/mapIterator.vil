@@ -1,0 +1,10 @@
+vilScript mapIterator () {
+
+    main() = : {
+        StringCreator sc = new StringCreator();
+        map(String s:sc.strings()) {
+            println(s);
+        };
+    }
+
+}

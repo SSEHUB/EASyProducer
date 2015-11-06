@@ -1,5 +1,9 @@
 package test.de.uni_hildesheim.sse.vil.templatelang;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IArtifactVisitor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.SimpleArtifact;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Binary;
@@ -90,6 +94,20 @@ public class StringArtifact extends SimpleArtifact implements IStringValueProvid
 
     @Override
     public void update() throws VilException {
+    }
+    
+    /**
+     * Just return strings as iterator.
+     * 
+     * @return the iterator
+     */
+    @OperationMeta(returnGenerics = String.class)
+    public Iterator<String> values() {
+        List<String> tmp = new ArrayList<String>();
+        tmp.add("1");
+        tmp.add("2");
+        tmp.add("3");
+        return tmp.iterator();
     }
     
 }

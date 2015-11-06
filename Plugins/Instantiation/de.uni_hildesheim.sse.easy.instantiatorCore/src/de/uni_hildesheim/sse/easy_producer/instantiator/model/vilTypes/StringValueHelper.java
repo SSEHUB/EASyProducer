@@ -111,6 +111,8 @@ public class StringValueHelper {
             result = ((IStringValueProvider) object).getStringValue(comparator);
         } else if (object instanceof java.util.Map) {
             result = Map.getStringValue((java.util.Map<?, ?>) object, comparator);
+        } else if (object instanceof Iterator) {
+            result = PseudoIterator.STRING_VALUE;
         } else if (null == object || TypeRegistry.NULL == object) {
             result = NULL_VALUE; // we no 
         } else {

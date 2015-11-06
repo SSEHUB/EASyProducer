@@ -581,6 +581,16 @@ public class TypeRegistry {
     }
     
     /**
+     * Returns whether this type registry knows a type of the given name.
+     * 
+     * @param name the name to search for
+     * @return <code>true</code> if the type with <code>name</code> is known, <code>false</code> else
+     */
+    public boolean hasType(String name) {
+        return null != findType(name);
+    }
+    
+    /**
      * Resolves the given type <code>name</code> via the resolvers.
      * 
      * @param name the name to look for

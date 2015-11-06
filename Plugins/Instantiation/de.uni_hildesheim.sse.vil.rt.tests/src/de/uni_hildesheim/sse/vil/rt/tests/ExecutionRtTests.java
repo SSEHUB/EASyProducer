@@ -37,8 +37,6 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configura
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.NoVariableFilter;
 import de.uni_hildesheim.sse.model.management.VarModel;
 import de.uni_hildesheim.sse.model.varModel.Project;
-import de.uni_hildesheim.sse.reasoning.core.frontend.ReasonerFrontend;
-import de.uni_hildesheim.sse.reasoning.reasoner.Reasoner;
 import de.uni_hildesheim.sse.utils.messages.AbstractException;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
@@ -48,22 +46,15 @@ import de.uni_hildesheim.sse.vil.rt.tests.types.CommandSequence;
 import de.uni_hildesheim.sse.vil.rt.tests.types.LifecycleEvent;
 import de.uni_hildesheim.sse.vil.rt.tests.types.RegularAdaptationEvent;
 import de.uni_hildesheim.sse.vil.rt.tests.types.StartupAdaptationEvent;
-import test.de.uni_hildesheim.sse.vil.buildlang.AbstractExecutionTest;
-import test.de.uni_hildesheim.sse.vil.buildlang.ITestConfigurer;
 
 /**
  * Tests the execution of rt-VIL.
  * 
  * @author Holger Eichelberger
  */
-public class ExecutionRtTests extends AbstractExecutionTest<Script> {
+public class ExecutionRtTests extends AbstractRtTest {
 
     private static final boolean DEBUG = false;
-    
-    @Override
-    protected ITestConfigurer<Script> createTestConfigurer() {
-        return new RtVilTestConfigurer();
-    }
     
     @Override
     protected File getTestFolder() {
@@ -76,7 +67,7 @@ public class ExecutionRtTests extends AbstractExecutionTest<Script> {
     @BeforeClass
     public static void startUp() {
         test.de.uni_hildesheim.sse.vil.buildlang.ExecutionTests.startUp();
-        ReasonerFrontend.getInstance().getRegistry().register(new Reasoner());
+        registerReasoner();
     }
 
     /**

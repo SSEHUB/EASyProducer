@@ -533,8 +533,7 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends
                 result.add(iter.next());
             }
             value = new ListSequence<Object>(result, type.getGenericParameter());
-        }
-        if (!type.isCollection()) {
+        } else if (!type.isCollection()) {
             OperationDescriptor desc = type.getConversionToSequence();
             if (null != desc) {
                 value = desc.invoke(value);

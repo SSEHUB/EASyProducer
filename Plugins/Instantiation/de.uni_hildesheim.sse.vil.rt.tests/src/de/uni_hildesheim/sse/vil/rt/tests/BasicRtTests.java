@@ -22,20 +22,20 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import test.de.uni_hildesheim.sse.vil.buildlang.AbstractBasicTest;
+import test.de.uni_hildesheim.sse.vil.buildlang.ITestConfigurer;
 import de.uni_hildesheim.sse.dslCore.translation.ErrorCodes;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Script;
 import de.uni_hildesheim.sse.utils.messages.AbstractException;
 import de.uni_hildesheim.sse.vil.rt.RtErrorCodes;
-import test.de.uni_hildesheim.sse.vil.buildlang.AbstractBasicTest;
-import test.de.uni_hildesheim.sse.vil.buildlang.ITestConfigurer;
 
 /**
  * Basic syntactic language tests.
  * 
  * @author Holger Eichelberger
  */
-public class BasicRtTests extends AbstractBasicTest<Script> {
+public class BasicRtTests extends AbstractBasicTest<Script> { // unclear why AbstractRtTest does not work here
 
     private static BasicRtTests tests;
     

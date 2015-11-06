@@ -543,7 +543,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
         } catch (VilException e) {
             throw new TranslatorException(e, loop, TemplateLangPackage.Literals.LOOP__EXPR);
         }
-        if (!exprType.isCollection()) {
+        if (!exprType.isCollection() && !exprType.isIterator()) {
             OperationDescriptor conversion = exprType.getConversionToSequence();
             if (null == conversion) {
                 throw new TranslatorException("loop expression must be of type collection rather than " 

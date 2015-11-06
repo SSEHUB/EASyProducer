@@ -394,6 +394,16 @@ public class ExecutionTests extends AbstractTest {
     }
 
     /**
+     * Tests a simple loop with iterator.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testLoop5() throws IOException {
+        assertEqual("loop5");
+    }
+
+    /**
      * Tests sub-string statements (contributed by C. Qin/QM).
      * 
      * @throws IOException should not occur

@@ -24,7 +24,7 @@ import org.junit.runners.Suite;
  * @author Holger Eichelberger
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({BasicRtTests.class, ExecutionRtTests.class })
+@Suite.SuiteClasses({BasicRtTests.class, ExecutionRtTests.class, AnalyzerTest.class })
 public class AllTests {
 
 }
