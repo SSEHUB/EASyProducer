@@ -1,8 +1,8 @@
 -> main()
-    -> create() with () = test.de.uni_hildesheim.sse.vil.buildlang.StringCreator@16cedbb
-    sc <- test.de.uni_hildesheim.sse.vil.buildlang.StringCreator@16cedbb
+    -> create() with () = <StringCreator>
+    sc <- <StringCreator>
     map {
-        -> strings(StringCreator) with (test.de.uni_hildesheim.sse.vil.buildlang.StringCreator@16cedbb) = java.util.ArrayList$Itr@157d88b
+        -> strings(StringCreator) with (<StringCreator>) = <Iterator>
         map: s <- 1
         -> println(Any) with (1)
         map: s <- 2

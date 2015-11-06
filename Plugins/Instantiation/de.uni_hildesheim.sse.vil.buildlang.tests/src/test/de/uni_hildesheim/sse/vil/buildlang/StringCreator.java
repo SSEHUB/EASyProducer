@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IStringValueProvider;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationMeta;
 
@@ -27,7 +28,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Operation
  * 
  * @author Holger Eichelberger
  */
-public class StringCreator implements IVilType {
+public class StringCreator implements IVilType, IStringValueProvider {
     
     /**
      * The VIL constructor.
@@ -50,6 +51,11 @@ public class StringCreator implements IVilType {
         tmp.add("2");
         tmp.add("3");
         return tmp.iterator();
+    }
+
+    @Override
+    public String getStringValue(StringComparator comparator) {
+        return "<StringCreator>";
     }
 
 }
