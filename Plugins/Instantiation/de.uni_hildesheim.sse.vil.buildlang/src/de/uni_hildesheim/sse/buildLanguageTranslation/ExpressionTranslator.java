@@ -201,7 +201,7 @@ public class ExpressionTranslator
         } catch (VilException e) {
             throw new TranslatorException(e, map, VilBuildLanguagePackage.Literals.MAP__EXPR);
         }
-        if (!type.isCollection()) {
+        if (!type.isCollection() && !type.isIterator()) {
             OperationDescriptor conversion = type.getConversionToSequence();
             if (null == conversion) {
                 throw new TranslatorException("map must run over collection", map, 

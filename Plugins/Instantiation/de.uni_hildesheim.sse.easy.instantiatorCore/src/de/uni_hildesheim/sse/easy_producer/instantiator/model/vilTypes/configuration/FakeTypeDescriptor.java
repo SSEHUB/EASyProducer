@@ -78,6 +78,11 @@ public class FakeTypeDescriptor extends TypeDescriptor<IvmlElement> {
     }
 
     @Override
+    public boolean isIterator() {
+        return false;
+    }
+    
+    @Override
     public boolean isMap() {
         return false;
     }

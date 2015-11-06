@@ -85,6 +85,8 @@ public class ReflectionResolver {
                     result = TypeRegistry.getSequenceType(parameter);
                 } else if (ReflectionTypeDescriptor.isMap(cls)) {
                     result = TypeRegistry.getMapType(parameter);
+                } else if (ReflectionTypeDescriptor.isIterator(cls)) {
+                    result = TypeRegistry.getIteratorType(parameter);
                 }
             } catch (VilException e) {
                 // no type -> handled later

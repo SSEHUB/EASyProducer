@@ -51,6 +51,8 @@ public class Constants {
 
     public static final String GREATER_THEN_EQUALS = GREATER_THEN + ASSIGNMENT;
 
+    public static final String TYPE_ITERATOR = "Iterator";
+
     public static final String TYPE_STRING = "String";
 
     public static final String TYPE_REAL = "Real";

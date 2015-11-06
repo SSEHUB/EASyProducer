@@ -200,6 +200,11 @@ public class TupleType extends TypeDescriptor<TupleType> implements IVilType {
     }
 
     @Override
+    public boolean isIterator() {
+        return false;
+    }
+    
+    @Override
     public boolean isMap() {
         return false;
     }

@@ -615,6 +615,19 @@ public class TypeRegistry {
     }
 
     /**
+     * Returns the VIL type for a map with the given type parameters.
+     * 
+     * @param parameter the type parameter
+     * @return the type
+     * @throws VilException in case that the derivation of the type fails
+     */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public static final TypeDescriptor<? extends PseudoIterator<?>> getIteratorType(TypeDescriptor<?>... parameter) 
+        throws VilException {
+        return new ReflectionTypeDescriptor(PseudoIterator.class, parameter).resolve();
+    }
+    
+    /**
      * Returns the VIL type for a collection with the given type parameters.
      * 
      * @param parameter the type parameter

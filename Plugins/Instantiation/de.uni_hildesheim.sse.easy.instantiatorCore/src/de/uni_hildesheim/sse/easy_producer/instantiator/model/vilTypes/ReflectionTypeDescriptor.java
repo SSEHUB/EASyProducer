@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
@@ -652,6 +653,16 @@ public class ReflectionTypeDescriptor <T> extends TypeDescriptor <T> {
     static boolean isSet(Class<?> cls) {
         return Set.class.isAssignableFrom(cls);
     }
+    
+    /**
+     * Returns whether the given class represents an iterator.
+     * 
+     * @param cls the class to be checked
+     * @return <code>true</code> if it is an iterator, <code>false</code> else
+     */
+    static boolean isIterator(Class<?> cls) {
+        return Iterator.class.isAssignableFrom(cls);
+    }
 
     /**
      * Returns whether the given class represents a VIL sequence.
@@ -676,6 +687,11 @@ public class ReflectionTypeDescriptor <T> extends TypeDescriptor <T> {
     @Override
     public boolean isCollection() {
         return isSet() || isSequence() || isCollection(cls);
+    }
+    
+    @Override
+    public boolean isIterator() {
+        return isIterator(cls) || PseudoIterator.class.isAssignableFrom(cls);
     }
 
     @Override

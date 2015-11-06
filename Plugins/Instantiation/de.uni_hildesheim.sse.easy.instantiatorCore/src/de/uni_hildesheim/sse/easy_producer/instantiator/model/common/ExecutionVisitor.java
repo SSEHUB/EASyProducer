@@ -1,8 +1,10 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.common;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -19,6 +21,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Variab
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Collection;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.FieldDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ITypedModel;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ListSequence;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
@@ -523,6 +526,14 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends
      */
     protected Object convertToContainer(Expression expr, Object value, String eltName) throws VilException {
         TypeDescriptor<?> type = expr.inferType();
+        if (type.isIterator()) {
+            List<Object> result = new ArrayList<Object>();
+            Iterator<?> iter = (Iterator<?>) value;
+            while (iter.hasNext()) {
+                result.add(iter.next());
+            }
+            value = new ListSequence<Object>(result, type.getGenericParameter());
+        }
         if (!type.isCollection()) {
             OperationDescriptor desc = type.getConversionToSequence();
             if (null != desc) {

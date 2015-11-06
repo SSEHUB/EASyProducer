@@ -422,6 +422,13 @@ public abstract class TypeDescriptor <T> implements IMetaType {
      * @return <code>true</code> if this is a VIL map, <code>false</code> else
      */
     public abstract boolean isMap();
+
+    /**
+     * Returns whether this descriptor represents an iterator.
+     * 
+     * @return <code>true</code> if this is an iterator, <code>false</code> else
+     */
+    public abstract boolean isIterator();
     
     /**
      * Returns whether this descriptor represents a VIL collection, i.e., set, sequence or collection.

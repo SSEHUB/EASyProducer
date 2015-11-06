@@ -136,6 +136,11 @@ class AliasTypeDescriptor <T> extends TypeDescriptor<T> {
     }
 
     @Override
+    public boolean isIterator() {
+        return type.isIterator();
+    }
+
+    @Override
     public boolean isMap() {
         return type.isMap();
     }
