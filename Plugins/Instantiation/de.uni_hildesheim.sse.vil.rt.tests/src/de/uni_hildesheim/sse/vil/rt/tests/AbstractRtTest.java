@@ -35,7 +35,12 @@ public abstract class AbstractRtTest extends AbstractExecutionTest<Script> {
      */
     protected static void registerReasoner() {
         if (!reasonerRegistered) {
-            ReasonerFrontend.getInstance().getRegistry().register(new Reasoner());
+            ReasonerFrontend fe = ReasonerFrontend.getInstance();
+            Reasoner reasoner = new Reasoner();
+            fe.getRegistry().register(reasoner);
+            // set the preferred reasoner, in particular for plugin-based tests as then also older reasoners
+            // may be available
+            fe.setReasonerHint(reasoner.getDescriptor());
             reasonerRegistered = true;
         }
     }

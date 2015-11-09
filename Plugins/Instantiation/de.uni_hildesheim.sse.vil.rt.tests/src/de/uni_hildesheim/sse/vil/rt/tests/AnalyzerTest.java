@@ -19,7 +19,6 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.AbstractAnalyzerVisitor;
@@ -137,7 +136,6 @@ public class AnalyzerTest extends AbstractRtTest {
      * @throws CSTSemanticException shall not occur
      * @throws ConfigurationException shall not occur
      */
-    @Ignore("Jenkins")
     @Test
     public void testGreaterEqualsComparison() throws ValueDoesNotMatchTypeException, CSTSemanticException, 
         ConfigurationException {
@@ -151,7 +149,6 @@ public class AnalyzerTest extends AbstractRtTest {
      * @throws CSTSemanticException shall not occur
      * @throws ConfigurationException shall not occur
      */
-    @Ignore("Jenkins")
     @Test
     public void testSmallerEqualsComparison() throws ValueDoesNotMatchTypeException, CSTSemanticException, 
         ConfigurationException {
