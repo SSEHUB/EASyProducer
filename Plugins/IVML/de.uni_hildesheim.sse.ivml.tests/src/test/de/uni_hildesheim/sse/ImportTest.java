@@ -31,13 +31,12 @@ import de.uni_hildesheim.sse.model.management.VarModel;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.ProjectImport;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelLocations;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
 
 /**
- * Test for testing the correct resolution of project imports inside IVML files.
+ * Testing the correct resolution of project imports inside IVML files, in particular cyclic imports.
+ * 
  * @author El-Sharkawy
- *
  */
 public class ImportTest extends AbstractTest {
 
@@ -112,12 +111,15 @@ public class ImportTest extends AbstractTest {
         }
         
         // Test pre-condition: Check that exactly one location is known
+        // works only as individual test, not in combination with other tests and already known locations
+        /**
         ModelLocations<Project> knownLocations = VarModel.INSTANCE.locations();
         int nKnownLocations = knownLocations.getLocationCount();
         Assert.assertEquals("Error: Only one location should registered, but " + nKnownLocations + " are registered",
             1, nKnownLocations);
         Assert.assertEquals(LOCATION_IMPORTS_WITH_2_PROJECTS.getAbsolutePath(),
             knownLocations.getLocation(0).getLocation().getAbsolutePath());      
+        **/
         
         // Test: Try to load model
         List<ModelInfo<Project>> infos = VarModel.INSTANCE.availableModels()

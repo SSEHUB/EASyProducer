@@ -17,6 +17,7 @@
 package de.uni_hildesheim.sse.persistency;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 import de.uni_hildesheim.sse.model.cst.CompoundAccess;
@@ -68,6 +69,7 @@ class VariableUsage implements IModelVisitor, IConstraintTreeVisitor {
     
     private Map<String, Integer> imports = new HashMap<String, Integer>();
     private Map<String, AbstractVariable> mapping = new HashMap<String, AbstractVariable>();
+    private java.util.Set<Project> done = new HashSet<Project>();
 
     /**
      * Returns whether <code>var</code> needs qualification.
@@ -85,6 +87,7 @@ class VariableUsage implements IModelVisitor, IConstraintTreeVisitor {
     public void clear() {
         imports.clear();
         mapping.clear();
+        done.clear();
     }
     
     @Override
@@ -127,19 +130,22 @@ class VariableUsage implements IModelVisitor, IConstraintTreeVisitor {
 
     @Override
     public void visitProject(Project project) {
-        for (int i = 0; i < project.getImportsCount(); i++) {
-            ProjectImport imp = project.getImport(i);
-            String name = imp.getName();
-            if (null != imp.getInterfaceName()) {
-                name = name + IvmlKeyWords.NAMESPACE_SEPARATOR + imp.getInterfaceName();
+        if (!done.contains(project)) {
+            done.add(project);
+            for (int i = 0; i < project.getImportsCount(); i++) {
+                ProjectImport imp = project.getImport(i);
+                String name = imp.getName();
+                if (null != imp.getInterfaceName()) {
+                    name = name + IvmlKeyWords.NAMESPACE_SEPARATOR + imp.getInterfaceName();
+                }
+                imports.put(name, i);
+                if (null != imp.getResolved()) {
+                    imp.getResolved().accept(this);
+                }
             }
-            imports.put(name, i);
-            if (null != imp.getResolved()) {
-                imp.getResolved().accept(this);
+            for (int e = 0; e < project.getElementCount(); e++) {
+                project.getElement(e).accept(this);
             }
-        }
-        for (int e = 0; e < project.getElementCount(); e++) {
-            project.getElement(e).accept(this);
         }
     }
 
