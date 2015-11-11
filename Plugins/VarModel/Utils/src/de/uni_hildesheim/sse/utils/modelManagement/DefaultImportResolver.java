@@ -17,8 +17,10 @@ package de.uni_hildesheim.sse.utils.modelManagement;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import de.uni_hildesheim.sse.utils.internal.Bundle;
@@ -42,6 +44,8 @@ public abstract class DefaultImportResolver<M extends IModel> extends ImportReso
     public static final boolean IMPORT_WITH_VERSION = true;
     
     private final ModelInfo<M> conflictMarker = new ModelInfo<M>();
+    // stores current models in resolution - overrides repository - allows cyclic imports
+    private final Map<ModelInfo<M>, M> localModelOverride = new HashMap<ModelInfo<M>, M>();
 
     /**
      * Creates an resolver instance.
@@ -62,6 +66,10 @@ public abstract class DefaultImportResolver<M extends IModel> extends ImportReso
     @Override
     protected List<IMessage> resolveImportsImpl(M model, URI uri, List<ModelInfo<M>> inProgress, 
         IModelRepository<M> repository, IRestrictionEvaluationContext evaluationContext) {
+        ModelInfo<M> info = repository.getModelInfo(model.getName(), model.getVersion(), uri);
+        if (null != info) {
+            localModelOverride.put(info, model);
+        }
         List<IMessage> messages = new ArrayList<IMessage>();
         ResolutionContext<M> context = new ResolutionContext<M>(model, uri, inProgress, repository, evaluationContext);
         HashSet<M> done = new HashSet<M>();
@@ -75,6 +83,9 @@ public abstract class DefaultImportResolver<M extends IModel> extends ImportReso
             }
         } catch (RestrictionEvaluationException e) {
             messages.add(new Message(e.getMessage(), Status.ERROR));
+        }
+        if (null != info) {
+            localModelOverride.put(info, model);
         }
         return messages;
     }
@@ -420,14 +431,17 @@ public abstract class DefaultImportResolver<M extends IModel> extends ImportReso
         } else {
             IModelRepository<M> repository = context.getModelRepository();
             // is it already loaded?
-            M found = toLoad.getResolved();
-            if (null == found || repository.isOutdated(toLoad)) { // do not use is actual here!
-                if (!context.isLoop(toLoad)) {
-                    found = repository.load(toLoad, messages);
-                } else {
-                    messages.add(new Message("model '" + imp.getName() 
-                        + "' cannot be resolved here due to errors in the imported model", 
-                        Status.ERROR));                    
+            M found = localModelOverride.get(toLoad); // precedence to models in resolution
+            if (null == found) {
+                found = toLoad.getResolved();
+                if (null == found || repository.isOutdated(toLoad)) { // do not use is actual here!
+                    if (!context.isLoop(toLoad)) {
+                        found = repository.load(toLoad, messages);
+                    } else {
+                        messages.add(new Message("model '" + imp.getName() 
+                            + "' cannot be resolved here due to errors in the imported model", 
+                            Status.ERROR));                    
+                    }
                 }
             }
             if (null != found) {

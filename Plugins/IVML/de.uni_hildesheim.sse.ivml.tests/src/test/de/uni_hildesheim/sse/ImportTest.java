@@ -16,18 +16,20 @@
 package test.de.uni_hildesheim.sse;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.ModelUtility;
 import de.uni_hildesheim.sse.model.management.VarModel;
 import de.uni_hildesheim.sse.model.varModel.Project;
+import de.uni_hildesheim.sse.model.varModel.ProjectImport;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelLocations;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
@@ -100,7 +102,6 @@ public class ImportTest extends AbstractTest {
      * </code></pre>
      */
     @Test
-    @Ignore
     public void testCycleImportsWith2Projects() {
         File location = new File(DIR, "CycleTest_2Projects");
         try {
@@ -131,9 +132,48 @@ public class ImportTest extends AbstractTest {
             Assert.fail("Error: Model-Info could not be loaded. " + e.getMessage());
         }
         Assert.assertNotNull(project);
+        assertImported(project);
+        
+        
         
         // Test: Test correct project structure, i.e. loaded cycle imports
         // TODO
+    }
+    
+    /**
+     * Recursively asserts the resolved instances of model imports.
+     * @param project the project to visit
+     */
+    private static void assertImported(Project project) {
+        Map<ModelInfo<Project>, Project> imported = new HashMap<ModelInfo<Project>, Project>();
+        ModelInfo<Project> info = VarModel.INSTANCE.availableModels().getModelInfo(project);
+        Assert.assertNotNull(info);
+        imported.put(info, project);
+        assertImported(project, imported);
+    }
+    
+    /**
+     * Recursively asserts the resolved instances of model imports.
+     * @param project the project to visit
+     * @param imported the already imported (and visited) projects
+     */
+    private static void assertImported(Project project, Map<ModelInfo<Project>, Project> imported) {
+        for (int i = 0; i < project.getImportsCount(); i++) {
+            ProjectImport imp = project.getImport(i);
+            Project resolved = imp.getResolved();
+            Assert.assertNotNull("import '" + imp.getName() + "' in '" + project.getName() + "' is not resolved", 
+                resolved);
+            ModelInfo<Project> info = VarModel.INSTANCE.availableModels().getModelInfo(resolved);
+            Assert.assertNotNull("no model info for '" + imp.getName() + "'", info);
+            if (imported.containsKey(info)) {
+                Assert.assertTrue("only one instance of '" + imp.getName() + "' shall be used in the model references", 
+                    resolved == imported.get(info));
+                // already visited, no recursion
+            } else {
+                imported.put(info, imp.getResolved());
+                assertImported(imp.getResolved(), imported);
+            }
+        }
     }
 
 }
