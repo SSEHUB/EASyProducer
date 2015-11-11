@@ -1,0 +1,1 @@
+Projects for testing correct resolution of project imports inside IVML files.

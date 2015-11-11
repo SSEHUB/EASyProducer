@@ -1,0 +1,5 @@
+project ImportCycleTest_2Projects_A {
+
+	version v0;
+	import ImportCycleTest_2Projects_B;
+}

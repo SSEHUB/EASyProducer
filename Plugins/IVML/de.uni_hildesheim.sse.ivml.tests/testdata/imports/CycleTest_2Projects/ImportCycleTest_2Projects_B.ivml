@@ -1,0 +1,4 @@
+project ImportCycleTest_2Projects_B {
+  import ImportCycleTest_2Projects_A;
+
+}
