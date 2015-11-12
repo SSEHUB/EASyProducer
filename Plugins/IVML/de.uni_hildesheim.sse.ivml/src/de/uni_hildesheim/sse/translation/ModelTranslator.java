@@ -568,7 +568,6 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
      * @param context the type resolution context
      * @param force if creation (and related errors) shall be forced or just tested and created on best-effort
      */
-// TODO keep already processed    
     private void processDefinitions(List<Typedef> typedefs, List<VariableDeclaration> vardecls, 
         List<AttrAssignment> assignments, TypeContext context, boolean force) {
         List<Typedef> typesToDo = new LinkedList<Typedef>();
@@ -608,15 +607,12 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
             assgnCount = assgnToDo.size();
             if (typesCount > 0) {
                 processTypedefs(typesToDo, context, false);
-// TODO hash within             
             }
             if (declsCount > 0) {
                 processVars(declsToDo, context, false);
-// TODO hash within
             }
             if (assgnCount > 0) {
                 processAttributeAssignments(assgnToDo, context, false);
-// TODO hash within
             }
             if (typesCount == typesToDo.size()
                 && declsCount == declsToDo.size()
@@ -1233,6 +1229,9 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
             superCompound = null;
         }
         Compound stored = compoundMapping.get(tcomp);
+        if (null != stored && null == stored.getRefines() && null != superCompound) {
+            stored.setRefines(superCompound);
+        }
         expressionTranslator.warnDiscouragedNames(tcomp.getName(), tcomp, IvmlPackage.Literals.TYPEDEF_COMPOUND__NAME);
         Compound compound = (null != stored ? stored : new Compound(tcomp.getName(), context.getProject(), 
             tcomp.getAbstract() != null, superCompound));
