@@ -1454,7 +1454,10 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
             if (null != tmapping.getConstraint()) {
                 typedefMapping.put(tmapping, result);
             }
-            context.addToProject(tmapping, comment, result);
+            if (!context.addToProject(tmapping, comment, result)) {
+                throw new TranslatorException("duplicated type name '" + tmapping.getNewType() + "'", tmapping, 
+                    IvmlPackage.Literals.TYPEDEF_MAPPING__NEW_TYPE, ErrorCodes.NAME_CLASH);
+            }
         }
         return resolvable;
     }

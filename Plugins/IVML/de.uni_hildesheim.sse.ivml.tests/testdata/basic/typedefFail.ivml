@@ -1,0 +1,6 @@
+project testTypedefFail {
+
+    version v0;
+    typedef myInt Integer;
+    typedef myInt sequenceOf(String);
+}

@@ -282,6 +282,16 @@ public class BasicTests extends AbstractTest {
     }
 
     /**
+     * Tests custom typedefs. (failing)
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testTypedefFail() throws IOException {
+        assertEqual(createFile("typedefFail"), "testTypedefFail", "0", ErrorCodes.NAME_CLASH);
+    }
+    
+    /**
      * Tests custom typedefs on compounds (SAP case).
      * 
      * @throws IOException should not occur
