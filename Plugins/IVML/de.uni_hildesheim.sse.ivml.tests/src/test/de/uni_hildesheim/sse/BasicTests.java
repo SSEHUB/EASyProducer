@@ -210,6 +210,17 @@ public class BasicTests extends AbstractTest {
     }
 
     /**
+     * Tests failing enumerations.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testEnumerationsFail2() throws IOException {
+        assertEqual(createFile("enumerationsFail2"), "testEnumerationsFail2",
+                "0", ErrorCodes.NAME_CLASH);
+    }
+
+    /**
      * Tests initializers at basic compounds.
      * 
      * @throws IOException should not occur

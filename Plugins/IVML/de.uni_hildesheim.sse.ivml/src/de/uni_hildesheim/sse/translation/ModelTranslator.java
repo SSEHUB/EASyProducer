@@ -1158,8 +1158,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
      *             in case that the processing of the <code>statement</code>
      *             must be terminated abnormally
      */
-    private void processEnum(TypedefEnum tenum, TypeContext context)
-        throws TranslatorException {
+    private void processEnum(TypedefEnum tenum, TypeContext context) throws TranslatorException {
         int noOrdinals = 0;
         int allOrdinals = 0;
         int literalCount = tenum.getLiterals().size();
@@ -1192,13 +1191,15 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
                     pos = Integer.parseInt(lit.getValue().getVal());
                 }
                 if (!iEnum.add(new EnumLiteral(lit.getName(), pos, iEnum))) {
-                    error("enum value '" + lit.getName() + "' is defined twice",
-                            lit,
+                    error("enum value '" + lit.getName() + "' is defined twice", lit,
                             IvmlPackage.Literals.TYPEDEF_ENUM_LITERAL__NAME,
                             ErrorCodes.INITIALIZER_CONSISTENCY);
                 }
             }
-            context.addToProject(tenum, comment, iEnum);
+            if (!context.addToProject(tenum, comment, iEnum)) {
+                throw new TranslatorException("duplicated type name '" + tenum.getName() + "'", tenum, 
+                    IvmlPackage.Literals.TYPEDEF_ENUM__NAME, ErrorCodes.NAME_CLASH);
+            }
         }
     }
 

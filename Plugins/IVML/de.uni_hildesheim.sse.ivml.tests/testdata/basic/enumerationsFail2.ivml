@@ -1,0 +1,6 @@
+project testEnumerationsFail2 {
+
+    version v0;
+    enum e {f, g};
+    enum e {f = 10, g = 20, h = 30, i = 40};
+}
