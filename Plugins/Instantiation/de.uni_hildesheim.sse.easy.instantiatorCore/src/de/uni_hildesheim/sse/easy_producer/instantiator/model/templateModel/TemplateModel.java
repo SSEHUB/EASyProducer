@@ -1,10 +1,8 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel;
 
-import de.uni_hildesheim.sse.utils.modelManagement.AbstractImportResolverPoolManager;
 import de.uni_hildesheim.sse.utils.modelManagement.ImportResolver;
 import de.uni_hildesheim.sse.utils.modelManagement.DefaultImportResolver;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagement;
-import de.uni_hildesheim.sse.utils.pool.IPoolManager;
 
 /**
  * Provides mechanisms for loading, linking, referring, searching and storing template models
@@ -27,16 +25,8 @@ public class TemplateModel extends ModelManagement<Template> {
     }
 
     @Override
-    protected IPoolManager<ImportResolver<Template>> createResolverPoolManager() {
-        return new AbstractImportResolverPoolManager<Template>() {
-
-            @Override
-            public ImportResolver<Template> create() {
-                return new DefaultImportResolver<Template>();
-            }
-
-        };
+    protected ImportResolver<Template> createResolver() {
+        return new DefaultImportResolver<Template>();
     }
-
 
 }

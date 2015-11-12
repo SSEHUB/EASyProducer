@@ -18,11 +18,9 @@ package de.uni_hildesheim.sse.model.management;
 import java.io.IOException;
 
 import de.uni_hildesheim.sse.model.varModel.Project;
-import de.uni_hildesheim.sse.utils.modelManagement.AbstractImportResolverPoolManager;
 import de.uni_hildesheim.sse.utils.modelManagement.ImportResolver;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagement;
-import de.uni_hildesheim.sse.utils.pool.IPoolManager;
 
 /**
  * The variability model, the central class holding all project instances and being
@@ -79,15 +77,8 @@ public class VarModel extends ModelManagement<Project> {
     }
 
     @Override
-    protected IPoolManager<ImportResolver<Project>> createResolverPoolManager() {
-        return new AbstractImportResolverPoolManager<Project>() {
-
-            @Override
-            public ImportResolver<Project> create() {
-                return new DefaultImportResolver();
-            }
-            
-        };
+    protected ImportResolver<Project> createResolver() {
+        return new DefaultImportResolver();
     }
 
 }

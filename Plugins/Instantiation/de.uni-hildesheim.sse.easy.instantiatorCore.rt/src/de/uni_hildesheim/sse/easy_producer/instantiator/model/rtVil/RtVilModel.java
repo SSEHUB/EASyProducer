@@ -1,10 +1,8 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil;
 
-import de.uni_hildesheim.sse.utils.modelManagement.AbstractImportResolverPoolManager;
 import de.uni_hildesheim.sse.utils.modelManagement.ImportResolver;
 import de.uni_hildesheim.sse.utils.modelManagement.DefaultImportResolver;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagement;
-import de.uni_hildesheim.sse.utils.pool.IPoolManager;
 
 /**
  * Provides mechanisms for loading, linking, referring, searching and storing adaptation language models
@@ -27,15 +25,8 @@ public class RtVilModel extends ModelManagement<Script> {
     }
 
     @Override
-    protected IPoolManager<ImportResolver<Script>> createResolverPoolManager() {
-        return new AbstractImportResolverPoolManager<Script>() {
-
-            @Override
-            public ImportResolver<Script> create() {
-                return new DefaultImportResolver<Script>();
-            }
-
-        };
+    protected ImportResolver<Script> createResolver() {
+        return new DefaultImportResolver<Script>();
     }
 
 }

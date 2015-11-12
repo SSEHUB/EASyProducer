@@ -82,19 +82,31 @@ public abstract class ModelManagement <M extends IModel> {
      * Singleton.
      */
     protected ModelManagement() {
-        resolverPool = new Pool<ImportResolver<M>>(createResolverPoolManager());
+        resolverPool = new Pool<ImportResolver<M>>(new IPoolManager<ImportResolver<M>>() {
+
+            @Override
+            public ImportResolver<M> create() {
+                return createResolver();
+            }
+
+            @Override
+            public void clear(ImportResolver<M> instance) {
+                instance.clear();
+            }
+            
+        });
         repository = new ModelRepository<M>(this);
         availableModels = new AvailableModels<M>(repository);
         locations = new ModelLocations<M>(repository);
         loaders = new ModelLoaders<M>(repository);
     }
-    
+
     /**
-     * Creates a pool manager for the resolver pool.
+     * Creates a resolver instance.
      * 
-     * @return the pool manager
+     * @return the resolver instance
      */
-    protected abstract IPoolManager<ImportResolver<M>> createResolverPoolManager();
+    protected abstract ImportResolver<M> createResolver();
 
     /**
      * Provides access to the internationalization mechanisms. For future compatibility, 
