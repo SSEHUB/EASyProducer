@@ -35,6 +35,8 @@ import de.uni_hildesheim.sse.utils.messages.Status;
 import de.uni_hildesheim.sse.utils.modelManagement.IModelLoader.LoadResult;
 import de.uni_hildesheim.sse.utils.modelManagement.IModelProcessingListener.Type;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelLocations.Location;
+import de.uni_hildesheim.sse.utils.pool.IPoolManager;
+import de.uni_hildesheim.sse.utils.pool.Pool;
 import de.uni_hildesheim.sse.utils.progress.ObservableTask;
 import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
 import de.uni_hildesheim.sse.utils.progress.ProgressObserver.ITask;
@@ -74,16 +76,37 @@ public abstract class ModelManagement <M extends IModel> {
     private ModelLoaders<M> loaders;
     private transient Set<ModelInfo<M>> loading = new HashSet<ModelInfo<M>>();
     private transient boolean inUpdate = false;
+    private Pool<ImportResolver<M>> resolverPool;
 
     /**
      * Singleton.
      */
     protected ModelManagement() {
+        resolverPool = new Pool<ImportResolver<M>>(new IPoolManager<ImportResolver<M>>() {
+
+            @Override
+            public ImportResolver<M> create() {
+                return createResolver();
+            }
+
+            @Override
+            public void clear(ImportResolver<M> instance) {
+                instance.clear();
+            }
+            
+        });
         repository = new ModelRepository<M>(this);
         availableModels = new AvailableModels<M>(repository);
         locations = new ModelLocations<M>(repository);
         loaders = new ModelLoaders<M>(repository);
     }
+
+    /**
+     * Creates a resolver instance.
+     * 
+     * @return the resolver instance
+     */
+    protected abstract ImportResolver<M> createResolver();
 
     /**
      * Provides access to the internationalization mechanisms. For future compatibility, 
@@ -164,8 +187,21 @@ public abstract class ModelManagement <M extends IModel> {
      * Returns the current top-level resolver.
      * 
      * @return the top-level resolver
+     * @see #releaseResolver(ImportResolver)
      */
-    protected abstract ImportResolver<M> getTopLevelResolver();
+    protected ImportResolver<M> getResolverFromPool() {
+        return resolverPool.getInstance();
+    }
+    
+    /**
+     * Releases a given resolver instance.
+     * 
+     * @param resolver the resolver to be released
+     * @see #getResolverFromPool()
+     */
+    protected void releaseResolver(ImportResolver<M> resolver) {
+        resolverPool.releaseInstance(resolver);
+    }
     
     /**
      * Add a model to this management instance. Existing models are overwritten
@@ -397,8 +433,11 @@ public abstract class ModelManagement <M extends IModel> {
      * @return messages which occur during resolution, <code>null</code> or empty if none
      */
     public synchronized List<IMessage> resolveImports(M model, URI uri, List<ModelInfo<M>> inProgress) {
-        return getTopLevelResolver().resolveImports(model, uri, inProgress, repository, 
+        ImportResolver<M> resolver = getResolverFromPool();
+        List<IMessage> result = resolver.resolveImports(model, uri, inProgress, repository, 
             model.getRestrictionEvaluationContext());
+        releaseResolver(resolver);
+        return result;
     }
 
     /**
@@ -414,7 +453,10 @@ public abstract class ModelManagement <M extends IModel> {
      */
     public synchronized M resolve(String modelName, IVersionRestriction restriction, URI baseURI, 
         IRestrictionEvaluationContext evaluationContext) throws ModelManagementException {
-        return getTopLevelResolver().resolve(modelName, restriction, baseURI, repository, evaluationContext);
+        ImportResolver<M> resolver = getResolverFromPool();
+        M result = resolver.resolve(modelName, restriction, baseURI, repository, evaluationContext);
+        releaseResolver(resolver);
+        return result;
     }
     
     /**

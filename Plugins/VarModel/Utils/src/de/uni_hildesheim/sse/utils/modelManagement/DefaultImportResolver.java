@@ -30,13 +30,15 @@ import de.uni_hildesheim.sse.utils.messages.Message;
 import de.uni_hildesheim.sse.utils.messages.Status;
 
 /**
- * A model imports resolver. Don't store information in attributes!
+ * A model imports resolver. Due to the instance data needed to perform cyclic model resolution,
+ * instances of this class are not reentrant during processing of one model and its imported
+ * models. Either instances are pooled or created individually per model translation.
  * 
  * @param <M> the specific model type
  * 
  * @author Holger Eichelberger
  */
-public abstract class DefaultImportResolver<M extends IModel> extends ImportResolver<M> {
+public class DefaultImportResolver<M extends IModel> extends ImportResolver<M> {
 
     /** 
      * Allows to switch easily to the primitive (non-version checking) variant.
@@ -50,21 +52,17 @@ public abstract class DefaultImportResolver<M extends IModel> extends ImportReso
     /**
      * Creates an resolver instance.
      */
-    protected DefaultImportResolver() {
+    public DefaultImportResolver() {
         super();
-    }
-
-    /**
-     * Creates an resolver instance with a parent resolver to delegate to in failure cases.
-     * 
-     * @param parent the parent resolver
-     */
-    protected DefaultImportResolver(ImportResolver<M> parent) {
-        super(parent);
     }
     
     @Override
-    protected List<IMessage> resolveImportsImpl(M model, URI uri, List<ModelInfo<M>> inProgress, 
+    public void clear() {
+        localModelOverride.clear();
+    }
+    
+    @Override
+    public List<IMessage> resolveImports(M model, URI uri, List<ModelInfo<M>> inProgress, 
         IModelRepository<M> repository, IRestrictionEvaluationContext evaluationContext) {
         ModelInfo<M> info = repository.getModelInfo(model.getName(), model.getVersion(), uri);
         if (null != info) {
@@ -493,7 +491,7 @@ public abstract class DefaultImportResolver<M extends IModel> extends ImportReso
     }
 
     @Override
-    protected M resolveImpl(String modelName, IVersionRestriction restrictions, URI baseUri,
+    public M resolve(String modelName, IVersionRestriction restrictions, URI baseUri,
         IModelRepository<M> repository, IRestrictionEvaluationContext evaluationContext) 
         throws ModelManagementException {
         M result = null;

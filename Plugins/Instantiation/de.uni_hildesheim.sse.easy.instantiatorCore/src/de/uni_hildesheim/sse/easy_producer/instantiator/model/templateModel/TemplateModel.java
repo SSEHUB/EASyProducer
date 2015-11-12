@@ -1,6 +1,7 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel;
 
 import de.uni_hildesheim.sse.utils.modelManagement.ImportResolver;
+import de.uni_hildesheim.sse.utils.modelManagement.DefaultImportResolver;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagement;
 
 /**
@@ -17,38 +18,15 @@ public class TemplateModel extends ModelManagement<Template> {
      */
     public static final TemplateModel INSTANCE = new TemplateModel();
 
-    private static ImportResolver<Template> resolver = new DefaultImportResolver();
-
     /**
      * Singleton.
      */
     private TemplateModel() {
     }
-    
-    /**
-     * Defines the new top-level resolver.
-     * 
-     * @param newResolver the new top-level resolver
-     */
-    public static void setResolver(ImportResolver<Template> newResolver) {
-        if (null != newResolver) {
-            resolver = newResolver;
-        }
-    }
-    
-    /**
-     * Returns the top-level resolver.
-     * 
-     * @return the top-level resolver
-     */
-    public static ImportResolver<Template> getResolver() {
-        return resolver;
-    }
 
-    
     @Override
-    protected ImportResolver<Template> getTopLevelResolver() {
-        return resolver;
+    protected ImportResolver<Template> createResolver() {
+        return new DefaultImportResolver<Template>();
     }
 
 }

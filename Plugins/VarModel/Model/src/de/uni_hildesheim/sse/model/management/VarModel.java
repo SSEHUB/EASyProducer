@@ -45,8 +45,6 @@ public class VarModel extends ModelManagement<Project> {
      */
     public static final VarModel INSTANCE = new VarModel();
 
-    private static ImportResolver<Project> resolver = new DefaultImportResolver();
-    
     private ModelCommentsPersistencer comments;
         
     /**
@@ -54,35 +52,6 @@ public class VarModel extends ModelManagement<Project> {
      */
     private VarModel() {
         comments = new ModelCommentsPersistencer(repository());
-    }
-
-    /**
-     * Defines the new top-level resolver.
-     * 
-     * @param newResolver the new top-level resolver
-     */
-    public static void setResolver(ImportResolver<Project> newResolver) {
-        if (null != newResolver) {
-            resolver = newResolver;
-        }
-    }
-    
-    /**
-     * Returns the top-level resolver.
-     * 
-     * @return the top-level resolver
-     */
-    public static ImportResolver<Project> getResolver() {
-        return resolver;
-    }
-    
-    /**
-     * Returns the current top-level resolver.
-     * 
-     * @return the top-level resolver
-     */
-    protected ImportResolver<Project> getTopLevelResolver() {
-        return resolver;
     }
 
     /**
@@ -105,6 +74,11 @@ public class VarModel extends ModelManagement<Project> {
     @Override
     protected void postLoadModel(ModelInfo<Project> info) throws IOException {
         comments.loadComments(info);
+    }
+
+    @Override
+    protected ImportResolver<Project> createResolver() {
+        return new DefaultImportResolver();
     }
 
 }
