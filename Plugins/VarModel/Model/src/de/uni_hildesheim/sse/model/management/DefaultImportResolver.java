@@ -25,7 +25,6 @@ import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
 import de.uni_hildesheim.sse.utils.messages.IMessage;
 import de.uni_hildesheim.sse.utils.messages.Message;
 import de.uni_hildesheim.sse.utils.messages.Status;
-import de.uni_hildesheim.sse.utils.modelManagement.ImportResolver;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
 
 /**
@@ -43,17 +42,6 @@ class DefaultImportResolver extends de.uni_hildesheim.sse.utils.modelManagement.
         EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID);
         logger.info("Model.DefaultImportResolver registered");            
     }
-
-    @Override
-    protected ImportResolver<Project> getTopResolver() {
-        return VarModel.getResolver();
-    }
-
-    @Override
-    protected void setTopResolver(ImportResolver<Project> resolver) {
-        VarModel.setResolver(resolver);
-    }
-
 
     /**
      * Checks the imported interfaces for obvious import problems, such as importing projects

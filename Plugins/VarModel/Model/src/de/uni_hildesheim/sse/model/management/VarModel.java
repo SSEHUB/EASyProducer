@@ -18,9 +18,11 @@ package de.uni_hildesheim.sse.model.management;
 import java.io.IOException;
 
 import de.uni_hildesheim.sse.model.varModel.Project;
+import de.uni_hildesheim.sse.utils.modelManagement.AbstractImportResolverPoolManager;
 import de.uni_hildesheim.sse.utils.modelManagement.ImportResolver;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagement;
+import de.uni_hildesheim.sse.utils.pool.IPoolManager;
 
 /**
  * The variability model, the central class holding all project instances and being
@@ -45,8 +47,6 @@ public class VarModel extends ModelManagement<Project> {
      */
     public static final VarModel INSTANCE = new VarModel();
 
-    private static ImportResolver<Project> resolver = new DefaultImportResolver();
-    
     private ModelCommentsPersistencer comments;
         
     /**
@@ -54,35 +54,6 @@ public class VarModel extends ModelManagement<Project> {
      */
     private VarModel() {
         comments = new ModelCommentsPersistencer(repository());
-    }
-
-    /**
-     * Defines the new top-level resolver.
-     * 
-     * @param newResolver the new top-level resolver
-     */
-    public static void setResolver(ImportResolver<Project> newResolver) {
-        if (null != newResolver) {
-            resolver = newResolver;
-        }
-    }
-    
-    /**
-     * Returns the top-level resolver.
-     * 
-     * @return the top-level resolver
-     */
-    public static ImportResolver<Project> getResolver() {
-        return resolver;
-    }
-    
-    /**
-     * Returns the current top-level resolver.
-     * 
-     * @return the top-level resolver
-     */
-    protected ImportResolver<Project> getTopLevelResolver() {
-        return resolver;
     }
 
     /**
@@ -105,6 +76,18 @@ public class VarModel extends ModelManagement<Project> {
     @Override
     protected void postLoadModel(ModelInfo<Project> info) throws IOException {
         comments.loadComments(info);
+    }
+
+    @Override
+    protected IPoolManager<ImportResolver<Project>> createResolverPoolManager() {
+        return new AbstractImportResolverPoolManager<Project>() {
+
+            @Override
+            public ImportResolver<Project> create() {
+                return new DefaultImportResolver();
+            }
+            
+        };
     }
 
 }
