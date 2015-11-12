@@ -24,12 +24,16 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.ModelUtility;
 import de.uni_hildesheim.sse.model.management.VarModel;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.ProjectImport;
+import de.uni_hildesheim.sse.model.varModel.filter.DeclarationFinder;
+import de.uni_hildesheim.sse.model.varModel.filter.DeclarationFinder.VisibilityType;
+import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
 
@@ -46,6 +50,7 @@ public class ImportTest extends AbstractTest {
     private static final File DIR = new File(TESTDATA_DIR, "imports");
     
     private static final File LOCATION_IMPORTS_WITH_2_PROJECTS = new File(DIR, "CycleTest_2Projects"); 
+    private static final File LOCATION_CYCLING_DECLARATIONS = new File(DIR, "CycleTest_CyclingDeclarations"); 
     
     /**
      * Starts up the test overriding the parent method.
@@ -81,6 +86,12 @@ public class ImportTest extends AbstractTest {
             // Do not abort, print warning if any problems occur
             e.printStackTrace();
         }
+        try {
+            VarModel.INSTANCE.locations().removeLocation(LOCATION_CYCLING_DECLARATIONS, OBSERVER);
+        } catch (ModelManagementException e) {
+            // Do not abort, print warning if any problems occur
+            e.printStackTrace();
+        }
     }
     
     /**
@@ -102,44 +113,93 @@ public class ImportTest extends AbstractTest {
      */
     @Test
     public void testCycleImportsWith2Projects() {
-        File location = new File(DIR, "CycleTest_2Projects");
+        addLocation(LOCATION_IMPORTS_WITH_2_PROJECTS);
+        
+        // Test: Try to load model
+        loadAndCheckProject("ImportCycleTest_2Projects_A");
+    }
+    
+    /**
+     * Tests whether 2 projects with cycling declarations can be loaded.
+     * The following 2 projects are loaded:
+     * <pre><code>
+     * project ImportCycleTest_CyclingDeclarations_A {
+     *
+     *   version v0;
+     *   import ImportCycleTest_CyclingDeclarations_B;
+     *   Integer varA = varB + 1;
+     * }
+     * 
+     * project ImportCycleTest_CyclingDeclarations_B {
+     *
+     *   version v0;
+     *   import ImportCycleTest_CyclingDeclarations_A;
+     *   Integer varB = 1;
+     *   Integer varC = varA + 1;
+     * }
+     * </code></pre>
+     */
+    @Test
+    @Ignore
+    public void testCyclingDeclarations() {
+        addLocation(LOCATION_CYCLING_DECLARATIONS);
+        
+        // Test: Try to load model
+        Project project = loadAndCheckProject("ImportCycleTest_CyclingDeclarations_A");
+        
+        // Test whether all declarations could be resolved correctly
+        DeclarationFinder finder = new DeclarationFinder(project, FilterType.ALL, null);
+//        List<AbstractVariable> delcarations = 
+        finder.getVariableDeclarations(VisibilityType.ALL);
+        // TODO
+    }
+
+    /**
+     * Loads the specified IVML {@link Project} and verifies whether the imports are resolved correctly.
+     * Note that the locations must be registered before loading the project.
+     * Works only if exactly one project with the specified name exists at the registered locations.
+     * @param projectName The name of the project to load.
+     * @return The loaded project, will not be <tt>null</tt>.
+     * @see #addLocation(File)
+     */
+    private Project loadAndCheckProject(String projectName) {
+        List<ModelInfo<Project>> infos = VarModel.INSTANCE.availableModels().getModelInfo(projectName);
+        Assert.assertNotNull(infos);
+        Assert.assertEquals("Error: Only one project should be found, but there were " + infos.size(), 1, infos.size());
+        ModelInfo<Project> info = infos.get(0);
+        Project project = null;
+        try {
+            project = VarModel.INSTANCE.load(info);
+        } catch (ModelManagementException e) {
+            e.printStackTrace();
+            Assert.fail("Error: model info of \"" + info.getName() + "\"could not be loaded.\nReason: "
+                + e.getMessage());
+        }
+        
+        // Test: Test correct project structure, i.e. loaded cycle imports
+        Assert.assertNotNull(project);
+        assertImported(project);
+        return project;
+    }
+
+    /**
+     * Adds a file location (folder), to the {@link VarModel} which shall be used to load models for the current test.
+     * Test will be aborted if location could not be added.
+     * @param location A folder which shall be used for loading models for the current test
+     * (will also use sub folders).
+     */
+    private void addLocation(File location) {
+        Assert.assertTrue("Error: The given location does not exist: \"" + location.getAbsolutePath() + "\"",
+            location.exists());
+        Assert.assertTrue("Error: The given location is not a folder: \"" + location.getAbsolutePath() + "\"",
+            location.isDirectory());
         try {
             VarModel.INSTANCE.locations().addLocation(location, OBSERVER);
         } catch (ModelManagementException e) {
             e.printStackTrace();
-            Assert.fail("Error: Test location could not be added to VarModel. " + e.getMessage());
+            Assert.fail("Error: Test location could not be added to VarModel. Failed to add location: \""
+                + location.getAbsolutePath() + "\". Message: " + e.getMessage());
         }
-        
-        // Test pre-condition: Check that exactly one location is known
-        // works only as individual test, not in combination with other tests and already known locations
-        /**
-        ModelLocations<Project> knownLocations = VarModel.INSTANCE.locations();
-        int nKnownLocations = knownLocations.getLocationCount();
-        Assert.assertEquals("Error: Only one location should registered, but " + nKnownLocations + " are registered",
-            1, nKnownLocations);
-        Assert.assertEquals(LOCATION_IMPORTS_WITH_2_PROJECTS.getAbsolutePath(),
-            knownLocations.getLocation(0).getLocation().getAbsolutePath());      
-        **/
-        
-        // Test: Try to load model
-        List<ModelInfo<Project>> infos = VarModel.INSTANCE.availableModels()
-            .getModelInfo("ImportCycleTest_2Projects_A");
-        Assert.assertNotNull(infos);
-        Assert.assertEquals("Error: Only one project should be found, but there were " + infos.size(), 1, infos.size());
-        Project project = null;
-        try {
-            project = VarModel.INSTANCE.load(infos.get(0));
-        } catch (ModelManagementException e) {
-            e.printStackTrace();
-            Assert.fail("Error: Model-Info could not be loaded. " + e.getMessage());
-        }
-        Assert.assertNotNull(project);
-        assertImported(project);
-        
-        
-        
-        // Test: Test correct project structure, i.e. loaded cycle imports
-        // TODO
     }
     
     /**

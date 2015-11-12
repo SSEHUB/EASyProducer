@@ -1,0 +1,7 @@
+project ImportCycleTest_CyclingDeclarations_B {
+  
+  version v0;
+  import ImportCycleTest_CyclingDeclarations_A;
+  Integer varB = 1;
+  Integer varC = varA + 1;
+}
