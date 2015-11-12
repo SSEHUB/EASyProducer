@@ -16,6 +16,7 @@ import de.uni_hildesheim.sse.utils.messages.IMessage;
 import de.uni_hildesheim.sse.utils.messages.Message;
 import de.uni_hildesheim.sse.utils.messages.Status;
 import de.uni_hildesheim.sse.utils.modelManagement.IModelLoader;
+import de.uni_hildesheim.sse.utils.modelManagement.ImportResolver;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
@@ -194,7 +195,7 @@ class UnloadTestModelLoader implements IModelLoader<Project> {
     }
     
     @Override
-    public LoadResult<Project> load(ModelInfo<Project> info) {
+    public LoadResult<Project> load(ModelInfo<Project> info, ImportResolver<Project> resolver) {
         List<Project> projects = new ArrayList<Project>();
         List<IMessage> messages = new ArrayList<IMessage>();
         Project project = data.get(info);

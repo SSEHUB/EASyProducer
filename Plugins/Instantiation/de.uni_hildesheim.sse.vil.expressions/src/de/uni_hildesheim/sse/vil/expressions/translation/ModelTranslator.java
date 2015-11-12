@@ -30,6 +30,7 @@ import de.uni_hildesheim.sse.utils.messages.IMessage;
 import de.uni_hildesheim.sse.utils.modelManagement.AvailableModels;
 import de.uni_hildesheim.sse.utils.modelManagement.IModel;
 import de.uni_hildesheim.sse.utils.modelManagement.IVersionRestriction;
+import de.uni_hildesheim.sse.utils.modelManagement.ImportResolver;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagement;
@@ -382,7 +383,7 @@ public abstract class ModelTranslator
      * @param inProgress the other projects being resolved at once (in order to avoid loops)
      */
     protected void resolveImports(LanguageUnit input, EStructuralFeature inputFeature, 
-        M model, URI uri, List<? extends LanguageUnit> inProgress) {
+        M model, URI uri, List<? extends LanguageUnit> inProgress, ImportResolver<M> impResolver) {
         List<ModelInfo<M>> infoInProgress = new ArrayList<ModelInfo<M>>();
         AvailableModels<M> available = getManagementInstance().availableModels();
         for (int p = 0; p < inProgress.size(); p++) {
@@ -403,7 +404,8 @@ public abstract class ModelTranslator
                 error(e.getMessage(), input, inputFeature, ErrorCodes.IMPORT);
             }
         }
-        List<IMessage> resolutionMessages = getManagementInstance().resolveImports(model, uri, infoInProgress);
+        List<IMessage> resolutionMessages = getManagementInstance().resolveImports(model, uri, infoInProgress, 
+            impResolver);
         if (resolutionMessages.size() > 0) {
             resolutionMessages = postResolveImports(model, uri, resolutionMessages);
         }        

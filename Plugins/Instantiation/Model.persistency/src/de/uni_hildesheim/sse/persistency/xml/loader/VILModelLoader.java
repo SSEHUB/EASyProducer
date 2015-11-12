@@ -14,6 +14,7 @@ import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
 import de.uni_hildesheim.sse.utils.messages.IMessage;
 import de.uni_hildesheim.sse.utils.modelManagement.IModel;
 import de.uni_hildesheim.sse.utils.modelManagement.IModelLoader;
+import de.uni_hildesheim.sse.utils.modelManagement.ImportResolver;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 import de.uni_hildesheim.sse.utils.modelManagement.Version;
 
@@ -39,7 +40,8 @@ public class VILModelLoader implements IModelLoader<Script> {
     }
     
     @Override
-    public de.uni_hildesheim.sse.utils.modelManagement.IModelLoader.LoadResult<Script> load(ModelInfo<Script> info) {
+    public de.uni_hildesheim.sse.utils.modelManagement.IModelLoader.LoadResult<Script> load(ModelInfo<Script> info, 
+        ImportResolver<Script> resolver) {
         LoadResult<Script> loadResult = null;
         for (Script script : scripts) {
             if (info.getName().equals(script.getName()) && Version.equals(info.getVersion(), script.getVersion())) {

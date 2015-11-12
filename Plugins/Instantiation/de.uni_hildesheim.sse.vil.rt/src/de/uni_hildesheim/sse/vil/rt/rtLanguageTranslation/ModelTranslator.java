@@ -40,6 +40,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescr
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.utils.messages.IMessage;
 import de.uni_hildesheim.sse.utils.modelManagement.IModelLoader;
+import de.uni_hildesheim.sse.utils.modelManagement.ImportResolver;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagement;
 import de.uni_hildesheim.sse.vil.expressions.ResourceRegistry;
@@ -87,9 +88,11 @@ public class ModelTranslator extends de.uni_hildesheim.sse.buildLanguageTranslat
      * @param uri the URI of the project to resolve (in order to find the
      *        closest project, may be <b>null</b>)
      * @param registerSuccessful successfully created models shall be registered
+     * @param impResolver the import resolver to use (may be <b>null</b> to use a new default import resolver)
      * @return the corresponding build model
      */
-    public List<Script> createModel(ImplementationUnit unit, URI uri, boolean registerSuccessful) {
+    public List<Script> createModel(ImplementationUnit unit, URI uri, boolean registerSuccessful, 
+        ImportResolver<Script> impResolver) {
         ResourceRegistry.register(unit.eResource(), getResolver().getTypeRegistry());
         List<Script> result = new ArrayList<Script>();
         if (null != unit.getScripts()) {
@@ -105,7 +108,8 @@ public class ModelTranslator extends de.uni_hildesheim.sse.buildLanguageTranslat
                 String name = script.getName();
                 if (!names.contains(name)) {
                     try {
-                        result.add(createScript(script, uri, registerSuccessful, unit.getScripts(), imports));
+                        result.add(createScript(script, uri, registerSuccessful, unit.getScripts(), imports, 
+                            impResolver));
                         names.add(name);
                     } catch (TranslatorException e) {
                         error(e);

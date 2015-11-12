@@ -14,6 +14,7 @@ import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
 import de.uni_hildesheim.sse.utils.messages.IMessage;
 import de.uni_hildesheim.sse.utils.modelManagement.IModel;
 import de.uni_hildesheim.sse.utils.modelManagement.IModelLoader;
+import de.uni_hildesheim.sse.utils.modelManagement.ImportResolver;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 import de.uni_hildesheim.sse.utils.modelManagement.Version;
 
@@ -39,7 +40,7 @@ public class VTLModelLoader implements IModelLoader<Template> {
 
     @Override
     public de.uni_hildesheim.sse.utils.modelManagement.IModelLoader.LoadResult<Template> load(
-        ModelInfo<Template> info) {
+        ModelInfo<Template> info, ImportResolver<Template> resolver) {
         LoadResult<Template> loadResult = null;
         for (Template template : templates) {
             if (info.getName().equals(template.getName()) && Version.equals(info.getVersion(), template.getVersion())) {

@@ -24,6 +24,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Temp
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 import de.uni_hildesheim.sse.utils.messages.Status;
 import de.uni_hildesheim.sse.utils.modelManagement.IModelLoader;
+import de.uni_hildesheim.sse.utils.modelManagement.ImportResolver;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 import de.uni_hildesheim.sse.utils.modelManagement.Version;
@@ -72,20 +73,19 @@ public class TemplateLangModelUtility extends de.uni_hildesheim.sse.dslCore.Mode
         boolean registerSuccessful) {
         ModelTranslator translator = new ModelTranslator();
         List<Template> result = new ArrayList<Template>();
-        result.add(translator.createModel(root, uri, registerSuccessful));
+        result.add(translator.createModel(root, uri, registerSuccessful, null));
         return new TranslationResult<Template>(result , translator);
     }
-
     
     @Override
-    public TranslationResult<Template> parse(URI uri) throws IOException {
+    public TranslationResult<Template> parse(URI uri, ImportResolver<Template> resolver) throws IOException {
         ModelTranslator translator = new ModelTranslator();
         LanguageUnit root = parse(uri, true, translator, LanguageUnit.class);
         List<Template> result = null;
         if (null != root) {
             try {
                 result = new ArrayList<Template>();
-                Template tpl = translator.createModel(root, toNetUri(uri), true);
+                Template tpl = translator.createModel(root, toNetUri(uri), true, resolver);
                 if (null != tpl) {
                     result.add(tpl);
                 }

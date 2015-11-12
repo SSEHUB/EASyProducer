@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
@@ -85,6 +86,7 @@ import de.uni_hildesheim.sse.translation.Utils.SplitResult;
 import de.uni_hildesheim.sse.utils.messages.IIdentifiable;
 import de.uni_hildesheim.sse.utils.messages.IMessage;
 import de.uni_hildesheim.sse.utils.modelManagement.AvailableModels;
+import de.uni_hildesheim.sse.utils.modelManagement.ImportResolver;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 import de.uni_hildesheim.sse.utils.modelManagement.Version;
 import de.uni_hildesheim.sse.utils.modelManagement.VersionFormatException;
@@ -106,6 +108,8 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
         new HashMap<VariableDeclarationPart, DecisionVariableDeclaration>();
     
     private Map<TypedefMapping, DerivedDatatype> typedefMapping = new HashMap<TypedefMapping, DerivedDatatype>();
+    
+    private Set<EObject> definitionsProcessed = new HashSet<EObject>();
         
     /**
      * Contains an expression translator instance. Expression are realized in an
@@ -133,16 +137,18 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
      * @param registerSuccessful
      *            successfully created models shall be registered in
      *            {@link VarModel}
+     * @param impResolver the import resolver (may be <b>null</b> to use a new default import resolver)           
      * @return the corresponding variability model
      */
-    public List<Project> createModel(VariabilityUnit unit, URI uri, boolean registerSuccessful) {
+    public List<Project> createModel(VariabilityUnit unit, URI uri, boolean registerSuccessful, 
+        ImportResolver<Project> impResolver) {
         List<Project> result = new ArrayList<Project>();
         if (null != unit.getProjects()) {
             HashSet<String> names = new HashSet<String>();
             for (de.uni_hildesheim.sse.ivml.Project p : unit.getProjects()) {
                 String name = p.getName();
                 if (!names.contains(name)) {
-                    result.add(createProject(p, uri, registerSuccessful, unit.getProjects()));
+                    result.add(createProject(p, uri, registerSuccessful, unit.getProjects(), impResolver));
                     names.add(name);
                 } else {
                     error("project '" + name + "' occurs multiple times in the same file", p,
@@ -198,11 +204,12 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
      *            {@link VarModel}
      * @param inProgress
      *            the projects currently being processed at once
+     * @param impResolver the import resolver to use (may be <b>null</b> to use a new default import resolver)
      * @return the corresponding IVML project
      */
     public Project createProject(de.uni_hildesheim.sse.ivml.Project project,
             URI uri, boolean registerSuccessful,
-            List<de.uni_hildesheim.sse.ivml.Project> inProgress) {
+            List<de.uni_hildesheim.sse.ivml.Project> inProgress, ImportResolver<Project> impResolver) {
         int errorCount = getErrorCount();
         Project result = new Project(project.getName());
         TypeContext context = new TypeContext(result, this);
@@ -225,10 +232,13 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
         for (ConflictStmt importStmt : project.getConflicts()) {
             processConflict(importStmt, context);
         }
-        resolveImports(project, result, uri, inProgress);
         ProjectContents contents = project.getContents();
         Utils.SplitResult splitRes = Utils.split(contents.getElements());
-        processDefinitions(splitRes.getTypedefs(), splitRes.getVarDecls(), splitRes.getAttrAssignments(), context);
+        processDefinitions(splitRes.getTypedefs(), splitRes.getVarDecls(), splitRes.getAttrAssignments(), 
+            context, false);
+        resolveImports(project, result, uri, inProgress, impResolver);
+        processDefinitions(splitRes.getTypedefs(), splitRes.getVarDecls(), splitRes.getAttrAssignments(), 
+            context, true);
         if (null != splitRes.getAttrs()) {
             for (AnnotateTo attribute : splitRes.getAttrs()) {
                 processAttribute(attribute, context);
@@ -267,9 +277,10 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
      * @param project the target project
      * @param uri the physical URI of the project
      * @param inProgress the other projects being resolved at once (in order to avoid loops)
+     * @param impResolver the import resolver to use (may be <b>null</b> to use a new default import resolver)
      */
     private void resolveImports(de.uni_hildesheim.sse.ivml.Project input, Project project, URI uri,
-            List<de.uni_hildesheim.sse.ivml.Project> inProgress) {
+            List<de.uni_hildesheim.sse.ivml.Project> inProgress, ImportResolver<Project> impResolver) {
         if (Utils.isImportResolutionEnabled()) { // as long as initialization for Editor is not final
             List<ModelInfo<Project>> infoInProgress = new ArrayList<ModelInfo<Project>>();
             AvailableModels<Project> available = VarModel.INSTANCE.availableModels();
@@ -291,7 +302,8 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
                     error(e.getMessage(), input, IvmlPackage.Literals.PROJECT__IMPORTS, ErrorCodes.IMPORT);
                 }
             }
-            List<IMessage> resolutionMessages = VarModel.INSTANCE.resolveImports(project, uri, infoInProgress);
+            List<IMessage> resolutionMessages = VarModel.INSTANCE.resolveImports(project, uri, infoInProgress, 
+                impResolver);
             for (int i = 0; i < resolutionMessages.size(); i++) {
                 IMessage msg = resolutionMessages.get(i);
                 switch (msg.getStatus()) {
@@ -554,18 +566,23 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
      * @param vardecls the variable declarations
      * @param assignments the assignments
      * @param context the type resolution context
+     * @param force if creation (and related errors) shall be forced or just tested and created on best-effort
      */
+// TODO keep already processed    
     private void processDefinitions(List<Typedef> typedefs, List<VariableDeclaration> vardecls, 
-        List<AttrAssignment> assignments, TypeContext context) {
+        List<AttrAssignment> assignments, TypeContext context, boolean force) {
         List<Typedef> typesToDo = new LinkedList<Typedef>();
         if (null != typedefs) {
             // process enums first - no type dependencies
             for (Typedef typedef : typedefs) {
-                if (null != typedef.getTEnum()) {
+                if (null != typedef.getTEnum() && !definitionsProcessed.contains(typedef)) {
                     try {
                         processEnum(typedef.getTEnum(), context);
+                        definitionsProcessed.add(typedef);
                     } catch (TranslatorException e) {
-                        error(e);
+                        if (force) {
+                            error(e);
+                        }
                     }
                 } else if (null != typedef.getTMapping()) {
                     typesToDo.add(typedef);
@@ -591,12 +608,15 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
             assgnCount = assgnToDo.size();
             if (typesCount > 0) {
                 processTypedefs(typesToDo, context, false);
+// TODO hash within             
             }
             if (declsCount > 0) {
                 processVars(declsToDo, context, false);
+// TODO hash within
             }
             if (assgnCount > 0) {
                 processAttributeAssignments(assgnToDo, context, false);
+// TODO hash within
             }
             if (typesCount == typesToDo.size()
                 && declsCount == declsToDo.size()
@@ -604,14 +624,16 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
                 break; // break endless loop
             }
         } while (typesCount > 0 || declsCount > 0);
-        if (typesCount > 0) {
-            processTypedefs(typesToDo, context, true);
-        }
-        if (declsCount > 0) {
-            processVars(declsToDo, context, true);
-        }
-        if (assgnCount > 0) {
-            processAttributeAssignments(assgnToDo, context, true);
+        if (force) {
+            if (typesCount > 0) {
+                processTypedefs(typesToDo, context, true);
+            }
+            if (declsCount > 0) {
+                processVars(declsToDo, context, true);
+            }
+            if (assgnCount > 0) {
+                processAttributeAssignments(assgnToDo, context, true);
+            }
         }
     }
     
@@ -684,20 +706,23 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
         Iterator<Typedef> tdIter = compounds.iterator();
         while (tdIter.hasNext()) {
             Typedef typedef = tdIter.next();
-            try {
-                boolean done = false;
-                if (null != typedef.getTCompound()) {
-                    done = processCompound(typedef.getTCompound(), context, force);
+            if (!definitionsProcessed.contains(typedef)) {
+                try {
+                    boolean done = false;
+                    if (null != typedef.getTCompound()) {
+                        done = processCompound(typedef.getTCompound(), context, force);
+                    }
+                    if (null != typedef.getTMapping()) {
+                        done = processMapping(typedef.getTMapping(), context, force);
+                    }
+                    if (done) {
+                        definitionsProcessed.add(typedef);
+                        tdIter.remove();
+                    }
+                } catch (TranslatorException e) {
+                    tdIter.remove(); // don't cause endless loops
+                    error(e);
                 }
-                if (null != typedef.getTMapping()) {
-                    done = processMapping(typedef.getTMapping(), context, force);
-                }
-                if (done) {
-                    tdIter.remove();
-                }
-            } catch (TranslatorException e) {
-                tdIter.remove(); // don't cause endless loops
-                error(e);
             }
         }
     }
@@ -714,13 +739,16 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
         Iterator<VariableDeclaration> dIter = vars.iterator();
         while (dIter.hasNext()) {
             VariableDeclaration vDecl = dIter.next();
-            try {
-                if (processVariableDeclaration(vDecl, context, null, true, force)) {
-                    dIter.remove();
+            if (!definitionsProcessed.contains(vDecl)) {
+                try {
+                    if (processVariableDeclaration(vDecl, context, null, true, force)) {
+                        dIter.remove();
+                        definitionsProcessed.add(vDecl);
+                    }
+                } catch (TranslatorException e) {
+                    dIter.remove(); // don't cause endless loops
+                    error(e);
                 }
-            } catch (TranslatorException e) {
-                dIter.remove(); // don't cause endless loops
-                error(e);
             }
         }
     }
@@ -736,13 +764,16 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
         Iterator<AttrAssignment> aIter = assignments.iterator();
         while (aIter.hasNext()) {
             AttrAssignment assgn = aIter.next();
-            try {
-                if (processAttributeAssignment(assgn, context, null, true, force)) {
-                    aIter.remove();
+            if (!definitionsProcessed.contains(assgn)) {
+                try {
+                    if (processAttributeAssignment(assgn, context, null, true, force)) {
+                        definitionsProcessed.add(assgn);
+                        aIter.remove();
+                    }
+                } catch (TranslatorException e) {
+                    aIter.remove(); // don't cause endless loops
+                    error(e);
                 }
-            } catch (TranslatorException e) {
-                aIter.remove(); // don't cause endless loops
-                error(e);
             }
         }
     }

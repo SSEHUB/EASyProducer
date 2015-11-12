@@ -423,7 +423,7 @@ public abstract class ModelManagement <M extends IModel> {
      * messages on failures. Exceptions might be appropriate here but the
      * caller shall be able to decide how to handle the level of detail, i.e.
      * whether the first message shall be emitted or all. May modify <code>model</code>
-     * as a side effect.
+     * as a side effect. This method uses a new default import resolver.
      * 
      * @param model the model to be resolved
      * @param uri the URI of the model to resolve (in order to find the closest 
@@ -439,9 +439,37 @@ public abstract class ModelManagement <M extends IModel> {
         releaseResolver(resolver);
         return result;
     }
+    
+    /**
+     * Resolves the imports of the given <code>model</code> and returns
+     * messages on failures. Exceptions might be appropriate here but the
+     * caller shall be able to decide how to handle the level of detail, i.e.
+     * whether the first message shall be emitted or all. May modify <code>model</code>
+     * as a side effect.
+     * 
+     * @param model the model to be resolved
+     * @param uri the URI of the model to resolve (in order to find the closest 
+     *   model, may be <b>null</b>)
+     * @param inProgress the model information objects of the models currently being 
+     *   processed at once (may be <b>null</b>)
+     * @param resolver the import resolver (may be <b>null</b> to use a new default import resolver)  
+     * @return messages which occur during resolution, <code>null</code> or empty if none
+     */
+    public synchronized List<IMessage> resolveImports(M model, URI uri, List<ModelInfo<M>> inProgress, 
+        ImportResolver<M> resolver) {
+        List<IMessage> result;
+        if (null == resolver) {
+            result = resolveImports(model, uri, inProgress);
+        } else {
+            result = resolver.resolveImports(model, uri, inProgress, repository, 
+            model.getRestrictionEvaluationContext());
+        }
+        return result;
+    }
 
     /**
-     * Resolves the denoted model considering the given <code>restrictions</code>.
+     * Resolves the denoted model considering the given <code>restrictions</code>. This method uses a new default 
+     * import resolver.
      * 
      * @param modelName the name of the model
      * @param restriction the restriction (may be <b>null</b> if there is none)
@@ -458,15 +486,27 @@ public abstract class ModelManagement <M extends IModel> {
         releaseResolver(resolver);
         return result;
     }
-    
+
     /**
-     * Loads the model related to <code>info</code>.
+     * Loads the model related to <code>info</code> with a new default import resolver.
      * 
      * @param info the model info to load the model for
      * @param messages the messages collected so far (modified as a side effect)
      * @return the loaded model or <b>null</b>
      */
     M load(ModelInfo<M> info, List<IMessage> messages) {
+        return load(info, null, messages);
+    }
+    
+    /**
+     * Loads the model related to <code>info</code>.
+     * 
+     * @param info the model info to load the model for
+     * @param resolver the resolver to use (<b>null</b> for a new default import resolver)
+     * @param messages the messages collected so far (modified as a side effect)
+     * @return the loaded model or <b>null</b>
+     */
+    M load(ModelInfo<M> info, ImportResolver<M> resolver, List<IMessage> messages) {
         M result = null;
         IModelLoader<M> loader = info.getLoader();
         if (null == loader) {
@@ -474,7 +514,7 @@ public abstract class ModelManagement <M extends IModel> {
         }
         if (null != loader) { // do not use isActual here
             notifyLoading(info, true);
-            LoadResult<M> loadResult = loader.load(info);
+            LoadResult<M> loadResult = loader.load(info, resolver);
             notifyLoading(info, false);
             if (loadResult.getModelCount() > 0 && 0 == loadResult.getErrorCount()) {
                 for (int i = 0; i < loadResult.getModelCount(); i++) {

@@ -752,7 +752,6 @@ public class ModelQuery {
                 throw new ModelQueryException("name is ambiguous '" + originalName + "'", 
                      ModelQueryException.AMBIGUITY);
             }
-
         }
         return result;
     }

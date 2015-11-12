@@ -434,7 +434,7 @@ public class DefaultImportResolver<M extends IModel> extends ImportResolver<M> {
                 found = toLoad.getResolved();
                 if (null == found || repository.isOutdated(toLoad)) { // do not use is actual here!
                     if (!context.isLoop(toLoad)) {
-                        found = repository.load(toLoad, messages);
+                        found = repository.load(toLoad, this, messages);
                     } else {
                         messages.add(new Message("model '" + imp.getName() 
                             + "' cannot be resolved here due to errors in the imported model", 
@@ -502,7 +502,7 @@ public class DefaultImportResolver<M extends IModel> extends ImportResolver<M> {
             result = toLoad.getResolved();
             if (null == result || repository.isOutdated(toLoad)) { 
                 List<IMessage> messages = new ArrayList<IMessage>();
-                result = repository.load(toLoad, messages);
+                result = repository.load(toLoad, this, messages);
                 if (!messages.isEmpty()) {
                     boolean isError = false;
                     StringBuilder tmp = new StringBuilder();

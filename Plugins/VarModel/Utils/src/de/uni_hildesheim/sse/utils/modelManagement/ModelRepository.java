@@ -61,6 +61,11 @@ class ModelRepository <M extends IModel> implements IModelManagementRepository<M
     }
     
     @Override
+    public M load(ModelInfo<M> info, ImportResolver<M> resolver, List<IMessage> messages) {
+        return modelMgmt.load(info, resolver, messages);
+    }
+    
+    @Override
     public ModelInfo<M> getModelInfo(String name, Version version, URI uri) {
         return modelMgmt.availableModels().getModelInfo(name, version, uri);
     }

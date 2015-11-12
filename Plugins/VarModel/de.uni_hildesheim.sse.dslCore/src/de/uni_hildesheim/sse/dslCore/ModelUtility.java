@@ -37,6 +37,7 @@ import de.uni_hildesheim.sse.utils.messages.IMessage;
 import de.uni_hildesheim.sse.utils.messages.Status;
 import de.uni_hildesheim.sse.utils.modelManagement.IModel;
 import de.uni_hildesheim.sse.utils.modelManagement.IModelLoader;
+import de.uni_hildesheim.sse.utils.modelManagement.ImportResolver;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 
 /**
@@ -183,15 +184,14 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
     }
     
     /**
-     * Parse an IVML model file for standalone application (without editor).<br/>
+     * Parse an IVML model file for standalone application (without editor) with a new default import resolver.<br/>
      * <b>Note:</b> This method is called by {@link de.uni_hildesheim.sse.model.management.VarModel} 
      * so if you intend to use the management facilities in 
      * {@link de.uni_hildesheim.sse.model.management.VarModel} let the 
      * {@link de.uni_hildesheim.sse.model.management.VarModel}
      * do this job for you and do not call this method directly!
      * 
-     * @param file
-     *            the location of the model
+     * @param file the location of the model
      * @return the created variability model including messages
      * @throws IOException in case of IO problems
      */
@@ -203,23 +203,41 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
             throw new FileNotFoundException(file.toString());
         }
     }
-
+    
     /**
-     * Parse an IVML model file for standalone application (without editor).<br/>
+     * Parse an IVML model file for standalone application (without editor) with a new default import resolver.<br/>
      * <b>Note:</b> This method is called by {@link de.uni_hildesheim.sse.model.management.VarModel} 
      * so if you intend to use the management facilities in 
      * {@link de.uni_hildesheim.sse.model.management.VarModel} let the 
      * {@link de.uni_hildesheim.sse.model.management.VarModel}
      * do this job for you and do not call this method directly!
      * 
-     * @param uri
-     *            the location of the model, e.g. via
+     * @param uri the location of the model, e.g. via
      *            URI.createURI("dummy:/example.ex1")
      * @return the created variability model including messages
      * @throws IOException
      *             in case of any I/O or URI problem
      */
-    public abstract TranslationResult<R> parse(URI uri) throws IOException;
+    public TranslationResult<R> parse(URI uri) throws IOException {
+        return parse(uri, null);
+    }
+
+    /**
+     * Parse an IVML model file for standalone application (without editor) with a given import resolver.<br/>
+     * <b>Note:</b> This method is called by {@link de.uni_hildesheim.sse.model.management.VarModel} 
+     * so if you intend to use the management facilities in 
+     * {@link de.uni_hildesheim.sse.model.management.VarModel} let the 
+     * {@link de.uni_hildesheim.sse.model.management.VarModel}
+     * do this job for you and do not call this method directly!
+     * 
+     * @param uri the location of the model, e.g. via
+     *            URI.createURI("dummy:/example.ex1")
+     * @param resolver the import resolver (may be <b>null</b> for a new default import resolver)
+     * @return the created variability model including messages
+     * @throws IOException
+     *             in case of any I/O or URI problem
+     */
+    public abstract TranslationResult<R> parse(URI uri, ImportResolver<R> resolver) throws IOException;
 
     /**
      * Returns the object representation of the actual grammar (and performs a lazy 
@@ -415,7 +433,8 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
     public abstract List<ModelInfo<R>> obtainInfo(URI uri) throws IOException;
     
     @Override
-    public de.uni_hildesheim.sse.utils.modelManagement.IModelLoader.LoadResult<R> load(ModelInfo<R> info) {
+    public de.uni_hildesheim.sse.utils.modelManagement.IModelLoader.LoadResult<R> load(ModelInfo<R> info, 
+        ImportResolver<R> resolver) {
         List<R> models = null;
         List<IMessage> messages = null;
         if (null != info) {
@@ -429,7 +448,7 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
             if (!beingLoadedInThread.contains(location)) {
                 beingLoadedInThread.add(location);
                 try {
-                    TranslationResult<R> parseResult = parse(URI.createURI(location));
+                    TranslationResult<R> parseResult = parse(URI.createURI(location), resolver);
                     models = parseResult.getResultsList();
                     messages = parseResult.getMessageList();
                 } catch (IOException e) {

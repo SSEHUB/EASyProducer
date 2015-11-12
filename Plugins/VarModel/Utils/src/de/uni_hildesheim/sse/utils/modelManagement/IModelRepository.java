@@ -48,13 +48,23 @@ public interface IModelRepository <M extends IModel> {
     public boolean isOutdated(ModelInfo<M> info);
 
     /**
-     * Loads the model related to <code>info</code>.
+     * Loads the model related to <code>info</code> with a new default import resolver.
      * 
      * @param info the model info to load the model for
      * @param messages the messages collected so far (modified as a side effect)
      * @return the loaded model or <b>null</b>
      */
     public M load(ModelInfo<M> info, List<IMessage> messages);
+
+    /**
+     * Loads the model related to <code>info</code> with the given import resolver.
+     * 
+     * @param info the model info to load the model for
+     * @param resolver the import resolver to use (<b>null</b> for a new default resolver)
+     * @param messages the messages collected so far (modified as a side effect)
+     * @return the loaded model or <b>null</b>
+     */
+    public M load(ModelInfo<M> info, ImportResolver<M> resolver, List<IMessage> messages);
 
     /**
      * Returns a known model information object via its URI.

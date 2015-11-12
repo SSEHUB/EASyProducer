@@ -14,6 +14,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Scr
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script.ScriptDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.utils.modelManagement.IModelLoader;
+import de.uni_hildesheim.sse.utils.modelManagement.ImportResolver;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagement;
 import de.uni_hildesheim.sse.vil.expressions.ResourceRegistry;
@@ -45,7 +46,8 @@ public class ModelTranslator extends AbstractModelTranslator<Script, LanguageUni
      * @param registerSuccessful successfully created models shall be registered
      * @return the corresponding build model
      */
-    public List<Script> createModel(ImplementationUnit unit, URI uri, boolean registerSuccessful) {
+    public List<Script> createModel(ImplementationUnit unit, URI uri, boolean registerSuccessful, 
+        ImportResolver<Script> impResolver) {
         ResourceRegistry.register(unit.eResource(), getResolver().getTypeRegistry());
         List<Script> result = new ArrayList<Script>();
         if (null != unit.getScripts()) {
@@ -60,7 +62,8 @@ public class ModelTranslator extends AbstractModelTranslator<Script, LanguageUni
                 String name = script.getName();
                 if (!names.contains(name)) {
                     try {
-                        result.add(createScript(script, uri, registerSuccessful, unit.getScripts(), imports));
+                        result.add(createScript(script, uri, registerSuccessful, unit.getScripts(), imports, 
+                            impResolver));
                         names.add(name);
                     } catch (TranslatorException e) {
                         error(e);

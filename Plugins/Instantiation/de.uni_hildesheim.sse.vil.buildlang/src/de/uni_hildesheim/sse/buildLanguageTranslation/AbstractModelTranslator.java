@@ -48,6 +48,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Temp
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.utils.modelManagement.IModelLoader;
+import de.uni_hildesheim.sse.utils.modelManagement.ImportResolver;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagement;
 import de.uni_hildesheim.sse.utils.modelManagement.Version;
@@ -105,11 +106,12 @@ public abstract class AbstractModelTranslator<M extends Script, L extends Langua
      * @param registerSuccessful successfully created models shall be registered
      * @param inProgress the scripts currently being translated
      * @param imports the global imports
+     * @param impResolver the import resolver to use (may be <b>null</b> to use a new default import resolver)
      * @return the created script
      * @throws TranslatorException in case that a problem occurred
      */
     protected M createScript(L script, URI uri, boolean registerSuccessful, List<LanguageUnit> inProgress, 
-        Imports<M> imports) throws TranslatorException {
+        Imports<M> imports, ImportResolver<M> impResolver) throws TranslatorException {
         int errorCount = getErrorCount();
         Advice[] advices = processAdvices(script.getAdvices(), uri);
         VariableDeclaration[] param = resolveParameters(script.getParam());
@@ -135,7 +137,8 @@ public abstract class AbstractModelTranslator<M extends Script, L extends Langua
                 result.addLoadProperties(new LoadProperties(StringUtils.convertString(prop.getPath())));
             }
         }
-        resolveImports(script, ExpressionDslPackage.Literals.LANGUAGE_UNIT__IMPORTS, result, uri, inProgress);
+        resolveImports(script, ExpressionDslPackage.Literals.LANGUAGE_UNIT__IMPORTS, result, uri, inProgress, 
+            impResolver);
         resolver.enumerateImports(result);
         processContents(script, result);
         checkConstants(result, script);

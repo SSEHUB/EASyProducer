@@ -122,9 +122,10 @@ public interface IModelLoader<M extends IModel> {
      * Loads the related model.
      * 
      * @param info the model to be loaded (as information object)
+     * @param resolver the import resolver to use (or <b>null</b> for a new default import resolver)
      * @return the loaded model (or <b>null</b> in case of problems)
      */
-    public LoadResult<M> load(ModelInfo<M> info);
+    public LoadResult<M> load(ModelInfo<M> info, ImportResolver<M> resolver);
     
     /**
      * Scans a file for model information.

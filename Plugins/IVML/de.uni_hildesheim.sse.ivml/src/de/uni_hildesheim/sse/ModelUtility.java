@@ -42,6 +42,7 @@ import de.uni_hildesheim.sse.translation.TypeContext;
 import de.uni_hildesheim.sse.translation.Utils;
 import de.uni_hildesheim.sse.utils.messages.Status;
 import de.uni_hildesheim.sse.utils.modelManagement.IModelLoader;
+import de.uni_hildesheim.sse.utils.modelManagement.ImportResolver;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 import de.uni_hildesheim.sse.utils.modelManagement.Version;
@@ -98,7 +99,7 @@ public class ModelUtility extends de.uni_hildesheim.sse.dslCore.ModelUtility<Var
     public TranslationResult<Project> createVarModel(VariabilityUnit root, java.net.URI uri, 
         boolean registerSuccessful) {
         ModelTranslator translator = new ModelTranslator();
-        return new TranslationResult<Project>(translator.createModel(root, uri, registerSuccessful), translator);
+        return new TranslationResult<Project>(translator.createModel(root, uri, registerSuccessful, null), translator);
     }
 
     /**
@@ -122,13 +123,13 @@ public class ModelUtility extends de.uni_hildesheim.sse.dslCore.ModelUtility<Var
     }
 
     @Override
-    public TranslationResult<Project> parse(URI uri) throws IOException {
+    public TranslationResult<Project> parse(URI uri, ImportResolver<Project> resolver) throws IOException {
         ModelTranslator translator = new ModelTranslator();
         VariabilityUnit root = parse(uri, true, translator, VariabilityUnit.class);
         List<Project> result = null;
         if (null != root) {
             try {
-                result = translator.createModel(root, toNetUri(uri), true);
+                result = translator.createModel(root, toNetUri(uri), true, resolver);
             } catch (URISyntaxException e) {
                 throw new IOException(e);
             }

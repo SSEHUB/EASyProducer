@@ -41,6 +41,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaType
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
+import de.uni_hildesheim.sse.utils.modelManagement.ImportResolver;
 import de.uni_hildesheim.sse.utils.modelManagement.IndentationConfiguration;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagement;
@@ -91,10 +92,11 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
      * @param uri the URI of the project to resolve (in order to find the
      *        closest project, may be <b>null</b>)
      * @param registerSuccessful successfully created models shall be registered
+     * @param impResolver the import resolver to use (may be <b>null</b> to use a new default import resolver)
      * @return the corresponding build model
      */
     public Template createModel(de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit tpl, URI uri, 
-        boolean registerSuccessful) {
+        boolean registerSuccessful, ImportResolver<Template> impResolver) {
         Template result = null;
         boolean pushed = false;
         int errorCount = getErrorCount();
@@ -127,7 +129,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
             }
             result.setVersion(convert(tpl.getVersion()));
             resolveImports(tpl, ExpressionDslPackage.Literals.LANGUAGE_UNIT__IMPORTS, result, uri, 
-                new ArrayList<de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit>());
+                new ArrayList<de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit>(), impResolver);
             resolver.enumerateImports(result);
             if (null != tpl.getDefs()) {
                 processDefs(tpl, result);

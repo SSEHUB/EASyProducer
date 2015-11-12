@@ -24,6 +24,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Script;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 import de.uni_hildesheim.sse.utils.messages.Status;
 import de.uni_hildesheim.sse.utils.modelManagement.IModelLoader;
+import de.uni_hildesheim.sse.utils.modelManagement.ImportResolver;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 import de.uni_hildesheim.sse.utils.modelManagement.Version;
@@ -61,7 +62,7 @@ public class RtVilModelUtility extends de.uni_hildesheim.sse.dslCore.ModelUtilit
     public TranslationResult<Script> createRtModel(ImplementationUnit root, java.net.URI uri, 
         boolean registerSuccessful) {
         ModelTranslator translator = new ModelTranslator();
-        return new TranslationResult<Script>(translator.createModel(root, uri, registerSuccessful), translator);
+        return new TranslationResult<Script>(translator.createModel(root, uri, registerSuccessful, null), translator);
     }
 
     /**
@@ -76,13 +77,13 @@ public class RtVilModelUtility extends de.uni_hildesheim.sse.dslCore.ModelUtilit
     }
 
     @Override
-    public TranslationResult<Script> parse(URI uri) throws IOException {
+    public TranslationResult<Script> parse(URI uri, ImportResolver<Script> resolver) throws IOException {
         ModelTranslator translator = new ModelTranslator();
         ImplementationUnit root = parse(uri, true, translator, ImplementationUnit.class);
         List<Script> result = null;
         if (null != root) {
             try {
-                result = translator.createModel(root, toNetUri(uri), true);
+                result = translator.createModel(root, toNetUri(uri), true, resolver);
             } catch (URISyntaxException e) {
                 throw new IOException(e);
             }

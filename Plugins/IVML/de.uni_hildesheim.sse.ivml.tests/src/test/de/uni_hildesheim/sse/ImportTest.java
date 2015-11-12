@@ -140,7 +140,6 @@ public class ImportTest extends AbstractTest {
      * </code></pre>
      */
     @Test
-    @Ignore
     public void testCyclingDeclarations() {
         addLocation(LOCATION_CYCLING_DECLARATIONS);
         

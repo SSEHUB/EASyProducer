@@ -14,6 +14,7 @@ import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
 import de.uni_hildesheim.sse.utils.messages.IMessage;
 import de.uni_hildesheim.sse.utils.modelManagement.IModel;
 import de.uni_hildesheim.sse.utils.modelManagement.IModelLoader;
+import de.uni_hildesheim.sse.utils.modelManagement.ImportResolver;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 import de.uni_hildesheim.sse.utils.modelManagement.Version;
 
@@ -39,7 +40,8 @@ public class IVMLModelLoader implements IModelLoader<Project> {
     }
     
     @Override
-    public de.uni_hildesheim.sse.utils.modelManagement.IModelLoader.LoadResult<Project> load(ModelInfo<Project> info) {
+    public de.uni_hildesheim.sse.utils.modelManagement.IModelLoader.LoadResult<Project> load(ModelInfo<Project> info, 
+        ImportResolver<Project> resolver) {
         LoadResult<Project> loadResult = null;
         for (Project project : projects) {
             if (info.getName().equals(project.getName()) && Version.equals(info.getVersion(), project.getVersion())) {
