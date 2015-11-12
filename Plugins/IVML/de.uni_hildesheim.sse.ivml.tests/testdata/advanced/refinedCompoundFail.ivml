@@ -1,0 +1,9 @@
+project testRefinedCompoundFail {
+
+    version v0;
+
+    compound refined refines IDontKnowShallNotResolve {
+        Integer z = 1;
+    }
+
+}

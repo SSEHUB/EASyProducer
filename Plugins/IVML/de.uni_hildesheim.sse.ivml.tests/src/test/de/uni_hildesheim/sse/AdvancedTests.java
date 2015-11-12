@@ -307,6 +307,16 @@ public class AdvancedTests extends AbstractTest {
     public void testRefinedCompound() throws IOException {
         assertEqual(createFile("refinedCompound"), "testRefinedCompound", "0");
     }
+
+    /**
+     * Tests refined compounds.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testRefinedCompoundFail() throws IOException {
+        assertEqual(createFile("refinedCompoundFail"), "testRefinedCompoundFail", "0", ErrorCodes.UNKNOWN_ELEMENT);
+    }
     
     /**
      * Tests refined compounds, the refined compounds is written before the super/parent compound.

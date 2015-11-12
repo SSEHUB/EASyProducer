@@ -1269,6 +1269,12 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
                 }
             }
             context.clearUnresolvedCompounds(compound.getName());
+
+            if (resolvable && null != tcomp.getSuper() && null == compound.getRefines()) {
+                throw new TranslatorException("cannot resolve '" + tcomp.getSuper() + "'", tcomp, 
+                   IvmlPackage.Literals.TYPEDEF_COMPOUND__SUPER, ErrorCodes.UNKNOWN_ELEMENT);
+            }
+
         }
         return resolvable;
     }
