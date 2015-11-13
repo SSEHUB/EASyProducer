@@ -697,10 +697,11 @@ public class TypeRegistry {
      * @return the type descriptor or <b>null</b> if no one is registered for <code>name</code>
      */
     public TypeDescriptor<? extends IVilType> getInstantiator(String name) {
-        TypeDescriptor<? extends IVilType> result;
+        TypeDescriptor<? extends IVilType> result = null;
         if (null != parentRegistry) {
             result = parentRegistry.getInstantiator(name);
-        } else {
+        } 
+        if (null == result) {
             result = instantiators.get(name);
         }
         if (null == result && null != resolver) {

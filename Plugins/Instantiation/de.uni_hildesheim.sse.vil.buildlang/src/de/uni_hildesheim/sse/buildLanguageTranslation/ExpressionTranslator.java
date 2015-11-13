@@ -434,7 +434,9 @@ public class ExpressionTranslator
             if ((null == result || continueResolution(semanticException)) && Resolver.ContextType.RULE_BODY == resolver.getContextType()) {
                 // grammar supports system executions only on top-level
                 try {
-                    result = new StrategyCallExpression(resolver.getCurrentModel(), name, arg);
+                    StrategyCallExpression sce = new StrategyCallExpression(resolver.getCurrentModel(), name, arg);
+                    sce.setTypeRegistry(resolver.getTypeRegistry());
+                    result = sce;
                     semanticException = checkSemantics(result);
                 } catch (VilException e) {
                     // wrong expression

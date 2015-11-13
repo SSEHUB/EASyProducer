@@ -37,6 +37,7 @@ public class StrategyCallExpression extends CallExpression {
     private Type type;
     private boolean execResolved;
     private VariableDeclaration nameVar;
+    private transient TypeRegistry typeRegistry = TypeRegistry.DEFAULT;
 
     /**
      * Creates a new instantiator strategy call.
@@ -86,6 +87,18 @@ public class StrategyCallExpression extends CallExpression {
         this.type = Type.EXECUTE;
         this.nameVar = nameVar;
     }
+    
+    /**
+     * Defines the type registry to be used for resolving this call. The type registry is transient and
+     * used only during resolution of instantiator calls.
+     * 
+     * @param registry the type registry to use
+     */
+    public void setTypeRegistry(TypeRegistry registry) {
+        if (null != registry) {
+            this.typeRegistry = registry;
+        }
+    }
 
     /**
      * Returns the variable declaration holding the actual name.
@@ -107,7 +120,7 @@ public class StrategyCallExpression extends CallExpression {
     }
     
     /**
-     * Returns the type of this calll.
+     * Returns the type of this call.
      * 
      * @return the type of this call
      */
@@ -156,7 +169,7 @@ public class StrategyCallExpression extends CallExpression {
 
     @Override
     protected TypeDescriptor<?> determineOperand() throws VilException {
-        TypeDescriptor<?> instantiator = TypeRegistry.DEFAULT.getInstantiator(getName());
+        TypeDescriptor<?> instantiator = typeRegistry.getInstantiator(getName());
         if (null == instantiator) {
             throw new VilException("unknown instantiator " + getName(), 
                 VilException.ID_CANNOT_RESOLVE);
