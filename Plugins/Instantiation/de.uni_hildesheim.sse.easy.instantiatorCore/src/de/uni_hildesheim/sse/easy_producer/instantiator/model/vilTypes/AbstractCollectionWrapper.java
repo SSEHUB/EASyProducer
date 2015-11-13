@@ -212,17 +212,29 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
      */
     public static <T> List<T> selectByType(Collection<T> collection, TypeDescriptor<?> type) {
         List<T> result = new ArrayList<T>();
+        selectByType(collection, type, result);
+        return result;
+    }
+    
+    /**
+     * Calculates the selection of elements from <code>collection</code> complying to the given <code>type</code>.
+     * 
+     * @param <T> the element type
+     * @param collection the collection to analyze
+     * @param type the type to select for
+     * @param result the elements of type <code>type</code> (modified as a side effect)
+     */
+    protected static <T> void selectByType(Collection<T> collection, TypeDescriptor<?> type, 
+        java.util.Collection<T> result) {
         Iterator<T> iter = collection.iterator();
         while (iter.hasNext()) {
             T element = iter.next();
             if (null == type || type.isInstance(element)) {
                 result.add(element);
             }
-            
         }
-        return result;
     }
-
+ 
     /**
      * Selects those elements from <code>collection</code> which comply to the result of <code>evaluator</code>.
      *
@@ -235,6 +247,21 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
     public static <T> List<T> select(Collection<T> collection, ExpressionEvaluator evaluator) 
         throws VilException {
         List<T> result = new ArrayList<T>();
+        select(collection, evaluator, result);
+        return result;
+    }
+    
+    /**
+     * Selects those elements from <code>collection</code> which comply to the result of <code>evaluator</code>.
+     *
+     * @param <T> the element type
+     * @param collection the collection to select from
+     * @param evaluator the evaluator instance
+     * @param result the elements of type <code>type</code> (modified as a side effect)
+     * @throws VilException in case that evaluation or selection fails
+     */
+    protected static <T> void select(Collection<T> collection, ExpressionEvaluator evaluator, 
+        java.util.Collection<T> result) throws VilException {
         if (!TypeRegistry.booleanType().isAssignableFrom(evaluator.getExpression().inferType())) {
             throw new VilException("iterator must be of type boolean", 
                 VilException.ID_RUNTIME_ITERATOR);
@@ -247,7 +274,6 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
                 result.add(value);
             }
         }
-        return result;
     }
     
     /**
@@ -280,6 +306,21 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
     public static <T> List<Object> collect(Collection<T> collection, ExpressionEvaluator evaluator) 
         throws VilException {
         List<Object> result = new ArrayList<Object>();
+        collect(collection, evaluator, result);
+        return result;
+    }
+    
+    /**
+     * Collects the application of <code>evaluator</code> to <code>collection</code>.
+     *
+     * @param <T> the element type
+     * @param collection the collection to select from
+     * @param evaluator the evaluator instance
+     * @param result the elements of type <code>type</code> (modified as a side effect)
+     * @throws VilException in case that evaluation or selection fails
+     */
+    protected static <T> void collect(Collection<T> collection, ExpressionEvaluator evaluator, 
+        java.util.Collection<Object> result) throws VilException {
         Iterator<T> iter = collection.iterator();
         while (iter.hasNext()) {
             T value = iter.next();
@@ -288,7 +329,6 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
                 result.add(eval);
             }
         }
-        return result;
     }
 
     @Override

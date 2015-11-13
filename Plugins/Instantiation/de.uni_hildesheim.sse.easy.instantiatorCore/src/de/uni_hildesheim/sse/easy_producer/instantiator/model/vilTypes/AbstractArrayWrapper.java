@@ -106,11 +106,6 @@ public abstract class AbstractArrayWrapper<T> extends AbstractCollectionWrapper<
                 return array[pos++];
             }
 
-            @Override
-            public void remove() {
-                throw new UnsupportedOperationException();
-            }
-
         };
     }
 
