@@ -725,12 +725,28 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
      * from the names of the given variable and its parent variables. Please note
      * that the instance name is typically different from the qualified name of 
      * the declaration, which, in case of compound slots, leads to the variable
-     * in the compound definition.
+     * in the compound definition. The result is unqualified regarding the top-level
+     * variable.
      * 
      * @param var the variable to return the name for (may be <b>null</b>)
      * @return the instance name (may be empty if <code>var == <b>null</b></code>
      */
     public static String getInstanceName(IDecisionVariable var) {
+        return getInstanceName(var, false);
+    }
+    
+    /**
+     * Returns the instance name of a decision variable. This name is composed 
+     * from the names of the given variable and its parent variables. Please note
+     * that the instance name is typically different from the qualified name of 
+     * the declaration, which, in case of compound slots, leads to the variable
+     * in the compound definition.
+     * 
+     * @param var the variable to return the name for (may be <b>null</b>)
+     * @param qualified whether the name of the top-level variable shall be qualified
+     * @return the instance name (may be empty if <code>var == <b>null</b></code>
+     */
+    public static String getInstanceName(IDecisionVariable var, boolean qualified) {
         String result = "";
         IConfigurationElement iter = var;
         while (null != iter) {
@@ -739,7 +755,13 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
                 if (result.length() > 0) {
                     result = "::" + result;
                 }
-                result = decVar.getDeclaration().getName() + result;
+                String name;
+                if (qualified && !(iter.getParent() instanceof IDecisionVariable)) {
+                    name = decVar.getDeclaration().getQualifiedName();
+                } else {
+                    name = decVar.getDeclaration().getName();
+                }
+                result = name + result;
             }
             iter = iter.getParent();
         }
