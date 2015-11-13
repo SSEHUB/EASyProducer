@@ -1,0 +1,13 @@
+-> main(Configuration, Artifact) with (<config>, test.texts)
+    s <- {a, bb, ccc}
+    -> length(String) with (a) = 1
+    -> +(Integer, Integer) with (0, 1) = 1
+    r <- 1
+    -> length(String) with (bb) = 2
+    -> +(Integer, Integer) with (1, 2) = 3
+    r <- 3
+    -> length(String) with (ccc) = 3
+    -> +(Integer, Integer) with (3, 3) = 6
+    r <- 6
+    -> apply(Sequence, ExpressionEvaluator) with ({a, bb, ccc}, <evaluator>) = 6
+    j <- 6

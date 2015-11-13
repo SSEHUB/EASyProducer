@@ -1,0 +1,9 @@
+template apply5(Configuration config, Artifact target) {
+
+    def main(Configuration config, Artifact target) {
+        sequenceOf(String) s = {"a", "bb", "ccc"};
+        Integer j = s->apply(Integer r = 0; String i | r = r + i.length());
+        '${j}'
+    }
+
+}

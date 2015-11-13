@@ -81,11 +81,15 @@ public class ExpressionWriter extends AbstractWriter implements IExpressionVisit
         if (call.isIteratorCall()) {
             ExpressionEvaluator eval = (ExpressionEvaluator) call.getArgument(1).getExpression();
             for (int d = 0; d < eval.getDeclaratorsCount(); d++) {
+                VariableDeclaration decl = eval.getDeclarator(d);
                 if (d > 0) {
-                    print(",");
+                    if (decl.hasExplicitType()) {
+                        print(";");    
+                    } else {
+                        print(",");
+                    }
                     printWhitespace();
                 }
-                VariableDeclaration decl = eval.getDeclarator(d);
                 if (decl.hasExplicitType()) {
                     printType(decl.getType());
                     printWhitespace();

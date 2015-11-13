@@ -224,6 +224,16 @@ public class ExecutionTests extends AbstractTest {
     }
     
     /**
+     * Tests an apply iterator with result and different types for result and iteration.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testApply5() throws IOException {
+        assertEqual("apply5");
+    }
+    
+    /**
      * Tests simple content.
      * 
      * @throws IOException should not occur

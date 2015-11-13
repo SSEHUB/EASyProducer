@@ -459,17 +459,20 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
     private ArrayList<I> processDeclarators(Call call, TypeDescriptor<?> implicitType, R resolver) throws TranslatorException {
         ArrayList<I> result = new ArrayList<I>();
         Declarator decl = call.getDecl();
+        boolean firstDecl = true;
+        String callName = Utils.getQualifiedNameString(call.getName());
+        boolean isAggregator = "apply".equals(callName); // fixed name is not nice
         for (Declaration d : decl.getDecl()) {
-            // currently we consider only 1 dimension, see exception below
-            //TypeDescriptor<?> dimensionType = arg0Type.getGenericParameterType(0); 
             TypeDescriptor<?> t;
             if (null != d.getType()) {
                 t = processType(d.getType(), resolver);
-                if (null != implicitType && !t.isAssignableFrom(implicitType)) {
-                    throw new TranslatorException("type '" + t.getVilName() + "' of iterator does not match type '" 
-                        + implicitType.getVilName() + 
-                        "' of the expression", call, ExpressionDslPackage.Literals.CALL__PARAM, 
-                        ErrorCodes.CANNOT_RESOLVE_ITER);
+                if (!(firstDecl && isAggregator)) { // here it's the aggregator
+                    if (null != implicitType && !t.isAssignableFrom(implicitType)) {
+                        throw new TranslatorException("type '" + t.getVilName() + "' of iterator does not match type '" 
+                            + implicitType.getVilName() + 
+                            "' of the expression", call, ExpressionDslPackage.Literals.CALL__PARAM, 
+                            ErrorCodes.CANNOT_RESOLVE_ITER);
+                    }
                 }
             } else {
                 if (null == implicitType) {
@@ -478,17 +481,18 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                 }
                 t = implicitType; // not explicitly given, take over
             }
-            boolean first = true;
+            boolean firstUnit = true;
             for (DeclarationUnit unit : d.getUnits()) {
                 Expression deflt = null;
                 if (null != unit.getDeflt()) {
                     deflt = processExpression(unit.getDeflt(), resolver);
                 }
                 I var = createVariableDeclaration(unit.getId(), t, false, deflt);
-                var.setHasExplicitType(first && null != d.getType());
+                var.setHasExplicitType(firstUnit && null != d.getType());
                 result.add(var);
-                first = false;
+                firstUnit = false;
             }
+            firstDecl = false;
         }
         return result;
     }        
@@ -500,7 +504,7 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
      * @param arguments the arguments created so far (may be the operator, list is modified as a side effect)
      * @param arrayEx an array access expression (may be <b>null</b>, but then <code>call</code> is required)
      * @param resolver a resolver instance for resolving variables etc.
-     * @return the resulting expression node
+     * @return the operation name
      * @throws TranslatorException in case that the translation fails for some reason
      */
     protected String resolveCallArguments(Call call, List<I> iterators, List<CallArgument> arguments, 
