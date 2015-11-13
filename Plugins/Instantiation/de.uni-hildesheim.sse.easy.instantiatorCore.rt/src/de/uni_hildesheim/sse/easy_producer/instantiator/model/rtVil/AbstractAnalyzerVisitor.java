@@ -235,7 +235,9 @@ public abstract class AbstractAnalyzerVisitor<V> extends EvaluationVisitor {
      * 
      * @param config the configuration used for reasoning
      * @param reasoningResult the (failing) reasoning result
-     * @return the violating clauses (may be <b>null</b> or empty if there are none)
+     * @return the violating clauses (may be <b>null</b> or empty if there are none) as an individual list instance,
+     *   i.e., calling this method again returns a different list instance and the result is independent of / not 
+     *   influenced by {@link #clear()} 
      */
     public List<V> analyze(Configuration config, ReasoningResult reasoningResult) {
         List<V> result = null;

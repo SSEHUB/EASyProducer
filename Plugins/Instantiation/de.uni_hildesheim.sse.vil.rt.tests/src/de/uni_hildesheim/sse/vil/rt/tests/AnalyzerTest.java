@@ -139,7 +139,7 @@ public class AnalyzerTest extends AbstractRtTest {
     @Test
     public void testGreaterEqualsComparison() throws ValueDoesNotMatchTypeException, CSTSemanticException, 
         ConfigurationException {
-        testSimpleComparison(">=", 0.5, 0.3, -1, 0.2);
+        testSimpleComparison(new ClauseData(">=", 0.5, 0.3), -1, 0.2);
     }
 
     /**
@@ -152,23 +152,23 @@ public class AnalyzerTest extends AbstractRtTest {
     @Test
     public void testSmallerEqualsComparison() throws ValueDoesNotMatchTypeException, CSTSemanticException, 
         ConfigurationException {
-        testSimpleComparison("<=", 0.5, 1.3, 1, -0.8);
+        testSimpleComparison(new ClauseData("<=", 0.5, 1.3), 1, -0.8);
     }
 
     /**
-     * Tests a simple failing comparison.
+     * Tests a simple failing comparison. We distinguish here between a relevant variable that shall be reported
+     * by the analysis and an irrelevant variable (with fixed clause, just varying value) that shall be ignored. 
      * 
-     * @param operation the operation for the relevant variable
-     * @param limit the limiting value to be applied with <code>operation</code>
-     * @param value the actual value of the relevant variable
+     * @param clause the clause data  for the relevant variable
      * @param value2 the actual value of the irrelevant variable
-     * @param deviation the expected deviation of the actual variable due to <code>operation</code> and limit
+     * @param deviation the expected deviation of the actual variable due to 
+     *     <code>clause.operation</code> and <code>clause.limit</code>
      * 
      * @throws ValueDoesNotMatchTypeException shall not occur
      * @throws CSTSemanticException shall not occur
      * @throws ConfigurationException shall not occur
      */
-    private void testSimpleComparison(String operation, double limit, double value, int value2, double deviation) 
+    private void testSimpleComparison(ClauseData clause, int value2, double deviation) 
         throws ValueDoesNotMatchTypeException, CSTSemanticException, ConfigurationException {
         ReasonerConfiguration rCfg = new ReasonerConfiguration();
         rCfg.setRuntimeMode(true);
@@ -178,8 +178,8 @@ public class AnalyzerTest extends AbstractRtTest {
         // relevantVariable with constraint: monVar >= 0.5
         DecisionVariableDeclaration decl1 = new DecisionVariableDeclaration("monVar", RealType.TYPE, prj);
         prj.add(decl1);
-        ConstraintSyntaxTree cst1 = new OCLFeatureCall(new Variable(decl1), operation, new ConstantValue(
-             ValueFactory.createValue(RealType.TYPE, limit)));
+        ConstraintSyntaxTree cst1 = new OCLFeatureCall(new Variable(decl1), clause.operation, new ConstantValue(
+             ValueFactory.createValue(RealType.TYPE, clause.limit)));
         cst1.inferDatatype();
         prj.add(new Constraint(cst1, prj));
 
@@ -192,7 +192,8 @@ public class AnalyzerTest extends AbstractRtTest {
         prj.add(new Constraint(cst2, prj));
 
         Configuration cfg = new Configuration(prj);
-        cfg.getDecision(decl1).setValue(ValueFactory.createValue(RealType.TYPE, value), AssignmentState.ASSIGNED);
+        cfg.getDecision(decl1).setValue(ValueFactory.createValue(RealType.TYPE, clause.value), 
+             AssignmentState.ASSIGNED);
         cfg.getDecision(decl2).setValue(ValueFactory.createValue(IntegerType.TYPE, value2), AssignmentState.ASSIGNED);
 
         ReasoningResult rResult = ReasonerFrontend.getInstance().check(prj, cfg, rCfg, ProgressObserver.NO_OBSERVER);
@@ -208,8 +209,138 @@ public class AnalyzerTest extends AbstractRtTest {
         Violation violation = violations.get(0);
         
         Assert.assertEquals(cfg.getDecision(decl1), violation.getVariable());
-        Assert.assertEquals(operation, violation.getOperation());
+        Assert.assertEquals(clause.operation, violation.getOperation());
         Assert.assertEquals(deviation, violation.getDeviation(), 0.05);
     }
+    
+    /**
+     * Represents information about a clause, currently basic operations / comparisons only.
+     * 
+     * @author Holger Eichelberger
+     */
+    private class ClauseData {
+        private String operation;
+        private double limit;
+        private double value;
+        
+        /**
+         * Creates a clause information instance.
+         * 
+         * @param operation the operation to use
+         * @param limit the limiting value in the clause
+         * @param value the actual value of the variable
+         */
+        private ClauseData(String operation, double limit, double value) {
+            this.operation = operation;
+            this.limit = limit;
+            this.value = value;
+        }
+        
+    }
+    
+    /**
+     * Tests a implication with a comparison on both sides (no deviation as the left side does not hold).
+     * 
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     * @throws CSTSemanticException shall not occur
+     * @throws ConfigurationException shall not occur
+     */
+    @Test
+    public void testImplicationNoDeviation1() throws ValueDoesNotMatchTypeException, CSTSemanticException, 
+        ConfigurationException {
+        // monVarLeft >= 2 => monVarRight >= 0.3, monVarLeft = 1 -> no deviation
+        testSimpleImplication(new ClauseData(">=", 2, 1), new ClauseData(">=", 0.3, 0.1), null);
+    }
+    
+    /**
+     * Tests a implication with a comparison on both sides (no deviation as the right side holds).
+     * 
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     * @throws CSTSemanticException shall not occur
+     * @throws ConfigurationException shall not occur
+     */
+    @Test
+    public void testImplicationNoDeviation2() throws ValueDoesNotMatchTypeException, CSTSemanticException, 
+        ConfigurationException {
+        // monVarLeft >= 2 => monVarRight >= 0.3, monVarLeft = 2, monVarRight = 0.4 -> no deviation
+        testSimpleImplication(new ClauseData(">=", 2, 1), new ClauseData(">=", 0.3, 0.4), null);
+    }
 
+    /**
+     * Tests a implication with a comparison on both sides (with deviation).
+     * 
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     * @throws CSTSemanticException shall not occur
+     * @throws ConfigurationException shall not occur
+     */
+    @Test
+    public void testImplicationWithDeviation() throws ValueDoesNotMatchTypeException, CSTSemanticException, 
+        ConfigurationException {
+        // monVarLeft >= 2 => monVarRight >= 0.3, monVarLeft = 2, monVarRight = 0.2 -> 0.1
+        testSimpleImplication(new ClauseData(">=", 2, 2), new ClauseData(">=", 0.3, 0.2), 0.1);
+    }
+
+    /**
+     * Tests a simple failing implication, left => right.
+     * 
+     * @param left the left clause data
+     * @param right the right clause data
+     * @param deviation the expected deviation of the actual variable due to <code>right.operation</code> and 
+     *    <code>right.limit</code>, may be <b>null</b> if no deviation is expected 
+     * 
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     * @throws CSTSemanticException shall not occur
+     * @throws ConfigurationException shall not occur
+     */
+    private void testSimpleImplication(ClauseData left, ClauseData right, Double deviation) 
+        throws ValueDoesNotMatchTypeException, CSTSemanticException, ConfigurationException {
+        ReasonerConfiguration rCfg = new ReasonerConfiguration();
+        rCfg.setRuntimeMode(true);
+
+        Project prj = new Project("test");
+
+        // relevantVariables
+        DecisionVariableDeclaration declLeft = new DecisionVariableDeclaration("monVarLeft", RealType.TYPE, prj);
+        prj.add(declLeft);
+        DecisionVariableDeclaration declRight = new DecisionVariableDeclaration("monVarRight", RealType.TYPE, prj);
+        prj.add(declRight);
+        
+        OCLFeatureCall cstLeft = new OCLFeatureCall(new Variable(declLeft), left.operation, new ConstantValue(
+             ValueFactory.createValue(RealType.TYPE, left.limit)));
+        cstLeft.inferDatatype();
+        OCLFeatureCall cstRight = new OCLFeatureCall(new Variable(declRight), right.operation, new ConstantValue(
+            ValueFactory.createValue(RealType.TYPE, right.limit)));
+        cstRight.inferDatatype();
+        ConstraintSyntaxTree cst = new OCLFeatureCall(cstLeft, "implies", cstRight);
+        cst.inferDatatype();
+        
+        prj.add(new Constraint(cst, prj));
+
+        Configuration cfg = new Configuration(prj);
+        cfg.getDecision(declLeft).setValue(ValueFactory.createValue(RealType.TYPE, left.value), 
+            AssignmentState.ASSIGNED);
+        cfg.getDecision(declRight).setValue(ValueFactory.createValue(RealType.TYPE, right.value), 
+            AssignmentState.ASSIGNED);
+
+        ReasoningResult rResult = ReasonerFrontend.getInstance().check(prj, cfg, rCfg, ProgressObserver.NO_OBSERVER);
+        Assert.assertNotNull(rResult);
+        Assert.assertEquals(deviation != null, rResult.hasConflict());
+        
+        AnalyzerVisitor analyzer = new AnalyzerVisitor();
+        List<Violation> violations = analyzer.analyze(cfg, rResult);
+        analyzer.clear();
+        
+        if (null != deviation) { // we expect one violation, for the relevant variable
+            Assert.assertNotNull(violations);
+            Assert.assertEquals(1, violations.size()); 
+            Violation violation = violations.get(0);
+            
+            Assert.assertEquals(cfg.getDecision(declRight), violation.getVariable());
+            Assert.assertEquals(right.operation, violation.getOperation());
+            Assert.assertEquals(deviation, violation.getDeviation(), 0.05);
+        } else { // no violation expected
+            Assert.assertTrue(null == violations || 1 == violations.size());    
+        }
+    }
+    
 }
