@@ -30,7 +30,7 @@ public class ArraySet<T> extends AbstractArrayWrapper<T> implements Set<T> {
     /**
      * Creates a new array collection wrapper using the default type registry.
      * 
-     * @param array the wrapped array
+     * @param array the array to be wrapped
      * @param param the only type parameter characterizing <T>
      */
     public ArraySet(T[] array, Class<?> param) {
@@ -40,7 +40,7 @@ public class ArraySet<T> extends AbstractArrayWrapper<T> implements Set<T> {
     /**
      * Creates a new array collection wrapper.
      * 
-     * @param array the wrapped array
+     * @param array the array to be wrapped
      * @param registry the type registry to use
      * @param param the only type parameter characterizing <T>
      */
@@ -51,7 +51,7 @@ public class ArraySet<T> extends AbstractArrayWrapper<T> implements Set<T> {
     /**
      * Creates a new array collection wrapper.
      * 
-     * @param array the wrapped array
+     * @param array the array to be wrapped
      * @param params the type parameter characterizing <T>
      */
     public ArraySet(T[] array, TypeDescriptor<?>... params) {

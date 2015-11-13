@@ -1069,5 +1069,69 @@ public class ModelQuery {
             }
         }
     }
+    
+    /**
+     * Defines the interface of a declaration selector.
+     * 
+     * @author Holger Eichelberger
+     */
+    public interface IDeclarationSelector {
+
+        /**
+         * Returns whether a declaration was selected.
+         * 
+         * @param decl the declaration to consider
+         * @return <code>true</code> if <code>decl</code> was selected, <code>false</code> else
+         */
+        public boolean select(DecisionVariableDeclaration decl);
+        
+    }
+    
+    /**
+     * Selects the first declaration with the given type.
+     * 
+     * @author Holger Eichelberger
+     */
+    public static class FirstDeclTypeSelector implements IDeclarationSelector {
+
+        private IDatatype type;
+
+        /**
+         * Creates a selector for <code>type</code>.
+         * 
+         * @param type the type to select
+         */
+        public FirstDeclTypeSelector(IDatatype type) {
+            this.type = type;
+        }
+        
+        @Override
+        public boolean select(DecisionVariableDeclaration decl) {
+            return type.isAssignableFrom(decl.getType());
+        }
+        
+    }
+    
+    /**
+     * Searches a given <code>scope</code> for a variable declaration of <code>type</code> and returns the declaration 
+     * determined by <code>selector</code>.
+     * 
+     * @param scope the scope to search 
+     * @param selector the variable selector
+     * @return the selected variable declaration or <b>null</b> if none was found
+     */
+    public static DecisionVariableDeclaration findDeclaration(IResolutionScope scope, IDeclarationSelector selector) {
+        DecisionVariableDeclaration result = null;
+        for (int e = 0; e < scope.getElementCount(); e++) {
+            ContainableModelElement elt = scope.getElement(e);
+            if (elt instanceof DecisionVariableDeclaration) {
+                DecisionVariableDeclaration decl = (DecisionVariableDeclaration) elt;
+                if (selector.select(decl)) {
+                    result = decl;
+                }
+            }
+        }
+        return result;
+    }
 
 }

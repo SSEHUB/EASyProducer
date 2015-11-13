@@ -36,6 +36,27 @@ public class SetSet<T> extends AbstractCollectionWrapper<T> implements Set<T> {
     private TypeDescriptor<?> type;
     
     /**
+     * Creates a new array collection wrapper using the default type registry.
+     * 
+     * @param set the set to be wrapped
+     * @param param the only type parameter characterizing <T>
+     */
+    public SetSet(java.util.Set<T> set, Class<?> param) {
+        this(set, param, TypeRegistry.DEFAULT);
+    }
+
+    /**
+     * Creates a new array collection wrapper.
+     * 
+     * @param set the set to be wrapped
+     * @param registry the type registry to use
+     * @param param the only type parameter characterizing <T>
+     */
+    public SetSet(java.util.Set<T> set, Class<?> param, TypeRegistry registry) {
+        this(set, registry.convert(param));
+    }
+    
+    /**
      * Creates a new set wrapper.
      * 
      * @param set the set to be wrapped
