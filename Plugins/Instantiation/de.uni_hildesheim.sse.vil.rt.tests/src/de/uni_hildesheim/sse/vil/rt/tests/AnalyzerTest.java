@@ -67,6 +67,7 @@ public class AnalyzerTest extends AbstractRtTest {
         private IDecisionVariable var;
         private String operation;
         private Double deviation;
+        private Double deviationPercentage;
         
         /**
          * Creates a violation object.
@@ -74,11 +75,13 @@ public class AnalyzerTest extends AbstractRtTest {
          * @param var the variable
          * @param operation the operation name (may be <b>null</b>)
          * @param deviation the deviation (may be <b>null</b>)
+         * @param deviationPercentage the deviation as percentage (may be <b>null</b>, may be NaN)
          */
-        private Violation(IDecisionVariable var, String operation, Double deviation) {
+        private Violation(IDecisionVariable var, String operation, Double deviation, Double deviationPercentage) {
             this.var = var;
             this.operation = operation;
             this.deviation = deviation;
+            this.deviationPercentage = deviationPercentage;
         }
         
         /**
@@ -108,6 +111,15 @@ public class AnalyzerTest extends AbstractRtTest {
             return deviation;
         }
         
+        /**
+         * Returns the deviation percentage.
+         * 
+         * @return the deviation percentage (may be <b>null</b>, may be NaN)
+         */
+        public Double getDeviationPercentage() {
+            return deviationPercentage;
+        }
+        
     }
     
     /**
@@ -119,12 +131,18 @@ public class AnalyzerTest extends AbstractRtTest {
 
         @Override
         protected Violation createViolationInstance(IDecisionVariable var, String operation, Double deviation) {
-            return new Violation(var, operation, deviation);
+            return new Violation(var, operation, deviation, null);
         }
 
         @Override
         protected boolean isRelevantVariable(IDecisionVariable var) {
             return var.getDeclaration().getName().startsWith("mon");
+        }
+
+        @Override
+        protected Violation createViolationInstance(IDecisionVariable var, String operation, Double deviation,
+            Double deviationPercentage) {
+            return new Violation(var, operation, deviation, deviationPercentage);
         }
         
     }
@@ -211,6 +229,8 @@ public class AnalyzerTest extends AbstractRtTest {
         Assert.assertEquals(cfg.getDecision(decl1), violation.getVariable());
         Assert.assertEquals(clause.operation, violation.getOperation());
         Assert.assertEquals(deviation, violation.getDeviation(), 0.05);
+        Assert.assertNotNull(violation.getDeviationPercentage());
+        Assert.assertNotNull(Math.abs(violation.getDeviationPercentage()) >= 0.00005);
     }
     
     /**
@@ -338,6 +358,8 @@ public class AnalyzerTest extends AbstractRtTest {
             Assert.assertEquals(cfg.getDecision(declRight), violation.getVariable());
             Assert.assertEquals(right.operation, violation.getOperation());
             Assert.assertEquals(deviation, violation.getDeviation(), 0.05);
+            Assert.assertNotNull(violation.getDeviationPercentage());
+            Assert.assertNotNull(Math.abs(violation.getDeviationPercentage()) >= 0.00005);            
         } else { // no violation expected
             Assert.assertTrue(null == violations || 1 == violations.size());    
         }

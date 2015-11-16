@@ -157,6 +157,39 @@ public class PseudoReal implements IVilType {
     }
 
     /**
+     * Returns whether the given real value is not a number.
+     * 
+     * @param r0 the real the absolute value to be considered
+     * @return <code>true</code> if <code>r0</code> is not a number, <code>false</code> else
+     */
+    @OperationMeta(opType = OperationType.FUNCTION)
+    public static boolean isNaN(double r0) {
+        return Double.isNaN(r0);
+    }
+    
+    /**
+     * Returns whether the given real value is finite.
+     * 
+     * @param r0 the real the absolute value to be considered
+     * @return <code>true</code> if <code>r0</code> is finite, <code>false</code> else
+     */
+    @OperationMeta(opType = OperationType.FUNCTION)
+    public static boolean isFinite(double r0) {
+        return Double.isFinite(r0);
+    }
+    
+    /**
+     * Returns whether the given real value is infinite.
+     * 
+     * @param r0 the real the absolute value to be considered
+     * @return <code>true</code> if <code>r0</code> is infinite, <code>false</code> else
+     */
+    @OperationMeta(opType = OperationType.FUNCTION)
+    public static boolean isInfinite(double r0) {
+        return Double.isInfinite(r0);
+    }
+
+    /**
      * Returns the largest integer that is less than or equal to r0.
      * 
      * @param r0 the real value to be considered

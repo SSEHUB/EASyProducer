@@ -61,9 +61,23 @@ public abstract class AbstractAnalyzerVisitor<V> extends EvaluationVisitor {
      * 
      * @param var the variable causing the violation
      * @param operation the operation causing the violation (may be <b>null</b> if unknown)
-     * @param deviation the deviating value (may be <b>null</b> if unknown)
+     * @param deviation the deviation from the expected value (may be negative/positive, may be <b>null</b> if unknown)
+     * @param deviationPercentage the deviation in percent (may be negative/positive, may be NaN, may be <b>null</b> if 
+     *     unknown)
      * @return the violating instance
      */
+    protected abstract V createViolationInstance(IDecisionVariable var, String operation, Double deviation, 
+        Double deviationPercentage);
+
+    /**
+     * Creates a violating instance.
+     * 
+     * @param var the variable causing the violation
+     * @param operation the operation causing the violation (may be <b>null</b> if unknown)
+     * @param deviation the deviation from the expected value (may be negative/positive, may be <b>null</b> if unknown)
+     * @return the violating instance
+     */
+    @Deprecated
     protected abstract V createViolationInstance(IDecisionVariable var, String operation, Double deviation);
     
     @Override
@@ -84,7 +98,7 @@ public abstract class AbstractAnalyzerVisitor<V> extends EvaluationVisitor {
             Set<IDecisionVariable> tmp = new HashSet<IDecisionVariable>();
             tmp.addAll(relevant);
             for (IDecisionVariable var : tmp) {
-                violating.add(createViolationInstance(var, null, null));
+                violating.add(createViolationInstance(var, null, null, null));
             }
         } 
         result.addAll(violating);
@@ -127,19 +141,22 @@ public abstract class AbstractAnalyzerVisitor<V> extends EvaluationVisitor {
             Double op = toDouble(operand);
             Double param = toDouble(parameter[0]);
             Double deviation = null;
+            Double deviationPercentage = null;
             String opName = call.getOperation();
             if (null != op && null != param) {
                 if (oclOp1ParamDeviation.contains(opName)) {
                     if (operandRelevant) { 
-                        deviation = param.doubleValue() - op.doubleValue();
+                        deviation = param - op;
+                        deviationPercentage = deviation / op;
                     } else {
-                        deviation = op.doubleValue() - param.doubleValue();
+                        deviation = op - param;
+                        deviationPercentage = deviation / param;
                     }
                 }
             }
             for (int r = startIndex; r <= endIndex; r++) {
                 IDecisionVariable var = relevant.get(r);
-                violating.add(createViolationInstance(var, opName, deviation));
+                violating.add(createViolationInstance(var, opName, deviation, deviationPercentage));
             }
         }
         release(operand);
