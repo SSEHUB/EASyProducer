@@ -130,11 +130,6 @@ public class AnalyzerTest extends AbstractRtTest {
     private class AnalyzerVisitor extends AbstractAnalyzerVisitor<Violation> {
 
         @Override
-        protected Violation createViolationInstance(IDecisionVariable var, String operation, Double deviation) {
-            return new Violation(var, operation, deviation, null);
-        }
-
-        @Override
         protected boolean isRelevantVariable(IDecisionVariable var) {
             return var.getDeclaration().getName().startsWith("mon");
         }

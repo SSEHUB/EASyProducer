@@ -68,17 +68,6 @@ public abstract class AbstractAnalyzerVisitor<V> extends EvaluationVisitor {
      */
     protected abstract V createViolationInstance(IDecisionVariable var, String operation, Double deviation, 
         Double deviationPercentage);
-
-    /**
-     * Creates a violating instance.
-     * 
-     * @param var the variable causing the violation
-     * @param operation the operation causing the violation (may be <b>null</b> if unknown)
-     * @param deviation the deviation from the expected value (may be negative/positive, may be <b>null</b> if unknown)
-     * @return the violating instance
-     */
-    @Deprecated
-    protected abstract V createViolationInstance(IDecisionVariable var, String operation, Double deviation);
     
     @Override
     public void clearResult() {
