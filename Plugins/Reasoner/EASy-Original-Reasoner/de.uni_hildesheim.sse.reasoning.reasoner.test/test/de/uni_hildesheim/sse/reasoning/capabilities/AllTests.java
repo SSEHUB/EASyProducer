@@ -14,7 +14,8 @@ import org.junit.runners.Suite.SuiteClasses;
     CollectionConstraintsTests.class,
     FailedDecisionsTests.class,
     RuntimeReasoningTests.class,
-    OperationTests.class
+    OperationTests.class,
+    StructureTests.class
     })
 public class AllTests {
 

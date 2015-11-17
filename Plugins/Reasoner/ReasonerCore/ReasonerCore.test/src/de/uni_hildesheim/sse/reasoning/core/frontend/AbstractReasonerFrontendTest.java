@@ -4,9 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import org.junit.Assert;
-
 import org.eclipse.core.runtime.Platform;
+import org.junit.Assert;
 import org.osgi.framework.Bundle;
 
 import de.uni_hildesheim.sse.ModelUtility;
@@ -32,7 +31,9 @@ import de.uni_hildesheim.sse.reasoning.core.reasoner.Message;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerConfiguration;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasoningResult;
 import de.uni_hildesheim.sse.utils.messages.Status;
+import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
+import de.uni_hildesheim.sse.utils.modelManagement.Version;
 import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
 
 /**
@@ -159,6 +160,43 @@ public abstract class AbstractReasonerFrontendTest {
         Project p = result.getResult(0);
         return p;
     }
+    
+    /**
+     * Load an IVML File to the test projects.
+     * 
+     * @param folder The folder the test project(s)
+     * @param projectName The name of the project to load.
+     * @return the specified and parsed project 
+     * @throws IOException
+     *             if an error occurred due reading the ivml file
+     */
+    protected final Project loadProject(File folder, String projectName) throws IOException {
+        // Register folder for parsing files
+        try {
+            VarModel.INSTANCE.locations().addLocation(folder, ProgressObserver.NO_OBSERVER);
+            VarModel.INSTANCE.loaders().registerLoader(ModelUtility.INSTANCE, ProgressObserver.NO_OBSERVER);
+        } catch (ModelManagementException e) {
+            System.out.println(e.getMessage());
+        }
+        
+        List<ModelInfo<Project>> infos = VarModel.INSTANCE.availableModels().getModelInfo(projectName, new Version(0));
+        Assert.assertNotNull("No models found at \"" + folder.getAbsolutePath() + "\"", infos);
+        Assert.assertEquals(infos.size() + " models found at \"" + folder.getAbsolutePath() + "\" but should be 1.",
+            1, infos.size());
+        
+        // Parse IVML File
+        Project project = null;
+        try {
+            project = VarModel.INSTANCE.load(infos.get(0));
+        } catch (ModelManagementException e) {
+            e.printStackTrace();
+            Assert.fail("Could not load model \"" + projectName + "\", reason: " + e.getMessage());
+        }
+        
+        Assert.assertNotNull("Loaded project is null, probably due parsing errors: \"" + projectName + "\"", project);
+        
+        return project;
+    }
 
     /**
      * Performs a check with the current reasoner on the specified project and
@@ -172,6 +210,24 @@ public abstract class AbstractReasonerFrontendTest {
      */
     protected void performCheck(String path, boolean isValid) throws IOException {
         Project p = loadProject(path);
+        Configuration config = new Configuration(p);
+        performCheck(p, config, isValid);
+    }
+    
+    /**
+     * Performs a check with the current reasoner on the specified project and
+     * configuration at the specified folder. This folder may contain multiple related projects.
+     * 
+     * @param folder the relative folder which contains the related projects.
+     * @param projectName The name of the main project. This project must be versioned with v0.
+     * @param isValid
+     *            <tt>true</tt> if project and configuration should be valid,
+     *            otherwise <tt>false</tt>
+     * @throws IOException in case of problems loading the model
+     */
+    protected void performCheck(String folder, String projectName, boolean isValid) throws IOException {
+        File fFolder = obtainTestFile(folder);
+        Project p = loadProject(fFolder, projectName);
         Configuration config = new Configuration(p);
         performCheck(p, config, isValid);
     }
