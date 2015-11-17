@@ -5,7 +5,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 /**
- * Bundling all tests.
+ * Tests for testing the reasoning capabilities.
  * @author Sizonenko
  */
 @RunWith(Suite.class)
@@ -13,7 +13,8 @@ import org.junit.runners.Suite.SuiteClasses;
     AttributeTests.class,  
     CollectionConstraintsTests.class,
     FailedDecisionsTests.class,
-    RuntimeReasoningTests.class
+    RuntimeReasoningTests.class,
+    OperationTests.class
     })
 public class AllTests {
 

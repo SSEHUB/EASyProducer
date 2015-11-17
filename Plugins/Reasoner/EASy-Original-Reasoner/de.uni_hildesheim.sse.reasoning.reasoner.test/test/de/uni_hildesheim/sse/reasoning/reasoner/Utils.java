@@ -8,7 +8,7 @@ import de.uni_hildesheim.sse.reasoning.core.frontend.TestConfiguration;
  * 
  * @author Holger Eichelberger
  */
-class Utils {
+public class Utils {
 
     /**
      * Prevents creation from outside.

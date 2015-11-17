@@ -29,6 +29,7 @@ import de.uni_hildesheim.sse.persistency.StringProvider;
 import de.uni_hildesheim.sse.reasoning.core.frontend.TestConfiguration.Capabilities;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.IReasoner;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.Message;
+import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerConfiguration;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasoningResult;
 import de.uni_hildesheim.sse.utils.messages.Status;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
@@ -191,7 +192,8 @@ public abstract class AbstractReasonerFrontendTest {
         Assert.assertSame("Configuration doesn't belong to the given project", project, config.getProject());
 
         long startTime = System.currentTimeMillis();
-        ReasoningResult result = FRONTEND.check(project, config, null, ProgressObserver.NO_OBSERVER);
+        ReasoningResult result = FRONTEND.check(project, config, new ReasonerConfiguration(),
+            ProgressObserver.NO_OBSERVER);
         long endTime = System.currentTimeMillis();
 
         String errorMsg = "";
