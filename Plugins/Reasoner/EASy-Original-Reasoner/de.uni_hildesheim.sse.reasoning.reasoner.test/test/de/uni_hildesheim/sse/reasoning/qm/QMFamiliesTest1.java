@@ -8,7 +8,6 @@ import org.eclipse.emf.common.util.URI;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.ModelUtility;
@@ -16,17 +15,9 @@ import de.uni_hildesheim.sse.dslCore.StandaloneInitializer;
 import de.uni_hildesheim.sse.dslCore.TranslationResult;
 import de.uni_hildesheim.sse.dslCore.test.AbstractTest;
 import de.uni_hildesheim.sse.dslCore.translation.Message;
-import de.uni_hildesheim.sse.model.confModel.Configuration;
 import de.uni_hildesheim.sse.model.management.VarModel;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.ProjectImport;
-import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerConfiguration;
-import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasoningResult;
-import de.uni_hildesheim.sse.reasoning.reasoner.Descriptor;
-import de.uni_hildesheim.sse.reasoning.reasoner.Engine;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
-import de.uni_hildesheim.sse.utils.messages.Status;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
 import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
 
@@ -37,10 +28,11 @@ import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
  */
 public class QMFamiliesTest1 extends AbstractTest<Project> {
 
-    private static final EASyLogger LOGGER =
-            EASyLoggerFactory.INSTANCE.getLogger(QMFamiliesTest1.class, Descriptor.BUNDLE_NAME);
     
-    private static final File TESTDATA = determineTestDataFolder("reasonerCore.testdata.home");
+    /**
+     * Top level folder of all test data shipped with this test plug-in.
+     */
+    public static final File TESTDATA = determineTestDataFolder("reasonerCore.testdata.home");
     private static final File FOLDER = new File(TESTDATA, "qmFamiliesTest1");
     
     private Project basic;
@@ -286,30 +278,8 @@ public class QMFamiliesTest1 extends AbstractTest<Project> {
         qm.addImport(importPipelinesCfg);
         qm.addImport(importInfrastructureCfg);
         
-        resultHandler(expectedFailedConstraints, qm);
+        AllTests.resultHandler(expectedFailedConstraints, qm);
     }    
-
-    /**
-     * Method for handling reasoning result.
-     * @param expectedFailedConstraints Number of constraints that are expected to fa
-     * @param qm Project to reason on.
-     */
-    private void resultHandler(int expectedFailedConstraints, Project qm) {
-        Configuration config = new Configuration(qm, false);        
-        ReasonerConfiguration rConfig = new ReasonerConfiguration();
-        // Perform reasoning
-        Engine engine = new Engine(qm, config, rConfig, ProgressObserver.NO_OBSERVER);
-        ReasoningResult result = engine.reason();
-        
-        // Test whether reasoning detected correct result  
-        int failedConstraints = 0;
-        for (int i = 0; i < result.getMessageCount(); i++) {
-            if (result.getMessage(i).getStatus() == Status.ERROR) {
-                failedConstraints = failedConstraints + result.getMessage(i).getConflicts().size(); 
-            }
-        }
-        Assert.assertEquals("Failed constraints: ", expectedFailedConstraints, failedConstraints);
-    }   
     
     /**
      * Basic test.
