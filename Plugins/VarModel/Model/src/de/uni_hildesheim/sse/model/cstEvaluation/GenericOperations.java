@@ -19,7 +19,9 @@ import de.uni_hildesheim.sse.model.confModel.AssignmentState;
 import de.uni_hildesheim.sse.model.confModel.CompoundVariable;
 import de.uni_hildesheim.sse.model.varModel.datatypes.AnyType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
+import de.uni_hildesheim.sse.model.varModel.datatypes.IntegerType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.MetaType;
+import de.uni_hildesheim.sse.model.varModel.datatypes.RealType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.TypeQueries;
 import de.uni_hildesheim.sse.model.varModel.values.BooleanValue;
 import de.uni_hildesheim.sse.model.varModel.values.CompoundValue;
@@ -181,35 +183,49 @@ public class GenericOperations {
         if (null != operand && null != arguments && arguments.length == 1) {
             Value oValue = operand.getValue();
             Value aValue = arguments[0].getValue();
-            boolean equals; 
-            if (!negate && operand.getContext().allowPropagation()) {
-                // special if not assigned, but assignable (not constant), we can do this now
-                if (((null == oValue || !operand.isAssigned()) && operand.isAssignable()) 
-                        || isAssignableCompound(operand)) {
-                    ASSIGNMENT.evaluate(operand, arguments);
-                    oValue = operand.getValue();
-                } else if ((null == aValue) && arguments[0].isAssignable()) {
-                    // considers the reverse case 1 == x, x undefined
-                    EvaluationAccessor[] temp = new EvaluationAccessor[1];
-                    temp[0] = operand;
-                    ASSIGNMENT.evaluate(arguments[0], temp);
-                    aValue = operand.getValue();
-                }
-            }
-            if (null == oValue || null == aValue) {
-                result = null;
+            
+            // Support equals on unequal datatypes (mixed Int/Real).
+            if (null != oValue && oValue.getType() == RealType.TYPE && null != aValue
+                && aValue.getType() == IntegerType.TYPE) {
+                
+                result = RealOperations.equalsRealInt(operand, arguments, negate);
+            } else if (null != oValue && oValue.getType() == IntegerType.TYPE
+                && null != aValue && aValue.getType() == RealType.TYPE) {
+                
+                result = IntegerOperations.equalsIntReal(operand, arguments, negate);
             } else {
+                
+                // Equals on same datatypes
+                boolean equals; 
+                if (!negate && operand.getContext().allowPropagation()) {
+                    // special if not assigned, but assignable (not constant), we can do this now
+                    if (((null == oValue || !operand.isAssigned()) && operand.isAssignable()) 
+                            || isAssignableCompound(operand)) {
+                        ASSIGNMENT.evaluate(operand, arguments);
+                        oValue = operand.getValue();
+                    } else if ((null == aValue) && arguments[0].isAssignable()) {
+                        // considers the reverse case 1 == x, x undefined
+                        EvaluationAccessor[] temp = new EvaluationAccessor[1];
+                        temp[0] = operand;
+                        ASSIGNMENT.evaluate(arguments[0], temp);
+                        aValue = operand.getValue();
+                    }
+                }
                 if (null == oValue || null == aValue) {
-                    // one part is undefined
-                    equals = false;
+                    result = null;
                 } else {
-                    equals = oValue.equals(aValue);
+                    if (null == oValue || null == aValue) {
+                        // one part is undefined
+                        equals = false;
+                    } else {
+                        equals = oValue.equals(aValue);
+                    }
+                    if (negate) {
+                        equals = !equals;
+                    }
+                    BooleanValue resValue = BooleanValue.toBooleanValue(equals);
+                    result = ConstantAccessor.POOL.getInstance().bind(resValue, operand.getContext());                
                 }
-                if (negate) {
-                    equals = !equals;
-                }
-                BooleanValue resValue = BooleanValue.toBooleanValue(equals);
-                result = ConstantAccessor.POOL.getInstance().bind(resValue, operand.getContext());                
             }
         } else {
             result = null;

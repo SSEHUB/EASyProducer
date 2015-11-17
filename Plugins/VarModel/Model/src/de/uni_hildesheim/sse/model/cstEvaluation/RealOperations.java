@@ -177,7 +177,7 @@ public class RealOperations {
      * @param negate whether the result shall be negated
      * @return the comparison result, <b>null</b> if the operation cannot be applied
      */
-    private static EvaluationAccessor equalsRealInt(EvaluationAccessor operand, EvaluationAccessor[] arguments, 
+    static EvaluationAccessor equalsRealInt(EvaluationAccessor operand, EvaluationAccessor[] arguments, 
         boolean negate) {
         EvaluationAccessor result = null;
         if (arguments.length == 1) {
