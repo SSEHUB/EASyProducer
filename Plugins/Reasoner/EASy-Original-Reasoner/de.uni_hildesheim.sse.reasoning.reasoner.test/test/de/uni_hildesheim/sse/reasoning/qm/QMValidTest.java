@@ -306,12 +306,16 @@ public class QMValidTest extends AbstractTest<Project> {
         
         // Test whether reasoning detected correct result  
         int failedConstraints = 0;
+        StringBuffer errorMsg = new StringBuffer();
         for (int i = 0; i < result.getMessageCount(); i++) {
             if (result.getMessage(i).getStatus() == Status.ERROR) {
-                failedConstraints = failedConstraints + result.getMessage(i).getConflicts().size(); 
+                failedConstraints = failedConstraints + result.getMessage(i).getConflicts().size();
+                errorMsg.append("\n");
+                errorMsg.append(result.getMessage(i).getDescription());
             }
         }
-        Assert.assertEquals("Failed constraints: ", expectedFailedConstraints, failedConstraints);
+        Assert.assertEquals("Failed constraints: " + failedConstraints + errorMsg, expectedFailedConstraints,
+            failedConstraints);
     }   
     
     /**
