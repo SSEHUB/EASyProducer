@@ -1,8 +1,8 @@
-project BlockAssignNestedConstraint {
+project BlockAssignNestedConstraintFail {
 
     version v0;
     
-    annotate Integer at to BlockAssignNestedConstraint;
+    annotate Integer at to BlockAssignNestedConstraintFail;
     
     compound cmp {
         assign (at = 5) to {
