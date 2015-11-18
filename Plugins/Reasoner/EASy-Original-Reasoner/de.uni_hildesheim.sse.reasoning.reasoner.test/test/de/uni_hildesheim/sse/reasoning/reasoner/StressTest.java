@@ -30,9 +30,6 @@ import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
  * @author krafczyk
  */
 public class StressTest extends AbstractTest<Project> {
-
-//    private static final EASyLogger LOGGER =
-//            EASyLoggerFactory.INSTANCE.getLogger(StressTest.class, Descriptor.BUNDLE_NAME);
     
     private static final File TESTDATA = determineTestDataFolder("reasonerCore.testdata.home");
     private static final File FOLDER = new File(TESTDATA, "stresstest");

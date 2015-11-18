@@ -23,7 +23,6 @@ import de.uni_hildesheim.sse.model.confModel.Configuration;
 import de.uni_hildesheim.sse.model.confModel.IAssignmentState;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
-import de.uni_hildesheim.sse.model.cst.CompoundAccess;
 import de.uni_hildesheim.sse.model.cst.ConstantValue;
 import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
 import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
@@ -32,15 +31,11 @@ import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.ProjectImport;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IntegerType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
-import de.uni_hildesheim.sse.model.varModel.values.CompoundValue;
-import de.uni_hildesheim.sse.model.varModel.values.Value;
 import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
 import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerConfiguration;
-import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasoningResult;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
 import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
 import de.uni_hildesheim.sse.varModel.testSupport.ProjectTestUtilities;
@@ -63,12 +58,6 @@ public class EvaluationIntegrityTest {
     private DecisionVariableDeclaration declC;
     private DecisionVariableDeclaration declD;
     
- // Test: testResolveOfCompounds()
-    private Project cmpProject;
-    private DecisionVariableDeclaration cmp1;
-    private DecisionVariableDeclaration cmp2;
-    private DecisionVariableDeclaration cmp3;
-    
     
     /**
      * Tests whether integer variables are resolved correctly.
@@ -90,7 +79,7 @@ public class EvaluationIntegrityTest {
         ReasonerConfiguration rConfig = new ReasonerConfiguration();
      
         Engine engine = new Engine(projectP2, config, rConfig, ProgressObserver.NO_OBSERVER);
-        ReasoningResult result = engine.reason();
+        engine.reason();
         
         assertVariable(config, declA, 2, AssignmentState.DERIVED);
         assertVariable(config, declB, 2, AssignmentState.DERIVED);

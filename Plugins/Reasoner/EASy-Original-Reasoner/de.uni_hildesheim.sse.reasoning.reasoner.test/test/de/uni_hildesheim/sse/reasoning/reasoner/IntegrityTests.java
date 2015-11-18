@@ -20,8 +20,6 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
 import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
 import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
 
 /**
  * Configures the operation tests for Drools.
@@ -30,14 +28,10 @@ import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
  * @author El-Sharkawy
  */
 public class IntegrityTests extends AbstractTest<Project> {
-
-    private static final EASyLogger LOGGER =
-            EASyLoggerFactory.INSTANCE.getLogger(IntegrityTests.class, Descriptor.BUNDLE_NAME);
-    
-    private Configuration config;
     
     /**
-     * Tests whether implies constraints will be handled correctly by the {@link AssignmentResolver}.
+     * Tests whether implies constraints will be handled correctly by the
+     * {@link de.uni_hildesheim.sse.model.confModel.AssignmentResolver}.
      * @throws ValueDoesNotMatchTypeException Must not occur otherwise there is a failure inside the
      * {@link ValueFactory}.
      * @throws CSTSemanticException  Must not occur otherwise there is a failure inside the constraint syntax trees.

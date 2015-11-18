@@ -26,7 +26,6 @@ import org.junit.Before;
 import de.uni_hildesheim.sse.ModelUtility;
 import de.uni_hildesheim.sse.dslCore.StandaloneInitializer;
 import de.uni_hildesheim.sse.dslCore.TranslationResult;
-import de.uni_hildesheim.sse.dslCore.test.AbstractTest;
 import de.uni_hildesheim.sse.dslCore.translation.Message;
 import de.uni_hildesheim.sse.model.management.VarModel;
 import de.uni_hildesheim.sse.model.varModel.Project;
@@ -40,7 +39,7 @@ import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
  * @author El-Sharkawy
  *
  */
-abstract class AbstractQualiMasterTest extends AbstractTest<Project> {
+abstract class AbstractQualiMasterTest extends de.uni_hildesheim.sse.reasoning.AbstractTest {
       
     protected static final File TESTDATA = determineTestDataFolder("reasonerCore.testdata.home");
 
@@ -86,37 +85,6 @@ abstract class AbstractQualiMasterTest extends AbstractTest<Project> {
     private ProjectImport importPipelinesCfg;
     private ProjectImport importInfrastructure;
     private ProjectImport importInfrastructureCfg;
-    
-    
-    /**
-     * Method for determining folder with IVML files.
-     * @param property property
-     * @return folder location
-     */
-    private static File determineTestDataFolder(String property) {
-        File testdataFolder = determineTestDataDir(property);
-        String externalLocation = System.getProperty(property);
-        
-        // If no property was defined, use ReasonerCore.test/testdata directory
-        if (null == externalLocation) {
-            // Work around over the path avoids a NullPointer exception
-            String path = testdataFolder.getAbsolutePath();
-            testdataFolder = new File(path);
-            testdataFolder = testdataFolder.getParentFile().getParentFile();
-            testdataFolder = new File(testdataFolder, "ReasonerCore.test");
-            testdataFolder = new File(testdataFolder, "testdata");
-        }
-        if (!testdataFolder.exists()) {
-            String path = testdataFolder.getAbsolutePath();
-            testdataFolder = new File(path);
-            testdataFolder = testdataFolder.getParentFile().getParentFile().getParentFile();
-            testdataFolder = new File(testdataFolder, "ReasonerCore");
-            testdataFolder = new File(testdataFolder, "ReasonerCore.test");
-            testdataFolder = new File(testdataFolder, "testdata");
-        } 
-        return testdataFolder;    
-    }
-    
     
     /**
      * (Static) specifcation of sub folder which shall be used for the tests.
