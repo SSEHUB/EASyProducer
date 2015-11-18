@@ -594,7 +594,25 @@ public class Resolver {
             Compound refinedType = cmpType.getRefines();
             getAllCompoundConstraints(refinedType, thisCompoundConstraints, false);
         }
+        for (int a = 0; a < cmpType.getAssignmentCount(); a++) {
+            collectAllAssignmentConstraints(cmpType.getAssignment(a), thisCompoundConstraints);
+        }
     }
+    
+    /**
+     * Collects all assignment constraints and adds them to <code>result</code>.
+     * 
+     * @param assng the assignment constraint
+     * @param result the list of constraints to be modified as a side effect
+     */
+    private void collectAllAssignmentConstraints(AttributeAssignment assng, List<Constraint> result) {
+        for (int c = 0; c < assng.getConstraintsCount(); c++) {
+            result.add(assng.getConstraint(c));
+        }
+        for (int a = 0; a < assng.getAssignmentCount(); a++) {
+            collectAllAssignmentConstraints(assng.getAssignment(a), result);
+        }
+    }    
     
     /**
      * Method for retrieving constraints from compounds initialized in collections.

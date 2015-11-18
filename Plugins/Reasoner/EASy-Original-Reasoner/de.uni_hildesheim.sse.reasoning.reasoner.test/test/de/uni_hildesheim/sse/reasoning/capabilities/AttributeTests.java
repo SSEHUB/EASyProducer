@@ -214,6 +214,26 @@ public class AttributeTests extends AbstractTest<Project> {
     }
     
     /**
+     * Assign attribute with a default value to the project test. Test includes a 
+     * constraint in the attribute assignment.
+     */
+    @Test    
+    public void blockAssignNestedConstraint() {
+        reasoningTest("BlockAssignNestedConstraint.ivml", 0);
+    }
+    
+    /**
+     * Assign attribute with a default value to the project test. Test includes a 
+     * failing constraint in the attribute assignment.
+     */
+    @Test    
+    public void blockAssignNestedConstraintFail() {
+        reasoningTest("BlockAssignNestedConstraintFail.ivml", 1);
+    }
+    
+    // TODO assignment block nested in assignment block
+    
+    /**
      * Assign attribute with a default value to the project test.
      */
     @Test    

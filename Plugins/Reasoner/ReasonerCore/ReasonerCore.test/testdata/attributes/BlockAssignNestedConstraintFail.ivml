@@ -1,0 +1,20 @@
+project BlockAssignNestedConstraint {
+
+    version v0;
+    
+    annotate Integer at to BlockAssignNestedConstraint;
+    
+    compound cmp {
+        assign (at = 5) to {
+            Integer nest;
+            
+            nest > 5;           
+        }
+    }
+    
+    cmp C;  
+    C.nest = 5;
+    Integer var;    
+
+
+}
