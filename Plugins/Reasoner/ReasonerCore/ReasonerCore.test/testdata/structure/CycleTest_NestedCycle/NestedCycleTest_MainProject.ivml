@@ -1,0 +1,6 @@
+project NestedCycleTest_MainProject {
+
+  version v0;
+  import NestedCycleProject_A;
+  varB = varA;
+}

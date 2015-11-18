@@ -66,8 +66,8 @@ public abstract class AbstractTest extends de.uni_hildesheim.sse.dslCore.test.Ab
                 errMsg.append(result.getMessage(i).getDescription());
             }
         }
-        Assert.assertEquals("Failed constraints: " + failedConstraints + " of " + expectedFailedConstraints + errMsg,
-            expectedFailedConstraints, failedConstraints);
+        Assert.assertEquals("Failed constraints: " + failedConstraints + " of " + expectedFailedConstraints
+            + errMsg.toString(), expectedFailedConstraints, failedConstraints);
     }
     
     /**

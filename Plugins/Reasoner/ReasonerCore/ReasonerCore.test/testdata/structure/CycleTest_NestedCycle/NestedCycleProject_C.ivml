@@ -1,0 +1,6 @@
+project NestedCycleProject_C {
+  
+  version v0;
+  import NestedCycleProject_A;
+  Integer varC = 1;
+}

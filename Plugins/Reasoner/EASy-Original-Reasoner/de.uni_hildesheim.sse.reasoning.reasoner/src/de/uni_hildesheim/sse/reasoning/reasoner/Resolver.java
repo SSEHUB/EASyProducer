@@ -1087,26 +1087,43 @@ public class Resolver {
     private ArrayList<Project> arrangeImportedProjects(ArrayList<Project> projects) {
         ArrayList<Project> sequence = new ArrayList<Project>();    
         Set<Project> done = new HashSet<Project>();        
-        while (!projects.isEmpty()) {            
+//        while (!projects.isEmpty()) {            
             for (int y = projects.size() - 1; y >= 0; y--) {
                 Project project = projects.get(y);
-                boolean resolved = true;
-                for (int i = 0, n = project.getImportsCount(); resolved && i < n; i++) {
-                    Project importedProject = project.getImport(i).getResolved();
-                    if (null != importedProject) {
-                        resolved = done.contains(importedProject)
-                            // Stop in case of a cycle
-                            || importedProject == config.getProject();
-                    }
+                if (!done.contains(project)) {
+                    
+//                boolean resolved = true;
+//                for (int i = 0, n = project.getImportsCount(); resolved && i < n; i++) {
+//                    Project importedProject = project.getImport(i).getResolved();
+//                    if (null != importedProject) {
+//                        resolved = done.contains(importedProject)
+//                            // Stop in case of a cycle
+//                            || importedProject == config.getProject();
+//                    }
+//                }
+//                if (resolved) {
+//                    sequence.add(project);
+//                    done.add(project);
+//                    projects.remove(y);
+//                }
+                arrangeImportedProjects(project, done, sequence);
                 }
-                if (resolved) {
-                    sequence.add(project);
-                    done.add(project);
-                    projects.remove(y);
+            }
+//        }
+        return sequence;
+    }
+    
+    private void arrangeImportedProjects(Project project, Set<Project> alreadyVisited, List<Project> sequence) {
+        alreadyVisited.add(project);
+        for (int i = 0, n = project.getImportsCount(); i < n; i++) {
+            Project importedProject = project.getImport(i).getResolved();
+            if (null != importedProject) {
+                if (!alreadyVisited.contains(importedProject)) {
+                    arrangeImportedProjects(importedProject, alreadyVisited, sequence);
                 }
             }
         }
-        return sequence;
+        sequence.add(project);
     }
     
     /**
