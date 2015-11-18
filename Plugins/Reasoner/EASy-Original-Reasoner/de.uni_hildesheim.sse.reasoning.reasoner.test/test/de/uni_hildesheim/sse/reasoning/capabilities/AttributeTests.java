@@ -204,13 +204,21 @@ public class AttributeTests extends AbstractTest<Project> {
     public void individualAssign() {
         reasoningTest("IndividualAssign.ivml", 0);
     }
-    
+
     /**
      * Assign attribute with a default value to the project test.
      */
     @Test    
     public void blockAssignNested() {
         reasoningTest("BlockAssignNested.ivml", 0);
+    }
+    
+    /**
+     * Assign attribute with a default value to the project test.
+     */
+    @Test    
+    public void blockAssignNestedNested() {
+        reasoningTest("BlockAssignNestedNested.ivml", 0);
     }
     
     /**
@@ -230,8 +238,6 @@ public class AttributeTests extends AbstractTest<Project> {
     public void blockAssignNestedConstraintFail() {
         reasoningTest("BlockAssignNestedConstraintFail.ivml", 1);
     }
-    
-    // TODO assignment block nested in assignment block
     
     /**
      * Assign attribute with a default value to the project test.
