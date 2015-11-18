@@ -15,6 +15,7 @@
  */
 package de.uni_hildesheim.sse.model.confModel;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -797,6 +798,21 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
             equals = false;
         }
         return equals;
+    }
+    
+    /**
+     * Prints a configuration to <code>out</code>. [debugging]
+     * 
+     * @param out the output stream
+     * @param cfg the configuration to print
+     */
+    public static void printConfig(PrintStream out, Configuration cfg) {
+        // -> toString???
+        Iterator<IDecisionVariable> iter = cfg.iterator();
+        while (iter.hasNext()) {
+            IDecisionVariable var = iter.next();
+            out.println(var.getDeclaration().getName() + " = " + var.getValue());
+        }
     }
 
 }
