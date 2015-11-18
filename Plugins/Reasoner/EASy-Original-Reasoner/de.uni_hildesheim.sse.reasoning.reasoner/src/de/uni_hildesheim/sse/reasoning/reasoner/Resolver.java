@@ -1088,9 +1088,9 @@ public class Resolver {
         ArrayList<Project> sequence = new ArrayList<Project>();    
         Set<Project> done = new HashSet<Project>();        
 //        while (!projects.isEmpty()) {            
-            for (int y = projects.size() - 1; y >= 0; y--) {
-                Project project = projects.get(y);
-                if (!done.contains(project)) {
+        for (int y = projects.size() - 1; y >= 0; y--) {
+            Project project = projects.get(y);
+            if (!done.contains(project)) {
                     
 //                boolean resolved = true;
 //                for (int i = 0, n = project.getImportsCount(); resolved && i < n; i++) {
@@ -1107,8 +1107,8 @@ public class Resolver {
 //                    projects.remove(y);
 //                }
                 arrangeImportedProjects(project, done, sequence);
-                }
             }
+        }
 //        }
         return sequence;
     }
