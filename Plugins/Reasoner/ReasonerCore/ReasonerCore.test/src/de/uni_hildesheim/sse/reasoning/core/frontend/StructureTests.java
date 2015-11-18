@@ -62,8 +62,8 @@ public abstract class StructureTests extends AbstractReasonerFrontendTest {
      * For this reason, I specified a short timeout. Timeout may be shorter.
      * @throws IOException in case of problems reading a mode
      */
-//    @Test(timeout = 1000)
-    @Test()
+    @Test(timeout = 1000)
+//    @Test()
     public void testCyclingDeclarations() throws IOException {
         performStructureCheck("CycleTest_CyclingDeclarations", "ImportCycleTest_CyclingDeclarations_A", true);
     }
