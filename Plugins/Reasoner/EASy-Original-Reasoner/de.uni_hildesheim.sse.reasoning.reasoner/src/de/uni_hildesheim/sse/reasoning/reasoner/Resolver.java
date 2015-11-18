@@ -1100,7 +1100,8 @@ public class Resolver {
                 for (int i = 0, n = project.getImportsCount(); resolved && i < n; i++) {
                     Project importedProject = project.getImport(i).getResolved();
                     if (null != importedProject) {
-                        resolved = done.contains(importedProject);
+                        resolved = done.contains(importedProject) || importedProject == config.getProject();
+                        
                         // Prevent endless loop in case of cycling imports
 //                        resolved = !imports.add(importedProject);
                     }
