@@ -1085,25 +1085,18 @@ public class Resolver {
      * @return Rearranged list of {@link Project}s.
      */
     private ArrayList<Project> arrangeImportedProjects(ArrayList<Project> projects) {
-        ArrayList<Project> sequence = new ArrayList<Project>();
-//        Map<Project, Set<Project>> alreadyFoundImports = new HashMap<Project, Set<Project>>();        
+        ArrayList<Project> sequence = new ArrayList<Project>();    
         Set<Project> done = new HashSet<Project>();        
         while (!projects.isEmpty()) {            
             for (int y = projects.size() - 1; y >= 0; y--) {
                 Project project = projects.get(y);
-//                Set<Project> imports = alreadyFoundImports.get(project);
-//                if (null == imports) {
-//                    imports = new HashSet<Project>();
-//                    alreadyFoundImports.put(project, imports);
-//                }
                 boolean resolved = true;
                 for (int i = 0, n = project.getImportsCount(); resolved && i < n; i++) {
                     Project importedProject = project.getImport(i).getResolved();
                     if (null != importedProject) {
-                        resolved = done.contains(importedProject) || importedProject == config.getProject();
-                        
-                        // Prevent endless loop in case of cycling imports
-//                        resolved = !imports.add(importedProject);
+                        resolved = done.contains(importedProject)
+                            // Stop in case of a cycle
+                            || importedProject == config.getProject();
                     }
                 }
                 if (resolved) {
