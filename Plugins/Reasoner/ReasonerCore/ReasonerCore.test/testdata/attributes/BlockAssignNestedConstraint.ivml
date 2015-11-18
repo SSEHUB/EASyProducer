@@ -16,5 +16,5 @@ project BlockAssignNestedConstraint {
     C.nest = 6;  
     Integer var;    
 
-
+    C.at == 5;
 }
