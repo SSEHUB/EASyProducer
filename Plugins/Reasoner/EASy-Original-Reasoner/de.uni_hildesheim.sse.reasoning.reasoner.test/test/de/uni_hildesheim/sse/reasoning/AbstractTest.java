@@ -58,12 +58,16 @@ public abstract class AbstractTest extends de.uni_hildesheim.sse.dslCore.test.Ab
         
         // Test whether reasoning detected correct result  
         int failedConstraints = 0;
+        StringBuffer errMsg = new StringBuffer();
         for (int i = 0; i < result.getMessageCount(); i++) {
             if (result.getMessage(i).getStatus() == Status.ERROR) {
                 failedConstraints = failedConstraints + result.getMessage(i).getConflicts().size();
+                errMsg.append("\n");
+                errMsg.append(result.getMessage(i).getDescription());
             }
         }
-        Assert.assertEquals("Failed constraints: ", expectedFailedConstraints, failedConstraints);
+        Assert.assertEquals("Failed constraints: " + failedConstraints + " of " + expectedFailedConstraints + errMsg,
+            expectedFailedConstraints, failedConstraints);
     }
     
     /**
