@@ -1316,6 +1316,8 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
         int entryCount = (null == entryList ? 0 : entryList.size());
         ConstraintSyntaxTree[] exprs = new ConstraintSyntaxTree[entryCount];
         IDatatype contained = ((Container) lhsType).getContainedType();
+        // assignable <-> Boolean
+        boolean isConstraintCollection = ConstraintType.TYPE.getType().equals(contained.getType()); 
         for (int e = 0; e < entryCount; e++) {
             ExpressionListEntry entry = entryList.get(e);
             if (null != entry.getValue()) {
@@ -1338,7 +1340,7 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
             if (null != values && Container.isContainer(lhsType, ConstraintType.TYPE)) {
                 for (int v = 0; v < values.length; v++) {
                     Object val = values[v];
-                    if (!(val instanceof ConstraintValue)) {
+                    if (!(val instanceof ConstraintValue) && isConstraintCollection) {
                         values[v] = ValueFactory.createValue(ConstraintType.TYPE, 
                             new ConstantValue((de.uni_hildesheim.sse.model.varModel.values.Value) val));
                     }

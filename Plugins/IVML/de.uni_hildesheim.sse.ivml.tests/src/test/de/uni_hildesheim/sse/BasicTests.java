@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.List;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
@@ -426,7 +425,6 @@ public class BasicTests extends AbstractTest {
      * Test whether values of Boolean/Constraint sequences are correctly initialized.
      * @throws IOException should not occur
      */
-    @Ignore("For Holger ;-)")
     @Test
     public void testSequenceValueInitialization() throws IOException {
         List<Project> projects = assertEqual(createFile("sequenceValueInitialization"), "sequenceValueInitialization",
