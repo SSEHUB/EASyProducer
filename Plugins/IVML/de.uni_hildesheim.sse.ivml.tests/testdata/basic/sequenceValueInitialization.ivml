@@ -1,0 +1,6 @@
+project sequenceValueInitialization {
+
+    version v0;
+    sequenceOf(Constraint) consSeq = {true, false, true};
+    sequenceOf(Boolean) boolSeq = {true, false, true};
+}

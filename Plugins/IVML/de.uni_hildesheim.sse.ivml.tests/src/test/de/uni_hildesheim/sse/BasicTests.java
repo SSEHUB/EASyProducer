@@ -2,10 +2,24 @@ package test.de.uni_hildesheim.sse;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
+import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
+import de.uni_hildesheim.sse.model.cst.ConstantValue;
+import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
+import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
+import de.uni_hildesheim.sse.model.varModel.Project;
+import de.uni_hildesheim.sse.model.varModel.datatypes.BooleanType;
+import de.uni_hildesheim.sse.model.varModel.datatypes.ConstraintType;
+import de.uni_hildesheim.sse.model.varModel.filter.DeclarationFinder;
+import de.uni_hildesheim.sse.model.varModel.filter.DeclarationFinder.VisibilityType;
+import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
+import de.uni_hildesheim.sse.model.varModel.values.ContainerValue;
+import de.uni_hildesheim.sse.model.varModel.values.Value;
 import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
 import de.uni_hildesheim.sse.translation.ErrorCodes;
 
@@ -406,6 +420,65 @@ public class BasicTests extends AbstractTest {
     @Test
     public void testCompoundInitFail() throws IOException {
         assertEqual(createFile("compoundInitFail"), "compoundInitFail", "0", ErrorCodes.INITIALIZER_CONSISTENCY);
+    }
+    
+    /**
+     * Test whether values of Boolean/Constraint sequences are correctly initialized.
+     * @throws IOException should not occur
+     */
+    @Ignore("For Holger ;-)")
+    @Test
+    public void testSequenceValueInitialization() throws IOException {
+        List<Project> projects = assertEqual(createFile("sequenceValueInitialization"), "sequenceValueInitialization",
+            "0");
+        
+        // Search for the two declarations
+        Assert.assertEquals("File does not contain exectly one project.", 1, projects.size());
+        DeclarationFinder finder = new DeclarationFinder(projects.get(0), FilterType.ALL, null);
+        List<AbstractVariable> variables = finder.getVariableDeclarations(VisibilityType.ALL);
+        Assert.assertEquals("Project has not exactly 2 declarations.", 2, variables.size());
+        AbstractVariable consSeq = null;
+        AbstractVariable boolSeq = null;
+        for (int i = 0; i < variables.size(); i++) {
+            AbstractVariable var = variables.get(i);
+            if ("consSeq".equals(var.getName())) {
+                consSeq = var;
+            } else if ("boolSeq".equals(var.getName())) {
+                boolSeq = var;
+            }
+        }
+        ContainerValue consValue = (ContainerValue) extractDefaultValue(consSeq, "consSeq");
+        ContainerValue boolValue = (ContainerValue) extractDefaultValue(boolSeq, "boolSeq");
+        
+        // Test: Check correct type of ContainerValue AND of their nested elements
+        Assert.assertSame("Error: Value of \"consSeq\" is not the correct IDatatype.", ConstraintType.TYPE,
+            consValue.getContainedType());
+        Assert.assertSame("Error: Value of \"consSeq\" is not the correct IDatatype.", ConstraintType.TYPE,
+            consValue.getElement(0).getType());
+        Assert.assertSame("Error: Value of \"boolSeq\" is not the correct IDatatype.", BooleanType.TYPE,
+            boolValue.getContainedType());
+        Assert.assertSame("Error: Value of \"boolSeq\" is not the correct IDatatype.", BooleanType.TYPE,
+            boolValue.getElement(0).getType());
+    }
+    
+    /**
+     * Helpermethod: Extracts the {@link Value} out of the default value from the given {@link AbstractVariable}.
+     * @param var The declaration which shall contain a default value.
+     * @param varName The name of the declaration (for proper error messages).
+     * @return The default value of the {@link AbstractVariable}. Will fail if the declaration does not have any.
+     */
+    private Value extractDefaultValue(AbstractVariable var, String varName) {
+        Assert.assertNotNull("Declaration of \"" + varName + "\" not found.", var);
+        ConstraintSyntaxTree cst = var.getDefaultValue();
+        Value containerValue = null;
+        try {
+            containerValue = (Value) ((ConstantValue) cst).getConstantValue();
+        } catch (ClassCastException cce) {
+            cce.printStackTrace();
+            Assert.fail(cce.getMessage());
+        }
+        Assert.assertNotNull("Variable \"" + varName + "\" has no default value.", containerValue);
+        return containerValue;
     }
     
 }
