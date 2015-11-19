@@ -8,7 +8,7 @@ project booleanImpliesVariables {
     
     a == true implies b == true;
     a1 == false implies b1 == false;
-    (a == true or a1 = false) implies b1 = false;
-    a == true or a1 = false implies b1 = false;
+    (a == true or a1 == false) implies b1 == false;
+    a == true or a1 == false implies b1 == false;
 
 }

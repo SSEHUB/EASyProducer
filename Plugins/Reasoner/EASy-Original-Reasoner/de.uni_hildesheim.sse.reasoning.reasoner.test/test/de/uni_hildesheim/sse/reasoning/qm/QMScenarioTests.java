@@ -146,7 +146,7 @@ public class QMScenarioTests extends AbstractTest<Project> {
      */        
     public void reasoningTest(String ivmlFile, int expectedFailedConstraints) {
         Project project = loadProject(ivmlFile);
-        AllTests.resultHandler(expectedFailedConstraints, project);
+        de.uni_hildesheim.sse.reasoning.AllTests.resultHandler(expectedFailedConstraints, project);
     }   
     
     /**
@@ -161,7 +161,7 @@ public class QMScenarioTests extends AbstractTest<Project> {
         Project projectP1 = loadProject(p1);
         ProjectImport importP0 = new ProjectImport(projectP0.getName(), null);
         projectP1.addImport(importP0);
-        AllTests.resultHandler(expectedFailedConstraints, projectP1);
+        de.uni_hildesheim.sse.reasoning.AllTests.resultHandler(expectedFailedConstraints, projectP1);
     }
     
     /**
@@ -180,7 +180,7 @@ public class QMScenarioTests extends AbstractTest<Project> {
         projectP1.addImport(importP0);
         ProjectImport importP1 = new ProjectImport(projectP1.getName(), null);
         projectP2.addImport(importP1);
-        AllTests.resultHandler(expectedFailedConstraints, projectP2);
+        de.uni_hildesheim.sse.reasoning.AllTests.resultHandler(expectedFailedConstraints, projectP2);
     }
 
     

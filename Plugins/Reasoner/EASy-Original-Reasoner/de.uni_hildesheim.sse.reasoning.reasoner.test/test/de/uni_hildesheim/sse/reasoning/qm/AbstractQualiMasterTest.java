@@ -39,7 +39,7 @@ import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
  * @author El-Sharkawy
  *
  */
-abstract class AbstractQualiMasterTest extends de.uni_hildesheim.sse.reasoning.AbstractTest {
+public abstract class AbstractQualiMasterTest extends de.uni_hildesheim.sse.reasoning.AbstractTest {
       
     protected static final File TESTDATA = determineTestDataFolder("reasonerCore.testdata.home");
 
@@ -263,7 +263,7 @@ abstract class AbstractQualiMasterTest extends de.uni_hildesheim.sse.reasoning.A
         qm.addImport(importPipelinesCfg);
         qm.addImport(importInfrastructureCfg);
         
-        AllTests.resultHandler(expectedFailedConstraints, qm);
+        de.uni_hildesheim.sse.reasoning.AllTests.resultHandler(expectedFailedConstraints, qm);
     }    
     
 

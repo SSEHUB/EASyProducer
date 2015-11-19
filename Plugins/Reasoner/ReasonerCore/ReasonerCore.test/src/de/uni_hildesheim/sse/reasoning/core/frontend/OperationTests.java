@@ -70,7 +70,6 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      * 
      * @throws IOException in case of problems reading a model
      */
-    @Ignore 
     @Test
     public void testIntegerMulConstantsFail() throws IOException {
         performOpCheck("integerMulConstantsFail.ivml", false);
@@ -91,10 +90,9 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      * 
      * @throws IOException in case of problems reading a model
      */  
-    @Ignore
     @Test // Must fail div by 0
     public void testIntegerDivConstantsFail() throws IOException {
-        performOpCheck("integerDivConstantsFail.ivml", true);
+        performOpCheck("integerDivConstantsFail.ivml", false);
     }
     
     /**
@@ -204,7 +202,6 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      * 
      * @throws IOException in case of problems reading a model
      */
-    @Ignore
     @Test 
     public void testIntegerEqVariablesFail() throws IOException {
         performOpCheck("integerEqVariablesFail.ivml", false);
@@ -255,7 +252,6 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      * 
      * @throws IOException in case of problems reading a model
      */
-    @Ignore
     @Test
     public void testIntegerDivVariablesFails() throws IOException {
         performOpCheck("integerDivVariablesFail.ivml", false);
@@ -741,7 +737,6 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      * 
      * @throws IOException in case of problems reading a model
      */
-    @Ignore
     @Test
     public void testBooleanImpliesVariables() throws IOException {
         performOpCheck("booleanImpliesVariables.ivml", true);
@@ -773,7 +768,6 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      * 
      * @throws IOException in case of problems reading a model
      */
-    @Ignore
     @Test
     public void testStringOperationsIsValid() throws IOException {
         performOpCheck("string.ivml", true);
@@ -797,7 +791,6 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      * 
      * @throws IOException in case of problems reading a model
      */
-    @Ignore
     @Test
     public void testTypedefValid() throws IOException {
         performOpCheck("typedef.ivml", true);

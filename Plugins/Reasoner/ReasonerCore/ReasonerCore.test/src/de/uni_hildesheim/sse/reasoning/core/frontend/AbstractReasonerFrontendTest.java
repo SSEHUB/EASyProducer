@@ -149,15 +149,22 @@ public abstract class AbstractReasonerFrontendTest {
 
         // Parse IVML File
         de.uni_hildesheim.sse.dslCore.TranslationResult<Project> result = ModelUtility.INSTANCE.parse(file);
-        // test cases must be correct!
-        Assert.assertTrue("Parsing error", 0 == result.getMessageCount());
+        Project p = null;
+        
+        StringBuffer errorMsg = new StringBuffer();
         for (int i = 0; i < result.getMessageCount(); i++) {
-            System.out.println("Parsing error -> " + result.getMessage(i).getDescription());
+            de.uni_hildesheim.sse.dslCore.translation.Message msg = result.getMessage(i);
+            if (!msg.ignore()) {
+                errorMsg.append(msg.getDescription());
+                errorMsg.append("\n");
+            }
         }
-        Assert.assertEquals(1, result.getResultCount());
-
-        // Load project
-        Project p = result.getResult(0);
+        if (errorMsg.length() == 0) {
+            p = result.getResult(0);
+        } else {
+            Assert.fail(errorMsg.toString());
+        }
+        Assert.assertNotNull("Error: The loaded project " + path + " is NULL (should not happen)", p);
         return p;
     }
     
@@ -253,7 +260,7 @@ public abstract class AbstractReasonerFrontendTest {
         long endTime = System.currentTimeMillis();
 
         String errorMsg = "";
-        System.out.println("Result -> " + result.hasConflict());
+        System.out.println("Has Conflict: " + result.hasConflict());
         if (configuration.isSupported(Capabilities.CHECK)) {
             if (result.hasConflict()) {
                 errorMsg = resultErrorToFailureTrace(result, project);
@@ -339,16 +346,33 @@ public abstract class AbstractReasonerFrontendTest {
      * @return the failure trace
      */
     protected String resultErrorToFailureTrace(ReasoningResult result, Project project) {
-        int index = -1;
-        for (int i = 0; i < project.getElementCount() && -1 == index; i++) {
-            if (project.getElement(i) == result.getMessage(0).getConflicts().get(0)) {
-                index = i;
+        StringBuffer errMsg = new StringBuffer();
+        
+        for (int j = 0; j < result.getMessageCount(); j++) {
+            if (Status.ERROR == result.getMessage(j).getStatus()) {
+                int index = -1;
+                for (int i = 0; i < project.getElementCount() && -1 == index; i++) {
+                    if (project.getElement(i) == result.getMessage(j).getConflicts().get(0)) {
+                        index = i;
+                    }
+                }
+                
+                StringBuffer conflicts = new StringBuffer();
+                List<ModelElement> conflictingElements = result.getMessage(j).getConflicts();
+                for (int i = 0; i < conflictingElements.size(); i++) {
+                    ModelElement conflict = conflictingElements.get(i);
+                    // StringProvider adds a line break, too 
+                    conflicts.append(StringProvider.toIvmlString(conflict));
+                    
+                }
+                errMsg.append(result.getMessage(j).getDescription());
+                errMsg.append("\n");
+                errMsg.append(conflicts);
+                errMsg.append("Conflict @ Element ");
+                errMsg.append(index);
             }
         }
-
-        ModelElement conflict = result.getMessage(0).getConflicts().get(0);
-        String strConflict = StringProvider.toIvmlString(conflict);
-        return result.getMessage(0).getDescription() + "\n" + strConflict + "\nConflict @ Element " + index;
+        return errMsg.toString();
     }
 
 }
