@@ -167,6 +167,7 @@ public class EASyPersistencer implements PersistenceConstants {
             }
         }
         
+        reasonerConfig.setFreshConfiguration(false);
         plp.setReasonerConfig(reasonerConfig);
     }
 

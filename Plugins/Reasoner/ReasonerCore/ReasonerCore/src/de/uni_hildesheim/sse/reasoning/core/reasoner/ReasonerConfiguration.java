@@ -229,4 +229,12 @@ public class ReasonerConfiguration {
     public boolean isFreshConfiguration() {
         return freshConfig;
     }
+    
+    /**
+     * Specification whether a fresh configuration should be created for reasoning.
+     * @param freshConfig <tt>true</tt> A fresh configuration will be created, otherwise not.
+     */
+    public void setFreshConfiguration(boolean freshConfig) {
+        this.freshConfig = freshConfig;
+    }
 }
