@@ -29,6 +29,7 @@ import java.util.Set;
  * Some model utilities.
  * 
  * @author Holger Eichelberger
+ * @author El-Sharkawy
  */
 public class Utils {
 
@@ -229,6 +230,88 @@ public class Utils {
                 enumerateImported((M) model.getImport(i).getResolved(), result, deleteFrom);
             }
         }
+    }
+    
+    /**
+     * List all imported {@link IModel}s for the given model including the model itself. The most inner model
+     * will be the first element of the list, the main model the last (helpful for a correct initialization). <br/>
+     * <b>Note:</b> This function should not run into an endless loop in case of cycling imports.
+     * @param mainModel The model to start with. May contain any imports and is the starting point.
+     * @return The list of all associated projects (first most inner imported model, last is the main model itself).
+     * @param <M> the actual model type 
+     */
+    public static synchronized <M extends IModel> List<M> discoverImports(M mainModel) {
+        // Unsorted list of all models (imports and main model)
+        List<M> allModels = new ArrayList<M>();
+        findImportedModels(mainModel, allModels, new HashSet<M>());
+        
+        // Arrange them (most inner import first, main model last).
+        return arrangeImportedModels(allModels); 
+    }
+    
+    /**
+     * Fills the stack of imported {@link IModel}s recursively.
+     * @param model the model to be considered (should be the main model for starting the recursion).
+     * @param allModels the list of all included models (modified as a side effect)
+     * @param done already considered models
+     * @param <M> the actual model type 
+     */
+    @SuppressWarnings("unchecked")
+    private static <M extends IModel> void findImportedModels(M model, List<M> allModels, Set<M> done) {
+        if (!done.contains(model)) {
+            done.add(model);
+            
+            // do this in sequence of import specification
+            allModels.add(model); 
+            for (int i = 0, n = model.getImportsCount(); i < n; i++) {
+                M importedModel = (M) model.getImport(i).getResolved();
+                if (null != importedModel) {
+                    findImportedModels(importedModel, allModels, done);
+                }
+            }
+        }
+    }
+    
+    /**
+     * Rearranges all {@link IModel}s used in imports.
+     * @param models {@link IModel}s retrieved from {@link #findImportedModels(IModel, List, Set)}.
+     * @return Rearranged list of {@link IModel}s.
+     * @param <M> the actual model type 
+     */
+    private static <M extends IModel> List<M> arrangeImportedModels(List<M> models) {
+        List<M> sequence = new ArrayList<M>();    
+        Set<M> done = new HashSet<M>();        
+        for (int y = models.size() - 1; y >= 0; y--) {
+            M project = models.get(y);
+            if (!done.contains(project)) {
+                arrangeImportedModels(project, done, sequence);
+            }
+        }
+        return sequence;
+    }
+    
+    /**
+     * Recursive part of {@link #arrangeImportedModels(List)} to arrange first the imports before the importing
+     * project without running into an endless loop in case of cycling projects.
+     * @param model The current {@link IModel} to add/check
+     * @param alreadyVisited Already visited {@link IModel}s, will not be revisited in case of a cycle.
+     * Should be empty when the recursive function is called from outside to start.
+     * @param sequence The resulting sequence (deepest import should be first, main {@link IModel} should be last).
+     * Should be empty when the recursive function is called from outside to start.
+     * @param <M> the actual model type 
+     */
+    @SuppressWarnings("unchecked")
+    private static <M extends IModel> void arrangeImportedModels(M model, Set<M> alreadyVisited, List<M> sequence) {
+        alreadyVisited.add(model);
+        for (int i = 0, n = model.getImportsCount(); i < n; i++) {
+            M importedProject = (M) model.getImport(i).getResolved();
+            if (null != importedProject) {
+                if (!alreadyVisited.contains(importedProject)) {
+                    arrangeImportedModels(importedProject, alreadyVisited, sequence);
+                }
+            }
+        }
+        sequence.add(model);
     }
 
 }

@@ -62,6 +62,7 @@ import de.uni_hildesheim.sse.reasoning.reasoner.model.CopyVisitor;
 import de.uni_hildesheim.sse.reasoning.reasoner.model.VariablesInConstraintsFinder;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
+import de.uni_hildesheim.sse.utils.modelManagement.Utils;
 
 /**
  * Class for performing reasoning with AssignmnetResolver.
@@ -254,11 +255,8 @@ public class Resolver {
         if (Descriptor.LOGGING) {
             printModelElements(config, "Before reasoning");            
         }        
-     // Stack of importedProject (start with inner most imported project)
-        ArrayList<Project> projects = new ArrayList<Project>();
-        findImportedProjects(projects);
-        
-        projects = arrangeImportedProjects(projects);        
+        // Stack of importedProject (start with inner most imported project)
+        List<Project> projects = Utils.discoverImports(config.getProject());    
         
         while (!projects.isEmpty()) {
             project = projects.remove(0);
@@ -1049,73 +1047,6 @@ public class Resolver {
                     + StringProvider.toIvmlString(constraint.getConsSyntax()));                
             }
         }
-    }
-    
-    /**
-     * Fills the stack of imported {@link Project}s.
-     * Starts with the core project.
-     * @param projects The list of all included projects, which are used inside the configuration.
-     */
-    private void findImportedProjects(ArrayList<Project> projects) {
-        findImportedProjects(config.getProject(), projects, new HashSet<Project>());        
-    }
-
-    /**
-     * Fills the stack of imported {@link Project}s recursively.
-     * @param project the project to be considered
-     * @param projects the list of all included projects (modified as a side effect)
-     * @param done already considered projects 
-     */
-    private void findImportedProjects(Project project, ArrayList<Project> projects, Set<Project> done) {
-        if (!done.contains(project)) {
-            done.add(project);
-            projects.add(project); // do this in sequence of import specification
-            for (int i = 0, n = project.getImportsCount(); i < n; i++) {
-                Project importedProject = project.getImport(i).getResolved();
-                if (null != importedProject) {
-                    findImportedProjects(importedProject, projects, done);
-                }
-            }
-        }
-    }
-    
-    /**
-     * Rearranges all {@link Project} used in imports.
-     * @param projects {@link Project} retrieved from {@link Configuration}.
-     * @return Rearranged list of {@link Project}s.
-     */
-    private ArrayList<Project> arrangeImportedProjects(ArrayList<Project> projects) {
-        ArrayList<Project> sequence = new ArrayList<Project>();    
-        Set<Project> done = new HashSet<Project>();        
-        for (int y = projects.size() - 1; y >= 0; y--) {
-            Project project = projects.get(y);
-            if (!done.contains(project)) {
-                arrangeImportedProjects(project, done, sequence);
-            }
-        }
-        return sequence;
-    }
-    
-    /**
-     * Recursive part of {@link #arrangeImportedProjects(ArrayList)} to arrange first the imports before the importing
-     * project without running into an endless loop in case of cycling projects.
-     * @param project The current project to add/check
-     * @param alreadyVisited Already visited projects, will not be revisited in case of a cycle.
-     * Should be empty when the recursive function is called from outside to start.
-     * @param sequence The resulting sequence (deepest import should be first, main project should be last).
-     * Should be empty when the recursive function is called from outside to start.
-     */
-    private void arrangeImportedProjects(Project project, Set<Project> alreadyVisited, List<Project> sequence) {
-        alreadyVisited.add(project);
-        for (int i = 0, n = project.getImportsCount(); i < n; i++) {
-            Project importedProject = project.getImport(i).getResolved();
-            if (null != importedProject) {
-                if (!alreadyVisited.contains(importedProject)) {
-                    arrangeImportedProjects(importedProject, alreadyVisited, sequence);
-                }
-            }
-        }
-        sequence.add(project);
     }
     
     /**
