@@ -51,7 +51,6 @@ import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
 import de.uni_hildesheim.sse.persistency.StringProvider;
 import de.uni_hildesheim.sse.reasoning.core.model.PerformanceStatistics;
-import de.uni_hildesheim.sse.reasoning.core.model.variables.ConstraintVariable;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerConfiguration;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerConfiguration.IAdditionalInformationLogger;
 import de.uni_hildesheim.sse.reasoning.reasoner.functions.FailedElementDetails;
@@ -67,6 +66,7 @@ import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
 /**
  * Class for performing reasoning with AssignmnetResolver.
  * @author Sizonenko
+ * @author El-Sharkawy
  *
  */
 public class Resolver {
@@ -400,7 +400,7 @@ public class Resolver {
 
     /**
      * Method for checking if {@link CompoundInitializer} holds 
-     * a {@link CollectionInitializer} with {@link Constraint}s.
+     * a {@link de.uni_hildesheim.sse.ivml.CollectionInitializer} with {@link Constraint}s.
      * @param exp expression to check.
      * @param compound false if variable is not nested.
      */
@@ -1087,32 +1087,24 @@ public class Resolver {
     private ArrayList<Project> arrangeImportedProjects(ArrayList<Project> projects) {
         ArrayList<Project> sequence = new ArrayList<Project>();    
         Set<Project> done = new HashSet<Project>();        
-//        while (!projects.isEmpty()) {            
         for (int y = projects.size() - 1; y >= 0; y--) {
             Project project = projects.get(y);
             if (!done.contains(project)) {
-                    
-//                boolean resolved = true;
-//                for (int i = 0, n = project.getImportsCount(); resolved && i < n; i++) {
-//                    Project importedProject = project.getImport(i).getResolved();
-//                    if (null != importedProject) {
-//                        resolved = done.contains(importedProject)
-//                            // Stop in case of a cycle
-//                            || importedProject == config.getProject();
-//                    }
-//                }
-//                if (resolved) {
-//                    sequence.add(project);
-//                    done.add(project);
-//                    projects.remove(y);
-//                }
                 arrangeImportedProjects(project, done, sequence);
             }
         }
-//        }
         return sequence;
     }
     
+    /**
+     * Recursive part of {@link #arrangeImportedProjects(ArrayList)} to arrange first the imports before the importing
+     * project without running into an endless loop in case of cycling projects.
+     * @param project The current project to add/check
+     * @param alreadyVisited Already visited projects, will not be revisited in case of a cycle.
+     * Should be empty when the recursive function is called from outside to start.
+     * @param sequence The resulting sequence (deepest import should be first, main project should be last).
+     * Should be empty when the recursive function is called from outside to start.
+     */
     private void arrangeImportedProjects(Project project, Set<Project> alreadyVisited, List<Project> sequence) {
         alreadyVisited.add(project);
         for (int i = 0, n = project.getImportsCount(); i < n; i++) {
@@ -1301,7 +1293,7 @@ public class Resolver {
     }
     
     /**
-     * Method for displying failed constraints and assignments.
+     * Method for displaying failed constraints and assignments.
      */
     private void displayFailedElements() {
 //        FailedElements failedElements = FailedRules.getFailedElements(reasoningID);
@@ -1324,7 +1316,8 @@ public class Resolver {
     }
     
     /**
-     * Getter for the map of all {@link ConstraintVariable} and their {@link Constraint}s.
+     * Getter for the map of all {@link de.uni_hildesheim.sse.reasoning.core.model.variables.ConstraintVariable}
+     * and their {@link Constraint}s.
      * @return Map of constraint variables and their constraints.
      */
     public Map<Constraint, IDecisionVariable> getConstraintVariableMap() {
