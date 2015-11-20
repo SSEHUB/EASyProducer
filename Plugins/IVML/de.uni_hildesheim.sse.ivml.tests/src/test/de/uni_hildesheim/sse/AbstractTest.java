@@ -263,16 +263,7 @@ public abstract class AbstractTest extends de.uni_hildesheim.sse.dslCore.test.Ab
                     expectedKey = null;
                 }
                 Assert.assertTrue(null != map.remove(key));
-                
-                IvmlValidationVisitor valVis = new IvmlValidationVisitor();
-                project.accept(valVis);
-                if (valVis.getErrorCount() > 0) {
-                    System.out.println("validation messages:");
-                    for (int m = 0; m < valVis.getMessageCount(); m++) {
-                        System.err.println(" - " + valVis.getMessage(m).getDescription());
-                    }
-                }
-                Assert.assertEquals(0, valVis.getErrorCount());
+                validateParsedProject(uri, project);
             }
             Assert.assertTrue(map.isEmpty());
             Assert.assertNull(expectedKey); // otherwise wrong expectation
@@ -290,8 +281,39 @@ public abstract class AbstractTest extends de.uni_hildesheim.sse.dslCore.test.Ab
                     }
                 }
             }
+        } else {
+            // Create List without check
+            pRes = new ArrayList<Project>();
+            for (int r = 0; r < result.getResultCount(); r++) {
+                Project p = result.getResult(r);
+                validateParsedProject(uri, p);
+                pRes.add(p);
+            }
         }
         return pRes;
+    }
+
+    /**
+     * Checks whether a loaded/parsed {@link Project} contains errors and aborts the current test if it contain
+     * at least one error.
+     * @param uri The location from where the project was loaded from.
+     * @param project The currently loaded/parsed project, which shall be checked.
+     */
+    private void validateParsedProject(URI uri, Project project) {
+        IvmlValidationVisitor valVis = new IvmlValidationVisitor();
+        project.accept(valVis);
+        if (valVis.getErrorCount() > 0) {
+            StringBuffer errMsg = new StringBuffer("Project \"");
+            errMsg.append(project.getName());
+            errMsg.append("\" of \"");
+            errMsg.append(uri.toFileString());
+            errMsg.append("\" contains errors:");
+            for (int m = 0; m < valVis.getMessageCount(); m++) {
+                errMsg.append("\n");
+                errMsg.append(" - " + valVis.getMessage(m).getDescription());
+            }
+            Assert.fail(errMsg.toString());
+        }
     }
 
     /**

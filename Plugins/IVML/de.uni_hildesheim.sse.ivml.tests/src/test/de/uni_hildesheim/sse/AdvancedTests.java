@@ -612,4 +612,34 @@ public class AdvancedTests extends AbstractTest {
         assertEqual(createFile("opDefImport"), null, null);
     }
     
+    /**
+     * Test that the ordering of projects inside the same IVML file is kept after (re-)saving.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testmultipleProjectsInIVMLFile() throws IOException {
+        File inputTestFile = createFile("MultipleProjectsInIVMLFile");
+        List<Project> projects = assertEqual(inputTestFile, null, null);
+        // Test correct ordering inside list as this ordering is also used for saving the projects
+        Assert.assertEquals("Error: Not exact 3 projects found in \"" + inputTestFile.getAbsolutePath() + "\"",
+            3, projects.size());
+        assertProjectInPosition(projects, "MultipleProjectsInIVMLFile", 0);
+        assertProjectInPosition(projects, "InternalProject", 1);
+        assertProjectInPosition(projects, "InterfacedProject", 2);
+    }
+
+    /**
+     * Helpermethod of {@link #testmultipleProjectsInIVMLFile()}, tests whether the projects inside the list
+     * are stored at the correct position.
+     * @param projects The list of all parsed projects of the same file.
+     * @param expectedProject The name of the project to test.
+     * @param index The expected index of the project (should be the same as inside the file, starting with index 0).
+     */
+    private void assertProjectInPosition(List<Project> projects, String expectedProject, int index) {
+        String actualProject = projects.get(index).getName();
+        Assert.assertEquals("Wrong project at index " + index + " expected \"" + expectedProject + "\" but was \""
+            + actualProject + "\"." , expectedProject, actualProject);
+    }
+    
 }
