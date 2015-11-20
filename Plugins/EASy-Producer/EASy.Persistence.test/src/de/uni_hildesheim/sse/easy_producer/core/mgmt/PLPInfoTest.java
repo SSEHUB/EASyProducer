@@ -575,7 +575,6 @@ public class PLPInfoTest extends AbstractPLPInfoTest {
      * @throws ConfigurationException If configuration is not supported (Error in VarModel).
      * @throws IOException If the generated file could not read from the file system
      */
-    @Ignore("Not working with Java 1.8")
     @Test
     public void testMultipleProjectsInIVMLFile() throws PersistenceException,
         ValueDoesNotMatchTypeException, ConfigurationException, IOException {

@@ -20,6 +20,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +38,7 @@ public class AvailableModels<M extends IModel> {
 
     private IModelManagementRepository<M> repository;
     private Map<String, List<VersionedModelInfos<M>>> availableModels 
-        = new HashMap<String, List<VersionedModelInfos<M>>>();
+        = new LinkedHashMap<String, List<VersionedModelInfos<M>>>();
     private Map<URI, ModelInfo<M>> tmpInfo = null;
 
     /**
