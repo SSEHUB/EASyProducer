@@ -2,7 +2,6 @@ package de.uni_hildesheim.sse.reasoning.core.frontend;
 
 import java.io.IOException;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -780,7 +779,6 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      * 
      * @throws IOException in case of problems reading a model
      */
-    @Ignore
     @Test
     public void testSequenceOperationsIsValid() throws IOException {
         performOpCheck("sequence.ivml", true);
@@ -819,7 +817,6 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      * 
      * @throws IOException in case of problems reading a model
      */
-    @Ignore
     @Test
     public void testValueValidation2IsValid() throws IOException {
         performOpCheck("valueValidation2.ivml", true);
@@ -833,7 +830,6 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      * 
      * @throws IOException in case of problems reading a model
      */
-    @Ignore
     @Test
     public void testValueValidation3IsValid() throws IOException {
         performOpCheck("valueValidation3.ivml", true);
@@ -860,7 +856,6 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      * 
      * @throws IOException in case of problems reading a model
      */
-    @Ignore
     @Test
     public void testValueValidation5IsValid() throws IOException {
         performOpCheck("valueValidation5.ivml", true);
@@ -874,7 +869,6 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      * 
      * @throws IOException in case of problems reading a model
      */
-    @Ignore
     @Test
     public void testValueValidation6IsValid() throws IOException {
         performOpCheck("valueValidation6.ivml", true);
@@ -888,7 +882,6 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      * 
      * @throws IOException in case of problems reading a model
      */ 
-    @Ignore
     @Test
     public void testValueValidation7IsValid() throws IOException {
         performOpCheck("valueValidation7.ivml", true);
@@ -902,7 +895,6 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      * 
      * @throws IOException in case of problems reading a model
      */ 
-    @Ignore
     @Test
     public void testValueValidation8IsValid() throws IOException {
         performOpCheck("valueValidation8.ivml", true);
@@ -915,7 +907,6 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      *  - Assign block on variables and constraints (one assign block)
      * @throws IOException in case of problems reading a model
      */ 
-    @Ignore
     @Test
     public void testValueValidation9IsValid() throws IOException {
         performOpCheck("valueValidation9.ivml", true);
@@ -929,7 +920,6 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      * 
      * @throws IOException in case of problems reading a model
      */ 
-    @Ignore
     @Test
     public void testValueValidation10IsValid() throws IOException {
         performOpCheck("valueValidation10.ivml", true);
@@ -942,7 +932,6 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      *  - Assign block on variables and constraints (two assign block, same attributes)
      * @throws IOException in case of problems reading a model
      */
-    @Ignore
     @Test
     public void testValueValidation11IsValid() throws IOException {
         performOpCheck("valueValidation11.ivml", true);
@@ -955,7 +944,6 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      *  - Assign block on variables and constraints (two assign block, same attributes)
      * @throws IOException in case of problems reading a model
      */ 
-    @Ignore
     @Test
     public void testValueValidation12IsValid() throws IOException {
         performOpCheck("valueValidation12.ivml", true);
@@ -968,7 +956,6 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      *  - Assign block on variables and constraints (two assign block, different attributes)
      * @throws IOException in case of problems reading a model
      */
-    @Ignore
     @Test
     public void testValueValidation13IsValid() throws IOException {
         performOpCheck("valueValidation13.ivml", true);
@@ -981,7 +968,6 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      *  - Assign block on variables and constraints (two assign block, different attributes)
      * @throws IOException in case of problems reading a model
      */  
-    @Ignore
     @Test
     public void testValueValidation14IsValid() throws IOException {
         performOpCheck("valueValidation14.ivml", true);
