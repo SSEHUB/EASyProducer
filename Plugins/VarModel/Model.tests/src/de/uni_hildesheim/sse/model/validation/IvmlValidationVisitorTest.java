@@ -20,8 +20,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
+import de.uni_hildesheim.sse.model.varModel.IvmlKeyWords;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Enum;
+import de.uni_hildesheim.sse.model.varModel.datatypes.IntegerType;
+import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
 
 /**
  * Tests the {@link IvmlValidationVisitor}.
@@ -60,5 +63,64 @@ public class IvmlValidationVisitorTest {
         Assert.assertTrue(validator.getErrorCount() > 0);
         ValidationMessage errMsg = validator.getMessage(0);
         Assert.assertEquals(ValidationMessage.MISSING_CUSTOM_DATATYPE, errMsg.getCode());
+    }
+    
+    /**
+     * Test whether the {@link IvmlValidationVisitor} does not detect to many identifier errors.
+     */
+    @Test
+    public void testIdentifierCheckValid() {
+        Project validIdentifierProject = new Project("validIdentifier");
+        /* 
+         * Some "problematic" examples. May be extended ;-)
+         * Avoid to use the same implementation as already used inside the visitor.
+         */
+        createDeclaration(validIdentifierProject, OclKeyWords.AT);
+        createDeclaration(validIdentifierProject, OclKeyWords.APPLY);
+        createDeclaration(validIdentifierProject, OclKeyWords.COUNT);
+        
+        IvmlValidationVisitor validator = new IvmlValidationVisitor();
+        validIdentifierProject.accept(validator);
+        Assert.assertEquals("Visitor detected errors, but should not.", 0, validator.getErrorCount());
+    }
+    
+    /**
+     * Test whether the {@link IvmlValidationVisitor} does detect identifier erros.
+     */
+    @Test
+    public void testIdentifierCheckFails() {
+        Project invalidIdentifierProject = new Project("invalidIdentifier");
+        /* 
+         * Some "problematic" examples. May be extended ;-)
+         * Avoid to use the same implementation as already used inside the visitor.
+         */
+        int problemsAdded = 0;
+        createDeclaration(invalidIdentifierProject, OclKeyWords.AND);
+        problemsAdded++;
+        createDeclaration(invalidIdentifierProject, IvmlKeyWords.ABSTRACT);
+        problemsAdded++;
+        createDeclaration(invalidIdentifierProject, OclKeyWords.EQUALS);
+        problemsAdded++;
+        createDeclaration(invalidIdentifierProject, "[");
+        problemsAdded++;
+        createDeclaration(invalidIdentifierProject, "42");
+        problemsAdded++;
+        createDeclaration(invalidIdentifierProject, "42_and_a_name");
+        problemsAdded++;
+        
+        IvmlValidationVisitor validator = new IvmlValidationVisitor();
+        invalidIdentifierProject.accept(validator);
+        Assert.assertEquals("Visitor detected not all identifier problems", problemsAdded, validator.getErrorCount());
+    }
+
+    /**
+     * Helper method to simplify the creation of {@link DecisionVariableDeclaration}s.
+     * @param project The project where to add the declaration.
+     * @param name The name of the declaration.
+     */
+    private void createDeclaration(Project project, String name) {
+        // Data type is not important -> There I choose one basic type
+        DecisionVariableDeclaration decl = new DecisionVariableDeclaration(name, IntegerType.TYPE, project);
+        project.add(decl);
     }
 }

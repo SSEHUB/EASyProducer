@@ -36,10 +36,15 @@ public class OclKeyWords {
     public static final String IS_KIND_OF = "isKindOf";
     
     // e.g. Boolean
+    @IVMLKeyWord
     public static final String NOT = "not";
+    @IVMLKeyWord
     public static final String OR = "or";
+    @IVMLKeyWord
     public static final String XOR = "xor";
+    @IVMLKeyWord
     public static final String AND = "and";
+    @IVMLKeyWord
     public static final String IMPLIES = "implies";
     
     // e.g. Integer, Real
@@ -118,11 +123,13 @@ public class OclKeyWords {
     public static final String ORDINAL = "ordinal";
     
     // self
+    @IVMLKeyWord
     public static final String SELF = "self";
     
     // e.g. IVML
     public static final String TYPE_OF = "typeOf";
     public static final String APPLY = "apply";
+    @IVMLKeyWord
     public static final String IFF = "iff";
     public static final String IS_DEFINED = "isDefined";    
     public static final String TYPE_SELECT = "typeSelect";

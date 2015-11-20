@@ -22,6 +22,7 @@ import java.util.Set;
 
 import de.uni_hildesheim.sse.Bundle;
 import de.uni_hildesheim.sse.model.varModel.IvmlKeyWords;
+import de.uni_hildesheim.sse.model.varModel.datatypes.IVMLKeyWord;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 
 /**
@@ -41,9 +42,9 @@ public class IvmlIdentifierCheck {
      */
     static {
         // own fields
-        hash(IvmlKeyWords.class.getDeclaredFields());
-        // superclass fields
-        hash(IvmlKeyWords.class.getFields());
+        hash(IvmlKeyWords.class.getDeclaredFields(), false);
+        // superclass fields (not all of them are reserved keywords in IVML).
+        hash(IvmlKeyWords.class.getFields(), true);
     }
     
     /**
@@ -51,12 +52,16 @@ public class IvmlIdentifierCheck {
      * into {@link #RESERVED}.
      * 
      * @param fields the fields to be hashed
+     * @param checkAnnotation <tt>false</tt> each field will be added to {@link #RESERVED} which marks them as
+     * reserved keyword, <tt>true</tt> only fields annotated with {@link IVMLKeyWord} will be added to
+     * {@link #RESERVED}. This is useful for inherited keywords as not all of them are also reserved in IVML.
      */
-    private static final void hash(Field[] fields) {
+    private static final void hash(Field[] fields, boolean checkAnnotation) {
         for (int f = 0; f < fields.length; f++) {
             Field field = fields[f];
+            boolean add = !checkAnnotation || (null != field.getAnnotation(IVMLKeyWord.class));
             int mod = field.getModifiers();
-            if (Modifier.isPublic(mod) && Modifier.isStatic(mod) && Modifier.isFinal(mod)) {
+            if (add && Modifier.isPublic(mod) && Modifier.isStatic(mod) && Modifier.isFinal(mod)) {
                 try {
                     Object value = field.get(null);
                     if (null != value) {
