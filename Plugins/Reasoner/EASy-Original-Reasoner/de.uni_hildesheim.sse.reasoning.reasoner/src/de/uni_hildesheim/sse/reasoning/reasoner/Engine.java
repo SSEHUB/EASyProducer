@@ -84,7 +84,7 @@ public class Engine {
         ProgressObserver observer) {
         this.project = project;
         this.reasoningID = PerformanceStatistics.createReasoningID(project.getName(), "Model validation");
-        this.resolver = new Resolver(project, cfg, reasonerConfig);
+        this.resolver = new Resolver(project, cfg, true, reasonerConfig);
         this.resolver.setIncremental(reasonerConfig.isRuntimeMode());
         this.result = new ReasoningResult();
         this.infoLogger = reasonerConfig.getLogger();

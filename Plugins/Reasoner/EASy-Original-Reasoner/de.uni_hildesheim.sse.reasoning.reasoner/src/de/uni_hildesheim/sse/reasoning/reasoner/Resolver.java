@@ -12,6 +12,7 @@ import de.uni_hildesheim.sse.model.confModel.AssignmentState;
 import de.uni_hildesheim.sse.model.confModel.CompoundVariable;
 import de.uni_hildesheim.sse.model.confModel.Configuration;
 import de.uni_hildesheim.sse.model.confModel.ConfigurationException;
+import de.uni_hildesheim.sse.model.confModel.IAssignmentState;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.model.cst.AttributeVariable;
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
@@ -48,6 +49,7 @@ import de.uni_hildesheim.sse.model.varModel.filter.ConstraintFinder;
 import de.uni_hildesheim.sse.model.varModel.filter.DeclarationFinder;
 import de.uni_hildesheim.sse.model.varModel.filter.DeclarationFinder.VisibilityType;
 import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
+import de.uni_hildesheim.sse.model.varModel.filter.VariablesInConstraintFinder;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
 import de.uni_hildesheim.sse.persistency.StringProvider;
 import de.uni_hildesheim.sse.reasoning.core.model.PerformanceStatistics;
@@ -99,6 +101,7 @@ public class Resolver {
     private List<Constraint> collectionConstraints;
     private List<Constraint> defaultConstraints;
     private List<Constraint> internalConstraints;
+    private boolean considerFrozenConstraints;
     
     private int constraintBaseSize = 0;
     private Set<Constraint> lastAdded = null;
@@ -179,8 +182,12 @@ public class Resolver {
      * @param config Configuration to reason on.
      * @param reasonerConfig the reasoner configuration to be used for reasoning (e.g. taken from the UI, 
      *        may be <b>null</b>)
+     * @param considerFrozenConstraints Specification whether constraints containing only frozen variables
+     *     shall be considered during reasoning (<tt>true</tt>: Shall be considered).
      */
-    public Resolver(Project project, Configuration config, ReasonerConfiguration reasonerConfig) {
+    public Resolver(Project project, Configuration config, boolean considerFrozenConstraints,
+        ReasonerConfiguration reasonerConfig) {
+        
         this.infoLogger = reasonerConfig.getLogger();
         this.config = config;
 //        evaluator = createEvaluationVisitor();
@@ -204,6 +211,7 @@ public class Resolver {
         this.incremental = false;
         this.problemVariables = new HashSet<IDecisionVariable>();
         this.internalConstraints = new ArrayList<Constraint>();
+        this.considerFrozenConstraints = considerFrozenConstraints;
     } 
     
     /**
@@ -213,7 +221,7 @@ public class Resolver {
      *        may be <b>null</b>)
      */
     public Resolver(Project project, ReasonerConfiguration reasonerConfig) {
-        new Resolver(project, createCleanConfiguration(project), reasonerConfig);        
+        new Resolver(project, createCleanConfiguration(project), true, reasonerConfig);        
     } 
     
     /**
@@ -223,7 +231,7 @@ public class Resolver {
      *        may be <b>null</b>)
      */
     public Resolver(Configuration config, ReasonerConfiguration reasonerConfig) {
-        new Resolver(config.getProject(), config, reasonerConfig);
+        new Resolver(config.getProject(), config, true, reasonerConfig);
     }  
     
     /**
@@ -702,6 +710,29 @@ public class Resolver {
     }
     
     /**
+     * Adds the constraints of <tt>constraintsToAdd</tt> to <tt>scopeConstraints</tt> while considering
+     * {@link #considerFrozenConstraints}.
+     * @param scopeConstraints The list of constraints for the current reasoning process
+     *     (will be changed as side effect).
+     * @param constraintsToAdd The constraints to be added to <tt>scopeConstraints</tt>.
+     */
+    private void addAllConstraints(List<Constraint> scopeConstraints, List<Constraint> constraintsToAdd) {
+        if (considerFrozenConstraints) {
+            scopeConstraints.addAll(constraintsToAdd);
+        } else {
+            for (int i = 0, n = constraintsToAdd.size(); i < n; i++) {
+                Constraint currentConstraint = constraintsToAdd.get(i);
+                VariablesInConstraintFinder finder = new VariablesInConstraintFinder(currentConstraint.getConsSyntax(),
+                    config);
+                Set<IAssignmentState> states = finder.getStates();
+                if (!(1 == states.size() && states.contains(AssignmentState.FROZEN))) {
+                    scopeConstraints.add(currentConstraint);
+                }
+            }
+        }
+    }
+    
+    /**
      * Part of the {@link #resolve()} method.
      * Processes all constraints.
      */
@@ -710,20 +741,15 @@ public class Resolver {
         if (!incremental) {
             if (defaultConstraints.size() > 0) {
                 defaultConstraints = transformConstraints(defaultConstraints, true);
-                scopeConstraints.addAll(defaultConstraints);
+                addAllConstraints(scopeConstraints, defaultConstraints);
             }            
         }
-//        for (int i = 0; i < project.getInternalConstraintCount(); i++) {
-//            scopeConstraints.add(project.getInternalConstraint(i));
-//        }
-//        System.out.println(project.getName() + ";" + project.getInternalConstraintCount() + ";");
         if (internalConstraints.size() > 0) {
             internalConstraints = transformConstraints(internalConstraints, false);
-            scopeConstraints.addAll(internalConstraints);
+            addAllConstraints(scopeConstraints, internalConstraints);
         }
-//        System.out.println(project.getName() + ";" + internalConstraints.size() + ";");
         ConstraintFinder finder = new ConstraintFinder(project, false);
-        scopeConstraints.addAll(finder.getConstraints());
+        addAllConstraints(scopeConstraints, finder.getConstraints());
         if (!incremental) {
             List<AttributeAssignment> scopeAttributes = new ArrayList<AttributeAssignment>();
             scopeAttributes = finder.getAttributeAssignments();

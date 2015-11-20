@@ -19,20 +19,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
-import de.uni_hildesheim.sse.model.cst.Comment;
 import de.uni_hildesheim.sse.model.cst.CompoundAccess;
-import de.uni_hildesheim.sse.model.cst.CompoundInitializer;
-import de.uni_hildesheim.sse.model.cst.ConstantValue;
 import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
-import de.uni_hildesheim.sse.model.cst.ContainerInitializer;
 import de.uni_hildesheim.sse.model.cst.ContainerOperationCall;
-import de.uni_hildesheim.sse.model.cst.IConstraintTreeVisitor;
-import de.uni_hildesheim.sse.model.cst.IfThen;
 import de.uni_hildesheim.sse.model.cst.Let;
-import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
-import de.uni_hildesheim.sse.model.cst.Parenthesis;
-import de.uni_hildesheim.sse.model.cst.Self;
-import de.uni_hildesheim.sse.model.cst.UnresolvedExpression;
 import de.uni_hildesheim.sse.model.cst.Variable;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 
@@ -41,7 +31,7 @@ import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
  * @author El-Sharkawy
  *
  */
-public class DeclrationInConstraintFinder implements IConstraintTreeVisitor {
+public class DeclrationInConstraintFinder extends AbstractVariableInConstraintFinder {
     
     private Set<AbstractVariable> declarations;
     
@@ -63,46 +53,15 @@ public class DeclrationInConstraintFinder implements IConstraintTreeVisitor {
     }
 
     @Override
-    public void visitConstantValue(ConstantValue value) {
-        // No function needed
-    }
-
-    @Override
     public void visitVariable(Variable variable) {
         declarations.add(variable.getVariable());
     }
 
-    @Override
-    public void visitParenthesis(Parenthesis parenthesis) {
-        parenthesis.getExpr().accept(this);
-    }
-
-    @Override
-    public void visitComment(Comment comment) {
-        comment.getExpr().accept(this);
-    }
-
-    @Override
-    public void visitOclFeatureCall(OCLFeatureCall call) {
-        if (null != call.getOperand()) { // user defined function!
-            call.getOperand().accept(this);
-        }
-        for (int i = 0; i < call.getParameterCount(); i++) {
-            call.getParameter(i).accept(this);
-        }
-    }
 
     @Override
     public void visitLet(Let let) {
         declarations.add(let.getVariable());
         let.getInExpression().accept(this);  
-    }
-
-    @Override
-    public void visitIfThen(IfThen ifThen) {
-        ifThen.getIfExpr().accept(this);
-        ifThen.getThenExpr().accept(this);
-        ifThen.getElseExpr().accept(this);        
     }
 
     @Override
@@ -125,26 +84,5 @@ public class DeclrationInConstraintFinder implements IConstraintTreeVisitor {
         }
         declarations.add(access.getResolvedSlot());
         access.getCompoundExpression().accept(this);
-    }
-
-    @Override
-    public void visitUnresolvedExpression(UnresolvedExpression expression) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void visitCompoundInitializer(CompoundInitializer initializer) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void visitContainerInitializer(ContainerInitializer initializer) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void visitSelf(Self self) {
-        // no variable declaration
-    }
-    
+    }    
 }
