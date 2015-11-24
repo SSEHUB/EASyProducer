@@ -49,7 +49,7 @@ import de.uni_hildesheim.sse.utils.modelManagement.VersionFormatException;
  *
  */
 class ModelLoader<Model extends IModel> {
-    private static final EASyLogger LOGGER = EASyLoggerFactory.INSTANCE.getLogger(Persistencer.class,
+    private static final EASyLogger LOGGER = EASyLoggerFactory.INSTANCE.getLogger(ModelLoader.class,
         Activator.PLUGIN_ID);
     
     
