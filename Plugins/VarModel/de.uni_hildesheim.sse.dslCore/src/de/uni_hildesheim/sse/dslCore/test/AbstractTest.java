@@ -54,7 +54,7 @@ public abstract class AbstractTest<R extends IModel> {
      * 
      * @return the actual directory as file
      */
-    protected static File determineTestDataDir(String property) {
+    public static File determineTestDataDir(String property) {
         File result;
         String externalLocation = System.getProperty(property);
         if (null == externalLocation) {
