@@ -1,0 +1,15 @@
+project FamilyCfg {
+  import Family;
+  import AlgorithmCfg;
+  
+  Family familyA = {name = "Family A", members = {refBy(algoA1), refBy(algoA2)}};
+  Family familyB = {name = "Family B", members = {refBy(algoB1), refBy(algoB2)}};
+  
+  families = {refBy(familyA), refBy(familyB)};
+  
+  freeze {
+    familyA;
+    familyB;
+    families;
+  }
+}

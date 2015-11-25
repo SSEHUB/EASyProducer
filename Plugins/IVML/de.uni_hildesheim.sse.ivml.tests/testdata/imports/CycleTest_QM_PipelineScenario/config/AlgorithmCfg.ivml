@@ -1,0 +1,31 @@
+project AlgorithmCfg {
+  import Algorithm;
+  import PipelineCfg;
+  
+  ClassicalAlgorithm algoA1 = {name = "ClassicalAlgorithm 1 of Family A"};
+  ClassicalAlgorithm algoA2 = {name = "ClassicalAlgorithm 2 of Family A"};
+  ClassicalAlgorithm algoB1 = {name = "ClassicalAlgorithm 1 of Family B"};
+  ClassicalAlgorithm algoB2 = {name = "ClassicalAlgorithm 2 of Family B"};
+ 
+  PipelineAlgorithm algoC = {
+    name = "Algorithm Pipeline",
+    subPipeline = refBy(pAlgorithm)
+  };
+  
+  algorithms = {
+    refBy(algoA1),
+    refBy(algoA2),
+    refBy(algoB1),
+    refBy(algoB2),
+    refBy(algoC)
+  };
+
+  freeze {
+    algoA1;
+    algoA2;
+    algoB1;
+    algoB2;
+    algoC;
+    algorithms;
+  }
+}

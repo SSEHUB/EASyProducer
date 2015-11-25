@@ -17,22 +17,27 @@ package test.de.uni_hildesheim.sse;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.ModelUtility;
 import de.uni_hildesheim.sse.model.management.VarModel;
+import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.ProjectImport;
 import de.uni_hildesheim.sse.model.varModel.filter.DeclarationFinder;
 import de.uni_hildesheim.sse.model.varModel.filter.DeclarationFinder.VisibilityType;
 import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
+import de.uni_hildesheim.sse.persistency.StringProvider;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
 
@@ -50,6 +55,7 @@ public class ImportTest extends AbstractTest {
     
     private static final File LOCATION_IMPORTS_WITH_2_PROJECTS = new File(DIR, "CycleTest_2Projects"); 
     private static final File LOCATION_CYCLING_DECLARATIONS = new File(DIR, "CycleTest_CyclingDeclarations"); 
+    private static final File LOCATION_QM_CYCLE_SCENARIO = new File(DIR, "CycleTest_QM_PipelineScenario"); 
     
     /**
      * Starts up the test overriding the parent method.
@@ -87,6 +93,12 @@ public class ImportTest extends AbstractTest {
         }
         try {
             VarModel.INSTANCE.locations().removeLocation(LOCATION_CYCLING_DECLARATIONS, OBSERVER);
+        } catch (ModelManagementException e) {
+            // Do not abort, print warning if any problems occur
+            e.printStackTrace();
+        }
+        try {
+            VarModel.INSTANCE.locations().removeLocation(LOCATION_QM_CYCLE_SCENARIO, OBSERVER);
         } catch (ModelManagementException e) {
             // Do not abort, print warning if any problems occur
             e.printStackTrace();
@@ -147,9 +159,50 @@ public class ImportTest extends AbstractTest {
         
         // Test whether all declarations could be resolved correctly
         DeclarationFinder finder = new DeclarationFinder(project, FilterType.ALL, null);
-//        List<AbstractVariable> delcarations = 
-        finder.getVariableDeclarations(VisibilityType.ALL);
-        // TODO
+        List<AbstractVariable> delcarations = finder.getVariableDeclarations(VisibilityType.ALL);
+        Assert.assertEquals("Not the expected number of declarations found.", 3, delcarations.size());
+        Set<String> foundDeclarations = new HashSet<String>();
+        Set<String> foundDefaults = new HashSet<String>();
+        for (AbstractVariable decl : delcarations) {
+            foundDeclarations.add(decl.getName());
+            foundDefaults.add(StringProvider.toIvmlString(decl.getDefaultValue()).trim());
+        }
+        Assert.assertEquals("Not the expected number of declaration named found.", 3, foundDeclarations.size());
+        Assert.assertEquals("Not the expected number of default values found.", 3, foundDefaults.size());
+        
+        // final test, test whether variable declarations and their default values where found.
+        assertVariable(foundDeclarations, foundDefaults, "varA", "ImportCycleTest_CyclingDeclarations_B::varB + 1");
+        assertVariable(foundDeclarations, foundDefaults, "varB", "1");
+        assertVariable(foundDeclarations, foundDefaults, "varC", "ImportCycleTest_CyclingDeclarations_A::varA + 1");
+    }
+
+    /**
+     * Helping method for {@link #testCyclingDeclarations()}, tests whether a expected declaration was found.
+     * @param foundDeclarations A set of all found declaration names.
+     * @param foundDefaults A set of all found defaults.
+     * @param varName A name which should be found
+     * @param defaultValue A default value which should be found (need not necessary to be associated
+     *     with the given variable name.
+     */
+    private void assertVariable(Set<String> foundDeclarations, Set<String> foundDefaults, String varName,
+        String defaultValue) {
+        
+        Assert.assertTrue("Error: variable \"" + varName + "\" not found.", foundDeclarations.contains(varName));
+        Assert.assertTrue("Default value of \"" + varName + "\" = \"" + defaultValue + "\" not found.",
+            foundDefaults.contains(defaultValue));
+    }
+    
+    /**
+     * Tests whether a cycle, like modeled in QM, can be loaded.
+     * Bug found by Cui Qin in autumn 2015.
+     */
+    @Ignore
+    @Test
+    public void testCycleQMScenario() {
+        addLocation(LOCATION_QM_CYCLE_SCENARIO);
+        
+        // Test: Try to load model
+        loadAndCheckProject("QM_PipelineScenario");
     }
 
     /**
