@@ -451,6 +451,14 @@ public class ArtifactModel {
      * Clears this artifact. For internal use only.
      */
     void clear() {
+        for (IFileSystemArtifact fa : fileArtifacts.values()) {
+            if (fa.isTemporary()) {
+                try {
+                    fa.delete();
+                } catch (VilException e) {
+                }
+            }
+        }
         fileArtifacts.clear();
         otherArtifacts.clear();
     }

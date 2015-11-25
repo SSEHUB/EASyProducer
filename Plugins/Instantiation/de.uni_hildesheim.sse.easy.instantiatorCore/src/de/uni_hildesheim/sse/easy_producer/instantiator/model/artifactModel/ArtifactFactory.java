@@ -83,6 +83,7 @@ public class ArtifactFactory {
     public static synchronized void release(ArtifactModel model) {
         initialize();
         MODELS.remove(model);
+        model.clear();
     }
     
     /**
