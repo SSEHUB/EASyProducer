@@ -18,6 +18,7 @@ import de.uni_hildesheim.sse.model.varModel.IModelElement;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.datatypes.BooleanType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
+import de.uni_hildesheim.sse.model.varModel.datatypes.Container;
 import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IntegerType;
@@ -92,6 +93,9 @@ public class IvmlTypeDescriptor extends AbstractIvmlTypeDescriptor {
                 }
             }
             addElements(comp, registry, fields);
+        }
+        if (Compound.TYPE.isAssignableFrom(ivmlType) || Container.TYPE.isAssignableFrom(ivmlType)) {
+            Utils.addOperation(new IvmlConstructorOperationDescriptor(this, ivmlType), operations);
         }
         setOperations(operations.values());
         setFields(fields.values());
