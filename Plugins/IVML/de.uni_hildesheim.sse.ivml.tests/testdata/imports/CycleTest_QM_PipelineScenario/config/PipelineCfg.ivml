@@ -1,0 +1,62 @@
+project PipelineCfg {
+  import Pipeline;
+  import FamilyCfg;
+
+  // Sources
+  Source src1 = {
+    name = "Source 1",
+    next = refBy(element1)
+  };
+  
+  Source srcAlgo = {
+    name = "Source of algorithm pipeline",
+    next = refBy(elementAlgo)
+  };
+  
+  // Elements
+  FamilyElement element1 = {
+    name = "Single element of 1. Pipeline",
+    next = refBy(snk1),
+    algorihtmFamily = refBy(familyA)
+  };
+  
+  FamilyElement elementAlgo = {
+    name = "Algorithm Pipeline",
+    next = refBy(snkAlgo),
+    algorihtmFamily = refBy(familyB)
+  };
+  
+  // Sinks
+  Sink snk1 = {
+    name = "Sink 1"
+  };
+  
+  Sink snkAlgo = {
+    name = "Sink of Algorithm"
+  };
+
+  // Complete Pipelines
+  Pipeline p1 = {
+    source = refBy(src1)
+  }
+  ;
+  Pipeline pAlgorithm = {
+    source = refBy(srcAlgo)
+  };
+  
+  // All Pipelines
+  pipelines = {refBy(p1), refBy(pAlgorithm)};
+  
+  freeze {
+    src1;
+    srcAlgo;
+    element1;
+    elementAlgo;
+    snk1;
+    snkAlgo;
+    p1;
+    pAlgorithm;
+    pipelines;
+  }
+
+}

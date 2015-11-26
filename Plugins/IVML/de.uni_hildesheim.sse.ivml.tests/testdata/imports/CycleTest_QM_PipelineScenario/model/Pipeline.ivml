@@ -1,0 +1,28 @@
+project Pipeline {
+  import Family;
+  
+  
+  compound Pipeline {
+    refTo(Source) source;
+  }
+
+  compound Source {
+    String name;
+    refTo(PipelineElement) next;
+  }
+  
+  abstract compound PipelineElement {
+    String name;
+  }
+  
+  compound Sink refines PipelineElement {
+    
+  }
+  
+  compound FamilyElement refines PipelineElement {
+    refTo(PipelineElement) next;
+    refTo(Family) algorihtmFamily;
+  }
+  
+  setOf(refTo(Pipeline)) pipelines;
+}

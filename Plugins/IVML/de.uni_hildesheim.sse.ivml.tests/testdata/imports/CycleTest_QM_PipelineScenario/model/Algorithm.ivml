@@ -1,0 +1,16 @@
+project Algorithm {
+  import Pipeline;
+  
+  abstract compound Algorithm {
+    String name;
+  }
+
+  compound ClassicalAlgorithm refines Algorithm {
+  }
+  
+  compound PipelineAlgorithm refines Algorithm {
+      refTo(Pipeline) subPipeline;  
+  }
+  
+  setOf(refTo(Algorithm)) algorithms;
+}

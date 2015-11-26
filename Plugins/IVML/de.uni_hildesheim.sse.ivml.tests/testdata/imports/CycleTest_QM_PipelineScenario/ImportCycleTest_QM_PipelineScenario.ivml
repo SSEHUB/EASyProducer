@@ -1,0 +1,6 @@
+project QM_PipelineScenario {
+
+    version v0;
+    import Pipeline;
+    import PipelineCfg;
+}

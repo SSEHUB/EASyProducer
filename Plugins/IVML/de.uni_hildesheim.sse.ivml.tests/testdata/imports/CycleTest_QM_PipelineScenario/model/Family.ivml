@@ -1,0 +1,10 @@
+project Family {
+  import Algorithm;
+  
+  compound Family {
+    String name;
+    setOf(refTo(Algorithm)) members;
+  }
+  
+  setOf(refTo(Family)) families;
+}
