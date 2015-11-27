@@ -48,12 +48,23 @@ public class DefaultImportResolver<M extends IModel> extends ImportResolver<M> {
     private final ModelInfo<M> conflictMarker = new ModelInfo<M>();
     // stores current models in resolution - overrides repository - allows cyclic imports
     private final Map<ModelInfo<M>, M> localModelOverride = new HashMap<ModelInfo<M>, M>();
+    private boolean allowCycles; // do not clear, specific to the model-dependent resolver
 
     /**
-     * Creates an resolver instance.
+     * Creates a resolver instance which, by default, does not allow cycles in the model imports.
      */
     public DefaultImportResolver() {
+        this(false);
+    }
+    
+    /**
+     * Creates a resolver instance which may allow cycles.
+     *  
+     * @param allowCycles if <code>true</code>, allow and resolve cycles, if <code>false</code> emit an error
+     */
+    public DefaultImportResolver(boolean allowCycles) {
         super();
+        this.allowCycles = allowCycles;
     }
     
     @Override
@@ -73,7 +84,9 @@ public class DefaultImportResolver<M extends IModel> extends ImportResolver<M> {
         HashSet<M> done = new HashSet<M>();
         List<ModelImport<M>> conflicts = resolveImports(context, done, messages);
         done.clear();
-        //checkImportCycles(model, messages, done); // conflicts with QM-Model... 
+        if (!allowCycles) {
+            checkImportCycles(model, messages, done);
+        }
         try {
             if ((null != conflicts) || null != context.getConflict(model)) {
                 messages.add(new Message("import conflict on model '" + model.getName() 
@@ -96,10 +109,9 @@ public class DefaultImportResolver<M extends IModel> extends ImportResolver<M> {
      *   if none (modified as a side effect)
      * @param done for detecting cyclic imports (modified as a side effect)
      */
-    @SuppressWarnings("unused")
     private void checkImportCycles(M model, List<IMessage> messages, Set<M> done) {
         if (done.contains(model)) {
-            messages.add(new Message("cyclic import of '" + model.getName() + "'", Status.ERROR));
+            messages.add(new Message("cyclic import of '" + model.getName() + "' is forbidden", Status.ERROR));
         } else {
             done.add(model);
             for (int i = 0; i < model.getImportsCount(); i++) {
@@ -432,16 +444,16 @@ public class DefaultImportResolver<M extends IModel> extends ImportResolver<M> {
             M found = localModelOverride.get(toLoad); // precedence to models in resolution
             if (null == found) {
                 found = toLoad.getResolved();
-                if (null == found || repository.isOutdated(toLoad)) { // do not use is actual here!
+                if ((null == found && isTransitiveLoadingEnabled()) || repository.isOutdated(toLoad)) {
                     if (!context.isLoop(toLoad)) {
                         found = repository.load(toLoad, this, messages);
                     } else {
-                        messages.add(new Message("model '" + imp.getName() 
+                        messages.add(new Message("Model '" + imp.getName() 
                             + "' cannot be resolved here due to errors in the imported model", 
                             Status.ERROR));                    
                     }
                 }
-            }
+            } 
             if (null != found) {
                 try {
                     if (checkImported(imp, found, messages)) {

@@ -179,7 +179,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
      * ensures the existence the structured comment for the project if required.
      * @param project the project to assign to
      * @param element the element to assign to
-     * @param comment the comment to be assinged
+     * @param comment the comment to be assigned
      */
     private void assignProjectComment(Project project, Object element, Comment comment) {
         StructuredComment sComment = project.getComments();
@@ -234,9 +234,10 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
         }
         ProjectContents contents = project.getContents();
         Utils.SplitResult splitRes = Utils.split(contents.getElements());
+        resolveImports(project, result, uri, inProgress, impResolver, false);
         processDefinitions(splitRes.getTypedefs(), splitRes.getVarDecls(), splitRes.getAttrAssignments(), 
             context, false);
-        resolveImports(project, result, uri, inProgress, impResolver);
+        resolveImports(project, result, uri, inProgress, impResolver, true);
         processDefinitions(splitRes.getTypedefs(), splitRes.getVarDecls(), splitRes.getAttrAssignments(), 
             context, true);
         if (null != splitRes.getAttrs()) {
@@ -278,9 +279,11 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
      * @param uri the physical URI of the project
      * @param inProgress the other projects being resolved at once (in order to avoid loops)
      * @param impResolver the import resolver to use (may be <b>null</b> to use a new default import resolver)
+     * @param transitiveLoading with or without transitive loading (false = lazy, true = force)
      */
     private void resolveImports(de.uni_hildesheim.sse.ivml.Project input, Project project, URI uri,
-            List<de.uni_hildesheim.sse.ivml.Project> inProgress, ImportResolver<Project> impResolver) {
+        List<de.uni_hildesheim.sse.ivml.Project> inProgress, ImportResolver<Project> impResolver, 
+        boolean transitiveLoading) {
         if (Utils.isImportResolutionEnabled()) { // as long as initialization for Editor is not final
             List<ModelInfo<Project>> infoInProgress = new ArrayList<ModelInfo<Project>>();
             AvailableModels<Project> available = VarModel.INSTANCE.availableModels();
@@ -303,7 +306,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
                 }
             }
             List<IMessage> resolutionMessages = VarModel.INSTANCE.resolveImports(project, uri, infoInProgress, 
-                impResolver);
+                impResolver, transitiveLoading);
             for (int i = 0; i < resolutionMessages.size(); i++) {
                 IMessage msg = resolutionMessages.get(i);
                 switch (msg.getStatus()) {
@@ -606,13 +609,13 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
             declsCount = declsToDo.size();
             assgnCount = assgnToDo.size();
             if (typesCount > 0) {
-                processTypedefs(typesToDo, context, false);
+                processTypedefs(typesToDo, context, force);
             }
             if (declsCount > 0) {
-                processVars(declsToDo, context, false);
+                processVars(declsToDo, context, force);
             }
             if (assgnCount > 0) {
-                processAttributeAssignments(assgnToDo, context, false);
+                processAttributeAssignments(assgnToDo, context, force);
             }
             if (typesCount == typesToDo.size()
                 && declsCount == declsToDo.size()
@@ -773,7 +776,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
             }
         }
     }
-
+    
     /**
      * Process variable declaration <code>decl</code> add IVML object model
      * instances to <code>project</code> or <code>compound</code>.

@@ -12,7 +12,6 @@ import de.uni_hildesheim.sse.ModelUtility;
 import de.uni_hildesheim.sse.model.management.VarModel;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelLocations;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelLocations.Location;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
 
@@ -50,11 +49,6 @@ public class HierarchicalTests extends AbstractTest {
      */
     @Test
     public void testCase1() {
-        ModelLocations<Project> knownLocations = VarModel.INSTANCE.locations();
-        for (int l = 0; l < knownLocations.getLocationCount(); l++) {
-            System.out.println(knownLocations.getLocation(l));
-        }
-        
         File base = new File(DIR, "case1");
         File pl0 = new File(base, "pl0/EASy");
         File pl1 = new File(base, "pl1/EASy");
