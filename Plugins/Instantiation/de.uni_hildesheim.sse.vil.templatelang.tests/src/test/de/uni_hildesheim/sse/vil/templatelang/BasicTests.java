@@ -435,6 +435,26 @@ public class BasicTests extends AbstractTest {
     }
     
     /**
+     * Tests an self-importing script (shall fail).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testImportCycle1() throws IOException {
+        assertEqual("importCycle1", "importCycle1", ErrorCodes.IMPORT);
+    }
+
+    /**
+     * Tests an import cycle (shall fail).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testImportCycle2() throws IOException {
+        assertEqual("importCycle2", "importCycle2", ErrorCodes.IMPORT);
+    }
+    
+    /**
      * Tests a recursive sub-template.
      * 
      * @throws IOException should not occur

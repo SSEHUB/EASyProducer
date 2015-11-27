@@ -38,7 +38,7 @@ class DefaultImportResolver extends de.uni_hildesheim.sse.utils.modelManagement.
      * Creates the resolver instance.
      */
     DefaultImportResolver() {
-        super();
+        super(true); // enable cycles
         EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID);
         logger.info("Model.DefaultImportResolver registered");            
     }

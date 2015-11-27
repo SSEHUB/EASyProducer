@@ -76,7 +76,7 @@ public abstract class ModelManagement <M extends IModel> {
     private ModelLoaders<M> loaders;
     private transient Set<ModelInfo<M>> loading = new HashSet<ModelInfo<M>>();
     private transient boolean inUpdate = false;
-    private Pool<ImportResolver<M>> resolverPool;
+    private Pool<ImportResolver<M>> resolverPool; // must not be static, as individual for each model type
 
     /**
      * Singleton.

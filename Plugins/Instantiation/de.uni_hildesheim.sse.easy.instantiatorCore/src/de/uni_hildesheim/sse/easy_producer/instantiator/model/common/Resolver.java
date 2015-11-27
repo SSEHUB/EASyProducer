@@ -1,5 +1,7 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.common;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Stack;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.AbstractCallExpression;
@@ -97,7 +99,7 @@ public abstract class Resolver<M extends IResolvableModel<V>, O extends IResolva
                 add(varDecl, qualifier);
             }
         }
-        addImportedVariables(model, "");
+        addImportedVariables(model, "", new HashSet<M>());
     }
     
     /**
@@ -105,21 +107,25 @@ public abstract class Resolver<M extends IResolvableModel<V>, O extends IResolva
      * 
      * @param model the model to add the variables for
      * @param path the qualified name path collected so far
+     * @param done already processed models (cycle prevention)
      */
-    private void addImportedVariables(M model, String path) {
-        for (int i = 0; i < model.getImportsCount(); i++) {
-            ModelImport<?> imp = model.getImport(i);
-            if (null != imp.getResolved()) {
-                @SuppressWarnings("unchecked")
-                M m = (M) imp.getResolved();
-                String tmp = path + imp.getName() + Constants.QUALIFICATION_SEPARATOR;
-                for (int v = 0; v < m.getVariableDeclarationCount(); v++) {
-                    V varDecl = m.getVariableDeclaration(v);
-                    if (!model.isImplicit(varDecl)) {
-                        add(varDecl, tmp);
+    private void addImportedVariables(M model, String path, Set<M> done) {
+        if (!done.contains(model)) {
+            done.add(model);
+            for (int i = 0; i < model.getImportsCount(); i++) {
+                ModelImport<?> imp = model.getImport(i);
+                if (null != imp.getResolved()) {
+                    @SuppressWarnings("unchecked")
+                    M m = (M) imp.getResolved();
+                    String tmp = path + imp.getName() + Constants.QUALIFICATION_SEPARATOR;
+                    for (int v = 0; v < m.getVariableDeclarationCount(); v++) {
+                        V varDecl = m.getVariableDeclaration(v);
+                        if (!model.isImplicit(varDecl)) {
+                            add(varDecl, tmp);
+                        }
                     }
+                    addImportedVariables(m, tmp, done);
                 }
-                addImportedVariables(m, tmp);
             }
         }
     }
