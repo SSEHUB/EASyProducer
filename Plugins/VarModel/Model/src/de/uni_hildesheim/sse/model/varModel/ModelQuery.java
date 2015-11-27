@@ -527,7 +527,7 @@ public class ModelQuery {
      * Performs final checks on accessing an imported interface.
      * @param scope the scope containing the interface being imported (may be <b>null</b>)
      * @param ispace the current state in resolving the namespace
-     * @param namespace the initial namespace (for error messages=
+     * @param namespace the initial namespace (for error messages)
      * @param project the containing project
      * @return <code>scope</code>
      * @throws ModelQueryException in case of interface access errors, i.e. <code>scope</code>

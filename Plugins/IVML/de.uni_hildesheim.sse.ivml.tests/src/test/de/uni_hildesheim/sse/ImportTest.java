@@ -26,7 +26,6 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.ModelUtility;
@@ -196,7 +195,6 @@ public class ImportTest extends AbstractTest {
      * Tests whether a cycle, like modeled in QM, can be loaded.
      * Bug found by Cui Qin in autumn 2015.
      */
-    @Ignore
     @Test
     public void testCycleQMScenario() {
         addLocation(LOCATION_QM_CYCLE_SCENARIO);

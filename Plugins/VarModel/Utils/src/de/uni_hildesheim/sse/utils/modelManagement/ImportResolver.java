@@ -27,12 +27,15 @@ import de.uni_hildesheim.sse.utils.messages.IMessage;
  * 
  * @author Holger Eichelberger
  */
-public abstract class ImportResolver<M extends IModel> { // once, this class had some implementation
+public abstract class ImportResolver<M extends IModel> {
 
+    private boolean transitiveLoading = true;
+    
     /**
      * Clears this instance for reuse.
      */
     public void clear() {
+        transitiveLoading = true; // back to default
     }
     
     /**
@@ -70,5 +73,27 @@ public abstract class ImportResolver<M extends IModel> { // once, this class had
     public abstract M resolve(String modelName, IVersionRestriction restriction, URI baseUri, 
         IModelRepository<M> repository, IRestrictionEvaluationContext evaluationContext) 
         throws ModelManagementException;
+    
+    /**
+     * Enables or disables transitive loading. By default, transitive loading is enabled, i.e., while resolution
+     * unknown models are loaded and resolved. If disabled, such models are not resolved at all. 
+     * 
+     * @param transitiveLoading whether transitive loading is enabled
+     * @return the value of the transitive loading before setting the value
+     */
+    public boolean setTransitiveLoading(boolean transitiveLoading) {
+        boolean old = this.transitiveLoading;
+        this.transitiveLoading = transitiveLoading;
+        return old;
+    }
+    
+    /**
+     * Returns whether transitive loading is enabled.
+     * 
+     * @return <code>true</code> if transitive loading is enabled, <code>false</code> else
+     */
+    public boolean isTransitiveLoadingEnabled() {
+        return transitiveLoading;
+    }
     
 }

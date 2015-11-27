@@ -417,9 +417,9 @@ public abstract class ModelManagement <M extends IModel> {
     public synchronized M getModel(int index) {
         return models.get(index);
     }
-
+    
     /**
-     * Resolves the imports of the given <code>model</code> and returns
+     * Resolves the imports of the given <code>model</code> with transitive loading and returns
      * messages on failures. Exceptions might be appropriate here but the
      * caller shall be able to decide how to handle the level of detail, i.e.
      * whether the first message shall be emitted or all. May modify <code>model</code>
@@ -433,7 +433,28 @@ public abstract class ModelManagement <M extends IModel> {
      * @return messages which occur during resolution, <code>null</code> or empty if none
      */
     public synchronized List<IMessage> resolveImports(M model, URI uri, List<ModelInfo<M>> inProgress) {
+        return resolveImports(model, uri, inProgress, true);
+    }
+
+    /**
+     * Resolves the imports of the given <code>model</code> and returns
+     * messages on failures. Exceptions might be appropriate here but the
+     * caller shall be able to decide how to handle the level of detail, i.e.
+     * whether the first message shall be emitted or all. May modify <code>model</code>
+     * as a side effect. This method uses a new default import resolver.
+     * 
+     * @param model the model to be resolved
+     * @param uri the URI of the model to resolve (in order to find the closest 
+     *   model, may be <b>null</b>)
+     * @param inProgress the model information objects of the models currently being 
+     *   processed at once (may be <b>null</b>)  
+     * @param transitiveLoading with or without transitive loading (see {@link ImportResolver})
+     * @return messages which occur during resolution, <code>null</code> or empty if none
+     */
+    public synchronized List<IMessage> resolveImports(M model, URI uri, List<ModelInfo<M>> inProgress, 
+        boolean transitiveLoading) {
         ImportResolver<M> resolver = getResolverFromPool();
+        resolver.setTransitiveLoading(transitiveLoading); // set back by release 
         List<IMessage> result = resolver.resolveImports(model, uri, inProgress, repository, 
             model.getRestrictionEvaluationContext());
         releaseResolver(resolver);
@@ -441,7 +462,7 @@ public abstract class ModelManagement <M extends IModel> {
     }
     
     /**
-     * Resolves the imports of the given <code>model</code> and returns
+     * Resolves the imports of the given <code>model</code> with transitive loading and returns
      * messages on failures. Exceptions might be appropriate here but the
      * caller shall be able to decide how to handle the level of detail, i.e.
      * whether the first message shall be emitted or all. May modify <code>model</code>
@@ -457,12 +478,35 @@ public abstract class ModelManagement <M extends IModel> {
      */
     public synchronized List<IMessage> resolveImports(M model, URI uri, List<ModelInfo<M>> inProgress, 
         ImportResolver<M> resolver) {
+        return resolveImports(model, uri, inProgress, resolver, true);
+    }
+    
+    /**
+     * Resolves the imports of the given <code>model</code> and returns
+     * messages on failures. Exceptions might be appropriate here but the
+     * caller shall be able to decide how to handle the level of detail, i.e.
+     * whether the first message shall be emitted or all. May modify <code>model</code>
+     * as a side effect.
+     * 
+     * @param model the model to be resolved
+     * @param uri the URI of the model to resolve (in order to find the closest 
+     *   model, may be <b>null</b>)
+     * @param inProgress the model information objects of the models currently being 
+     *   processed at once (may be <b>null</b>)
+     * @param resolver the import resolver (may be <b>null</b> to use a new default import resolver)
+     * @param transitiveLoading with or without transitive loading (see {@link ImportResolver})  
+     * @return messages which occur during resolution, <code>null</code> or empty if none
+     */
+    public synchronized List<IMessage> resolveImports(M model, URI uri, List<ModelInfo<M>> inProgress, 
+        ImportResolver<M> resolver, boolean transitiveLoading) {
         List<IMessage> result;
         if (null == resolver) {
-            result = resolveImports(model, uri, inProgress);
+            result = resolveImports(model, uri, inProgress, transitiveLoading);
         } else {
+            boolean old = resolver.setTransitiveLoading(transitiveLoading);
             result = resolver.resolveImports(model, uri, inProgress, repository, 
-            model.getRestrictionEvaluationContext());
+                model.getRestrictionEvaluationContext());
+            resolver.setTransitiveLoading(old);
         }
         return result;
     }

@@ -15,6 +15,7 @@ import de.uni_hildesheim.sse.ivml.OpDefStatement;
 import de.uni_hildesheim.sse.ivml.QualifiedName;
 import de.uni_hildesheim.sse.ivml.Typedef;
 import de.uni_hildesheim.sse.ivml.VariableDeclaration;
+import de.uni_hildesheim.sse.ivml.VariableDeclarationPart;
 import de.uni_hildesheim.sse.model.management.VarModel;
 
 /**
@@ -250,5 +251,23 @@ public class Utils {
     public static final boolean isImportResolutionEnabled() {
         return VarModel.INSTANCE.locations().getLocationCount() > 0;
     }
+    
+    /**
+     * Turns the declared variable names of the <code>varDecl</code> into a string. [debugging]
+     * 
+     * @param varDecl the variable declaration
+     * @return the names of the declared variables
+     */
+    public static String toString(VariableDeclaration varDecl) {
+        String result = "";
+        for (VariableDeclarationPart p : varDecl.getDecls()) {
+            if (result.length() > 0) {
+                result = result + ", ";
+            }
+            result = result + p.getName();
+        }
+        return result;
+    }
+
 
 }
