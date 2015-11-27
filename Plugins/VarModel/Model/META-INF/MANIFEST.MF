@@ -7,7 +7,8 @@ Import-Package: org.osgi.framework,
  org.osgi.service.log;version="1.3.0",
  org.osgi.util.tracker;version="1.5.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Export-Package: de.uni_hildesheim.sse.model,
+Export-Package: de.uni_hildesheim.sse.capabilities,
+ de.uni_hildesheim.sse.model,
  de.uni_hildesheim.sse.model.confModel,
  de.uni_hildesheim.sse.model.cst,
  de.uni_hildesheim.sse.model.cstEvaluation,
@@ -15,12 +16,12 @@ Export-Package: de.uni_hildesheim.sse.model,
  de.uni_hildesheim.sse.model.utils,
  de.uni_hildesheim.sse.model.validation,
  de.uni_hildesheim.sse.model.varModel,
+ de.uni_hildesheim.sse.model.varModel.copy,
  de.uni_hildesheim.sse.model.varModel.datatypes,
  de.uni_hildesheim.sse.model.varModel.filter,
  de.uni_hildesheim.sse.model.varModel.search,
  de.uni_hildesheim.sse.model.varModel.values,
- de.uni_hildesheim.sse.persistency,
- de.uni_hildesheim.sse.capabilities
+ de.uni_hildesheim.sse.persistency
 Bundle-Vendor: University of Hildesheim - SSE
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .

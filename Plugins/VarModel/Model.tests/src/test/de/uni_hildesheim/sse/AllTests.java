@@ -24,6 +24,7 @@ import de.uni_hildesheim.sse.varModel.PartialEvaluationBlockTest;
 import de.uni_hildesheim.sse.varModel.ProjectInfoTest;
 import de.uni_hildesheim.sse.varModel.ProjectInterfaceTest;
 import de.uni_hildesheim.sse.varModel.VersionTest;
+import de.uni_hildesheim.sse.varModel.copy.ProjectCopyVisitorTest;
 import de.uni_hildesheim.sse.varModel.datytypes.AttributeTest;
 import de.uni_hildesheim.sse.varModel.datytypes.BasisDatatypeTest;
 import de.uni_hildesheim.sse.varModel.datytypes.CompoundTest;
@@ -112,7 +113,8 @@ import de.uni_hildesheim.sse.varModel.versioning.ImportValidationTest;
     IvmlIdentifierCheckTest.class,
     IvmlValidationVisitorTest.class,
     TypeMapperTests.class,
-    CstEvaluationTests.class
+    CstEvaluationTests.class,
+    ProjectCopyVisitorTest.class
     })
 public class AllTests {
 
