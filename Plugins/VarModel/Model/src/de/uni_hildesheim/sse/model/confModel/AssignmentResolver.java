@@ -28,12 +28,15 @@ import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.datatypes.BooleanType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
+import de.uni_hildesheim.sse.model.varModel.datatypes.ConstraintType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 import de.uni_hildesheim.sse.model.varModel.filter.ConstraintFinder;
 import de.uni_hildesheim.sse.model.varModel.filter.DeclarationFinder;
 import de.uni_hildesheim.sse.model.varModel.filter.DeclarationFinder.VisibilityType;
 import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
+import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
+import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 
 /**
@@ -159,22 +162,33 @@ public class AssignmentResolver {
         
         ConstraintSyntaxTree defaultValue = decl.getDefaultValue();
         if (null != defaultValue) {
-            evaluator.init(config, AssignmentState.DEFAULT, false, null);
-            evaluator.visit(defaultValue);
-            if (evaluator.constraintFailed() && !(BooleanType.TYPE.isAssignableFrom(type))) {
-                conflictingDefault(decl);
+            if (type == ConstraintType.TYPE) {
+                try {
+                    Value value = ValueFactory.createValue(type, defaultValue);
+                    variable.setValue(value, AssignmentState.DEFAULT);
+                } catch (ConfigurationException e) {
+                    EASyLoggerFactory.INSTANCE.getLogger(AssignmentResolver.class, Bundle.ID).exception(e);
+                } catch (ValueDoesNotMatchTypeException e) {
+                    EASyLoggerFactory.INSTANCE.getLogger(AssignmentResolver.class, Bundle.ID).exception(e);
+                }
             } else {
-                Value value = evaluator.getResult();
-                if (null != value) {
-                    try {
-                        variable.setValue(value, AssignmentState.DEFAULT);
-                        valueResolved = true;
-                    } catch (ConfigurationException e) {
-                        EASyLoggerFactory.INSTANCE.getLogger(AssignmentResolver.class, Bundle.ID).exception(e);
+                evaluator.init(config, AssignmentState.DEFAULT, false, null);
+                evaluator.visit(defaultValue);
+                if (evaluator.constraintFailed() && !(BooleanType.TYPE.isAssignableFrom(type))) {
+                    conflictingDefault(decl);
+                } else {
+                    Value value = evaluator.getResult();
+                    if (null != value) {
+                        try {
+                            variable.setValue(value, AssignmentState.DEFAULT);
+                            valueResolved = true;
+                        } catch (ConfigurationException e) {
+                            EASyLoggerFactory.INSTANCE.getLogger(AssignmentResolver.class, Bundle.ID).exception(e);
+                        }
                     }
                 }
+                evaluator.clear();
             }
-            evaluator.clear();
         }
         
         return valueResolved;

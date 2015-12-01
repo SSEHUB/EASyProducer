@@ -29,13 +29,13 @@ import de.uni_hildesheim.sse.model.varModel.filter.DeclrationInConstraintFinder;
  * @author El-Sharkawy
  *
  */
-public class FrozenConstraintsOmitter extends AbstractFrozenChecker<Constraint> {
+public class FrozenConstraintsFilter extends AbstractFrozenChecker<Constraint> {
 
     /**
      * Default Constructor if a {@link Configuration} is available containing already derived and propagated variables.
      * @param config A already initialized {@link Configuration}.
      */
-    public FrozenConstraintsOmitter(Configuration config) {
+    public FrozenConstraintsFilter(Configuration config) {
         super(config);
     }
     
@@ -45,7 +45,7 @@ public class FrozenConstraintsOmitter extends AbstractFrozenChecker<Constraint> 
     }
 
     @Override
-    public ContainableModelElement handleModelElement(ContainableModelElement element) {
+    public ContainableModelElement handleModelElement(ContainableModelElement element, RewriteContext context) {
         Constraint constraint = (Constraint) element;
         DeclrationInConstraintFinder finder = new DeclrationInConstraintFinder(constraint.getConsSyntax());
         Set<AbstractVariable> vars = finder.getDeclarations();

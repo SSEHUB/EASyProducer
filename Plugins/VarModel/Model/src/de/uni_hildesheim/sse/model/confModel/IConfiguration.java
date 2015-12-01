@@ -12,10 +12,10 @@ import de.uni_hildesheim.sse.model.varModel.values.Value;
 public interface IConfiguration {
 
     /**
-     * Returns the specified {@link Variable}.
+     * Returns the specified {@link IDecisionVariable}.
      * 
      * @param declaration The declaration for which the configuration entity should be returned.
-     * @return The {@link Variable} for the given declaration
+     * @return The {@link IDecisionVariable} for the given declaration
      */
     public IDecisionVariable getDecision(AbstractVariable declaration);
     

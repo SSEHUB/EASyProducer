@@ -60,6 +60,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
     private Map<Class<? extends ModelElement>, List<IModelCopyModifier<?>>> modifiers;
     private Project currentProject;
     private Deque<Project> parentProjects;
+    private RewriteContext context;
     
     /**
      * Default constructor for this class.
@@ -70,6 +71,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
         super(originProject, filterType);
         modifiers = new HashMap<Class<? extends ModelElement>, List<IModelCopyModifier<?>>>();
         parentProjects = new ArrayDeque<Project>();
+        context = new RewriteContext();
     }
 
     /**
@@ -205,7 +207,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
         if (null != modifierList) {
             for (int i = 0, n = modifierList.size(); i < n && null != copy; i++) {
                 IModelCopyModifier<?> currentModifier = (IModelCopyModifier<?>) modifierList.get(i);
-                copy = currentModifier.handleModelElement(copy);
+                copy = currentModifier.handleModelElement(copy, context);
             }
         }
         
@@ -231,6 +233,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
     @Override
     public void visitProject(Project project) {
         currentProject = new Project(project.getName());
+        context.storeTranslatedProject(project, currentProject);
         super.visitProject(project);
         
     }

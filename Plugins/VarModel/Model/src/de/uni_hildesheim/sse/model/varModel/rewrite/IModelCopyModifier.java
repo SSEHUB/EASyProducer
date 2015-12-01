@@ -35,9 +35,10 @@ public interface IModelCopyModifier<M extends ContainableModelElement> {
     /**
      * Specification how to handle {@link ContainableModelElement}s. 
      * @param element A {@link ContainableModelElement} which may be modified by this class.
+     * @param context Knowledge of the current translation, comes from the {@link ProjectCopyVisitor}.
      * @return The modified element. Maybe the same instance as passed as parameter (if nothing should be changed) or
      * <tt>null</tt> if the element should be deleted.
      */
-    public ContainableModelElement handleModelElement(ContainableModelElement element);
+    public ContainableModelElement handleModelElement(ContainableModelElement element, RewriteContext context);
 
 }

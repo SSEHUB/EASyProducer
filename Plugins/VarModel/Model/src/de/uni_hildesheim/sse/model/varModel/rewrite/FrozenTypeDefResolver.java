@@ -52,12 +52,26 @@ public class FrozenTypeDefResolver extends AbstractFrozenChecker<DerivedDatatype
         for (int i = 0, n = tmpList.size(); i < n; i++) {
             AbstractVariable decl = tmpList.get(i);
             IDatatype dType = decl.getType();
-            List<AbstractVariable> declList = allTypeDefDeclarations.get(dType);
+            storeDeclaration(decl, dType);
+        }
+    }
+
+    /**
+     * Recursive function to store all (derived) instances of a given datatpe.
+     * @param decl A declaration to store
+     * @param type The type it belongs to (recusrive function will also find super classes).
+     */
+    private void storeDeclaration(AbstractVariable decl, IDatatype type) {
+        if (type instanceof DerivedDatatype) {
+            List<AbstractVariable> declList = allTypeDefDeclarations.get(type);
             if (null == declList) {
                 declList = new ArrayList<AbstractVariable>();
-                allTypeDefDeclarations.put(dType, declList);
+                allTypeDefDeclarations.put(type, declList);
             }
             declList.add(decl);
+            
+            IDatatype basisType = ((DerivedDatatype) type).getBasisType();
+            storeDeclaration(decl, basisType);
         }
     }
     
@@ -67,7 +81,7 @@ public class FrozenTypeDefResolver extends AbstractFrozenChecker<DerivedDatatype
     }
 
     @Override
-    public ContainableModelElement handleModelElement(ContainableModelElement element) {
+    public ContainableModelElement handleModelElement(ContainableModelElement element, RewriteContext context) {
         DerivedDatatype dType = (DerivedDatatype) element;
         if (typeDefIsFrozen(dType)) {
             dType.setConstraints(null);

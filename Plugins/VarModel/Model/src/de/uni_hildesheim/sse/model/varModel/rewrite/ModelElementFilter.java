@@ -23,7 +23,7 @@ import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
  * @author El-Sharkawy
  *
  */
-public class ModelElementOmitter implements IModelCopyModifier<ContainableModelElement> {
+public class ModelElementFilter implements IModelCopyModifier<ContainableModelElement> {
 
     private Class<? extends ContainableModelElement> ommitingClass;
     
@@ -32,7 +32,7 @@ public class ModelElementOmitter implements IModelCopyModifier<ContainableModelE
      * @param ommitingClass The sub class of {@link ContainableModelElement}, which shall be filtered while copying a
      * {@link de.uni_hildesheim.sse.model.varModel.Project}.
      */
-    public ModelElementOmitter(Class<? extends ContainableModelElement> ommitingClass) {
+    public ModelElementFilter(Class<? extends ContainableModelElement> ommitingClass) {
         this.ommitingClass = ommitingClass;
     }
     
@@ -42,7 +42,7 @@ public class ModelElementOmitter implements IModelCopyModifier<ContainableModelE
     }
 
     @Override
-    public ContainableModelElement handleModelElement(ContainableModelElement element) {
+    public ContainableModelElement handleModelElement(ContainableModelElement element, RewriteContext context) {
         return null;
     }
 

@@ -56,4 +56,14 @@ public abstract class AbstractFrozenChecker<M extends ContainableModelElement> i
 
         return isFrozen;
     }
+    
+    /**
+     * Returns the specified {@link IDecisionVariable}.
+     * 
+     * @param declaration The declaration for which the configuration entity should be returned.
+     * @return The {@link IDecisionVariable} for the given declaration
+     */
+    protected IDecisionVariable getVariable(AbstractVariable declaration) {
+        return config.getDecision(declaration);
+    }
 }

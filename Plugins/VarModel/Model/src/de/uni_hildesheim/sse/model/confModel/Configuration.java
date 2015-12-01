@@ -45,9 +45,10 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.Set;
 import de.uni_hildesheim.sse.model.varModel.datatypes.TypeQueries;
 import de.uni_hildesheim.sse.model.varModel.filter.DeclarationFinder;
 import de.uni_hildesheim.sse.model.varModel.filter.DeclarationFinder.VisibilityType;
-import de.uni_hildesheim.sse.model.varModel.rewrite.FrozenConstraintsOmitter;
+import de.uni_hildesheim.sse.model.varModel.rewrite.FrozenConstraintVarFilter;
+import de.uni_hildesheim.sse.model.varModel.rewrite.FrozenConstraintsFilter;
 import de.uni_hildesheim.sse.model.varModel.rewrite.FrozenTypeDefResolver;
-import de.uni_hildesheim.sse.model.varModel.rewrite.ModelElementOmitter;
+import de.uni_hildesheim.sse.model.varModel.rewrite.ModelElementFilter;
 import de.uni_hildesheim.sse.model.varModel.rewrite.ProjectCopyVisitor;
 import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
 import de.uni_hildesheim.sse.model.varModel.filter.FrozenElementsFinder;
@@ -832,9 +833,10 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
     public void prune() {
         VarModel.INSTANCE.events().removeModelListener(project, this);
         ProjectCopyVisitor copynator = new ProjectCopyVisitor(project, FilterType.ALL);
-        copynator.addModelCopyModifier(new ModelElementOmitter(Comment.class));
-        copynator.addModelCopyModifier(new FrozenConstraintsOmitter(this));
+        copynator.addModelCopyModifier(new ModelElementFilter(Comment.class));
+        copynator.addModelCopyModifier(new FrozenConstraintsFilter(this));
         copynator.addModelCopyModifier(new FrozenTypeDefResolver(this));
+        copynator.addModelCopyModifier(new FrozenConstraintVarFilter(this));
         project.accept(copynator);
         project = copynator.getCopyiedProject();
     }
