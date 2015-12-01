@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.uni_hildesheim.sse.model.varModel.copy;
+package de.uni_hildesheim.sse.model.varModel.rewrite;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -91,7 +91,12 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
 
     /**
      * Returns the copied and modified {@link Project} after the visiting method of the project was called.
-     * {@link Project#accept(de.uni_hildesheim.sse.model.varModel.IModelVisitor)} must be called before.
+     * {@link Project#accept(de.uni_hildesheim.sse.model.varModel.IModelVisitor)} must be called before.<br/>
+     * <b><font color="red">Attention:</font></b> This method creates a modified, shallow copy of the visited project.
+     * Thus, the original project becomes invalid through this visitation. This visitor should only be used if the
+     * original is no longer needed, e.g., for performance tweaks in a automated setup which does not save any data.
+     * <br/>
+     * <b>FIXME SE:</b> Create a deep copy if a real copy mechanism is needed.
      * @return The copied and modified version of the given {@link Project}.
      */
     public Project getCopyiedProject() {
@@ -205,12 +210,24 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
         }
         
         if (null != copy) {
-            // Parent must be adjusted to the new parent, otherwise the resulting project would not be valid.
+            /*
+             * Parent must be adjusted to the new parent, otherwise the resulting project would not be valid.
+             * FIXME SE: Currently, this Visitor is producing only a shallow copy. Therefore, the originally project
+             * won't be valid after adjusting the elements for the newly created project.
+             */
             copy.setParent(currentProject);
             currentProject.add(copy);
         }
     }
     
+    /**
+     * {@inheritDoc} <br/>
+     * <b><font color="red">Attention:</font></b> This method creates a modified, shallow copy of the visited project.
+     * Thus, the original project becomes invalid through this visitation. This visitor should only be used if the
+     * original is no longer needed, e.g., for performance tweaks in a automated setup which does not save any data.
+     * <br/>
+     * <b>FIXME SE:</b> Create a deep copy if a real copy mechanism is needed.
+     */
     @Override
     public void visitProject(Project project) {
         currentProject = new Project(project.getName());

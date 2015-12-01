@@ -13,17 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.uni_hildesheim.sse.model.varModel.copy;
+package de.uni_hildesheim.sse.model.varModel.rewrite;
 
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import de.uni_hildesheim.sse.model.confModel.Configuration;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
-import de.uni_hildesheim.sse.model.varModel.IFreezable;
 import de.uni_hildesheim.sse.model.varModel.filter.DeclrationInConstraintFinder;
 
 /**
@@ -31,17 +29,14 @@ import de.uni_hildesheim.sse.model.varModel.filter.DeclrationInConstraintFinder;
  * @author El-Sharkawy
  *
  */
-public class FrozenConstraintsOmitter implements IModelCopyModifier<Constraint> {
+public class FrozenConstraintsOmitter extends AbstractFrozenChecker<Constraint> {
 
-    private Set<IFreezable> frozenElements;
-    
     /**
-     * Default constructor for this class.
-     * @param frozenElements A list of already frozen variables (also of imported projects).
-     * @see de.uni_hildesheim.sse.model.varModel.filter.FrozenElementsFinder
+     * Default Constructor if a {@link Configuration} is available containing already derived and propagated variables.
+     * @param config A already initialized {@link Configuration}.
      */
-    public FrozenConstraintsOmitter(Collection<IFreezable> frozenElements) {
-        this.frozenElements = new HashSet<IFreezable>(frozenElements);
+    public FrozenConstraintsOmitter(Configuration config) {
+        super(config);
     }
     
     @Override
@@ -61,17 +56,13 @@ public class FrozenConstraintsOmitter implements IModelCopyModifier<Constraint> 
             Iterator<AbstractVariable> itr = vars.iterator();
             while (containsOnlyFrozen && itr.hasNext()) {
                 AbstractVariable declaration = itr.next();
-                containsOnlyFrozen = frozenElements.contains(declaration);
+                containsOnlyFrozen = isFrozen(declaration);
             }
         }
-        
         
         if (containsOnlyFrozen) {
             constraint = null;
         }
         return constraint;
     }
-    
-    
-
 }

@@ -31,6 +31,7 @@ import de.uni_hildesheim.sse.model.management.VarModel;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.Attribute;
 import de.uni_hildesheim.sse.model.varModel.AttributeAssignment;
+import de.uni_hildesheim.sse.model.varModel.Comment;
 import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
 import de.uni_hildesheim.sse.model.varModel.ICollectionElementVariable;
 import de.uni_hildesheim.sse.model.varModel.IFreezable;
@@ -44,6 +45,10 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.Set;
 import de.uni_hildesheim.sse.model.varModel.datatypes.TypeQueries;
 import de.uni_hildesheim.sse.model.varModel.filter.DeclarationFinder;
 import de.uni_hildesheim.sse.model.varModel.filter.DeclarationFinder.VisibilityType;
+import de.uni_hildesheim.sse.model.varModel.rewrite.FrozenConstraintsOmitter;
+import de.uni_hildesheim.sse.model.varModel.rewrite.FrozenTypeDefResolver;
+import de.uni_hildesheim.sse.model.varModel.rewrite.ModelElementOmitter;
+import de.uni_hildesheim.sse.model.varModel.rewrite.ProjectCopyVisitor;
 import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
 import de.uni_hildesheim.sse.model.varModel.filter.FrozenElementsFinder;
 import de.uni_hildesheim.sse.model.varModel.values.NullValue;
@@ -815,4 +820,22 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
         }
     }
 
+    /**
+     * Reduces the underlying {@link Project} and removes elements which are not needed for a runtime reasoning,
+     * e.g., constraints containing only frozen variables or comments.<br/>
+     * <b><font color="red">Attention:</font></b> This method creates a modified, shallow copy of the visited project.
+     * Thus, the original project becomes invalid through this visitation. This visitor should only be used if the
+     * original is no longer needed, e.g., for performance tweaks in a automated setup which does not save any data.
+     * <br/>
+     * <b>FIXME SE:</b> Create a deep copy if a real copy mechanism is needed.
+     */
+    public void prune() {
+        VarModel.INSTANCE.events().removeModelListener(project, this);
+        ProjectCopyVisitor copynator = new ProjectCopyVisitor(project, FilterType.ALL);
+        copynator.addModelCopyModifier(new ModelElementOmitter(Comment.class));
+        copynator.addModelCopyModifier(new FrozenConstraintsOmitter(this));
+        copynator.addModelCopyModifier(new FrozenTypeDefResolver(this));
+        project.accept(copynator);
+        project = copynator.getCopyiedProject();
+    }
 }

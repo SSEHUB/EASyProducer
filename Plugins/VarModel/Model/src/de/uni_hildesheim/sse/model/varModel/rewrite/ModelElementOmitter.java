@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.uni_hildesheim.sse.model.varModel.copy;
+package de.uni_hildesheim.sse.model.varModel.rewrite;
 
 import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
 

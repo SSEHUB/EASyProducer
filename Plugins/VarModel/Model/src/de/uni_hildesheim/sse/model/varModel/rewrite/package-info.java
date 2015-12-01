@@ -16,4 +16,4 @@
 /**
  * Classes for creating an (adapted) copy of the {@link de.uni_hildesheim.sse.model.varModel.Project}.
  */
-package de.uni_hildesheim.sse.model.varModel.copy;
+package de.uni_hildesheim.sse.model.varModel.rewrite;

@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.uni_hildesheim.sse.varModel.copy;
+package de.uni_hildesheim.sse.varModel.rewrite;
 
 import org.junit.Assert;
 import org.junit.Test;
 
+import de.uni_hildesheim.sse.model.confModel.Configuration;
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
 import de.uni_hildesheim.sse.model.cst.ConstantValue;
 import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
@@ -30,13 +31,14 @@ import de.uni_hildesheim.sse.model.varModel.FreezeBlock;
 import de.uni_hildesheim.sse.model.varModel.IFreezable;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.ProjectImport;
-import de.uni_hildesheim.sse.model.varModel.copy.FrozenConstraintsOmitter;
-import de.uni_hildesheim.sse.model.varModel.copy.ModelElementOmitter;
-import de.uni_hildesheim.sse.model.varModel.copy.ProjectCopyVisitor;
+import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IntegerType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
 import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
-import de.uni_hildesheim.sse.model.varModel.filter.FrozenElementsFinder;
+import de.uni_hildesheim.sse.model.varModel.rewrite.FrozenConstraintsOmitter;
+import de.uni_hildesheim.sse.model.varModel.rewrite.FrozenTypeDefResolver;
+import de.uni_hildesheim.sse.model.varModel.rewrite.ModelElementOmitter;
+import de.uni_hildesheim.sse.model.varModel.rewrite.ProjectCopyVisitor;
 import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
 import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
 import de.uni_hildesheim.sse.persistency.StringProvider;
@@ -107,11 +109,11 @@ public class ProjectCopyVisitorTest {
         p.add(new FreezeBlock(new IFreezable[] {declA}, null, null, p));
         // Project should be valid        
         ProjectTestUtilities.validateProject(p);
+        Configuration config = new Configuration(p);
         
         // Create copy while omitting "frozen" constraints
         ProjectCopyVisitor copynator = new ProjectCopyVisitor(p, FilterType.NO_IMPORTS);
-        FrozenElementsFinder finder = new FrozenElementsFinder(p, FilterType.ALL);
-        FrozenConstraintsOmitter ommiter = new FrozenConstraintsOmitter(finder.getFrozenElements());
+        FrozenConstraintsOmitter ommiter = new FrozenConstraintsOmitter(config);
         copynator.addModelCopyModifier(ommiter);
         p.accept(copynator);
         Project copy = copynator.getCopyiedProject();
@@ -180,6 +182,7 @@ public class ProjectCopyVisitorTest {
         p.add(constraint);
         ProjectTestUtilities.validateProject(p);
         
+        // Create copy
         ProjectCopyVisitor copynator = new ProjectCopyVisitor(p, FilterType.ALL);
         p.accept(copynator);
         Project copy = copynator.getCopyiedProject();
@@ -188,6 +191,58 @@ public class ProjectCopyVisitorTest {
         Project importedCopy = assertProjectImport(p, copy);
         assertProjectContainment(copy, constraint, true, 1);
         assertProjectContainment(importedCopy, decl, true, 1);
+    }
+    
+    /**
+     * Tests whether constraints of {@link DerivedDatatype}s are removed if all instances are frozen.
+     *  @throws ValueDoesNotMatchTypeException Must not occur, otherwise the {@link ValueFactory} or
+     * {@link de.uni_hildesheim.sse.model.varModel.AbstractVariable#setValue(String)} are broken.
+     * @throws CSTSemanticException Must not occur, otherwise
+     */
+    @Test
+    public void testResolveFrozenTypeDefs() throws ValueDoesNotMatchTypeException, CSTSemanticException {
+        // Create original project with a typedef and a frozen declaration.
+        Project p = new Project("testProject");
+        ConstantValue zero = new ConstantValue(ValueFactory.createValue(IntegerType.TYPE, 0));
+        // Create first typeDef with declaration and freeze it
+        DerivedDatatype dType1 = new DerivedDatatype("posInteger1", IntegerType.TYPE, p);
+        Variable constraintVar1 = new Variable(dType1.getTypeDeclaration());
+        OCLFeatureCall comparison1 = new OCLFeatureCall(constraintVar1, OclKeyWords.GREATER, zero);
+        Constraint dTypeConstraint1 = new Constraint(dType1);
+        dTypeConstraint1.setConsSyntax(comparison1);
+        dType1.setConstraints(new Constraint[] {dTypeConstraint1});
+        DecisionVariableDeclaration decl1 = new DecisionVariableDeclaration("declA", dType1, p);
+        decl1.setValue("42");
+        p.add(dType1);
+        p.add(decl1);
+        // Create second typeDef with declaration and do not freeze it
+        DerivedDatatype dType2 = new DerivedDatatype("posInteger2", IntegerType.TYPE, p);
+        Variable constraintVar2 = new Variable(dType2.getTypeDeclaration());
+        OCLFeatureCall comparison2 = new OCLFeatureCall(constraintVar2, OclKeyWords.GREATER, zero);
+        Constraint dTypeConstraint2 = new Constraint(dType2);
+        dTypeConstraint2.setConsSyntax(comparison2);
+        dType2.setConstraints(new Constraint[] {dTypeConstraint2});
+        DecisionVariableDeclaration decl2 = new DecisionVariableDeclaration("declB", dType2, p);
+        decl2.setValue("21");
+        p.add(dType2);
+        p.add(decl2);
+        // Project should be valid
+        p.add(new FreezeBlock(new IFreezable[] {decl1}, null, null, p));
+        ProjectTestUtilities.validateProject(p);
+        Configuration config = new Configuration(p);
+        
+        // Create copy
+        ProjectCopyVisitor copynator = new ProjectCopyVisitor(p, FilterType.ALL);
+        copynator.addModelCopyModifier(new FrozenTypeDefResolver(config));
+        p.accept(copynator);
+        Project copy = copynator.getCopyiedProject();
+        ProjectTestUtilities.validateProject(copy);
+        
+        DerivedDatatype copiedType1 = (DerivedDatatype) copy.getElement(0);
+        DerivedDatatype copiedType2 = (DerivedDatatype) copy.getElement(2);
+        Assert.assertEquals("Error: Frozen \"posInteger1\" not resolved.", 0, copiedType1.getConstraintCount());
+        Assert.assertEquals("Error: Unfrozen \"posInteger2\" resolved, but should not.", 1,
+            copiedType2.getConstraintCount());
     }
 
     /**
