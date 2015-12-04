@@ -109,11 +109,13 @@
 	
 	<target name="dist" depends="jar">
 		<copy todir="${build.jar.dir}">
-			<fileset dir="${resources.external.dir}" includes="**/*"/>      
+			<fileset dir="${resources.external.dir}" includes="**/*"/>
+    </copy>
+		<copy todir="${build.jar.dir}/task">
 			<fileset dir="${lib.dir}" includes="**/*.jar">
             <exclude name="ant-1.8.4.jar"/>
 			</fileset>
-      </copy>
+    </copy>
 		<zip destfile="${build.base.dir}/${ant.project.name}.zip" basedir="${build.jar.dir}"/>
 	</target>
 	
