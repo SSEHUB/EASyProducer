@@ -161,6 +161,11 @@ public class ModelCopy extends Task {
     
     @Override
     public void execute() throws BuildException {
+        // Print debug data
+        System.out.println("Source folder: " + sourceFolder.getAbsolutePath());
+        System.out.println("Destination folder: " + destinationFolder.getAbsolutePath());
+        System.out.println("Main model: " + mainProject);
+        
         boolean createFolder = false;
         if (destinationFolder.exists() && allowDestDeletion) {
             try {
@@ -195,8 +200,8 @@ public class ModelCopy extends Task {
                     + sourceFolder.getAbsolutePath() + "\" to \"" + destinationFolder.getAbsolutePath()
                     + "\". Cause: " + e.getMessage());
             } else {
-                throw new BuildException("Error during copying models from \"" + sourceFolder.getAbsolutePath()
-                    + "\" to \"" + destinationFolder.getAbsolutePath() + "\". Cause: " + e.getMessage());
+                throw new BuildException("Unspecified error during copying models from \""
+                    + sourceFolder.getAbsolutePath() + "\" to \"" + destinationFolder.getAbsolutePath() + "\". Cause: " + e.getMessage());
             }
         }
     }

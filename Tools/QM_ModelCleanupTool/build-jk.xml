@@ -118,7 +118,7 @@
     </copy>
 		<zip destfile="${build.base.dir}/${ant.project.name}.zip" basedir="${build.jar.dir}"/>
 	</target>
-	
+	<move file="${build.jar.dir}/${ant.project.name}.jar" todir="${build.jar.dir}/task"/>
 	<target name="all">
 	   <antcall target="compile"/>
 	   <antcall target="test"/>
