@@ -77,22 +77,18 @@
     </javac>
 		
 		<jacoco:coverage destfile="${junitResults.dir}/jacoco.exec" includes="de.uni_hildesheim.sse.easy.ant.modelcopy.*">
-  		<junit fork="yes" printsummary="off" haltonfailure="off">
-  		  <classpath refid="includes" />
-  		  <classpath refid="junit" />
-  		  <classpath>
-  		    <pathelement location="${build.testclasses.dir}"/>
-  		  </classpath>
+      <junit fork="true" forkmode="once" printsummary="off" haltonfailure="off">
+        <classpath refid="includes" />
+        <classpath refid="junit" />
+        <classpath>
+          <pathelement location="${build.testclasses.dir}"/>
+        </classpath>
   
-  		  <formatter type="xml"/>
+        <formatter type="xml"/>
   
-  		  <batchtest fork="yes" todir="${junitResults.dir}">
-  		    <fileset dir="${test.dir}">
-  		      <include name="**/ModelCopyTest.java"/>
-  		    </fileset>
-  		  </batchtest>
-  		</junit>
-		</jacoco:coverage>
+      	<test name="de.uni_hildesheim.sse.easy.ant.modelcopy.ModelCopyTest" todir="${junitResults.dir}"/>
+      </junit>
+    </jacoco:coverage>
 		
     <jacoco:report>                
         <executiondata>
