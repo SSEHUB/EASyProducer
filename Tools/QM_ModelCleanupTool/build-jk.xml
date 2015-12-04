@@ -116,9 +116,10 @@
             <exclude name="ant-1.8.4.jar"/>
 			</fileset>
     </copy>
+	  <move file="${build.jar.dir}/${ant.project.name}.jar" todir="${build.jar.dir}/task"/>
 		<zip destfile="${build.base.dir}/${ant.project.name}.zip" basedir="${build.jar.dir}"/>
 	</target>
-	<move file="${build.jar.dir}/${ant.project.name}.jar" todir="${build.jar.dir}/task"/>
+
 	<target name="all">
 	   <antcall target="compile"/>
 	   <antcall target="test"/>
