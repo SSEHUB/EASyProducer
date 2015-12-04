@@ -9,6 +9,7 @@ import de.uni_hildesheim.sse.easy.java.artifacts.JavaAttribute;
 import de.uni_hildesheim.sse.easy.java.artifacts.JavaCall;
 import de.uni_hildesheim.sse.easy.java.artifacts.JavaClass;
 import de.uni_hildesheim.sse.easy.java.artifacts.JavaFileArtifact;
+import de.uni_hildesheim.sse.easy.java.artifacts.JavaImport;
 import de.uni_hildesheim.sse.easy.java.artifacts.JavaMethod;
 import de.uni_hildesheim.sse.easy.java.instantiators.CocktailInstantiator;
 import de.uni_hildesheim.sse.easy.java.instantiators.Jar;
@@ -49,6 +50,7 @@ public class Registration implements IRegistration {
             TypeRegistry.DEFAULT.register(JavaAssignment.class);
             SettingsInitializerRegistry.register(new JavaSettingsInitializer());
             TypeRegistry.DEFAULT.register(JavaSettings.class);
+            TypeRegistry.DEFAULT.register(JavaImport.class);
         }
     }
     

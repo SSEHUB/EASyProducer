@@ -55,6 +55,8 @@ public class JavaAttribute extends JavaParentFragmentArtifact {
     public void delete() throws VilException {
         fieldDeclaration.delete();
         super.delete();
+        store();
+        notifyChanged();
     }
 
     @Override

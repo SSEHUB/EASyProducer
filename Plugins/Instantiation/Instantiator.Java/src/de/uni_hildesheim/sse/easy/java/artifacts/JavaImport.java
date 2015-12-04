@@ -67,5 +67,13 @@ public class JavaImport extends JavaParentFragmentArtifact {
     public ArtifactModel getArtifactModel() {
         return getParent().getArtifactModel();
     }
+    
+    @Override
+    public void delete() throws VilException {
+        importDeclaration.delete();
+        super.delete();
+        store();
+        notifyChanged();
+    }
 
 }

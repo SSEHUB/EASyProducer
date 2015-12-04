@@ -110,6 +110,7 @@ public class JavaMethod extends JavaParentFragmentArtifact {
      * @throws VilException
      *             in case something goes wrong
      */
+    @Invisible
     public void deleteStatement(ExpressionEvaluator evaluator) throws VilException {
         // Check if type is JavaCall
         TypeDescriptor<?> obj = evaluator.getIteratorVariable().getType();
@@ -126,6 +127,7 @@ public class JavaMethod extends JavaParentFragmentArtifact {
                 if (null != object && object instanceof Boolean && Boolean.TRUE == ((Boolean) object).booleanValue()) {
                     statement.delete();
                     notifyChanged();
+                    store();
                 }
             }
         }

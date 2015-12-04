@@ -1,0 +1,9 @@
+project RemoveLogs {
+
+	version v0;
+	Boolean withLogs;
+	withLogs = true;
+	freeze {
+		withLogs;
+	}
+}

@@ -33,6 +33,7 @@ import org.eclipse.text.edits.MalformedTreeException;
 import org.eclipse.text.edits.TextEdit;
 
 import de.uni_hildesheim.sse.easy.java.JavaSettings;
+import de.uni_hildesheim.sse.easy.java.JavaSettingsInitializer;
 import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
 import de.uni_hildesheim.sse.easy_producer.instantiator.JavaUtilities;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactCreator;
@@ -355,13 +356,13 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
             Object classPathFromScript = getArtifactModel().getSettings(JavaSettings.CLASSPATH);
             if (null != classPathFromScript) {
                 isClasspathFromScript = true;
-                sourcePath = determineClasspath(classPathFromScript);
+                sourcePath = JavaSettingsInitializer.determineClasspath(classPathFromScript);
             } else {
                 // if no classpath is given via VIL
-                sourcePath = determineClasspath(null);
+                sourcePath = JavaSettingsInitializer.determineClasspath(null);
             }
         } else {
-            sourcePath = determineClasspath(null);
+            sourcePath = JavaSettingsInitializer.determineClasspath(null);
         }
         // WORKAROUND! FIX IT!
         if (sourcePath.contains("//")) {
@@ -395,54 +396,6 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
         unitNode.recordModifications();
     }
     
-    /**
-     * Determines the classpath. A given classpath via VIL will be parsed accordingly.
-     * 
-     * @param classpath classpath object
-     * @return classpath as string
-     */
-    private String determineClasspath(Object classpath) {
-        // In case the classpath is set via VIL
-        String result = null;
-        if (null != classpath) {
-            if (classpath instanceof String) {
-                result = String.valueOf(classpath);
-            } else if (classpath instanceof Set<?>) {
-                Set<?> classpathSet = (Set<?>) classpath;
-                String tmpClasspath = "";
-                int parameterCount = classpathSet.getGenericParameterCount();
-                TypeDescriptor<?> typeDescriptorSet = classpathSet.getGenericParameterType(parameterCount - 1);
-                TypeDescriptor<?> typeDescriptorParameter = typeDescriptorSet.getGenericParameterType(
-                    typeDescriptorSet.getGenericParameterCount() - 1);
-                for (Iterator<?> iterator = classpathSet.iterator(); iterator.hasNext();) {
-                    // Validate String; if file does not exists it won't be added to the classpath
-                    if (TypeRegistry.stringType().isSame(typeDescriptorParameter)) {
-                        String string = (String) iterator.next();
-                        File file = new File(string);
-                        if (file.exists()) {
-                            tmpClasspath += string + File.pathSeparatorChar;
-                        }
-                    } else if (typeDescriptorParameter.isSame(TypeRegistry.DEFAULT.findType(Path.class))) {
-                        // Path
-                        Path path = (Path) iterator.next();
-                        if (path.exists()) {
-                            tmpClasspath += path.getAbsolutePath().getAbsolutePath() + File.pathSeparatorChar;
-                        }
-                    } else {
-                        // fallback: do nothing
-                        iterator.next();
-                    }
-                }
-                result = tmpClasspath;
-            }
-        } else {
-            // Get the classpath from eclipse
-            String systemClasspath = System.getProperty("java.class.path");
-            result = systemClasspath;
-        }
-        return result;
-    }
-
     /**
      * Reads a file to String.
      * 
@@ -490,6 +443,7 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
      * @return all imports
      */
     @SuppressWarnings("unchecked")
+    @OperationMeta(returnGenerics = JavaImport.class)
     public Set<JavaImport> imports() {
         if (null == unitNode) {
             initialize();
