@@ -2,7 +2,7 @@ project Reasoner {
 
 	version v0;
 	Boolean withLogs;
-	withLogs = true;
+	withLogs = false;
 	freeze {
 		withLogs;
 	}
