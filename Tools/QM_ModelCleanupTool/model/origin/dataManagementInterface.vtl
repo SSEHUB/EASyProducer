@@ -1,0 +1,73 @@
+import commonVTLMethods;
+@advice(QM)
+template dataManagementInterface(Configuration config, FileArtifact target, DecisionVariable elt) {
+	def main(Configuration config, FileArtifact target, DecisionVariable elt) {
+		String dName = elt.varName().firstToUpperCase();
+		String idName = "I" + dName;
+		PersistentDataElement de = elt;   
+	
+		'package eu.qualimaster.data.inf;'
+    	''
+    	'/**'
+    	' * Defines the interface for the datamanagement node "${idName}" (GEN).'
+    	' */'
+    	'public interface ${toIdentifier(idName)} {'
+    	''   	
+    	produceForTuples(elt.byName("input"), false, idName, 4);
+    	produceForTuples(elt.byName("input"), true, idName, 4);	
+    	'}'	
+	}
+    
+    def produceForTuples(DecisionVariable tuples, Boolean output, String fName, Integer indent) {
+	    String type;
+	    String typeName;
+   	    Integer tuplesSize = tuples.variables().size();
+    	String tupleId;
+    	String fields;    	
+		Integer tupleCount = 1;	   					    
+	    for (Tuple t : tuples){
+   		String tupleId = "";
+    		if (tuplesSize > 1) {
+    			tupleId = "${tupleCount}"; // we need an operator
+    		}
+    		
+	    if (output) {
+    		type = "${fName}${tupleId}Output";
+    		typeName = "output";
+    	} else {
+    		type = "${fName}${tupleId}Input";
+    		typeName = "input";   		
+    	}
+    	
+    	type = "I" + type;
+    	'/**' | indent;
+    	'* Defines the data ${typeName} interface for the {@link ${type}} dataManagement (over all defined ${typeName} tuples).' | indent + 1;
+		'*/' | indent + 1;
+    	'public static interface $type {' | indent;
+    	''
+    		for (Field f : t.fields) {
+    			String fname = toIdentifier("${f.name}");
+    			String mname = firstToUpperCase(fname);
+    			String ftype = fieldTypeName(f);
+    			'/**' | indent + 4;
+				'* Returns the input value for tuple field "${f.name}".' | indent + 5;
+				'* @return the tuple value' | indent + 5;
+				'*/' | indent + 5;
+    			'public ${ftype} get${mname}();' | indent + 4;
+    			''
+    			'/**' | indent + 4;
+				'* Changes the output value for tuple field "${f.name}".' | indent + 5;
+				'* @param ${fname} the field value' | indent + 5;
+				'*/' | indent + 5;
+    			'public void set${mname}(${ftype} ${fname});' | indent + 4;
+    		}
+    		tupleCount = tupleCount + 1;
+    	
+    	'}' | indent;
+    	''	    	
+	    	
+	    }
+
+    }
+ 		
+}

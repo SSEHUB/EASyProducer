@@ -1,0 +1,121 @@
+import enactment;
+import mapping;
+
+// InitExperiment
+import capacity;
+
+@advice(QM)
+rtVilScript QM (Project source, Configuration config, Project target, AdaptationEvent event, mapOf(String, Real) bindings) {
+
+    strategy main(Project source, Configuration config, Project target, AdaptationEvent event) = {
+        objective true;
+        breakdown {
+            tactic defaultTactic();
+        }
+    }
+
+    tactic defaultTactic() = {
+    }
+
+    // --------------------------------------- startup ----------------------------------
+
+    strategy startup(Project source, Configuration config, Project target, StartupAdaptationEvent event) = {
+        objective true;
+        breakdown {
+            tactic startupTakeFirst(config, event.getPipeline());
+        }
+    }
+
+    // greedy assignment to the first algorithms in family and the first hardware algorithms in pipeline branches
+    tactic startupTakeFirst(Configuration config, String pipName) = {
+        QM qm = config;
+        // TODO compute real assignment to hardware and enact it (command change)
+        // TODO assign dfes on machine level
+        Integer dfes = 0; 
+        map(Pipeline pip:qm.pipelines) {
+            if (pip.name == pipName) {
+                map(Source src:pip.sources) {
+                    dfes = assignFirst(src, dfes);
+                };
+            }
+        };
+    }
+
+    Integer assignFirst(PipelineNode node, Integer dfes) = : {
+    	dfes;
+    }
+
+    Integer assignFirst(Source src, Integer dfes) = : {
+        map(Flow f:src.output) {
+            dfes = assignFirst(f.destination, dfes);
+        };
+        dfes;
+    }
+
+    // regarding dfes this prefers the first branch of the pipeline!
+    Integer assignFirst(FamilyElement elt, Integer dfes) = : {
+        Family fam = elt.family;
+        if (!elt.actual.isConfigured()) {
+        	Boolean done = false;
+        	if (dfes > 0) {
+        	    // requires true hardware integration (!)
+                setOf(Algorithm) hwAlgs = fam.members->select(Algorithm a | a.hwNode <> null);
+                if (!hwAlgs.isEmpty()) {
+                	elt.actual = hwAlgs.projectSingle();
+                	dfes = dfes - 1;
+                }
+        	}
+        	if (!done) {
+                elt.actual = fam.members.toSequence().first();
+        	}
+        	Algorithm a = elt.actual;
+        	map(Parameter p : elt.actual.parameters) {
+        		setDefaultValue(p);
+        	};
+        }
+        map(Flow f:elt.output) {
+            dfes = assignFirst(f.destination, dfes);
+        };
+        dfes;
+    }
+    
+    setDefaultValue(Parameter parameter) = : {
+    }
+
+    setDefaultValue(IntegerParameter parameter) = : {
+    	parameter.value = parameter.defaultValue;
+    }
+
+    setDefaultValue(StringParameter parameter) = : {
+    	parameter.value = parameter.defaultValue;
+    }
+    
+    setDefaultValue(RealParameter parameter) = : {
+    	parameter.value = parameter.defaultValue;
+    }
+
+    setDefaultValue(BooleanParameter parameter) = : {
+    	parameter.value = parameter.defaultValue;
+    }
+    
+    setDefaultValue(LongParameter parameter) = : {
+    	parameter.value = parameter.defaultValue;
+    }
+    
+    // --------------------------------------- InitExperiment ----------------------------------
+    
+    strategy initExperiment(Project source, Configuration config, Project target, InitExperimentEvent event) = {
+        objective true;
+        breakdown {
+            tactic execInitExperiment(config, event);
+        }
+    }
+
+    tactic execInitExperiment(Configuration config, InitExperimentEvent event) = {
+    	QM qm = config;
+    	inInitialization = true;
+    	FileArtifact out = "$target/capacities.txt";
+    	initCapacities(qm, event, out);
+    }
+    
+}

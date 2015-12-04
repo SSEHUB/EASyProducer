@@ -1,0 +1,12 @@
+ReconfigurableHardware::HwNode::name = node name
+ReconfigurableHardware::MPCCNode::host = host node address
+ReconfigurableHardware::HwNode::monitoringPort = monitoring port
+ReconfigurableHardware::HwNode::bandwidth = network bandwidth (runtime)
+ReconfigurableHardware::MPCCNode::numCPUs = number of CPUs
+ReconfigurableHardware::MPCCNode::numDFEs = number of DFEs
+ReconfigurableHardware::MPCCNode::usedCPUs = actual used CPUs (unused)
+ReconfigurableHardware::MPCCNode::usedDFEs = actual used DFEs (runtime)
+ReconfigurableHardware::MPCCNode::availableCPUs = actual available CPUs (unused)
+ReconfigurableHardware::MPCCNode::availableDFEs = actual available DFEs (runtime)
+ReconfigurableHardware::clusters = available hardware machines for hardware execution
+ReconfigurableHardware::namesUnique = Cluster node names must be unique

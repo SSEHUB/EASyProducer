@@ -1,0 +1,226 @@
+import commonVTLMethods;
+@advice(QM)
+template hardwareReceiver(Configuration config, FileArtifact target, Family family) {
+	Integer indent = 0;
+	String fNameUpper = family.name.firstToUpperCase();
+	setOf(String) parametersByType = {};
+	sequenceOf(String) letters = {"a", "b", "c", "d", "e"}; 
+	def main(Configuration config, FileArtifact target, Family family) {
+		'#include <stdio.h>'
+		'#include <stdlib.h>'
+		'#include <strings.h>'
+		'#include <unistd.h>'
+		'#include <sys/types.h>'
+		'#include <sys/socket.h>'
+		'#include <netinet/in.h>'
+		'#include <arpa/inet.h>'
+		'#include <sys/wait.h>'
+		'#include <signal.h>'
+		'#include <string>'
+		'#include <iostream>'
+		'#include <google/protobuf/io/coded_stream.h>'
+		'#include <google/protobuf/generated_message_util.h>'
+		'#include <google/protobuf/message.h>'
+		'#include <google/protobuf/extension_set.h>'
+		'#include <google/protobuf/unknown_field_set.h>'
+		'#include <google/protobuf/io/zero_copy_stream_impl_lite.h>'
+		''
+		'#include "SerializeServerCpuCode.h"'
+		'#include "parameters.pb.h"'
+		produceTuplesForInclude(family.input); 
+		'using namespace std;'
+		''
+		'void receiver()'
+		'{'
+			'struct sockaddr_in server_addr;' | indent+4;
+			'int receiver_socket;' | indent+4;
+			'int true_var=1;' | indent+4;
+			'struct sockaddr_in receiver_addr;' | indent+4;
+			'socklen_t sin_size;' | indent+4;
+			''
+			'if ((receiver_socket = socket(AF_INET, SOCK_STREAM, 0)) == -1)' | indent+4;
+			'{'  | indent+4;
+				'perror("Socket");' | indent+8;
+				'exit(1);' | indent+8;
+			'}'  | indent+4;
+			''
+			'if (setsockopt(receiver_socket,SOL_SOCKET,SO_REUSEADDR,&true_var,sizeof(int)) == -1)' | indent+4;
+			'{' | indent+4;
+				'perror("Setsockopt");' | indent+8;
+				'exit(1);' | indent+8;
+			'}' | indent+4;
+			''
+			'server_addr.sin_family = AF_INET;' | indent+4;
+			'server_addr.sin_port = htons(2400);' | indent+4;
+			'server_addr.sin_addr.s_addr = INADDR_ANY;' | indent+4;
+			'bzero(&(server_addr.sin_zero),8);' | indent+4;
+			''
+			'if (bind(receiver_socket, (struct sockaddr *)&server_addr, sizeof(server_addr)) == -1)' | indent+4;
+			'{' | indent+4;
+				'perror("Unable to bind");' | indent+8;
+				'exit(1);' | indent+8;
+			'}' | indent+4;
+			''
+			'if (listen(receiver_socket, 5) == -1)' | indent+4;
+			'{' | indent+4;
+				'perror("Listen failed");' | indent+8;
+				'exit(1);' | indent+8;
+			'}' | indent+4;
+			''
+			'printf("TCPServer Waiting for client on port 2400\\n");' | indent+4;
+			''
+			'sin_size = (socklen_t)sizeof(receiver_addr);' | indent+4;
+			'int receiver_socket_connected = accept(receiver_socket, (struct sockaddr *)&receiver_addr,&sin_size);' | indent+4;
+			'printf("Got a connection from (%s , %d)\\n",inet_ntoa(receiver_addr.sin_addr),ntohs(receiver_addr.sin_port));' | indent+4;
+			''
+			mapOf(String, setOf(String)) serializers = produceTuplesForHardwareVariables(family.input, fNameUpper, false, indent+4);
+			produceParametersForVariables(family.parameters, indent+4);
+			''
+			'unsigned char buffer[MAXDATASIZE];' | indent+4;
+			'unsigned char temp[10];' | indent+4;
+			'int numbytes = 0;' | indent+4;
+			'google::protobuf::uint32 size;' | indent+4;
+			'google::protobuf::io::CodedInputStream::Limit msgLimit;' | indent+4;
+			'int internal_size = 0;' | indent+4;
+			'int pointer = 0;' | indent+4;
+			'bzero(buffer,0);' | indent+4;
+			''
+			'while(1)' | indent+4;
+			'{' | indent+4;
+				'numbytes = 0;' | indent+8;
+				'while(pointer < 3)//MAXDATASIZE)' | indent+8;
+				'{' | indent+8;
+					'numbytes = recv(receiver_socket_connected, &buffer[pointer], 1, 0);' | indent+12;
+					'if(numbytes > 0)' | indent+12;
+						'pointer = pointer + numbytes;' | indent+16;
+				'}' | indent+8;
+				''
+				'google::protobuf::io::ArrayInputStream arrayIn(buffer, pointer);' | indent+8;
+				'google::protobuf::io::CodedInputStream codedIn(&arrayIn);' | indent+8;
+				''
+				'internal_size = 0;' | indent+8;
+				'while(1)' | indent+8;
+				'{' | indent+8;
+					'if(pointer - internal_size < MIN_MESSAGE_SIZE)' | indent+12;
+					'{' | indent+12;
+						'int j = 0;' | indent+16;
+						'for(int i = internal_size; i < pointer; i++)' | indent+16;
+						'{' | indent+16;
+							'buffer[j] = buffer[i];' | indent+20;
+							'j++;' | indent+20;
+						'}' | indent+16;
+						'bzero(&buffer[j],(int)MAXDATASIZE-j);' | indent+16;
+						'pointer = j;' | indent+16;
+						'break;' | indent+16;
+					'}' | indent+12;
+					''
+					'codedIn.ReadRaw(temp, 2); // Read the protocol Message type' | indent+12;
+					produceTuplesForHardware(family.input, serializers, indent+12);
+					produceParametersForHardware(family.parameters, indent+12);
+					'else if(temp[0] == \'c\')' | indent+12;
+					'{' | indent+12;
+						'printf("Connection closed\\n");' | indent+16;
+						'return;' | indent+16;
+					'}' | indent+12;
+					''
+				'}' | indent+8;
+			'}' | indent+4;
+			'close(receiver_socket_connected);' | indent+4;
+		'}'
+	}
+	def produceTuplesForInclude(Tuples tuples) {
+		Boolean once1 = true;
+	    Boolean once2 = true;
+		for(Tuple t : tuples) {
+			for(Field f : t.fields) {
+				FieldType ftype = f.type;
+				String fieldName = toIdentifier("${f.name}");
+				String ptype = basicTypeForProto(ftype);
+				if(ptype != "" and once1) {
+					'#include "${fNameUpper}.pb.h"'
+					once1 = false;
+				}
+				if(isListType(ftype) and once2) {
+					'#include "stringlist.pb.h"'
+					once2 = false;
+				} else if(ptype == "" and !isListType(ftype)){
+					'#include "${fieldName}.pb.h"' //Notice that the algorithm-specific proto name is the configured field name
+				}
+			}
+		}
+	}
+	def produceParametersForVariables(setOf(Parameter) parameters, Integer indent) {
+		String paraType;
+		for(Parameter p : parameters) {
+			DecisionVariable para = p;
+			paraType = para.type();
+			if(!isStringExisted(paraType, parametersByType)) {
+				'eu::qualimaster::base::protos::S$paraType $paraType;' | indent;
+				parametersByType.add(paraType);
+			}
+		}
+	}
+	def produceParametersForHardware(setOf(Parameter) parameters, Integer indent) {
+		setOf(String) marker = {};
+		String protocol;
+		String paraType;
+		if(parameters.size()>0){
+			'else if(temp[0] == \'p\') { //Parameters' | indent;
+			for(Parameter p : parameters) {
+				DecisionVariable para = p;
+				paraType = para.type();
+				protocol = parameterHwProtocol(p);
+				if(!isStringExisted(protocol, marker)){
+					'if(temp[1] == \'${protocol}\')  {//${parameterTypeName(p)} Parameter' | indent+4;
+						produceHardwareSerialization(paraType, indent+8);
+						produceSizeCode(indent+8);
+					'}' | indent+4;
+					marker.add(protocol);
+				}
+			}
+			'}' | indent;
+		}
+	}
+	def produceTuplesForHardware(Tuples tuples, mapOf(String, setOf(String)) serializers, Integer indent) {		
+		String tupleName;
+		Integer counter = 0;
+		'if(temp[0] == \'d\') { //Data' | indent;
+		for(Tuple t : tuples) {
+			tupleName = t.name;
+			setOf(String) setS = serializers.get(tupleName);
+			String letter = letters.get(counter);
+			counter = counter + 1;
+				'if(temp[1] == \'${letter}\') { //${counter}st Data Type' | indent+4;
+				for(String s : setS) {
+					produceHardwareSerialization(s, indent+8);
+					produceSizeCode(indent+8);
+				}
+				'}' | indent+4;
+		}
+		'}' | indent;
+	}
+	def produceHardwareSerialization(String serializer, Integer indent) {
+		'codedIn.ReadVarint32(&size);' | indent;
+		'msgLimit = codedIn.PushLimit(size);' | indent;
+    	'${serializer}.ParseFromCodedStream(&codedIn);' | indent;
+    	'codedIn.PopLimit(msgLimit);' | indent;
+	}
+	def produceSizeCode(Integer indent) {
+		'if((size & 0x7f800000) > 0)' | indent;
+		'{' | indent;
+			'internal_size = internal_size + size + 4;' | indent+4;
+		'}' | indent;
+		'else if((size & 0x7f8000) > 0)' | indent;
+		'{' | indent;
+			'internal_size = internal_size + size + 3;' | indent+4;
+		'}' | indent;
+		'else if((size & 0x7f80) > 0)' | indent;
+		'{' | indent;
+			'internal_size = internal_size + size + 2;' | indent+4;
+		'}' | indent;
+		'else' | indent;
+		'{' | indent;
+			'internal_size = internal_size + size + 1;' | indent+4;
+		'}' | indent;
+	}
+}

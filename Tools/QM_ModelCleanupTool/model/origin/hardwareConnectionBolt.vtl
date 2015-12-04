@@ -1,0 +1,204 @@
+import commonVTLMethods;
+@advice(QM)
+template hardwareConnectionBolt(Configuration config, FileArtifact target, Family family, String algName) {
+	sequenceOf(String) letters = {"a", "b", "c", "d", "e"}; 
+	def main(Configuration config, FileArtifact target, Family family, String algName) {
+		String fName = family.name.firstToUpperCase();
+		String ifName = "I" + fName.firstToUpperCase();
+		'package eu.qualimaster.algorithms.$algName;'
+		''
+		'import java.io.IOException;'
+		'import java.io.ByteArrayOutputStream;'
+		'import java.util.Map;'
+		'import backtype.storm.task.OutputCollector;'
+		'import backtype.storm.task.TopologyContext;'
+		'import backtype.storm.topology.OutputFieldsDeclarer;'
+		'import backtype.storm.tuple.Tuple;'
+		'import eu.qualimaster.common.signal.BaseSignalBolt;'
+		'import eu.qualimaster.base.algorithm.HardwareTransmitter;'
+		'import eu.qualimaster.dataManagement.serialization.SerializerRegistry;'
+		'import eu.qualimaster.base.serializer.Parameters.*;'
+		'import eu.qualimaster.common.signal.ParameterChangeSignal;'	
+		'import eu.qualimaster.common.signal.ParameterChange;'	
+		'import eu.qualimaster.common.signal.ValueFormatException;'
+		produceImportFromInput(family.input, fName, 0);
+		''
+		'public class HardwareConnectionBolt extends BaseSignalBolt {'
+			'final static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(HardwareConnectionBolt.class);' | 4;
+			'private OutputCollector collector;' | 4;
+			'private String ip;' | 4;
+			'private int port;' | 4;
+			'private HardwareTransmitter hardwareConnection;' | 4;
+			'private transient ByteArrayOutputStream output = null;' | 4;
+			'private transient ByteArrayOutputStream paraOutput = null;' | 4;
+			'private String separator;' | 4;
+			produceInputVariable(family.input, ifName, 4);
+			''
+			/*********************** */
+			/*******Constructor***** */
+			/*********************** */
+			'public HardwareConnectionBolt(String name, String namespace) {' | 4;
+        		'super(name, namespace); ' | 8; 
+    		'}' | 4;
+    		''
+    		/************************* */
+    		/*******prepare method**** */
+    		/************************* */
+    		'@SuppressWarnings("rawtypes")' | 4;
+    		'public void prepare(Map map, TopologyContext topologyContext, OutputCollector outputCollector) {' | 4;
+    			'super.prepare(map, topologyContext, outputCollector);' | 8;
+    			'collector = outputCollector;' | 8;
+    			'ip = "147.27.39.13";' | 8; //replace to the ip configuration
+        		'port = 2400;' | 8; //replace to the port configuration
+        		'output = new ByteArrayOutputStream();' | 8;
+        		'paraOutput = new ByteArrayOutputStream();' | 8;
+        		produceTypesRegistration(family.input, fName, false, 8);
+    		'}' | 4;
+    		''
+    		/************************** */
+    		/*******execute method***** */
+    		/************************** */
+    		'public void execute(Tuple tuple) {' | 4;
+        		produceInputForTuples(family.input, ifName, 8);
+        	'}' | 4;
+        	''
+			/**************************** */
+			/*********connect method***** */
+			/**************************** */
+			'private boolean connect() {' | 4;
+        		'if (null == hardwareConnection) {' | 8;
+	            	'try {' | 12;
+	                	'hardwareConnection = new HardwareTransmitter(ip, port);' | 16;
+	                	'logger.info("Created a transmitter connection.");' | 16;
+	            	'} catch (IOException e) {' | 12;
+	                	'e.printStackTrace();' | 16;
+	            	'}' | 12;
+        		'}' | 8;
+        		'return null != hardwareConnection;' | 8;
+    		'}' | 4;
+    		''
+    		/********************************/
+		    /* notifyParameterChange method */  
+		    /********************************/	    
+		setOf(Parameter) parameters = family.parameters;
+		String protocol;	           
+        if(family.parameters.isConfigured()) {
+			'@Override' | 4;
+			'public void notifyParameterChange(ParameterChangeSignal signal) {' | 4;
+			'String paraSeparator = null;' | 8;
+			'try {' | 8;
+			'for(int i = 0; i < signal.getChangeCount(); i++) {' | 12;
+			'ParameterChange para = signal.getChange(i);' | 16;	
+			'paraOutput.reset();' | 16;		
+			'switch (para.getName()) {' | 16;			
+			for(Parameter p : parameters) {
+				DecisionVariable paraVar = p;
+				String paraVarType = p.type();
+				String paraName = p.name;
+				String type = parameterTypeName(p);	
+				protocol = parameterHwProtocol(p);
+				'case "$paraName" :' | 20;
+					'logger.info("Received parameter changing signal $paraName");' | 24;
+					'$paraVarType ${paraName}Para = new $paraVarType();' | 24;
+					'${paraName}Para.setName("$paraName");' | 24;
+					'${paraName}Para.setValue(para.get${type.firstToUpperCase()}Value());' | 24;
+					'SerializerRegistry.getSerializerSafe("$paraVarType", $paraVarType.class).serializeTo(${paraName}Para, paraOutput);' | 24;
+					'paraSeparator = "p${protocol}";'	 | 24;
+					'break;' | 24;
+				}
+					'}' | 16;
+					'if (connect()) {' | 16;
+        	 			'if(paraOutput != null && paraSeparator != null) {' | 20;
+        	 				'hardwareConnection.sendSeparator(paraSeparator);' | 24;
+			 				'hardwareConnection.sendData(paraOutput.toByteArray());' | 24;           
+            			'}' | 20;
+        			'}' | 16;
+				'}' | 12;
+				'} catch (ValueFormatException e) {' | 8;
+				'e.printStackTrace();' | 12;
+				'} catch (IOException e) {' | 8;
+				'e.printStackTrace();' | 12;
+				'}' | 8;
+			'}' |4;		
+		}
+    		''
+    		/******************************** */
+    		/****declareOuputFields method*** */
+    		/******************************** */
+    		'public void declareOutputFields(OutputFieldsDeclarer outputFieldsDeclarer) {' | 4;
+    		'}' | 4;    		   		
+		'}'
+	}
+	
+	def produceInputForTuples(Tuples tuples, String ifName, Integer indent) {	
+		String inputInfName; //input interface name	
+		String inputImpName;		     
+		
+		String tupleName;
+		Boolean multiStream = false;
+
+		Integer tuplesSize = tuples.size();
+		Integer innerIndent = indent;
+		if(tuplesSize > 1){
+			multiStream = true;
+			innerIndent = indent + 4;
+		}
+		String letter;
+		Integer counter = 0;
+		for(Tuple t : tuples) {
+			//get the tuple name
+			tupleName = t.name;			
+			//get input interface name
+			inputInfName = "I" + ifName + "${firstToUpperCase(tupleName)}Input";
+			inputImpName =ifName + "${firstToUpperCase(tupleName)}Input";
+			letter = letters.get(counter);									
+			if(multiStream){
+				'if(tuple.getValue(0) instanceof $inputInfName) {' | indent;
+			}
+			'separator = "d${letter}";' | innerIndent;
+			'input${firstToUpperCase(tupleName)} = ($inputInfName)tuple.getValue(0);' | innerIndent;
+			produceFieldsForLog(t.fields, "input${firstToUpperCase(tupleName)}", true, innerIndent);
+			'try {' | innerIndent;
+				'output.reset();' | innerIndent + 4;
+		    	'SerializerRegistry.getSerializerSafe("$inputImpName", $inputInfName.class).serializeTo(input${firstToUpperCase(tupleName)}, output);' | innerIndent + 4;
+			 '} catch (IOException e) {' | innerIndent;
+            	'e.printStackTrace();' | innerIndent + 4;
+        	 '}' | innerIndent;
+			 if(multiStream){
+			 	'}' | indent;
+			 }
+			 counter = counter +1;
+			 ''		
+		}	
+		'if (connect()) {' | innerIndent;
+        	 'if(output != null && separator != null) {' | innerIndent + 4;
+        	 	'hardwareConnection.sendSeparator(separator);' | innerIndent + 8;
+			 	'hardwareConnection.sendData(output.toByteArray());' | innerIndent + 8;           
+            	'collector.ack(tuple);' | innerIndent + 8;
+            '}' | innerIndent + 4;
+        '}' | innerIndent;							
+	}
+	
+	def produceInputVariable(Tuples tuples, String ifName, Integer indent) {
+		String tupleName;
+		for(Tuple t : tuples) {
+			tupleName = t.name;
+			String inputInfName = 'I' + ifName + "${firstToUpperCase(tupleName)}Input";
+			'private transient $inputInfName input${firstToUpperCase(tupleName)} = null;' | indent;
+		}
+	}
+	
+	def produceImportFromInput(Tuples tuples, String fName, Integer indent) {
+		String ifName = 'I' + fName;
+		String tupleName;
+		'import eu.qualimaster.families.inf.${firstToUpperCase(toIdentifier(ifName))}.*;'
+		'import eu.qualimaster.families.imp.${firstToUpperCase(toIdentifier(fName))}.*;'
+		for(Tuple t : tuples) {
+			tupleName = t.name;
+			String inputInfName = ifName + "${firstToUpperCase(tupleName)}Input";
+			'import eu.qualimaster.families.inf.${firstToUpperCase(toIdentifier(ifName))}.I$inputInfName;' | indent;
+			'import eu.qualimaster.families.imp.${firstToUpperCase(toIdentifier(fName))}.$inputInfName;' | indent;
+		}
+	}
+	
+}

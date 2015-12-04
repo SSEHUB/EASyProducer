@@ -1,0 +1,33 @@
+project ReconfigurableHardwareCfg {
+
+    import ReconfigurableHardware;	
+
+    MPCCNode cluster1;
+    MPCCNode cluster2;
+    cluster1 = MPCCNode {
+        name = "olynthos1",
+        host = "147.27.39.12",
+        monitoringPort = 2402,
+        commandPort = 2400,
+		numCPUs = 12,
+		numDFEs = 4
+	};
+	
+	cluster2 = MPCCNode {
+        name = "olynthos2",
+        host = "147.27.39.13",
+        monitoringPort = 2402,
+        commandPort = 2401,
+		numCPUs = 12,
+		numDFEs = 4
+	};
+
+	clusters = {refBy(cluster1), refBy(cluster2)};
+		 
+	freeze {
+		cluster1;
+		cluster2;
+		clusters; 
+	} but (f|f.bindingTime >= BindingTime.runtimeMon)
+
+}

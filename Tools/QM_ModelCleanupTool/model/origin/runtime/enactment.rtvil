@@ -1,0 +1,93 @@
+@advice(QM)
+rtVilScript enactment(Project source, Configuration config, Project target, AdaptationEvent event) {
+
+    typedef Rebalances mapOf(String, Integer);
+    typedef Migrations mapOf(String, ParallelismChangeRequest);
+    Boolean inInitialization = false;
+
+    enact(Project source, Configuration changed, Project target) = : {
+    	QM qm = config.selectChangedWithContext();
+    	if (!config.isEmpty()) {
+            CommandSequence cmd = new CommandSequence();
+	        map(Pipeline p:qm.pipelines) {
+    	        Rebalances rebalance = {};
+    	        Migrations migrate = {};
+	            map(Source s:p.sources) {
+	                enact(p, cmd, rebalance, migrate, s);
+	            };
+	            if (migrate.size() >0 or rebalance.size() > 0) {
+	            	ParallelismChangeCommand cmd;
+	                if (inInitialization) {
+	                	// TODO workers
+	            	    cmd = new ParallelismChangeCommand(p.name, p.numworkers, rebalance);
+	                } else {
+	            	    cmd = new ParallelismChangeCommand(p.name, migrate);
+	                }
+	                cmd.exec();
+	            }
+	        };
+            cmd.exec();
+        }
+    }
+    
+    enact(Pipeline pipeline, CommandSequence cmd, Rebalances rebalance, Migrations migrate, PipelineNode node) = {
+        // dynamic dispatch default – do nothing   
+    }
+    
+    enact(Pipeline pipeline, CommandSequence cmd, Rebalances rebalance, Migrations migrate, Source source) = {
+        map(Flow f:source.output) {
+            enact(pipeline, cmd, rebalance, migrate, f.destination);
+        };
+    }
+    
+    enact(Pipeline pipeline, CommandSequence cmd, Rebalances rebalance, Migrations migrate, FamilyElement elt) = {
+        Family family = elt.family;
+        if (elt.actual != null) { // changed by rt-VIL
+        	CommandSet cmdSet = new CommandSet(); // allow reordering in Coordination Layer
+        	cmd.add(cmdSet);
+            cmdSet.add(new AlgorithmChangeCommand(pipeline.name, elt.name, elt.actual.name));
+            map(Parameter p : elt.actual.parameters) {
+                enactParameter(p, pipeline.name, elt.name, cmdSet);            	
+            };         
+        }
+        map(Flow f:elt.output) {
+            enact(pipeline, cmd, rebalance, migrate, f.destination);
+        };        
+    }
+    
+    enactExecutor(PipelineNode node, Rebalances rebalance, Migrations migrate) = {
+    	if (node.executors != null) { // changed by rt-VIL
+    	    String name = node.name;
+    	    Integer executors = node.executors;
+            rebalance.add(name, executors);
+            Integer origExecutors = originalValue(node.executors);
+            if (origExecutors != null) {
+            	migrate.add(name, new ParallelismChangeRequest(origExecutors - executors));
+            }
+    	}
+    }
+    
+    enactParameter(Parameter parameter, String pipName, String eltName, CommandSet cmd) = {
+    }
+    
+    enactParameter(IntegerParameter parameter, String pipName, String eltName, CommandSet cmd) = {
+        cmd.add(new ParameterChangeCommand(pipName, eltName, parameter.name, parameter.value));
+    }
+    
+    enactParameter(StringParameter parameter, String pipName, String eltName, CommandSet cmd) = {
+    	cmd.add(new ParameterChangeCommand(pipName, eltName, parameter.name, parameter.value));
+    }
+    
+    enactParameter(RealParameter parameter, String pipName, String eltName, CommandSet cmd) = {
+    	cmd.add(new ParameterChangeCommand(pipName, eltName, parameter.name, parameter.value));
+    }
+    
+    enactParameter(BooleanParameter parameter, String pipName, String eltName, CommandSet cmd) = {
+    	cmd.add(new ParameterChangeCommand(pipName, eltName, parameter.name, parameter.value));
+    }
+    
+    enactParameter(LongParameter parameter, String pipName, String eltName, CommandSet cmd) = {
+    	cmd.add(new ParameterChangeCommand(pipName, eltName, parameter.name, parameter.value));
+    }
+    
+}

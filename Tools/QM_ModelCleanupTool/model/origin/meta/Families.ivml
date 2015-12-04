@@ -1,0 +1,43 @@
+project Families {
+	
+    import Basics;
+	import Algorithms;
+	
+	annotate BindingTime bindingTime = BindingTime.compile to Families;
+	
+	compound Family {
+		NonEmptyString name;
+		Description description;
+		Tuples input;
+		Tuples output;
+		Parameters parameters;
+		setOf(refTo(Algorithm)) members; 
+
+        // we go now for names + types as required by the pipeline		
+//		Constraint inputCheck = members->forAll(refTo(Algorithm) algorithm | input == algorithm.input);
+//		Constraint outputCheck = members->forAll(refTo(Algorithm) algorithm | output == algorithm.output);
+		Constraint inputCheck = members->forAll(refTo(Algorithm) algorithm | fieldCheck(input, algorithm.input));
+		Constraint outputCheck = members->forAll(refTo(Algorithm) algorithm | fieldCheck(output, algorithm.output));
+		Constraint parameterCheck = members->forAll(refTo(Algorithm) algorithm | contains(parameters, algorithm.parameters));
+//		Constraint memberCount = members.size() > 0;
+		Constraint inputGivenCheck = input.isDefined(); //untested
+		Constraint outputGivenCheck = output.isDefined(); //untested		
+	}
+
+    def Boolean contains(Parameters parameters1, Parameters parameters2) = 
+        parameters2->forAll(p2 | parameters1->exists(p1 | p1.name == p2.name and p1.typeOf() == p2.typeOf()));
+        	  
+	setOf(refTo(Family)) families;
+	
+	Constraint familyNameUnqiue = families->collect(f|f.name).size() == families.size();
+	
+	def Boolean fieldCheck(Tuples fTuples, Tuples aTuples) =
+		(collectFieldNames(fTuples) ==  collectFieldNames(aTuples)) and (collectFieldTypes(fTuples) == collectFieldTypes(aTuples));
+		
+	def sequenceOf(NonEmptyString) collectFieldNames(Tuples tuples) = 
+		tuples->collect(Tuple tuple | tuple.fields->collect(Field field | field.name)).flatten();
+		
+	def sequenceOf(refTo(FieldType)) collectFieldTypes(Tuples tuples) =
+		tuples->collect(Tuple tuple | tuple.fields->collect(Field field | field.type)).flatten();
+	
+} 

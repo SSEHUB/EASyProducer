@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="CreateBlankModel" default="copy" basedir="." xmlns:plugins="antlib:de.uni_hildesheim.sse.easy.ant.modelcopy">
+    <property file="${user.home}/global-build.properties"/>
+
+    <path id ="task.libs">
+		  <!-- Libs of the Task -->
+		  <fileset dir="task">
+			  <include name="**/*.jar" />
+		   </fileset>
+	  </path>
+    
+    <taskdef resource="ModelCopy.properties" classpathref="task.libs" />
+    
+	<target name="copy">
+        <copy_easy_model SourceFolder="path_to_original_model" DestinationFolder="path_to_generated_model" MainProject="QM"/>
+  </target>
+</project>

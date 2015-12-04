@@ -1,0 +1,144 @@
+import commonVTLMethods;
+@advice(QM)
+template hardwareConnectionSpout(Configuration config, FileArtifact target, Family family, String algName) {
+	def main(Configuration config, FileArtifact target, Family family, String algName) {
+		String fName = family.name.firstToUpperCase();
+		String ifName = "I" + fName.firstToUpperCase();
+		String outputImpName;
+		String tupleName; 		
+		
+		'package eu.qualimaster.algorithms.$algName;'
+		''
+		'import java.io.IOException;'
+		'import java.io.ByteArrayOutputStream;'
+		'import java.io.ByteArrayInputStream;'
+		'import java.util.Map;'
+		'import backtype.storm.spout.SpoutOutputCollector;'
+		'import backtype.storm.task.TopologyContext;'
+		'import backtype.storm.topology.OutputFieldsDeclarer;'
+		'import backtype.storm.tuple.Tuple;'
+		'import backtype.storm.tuple.Fields;'
+		'import backtype.storm.tuple.Values;'
+		'import eu.qualimaster.common.signal.BaseSignalSpout;'
+		'import eu.qualimaster.base.algorithm.HardwareTransmitter;'
+		'import eu.qualimaster.dataManagement.serialization.SerializerRegistry;'
+		'import eu.qualimaster.families.inf.${toIdentifier(ifName)}.*;'
+		produceImportFromOutput(family.output, fName, 0);
+		''
+		'public class HardwareConnectionSpout extends BaseSignalSpout {'
+			'final static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(HardwareConnectionSpout.class);' | 4;
+			'private SpoutOutputCollector collector;' | 4;
+			'private String streamId;' | 4;
+			'private String ip;' | 4;
+			'private int port;' | 4;
+			'private int MAXDATASIZE;' | 4;
+			'private int MIN_MESSAGE_SIZE;' | 4;
+			'private byte [] msg = null;' | 4;
+			'private int pointer;' | 4;
+			'private HardwareTransmitter hardwareConnection;' | 4;
+			'private transient byte[] receivedData = null;' | 4;
+			'private transient ByteArrayInputStream in = null;' | 4;
+			produceOutputVariable(family.output, ifName, 4);
+			
+			/*********************** */
+			/*******Constructor***** */
+			/*********************** */
+			'public HardwareConnectionSpout(String name, String namespace, String streamId) {' | 4;
+        		'super(name, namespace); ' | 8; 
+        		'this.streamId = streamId;' | 8;
+    		'}' | 4;
+    		''
+    		/************************* */
+    		/*******prepare method**** */
+    		/************************* */
+    		'@SuppressWarnings("rawtypes")' | 4;
+    		'public void open(Map map, TopologyContext topologyContext, SpoutOutputCollector spoutputCollector) {' | 4;
+    			'super.open(map, topologyContext, spoutputCollector);' | 8;
+    			'collector = spoutputCollector;' | 8;
+    			'ip = "147.27.39.13";' | 8; //replace to the ip configuration
+        		'port = 2401;' | 8; //replace to the port configuration
+        		'pointer = 0;' | 8;
+        		'MAXDATASIZE = 16384;' | 8;
+        		'MIN_MESSAGE_SIZE = 1000;' | 8;
+        		'msg = new byte[MAXDATASIZE];' | 8;
+        		produceTypesRegistration(family.output, fName, true,  8);
+    		'}' | 4;
+    		''
+    		/************************** */
+    		/*******execute method***** */
+    		/************************** */
+    		'public void nextTuple() {' | 4;
+        		'if (connect()) {' | 8;
+        			'try {' | 12;
+        				'logger.info("Receiving data from the hardware.");' | 16;
+        				'in = null;' | 16;
+        				'msg = hardwareConnection.receiveData(msg, pointer, MAXDATASIZE);' | 16;
+        				for(Tuple t : family.output) {
+							tupleName = t.name; // assume that we only have one type of Tuple in the output of the family
+							outputImpName = ifName + "${firstToUpperCase(tupleName)}Output";
+							'if(msg != null) {' | 16;
+        						'in = new ByteArrayInputStream(msg);' | 20;
+        						'while(in != null && in.available() > MIN_MESSAGE_SIZE) {' | 20;
+        							'output${firstToUpperCase(tupleName)} = null;' | 24;
+                    				'output${firstToUpperCase(tupleName)} = SerializerRegistry.getSerializerSafe("$outputImpName", I$outputImpName.class).deserializeFrom(in);' | 24;
+                					'if(output${firstToUpperCase(tupleName)} != null) {' | 24;
+                						produceFieldsForLog(t.fields, "output${firstToUpperCase(tupleName)}", false, 28);
+                						'collector.emit(streamId, new Values(output${firstToUpperCase(tupleName)}));' | 28;
+                					'}'| 28;
+                				'}' | 20;
+                				'pointer = in.available();' | 20;
+                				'in.read(msg, 0, in.available());' | 20;
+                			'}' | 16;			
+						}
+        			'} catch (IOException e) {' | 12;
+        			'}' | 12;
+        		'}' | 8;
+        	'}' | 4;
+        	''
+			/**************************** */
+			/*********connect method***** */
+			/**************************** */
+			'private boolean connect() {' | 4;
+        		'if (null == hardwareConnection) {' | 8;
+	            	'try {' | 12;
+	                	'hardwareConnection = new HardwareTransmitter(ip, port);' | 16;
+	                	'logger.info("Created a receiver connection.");' | 16;
+	            	'} catch (IOException e) {' | 12;
+	                	'e.printStackTrace();' | 16;
+	            	'}' | 12;
+        		'}' | 8;
+        		'return null != hardwareConnection;' | 8;
+    		'}' | 4;
+    		
+    		/******************************** */
+    		/****declareOuputFields method*** */
+    		/******************************** */
+    		'public void declareOutputFields(OutputFieldsDeclarer outputFieldsDeclarer) {' | 4;
+    			'outputFieldsDeclarer.declareStream(streamId, false, new Fields("hardwareOutput"));' | 8;
+    		'}' | 4;    		   		
+		'}'
+	}
+	
+	def produceOutputVariable(Tuples tuples, String ifName, Integer indent) {
+		String outputInfName;	
+		String tupleName;	
+		for(Tuple t : tuples) {
+			tupleName = t.name;
+			//get output interface name	
+			outputInfName = 'I' + ifName + "${firstToUpperCase(tupleName)}Output"; //output interface name				
+			'private transient $outputInfName output${firstToUpperCase(tupleName)} = null;' | indent;					
+	    }
+	}
+	
+	def produceImportFromOutput(Tuples tuples, String fName, Integer indent) {
+		String ifName = "I" + fName.firstToUpperCase();
+		String tupleName;
+		'import eu.qualimaster.families.imp.${firstToUpperCase(toIdentifier(fName))}.*;'
+		for(Tuple t : tuples) {
+			tupleName = t.name;
+			String outputInfName = ifName + "${firstToUpperCase(tupleName)}Output";
+			'import eu.qualimaster.families.imp.${firstToUpperCase(toIdentifier(fName))}.$outputInfName;' | indent;
+			'import eu.qualimaster.families.inf.${firstToUpperCase(toIdentifier(ifName))}.I$outputInfName;' | indent;
+		}
+	}
+}

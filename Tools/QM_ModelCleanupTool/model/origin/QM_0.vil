@@ -1,0 +1,391 @@
+@advice(QM)
+vilScript QM (Project source, Configuration config, Project target) {
+
+    version v0;
+    Path targetPath = "$target/";
+    Path pipelines = "$target/pipelines/eu/qualimaster";
+	Path pipelinesXml = "$target/pipelines.xml";
+    Path ifGen = "$target/if-gen";
+    Path modelPom = "$target/pom.xml";
+    Path serializers = "$target/serializers";
+    Path hwAlgorithms = "$target/hardwareAlgorithms";
+    Path hwGen = "$target/hw-gen";
+
+    mapOf(String, setOf(DecisionVariable)) lastElementMap = {}; //map<eltVarname, lastElements>
+    mapOf(Tuple,Tuple) inputToOutputMap = {};
+    mapOf(Tuple,String) nameToOutputMap = {}; //obtain the interface name of the output tuples. map<outputTuple, familyInterfaceName>
+    mapOf(String, mapOf(Tuple,Tuple)) globalMap = {}; //map<eltVarname, map<inputTuple, outputTuple>>
+    mapOf(String, setOf(DecisionVariable)) familiesInPipeline = {};    
+
+    cleanup(Project target) = : {
+		pipelines.delete(); 
+		pipelinesXml.delete();
+		modelPom.delete();   
+		serializers.delete();
+		hwAlgorithms.delete();   
+    }
+    
+    // this needs to be done separately, please do not clear the interfaces in cleanup
+    cleanupInterfaces(Project target) = : {
+        ifGen.delete();
+    }      
+    
+    mapSequence(Tuples input, Tuples output, mapOf(Tuple, Tuple) result) = : {
+		Integer inputSize = input.size();
+		Integer outputSize = output.size();
+		Integer s1 = 0;
+		Integer s2 = 0;
+		if(inputSize > 0 and outputSize > 0) {
+			map(Tuple t : input) {
+				Fields fSet1 = t.fields;
+				Integer fs1 =fSet1.size();
+				map(Tuple e : output) {
+					Fields fSet2 = e.fields;
+					Integer fs2 =fSet2.size();
+					if(fs1 == fs2){
+						Integer m = 0;
+						map(Field f1 : fSet1) {
+							map(Field f2 : fSet2) {
+								if(f1.name == f2.name and f1.type == f2.type) {
+									//matched!!
+									m = m + 1;
+								}
+							};
+						};
+						if(m == fs1) {
+							result.add(t, e);
+						}						
+					}
+					
+				};
+			};
+		}
+	}
+	
+    protected processElement(sequenceOf(DecisionVariable) output, DecisionVariable prevar, Configuration config, String topoName, Boolean debug) = : {     	
+        map(Flow v=output) { 
+            DecisionVariable elt = v.destination;
+            String eltName = elt.varName().firstToUpperCase();            
+            String name = elt.varName().firstToUpperCase() + elt.type();         
+            vilTemplateProcessor("storm" + elt.type(), config, "$pipelines/${toIdentifier(topoName)}/topology/$name.java", preElt = prevar, elt=elt, topoName=topoName, nameToOutputMap=nameToOutputMap, globalMap=globalMap, lastElementMap=lastElementMap, debug=debug);
+            processElement(elt.byName("output").variables(), elt, config, topoName, debug);
+        }; 
+    }
+    
+    // entry point for interface generation - do not change the name / signature
+    interfaces(Project source, Configuration config, Project target) = : cleanupInterfaces(target) {
+    	QM topLevel = config;
+    	/* 
+    	//generate the algorithm topology interface
+        String prefixPath = "$ifGen/eu/qualimaster/algorithms/inf";
+        vilTemplateProcessor("algorithmTopologyInterface", config, "$prefixPath/ITopologyCreate.java");  
+        */
+		map(DecisionVariable f=topLevel.families) {
+			Family family = f;
+			String ifName = "I" + family.name.firstToUpperCase(); 
+			String fName = family.name.firstToUpperCase();			
+
+			//generate the family interfaces and implementations
+			createInterfacesFor(f, ifName, config, target);			
+			createProtosFor(f, fName, config, target);
+			createImpFor(f, fName, config, target);		
+		};
+		vilTemplateProcessor("serializationRegistry", config, "$ifGen/eu/qualimaster/families/imp/SerializationRegistry.java", families=topLevel.families);
+	}  
+ 
+    /**
+     * Obtain the globalMap.
+     */
+    protected obtainGlobalMapForTuples(Pipeline pip, Family subPipelineFamily, setOf(DecisionVariable) families) = : {//globalMap --> <elementName, mapOf(inputTuple, outputTuple)>
+    	Boolean isSubPipeline = pip.isSubPipeline; //consider the subPipeline
+    	if(!isSubPipeline) {//pipeline
+    		map(DecisionVariable v = pip.sources){
+            if(v.type() == "Source") { // add <name,outputTuple>
+            	Source src = v;
+                DataSource dataSrc = src.source;
+                String srcName = dataSrc.name;
+            	Tuples outputTuples = dataSrc.input;
+            	String name = "I" + srcName.firstToUpperCase();
+            	name = "${toIdentifier(name)}";
+                obtainNameToOutputMap(outputTuples, name, true);
+            }
+            processForGlobalMap(v.byName("output").variables(), v, families);    		
+    		};
+    	} else {//subPipeline
+    		processForGlobalMap(pip.connectors, subPipelineFamily, families); //tuples argument is only for subPipeline
+    	}
+    	
+    }
+   
+	protected checkedLastElementForOutputTuples(setOf(DecisionVariable) lastElementSet, sequenceOf(Tuple) outputTuples) = : {
+	    //Collect all output tuples from last elements	   	
+		sequenceOf(Tuple) tmpTuples = {};
+		map(DecisionVariable lastElt = lastElementSet){
+	    	if(lastElt.type() == "Source"){
+	    	   Source src = lastElt;
+	    	   DataSource dataSrc = src.source;
+	    	   tmpTuples = dataSrc.input;
+	    	} else if(lastElt.type() == "FamilyElement") {
+	     	   Family lastEltFamily = lastElt.byName("family");
+	   	       tmpTuples = lastEltFamily.output;
+	    	} else if(lastElt.type() == "DataManagementElement"){
+	    	   String name = lastElt.varName().firstToUpperCase();
+	    	   setOf(DecisionVariable) preLastEltSet = lastElementMap.get(name);
+	    	   checkedLastElementForOutputTuples(preLastEltSet, outputTuples);
+	    	}	   	    	 	 
+	    	   map(Tuple t = tmpTuples){
+	    	   	  outputTuples.add(t); //..TODO.. to avoid adding the duplicates
+	    	   
+	           };
+	    	    	     	    	 	
+	    };
+	    outputTuples;	
+	}
+	
+    protected processForGlobalMap(sequenceOf(DecisionVariable)output, DecisionVariable lastVar, setOf(DecisionVariable) families) = : {//globalMap --> <elementName, mapOf(inputTuple, outputTuple)>
+    	mapOf(Tuple, Tuple) tempMap = {};
+    	setOf(DecisionVariable) lastElementSet = {};
+    	sequenceOf(Tuple) inputTuples = {};    	
+    	sequenceOf(Tuple) outputTuples = {};
+    	sequenceOf(Tuple) tmpTuples = {};
+    	map(Flow f = output){
+    	    DecisionVariable elt = f.destination;	
+    	    String eltName = elt.varName().firstToUpperCase();
+    	    //check current element (FamilyElement, DataManagement or Sink)
+    	    if(elt.type() != "DataManagementElement") {
+	    	    if(elt.type() == "FamilyElement"){
+	    	    	 DecisionVariable eltFamilyVar = elt.byName("family"); 
+	    	    	 Family eltFamily = elt.byName("family"); 
+	    	    	 String fName = eltFamilyVar.varName(); 	    	     	    	 
+	    	    	 obtainNameToOutputMap(eltFamily.output, "II"+ fName.firstToUpperCase(), true); //obtain <currentElementName, outputTuple>
+	    	         inputTuples = eltFamily.input;
+	    	         //collect families
+	    	         families.add(eltFamily);   	         
+	    	    } else if(elt.type() == "Sink"){
+	    	    	 Sink snk = elt;
+	    	    	 DataSink dataSnk = snk.sink;
+	    	    	 inputTuples = dataSnk.output;
+	    	    }    	    
+	    	    //check last elements linked to the current elt in order to obtain the output Tuples from last element(lastElement only can be Source or Family)
+	    	    lastElementSet = lastElementMap.get(eltName);
+	    	    checkedLastElementForOutputTuples(lastElementSet, outputTuples); //get all output tuples from last elements	    
+	    	    //tempMap = inputTuples.mapAny(outputTuples); //the old mapSequence checking all fields in the tuple.
+	    	    mapSequence(inputTuples, outputTuples, tempMap);
+	    	    globalMap.add(eltName, tempMap);
+	    	    processForGlobalMap(elt.byName("output").variables(), elt, families); 
+    	    } else { // if elt is DataManagementElement, just pass to next bolt
+    	    	processForGlobalMap(elt.byName("output").variables(), elt, families); 
+    	    }    	       	       	    
+    	};
+    }
+    
+    protected processForGlobalMap(setOf(FamilyElement) connectors, Family subPipelineFamily, setOf(DecisionVariable) families) = : {//globalMap --> <elementName, mapOf(inputTuple, outputTuple)>
+    	mapOf(Tuple, Tuple) tempMap = {};
+    	sequenceOf(Tuple) inputTuples = {};    	
+    	sequenceOf(Tuple) tmpTuples = {};
+    	obtainNameToOutputMap(subPipelineFamily.input, "II" + subPipelineFamily.name.firstToUpperCase(), false);//TODO: RandomFamily needs to refer to the actual prefamily!!!
+    	map(DecisionVariable elt = connectors){
+    	    String eltName = elt.varName().firstToUpperCase();
+    	    //connectors will be only FamilyElement
+	    	DecisionVariable eltFamilyVar = elt.byName("family"); 
+	    	Family eltFamily = elt.byName("family"); 
+	    	String fName = eltFamilyVar.varName(); 	    	     	    	 
+	    	obtainNameToOutputMap(eltFamily.output, "II"+ fName.firstToUpperCase(), true); //obtain <currentElementName, outputTuple>
+	        inputTuples = eltFamily.input;
+	    	//collect families
+	    	families.add(eltFamily);   	         
+	    	       	    	    	       
+	    	//tempMap = inputTuples.mapAny(outputTuples); //the old mapSequence checking all fields in the tuple.
+	    	mapSequence(inputTuples, subPipelineFamily.input, tempMap);
+	    	globalMap.add(eltName, tempMap);
+	    	processForGlobalMap(elt.byName("output").variables(), elt, families); 
+    	};
+    }
+    
+    /**
+     * Obtain nameToOutputMap.
+     */
+    protected obtainNameToOutputMap(Tuples tuples,  String elementName, Boolean output) = : {//nameToOutputMap --> <elementName, outputTuple>
+    	String eName = "";
+    	String ending;
+    	if(output) {
+    		ending = "Output";
+    	} else {
+    		ending = "Input";
+    	}
+        map(Tuple t = tuples) {
+			eName = t.name;
+            String name = elementName + firstToUpperCase(eName) + ending;
+            nameToOutputMap.add(t,name);    
+        };
+    }
+    
+    protected obtainLastElementMap(Pipeline pip) = : {//lastElementMap --> <elementName, setOf(lastElement)>
+       	Boolean isSubPipeline = pip.isSubPipeline; //consider the subPipeline
+       	if(!isSubPipeline) {
+       		map(DecisionVariable v = pip.sources){
+            	processForLastElementMap(v.byName("output").variables(), v);    		
+    		};
+       	} else { //subPipeline
+       		map(DecisionVariable d = pip.connectors) {
+       			processForLastElementMap(d.byName("output").variables(), d);
+       		};
+       	}
+    } 
+  
+    protected processForLastElementMap(sequenceOf(DecisionVariable)output, DecisionVariable lastVar) = : { //lastElementMap --> <elementName, setOf(lastElement)>
+  		map(Flow f = output){
+    	    DecisionVariable elt = f.destination;	
+    	    String eltName = elt.varName().firstToUpperCase();
+    	    setOf(DecisionVariable) tempSet = {};
+    	    
+    	    if(lastElementMap.containsKey(eltName)) { //containsKey returns opposite boolean value
+    	    	 tempSet = lastElementMap.get(eltName);
+    	    	 setOf(DecisionVariable) t = {}; 
+    	    	 map(DecisionVariable v : tempSet){
+    	    	 	t.add(v);
+    	    	 };    	    	
+    	    	 t.add(lastVar); 
+    	    	 tempSet = t; 	    	
+    	    } else {
+    	    	 tempSet.add(lastVar);
+    	    }   	       	    
+    	    lastElementMap.add(eltName, tempSet);
+    	    if(!elt.byName("output").isNull()){
+    	    	processForLastElementMap(elt.byName("output").variables(), elt);
+    	    }    	    
+    	};
+    } 
+   
+    protected createImpFor(Family family, String fName, Configuration config, Project target) = : {
+    	String prefixImpPath = "$ifGen/eu/qualimaster/families/imp/${toIdentifier(fName)}";
+    	vilTemplateProcessor("familyImplementationJava", config, "$prefixImpPath.java", family=family, fName=fName);
+    	vilTemplateProcessor("familySerialization", config, "${prefixImpPath}Serializers.java", family=family, fName=fName);
+    }
+    
+    protected createInterfacesFor(Family family, String ifName, Configuration config, Project target) = : {
+        String prefixPath = "$ifGen/eu/qualimaster/families/inf/${toIdentifier(ifName)}";
+    	vilTemplateProcessor("familyInterfaceJava", config, "$prefixPath.java", family=family, ifName=ifName);
+    	//vilTemplateProcessor("familyInterfaceC", config, "$prefixPath.c", family=family, ifName=ifName);
+    	
+    }
+    
+	protected createProtosFor(Family family, String fName, Configuration config, Project target) = : {
+        String prefixPath = "$ifGen/protobuf/${toIdentifier(fName)}";
+    	vilTemplateProcessor("protoFiles", config, "$prefixPath.proto", family=family, fName=fName);
+    	
+    }	
+    
+    protected createHardwareAlgorithms(Family family, String pipelineName, Configuration config, Project target) = : {
+    	map(Algorithm alg : family.members) {
+    		String algName = alg.name;
+    		String artifact = alg.artifact;
+    		if(alg.hwNode.isConfigured() and !alg.hwNode.isNull()) {
+    			String prefixPath = "$hwAlgorithms/eu/qualimaster/algorithms/${firstToUpperCase(toIdentifier(algName))}";
+    			vilTemplateProcessor("hardwareAlgorithmSubTopology", config, "$prefixPath/HardwareAlgorithmSubTopology.java", family=family, pipelineName=pipelineName, algName=algName);
+    			vilTemplateProcessor("hardwareConnectionBolt", config, "$prefixPath/HardwareConnectionBolt.java", family=family, algName=algName);
+    			vilTemplateProcessor("hardwareConnectionSpout", config, "$prefixPath/HardwareConnectionSpout.java", family=family, algName=algName);
+    			vilTemplateProcessor("hardwareAlgorithmPom", config, "$prefixPath/pom.tmp", artifact=artifact);
+    			maven("$prefixPath");
+    			vilTemplateProcessor("hardwareSender", config, "$hwGen/${firstToUpperCase(toIdentifier(algName))}/sender.cpp", family=family);
+    			vilTemplateProcessor("hardwareReceiver", config, "$hwGen/${firstToUpperCase(toIdentifier(algName))}/receiver.cpp", family=family);
+    		}
+    	};
+    } 
+    
+    protected createPipelines(Pipeline pip, Family subPipelineFamily, String algName) = : {//inputTuples is the input of the algorithm    	      	
+        	String topoName = pip.name;
+        	Boolean debug = pip.debug;
+        	Boolean isSubPipeline = pip.isSubPipeline;  
+        	//generate a pom xml
+        	vilTemplateProcessor("pomXml", config, "$pipelines/${toIdentifier(topoName)}/pom.tmp", pipeline=pip, repoURL=repositoryURL);
+            //deriving a mapping xml
+            vilTemplateProcessor("mappingXml", config, "$pipelines/${toIdentifier(topoName)}/mapping.tmp", pipeline=pip);
+        	setOf(DecisionVariable) families = {}; //collect the families of the pipeline in order to manage the imports for the topology class
+        	//test for map
+        	obtainLastElementMap(pip);
+        	obtainGlobalMapForTuples(pip, subPipelineFamily, families); //carring the input information of the subPipeline algorithm
+        	
+        	//generate the hardware algorithms
+        	map(Family family : families) {
+        		createHardwareAlgorithms(family, topoName, config, target);
+        	};
+        	
+        	familiesInPipeline.add(topoName, families);
+        	//vilTemplateProcessor("pipelineMap", config, "$pipelines/${toIdentifier(topoName)}/pipelineMap.java",inputToOutputMap=inputToOutputMap, nameToOutputMap=nameToOutputMap, globalMap=globalMap, lastElementMap=lastElementMap);             
+        	if(!isSubPipeline) {        
+            	vilTemplateProcessor("stormPipeline", config, "$pipelines/${toIdentifier(topoName)}/topology/Topology.java", pipeline=pip, familiesInPipeline=familiesInPipeline);
+				
+				map(DecisionVariable v=pip.sources) {
+					String name = v.varName().firstToUpperCase() + v.type();
+					vilTemplateProcessor("storm" + v.type(), config, "$pipelines/${toIdentifier(topoName)}/topology/$name.java", elt=v, topoName=topoName, debug=debug);
+					processElement(v.byName("output").variables(), v, config, topoName, debug);
+				}; 
+            } else {
+				map(DecisionVariable v=pip.connectors) {
+					String name = v.varName().firstToUpperCase() + v.type();
+					vilTemplateProcessor("storm" + v.type(), config, "$pipelines/${toIdentifier(topoName)}/topology/$name.java", preElt = v, elt=v, topoName=topoName, nameToOutputMap=nameToOutputMap, globalMap=globalMap, lastElementMap=lastElementMap, debug=debug);
+					processElement(v.byName("output").variables(), v, config, topoName, debug);
+				};
+				vilTemplateProcessor("subPipelineMain", config, "$pipelines/${toIdentifier(topoName)}/topology/SubPipelineMain.java", pipeline=pip, family=subPipelineFamily, algName=algName);
+			}
+                      
+           package(topoName);                
+    }
+    
+    package(String topoName) = : {
+    	//jar("${target.getPath()}/bin", "${target.getPath()}/bin/**/*.class", "${target.getPath()}/Lib.jar");
+    	maven("$pipelines/${toIdentifier(topoName)}",true);
+    }
+    
+    main(Project source, Configuration config, Project target) = : cleanup(target) {  
+    	//Project level config
+    	QM cfg = config;
+    	    	              
+        interfaces(source, config, target);       
+
+       // generate data source interfaces
+		sequenceOf(DataSource) sources = cfg.dataSources;
+	    map(DataSource dataSrc : sources) {
+            String srcName = dataSrc.name.firstToUpperCase(); 
+	    	vilTemplateProcessor("dataSourceInterface", config, "$ifGen/eu/qualimaster/data/inf/I${toIdentifier(srcName)}.java", elt=dataSrc); //generate the data source interface
+            vilTemplateProcessor("dataSourceImplementation", config, "$ifGen/eu/qualimaster/data/imp/${toIdentifier(srcName)}.java", elt=dataSrc);
+	    };
+	    //generate data sink interfaces
+		sequenceOf(DataSink) sinks = cfg.dataSinks;
+	    map(DataSink dataSnk : sinks) {
+            String snkName = dataSnk.name.firstToUpperCase();
+	    	vilTemplateProcessor("dataSinkInterface", config, "$ifGen/eu/qualimaster/data/inf/I${toIdentifier(snkName)}.java", elt=dataSnk); //generate the data sink interface
+            vilTemplateProcessor("dataSinkImplementation", config, "$ifGen/eu/qualimaster/data/imp/${toIdentifier(snkName)}.java", elt=dataSnk);	
+	    };
+	    	    
+	    sequenceOf(DecisionVariable) activePipelines = cfg.activePipelines.variables();
+		String interfaceArtifact = cfg.interfaceArtifact;
+		String repositoryURL = cfg.repositoryURL;
+		String modelArtifact = cfg.modelArtifact;
+		
+		setOf(FieldType) types = cfg.types;
+		
+	    //generate the interface pom
+	    vilTemplateProcessor("interfacesXml", config, "$ifGen/pom.tmp", interfaceArtifact=interfaceArtifact, types=types);
+	    //package interfaces --- should use maven install 
+	    maven("$ifGen"); 
+	    //generate the pom for the model artifact
+	    vilTemplateProcessor("modelArtifactPom", config, "$target/pom.tmp", modelArtifact=modelArtifact); 
+	    maven("$target");
+	    //generate the subPipeline algorithms
+	    setOf(SubPipelineAlgorithm) subPipAlgorithms = cfg.subPipelineAlgorithms;
+	    map(SubPipelineAlgorithm alg : subPipAlgorithms) {
+	    	Pipeline subPipeline = alg.subPipeline;
+	    	createPipelines(subPipeline, subPipeline.subPipelineFamily, alg.name);
+	    };
+	    //generate the pipelines
+        vilTemplateProcessor("pipelinesXml", config, "$target/pipelines.tmp", pipelines=activePipelines, interfaceArtifact=interfaceArtifact, modelArtifact=modelArtifact);
+        map(DecisionVariable vPip : activePipelines) {
+			Pipeline pip = vPip;
+			createPipelines(pip, pip.subPipelineFamily, "");  
+		};                       
+                     
+    }
+
+}

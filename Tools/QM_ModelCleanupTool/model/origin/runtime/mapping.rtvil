@@ -1,0 +1,127 @@
+@advice(QM)
+rtVilScript mapping(Project source, Configuration config, Project target, AdaptationEvent event, mapOf(String, Real) bindings) {
+
+    bindValues(Configuration config, mapOf(String, Real) bindings) = {
+        QM qm = config;
+        FrozenSystemState state = new FrozenSystemState(bindings);
+		map(Machine m : qm.machines) {
+			bindValues(m, state);
+		};
+		qm.usedMachines = 0; // TODO real values
+		qm.availableMachines = 0;
+		map(HwNode n : qm.clusters) {
+			bindValues(n, state);
+		};
+		qm.availableDFEs = state.getInfrastructureObservation(ResourceUsage.AVAILABLE_DFES, 0);
+		qm.usedDFEs = state.getInfrastructureObservation(ResourceUsage.USED_DFES, 0);
+		map(DataSource s : qm.dataSources) {
+			bindValues(s, state);
+		};
+        map(Algorithm a : qm.algorithms) {
+			bindValues(a, state);        	
+        };
+		map(DataSink s : qm.dataSinks) {
+			bindValues(s, state);
+		};
+        map(Pipeline p : qm.pipelines) { // TODO infrastructure.activePipelines
+        	bindValues(p, state);
+		};
+    }
+
+    bindValues(Machine machine, FrozenSystemState state) = {
+    	machine.bandwidth = state.getMachineObservation(machine.name(), ResourceUsage.BANDWIDTH, 0);
+	}
+	
+    bindValues(HwNode node, FrozenSystemState state) = {
+    	node.bandwidth = state.getHwNodeObservation(node.name(), ResourceUsage.BANDWIDTH, 0);
+    }
+
+    bindValues(MPCCNode node, FrozenSystemState state) = {
+    	node.bandwidth = state.getHwNodeObservation(node.name(), ResourceUsage.BANDWIDTH, 0);
+    	node.usedDFEs = state.getHwNodeObservation(node.name(), ResourceUsage.USED_DFES, 0);
+    	node.availableDFEs = state.getHwNodeObservation(node.name(), ResourceUsage.AVAILABLE_DFES, 0);
+    }
+
+	bindValues(Algorithm algorithm, FrozenSystemState state) = {
+		String algName = algorithm.name;
+    	algorithm.latency = state.getAlgorithmObservation(algName, TimeBehavior.LATENCY, 0);
+    	algorithm.throughputItems = state.getAlgorithmObservation(algName, TimeBehavior.THROUGHPUT_ITEMS, 0);
+    	algorithm.throughputVolume = state.getAlgorithmObservation(algName, TimeBehavior.THROUGHPUT_VOLUME, 0);
+    	algorithm.memoryUse = state.getAlgorithmObservation(algName, ResourceUsage.MEMORY_USE, 0);
+    	algorithm.accuracyConfidence = state.getAlgorithmObservation(algName, FunctionalSuitability.ACCURACY_CONFIDENCE, 0);
+    	algorithm.accuracyErrorRate = state.getAlgorithmObservation(algName, FunctionalSuitability.ACCURACY_ERROR_RATE, 0);
+    	algorithm.believability = state.getAlgorithmObservation(algName, FunctionalSuitability.BELIEVABILITY, 0);
+    	algorithm.relevancy = state.getAlgorithmObservation(algName, FunctionalSuitability.RELEVANCY, 0);
+    	algorithm.completeness = state.getAlgorithmObservation(algName, FunctionalSuitability.COMPLETENESS, 0);
+		algorithm.volume = state.getAlgorithmObservation(algName, Scalability.VOLUME, 0);
+		algorithm.velocity = state.getAlgorithmObservation(algName, Scalability.VELOCITY, 0);
+		algorithm.variety = state.getAlgorithmObservation(algName, Scalability.VARIETY, 0);
+	}
+
+	bindValues(DataSource source, FrozenSystemState state) = {
+		String sourceName = source.name;
+		source.velocity = state.getDataSinkObservation(sourceName, Scalability.VELOCITY, 0);
+		source.volume = state.getDataSinkObservation(sourceName, Scalability.VOLUME, 0);
+		source.volatility = state.getDataSinkObservation(sourceName, Scalability.VOLATILITY, 0);
+    	source.accuracyConfidence = state.getDataSinkObservation(sourceName, FunctionalSuitability.ACCURACY_CONFIDENCE, 0);
+    	source.completeness = state.getDataSinkObservation(sourceName, FunctionalSuitability.COMPLETENESS, 0);
+	}
+
+	bindValues(DataSink sink, FrozenSystemState state) = {
+		String sinkName = sink.name;
+		sink.velocity = state.getDataSinkObservation(sinkName, Scalability.VELOCITY, 0);
+		sink.volume = state.getDataSinkObservation(sinkName, Scalability.VOLUME, 0);
+    	sink.accuracyConfidence = state.getDataSinkObservation(sinkName, FunctionalSuitability.ACCURACY_CONFIDENCE, 0);
+		//??MPVolatility mpVolatility;
+	}
+	
+    bindValues(Pipeline pipeline, FrozenSystemState state) = {
+    	String pipName = pipeline.name;
+    	pipeline.latency = state.getPipelineObservation(pipName, TimeBehavior.LATENCY, 0);
+    	pipeline.throughputItems = state.getPipelineObservation(pipName, TimeBehavior.THROUGHPUT_ITEMS, 0);
+    	pipeline.throughputVolume = state.getPipelineObservation(pipName, TimeBehavior.THROUGHPUT_VOLUME, 0);
+    	pipeline.accuracyConfidence = state.getPipelineObservation(pipName, FunctionalSuitability.ACCURACY_CONFIDENCE, 0);
+    	pipeline.accuracyErrorRate = state.getPipelineObservation(pipName, FunctionalSuitability.ACCURACY_ERROR_RATE, 0);
+    	pipeline.capacity = state.getPipelineObservation(pipName, ResourceUsage.CAPACITY, 0);
+    	pipeline.executors = state.getPipelineObservation(pipName, ResourceUsage.EXECUTORS, 0);
+    	
+        map(Source s : pipeline.sources) {
+            bindValues(s, pipeline, state);
+        };
+    }
+
+    bindCommon(PipelineNode node, Pipeline pipeline, FrozenSystemState state) = {
+    	String pipName = pipeline.name;
+    	String eltName = node.name;
+    	node.capacity = state.getPipelineElementObservation(pipName, eltName, ResourceUsage.CAPACITY, 0);
+    	node.executors = state.getPipelineElementObservation(pipName,eltName, ResourceUsage.EXECUTORS, 0);
+    }
+
+    bindValues(PipelineNode node, Pipeline pipeline, FrozenSystemState state) = {
+    	bindCommon(node, pipeline, state);
+    }
+    
+    bindValues(Source src, Pipeline pipeline, FrozenSystemState state) = {
+    	bindCommon(src, pipeline, state);
+    	// all values come from source
+        map(Flow f : src.output) {
+            bindValues(f.destination, pipeline, state);
+        };
+    }
+
+    bindValues(FamilyElement elt, Pipeline pipeline, FrozenSystemState state) = {
+    	bindCommon(elt, pipeline, state);
+    	String pipName = pipeline.name;
+    	String eltName = elt.name;
+    	// all values come from algorithm
+        map(Flow f : elt.output) {
+            bindValues(f.destination, pipeline, state);
+        };
+    }
+
+    bindValues(Sink snk, Pipeline pipeline, FrozenSystemState state) = {
+    	bindCommon(snk, pipeline, state);
+    	// all values come from sink
+    }
+
+}

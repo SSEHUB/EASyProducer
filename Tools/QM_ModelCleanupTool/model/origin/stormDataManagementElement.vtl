@@ -1,0 +1,191 @@
+import commonVTLMethods;
+@advice(QM)
+template stormDataManagementElement(Configuration config, FileArtifact target, DecisionVariable preElt, DecisionVariable elt, String topoName, mapOf(Tuple,String) nameToOutputMap, mapOf(String, mapOf(Tuple, Tuple)) globalMap,mapOf(String, setOf(DecisionVariable)) lastElementMap) {
+	
+	def produceOutputVariable(setOf(DecisionVariable) lastElts, mapOf(Tuple,String) nameToOutputMap) {
+		String outputInfName; //output interface name
+		
+		for(DecisionVariable lastElt : lastElts) {
+			FamilyElement fe = lastElt;
+			Family fm = fe.family;			
+			Tuples tuples = fm.output;
+			Integer tuplesSize = tuples.size();
+			String tupleId = "";
+			Integer tupleCount =1;
+			for(Tuple t : tuples) {				
+				outputInfName = nameToOutputMap.get(t);
+				if(tuplesSize > 1){
+					 tupleId = "$tupleCount";
+				}
+			    '    transient $outputInfName iTuple${tupleId} = null;'
+			    tupleCount = tupleCount + 1;
+			}
+			
+		}	
+	
+	}
+	
+	def produceInputForTuples(mapOf(Tuple,String) nameToOutputMap, setOf(DecisionVariable) lastElts, String prefixStreamId, setOf(String) streamListToDeclare) {
+		String outputInfName; //output interface name	
+		Boolean multiStream = false;
+		Integer indent = 4;
+		if(lastElts.size() > 1) {
+			multiStream = true;
+			indent = 8;
+		}
+		for(DecisionVariable lastElt : lastElts) {
+			FamilyElement fe = lastElt;
+			Family fm = fe.family;			
+			Tuples tuples = fm.output;
+			String tupleId = "";
+			Integer tuplesSize = tuples.size();
+			Integer tupleCount =1;
+			String tupleName;
+			for(Tuple t : tuples) {
+			    if(tuplesSize > 1){	
+			    	tupleId = "$tupleCount";			
+				    multiStream = true;
+				    indent = 8;
+			    }				
+				outputInfName = nameToOutputMap.get(t);
+				tupleName = t.name;
+				streamListToDeclare.add(tupleName);
+				if(multiStream){
+				    'if(tuple instanceof $outputInfName) {' | indent;
+			    }
+			    'iTuple${tupleId} = ($outputInfName)tuple.getValue(0);' | indent+4;
+			    'streamId = "${prefixStreamId}${tupleName.firstToUpperCase()}";' | indent+4;
+			   // '_collector.emit(streamId, tuple, new Values(iTuple${tupleId}));' | indent+4;
+			   '//support.write(iTuple${tupleId});' | indent+4; //--problematic line
+			   '//_collector.ack(tuple);' | indent+4;			   
+			    if(multiStream){
+			 	    '}' | indent;
+			    }
+			}
+			
+		}				
+		
+	}
+	
+	def produceImportsFromLastElements(setOf(DecisionVariable) lastElt) {
+	    for(DecisionVariable v : lastElt) {
+    		if(v.type() == "Source"){
+    		  Source src = v;
+    	      DataSource dataSrc = src.source;
+    	      String srcName = dataSrc.name;
+		      String srcInfName = "I" + srcName.firstToUpperCase();
+    	     'import eu.qualimaster.data.inf.${toIdentifier(srcInfName)}.*;'	
+    		}
+    		if(v.type() == "FamilyElement") {
+    			FamilyElement fe = v;
+    			Family fm = fe.family;
+    			String fName = fm.name;
+    			fName = "I" + fName.firstToUpperCase();
+    			'import eu.qualimaster.families.inf.${toIdentifier(fName)}.*;'
+    		}
+    	}
+	}
+	
+    def main(Configuration config, FileArtifact target, DecisionVariable preElt, DecisionVariable elt, String topoName,mapOf(Tuple,String) nameToOutputMap, mapOf(String, mapOf(Tuple, Tuple)) globalMap,mapOf(String, setOf(DecisionVariable)) lastElementMap) {
+        setOf(String) streamListToDeclare = {};
+        String name = elt.varName().firstToUpperCase() + elt.type();
+        String nontopoStream = "Stream";
+        String topoStream = "TopoStream";
+        String dataMgtName = elt.byName("dataManagement").varName();
+        String ifName = "I" + dataMgtName.firstToUpperCase();
+      	String ifOutputName = "I" + ifName + "Output";
+      	
+		String streamId = elt.varName() + nontopoStream;
+		String topoStreamId = elt.varName();
+		
+		DataManagementElement dataMgtElt = elt;
+		PersistentDataElement persistentDataElt = dataMgtElt.dataManagement;
+		
+		String fmVarName = elt.varName().firstToUpperCase();
+		setOf(DecisionVariable) lastElts = lastElementMap.get(fmVarName); //last elements linked to the current element
+		'package eu.qualimaster.$topoName.topology;'
+    	''    	
+    	'import java.util.*;'
+    	'import org.apache.log4j.Logger;'
+    	'import backtype.storm.tuple.*;'
+    	'import backtype.storm.task.*;'
+    	'import backtype.storm.topology.*;'
+    	'import eu.qualimaster.common.signal.*;'
+    	'import eu.qualimaster.dataManagement.DataManager;'
+		'import eu.qualimaster.dataManagement.storage.AbstractStorageTable;'
+		'import eu.qualimaster.dataManagement.storage.support.IStorageSupport;'
+		'import eu.qualimaster.dataManagement.strategies.*;'
+		    	produceImportsFromLastElements(lastElts);
+    	''
+    	'/**'
+    	'* Defines the FamilyElment in the pipeline(GEN).'
+    	'**/'
+    	'@SuppressWarnings({ "rawtypes", "serial" })'
+    	'public class $name extends BaseSignalBolt {'
+    	''
+    	'    final static Logger logger = Logger.getLogger($name.class);'
+    	'    transient OutputCollector _collector;'
+    	'    private static String streamId;'
+    	'    private transient IStorageSupport support;'
+    	produceOutputVariable(lastElts, nameToOutputMap);	    	
+    	''
+    	'    public $name(String name, String namespace) {'
+    	'        super(name, namespace);'
+    	'    }'
+    	''   	      
+		'    public void prepare(Map map, TopologyContext topologyContext, OutputCollector collector) {'
+		'		 super.prepare(map, topologyContext, collector);'
+		'		 String pipelineName = "$topoName";'
+		String location = persistentDataElt.storageLocation;
+		'		 String location = "$location";'
+		String strategyStr = "null"; // just to produce valid code in any case
+		DataManagementStrategy strategy = persistentDataElt.strategy;	
+		if(strategy == DataManagementStrategy.None){
+			strategyStr = null;
+		} else if(strategy == DataManagementStrategy.FirstInFirstOut){
+			strategyStr = "FirstInFirstOutStorageStrategyDescriptor.INSTANCE";
+		} else if(strategy == DataManagementStrategy.LeastFrequentlyUsed){
+			Integer cutoffCapacity = persistentDataElt.cutoffCapacity;
+			strategyStr = "LeastFrequentlyUsedStorageStrategyDescriptor($cutoffCapacity)";			
+		} else if(strategy == DataManagementStrategy.LeastFrequentlyRecentlyUsed){
+			Integer timeLine = persistentDataElt.timeLine;
+			Integer cutoffCapacity = persistentDataElt.cutoffCapacity;
+			strategyStr = "LeastFrequentlyRecentlyUsedStorageStrategyDescriptor($cutoffCapacity, $timeLine)";
+		} else if(strategy == DataManagementStrategy.LeastRecentlyUsed){
+			Integer timeLine = persistentDataElt.timeLine;
+			strategyStr = "LeastRecentlyUsedStorageStrategyDescriptor($timeLine)";			
+		}
+		'		 IStorageStrategyDescriptor storageStrategy = $strategyStr;'
+		'		 AbstractStorageTable table = DataManager.INTERMEDIARY_STORAGE_MANAGER.getTable(pipelineName, location, storageStrategy);'
+		'         support = table.getStorageSupport();'
+		'         _collector = collector;'
+		'    }'
+	    ''
+		'    public void execute(Tuple tuple) {'
+        if (genMonitoringProbes) {      
+        '        long start = System.currentTimeMillis();'
+        }
+		
+		 //produce input -- output casting statement
+		 produceInputForTuples(nameToOutputMap, lastElts, streamId, streamListToDeclare);
+        if (genMonitoringProbes) {      
+        '        aggregateExecutionTime(start);'
+        }
+		'    }'
+        ''
+        	
+	    '    @Override'
+        '    public void cleanup() {'
+        '        super.cleanup();'
+        '    }'
+        ''       
+		'    public void declareOutputFields(OutputFieldsDeclarer declarer) {'	
+		for(String s : streamListToDeclare) {
+		'        declarer.declareStream("${streamId}${s.firstToUpperCase()}", new Fields("$ifOutputName"));'	
+		}			
+		
+		'    }'
+    	''
+    	'}'
+    }	
+}

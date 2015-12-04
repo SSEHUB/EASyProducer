@@ -1,0 +1,163 @@
+project PriorityPipCfg {
+
+    import Basics;
+	import Pipelines;
+	import FamiliesCfg;
+	import DataManagementCfg;
+	annotate BindingTime bindingTime = BindingTime.compile to PriorityPipCfg;
+	Pipeline PriorityPip;
+	Source PriorityPip_Source0;
+	Flow PriorityPip_Flow0;
+	FamilyElement PriorityPip_FamilyElement0;
+	Flow PriorityPip_Flow1;
+	FamilyElement PriorityPip_FamilyElement1;
+	Flow PriorityPip_Flow2;
+	Sink PriorityPip_Sink0;
+	PriorityPip_Sink0 = Sink {
+		sink = refBy(priorSnk), 
+		parallelism = 1, 
+		name = "Sink"
+	};
+	PriorityPip_Flow2 = Flow {
+		destination = refBy(PriorityPip_Sink0), 
+		grouping = Grouping.shuffleGrouping, 
+		name = "f4"
+	};
+	PriorityPip_FamilyElement1 = FamilyElement {
+		family = refBy(fCorrelationFinancial), 
+		output = {
+			refBy(PriorityPip_Flow2)
+		}, 
+		parallelism = 1, 
+		name = "FinancialCorrelation"
+	};
+	PriorityPip_Flow1 = Flow {
+		destination = refBy(PriorityPip_FamilyElement1), 
+		grouping = Grouping.shuffleGrouping, 
+		name = "f2"
+	};
+	PriorityPip_FamilyElement0 = FamilyElement {
+		family = refBy(fPreprocessor), 
+		output = {
+			refBy(PriorityPip_Flow1)
+		}, 
+		parallelism = 1, 
+		name = "Preprocessor"
+	};
+	PriorityPip_Flow0 = Flow {
+		destination = refBy(PriorityPip_FamilyElement0), 
+		grouping = Grouping.shuffleGrouping, 
+		name = "f1"
+	};
+	Flow PriorityPip_Flow3;
+	PriorityPip_Flow3 = Flow {
+		destination = refBy(PriorityPip_FamilyElement1), 
+		grouping = Grouping.shuffleGrouping, 
+		name = "f3"
+	};
+	PriorityPip_Source0 = Source {
+		output = {
+			refBy(PriorityPip_Flow0), refBy(PriorityPip_Flow3)
+		}, 
+		source = refBy(spring), 
+		parallelism = 1, 
+		name = "FinancialDataSource"
+	};
+	Source PriorityPip_Source1;
+	Flow PriorityPip_Flow4;
+	FamilyElement PriorityPip_FamilyElement2;
+	Flow PriorityPip_Flow5;
+	DataManagementElement PriorityPip_DataManagementElement0;
+	Flow PriorityPip_Flow6;
+	FamilyElement PriorityPip_FamilyElement3;
+	Flow PriorityPip_Flow7;
+	PriorityPip_Flow7 = Flow {
+		destination = refBy(PriorityPip_Sink0), 
+		grouping = Grouping.shuffleGrouping, 
+		name = "f9"
+	};
+	PriorityPip_FamilyElement3 = FamilyElement {
+		family = refBy(fCorrelationTwitter), 
+		output = {
+			refBy(PriorityPip_Flow7)
+		}, 
+		parallelism = 1, 
+		name = "TwitterCorrelation"
+	};
+	PriorityPip_Flow6 = Flow {
+		destination = refBy(PriorityPip_FamilyElement3), 
+		grouping = Grouping.shuffleGrouping, 
+		name = "f7"
+	};
+	PriorityPip_DataManagementElement0 = DataManagementElement {
+		dataManagement = refBy(hBaseDataManagement), 
+		output = {
+			refBy(PriorityPip_Flow6)
+		}, 
+		parallelism = 1, 
+		name = "DataManagement"
+	};
+	PriorityPip_Flow5 = Flow {
+		destination = refBy(PriorityPip_DataManagementElement0), 
+		grouping = Grouping.shuffleGrouping, 
+		name = "f6"
+	};
+	PriorityPip_FamilyElement2 = FamilyElement {
+		family = refBy(fSentimentAnalysis), 
+		output = {
+			refBy(PriorityPip_Flow5)
+		}, 
+		parallelism = 1, 
+		name = "SentimentAnalysis"
+	};
+	PriorityPip_Flow4 = Flow {
+		destination = refBy(PriorityPip_FamilyElement2), 
+		grouping = Grouping.shuffleGrouping, 
+		name = "f5"
+	};
+	Flow PriorityPip_Flow8;
+	PriorityPip_Flow8 = Flow {
+		destination = refBy(PriorityPip_FamilyElement3), 
+		grouping = Grouping.shuffleGrouping, 
+		name = "f8"
+	};
+	PriorityPip_Source1 = Source {
+		output = {
+			refBy(PriorityPip_Flow4), refBy(PriorityPip_Flow8)
+		}, 
+		source = refBy(twitter), 
+		parallelism = 1, 
+		name = "TwitterDataSource"
+	};
+
+	PriorityPip = Pipeline {
+		name = "PriorityPip", 
+		sources = {
+			refBy(PriorityPip_Source0), refBy(PriorityPip_Source1)
+		}, 		
+		numworkers = 7,
+		artifact = "eu.qualimaster:PriorityPip:0.2.0-SNAPSHOT",
+		debug = false,
+		fastSerialization = true		
+	};
+	freeze {
+		PriorityPip;
+		PriorityPip_Source0;
+		PriorityPip_Flow0;
+		PriorityPip_FamilyElement0;
+		PriorityPip_Flow1;
+		PriorityPip_FamilyElement1;
+		PriorityPip_Flow2;
+		PriorityPip_Sink0;
+		PriorityPip_Flow3;
+		PriorityPip_Source1;
+		PriorityPip_Flow4;
+		PriorityPip_FamilyElement2;
+		PriorityPip_Flow5;
+		PriorityPip_DataManagementElement0;
+		PriorityPip_Flow6;
+		PriorityPip_FamilyElement3;
+		PriorityPip_Flow7;
+		PriorityPip_Flow8;
+	} but (f|f.bindingTime >= BindingTime.runtimeMon)
+}

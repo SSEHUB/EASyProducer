@@ -1,0 +1,243 @@
+@advice(QM)
+rtVilScript capacity(Project source, Configuration config, Project target) {
+
+    // TODO determine shift amount from paper
+    // TODO fill executor pool
+    // TODO estimate amount of workers -> enactment
+
+    balanceCapacities(sequenceOf(Pipeline) pipelines, Integer numWorkers, Integer executorPool) = {
+    	map(Pipeline pip: pipelines) {
+  	        println(printNodes(pip));
+  	        
+  	        // determine numbering / sequence
+    		mapOf(PipelineNode, setOf(PipelineNode)) predecessors = {};
+    		collectPred(pip, predecessors);
+    		sequenceOf(PipelineNode) nodes = {};
+    		collectNodes(pip, nodes, predecessors);
+    		// determine loads: already assigned if called ;)
+    		sequenceOf(PipelineNode) nodeSequence = nodes->sort(PipelineNode e | e.capacity);
+    		nodeSequence = nodeSequence.revert();
+    		Real HWM = 0.8;
+    		Real LWM = 0.5;
+    		Integer first = 0;
+    		Integer last = nodeSequence.size() - 1;
+    		map(PipelineNode n: nodeSequence) { // we do not have "while" :|
+				PipelineNode firstNode = nodeSequence.get(first);
+				PipelineNode lastNode = nodeSequence.get(last);
+				println("first $first last $last c(first) ${firstNode.capacity} c(last) ${lastNode.capacity} HWM ${HWM}");
+		        if (first < last and firstNode.capacity > HWM and lastNode.capacity < HWM) {
+    				Integer firstExecDelta = 0;
+    				Integer lastExecDelta = 0;
+    				if (lastNode.executors > 1) { // there is something to distribute
+                        lastExecDelta = -1;
+                        firstExecDelta = 1; 					
+    				} else if (executorPool > 0) {
+    					executorPool = executorPool - 1;
+    					firstExecDelta = 1;
+    				}
+    				if (firstExecDelta > 0 or lastExecDelta > 0) {
+    					firstNode.executors = firstNode.executors + firstExecDelta;
+    					lastNode.executors = lastNode.executors + lastExecDelta;
+    					last = last - 1;
+    				}
+    			}
+    		    first = first + 1; // follow the map-"loop"
+    		};
+    		// handle executors among pipelines
+    		println(printNodes(pip));
+    	};
+    }
+    
+    initCapacities(QM cfg, InitExperimentEvent evt, FileArtifact out) = {
+    	String pipName = evt.pipeline();
+    	sequenceOf(Pipeline) pipelines;
+    	if (pipName == "") {
+    		pipelines = cfg.pipelines;
+    	} else {
+    		pipelines = cfg.pipelines->select(Pipeline p | p.name == pipName);
+    	}
+    	balanceCapacities(pipelines, evt.getNumWorkers(), evt.getNumExecutors());
+    	String text = "";
+    	map(Pipeline p: pipelines) {
+    		text = text + (printNodes(p));
+    	};
+    	out.text().setText(text);
+    }
+
+/*
+    initCapacity(QM cfg, Integer numWorkers, Integer executorPool) = {
+    	sequenceOf(Pipeline) tst = cfg.pipelines->select(Pipeline p | p.name == "RandomPip");
+    	map(Pipeline pip: cfg.pipelines->select(Pipeline p | p.name == "RandomPip")) {
+  	        
+  	        println(printNodes(pip));
+  	        
+  	        // determine numbering / sequence
+    		mapOf(PipelineNode, setOf(PipelineNode)) predecessors = {};
+    		collectPred(pip, predecessors);
+    		sequenceOf(PipelineNode) nodes = {};
+    		collectNodes(pip, nodes, predecessors);
+    		// determine loads: already assigned if called ;)
+    		sequenceOf(PipelineNode) nodeSequence = nodes->sort(PipelineNode e | e.capacity);
+    		nodeSequence = nodeSequence.revert();
+    		Real HWM = 0.8;
+    		Real LWM = 0.5;
+    		Integer first = 0;
+    		Integer last = nodeSequence.size() - 1;
+    		map(PipelineNode n: nodeSequence) { // we do not have "while" :|
+				PipelineNode firstNode = nodeSequence.get(first);
+				PipelineNode lastNode = nodeSequence.get(last);
+		        if (first < last and firstNode.capacity > HWM and lastNode.capacity < HWM) {
+    				Integer firstExecDelta = 0;
+    				Integer lastExecDelta = 0;
+    				if (lastNode.executors > 1) { // there is something to distribute
+                        lastExecDelta = -1;
+                        firstExecDelta = 1; 					
+    				} else if (executorPool > 0) {
+    					executorPool = executorPool - 1;
+    					firstExecDelta = 1;
+    				}
+    				if (firstExecDelta > 0 or lastExecDelta > 0) {
+    					firstNode.executors = firstNode.executors + firstExecDelta;
+    					lastNode.executors = lastNode.executors + lastExecDelta;
+    					last = last - 1;
+    				}
+    			}
+    		    first = first + 1; // follow the map-"loop"
+    		};
+    		// handle executors among pipelines
+    		println(printNodes(pip));
+    		FileArtifact out = "$target/capacities.txt";
+    		out.text().setText(printNodes(pip));
+    	};
+    }
+   */  
+    // ------------------------------------------------------------------------------------------
+    // collect predecessors of pipeline nodes - we cannot navigate back over flows at the moment
+    // ------------------------------------------------------------------------------------------
+        
+    collectPred(Pipeline pip, mapOf(PipelineNode, setOf(PipelineNode)) preds) = {
+    	map(Source src : pip.sources) {
+  		    collectPred(src, preds);
+        };
+    }
+    
+    storePred(PipelineNode start, setOf(Flow) flows, mapOf(PipelineNode, setOf(PipelineNode)) preds) = {
+    	map(Flow f : flows) {
+    		// empty set if not already registered
+    	    if (!preds.containsKey(f.destination)) {
+    	    	setOf(PipelineNode) tmp = {};
+    		    preds.add(f.destination, tmp);
+    	    }
+    	    // add
+    	    preds.get(f.destination).add(start);
+    	    // and go on
+    	    collectPred(f.destination, preds);
+    	};
+    }
+    
+    // dynamic dispatch base
+    collectPred(PipelineNode elt, mapOf(PipelineNode, setOf(PipelineNode)) preds) = {
+    }
+
+    collectPred(Source src, mapOf(PipelineNode, setOf(PipelineNode)) preds) = {
+    	storePred(src, src.output, preds);
+    }
+
+    collectPred(ProcessingElement elt, mapOf(PipelineNode, setOf(PipelineNode)) preds) = {
+    	storePred(elt, elt.output, preds);
+    }
+    
+    // ------------------------------------------------------------------------------------------
+    // collect pipeline nodes in depth-first-sequence of nodes will all incoming flows visited
+    // ------------------------------------------------------------------------------------------
+      
+    collectNodes(Pipeline pip, sequenceOf(PipelineNode) nodes, mapOf(PipelineNode, setOf(PipelineNode)) preds) = {
+  	    map(Source src : pip.sources) {
+  		    collectNodes(src, nodes, preds);
+        };
+    }
+    
+    handleTransitions(PipelineNode start, setOf(Flow) flows, sequenceOf(PipelineNode) nodes, mapOf(PipelineNode, setOf(PipelineNode)) preds) = {
+  	    map(Flow f : flows) {
+  	    	// transition removes predecessor and goes on if this transition has not already been visited
+  	    	if (preds.get(f.destination).remove(start)) {
+  	        // go on only if all predecessors have been considered before
+  	    	    if (preds.get(f.destination).isEmpty()) {
+  	  	            collectNodes(f.destination, nodes, preds);
+  	    	    }
+  	    	}
+  	    };
+    }
+
+    // dynamic dispatch base
+    collectNodes(PipelineNode elt, sequenceOf(PipelineNode) nodes, mapOf(PipelineNode, setOf(PipelineNode)) preds) = {
+  	    nodes.add(elt);
+    }
+  
+    collectNodes(Source src, sequenceOf(PipelineNode) nodes, mapOf(PipelineNode, setOf(PipelineNode)) preds) = {
+  	    nodes.add(src);
+  	    handleTransitions(src, src.output, nodes, preds);
+    }
+  
+    collectNodes(ProcessingElement elt, sequenceOf(PipelineNode) nodes, mapOf(PipelineNode, setOf(PipelineNode)) preds) = {
+  	    if (!nodes.includes(elt)) {
+  	        nodes.add(elt);
+  	        handleTransitions(elt, elt.output, nodes, preds);
+        }
+    }
+    
+    // ------------------------------------------------------------------------------------------
+    // print pipeline nodes
+    // ------------------------------------------------------------------------------------------
+
+    String defaulted(DecisionVariable dv, Any dflt) = : {
+        if (dv.isConfigured()) {
+            "${dv}";
+        } else {
+            "${dflt}";
+        }
+    }
+
+    String printNodes(Pipeline pip) = {
+    	setOf(PipelineNode) done = {};
+    	String tmp = "\n";
+  	    map(Source src : pip.sources) {
+  		    tmp = printNodes(src, tmp, done);
+        };
+        tmp;
+    }
+    
+    String handleTransitions(PipelineNode start, setOf(Flow) flows, String text, setOf(PipelineNode) done) = {
+    	String tmp = printNode(start, text, done);
+  	    map(Flow f : flows) {
+  	    	if (!done.includes(f.destination)) {
+  	    	    tmp = printNodes(f.destination, tmp, done);
+  	    	}
+  	    };
+  	    tmp;
+  	}
+  	
+  	String printNode(PipelineNode elt, String text, setOf(PipelineNode) done) = {
+  		if (!done.includes(elt)) {
+  		    done.add(elt);
+  		    // runtime settings may be undefined if algorithm is executed too early
+  		    "$text ${elt.name}\t${defaulted(elt.executors, 0)}\t${defaulted(elt.capacity, 0)}\t${defaulted(elt.parallelism, 0)}\n";
+  		} else {
+  			"";
+  		}
+  	}
+
+    // dynamic dispatch base
+    String printNodes(PipelineNode elt, String text, setOf(PipelineNode) done) = {
+    	printNode(elt, text, done);
+    }
+  
+    String printNodes(Source src, String text, setOf(PipelineNode) done) = {
+    	handleTransitions(src, src.output, text, done);
+    }
+  
+    String printNodes(ProcessingElement elt, String text, setOf(PipelineNode) done) = {
+    	handleTransitions(elt, elt.output, text, done);
+    }
+
+}

@@ -1,0 +1,198 @@
+project Pipelines {
+   
+	import Basics;
+	import Families;
+	import DataManagement;
+	import Hardware;
+	   
+	annotate BindingTime bindingTime = BindingTime.compile to Pipelines;
+	annotate Boolean userVisible = true to Pipelines;
+
+    // TODO this is Storm stuff - find more abstract/adequate representation
+	enum Grouping {shuffleGrouping, fieldsGrouping, globalGrouping, directGrouping, allGrouping, customGrouping, noneGrouping}; // this is very storm specific - can we infer this from the element type?
+	
+    // all elements in a pipeline
+    abstract compound PipelineElement {
+		NonEmptyString name;
+		setOf(Constraint) constraints = {}; // user constraints
+	} 
+   
+    // a flow among pipeline nodes
+	compound Flow refines PipelineElement {
+		refTo(PipelineNode) destination;
+	    Grouping grouping;
+	    Constraint destinationConst = destination.typeOf() <> Source;
+	}
+	
+	// all nodes in a pipeline
+    abstract compound PipelineNode refines PipelineElement{
+    	PositiveInteger parallelism;
+		assign (userVisible = false) to {
+		    Tuples inputTypes; 
+		    Tuples outputTypes;
+		}
+		assign(bindingTime = BindingTime.runtimeMon) to {
+            Capacity capacity;
+            capacity >= capacityLowWatermark; // quality constraint -> trigger adaptation if violated
+            capacity <= capacityHighWatermark;
+		}
+        assign(bindingTime = BindingTime.runtimeEnact) to {
+            Executors executors;
+        }
+    }
+	
+	compound Source refines PipelineNode {
+		setOf(refTo(Flow)) output;
+  		refTo(DataSource) source;
+  		inputTypes = source.input; 
+//  		Constraint reverseProp = if isDefined(outputTypes) and isDefined(inputTypes) then outputTypes.overlaps(inputTypes) else outputTypes == output->apply(f; Tuples r12 = {} | r12 = r12.union(f.destination.inputTypes)) endif;
+  		Constraint reverseProp = if isDefined(outputTypes) and isDefined(inputTypes) then collectFieldNames(outputTypes).overlaps(collectFieldNames(inputTypes)) and collectFieldTypes(outputTypes).overlaps(collectFieldTypes(inputTypes)) else outputTypes == output->apply(f; Tuples r12 = {} | r12 = r12.union(f.destination.inputTypes)) endif;
+		//  if isDefined(outputTypes) and isDefined(inputTypes) then outputTypes.overlaps(inputTypes) else outputTypes == inputTypes endif;
+ 		Constraint sourceTypeCheck = typeCheck(self, self.output);
+
+	    assign(bindingTime = BindingTime.runtimeMon) to {
+			Velocity velocity;
+			Volume volume;
+			Volatility volatility;
+			Accuracy_Confidence accuracyConfidence;
+			Completeness completeness;
+			
+			velocity = source.velocity;
+			volume = source.volume;
+			volatility = source.volatility;
+			accuracyConfidence = source.accuracyConfidence;
+			completeness = source.completeness;
+		} 
+	} 
+	   
+	compound Sink refines PipelineNode {
+	    refTo(DataSink) sink;
+	    outputTypes = sink.output;
+	    inputTypes = outputTypes;
+	    //if isDefined(outputTypes) and isDefined(inputTypes) then outputTypes.overlaps(inputTypes) else outputTypes == inputTypes endif;
+
+	    assign(bindingTime = BindingTime.runtimeMon) to {
+			Velocity velocity;
+			Volume volume;
+			Accuracy_Confidence accuracyConfidence;
+			
+			velocity = sink.velocity;
+			volume = sink.volume;
+			accuracyConfidence = sink.accuracyConfidence;
+			//MPVolatility mpVolatility;
+		} 
+	} 
+
+	// inner node that processes something
+	compound ProcessingElement refines PipelineNode {
+		setOf(refTo(Flow)) output;
+		Constraint peTypeCheck = typeCheck(self, self.output);
+	}
+	   
+	compound FamilyElement refines ProcessingElement {
+		refTo(Family) family;
+        assign(bindingTime = BindingTime.runtimeMon) to {
+		    refTo(Algorithm) actual; // shall be runtimeEnact -> Reasoner :(
+		
+            // derived			
+			Latency latency;
+			Throughput_Item throughputItems;
+			Throughput_Volume throughputVolume;
+			UsedMemory memoryUse;
+            Accuracy_Confidence accuracyConfidence;
+            Accuracy_ErrorRate accuracyErrorRate;
+            Believability believability;
+            Relevancy relevancy;
+            Completeness completeness;
+            Volume volume;
+            Velocity velocity;
+            Variety variety;
+            
+            latency = actual.latency;
+            throughputItems = actual.throughputItems;
+            throughputVolume = actual.throughputVolume;
+            memoryUse = actual.memoryUse;
+            accuracyConfidence = actual.accuracyConfidence;
+            accuracyErrorRate = actual.accuracyErrorRate;
+            believability = actual.believability;
+            relevancy = actual.relevancy;
+            completeness = actual.completeness;
+            volume = actual.volume;
+            velocity = actual.velocity;
+            variety = actual.variety;
+		}
+		Constraint tuplesInputTypeCheck = typeCheckTuplesInput(self, self.family);
+		Constraint tuplesOutputTypeCheck = typeCheckTuplesOutput(self, self.family);
+		Constraint actualAlgorithmCheck = family.members->exists(a | a == actual);
+	} 
+	
+	compound DataManagementElement refines ProcessingElement {
+	    refTo(PersistentDataElement) dataManagement; 
+	    inputTypes = outputTypes;
+	}
+
+	abstract compound StreamOperationElement refines ProcessingElement {
+		// needs to define inputTypes <-> outputTypes
+	}
+
+/* 	
+	compound Artifact {
+		NonEmptyString groupId;
+		NonEmptyString artifactId;
+		NonEmptyString versionNum;
+	}
+*/	
+	compound SubPipelineAlgorithm refines Algorithm {
+		refTo(Pipeline) subPipeline;
+	}
+	compound Pipeline {
+		NonEmptyString name;
+		Description description;
+		setOf(refTo(Source)) sources;
+		PositiveInteger numworkers;
+		PositiveInteger timeout = 100;
+		ArtifactString artifact;
+		Boolean debug;
+		Boolean fastSerialization = false;
+		Boolean isSubPipeline = false;
+		setOf(refTo(FamilyElement)) connectors;
+		refTo(Family) subPipelineFamily;
+		assign(bindingTime = BindingTime.runtimeMon) to {
+			Latency latency;
+			Throughput_Item throughputItems;
+			Throughput_Volume throughputVolume;
+            Accuracy_Confidence accuracyConfidence;
+            Accuracy_ErrorRate accuracyErrorRate;
+            Capacity capacity;
+            Executors executors;
+        }
+		setOf(Constraint) constraints = {}; // user constraints
+		Constraint sourcesCount = (isSubPipeline == false implies sources.size() > 0);
+	}
+	
+	sequenceOf(refTo(Pipeline)) pipelines;
+	Constraint pipelineNamesUnique = not(pipelines->collect(p|p.name).hasDuplicates());
+	
+	def Boolean typeCheck(PipelineNode src, setOf(refTo(Flow)) output) =
+	    output->forAll(f|typeCheck(src, f.destination));
+	    
+	def Boolean typeCheck(PipelineNode src, PipelineNode dst) = 
+		if isDefined(dst.inputTypes) and isDefined(src.outputTypes) then collectFieldNames(src.outputTypes).overlaps(collectFieldNames(dst.inputTypes)) and collectFieldTypes(src.outputTypes).overlaps(collectFieldTypes(dst.inputTypes)) else dst.inputTypes == src.outputTypes endif;
+
+//	def Boolean typeCheck(PipelineNode src, PipelineNode dst) = 
+//		if isDefined(dst.inputTypes) and isDefined(src.outputTypes) then src.outputTypes.overlaps(dst.inputTypes) else dst.inputTypes == src.outputTypes endif;
+		
+	def sequenceOf(NonEmptyString) collectFieldNames(Tuples tuples) = 
+		tuples->collect(Tuple tuple | tuple.fields->collect(Field field | field.name)).flatten();
+		
+	def sequenceOf(refTo(FieldType)) collectFieldTypes(Tuples tuples) =
+		tuples->collect(Tuple tuple | tuple.fields->collect(Field field | field.type)).flatten();
+
+    // strange constraints if written directly in compound -> if isDefined() then isDefined() else isDefined()	    
+	def Boolean typeCheckTuplesInput(FamilyElement elt, Family family) =
+		if isDefined(elt.inputTypes) and isDefined(family.input) then elt.inputTypes.overlaps(family.input) else elt.inputTypes == family.input endif;
+
+	def Boolean typeCheckTuplesOutput(FamilyElement elt, Family family) =
+		if isDefined(elt.outputTypes) and isDefined(family.output) then elt.outputTypes.overlaps(family.output) else elt.outputTypes == family.output endif;
+	
+}

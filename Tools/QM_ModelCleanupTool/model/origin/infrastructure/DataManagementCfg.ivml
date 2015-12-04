@@ -1,0 +1,281 @@
+project DataManagementCfg {
+
+	import DataManagement;
+	import BasicsCfg;
+	DataSource spring;
+	DataSource twitter;
+	DataSource randomSource;
+	DataSink priorSnk;
+	DataSink randomSink;
+	PersistentDataElement hBaseDataManagement;
+	DataSource DataSourceVar_4;
+	dataSources = {
+		refBy(spring), refBy(twitter), refBy(randomSource), refBy(DataSourceVar_4)
+	};
+	dataSources.bindingTime = BindingTime.compile;
+	dataSinks = {
+		refBy(priorSnk), refBy(randomSink)
+	};
+	dataSinks.bindingTime = BindingTime.compile;
+	persistentDataElements = {
+		refBy(hBaseDataManagement)
+	};
+	persistentDataElements.bindingTime = BindingTime.compile;
+	spring = DataSource {
+		host = "springtechno.org", 
+		input = {
+			Tuple {
+				name = "symbolList", 
+				fields = {
+					Field {
+						name = "allSymbols", 
+						type = refBy(StringListType)
+					}
+				}
+			}, Tuple {
+				name = "springStream", 
+				fields = {
+					Field {
+						name = "symbolTuple", 
+						type = refBy(StringType)
+					}
+				}
+			}
+		}, 
+		sourceCls = "eu.qualimaster.algorithms.imp.correlation.SpringClientSimulator", 
+		name = "Spring Financial Data", 
+		artifact = "eu.qualimaster:spring-client-simulator:3.0-SNAPSHOT", 
+		storageLocation = "input/spring", 
+		strategy = DataManagementStrategy.LeastRecentlyUsed, 
+		timeLine = 1000, 
+		strategyAssigned = true, 
+		strategyC1 = true, 
+		strategyC2 = true, 
+		strategyC3 = true
+	};
+	twitter = DataSource {
+		host = "twitter.com", 
+		input = {
+			Tuple {
+				name = "symbolList", 
+				fields = {
+					Field {
+						name = "allSymbols", 
+						type = refBy(StringListType)
+					}
+				}
+			}, Tuple {
+				name = "twitterStream", 
+				fields = {
+					Field {
+						name = "status", 
+						type = refBy(ObjectType)
+					}
+				}
+			}
+		}, 
+		parameters = {
+			StringParameter {
+				defaultValue = "mVG7FJIMFDXrwfmVK3NTsmXJf", 
+				name = "consumerKey"
+			}, StringParameter {
+				defaultValue = "qbVQfvaSC5ywH1PcMZL2vTHnm9tQ2LRlD0JxEzZgIrzvqQMbnr", 
+				name = "consumerSecret"
+			}, StringParameter {
+				defaultValue = "2831271881-fb2wQVANZdrPiSDEhzoGniRaBvIHZVfuRPI8XtJ", 
+				name = "accessToken"
+			}, StringParameter {
+				defaultValue = "n4f2mmY0QuS95fWYOygtzYD8xzbRBiTlXt2EbYF77IIgy", 
+				name = "accessTokenSecret"
+			}, IntegerParameter {
+				defaultValue = 0, 
+				name = "queueSize"
+			}, StringParameter {
+				defaultValue = "/user/storm/resultSymbols", 
+				name = "tweetDirectory"
+			}, RealParameter {
+				defaultValue = 0.0, 
+				name = "speedFactor"
+			}, BooleanParameter {
+				defaultValue = false, 
+				name = "runLocally"
+			}, BooleanParameter {
+				defaultValue = true, 
+				name = "adjustTimeToNow"
+			}, BooleanParameter {
+				defaultValue = false, 
+				name = "realLoops"
+			}
+		}, 
+		sourceCls = "eu.qualimaster.data.stream.source.TwitterFileStreaming", 
+		name = "Twitter Stream Data", 
+		description = "", 
+		artifact = "eu.qualimaster:TwitterStreamDataSource:0.0.5-SNAPSHOT", 
+		storageLocation = "input/twitter", 
+		strategy = DataManagementStrategy.None, 
+		timeLine = 0, 
+		strategyAssigned = true, 
+		strategyC1 = true, 
+		strategyC2 = true, 
+		strategyC3 = true
+	};
+	randomSource = DataSource {
+		input = {
+			Tuple {
+				name = "randomData", 
+				fields = {
+					Field {
+						name = "randomInteger", 
+						type = refBy(IntegerType)
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				defaultValue = 0, 
+				name = "delay"
+			}
+		}, 
+		sourceCls = "eu.qualimaster.algorithms.RandomSourceAlg", 
+		name = "Random Source", 
+		artifact = "eu.qualimaster.test:RandomSourceAlg:0.0.2-SNAPSHOT", 
+		strategy = DataManagementStrategy.None, 
+		strategyAssigned = true, 
+		strategyC1 = true, 
+		strategyC2 = true, 
+		strategyC3 = true
+	};
+	priorSnk = DataSink {
+		output = {
+			Tuple {
+				name = "pairwiseFinancial", 
+				fields = {
+					Field {
+						name = "pairwiseCorrelationFinancial", 
+						type = refBy(StringType)
+					}
+				}
+			}, Tuple {
+				name = "pairwiseTwitter", 
+				fields = {
+					Field {
+						name = "pairwiseCorrelationTwitter", 
+						type = refBy(StringType)
+					}
+				}
+			}
+		}, 
+		sinkCls = "eu.qualimaster.algorithms.imp.correlation.PriorityDataSinkForFinancialAndTwitter", 
+		name = "Priority Data Sink", 
+		artifact = "eu.qualimaster:hy-priority-data-sink:3.0-SNAPSHOT", 
+		storageLocation = "output/prior", 
+		strategy = DataManagementStrategy.None, 
+		timeLine = 0, 
+		strategyAssigned = true, 
+		strategyC1 = true, 
+		strategyC2 = true, 
+		strategyC3 = true
+	};
+	randomSink = DataSink {
+		output = {
+			Tuple {
+				name = "proccessedData", 
+				fields = {
+					Field {
+						name = "randomInteger", 
+						type = refBy(IntegerType)
+					}
+				}
+			}
+		}, 
+		sinkCls = "eu.qualimaster.algorithms.RandomSinkAlg", 
+		name = "Random Sink", 
+		artifact = "eu.qualimaster.test:RandomSinkAlg:0.0.2-SNAPSHOT", 
+		strategy = DataManagementStrategy.None, 
+		strategyAssigned = true, 
+		strategyC1 = true, 
+		strategyC2 = true, 
+		strategyC3 = true
+	};
+	hBaseDataManagement = PersistentDataElement {
+		name = "hBase DataManagement", 
+		storageLocation = "hBase-l3s", 
+		strategy = DataManagementStrategy.FirstInFirstOut, 
+		timeLine = 0, 
+		strategyAssigned = true, 
+		strategyC1 = true, 
+		strategyC2 = true, 
+		strategyC3 = true
+	};
+	DataSourceVar_4 = DataSource {
+		host = "twitter.com", 
+		input = {
+			Tuple {
+				name = "analysis", 
+				fields = {
+					Field {
+						name = "status", 
+						type = refBy(ObjectType)
+					}
+				}
+			}
+		}, 
+		parameters = {
+			StringParameter {
+				defaultValue = "mVG7FJIMFDXrwfmVK3NTsmXJf", 
+				name = "consumerKey"
+			}, StringParameter {
+				defaultValue = "qbVQfvaSC5ywH1PcMZL2vTHnm9tQ2LRlD0JxEzZgIrzvqQMbnr", 
+				name = "consumerSecret"
+			}, StringParameter {
+				defaultValue = "2831271881-fb2wQVANZdrPiSDEhzoGniRaBvIHZVfuRPI8XtJ", 
+				name = "accessToken"
+			}, StringParameter {
+				defaultValue = "n4f2mmY0QuS95fWYOygtzYD8xzbRBiTlXt2EbYF77IIgy", 
+				name = "accessTokenSecret"
+			}, IntegerParameter {
+				defaultValue = 0, 
+				name = "queueSize"
+			}, StringParameter {
+				defaultValue = "/user/storm/resultSymbols", 
+				name = "tweetDirectory"
+			}, RealParameter {
+				defaultValue = 0.0, 
+				name = "speedFactor"
+			}, BooleanParameter {
+				defaultValue = false, 
+				name = "runLocally"
+			}, BooleanParameter {
+				defaultValue = true, 
+				name = "adjustTimeToNow"
+			}, BooleanParameter {
+				defaultValue = false, 
+				name = "realLoops"
+			}
+		}, 
+		sourceCls = "eu.qualimaster.data.stream.source.TwitterStreaming", 
+		name = "NewTwitterStreamDataSource", 
+		description = "", 
+		artifact = "eu.qualimaster:NewTwitterStreamDataSource:0.0.1-SNAPSHOT", 
+		storageLocation = "input/twitter", 
+		strategy = DataManagementStrategy.None, 
+		timeLine = 0, 
+		strategyAssigned = true, 
+		strategyC1 = true, 
+		strategyC2 = true, 
+		strategyC3 = true
+	};
+	freeze {
+		dataSources;
+		dataSinks;
+		persistentDataElements;
+		spring;
+		twitter;
+		randomSource;
+		priorSnk;
+		randomSink;
+		hBaseDataManagement;
+		DataSourceVar_4;
+	} but (f|f.bindingTime >= BindingTime.runtimeMon)
+}

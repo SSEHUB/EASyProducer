@@ -1,0 +1,30 @@
+project Infrastructure {
+	
+    import Basics;
+	import Hardware;
+	import ReconfigurableHardware;
+	import Families;
+	import Observables;
+	import Adaptivity;
+	import Pipelines; 
+
+	annotate BindingTime bindingTime = BindingTime.compile to Infrastructure;
+	
+	setOf(refTo(Pipeline)) activePipelines;
+	setOf(refTo(SubPipelineAlgorithm)) subPipelineAlgorithms;
+	ArtifactString interfaceArtifact;
+	ArtifactString modelArtifact;
+	String repositoryURL;
+
+    // function calculating the workers of the active pipelines	
+	def Integer activePipelinesNumWorkers() = 
+	  activePipelines->apply(refTo(Pipeline) pipeline; Integer totalNumWorkers = 0 | totalNumWorkers = totalNumWorkers + pipeline.numworkers);
+    
+    // function calculating the (different) configured worker ports
+    def Integer workerMachinesPortsCount() =
+      machines->select(m|m.role==MachineRole.Worker)->apply(refTo(Machine) machine; Integer usedPorts = 0 | usedPorts = usedPorts + machine.ports.size());
+	
+	// Constraint for checking if the number of workers for the active pipelines is less then reserved ports for machines	
+	Constraint workerportCheck = activePipelinesNumWorkers() <= workerMachinesPortsCount();	
+	
+}  

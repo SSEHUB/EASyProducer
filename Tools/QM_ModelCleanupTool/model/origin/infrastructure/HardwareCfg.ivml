@@ -1,0 +1,100 @@
+project HardwareCfg {
+
+    import Hardware;
+ 
+ 
+    Machine machine1;
+    machine1 = {
+		name="snf-618466.vm.okeanos.grnet.gr", 
+		memory=1000000, 
+		processors=2, 
+		frequency=10,
+		ports={},
+		role = MachineRole.Manager
+    };
+    
+    Machine machine2;
+    machine2 = {
+		name="snf-618463.vm.okeanos.grnet.gr", 
+		memory=1000000, 
+		processors=2, 
+		frequency=10,
+		ports={6700,6701,6702,6703},
+		role = MachineRole.Worker
+    };
+    
+    Machine machine3;
+    machine3 = {
+		name="snf-618464.vm.okeanos.grnet.gr", 
+		memory=1000000, 
+		processors=2, 
+		frequency=10,
+		ports={6700,6701,6702,6703},
+		role = MachineRole.Worker
+    };
+    
+    Machine machine4;
+    machine4 = {
+		name="snf-618465.vm.okeanos.grnet.gr", 
+		memory=1000000, 
+		processors=2, 
+		frequency=10,
+		ports={6700,6701,6702,6703},
+		role = MachineRole.Worker
+    };
+    
+    Machine machine5;
+    machine5 = { 
+		name="snf-625826.vm.okeanos.grnet.gr", 
+		memory=1000000, 
+		processors=2, 
+		frequency=10,
+		ports={6700,6701,6702,6703},
+		role = MachineRole.Worker
+	};  
+	
+	Machine machine6;
+	machine6 = {
+		name="snf-625827.vm.okeanos.grnet.gr", 
+		memory=1000000, 
+		processors=2, 
+		frequency=10,
+		ports={6700,6701,6702,6703},
+		role = MachineRole.Worker
+	};
+	
+	Machine machine7;
+	machine7 = {
+		name="snf-625828.vm.okeanos.grnet.gr", 
+		memory=1000000, 
+		processors=2, 
+		frequency=10,
+		ports={6700,6701,6702,6703},
+		role = MachineRole.Worker
+	};
+	
+	Machine machine8;
+	machine8 = { 
+		name="snf-625829.vm.okeanos.grnet.gr", 
+		memory=1000000, 
+		processors=2, 
+		frequency=10,
+		ports={6700,6701,6702,6703},
+		role = MachineRole.Worker
+	};
+ 
+	machines = {refBy(machine1), refBy(machine2), refBy(machine3), refBy(machine4), refBy(machine5), refBy(machine6), refBy(machine7), refBy(machine8)}; 
+ 
+	freeze {
+		machine1;
+		machine2;
+		machine3;
+		machine4;
+		machine5;
+		machine6;
+		machine7;
+		machine8;
+        machines;   
+    } but (f|f.bindingTime >= BindingTime.runtimeMon)
+
+}
