@@ -1,0 +1,35 @@
+vilScript Reasoner (Project source, Configuration config, Project target) {
+
+    version v0;
+    
+    main(Project source, Configuration config, Project target) = : {
+    	// Collect all java files
+ 	    setOf(JavaFileArtifact) files = target.selectByType(JavaFileArtifact);
+ 	    // Set the classpath by adding each java file to the class path
+    	String newClasspath = target.path();
+    	String allFiles = "";
+    	map (JavaFileArtifact artifact = files) {
+    		allFiles + artifact.getPath() + ";";
+    	};
+        setOf(String) classpath = {newClasspath, allFiles};
+        target.setSettings(JavaSettings.CLASSPATH, classpath);
+		map (JavaFileArtifact file = files) { 
+			// Remove all logging outputs
+    	    JavaClass cls = file.defaultClass();
+        	cls->deleteStatement(JavaCall c | (c.getType() == "EASyLogger" or c.getType() == "IAdditionalInformationLogger") and (c.getName() == "info" or c.getName() == "error") or c.getName() == "debug" or c.getName() == "exception" or c.getName() == "warn");
+        	// After removing all logging outputs clean up by removing the logger attribute
+        	JavaAttribute attribute = cls.getAttributeByName("LOGGER");
+        	if (null != attribute) {
+	        	attribute.delete();
+        	}
+        	// Remove imports after all logging references were removed
+        	setOf(JavaImport) imports = file.imports();
+        	map (JavaImport imp = imports) {
+        		if (imp.getName() == "de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger" or imp.getName() == "de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory") {
+        			imp.delete();
+        		}
+        	};
+    	};
+    }
+
+}

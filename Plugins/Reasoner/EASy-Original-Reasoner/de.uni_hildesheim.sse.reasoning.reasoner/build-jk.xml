@@ -7,6 +7,7 @@
 	<property name="src.dir" value="src"/>
 	<property name="javacSource" value="1.6"/>
 	<property name="javacTarget" value="1.6"/>
+	<property name="easyLibs.dir" value="easyLibs"/>
 	
 	<path id ="includes">
 		<!-- Reasoner Core -->
@@ -24,23 +25,45 @@
 		</fileset>
 	</path>
 	
+	
 	<!-- Targets  -->
 	<target name="init">
-		<!-- Delete generated folders -->
+	  <!-- Delete generated folders -->
 		<delete dir="${build.base.dir}"/>
+		<delete dir="${easyLibs.dir}"/>
+
+		<!-- Prepare EASy standalone ANT Lib (copy libraries to avoid problems with building the standalone libs) -->
+		<mkdir dir="${easyLibs.dir}"/>
+	  <copy todir="${easyLibs.dir}">
+			<fileset dir="${home.base.dir}/${projects.standalone.dir}/build/generatedLibs/dist">
+	        <include name="**/*.jar"/>
+	    </fileset>
+	  </copy>
+			
+		<!-- collect the standalone libraries -->
+  	<path id="easyTaskDef.lib">
+  		<fileset dir="easyLibs">
+  			<include name="*.jar"/>
+  	  </fileset>
+  	</path>
+
+	  <!-- Create EASy task -->
+	  <taskdef name="easy" classname="de.uni_hildesheim.sse.easy.ant.EASy" classpathref="easyTaskDef.lib"/>
 		
 		<!-- Create folders -->
-        <mkdir dir="${build.base.dir}"/>
+    <mkdir dir="${build.base.dir}"/>
 		<mkdir dir="${build.classes.dir}"/>
 		<mkdir dir="${build.jar.dir}"/>
 	</target>
 	
 	<!-- Compile all files without test classes -->
 	<target name="compile" depends="init">
+		<property name="projectFolder" location="${base.dir}"/>
+		<easy source="${projectFolder}" target="${projectFolder}" projectName="Reasoner"/>
 		<javac srcdir="${src.dir}" debug="true" destdir="${build.classes.dir}" includeAntRuntime="no" failonerror="true" source="${javacSource}" target="${javacTarget}" encoding="${javac.encoding}">
 			<classpath refid="includes" />	
 		</javac>
-    </target>
+  </target>
 	
 	<!-- Creates a jar file -->
 	<target name="jar" depends="compile">

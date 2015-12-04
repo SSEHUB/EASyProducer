@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProductLineProject id="ca74a592-912a-4a0c-ac61-aa6aa3026a52" name="Reasoner" version="0" location="Reasoner">
+	<predecessors>
+	</predecessors>
+	<successors>
+	</successors>
+	<settings>
+		<entity debug="false" />
+	</settings>
+	<reasoners>
+		<entity timeout="0" />
+	</reasoners>
+	<instantiators>
+	</instantiators>
+</ProductLineProject>
