@@ -1,0 +1,12 @@
+Families::Family::name = name
+Families::Family::input = input fields
+Families::Family::output = output fields
+Families::Family::members = family members
+Families::Family::inputCheck = Input of at least one algorithm in the Family does not match the input of the Family
+Families::Family::outputCheck = Output of at least one algorithm in the Family does not match the output of the Family
+Families::Family::parameterCheck = Algorithm parameters must be declared in Family
+Families::Family::memberCount = There should be at least 1 member
+Families::Family::inputGivenCheck = Input should be assigned
+Families::Family::outputGivenCheck = Output should be assigned
+Families::families = configured families
+Families::familyNameUnqiue = All family names must be unique

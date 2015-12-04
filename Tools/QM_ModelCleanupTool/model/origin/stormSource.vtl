@@ -1,0 +1,219 @@
+import commonVTLMethods;
+@advice(QM)
+template stormSource(Configuration config, FileArtifact target, DecisionVariable elt, String topoName, Boolean debug) {
+    
+	/*
+	 * Produces the variables of the output tuples.
+	 */	
+	def produceInOrOutputVariable(sequenceOf(Tuple) tuples, Boolean output, String srcName) {
+		String tupleName;
+		String ending;
+		if(output) {
+			ending = "Output";
+		} else{
+			ending = "Input";
+		}
+		for(Tuple t : tuples) {
+			//get the tuple name
+			tupleName = t.name;
+			//change the first letter to upper letter
+			tupleName = firstToUpperCase(tupleName);
+			String srcInfName = "I" + srcName.firstToUpperCase() + "${tupleName}${ending}";
+			'    //transient ${toIdentifier(srcInfName)} dataItem${tupleName} = null;'
+		}
+	}
+	    
+    def main(Configuration config, FileArtifact target, DecisionVariable elt, String topoName, Boolean debug) {
+    	//name for the Spout class name
+        String name = elt.varName().firstToUpperCase() + elt.type();
+        //ending for the streamId
+        String nontopoStream = "Stream";
+        String topoStream = "TopoStream";
+        //casting the decisionVariable to Source
+        Source src = elt;   
+        DataSource dataSrc = src.source;
+        String srcName = dataSrc.name;        
+        String qualifiedClsName = dataSrc.sourceCls; //dataSrc.sourceCls().firstToUpperCase() leads to a problem!! 
+        JavaPath clsNamePath = qualifiedClsName;
+        String srcClsName = clsNamePath.getName();
+        String srcInfName;
+ 	
+        String streamId = elt.varName() + nontopoStream;
+        String topoStreamId = elt.varName() + topoStream;
+        'package eu.qualimaster.$topoName.topology;'
+    	''
+    	/****************************/
+    	/*        Imports           */  
+    	/****************************/    	
+    	'import java.util.*;'
+    	'import org.apache.log4j.Logger;'
+    	'import backtype.storm.topology.*;'
+    	'import backtype.storm.task.*;'
+    	'import backtype.storm.spout.*;'
+    	'import backtype.storm.tuple.*;'
+    	'import eu.qualimaster.data.inf.I${toIdentifier(srcName)};'
+        'import eu.qualimaster.data.inf.I${toIdentifier(srcName)}.*;'
+        'import eu.qualimaster.data.imp.${toIdentifier(srcName)};'
+        'import $qualifiedClsName;'
+        'import eu.qualimaster.common.signal.*;'
+        'import eu.qualimaster.events.EventManager;'
+    	'import eu.qualimaster.infrastructure.PipelineOptions;'
+        'import eu.qualimaster.pipeline.DefaultModeException;'
+    	'import eu.qualimaster.pipeline.DefaultModeMonitoringEvent;'
+    	''
+    	/****************************/
+    	/*        Spout class        */  
+    	/****************************/    	
+    	'/**'
+    	'* Define the source Spout class(GEN).'
+    	'**/'
+    	'@SuppressWarnings({ "rawtypes", "serial" })'
+    	'public class $name extends BaseSignalSpout {'
+    	''
+		    	/****************************/
+		    	/*     Class variables      */  
+		    	/****************************/    	
+    	if(debug) {
+    	'    final static Logger logger = Logger.getLogger($name.class);'
+    	}
+    	'    transient SpoutOutputCollector _collector;'
+    	'    transient I${toIdentifier(srcName)} sourceData;'    	
+    	//generates the variables of the output tuples
+    	produceInOrOutputVariable(dataSrc.input, true, srcName);
+		    	/****************************/
+		    	/*    Class constructor     */  
+		    	/****************************/    	
+	    ''
+	    '    public $name(String name, String namespace) {'
+    	'        super(name, namespace);'
+    	'    }'
+    	''
+		    	/****************************/
+		    	/*     open method          */  
+		    	/****************************/    	
+    	'    @Override'
+        '    public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) {'
+        '		 super.open(conf, context, collector);'
+        '        _collector = collector;' 
+        '        try {'
+		'            Class cls = Class.forName("$qualifiedClsName");'
+		'            sourceData = (I${toIdentifier(srcName)}) cls.newInstance();'
+		setDefaultParameterValue(dataSrc.parameters, "conf", "sourceData", 12);
+		'		    sourceData.connect();'		
+		'        } catch (ClassNotFoundException e) {'
+		'	         // TODO Auto-generated catch block'
+		'            e.printStackTrace();'
+		'        } catch (InstantiationException e) {'
+		'        	// TODO Auto-generated catch block'
+		'            e.printStackTrace();'
+		'        } catch (IllegalAccessException e) {'
+		'           // TODO Auto-generated catch block'
+		'            e.printStackTrace();'
+		'        }'     
+        '    }'
+        ''
+    			/*****************************************/
+		    	/* sendDefaultModeMonitoringEvent method */  
+		    	/*****************************************/
+		'    /**'
+		'     * Sends an a default mode monitoring event with a DefaultModeException case.' 
+		'     * @param exceptionCase the DefaultModeException case'
+		'     */'
+		'    private static void sendDefaultModeMonitoringEvent(DefaultModeException exceptionCase) {'
+		'        EventManager.send(new DefaultModeMonitoringEvent("$topoName", "${elt.varName()}", exceptionCase));'
+		'    }'        
+		    	/****************************/
+		    	/*     nextTuple method     */  
+		    	/****************************/        
+        '    @Override'
+        '    public void nextTuple() {'
+        if (genMonitoringProbes) {
+            '        long start = System.currentTimeMillis();'
+        }
+        '        boolean emitted = false;'
+        String tupleName;
+        for(Tuple t : dataSrc.input){
+			//get the tuple name
+			tupleName = t.name;
+			//change the first letter to upper letter
+			tupleName = firstToUpperCase(tupleName);
+			String srcImpName = toIdentifier(srcName.firstToUpperCase()) + "${tupleName}Output";
+        	srcInfName = "I" + srcName.firstToUpperCase() + "${tupleName}Output";
+        '        // Emitting stream "${streamId}${tupleName}".'
+        '        ${toIdentifier(srcInfName)} dataItem${tupleName} = new ${toIdentifier(srcName.firstToUpperCase())}.$srcImpName();'
+        '        try {'
+	    '            dataItem${tupleName} = sourceData.get${tupleName}();'
+	    '        } catch(DefaultModeException e) {'	
+	        for(Field f : t.fields) {
+	        	String fieldName = toIdentifier("${f.name}"); 
+				String upFieldName = firstToUpperCase(fieldName);
+				FieldType fdType = f.type;				
+				'dataItem${tupleName}.set${upFieldName}(${obtainDefaultValue(fdType)});' | 12;	
+	        }
+	        'sendDefaultModeMonitoringEvent(e);' | 12;
+	    '        }'
+	    '        if(dataItem${tupleName}!=null){'	
+	        if(debug){   		  
+		'            logger.info("Get data tuple for data source Spout:" + dataItem${tupleName});'
+		    }		
+		'            _collector.emit("${streamId}${tupleName}", new Values(dataItem${tupleName}));' /*,dataItem${tupleName} */
+		'            emitted = true;'		   
+	    '        }'
+	    ''
+        }
+        if (genMonitoringProbes) {
+        '        if (emitted) {'
+        '            aggregateExecutionTime(start);'
+        '        }'
+        }
+        '        '
+        '    }'
+        ''
+    			/********************************/
+		    	/* notifyParameterChange method */  
+		    	/********************************/               
+        if(dataSrc.parameters.isConfigured()) {
+			'@Override' | 4;
+			'public void notifyParameterChange(ParameterChangeSignal signal) {' | 4;
+			'try {' | 8;
+			'switch (signal.getParameter()) {' | 12;
+			setOf(Parameter) parameters = dataSrc.parameters;
+			for(Parameter p : parameters) {
+				String paraName = p.name;
+				String type = parameterTypeName(p);				
+				'case "$paraName" :' | 16;
+				'sourceData.setParameter${paraName.firstToUpperCase()}(signal.get${type.firstToUpperCase()}Value()); ' | 20;
+				'break;' | 20;
+				}
+			'}' | 12;
+			'} catch (ValueFormatException e) {' | 8;
+			'e.printStackTrace();' | 12;
+			'}' | 8;
+			'}' |4;		
+		}        
+        ''
+				/****************************/
+				/*       close method       */
+				/****************************/             
+        '    @Override'
+        '    public void close() {'
+        '        super.close();'
+        '		 sourceData.disconnect();'
+        '    }'
+        ''
+				/************************************/
+				/*   declareOutputFields method     */
+				/************************************/        
+        '	@Override'
+		'    public void declareOutputFields(OutputFieldsDeclarer declarer) {'
+		for(Tuple t : dataSrc.input){
+		//get the tuple name
+		tupleName = t.name;
+		//change the first letter to upper letter
+		tupleName = firstToUpperCase(tupleName);
+		'        declarer.declareStream("${streamId}${tupleName}", new Fields("datastream${tupleName}"));'        	     				
+		}
+		'    }'
+    	'}'
+    }    
+}

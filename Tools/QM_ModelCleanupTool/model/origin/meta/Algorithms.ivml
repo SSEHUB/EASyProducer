@@ -1,0 +1,41 @@
+project Algorithms {
+
+    import Basics;
+    import Observables;
+	import ReconfigurableHardware;
+	
+	annotate BindingTime bindingTime = BindingTime.compile to Algorithms;
+	 
+	compound Algorithm {
+		NonEmptyString name; 
+		ArtifactString artifact;
+		NonEmptyString class;
+		Description description;
+		Tuples input;    
+		Tuples output;
+		Parameters parameters;
+		refTo(HwNode) hwNode;
+		String algTopologyClass = null;
+		refTo(Algorithm) successor = null;
+		
+	    assign(bindingTime = BindingTime.runtimeMon) to {
+			Latency latency;
+			Throughput_Item throughputItems;
+			Throughput_Volume throughputVolume;
+			UsedMemory memoryUse;
+            Accuracy_Confidence accuracyConfidence;
+            Accuracy_ErrorRate accuracyErrorRate;
+            Believability believability;
+            Relevancy relevancy;
+            Completeness completeness;
+            Volume volume;
+            Velocity velocity;
+            Variety variety;
+		} 
+		Constraint inputGivenCheck = input.isDefined(); //untested
+		Constraint outputGivenCheck = output.isDefined(); //untested
+	} 
+	
+	setOf(refTo(Algorithm)) algorithms;
+	Constraint algNamesUnique = algorithms->collect(a|a.name.substitutes(" ", "")).size() == algorithms.size(); 
+}

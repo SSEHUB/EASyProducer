@@ -1,0 +1,10 @@
+Algorithms::Algorithm::name = name
+Algorithms::Algorithm::artifact = implementing artifact
+Algorithms::Algorithm::input = input fields
+Algorithms::Algorithm::output = output fields
+Algorithms::Algorithm::parameters = adaptable parameters
+Algorithms::Algorithm::hwType = realizing hardware
+Algorithms::Algorithm::inputGivenCheck = Input must be assigned
+Algorithms::Algorithm::outputGivenCheck = Output must be assigned
+Algorithms::algorithms = configured algorithms
+Algorithms::algNamesUnique = All algorithm names must be unique

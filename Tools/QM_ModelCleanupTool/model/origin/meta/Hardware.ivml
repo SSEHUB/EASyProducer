@@ -1,0 +1,47 @@
+project Hardware {
+
+    import Basics;
+    import Observables;
+	
+	annotate BindingTime bindingTime = BindingTime.compile to Hardware;
+	
+	enum MachineRole {Manager, Worker};
+	
+	compound Machine {
+		NonEmptyString name;
+		MemorySize memory;       // open
+		PositiveInteger processors;   // open
+		Frequency frequency;    // open
+		setOf(PortInteger) ports;
+		MachineRole role;
+		assign(bindingTime = BindingTime.runtimeMon) to { 
+            Bandwidth bandwidth;
+		}
+		
+		// managers do not have configured ports
+		Constraint managerRole = role == MachineRole.Manager implies ports.isEmpty();
+		// workers without configured ports receive the default Storm ports
+        Constraint workerRole = role == MachineRole.Worker and ports.isEmpty() implies ports == {6700, 6701, 6702, 6703};
+   	}
+	 
+	  
+	setOf(refTo(Machine)) machines;
+
+	// legacy
+	//Constraint duplicatePorts = machines->apply(Machine machine; sequenceOf(Integer) usedPorts = {} | usedPorts.union(machine.ports.asSequence())).hasDuplicates() == false;
+	
+	// At least one manager must be assigned
+	Constraint managerReq = machines->exists(refTo(Machine) machine | machine.role == MachineRole.Manager);
+	
+	// At least one worker must be assigned
+	Constraint workerReq = machines->exists(refTo(Machine) machine | machine.role == MachineRole.Worker);	
+ 
+	// Machine names must be unique
+ 	Constraint machineName = machines->collect(m|m.name).size() == machines.size();
+ 
+ 	assign(bindingTime = BindingTime.runtimeMon) to {
+	    UsedMachines usedMachines;
+	    AvailableMachines availableMachines;
+	}
+ 
+}

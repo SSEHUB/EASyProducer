@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pipeline:Pipeline xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pipeline="pipeline" name="PriorityPip" artifact="eu.qualimaster:PriorityPip:0.0.2-SNAPSHOT">
+  <nodes xsi:type="pipeline:Source" name="FinancialDataSource" source="0"/>
+  <nodes xsi:type="pipeline:FamilyElement" name="Preprocessor" family="0"/>
+  <nodes xsi:type="pipeline:FamilyElement" name="FinancialCorrelation" family="1"/>
+  <nodes xsi:type="pipeline:Sink" name="Sink" sink="0"/>
+  <nodes xsi:type="pipeline:Source" name="TwitterDataSource" source="1"/>
+  <nodes xsi:type="pipeline:FamilyElement" name="SentimentAnalysis" family="2"/>
+  <nodes xsi:type="pipeline:FamilyElement" name="TwitterCorrelation" family="3"/>
+  <nodes xsi:type="pipeline:DataManagementElement" name="DataManagement" dataManagement="0"/>
+  <flows name="f2" source="//@nodes.1" destination="//@nodes.2"/>
+  <flows name="f3" source="//@nodes.0" destination="//@nodes.2"/>
+  <flows name="f4" source="//@nodes.2" destination="//@nodes.3"/>
+  <flows name="f5" source="//@nodes.4" destination="//@nodes.5"/>
+  <flows name="f6" source="//@nodes.5" destination="//@nodes.7"/>
+  <flows name="f7" source="//@nodes.7" destination="//@nodes.6"/>
+  <flows name="f8" source="//@nodes.4" destination="//@nodes.6"/>
+  <flows name="f9" source="//@nodes.6" destination="//@nodes.3"/>
+  <flows name="f1" source="//@nodes.0" destination="//@nodes.1"/>
+</pipeline:Pipeline>

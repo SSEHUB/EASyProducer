@@ -1,0 +1,140 @@
+import commonVTLMethods;
+@advice(QM)
+template dataSourceImplementation(Configuration config, FileArtifact target, DataSource elt) {
+
+	/**
+	 * Produces the tuple type classes.
+	 */
+	def produceForTuples(sequenceOf(Tuple) tuples, String srcName, Boolean output, Integer indent) {
+		String type;
+		String typeName;			
+    	String tupleName;
+    		for (Tuple t : tuples) {      
+				//get the tuple name.
+				tupleName = t.name;
+	    		if (output) {
+	    		    type = "${toIdentifier(srcName)}${firstToUpperCase(tupleName)}Output";
+	    		    typeName = "output";
+    	        } else {
+	    		    type = "${toIdentifier(srcName)}${firstToUpperCase(tupleName)}Input";
+	    		    typeName = "input";   		
+	    	    }
+		        '/**' | indent;
+		        '* Define the source data input interface.' | indent;
+		        '**/' | 4;
+		        'public static class $type implements I${type} {' | indent;
+		        
+		     //   'private static final long serialVersionUID = 1L;' | indent + 4;
+		        //produce the variable instances.	
+		        for (Field f : t.fields) {
+	    			String fname = toIdentifier("${f.name}");
+	    			String ftype = fieldTypeName(f);
+	    			'private ${ftype} ${fname};' | indent + 4;
+    		    }
+    		    //generate the Getters and Setters.		
+    			for (Field f : t.fields) {
+    				String fname = toIdentifier("${f.name}");
+    				String mname = firstToUpperCase(fname);
+    				String ftype = fieldTypeName(f);
+    				'/**' | indent + 4;
+					'* Returns the input value for tuple field "${f.name}".' | indent + 4;
+					'* @return the tuple value' | indent + 4;
+					'*/' | indent + 4;
+    				'@Override' | indent + 4;
+		    		'public ${ftype} get${mname}(){' | indent + 4;
+		    			'return ${fname};' | indent + 8;
+		    		'}' | indent + 4;
+    				''
+    				'/**' | indent + 4;
+					'* Sets the output value for tuple field "${f.name}".' | indent + 4;
+					'* @param ${fname} the field value' | indent + 4;
+					'*/' | indent + 4;
+					'@Override' | indent + 4;
+		    		'public void set${mname}(${ftype} ${fname}){' | indent + 4;
+		    			   'this.${fname} = ${fname};' | indent + 8;
+		    		'}' | indent + 4;
+    			}
+    			'}' | indent;
+    		}
+    		
+    		''   	
+	}
+	
+	def main(Configuration config, FileArtifact target, DataSource dataSrc){
+		String srcName =dataSrc.name;
+		srcName = srcName.firstToUpperCase();
+	
+		'package eu.qualimaster.data.imp;'
+		''
+		//'import java.io.Serializable;'
+		'import eu.qualimaster.data.inf.I${toIdentifier(srcName)};'
+		'import eu.qualimaster.data.inf.I${toIdentifier(srcName)}.*;'
+		'import eu.qualimaster.dataManagement.strategies.*;'
+		'import eu.qualimaster.observables.*;'
+		''
+		'/**'
+		'* Define the data source class(GEN).'
+		'**/'
+		'public class ${toIdentifier(srcName)} implements I${toIdentifier(srcName)}{'
+		''
+		//generate tuple type classes.
+		 produceForTuples(dataSrc.input, srcName, true, 4);		
+		''
+		String tupleName;
+		for(Tuple t : dataSrc.input){
+			//get the tuple name
+			tupleName = t.name;
+			for(Field f : t.fields) {
+			    String fname = toIdentifier("${f.name}");
+    		    String mname = firstToUpperCase(fname);	
+			}
+			
+		'/**' | 4;
+		'* Returns a specific type of data source.' | 4;
+		'* @return ${toIdentifier(srcName)}${firstToUpperCase(tupleName)}Output the source data' | 4;
+		'**/' | 4;
+		'@Override' | 4;
+	    'public ${toIdentifier(srcName)}${firstToUpperCase(tupleName)}Output get${firstToUpperCase(tupleName)}() {' | 4;
+	    'return null;' | 8;
+	    '}' | 4;
+		}
+		
+        if (dataSrc.parameters.size()>0) {
+	        '    // data source parameters'
+	        ''
+	        for (Parameter p : dataSrc.parameters) {
+	        	String paramName = p.name;
+    			String mname = firstToUpperCase(toIdentifier(paramName));
+    			String type = parameterTypeName(p);
+	        	'    /**'
+	        	'     * Sets the data source parameter "${paramName}".'
+	        	'     *'
+	        	'     * @param value the new value of the data source parameter'
+	        	'     */'
+	        	'@Override' | 4;
+	        	'    public void setParameter${mname}(${parameterTypeName(p)} value) {'
+	        	'    }'
+	        	''
+	    	}
+    	}
+    	
+    	'@Override' | 4;
+    	'public void connect() {}' | 4;
+		''
+		'@Override' | 4;
+		'public void disconnect(){}' | 4;
+ 		''
+ 		'@Override' | 4;
+ 		'public void setStrategy(IStorageStrategyDescriptor strategy) {}' | 4;
+ 		''
+ 		'@Override' | 4;
+ 		'public IStorageStrategyDescriptor getStrategy() { return NoStorageStrategyDescriptor.INSTANCE;}' | 4;
+ 		''
+ 		'@Override' | 4;
+ 		'public Double getMeasurement(IObservable observable) { return null;}' | 4;	
+		'}' 
+		}
+		
+		
+ 
+}

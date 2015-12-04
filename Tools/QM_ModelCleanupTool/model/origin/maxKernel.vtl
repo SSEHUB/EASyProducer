@@ -1,0 +1,62 @@
+@advice(QM)
+template maxKernel(Configuration config, FileArtifact target, Pipeline pipeline) {  
+
+    String streamInType = "dfeInt(32)";  // fixed for now
+    String streamOutType = "dfeInt(32)"; // fixed for now
+
+    def main(Configuration config, FileArtifact target, Pipeline pip) { 
+    	String name = pip.name;
+
+    	'package qm;'
+    	''
+    	'import com.maxeler.maxcompiler.v2.kernelcompiler.Kernel;'
+		'import com.maxeler.maxcompiler.v2.kernelcompiler.KernelParameters;'
+		'import com.maxeler.maxcompiler.v2.kernelcompiler.stdlib.memory.Memory;'
+		'import com.maxeler.maxcompiler.v2.kernelcompiler.types.base.DFEVar;'
+		''
+		'class PipelineKernel extends Kernel {'
+        '    PipelineKernel(KernelParameters parameters) {'
+		'        super(parameters);'
+		'        DFEVar inData = io.input("inData", $streamInType);'
+    	for (DecisionVariable r : pip.sources) {
+    		processElement(r, "inData");
+    	}
+		'    }' 
+		'}'   
+    } 
+       
+    def processElement(DecisionVariable elt, String lastName) {
+    }
+    
+    def processElement(FamilyElement elt, String lastName) {
+	    Family family = elt.family;
+	    for (Algorithm alg : family.members) {
+            if (alg.hwNode.type() == ReconfigurableHardware::MPCCNode) {
+            	String familyName = elt.varName();
+            	String enabledSwitch = "${familyName}Enabled";
+            	String resultName = "${familyName}Result";
+		        'DFEVar $enabledSwitch = io.scalarInput("$familyName", dfeInt(32));' | 8;
+		        'DFEVar $resultName;' | 8;
+		        '$resultName = ($enabledSwitch != 0 ? ${alg.artifact}($lastName) : $lastName);' | 8;
+		        lastName = resultName;
+            }
+        }
+		for (Flow flow : elt.output) {
+			processElement(flow.destination, lastName);
+		}
+    }
+
+    def processElement(Source elt, String lastName) {
+		// simplifying assumption - only family elements are suitable for hw
+		for (Flow flow : elt.output) {
+			processElement(flow.destination, lastName);
+		}
+    }
+
+    def processElement(Sink elt, String lastName) {
+		// simplifying assumption - only family elements are suitable for hw
+		// simplifying assumption - exactly one output stream :o
+		'io.output("outData", $lastName, $streamInType);' | 8;
+    }
+        
+}

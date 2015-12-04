@@ -1,0 +1,109 @@
+import commonVTLMethods;
+@advice(QM)
+template mappingXml(Configuration config, FileArtifact target, Pipeline pipeline) {
+
+
+//    def Boolean nodeNotExisted(String name, setOf(String) nodes) {
+//    	Boolean exist = true;
+//    	for(String n : nodes) {
+//    		if(name == n) {
+//    			exist = false;   			
+//    		}
+//    	}
+//    	exist;
+//    }
+    		
+    def processElement(sequenceOf(DecisionVariable) output, Text text, setOf(String) nodes, setOf(Algorithm) algorithms, String pipName) {     	
+        for(Flow v : output) { 
+            DecisionVariable elt = v.destination;
+            String nodeName = elt.varName();
+            String nodeClsName = elt.varName().firstToUpperCase() + elt.type();                  	            
+			appendForNode(elt, nodes, algorithms, pipName, text); 
+            processElement(elt.byName("output").variables(), text, nodes, algorithms, pipName);
+        } 
+    }
+    
+    def appendForNode(DecisionVariable elt, setOf(String) nodes, setOf(Algorithm) algorithms, String pipName, Text text) {
+        Boolean useThrift = not(genMonitoringProbes);
+    	String nodeName = elt.varName();
+    	String nodeClsName = elt.varName().firstToUpperCase() + elt.type();
+    	if(elt.type() == "Source" and !isStringExisted(nodeName, nodes)) {               	
+	    	Source src =elt;
+	        DataSource dataSrc = src.source;
+	        String srcName = src.name;                         
+	        text.append('      <node name="$srcName" type="source">\n');
+	        text.append('          <component name="$nodeName" container="$pipName" class="eu.qualimaster.$pipName.topology.$nodeClsName" receiver="true" thrift="${useThrift}"/>\n');                    
+	        text.append('      </node>\n');
+	    }
+    	if(elt.type() == "Sink" and !isStringExisted(nodeName, nodes)) {
+            Sink snk = elt;
+            String snkName = snk.name;
+            text.append('      <node name="$snkName" type="sink">\n');
+            text.append('          <component name="$nodeName" container="$pipName" class="eu.qualimaster.$pipName.topology.$nodeClsName" receiver="true" thrift="${useThrift}"/>\n'); 
+            text.append('      </node>\n'); 
+        } 
+        if(elt.type() == "FamilyElement" and !isStringExisted(nodeName, nodes)) {
+            FamilyElement fe = elt;
+            Family fm = fe.family;
+            String fmName = fe.name;
+            text.append('      <node name="$fmName" type="family">\n');
+            text.append('          <component name="$nodeName" container="$pipName" class="eu.qualimaster.$pipName.topology.$nodeClsName" receiver="true" thrift="${useThrift}"/>\n'); 
+            text.append('      </node>\n'); 
+            for(Algorithm alg : fm.members) {
+                algorithms.add(alg);
+            }             	
+        }
+        if(elt.type() == "DataManagementElement" and !isStringExisted(nodeName, nodes)) {
+            DataManagementElement fe = elt;
+            String fmName = fe.name;
+            text.append('      <node name="$fmName" type="data_mgt">\n');
+            text.append('          <component name="$nodeName" container="$pipName" class="eu.qualimaster.$pipName.topology.$nodeClsName" receiver="true" thrift="${useThrift}"/>\n'); 
+            text.append('      </node>\n'); 
+        }        
+		nodes.add(nodeName); 
+    }
+	def main(Configuration config, FileArtifact target, Pipeline pipeline) {		
+		Text text = target.getText();
+		text.append("<mapping>\n");
+//		for(DecisionVariable vPip : activePipelines) {
+//			Pipeline pipeline = vPip;
+			String pipName = pipeline.name;
+			String topologyClsName = "eu.qualimaster.$pipName.topology.Topology";
+	        setOf(String) nodes = {};
+	        setOf(Algorithm) algorithms = {};
+			text.append('  <pipeline name="$pipName" class="$topologyClsName">\n');
+			for(DecisionVariable v : pipeline.sources) {
+				String nodeName = v.varName();
+	            String nodeClsName = v.varName().firstToUpperCase() + v.type();	
+	            appendForNode(v, nodes, algorithms, pipName, text);  
+	            processElement(v.byName("output").variables(), text, nodes, algorithms, pipName);
+	        }
+	        for(DecisionVariable v : pipeline.connectors) {//considering the connectors from subpipeline
+		    	appendForNode(v, nodes, algorithms, pipName, text);
+		    	processElement(v.byName("output").variables(), text, nodes, algorithms, pipName);
+	    	}
+	        for(Algorithm alg : algorithms) {
+	        	/* 
+	        	String algName = alg.name;
+	        	String algClsName = algName.firstToUpperCase();
+	        	if(!alg.algTopologyClass.isNull()) {
+	        		algClsName = alg.algTopologyClass;
+	        	}
+	        	* 
+	        	*/
+	        	String n = alg.class;
+		        JavaPath algPath = n;
+		        String algClsName = algPath.getName();
+	        	text.append('      <algorithm name="$algClsName" class="$n"/>\n');        	        	
+	        }
+			text.append('  </pipeline>\n');
+			text.append('\n');				        			
+//		}
+        
+
+		text.append("</mapping>\n");
+		target.rename("mapping.xml");
+	}
+	
+    	
+}

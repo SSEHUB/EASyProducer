@@ -1,0 +1,237 @@
+@advice(QM)
+template commonVTLMethods(Configuration config, FileArtifact target) {
+	
+	Boolean genMultiOutputs = true;     // generate specific code for multiple output of one algorithm
+	Boolean genMonitoringProbes = true; // generate monitoring probes (false for experiments)
+	
+	def String parameterTypeName(DecisionVariable var) {
+    	switch(var.type()) {
+    		"IntegerParameter" : "int",
+    		"BooleanParameter" : "boolean",
+    		"RealParameter" : "double",
+    		"StringParameter" : "String",
+    		"LongParameter" : "long" 		
+    	}
+    }
+    
+    def String parameterHwProtocol(DecisionVariable var) {
+    	switch(var.type()) {
+    		"IntegerParameter" : "a",
+    		"BooleanParameter" : "b",
+    		"RealParameter" : "c",
+    		"StringParameter" : "e",
+    		"LongParameter" : "f" 
+    	}
+    }
+    
+    def String parameterProto(DecisionVariable var) {
+    	switch(var.type()) {
+    		"IntegerParameter" : "SIntegerParameter",
+    		"BooleanParameter" : "SBooleanParameter",
+    		"RealParameter" : "SRealParameter",
+    		"StringParameter" : "SStringParameter",
+    		"LongParameter" : "SLongParameter" 
+    	}
+    }
+    
+    def obtainDefaultValue(FieldType type) {
+    	switch(type.class) {
+    		"int" : 0,
+    		"String" : null,
+    		"boolean" : false,
+    		"long" : 0, 
+    		"float" : 0.0,
+    		"double" : 0.0,
+    		"Object" : null,
+    		default : null
+    	}
+    }	
+
+    def String basicTypeForProto(FieldType type) {
+    	switch(type.class) {
+    		"int" : "int32",
+    		"String" : "string",
+    		"boolean" : "bool",
+    		"long" : "int64", 
+    		"float" : "float",
+    		"double" : "double",
+    		default : ""
+    	}
+    }	
+    
+    def String basicTypeForProto(String type) {
+    	switch(type) {
+    		"int" : "int32",
+    		"String" : "string",
+    		"boolean" : "bool",
+    		"long" : "int64", 
+    		"float" : "float",
+    		"double" : "double",
+    		default : ""
+    	}
+    }
+    
+    def Boolean isBasicType(FieldType type) {
+    	switch(type.class) {
+    		"int" : true,
+    		"String" : true,
+    		"boolean" : true,
+    		"long" : true, 
+    		"float" : true,
+    		"double" : true,
+    		default : false
+    	}
+    }
+    
+    def Boolean isListType(FieldType type) {
+    	String class = type.class;
+    	if(class.matches("java.util.List.*")) {
+    		true;
+    	} else {
+    		false;
+    	}
+    }
+    
+    def String obtainInnerType(String class) {
+    	String result;
+    	Integer len = class.length();
+    	result = class.substring(15, len - 1);
+    	result;
+    }
+    
+    def String fieldTypeName(DecisionVariable f) {
+		DecisionVariable type = f.byName("type");
+		String typeName = type.byName("class");
+		typeName;
+	}
+	
+	def String stripTemplates(String typeName) {
+		typeName.substitute("<.*>", "");
+	}
+	
+	def Boolean isStringExisted(String name, setOf(String) checkSet) {
+    	Boolean exist = false;
+    	for(String n : checkSet) {
+    		if(name == n) {
+    			exist = true;   			
+    		}
+    	}
+    	exist;
+    }
+	
+    def String composePOptionsInit(String confName, String paramName, String type, Any value) {
+		String result;
+		if (confName.length() > 0) {
+			result = "PipelineOptions.getExecutor${type}Argument($confName, getName(), \"${paramName}\", $value)";
+		} else {
+			result = "$value";
+		}
+		result;
+	}
+
+	def setDefaultParameterValue(setOf(Parameter) parameters, String confName, String algName, int indent) {
+		for(Parameter p : parameters) {	
+			String paraName = p.name;
+			String ty = p.type();
+			if(ty == "IntegerParameter") { 
+				IntegerParameter para = p;
+				Integer value = para.defaultValue;
+				String tmp = composePOptionsInit(confName, paraName, "Int", value);
+				'$algName.setParameter${paraName.firstToUpperCase()}($tmp);' | indent;
+			} else if(ty == "BooleanParameter") { 
+				BooleanParameter para = p;
+				Boolean value = para.defaultValue;
+				String tmp = composePOptionsInit(confName, paraName, "Boolean", value);
+				'$algName.setParameter${paraName.firstToUpperCase()}($tmp);' | indent;
+			} else if(ty == "StringParameter") { 
+				StringParameter para = p;
+				String value = para.defaultValue;
+				String tmp = composePOptionsInit(confName, paraName, "String", "\"$value\"");
+				'$algName.setParameter${paraName.firstToUpperCase()}($tmp);' | indent;
+			} else if(ty == "RealParameter") { 
+				RealParameter para = p;
+				Real value = para.defaultValue;
+				String tmp = composePOptionsInit(confName, paraName, "Double", value);
+				'$algName.setParameter${paraName.firstToUpperCase()}($tmp);' | indent;
+			} else if(ty == "LongParameter") { 
+				LongParameter para = p;
+				Real value = para.defaultValue;
+				String tmp = composePOptionsInit(confName, paraName, "Long", value);
+				'$algName.setParameter${paraName.firstToUpperCase()}($tmp);' | indent;
+			}		
+		}
+	}
+	
+	def produceTypesRegistration(Tuples tuples, String fName, Boolean output, Integer indent) {
+		String tupleName;
+		String end;
+		if(output) {
+			end = "Output";
+		} else {
+			end = "Input";
+		}
+		for(Tuple t : tuples) {
+			tupleName = t.name;
+			String infName = 'I' + fName + "${firstToUpperCase(tupleName)}$end";
+			'new $infName();' | indent;
+		}
+	}
+	
+	def produceFieldsForLog(Fields fields, String object, Boolean sender, Integer indent) {
+		for (Field f : fields) {
+    			String fname = toIdentifier("${f.name}");
+    			String mname = firstToUpperCase(fname);
+    			if(sender) {
+    				'logger.info("Sending data to hardware: " + $object.get${mname}());' | indent;
+    			} else {
+    				'logger.info("Received data from hardware: " + $object.get${mname}());' | indent;
+    			}
+    		}
+	}
+	
+	def mapOf(String, setOf(String)) produceTuplesForHardwareVariables(Tuples tuples, String fName, Boolean output, int indent) {
+		mapOf(String, setOf(String)) serializers = {};
+		setOf(String) tmp;
+		String type;
+    	String tupleName;
+    	String ifName = "I" + fName;
+    	Boolean flag = true;
+		for (Tuple t : tuples) {
+			tmp = {};
+	    	tupleName = t.name;
+	    	   if(flag and output) { //for output in the sender
+	    	       type = "S${ifName}${firstToUpperCase(tupleName)}Output";
+	    	       'eu::qualimaster::families::protobuf::$type ${tupleName}Output;' | indent;
+	    	       flag = false; //assume that there is only one output type from the family
+	    	   }
+	    	   if(!output) { //for input considering the multiple case
+	    	       type = "S${ifName}${tupleName}Input";
+	    	       Boolean once1 = true;
+	    	       Boolean once2 = true;
+	    	       for (Field f : t.fields) {
+    	   		       FieldType ftype = f.type;
+    	   		       String fieldName = toIdentifier("${f.name}");  
+    			       String ptype = basicTypeForProto(ftype);
+    			       if(ptype != "" and once1) {
+    				       'eu::qualimaster::families::protobuf::$type ${tupleName}Input;' | indent;
+    				       tmp.add("${tupleName}Input");
+    				       once1 = false;
+    			       } else if(isListType(ftype) and once2) {
+    			       	   'eu::qualimaster::base::protos::SStringList stringList;' | indent;
+    			       	   tmp.add("stringList");
+    			       	   once2 = false;
+    			       } else if(ptype == "" and !isListType(ftype)){//algorithm-specific protobuf TODO: the actual path
+    			       	   'eu::qualimaster::families::protobuf::S${fieldName} ${fieldName};'
+    			       	   tmp.add("${fieldName}");
+    			       }			
+    		       }
+	        }
+	        serializers.add(tupleName, tmp);	    
+      	}
+      	serializers;		
+	}	
+	
+	def className(DecisionVariable elt) {
+    	elt.varName().firstToUpperCase() + elt.type(); 
+    }		
+}

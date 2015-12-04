@@ -1,0 +1,104 @@
+@advice(QM)
+template hardwareAlgorithmPom(Configuration config, FileArtifact target, String artifact) {
+	def main(Configuration config, FileArtifact target, String artifact) {
+		Text text = target.getText();
+		text.append("<project xmlns=\"http://maven.apache.org/POM/4.0.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\">\n");		
+		text.append("  <modelVersion>4.0.0</modelVersion>\n");
+		sequenceOf(String) artList = artifact.split(":");
+		if(artList.size() == 3) {
+		    text.append("  <groupId>${artList[0]}</groupId>\n");
+			text.append("  <artifactId>${artList[1]}</artifactId>\n");
+			text.append("  <version>${artList[2]}</version>\n");	
+		}		
+		text.append("  <packaging>jar</packaging>\n");
+		text.append("\n");
+		text.append("  <build>\n");
+		text.append("    <sourceDirectory>"+"$"+"{basedir}/</sourceDirectory>\n");
+		text.append("    <plugins>\n");
+		appendPlugins(text);
+		text.append("    </plugins>\n");		
+		text.append("  </build>\n");
+		text.append("  <repositories>\n");		
+		appendRepositories(text);
+		text.append("  </repositories>\n");
+		text.append("\n");
+		appendDependencyManagement(text);
+		text.append("  <dependencies>\n");
+		appendDependencies(text);
+		text.append("  </dependencies>\n");		
+		text.append("</project>\n");
+		target.rename("pom.xml");
+	}
+	
+	def appendPlugins(Text text) {		
+            text.append("            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.0</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>              
+            </plugin>\n");	  
+            text.append("            <plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.2.1</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>\n"); 			     	
+	}
+	def appendDependencyManagement(Text text) {
+		text.append("<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>eu.qualimaster</groupId>
+            <artifactId>InfrastructureDependencies</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <type>pom</type>
+            <scope>import</scope>
+    </dependency>        
+        <dependency>
+            <groupId>eu.qualimaster</groupId>
+            <artifactId>PipelineDependencies</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>            
+    </dependencies>
+</dependencyManagement>\n");
+	}
+	def appendDependencies(Text text) {
+	   text.append("   <dependency>
+	     <groupId>org.apache.storm</groupId>
+	     <artifactId>storm-core</artifactId>
+	   </dependency>\n");
+	   		text.append("   <dependency>
+	     <groupId>eu.qualimaster</groupId>
+	     <artifactId>StormCommons</artifactId>
+	   </dependency>\n");
+   		text.append("    <dependency>
+			<groupId>eu.qualimaster</groupId>
+			<artifactId>PriorityPipelineInterfaces</artifactId>
+			<version>0.0.5-SNAPSHOT</version>
+		</dependency>\n");
+   		text.append("   <dependency>
+     	<groupId>eu.qualimaster</groupId>
+     	<artifactId>QualiMaster.Events</artifactId>
+   	</dependency>\n"); 
+	   text.append("   <dependency>
+	     <groupId>eu.qualimaster</groupId>
+	     <artifactId>DataManagementLayer</artifactId>
+	   </dependency>\n"); 
+	}
+	def appendRepositories(Text text) {
+		text.append("    <repository>\n      <id>qm.eu</id>\n      <name>qm.eu</name>\n      <url>https://projects.sse.uni-hildesheim.de/qm/maven/</url>\n    </repository>\n");
+	}
+}

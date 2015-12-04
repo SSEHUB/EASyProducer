@@ -1,0 +1,64 @@
+@advice(QM)
+template maxHost(Configuration config, FileArtifact target, Pipeline pipeline) {  
+
+    def main(Configuration config, FileArtifact target, Pipeline pip) {  
+        '#include "Maxfiles.h"'
+        '#include <MaxSLiCInterface.h>'
+        ''
+        'int main(void)'
+        '{'
+        '    while(true) {'
+        '        int32_ *inData;'
+        '        int count = readDataFromNetwork(inData); // simplification, we need a loop or so'
+        '        int32_ *outData;' 
+        '        outData = malloc(count); // just for now'
+        String param = "";
+    	for (DecisionVariable r : pip.sources) { 
+    		param = param + processElement(r, "");
+    	}
+    	if (param.length() > 0) {
+    		param = param + ",";
+    	} 
+        '' 
+        '        Pipeline($param inData, outData);'
+        '        writeToNetwork(outData);'
+        '    }'
+        '}'  
+    }  
+       
+    def String processElement(DecisionVariable elt, String param) {
+		param; // force return
+    }
+ 
+    def String processElement(FamilyElement elt, String param) {
+	    Family family = elt.family;
+	    for (Algorithm alg : family.members) {
+            if (alg.hwNode.type() == ReconfigurableHardware::MPCCNode) {
+            	String familyName = elt.varName();
+            	String enabledSwitch = "${familyName}Enabled";
+            	'int $enabledSwitch = readIntFromNetwork(); // just for now' | 8;
+                if (param.length() > 0) {
+            	    param = param + ", ";
+                }
+                param = param + enabledSwitch;
+            }
+        }    		
+		for (Flow flow : elt.output) {
+			param = processElement(flow.destination, param);
+		}
+		param;
+    }
+    
+    def String processElement(Source elt, String param) {
+		for (Flow flow : elt.output) {
+			param = processElement(flow.destination, param);
+		}
+		param;
+    }
+    
+   def String processElement(Sink elt, String param) {
+	    // simplifying assumption - only family elements are suitable for hw
+		param;
+   }
+   
+}

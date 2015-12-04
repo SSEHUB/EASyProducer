@@ -1,0 +1,77 @@
+@advice(QM)
+template pipelinesXml(Configuration config, FileArtifact target, sequenceOf(DecisionVariable) pipelines, String interfaceArtifact, String modelArtifact) {
+
+	def appendBasics(Text text) {
+		text.append("<project name=\"pipelines\" default=\"deploy\" basedir=\".\">
+
+    <property file=\""+"$"+"{user.home}/global-build.properties\"/>
+    <property file=\""+"$"+"{user.home}/qualimaster-build.properties\"/>
+    <include file=\""+"$"+"{user.home}/macros.xml\"/>
+
+    <!--
+    <taskdef uri=\"antlib:org.jacoco.ant\" resource=\"org/jacoco/ant/antlib.xml\"/>
+
+    <path id=\"easyTaskDef.lib\">
+      <fileset dir=\""+"$"+"{home.base.dir}/"+"$"+"{projects.standalone.dir}/build/generatedLibs.ex/dist\">
+        <include name=\"*.jar\"/>
+      </fileset>
+    </path>
+    -->
+");
+	}
+	
+	def appendPipelinesDeploy(sequenceOf(DecisionVariable) pipelines, Text text) {
+		for(Pipeline pip : pipelines) {
+			String pipName = pip.name;
+			String artifact = pip.artifact;
+			String pipelineJarFileName = obtainArtifactName(artifact,true);
+			if(pipelineJarFileName.length()>0) {
+				text.append("      <mvnDeploy folderName=\"eu/qualimaster/$pipName\" pomFile=\"pipelines/eu/qualimaster/$pipName/pom.xml\" 
+        jarFolder=\"pipelines/eu/qualimaster/$pipName/target\" jarFile= \"${pipelineJarFileName}.jar\"/>\n");
+			}			
+	    }		
+	}
+	
+	def appendInterfaceDeploy(String interfaceArtifact, Text text) {
+		String interfaceJarFileName = obtainArtifactName(interfaceArtifact, false);
+		if(interfaceJarFileName.length()>0) {
+		    text.append("      <mvnDeploy folderName=\"if-gen\" pomFile=\"if-gen/pom.xml\" 
+        jarFolder=\"if-gen/target\" jarFile= \"${interfaceJarFileName}.jar\"/>\n");
+		}		
+	}
+	
+	def appendModelArtifactDeploy(String modelArtifact, Text text) {
+		String artifactName = obtainArtifactName(modelArtifact, false);
+		if(artifactName.length()>0) {			
+		    text.append("      <mvnDeploy folderName=\"InfrastructureModel\" pomFile=\"pom.xml\" jarFolder=\"target\" jarFile=\"${artifactName}.jar\" />\n");
+	    }
+	}
+	
+	def String obtainArtifactName(String artifact, Boolean pipeline) {
+		String artifactName = null;
+		sequenceOf(String) artList = artifact.split(":");
+		if(artList.size() == 3) {
+			String artifactId = artList[1];
+		    String versionNum = artList[2];
+		    if(pipeline) {
+		    	artifactName = artifactId + "-" + versionNum + "-jar-with-dependencies";
+		    } else {
+		    	artifactName = artifactId + "-" + versionNum;
+		    }		    
+		}
+		artifactName;   
+	}
+
+	def main(Configuration config, FileArtifact target, sequenceOf(DecisionVariable) pipelines, String interfaceArtifact, String modelArtifact) {
+		Text text = target.getText();
+//		text.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+		appendBasics(text);
+		text.append("    <target name=\"deploy\">\n");
+		appendPipelinesDeploy(pipelines, text);
+		appendInterfaceDeploy(interfaceArtifact, text);
+		appendModelArtifactDeploy(modelArtifact, text);
+		text.append("    </target>\n");
+		text.append("</project>\n");
+		target.rename("pipelines.xml");
+	}
+}

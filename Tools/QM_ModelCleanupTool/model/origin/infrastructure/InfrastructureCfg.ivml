@@ -1,0 +1,21 @@
+project InfrastructureCfg {
+	
+	import Infrastructure;
+	import PipelinesCfg;  
+	 
+	// alternative: activePipelines = {pipelines[0]};
+	activePipelines = {refBy(PriorityPip) ,refBy(PipelineVar_1), refBy(PipelineVar_2), refBy(PipelineVar_3)};   
+	//subPipelineAlgorithms = {refBy(randomProcessor)};           
+	interfaceArtifact = "eu.qualimaster:PriorityPipelineInterfaces:0.2.0-SNAPSHOT";
+	modelArtifact = "eu.qualimaster:infrastructureModel:0.2.0-SNAPSHOT";
+	repositoryURL = "https://projects.sse.uni-hildesheim.de/qm/maven/";
+	
+	freeze {
+	    activePipelines;
+//	    subPipelineAlgorithms;
+        interfaceArtifact;
+        modelArtifact;
+        repositoryURL;                
+	} but (f|f.bindingTime >= BindingTime.runtimeMon)
+      
+}                          

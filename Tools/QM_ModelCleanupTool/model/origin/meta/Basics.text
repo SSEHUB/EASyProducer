@@ -1,0 +1,14 @@
+Basics::Tuple::fields = data fields
+Basics::Field::name = name
+Basics::Field::type = type
+Basics::Parameter::name = name
+Basics::IntegerParameter::name = value
+Basics::StringParameter::name = value
+Basics::RealParameter::name = value
+Basics::BooleanParameter::name = value
+Basics::Type::name = type name
+Basics::Type::class = realizing class
+Basics::Type::artifact = artifact implementing type*
+Basics::Type::serializer = Kryo serializer class*
+Basics::Type::serializerArtifact = artifact implemeting serializer*
+Basics::types = configured types

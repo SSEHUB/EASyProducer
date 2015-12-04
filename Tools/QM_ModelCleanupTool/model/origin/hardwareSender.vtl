@@ -1,0 +1,110 @@
+import commonVTLMethods;
+@advice(QM)
+template hardwareSender(Configuration config, FileArtifact target, Family family) {
+	Integer indent = 0;
+	String fNameUpper = family.name.firstToUpperCase();
+	def main(Configuration config, FileArtifact target, Family family) {
+		'#include <stdio.h>'
+		'#include <stdlib.h>'
+		'#include <strings.h>'
+		'#include <unistd.h>'
+		'#include <sys/types.h>'
+		'#include <sys/socket.h>'
+		'#include <netinet/in.h>'
+		'#include <arpa/inet.h>'
+		'#include <sys/wait.h>'
+		'#include <signal.h>'
+		'#include <string>'
+		'#include <iostream>'
+		'#include <google/protobuf/io/coded_stream.h>'
+		'#include <google/protobuf/generated_message_util.h>'
+		'#include <google/protobuf/message.h>'
+		'#include <google/protobuf/extension_set.h>'
+		'#include <google/protobuf/unknown_field_set.h>'
+		'#include <google/protobuf/io/zero_copy_stream_impl_lite.h>'
+		''
+		'#include "SerializeServerCpuCode.h"'
+		'#include "$fNameUpper.pb.h"'
+		''
+		'void sender()'
+		'{'
+			'struct sockaddr_in server_addr;' | indent+4;
+			'int transmitter_socket;' | indent+4;
+			'socklen_t sin_size;' | indent+4;
+			'int true_var=1;' | indent+4;
+			'struct sockaddr_in transmitter_addr;' | indent+4;
+			'//int counter = 0;' | indent+4;
+			''
+			'if ((transmitter_socket = socket(AF_INET, SOCK_STREAM, 0)) == -1)' | indent+4;
+			'{' | indent+4;
+				'perror("Socket");' | indent+8;
+				'exit(1);' | indent+8;
+			'}' | indent+4;
+			''
+			'if (setsockopt(transmitter_socket,SOL_SOCKET,SO_REUSEADDR,&true_var,sizeof(int)) == -1)' | indent+4;
+			'{' | indent+4;
+				'perror("Setsockopt");' | indent+8;
+				'exit(1);' | indent+8;
+			'}' | indent+4;
+			''
+			'server_addr.sin_family = AF_INET;' | indent+4;
+			'server_addr.sin_port = htons(2401);' | indent+4;
+			'server_addr.sin_addr.s_addr = INADDR_ANY;' | indent+4;
+			'bzero(&(server_addr.sin_zero),8);' | indent+4;
+			''
+			'if (bind(transmitter_socket, (struct sockaddr *)&server_addr, sizeof(server_addr)) == -1)' | indent+4;
+			'{' | indent+4;
+				'perror("Unable to bind");' | indent+8;
+				'exit(1);' | indent+8;
+			'}' | indent+4;
+			''
+			'if (listen(transmitter_socket, 5) == -1)' | indent+4;
+			'{' | indent+4;
+				'perror("Listen failed");' | indent+8;
+				'exit(1);' | indent+8;
+			'}' | indent+4;
+			''
+			'printf("TCPServer Waiting for client on port 2401\\n");' | indent+4;
+			''
+			'sin_size = sizeof(transmitter_addr);' | indent+4;
+			'int transmitter_socket_connected = accept(transmitter_socket, (struct sockaddr *)&transmitter_addr,&sin_size);' | indent+4;
+			'printf("Got a connection from (%s , %d)\\n",inet_ntoa(transmitter_addr.sin_addr),ntohs(transmitter_addr.sin_port));' | indent+4;
+			''
+			String type;
+    		String tupleName;
+    		String ifName = "I" + fNameUpper;
+    		Boolean flag = true;
+			for (Tuple t : family.output) {
+	    		tupleName = t.name;
+	    		tupleName = firstToUpperCase(tupleName);
+	    		type = "S${ifName}${tupleName}Output";
+	    	    if(flag) {
+	    	    	'eu::qualimaster::families::protobuf::$type to;' | indent+4;
+	    	    	flag = false; //assume that there is only one output type from the family
+	    	    }	    
+      		}	
+			''
+			'while(1)' | indent+4;
+			'{' | indent+4;
+				'//counter ++;' | indent+8;
+				'//TODO: get the processed data, for example, in the switch example we use to.set_randominteger(counter);' | indent+8;
+				'//make a buffer that can hold message + room for a 32bit delimiter' | indent+8;
+				'int ackSize=to.ByteSize()+ google::protobuf::io::CodedOutputStream::VarintSize32(to.ByteSize());' | indent+8;
+				'char* ackBuf=new char[ackSize];' | indent+8;
+				''
+				'//write varint delimiter to buffer' | indent+8;
+				'google::protobuf::io::ArrayOutputStream arrayOut(ackBuf, ackSize);' | indent+8;
+				'google::protobuf::io::CodedOutputStream codedOut(&arrayOut);' | indent+8;
+				''
+				'//write protobuf ack to buffer' | indent+8;
+				'codedOut.WriteVarint32(to.ByteSize());' | indent+8;
+				'to.SerializeToCodedStream(&codedOut);' | indent+8;
+				''
+				'//send buffer to client' | indent+8;
+				'send(transmitter_socket_connected, ackBuf, ackSize, 0);' | indent+8;
+				''
+				'delete(ackBuf);' | indent+8;
+			'}' | indent+4;
+		'}'
+	}
+}

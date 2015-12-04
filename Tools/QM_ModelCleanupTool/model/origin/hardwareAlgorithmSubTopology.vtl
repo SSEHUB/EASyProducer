@@ -1,0 +1,88 @@
+import commonVTLMethods;
+@advice(QM)
+template hardwareAlgorithmSubTopology(Configuration config, FileArtifact target, Family family, String pipelineName, String algName) {
+	def main(Configuration config, FileArtifact target, Family family, String pipelineName, String algName) {
+		String fName = family.name;
+		String ifName = "I" + fName.firstToUpperCase();
+		String outputImpName;
+		String tupleName; 
+		for(Tuple t : family.output) {
+			tupleName = t.name; // assume that we only have one type of Tuple in the output of the family
+			outputImpName = fName + "${firstToUpperCase(tupleName)}Output";
+		}
+		'package eu.qualimaster.algorithms.$algName;'
+		''
+		'import eu.qualimaster.base.algorithm.ITopologyCreate;'
+		'import eu.qualimaster.base.algorithm.SubTopologyOutput;'
+		'import eu.qualimaster.families.inf.$ifName;'
+		'import eu.qualimaster.observables.IObservable;'
+		'import backtype.storm.topology.TopologyBuilder;'
+		'import backtype.storm.Config;'
+		''
+		''
+		'public class HardwareAlgorithmSubTopology implements ITopologyCreate, $ifName {'
+			'final static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(HardwareAlgorithmSubTopology.class);' | 4;
+			'private String pipelineName = "$pipelineName";' | 4;
+			''
+			'public SubTopologyOutput createSubTopology(TopologyBuilder topologyBuilder,
+            Config config, String prefix, String input, String streamId) {' | 4;
+            	'topologyBuilder.setSpout(prefix + "hardwareConnectionSpout", new HardwareConnectionSpout(prefix + "hardwareConnectionSpout",
+                        pipelineName, streamId), 1);' | 8;
+        		'topologyBuilder.setBolt(prefix + "hardwareConnectionBolt", new HardwareConnectionBolt(prefix + "hardwareConnectionBolt",
+                        pipelineName), 1).shuffleGrouping(input, streamId);' | 8;
+        		'return new SubTopologyOutput(prefix + "hardwareConnectionSpout", streamId, 1, 1);' | 8;
+    		'}' | 4;
+    		''
+    		produceForCalculate(family.input, family.output, ifName);
+    		for (Parameter p : family.parameters) {
+	        	String paramName = p.name;
+    			String mname = firstToUpperCase(toIdentifier(paramName));
+	        	'    /**'
+	        	'     * Sets the algorithm parameter "${paramName}".'
+	        	'     *'
+	        	'     * @param value the new value of the algorithm parameter'
+	        	'     */'
+	        	'    public void setParameter${mname}(${parameterTypeName(p)} value) {'
+	        	'    }'
+	        	''      	
+	    	}
+    		'public Double getMeasurement(IObservable observable) {' | 4;
+        		'return null; ' | 8;
+    		'}' | 4;
+			''
+    		'@Override' | 4;
+    		'public void switchState(State state) {' | 4;        
+    		'}' | 4;
+			''			    		  		
+		'}'
+	}
+	
+	def produceForCalculate(Tuples inputTuples, Tuples outputTuples, String ifName) {   	 
+    	 String inputTupleName;
+    	 String outputTupleName;
+  	  
+    	 for(Tuple t : inputTuples){
+    	    inputTupleName = t.name;
+    	    inputTupleName = firstToUpperCase(inputTupleName);        	      	 	
+    	 	String inTypeName = "I${ifName}${inputTupleName}Input";
+
+    	 	for(Tuple p : outputTuples){
+    	 		outputTupleName = p.name;
+    	        outputTupleName = firstToUpperCase(outputTupleName);    	 		
+    	 		String outTypeName = "I${ifName}${outputTupleName}Output";  	 
+    	
+    	'    /**'
+    	'     * Calculates the actual <code>result</code> for <code>input</code>.'
+    	'     *'
+    	'     * @param input the algorithm input taken from the input stream'
+    	'     * @param result the result calculated by the algorithm'
+    	'     */'
+    	'    @Override'
+        '    public void calculate(${inTypeName} input, ${outTypeName} result){'
+        '    }'
+        ''
+           }
+       }
+    }
+
+}

@@ -1,0 +1,76 @@
+project Observables {
+	
+    import Basics;
+	
+	annotate BindingTime bindingTime = BindingTime.compile to Observables;
+
+    // don't move these alias definitions!
+    // define each category of observable / quality property as an own type
+    
+    // time-behavior
+    typedef Latency NaturalNumber;
+    typedef Throughput_Item Frequency;
+    typedef Throughput_Volume NaturalNumber;
+    typedef EnactmentDelay NaturalNumber;
+    
+    // resource utilization
+    typedef UsedMemory MemorySize;
+    typedef UsedMachines NaturalNumber;
+    typedef AvailableMachines NaturalNumber;
+    typedef Bandwidth NonNegativeReal;
+    typedef Capacity Real;
+    typedef Executors NaturalNumber;
+    
+    typedef Accuracy_Confidence Real;
+    typedef Accuracy_ErrorRate Real;
+    typedef Believability Real;
+    typedef Relevancy Real;
+    typedef Completeness Real;
+    // MPVolatility?
+    
+    typedef Volume NonNegativeReal;
+    typedef Velocity Frequency;
+    typedef Volatility Real;
+    typedef Variety NaturalNumber;
+
+    abstract compound Observable {
+    	NonEmptyString type; // not nice
+    }
+
+    compound QualityParameter refines Observable {
+    }
+
+    compound ConfiguredQualityParameter refines QualityParameter{
+    	NonEmptyString monitorCls = null;
+    }
+
+    setOf(ConfiguredQualityParameter) qualityParameters = {
+    	{type="Latency"},
+    	{type="Throughput_Item"},
+    	{type="Throughput_Volume"},
+    	{type="EnactmentDelay"},
+    	{type="UsedMemory"},
+    	{type="UsedMachines"},
+    	{type="AvailableMachines"},
+    	{type="Bandwidth"},
+    	{type="Capacity"},
+    	{type="Executors"},
+    	{type="Accuracy_Confidence"},
+    	{type="Accuracy_ErrorRate"},
+    	{type="Believability"},
+    	{type="Relevancy"},
+    	{type="Completeness"},
+    	{type="Volume"},
+    	{type="Velocity"},
+    	{type="Volatility"},
+    	{type="Variety"}
+    };
+    Constraint paramTypes = qualityParameters->collect(p|p.type).size() == qualityParameters.size();
+    
+    setOf(ConfiguredQualityParameter) configuredParameters = {};
+    Constraint cfgParamTypes = configuredParameters->collect(p|p.type).size() == configuredParameters.size();
+    	 
+    freeze {
+    	qualityParameters;
+    }
+} 
