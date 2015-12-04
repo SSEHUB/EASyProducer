@@ -91,28 +91,17 @@ public class ModelCopy extends Task {
     public void setMainProject(String mainProject) {
         this.mainProject = mainProject;
     }
-
-    private void initModels() throws Exception {
-        try {
-            VarModel.INSTANCE.locations().addLocation(sourceFolder, ProgressObserver.NO_OBSERVER);
-            Project p = ProjectUtilities.loadProject(mainProject);
-            System.out.println(p.getName() + " sucessfully loaded.");
-        } catch (ModelManagementException e1) {
-            e1.printStackTrace();
-            throw new Exception(e1);
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new Exception(e);
-        }
-    }
     
     /**
      * Starts the copy process.
-     * @throws Exception If files could not be copied or if a model could not be loaded.
+     * @throws ModelManagementException If IVML files could not be parsed
+     * @throws IOException If files could not be copied.
      */
-    private void copy() throws Exception {
+    private void copy() throws ModelManagementException, IOException {
         // Initialize
-        initModels();
+        VarModel.INSTANCE.locations().addLocation(sourceFolder, ProgressObserver.NO_OBSERVER);
+        Project p = ProjectUtilities.loadProject(mainProject);
+        System.out.println(p.getName() + " sucessfully loaded.");
         Collection<File> originalFiles = FileUtils.listFiles(sourceFolder, new EASyModelFilter(),
             TrueFileFilter.INSTANCE);
         
@@ -128,7 +117,6 @@ public class ModelCopy extends Task {
                     FileUtils.copyFile(file, copyDestination, false);
                 } else {
                     handleConfigFile(relativeFileName, destFolder);
-                    
                 }
             }
         }
@@ -138,9 +126,12 @@ public class ModelCopy extends Task {
      * Copies are IVML model. Configs will be cleaned.
      * @param relativeFileName The path inside {@link #sourceFolder}.
      * @param destFolder The destination folder where to save the copy.
-     * @throws Exception If files could not be copied or if a model could not be loaded.
+     * @throws ModelManagementException If IVML files could not be parsed
+     * @throws IOException If files could not be copied.
      */
-    private void handleConfigFile(String relativeFileName, File destFolder) throws Exception {
+    private void handleConfigFile(String relativeFileName, File destFolder) throws ModelManagementException,
+        IOException {
+        
         if (!relativeFileName.toLowerCase().matches(REMOVEABLE_CONFIG_EXTENSION)) {
             int lastDot = relativeFileName.lastIndexOf('.');
             int lastSeparator = relativeFileName.lastIndexOf('/');
@@ -195,9 +186,18 @@ public class ModelCopy extends Task {
             } catch (IOException exc) {
                
             }
-            throw new BuildException("Error during copying models from \"" + sourceFolder.getAbsolutePath()
-                + "\" to \"" + destinationFolder.getAbsolutePath() + "\"could not be created.");
+            
+            if (e instanceof IOException) {
+                throw new BuildException("IOError during copying models from \"" + sourceFolder.getAbsolutePath()
+                    + "\" to \"" + destinationFolder.getAbsolutePath() + "\". Cause: " + e.getMessage());
+            } else if (e instanceof ModelManagementException) {
+                throw new BuildException("Modelloadingerror during copying models from \""
+                    + sourceFolder.getAbsolutePath() + "\" to \"" + destinationFolder.getAbsolutePath()
+                    + "\". Cause: " + e.getMessage());
+            } else {
+                throw new BuildException("Error during copying models from \"" + sourceFolder.getAbsolutePath()
+                    + "\" to \"" + destinationFolder.getAbsolutePath() + "\". Cause: " + e.getMessage());
+            }
         }
-       
     }
 }
