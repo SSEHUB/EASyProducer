@@ -34,7 +34,7 @@ public class EASyLoggerFactory {
      * <li><tt>true</tt>: For development.</li>
      * </ul>
      */
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
 
     private static final String LOGGING_LEVEL_PROPERTY = "de.uni_hildesheim.sse.easy.logging.level";
     
