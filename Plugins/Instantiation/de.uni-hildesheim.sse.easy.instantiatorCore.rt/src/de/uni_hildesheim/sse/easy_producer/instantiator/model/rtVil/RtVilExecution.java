@@ -396,7 +396,7 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
             } catch (VilException e) {
                 exc = e;
             }
-            if (RtVilStorage.isInSimulation()) {
+            if (null != RtVilStorage.getSimulationNotifier()) {
                 // allow reuse of configuration - get rid of all changes
                 for (int i = 0; i < script.getParameterCount(); i++) {
                     if (clearCfg(script.getParameter(i))) {

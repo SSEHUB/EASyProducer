@@ -36,8 +36,10 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Bundle;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.VariableDeclaration;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Executor;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.ISimulationNotifier;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.RtVILMemoryStorage;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Script;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Sequence;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
@@ -53,7 +55,7 @@ import de.uni_hildesheim.sse.vil.rt.ui.embed.SimulationSettingsDialog.TempArgume
  *  
  * @author Holger Eichelberger
  */
-public class SimulatorUi {
+public class SimulatorUi implements ISimulationNotifier {
 
     private Shell shell;
     private de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.Configuration config;
@@ -84,7 +86,7 @@ public class SimulatorUi {
      * @param filters the default viewer filters (<b>null</b> for {@link #createDefaultFilters()}.
      */
     public SimulatorUi(Shell shell, Configuration config, File base, ModelInfo<?> info, NamedViewerFilter[] filters) {
-        RtVILMemoryStorage.setSimulationHint(true);
+        RtVILMemoryStorage.setSimulationNotifier(this);
         this.shell = shell;
         Configuration cfg = new Configuration(config.getProject()); // copy the configuration to avoid writing back
         this.config = new de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.
@@ -415,6 +417,11 @@ public class SimulatorUi {
      */
     private static EASyLogger getLogger() {
         return EASyLoggerFactory.INSTANCE.getLogger(EASyLogger.class, Bundle.ID);
+    }
+
+    @Override
+    public void notifyOperationCall(OperationDescriptor operation, Object[] args) {
+        // just ignore..
     }
 
 }

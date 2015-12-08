@@ -28,7 +28,7 @@ public abstract class RtVilStorage {
     
     private static RtVilStorage instance;
     private static boolean storageHint;
-    private static boolean simulationHint;
+    private static ISimulationNotifier simulationNotifier;
     
     /**
      * Defines the global storage provider.
@@ -60,19 +60,19 @@ public abstract class RtVilStorage {
     /**
      * Provides a hint to the execution whether the runtime execution happens in a simulation environment.
      * 
-     * @param inSimulation <code>true</code> if VIL is executed within a simulation environment, <code>false</code> else
+     * @param notifier the notifier instance or <b>null</b> in case of no notification
      */
-    public static final void setSimulationHint(boolean inSimulation) {
-        simulationHint = inSimulation;
+    public static final void setSimulationNotifier(ISimulationNotifier notifier) {
+        simulationNotifier = notifier;
     }
     
     /**
-     * Returns whether VIL is executed within a simulation environment.
+     * Returns the simulation notifier, i.e., whether rt-VIL is executed within a simulation environment.
      * 
-     * @return <code>true</code> if VIL is executed within a simulation environment, <code>false</code> else
+     * @return <b>null</b> in case of no simulation, the notifier else
      */
-    public static final boolean isInSimulation() {
-        return simulationHint;
+    public static final ISimulationNotifier getSimulationNotifier() {
+        return simulationNotifier;
     }
     
     /**

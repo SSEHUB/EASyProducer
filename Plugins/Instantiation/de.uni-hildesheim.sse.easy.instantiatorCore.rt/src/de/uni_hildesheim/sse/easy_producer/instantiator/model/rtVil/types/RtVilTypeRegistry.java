@@ -27,6 +27,7 @@ import java.util.Set;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactFactory;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Bundle;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.ISimulationNotifier;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.RtVilStorage;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArraySequence;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArraySet;
@@ -141,7 +142,9 @@ public class RtVilTypeRegistry extends TypeRegistry implements IClassNameMapperP
         public Object invoke(Object... args) throws VilException {
             mapArgumentsToJava(args);
             Object result;
-            if (RtVilStorage.isInSimulation() && disableExecution) {
+            ISimulationNotifier notifier = RtVilStorage.getSimulationNotifier();
+            if (null != notifier && disableExecution) {
+                notifier.notifyOperationCall(this, args);
                 result = null;
             } else {
                 result = super.invoke(args);
