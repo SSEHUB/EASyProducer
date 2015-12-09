@@ -1,0 +1,17 @@
+-> main(Configuration, Artifact) with (<config>, test.texts)
+    cfg <- <config>
+    -> ==(MachineRole, MachineRole) with (sequence2::Machine::role, Worker) = false
+    -> and(Boolean, Boolean) with (true, false) = false
+    -> ==(MachineRole, MachineRole) with (sequence2::Machine::role, Worker) = true
+    -> and(Boolean, Boolean) with (true, true) = true
+    -> ==(MachineRole, MachineRole) with (sequence2::Machine::role, Worker) = false
+    -> and(Boolean, Boolean) with (false, false) = false
+    -> ==(MachineRole, MachineRole) with (sequence2::Machine::role, Worker) = true
+    -> and(Boolean, Boolean) with (false, true) = false
+    -> ==(MachineRole, MachineRole) with (sequence2::Machine::role, Worker) = true
+    -> and(Boolean, Boolean) with (null, true) = null
+    -> select(Set, ExpressionEvaluator) with ({sequence2::machines {0}, sequence2::machines {1}, sequence2::machines {2}, sequence2::machines {3}, sequence2::machines {4}}, <evaluator>) = {sequence2::machines {1}}
+    available <- {sequence2::machines {1}}
+    for mach {
+        mach <- sequence2::machines {1}
+    }

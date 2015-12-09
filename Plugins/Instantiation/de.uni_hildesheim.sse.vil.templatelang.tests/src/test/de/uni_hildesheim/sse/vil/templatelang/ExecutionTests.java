@@ -272,6 +272,16 @@ public class ExecutionTests extends AbstractTest {
     public void testSequence1() throws IOException {
         assertEqual("sequence1");
     }
+    
+    /**
+     * Tests a Boolean select condition on compounds (QM).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testSequence2() throws IOException {
+        assertEqualWithIvml("sequence2", "sequence2");
+    }
 
     /**
      * Tests simple defs. This is an exceptional case as "value" in 
