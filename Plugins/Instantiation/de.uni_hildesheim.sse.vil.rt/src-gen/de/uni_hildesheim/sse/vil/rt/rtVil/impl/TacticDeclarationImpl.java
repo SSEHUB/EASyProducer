@@ -25,13 +25,13 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vil.rt.rtVil.impl.TacticDeclarationImpl#getName <em>Name</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.rt.rtVil.impl.TacticDeclarationImpl#getParamList <em>Param List</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.rt.rtVil.impl.TacticDeclarationImpl#getConditions <em>Conditions</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.rt.rtVil.impl.TacticDeclarationImpl#getBlock <em>Block</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

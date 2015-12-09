@@ -25,12 +25,12 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vil.rt.rtVil.impl.BreakdownElementImpl#getVarDecl <em>Var Decl</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.rt.rtVil.impl.BreakdownElementImpl#getExprStmt <em>Expr Stmt</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.rt.rtVil.impl.BreakdownElementImpl#getBreakdownStmt <em>Breakdown Stmt</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

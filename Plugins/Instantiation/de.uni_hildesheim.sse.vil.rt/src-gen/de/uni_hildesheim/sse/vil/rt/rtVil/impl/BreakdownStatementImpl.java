@@ -33,6 +33,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vil.rt.rtVil.impl.BreakdownStatementImpl#getType <em>Type</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.rt.rtVil.impl.BreakdownStatementImpl#getGuard <em>Guard</em>}</li>
@@ -41,7 +42,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link de.uni_hildesheim.sse.vil.rt.rtVil.impl.BreakdownStatementImpl#getPart <em>Part</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.rt.rtVil.impl.BreakdownStatementImpl#getTime <em>Time</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

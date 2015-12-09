@@ -16,13 +16,13 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vil.rt.rtVil.TacticDeclaration#getName <em>Name</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.rt.rtVil.TacticDeclaration#getParamList <em>Param List</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.rt.rtVil.TacticDeclaration#getConditions <em>Conditions</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.rt.rtVil.TacticDeclaration#getBlock <em>Block</em>}</li>
  * </ul>
- * </p>
  *
  * @see de.uni_hildesheim.sse.vil.rt.rtVil.RtVilPackage#getTacticDeclaration()
  * @model

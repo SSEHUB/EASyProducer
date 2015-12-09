@@ -36,6 +36,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vil.rt.rtVil.impl.StrategyDeclarationImpl#getName <em>Name</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.rt.rtVil.impl.StrategyDeclarationImpl#getParamList <em>Param List</em>}</li>
@@ -46,7 +47,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link de.uni_hildesheim.sse.vil.rt.rtVil.impl.StrategyDeclarationImpl#getBreakdown <em>Breakdown</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.rt.rtVil.impl.StrategyDeclarationImpl#getPost <em>Post</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

@@ -15,12 +15,12 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vil.rt.rtVil.BreakdownElement#getVarDecl <em>Var Decl</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.rt.rtVil.BreakdownElement#getExprStmt <em>Expr Stmt</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.rt.rtVil.BreakdownElement#getBreakdownStmt <em>Breakdown Stmt</em>}</li>
  * </ul>
- * </p>
  *
  * @see de.uni_hildesheim.sse.vil.rt.rtVil.RtVilPackage#getBreakdownElement()
  * @model

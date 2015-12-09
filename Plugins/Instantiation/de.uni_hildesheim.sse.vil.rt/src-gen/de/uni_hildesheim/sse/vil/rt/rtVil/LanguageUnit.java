@@ -10,10 +10,10 @@ package de.uni_hildesheim.sse.vil.rt.rtVil;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vil.rt.rtVil.LanguageUnit#getRtContents <em>Rt Contents</em>}</li>
  * </ul>
- * </p>
  *
  * @see de.uni_hildesheim.sse.vil.rt.rtVil.RtVilPackage#getLanguageUnit()
  * @model

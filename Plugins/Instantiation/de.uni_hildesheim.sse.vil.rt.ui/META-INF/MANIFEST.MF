@@ -32,5 +32,6 @@ Export-Package: de.uni_hildesheim.sse.vil.rt.ui.contentassist,
  de.uni_hildesheim.sse.vil.rt.ui.contentassist.antlr,
  de.uni_hildesheim.sse.vil.rt.ui.embed,
  de.uni_hildesheim.sse.vil.rt.ui.internal,
- de.uni_hildesheim.sse.vil.rt.ui.quickfix
+ de.uni_hildesheim.sse.vil.rt.ui.quickfix,
+ de.uni_hildesheim.sse.vil.rt.ui.contentassist.antlr.internal
 Bundle-Activator: de.uni_hildesheim.sse.vil.rt.ui.internal.RtVilActivator
