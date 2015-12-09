@@ -175,7 +175,9 @@ public class PseudoReal implements IVilType {
      */
     @OperationMeta(opType = OperationType.FUNCTION)
     public static boolean isFinite(double r0) {
-        return Double.isFinite(r0);
+        // SE: following function exists only since Java 1.8
+        // Double.isFinite(r0);
+        return Math.abs(r0) <= Double.MAX_VALUE;
     }
     
     /**

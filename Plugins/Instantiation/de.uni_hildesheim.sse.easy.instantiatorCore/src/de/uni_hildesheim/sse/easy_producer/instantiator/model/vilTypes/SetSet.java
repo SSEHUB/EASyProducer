@@ -104,6 +104,12 @@ public class SetSet<T> extends AbstractCollectionWrapper<T> implements Set<T> {
             public T next() {
                 throw new NoSuchElementException("empty");
             }
+            
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException("remove");
+            }
+            
         } : set.iterator();
     }
 
