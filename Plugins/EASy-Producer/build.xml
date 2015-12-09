@@ -238,10 +238,10 @@
 		  <property name="classname" value="${test.suite}"/>
 		  <property name="vmargs" value="-Dbaz=true"/>
 		  <property name="extraVMargs" value="-Deasy_producer.testdata.home=${home.easy.tests.dir}/testdata -Demma.coverage.out.file=${basedir}/${coverage.results.dir}/${ant.project.name}.emma -Dosgi.dev=${emma.path}/emma.jar" />
-		  <property name="os" value="win32"/>
-		  <property name="ws" value="win32"/>
-		  <property name="arch" value="x86"/>
-		  <property name="timeout" value="480000"/>
+		  <property name="os" value="linux"/>
+		  <property name="ws" value="gtk"/>
+		  <property name="arch" value="x86_64"/>
+		  <property name="timeout" value="240000"/>
 		</ant>
         <!-- Scenario Tests -->
         <ant target="core-test" antfile="plugins/${test.eclipse.testFW.dir}/library.xml" dir="${test.eclipse.path}">
