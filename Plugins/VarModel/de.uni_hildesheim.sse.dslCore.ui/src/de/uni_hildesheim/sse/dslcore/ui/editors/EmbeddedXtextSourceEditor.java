@@ -270,7 +270,15 @@ class EmbeddedXtextSourceEditor implements IEmbeddedEditor, IUpdatableEditor {
         }
 
         @Override
-        public void performNecessaryUpdates(Processor processor) {
+        public boolean performNecessaryUpdates(Processor processor) {
+            // TODO Auto-generated method stub
+            return false;
+        }
+
+        @Override
+        public boolean hasPendingUpdates() {
+            // TODO Auto-generated method stub
+            return false;
         }
     }
     
