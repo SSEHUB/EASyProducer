@@ -51,12 +51,12 @@
 	
 	<!-- Compile all files without test classes -->
 	<target name="compile" depends="init">
-	    <echo> message="${toString:includes}" </echo>
+	    <!-- echo> message="${toString:includes}" </echo -->
 		<javac srcdir="${src.dir}" debug="true" destdir="${build.classes.dir}" includeAntRuntime="no" failonerror="true" source="${javacSource}" target="${javacTarget}" encoding="${javac.encoding}">
 			<src path="${src.gen.dir}" />
-			<classpath refid="includes" />	
+			<classpath refid="includes" />
 		</javac>
-    </target>
+  </target>
 	
 	<!-- Creates a jar file -->
 	<target name="jar" depends="compile">
