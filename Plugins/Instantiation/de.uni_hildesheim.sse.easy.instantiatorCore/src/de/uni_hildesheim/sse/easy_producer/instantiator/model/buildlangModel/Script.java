@@ -84,6 +84,7 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
     /**
      * A descriptor class used for creating scripts (maximum parameter constraint).
      * 
+     * @param <S> the script type
      * @author Holger Eichelberger
      */
     public static class ScriptDescriptor<S extends Script> {

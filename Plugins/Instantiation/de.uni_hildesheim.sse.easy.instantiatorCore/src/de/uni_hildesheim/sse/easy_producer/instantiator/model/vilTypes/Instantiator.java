@@ -32,12 +32,16 @@ public @interface Instantiator {
      * The name of the instantiator as it will appear in VIL build flows for production strategy execution.
      * To be recognized, instantiator methods must have the same name. Please note that VIL buildlanguage
      * keywords shall not be used as name as such instantiators will not be available!
+     * 
+     * @return the name
      */
     String value();
     
     /**
      * Whether this instantiator may react on implicit parameters 
      * such as {@link Constants#IMPLICIT_PARENT_PARAMETER_NAME}.
+     * 
+     * @return <code>true</code> for implicit parameters, <code>false</code> else
      */
     boolean acceptsImplicitParameters() default false;
 }
