@@ -23,10 +23,6 @@ public class RtVilOutlineTreeProvider extends VilBuildLanguageOutlineTreeProvide
     public static final String NAME_STRATEGY_INSTANCE = "strategy.jpg";
     public static final String NAME_TACTIC_INSTANCE = "tactic.jpg";
 
-    {
-        System.out.println("CREATED rt-VIL");
-    }
-
     @Override
     protected void createScriptContentNodes(de.uni_hildesheim.sse.vilBuildLanguage.LanguageUnit script, 
         VirtualOutlineNode parentNode) {
@@ -42,7 +38,6 @@ public class RtVilOutlineTreeProvider extends VilBuildLanguageOutlineTreeProvide
     
     @Override
     protected void createScriptContentNode(EObject element, VirtualOutlineNode parentNode) {
-System.out.println("SPECIAL " + element);        
         if (element instanceof StrategyDeclaration) {
             StrategyDeclaration decl = (StrategyDeclaration) element;
             if (checkStrategyDeclaration(decl)) {
