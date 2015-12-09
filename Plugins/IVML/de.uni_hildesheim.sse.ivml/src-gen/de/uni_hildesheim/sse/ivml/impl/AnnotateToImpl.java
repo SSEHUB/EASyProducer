@@ -28,13 +28,13 @@ import org.eclipse.emf.ecore.util.EDataTypeEList;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.AnnotateToImpl#getSname <em>Sname</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.AnnotateToImpl#getAnnotationType <em>Annotation Type</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.AnnotateToImpl#getAnnotationDecl <em>Annotation Decl</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.AnnotateToImpl#getNames <em>Names</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

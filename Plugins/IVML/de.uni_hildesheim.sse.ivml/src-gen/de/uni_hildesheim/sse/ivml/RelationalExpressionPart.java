@@ -11,11 +11,11 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.ivml.RelationalExpressionPart#getOp <em>Op</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.RelationalExpressionPart#getEx <em>Ex</em>}</li>
  * </ul>
- * </p>
  *
  * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getRelationalExpressionPart()
  * @model

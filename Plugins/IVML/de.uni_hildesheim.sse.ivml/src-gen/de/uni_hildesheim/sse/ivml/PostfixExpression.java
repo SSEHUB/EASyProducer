@@ -13,13 +13,13 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.ivml.PostfixExpression#getCall <em>Call</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.PostfixExpression#getFCalls <em>FCalls</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.PostfixExpression#getAccess <em>Access</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.PostfixExpression#getLeft <em>Left</em>}</li>
  * </ul>
- * </p>
  *
  * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getPostfixExpression()
  * @model

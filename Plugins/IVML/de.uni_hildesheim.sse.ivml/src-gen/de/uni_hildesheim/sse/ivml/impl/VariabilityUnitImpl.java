@@ -26,10 +26,10 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.VariabilityUnitImpl#getProjects <em>Projects</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

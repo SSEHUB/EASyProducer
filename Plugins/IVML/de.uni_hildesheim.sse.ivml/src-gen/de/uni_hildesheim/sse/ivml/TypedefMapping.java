@@ -11,12 +11,12 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.ivml.TypedefMapping#getNewType <em>New Type</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.TypedefMapping#getType <em>Type</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.TypedefMapping#getConstraint <em>Constraint</em>}</li>
  * </ul>
- * </p>
  *
  * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getTypedefMapping()
  * @model

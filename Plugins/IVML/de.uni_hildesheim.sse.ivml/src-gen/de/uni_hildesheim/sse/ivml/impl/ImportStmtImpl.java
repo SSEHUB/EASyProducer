@@ -21,12 +21,12 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ImportStmtImpl#getName <em>Name</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ImportStmtImpl#getInterface <em>Interface</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ImportStmtImpl#getRestriction <em>Restriction</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

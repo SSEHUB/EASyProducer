@@ -29,11 +29,11 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.VariableDeclarationImpl#getType <em>Type</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.VariableDeclarationImpl#getDecls <em>Decls</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

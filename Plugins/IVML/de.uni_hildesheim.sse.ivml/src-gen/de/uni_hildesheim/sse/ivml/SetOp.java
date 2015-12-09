@@ -11,12 +11,12 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.ivml.SetOp#getName <em>Name</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.SetOp#getDecl <em>Decl</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.SetOp#getDeclEx <em>Decl Ex</em>}</li>
  * </ul>
- * </p>
  *
  * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getSetOp()
  * @model

@@ -11,11 +11,11 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.ivml.FreezeStatement#getName <em>Name</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.FreezeStatement#getAccess <em>Access</em>}</li>
  * </ul>
- * </p>
  *
  * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getFreezeStatement()
  * @model

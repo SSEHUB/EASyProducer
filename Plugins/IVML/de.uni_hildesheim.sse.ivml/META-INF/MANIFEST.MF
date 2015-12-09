@@ -22,7 +22,9 @@ Require-Bundle: org.eclipse.xtext;bundle-version="2.5.0";visibility:=reexport,
  com.google.guava,
  de.uni_hildesheim.sse.varModel;bundle-version="0.0.3";visibility:=reexport,
  de.uni_hildesheim.sse.dslCore;bundle-version="0.0.1";visibility:=reexport,
- org.eclipse.emf.mwe2.launch;bundle-version="2.5.0";resolution:=optional
+ org.eclipse.emf.mwe2.launch;bundle-version="2.5.0";resolution:=optional,
+ org.eclipse.xtext.xbase.lib,
+ org.objectweb.asm;bundle-version="[5.0.1,6.0.0)";resolution:=optional
 Service-Component: OSGI-INF/ivmlParser.xml
 Import-Package: org.apache.log4j,
  org.apache.commons.logging,

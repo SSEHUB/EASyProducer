@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.ivml.Project#getName <em>Name</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.Project#getVersion <em>Version</em>}</li>
@@ -21,7 +22,6 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link de.uni_hildesheim.sse.ivml.Project#getInterfaces <em>Interfaces</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.Project#getContents <em>Contents</em>}</li>
  * </ul>
- * </p>
  *
  * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getProject()
  * @model

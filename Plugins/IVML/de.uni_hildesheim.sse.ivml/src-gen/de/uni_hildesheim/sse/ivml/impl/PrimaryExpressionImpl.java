@@ -32,6 +32,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.PrimaryExpressionImpl#getLit <em>Lit</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.PrimaryExpressionImpl#getEx <em>Ex</em>}</li>
@@ -40,7 +41,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.PrimaryExpressionImpl#getCalls <em>Calls</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.PrimaryExpressionImpl#getAccess <em>Access</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

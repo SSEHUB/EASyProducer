@@ -31,13 +31,13 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.PostfixExpressionImpl#getCall <em>Call</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.PostfixExpressionImpl#getFCalls <em>FCalls</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.PostfixExpressionImpl#getAccess <em>Access</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.PostfixExpressionImpl#getLeft <em>Left</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

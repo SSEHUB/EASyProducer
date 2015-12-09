@@ -11,12 +11,12 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.ivml.Typedef#getTEnum <em>TEnum</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.Typedef#getTCompound <em>TCompound</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.Typedef#getTMapping <em>TMapping</em>}</li>
  * </ul>
- * </p>
  *
  * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getTypedef()
  * @model

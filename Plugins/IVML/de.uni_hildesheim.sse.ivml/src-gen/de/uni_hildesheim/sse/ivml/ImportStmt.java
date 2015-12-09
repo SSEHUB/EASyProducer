@@ -11,12 +11,12 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.ivml.ImportStmt#getName <em>Name</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.ImportStmt#getInterface <em>Interface</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.ImportStmt#getRestriction <em>Restriction</em>}</li>
  * </ul>
- * </p>
  *
  * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getImportStmt()
  * @model

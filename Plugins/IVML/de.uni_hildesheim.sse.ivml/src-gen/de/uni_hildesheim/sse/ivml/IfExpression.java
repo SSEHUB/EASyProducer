@@ -11,12 +11,12 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.ivml.IfExpression#getIfEx <em>If Ex</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.IfExpression#getThenEx <em>Then Ex</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.IfExpression#getElseEx <em>Else Ex</em>}</li>
  * </ul>
- * </p>
  *
  * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getIfExpression()
  * @model

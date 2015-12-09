@@ -28,12 +28,12 @@ import org.eclipse.emf.ecore.util.EDataTypeEList;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.DeclarationImpl#getType <em>Type</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.DeclarationImpl#getId <em>Id</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.DeclarationImpl#getInit <em>Init</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

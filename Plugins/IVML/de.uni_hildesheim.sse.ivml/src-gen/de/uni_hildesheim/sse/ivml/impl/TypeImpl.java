@@ -23,12 +23,12 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.TypeImpl#getType <em>Type</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.TypeImpl#getId <em>Id</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.TypeImpl#getDerived <em>Derived</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

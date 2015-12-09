@@ -28,12 +28,12 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ExpressionAccessImpl#getName <em>Name</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ExpressionAccessImpl#getCalls <em>Calls</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ExpressionAccessImpl#getAccess <em>Access</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

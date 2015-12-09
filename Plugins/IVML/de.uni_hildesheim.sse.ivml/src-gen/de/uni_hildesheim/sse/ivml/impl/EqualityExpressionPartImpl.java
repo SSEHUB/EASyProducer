@@ -22,12 +22,12 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.EqualityExpressionPartImpl#getOp <em>Op</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.EqualityExpressionPartImpl#getEx <em>Ex</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.EqualityExpressionPartImpl#getCollection <em>Collection</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

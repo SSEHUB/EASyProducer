@@ -11,12 +11,12 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.ivml.AssignmentExpressionPart#getOp <em>Op</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.AssignmentExpressionPart#getEx <em>Ex</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.AssignmentExpressionPart#getCollection <em>Collection</em>}</li>
  * </ul>
- * </p>
  *
  * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getAssignmentExpressionPart()
  * @model

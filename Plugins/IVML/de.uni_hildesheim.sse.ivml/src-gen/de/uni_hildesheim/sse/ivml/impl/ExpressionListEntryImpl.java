@@ -22,13 +22,13 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ExpressionListEntryImpl#getName <em>Name</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ExpressionListEntryImpl#getAttrib <em>Attrib</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ExpressionListEntryImpl#getValue <em>Value</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ExpressionListEntryImpl#getCollection <em>Collection</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

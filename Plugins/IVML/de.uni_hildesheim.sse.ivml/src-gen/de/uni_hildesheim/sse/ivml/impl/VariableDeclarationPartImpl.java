@@ -21,11 +21,11 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.VariableDeclarationPartImpl#getName <em>Name</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.VariableDeclarationPartImpl#getDefault <em>Default</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

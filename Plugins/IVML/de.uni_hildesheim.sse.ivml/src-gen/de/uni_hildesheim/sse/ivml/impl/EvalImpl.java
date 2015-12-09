@@ -26,11 +26,11 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.EvalImpl#getNested <em>Nested</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.EvalImpl#getStatements <em>Statements</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

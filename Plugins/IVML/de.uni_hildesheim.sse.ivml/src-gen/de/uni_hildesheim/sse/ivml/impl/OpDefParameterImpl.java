@@ -22,12 +22,12 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.OpDefParameterImpl#getType <em>Type</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.OpDefParameterImpl#getId <em>Id</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.OpDefParameterImpl#getVal <em>Val</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

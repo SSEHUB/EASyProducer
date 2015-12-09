@@ -13,13 +13,13 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.ivml.TypedefCompound#getAbstract <em>Abstract</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.TypedefCompound#getName <em>Name</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.TypedefCompound#getSuper <em>Super</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.TypedefCompound#getElements <em>Elements</em>}</li>
  * </ul>
- * </p>
  *
  * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getTypedefCompound()
  * @model

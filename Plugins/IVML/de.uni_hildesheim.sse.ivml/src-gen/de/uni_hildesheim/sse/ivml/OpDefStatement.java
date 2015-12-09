@@ -11,13 +11,13 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.ivml.OpDefStatement#getResult <em>Result</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.OpDefStatement#getId <em>Id</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.OpDefStatement#getParam <em>Param</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.OpDefStatement#getImpl <em>Impl</em>}</li>
  * </ul>
- * </p>
  *
  * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getOpDefStatement()
  * @model

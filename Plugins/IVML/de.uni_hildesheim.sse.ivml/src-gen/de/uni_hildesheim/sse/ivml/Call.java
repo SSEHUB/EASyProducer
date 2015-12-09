@@ -11,12 +11,12 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.ivml.Call#getCall <em>Call</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.Call#getSetOp <em>Set Op</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.Call#getArrayEx <em>Array Ex</em>}</li>
  * </ul>
- * </p>
  *
  * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getCall()
  * @model

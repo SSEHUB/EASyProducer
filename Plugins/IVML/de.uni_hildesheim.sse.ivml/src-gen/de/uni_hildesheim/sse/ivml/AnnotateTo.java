@@ -13,13 +13,13 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.ivml.AnnotateTo#getSname <em>Sname</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.AnnotateTo#getAnnotationType <em>Annotation Type</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.AnnotateTo#getAnnotationDecl <em>Annotation Decl</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.AnnotateTo#getNames <em>Names</em>}</li>
  * </ul>
- * </p>
  *
  * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getAnnotateTo()
  * @model

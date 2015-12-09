@@ -32,6 +32,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ProjectImpl#getName <em>Name</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ProjectImpl#getVersion <em>Version</em>}</li>
@@ -40,7 +41,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ProjectImpl#getInterfaces <em>Interfaces</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ProjectImpl#getContents <em>Contents</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */
