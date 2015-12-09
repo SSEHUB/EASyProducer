@@ -15,11 +15,11 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleConditions#getPostcondition <em>Postcondition</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleConditions#getPreconditions <em>Preconditions</em>}</li>
  * </ul>
- * </p>
  *
  * @see de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage#getRuleConditions()
  * @model

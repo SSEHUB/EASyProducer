@@ -29,5 +29,6 @@ Export-Package: de.uni_hildesheim.sse.ui.contentassist,
  de.uni_hildesheim.sse.ui.contentassist.antlr,
  de.uni_hildesheim.sse.ui.internal,
  de.uni_hildesheim.sse.ui.quickfix,
- de.uni_hildesheim.sse.vil.buildlang.ui.resources
+ de.uni_hildesheim.sse.vil.buildlang.ui.resources,
+ de.uni_hildesheim.sse.ui.contentassist.antlr.internal
 Bundle-Activator: de.uni_hildesheim.sse.ui.internal.VilBuildLanguageActivator

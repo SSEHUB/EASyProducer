@@ -15,12 +15,12 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.ImplementationUnit#getImports <em>Imports</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.ImplementationUnit#getRequires <em>Requires</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.ImplementationUnit#getScripts <em>Scripts</em>}</li>
  * </ul>
- * </p>
  *
  * @see de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage#getImplementationUnit()
  * @model

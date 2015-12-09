@@ -10,10 +10,10 @@ package de.uni_hildesheim.sse.vilBuildLanguage;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.ExpressionStatement#getAlt <em>Alt</em>}</li>
  * </ul>
- * </p>
  *
  * @see de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage#getExpressionStatement()
  * @model

@@ -11,13 +11,13 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.PrimaryExpression#getOtherEx <em>Other Ex</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.PrimaryExpression#getUnqEx <em>Unq Ex</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.PrimaryExpression#getSuperEx <em>Super Ex</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.PrimaryExpression#getNewEx <em>New Ex</em>}</li>
  * </ul>
- * </p>
  *
  * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage#getPrimaryExpression()
  * @model

@@ -29,12 +29,12 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.ImplementationUnitImpl#getImports <em>Imports</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.ImplementationUnitImpl#getRequires <em>Requires</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.ImplementationUnitImpl#getScripts <em>Scripts</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

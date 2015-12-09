@@ -23,12 +23,12 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.AlternativeImpl#getExpr <em>Expr</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.AlternativeImpl#getIf <em>If</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.AlternativeImpl#getElse <em>Else</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

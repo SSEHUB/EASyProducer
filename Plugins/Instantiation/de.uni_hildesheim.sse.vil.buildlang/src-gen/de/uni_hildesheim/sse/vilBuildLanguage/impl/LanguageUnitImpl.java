@@ -31,13 +31,13 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.LanguageUnitImpl#getParam <em>Param</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.LanguageUnitImpl#getParent <em>Parent</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.LanguageUnitImpl#getLoadProperties <em>Load Properties</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.LanguageUnitImpl#getContents <em>Contents</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

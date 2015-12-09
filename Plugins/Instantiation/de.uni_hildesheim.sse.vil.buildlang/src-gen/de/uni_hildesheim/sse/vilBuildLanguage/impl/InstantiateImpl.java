@@ -23,13 +23,13 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.InstantiateImpl#getProject <em>Project</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.InstantiateImpl#getRuleName <em>Rule Name</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.InstantiateImpl#getParam <em>Param</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.InstantiateImpl#getVersionSpec <em>Version Spec</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

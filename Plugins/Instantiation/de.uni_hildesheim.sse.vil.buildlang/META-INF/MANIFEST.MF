@@ -21,7 +21,9 @@ Require-Bundle: org.eclipse.xtext;bundle-version="2.5.0";visibility:=reexport,
  de.uni-hildesheim.sse.easy.instantiatorCore;bundle-version="0.5.0",
  de.uni_hildesheim.sse.dslCore;bundle-version="0.0.1";visibility:=reexport,
  de.uni_hildesheim.sse.vil.expressions;bundle-version="0.0.1",
- org.eclipse.emf.mwe2.launch;resolution:=optional
+ org.eclipse.emf.mwe2.launch;resolution:=optional,
+ org.eclipse.xtext.xbase.lib,
+ org.objectweb.asm;bundle-version="[5.0.1,6.0.0)";resolution:=optional
 Service-Component: OSGI-INF/vilParser.xml
 Import-Package: org.apache.log4j,
  org.eclipse.xtext.xbase.lib
@@ -39,3 +41,4 @@ Export-Package: de.uni_hildesheim.sse,
  de.uni_hildesheim.sse.vilBuildLanguage,
  de.uni_hildesheim.sse.vilBuildLanguage.impl,
  de.uni_hildesheim.sse.vilBuildLanguage.util
+

@@ -23,13 +23,13 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.PrimaryExpressionImpl#getSysEx <em>Sys Ex</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.PrimaryExpressionImpl#getMap <em>Map</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.PrimaryExpressionImpl#getJoin <em>Join</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.PrimaryExpressionImpl#getInstantiate <em>Instantiate</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

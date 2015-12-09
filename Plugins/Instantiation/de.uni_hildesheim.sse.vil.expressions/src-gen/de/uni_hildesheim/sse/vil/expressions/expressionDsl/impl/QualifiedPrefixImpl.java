@@ -21,10 +21,10 @@ import org.eclipse.emf.ecore.util.EDataTypeEList;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.QualifiedPrefixImpl#getQname <em>Qname</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

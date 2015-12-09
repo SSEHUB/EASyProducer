@@ -24,13 +24,13 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.PrimaryExpressionImpl#getOtherEx <em>Other Ex</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.PrimaryExpressionImpl#getUnqEx <em>Unq Ex</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.PrimaryExpressionImpl#getSuperEx <em>Super Ex</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.PrimaryExpressionImpl#getNewEx <em>New Ex</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

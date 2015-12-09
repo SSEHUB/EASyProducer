@@ -22,11 +22,11 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.StatementOrBlockImpl#getExStmt <em>Ex Stmt</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.StatementOrBlockImpl#getBlock <em>Block</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

@@ -23,12 +23,12 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.JoinImpl#getVar1 <em>Var1</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.JoinImpl#getVar2 <em>Var2</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.JoinImpl#getCondition <em>Condition</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

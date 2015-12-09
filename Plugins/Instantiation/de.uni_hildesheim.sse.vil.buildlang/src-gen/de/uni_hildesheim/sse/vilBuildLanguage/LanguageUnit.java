@@ -13,13 +13,13 @@ import org.eclipse.emf.common.util.EList;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.LanguageUnit#getParam <em>Param</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.LanguageUnit#getParent <em>Parent</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.LanguageUnit#getLoadProperties <em>Load Properties</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.LanguageUnit#getContents <em>Contents</em>}</li>
  * </ul>
- * </p>
  *
  * @see de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage#getLanguageUnit()
  * @model

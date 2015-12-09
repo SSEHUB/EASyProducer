@@ -13,12 +13,12 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.Join#getVar1 <em>Var1</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.Join#getVar2 <em>Var2</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.Join#getCondition <em>Condition</em>}</li>
  * </ul>
- * </p>
  *
  * @see de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage#getJoin()
  * @model

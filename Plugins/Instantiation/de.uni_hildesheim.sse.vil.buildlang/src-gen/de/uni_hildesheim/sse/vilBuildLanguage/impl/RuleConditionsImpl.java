@@ -27,11 +27,11 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.RuleConditionsImpl#getPostcondition <em>Postcondition</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.RuleConditionsImpl#getPreconditions <em>Preconditions</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

@@ -31,13 +31,13 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.MapImpl#getVar <em>Var</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.MapImpl#getSeparator <em>Separator</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.MapImpl#getExpr <em>Expr</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.MapImpl#getBlock <em>Block</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */
