@@ -13,13 +13,13 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.genericMultiselect#getPreamble <em>Preamble</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.genericMultiselect#getSelector <em>Selector</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.genericMultiselect#getPart <em>Part</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.genericMultiselect#getTrailer <em>Trailer</em>}</li>
  * </ul>
- * </p>
  *
  * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.TemplateLangPackage#getgenericMultiselect()
  * @model

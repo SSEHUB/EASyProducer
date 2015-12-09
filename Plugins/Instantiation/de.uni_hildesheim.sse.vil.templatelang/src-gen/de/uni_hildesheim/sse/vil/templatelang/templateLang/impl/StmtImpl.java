@@ -29,6 +29,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.StmtImpl#getVar <em>Var</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.StmtImpl#getAlt <em>Alt</em>}</li>
@@ -39,7 +40,6 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.StmtImpl#getExprStmt <em>Expr Stmt</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.StmtImpl#getCtn <em>Ctn</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

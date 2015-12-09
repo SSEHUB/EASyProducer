@@ -25,6 +25,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.LoopImpl#getType <em>Type</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.LoopImpl#getId <em>Id</em>}</li>
@@ -33,7 +34,6 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.LoopImpl#getFinalSeparator <em>Final Separator</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.LoopImpl#getStmt <em>Stmt</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

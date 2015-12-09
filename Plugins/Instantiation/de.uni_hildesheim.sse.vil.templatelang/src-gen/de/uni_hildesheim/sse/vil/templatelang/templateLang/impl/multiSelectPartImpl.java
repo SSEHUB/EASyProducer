@@ -23,12 +23,12 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.multiSelectPartImpl#getCase <em>Case</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.multiSelectPartImpl#getCode <em>Code</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.multiSelectPartImpl#getSelector <em>Selector</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

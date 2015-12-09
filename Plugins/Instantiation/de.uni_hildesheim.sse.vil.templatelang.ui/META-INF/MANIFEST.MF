@@ -28,5 +28,6 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: de.uni_hildesheim.sse.vil.templatelang.ui.contentassist,
  de.uni_hildesheim.sse.vil.templatelang.ui.contentassist.antlr,
  de.uni_hildesheim.sse.vil.templatelang.ui.internal,
- de.uni_hildesheim.sse.vil.templatelang.ui.quickfix
+ de.uni_hildesheim.sse.vil.templatelang.ui.quickfix,
+ de.uni_hildesheim.sse.vil.templatelang.ui.contentassist.antlr.internal
 Bundle-Activator: de.uni_hildesheim.sse.vil.templatelang.ui.internal.TemplateLangActivator

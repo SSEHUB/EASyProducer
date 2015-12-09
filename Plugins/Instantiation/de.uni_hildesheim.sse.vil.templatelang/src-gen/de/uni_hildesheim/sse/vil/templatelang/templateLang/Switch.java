@@ -15,12 +15,12 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Switch#getExpr <em>Expr</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Switch#getParts <em>Parts</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Switch#getDflt <em>Dflt</em>}</li>
  * </ul>
- * </p>
  *
  * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.TemplateLangPackage#getSwitch()
  * @model

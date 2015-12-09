@@ -4,9 +4,9 @@
     editDirectory="/de.uni_hildesheim.sse.vil.templatelang.edit/src" editorDirectory="/de.uni_hildesheim.sse.vil.templatelang.editor/src"
     modelPluginID="de.uni_hildesheim.sse.vil.templatelang" forceOverwrite="true" modelName="TemplateLang"
     updateClasspath="false" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
-    complianceLevel="5.0" copyrightFields="false" editPluginID="de.uni_hildesheim.sse.vil.templatelang.edit"
-    editorPluginID="de.uni_hildesheim.sse.vil.templatelang.editor" runtimeVersion="2.10"
-    usedGenPackages="../../../../../../../de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/ExpressionDsl.genmodel#//expressionDsl">
+    complianceLevel="6.0" copyrightFields="false" editPluginID="de.uni_hildesheim.sse.vil.templatelang.edit"
+    editorPluginID="de.uni_hildesheim.sse.vil.templatelang.editor" runtimeVersion="2.11"
+    usedGenPackages="platform:/resource/de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/ExpressionDsl.genmodel#//expressionDsl">
   <genPackages prefix="TemplateLang" basePackage="de.uni_hildesheim.sse.vil.templatelang"
       disposableProviderFactory="true" ecorePackage="TemplateLang.ecore#/">
     <genClasses ecoreClass="TemplateLang.ecore#//LanguageUnit">

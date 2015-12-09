@@ -13,7 +13,8 @@ Require-Bundle: de.uni_hildesheim.sse.vil.templatelang,
  de.uni-hildesheim.sse.easy.instantiatorCore;bundle-version="0.5.0",
  de.uni_hildesheim.sse.varModel.tests;bundle-version="0.0.10",
  de.uni_hildesheim.sse.varModel;bundle-version="0.5.5",
- de.uni_hildesheim.sse.ivml;bundle-version="0.8.0"
+ de.uni_hildesheim.sse.ivml;bundle-version="0.8.0",
+ org.objectweb.asm;bundle-version="[5.0.1,6.0.0)";resolution:=optional
 Import-Package: org.apache.log4j,
  org.junit,
  org.junit.runner;version="4.5.0",

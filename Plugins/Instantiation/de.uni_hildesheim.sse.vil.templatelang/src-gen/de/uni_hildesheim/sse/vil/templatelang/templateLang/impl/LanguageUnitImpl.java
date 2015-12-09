@@ -34,6 +34,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.LanguageUnitImpl#getJavaExts <em>Java Exts</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.LanguageUnitImpl#getIndent <em>Indent</em>}</li>
@@ -44,7 +45,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.LanguageUnitImpl#getVars <em>Vars</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.LanguageUnitImpl#getDefs <em>Defs</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

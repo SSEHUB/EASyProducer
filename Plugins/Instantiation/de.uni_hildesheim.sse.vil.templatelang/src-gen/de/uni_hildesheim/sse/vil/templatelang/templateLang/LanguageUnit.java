@@ -15,6 +15,7 @@ import org.eclipse.emf.common.util.EList;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit#getJavaExts <em>Java Exts</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit#getIndent <em>Indent</em>}</li>
@@ -25,7 +26,6 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit#getVars <em>Vars</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit#getDefs <em>Defs</em>}</li>
  * </ul>
- * </p>
  *
  * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.TemplateLangPackage#getLanguageUnit()
  * @model

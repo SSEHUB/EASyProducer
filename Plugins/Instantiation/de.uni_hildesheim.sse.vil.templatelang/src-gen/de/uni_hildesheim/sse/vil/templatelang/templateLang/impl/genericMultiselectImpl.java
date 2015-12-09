@@ -29,13 +29,13 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.genericMultiselectImpl#getPreamble <em>Preamble</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.genericMultiselectImpl#getSelector <em>Selector</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.genericMultiselectImpl#getPart <em>Part</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.genericMultiselectImpl#getTrailer <em>Trailer</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */
