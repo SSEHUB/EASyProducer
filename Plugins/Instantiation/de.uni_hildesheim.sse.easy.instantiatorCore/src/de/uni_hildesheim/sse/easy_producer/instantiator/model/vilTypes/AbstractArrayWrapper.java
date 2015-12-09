@@ -105,6 +105,11 @@ public abstract class AbstractArrayWrapper<T> extends AbstractCollectionWrapper<
             public T next() {
                 return array[pos++];
             }
+            
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException("remove");
+            }
 
         };
     }
