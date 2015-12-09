@@ -1,0 +1,29 @@
+project sequence2 {
+  version v0;
+  
+  enum MachineRole {Manager, Worker};
+  
+  compound Machine {
+      String name;
+      MachineRole role;
+      Boolean available;
+  }
+  
+  Machine mach1 = {name="mach1", role=MachineRole.Manager, available=true};
+  Machine mach2 = {name="mach2", role=MachineRole.Worker, available=true};
+  Machine mach3 = {name="mach3", role=MachineRole.Manager, available=false};
+  Machine mach4 = {name="mach4", role=MachineRole.Worker, available=false};
+  Machine mach5 = {name="mach5", role=MachineRole.Worker, available=null};
+  
+  setOf(refTo(Machine)) machines = {refBy(mach1), refBy(mach2), refBy(mach3), refBy(mach4), refBy(mach5)};
+   
+  freeze {
+    mach1;
+    mach2;
+    mach3;
+    mach4;
+    mach5;
+    machines;
+  };
+  
+}

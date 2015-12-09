@@ -589,8 +589,12 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
         IMetaOperation convOp = TypeHelper.findConversion(opType, sndArgType);
         if (null != convOp) {
             try {
+                // may already insert conversion
                 op = resolveOperation(sndArgType, name, arguments, true);
-                arguments[0].insertConversion(convOp);
+                // don't accidentally insert conversion twice
+                if (!op.getReturnType().isAssignableFrom(sndArgType)) { 
+                    arguments[0].insertConversion(convOp);
+                }
             } catch (VilException e1) {
                 // ok, let's try strings
             }
