@@ -3,9 +3,76 @@
 */
 package de.uni_hildesheim.sse.vil.rt.ui.contentassist;
 
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jface.viewers.StyledString;
+import org.eclipse.xtext.Assignment;
+import org.eclipse.xtext.RuleCall;
+import org.eclipse.xtext.ui.editor.contentassist.ContentAssistContext;
+import org.eclipse.xtext.ui.editor.contentassist.ICompletionProposalAcceptor;
+
+import de.uni_hildesheim.sse.vil.rt.ui.resources.Images;
+
 /**
  * see http://www.eclipse.org/Xtext/documentation.html#contentAssist on how to customize content assistant
  */
 public class RtVilProposalProvider extends de.uni_hildesheim.sse.vil.rt.ui.contentassist.AbstractRtVilProposalProvider {
+
+    @Override
+    public void completeRtContents_Elements(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        // Propose script parameters and already declared/defined variables
+        proposeScriptParamsVars(model, assignment, context, acceptor, false);        
+        // Propose version definition (only if no version exists)
+        completeLanguageUnit_Version(model, assignment, context, acceptor);
+        // Propose load properties definition
+        completeLanguageUnit_LoadProperties(model, assignment, context, acceptor);
+        // Propose new variable declaration
+        completeVariableDeclaration_Type(model, assignment, context, acceptor);
+        // Propose new rule definition
+        complete_RuleDeclaration(model, (RuleCall) assignment.getTerminal(), context, acceptor);
+    }
+
+    @Override
+    public void complete_GlobalVariableDeclaration(EObject model, RuleCall ruleCall, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        String proposalString = "<persistent> <Type> <var> = <value>;";
+        acceptor.accept(createCompletionProposal(proposalString, new StyledString("VariableDeclaration"),
+            getImageHelper().getImage(Images.NAME_VARIABLEDECLARATION), 700, context.getPrefix(), context));
+    }
+    
+    public void complete_StrategyDeclaration(EObject model, RuleCall ruleCall, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        String proposalString = "strategy <name> (<params>) = {\n        objective true;\n        breakdown {\n            tactic <name>(<params>);\n        }\n}";
+        acceptor.accept(createCompletionProposal(proposalString, new StyledString("StrategyDeclaration"),
+            getImageHelper().getImage(Images.NAME_STRATEGY_INSTANCE), 700, context.getPrefix(), context));
+    }
+    
+    public void complete_BreakdownElement(EObject model, RuleCall ruleCall, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        String proposalString = "breakdown {\n        tactic <name>(<params>);\n}";
+        acceptor.accept(createCompletionProposal(proposalString, new StyledString("StrategyDeclaration"),
+            getImageHelper().getImage(Images.NAME_STRATEGY_INSTANCE), 700, context.getPrefix(), context));
+    }
+
+    public void complete_WeightingStatement(EObject model, RuleCall ruleCall, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        String proposalString = "weighting <expression>; ";
+        acceptor.accept(createCompletionProposal(proposalString, new StyledString("StrategyDeclaration"),
+            getImageHelper().getImage(Images.NAME_STRATEGY_INSTANCE), 700, context.getPrefix(), context));
+            // subclasses may override
+    }
+
+    public void complete_BreakdownStatement(EObject model, RuleCall ruleCall, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        String proposalString = "tactic <name>(<params>);";
+        acceptor.accept(createCompletionProposal(proposalString, new StyledString("StrategyDeclaration"),
+            getImageHelper().getImage(Images.NAME_STRATEGY_INSTANCE), 700, context.getPrefix(), context));
+    }
+    
+    public void complete_BreakdownWithPart(EObject model, RuleCall ruleCall, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        String proposalString = "(name=value)";
+        acceptor.accept(createCompletionProposal(proposalString, new StyledString("StrategyDeclaration"),
+            getImageHelper().getImage(Images.NAME_STRATEGY_INSTANCE), 700, context.getPrefix(), context));
+    }
+
+    public void complete_TacticDeclaration(EObject model, RuleCall ruleCall, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        String proposalString = "tactic <name> (<params>) = {\n}\n}";
+        acceptor.accept(createCompletionProposal(proposalString, new StyledString("StrategyDeclaration"),
+            getImageHelper().getImage(Images.NAME_TACTIC_INSTANCE), 700, context.getPrefix(), context));
+    }
 
 }

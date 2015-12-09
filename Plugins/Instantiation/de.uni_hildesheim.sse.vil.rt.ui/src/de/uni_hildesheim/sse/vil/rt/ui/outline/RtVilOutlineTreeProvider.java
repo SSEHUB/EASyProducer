@@ -11,6 +11,7 @@ import de.uni_hildesheim.sse.ui.outline.VirtualOutlineNode;
 import de.uni_hildesheim.sse.vil.rt.rtVil.LanguageUnit;
 import de.uni_hildesheim.sse.vil.rt.rtVil.StrategyDeclaration;
 import de.uni_hildesheim.sse.vil.rt.rtVil.TacticDeclaration;
+import de.uni_hildesheim.sse.vil.rt.ui.resources.Images;
 import de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage;
 
 /**
@@ -19,9 +20,6 @@ import de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage;
  * see http://www.eclipse.org/Xtext/documentation.html#outline
  */
 public class RtVilOutlineTreeProvider extends VilBuildLanguageOutlineTreeProvider {
-
-    public static final String NAME_STRATEGY_INSTANCE = "strategy.jpg";
-    public static final String NAME_TACTIC_INSTANCE = "tactic.jpg";
 
     @Override
     protected void createScriptContentNodes(de.uni_hildesheim.sse.vilBuildLanguage.LanguageUnit script, 
@@ -46,7 +44,7 @@ public class RtVilOutlineTreeProvider extends VilBuildLanguageOutlineTreeProvide
                 displayString.append(toString(decl.getParamList()) + " : Strategy", StyledString.QUALIFIER_STYLER);
                 createEStructuralFeatureNode(parentNode, decl,
                     VilBuildLanguagePackage.Literals.RULE_DECLARATION__NAME,
-                    getImageHelper().getImage(NAME_STRATEGY_INSTANCE), displayString, true);
+                    getImageHelper().getImage(Images.NAME_STRATEGY_INSTANCE), displayString, true);
             }
         } else if (element instanceof TacticDeclaration) {
             TacticDeclaration decl = (TacticDeclaration) element;
@@ -56,7 +54,7 @@ public class RtVilOutlineTreeProvider extends VilBuildLanguageOutlineTreeProvide
                 displayString.append(toString(decl.getParamList()) + " : Tactic", StyledString.QUALIFIER_STYLER);
                 createEStructuralFeatureNode(parentNode, decl,
                     VilBuildLanguagePackage.Literals.RULE_DECLARATION__NAME,
-                    getImageHelper().getImage(NAME_TACTIC_INSTANCE), displayString, true);
+                    getImageHelper().getImage(Images.NAME_TACTIC_INSTANCE), displayString, true);
             }
         }
     }
