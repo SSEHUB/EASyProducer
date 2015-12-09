@@ -241,7 +241,7 @@
 		  <property name="os" value="win32"/>
 		  <property name="ws" value="win32"/>
 		  <property name="arch" value="x86"/>
-		  <property name="timeout" value="240000"/>
+		  <property name="timeout" value="480000"/>
 		</ant>
         <!-- Scenario Tests -->
         <ant target="core-test" antfile="plugins/${test.eclipse.testFW.dir}/library.xml" dir="${test.eclipse.path}">
