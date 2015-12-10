@@ -69,9 +69,9 @@
 		  <property name="plugin-name" value="${test.plugin}"/>
 		  <property name="classname" value="${test.suite}"/>
 		  <property name="extraVMargs" value="-DreasonerCore.testdata.home=${home.reasonerCore.test.dir}/testdata -javaagent:${jacoco.path}/jacocoagent.jar=append=true,destfile=${basedir}/${coverage.results.dir}/${ant.project.name}.exec" />
-		  <property name="os" value="win32"/>
-		  <property name="ws" value="win32"/>
-		  <property name="arch" value="x86"/>
+		  <property name="os" value="${test.eclipse.os}"/>
+		  <property name="ws" value="${test.eclipse.ws}"/>
+		  <property name="arch" value="${test.eclipse.arch}"/>
 		  <property name="timeout" value="240000"/>
 		</ant>
 	</target>

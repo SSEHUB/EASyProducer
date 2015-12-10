@@ -219,9 +219,9 @@
           <property name="plugin-name" value="${test.plugin.instantiation.serializer}"/>
           <property name="classname" value="${test.suite.instantiation.serializer}"/>
           <property name="extraVMargs" value="-Dinstantiation.serializer.testdata.home=${home.instantiator.serializer.test.dir}/testdata -javaagent:${jacoco.path}/jacocoagent.jar=append=true,destfile=${basedir}/${coverage.results.dir}/${ant.project.name}.exec" />
-          <property name="os" value="win32"/>
-          <property name="ws" value="win32"/>
-          <property name="arch" value="x86"/>
+          <property name="os" value="${test.eclipse.os}"/>
+		  <property name="ws" value="${test.eclipse.ws}"/>
+		  <property name="arch" value="${test.eclipse.arch}"/>
           <property name="timeout" value="480000"/>
         </ant>
         <!-- Instantiator Core test -->
@@ -230,9 +230,9 @@
 		  <property name="plugin-name" value="${test.plugin.instantiation}"/>
 		  <property name="classname" value="${test.suite.instantiation}"/>
 		  <property name="extraVMargs" value="-DinstantiatorCore.testdata.home=${home.instantiatorCore.tests.dir}/testdata -javaagent:${jacoco.path}/jacocoagent.jar=append=true,destfile=${basedir}/${coverage.results.dir}/${ant.project.name}.exec" />
-		  <property name="os" value="win32"/>
-		  <property name="ws" value="win32"/>
-		  <property name="arch" value="x86"/>
+		  <property name="os" value="${test.eclipse.os}"/>
+		  <property name="ws" value="${test.eclipse.ws}"/>
+		  <property name="arch" value="${test.eclipse.arch}"/>
 		  <property name="timeout" value="240000"/>
 		</ant>
         <!-- buildlang test -->
@@ -241,9 +241,9 @@
 		  <property name="plugin-name" value="${test.plugin.vil}"/>
 		  <property name="classname" value="${test.suite.vil}"/>
 		  <property name="extraVMargs" value="-Dvil.buildlang.testdata.home=${home.vil.tests.dir}/testdata -javaagent:${jacoco.path}/jacocoagent.jar=append=true,destfile=${basedir}/${coverage.results.dir}/${ant.project.name}.exec" />
-		  <property name="os" value="win32"/>
-		  <property name="ws" value="win32"/>
-		  <property name="arch" value="x86"/>
+		  <property name="os" value="${test.eclipse.os}"/>
+		  <property name="ws" value="${test.eclipse.ws}"/>
+		  <property name="arch" value="${test.eclipse.arch}"/>
 		  <property name="timeout" value="240000"/>
 		</ant>
         <!-- templatelang test -->
@@ -252,9 +252,9 @@
 		  <property name="plugin-name" value="${test.plugin.template}"/>
 		  <property name="classname" value="${test.suite.template}"/>
 		  <property name="extraVMargs" value="-Dvil.templatelang.testdata.home=${home.template.tests.dir}/testdata -javaagent:${jacoco.path}/jacocoagent.jar=append=true,destfile=${basedir}/${coverage.results.dir}/${ant.project.name}.exec" />
-		  <property name="os" value="win32"/>
-		  <property name="ws" value="win32"/>
-		  <property name="arch" value="x86"/>
+		  <property name="os" value="${test.eclipse.os}"/>
+		  <property name="ws" value="${test.eclipse.ws}"/>
+		  <property name="arch" value="${test.eclipse.arch}"/>
 		  <property name="timeout" value="240000"/>
 		</ant>
         <!-- Java Instantiation test -->
@@ -263,9 +263,9 @@
 		  <property name="plugin-name" value="${test.plugin.instantiation.java}"/>
 		  <property name="classname" value="${test.suite.instantiation.java}"/>
 		  <property name="extraVMargs" value="-Dinstantiator.java.testdata.home=${home.instantiator.java.test.dir}/testdata -javaagent:${jacoco.path}/jacocoagent.jar=append=true,destfile=${basedir}/${coverage.results.dir}/${ant.project.name}.exec" />
-		  <property name="os" value="win32"/>
-		  <property name="ws" value="win32"/>
-		  <property name="arch" value="x86"/>
+		  <property name="os" value="${test.eclipse.os}"/>
+		  <property name="ws" value="${test.eclipse.ws}"/>
+		  <property name="arch" value="${test.eclipse.arch}"/>
 		  <property name="timeout" value="240000"/>
 		</ant>
         <!-- ANT Instantiation test -->
@@ -274,9 +274,9 @@
           <property name="plugin-name" value="${test.plugin.instantiation.ant}"/>
           <property name="classname" value="${test.suite.instantiation.ant}"/>
           <property name="extraVMargs" value="-Dinstantiator.ant.testdata.home=${home.instantiator.ant.test.dir}/testdata -javaagent:${jacoco.path}/jacocoagent.jar=append=true,destfile=${basedir}/${coverage.results.dir}/${ant.project.name}.exec" />
-          <property name="os" value="win32"/>
-          <property name="ws" value="win32"/>
-          <property name="arch" value="x86"/>
+          <property name="os" value="${test.eclipse.os}"/>
+		  <property name="ws" value="${test.eclipse.ws}"/>
+		  <property name="arch" value="${test.eclipse.arch}"/>
           <property name="timeout" value="240000"/>
         </ant>
         <!-- AspectJ Instantiation test -->
@@ -285,9 +285,9 @@
           <property name="plugin-name" value="${test.plugin.instantiation.aspectj}"/>
           <property name="classname" value="${test.suite.instantiation.aspectj}"/>
           <property name="extraVMargs" value="-Dinstantiator.aspectj.testdata.home=${home.instantiator.aspectj.test.dir}/testdata -javaagent:${jacoco.path}/jacocoagent.jar=append=true,destfile=${basedir}/${coverage.results.dir}/${ant.project.name}.exec" />
-          <property name="os" value="win32"/>
-          <property name="ws" value="win32"/>
-          <property name="arch" value="x86"/>
+          <property name="os" value="${test.eclipse.os}"/>
+		  <property name="ws" value="${test.eclipse.ws}"/>
+		  <property name="arch" value="${test.eclipse.arch}"/>
           <property name="timeout" value="240000"/>
         </ant>
         <!-- rt-VIL test -->
@@ -296,9 +296,9 @@
           <property name="plugin-name" value="${test.plugin.instantiation.rtVil}"/>
           <property name="classname" value="${test.suite.instantiation.rtVil}"/>
           <property name="extraVMargs" value="-Dvil.rt.testdata.home=${home.vil.rt.tests.dir}/testdata -javaagent:${jacoco.path}/jacocoagent.jar=append=true,destfile=${basedir}/${coverage.results.dir}/${ant.project.name}.exec" />
-          <property name="os" value="win32"/>
-          <property name="ws" value="win32"/>
-          <property name="arch" value="x86"/>
+          <property name="os" value="${test.eclipse.os}"/>
+		  <property name="ws" value="${test.eclipse.ws}"/>
+		  <property name="arch" value="${test.eclipse.arch}"/>
           <property name="timeout" value="240000"/>
         </ant>        
       </target>

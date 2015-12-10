@@ -226,9 +226,9 @@
 		  <property name="classname" value="${test.suite.core}"/>
 		  <property name="vmargs" value="-Dbaz=true"/>
 		  <property name="extraVMargs" value="-Dde.uni_hildesheim.sse.easy_producer.core.test=${home.easy.easy-producer.core.tests.dir}/testdata -Demma.coverage.out.file=${basedir}/${coverage.results.dir}/${ant.project.name}.emma -Dosgi.dev=${emma.path}/emma.jar" />
-		  <property name="os" value="win32"/>
-		  <property name="ws" value="win32"/>
-		  <property name="arch" value="x86"/>
+		  <property name="os" value="${test.eclipse.os}"/>
+		  <property name="ws" value="${test.eclipse.ws}"/>
+		  <property name="arch" value="${test.eclipse.arch}"/>
 		  <property name="timeout" value="240000"/>
 		</ant>
         <!-- Core.Eclipse Tests -->
@@ -238,9 +238,9 @@
 		  <property name="classname" value="${test.suite}"/>
 		  <property name="vmargs" value="-Dbaz=true"/>
 		  <property name="extraVMargs" value="-Deasy_producer.testdata.home=${home.easy.tests.dir}/testdata -Demma.coverage.out.file=${basedir}/${coverage.results.dir}/${ant.project.name}.emma -Dosgi.dev=${emma.path}/emma.jar" />
-		  <property name="os" value="linux"/>
-		  <property name="ws" value="gtk"/>
-		  <property name="arch" value="x86_64"/>
+		  <property name="os" value="${test.eclipse.os}"/>
+		  <property name="ws" value="${test.eclipse.ws}"/>
+		  <property name="arch" value="${test.eclipse.arch}"/>
 		  <property name="timeout" value="240000"/>
 		</ant>
         <!-- Scenario Tests -->
@@ -250,9 +250,9 @@
 		  <property name="classname" value="${test.suite.szenarios}"/>
 		  <property name="vmargs" value="-Dbaz=true"/>
 		  <property name="extraVMargs" value="-Deasy_producer.scenarios.testdata.home=${home.scenario.tests.dir}/testdata -Demma.coverage.out.file=${basedir}/${coverage.results.dir}/${ant.project.name}.emma -Dosgi.dev=${emma.path}/emma.jar" />
-		  <property name="os" value="win32"/>
-		  <property name="ws" value="win32"/>
-		  <property name="arch" value="x86"/>
+		  <property name="os" value="${test.eclipse.os}"/>
+		  <property name="ws" value="${test.eclipse.ws}"/>
+		  <property name="arch" value="${test.eclipse.arch}"/>
 		  <property name="timeout" value="240000"/>
 		</ant>
 	</target>
