@@ -79,9 +79,9 @@
           <property name="classname" value="test.de.uni_hildesheim.sse.AllTests"/>
           <!-- property name="vmargs" value="-Dbaz=true"/ -->
           <property name="extraVMargs" value="-javaagent:${jacoco.path}/jacocoagent.jar=append=true,destfile=${basedir}/${coverage.results.dir}/${ant.project.name}.exec"/>
-          <property name="os" value="win32"/>
-          <property name="ws" value="win32"/>
-          <property name="arch" value="x86"/>
+          <property name="os" value="${test.eclipse.os}"/>
+		  <property name="ws" value="${test.eclipse.ws}"/>
+		  <property name="arch" value="${test.eclipse.arch}"/>
           <property name="timeout" value="240000"/>
         </ant>
 	</target>

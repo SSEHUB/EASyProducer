@@ -98,9 +98,9 @@
 		  <property name="classname" value="de.uni_hildesheim.sse.reasoning.drools.AllTests"/>
 		  <property name="vmargs" value="-Dbaz=true"/>
 		  <property name="extraVMargs" value="-DreasonerCore.testdata.home=${home.reasonerCore.test.dir}/testdata -DDrools.testdata.dir=${home.drools.test.dir}/testdata -Demma.coverage.out.file=${basedir}/${coverage.results.dir}/${ant.project.name}.emma -Dosgi.dev=${emma.path}/emma.jar" />
-		  <property name="os" value="win32"/>
-		  <property name="ws" value="win32"/>
-		  <property name="arch" value="x86"/>
+		  <property name="os" value="${test.eclipse.os}"/>
+		  <property name="ws" value="${test.eclipse.ws}"/>
+		  <property name="arch" value="${test.eclipse.arch}"/>
 		  <property name="timeout" value="900000"/>
 		</ant>
         <!-- Testing Drools 2 -->
@@ -110,9 +110,9 @@
 		  <property name="classname" value="de.uni_hildesheim.sse.reasoning.drools2.AllTests"/>
 		  <property name="vmargs" value="-Dbaz=true"/>
 		  <property name="extraVMargs" value="-DreasonerCore.testdata.home=${home.reasonerCore.test.dir}/testdata -DDrools2.testdata.dir=${home.drools2.test.dir}/testdata -Demma.coverage.out.file=${basedir}/${coverage.results.dir}/${ant.project.name}.emma -Dosgi.dev=${emma.path}/emma.jar" />
-		  <property name="os" value="win32"/>
-		  <property name="ws" value="win32"/>
-		  <property name="arch" value="x86"/>
+		  <property name="os" value="${test.eclipse.os}"/>
+		  <property name="ws" value="${test.eclipse.ws}"/>
+		  <property name="arch" value="${test.eclipse.arch}"/>
 		  <property name="timeout" value="900000"/>
 		</ant>
 	</target>

@@ -94,7 +94,7 @@
 	
 	<target name="coreTestEMMA" depends="instrumment, copy.to.eclipse">
 		<echo>#################</echo>
-        <echo>###  tESTING  ###</echo>
+        <echo>###  TESTING  ###</echo>
         <echo>#################</echo>
         <property name="eclipse-home" value="${test.eclipse.path}"/>
 		<ant target="core-test" antfile="plugins/${test.eclipse.testFW.dir}/library.xml" dir="${test.eclipse.path}">
@@ -103,9 +103,9 @@
 		  <property name="classname" value="de.uni_hildesheim.sse.integration.common.tests.AbstractTest"/>
 		  <property name="vmargs" value="-Dbaz=true"/>
 		  <property name="extraVMargs" value="-Demma.coverage.out.file=${basedir}/${coverage.results.dir}/${ant.project.name}.emma -Dosgi.dev=${emma.path}/emma.jar" />
-		  <property name="os" value="win32"/>
-		  <property name="ws" value="win32"/>
-		  <property name="arch" value="x86"/>
+		  <property name="os" value="${test.eclipse.os}"/>
+		  <property name="ws" value="${test.eclipse.ws}"/>
+		  <property name="arch" value="${test.eclipse.arch}"/>
 		  <property name="timeout" value="240000"/>
 		</ant>
 	</target>
