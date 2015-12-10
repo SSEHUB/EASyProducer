@@ -15,7 +15,7 @@ project sequence2 {
   Machine mach4 = {name="mach4", role=MachineRole.Worker, available=false};
   Machine mach5 = {name="mach5", role=MachineRole.Worker, available=null};
   
-  setOf(refTo(Machine)) machines = {refBy(mach1), refBy(mach2), refBy(mach3), refBy(mach4), refBy(mach5)};
+  sequenceOf(refTo(Machine)) machines = {refBy(mach1), refBy(mach2), refBy(mach3), refBy(mach4), refBy(mach5)};
    
   freeze {
     mach1;

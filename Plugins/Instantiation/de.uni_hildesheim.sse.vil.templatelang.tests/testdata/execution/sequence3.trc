@@ -1,0 +1,8 @@
+-> main(Configuration, Artifact) with (<config>, test.texts)
+    cfg <- <config>
+    -> select(Sequence, ExpressionEvaluator) with ({sequence2::machines [0], sequence2::machines [1], sequence2::machines [2], sequence2::machines [3], sequence2::machines [4]}, <evaluator>) = {sequence2::machines [0], sequence2::machines [1]}
+    available <- {sequence2::machines [0], sequence2::machines [1]}
+    for mach {
+        mach <- sequence2::machines [0]
+        mach <- sequence2::machines [1]
+    }

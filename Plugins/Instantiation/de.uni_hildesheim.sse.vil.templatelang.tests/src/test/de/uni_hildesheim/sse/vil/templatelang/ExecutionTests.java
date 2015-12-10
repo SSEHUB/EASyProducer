@@ -274,7 +274,7 @@ public class ExecutionTests extends AbstractTest {
     }
     
     /**
-     * Tests a Boolean select condition on compounds (QM).
+     * Tests a composite Boolean select condition on compounds (QM).
      * 
      * @throws IOException should not occur
      */
@@ -283,6 +283,16 @@ public class ExecutionTests extends AbstractTest {
         assertEqualWithIvml("sequence2", "sequence2");
     }
 
+    /**
+     * Tests a simple Boolean select condition on compounds (QM).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testSequence3() throws IOException {
+        assertEqualWithIvml("sequence3", "sequence2");
+    }
+    
     /**
      * Tests simple defs. This is an exceptional case as "value" in 
      * a def is considered as a content expression, not as a single String.
