@@ -18,6 +18,8 @@ import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Advice;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Import;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Parameter;
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ParameterList;
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Type;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VersionStmt;
 import de.uni_hildesheim.sse.vil.expressions.translation.Utils;
@@ -64,7 +66,7 @@ public class VilBuildLanguageOutlineTreeProvider extends DefaultOutlineTreeProvi
      * @param parentNode
      *            parentnode
      */
-    private void createAdviceNodes(EList<Advice> adviceList, VirtualOutlineNode parentNode) {
+    protected void createAdviceNodes(EList<Advice> adviceList, VirtualOutlineNode parentNode) {
         for (Advice advice : adviceList) {
             if (checkAdviceName(advice)) {
                 StyledString displayString = new StyledString();
@@ -87,7 +89,7 @@ public class VilBuildLanguageOutlineTreeProvider extends DefaultOutlineTreeProvi
      * @param parentNode
      *            parentnode
      */
-    private void createScriptNodes(LanguageUnit script, DocumentRootNode parentNode) {
+    protected void createScriptNodes(LanguageUnit script, DocumentRootNode parentNode) {
         VirtualOutlineNode vilNode = null;
         StyledString displayString = new StyledString();
         if (checkScriptParent(script)) {
@@ -133,15 +135,35 @@ public class VilBuildLanguageOutlineTreeProvider extends DefaultOutlineTreeProvi
                 createPropertyNodes(script.getLoadProperties(), vilNode);
             }
             // ScriptContents
-            if (script.getContents() != null && !isEmpty(script.getContents().getElements())) {
+            if (hasContents(script)) {
                 // create VirtualNode for ScriptContent
                 StyledString scriptContentsString = new StyledString();
                 scriptContentsString.append("Script Contents", StyledString.QUALIFIER_STYLER);
                 VirtualOutlineNode scriptContentNode = new VirtualOutlineNode(vilNode,
                         imageHelper.getImage(Images.NAME_SCRIPTCONTENT), scriptContentsString, false);
-                createScriptContentNodes(script.getContents().getElements(), scriptContentNode);
+                createScriptContentNodes(script, scriptContentNode);
             }
         }
+    }
+
+    /**
+     * Returns whether <code>script</code> has contents.
+     * 
+     * @param script the script
+     * @return <code>true</code> if the script has contents, <code>false</code> else
+     */
+    protected boolean hasContents(LanguageUnit script) {
+        return script.getContents() != null && !isEmpty(script.getContents().getElements());
+    }
+    
+    /**
+     * Creates the content nodes for <code>script</code>.
+     * 
+     * @param script the script to create the content nodes for
+     * @param parentNode the parent node for adding new nodes
+     */
+    protected void createScriptContentNodes(LanguageUnit script, VirtualOutlineNode parentNode) {
+        createScriptContentNodes(script.getContents().getElements(), parentNode);
     }
 
     /**
@@ -152,7 +174,7 @@ public class VilBuildLanguageOutlineTreeProvider extends DefaultOutlineTreeProvi
      * @param parentNode
      *            version will be displayed under this node
      */
-    private void createVersionNode(VersionStmt version, IOutlineNode parentNode) {
+    protected void createVersionNode(VersionStmt version, IOutlineNode parentNode) {
         if (version.getVersion() != null) {
             createEStructuralFeatureNode(parentNode, version, ExpressionDslPackage.Literals.VERSION_STMT__VERSION,
                     imageHelper.getImage(Images.NAME_VERSION), "v" + version.getVersion(), true);
@@ -167,7 +189,7 @@ public class VilBuildLanguageOutlineTreeProvider extends DefaultOutlineTreeProvi
      * @param parentNode
      *            all parameters will be displayed under this node
      */
-    private void createParametersNodes(EList<Parameter> paramList, VirtualOutlineNode parentNode) {
+    protected void createParametersNodes(EList<Parameter> paramList, VirtualOutlineNode parentNode) {
         for (Parameter param : paramList) {
             if (checkParameter(param)) {
                 StyledString displayString = new StyledString();
@@ -188,7 +210,7 @@ public class VilBuildLanguageOutlineTreeProvider extends DefaultOutlineTreeProvi
      * @param parentNode
      *            all properties will be displayed under this node
      */
-    private void createPropertyNodes(EList<LoadProperties> propList, VirtualOutlineNode parentNode) {
+    protected void createPropertyNodes(EList<LoadProperties> propList, VirtualOutlineNode parentNode) {
         for (LoadProperties prop : propList) {
             if (prop.getPath() != null && !prop.getPath().isEmpty()) {
                 StyledString displayString = new StyledString();
@@ -208,7 +230,7 @@ public class VilBuildLanguageOutlineTreeProvider extends DefaultOutlineTreeProvi
      * @param parentNode
      *            all imports will be displayed under this node
      */
-    private void createImportNodes(EList<Import> importList, VirtualOutlineNode parentNode) {
+    protected void createImportNodes(EList<Import> importList, VirtualOutlineNode parentNode) {
         for (Import importvar : importList) {
             if (importvar.getName() != null && !importvar.getName().isEmpty()) {
                 StyledString displayString = new StyledString();
@@ -228,7 +250,7 @@ public class VilBuildLanguageOutlineTreeProvider extends DefaultOutlineTreeProvi
      * @param parentNode
      *            all Rules and Variables will be displayed under this node
      */
-    private void createScriptContentNodes(EList<EObject> content, VirtualOutlineNode parentNode) {
+    protected void createScriptContentNodes(EList<EObject> content, VirtualOutlineNode parentNode) {
         // RuleDeclarations
         for (EObject element : content) {
             if (element instanceof RuleDeclaration) {
@@ -236,14 +258,13 @@ public class VilBuildLanguageOutlineTreeProvider extends DefaultOutlineTreeProvi
                 if (checkRuleDeclaration(ruleCast)) {
                     StyledString displayString = new StyledString();
                     displayString.append("" + ruleCast.getName());
-                    displayString.append(" : Rule", StyledString.QUALIFIER_STYLER);
+                    displayString.append(toString(ruleCast.getParamList()) + " : Rule", 
+                        StyledString.QUALIFIER_STYLER);
                     createEStructuralFeatureNode(parentNode, ruleCast,
                             VilBuildLanguagePackage.Literals.RULE_DECLARATION__NAME,
                             imageHelper.getImage(Images.NAME_RULE_INSTANCE), displayString, true);
                 }
-            }
-            
-            if (element instanceof VariableDeclaration) {
+            } else if (element instanceof VariableDeclaration) {
                 // VariableDeclarations                
                 VariableDeclaration varCast = (VariableDeclaration) element;
                 if (checkVariableDeclaration(varCast)) {
@@ -255,10 +276,70 @@ public class VilBuildLanguageOutlineTreeProvider extends DefaultOutlineTreeProvi
                             VilBuildLanguagePackage.Literals.RULE_DECLARATION__NAME,
                             imageHelper.getImage(Images.NAME_VARIABLEDECLARATION), displayString, true);
                 }
+            } else {
+                createScriptContentNode(element, parentNode);
             }
         }
     }
-
+    
+    protected String toString(Type type) {
+        String result = "";
+        String prefix = null;
+        if (null != type.getName()) {
+            result = Utils.getQualifiedNameString(type.getName());
+        } else if (null != type.getMap()) {
+            prefix = "mapOf";
+        } else if (null != type.getSeq()) {
+            prefix = "sequenceOf";
+        } else if (null != type.getSet()) {
+            prefix = "setOf";
+        } else if (null != type.getCall()) {
+            if (null != type.getReturn()) {
+                result = toString(type.getReturn()) + " ";
+            }
+            prefix = "callOf";
+        }
+        if (null != prefix) {
+            result += "(";
+            boolean first = true;
+            for (Type param : type.getParam().getParam()) {
+                if (!first) {
+                    result += ", ";
+                }
+                result += toString(param);
+            }
+            result += ")";
+        }
+        return result;
+    }
+    
+    protected String toString(ParameterList params) {
+        String result = "";
+        if (null != params) {
+            result = " (";
+            boolean first = true;
+            for (Parameter param : params.getParam()) {
+                if (!first) {
+                    result += ", ";
+                }
+                result += toString(param.getType());
+            }
+            result += ")";
+        }
+        return result;
+    }
+    
+    /**
+     * Creates (further) content nodes.
+     * 
+     * @param content
+     *            ScriptContents
+     * @param parentNode
+     *            all Rules and Variables will be displayed under this node
+     */
+    protected void createScriptContentNode(EObject element, VirtualOutlineNode parentNode) {
+    }
+    
     /**
      * Returns the value if the script is a leaf or not.
      * 
@@ -276,7 +357,7 @@ public class VilBuildLanguageOutlineTreeProvider extends DefaultOutlineTreeProvi
      *            The list to be checked.
      * @return <b>True</b> if the list is <b>null</b> or has no elements. <b>False</b> otherwise.
      */
-    private static boolean isEmpty(EList<?> list) {
+    protected static boolean isEmpty(EList<?> list) {
         return null == list || list.isEmpty();
     }
 
@@ -287,7 +368,7 @@ public class VilBuildLanguageOutlineTreeProvider extends DefaultOutlineTreeProvi
      *            the script to be checked
      * @return <b>True</b> if the script is not <b>null</b> and has a name. <b>False</b> otherwise.
      */
-    private boolean checkScriptParent(LanguageUnit script) {
+    protected boolean checkScriptParent(LanguageUnit script) {
         return script.getParent() != null && script.getParent().getName() != null
                 && !script.getParent().getName().isEmpty();
     }
@@ -299,7 +380,7 @@ public class VilBuildLanguageOutlineTreeProvider extends DefaultOutlineTreeProvi
      *            the advice to be checked
      * @return <b>True</b> if the advice is not <b>null</b> and has a name. <b>False</b> otherwise.
      */
-    private boolean checkAdviceName(Advice advice) {
+    protected boolean checkAdviceName(Advice advice) {
         return advice != null && advice.getName() != null && advice.getName().getPrefix() != null
                 && advice.getName().getPrefix().getQname() != null && !isEmpty(advice.getName().getPrefix().getQname());
     }
@@ -311,7 +392,7 @@ public class VilBuildLanguageOutlineTreeProvider extends DefaultOutlineTreeProvi
      *            the parameter to be checked.
      * @return <b>True</b> if the parameter is completely defined. <b>False</b> otherwise.
      */
-    private boolean checkParameter(Parameter param) {
+    protected boolean checkParameter(Parameter param) {
         return param != null && param.getName() != null && !param.getName().isEmpty() && param.getType() != null
                 && param.getType().getName() != null && !Utils.isEmpty(param.getType().getName());
     }
@@ -323,7 +404,7 @@ public class VilBuildLanguageOutlineTreeProvider extends DefaultOutlineTreeProvi
      *            the rule declaration to be checked.
      * @return <b>True</b> if the rule declaration is not <b>null</b> and has a name. <b>False</b> otherwise.
      */
-    private boolean checkRuleDeclaration(RuleDeclaration ruleDecl) {
+    protected boolean checkRuleDeclaration(RuleDeclaration ruleDecl) {
         return ruleDecl != null && ruleDecl.getName() != null && !ruleDecl.getName().isEmpty();
     }
 
@@ -334,9 +415,19 @@ public class VilBuildLanguageOutlineTreeProvider extends DefaultOutlineTreeProvi
      *            the variable declaration to be checked
      * @return <b>True</b> if the variable declaration is completely defined. <b>False</b> otherwise.
      */
-    private boolean checkVariableDeclaration(VariableDeclaration varDecl) {
+    protected boolean checkVariableDeclaration(VariableDeclaration varDecl) {
         return varDecl != null && varDecl.getName() != null && !varDecl.getName().isEmpty()
                 && varDecl.getType() != null && varDecl.getType().getName() != null
                 && !Utils.isEmpty(varDecl.getType().getName());
     }
+    
+    /**
+     * Returns the image helper.
+     * 
+     * @return the image helper
+     */
+    protected IImageHelper getImageHelper() {
+        return imageHelper;
+    }
+    
 }

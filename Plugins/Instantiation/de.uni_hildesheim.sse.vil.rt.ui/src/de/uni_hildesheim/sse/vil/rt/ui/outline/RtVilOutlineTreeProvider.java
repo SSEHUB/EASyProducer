@@ -3,364 +3,80 @@
 */
 package de.uni_hildesheim.sse.vil.rt.ui.outline;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.StyledString;
-import org.eclipse.xtext.ui.IImageHelper;
-import org.eclipse.xtext.ui.editor.outline.IOutlineNode;
-import org.eclipse.xtext.ui.editor.outline.impl.DefaultOutlineTreeProvider;
-import org.eclipse.xtext.ui.editor.outline.impl.DocumentRootNode;
 
-import com.google.inject.Inject;
-
-import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Advice;
-import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
-import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Import;
-import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Parameter;
-import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VersionStmt;
-import de.uni_hildesheim.sse.vil.expressions.translation.Utils;
-import de.uni_hildesheim.sse.vil.rt.rtVil.GlobalVariableDeclaration;
-import de.uni_hildesheim.sse.vil.rt.rtVil.RtVilPackage;
+import de.uni_hildesheim.sse.ui.outline.VilBuildLanguageOutlineTreeProvider;
+import de.uni_hildesheim.sse.ui.outline.VirtualOutlineNode;
+import de.uni_hildesheim.sse.vil.rt.rtVil.LanguageUnit;
 import de.uni_hildesheim.sse.vil.rt.rtVil.StrategyDeclaration;
 import de.uni_hildesheim.sse.vil.rt.rtVil.TacticDeclaration;
 import de.uni_hildesheim.sse.vil.rt.ui.resources.Images;
-import de.uni_hildesheim.sse.vilBuildLanguage.ImplementationUnit;
-import de.uni_hildesheim.sse.vilBuildLanguage.LanguageUnit;
-import de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration;
 import de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage;
-
-
-
-
-
 
 /**
  * Customization of the default outline structure.
  *
  * see http://www.eclipse.org/Xtext/documentation.html#outline
  */
-public class RtVilOutlineTreeProvider extends DefaultOutlineTreeProvider {
-	@Inject
-    private IImageHelper imageHelper;
-	
-	 /**
-     * Creates the children for the ImplementationUnit.
-     * 
-     * @param parentNode
-     *            parentNode
-     * @param unit
-     *            Create children for unit-object
-     */
-    protected void _createChildren(DocumentRootNode parentNode, ImplementationUnit unit) {
-        if (unit != null && unit.getScripts() != null && !unit.getScripts().isEmpty()) {
-        	for (LanguageUnit script : unit.getScripts()) {
-                // List rtVilScript
-                if (script != null) {
-                    createScriptNodes(script, parentNode);
-                }
-            }
-        }
-    }
-    
-    
-    /**
-     * creates a node for the rtVilScript.
-     * 
-     * @param script
-     *            the rtVilScript
-     * @param parentNode
-     *            parentnode
-     */
-    private void createScriptNodes(LanguageUnit script, DocumentRootNode parentNode) {
-        VirtualOutlineNode vilNode = null;
-        StyledString displayString = new StyledString();
-        if (checkScriptParent(script)) {
-            if (script.getName() != null && !script.getName().isEmpty()) {
-                String parentName = script.getParent().getName();
-                // rtVilScript Name with parent
-                displayString.append("" + script.getName());
-                displayString.append(" extends " + parentName);
-                // create virtualNode for rtVilScript
-                vilNode = new VirtualOutlineNode(parentNode, imageHelper.getImage(Images.NAME_VILSCRIPT),
-                        displayString, false);
-            }
-        } else {
-            if (script.getName() != null && !script.getName().isEmpty()) {
-            	//rtVilScript without parent
-            	displayString.append("" + script.getName());
-            	vilNode = new VirtualOutlineNode(parentNode, imageHelper.getImage(Images.NAME_VILSCRIPT),
-                        displayString, false);
-            }
-        }
-        
-        if (vilNode != null) {
-        	// create Nodes for Advices
-            if (!isEmpty(script.getAdvices())) {
-                createAdviceNodes(script.getAdvices(), vilNode);
-            }
-            // create VirtualNode for rtVilParameters
-            if (script.getParam() != null && !isEmpty(script.getParam().getParam())) {
-                VirtualOutlineNode virtualParamNode = new VirtualOutlineNode(vilNode,
-                        imageHelper.getImage(Images.NAME_PARAMLIST), "Parameters", false);
-                createParametersNodes(script.getParam().getParam(), virtualParamNode);
-            }
-            // create versionNode
-            if (script.getVersion() != null) {
-                createVersionNode(script.getVersion(), vilNode);
-            }
-            // create ImportNodes
-            if (!isEmpty(script.getImports())) {
-                createImportNodes(script.getImports(), vilNode);
-            }
-            // rtContent
-            de.uni_hildesheim.sse.vil.rt.rtVil.LanguageUnit rtUnit = 
-            		(de.uni_hildesheim.sse.vil.rt.rtVil.LanguageUnit) script;
-            
-            if (rtUnit.getRtContents() != null && !isEmpty(rtUnit.getRtContents().getElements())) {
-            	StyledString scriptContentsString = new StyledString();
-            	scriptContentsString.append("RT-Contents", StyledString.QUALIFIER_STYLER);
-            	VirtualOutlineNode scriptContentNode = new VirtualOutlineNode(vilNode,
-            			imageHelper.getImage(Images.NAME_SCRIPTCONTENT), scriptContentsString, false);
-            	createRTContentNodes(rtUnit.getRtContents().getElements(), scriptContentNode);            	
-            }
-        }
+public class RtVilOutlineTreeProvider extends VilBuildLanguageOutlineTreeProvider {
+
+    @Override
+    protected void createScriptContentNodes(de.uni_hildesheim.sse.vilBuildLanguage.LanguageUnit script, 
+        VirtualOutlineNode parentNode) {
+        LanguageUnit rtScript = (LanguageUnit) script;
+        createScriptContentNodes(rtScript.getRtContents().getElements(), parentNode);
     }
 
+    @Override
+    protected boolean hasContents(de.uni_hildesheim.sse.vilBuildLanguage.LanguageUnit script) {
+        LanguageUnit rtScript = (LanguageUnit) script;
+        return rtScript.getRtContents() != null && !isEmpty(rtScript.getRtContents().getElements());
+    }
     
-    
-    
-    /**
-     * creates a node for every Advice-Statement.
-     * 
-     * @param adviceList
-     *            List with all Advices
-     * @param parentNode
-     *            parentnode
-     */
-    private void createAdviceNodes(EList<Advice> adviceList, VirtualOutlineNode parentNode) {
-        for (Advice advice : adviceList) {
-            if (checkAdviceName(advice)) {
+    @Override
+    protected void createScriptContentNode(EObject element, VirtualOutlineNode parentNode) {
+        if (element instanceof StrategyDeclaration) {
+            StrategyDeclaration decl = (StrategyDeclaration) element;
+            if (checkStrategyDeclaration(decl)) {
                 StyledString displayString = new StyledString();
-                displayString.append("" + advice.getName().getPrefix().getQname().get(0));
-                if (advice.getName().getPrefix().getQname().size() > 1) {
-                    displayString.append(", ...");
-                }
-                displayString.append(" : Advice", StyledString.QUALIFIER_STYLER);
-                createEStructuralFeatureNode(parentNode, (EObject) advice, ExpressionDslPackage.Literals.ADVICE__NAME,
-                        imageHelper.getImage(Images.NAME_ADVICE), displayString, true);
+                displayString.append("" + decl.getName());
+                displayString.append(toString(decl.getParamList()) + " : Strategy", StyledString.QUALIFIER_STYLER);
+                createEStructuralFeatureNode(parentNode, decl,
+                    VilBuildLanguagePackage.Literals.RULE_DECLARATION__NAME,
+                    getImageHelper().getImage(Images.NAME_STRATEGY_INSTANCE), displayString, true);
+            }
+        } else if (element instanceof TacticDeclaration) {
+            TacticDeclaration decl = (TacticDeclaration) element;
+            if (checkTacticDeclaration(decl)) {
+                StyledString displayString = new StyledString();
+                displayString.append("" + decl.getName());
+                displayString.append(toString(decl.getParamList()) + " : Tactic", StyledString.QUALIFIER_STYLER);
+                createEStructuralFeatureNode(parentNode, decl,
+                    VilBuildLanguagePackage.Literals.RULE_DECLARATION__NAME,
+                    getImageHelper().getImage(Images.NAME_TACTIC_INSTANCE), displayString, true);
             }
         }
     }
     
     /**
-     * Creates the version node.
+     * Checks whether a given strategy declaration is not <b>null</b> and has a name.
      * 
-     * @param version
-     *            version
-     * @param parentNode
-     *            version will be displayed under this node
+     * @param decl the declaration to be checked.
+     * @return <b>True</b> if the declaration is not <b>null</b> and has a name. <b>False</b> otherwise.
      */
-    private void createVersionNode(VersionStmt version, IOutlineNode parentNode) {
-        if (version.getVersion() != null) {
-            createEStructuralFeatureNode(parentNode, version, ExpressionDslPackage.Literals.VERSION_STMT__VERSION,
-                    imageHelper.getImage(Images.NAME_VERSION), "v" + version.getVersion(), true);
-        }
+    protected boolean checkStrategyDeclaration(StrategyDeclaration decl) {
+        return decl != null && decl.getName() != null && !decl.getName().isEmpty();
     }
 
     /**
-     * Creates the Nodes for the parameters.
+     * Checks whether a given tactic declaration is not <b>null</b> and has a name.
      * 
-     * @param paramList
-     *            List with the parameters
-     * @param parentNode
-     *            all parameters will be displayed under this node
+     * @param decl the declaration to be checked.
+     * @return <b>True</b> if the declaration is not <b>null</b> and has a name. <b>False</b> otherwise.
      */
-    private void createParametersNodes(EList<Parameter> paramList, VirtualOutlineNode parentNode) {
-        for (Parameter param : paramList) {
-            if (checkParameter(param)) {
-                StyledString displayString = new StyledString();
-                displayString.append("" + param.getName());
-                String type = Utils.getQualifiedNameString(param.getType().getName());
-                displayString.append(" : " + type, StyledString.QUALIFIER_STYLER);
-                createEStructuralFeatureNode(parentNode, param, ExpressionDslPackage.Literals.PARAMETER__NAME,
-                        imageHelper.getImage(Images.NAME_PARAM), displayString, true);
-            }
-        }
-    }
-    
-    /**
-     * Creates the nodes for the imports.
-     * 
-     * @param importList
-     *            List with all imports
-     * @param parentNode
-     *            all imports will be displayed under this node
-     */
-    private void createImportNodes(EList<Import> importList, VirtualOutlineNode parentNode) {
-        for (Import importvar : importList) {
-            if (importvar.getName() != null && !importvar.getName().isEmpty()) {
-                StyledString displayString = new StyledString();
-                displayString.append("" + importvar.getName());
-                displayString.append(" : import", StyledString.QUALIFIER_STYLER);
-                createEStructuralFeatureNode(parentNode, importvar, ExpressionDslPackage.Literals.IMPORT__NAME,
-                        imageHelper.getImage(Images.NAME_IMPORT), displayString, true);
-            }
-        }
-    }
-    
-    /**
-     * Creates the RuleDeclarations, GlobalVariableDeclaration, StrategyDeclaration and
-     * the TacticDeclaration.
-     * 
-     * @param content
-     *           rtContents
-     * @param parentNode
-     *            all elements of the rtContent will be displayed under this node
-     */
-    private void createRTContentNodes(EList<EObject> content, VirtualOutlineNode parentNode) {
-    	for (EObject element : content) {
-    		if (element instanceof RuleDeclaration) {
-    			RuleDeclaration ruleCast = (RuleDeclaration) element;
-                if (checkRuleDeclaration(ruleCast)) {
-                    StyledString displayString = new StyledString();
-                    displayString.append("" + ruleCast.getName());
-                    displayString.append(" : Rule", StyledString.QUALIFIER_STYLER);
-                    createEStructuralFeatureNode(parentNode, ruleCast,
-                            VilBuildLanguagePackage.Literals.RULE_DECLARATION__NAME,
-                            imageHelper.getImage(Images.NAME_RULE_INSTANCE), displayString, true);
-                }
-    		}
-    		
-    		if (element instanceof GlobalVariableDeclaration) {
-    			GlobalVariableDeclaration globalVar = (GlobalVariableDeclaration) element;
-    			if (checkVariableDeclaration(globalVar)) {
-    				StyledString displayString = new StyledString();
-    				displayString.append("" + globalVar.getVarDecl().getName());
-    				String type = Utils.getQualifiedNameString(globalVar.getVarDecl().getType().getName());
-    				displayString.append(" : " + type, StyledString.QUALIFIER_STYLER);
-    				createEStructuralFeatureNode(parentNode, globalVar.getVarDecl(),
-    						RtVilPackage.Literals.GLOBAL_VARIABLE_DECLARATION__VAR_DECL,
-    						imageHelper.getImage(Images.NAME_VARIABLEDECLARATION), displayString, true);
-    			}
-    		}
-    		
-    		if (element instanceof StrategyDeclaration) {
-    			StrategyDeclaration strategy = (StrategyDeclaration) element;
-    			if (checkStrategyDeclaration(strategy)) {
-    				StyledString displayString = new StyledString();
-    				displayString.append("" + strategy.getName());
-    				displayString.append(" : Strategy", StyledString.QUALIFIER_STYLER);
-    				createEStructuralFeatureNode(parentNode, strategy,
-    						RtVilPackage.Literals.STRATEGY_DECLARATION__NAME,
-                            imageHelper.getImage(Images.NAME_RULE_INSTANCE), displayString, true);
-    			}
-    		}
-    		
-    		if (element instanceof TacticDeclaration) {
-    			TacticDeclaration tactic = (TacticDeclaration) element;
-    			if (checkTacticDeclaration(tactic)) {
-    				StyledString displayString = new StyledString();
-    				displayString.append("" + tactic.getName());
-    				displayString.append(" : Tactic", StyledString.QUALIFIER_STYLER);
-    				createEStructuralFeatureNode(parentNode, tactic,
-    						RtVilPackage.Literals.TACTIC_DECLARATION__NAME,
-                            imageHelper.getImage(Images.NAME_RULE_INSTANCE), displayString, true);
-    			}
-    		}
-    	}
-    }
-    
-    /**
-     * Check whether a given EList is <b>null</b> or empty.
-     * 
-     * @param list The list to be checked.
-     * @return <b>True</b> if the list is <b>null</b> or has no elements. <b>False</b> otherwise.
-     */
-    private static boolean isEmpty(EList<?> list) {
-        return null == list || list.isEmpty();
+    protected boolean checkTacticDeclaration(TacticDeclaration decl) {
+        return decl != null && decl.getName() != null && !decl.getName().isEmpty();
     }
 
-    /**
-     * Checks whether a given script is not <b>null</b> and has a name.
-     * 
-     * @param script
-     *            the script to be checked
-     * @return <b>True</b> if the script is not <b>null</b> and has a name. <b>False</b> otherwise.
-     */
-    private boolean checkScriptParent(LanguageUnit script) {
-        return script.getParent() != null && script.getParent().getName() != null
-                && !script.getParent().getName().isEmpty();
-    }
-    
-    /**
-     * Checks whether a given advice is not <b>null</b> and has a name.
-     * 
-     * @param advice
-     *            the advice to be checked
-     * @return <b>True</b> if the advice is not <b>null</b> and has a name. <b>False</b> otherwise.
-     */
-    private boolean checkAdviceName(Advice advice) {
-        return advice != null && advice.getName() != null && advice.getName().getPrefix() != null
-                && advice.getName().getPrefix().getQname() != null && !isEmpty(advice.getName().getPrefix().getQname());
-    }
-    
-    /**
-     * Checks whether a given parameter is not <b>null</b>, has a name and a type (name).
-     * 
-     * @param param
-     *            the parameter to be checked.
-     * @return <b>True</b> if the parameter is completely defined. <b>False</b> otherwise.
-     */
-    private boolean checkParameter(Parameter param) {
-        return param != null && param.getName() != null && !param.getName().isEmpty() && param.getType() != null
-                && param.getType().getName() != null && !Utils.isEmpty(param.getType().getName());
-    }
-    
-    /**
-     * Checks whether a given rule declaration is not <b>null</b> and has a name.
-     * 
-     * @param ruleDecl
-     *            the rule declaration to be checked.
-     * @return <b>True</b> if the rule declaration is not <b>null</b> and has a name. <b>False</b> otherwise.
-     */
-    private boolean checkRuleDeclaration(RuleDeclaration ruleDecl) {
-        return ruleDecl != null && ruleDecl.getName() != null && !ruleDecl.getName().isEmpty();
-    }
-    
-    /**
-     * Checks whether a given variable declaration is not <b>null</b>, has a name and a type (name).
-     * 
-     * @param globalvar
-     *            the variable declaration to be checked
-     * @return <b>True</b> if the variable declaration is completely defined. <b>False</b> otherwise.
-     */
-    private boolean checkVariableDeclaration(GlobalVariableDeclaration globalvar) {
-        return globalvar != null && globalvar.getVarDecl() != null && !globalvar.getVarDecl().getName().isEmpty()
-                && globalvar.getVarDecl().getType() != null && globalvar.getVarDecl().getType().getName() != null
-                && !Utils.isEmpty(globalvar.getVarDecl().getType().getName());
-    }
-    
-    /**
-     * Checks whether a given Strategydeclaration is not <b>null</b>, and has an identifier(name).
-     * 
-     * @param strategyvar
-     * 				the strategy declaration to be checked
-     * @return <b>True</b> if the strategydeclaration is completely defined, to create it's outline entry.
-     * 			<b>False</b> otherwise.
-     */
-    private boolean checkStrategyDeclaration(StrategyDeclaration strategy) {
-    	return strategy != null && strategy.getName() != null;
-    }
-    
-    /**
-     * Checks whether a given Tacticdeclaration is not <b>null</b>, and has an identifier(name).
-     * 
-     * @param Tacticvar
-     * 				the Tactic declaration to be checked
-     * @return <b>True</b> if the Tacticdeclaration is completely defined, to create it's outline entry.
-     * 			<b>False</b> otherwise.
-     */
-    private boolean checkTacticDeclaration(TacticDeclaration tactic) {
-    	return tactic != null && tactic.getName() != null;
-    }
 }
