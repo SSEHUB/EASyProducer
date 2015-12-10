@@ -3,7 +3,7 @@ template sequence2(Configuration config, Artifact target) {
 
     def main(Configuration config, Artifact target) {
         sequence2 cfg = config;
-        sequenceOf(Machine) available = cfg.machines->select(Machine m | m.available and m.role == MachineRole.Worker);
+        sequenceOf(Machine) available = cfg.machines->select(Machine m | m.available);
         for (Machine mach : available) {
             '${mach.name}'
         }

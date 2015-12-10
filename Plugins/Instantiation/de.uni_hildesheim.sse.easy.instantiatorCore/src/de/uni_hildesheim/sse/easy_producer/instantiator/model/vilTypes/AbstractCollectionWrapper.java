@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.TreeMap;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionEvaluator;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.DecisionVariable;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypes;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 
 /**
@@ -262,15 +264,25 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
      */
     protected static <T> void select(Collection<T> collection, ExpressionEvaluator evaluator, 
         java.util.Collection<T> result) throws VilException {
-        if (!TypeRegistry.booleanType().isAssignableFrom(evaluator.getExpression().inferType())) {
-            throw new VilException("iterator must be of type boolean", 
-                VilException.ID_RUNTIME_ITERATOR);
+        TypeDescriptor<?> type = evaluator.getExpression().inferType();
+        boolean isDecVar = IvmlTypes.decisionVariableType().isAssignableFrom(type);
+        if (!isDecVar && !TypeRegistry.booleanType().isAssignableFrom(type)) {
+            // shall be done at language translation time, not at runtime - keep for now
+            throw new VilException("iterator must be of type boolean", VilException.ID_RUNTIME_ITERATOR);
         }
         Iterator<T> iter = collection.iterator();
         while (iter.hasNext()) {
             T value = iter.next();
             Object eval = evaluator.evaluate(value);
-            if (eval instanceof Boolean && ((Boolean) eval)) {
+            Boolean selectionCriterion = null;
+            if (isDecVar) {
+                if (eval instanceof DecisionVariable) {
+                    selectionCriterion = ((DecisionVariable) eval).getBooleanValue();
+                }
+            } else if (eval instanceof Boolean) {
+                selectionCriterion = (Boolean) eval;
+            }
+            if (null != selectionCriterion && selectionCriterion) {
                 result.add(value);
             }
         }
