@@ -265,7 +265,7 @@
 		  <property name="extraVMargs" value="-Dinstantiator.java.testdata.home=${home.instantiator.java.test.dir}/testdata -javaagent:${jacoco.path}/jacocoagent.jar=append=true,destfile=${basedir}/${coverage.results.dir}/${ant.project.name}.exec" />
 		  <property name="os" value="${test.eclipse.os}"/>
 		  <property name="ws" value="${test.eclipse.ws}"/>
-		  <property name="arch" value="${test.eclipse.arch}"/>/>
+		  <property name="arch" value="${test.eclipse.arch}"/>
 		  <property name="timeout" value="240000"/>
 		</ant>
         <!-- ANT Instantiation test -->
