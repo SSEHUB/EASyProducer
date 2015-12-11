@@ -58,15 +58,30 @@ public class ProjectCopyVisitorTest {
     
     /**
      * Tests whether of Declarations based on their names work.
+     * @throws ValueDoesNotMatchTypeException Must not occur, otherwise the {@link ValueFactory} or
+     * {@link de.uni_hildesheim.sse.model.varModel.AbstractVariable#setValue(String)} are broken.
+     * @throws CSTSemanticException Must not occur, otherwise
+     * {@link Constraint#setConsSyntax(de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree)} is broken.
      */
     @Test
-    public void testDeclarationBasedOnNames() {
+    public void testDeclarationBasedOnNames() throws ValueDoesNotMatchTypeException, CSTSemanticException {
         // Create original project with one declaration and one comment
         Project p = new Project("testProject");
         DecisionVariableDeclaration declA = new DecisionVariableDeclaration("declarationA", IntegerType.TYPE, p);
         p.add(declA);
         DecisionVariableDeclaration declB = new DecisionVariableDeclaration("declarationB", IntegerType.TYPE, p);
         p.add(declB);
+        // Create 2 assignments
+        Constraint assignmentA = new Constraint(p);
+        OCLFeatureCall cstA = new OCLFeatureCall(new Variable(declA), OclKeyWords.ASSIGNMENT,
+            new ConstantValue(ValueFactory.createValue(IntegerType.TYPE, 42)));
+        assignmentA.setConsSyntax(cstA);
+        p.add(assignmentA);
+        Constraint assignmentB = new Constraint(p);
+        OCLFeatureCall cstB = new OCLFeatureCall(new Variable(declB), OclKeyWords.ASSIGNMENT,
+            new ConstantValue(ValueFactory.createValue(IntegerType.TYPE, 21)));
+        assignmentB.setConsSyntax(cstB);
+        p.add(assignmentB);
         // Project should be valid
         ProjectTestUtilities.validateProject(p);
         
@@ -78,8 +93,10 @@ public class ProjectCopyVisitorTest {
         
         // Copied project should contain the declaration, but not the comment
         ProjectTestUtilities.validateProject(copy, true);
-        assertProjectContainment(copy, declA, true, 1);
-        assertProjectContainment(copy, declB, false, 1);
+        assertProjectContainment(copy, declA, true, 2);
+        assertProjectContainment(copy, declB, false, 2);
+        assertProjectContainment(copy, assignmentA, true, 2);
+        assertProjectContainment(copy, assignmentB, false, 2);
     }
     
     /**
