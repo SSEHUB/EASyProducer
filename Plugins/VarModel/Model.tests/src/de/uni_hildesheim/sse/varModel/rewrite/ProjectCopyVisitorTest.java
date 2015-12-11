@@ -36,6 +36,7 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IntegerType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
 import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
+import de.uni_hildesheim.sse.model.varModel.rewrite.DeclarationNameFilter;
 import de.uni_hildesheim.sse.model.varModel.rewrite.FrozenConstraintVarFilter;
 import de.uni_hildesheim.sse.model.varModel.rewrite.FrozenConstraintsFilter;
 import de.uni_hildesheim.sse.model.varModel.rewrite.FrozenTypeDefResolver;
@@ -54,6 +55,49 @@ import de.uni_hildesheim.sse.varModel.testSupport.ProjectTestUtilities;
  *
  */
 public class ProjectCopyVisitorTest {
+    
+    /**
+     * Tests whether of Declarations based on their names work.
+     * @throws ValueDoesNotMatchTypeException Must not occur, otherwise the {@link ValueFactory} or
+     * {@link de.uni_hildesheim.sse.model.varModel.AbstractVariable#setValue(String)} are broken.
+     * @throws CSTSemanticException Must not occur, otherwise
+     * {@link Constraint#setConsSyntax(de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree)} is broken.
+     */
+    @Test
+    public void testDeclarationBasedOnNames() throws ValueDoesNotMatchTypeException, CSTSemanticException {
+        // Create original project with one declaration and one comment
+        Project p = new Project("testProject");
+        DecisionVariableDeclaration declA = new DecisionVariableDeclaration("declarationA", IntegerType.TYPE, p);
+        p.add(declA);
+        DecisionVariableDeclaration declB = new DecisionVariableDeclaration("declarationB", IntegerType.TYPE, p);
+        p.add(declB);
+        // Create 2 assignments
+        Constraint assignmentA = new Constraint(p);
+        OCLFeatureCall cstA = new OCLFeatureCall(new Variable(declA), OclKeyWords.ASSIGNMENT,
+            new ConstantValue(ValueFactory.createValue(IntegerType.TYPE, 42)));
+        assignmentA.setConsSyntax(cstA);
+        p.add(assignmentA);
+        Constraint assignmentB = new Constraint(p);
+        OCLFeatureCall cstB = new OCLFeatureCall(new Variable(declB), OclKeyWords.ASSIGNMENT,
+            new ConstantValue(ValueFactory.createValue(IntegerType.TYPE, 21)));
+        assignmentB.setConsSyntax(cstB);
+        p.add(assignmentB);
+        // Project should be valid
+        ProjectTestUtilities.validateProject(p);
+        
+        // Create copy while omitting the comment
+        ProjectCopyVisitor copynator = new ProjectCopyVisitor(p, FilterType.NO_IMPORTS);
+        copynator.addModelCopyModifier(new DeclarationNameFilter(new String[] {declA.getName()}));
+        p.accept(copynator);
+        Project copy = copynator.getCopyiedProject();
+        
+        // Copied project should contain the declaration, but not the comment
+        ProjectTestUtilities.validateProject(copy, true);
+        assertProjectContainment(copy, declA, true, 2);
+        assertProjectContainment(copy, declB, false, 2);
+        assertProjectContainment(copy, assignmentA, true, 2);
+        assertProjectContainment(copy, assignmentB, false, 2);
+    }
     
     /**
      * Tests whether filtering of comments works.

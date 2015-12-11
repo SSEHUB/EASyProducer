@@ -16,8 +16,11 @@
 package de.uni_hildesheim.sse.model.varModel.rewrite;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
+import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
 import de.uni_hildesheim.sse.model.varModel.Project;
 
 /**
@@ -28,12 +31,16 @@ import de.uni_hildesheim.sse.model.varModel.Project;
 public class RewriteContext {
     
     private Map<Project, Project> translatedProjects;
+    private Map<Class<?>, Set<ContainableModelElement>> removedElements;
+    private boolean elementsWereRemoved;
     
     /**
      * Avoid instantiation from outside.
      */
     protected RewriteContext() {
         translatedProjects = new HashMap<Project, Project>();
+        removedElements = new HashMap<Class<?>, Set<ContainableModelElement>>();
+        elementsWereRemoved = false;
     }
 
     /**
@@ -55,5 +62,47 @@ public class RewriteContext {
      */
     public Project getTranslatedProject(Project originalProject) {
         return translatedProjects.get(originalProject);
+    }
+    
+    /**
+     * Stores the information that a model element was removed. Helpful for removing all instances pointing
+     * to this variable.
+     * @param removedElememt The removed element.
+     */
+    public void removeElement(ContainableModelElement removedElememt) {
+        elementsWereRemoved = true;
+        Class<?> modelElementType = removedElememt.getClass();
+        Set<ContainableModelElement> removedElementList = removedElements.get(modelElementType);
+        if (null == removedElementList) {
+            removedElementList = new HashSet<ContainableModelElement>();
+            removedElements.put(modelElementType, removedElementList);
+        }
+        removedElementList.add(removedElememt);
+    }
+    
+    /**
+     * Returns whether the given element was removed from the project.
+     * @param elememt An element to test.
+     * @return <tt>true</tt> if the element was removed, <tt>false</tt> if the element still exist.
+     */
+    public boolean elementWasRemoved(ContainableModelElement elememt) {
+        Class<?> elementType = elememt.getClass();
+        Set<ContainableModelElement> removedElementList = removedElements.get(elementType);
+        return removedElementList != null && removedElementList.contains(elememt);
+    }
+    
+    /**
+     * Returns whether elements were removed during the last iteration.
+     * @return <tt>true</tt> if at least one element was removed, <tt>false</tt> otherwise.
+     */
+    public boolean elementesWereRemoved() {
+        return elementsWereRemoved;
+    }
+    
+    /**
+     * Resets the internal <b>temporary</b> knowledge if the same projects should be filtered a second time.
+     */
+    void clear() {
+        elementsWereRemoved = false;
     }
 }

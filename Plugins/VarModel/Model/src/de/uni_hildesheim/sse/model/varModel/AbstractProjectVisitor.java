@@ -82,4 +82,24 @@ public abstract class AbstractProjectVisitor implements IModelVisitor {
             }
         }
     }
+    
+    /**
+     * Returns the original project which was the starting point for visitation.
+     * @return The starting point of the visitation.
+     */
+    protected Project getStartingProject() {
+        return originProject;
+    }
+    
+    /**
+     * Resets the knowledge if a this visitor should be used for a second iteration.
+     * @param originProject The starting project, should be the project from the constructor call.
+     */
+    protected void clear(Project originProject) {
+        done.clear();
+        // Reset original project only if explicitly specified.
+        if (null != originProject) {
+            this.originProject = originProject;
+        }
+    }
 }

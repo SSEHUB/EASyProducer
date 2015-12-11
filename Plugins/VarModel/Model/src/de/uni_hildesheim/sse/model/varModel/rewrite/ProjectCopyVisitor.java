@@ -19,10 +19,12 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import de.uni_hildesheim.sse.model.varModel.AbstractProjectVisitor;
+import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.Attribute;
 import de.uni_hildesheim.sse.model.varModel.AttributeAssignment;
 import de.uni_hildesheim.sse.model.varModel.Comment;
@@ -45,6 +47,7 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.OrderedEnum;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Sequence;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Set;
+import de.uni_hildesheim.sse.model.varModel.filter.DeclrationInConstraintFinder;
 import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
 
@@ -117,7 +120,19 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
 
     @Override
     public void visitConstraint(Constraint constraint) {
-        createCopy(constraint);
+        DeclrationInConstraintFinder finder = new DeclrationInConstraintFinder(constraint.getConsSyntax());
+        java.util.Set<AbstractVariable> usedDeclarations = finder.getDeclarations();
+        Iterator<AbstractVariable> variablesItr = usedDeclarations.iterator();
+        boolean allDeclarationsarePresent = true;
+        while (variablesItr.hasNext() && allDeclarationsarePresent) {
+            allDeclarationsarePresent = !context.elementWasRemoved(variablesItr.next());
+        }
+        
+        if (allDeclarationsarePresent) {
+            createCopy(constraint);
+        } else {
+            context.elementWasRemoved(constraint);
+        }
     }
 
     @Override
@@ -219,6 +234,9 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
              */
             copy.setParent(currentProject);
             currentProject.add(copy);
+        } else {
+            // Mark that the element was completely removed.
+            context.removeElement(original);
         }
     }
     
@@ -236,6 +254,18 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
         context.storeTranslatedProject(project, currentProject);
         super.visitProject(project);
         
+        if (project == getStartingProject() && context.elementesWereRemoved()) {
+            /*
+             * Elements where removed start filtering again, maybe there exist some elements pointing
+             * to the removed elements.
+             */
+            Project tmpProject = currentProject;
+            context.clear();
+            currentProject = new Project(project.getName());
+            clear(tmpProject);
+            context.storeTranslatedProject(tmpProject, currentProject);
+            super.visitProject(tmpProject);
+        }
     }
     
     @Override
