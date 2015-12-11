@@ -10,6 +10,7 @@ import java.util.Map;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor.CompatibilityResult;
 import de.uni_hildesheim.sse.model.varModel.values.NullValue;
+import de.uni_hildesheim.sse.model.varModel.values.NullValue.NullValueType;
 
 /**
  * Represents an individual operation available to the VIL languages based on reflection 
@@ -265,8 +266,10 @@ public class ReflectionOperationDescriptor extends OperationDescriptor implement
             boolean parCompatible = par[p].isAssignableFrom(cls) // instances match?
                 || REFLECTION_EQUALITIES.get(par[p]) == cls // basic types match?
                 || (par[p] == Class.class && params[p] instanceof Class); // parameter is class
-            if (!parCompatible) {
+            if (!parCompatible) { 
                 cannotEvaluate &= params[p] == null;
+            } else if (NullValueType.class.equals(par[p])) { // consider IVML null
+                cannotEvaluate = false;
             }
             compatible &= parCompatible;
         }
