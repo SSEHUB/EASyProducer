@@ -184,7 +184,10 @@ class ContainerIterators {
         @Override
         public boolean aggregate(EvaluationAccessor result, Value iter, EvaluationAccessor value, 
             Map<Object, Object> data) throws ValueDoesNotMatchTypeException {
-            ((ContainerValue) result.getValue()).addElement(value.getValue());
+            Value cVal = result.getValue();
+            if (cVal instanceof ContainerValue) {
+                ((ContainerValue) result.getValue()).addElement(value.getValue());
+            }
             return false;
         }
 
@@ -210,8 +213,9 @@ class ContainerIterators {
         @Override
         public boolean aggregate(EvaluationAccessor result, Value iter, EvaluationAccessor value, 
             Map<Object, Object> data) throws ValueDoesNotMatchTypeException {
-            if (condition.equals(value.getValue())) {
-                ((ContainerValue) result.getValue()).addElement(iter);
+            Value cVal = result.getValue();
+            if (condition.equals(value.getValue()) && cVal instanceof ContainerValue) {
+                ((ContainerValue) cVal).addElement(iter);
             }
             return false;
         }

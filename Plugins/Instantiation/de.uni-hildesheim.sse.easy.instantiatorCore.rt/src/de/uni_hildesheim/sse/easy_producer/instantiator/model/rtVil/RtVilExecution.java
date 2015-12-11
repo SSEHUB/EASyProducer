@@ -109,21 +109,23 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
                     EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(RtVilExecution.class, Bundle.ID);
                     de.uni_hildesheim.sse.utils.messages.Status status = evaluator.reasoningHook.analyze(
                         currentScript, concept, valueAccess, msg);
-                    switch (status) {
-                    case UNSUPPORTED:
-                    case ERROR:
-                        //errorCount++; // TODO enable again
-                        logger.error(toText(msg));
-                        break;
-                    case INFO:
-                        logger.info(toText(msg));
-                        break;
-                    case WARNING:
-                        logger.warn(toText(msg));
-                        break;
-                    default:
-                        logger.info(toText(msg));
-                        break;
+                    if (null != status) {
+                        switch (status) {
+                        case UNSUPPORTED:
+                        case ERROR:
+                            //errorCount++; // TODO enable again
+                            logger.error(toText(msg));
+                            break;
+                        case INFO:
+                            logger.info(toText(msg));
+                            break;
+                        case WARNING:
+                            logger.warn(toText(msg));
+                            break;
+                        default:
+                            logger.info(toText(msg));
+                            break;
+                        }
                     }
                 }
                 boolean ok = (0 == errorCount);
