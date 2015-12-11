@@ -36,6 +36,7 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IntegerType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
 import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
+import de.uni_hildesheim.sse.model.varModel.rewrite.DeclarationNameFilter;
 import de.uni_hildesheim.sse.model.varModel.rewrite.FrozenConstraintVarFilter;
 import de.uni_hildesheim.sse.model.varModel.rewrite.FrozenConstraintsFilter;
 import de.uni_hildesheim.sse.model.varModel.rewrite.FrozenTypeDefResolver;
@@ -54,6 +55,32 @@ import de.uni_hildesheim.sse.varModel.testSupport.ProjectTestUtilities;
  *
  */
 public class ProjectCopyVisitorTest {
+    
+    /**
+     * Tests whether of Declarations based on their names work.
+     */
+    @Test
+    public void testDeclarationBasedOnNames() {
+        // Create original project with one declaration and one comment
+        Project p = new Project("testProject");
+        DecisionVariableDeclaration declA = new DecisionVariableDeclaration("declarationA", IntegerType.TYPE, p);
+        p.add(declA);
+        DecisionVariableDeclaration declB = new DecisionVariableDeclaration("declarationB", IntegerType.TYPE, p);
+        p.add(declB);
+        // Project should be valid
+        ProjectTestUtilities.validateProject(p);
+        
+        // Create copy while omitting the comment
+        ProjectCopyVisitor copynator = new ProjectCopyVisitor(p, FilterType.NO_IMPORTS);
+        copynator.addModelCopyModifier(new DeclarationNameFilter(new String[] {declA.getName()}));
+        p.accept(copynator);
+        Project copy = copynator.getCopyiedProject();
+        
+        // Copied project should contain the declaration, but not the comment
+        ProjectTestUtilities.validateProject(copy, true);
+        assertProjectContainment(copy, declA, true, 1);
+        assertProjectContainment(copy, declB, false, 1);
+    }
     
     /**
      * Tests whether filtering of comments works.
