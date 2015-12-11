@@ -369,6 +369,7 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
             sourcePath = sourcePath.replaceAll("//", "/");
         }
         String[] sources = {sourcePath};
+        System.out.println("CLASSPATH: " + sources);
         parser.setEnvironment(classpath, sources, new String[] {"UTF-8" }, true);
         // Create AST
         unitNode = (CompilationUnit) parser.createAST(null);
