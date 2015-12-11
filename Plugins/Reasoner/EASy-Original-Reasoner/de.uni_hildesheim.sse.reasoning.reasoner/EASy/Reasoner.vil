@@ -3,7 +3,7 @@ vilScript Reasoner (Project source, Configuration config, Project target) {
     version v0;
     
     main(Project source, Configuration config, Project target) = : {
-    	if (config.getByName("withLogs").booleanValue()) {
+    	if (!config.getByName("withLogs").booleanValue()) {
             // Collect all java files
             setOf(JavaFileArtifact) files = target.selectByType(JavaFileArtifact);
             String utils = "/var/lib/jenkins/jobs/VarModel/workspace/Utils/build/jar/de.uni_hildesheim.sse.Utils.jar";
