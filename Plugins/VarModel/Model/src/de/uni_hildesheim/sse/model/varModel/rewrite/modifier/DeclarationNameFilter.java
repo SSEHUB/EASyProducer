@@ -13,37 +13,47 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.uni_hildesheim.sse.model.varModel.rewrite;
+package de.uni_hildesheim.sse.model.varModel.rewrite.modifier;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
+import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
+import de.uni_hildesheim.sse.model.varModel.rewrite.RewriteContext;
 
 /**
- * A {@link IModelCopyModifier} to specify that a certain sub class of {@link ContainableModelElement} should be
- * generally omitted.
+ * Filters {@link DecisionVariableDeclaration}s based on their names.
  * @author El-Sharkawy
  *
  */
-public class ModelElementFilter implements IModelCopyModifier<ContainableModelElement> {
-
-    private Class<? extends ContainableModelElement> ommitingClass;
+public class DeclarationNameFilter implements IModelCopyModifier<DecisionVariableDeclaration> {
+    
+    private Set<String> whitelist;
     
     /**
-     * Default constructor for this class.
-     * @param ommitingClass The sub class of {@link ContainableModelElement}, which shall be filtered while copying a
-     * {@link de.uni_hildesheim.sse.model.varModel.Project}.
+     * Default constructor of this class.
+     * @param allowedNames A whitelist of allowed names, others will be deleted.
      */
-    public ModelElementFilter(Class<? extends ContainableModelElement> ommitingClass) {
-        this.ommitingClass = ommitingClass;
+    public DeclarationNameFilter(String[] allowedNames) {
+        whitelist = new HashSet<String>();
+        for (int i = 0; i < allowedNames.length; i++) {
+            whitelist.add(allowedNames[i]);
+        }
     }
-    
+
     @Override
     public Class<? extends ContainableModelElement> getModifyingModelClass() {
-        return ommitingClass;
+        return DecisionVariableDeclaration.class;
     }
 
     @Override
     public ContainableModelElement handleModelElement(ContainableModelElement element, RewriteContext context) {
-        return null;
+        if (!whitelist.contains(element.getName())) {
+            element = null;
+        }
+        
+        return element;
     }
 
 }
