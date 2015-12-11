@@ -18,6 +18,7 @@ package de.uni_hildesheim.sse.model.varModel;
 import java.util.Arrays;
 
 import de.uni_hildesheim.sse.model.varModel.datatypes.IResolutionScope;
+import de.uni_hildesheim.sse.utils.modelManagement.Version;
 
 /**
  * ProjectInterface class.
@@ -157,7 +158,9 @@ public class ProjectInterface extends ContainableModelElement implements IResolu
             } else {
                 equal = thisParent.getName().equals(otherParent.getName());
                 if (thisParent instanceof Project && otherParent instanceof Project && equal) {
-                    equal = ((Project) thisParent).getVersion().equals(((Project) otherParent).getVersion());
+                    Version thisVersion = ((Project) thisParent).getVersion();
+                    Version otherVersion = ((Project) otherParent).getVersion();
+                    equal = (null == thisVersion) ? null == otherVersion : thisVersion.equals(otherVersion);
                 }
             }
             // ProjectInterfaces have the same name

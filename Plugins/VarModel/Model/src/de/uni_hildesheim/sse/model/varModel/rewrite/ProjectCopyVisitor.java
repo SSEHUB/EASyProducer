@@ -33,6 +33,7 @@ import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.FreezeBlock;
+import de.uni_hildesheim.sse.model.varModel.IFreezable;
 import de.uni_hildesheim.sse.model.varModel.ModelElement;
 import de.uni_hildesheim.sse.model.varModel.OperationDefinition;
 import de.uni_hildesheim.sse.model.varModel.PartialEvaluationBlock;
@@ -49,6 +50,7 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.Sequence;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Set;
 import de.uni_hildesheim.sse.model.varModel.filter.DeclrationInConstraintFinder;
 import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
+import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.IModelCopyModifier;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
 
 /**
@@ -137,7 +139,39 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
 
     @Override
     public void visitFreezeBlock(FreezeBlock freeze) {
-        createCopy(freeze);
+        if (context.hasRemovedElementsOfType(DecisionVariableDeclaration.class)) {
+            boolean removedElementsFound = false;
+            ArrayList<IFreezable> copiedElements = new ArrayList<IFreezable>();
+            for (int i = 0, n = freeze.getFreezableCount(); i < n; i++) {
+                IFreezable frozenElement = freeze.getFreezable(i);
+                if (frozenElement instanceof DecisionVariableDeclaration) {
+                    DecisionVariableDeclaration frozenElementDecl = (DecisionVariableDeclaration) frozenElement;
+                    
+                    // Filter removed elements
+                    if (!context.elementWasRemoved(frozenElementDecl)) {
+                        copiedElements.add(frozenElement);
+                    } else {
+                        removedElementsFound = true;
+                    }
+                }
+            }
+            
+            if (copiedElements.isEmpty()) {
+                // No more elements to freeze, remove complete freeze block
+                context.removeElement(freeze);
+                freeze = null;
+            } else if (removedElementsFound) {
+                // Create copy with filtered elements
+                freeze = new FreezeBlock(copiedElements.toArray(new IFreezable[0]), freeze.getIter(),
+                    freeze.getSelector(), (Project) freeze.getParent());                
+            }
+            // else: Nothing do do, process original block
+            
+        }
+        
+        if (null != freeze) { 
+            createCopy(freeze);
+        }
     }
 
     @Override

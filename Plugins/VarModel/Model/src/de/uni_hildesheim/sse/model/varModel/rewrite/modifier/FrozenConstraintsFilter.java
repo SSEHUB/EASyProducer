@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.uni_hildesheim.sse.model.varModel.rewrite;
+package de.uni_hildesheim.sse.model.varModel.rewrite.modifier;
 
 import java.util.Iterator;
 import java.util.Set;
@@ -23,6 +23,7 @@ import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
 import de.uni_hildesheim.sse.model.varModel.filter.DeclrationInConstraintFinder;
+import de.uni_hildesheim.sse.model.varModel.rewrite.RewriteContext;
 
 /**
  * A {@link IModelCopyModifier} to filter constraints, containing only frozen variables and constants.

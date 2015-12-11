@@ -19,6 +19,7 @@ Export-Package: de.uni_hildesheim.sse.capabilities,
  de.uni_hildesheim.sse.model.varModel.datatypes,
  de.uni_hildesheim.sse.model.varModel.filter,
  de.uni_hildesheim.sse.model.varModel.rewrite,
+ de.uni_hildesheim.sse.model.varModel.rewrite.modifier,
  de.uni_hildesheim.sse.model.varModel.search,
  de.uni_hildesheim.sse.model.varModel.values,
  de.uni_hildesheim.sse.persistency
